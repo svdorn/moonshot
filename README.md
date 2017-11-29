@@ -1,10 +1,16 @@
 # Moonshot
 
-One Paragraph of project description goes here
+Moonshot Learning is a website that will allow students to get credentialed in their learning as well as helping them connect with employers in order to start meaningful careers in industries that matter to them.
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
+```
+* cd to a directory where you want the repo placed on your local machine
+* git clone https://github.com/MoonshotLearning/moonshot.git
+* cd moonshot
+* npm install
+```
 
 ### Prerequisites
 
@@ -33,8 +39,10 @@ until finished
 End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
-
-Explain how to run the automated tests for this system
+```
+* cd to the directory where the project is
+* npm test
+```
 
 ### Break down into end to end tests
 
