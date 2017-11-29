@@ -5587,7 +5587,7 @@ Object.defineProperty(exports, "__esModule", {
 exports.getUsers = getUsers;
 exports.postUser = postUser;
 exports.deleteUser = deleteUser;
-exports.updateBooks = updateBooks;
+exports.updateUser = updateUser;
 exports.resetButton = resetButton;
 
 var _axios = __webpack_require__(86);
@@ -5600,20 +5600,20 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 function getUsers() {
   return function (dispatch) {
     _axios2.default.get("/api/books").then(function (response) {
-      dispatch({ type: "GET_BOOKS", payload: response.data });
+      dispatch({ type: "GET_USERS", payload: response.data });
     }).catch(function (err) {
-      dispatch({ type: "GET_BOOKS_REJECTED", payload: err });
+      dispatch({ type: "GET_USERS_REJECTED", payload: err });
     });
   };
 }
 
 // POST BOOKS
-function postUser(book) {
+function postUser(user) {
   return function (dispatch) {
-    _axios2.default.post("/api/books", book).then(function (response) {
-      dispatch({ type: "POST_BOOK", payload: response.data });
+    _axios2.default.post("/api/books", user).then(function (response) {
+      dispatch({ type: "POST_USER", payload: response.data });
     }).catch(function (err) {
-      dispatch({ type: "POST_BOOK_REJECTED", payload: "there was an error while posting a new book" });
+      dispatch({ type: "POST_USER_REJECTED", payload: "there was an error while posting a new user" });
     });
   };
 }
@@ -5622,18 +5622,18 @@ function postUser(book) {
 function deleteUser(id) {
   return function (dispatch) {
     _axios2.default.delete("/api/books/" + id).then(function (response) {
-      dispatch({ type: "DELETE_BOOK", payload: id });
+      dispatch({ type: "DELETE_USER", payload: id });
     }).catch(function (err) {
-      dispatch({ type: "DELETE_BOOK_REJECTED", payload: err });
+      dispatch({ type: "DELETE_USER_REJECTED", payload: err });
     });
   };
 }
 
 // UPDATE A BOOK
-function updateBooks(book) {
+function updateUser(user) {
   return {
-    type: "UPDATE_BOOK",
-    payload: book
+    type: "UPDATE_USER",
+    payload: user
   };
 }
 
@@ -35914,16 +35914,16 @@ function booksReducers() {
   var action = arguments[1];
 
   switch (action.type) {
-    case "GET_BOOKS":
+    case "GET_USERS":
       return _extends({}, state, { books: [].concat(_toConsumableArray(action.payload)) });
-    case "POST_BOOK":
+    case "POST_USER":
       return _extends({}, state, {
         books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)),
         msg: 'Saved! Click to continue',
         style: 'success',
         validation: 'success' });
       break;
-    case "POST_BOOK_REJECTED":
+    case "POST_USER_REJECTED":
       return _extends({}, state, {
         msg: 'Please try again',
         style: 'danger',
@@ -35935,7 +35935,7 @@ function booksReducers() {
         style: 'primary',
         validation: null });
       break;
-    case "DELETE_BOOK":
+    case "DELETE_USER":
       // Create a copy of the current array of books
       var currentBookToDelete = [].concat(_toConsumableArray(state.books));
       // Determine at which index in books array is
@@ -35947,7 +35947,7 @@ function booksReducers() {
       return { books: [].concat(_toConsumableArray(currentBookToDelete.slice(0, indexToDelete)), _toConsumableArray(currentBookToDelete.slice(indexToDelete + 1))) };
       break;
 
-    case "UPDATE_BOOK":
+    case "UPDATE_USER":
       // Create a copy of the current array of books
       var currentBookToUpdate = [].concat(_toConsumableArray(state.books));
       // Determine at which index in books array is the book to be deleted

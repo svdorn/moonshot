@@ -14,7 +14,7 @@ import thunk from 'redux-thunk';
 import reducers from './reducers/index';
 // import actions
 import { addToCart } from './actions/cartActions';
-import { postUser, deleteUser, updateBooks } from './actions/booksActions';
+import { postUser, deleteUser, updateUser } from './actions/booksActions';
 
 // STEP 1 create the store
 const middleware = applyMiddleware(thunk, logger);

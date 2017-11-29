@@ -6,23 +6,23 @@ export function getUsers() {
   return function(dispatch) {
     axios.get("/api/books")
       .then(function(response) {
-        dispatch({type:"GET_BOOKS", payload: response.data});
+        dispatch({type:"GET_USERS", payload: response.data});
       })
       .catch(function(err) {
-        dispatch({type: "GET_BOOKS_REJECTED", payload: err});
+        dispatch({type: "GET_USERS_REJECTED", payload: err});
       });
   }
 }
 
 // POST BOOKS
-export function postUser(book) {
+export function postUser(user) {
   return function(dispatch) {
-    axios.post("/api/books", book)
+    axios.post("/api/books", user)
       .then(function(response) {
-        dispatch({type:"POST_BOOK", payload:response.data});
+        dispatch({type:"POST_USER", payload:response.data});
       })
       .catch(function(err) {
-        dispatch({type: "POST_BOOK_REJECTED", payload: "there was an error while posting a new book"});
+        dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});
       });
   }
 }
@@ -32,19 +32,19 @@ export function deleteUser(id) {
   return function(dispatch) {
     axios.delete("/api/books/" + id)
       .then(function(response) {
-        dispatch({type: "DELETE_BOOK", payload: id});
+        dispatch({type: "DELETE_USER", payload: id});
       })
       .catch(function(err) {
-        dispatch({type: "DELETE_BOOK_REJECTED", payload: err});
+        dispatch({type: "DELETE_USER_REJECTED", payload: err});
       })
   }
 }
 
 // UPDATE A BOOK
-export function updateBooks(book) {
+export function updateUser(user) {
   return {
-    type: "UPDATE_BOOK",
-    payload: book
+    type: "UPDATE_USER",
+    payload: user
   }
 }
 

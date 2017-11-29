@@ -3,16 +3,16 @@
 // BOOKS REDUCERS
 export function booksReducers(state={books: []}, action) {
   switch(action.type) {
-    case "GET_BOOKS":
+    case "GET_USERS":
     return {...state, books:[...action.payload]}
-    case "POST_BOOK":
+    case "POST_USER":
     return {...state,
         books: [...state.books, ...action.payload],
         msg: 'Saved! Click to continue',
         style: 'success',
         validation: 'success'}
     break;
-    case "POST_BOOK_REJECTED":
+    case "POST_USER_REJECTED":
     return {...state,
         msg:'Please try again',
         style:'danger',
@@ -24,7 +24,7 @@ export function booksReducers(state={books: []}, action) {
         style: 'primary',
         validation: null};
     break;
-    case "DELETE_BOOK":
+    case "DELETE_USER":
     // Create a copy of the current array of books
     const currentBookToDelete = [...state.books];
     // Determine at which index in books array is
@@ -39,7 +39,7 @@ export function booksReducers(state={books: []}, action) {
     ...currentBookToDelete.slice(indexToDelete + 1)]}
     break;
 
-    case "UPDATE_BOOK":
+    case "UPDATE_USER":
     // Create a copy of the current array of books
     const currentBookToUpdate = [...state.books];
     // Determine at which index in books array is the book to be deleted
