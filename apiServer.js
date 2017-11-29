@@ -23,7 +23,7 @@ var mongoose = require('mongoose');
 //mongoose.connect('mongodb://testUser:test@ds111476.mlab.com:11476/bookshop')
 // MONGO LAB - NEW
 const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds125146.mlab.com:25146/testmoonshot'
-moongoose.connect(dbConnectLink);
+mongoose.connect(dbConnectLink);
 // LOCAL DB
 //mongoose.connect('mongodb://localhost:27017/bookshop');
 
