@@ -5584,9 +5584,9 @@ module.exports = defaults;
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.getBooks = getBooks;
-exports.postBooks = postBooks;
-exports.deleteBooks = deleteBooks;
+exports.getUsers = getUsers;
+exports.postUser = postUser;
+exports.deleteUser = deleteUser;
 exports.updateBooks = updateBooks;
 exports.resetButton = resetButton;
 
@@ -5597,7 +5597,7 @@ var _axios2 = _interopRequireDefault(_axios);
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 // GET BOOKS
-function getBooks() {
+function getUsers() {
   return function (dispatch) {
     _axios2.default.get("/api/books").then(function (response) {
       dispatch({ type: "GET_BOOKS", payload: response.data });
@@ -5608,7 +5608,7 @@ function getBooks() {
 }
 
 // POST BOOKS
-function postBooks(book) {
+function postUser(book) {
   return function (dispatch) {
     _axios2.default.post("/api/books", book).then(function (response) {
       dispatch({ type: "POST_BOOK", payload: response.data });
@@ -5619,7 +5619,7 @@ function postBooks(book) {
 }
 
 // DELETE A BOOK
-function deleteBooks(id) {
+function deleteUser(id) {
   return function (dispatch) {
     _axios2.default.delete("/api/books/" + id).then(function (response) {
       dispatch({ type: "DELETE_BOOK", payload: id });
@@ -13077,7 +13077,7 @@ var BooksForm = function (_Component) {
     value: function componentDidMount() {
       var _this2 = this;
 
-      this.props.getBooks();
+      this.props.getUsers();
 
       // GET IMAGES FROM API
       _axios2.default.get('/api/images').then(function (response) {
@@ -13090,19 +13090,19 @@ var BooksForm = function (_Component) {
     key: 'handleSubmit',
     value: function handleSubmit() {
       var book = [{
-        title: (0, _reactDom.findDOMNode)(this.refs.title).value,
-        description: (0, _reactDom.findDOMNode)(this.refs.description).value,
+        username: (0, _reactDom.findDOMNode)(this.refs.username).value,
+        userType: (0, _reactDom.findDOMNode)(this.refs.userType).value,
         images: (0, _reactDom.findDOMNode)(this.refs.image).value,
         price: (0, _reactDom.findDOMNode)(this.refs.price).value
       }];
-      this.props.postBooks(book);
+      this.props.postUser(book);
     }
   }, {
     key: 'onDelete',
     value: function onDelete() {
       var bookId = (0, _reactDom.findDOMNode)(this.refs.delete).value;
 
-      this.props.deleteBooks(bookId);
+      this.props.deleteUser(bookId);
     }
   }, {
     key: 'handleSelect',
@@ -13117,8 +13117,8 @@ var BooksForm = function (_Component) {
       // RESET the Button
       this.props.resetButton();
 
-      (0, _reactDom.findDOMNode)(this.refs.title).value = '';
-      (0, _reactDom.findDOMNode)(this.refs.description).value = '';
+      (0, _reactDom.findDOMNode)(this.refs.username).value = '';
+      (0, _reactDom.findDOMNode)(this.refs.userType).value = '';
       (0, _reactDom.findDOMNode)(this.refs.price).value = '';
       this.setState({ img: '' });
     }
@@ -13180,30 +13180,30 @@ var BooksForm = function (_Component) {
               null,
               _react2.default.createElement(
                 _reactBootstrap.FormGroup,
-                { controlId: 'title', validationState: this.props.validation },
+                { controlId: 'username', validationState: this.props.validation },
                 _react2.default.createElement(
                   _reactBootstrap.ControlLabel,
                   null,
-                  'Title'
+                  'Username'
                 ),
                 _react2.default.createElement(_reactBootstrap.FormControl, {
                   type: 'text',
-                  placeholder: 'Enter Title',
-                  ref: 'title' }),
+                  placeholder: 'Enter username',
+                  ref: 'username' }),
                 _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
               ),
               _react2.default.createElement(
                 _reactBootstrap.FormGroup,
-                { controlId: 'description', validationState: this.props.validation },
+                { controlId: 'userType', validationState: this.props.validation },
                 _react2.default.createElement(
                   _reactBootstrap.ControlLabel,
                   null,
-                  'Description'
+                  'UserType'
                 ),
                 _react2.default.createElement(_reactBootstrap.FormControl, {
                   type: 'text',
-                  placeholder: 'Enter Description',
-                  ref: 'description' }),
+                  placeholder: 'Enter User Type',
+                  ref: 'userType' }),
                 _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
               ),
               _react2.default.createElement(
@@ -13276,9 +13276,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
-    postBooks: _booksActions.postBooks,
-    deleteBooks: _booksActions.deleteBooks,
-    getBooks: _booksActions.getBooks,
+    postUser: _booksActions.postUser,
+    deleteUser: _booksActions.deleteUser,
+    getUsers: _booksActions.getUsers,
     resetButton: _booksActions.resetButton
   }, dispatch);
 }
@@ -13409,7 +13409,7 @@ var Cart = function (_Component) {
               _react2.default.createElement(
                 'h6',
                 null,
-                cartArr.title
+                cartArr.username
               ),
               _react2.default.createElement(
                 'span',
@@ -35956,7 +35956,7 @@ function booksReducers() {
       });
       // create a new book object with the new values
       var newBook = _extends({}, currentBookToUpdate[indexToUpdate], {
-        title: action.payload.title
+        username: action.payload.username
       });
       console.log("what newBook is: ", newBook);
       return { books: [].concat(_toConsumableArray(currentBookToUpdate.slice(0, indexToUpdate)), [newBook], _toConsumableArray(currentBookToUpdate.slice(indexToUpdate + 1))) };
@@ -37034,7 +37034,7 @@ var BooksList = function (_Component) {
     key: 'componentDidMount',
     value: function componentDidMount() {
       // Dispatch an action
-      this.props.getBooks();
+      this.props.getUsers();
     }
   }, {
     key: 'render',
@@ -37045,8 +37045,8 @@ var BooksList = function (_Component) {
           { xs: 12, m: 6, md: 4, key: booksArr._id },
           _react2.default.createElement(_bookItem2.default, {
             _id: booksArr._id,
-            title: booksArr.title,
-            description: booksArr.description,
+            username: booksArr.username,
+            userType: booksArr.userType,
             images: booksArr.images,
             price: booksArr.price })
         );
@@ -37126,7 +37126,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return (0, _redux.bindActionCreators)({
-    getBooks: _booksActions.getBooks
+    getUsers: _booksActions.getUsers
   }, dispatch);
 }
 
@@ -48435,8 +48435,8 @@ var BookItem = function (_Component) {
     value: function handleCart() {
       var book = [].concat(_toConsumableArray(this.props.cart), [{
         _id: this.props._id,
-        title: this.props.title,
-        description: this.props.description,
+        username: this.props.username,
+        userType: this.props.userType,
         images: this.props.images,
         price: this.props.price,
         quantity: 1
@@ -48501,16 +48501,16 @@ var BookItem = function (_Component) {
             _react2.default.createElement(
               'h6',
               null,
-              this.props.title
+              this.props.username
             ),
             _react2.default.createElement(
               'p',
               null,
-              this.props.description.length > 50 && this.state.isClicked === false ? this.props.description.substring(0, 50) : this.props.description,
+              this.props.userType.length > 50 && this.state.isClicked === false ? this.props.userType.substring(0, 50) : this.props.userType,
               _react2.default.createElement(
                 'button',
                 { className: 'link', onClick: this.onReadMore.bind(this) },
-                this.state.isClicked === false && this.props.description !== null && this.props.description.length > 50 ? '...read more' : ''
+                this.state.isClicked === false && this.props.userType !== null && this.props.userType.length > 50 ? '...read more' : ''
               )
             ),
             _react2.default.createElement(

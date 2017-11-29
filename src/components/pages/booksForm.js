@@ -5,7 +5,7 @@ import { MenuItem, InputGroup, DropdownButton, Image, Col, Row, Well, Panel, For
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { findDOMNode } from 'react-dom';
-import { postBooks, deleteBooks, getBooks, resetButton } from '../../actions/booksActions';
+import { postUser, deleteUser, getUsers, resetButton } from '../../actions/booksActions';
 import axios from 'axios';
 
 class BooksForm extends Component {
@@ -18,7 +18,7 @@ class BooksForm extends Component {
   }
 
   componentDidMount() {
-    this.props.getBooks();
+    this.props.getUsers();
 
     // GET IMAGES FROM API
     axios.get('/api/images')
@@ -32,18 +32,18 @@ class BooksForm extends Component {
 
   handleSubmit() {
     const book = [{
-      title: findDOMNode(this.refs.title).value,
-      description: findDOMNode(this.refs.description).value,
+      username: findDOMNode(this.refs.username).value,
+      userType: findDOMNode(this.refs.userType).value,
       images: findDOMNode(this.refs.image).value,
       price: findDOMNode(this.refs.price).value
     }];
-    this.props.postBooks(book);
+    this.props.postUser(book);
   }
 
   onDelete() {
     let bookId = findDOMNode(this.refs.delete).value;
 
-    this.props.deleteBooks(bookId);
+    this.props.deleteUser(bookId);
   }
 
   handleSelect(img) {
@@ -56,8 +56,8 @@ class BooksForm extends Component {
     // RESET the Button
     this.props.resetButton();
 
-    findDOMNode(this.refs.title).value = '';
-    findDOMNode(this.refs.description).value = '';
+    findDOMNode(this.refs.username).value = '';
+    findDOMNode(this.refs.userType).value = '';
     findDOMNode(this.refs.price).value = '';
     this.setState({img:''});
   }
@@ -99,20 +99,20 @@ class BooksForm extends Component {
           </Col>
           <Col xs={12} sm={6}>
             <Panel>
-              <FormGroup controlId="title" validationState={this.props.validation}>
-                <ControlLabel>Title</ControlLabel>
+              <FormGroup controlId="username" validationState={this.props.validation}>
+                <ControlLabel>Username</ControlLabel>
                 <FormControl
                     type="text"
-                    placeholder="Enter Title"
-                    ref="title" />
+                    placeholder="Enter username"
+                    ref="username" />
                     <FormControl.Feedback />
               </FormGroup>
-              <FormGroup controlId="description"  validationState={this.props.validation}>
-                <ControlLabel>Description</ControlLabel>
+              <FormGroup controlId="userType"  validationState={this.props.validation}>
+                <ControlLabel>UserType</ControlLabel>
                 <FormControl
                     type="text"
-                    placeholder="Enter Description"
-                    ref="description" />
+                    placeholder="Enter User Type"
+                    ref="userType" />
                     <FormControl.Feedback />
               </FormGroup>
               <FormGroup controlId="price"  validationState={this.props.validation}>
@@ -157,9 +157,9 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    postBooks,
-    deleteBooks,
-    getBooks,
+    postUser,
+    deleteUser,
+    getUsers,
     resetButton
   }, dispatch);
 }

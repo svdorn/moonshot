@@ -51,7 +51,7 @@ export function booksReducers(state={books: []}, action) {
     // create a new book object with the new values
     const newBook = {
       ...currentBookToUpdate[indexToUpdate],
-      title: action.payload.title
+      username: action.payload.username
     }
     console.log("what newBook is: ", newBook);
     return {books: [...currentBookToUpdate.slice(0, indexToUpdate),

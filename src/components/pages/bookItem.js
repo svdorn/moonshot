@@ -9,8 +9,8 @@ class BookItem extends Component {
   handleCart() {
     const book = [...this.props.cart, {
       _id: this.props._id,
-      title: this.props.title,
-      description: this.props.description,
+      username: this.props.username,
+      userType: this.props.userType,
       images: this.props.images,
       price: this.props.price,
       quantity: 1
@@ -58,10 +58,10 @@ class BookItem extends Component {
             <Image src={this.props.images} responsive/>
           </Col>
           <Col xs={12} sm={8}>
-            <h6>{this.props.title}</h6>
-            <p>{(this.props.description.length > 50 && this.state.isClicked === false)?(this.props.description.substring(0, 50)):(this.props.description)}
+            <h6>{this.props.username}</h6>
+            <p>{(this.props.userType.length > 50 && this.state.isClicked === false)?(this.props.userType.substring(0, 50)):(this.props.userType)}
               <button className='link' onClick={this.onReadMore.bind(this)}>
-                {(this.state.isClicked === false && this.props.description !== null && this.props.description.length > 50)?('...read more'):('')}
+                {(this.state.isClicked === false && this.props.userType !== null && this.props.userType.length > 50)?('...read more'):('')}
               </button>
             </p>
 

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getBooks } from '../../actions/booksActions';
+import { getUsers } from '../../actions/booksActions';
 import { Carousel, Grid, Col, Row, Button } from 'react-bootstrap';
 
 import BookItem from './bookItem';
@@ -12,7 +12,7 @@ import Cart from './cart';
 class BooksList extends Component {
   componentDidMount() {
     // Dispatch an action
-    this.props.getBooks();
+    this.props.getUsers();
   }
   render() {
     const booksList = this.props.books.map(function(booksArr) {
@@ -20,8 +20,8 @@ class BooksList extends Component {
         <Col xs={12} m={6} md={4} key={booksArr._id}>
           <BookItem
                 _id={booksArr._id}
-                title={booksArr.title}
-                description={booksArr.description}
+                username={booksArr.username}
+                userType={booksArr.userType}
                 images={booksArr.images}
                 price={booksArr.price} />
         </Col>
@@ -67,7 +67,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return bindActionCreators({
-    getBooks:getBooks
+    getUsers: getUsers
   }, dispatch)
 }
 

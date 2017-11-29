@@ -2,7 +2,7 @@
 import axios from 'axios';
 
 // GET BOOKS
-export function getBooks() {
+export function getUsers() {
   return function(dispatch) {
     axios.get("/api/books")
       .then(function(response) {
@@ -15,7 +15,7 @@ export function getBooks() {
 }
 
 // POST BOOKS
-export function postBooks(book) {
+export function postUser(book) {
   return function(dispatch) {
     axios.post("/api/books", book)
       .then(function(response) {
@@ -28,7 +28,7 @@ export function postBooks(book) {
 }
 
 // DELETE A BOOK
-export function deleteBooks(id) {
+export function deleteUser(id) {
   return function(dispatch) {
     axios.delete("/api/books/" + id)
       .then(function(response) {
