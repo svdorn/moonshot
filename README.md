@@ -14,10 +14,11 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-What things you need to install the software and how to install them
+Software that you need to install.
 
+* [MongoDB](https://docs.mongodb.com/manual/installation/) - Database, install it globally
 ```
-Give examples
+npm install --save -g mongodb
 ```
 
 ### Installing
@@ -40,8 +41,8 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Running the tests
 ```
-* cd to the directory where the project is
-* npm test
+cd to the directory where the project is
+npm test
 ```
 
 ### Break down into end to end tests
@@ -52,31 +53,15 @@ Explain what these tests test and why
 Give an example
 ```
 
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
 ## Deployment
 
-Add additional notes about how to deploy this on a live system
+System is deployed to AWS elastic beanstalk
 
 ## Built With
 
 * [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
 * [Maven](https://maven.apache.org/) - Dependency Management
 * [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
@@ -85,8 +70,9 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+This project is licensed under the MIT License.
 
 ## Acknowledgments
 
-* Inspiration
+* **Kyle Treige** - *CEO*
+* **Justin Ye** - *Lead Designer*
