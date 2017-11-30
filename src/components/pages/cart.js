@@ -13,18 +13,18 @@ class Cart extends Component {
 
   onDelete(_id) {
 
-    // Create a copy of the current array of books
-    const currentBookToDelete = this.props.cart;
-    // Determine at which index in books array is
-    // the book to be deleted
-    const indexToDelete = currentBookToDelete.findIndex(
+    // Create a copy of the current array of users
+    const currentUserToDelete = this.props.cart;
+    // Determine at which index in users array is
+    // the user to be deleted
+    const indexToDelete = currentUserToDelete.findIndex(
       function(cartItem) {
         return cartItem._id === _id;
       }
     )
-    // use slice to remove the book at the specified index
-    let cartAfterDelete = [...currentBookToDelete.slice(0, indexToDelete),
-    ...currentBookToDelete.slice(indexToDelete + 1)];
+    // use slice to remove the user at the specified index
+    let cartAfterDelete = [...currentUserToDelete.slice(0, indexToDelete),
+    ...currentUserToDelete.slice(indexToDelete + 1)];
 
     this.props.deleteCartItem(cartAfterDelete);
   }

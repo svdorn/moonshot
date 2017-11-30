@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { addToCart, updateCart } from '../../actions/cartActions';
 
-class BookItem extends Component {
+class UserItem extends Component {
 
   handleCart() {
-    const book = [...this.props.cart, {
+    const user = [...this.props.cart, {
       _id: this.props._id,
       username: this.props.username,
       userType: this.props.userType,
@@ -29,14 +29,14 @@ class BookItem extends Component {
 
       // IF RETURNS -1 THERE ARE NO ITEMS WITH SAME ID
       if (cartIndex === -1) {
-        this.props.addToCart(book);
+        this.props.addToCart(user);
       } else {
         // WE NEED TO UPDATE QUANTITY
         this.props.updateCart(_id, 1, this.props.cart)
       }
     } else {
       // CART IS EMPTY
-        this.props.addToCart(book);
+        this.props.addToCart(user);
     }
 
   }
@@ -87,4 +87,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BookItem);
+export default connect(mapStateToProps, mapDispatchToProps)(UserItem);

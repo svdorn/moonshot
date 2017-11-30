@@ -29,20 +29,20 @@ export function addToCart(cart) {
 
 //  UPDATE CART
 export function updateCart(_id, unit, cart) {
-  // Create a copy of the current array of books
-  const currentBookToUpdate = cart;
-  // Determine at which index in books array is the book to be deleted
-  const indexToUpdate = currentBookToUpdate.findIndex(
-    function(book) {
-      return book._id === _id;
+  // Create a copy of the current array of users
+  const currentUserToUpdate = cart;
+  // Determine at which index in users array is the user to be deleted
+  const indexToUpdate = currentUserToUpdate.findIndex(
+    function(user) {
+      return user._id === _id;
     }
   )
-  const newBook = {
-    ...currentBookToUpdate[indexToUpdate],
-    quantity: currentBookToUpdate[indexToUpdate].quantity + unit
+  const newUser = {
+    ...currentUserToUpdate[indexToUpdate],
+    quantity: currentUserToUpdate[indexToUpdate].quantity + unit
   }
-  let cartUpdate = [...currentBookToUpdate.slice(0, indexToUpdate),
-  newBook, ...currentBookToUpdate.slice(indexToUpdate + 1)];
+  let cartUpdate = [...currentUserToUpdate.slice(0, indexToUpdate),
+  newUser, ...currentUserToUpdate.slice(indexToUpdate + 1)];
 
   return function(dispatch) {
     axios.post("/api/cart", cartUpdate)

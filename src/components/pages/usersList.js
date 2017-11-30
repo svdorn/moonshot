@@ -2,27 +2,27 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { getUsers } from '../../actions/booksActions';
+import { getUsers } from '../../actions/usersActions';
 import { Carousel, Grid, Col, Row, Button } from 'react-bootstrap';
 
-import BookItem from './bookItem';
-import BooksForm from './booksForm';
+import UserItem from './userItem';
+import UsersForm from './usersForm';
 import Cart from './cart';
 
-class BooksList extends Component {
+class UsersList extends Component {
   componentDidMount() {
     // Dispatch an action
     this.props.getUsers();
   }
   render() {
-    const booksList = this.props.books.map(function(booksArr) {
+    const usersList = this.props.users.map(function(usersArr) {
       return (
-        <Col xs={12} m={6} md={4} key={booksArr._id}>
-          <BookItem
-                _id={booksArr._id}
-                username={booksArr.username}
-                userType={booksArr.userType}
-                images={booksArr.images}
+        <Col xs={12} m={6} md={4} key={usersArr._id}>
+          <UserItem
+                _id={usersArr._id}
+                username={usersArr.username}
+                userType={usersArr.userType}
+                images={usersArr.images}
                 />
         </Col>
       );
@@ -52,7 +52,7 @@ class BooksList extends Component {
           <Cart />
         </Row>
         <Row style={{marginTop:'15px'}}>
-          {booksList}
+          {usersList}
         </Row>
       </Grid>
     );
@@ -61,7 +61,7 @@ class BooksList extends Component {
 
 function mapStateToProps(state) {
   return {
-    books: state.books.books
+    users: state.users.users
   }
 }
 
@@ -71,4 +71,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch)
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BooksList)
+export default connect(mapStateToProps, mapDispatchToProps)(UsersList)

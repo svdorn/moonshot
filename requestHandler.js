@@ -10,13 +10,13 @@ import reducers from './src/reducers/index';
 import routes from './src/routes';
 
 function handleRender(req, res) {
-  axios.get('http://localhost:3001/books')
+  axios.get('http://localhost:3001/users')
     .then(function(response) {
       // var myHtml = JSON.stringify(response.data);
       // res.render('index', {myHtml});
 
       // STEP 1 CREATE A REDUX STORE ON THE SERVER
-      const store = createStore(reducers, {"books": {"books": response.data}});
+      const store = createStore(reducers, {"users": {"users": response.data}});
       // STEP 2 GET INITIAL STATE FROM THE STORE
       const initialState = JSON.stringify(store.getState())
           .replace(/<\/script/g, '<\\/script')

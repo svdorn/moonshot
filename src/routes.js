@@ -8,17 +8,17 @@ import { Router, Route, IndexRoute, browserHistory, hashHistory } from 'react-ro
 
 import Login from './components/pages/login';
 import Signup from './components/pages/signup';
-import BooksList from './components/pages/booksList'
+import UsersList from './components/pages/usersList'
 import Cart from './components/pages/cart';
-import BooksForm from './components/pages/booksForm';
+import UsersForm from './components/pages/usersForm';
 import Main from './main';
 
 const routes = (
   <Router history={browserHistory}>
     <Route path="/" component={Main}>
-      <IndexRoute component={BooksList} />
-      <Route path="/about" component={BooksList} />
-      <Route path="/admin" component={BooksForm} />
+      <IndexRoute component={UsersList} />
+      <Route path="/about" component={UsersList} />
+      <Route path="/admin" component={UsersForm} />
       <Route path="/cart" component={Cart} />
         <Route path ='/login' component={Login} />
         <Route path="/signup" component={Signup} />

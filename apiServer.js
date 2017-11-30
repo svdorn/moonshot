@@ -60,42 +60,42 @@ app.get('/cart', function(req, res) {
 
 var Users = require('./models/users.js');
 
-//----->> POST BOOKS <<------
-app.post('/books', function(req, res) {
-  var book = req.body;
+//----->> POST USER <<------
+app.post('/users', function(req, res) {
+  var user = req.body;
 
-  Users.create(book, function(err, books) {
+  Users.create(user, function(err, user) {
     if (err) {
       console.log(err);
     }
-    res.json(books);
+    res.json(user);
   })
 });
 
-//----->> GET BOOKS <<------
-app.get('/books', function(req, res) {
-  Users.find(function(err, books) {
+//----->> GET USERS <<------
+app.get('/users', function(req, res) {
+  Users.find(function(err, users) {
     if (err) {
       console.log(err);
     }
-    res.json(books);
+    res.json(users);
   })
 });
 
-//----->> DELETE BOOK <<------
-app.delete('/books/:_id', function(req, res) {
+//----->> DELETE USER <<------
+app.delete('/users/:_id', function(req, res) {
   var query = {_id: req.params._id};
 
-  Users.remove(query, function(err, books) {
+  Users.remove(query, function(err, user) {
     if (err) {
       console.log(err);
     }
-    res.json(books);
+    res.json(user);
   })
 });
 
-//----->> UPDATE BOOK <<------
-app.put('/books/:_id', function(req, res) {
+//----->> UPDATE USER <<------
+app.put('/users/:_id', function(req, res) {
   var user = req.body;
   var query = req.params._id;
 
@@ -122,7 +122,7 @@ app.put('/books/:_id', function(req, res) {
   });
 });
 
-//----->> GET BOOK IMAGES <<------
+//----->> GET USER IMAGES <<------
 app.get('/images', function(req, res) {
   const imgFolder = __dirname + '/public/images/';
   // REQUIRE FILE SYSTEM

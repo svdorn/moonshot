@@ -1,10 +1,10 @@
 "use strict"
 import axios from 'axios';
 
-// GET BOOKS
+// GET USERS
 export function getUsers() {
   return function(dispatch) {
-    axios.get("/api/books")
+    axios.get("/api/users")
       .then(function(response) {
         dispatch({type:"GET_USERS", payload: response.data});
       })
@@ -14,10 +14,10 @@ export function getUsers() {
   }
 }
 
-// POST BOOKS
+// POST USERS
 export function postUser(user) {
   return function(dispatch) {
-    axios.post("/api/books", user)
+    axios.post("/api/users", user)
       .then(function(response) {
         dispatch({type:"POST_USER", payload:response.data});
       })
@@ -27,10 +27,10 @@ export function postUser(user) {
   }
 }
 
-// DELETE A BOOK
+// DELETE A USER
 export function deleteUser(id) {
   return function(dispatch) {
-    axios.delete("/api/books/" + id)
+    axios.delete("/api/users/" + id)
       .then(function(response) {
         dispatch({type: "DELETE_USER", payload: id});
       })
@@ -40,7 +40,7 @@ export function deleteUser(id) {
   }
 }
 
-// UPDATE A BOOK
+// UPDATE A USER
 export function updateUser(user) {
   return {
     type: "UPDATE_USER",

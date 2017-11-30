@@ -3564,16 +3564,16 @@ function addToCart(cart) {
 
 //  UPDATE CART
 function updateCart(_id, unit, cart) {
-  // Create a copy of the current array of books
-  var currentBookToUpdate = cart;
-  // Determine at which index in books array is the book to be deleted
-  var indexToUpdate = currentBookToUpdate.findIndex(function (book) {
-    return book._id === _id;
+  // Create a copy of the current array of users
+  var currentUserToUpdate = cart;
+  // Determine at which index in users array is the user to be deleted
+  var indexToUpdate = currentUserToUpdate.findIndex(function (user) {
+    return user._id === _id;
   });
-  var newBook = _extends({}, currentBookToUpdate[indexToUpdate], {
-    quantity: currentBookToUpdate[indexToUpdate].quantity + unit
+  var newUser = _extends({}, currentUserToUpdate[indexToUpdate], {
+    quantity: currentUserToUpdate[indexToUpdate].quantity + unit
   });
-  var cartUpdate = [].concat(_toConsumableArray(currentBookToUpdate.slice(0, indexToUpdate)), [newBook], _toConsumableArray(currentBookToUpdate.slice(indexToUpdate + 1)));
+  var cartUpdate = [].concat(_toConsumableArray(currentUserToUpdate.slice(0, indexToUpdate)), [newUser], _toConsumableArray(currentUserToUpdate.slice(indexToUpdate + 1)));
 
   return function (dispatch) {
     _axios2.default.post("/api/cart", cartUpdate).then(function (response) {
@@ -5575,76 +5575,7 @@ module.exports = defaults;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(9)))
 
 /***/ }),
-/* 88 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-exports.getUsers = getUsers;
-exports.postUser = postUser;
-exports.deleteUser = deleteUser;
-exports.updateUser = updateUser;
-exports.resetButton = resetButton;
-
-var _axios = __webpack_require__(86);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// GET BOOKS
-function getUsers() {
-  return function (dispatch) {
-    _axios2.default.get("/api/books").then(function (response) {
-      dispatch({ type: "GET_USERS", payload: response.data });
-    }).catch(function (err) {
-      dispatch({ type: "GET_USERS_REJECTED", payload: err });
-    });
-  };
-}
-
-// POST BOOKS
-function postUser(user) {
-  return function (dispatch) {
-    _axios2.default.post("/api/books", user).then(function (response) {
-      dispatch({ type: "POST_USER", payload: response.data });
-    }).catch(function (err) {
-      dispatch({ type: "POST_USER_REJECTED", payload: "there was an error while posting a new user" });
-    });
-  };
-}
-
-// DELETE A BOOK
-function deleteUser(id) {
-  return function (dispatch) {
-    _axios2.default.delete("/api/books/" + id).then(function (response) {
-      dispatch({ type: "DELETE_USER", payload: id });
-    }).catch(function (err) {
-      dispatch({ type: "DELETE_USER_REJECTED", payload: err });
-    });
-  };
-}
-
-// UPDATE A BOOK
-function updateUser(user) {
-  return {
-    type: "UPDATE_USER",
-    payload: user
-  };
-}
-
-// RESET BUTTON
-function resetButton() {
-  return {
-    type: "RESET_BUTTON"
-  };
-}
-
-/***/ }),
+/* 88 */,
 /* 89 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13019,305 +12950,7 @@ ToggleButton.propTypes = propTypes;
 /* harmony default export */ __webpack_exports__["a"] = (ToggleButton);
 
 /***/ }),
-/* 188 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBootstrap = __webpack_require__(48);
-
-var _reactRedux = __webpack_require__(34);
-
-var _redux = __webpack_require__(23);
-
-var _reactDom = __webpack_require__(14);
-
-var _booksActions = __webpack_require__(88);
-
-var _axios = __webpack_require__(86);
-
-var _axios2 = _interopRequireDefault(_axios);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var BooksForm = function (_Component) {
-  _inherits(BooksForm, _Component);
-
-  function BooksForm() {
-    _classCallCheck(this, BooksForm);
-
-    var _this = _possibleConstructorReturn(this, (BooksForm.__proto__ || Object.getPrototypeOf(BooksForm)).call(this));
-
-    _this.state = {
-      images: [{}],
-      img: ''
-    };
-    return _this;
-  }
-
-  _createClass(BooksForm, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      var _this2 = this;
-
-      this.props.getUsers();
-
-      // GET IMAGES FROM API
-      _axios2.default.get('/api/images').then(function (response) {
-        _this2.setState({ images: response.data });
-      }).catch(function (err) {
-        _this2.setState({ images: 'error loading image files from the server', img: '' });
-      });
-    }
-  }, {
-    key: 'handleSubmit',
-    value: function handleSubmit() {
-      var book = [{
-        username: (0, _reactDom.findDOMNode)(this.refs.username).value,
-        userType: (0, _reactDom.findDOMNode)(this.refs.userType).value,
-        images: (0, _reactDom.findDOMNode)(this.refs.image).value,
-        password: (0, _reactDom.findDOMNode)(this.refs.password).value,
-        email: (0, _reactDom.findDOMNode)(this.refs.email).value,
-        name: (0, _reactDom.findDOMNode)(this.refs.name).value
-      }];
-      this.props.postUser(book);
-    }
-  }, {
-    key: 'onDelete',
-    value: function onDelete() {
-      var bookId = (0, _reactDom.findDOMNode)(this.refs.delete).value;
-
-      this.props.deleteUser(bookId);
-    }
-  }, {
-    key: 'handleSelect',
-    value: function handleSelect(img) {
-      this.setState({
-        img: '/images/' + img
-      });
-    }
-  }, {
-    key: 'resetForm',
-    value: function resetForm() {
-      // RESET the Button
-      this.props.resetButton();
-
-      (0, _reactDom.findDOMNode)(this.refs.username).value = '';
-      (0, _reactDom.findDOMNode)(this.refs.userType).value = '';
-      (0, _reactDom.findDOMNode)(this.refs.email).value = '';
-      (0, _reactDom.findDOMNode)(this.refs.password).value = '';
-      (0, _reactDom.findDOMNode)(this.refs.name).value = '';
-      this.setState({ img: '' });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-
-      var booksList = this.props.books.map(function (book) {
-        return _react2.default.createElement(
-          'option',
-          { key: book._id },
-          book._id
-        );
-      });
-
-      var imgList = this.state.images.map(function (imgArr, i) {
-        return _react2.default.createElement(
-          _reactBootstrap.MenuItem,
-          { key: i, eventKey: imgArr.name,
-            onClick: this.handleSelect.bind(this, imgArr.name) },
-          imgArr.name
-        );
-      }, this);
-
-      return _react2.default.createElement(
-        _reactBootstrap.Well,
-        null,
-        _react2.default.createElement(
-          _reactBootstrap.Row,
-          null,
-          _react2.default.createElement(
-            _reactBootstrap.Col,
-            { xs: 12, sm: 6 },
-            _react2.default.createElement(
-              _reactBootstrap.Panel,
-              null,
-              _react2.default.createElement(
-                _reactBootstrap.InputGroup,
-                null,
-                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', ref: 'image', value: this.state.img }),
-                _react2.default.createElement(
-                  _reactBootstrap.DropdownButton,
-                  {
-                    componentClass: _reactBootstrap.InputGroup.Button,
-                    id: 'input-dropdown-addon',
-                    title: 'Select an image',
-                    bsStyle: 'primary' },
-                  imgList
-                )
-              ),
-              _react2.default.createElement(_reactBootstrap.Image, { src: this.state.img, responsive: true })
-            )
-          ),
-          _react2.default.createElement(
-            _reactBootstrap.Col,
-            { xs: 12, sm: 6 },
-            _react2.default.createElement(
-              _reactBootstrap.Panel,
-              null,
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'username', validationState: this.props.validation },
-                _react2.default.createElement(
-                  _reactBootstrap.ControlLabel,
-                  null,
-                  'Username'
-                ),
-                _react2.default.createElement(_reactBootstrap.FormControl, {
-                  type: 'text',
-                  placeholder: 'Enter username',
-                  ref: 'username' }),
-                _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'userType', validationState: this.props.validation },
-                _react2.default.createElement(
-                  _reactBootstrap.ControlLabel,
-                  null,
-                  'UserType'
-                ),
-                _react2.default.createElement(_reactBootstrap.FormControl, {
-                  type: 'text',
-                  placeholder: 'Enter User Type',
-                  ref: 'userType' }),
-                _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'email', validationState: this.props.validation },
-                _react2.default.createElement(
-                  _reactBootstrap.ControlLabel,
-                  null,
-                  'Email'
-                ),
-                _react2.default.createElement(_reactBootstrap.FormControl, {
-                  type: 'text',
-                  placeholder: 'Enter Email',
-                  ref: 'email' }),
-                _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'name', validationState: this.props.validation },
-                _react2.default.createElement(
-                  _reactBootstrap.ControlLabel,
-                  null,
-                  'Name'
-                ),
-                _react2.default.createElement(_reactBootstrap.FormControl, {
-                  type: 'text',
-                  placeholder: 'Enter Name',
-                  ref: 'name' }),
-                _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'password', validationState: this.props.validation },
-                _react2.default.createElement(
-                  _reactBootstrap.ControlLabel,
-                  null,
-                  'Password'
-                ),
-                _react2.default.createElement(_reactBootstrap.FormControl, {
-                  type: 'text',
-                  placeholder: 'Enter Password',
-                  ref: 'password' }),
-                _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Button,
-                {
-                  onClick: !this.props.msg ? this.handleSubmit.bind(this) : this.resetForm.bind(this),
-                  bsStyle: !this.props.style ? "primary" : this.props.style },
-                !this.props.msg ? "Save book" : this.props.msg
-              )
-            ),
-            _react2.default.createElement(
-              _reactBootstrap.Panel,
-              { style: { marginTop: '25px' } },
-              _react2.default.createElement(
-                _reactBootstrap.FormGroup,
-                { controlId: 'formControlsSelect' },
-                _react2.default.createElement(
-                  _reactBootstrap.ControlLabel,
-                  null,
-                  'Select a book id to delete'
-                ),
-                _react2.default.createElement(
-                  _reactBootstrap.FormControl,
-                  { ref: 'delete', componentClass: 'select', placeholder: 'select' },
-                  _react2.default.createElement(
-                    'option',
-                    { value: 'select' },
-                    'select'
-                  ),
-                  booksList
-                )
-              ),
-              _react2.default.createElement(
-                _reactBootstrap.Button,
-                { onClick: this.onDelete.bind(this), bsStyle: 'danger' },
-                'Delete book'
-              )
-            )
-          )
-        )
-      );
-    }
-  }]);
-
-  return BooksForm;
-}(_react.Component);
-
-function mapStateToProps(state) {
-  return {
-    books: state.books.books,
-    msg: state.books.msg,
-    style: state.books.style,
-    validation: state.books.validation
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return (0, _redux.bindActionCreators)({
-    postUser: _booksActions.postUser,
-    deleteUser: _booksActions.deleteUser,
-    getUsers: _booksActions.getUsers,
-    resetButton: _booksActions.resetButton
-  }, dispatch);
-}
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BooksForm);
-
-/***/ }),
+/* 188 */,
 /* 189 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -13364,15 +12997,15 @@ var Cart = function (_Component) {
     key: 'onDelete',
     value: function onDelete(_id) {
 
-      // Create a copy of the current array of books
-      var currentBookToDelete = this.props.cart;
-      // Determine at which index in books array is
-      // the book to be deleted
-      var indexToDelete = currentBookToDelete.findIndex(function (cartItem) {
+      // Create a copy of the current array of users
+      var currentUserToDelete = this.props.cart;
+      // Determine at which index in users array is
+      // the user to be deleted
+      var indexToDelete = currentUserToDelete.findIndex(function (cartItem) {
         return cartItem._id === _id;
       });
-      // use slice to remove the book at the specified index
-      var cartAfterDelete = [].concat(_toConsumableArray(currentBookToDelete.slice(0, indexToDelete)), _toConsumableArray(currentBookToDelete.slice(indexToDelete + 1)));
+      // use slice to remove the user at the specified index
+      var cartAfterDelete = [].concat(_toConsumableArray(currentUserToDelete.slice(0, indexToDelete)), _toConsumableArray(currentUserToDelete.slice(indexToDelete + 1)));
 
       this.props.deleteCartItem(cartAfterDelete);
     }
@@ -13620,7 +13253,7 @@ var _index2 = _interopRequireDefault(_index);
 
 var _cartActions = __webpack_require__(59);
 
-var _booksActions = __webpack_require__(88);
+var _usersActions = __webpack_require__(425);
 
 var _routes = __webpack_require__(277);
 
@@ -35894,7 +35527,7 @@ Object.defineProperty(exports, "__esModule", {
 
 var _redux = __webpack_require__(23);
 
-var _booksReducers = __webpack_require__(257);
+var _usersReducers = __webpack_require__(424);
 
 var _cartReducers = __webpack_require__(258);
 
@@ -35903,87 +35536,12 @@ var _cartReducers = __webpack_require__(258);
 
 // import reducers to be combineReducers
 exports.default = (0, _redux.combineReducers)({
-  books: _booksReducers.booksReducers,
+  users: _usersReducers.usersReducers,
   cart: _cartReducers.cartReducers
 });
 
 /***/ }),
-/* 257 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-// BOOKS REDUCERS
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-exports.booksReducers = booksReducers;
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function booksReducers() {
-  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { books: [] };
-  var action = arguments[1];
-
-  switch (action.type) {
-    case "GET_USERS":
-      return _extends({}, state, { books: [].concat(_toConsumableArray(action.payload)) });
-    case "POST_USER":
-      return _extends({}, state, {
-        books: [].concat(_toConsumableArray(state.books), _toConsumableArray(action.payload)),
-        msg: 'Saved! Click to continue',
-        style: 'success',
-        validation: 'success' });
-      break;
-    case "POST_USER_REJECTED":
-      return _extends({}, state, {
-        msg: 'Please try again',
-        style: 'danger',
-        validation: 'error' });
-      break;
-    case "RESET_BUTTON":
-      return _extends({}, state, {
-        msg: null,
-        style: 'primary',
-        validation: null });
-      break;
-    case "DELETE_USER":
-      // Create a copy of the current array of books
-      var currentBookToDelete = [].concat(_toConsumableArray(state.books));
-      // Determine at which index in books array is
-      // the book to be deleted
-      var indexToDelete = currentBookToDelete.findIndex(function (book) {
-        return book._id == action.payload;
-      });
-      // use slice to remove the book at the specified index
-      return { books: [].concat(_toConsumableArray(currentBookToDelete.slice(0, indexToDelete)), _toConsumableArray(currentBookToDelete.slice(indexToDelete + 1))) };
-      break;
-
-    case "UPDATE_USER":
-      // Create a copy of the current array of books
-      var currentBookToUpdate = [].concat(_toConsumableArray(state.books));
-      // Determine at which index in books array is the book to be deleted
-      var indexToUpdate = currentBookToUpdate.findIndex(function (book) {
-        return book._id === action.payload._id;
-      });
-      // create a new book object with the new values
-      var newBook = _extends({}, currentBookToUpdate[indexToUpdate], {
-        username: action.payload.username
-      });
-      console.log("what newBook is: ", newBook);
-      return { books: [].concat(_toConsumableArray(currentBookToUpdate.slice(0, indexToUpdate)), [newBook], _toConsumableArray(currentBookToUpdate.slice(indexToUpdate + 1))) };
-      break;
-  }
-
-  return state;
-}
-
-/***/ }),
+/* 257 */,
 /* 258 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -36968,17 +36526,17 @@ var _signup = __webpack_require__(423);
 
 var _signup2 = _interopRequireDefault(_signup);
 
-var _booksList = __webpack_require__(278);
+var _usersList = __webpack_require__(427);
 
-var _booksList2 = _interopRequireDefault(_booksList);
+var _usersList2 = _interopRequireDefault(_usersList);
 
 var _cart = __webpack_require__(189);
 
 var _cart2 = _interopRequireDefault(_cart);
 
-var _booksForm = __webpack_require__(188);
+var _usersForm = __webpack_require__(426);
 
-var _booksForm2 = _interopRequireDefault(_booksForm);
+var _usersForm2 = _interopRequireDefault(_usersForm);
 
 var _main = __webpack_require__(419);
 
@@ -36992,9 +36550,9 @@ var routes = _react2.default.createElement(
   _react2.default.createElement(
     _reactRouter.Route,
     { path: '/', component: _main2.default },
-    _react2.default.createElement(_reactRouter.IndexRoute, { component: _booksList2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: '/about', component: _booksList2.default }),
-    _react2.default.createElement(_reactRouter.Route, { path: '/admin', component: _booksForm2.default }),
+    _react2.default.createElement(_reactRouter.IndexRoute, { component: _usersList2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: '/about', component: _usersList2.default }),
+    _react2.default.createElement(_reactRouter.Route, { path: '/admin', component: _usersForm2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '/cart', component: _cart2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '/login', component: _login2.default }),
     _react2.default.createElement(_reactRouter.Route, { path: '/signup', component: _signup2.default })
@@ -37005,162 +36563,7 @@ var routes = _react2.default.createElement(
 exports.default = routes;
 
 /***/ }),
-/* 278 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactRedux = __webpack_require__(34);
-
-var _redux = __webpack_require__(23);
-
-var _booksActions = __webpack_require__(88);
-
-var _reactBootstrap = __webpack_require__(48);
-
-var _bookItem = __webpack_require__(418);
-
-var _bookItem2 = _interopRequireDefault(_bookItem);
-
-var _booksForm = __webpack_require__(188);
-
-var _booksForm2 = _interopRequireDefault(_booksForm);
-
-var _cart = __webpack_require__(189);
-
-var _cart2 = _interopRequireDefault(_cart);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var BooksList = function (_Component) {
-  _inherits(BooksList, _Component);
-
-  function BooksList() {
-    _classCallCheck(this, BooksList);
-
-    return _possibleConstructorReturn(this, (BooksList.__proto__ || Object.getPrototypeOf(BooksList)).apply(this, arguments));
-  }
-
-  _createClass(BooksList, [{
-    key: 'componentDidMount',
-    value: function componentDidMount() {
-      // Dispatch an action
-      this.props.getUsers();
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      var booksList = this.props.books.map(function (booksArr) {
-        return _react2.default.createElement(
-          _reactBootstrap.Col,
-          { xs: 12, m: 6, md: 4, key: booksArr._id },
-          _react2.default.createElement(_bookItem2.default, {
-            _id: booksArr._id,
-            username: booksArr.username,
-            userType: booksArr.userType,
-            images: booksArr.images
-          })
-        );
-      });
-
-      return _react2.default.createElement(
-        _reactBootstrap.Grid,
-        null,
-        _react2.default.createElement(
-          _reactBootstrap.Row,
-          null,
-          _react2.default.createElement(
-            _reactBootstrap.Carousel,
-            null,
-            _react2.default.createElement(
-              _reactBootstrap.Carousel.Item,
-              null,
-              _react2.default.createElement('img', { width: 900, height: 300, alt: '900x300', src: '/images/RedFletcherHeader.png' }),
-              _react2.default.createElement(
-                _reactBootstrap.Carousel.Caption,
-                null,
-                _react2.default.createElement(
-                  'h3',
-                  null,
-                  'First slide label'
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  'Nulla vitae elit libero, a pharetra augue mollis interdum.'
-                )
-              )
-            ),
-            _react2.default.createElement(
-              _reactBootstrap.Carousel.Item,
-              null,
-              _react2.default.createElement('img', { width: 900, height: 300, alt: '900x300', src: '/images/LongCat.gif' }),
-              _react2.default.createElement(
-                _reactBootstrap.Carousel.Caption,
-                null,
-                _react2.default.createElement(
-                  'h3',
-                  null,
-                  'Second slide label'
-                ),
-                _react2.default.createElement(
-                  'p',
-                  null,
-                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
-                )
-              )
-            )
-          )
-        ),
-        _react2.default.createElement(
-          _reactBootstrap.Row,
-          null,
-          _react2.default.createElement(_cart2.default, null)
-        ),
-        _react2.default.createElement(
-          _reactBootstrap.Row,
-          { style: { marginTop: '15px' } },
-          booksList
-        )
-      );
-    }
-  }]);
-
-  return BooksList;
-}(_react.Component);
-
-function mapStateToProps(state) {
-  return {
-    books: state.books.books
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return (0, _redux.bindActionCreators)({
-    getUsers: _booksActions.getUsers
-  }, dispatch);
-}
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BooksList);
-
-/***/ }),
+/* 278 */,
 /* 279 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -48421,158 +47824,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
 /***/ }),
-/* 418 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-var _react = __webpack_require__(0);
-
-var _react2 = _interopRequireDefault(_react);
-
-var _reactBootstrap = __webpack_require__(48);
-
-var _reactRedux = __webpack_require__(34);
-
-var _redux = __webpack_require__(23);
-
-var _cartActions = __webpack_require__(59);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
-
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-var BookItem = function (_Component) {
-  _inherits(BookItem, _Component);
-
-  _createClass(BookItem, [{
-    key: 'handleCart',
-    value: function handleCart() {
-      var book = [].concat(_toConsumableArray(this.props.cart), [{
-        _id: this.props._id,
-        username: this.props.username,
-        userType: this.props.userType,
-        images: this.props.images,
-        password: this.props.password,
-        email: this.props.email,
-        name: this.props.name,
-        quantity: 1
-      }]);
-
-      // CHECK IF CART IS EMPTY
-      if (this.props.cart.length > 0) {
-        // CART IS NOT EMPTY
-        var _id = this.props._id;
-
-        var cartIndex = this.props.cart.findIndex(function (cart) {
-          return cart._id === _id;
-        });
-
-        // IF RETURNS -1 THERE ARE NO ITEMS WITH SAME ID
-        if (cartIndex === -1) {
-          this.props.addToCart(book);
-        } else {
-          // WE NEED TO UPDATE QUANTITY
-          this.props.updateCart(_id, 1, this.props.cart);
-        }
-      } else {
-        // CART IS EMPTY
-        this.props.addToCart(book);
-      }
-    }
-  }]);
-
-  function BookItem() {
-    _classCallCheck(this, BookItem);
-
-    var _this = _possibleConstructorReturn(this, (BookItem.__proto__ || Object.getPrototypeOf(BookItem)).call(this));
-
-    _this.state = {
-      isClicked: false
-    };
-    return _this;
-  }
-
-  _createClass(BookItem, [{
-    key: 'onReadMore',
-    value: function onReadMore() {
-      this.setState({ isClicked: true });
-    }
-  }, {
-    key: 'render',
-    value: function render() {
-      return _react2.default.createElement(
-        _reactBootstrap.Well,
-        null,
-        _react2.default.createElement(
-          _reactBootstrap.Row,
-          null,
-          _react2.default.createElement(
-            _reactBootstrap.Col,
-            { xs: 12, sm: 4 },
-            _react2.default.createElement(_reactBootstrap.Image, { src: this.props.images, responsive: true })
-          ),
-          _react2.default.createElement(
-            _reactBootstrap.Col,
-            { xs: 12, sm: 8 },
-            _react2.default.createElement(
-              'h6',
-              null,
-              this.props.username
-            ),
-            _react2.default.createElement(
-              'p',
-              null,
-              this.props.userType.length > 50 && this.state.isClicked === false ? this.props.userType.substring(0, 50) : this.props.userType,
-              _react2.default.createElement(
-                'button',
-                { className: 'link', onClick: this.onReadMore.bind(this) },
-                this.state.isClicked === false && this.props.userType !== null && this.props.userType.length > 50 ? '...read more' : ''
-              )
-            ),
-            _react2.default.createElement(
-              _reactBootstrap.Button,
-              { onClick: this.handleCart.bind(this), bsStyle: 'primary' },
-              'Buy now'
-            )
-          )
-        )
-      );
-    }
-  }]);
-
-  return BookItem;
-}(_react.Component);
-
-function mapStateToProps(state) {
-  return {
-    cart: state.cart.cart
-  };
-}
-
-function mapDispatchToProps(dispatch) {
-  return (0, _redux.bindActionCreators)({
-    addToCart: _cartActions.addToCart,
-    updateCart: _cartActions.updateCart
-  }, dispatch);
-}
-
-exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(BookItem);
-
-/***/ }),
+/* 418 */,
 /* 419 */
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -49072,6 +48324,759 @@ var Signup = function (_Component) {
 }(_react.Component);
 
 exports.default = Signup;
+
+/***/ }),
+/* 424 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+// USERS REDUCERS
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+exports.usersReducers = usersReducers;
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function usersReducers() {
+  var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : { users: [] };
+  var action = arguments[1];
+
+  switch (action.type) {
+    case "GET_USERS":
+      return _extends({}, state, { users: [].concat(_toConsumableArray(action.payload)) });
+    case "POST_USER":
+      return _extends({}, state, {
+        users: [].concat(_toConsumableArray(state.users), _toConsumableArray(action.payload)),
+        msg: 'Saved! Click to continue',
+        style: 'success',
+        validation: 'success' });
+      break;
+    case "POST_USER_REJECTED":
+      return _extends({}, state, {
+        msg: 'Please try again',
+        style: 'danger',
+        validation: 'error' });
+      break;
+    case "RESET_BUTTON":
+      return _extends({}, state, {
+        msg: null,
+        style: 'primary',
+        validation: null });
+      break;
+    case "DELETE_USER":
+      // Create a copy of the current array of users
+      var currentUserToDelete = [].concat(_toConsumableArray(state.users));
+      // Determine at which index in users array is
+      // the user to be deleted
+      var indexToDelete = currentUserToDelete.findIndex(function (user) {
+        return user._id == action.payload;
+      });
+      // use slice to remove the user at the specified index
+      return { users: [].concat(_toConsumableArray(currentUserToDelete.slice(0, indexToDelete)), _toConsumableArray(currentUserToDelete.slice(indexToDelete + 1))) };
+      break;
+
+    case "UPDATE_USER":
+      // Create a copy of the current array of users
+      var currentUserToUpdate = [].concat(_toConsumableArray(state.users));
+      // Determine at which index in users array is the user to be deleted
+      var indexToUpdate = currentUserToUpdate.findIndex(function (user) {
+        return user._id === action.payload._id;
+      });
+      // create a new user object with the new values
+      var newUser = _extends({}, currentUserToUpdate[indexToUpdate], {
+        username: action.payload.username
+      });
+      console.log("what newUser is: ", newUser);
+      return { users: [].concat(_toConsumableArray(currentUserToUpdate.slice(0, indexToUpdate)), [newUser], _toConsumableArray(currentUserToUpdate.slice(indexToUpdate + 1))) };
+      break;
+  }
+
+  return state;
+}
+
+/***/ }),
+/* 425 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.getUsers = getUsers;
+exports.postUser = postUser;
+exports.deleteUser = deleteUser;
+exports.updateUser = updateUser;
+exports.resetButton = resetButton;
+
+var _axios = __webpack_require__(86);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// GET USERS
+function getUsers() {
+  return function (dispatch) {
+    _axios2.default.get("/api/users").then(function (response) {
+      dispatch({ type: "GET_USERS", payload: response.data });
+    }).catch(function (err) {
+      dispatch({ type: "GET_USERS_REJECTED", payload: err });
+    });
+  };
+}
+
+// POST USERS
+function postUser(user) {
+  return function (dispatch) {
+    _axios2.default.post("/api/users", user).then(function (response) {
+      dispatch({ type: "POST_USER", payload: response.data });
+    }).catch(function (err) {
+      dispatch({ type: "POST_USER_REJECTED", payload: "there was an error while posting a new user" });
+    });
+  };
+}
+
+// DELETE A USER
+function deleteUser(id) {
+  return function (dispatch) {
+    _axios2.default.delete("/api/users/" + id).then(function (response) {
+      dispatch({ type: "DELETE_USER", payload: id });
+    }).catch(function (err) {
+      dispatch({ type: "DELETE_USER_REJECTED", payload: err });
+    });
+  };
+}
+
+// UPDATE A USER
+function updateUser(user) {
+  return {
+    type: "UPDATE_USER",
+    payload: user
+  };
+}
+
+// RESET BUTTON
+function resetButton() {
+  return {
+    type: "RESET_BUTTON"
+  };
+}
+
+/***/ }),
+/* 426 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = __webpack_require__(48);
+
+var _reactRedux = __webpack_require__(34);
+
+var _redux = __webpack_require__(23);
+
+var _reactDom = __webpack_require__(14);
+
+var _usersActions = __webpack_require__(425);
+
+var _axios = __webpack_require__(86);
+
+var _axios2 = _interopRequireDefault(_axios);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UsersForm = function (_Component) {
+  _inherits(UsersForm, _Component);
+
+  function UsersForm() {
+    _classCallCheck(this, UsersForm);
+
+    var _this = _possibleConstructorReturn(this, (UsersForm.__proto__ || Object.getPrototypeOf(UsersForm)).call(this));
+
+    _this.state = {
+      images: [{}],
+      img: ''
+    };
+    return _this;
+  }
+
+  _createClass(UsersForm, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      this.props.getUsers();
+
+      // GET IMAGES FROM API
+      _axios2.default.get('/api/images').then(function (response) {
+        _this2.setState({ images: response.data });
+      }).catch(function (err) {
+        _this2.setState({ images: 'error loading image files from the server', img: '' });
+      });
+    }
+  }, {
+    key: 'handleSubmit',
+    value: function handleSubmit() {
+      var user = [{
+        username: (0, _reactDom.findDOMNode)(this.refs.username).value,
+        userType: (0, _reactDom.findDOMNode)(this.refs.userType).value,
+        images: (0, _reactDom.findDOMNode)(this.refs.image).value,
+        password: (0, _reactDom.findDOMNode)(this.refs.password).value,
+        email: (0, _reactDom.findDOMNode)(this.refs.email).value,
+        name: (0, _reactDom.findDOMNode)(this.refs.name).value
+      }];
+      this.props.postUser(user);
+    }
+  }, {
+    key: 'onDelete',
+    value: function onDelete() {
+      var userId = (0, _reactDom.findDOMNode)(this.refs.delete).value;
+
+      this.props.deleteUser(userId);
+    }
+  }, {
+    key: 'handleSelect',
+    value: function handleSelect(img) {
+      this.setState({
+        img: '/images/' + img
+      });
+    }
+  }, {
+    key: 'resetForm',
+    value: function resetForm() {
+      // RESET the Button
+      this.props.resetButton();
+
+      (0, _reactDom.findDOMNode)(this.refs.username).value = '';
+      (0, _reactDom.findDOMNode)(this.refs.userType).value = '';
+      (0, _reactDom.findDOMNode)(this.refs.email).value = '';
+      (0, _reactDom.findDOMNode)(this.refs.password).value = '';
+      (0, _reactDom.findDOMNode)(this.refs.name).value = '';
+      this.setState({ img: '' });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+
+      var usersList = this.props.users.map(function (user) {
+        return _react2.default.createElement(
+          'option',
+          { key: user._id },
+          user._id
+        );
+      });
+
+      var imgList = this.state.images.map(function (imgArr, i) {
+        return _react2.default.createElement(
+          _reactBootstrap.MenuItem,
+          { key: i, eventKey: imgArr.name,
+            onClick: this.handleSelect.bind(this, imgArr.name) },
+          imgArr.name
+        );
+      }, this);
+
+      return _react2.default.createElement(
+        _reactBootstrap.Well,
+        null,
+        _react2.default.createElement(
+          _reactBootstrap.Row,
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Col,
+            { xs: 12, sm: 6 },
+            _react2.default.createElement(
+              _reactBootstrap.Panel,
+              null,
+              _react2.default.createElement(
+                _reactBootstrap.InputGroup,
+                null,
+                _react2.default.createElement(_reactBootstrap.FormControl, { type: 'text', ref: 'image', value: this.state.img }),
+                _react2.default.createElement(
+                  _reactBootstrap.DropdownButton,
+                  {
+                    componentClass: _reactBootstrap.InputGroup.Button,
+                    id: 'input-dropdown-addon',
+                    title: 'Select an image',
+                    bsStyle: 'primary' },
+                  imgList
+                )
+              ),
+              _react2.default.createElement(_reactBootstrap.Image, { src: this.state.img, responsive: true })
+            )
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Col,
+            { xs: 12, sm: 6 },
+            _react2.default.createElement(
+              _reactBootstrap.Panel,
+              null,
+              _react2.default.createElement(
+                _reactBootstrap.FormGroup,
+                { controlId: 'username', validationState: this.props.validation },
+                _react2.default.createElement(
+                  _reactBootstrap.ControlLabel,
+                  null,
+                  'Username'
+                ),
+                _react2.default.createElement(_reactBootstrap.FormControl, {
+                  type: 'text',
+                  placeholder: 'Enter username',
+                  ref: 'username' }),
+                _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.FormGroup,
+                { controlId: 'userType', validationState: this.props.validation },
+                _react2.default.createElement(
+                  _reactBootstrap.ControlLabel,
+                  null,
+                  'UserType'
+                ),
+                _react2.default.createElement(_reactBootstrap.FormControl, {
+                  type: 'text',
+                  placeholder: 'Enter User Type',
+                  ref: 'userType' }),
+                _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.FormGroup,
+                { controlId: 'email', validationState: this.props.validation },
+                _react2.default.createElement(
+                  _reactBootstrap.ControlLabel,
+                  null,
+                  'Email'
+                ),
+                _react2.default.createElement(_reactBootstrap.FormControl, {
+                  type: 'text',
+                  placeholder: 'Enter Email',
+                  ref: 'email' }),
+                _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.FormGroup,
+                { controlId: 'name', validationState: this.props.validation },
+                _react2.default.createElement(
+                  _reactBootstrap.ControlLabel,
+                  null,
+                  'Name'
+                ),
+                _react2.default.createElement(_reactBootstrap.FormControl, {
+                  type: 'text',
+                  placeholder: 'Enter Name',
+                  ref: 'name' }),
+                _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.FormGroup,
+                { controlId: 'password', validationState: this.props.validation },
+                _react2.default.createElement(
+                  _reactBootstrap.ControlLabel,
+                  null,
+                  'Password'
+                ),
+                _react2.default.createElement(_reactBootstrap.FormControl, {
+                  type: 'text',
+                  placeholder: 'Enter Password',
+                  ref: 'password' }),
+                _react2.default.createElement(_reactBootstrap.FormControl.Feedback, null)
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.Button,
+                {
+                  onClick: !this.props.msg ? this.handleSubmit.bind(this) : this.resetForm.bind(this),
+                  bsStyle: !this.props.style ? "primary" : this.props.style },
+                !this.props.msg ? "Save user" : this.props.msg
+              )
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.Panel,
+              { style: { marginTop: '25px' } },
+              _react2.default.createElement(
+                _reactBootstrap.FormGroup,
+                { controlId: 'formControlsSelect' },
+                _react2.default.createElement(
+                  _reactBootstrap.ControlLabel,
+                  null,
+                  'Select a user id to delete'
+                ),
+                _react2.default.createElement(
+                  _reactBootstrap.FormControl,
+                  { ref: 'delete', componentClass: 'select', placeholder: 'select' },
+                  _react2.default.createElement(
+                    'option',
+                    { value: 'select' },
+                    'select'
+                  ),
+                  usersList
+                )
+              ),
+              _react2.default.createElement(
+                _reactBootstrap.Button,
+                { onClick: this.onDelete.bind(this), bsStyle: 'danger' },
+                'Delete user'
+              )
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return UsersForm;
+}(_react.Component);
+
+function mapStateToProps(state) {
+  return {
+    users: state.users.users,
+    msg: state.users.msg,
+    style: state.users.style,
+    validation: state.users.validation
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({
+    postUser: _usersActions.postUser,
+    deleteUser: _usersActions.deleteUser,
+    getUsers: _usersActions.getUsers,
+    resetButton: _usersActions.resetButton
+  }, dispatch);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UsersForm);
+
+/***/ }),
+/* 427 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRedux = __webpack_require__(34);
+
+var _redux = __webpack_require__(23);
+
+var _usersActions = __webpack_require__(425);
+
+var _reactBootstrap = __webpack_require__(48);
+
+var _userItem = __webpack_require__(428);
+
+var _userItem2 = _interopRequireDefault(_userItem);
+
+var _usersForm = __webpack_require__(426);
+
+var _usersForm2 = _interopRequireDefault(_usersForm);
+
+var _cart = __webpack_require__(189);
+
+var _cart2 = _interopRequireDefault(_cart);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UsersList = function (_Component) {
+  _inherits(UsersList, _Component);
+
+  function UsersList() {
+    _classCallCheck(this, UsersList);
+
+    return _possibleConstructorReturn(this, (UsersList.__proto__ || Object.getPrototypeOf(UsersList)).apply(this, arguments));
+  }
+
+  _createClass(UsersList, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      // Dispatch an action
+      this.props.getUsers();
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var usersList = this.props.users.map(function (usersArr) {
+        return _react2.default.createElement(
+          _reactBootstrap.Col,
+          { xs: 12, m: 6, md: 4, key: usersArr._id },
+          _react2.default.createElement(_userItem2.default, {
+            _id: usersArr._id,
+            username: usersArr.username,
+            userType: usersArr.userType,
+            images: usersArr.images
+          })
+        );
+      });
+
+      return _react2.default.createElement(
+        _reactBootstrap.Grid,
+        null,
+        _react2.default.createElement(
+          _reactBootstrap.Row,
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Carousel,
+            null,
+            _react2.default.createElement(
+              _reactBootstrap.Carousel.Item,
+              null,
+              _react2.default.createElement('img', { width: 900, height: 300, alt: '900x300', src: '/images/RedFletcherHeader.png' }),
+              _react2.default.createElement(
+                _reactBootstrap.Carousel.Caption,
+                null,
+                _react2.default.createElement(
+                  'h3',
+                  null,
+                  'First slide label'
+                ),
+                _react2.default.createElement(
+                  'p',
+                  null,
+                  'Nulla vitae elit libero, a pharetra augue mollis interdum.'
+                )
+              )
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.Carousel.Item,
+              null,
+              _react2.default.createElement('img', { width: 900, height: 300, alt: '900x300', src: '/images/LongCat.gif' }),
+              _react2.default.createElement(
+                _reactBootstrap.Carousel.Caption,
+                null,
+                _react2.default.createElement(
+                  'h3',
+                  null,
+                  'Second slide label'
+                ),
+                _react2.default.createElement(
+                  'p',
+                  null,
+                  'Lorem ipsum dolor sit amet, consectetur adipiscing elit.'
+                )
+              )
+            )
+          )
+        ),
+        _react2.default.createElement(
+          _reactBootstrap.Row,
+          null,
+          _react2.default.createElement(_cart2.default, null)
+        ),
+        _react2.default.createElement(
+          _reactBootstrap.Row,
+          { style: { marginTop: '15px' } },
+          usersList
+        )
+      );
+    }
+  }]);
+
+  return UsersList;
+}(_react.Component);
+
+function mapStateToProps(state) {
+  return {
+    users: state.users.users
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({
+    getUsers: _usersActions.getUsers
+  }, dispatch);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UsersList);
+
+/***/ }),
+/* 428 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactBootstrap = __webpack_require__(48);
+
+var _reactRedux = __webpack_require__(34);
+
+var _redux = __webpack_require__(23);
+
+var _cartActions = __webpack_require__(59);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var UserItem = function (_Component) {
+  _inherits(UserItem, _Component);
+
+  _createClass(UserItem, [{
+    key: 'handleCart',
+    value: function handleCart() {
+      var user = [].concat(_toConsumableArray(this.props.cart), [{
+        _id: this.props._id,
+        username: this.props.username,
+        userType: this.props.userType,
+        images: this.props.images,
+        password: this.props.password,
+        email: this.props.email,
+        name: this.props.name,
+        quantity: 1
+      }]);
+
+      // CHECK IF CART IS EMPTY
+      if (this.props.cart.length > 0) {
+        // CART IS NOT EMPTY
+        var _id = this.props._id;
+
+        var cartIndex = this.props.cart.findIndex(function (cart) {
+          return cart._id === _id;
+        });
+
+        // IF RETURNS -1 THERE ARE NO ITEMS WITH SAME ID
+        if (cartIndex === -1) {
+          this.props.addToCart(user);
+        } else {
+          // WE NEED TO UPDATE QUANTITY
+          this.props.updateCart(_id, 1, this.props.cart);
+        }
+      } else {
+        // CART IS EMPTY
+        this.props.addToCart(user);
+      }
+    }
+  }]);
+
+  function UserItem() {
+    _classCallCheck(this, UserItem);
+
+    var _this = _possibleConstructorReturn(this, (UserItem.__proto__ || Object.getPrototypeOf(UserItem)).call(this));
+
+    _this.state = {
+      isClicked: false
+    };
+    return _this;
+  }
+
+  _createClass(UserItem, [{
+    key: 'onReadMore',
+    value: function onReadMore() {
+      this.setState({ isClicked: true });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      return _react2.default.createElement(
+        _reactBootstrap.Well,
+        null,
+        _react2.default.createElement(
+          _reactBootstrap.Row,
+          null,
+          _react2.default.createElement(
+            _reactBootstrap.Col,
+            { xs: 12, sm: 4 },
+            _react2.default.createElement(_reactBootstrap.Image, { src: this.props.images, responsive: true })
+          ),
+          _react2.default.createElement(
+            _reactBootstrap.Col,
+            { xs: 12, sm: 8 },
+            _react2.default.createElement(
+              'h6',
+              null,
+              this.props.username
+            ),
+            _react2.default.createElement(
+              'p',
+              null,
+              this.props.userType.length > 50 && this.state.isClicked === false ? this.props.userType.substring(0, 50) : this.props.userType,
+              _react2.default.createElement(
+                'button',
+                { className: 'link', onClick: this.onReadMore.bind(this) },
+                this.state.isClicked === false && this.props.userType !== null && this.props.userType.length > 50 ? '...read more' : ''
+              )
+            ),
+            _react2.default.createElement(
+              _reactBootstrap.Button,
+              { onClick: this.handleCart.bind(this), bsStyle: 'primary' },
+              'Buy now'
+            )
+          )
+        )
+      );
+    }
+  }]);
+
+  return UserItem;
+}(_react.Component);
+
+function mapStateToProps(state) {
+  return {
+    cart: state.cart.cart
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return (0, _redux.bindActionCreators)({
+    addToCart: _cartActions.addToCart,
+    updateCart: _cartActions.updateCart
+  }, dispatch);
+}
+
+exports.default = (0, _reactRedux.connect)(mapStateToProps, mapDispatchToProps)(UserItem);
 
 /***/ })
 /******/ ]);

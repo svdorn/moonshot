@@ -5,10 +5,10 @@ import { MenuItem, InputGroup, DropdownButton, Image, Col, Row, Well, Panel, For
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { findDOMNode } from 'react-dom';
-import { postUser, deleteUser, getUsers, resetButton } from '../../actions/booksActions';
+import { postUser, deleteUser, getUsers, resetButton } from '../../actions/usersActions';
 import axios from 'axios';
 
-class BooksForm extends Component {
+class UsersForm extends Component {
   constructor() {
     super();
     this.state = {
@@ -31,7 +31,7 @@ class BooksForm extends Component {
   }
 
   handleSubmit() {
-    const book = [{
+    const user = [{
       username: findDOMNode(this.refs.username).value,
       userType: findDOMNode(this.refs.userType).value,
       images: findDOMNode(this.refs.image).value,
@@ -39,13 +39,13 @@ class BooksForm extends Component {
       email: findDOMNode(this.refs.email).value,
       name: findDOMNode(this.refs.name).value
     }];
-    this.props.postUser(book);
+    this.props.postUser(user);
   }
 
   onDelete() {
-    let bookId = findDOMNode(this.refs.delete).value;
+    let userId = findDOMNode(this.refs.delete).value;
 
-    this.props.deleteUser(bookId);
+    this.props.deleteUser(userId);
   }
 
   handleSelect(img) {
@@ -68,9 +68,9 @@ class BooksForm extends Component {
 
   render() {
 
-    const booksList = this.props.books.map(function(book) {
+    const usersList = this.props.users.map(function(user) {
       return (
-        <option key={book._id}>{book._id}</option>
+        <option key={user._id}>{user._id}</option>
       );
     })
 
@@ -146,18 +146,18 @@ class BooksForm extends Component {
               <Button
                 onClick={(!this.props.msg)?(this.handleSubmit.bind(this)) : (this.resetForm.bind(this))}
                 bsStyle={(!this.props.style)?("primary"):(this.props.style)}>
-                {(!this.props.msg)?("Save book"):(this.props.msg)}
+                {(!this.props.msg)?("Save user"):(this.props.msg)}
               </Button>
             </Panel>
             <Panel style={{marginTop:'25px'}}>
               <FormGroup controlId="formControlsSelect">
-                <ControlLabel>Select a book id to delete</ControlLabel>
+                <ControlLabel>Select a user id to delete</ControlLabel>
                 <FormControl ref="delete" componentClass="select" placeholder="select">
                   <option value="select">select</option>
-                    {booksList}
+                    {usersList}
                 </FormControl>
               </FormGroup>
-              <Button onClick={this.onDelete.bind(this)} bsStyle="danger">Delete book</Button>
+              <Button onClick={this.onDelete.bind(this)} bsStyle="danger">Delete user</Button>
             </Panel>
           </Col>
         </Row>
@@ -168,10 +168,10 @@ class BooksForm extends Component {
 
 function mapStateToProps(state) {
   return {
-    books: state.books.books,
-    msg: state.books.msg,
-    style: state.books.style,
-    validation: state.books.validation
+    users: state.users.users,
+    msg: state.users.msg,
+    style: state.users.style,
+    validation: state.users.validation
   }
 }
 
@@ -184,4 +184,4 @@ function mapDispatchToProps(dispatch) {
   }, dispatch);
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(BooksForm);
+export default connect(mapStateToProps, mapDispatchToProps)(UsersForm);
