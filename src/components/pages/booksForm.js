@@ -35,7 +35,9 @@ class BooksForm extends Component {
       username: findDOMNode(this.refs.username).value,
       userType: findDOMNode(this.refs.userType).value,
       images: findDOMNode(this.refs.image).value,
-      price: findDOMNode(this.refs.price).value
+      password: findDOMNode(this.refs.password).value,
+      email: findDOMNode(this.refs.email).value,
+      name: findDOMNode(this.refs.name).value
     }];
     this.props.postUser(book);
   }
@@ -58,7 +60,9 @@ class BooksForm extends Component {
 
     findDOMNode(this.refs.username).value = '';
     findDOMNode(this.refs.userType).value = '';
-    findDOMNode(this.refs.price).value = '';
+    findDOMNode(this.refs.email).value = '';
+    findDOMNode(this.refs.password).value = '';
+    findDOMNode(this.refs.name).value = '';
     this.setState({img:''});
   }
 
@@ -115,12 +119,28 @@ class BooksForm extends Component {
                     ref="userType" />
                     <FormControl.Feedback />
               </FormGroup>
-              <FormGroup controlId="price"  validationState={this.props.validation}>
-                <ControlLabel>Price</ControlLabel>
+              <FormGroup controlId="email"  validationState={this.props.validation}>
+                <ControlLabel>Email</ControlLabel>
                 <FormControl
                     type="text"
-                    placeholder="Enter Price"
-                    ref="price" />
+                    placeholder="Enter Email"
+                    ref="email" />
+                    <FormControl.Feedback />
+              </FormGroup>
+              <FormGroup controlId="name"  validationState={this.props.validation}>
+                <ControlLabel>Name</ControlLabel>
+                <FormControl
+                    type="text"
+                    placeholder="Enter Name"
+                    ref="name" />
+                    <FormControl.Feedback />
+              </FormGroup>
+              <FormGroup controlId="password"  validationState={this.props.validation}>
+                <ControlLabel>Password</ControlLabel>
+                <FormControl
+                    type="text"
+                    placeholder="Enter Password"
+                    ref="password" />
                     <FormControl.Feedback />
               </FormGroup>
               <Button

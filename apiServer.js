@@ -96,27 +96,29 @@ app.delete('/books/:_id', function(req, res) {
 
 //----->> UPDATE BOOK <<------
 app.put('/books/:_id', function(req, res) {
-  var book = req.body;
+  var user = req.body;
   var query = req.params._id;
 
   // if the field doesn't exist, $set will set a new field
   var update = {
     '$set': {
-      username: book.username,
-      userType: book.userType,
-      image: book.image,
-      price: book.price
+      username: user.username,
+      userType: user.userType,
+      image: user.image,
+      password: user.password,
+      name: user.name,
+      email: user.email
     }
   };
 
   // When true returns the updated document
   var options = {new: true};
 
-  Users.findOneAndUpdate(query, update, options, function(err, books) {
+  Users.findOneAndUpdate(query, update, options, function(err, users) {
     if (err) {
       console.log(err);
     }
-    res.json(books);
+    res.json(users);
   });
 });
 

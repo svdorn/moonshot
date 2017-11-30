@@ -74,9 +74,6 @@ class Cart extends Component {
               <h6>{cartArr.username}</h6><span>    </span>
             </Col>
             <Col xs={12} sm={2}>
-              <h6>usd. {cartArr.price}</h6><span>    </span>
-            </Col>
-            <Col xs={12} sm={2}>
               <h6>qty. <Label bsStyle="success">{cartArr.quantity}</Label></h6>
             </Col>
             <Col xs={6} sm={4}>

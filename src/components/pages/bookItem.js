@@ -12,7 +12,9 @@ class BookItem extends Component {
       username: this.props.username,
       userType: this.props.userType,
       images: this.props.images,
-      price: this.props.price,
+      password: this.props.password,
+      email: this.props.email,
+      name: this.props.name,
       quantity: 1
     }]
 
@@ -64,8 +66,6 @@ class BookItem extends Component {
                 {(this.state.isClicked === false && this.props.userType !== null && this.props.userType.length > 50)?('...read more'):('')}
               </button>
             </p>
-
-            <h6>usd. {this.props.price}</h6>
             <Button onClick={this.handleCart.bind(this)} bsStyle='primary'>Buy now</Button>
           </Col>
         </Row>

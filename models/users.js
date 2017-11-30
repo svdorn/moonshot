@@ -2,10 +2,11 @@
 var mongoose = require('mongoose');
 
 var usersSchema = mongoose.Schema({
+  name: String,
+  email: String,
   username: String,
   userType: String,
-  images: String,
-  price: Number
+  images: String
 });
 
 // 'Users' means we will use the 'users' collection. if 'Books' was in there

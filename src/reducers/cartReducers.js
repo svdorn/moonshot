@@ -39,8 +39,9 @@ export function cartReducers(state={cart:[]}, action) {
 
 // CALCULATE TOTALS
 export function totals(payloadArr) {
+  const price = 1;
   const totalAmount = payloadArr.map(function(cartArr) {
-    return cartArr.price * cartArr.quantity;
+    return price * cartArr.quantity;
   }).reduce(function(a, b) {
     return a + b;
   }, 0) // start summing from index 0

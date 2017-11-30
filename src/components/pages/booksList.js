@@ -23,7 +23,7 @@ class BooksList extends Component {
                 username={booksArr.username}
                 userType={booksArr.userType}
                 images={booksArr.images}
-                price={booksArr.price} />
+                />
         </Col>
       );
     });
