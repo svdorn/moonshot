@@ -1,47 +1,48 @@
 "use strict"
-import React, {Component} from 'react';
-import {Col, Well, Button, Form, FormControl, FormGroup, Checkbox, ControlLabel} from 'react-bootstrap';
+import React from 'react';
+import TextField from 'material-ui/TextField';
+import {orange500, blue500} from 'material-ui/styles/colors';
 
-class Login extends Component {
-    render() {
-        return (
-            <Well>
-                <Form horizontal>
-                    <FormGroup controlId="formHorizontalEmail">
-                        <Col componentClass={ControlLabel} sm={2}>
-                            Email
-                        </Col>
-                        <Col sm={10}>
-                            <FormControl type="email" placeholder="Email"/>
-                        </Col>
-                    </FormGroup>
+const styles = {
+    errorStyle: {
+        color: orange500,
+    },
+    underlineStyle: {
+        borderColor: orange500,
+    },
+    floatingLabelStyle: {
+        color: orange500,
+    },
+    floatingLabelFocusStyle: {
+        color: blue500,
+    },
+};
 
-                    <FormGroup controlId="formHorizontalPassword">
-                        <Col componentClass={ControlLabel} sm={2}>
-                            Password
-                        </Col>
-                        <Col sm={10}>
-                            <FormControl type="password" placeholder="Password"/>
-                        </Col>
-                    </FormGroup>
-
-                    <FormGroup>
-                        <Col smOffset={2} sm={10}>
-                            <Checkbox>Remember me</Checkbox>
-                        </Col>
-                    </FormGroup>
-
-                    <FormGroup>
-                        <Col smOffset={2} sm={10}>
-                            <Button type="submit">
-                                Sign in
-                            </Button>
-                        </Col>
-                    </FormGroup>
-                </Form>
-            </Well>
-        );
-    }
-}
+const Login = () => (
+    <div>
+        <TextField
+            hintText="Styled Hint Text"
+            hintStyle={styles.errorStyle}
+        /><br />
+        <TextField
+            hintText="Custom error color"
+            errorText="This field is required."
+            errorStyle={styles.errorStyle}
+        /><br />
+        <TextField
+            hintText="Custom Underline Color"
+            underlineStyle={styles.underlineStyle}
+        /><br />
+        <TextField
+            hintText="Custom Underline Focus Color"
+            underlineFocusStyle={styles.underlineStyle}
+        /><br />
+        <TextField
+            floatingLabelText="Styled Floating Label Text"
+            floatingLabelStyle={styles.floatingLabelStyle}
+            floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+        />
+    </div>
+);
 
 export default Login;

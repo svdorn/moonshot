@@ -6,6 +6,7 @@ import Footer from './components/footer';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { getCart } from '../src/actions/cartActions';
+import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 
 class Main extends Component {
   componentDidMount() {
@@ -14,11 +15,11 @@ class Main extends Component {
 
   render() {
     return (
-      <div>
+      <MuiThemeProvider>
         <Menu cartItemsNumber={this.props.totalQty} />
           { this.props.children }
         <Footer />
-      </div>
+      </MuiThemeProvider>
     );
   }
 }
