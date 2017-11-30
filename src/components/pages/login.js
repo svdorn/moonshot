@@ -1,48 +1,46 @@
 "use strict"
-import React from 'react';
+import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
-import {orange500, blue500} from 'material-ui/styles/colors';
+import RaisedButton from 'material-ui/RaisedButton';
 
 const styles = {
-    errorStyle: {
-        color: orange500,
-    },
     underlineStyle: {
-        borderColor: orange500,
+        borderColor: '#00c3ff',
     },
     floatingLabelStyle: {
-        color: orange500,
+        color: '#00c3ff',
     },
     floatingLabelFocusStyle: {
-        color: blue500,
+        color: '#00c3ff',
+    },
+    button: {
+        labelColor: '#00c3ff',
+        margin: '12px 0 0 0',
     },
 };
 
-const Login = () => (
-    <div>
-        <TextField
-            hintText="Styled Hint Text"
-            hintStyle={styles.errorStyle}
-        /><br />
-        <TextField
-            hintText="Custom error color"
-            errorText="This field is required."
-            errorStyle={styles.errorStyle}
-        /><br />
-        <TextField
-            hintText="Custom Underline Color"
-            underlineStyle={styles.underlineStyle}
-        /><br />
-        <TextField
-            hintText="Custom Underline Focus Color"
-            underlineFocusStyle={styles.underlineStyle}
-        /><br />
-        <TextField
-            floatingLabelText="Styled Floating Label Text"
-            floatingLabelStyle={styles.floatingLabelStyle}
-            floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
-        />
-    </div>
-);
+class Login extends Component {
+    render(){
+        return (
+            <div>
+                <TextField
+                    floatingLabelText="Username or Email"
+                    type="text"
+                    floatingLabelStyle={styles.floatingLabelStyle}
+                    floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+                    underlineFocusStyle={styles.underlineStyle}
+                /><br />
+                <TextField
+                    floatingLabelText="Password"
+                    type="password"
+                    floatingLabelStyle={styles.floatingLabelStyle}
+                    floatingLabelFocusStyle={styles.floatingLabelFocusStyle}
+                    underlineFocusStyle={styles.underlineStyle}
+                /><br />
+                <RaisedButton label="Submit" labelColor="#fafafa" backgroundColor="#00c3ff" style={styles.button} />
+            </div>
+        );
+    }
+}
 
 export default Login;
