@@ -40348,6 +40348,24 @@ var Signup = function (_Component) {
     _createClass(Signup, [{
         key: 'handleSubmit',
         value: function handleSubmit() {
+            // make sure nothing is blank
+            // TODO change how the fields look, make them red if they are blank
+            var username = (0, _reactDom.findDOMNode)(this.refs.username).value;
+            if (username == "") {
+                console.log("username can't be blank");
+                return;
+            }
+            var email = (0, _reactDom.findDOMNode)(this.refs.email).value;
+            if (email == "") {
+                console.log("email can't be blank");
+                return;
+            }
+            var name = (0, _reactDom.findDOMNode)(this.refs.name).value;
+            if (name == "") {
+                console.log("name can't be blank");
+                return;
+            }
+
             // TODO get the users, check if a user with that username already exists,
             // eventually will want to do this as they are entering in their Username
 
@@ -40355,19 +40373,23 @@ var Signup = function (_Component) {
             // eventually will want to do this as passwords are being typed in
             var password = (0, _reactDom.findDOMNode)(this.refs.password1).value;
             var password2 = (0, _reactDom.findDOMNode)(this.refs.password2).value;
+            if (password == "") {
+                console.log("password can't be blank");
+                return;
+            }
             if (password != password2) {
                 console.log("passwords do not match");
                 return;
             }
 
             var user = [{
-                username: (0, _reactDom.findDOMNode)(this.refs.username).value,
+                username: username,
                 userType: "student",
                 //userType: findDOMNode(this.refs.userType).value,
                 //images: findDOMNode(this.refs.image).value,
-                password: (0, _reactDom.findDOMNode)(this.refs.password1).value,
-                email: (0, _reactDom.findDOMNode)(this.refs.email).value,
-                name: (0, _reactDom.findDOMNode)(this.refs.name).value
+                password: password,
+                email: email,
+                name: name
             }];
 
             console.log(user);

@@ -5,6 +5,8 @@ var logger = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const credentials = require('./credentials');
+var bcrypt = require('bcrypt');
+
 
 var app = express();
 
@@ -62,14 +64,24 @@ var Users = require('./models/users.js');
 
 //----->> POST USER <<------
 app.post('/users', function(req, res) {
-  var user = req.body;
+  var user = req.body[0];
 
-  Users.create(user, function(err, user) {
-    if (err) {
-      console.log(err);
-    }
-    res.json(user);
-  })
+  // hash the user's password
+  const saltRounds = 10;
+  bcrypt.genSalt(saltRounds, function(err, salt) {
+    bcrypt.hash(user.password, salt, function(err, hash) {
+        // change the stored password to be the hash
+        user.password = hash;
+
+        // store the user in the db
+        Users.create(user, function(err, user) {
+          if (err) {
+            console.log(err);
+          }
+          res.json(user);
+        })
+    });
+  });
 });
 
 //----->> GET USERS <<------
