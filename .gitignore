@@ -1,6 +1,7 @@
 node_modules/
 credentials.js
 public/bundle.js
+.idea/*
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
