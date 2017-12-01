@@ -22,6 +22,8 @@ class Login extends Component {
                     floatingLabelStyle={styles.floatingLabelStyle}
                 /><br />
                 <TextField
+                    required={true}
+                    valueType={String}
                     floatingLabelText="Password"
                     type="password"
                     floatingLabelStyle={styles.floatingLabelStyle}

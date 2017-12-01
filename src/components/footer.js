@@ -1,13 +1,14 @@
 "use strict"
 import React, { Component } from 'react';
+import {AppBar, FlatButton, ToolbarGroup } from 'material-ui';
 
 class Footer extends Component {
   render() {
     return (
       <footer className="footer text-center">
-        <div className="container">
-          <p className="footer-text">Copyright 2017 Moonshot Learning Inc. All rights reserved.</p>
-        </div>
+        <AppBar title="Copyright 2017 Moonshot Learning Inc. All rights reserved."
+                showMenuIconButton={false}
+        />
       </footer>
     );
   }

@@ -18,7 +18,8 @@ const styles = {
 
 class Signup extends Component {
 
-  handleSubmit() {
+
+    handleSubmit() {
       // make sure nothing is blank
       // TODO change how the fields look, make them red if they are blank
       const username = this.refs.username.getValue();

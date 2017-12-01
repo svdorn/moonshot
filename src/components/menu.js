@@ -1,6 +1,6 @@
 "use strict"
-import React, { Component } from 'react';
-import {AppBar, FlatButton, ToolbarGroup } from 'material-ui';
+import React, {Component} from 'react';
+import {AppBar, FlatButton, ToolbarGroup} from 'material-ui';
 
 class Menu extends Component {
 
@@ -19,10 +19,12 @@ class Menu extends Component {
         );
 
         return (
-            <AppBar title={<span style={styles.title}>Moonshot Learning</span>}
-                    iconElementRight={<ToolbarGroup>{myButtons}</ToolbarGroup>}
-            >
-            </AppBar>
+            <header>
+                <AppBar title={<span style={styles.title}>Moonshot Learning</span>}
+                        iconElementRight={<ToolbarGroup>{myButtons}</ToolbarGroup>}
+                        showMenuIconButton={false}
+                />
+            </header>
 
         )
     }
