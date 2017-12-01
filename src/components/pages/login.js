@@ -1,6 +1,8 @@
 "use strict"
 import React, { Component } from 'react';
 import { TextField, RaisedButton, Paper } from 'material-ui';
+import { login } from '../../actions/usersActions';
+
 
 const styles = {
     floatingLabelStyle: {
@@ -9,6 +11,18 @@ const styles = {
 };
 
 class Login extends Component {
+
+    handleSubmit(){
+        const user = [{
+            username: this.refs.username.getValue(),
+            password: this.refs.password.getValue(),
+        }];
+
+        console.log(user);
+
+        this.props.postUser(user);
+    }
+
     render(){
         return (
             <Paper className="form" zDepth={2}>
@@ -17,6 +31,7 @@ class Login extends Component {
                     floatingLabelText="Username or Email"
                     type="text"
                     floatingLabelStyle={styles.floatingLabelStyle}
+                    ref="username"
                 /><br />
                 <TextField
                     required={true}
@@ -24,8 +39,9 @@ class Login extends Component {
                     floatingLabelText="Password"
                     type="password"
                     floatingLabelStyle={styles.floatingLabelStyle}
+                    ref="password"
                 /><br />
-                <RaisedButton type="submit" label="Login" primary={true} className="button" />
+                <RaisedButton onClick={this.handleSubmit.bind(this)} type="submit" label="Login" primary={true} className="button" />
             </Paper>
         );
     }
