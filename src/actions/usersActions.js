@@ -14,9 +14,9 @@ export function getUsers() {
   }
 }
 
-export function login(username, password) {
+export function login(user) {
   return function(dispatch) {
-    axios.get("/api/login", username, password)
+    axios.post("/api/login", user)
       .then(function(response) {
         dispatch({type:"LOGIN", payload: response.data});
       })

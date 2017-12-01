@@ -17,14 +17,16 @@ const styles = {
 class Login extends Component {
 
     handleSubmit(){
+        const user = {
+            username: this.refs.username.getValue(),
+            password: this.refs.password.getValue()
+        };
 
-        const username = this.refs.username.getValue();
-        const password= this.refs.password.getValue();
+        console.log(user);
 
+        this.props.login(user);
 
-        this.props.login(username, password);
-
-        console.log(this.state.currentUser);
+        //console.log(this.state.currentUser);
     }
 
     render(){
