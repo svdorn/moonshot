@@ -2,25 +2,29 @@
 import React, { Component } from 'react';
 import { TextField, RaisedButton, Paper } from 'material-ui';
 import { login } from '../../actions/usersActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+
 
 
 const styles = {
     floatingLabelStyle: {
         color: '#00c3ff',
     },
+
 };
 
 class Login extends Component {
 
     handleSubmit(){
-        const user = [{
-            username: this.refs.username.getValue(),
-            password: this.refs.password.getValue(),
-        }];
 
-        console.log(user);
+        const username = this.refs.username.getValue();
+        const password= this.refs.password.getValue();
 
-        this.props.postUser(user);
+
+        this.props.login(username, password);
+
+        console.log(this.state.currentUser);
     }
 
     render(){
@@ -47,4 +51,16 @@ class Login extends Component {
     }
 }
 
-export default Login;
+function mapDispatchToProps(dispatch) {
+  return bindActionCreators({
+    login
+  }, dispatch);
+}
+
+function mapStateToProps(state) {
+  return {
+    currentUser: state.currentUser
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Login);

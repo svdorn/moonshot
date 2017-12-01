@@ -86,16 +86,25 @@ app.post('/users', function(req, res) {
 
 // LOGIN USER
 app.get('/login', function(req, res) {
-    var user = req.body;
+    //var userToFind = req.body;
+    var username = req.body[0];
+    var password = req.body[1];
+    //console.log(req);
+    console.log('BODY IS:');
+    console.log(req.body);
+    console.log(username);
+    console.log(password);
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function(err, salt) {
-      bcrypt.hash(user.password, salt, function(err, hash) {
-          var query = {username: user.username, password: hash}
+      bcrypt.hash(password, salt, function(err, hash) {
+          var query = {username: username, password: hash}
+          console.log("looking for " + username);
 
           Users.find(query, function(err, user) {
               if (err) {
                   console.log(err);
               }
+              console.log(user);
           res.json(user);
         })
       });
