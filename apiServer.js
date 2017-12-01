@@ -84,6 +84,23 @@ app.post('/users', function(req, res) {
   });
 });
 
+// LOGIN USER
+app.get('/login', function(req, res) {
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, function(err, salt) {
+      bcrypt.hash(req.password, salt, function(err, hash) {
+          var query = {username: req.username, password: hash}
+
+          Users.find(query, function(err, user) {
+              if (err) {
+                  console.log(err);
+              }
+          res.json(user);
+        })
+      });
+    });
+});
+
 //----->> GET USERS <<------
 app.get('/users', function(req, res) {
   Users.find(function(err, users) {

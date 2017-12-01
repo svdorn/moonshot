@@ -5,6 +5,15 @@ export function usersReducers(state={users: []}, action) {
   switch(action.type) {
     case "GET_USERS":
     return {...state, users:[...action.payload]}
+    break;
+    case "LOGIN":
+    return {...state, currentUser:action.payload}
+    break;
+    case "LOGIN_REJECTED":
+    // TODO deal with failed login
+    console.log("LOGIN FAILED");
+    console.log(action.payload);
+    break;
     case "POST_USER":
     return {...state,
         users: [...state.users, ...action.payload],

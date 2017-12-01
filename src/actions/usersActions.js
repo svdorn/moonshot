@@ -14,6 +14,18 @@ export function getUsers() {
   }
 }
 
+export function login(username) {
+  return function(dispatch) {
+    axios.get("/api/login/" + username)
+      .then(function(response) {
+        dispatch({type:"LOGIN", payload: response.data});
+      })
+      .catch(function(err) {
+        dispatch({type: "LOGIN_REJECTED", payload: err});
+      });
+  }
+}
+
 // POST USERS
 export function postUser(user) {
   return function(dispatch) {
