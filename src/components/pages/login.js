@@ -26,7 +26,7 @@ class Login extends Component {
                     type="password"
                     floatingLabelStyle={styles.floatingLabelStyle}
                 /><br />
-                <RaisedButton label="Submit" primary={true} style={styles.button} />
+                <RaisedButton type="submit" label="Login" primary={true} style={styles.button} />
             </div>
         );
     }

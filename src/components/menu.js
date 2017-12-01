@@ -12,6 +12,7 @@ class Menu extends Component {
         };
         const myButtons = (
             <div>
+                <FlatButton label="Home" href="/" hoverColor='#00c3ff' secondary={true}/>
                 <FlatButton label="Login" href="/login" hoverColor='#00c3ff' secondary={true}/>
                 <FlatButton label="Signup" href="/signup" hoverColor='#00c3ff' secondary={true}/>
             </div>
@@ -26,6 +27,5 @@ class Menu extends Component {
         )
     }
 }
-//admin, cart, login, signup
 
 export default Menu;

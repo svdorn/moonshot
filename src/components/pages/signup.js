@@ -1,28 +1,37 @@
 "use strict"
 import React, {Component} from 'react';
-import {Col, Well, Button, Form, FormControl, FormGroup, Checkbox, ControlLabel} from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { findDOMNode } from 'react-dom';
 import { postUser, getUsers } from '../../actions/usersActions';
+import { TextField, RaisedButton } from 'material-ui';
 import axios from 'axios';
 
+const styles = {
+    floatingLabelStyle: {
+        color: '#00c3ff',
+    },
+    button: {
+        margin: '12px 0 0 0',
+    },
+};
 
 class Signup extends Component {
+
   handleSubmit() {
       // make sure nothing is blank
       // TODO change how the fields look, make them red if they are blank
-      const username = findDOMNode(this.refs.username).value;
+      const username = this.refs.username.getValue();
       if (username == "") {
           console.log("username can't be blank");
           return;
       }
-      const email = findDOMNode(this.refs.email).value;
+      const email = this.refs.email.getValue();
       if (email == "") {
           console.log("email can't be blank");
           return;
       }
-      const name = findDOMNode(this.refs.name).value;
+      const name = this.refs.name.getValue();
       if (name == "") {
           console.log("name can't be blank");
           return;
@@ -34,8 +43,8 @@ class Signup extends Component {
 
       // check that the passwords match, if not don't let them submit
       // eventually will want to do this as passwords are being typed in
-      const password = findDOMNode(this.refs.password1).value;
-      const password2 = findDOMNode(this.refs.password2).value;
+      const password = this.refs.password.getValue();
+      const password2 = this.refs.password2.getValue();
       if (password == "") {
           console.log("password can't be blank");
           return;
@@ -60,84 +69,42 @@ class Signup extends Component {
       this.props.postUser(user);
   }
 
+  //name, username, email, password, confirm password, signup button
     render() {
         return (
-            <Well>
-                <Form horizontal>
-                    <FormGroup controlId="formHorizontalEmail">
-                        <Col componentClass={ControlLabel} sm={2}>
-                            Full Name
-                        </Col>
-                        <Col sm={10}>
-                            <FormControl
-                                type="text"
-                                placeholder="John"
-                                ref="name"
-                            />
-                        </Col>
-                    </FormGroup>
-
-                    <FormGroup controlId="formHorizontalEmail">
-                        <Col componentClass={ControlLabel} sm={2}>
-                            Username
-                        </Col>
-                        <Col sm={10}>
-                            <FormControl
-                                type="text"
-                                placeholder="jsmith"
-                                ref="username"
-                            />
-                        </Col>
-                    </FormGroup>
-
-                    <FormGroup controlId="formHorizontalEmail">
-                        <Col componentClass={ControlLabel} sm={2}>
-                            Email
-                        </Col>
-                        <Col sm={10}>
-                            <FormControl
-                                type="email"
-                                placeholder="Email"
-                                ref="email"
-                            />
-                        </Col>
-                    </FormGroup>
-
-                    <FormGroup controlId="formHorizontalPassword">
-                        <Col componentClass={ControlLabel} sm={2}>
-                            Password
-                        </Col>
-                        <Col sm={10}>
-                            <FormControl
-                                type="password"
-                                placeholder="Password"
-                                ref="password1"
-                            />
-                        </Col>
-                    </FormGroup>
-
-                    <FormGroup controlId="formHorizontalPassword">
-                        <Col componentClass={ControlLabel} sm={2}>
-                            Confirm Password
-                        </Col>
-                        <Col sm={10}>
-                            <FormControl
-                                type="password"
-                                placeholder="Confirm Password"
-                                ref="password2"
-                            />
-                        </Col>
-                    </FormGroup>
-
-                    <FormGroup>
-                        <Col smOffset={2} sm={10}>
-                            <Button onClick={this.handleSubmit.bind(this)}>
-                                Sign up
-                            </Button>
-                        </Col>
-                    </FormGroup>
-                </Form>
-            </Well>
+            <div>
+                <TextField
+                    floatingLabelText="Full Name"
+                    type="text"
+                    floatingLabelStyle={styles.floatingLabelStyle}
+                    ref="name"
+                /><br />
+                <TextField
+                    floatingLabelText="Username"
+                    type="text"
+                    floatingLabelStyle={styles.floatingLabelStyle}
+                    ref="username"
+                /><br />
+                <TextField
+                    floatingLabelText="Email"
+                    type="email"
+                    floatingLabelStyle={styles.floatingLabelStyle}
+                    ref="email"
+                /><br />
+                <TextField
+                    floatingLabelText="Password"
+                    type="password"
+                    floatingLabelStyle={styles.floatingLabelStyle}
+                    ref="password"
+                /><br />
+                <TextField
+                    floatingLabelText="Confirm Password"
+                    type="password"
+                    floatingLabelStyle={styles.floatingLabelStyle}
+                    ref="password2"
+                /><br />
+                <RaisedButton onClick={this.handleSubmit.bind(this)} type="submit" label="Sign up" primary={true} style={styles.button} />
+            </div>
         );
     }
 }
