@@ -88,23 +88,38 @@ app.post('/users', function(req, res) {
 app.post('/login', function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
-    const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function(err, salt) {
-      bcrypt.hash(password, salt, function(err, hash) {
-          //var query = {username: username, password: hash};
-          var query = {username: username};
-          Users.find(query, function(err, user) {
-              // TODO check if the passwords match
 
-              if (err) {
-                  console.log("there was an error");
-                  console.log(err);
-              }
-              console.log(user);
-          res.json(user);
-        })
-      });
+    var query = {username: username};
+    Users.findOne(query, function(err, user) {
+        if (err) {
+            // TODO Deal with error performing query
+            console.log("there was an error");
+            console.log(err);
+        }
+
+        // CHECK IF A USER WAS FOUND
+        if (!user) {
+            //TODO DEAL WITH NO USER FOUND
+            console.log('no user found');
+            return;
+        }
+
+        bcrypt.compare(password, user.password, function(passwordError, passwordsMatch) {
+            if (passwordError) {
+                // TODO deal with hashing error
+                console.log("error hashing password");
+            }
+            if (passwordsMatch) {
+                console.log(user);
+                res.json(user);
+            } else {
+                // TODO deal with bad password
+                console.log('wrong password');
+            }
+        });
     });
+
+
 });
 
 //----->> GET USERS <<------
