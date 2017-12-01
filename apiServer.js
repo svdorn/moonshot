@@ -95,26 +95,30 @@ app.post('/login', function(req, res) {
             // TODO Deal with error performing query
             console.log("there was an error");
             console.log(err);
+            res.status(500).send("error performing query to find user in db. ", err);
+            return;
         }
 
         // CHECK IF A USER WAS FOUND
         if (!user) {
-            //TODO DEAL WITH NO USER FOUND
             console.log('no user found');
+            res.status(404).send("user not found");
             return;
         }
 
         bcrypt.compare(password, user.password, function(passwordError, passwordsMatch) {
             if (passwordError) {
-                // TODO deal with hashing error
                 console.log("error hashing password");
-            }
-            if (passwordsMatch) {
+                res.status(500).send("error hashing password");
+            } else if (passwordsMatch) {
+                user.password = undefined;
                 console.log(user);
                 res.json(user);
+                return;
             } else {
-                // TODO deal with bad password
                 console.log('wrong password');
+                res.status(400).send("password is incorrect");
+                return;
             }
         });
     });
