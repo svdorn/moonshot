@@ -108,8 +108,8 @@ app.post('/login', function(req, res) {
             if (passwordError) {
                 // TODO deal with hashing error
                 console.log("error hashing password");
-            }
-            if (passwordsMatch) {
+            } else if (passwordsMatch) {
+                user.password = undefined;
                 console.log(user);
                 res.json(user);
             } else {
