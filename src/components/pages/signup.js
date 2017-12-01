@@ -4,15 +4,12 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { findDOMNode } from 'react-dom';
 import { postUser, getUsers } from '../../actions/usersActions';
-import { TextField, RaisedButton } from 'material-ui';
+import { TextField, RaisedButton, Paper } from 'material-ui';
 import axios from 'axios';
 
 const styles = {
     floatingLabelStyle: {
         color: '#00c3ff',
-    },
-    button: {
-        margin: '12px 0 0 0',
     },
 };
 
@@ -62,7 +59,7 @@ class Signup extends Component {
           //images: findDOMNode(this.refs.image).value,
           password: password,
           email: email,
-          name: name
+          name: name,
       }];
 
       console.log(user);
@@ -73,7 +70,8 @@ class Signup extends Component {
   //name, username, email, password, confirm password, signup button
     render() {
         return (
-            <div>
+            <Paper className="form" zDepth={2}>
+                <h1>Sign Up</h1>
                 <TextField
                     floatingLabelText="Full Name"
                     type="text"
@@ -104,8 +102,8 @@ class Signup extends Component {
                     floatingLabelStyle={styles.floatingLabelStyle}
                     ref="password2"
                 /><br />
-                <RaisedButton onClick={this.handleSubmit.bind(this)} type="submit" label="Sign up" primary={true} style={styles.button} />
-            </div>
+                <RaisedButton onClick={this.handleSubmit.bind(this)} type="submit" label="Sign up" primary={true} className="button" />
+            </Paper>
         );
     }
 }

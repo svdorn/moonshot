@@ -1,21 +1,18 @@
 "use strict"
 import React, { Component } from 'react';
-import TextField from 'material-ui/TextField';
-import RaisedButton from 'material-ui/RaisedButton';
+import { TextField, RaisedButton, Paper } from 'material-ui';
 
 const styles = {
     floatingLabelStyle: {
         color: '#00c3ff',
-    },
-    button: {
-        margin: '12px 0 0 0',
     },
 };
 
 class Login extends Component {
     render(){
         return (
-            <div>
+            <Paper className="form" zDepth={2}>
+                <h1>Login</h1>
                 <TextField
                     floatingLabelText="Username or Email"
                     type="text"
@@ -28,8 +25,8 @@ class Login extends Component {
                     type="password"
                     floatingLabelStyle={styles.floatingLabelStyle}
                 /><br />
-                <RaisedButton type="submit" label="Login" primary={true} style={styles.button} />
-            </div>
+                <RaisedButton type="submit" label="Login" primary={true} className="button" />
+            </Paper>
         );
     }
 }
