@@ -59,9 +59,8 @@ System is deployed to AWS elastic beanstalk
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [MaterialUI](http://www.material-ui.com/) - Frontend UI
+* [MaterialUI Forms](https://github.com/NewOldMax/react-material-ui-form-validator) - Frontend UI Forms Validator
 
 ## Authors
 
