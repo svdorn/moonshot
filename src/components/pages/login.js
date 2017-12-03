@@ -55,7 +55,12 @@ const validate = values => {
 class Login extends Component {
 
     handleSubmit() {
-        console.log("username is " + this.props.formData.login.values.username);
+        const vals = this.props.formData.login.values;
+        if (!vals || vals.length !== 2) {
+            console.log("not valid form");
+            this.props.router.push('/login?err');
+            return;
+        }
         const user = {
             username: this.props.formData.login.values.username,
             password: this.props.formData.login.values.password

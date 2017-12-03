@@ -64,7 +64,7 @@ class Signup extends Component {
         // Check if valid
         const vals = this.props.formData.signup.values;
         console.log(vals);
-        if (vals.length !== 5) {
+        if (!vals || vals.length !== 5) {
             console.log("not valid form");
             this.props.router.push('/signup?err');
             return;
