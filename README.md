@@ -41,16 +41,7 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Running the tests
 ```
-cd to the directory where the project is
 npm test
-```
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
 ```
 
 ## Deployment
@@ -59,9 +50,9 @@ System is deployed to AWS elastic beanstalk
 
 ## Built With
 
-* [Dropwizard](http://www.dropwizard.io/1.0.2/docs/) - The web framework used
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [MaterialUI](http://www.material-ui.com/) - Frontend UI
+* [Redux Form](https://redux-form.com/7.2.0/) - Frontend UI Forms Validator
+* [React-Router](https://github.com/ReactTraining/react-router) - Frontend routing
 
 ## Authors
 
