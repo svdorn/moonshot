@@ -60,7 +60,7 @@ System is deployed to AWS elastic beanstalk
 ## Built With
 
 * [MaterialUI](http://www.material-ui.com/) - Frontend UI
-* [MaterialUI Forms](https://github.com/NewOldMax/react-material-ui-form-validator) - Frontend UI Forms Validator
+* [Redux Form](https://redux-form.com/7.2.0/) - Frontend UI Forms Validator
 
 ## Authors
 
