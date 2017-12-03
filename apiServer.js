@@ -92,32 +92,28 @@ app.post('/login', function(req, res) {
     var query = {username: username};
     Users.findOne(query, function(err, user) {
         if (err) {
-            // TODO Deal with error performing query
-            console.log("there was an error");
-            console.log(err);
-            res.status(500).send("error performing query to find user in db. ", err);
+            console.log("error performing query to find user in db", err);
+            res.status(500).send("Error performing query to find user in db. ", err);
             return;
         }
 
         // CHECK IF A USER WAS FOUND
         if (!user) {
-            console.log('no user found');
-            res.status(404).send("user not found");
+            res.status(404).send("No user with that username was found.");
             return;
         }
 
         bcrypt.compare(password, user.password, function(passwordError, passwordsMatch) {
             if (passwordError) {
                 console.log("error hashing password");
-                res.status(500).send("error hashing password");
+                res.status(500).send("Error logging in, try again later.");
+                return;
             } else if (passwordsMatch) {
                 user.password = undefined;
-                console.log(user);
                 res.json(user);
                 return;
             } else {
-                console.log('wrong password');
-                res.status(400).send("password is incorrect");
+                res.status(400).send("Password is incorrect.");
                 return;
             }
         });
