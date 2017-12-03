@@ -50,7 +50,10 @@ const validate = values => {
         }
     });
     if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address'
+        errors.email = 'Invalid email address';
+    }
+    if (values.password && values.password2 && (values.password != values.password2)){
+        errors.password2 = 'Passwords must match';
     }
     return errors
 };
@@ -58,6 +61,7 @@ const validate = values => {
 class Signup extends Component {
 
     handleSubmit() {
+        console.log(this.props);
         const user = [{
             name: this.props.formData.signup.values.name,
             username: this.props.formData.signup.values.username,
@@ -75,6 +79,7 @@ class Signup extends Component {
 
     //name, username, email, password, confirm password, signup button
     render() {
+        console.log(this.props);
         return (
             <Paper className="form" zDepth={2}>
                 <form onSubmit={this.handleSubmit.bind(this)}>
