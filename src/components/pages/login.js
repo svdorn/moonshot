@@ -1,9 +1,9 @@
 "use strict"
-import React, {Component} from 'react';
-import {TextField, RaisedButton, Paper} from 'material-ui';
-import {login} from '../../actions/usersActions';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { TextField, RaisedButton, Paper } from 'material-ui';
+import { login } from '../../actions/usersActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Field, reduxForm } from 'redux-form';
 
 
@@ -22,6 +22,18 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         floatingLabelStyle={styles.floatingLabelStyle}
         {...input}
         {...custom}
+    />
+);
+
+const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        floatingLabelStyle={styles.floatingLabelStyle}
+        {...input}
+        {...custom}
+        type="password"
     />
 );
 
@@ -71,13 +83,14 @@ class Login extends Component {
                         /><br/>
                         <Field
                             name="password"
-                            component={renderTextField}
+                            component={renderPasswordField}
                             label="Password"
                         /><br/>
                     <RaisedButton type="submit"
                                   label="Login"
                                   primary={true}
-                                  className="button"/>
+                                  className="button"
+                    />
                 </form>
             </Paper>
         );
