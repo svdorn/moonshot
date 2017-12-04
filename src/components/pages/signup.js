@@ -63,8 +63,14 @@ class Signup extends Component {
     handleSubmit() {
         // Check if valid
         const vals = this.props.formData.signup.values;
-        console.log(vals);
-        if (!vals || vals.length !== 5) {
+
+        // check if all fields have a value
+        let valsCounter = 0;
+        for (let i in vals) {
+            valsCounter++;
+        }
+
+        if (!vals || valsCounter !== 5) {
             console.log("not valid form");
             this.props.router.push('/signup?err');
             return;
@@ -88,7 +94,7 @@ class Signup extends Component {
             email: this.props.formData.signup.values.email,
         }];
 
-        console.log(user);
+        console.log("POSTING USER: ", user);
 
         this.props.postUser(user);
 

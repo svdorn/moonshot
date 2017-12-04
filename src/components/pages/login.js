@@ -56,7 +56,14 @@ class Login extends Component {
 
     handleSubmit() {
         const vals = this.props.formData.login.values;
-        if (!vals || vals.length !== 2) {
+
+        // check if all fields have a value
+        let valsCounter = 0;
+        for (let i in vals) {
+            valsCounter++;
+        }
+
+        if (!vals || valsCounter !== 2) {
             console.log("not valid form");
             this.props.router.push('/login?err');
             return;

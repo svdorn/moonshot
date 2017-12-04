@@ -66,6 +66,9 @@ var Users = require('./models/users.js');
 app.post('/users', function(req, res) {
   var user = req.body[0];
 
+  console.log("SIGNING UP A USER: ");
+  console.log(user.username);
+
   // hash the user's password
   const saltRounds = 10;
   bcrypt.genSalt(saltRounds, function(err, salt) {
@@ -89,6 +92,9 @@ app.post('/login', function(req, res) {
     var username = req.body.username;
     var password = req.body.password;
 
+    console.log("TRYING TO LOG IN USER: ");
+    console.log(username);
+
     var query = {username: username};
     Users.findOne(query, function(err, user) {
         if (err) {
@@ -99,6 +105,7 @@ app.post('/login', function(req, res) {
 
         // CHECK IF A USER WAS FOUND
         if (!user) {
+            console.log('no user found');
             res.status(404).send("No user with that username was found.");
             return;
         }
@@ -109,10 +116,12 @@ app.post('/login', function(req, res) {
                 res.status(500).send("Error logging in, try again later.");
                 return;
             } else if (passwordsMatch) {
+                console.log("LOGGING IN USER: ", user.username);
                 user.password = undefined;
                 res.json(user);
                 return;
             } else {
+                console.log('wrong password');
                 res.status(400).send("Password is incorrect.");
                 return;
             }
