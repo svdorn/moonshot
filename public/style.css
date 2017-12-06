@@ -43,6 +43,16 @@ footer {
   margin-top: 12px;
 }
 
+.errorHeader {
+    text-align: center;
+    height: 40px;
+    margin-top: -11px;
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    padding-top: 10px;
+    background-color: rgb(255, 181, 181) !important;
+}
+
 button.link {
   background: none;
   border: none;

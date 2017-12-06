@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { TextField, RaisedButton, Paper } from 'material-ui';
+import { TextField, RaisedButton, Paper, Snackbar } from 'material-ui';
 import { login } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -74,21 +74,26 @@ class Login extends Component {
         console.log(user);
 
         this.props.login(user)
-        // .then(function(response) {
-        //     console.log(response);
-        // });
 
         console.log("here");
         console.log("current user is" + this.props.currentUser);
+    }
 
-        //console.log(this.state.currentUser);
+    handleErrorClose() {
+        //can't be closed
     }
 
     render() {
         console.log("props are:", this.props);
         return (
             <div>
-                {this.props.loginError ? <div>ERROR</div> : null}
+                {this.props.loginError ?
+                    <Paper className="errorHeader">
+                        {this.props.loginError.response.data}
+                    </Paper>
+                    :
+                    null
+                }
                 <Paper className="form" zDepth={2}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Login</h1>
@@ -109,9 +114,17 @@ class Login extends Component {
                         />
                     </form>
                 </Paper>
+
             </div>
         );
     }
+
+    // <Snackbar
+    //     open={this.props.loginError !== undefined}
+    //     message={this.props.loginError ? this.props.loginError.response.data : ""}
+    //     autoHideDuration={4000}
+    //     onRequestClose={this.handleErrorClose}
+    // />
 }
 
 function mapDispatchToProps(dispatch) {
