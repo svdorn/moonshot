@@ -9,6 +9,8 @@ import thunk from 'redux-thunk';
 
 // import combined reducers
 import reducers from './reducers/index';
+import Menu from './components/menu';
+import Footer from './components/footer';
 
 // STEP 1 create the store
 const middleware = applyMiddleware(thunk, logger);
@@ -19,7 +21,7 @@ const store = createStore(reducers, initialState, middleware);
 import routes from './routes'
 const Routes = (
   <Provider store={store}>
-    {routes}
+      {routes}
   </Provider>
 )
 

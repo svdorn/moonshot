@@ -37,11 +37,12 @@ const muiTheme = getMuiTheme({
 class Main extends Component {
 
   render() {
+      console.log("here");
     return (
       <MuiThemeProvider muiTheme={muiTheme}>
-        <Menu />
-          { this.props.children }
-        <Footer />
+          <Menu/>
+            { this.props.children }
+          <Footer/>
       </MuiThemeProvider>
     );
   }
