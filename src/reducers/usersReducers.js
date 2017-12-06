@@ -69,6 +69,7 @@ export function usersReducers(state = {users: []}, action) {
 
         case "UPDATE_USER":
             // Create a copy of the current array of users
+            console.log("in reducer");
             const currentUserToUpdate = [...state.users];
             // Determine at which index in users array is the user to be deleted
             const indexToUpdate = currentUserToUpdate.findIndex(
