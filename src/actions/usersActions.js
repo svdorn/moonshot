@@ -31,16 +31,33 @@ export function login(user) {
 
 // POST USERS
 export function postUser(user) {
-  return function(dispatch) {
+    return function(dispatch) {
+
+    // post user to database
     axios.post("/api/users", user)
-      .then(function(response) {
-        dispatch({type:"POST_USER", payload:response.data});
-        browserHistory.push('/login');
-      })
-      .catch(function(err) {
-        dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});
-      });
-  }
+        // user successfully posted
+        .then(function(response) {
+            // send verification email
+            console.log("about to try to send email");
+            axios.post("/api/sendEmail")
+                // successfully sent verification email
+                .then(function(emailResponse) {
+                    console.log("email sent");
+                    dispatch({type:"POST_USER", payload:response.data});
+                    browserHistory.push('/login');
+                })
+                // error sending verification email
+                .catch(function(emailError) {
+                    console.log("user successfully posted but error sending email: ", emailError)
+                    dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL"}, payload:response.data);
+                    browserHistory.push('/login');
+                });
+        })
+        // error posting user
+        .catch(function(err) {
+            dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});
+        });
+    }
 }
 
 // DELETE A USER

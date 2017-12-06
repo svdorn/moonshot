@@ -6,6 +6,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const credentials = require('./credentials');
 var bcrypt = require('bcrypt');
+const nodemailer = require('nodemailer');
 
 
 var app = express();
@@ -85,6 +86,52 @@ app.post('/users', function(req, res) {
         })
     });
   });
+});
+
+// SEND EMAIL
+app.post('/sendEmail', function(req, res) {
+    console.log("ABOUT TO TRY TO SEND EMAIL");
+    // Generate test SMTP service account from ethereal.email
+    // Only needed if you don't have a real mail account for testing
+    nodemailer.createTestAccount((err, account) => {
+
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            // host: 'smtp.ethereal.email',
+            // port: 587,
+            // secure: false, // true for 465, false for other ports
+            // auth: {
+            //     user: 'snabxjzqe3nmg2p7@ethereal.email',
+            //     pass: '5cbJWjTh7YYmz7e2Ce'
+            // }
+            service: 'gmail',
+            auth: {
+                user: credentials.emailUsername,
+                pass: credentials.emailPassword
+            }
+        });
+
+        // setup email data with unicode symbols
+        let mailOptions = {
+            from: '"Moonshot Learning" <do-not-reply@moonshot.com>', // sender address
+            to: 'frizzkitten@gmail.com, snabxjzqe3nmg2p7@ethereal.email', // list of receivers
+            subject: 'Verify email', // Subject line
+            html: '<b>Click this nonexistant link to verify your account</b>' // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                return console.log(error);
+            }
+            console.log('Message sent: %s', info.messageId);
+            // Preview only available when sending through an Ethereal account
+            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+
+            // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@blurdybloop.com>
+            // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+        });
+    });
 });
 
 // LOGIN USER
