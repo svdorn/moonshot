@@ -53,8 +53,8 @@ const validate = values => {
 };
 
 class Login extends Component {
-
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault();
         const vals = this.props.formData.login.values;
 
         // check if all fields have a value
@@ -64,8 +64,6 @@ class Login extends Component {
         }
 
         if (!vals || valsCounter !== 2) {
-            console.log("not valid form");
-            this.props.router.push('/login?err');
             return;
         }
         const user = {
@@ -75,7 +73,11 @@ class Login extends Component {
 
         console.log(user);
 
-        this.props.login(user);
+        this.props.login(user)
+        // .then(function(response) {
+        //     console.log(response);
+        // });
+
         console.log("here");
         console.log("current user is" + this.props.currentUser);
 
@@ -83,28 +85,31 @@ class Login extends Component {
     }
 
     render() {
-        console.log(this.props);
+        console.log("props are:", this.props);
         return (
-            <Paper className="form" zDepth={2}>
-                <form onSubmit={this.handleSubmit.bind(this)}>
-                    <h1>Login</h1>
-                        <Field
-                            name="username"
-                            component={renderTextField}
-                            label="Username"
-                        /><br/>
-                        <Field
-                            name="password"
-                            component={renderPasswordField}
-                            label="Password"
-                        /><br/>
-                    <RaisedButton type="submit"
-                                  label="Login"
-                                  primary={true}
-                                  className="button"
-                    />
-                </form>
-            </Paper>
+            <div>
+                {this.props.loginError ? <div>ERROR</div> : null}
+                <Paper className="form" zDepth={2}>
+                    <form onSubmit={this.handleSubmit.bind(this)}>
+                        <h1>Login</h1>
+                            <Field
+                                name="username"
+                                component={renderTextField}
+                                label="Username"
+                            /><br/>
+                            <Field
+                                name="password"
+                                component={renderPasswordField}
+                                label="Password"
+                            /><br/>
+                        <RaisedButton type="submit"
+                                      label="Login"
+                                      primary={true}
+                                      className="button"
+                        />
+                    </form>
+                </Paper>
+            </div>
         );
     }
 }
@@ -118,7 +123,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.currentUser,
-        formData: state.form
+        formData: state.form,
+        loginError: state.users.loginError
     };
 }
 

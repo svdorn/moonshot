@@ -1,5 +1,6 @@
 "use strict"
 import axios from 'axios';
+import { browserHistory } from 'react-router'
 
 // GET USERS
 export function getUsers() {
@@ -19,6 +20,8 @@ export function login(user) {
     axios.post("/api/login", user)
       .then(function(response) {
         dispatch({type:"LOGIN", payload: response.data});
+        browserHistory.push('/');
+        //return "successful Login, got this from the action creator";
       })
       .catch(function(err) {
         dispatch({type: "LOGIN_REJECTED", payload: err});
@@ -32,6 +35,7 @@ export function postUser(user) {
     axios.post("/api/users", user)
       .then(function(response) {
         dispatch({type:"POST_USER", payload:response.data});
+        browserHistory.push('/login');
       })
       .catch(function(err) {
         dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});

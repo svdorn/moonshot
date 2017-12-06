@@ -9,12 +9,13 @@ export function usersReducers(state = {users: []}, action) {
         case "LOGIN":
             console.log("printing payload");
             console.log(action.payload);
-            return {...state, currentUser: action.payload}
+            return {...state, loginError: undefined, currentUser: action.payload}
             break;
         case "LOGIN_REJECTED":
             // TODO deal with failed login
             console.log("LOGIN FAILED");
             console.log(action.payload);
+            return {...state, loginError: action.payload}
             break;
         case "POST_USER":
             return {

@@ -60,7 +60,9 @@ const validate = values => {
 
 class Signup extends Component {
 
-    handleSubmit() {
+    handleSubmit(e) {
+        e.preventDefault();
+
         // Check if valid
         const vals = this.props.formData.signup.values;
 
@@ -71,19 +73,13 @@ class Signup extends Component {
         }
 
         if (!vals || valsCounter !== 5) {
-            console.log("not valid form");
-            this.props.router.push('/signup?err');
             return;
         }
 
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
-            console.log('email problem');
-            this.props.router.push('/signup?err');
             return;
         }
         if (vals.password != vals.password2) {
-            console.log('password problem');
-            this.props.router.push('/signup?err');
             return;
         }
         const user = [{
