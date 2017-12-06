@@ -15,7 +15,10 @@ export function usersReducers(state = {users: []}, action) {
             // TODO deal with failed login
             console.log("LOGIN FAILED");
             console.log(action.payload);
-            return {...state, loginError: action.payload}
+            return {...state, loginError: action.payload};
+            break;
+        case "SIGNOUT":
+            return {...state, currentUser:undefined};
             break;
         case "POST_USER":
             return {

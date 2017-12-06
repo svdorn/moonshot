@@ -29,6 +29,13 @@ export function login(user) {
   }
 }
 
+// LOG USER OUT
+export function signout() {
+  return{
+    type: "SIGNOUT",
+  }
+}
+
 // POST USERS
 export function postUser(user) {
     return function(dispatch) {
