@@ -73,7 +73,8 @@ export function verifyEmail(token) {
         axios.post("/api/verifyEmail", {token: token})
             .then(function(response) {
                 console.log("EMAIL VERIFIED!");
-                dispatch({type: "VERIFY_EMAIL"});
+                dispatch({type: "LOGIN", payload:response.data});
+                browserHistory.push('/');
             })
             .catch(function(err) {
                 console.log("EMAIL VERIFIED REJECTED");

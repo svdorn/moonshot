@@ -121,11 +121,9 @@ app.post('/verifyEmail', function(req, res) {
             console.log(err);
           }
 
-          console.log("updated verification: ");
-          console.log(user.verified);
-          console.log("username: ");
-          console.log(user.username);
-
+          console.log("logging in user ", user.username);
+          user.password = undefined;
+          user.verificationString = undefined;
           res.json(user);
         });
     });

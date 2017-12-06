@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { verifyEmail } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Paper } from 'material-ui';
+import { Paper, RaisedButton } from 'material-ui';
 class VerifyEmail extends Component {
 
     onVerifyClick() {
@@ -11,7 +11,7 @@ class VerifyEmail extends Component {
         console.log(url);
         const token = url.substr(url.indexOf('?') + 1);
         console.log(token);
-        this.props.verifyEmail(token)
+        this.props.verifyEmail(token);
     }
 
     render() {
@@ -19,9 +19,11 @@ class VerifyEmail extends Component {
             <div>
                 <Paper className="form" zDepth={2}>
                     <h1>Verify Email</h1>
-                    <button onClick={this.onVerifyClick.bind(this)}>
-                        Click here to verify your email
-                    </button>
+                    <RaisedButton
+                        label="Verify my account"
+                        primary={true}
+                        onClick={this.onVerifyClick.bind(this)}
+                    />
                 </Paper>
             </div>
         );
