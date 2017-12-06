@@ -79,10 +79,6 @@ class Login extends Component {
         console.log("current user is" + this.props.currentUser);
     }
 
-    handleErrorClose() {
-        //can't be closed
-    }
-
     render() {
         console.log("props are:", this.props);
         return (

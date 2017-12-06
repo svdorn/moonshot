@@ -68,9 +68,9 @@ export function postUser(user) {
 }
 
 // VERIFY EMAIL
-export function verifyEmail() {
+export function verifyEmail(token) {
     return function(dispatch) {
-        axios.post("/api/verifyEmail")
+        axios.post("/api/verifyEmail", {token: token})
             .then(function(response) {
                 console.log("EMAIL VERIFIED!");
                 dispatch({type: "VERIFY_EMAIL"});

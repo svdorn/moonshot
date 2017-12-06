@@ -95,12 +95,39 @@ app.post('/users', function(req, res) {
 });
 
 app.post('/verifyEmail', function(req, res) {
-    const inputVerToken = req.body.verificationToken;
+    const token = req.body.token;
 
-    var query = {verificationToken: inputVerToken};
+    var query = {verificationToken: token};
     Users.findOne(query, function(err, user) {
         console.log("Found user from ver token: ");
         console.log(user.username);
+        console.log("verification status: ");
+        console.log(user.verified);
+
+        let query = {_id: user._id}
+
+        // if the field doesn't exist, $set will set a new field
+        var update = {
+          '$set': {
+            verified: true
+          }
+        };
+
+        // When true returns the updated document
+        var options = {new: true};
+
+        Users.findOneAndUpdate(query, update, options, function(err, user) {
+          if (err) {
+            console.log(err);
+          }
+
+          console.log("updated verification: ");
+          console.log(user.verified);
+          console.log("username: ");
+          console.log(user.username);
+
+          res.json(user);
+        });
     });
 });
 
