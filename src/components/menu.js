@@ -3,6 +3,8 @@ import React, {Component} from 'react';
 import {AppBar, FlatButton, ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarTitle} from 'material-ui';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
+import {bindActionCreators} from 'redux';
+import {signout} from "../actions/usersActions";
 
 const styles = {
     title: {
@@ -32,7 +34,8 @@ class Menu extends Component {
         } else if (value === 2) {
             browserHistory.push('/settings');
         } else {
-            console.log("sign out");
+            this.props.signout();
+            browserHistory.push('/');
         }
         this.setState({value})
     };
@@ -80,6 +83,11 @@ class Menu extends Component {
         )
     }
 }
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        signout,
+    }, dispatch);
+}
 
 function mapStateToProps(state) {
     return {
@@ -87,4 +95,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Menu);
+export default connect(mapStateToProps, mapDispatchToProps)(Menu);
