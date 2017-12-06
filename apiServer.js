@@ -99,6 +99,11 @@ app.post('/verifyEmail', function(req, res) {
 
     var query = {verificationToken: token};
     Users.findOne(query, function(err, user) {
+        if (err || user == undefined) {
+            res.status(404).send("User not found from token");
+            return;
+        }
+
         console.log("Found user from ver token: ");
         console.log(user.username);
         console.log("verification status: ");

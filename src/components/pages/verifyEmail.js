@@ -7,16 +7,22 @@ import { Paper, RaisedButton } from 'material-ui';
 class VerifyEmail extends Component {
 
     onVerifyClick() {
-        let url = window.location.href;
-        console.log(url);
-        const token = url.substr(url.indexOf('?') + 1);
-        console.log(token);
+        const token = this.props.location.search.substr(1);
         this.props.verifyEmail(token);
     }
 
     render() {
+        console.log("props: ", this.props);
+
         return(
             <div>
+                {this.props.verifyEmailErrorMsg !== undefined ?
+                    <Paper className="errorHeader">
+                        {this.props.verifyEmailErrorMsg}
+                    </Paper>
+                    :
+                    null
+                }
                 <Paper className="form" zDepth={2}>
                     <h1>Verify Email</h1>
                     <RaisedButton
@@ -36,8 +42,10 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-// function mapStateToProps(state) {
-//     return {};
-// }
+function mapStateToProps(state) {
+    return {
+        verifyEmailErrorMsg: state.users.verifyEmailErrorMsg
+    };
+}
 
 export default connect(null, mapDispatchToProps)(VerifyEmail);

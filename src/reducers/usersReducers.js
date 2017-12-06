@@ -37,6 +37,11 @@ export function usersReducers(state = {users: []}, action) {
                 validation: 'error'
             }
             break;
+        case "VERIFY_EMAIL_REJECTED":
+            return {
+                ...state,
+                verifyEmailErrorMsg: 'Error verifying email'
+            }
         case "RESET_BUTTON":
             return {
                 ...state,

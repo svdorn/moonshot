@@ -114,13 +114,6 @@ class Login extends Component {
             </div>
         );
     }
-
-    // <Snackbar
-    //     open={this.props.loginError !== undefined}
-    //     message={this.props.loginError ? this.props.loginError.response.data : ""}
-    //     autoHideDuration={4000}
-    //     onRequestClose={this.handleErrorClose}
-    // />
 }
 
 function mapDispatchToProps(dispatch) {
