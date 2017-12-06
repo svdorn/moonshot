@@ -13,6 +13,7 @@ import Home from './components/pages/home';
 import Content from './components/pages/content';
 import Profile from './components/pages/profile';
 import Settings from './components/pages/settings';
+import VerifyEmail from './components/pages/verifyEmail';
 
 const routes = (
   <Router history={browserHistory}>
@@ -21,8 +22,9 @@ const routes = (
         <Route path ='/login' component={Login} />
         <Route path="/signup" component={Signup} />
         <Route path="/content" component={Content} />
-        <Route path="/profile" component={Profile}/>
-        <Route path="/settings" component={Settings}/>
+        <Route path="/profile" component={Profile} />
+        <Route path="/settings" component={Settings} />
+        <Route path="/verifyEmail" component={VerifyEmail} />
     </Route>
   </Router>
 );

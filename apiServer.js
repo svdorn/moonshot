@@ -7,6 +7,7 @@ const MongoStore = require('connect-mongo')(session);
 const credentials = require('./credentials');
 var bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 
 
 var app = express();
@@ -76,6 +77,11 @@ app.post('/users', function(req, res) {
     bcrypt.hash(user.password, salt, function(err, hash) {
         // change the stored password to be the hash
         user.password = hash;
+        user.verified = false;
+
+        // create user's verification string
+        user.verificationToken = crypto.randomBytes(64).toString('hex');
+        console.log("verificationToken is: ", user.verificationToken);
 
         // store the user in the db
         Users.create(user, function(err, user) {
@@ -88,9 +94,35 @@ app.post('/users', function(req, res) {
   });
 });
 
+app.post('/verifyEmail', function(req, res) {
+    const inputVerToken = req.body.verificationToken;
+
+    var query = {verificationToken: inputVerToken};
+    Users.findOne(query, function(err, user) {
+        console.log("Found user from ver token: ");
+        console.log(user.username);
+    });
+});
+
 // SEND EMAIL
-app.post('/sendEmail', function(req, res) {
+app.post('/sendVerificationEmail', function(req, res) {
     console.log("ABOUT TO TRY TO SEND EMAIL");
+
+    let username = req.body.username;
+    let query = {username: username};
+
+    Users.findOne(query, function(err, user) {
+        let recipient = user.email;
+        let subject = 'Verify email';
+        let content = 'Click this link to verify your account: '
+            + "<a href='http://localhost:3000/verifyEmail?"
+            + user.verificationToken
+            + "'>Click me</a>";
+        sendEmail(recipient, subject, content);
+    });
+});
+
+function sendEmail(recipients, subject, content) {
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
     nodemailer.createTestAccount((err, account) => {
@@ -114,9 +146,9 @@ app.post('/sendEmail', function(req, res) {
         // setup email data with unicode symbols
         let mailOptions = {
             from: '"Moonshot Learning" <do-not-reply@moonshot.com>', // sender address
-            to: 'frizzkitten@gmail.com, snabxjzqe3nmg2p7@ethereal.email', // list of receivers
-            subject: 'Verify email', // Subject line
-            html: '<b>Click this nonexistant link to verify your account</b>' // html body
+            to: recipients, // list of receivers
+            subject: subject, // Subject line
+            html: content // html body
         };
 
         // send mail with defined transport object
@@ -127,12 +159,9 @@ app.post('/sendEmail', function(req, res) {
             console.log('Message sent: %s', info.messageId);
             // Preview only available when sending through an Ethereal account
             console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
-
-            // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@blurdybloop.com>
-            // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
         });
     });
-});
+}
 
 // LOGIN USER
 app.post('/login', function(req, res) {
@@ -165,6 +194,7 @@ app.post('/login', function(req, res) {
             } else if (passwordsMatch) {
                 console.log("LOGGING IN USER: ", user.username);
                 user.password = undefined;
+                user.verificationString = undefined;
                 res.json(user);
                 return;
             } else {

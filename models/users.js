@@ -7,6 +7,8 @@ var usersSchema = mongoose.Schema({
   username: String,
   userType: String,
   password: String,
+  verificationToken: String,
+  verified: Boolean,
   images: String
 });
 

@@ -46,7 +46,7 @@ export function postUser(user) {
         .then(function(response) {
             // send verification email
             console.log("about to try to send email");
-            axios.post("/api/sendEmail")
+            axios.post("/api/sendVerificationEmail", {username: user[0].username})
                 // successfully sent verification email
                 .then(function(emailResponse) {
                     console.log("email sent");
@@ -64,6 +64,21 @@ export function postUser(user) {
         .catch(function(err) {
             dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});
         });
+    }
+}
+
+// VERIFY EMAIL
+export function verifyEmail() {
+    return function(dispatch) {
+        axios.post("/api/verifyEmail")
+            .then(function(response) {
+                console.log("EMAIL VERIFIED!");
+                dispatch({type: "VERIFY_EMAIL"});
+            })
+            .catch(function(err) {
+                console.log("EMAIL VERIFIED REJECTED");
+                dispatch({type: "VERIFY_EMAIL_REJECTED"});
+            });
     }
 }
 
