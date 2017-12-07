@@ -46,9 +46,9 @@ footer {
 }
 
 .messageHeader {
+    margin-top: 56px;
     text-align: center;
     height: 40px;
-    margin-top: -11px;
     margin-bottom: 10px;
     padding-bottom: 10px;
     padding-top: 10px;
