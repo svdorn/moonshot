@@ -200,6 +200,7 @@ app.post('/login', function(req, res) {
 
     console.log("TRYING TO LOG IN USER: ");
     console.log(username);
+    console.log("initial pass: " + password);
 
     var query = {username: username};
     Users.findOne(query, function(err, user) {
@@ -215,6 +216,7 @@ app.post('/login', function(req, res) {
             res.status(404).send("No user with that username was found.");
             return;
         }
+        console.log("users pass: " + user.password);
 
         bcrypt.compare(password, user.password, function(passwordError, passwordsMatch) {
             if (passwordError) {
@@ -263,15 +265,15 @@ app.delete('/users/:_id', function(req, res) {
 //----->> UPDATE USER <<------
 app.put('/users/:_id', function(req, res) {
   var user = req.body;
-  var query = req.params._id;
+  var query = {_id: req.params._id};
+  console.log("in api server");
+  console.log(user);
+  console.log(query);
 
   // if the field doesn't exist, $set will set a new field
   var update = {
     '$set': {
       username: user.username,
-      userType: user.userType,
-      image: user.image,
-      password: user.password,
       name: user.name,
       email: user.email
     }
@@ -280,10 +282,13 @@ app.put('/users/:_id', function(req, res) {
   // When true returns the updated document
   var options = {new: true};
 
+  // i think it has to be {_id: req.params._id} for the query
   Users.findOneAndUpdate(query, update, options, function(err, users) {
     if (err) {
       console.log(err);
     }
+    console.log("printing users" + users);
+    users.password = undefined;
     res.json(users);
   });
 });

@@ -56,7 +56,7 @@ export function postUser(user) {
                 // error sending verification email
                 .catch(function(emailError) {
                     console.log("user successfully posted but error sending email: ", emailError)
-                    dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL"}, payload:response.data);
+                    dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", payload:response.data});
                     browserHistory.push('/login');
                 });
         })
@@ -64,6 +64,21 @@ export function postUser(user) {
         .catch(function(err) {
             dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});
         });
+    }
+}
+
+// UPDATE A USER
+export function updateUser(user) {
+    return function(dispatch) {
+
+        // update user on the database
+        axios.put("/api/users/" + user._id, user)
+            .then(function(response) {
+                dispatch({type:"UPDATE_USER", payload:response.data})
+            })
+            .catch(function(err) {
+
+            });
     }
 }
 
@@ -93,14 +108,6 @@ export function deleteUser(id) {
       .catch(function(err) {
         dispatch({type: "DELETE_USER_REJECTED", payload: err});
       })
-  }
-}
-
-// UPDATE A USER
-export function updateUser(user) {
-  return {
-    type: "UPDATE_USER",
-    payload: user
   }
 }
 
