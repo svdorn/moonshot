@@ -105,6 +105,13 @@ class Settings extends Component {
         console.log(this.props);
         return (
             <div className="container">
+                {this.props.changePasswordError !== undefined ?
+                    <Paper className="messageHeader errorHeader">
+                        {this.props.changePasswordError}
+                    </Paper>
+                    :
+                    null
+                }
                 <Paper className="boxStyle">
                     <Menu value={this.state.value} onChange={this.handleChange}>
                         <MenuItem primaryText="Account" disabled={true}/>
@@ -183,6 +190,7 @@ function mapStateToProps(state) {
         initialValues: state.users.currentUser,
         formData: state.form,
         currentUser: state.users.currentUser,
+        changePasswordError: state.users.changePasswordError,
     };
 }
 
