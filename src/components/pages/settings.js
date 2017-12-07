@@ -104,75 +104,77 @@ class Settings extends Component {
     render() {
         console.log(this.props);
         return (
-            <div className="container">
+            <div>
                 {this.props.changePasswordError !== undefined ?
                     <Paper className="messageHeader errorHeader">
-                        {this.props.changePasswordError}
+                        {this.props.changePasswordError.response.data}
                     </Paper>
                     :
                     null
                 }
-                <Paper className="boxStyle">
-                    <Menu value={this.state.value} onChange={this.handleChange}>
-                        <MenuItem primaryText="Account" disabled={true}/>
-                        <Divider/>
-                        <MenuItem value={1} primaryText="Settings"/>
-                        <MenuItem value={2} primaryText="Change Password"/>
-                    </Menu>
-                </Paper>
-                {this.state.value === 1 ?
-                    <Paper className="formOther">
-                        <form onSubmit={this.handleSubmit.bind(this)}>
-                            <h1>Settings</h1>
-                            <Field
-                                name="name"
-                                component={renderTextField}
-                                label="Full Name"
-                            /><br/>
-                            <Field
-                                name="username"
-                                component={renderTextField}
-                                label="Username"
-                            /><br/>
-                            <Field
-                                name="email"
-                                component={renderTextField}
-                                label="Email"
-                            /><br/>
-                            <RaisedButton type="submit"
-                                          label="Update User"
-                                          primary={true}
-                                          className="button"
-                            />
-                        </form>
+                <div className="container">
+                    <Paper className="boxStyle">
+                        <Menu value={this.state.value} onChange={this.handleChange}>
+                            <MenuItem primaryText="Account" disabled={true}/>
+                            <Divider/>
+                            <MenuItem value={1} primaryText="Settings"/>
+                            <MenuItem value={2} primaryText="Change Password"/>
+                        </Menu>
                     </Paper>
-                    :
-                    <Paper className="formOther">
-                        <form onSubmit={this.handleSubmit.bind(this)}>
-                            <h1>Change Password</h1>
-                            <Field
-                                name="oldpass"
-                                component={renderTextField}
-                                label="Old Password"
-                            /><br/>
-                            <Field
-                                name="password"
-                                component={renderTextField}
-                                label="New Password"
-                            /><br/>
-                            <Field
-                                name="password2"
-                                component={renderTextField}
-                                label="Confirm New Password"
-                            /><br/>
-                            <RaisedButton type="submit"
-                                          label="Change Password"
-                                          primary={true}
-                                          className="button"
-                            />
-                        </form>
-                    </Paper>
-                }
+                    {this.state.value === 1 ?
+                        <Paper className="formOther">
+                            <form onSubmit={this.handleSubmit.bind(this)}>
+                                <h1>Settings</h1>
+                                <Field
+                                    name="name"
+                                    component={renderTextField}
+                                    label="Full Name"
+                                /><br/>
+                                <Field
+                                    name="username"
+                                    component={renderTextField}
+                                    label="Username"
+                                /><br/>
+                                <Field
+                                    name="email"
+                                    component={renderTextField}
+                                    label="Email"
+                                /><br/>
+                                <RaisedButton type="submit"
+                                              label="Update User"
+                                              primary={true}
+                                              className="button"
+                                />
+                            </form>
+                        </Paper>
+                        :
+                        <Paper className="formOther">
+                            <form onSubmit={this.handleSubmit.bind(this)}>
+                                <h1>Change Password</h1>
+                                <Field
+                                    name="oldpass"
+                                    component={renderTextField}
+                                    label="Old Password"
+                                /><br/>
+                                <Field
+                                    name="password"
+                                    component={renderTextField}
+                                    label="New Password"
+                                /><br/>
+                                <Field
+                                    name="password2"
+                                    component={renderTextField}
+                                    label="Confirm New Password"
+                                /><br/>
+                                <RaisedButton type="submit"
+                                              label="Change Password"
+                                              primary={true}
+                                              className="button"
+                                />
+                            </form>
+                        </Paper>
+                    }
+                </div>
             </div>
         );
     }
