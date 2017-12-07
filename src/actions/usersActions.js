@@ -82,6 +82,19 @@ export function updateUser(user) {
     }
 }
 
+export function changePassword(user) {
+    return function(dispatch) {
+
+        axios.put('/api/users/changepassword/' +user._id, user)
+            .then(function(response) {
+                dispatch({type:"CHANGE_PASSWORD", payload:response.data})
+            })
+            .catch(function(err){
+                dispatch({type:"CHANGE_PASSWORD_REJECTED", payload:err})
+            });
+    }
+}
+
 // VERIFY EMAIL
 export function verifyEmail(token) {
     return function(dispatch) {

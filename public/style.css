@@ -3,11 +3,6 @@ html {
   min-height: 100%;
 }
 
-body {
-  margin-top: 67px;
-  margin-bottom: 75px;
-}
-
 .container {
   width: auto;
   max-width: 900px;
@@ -37,6 +32,13 @@ footer {
   margin-bottom: 100px;
   margin-left: 15%;
   padding-bottom: 20px;
+}
+
+.formOther{
+  text-align: center;
+  margin-top: 100px;
+  display: inline-block;
+  padding: 30px 60px 30px 60px;
 }
 
 .button {
@@ -73,4 +75,13 @@ h3{
   color: #00B7FF;
   font-family: Roboto, sans-serif;
   padding-top: 5px;
+}
+
+.boxStyle{
+  display: inline-block;
+  margin: 0 32px 0 32px;
+}
+
+.appBar{
+  margin-top: 75px;
 }

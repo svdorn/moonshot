@@ -7,7 +7,8 @@ class Profile extends Component{
     render(){
         return(
             <div>
-                    <AppBar showMenuIconButton={false}
+                    <AppBar className="appBar"
+                            showMenuIconButton={false}
                             title={this.props.currentUser.name}/>
             </div>
         );
