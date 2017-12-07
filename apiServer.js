@@ -115,6 +115,9 @@ app.post('/verifyEmail', function (req, res) {
         var update = {
             '$set': {
                 verified: true
+            },
+            '$unset': {
+                verificationToken: ""
             }
         };
 

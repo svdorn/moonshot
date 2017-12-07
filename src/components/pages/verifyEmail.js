@@ -48,4 +48,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(null, mapDispatchToProps)(VerifyEmail);
+export default connect(mapStateToProps, mapDispatchToProps)(VerifyEmail);
