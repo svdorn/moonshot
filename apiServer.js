@@ -113,9 +113,12 @@ app.post('/verifyEmail', function(req, res) {
 
         // if the field doesn't exist, $set will set a new field
         var update = {
-          '$set': {
-            verified: true
-          }
+            '$set': {
+                verified: true
+            },
+            '$unset': {
+                verificationToken: ""
+            }
         };
 
         // When true returns the updated document
