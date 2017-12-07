@@ -84,7 +84,7 @@ class Login extends Component {
         return (
             <div>
                 {this.props.loginError ?
-                    <Paper className="errorHeader">
+                    <Paper className="messageHeader errorHeader">
                         {this.props.loginError.response.data}
                     </Paper>
                     :

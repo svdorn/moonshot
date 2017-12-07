@@ -43,14 +43,21 @@ footer {
   margin-top: 12px;
 }
 
-.errorHeader {
+.messageHeader {
     text-align: center;
     height: 40px;
     margin-top: -11px;
     margin-bottom: 10px;
     padding-bottom: 10px;
     padding-top: 10px;
+}
+
+.errorHeader {
     background-color: rgb(255, 181, 181) !important;
+}
+
+.infoHeader {
+    background-color: #21ea2182 !important
 }
 
 button.link {

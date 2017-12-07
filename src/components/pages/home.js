@@ -10,7 +10,7 @@ class Home extends Component{
         return(
             <div>
                 {this.props.emailSentMessage ?
-                    <Paper className="errorHeader">
+                    <Paper className="messageHeader infoHeader">
                         {this.props.emailSentMessage}
                     </Paper>
                     :

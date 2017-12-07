@@ -17,7 +17,7 @@ class VerifyEmail extends Component {
         return(
             <div>
                 {this.props.verifyEmailErrorMsg !== undefined ?
-                    <Paper className="errorHeader">
+                    <Paper className="messageHeader errorHeader">
                         {this.props.verifyEmailErrorMsg}
                     </Paper>
                     :
