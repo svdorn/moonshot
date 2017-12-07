@@ -148,11 +148,19 @@ app.post('/sendVerificationEmail', function (req, res) {
             + "<a href='http://localhost:3000/verifyEmail?"
             + user.verificationToken
             + "'>Click me</a>";
-        sendEmail(recipient, subject, content);
+
+        sendEmail(recipient, subject, content, function(success, msg) {
+            if (success) {
+                res.json(msg);
+            } else {
+                res.status(500).send(msg);
+            }
+        })
     });
 });
 
-function sendEmail(recipients, subject, content) {
+// callback needs to be a function of a success boolean and string to return
+function sendEmail(recipients, subject, content, callback) {
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
     nodemailer.createTestAccount((err, account) => {
@@ -184,11 +192,13 @@ function sendEmail(recipients, subject, content) {
         // send mail with defined transport object
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                return console.log(error);
+                console.log(error);
+                callback(false, "Error sending email to user");
+                return;
             }
             console.log('Message sent: %s', info.messageId);
-            // Preview only available when sending through an Ethereal account
-            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+            callback(true, "Email sent! Check your email before logging in.");
+            return;
         });
     });
 }
@@ -217,19 +227,33 @@ app.post('/login', function (req, res) {
             return;
         }
         console.log("users pass: " + user.password);
-
-        bcrypt.compare(password, user.password, function (passwordError, passwordsMatch) {
+        
+        bcrypt.compare(password, user.password, function(passwordError, passwordsMatch) {
+            // if hashing password fails
             if (passwordError) {
                 console.log("error hashing password");
                 res.status(500).send("Error logging in, try again later.");
                 return;
-            } else if (passwordsMatch) {
-                console.log("LOGGING IN USER: ", user.username);
-                user.password = undefined;
-                user.verificationString = undefined;
-                res.json(user);
-                return;
-            } else {
+            }
+            // passwords match
+            else if (passwordsMatch) {
+                // check if user verified email address
+                if (user.verified) {
+                    console.log("LOGGING IN USER: ", user.username);
+                    user.password = undefined;
+                    user.verificationString = undefined;
+                    res.json(user);
+                    return;
+                }
+                // if user has not yet verified email address, don't log in
+                else {
+                    console.log("user hasn't verified email yet");
+                    res.status(401).send("Email not yet verified");
+                    return;
+                }
+            }
+            // wrong password
+            else {
                 console.log('wrong password');
                 res.status(400).send("Password is incorrect.");
                 return;
