@@ -18,7 +18,7 @@ var app = express();
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
 
 // APIs
@@ -36,69 +36,69 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 // --->>> SET UP SESSIONS <<<---
 app.use(session({
-  secret: 'mySecretString',
-  saveUninitialized: false,
-  resave: false,
-  cookie: {maxAge: 1000*60*60*24*2}, //2 days in milliseconds
-  store: new MongoStore({mongooseConnection: db, ttl: 2*24*60*60})
-  // ttl: 2 days * 24 hours * 60 minutes * 60 seconds
+    secret: 'mySecretString',
+    saveUninitialized: false,
+    resave: false,
+    cookie: {maxAge: 1000 * 60 * 60 * 24 * 2}, //2 days in milliseconds
+    store: new MongoStore({mongooseConnection: db, ttl: 2 * 24 * 60 * 60})
+    // ttl: 2 days * 24 hours * 60 minutes * 60 seconds
 }));
 // SAVE SESSION CART API
-app.post('/cart', function(req, res) {
-  var cart = req.body;
-  req.session.cart = cart;
-  req.session.save(function(err) {
-    if (err) {
-      console.log(err);
-    }
-    res.json(req.session.cart);
-  })
+app.post('/cart', function (req, res) {
+    var cart = req.body;
+    req.session.cart = cart;
+    req.session.save(function (err) {
+        if (err) {
+            console.log(err);
+        }
+        res.json(req.session.cart);
+    })
 })
 // GET SESSION CART API
-app.get('/cart', function(req, res) {
-  if (typeof req.session.cart !== 'undefined') {
-    res.json(req.session.cart);
-  }
+app.get('/cart', function (req, res) {
+    if (typeof req.session.cart !== 'undefined') {
+        res.json(req.session.cart);
+    }
 })
 // --->>> END SESSION SET UP <<<---
 
 var Users = require('./models/users.js');
 
 //----->> POST USER <<------
-app.post('/users', function(req, res) {
-  var user = req.body[0];
+app.post('/users', function (req, res) {
+    var user = req.body[0];
 
-  console.log("SIGNING UP A USER: ");
-  console.log(user.username);
+    console.log("SIGNING UP A USER: ");
+    console.log(user.username);
 
-  // hash the user's password
-  const saltRounds = 10;
-  bcrypt.genSalt(saltRounds, function(err, salt) {
-    bcrypt.hash(user.password, salt, function(err, hash) {
-        // change the stored password to be the hash
-        user.password = hash;
-        user.verified = false;
+    // hash the user's password
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+        bcrypt.hash(user.password, salt, function (err, hash) {
+            // change the stored password to be the hash
+            user.password = hash;
+            user.verified = false;
 
-        // create user's verification string
-        user.verificationToken = crypto.randomBytes(64).toString('hex');
-        console.log("verificationToken is: ", user.verificationToken);
+            // create user's verification string
+            user.verificationToken = crypto.randomBytes(64).toString('hex');
+            console.log("verificationToken is: ", user.verificationToken);
 
-        // store the user in the db
-        Users.create(user, function(err, user) {
-          if (err) {
-            console.log(err);
-          }
-          res.json(user);
-        })
+            // store the user in the db
+            Users.create(user, function (err, user) {
+                if (err) {
+                    console.log(err);
+                }
+                res.json(user);
+            })
+        });
     });
-  });
 });
 
-app.post('/verifyEmail', function(req, res) {
+app.post('/verifyEmail', function (req, res) {
     const token = req.body.token;
 
     var query = {verificationToken: token};
-    Users.findOne(query, function(err, user) {
+    Users.findOne(query, function (err, user) {
         if (err || user == undefined) {
             res.status(404).send("User not found from token");
             return;
@@ -124,27 +124,27 @@ app.post('/verifyEmail', function(req, res) {
         // When true returns the updated document
         var options = {new: true};
 
-        Users.findOneAndUpdate(query, update, options, function(err, user) {
-          if (err) {
-            console.log(err);
-          }
+        Users.findOneAndUpdate(query, update, options, function (err, user) {
+            if (err) {
+                console.log(err);
+            }
 
-          console.log("logging in user ", user.username);
-          user.password = undefined;
-          user.verificationString = undefined;
-          res.json(user);
+            console.log("logging in user ", user.username);
+            user.password = undefined;
+            user.verificationString = undefined;
+            res.json(user);
         });
     });
 });
 
 // SEND EMAIL
-app.post('/sendVerificationEmail', function(req, res) {
+app.post('/sendVerificationEmail', function (req, res) {
     console.log("ABOUT TO TRY TO SEND EMAIL");
 
     let username = req.body.username;
     let query = {username: username};
 
-    Users.findOne(query, function(err, user) {
+    Users.findOne(query, function (err, user) {
         let recipient = user.email;
         let subject = 'Verify email';
         let content = 'Click this link to verify your account: '
@@ -207,7 +207,7 @@ function sendEmail(recipients, subject, content, callback) {
 }
 
 // LOGIN USER
-app.post('/login', function(req, res) {
+app.post('/login', function (req, res) {
     var username = req.body.username;
     var password = req.body.password;
 
@@ -216,7 +216,7 @@ app.post('/login', function(req, res) {
     console.log("initial pass: " + password);
 
     var query = {username: username};
-    Users.findOne(query, function(err, user) {
+    Users.findOne(query, function (err, user) {
         if (err) {
             console.log("error performing query to find user in db", err);
             res.status(500).send("Error performing query to find user in db. ", err);
@@ -268,84 +268,142 @@ app.post('/login', function(req, res) {
 });
 
 //----->> GET USERS <<------
-app.get('/users', function(req, res) {
-  Users.find(function(err, users) {
-    if (err) {
-      console.log(err);
-    }
-    res.json(users);
-  })
+app.get('/users', function (req, res) {
+    Users.find(function (err, users) {
+        if (err) {
+            console.log(err);
+        }
+        res.json(users);
+    })
 });
 
 //----->> DELETE USER <<------
-app.delete('/users/:_id', function(req, res) {
-  var query = {_id: req.params._id};
+app.delete('/users/:_id', function (req, res) {
+    var query = {_id: req.params._id};
 
-  Users.remove(query, function(err, user) {
-    if (err) {
-      console.log(err);
-    }
-    res.json(user);
-  })
+    Users.remove(query, function (err, user) {
+        if (err) {
+            console.log(err);
+        }
+        res.json(user);
+    })
 });
 
 //----->> UPDATE USER <<------
-app.put('/users/:_id', function(req, res) {
-  var user = req.body;
-  var query = {_id: req.params._id};
-  console.log("in api server");
-  console.log(user);
-  console.log(query);
+app.put('/users/:_id', function (req, res) {
+    var user = req.body;
+    var query = {_id: req.params._id};
+    console.log("in api server");
+    console.log(user);
+    console.log(query);
 
-  // if the field doesn't exist, $set will set a new field
-  var update = {
-    '$set': {
-      username: user.username,
-      name: user.name,
-      email: user.email
-    }
-  };
+    // if the field doesn't exist, $set will set a new field
+    var update = {
+        '$set': {
+            username: user.username,
+            name: user.name,
+            email: user.email
+        }
+    };
 
-  // When true returns the updated document
-  var options = {new: true};
+    // When true returns the updated document
+    var options = {new: true};
 
-  // i think it has to be {_id: req.params._id} for the query
-  Users.findOneAndUpdate(query, update, options, function(err, users) {
-    if (err) {
-      console.log(err);
-    }
-    console.log("printing users" + users);
-    users.password = undefined;
-    res.json(users);
-  });
+    // i think it has to be {_id: req.params._id} for the query
+    Users.findOneAndUpdate(query, update, options, function (err, users) {
+        if (err) {
+            console.log(err);
+        }
+        console.log("printing users" + users);
+        users.password = undefined;
+        res.json(users);
+    });
+});
+
+//----->> CHANGE PASSWORD <<------
+app.put('/users/changepassword/:_id', function (req, res) {
+    var user = req.body;
+    var query = {_id: req.params._id};
+
+    // if the field doesn't exist, $set will set a new field
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+        bcrypt.hash(user.password, salt, function (err, hash) {
+            // change the stored password to be the hash
+            var update = {
+                $set : {
+                    password: hash
+                }
+            }
+            // i think it has to be {_id: req.params._id} for the query
+            Users.findOne(query, function (err, users) {
+                if (err) {
+                    res.status(500).send("Error performing query to find user in db. ", err);
+                    return;
+                }
+
+                // CHECK IF A USER WAS FOUND
+                if (!users) {
+                    res.status(404).send("No user with that username was found.");
+                    return;
+                }
+
+                bcrypt.compare(user.oldpass, users.password, function (passwordError, passwordsMatch) {
+                    if (passwordError) {
+                        console.log("error hashing password");
+                        res.status(500).send("Error logging in, try again later.");
+                        return;
+                    } else if (passwordsMatch) {
+                        console.log("ok");
+                        // When true returns the updated document
+                        var options = {new: true};
+
+                        // i think it has to be {_id: req.params._id} for the query
+                        Users.findOneAndUpdate(query, update, options, function (err, users) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            console.log("printing users" + users);
+                            users.password = undefined;
+                            res.json(users);
+                        });
+                    } else {
+                        console.log('wrong password');
+                        res.status(400).send("Old password is incorrect.");
+                        return;
+                    }
+                });
+            });
+        });
+    });
 });
 
 //----->> GET USER IMAGES <<------
-app.get('/images', function(req, res) {
-  const imgFolder = __dirname + '/public/images/';
-  // REQUIRE FILE SYSTEM
-  const fs = require('fs');
-  // READ ALL FILES IN THE DIRECTORY
-  fs.readdir(imgFolder, function(err, files) {
-    if (err) {
-      return console.error(err);
-    }
-    //CREATE AN EMPTY ARRAY
-    const filesArr = [];
-    // ITERATE ALL IMAGES IN THE DIRECTORY AND ADD TO THE ARRAY
-    files.forEach(function(file) {
-      filesArr.push({name: file});
-    });
-    // SEND THE JSON RESPONSE WITH THE ARRAY
-    res.json(filesArr);
-  })
+app.get('/images', function (req, res) {
+    const imgFolder = __dirname + '/public/images/';
+    // REQUIRE FILE SYSTEM
+    const fs = require('fs');
+    // READ ALL FILES IN THE DIRECTORY
+    fs.readdir(imgFolder, function (err, files) {
+        if (err) {
+            return console.error(err);
+        }
+        //CREATE AN EMPTY ARRAY
+        const filesArr = [];
+        // ITERATE ALL IMAGES IN THE DIRECTORY AND ADD TO THE ARRAY
+        files.forEach(function (file) {
+            filesArr.push({name: file});
+        });
+        // SEND THE JSON RESPONSE WITH THE ARRAY
+        res.json(filesArr);
+    })
 })
 
 // END APIs
 
-app.listen(3001, function(err) {
-  if (err) {
-    return console.log(err);
-  }
-  console.log('API Server is listening on http://localhost:3001');
+app.listen(3001, function (err) {
+    if (err) {
+        return console.log(err);
+    }
+    console.log('API Server is listening on http://localhost:3001');
 })
