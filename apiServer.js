@@ -219,17 +219,31 @@ app.post('/login', function(req, res) {
         console.log("users pass: " + user.password);
 
         bcrypt.compare(password, user.password, function(passwordError, passwordsMatch) {
+            // if hashing password fails
             if (passwordError) {
                 console.log("error hashing password");
                 res.status(500).send("Error logging in, try again later.");
                 return;
-            } else if (passwordsMatch) {
-                console.log("LOGGING IN USER: ", user.username);
-                user.password = undefined;
-                user.verificationString = undefined;
-                res.json(user);
-                return;
-            } else {
+            }
+            // passwords match
+            else if (passwordsMatch) {
+                // check if user verified email address
+                if (user.verified) {
+                    console.log("LOGGING IN USER: ", user.username);
+                    user.password = undefined;
+                    user.verificationString = undefined;
+                    res.json(user);
+                    return;
+                }
+                // if user has not yet verified email address, don't log in
+                else {
+                    console.log("user hasn't verified email yet");
+                    res.status(401).send("Email not yet verified");
+                    return;
+                }
+            }
+            // wrong password
+            else {
                 console.log('wrong password');
                 res.status(400).send("Password is incorrect.");
                 return;
