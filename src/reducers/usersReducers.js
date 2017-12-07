@@ -23,10 +23,7 @@ export function usersReducers(state = {users: [], currentUser: undefined}, actio
         case "POST_USER":
             return {
                 ...state,
-                users: [...state.users, ...action.payload],
-                msg: 'Saved! Click to continue',
-                style: 'success',
-                validation: 'success'
+                emailSentMessage: action.payload,
             }
             break;
         case "POST_USER_REJECTED":

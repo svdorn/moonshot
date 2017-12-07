@@ -50,8 +50,8 @@ export function postUser(user) {
                 // successfully sent verification email
                 .then(function(emailResponse) {
                     console.log("email sent");
-                    dispatch({type:"POST_USER", payload:response.data});
-                    browserHistory.push('/login');
+                    dispatch({type:"POST_USER", payload:emailResponse.data});
+                    browserHistory.push('/');
                 })
                 // error sending verification email
                 .catch(function(emailError) {

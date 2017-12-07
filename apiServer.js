@@ -148,11 +148,19 @@ app.post('/sendVerificationEmail', function(req, res) {
             + "<a href='http://localhost:3000/verifyEmail?"
             + user.verificationToken
             + "'>Click me</a>";
-        sendEmail(recipient, subject, content);
+
+        sendEmail(recipient, subject, content, function(success, msg) {
+            if (success) {
+                res.json(msg);
+            } else {
+                res.status(500).send(msg);
+            }
+        })
     });
 });
 
-function sendEmail(recipients, subject, content) {
+// callback needs to be a function of a success boolean and string to return
+function sendEmail(recipients, subject, content, callback) {
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
     nodemailer.createTestAccount((err, account) => {
@@ -184,11 +192,13 @@ function sendEmail(recipients, subject, content) {
         // send mail with defined transport object
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
-                return console.log(error);
+                console.log(error);
+                callback(false, "Error sending email to user");
+                return;
             }
             console.log('Message sent: %s', info.messageId);
-            // Preview only available when sending through an Ethereal account
-            console.log('Preview URL: %s', nodemailer.getTestMessageUrl(info));
+            callback(true, "Email sent! Check your email before logging in.");
+            return;
         });
     });
 }
