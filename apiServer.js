@@ -227,7 +227,7 @@ app.post('/login', function (req, res) {
             return;
         }
         console.log("users pass: " + user.password);
-        
+
         bcrypt.compare(password, user.password, function(passwordError, passwordsMatch) {
             // if hashing password fails
             if (passwordError) {
