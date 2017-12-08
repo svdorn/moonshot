@@ -1,27 +1,9 @@
 "use strict"
 import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import { TextField, Paper, Menu, MenuItem, Divider } from 'material-ui';
+import { Paper, Menu, MenuItem, Divider } from 'material-ui';
 import PasswordChange from './passwordchange';
 import Account from './account';
-
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
-};
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
-        {...input}
-        {...custom}
-    />
-);
-
 
 class Settings extends Component {
     constructor(props) {
