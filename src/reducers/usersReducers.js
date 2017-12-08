@@ -5,7 +5,9 @@ const initialState = {
     users: [],
     currentUser: undefined,
     isFetching: false,
-    errorMessage: undefined
+    headerMessage: undefined,
+    headerType: undefined,
+    headerExpirationTime: undefined
 }
 export function usersReducers(state = initialState, action) {
     switch (action.type) {
