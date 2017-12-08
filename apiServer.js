@@ -158,7 +158,7 @@ app.post('/verifyEmail', function (req, res) {
 });
 
 // VERIFY CHANGE PASSWORD
-app.post('/changePassword', function (req, res) {
+app.post('/users/changePasswordForgot', function (req, res) {
     const token = req.body.token;
     const password = req.body.password;
     console.log(token);
@@ -174,7 +174,7 @@ app.post('/changePassword', function (req, res) {
         console.log(user.username);
         const time = Date.now() - user.time;
         console.log("time is : " + time);
-        if (time > 1) {
+        if (time > (1*60*60*1000)) {
             res.status(401).send("Time ran out, try sending email again");
         }
 
