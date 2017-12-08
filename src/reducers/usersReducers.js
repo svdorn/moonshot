@@ -74,7 +74,7 @@ export function usersReducers(state = {users: [], currentUser: undefined}, actio
             break;
         case "CHANGE_PASSWORD":
             return {
-                ...state
+                ...state, changePasswordSuccess: "Password Changed"
             };
             break;
         case "CHANGE_PASSWORD_REJECTED":

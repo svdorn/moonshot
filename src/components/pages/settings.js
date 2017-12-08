@@ -112,6 +112,13 @@ class Settings extends Component {
                     :
                     null
                 }
+                {this.props.changePasswordSuccess ?
+                    <Paper className="messageHeader infoHeader">
+                        {this.props.changePasswordSuccess}
+                    </Paper>
+                    :
+                    null
+                }
                 <div className="container">
                     <Paper className="boxStyle">
                         <Menu value={this.state.value} onChange={this.handleChange}>
@@ -193,6 +200,7 @@ function mapStateToProps(state) {
         formData: state.form,
         currentUser: state.users.currentUser,
         changePasswordError: state.users.changePasswordError,
+        changePasswordSuccess: state.users.changePasswordSuccess,
     };
 }
 
