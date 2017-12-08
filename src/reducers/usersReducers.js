@@ -69,17 +69,17 @@ export function usersReducers(state = {users: [], currentUser: undefined}, actio
             console.log("in reducer");
             console.log("what newUser is: ", action.payload);
             return {
-                ...state, currentUser: action.payload
+                ...state, currentUser: action.payload, success: "User Updated"
             };
             break;
         case "CHANGE_PASSWORD":
             return {
-                ...state, changePasswordSuccess: "Password Changed"
+                ...state, success: "Password Changed"
             };
             break;
         case "CHANGE_PASSWORD_REJECTED":
             return {
-                ...state, changePasswordError: action.payload
+                ...state, failure: action.payload
             };
             break;
     }
