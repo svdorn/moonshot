@@ -1,10 +1,7 @@
 "use strict"
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {updateUser, changePassword} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper, Menu, MenuItem, Divider} from 'material-ui';
-import {Field, reduxForm} from 'redux-form';
+import { TextField, Paper, Menu, MenuItem, Divider } from 'material-ui';
 import PasswordChange from './passwordchange';
 import Account from './account';
 

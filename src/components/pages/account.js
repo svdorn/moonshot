@@ -1,10 +1,10 @@
 "use strict"
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updateUser, changePassword} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper, Menu, MenuItem, Divider} from 'material-ui';
-import {Field, reduxForm} from 'redux-form';
+import { updateUser } from '../../actions/usersActions';
+import { TextField, RaisedButton, Paper } from 'material-ui';
+import { Field, reduxForm } from 'redux-form';
 
 const styles = {
     floatingLabelStyle: {
