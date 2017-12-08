@@ -39,27 +39,47 @@ app.use(session({
     secret: credentials.secretString,
     saveUninitialized: false,
     resave: false,
-    cookie: {maxAge: 1000 * 60 * 60 * 24 * 2}, //2 days in milliseconds
-    store: new MongoStore({mongooseConnection: db, ttl: 2 * 24 * 60 * 60})
-    // ttl: 2 days * 24 hours * 60 minutes * 60 seconds
+    cookie: {maxAge: 1000 * 60 * 60 * 24 * 7}, //7 days in milliseconds
+    store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
+    // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
-// SAVE SESSION CART API
-app.post('/cart', function (req, res) {
-    var cart = req.body;
-    req.session.cart = cart;
+
+// SAVE USER SESSION
+app.post('/userSession', function (req, res) {
+    let userId = req.body.userId;
+    req.session.userId = userId;
     req.session.save(function (err) {
         if (err) {
-            console.log(err);
+            console.log("error saving user session", err);
         }
-        res.json(req.session.cart);
-    })
-})
-// GET SESSION CART API
-app.get('/cart', function (req, res) {
-    if (typeof req.session.cart !== 'undefined') {
-        res.json(req.session.cart);
+        res.json(req.session.userId);
+    });
+});
+
+// GET USER SESSION
+app.get('/userSession', function (req, res) {
+    if (typeof req.session.userId !== 'undefined') {
+        res.json(req.session.userId);
     }
-})
+});
+
+// // SAVE SESSION CART API
+// app.post('/cart', function (req, res) {
+//     var cart = req.body;
+//     req.session.cart = cart;
+//     req.session.save(function (err) {
+//         if (err) {
+//             console.log(err);
+//         }
+//         res.json(req.session.cart);
+//     })
+// })
+// // GET SESSION CART API
+// app.get('/cart', function (req, res) {
+//     if (typeof req.session.cart !== 'undefined') {
+//         res.json(req.session.cart);
+//     }
+// })
 // --->>> END SESSION SET UP <<<---
 
 var Users = require('./models/users.js');
@@ -205,6 +225,12 @@ function sendEmail(recipients, subject, content, callback) {
         });
     });
 }
+
+app.post('/userByUsername', function (req, res) {
+    var username = req.body.username;
+
+    //Users.findOne(query)
+});
 
 // LOGIN USER
 app.post('/login', function (req, res) {

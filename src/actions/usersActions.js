@@ -21,7 +21,14 @@ export function login(user) {
       .then(function(response) {
         dispatch({type:"LOGIN", payload: response.data});
         browserHistory.push('/');
-        //return "successful Login, got this from the action creator";
+        console.log(user);
+        axios.post("/api/userSession", {userId: user._id})
+            .then(function(response) {
+                console.log("added user to session");
+            })
+            .catch(function(err) {
+                console.log("error adding user to session", err);
+            });
       })
       .catch(function(err) {
         dispatch({type: "LOGIN_REJECTED", payload: err});
@@ -31,9 +38,15 @@ export function login(user) {
 
 // LOG USER OUT
 export function signout() {
-  return{
-    type: "SIGNOUT",
-  }
+    axios.post("/api/userSession", {userId: undefined})
+        .then(function(response) {
+            console.log("removed user from session");
+            return {type: "SIGNOUT"};
+        })
+        .catch(function(err) {
+            console.log("error removing user from session", err);
+            return {type: "SIGNOUT"};
+        });
 }
 
 // POST USERS
