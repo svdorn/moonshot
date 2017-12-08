@@ -51,15 +51,16 @@ export function login(user) {
 
 // LOG USER OUT
 export function signout() {
-    axios.post("/api/userSession", {userId: undefined})
-        .then(function(response) {
-            console.log("removed user from session");
-            return {type: "SIGNOUT"};
-        })
-        .catch(function(err) {
-            console.log("error removing user from session", err);
-            return {type: "SIGNOUT"};
-        });
+    return function(dispatch) {
+        dispatch({type:"SIGNOUT"});
+        axios.post("/api/userSession", {userId: undefined})
+            .then(function(response) {
+                console.log("removed user from session");
+            })
+            .catch(function(err) {
+                console.log("error removing user from session", err);
+            });
+    }
 }
 
 // POST USERS
