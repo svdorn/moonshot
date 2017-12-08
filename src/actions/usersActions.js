@@ -77,7 +77,7 @@ export function updateUser(user) {
                 dispatch({type:"UPDATE_USER", payload:response.data})
             })
             .catch(function(err) {
-
+                dispatch({type:"UPDATE_USER_REJECTED", payload:err});
             });
     }
 }

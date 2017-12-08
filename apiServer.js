@@ -318,15 +318,38 @@ app.put('/users/:_id', function (req, res) {
 
     // When true returns the updated document
     var options = {new: true};
-    
-    // i think it has to be {_id: req.params._id} for the query
-    Users.findOneAndUpdate(query, update, options, function (err, users) {
-        if (err) {
+    const findQuery = {username: user.username};
+    console.log(findQuery);
+    Users.findOne(findQuery, function (err, foundUser) {
+        console.log("inside");
+        if (err){
+            console.log("error");
             console.log(err);
         }
-        console.log("printing users" + users);
-        users.password = undefined;
-        res.json(users);
+        let bool = false;
+        if (foundUser === null) {
+            console.log("here");
+            bool = true;
+        } else {
+            if (foundUser._id === user._id) {
+                console.log("id's equal");
+                bool = true;
+            } else {
+                res.status(401).send("Username is taken. Choose a different username");
+            }
+        }
+        if (bool) {
+            Users.findOneAndUpdate(query, update, options, function (err, users) {
+                if (err) {
+                    console.log(err);
+                }
+
+                console.log("printing users" + users);
+                users.password = undefined;
+                res.json(users);
+            });
+        }
+
     });
 });
 
