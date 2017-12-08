@@ -171,7 +171,7 @@ export function verifyEmail(token) {
 
 export function changePasswordForgot(user) {
     return function(dispatch) {
-        axios.post("api/changePassword", user)
+        axios.post("api/users/changePasswordForgot", user)
             .then(function(response) {
                 dispatch({type:"LOGIN", payload:response.data});
                 browserHistory.push('/');
