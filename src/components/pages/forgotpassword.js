@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { TextField, RaisedButton, Paper, Snackbar } from 'material-ui';
+import { TextField, RaisedButton, Paper, Snackbar, CircularProgress } from 'material-ui';
 import { forgotPassword } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -95,8 +95,8 @@ class ForgotPassword extends Component {
                                       className="button"
                         />
                     </form>
+                    { this.props.loading ? <CircularProgress /> : "" }
                 </Paper>
-
             </div>
         );
     }
@@ -114,6 +114,7 @@ function mapStateToProps(state) {
         formData: state.form,
         forgotPassSuccess: state.users.forgotPassSuccess,
         forgotPassFailure: state.users.forgotPassFailure,
+        loading: state.users.loadingSomething
     };
 }
 

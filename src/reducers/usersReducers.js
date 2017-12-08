@@ -43,10 +43,17 @@ export function usersReducers(state = initialState, action) {
         case "SIGNOUT":
             return {...state, currentUser:undefined};
             break;
+        case "FORGOT_PASSWORD_REQUESTED":
+        case "POST_USER_REQUESTED":
+            return {
+                ...state,
+                loadingSomething: true
+            }
         case "POST_USER":
             return {
                 ...state,
                 emailSentMessage: action.payload,
+                loadingSomething: false
             };
             break;
         case "POST_USER_REJECTED":
@@ -110,12 +117,12 @@ export function usersReducers(state = initialState, action) {
             break;
         case "FORGOT_PASSWORD":
             return {
-                ...state, forgotPassSuccess: action.payload
+                ...state, forgotPassSuccess: action.payload, loadingSomething: false
             };
             break;
         case "FORGOT_PASSWORD_REJECTED":
             return {
-                ...state, forgotPassFailure: action.payload
+                ...state, forgotPassFailure: action.payload, loadingSomething: false
             };
             break;
     }

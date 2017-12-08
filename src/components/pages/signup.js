@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {postUser, getUsers} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper} from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 
 const styles = {
@@ -143,6 +143,7 @@ class Signup extends Component {
                                       className="button"
                         />
                     </form>
+                    { this.props.loadingCreateUser ? <CircularProgress /> : "" }
                 </Paper>
             </div>
         );
@@ -160,6 +161,7 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         failure: state.users.failure,
+        loadingCreateUser: state.users.loadingSomething,
     };
 }
 

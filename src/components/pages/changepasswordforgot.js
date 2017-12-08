@@ -63,28 +63,29 @@ class PasswordChange extends Component {
 
     //name, username, email, password, confirm password, signup button
     render() {
-        console.log(this.props);
         return (
-            <Paper className="form">
-                <form onSubmit={this.handleSubmit.bind(this)}>
-                    <h1>Change Password</h1>
-                    <Field
-                        name="password"
-                        component={renderPasswordField}
-                        label="New Password"
-                    /><br/>
-                    <Field
-                        name="password2"
-                        component={renderPasswordField}
-                        label="Confirm New Password"
-                    /><br/>
-                    <RaisedButton type="submit"
-                                  label="Change Password"
-                                  primary={true}
-                                  className="button"
-                    />
-                </form>
-            </Paper>
+            <div>
+                <Paper className="form">
+                    <form onSubmit={this.handleSubmit.bind(this)}>
+                        <h1>Change Password</h1>
+                        <Field
+                            name="password"
+                            component={renderPasswordField}
+                            label="New Password"
+                        /><br/>
+                        <Field
+                            name="password2"
+                            component={renderPasswordField}
+                            label="Confirm New Password"
+                        /><br/>
+                        <RaisedButton type="submit"
+                                      label="Change Password"
+                                      primary={true}
+                                      className="button"
+                        />
+                    </form>
+                </Paper>
+            </div>
         );
     }
 }
@@ -98,7 +99,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         formData: state.form,
-        currentUser: state.users.currentUser,
+        currentUser: state.users.currentUser
     };
 }
 

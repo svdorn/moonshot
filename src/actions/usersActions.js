@@ -81,36 +81,40 @@ export function signout() {
 export function postUser(user) {
     return function(dispatch) {
 
-    // post user to database
-    axios.post("/api/users", user)
-        // user successfully posted
-        .then(function(response) {
-            // send verification email
-            console.log("about to try to send email");
-            axios.post("/api/sendVerificationEmail", {username: user[0].username})
-                // successfully sent verification email
-                .then(function(emailResponse) {
-                    console.log("email sent");
-                    dispatch({type:"POST_USER", payload:emailResponse.data});
-                    browserHistory.push('/');
-                })
-                // error sending verification email
-                .catch(function(emailError) {
-                    console.log("user successfully posted but error sending email: ", emailError)
-                    dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", payload:response.data});
-                    browserHistory.push('/login');
-                });
-        })
-        // error posting user
-        .catch(function(err) {
-            dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});
-        });
+        dispatch({type: "POST_USER_REQUESTED"});
+
+        // post user to database
+        axios.post("/api/users", user)
+            // user successfully posted
+            .then(function(response) {
+                // send verification email
+                console.log("about to try to send email");
+                axios.post("/api/sendVerificationEmail", {username: user[0].username})
+                    // successfully sent verification email
+                    .then(function(emailResponse) {
+                        console.log("email sent");
+                        dispatch({type:"POST_USER", payload:emailResponse.data});
+                        browserHistory.push('/');
+                    })
+                    // error sending verification email
+                    .catch(function(emailError) {
+                        console.log("user successfully posted but error sending email: ", emailError)
+                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", payload:response.data});
+                        browserHistory.push('/login');
+                    });
+            })
+            // error posting user
+            .catch(function(err) {
+                dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});
+            });
     }
 }
 
 // FORGOT PASSWORD
 export function forgotPassword(user) {
     return function(dispatch) {
+        dispatch({type: "FORGOT_PASSWORD_REQUESTED"});
+
         axios.post("/api/forgotPassword", user)
             .then(function(response) {
                 dispatch({type:"FORGOT_PASSWORD", payload:response.data})
