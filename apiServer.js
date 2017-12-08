@@ -182,6 +182,8 @@ app.post('/sendVerificationEmail', function (req, res) {
     });
 });
 
+// SEND EMAIL FOR PASSWORD RESET
+
 // callback needs to be a function of a success boolean and string to return
 function sendEmail(recipients, subject, content, callback) {
     // Generate test SMTP service account from ethereal.email

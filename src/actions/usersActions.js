@@ -108,6 +108,19 @@ export function postUser(user) {
     }
 }
 
+// FORGOT PASSWORD
+export function forgotPassword(user) {
+    return function(dispatch) {
+        axios.post("/api/forgotPassword", user)
+            .then(function(emailResponse) {
+
+            })
+            .catch(function(err) {
+
+            })
+    }
+}
+
 // UPDATE A USER
 export function updateUser(user) {
     return function(dispatch) {

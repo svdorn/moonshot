@@ -1,7 +1,7 @@
 "use strict"
 import React, { Component } from 'react';
 import { TextField, RaisedButton, Paper, Snackbar } from 'material-ui';
-import { login } from '../../actions/usersActions';
+import { forgotPassword } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Field, reduxForm } from 'redux-form';
@@ -25,37 +25,27 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     />
 );
 
-const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
-        {...input}
-        {...custom}
-        type="password"
-    />
-);
-
 const validate = values => {
     const errors = {};
     const requiredFields = [
-        'username',
-        'password',
+        'email',
     ];
     requiredFields.forEach(field => {
         if (!values[field]) {
             errors[field] = 'This field is required'
         }
     });
+    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address';
+    }
 
     return errors
 };
 
-class Login extends Component {
+class ForgotPassword extends Component {
     handleSubmit(e) {
         e.preventDefault();
-        const vals = this.props.formData.login.values;
+        const vals = this.props.formData.forgot.values;
 
         // check if all fields have a value
         let valsCounter = 0;
@@ -63,17 +53,11 @@ class Login extends Component {
             valsCounter++;
         }
 
-        if (!vals || valsCounter !== 2) {
+        if (!vals || valsCounter !== 1) {
             return;
         }
-        const user = {
-            username: this.props.formData.login.values.username,
-            password: this.props.formData.login.values.password
-        };
 
-        console.log(user);
-
-        this.props.login(user)
+        this.props.forgotPassword(vals)
 
         console.log("here");
         console.log("current user is" + this.props.currentUser);
@@ -92,20 +76,14 @@ class Login extends Component {
                 }
                 <Paper className="form" zDepth={2}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Login</h1>
-                            <Field
-                                name="username"
-                                component={renderTextField}
-                                label="Username"
-                            /><br/>
-                            <Field
-                                name="password"
-                                component={renderPasswordField}
-                                label="Password"
-                            /><br/><br/>
-                        <a href="/forgotPassword">Forgot Password?</a><br/>
+                        <h1>Forgot Password</h1>
+                        <Field
+                            name="email"
+                            component={renderTextField}
+                            label="Email"
+                        /><br/>
                         <RaisedButton type="submit"
-                                      label="Login"
+                                      label="Send Email"
                                       primary={true}
                                       className="button"
                         />
@@ -119,21 +97,21 @@ class Login extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        login
+        forgotPassword,
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
+        currentUser: state.currentUser,
         formData: state.form,
         loginError: state.users.loginError
     };
 }
 
-Login = reduxForm({
-    form:'login',
+ForgotPassword = reduxForm({
+    form:'forgot',
     validate,
-})(Login);
+})(ForgotPassword);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(ForgotPassword);
