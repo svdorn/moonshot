@@ -1,11 +1,30 @@
 "use strict"
 
 // USERS REDUCERS
-export function usersReducers(state = {users: [], currentUser: undefined}, action) {
+const initialState = {
+    users: [],
+    currentUser: undefined,
+    isFetching: false,
+    errorMessage: undefined
+}
+export function usersReducers(state = initialState, action) {
     switch (action.type) {
+        case "GET_USER_FROM_SESSION_REQUEST":
+        case "GET_USER_FROM_SESSION_REJECTED":
+            return {
+                ...state,
+                isFetching: action.isFetching,
+                errorMessage: action.errorMessage
+            };
+            break;
         case "GET_USER_FROM_SESSION":
             console.log("setting current user from session: ", action.payload);
-            return {...state, currentUser: action.payload};
+            return {
+                ...state,
+                currentUser: action.payload,
+                isFetching: action.isFetching,
+                errorMessage: undefined
+            };
             break;
         case "GET_USERS":
             return {...state, users: [...action.payload]};

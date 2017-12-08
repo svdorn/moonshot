@@ -40,9 +40,26 @@ class Menu extends Component {
         this.setState({value})
     };
 
+    followRoute (route)  {
+        console.log(route);
+        this.props.route(route);
+    }
+
     render() {
         console.log("in menu");
         console.log(this.props.currentUser);
+
+        if (this.props.isFetching) {
+            return (
+                <header>
+                    <Toolbar>
+                        <ToolbarGroup>
+                            <ToolbarTitle text="Moonshot Learning" />
+                        </ToolbarGroup>
+                    </Toolbar>
+                </header>
+            );
+        }
 
         return (
             <header>
@@ -85,13 +102,14 @@ class Menu extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        signout,
+        signout
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        isFetching: state.users.isFetching
     };
 }
 

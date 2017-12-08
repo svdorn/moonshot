@@ -44,14 +44,25 @@ class Main extends Component {
 
     render() {
         console.log("here");
-
-        return (
-            <MuiThemeProvider muiTheme={muiTheme}>
-                <Menu/>
-                    { this.props.children }
-                <Footer/>
-            </MuiThemeProvider>
-        );
+        if (this.props.isFetching) {
+            //return <Spinner text="Loading..." style="fa fa-spinner fa-spin" />
+            return (
+                <MuiThemeProvider muiTheme={muiTheme}>
+                    <Menu/>
+                    <Footer/>
+                </MuiThemeProvider>
+            );
+        }
+        // render the page once the current user is loaded
+        else {
+            return (
+                <MuiThemeProvider muiTheme={muiTheme}>
+                    <Menu/>
+                        { this.props.children }
+                    <Footer/>
+                </MuiThemeProvider>
+            );
+        }
     }
 }
 
@@ -64,6 +75,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        isFetching: state.users.isFetching
     };
 }
 
