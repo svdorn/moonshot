@@ -323,15 +323,13 @@ app.put('/users/:_id', function (req, res) {
     Users.findOne(findQuery, function (err, foundUser) {
         console.log("inside");
         if (err){
-            console.log("error");
             console.log(err);
         }
         let bool = false;
         if (foundUser === null) {
-            console.log("here");
             bool = true;
         } else {
-            if (foundUser._id === user._id) {
+            if (foundUser._id == user._id) {
                 console.log("id's equal");
                 bool = true;
             } else {

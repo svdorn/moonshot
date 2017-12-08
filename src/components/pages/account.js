@@ -62,7 +62,12 @@ class Account extends Component {
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
             return;
         }
-        const user = this.props.formData.settings.values;
+        const user = {
+            username: this.props.formData.settings.values.username,
+            name: this.props.formData.settings.values.name,
+            email: this.props.formData.settings.values.email,
+            _id: this.props.currentUser._id,
+        };
 
         console.log("UPDATING USER: ", user);
 
