@@ -15,6 +15,7 @@ import Profile from './components/pages/profile';
 import Settings from './components/pages/settings';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
+import ChangePassword from './components/pages/changepasswordforgot';
 
 const routes = (
   <Router history={browserHistory}>
@@ -27,6 +28,7 @@ const routes = (
         <Route path="/settings" component={Settings} />
         <Route path="/verifyEmail" component={VerifyEmail} />
         <Route path="/forgotPassword" component={ForgotPassword}/>
+        <Route path="/changePassword" component={ChangePassword} />
     </Route>
   </Router>
 );

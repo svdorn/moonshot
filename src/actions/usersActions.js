@@ -98,11 +98,11 @@ export function postUser(user) {
 export function forgotPassword(user) {
     return function(dispatch) {
         axios.post("/api/forgotPassword", user)
-            .then(function(emailResponse) {
-
+            .then(function(response) {
+                dispatch({type:"FORGOT_PASSWORD", payload:response.data})
             })
             .catch(function(err) {
-
+                dispatch({type:"FORGOT_PASSWORD_REJECTED", payload:err})
             })
     }
 }
@@ -148,6 +148,19 @@ export function verifyEmail(token) {
                 console.log("EMAIL VERIFIED REJECTED");
                 dispatch({type: "VERIFY_EMAIL_REJECTED"});
             });
+    }
+}
+
+export function changePasswordForgot(user) {
+    return function(dispatch) {
+        axios.post("api/changePassword", user)
+            .then(function(response) {
+                dispatch({type:"LOGIN", payload:response.data});
+                browserHistory.push('/');
+            })
+            .catch(function(err) {
+                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED"})
+            })
     }
 }
 

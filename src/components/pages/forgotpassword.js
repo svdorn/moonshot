@@ -57,7 +57,7 @@ class ForgotPassword extends Component {
             return;
         }
 
-        this.props.forgotPassword(vals)
+        this.props.forgotPassword(vals);
 
         console.log("here");
         console.log("current user is" + this.props.currentUser);
@@ -67,9 +67,16 @@ class ForgotPassword extends Component {
         console.log("props are:", this.props);
         return (
             <div>
-                {this.props.loginError ?
+                {this.props.forgotPassSuccess ?
+                    <Paper className="messageHeader infoHeader">
+                        {this.props.forgotPassSuccess}
+                    </Paper>
+                    :
+                    null
+                }
+                {this.props.forgotPassFailure ?
                     <Paper className="messageHeader errorHeader">
-                        {this.props.loginError.response.data}
+                        {this.props.forgotPassFailure.response.data}
                     </Paper>
                     :
                     null
@@ -103,9 +110,10 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.currentUser,
+        currentUser: state.users.currentUser,
         formData: state.form,
-        loginError: state.users.loginError
+        forgotPassSuccess: state.users.forgotPassSuccess,
+        forgotPassFailure: state.users.forgotPassFailure,
     };
 }
 

@@ -172,6 +172,61 @@ app.post('/verifyEmail', function (req, res) {
     });
 });
 
+// VERIFY CHANGE PASSWORD
+app.post('/changePassword', function (req, res) {
+    const token = req.body.token;
+    const password = req.body.password;
+    console.log(token);
+
+    var query = {passwordToken: token};
+    Users.findOne(query, function (err, user) {
+        if (err || user == undefined) {
+            res.status(404).send("User not found from token");
+            return;
+        }
+
+        console.log("Found user from ver token: ");
+        console.log(user.username);
+        const time = Date.now() - user.time;
+        console.log("time is : " + time);
+        if (time > 1) {
+            res.status(401).send("Time ran out, try sending email again");
+        }
+
+        let query = {_id: user._id};
+        const saltRounds = 10;
+        bcrypt.genSalt(saltRounds, function (err, salt) {
+            bcrypt.hash(password, salt, function (err, hash) {
+                // change the stored password to be the hash
+                const newPassword = hash;
+                // if the field doesn't exist, $set will set a new field
+                var update = {
+                    '$set': {
+                        password: newPassword
+                    },
+                    '$unset': {
+                        passwordToken: "",
+                        time: '',
+                    }
+                };
+
+                // When true returns the updated document
+                var options = {new: true};
+
+                Users.findOneAndUpdate(query, update, options, function (err, newUser) {
+                    if (err) {
+                        console.log(err);
+                    }
+
+                    console.log("logging in user ", newUser.username);
+                    newUser.password = undefined;
+                    res.json(newUser);
+                });
+            })
+        })
+    });
+});
+
 // SEND EMAIL
 app.post('/sendVerificationEmail', function (req, res) {
     console.log("ABOUT TO TRY TO SEND EMAIL");
@@ -198,7 +253,56 @@ app.post('/sendVerificationEmail', function (req, res) {
 });
 
 // SEND EMAIL FOR PASSWORD RESET
+app.post('/forgotPassword', function (req,res) {
 
+    let email = req.body.email;
+    let query = {email: email};
+
+    const user = getUserByQuery(query, function(user) {
+        if (user == undefined) {
+            res.status(401).send("Cannot find user");
+        } else {
+            let recipient = user.email;
+            let subject = 'Change Password';
+            const newPasswordToken = crypto.randomBytes(64).toString('hex');
+            const newTime = Date.now();
+            console.log("new pass token" + newPasswordToken);
+
+            let query = {_id: user._id};
+            var update = {
+                '$set': {
+                    passwordToken: newPasswordToken,
+                    time: newTime,
+                }
+            };
+            console.log(update);
+
+            var options = {new: true};
+
+            Users.findOneAndUpdate(query, update, options, function (err, foundUser) {
+                if (err) {
+                    console.log(err);
+                }
+
+                console.log(foundUser);
+
+                console.log("foundUser pass token: " + foundUser.passwordToken);
+                foundUser.password = undefined;
+                let content = 'Click this link to change your password:'
+                    + "<a href='http://localhost:3000/changePassword?"
+                    + newPasswordToken
+                    + "'>Click me</a>";
+                sendEmail(recipient, subject, content, function(success, msg) {
+                    if (success) {
+                        res.json(msg);
+                    } else {
+                        res.status(500).send(msg);
+                    }
+                })
+            });
+        }
+    })
+});
 // callback needs to be a function of a success boolean and string to return
 function sendEmail(recipients, subject, content, callback) {
     // Generate test SMTP service account from ethereal.email
@@ -237,7 +341,7 @@ function sendEmail(recipients, subject, content, callback) {
                 return;
             }
             console.log('Message sent: %s', info.messageId);
-            callback(true, "Email sent! Check your email before logging in.");
+            callback(true, "Email sent! Check your email.");
             return;
         });
     });

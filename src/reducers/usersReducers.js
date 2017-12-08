@@ -89,6 +89,16 @@ export function usersReducers(state = {users: [], currentUser: undefined}, actio
                 ...state, failure: action.payload
             };
             break;
+        case "FORGOT_PASSWORD":
+            return {
+                ...state, forgotPassSuccess: action.payload
+            };
+            break;
+        case "FORGOT_PASSWORD_REJECTED":
+            return {
+                ...state, forgotPassFailure: action.payload
+            };
+            break;
     }
 
     return state
