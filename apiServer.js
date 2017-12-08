@@ -63,29 +63,14 @@ app.get('/userSession', function (req, res) {
         // consider changing the session to hold the entire user. This will take
         // more memory but will be faster
         getUserByQuery({_id: req.session.userId}, function(user) {
-            console.log("no user found in session");
             res.json(user);
         })
     }
+    else {
+        res.json(undefined);
+    }
 });
 
-// // SAVE SESSION CART API
-// app.post('/cart', function (req, res) {
-//     var cart = req.body;
-//     req.session.cart = cart;
-//     req.session.save(function (err) {
-//         if (err) {
-//             console.log(err);
-//         }
-//         res.json(req.session.cart);
-//     })
-// })
-// // GET SESSION CART API
-// app.get('/cart', function (req, res) {
-//     if (typeof req.session.cart !== 'undefined') {
-//         res.json(req.session.cart);
-//     }
-// })
 // --->>> END SESSION SET UP <<<---
 
 var Users = require('./models/users.js');

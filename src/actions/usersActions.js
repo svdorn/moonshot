@@ -18,12 +18,26 @@ export function getUsers() {
 // GET USER FROM SESSION
 export function getUserFromSession() {
     return function(dispatch) {
+        dispatch({
+            type: "GET_USER_FROM_SESSION_REQUEST",
+            isFetching: true,
+            errorMessage: undefined
+        });
+
+        console.log("about to get the user");
         axios.get("/api/userSession")
             .then(function(response) {
-                dispatch({type: "GET_USER_FROM_SESSION", payload:response.data});
+                console.log("got the user, dispatching");
+                dispatch({
+                    type: "GET_USER_FROM_SESSION",
+                    payload: response.data,
+                    isFetching: false});
             })
             .catch(function(err) {
-                dispatch({type: "GET_USER_FROM_SESSION_REJECTED", msg:"error getting user from session"})
+                dispatch({
+                    type: "GET_USER_FROM_SESSION_REJECTED",
+                    errorMessage:"error getting user from session",
+                    isFetching: false})
             })
     };
 }
