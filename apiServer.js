@@ -253,7 +253,7 @@ app.post('/forgotPassword', function (req,res) {
             const newTime = Date.now();
             console.log("new pass token" + newPasswordToken);
 
-            let query = {_id: user._id};
+            let query2 = {_id: user._id};
             var update = {
                 '$set': {
                     passwordToken: newPasswordToken,
@@ -264,7 +264,7 @@ app.post('/forgotPassword', function (req,res) {
 
             var options = {new: true};
 
-            Users.findOneAndUpdate(query, update, options, function (err, foundUser) {
+            Users.findOneAndUpdate(query2, update, options, function (err, foundUser) {
                 if (err) {
                     console.log(err);
                 }
