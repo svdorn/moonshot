@@ -40,9 +40,8 @@ class Menu extends Component {
         this.setState({value})
     };
 
-    followRoute (route)  {
-        console.log(route);
-        this.props.route(route);
+    goTo (route)  {
+        browserHistory.push(route);
     }
 
     render() {
@@ -69,8 +68,8 @@ class Menu extends Component {
                             <ToolbarTitle text="Moonshot Learning" />
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <FlatButton label="Home" href="/" />
-                            <FlatButton label="Content" href="/content" />
+                            <FlatButton label="Home" onClick={() => this.goTo('/')} />
+                            <FlatButton label="Content"  onClick={() => this.goTo('/content')} />
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
@@ -90,9 +89,9 @@ class Menu extends Component {
                         <ToolbarTitle text="Moonshot Learning" />
                     </ToolbarGroup>
                     <ToolbarGroup>
-                        <FlatButton label="Home" href="/" />
-                        <FlatButton label="Login" href="/login" />
-                        <FlatButton label="Signup" href="/signup" />
+                        <FlatButton label="Home" onClick={() => this.goTo('/')} />
+                        <FlatButton label="Login" onClick={() => this.goTo('/login')} />
+                        <FlatButton label="Signup" onClick={() => this.goTo('/signup')} />
                     </ToolbarGroup>
                 </Toolbar>}
             </header>
