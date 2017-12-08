@@ -124,7 +124,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.currentUser,
+        currentUser: state.users.currentUser,
         formData: state.form,
         loginError: state.users.loginError
     };

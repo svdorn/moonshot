@@ -59,7 +59,13 @@ app.post('/userSession', function (req, res) {
 // GET USER SESSION
 app.get('/userSession', function (req, res) {
     if (typeof req.session.userId !== 'undefined') {
-        res.json(req.session.userId);
+        // TODO this could be a source of slowdown, if site is running too slow
+        // consider changing the session to hold the entire user. This will take
+        // more memory but will be faster
+        getUserByQuery({_id: req.session.userId}, function(user) {
+            console.log("no user found in session");
+            res.json(user);
+        })
     }
 });
 
@@ -161,7 +167,6 @@ app.post('/verifyEmail', function (req, res) {
 
             console.log("logging in user ", user.username);
             user.password = undefined;
-            user.verificationString = undefined;
             res.json(user);
         });
     });
@@ -236,11 +241,27 @@ function sendEmail(recipients, subject, content, callback) {
     });
 }
 
-app.post('/userByUsername', function (req, res) {
-    var username = req.body.username;
-
-    //Users.findOne(query)
+app.post('/getUserByQuery', function (req, res) {
+    const query = req.body.query;
+    const user = getUserByQuery(query, function(user) {
+        res.json(user);
+    });
 });
+
+function getUserByQuery(query, callback) {
+    Users.findOne(query, function (err, foundUser) {
+        if (foundUser !== null) {
+            foundUser.password = undefined;
+            callback(foundUser);
+            return;
+        }
+        if (err) {
+            console.log(err);
+        }
+        callback(undefined);
+        return;
+    });
+}
 
 // LOGIN USER
 app.post('/login', function (req, res) {
@@ -280,7 +301,6 @@ app.post('/login', function (req, res) {
                 if (user.verified) {
                     console.log("LOGGING IN USER: ", user.username);
                     user.password = undefined;
-                    user.verificationString = undefined;
                     res.json(user);
                     return;
                 }

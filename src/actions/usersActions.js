@@ -15,14 +15,27 @@ export function getUsers() {
   }
 }
 
+// GET USER FROM SESSION
+export function getUserFromSession() {
+    return function(dispatch) {
+        axios.get("/api/userSession")
+            .then(function(response) {
+                dispatch({type: "GET_USER_FROM_SESSION", payload:response.data});
+            })
+            .catch(function(err) {
+                dispatch({type: "GET_USER_FROM_SESSION_REJECTED", msg:"error getting user from session"})
+            })
+    };
+}
+
 export function login(user) {
   return function(dispatch) {
     axios.post("/api/login", user)
       .then(function(response) {
         dispatch({type:"LOGIN", payload: response.data});
         browserHistory.push('/');
-        console.log(user);
-        axios.post("/api/userSession", {userId: user._id})
+
+        axios.post("/api/userSession", {userId: response.data._id})
             .then(function(response) {
                 console.log("added user to session");
             })
@@ -75,7 +88,7 @@ export function postUser(user) {
         })
         // error posting user
         .catch(function(err) {
-            dispatch({type: "POST_USER_REJECTED", payload: err});
+            dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});
         });
     }
 }
@@ -90,7 +103,7 @@ export function updateUser(user) {
                 dispatch({type:"UPDATE_USER", payload:response.data})
             })
             .catch(function(err) {
-                dispatch({type:"UPDATE_USER_REJECTED", payload:err});
+
             });
     }
 }

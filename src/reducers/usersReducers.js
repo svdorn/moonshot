@@ -3,13 +3,17 @@
 // USERS REDUCERS
 export function usersReducers(state = {users: [], currentUser: undefined}, action) {
     switch (action.type) {
+        case "GET_USER_FROM_SESSION":
+            console.log("setting current user from session: ", action.payload);
+            return {...state, currentUser: action.payload};
+            break;
         case "GET_USERS":
-            return {...state, users: [...action.payload]}
+            return {...state, users: [...action.payload]};
             break;
         case "LOGIN":
             console.log("printing payload");
             console.log(action.payload);
-            return {...state, loginError: undefined, currentUser: action.payload}
+            return {...state, loginError: undefined, currentUser: action.payload};
             break;
         case "LOGIN_REJECTED":
             // TODO deal with failed login
