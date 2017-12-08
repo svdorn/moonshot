@@ -36,7 +36,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 // --->>> SET UP SESSIONS <<<---
 app.use(session({
-    secret: 'mySecretString',
+    secret: credentials.secretString,
     saveUninitialized: false,
     resave: false,
     cookie: {maxAge: 1000 * 60 * 60 * 24 * 2}, //2 days in milliseconds
