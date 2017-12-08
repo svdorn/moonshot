@@ -12,6 +12,9 @@ import {
 } from 'material-ui/styles/colors';
 import {fade} from 'material-ui/utils/colorManipulator';
 import spacing from 'material-ui/styles/spacing';
+import { getUserFromSession } from './actions/usersActions';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 const muiTheme = getMuiTheme({
     spacing: spacing,
@@ -35,17 +38,33 @@ const muiTheme = getMuiTheme({
 });
 
 class Main extends Component {
+    componentDidMount() {
+        this.props.getUserFromSession();
+    }
 
-  render() {
-      console.log("here");
-    return (
-      <MuiThemeProvider muiTheme={muiTheme}>
-          <Menu/>
-            { this.props.children }
-          <Footer/>
-      </MuiThemeProvider>
-    );
-  }
+    render() {
+        console.log("here");
+
+        return (
+            <MuiThemeProvider muiTheme={muiTheme}>
+                <Menu/>
+                    { this.props.children }
+                <Footer/>
+            </MuiThemeProvider>
+        );
+    }
 }
 
-export default Main;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        getUserFromSession
+    }, dispatch);
+}
+
+function mapStateToProps(state) {
+    return {
+        currentUser: state.users.currentUser,
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Main);
