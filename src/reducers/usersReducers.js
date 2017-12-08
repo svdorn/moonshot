@@ -24,15 +24,13 @@ export function usersReducers(state = {users: [], currentUser: undefined}, actio
             return {
                 ...state,
                 emailSentMessage: action.payload,
-            }
+            };
             break;
         case "POST_USER_REJECTED":
+            console.log("user rejected");
             return {
-                ...state,
-                msg: 'Please try again',
-                style: 'danger',
-                validation: 'error'
-            }
+                ...state, failure: action.payload
+            };
             break;
         case "VERIFY_EMAIL_REJECTED":
             return {
@@ -70,6 +68,11 @@ export function usersReducers(state = {users: [], currentUser: undefined}, actio
             console.log("what newUser is: ", action.payload);
             return {
                 ...state, currentUser: action.payload, success: "User Updated"
+            };
+            break;
+        case "UPDATE_USER_REJECTED":
+            return {
+                ...state, failure: action.payload
             };
             break;
         case "CHANGE_PASSWORD":
