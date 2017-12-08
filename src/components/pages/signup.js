@@ -52,7 +52,7 @@ const validate = values => {
     if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email address';
     }
-    if (values.password && values.password2 && (values.password != values.password2)){
+    if (values.password && values.password2 && (values.password != values.password2)) {
         errors.password2 = 'Passwords must match';
     }
     return errors
@@ -101,41 +101,50 @@ class Signup extends Component {
     render() {
         console.log(this.props);
         return (
-            <Paper className="form" zDepth={2}>
-                <form onSubmit={this.handleSubmit.bind(this)}>
-                    <h1>Sign Up</h1>
-                    <Field
-                        name="name"
-                        component={renderTextField}
-                        label="Full Name"
-                    /><br/>
-                    <Field
-                        name="username"
-                        component={renderTextField}
-                        label="Username"
-                    /><br/>
-                    <Field
-                        name="email"
-                        component={renderTextField}
-                        label="Email"
-                    /><br/>
-                    <Field
-                        name="password"
-                        component={renderPasswordField}
-                        label="Password"
-                    /><br/>
-                    <Field
-                        name="password2"
-                        component={renderPasswordField}
-                        label="Confirm Password"
-                    /><br/>
-                    <RaisedButton type="submit"
-                                  label="Sign up"
-                                  primary={true}
-                                  className="button"
-                    />
-                </form>
-            </Paper>
+            <div>
+                {this.props.failure !== undefined ?
+                    <Paper className="messageHeader errorHeader">
+                        {this.props.failure.response.data}
+                    </Paper>
+                    :
+                    null
+                }
+                <Paper className="form" zDepth={2}>
+                    <form onSubmit={this.handleSubmit.bind(this)}>
+                        <h1>Sign Up</h1>
+                        <Field
+                            name="name"
+                            component={renderTextField}
+                            label="Full Name"
+                        /><br/>
+                        <Field
+                            name="username"
+                            component={renderTextField}
+                            label="Username"
+                        /><br/>
+                        <Field
+                            name="email"
+                            component={renderTextField}
+                            label="Email"
+                        /><br/>
+                        <Field
+                            name="password"
+                            component={renderPasswordField}
+                            label="Password"
+                        /><br/>
+                        <Field
+                            name="password2"
+                            component={renderPasswordField}
+                            label="Confirm Password"
+                        /><br/>
+                        <RaisedButton type="submit"
+                                      label="Sign up"
+                                      primary={true}
+                                      className="button"
+                        />
+                    </form>
+                </Paper>
+            </div>
         );
     }
 }
@@ -149,12 +158,13 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        formData: state.form
+        formData: state.form,
+        failure: state.users.failure,
     };
 }
 
 Signup = reduxForm({
-    form:'signup',
+    form: 'signup',
     validate,
 })(Signup);
 

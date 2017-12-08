@@ -24,15 +24,12 @@ export function usersReducers(state = {users: [], currentUser: undefined}, actio
             return {
                 ...state,
                 emailSentMessage: action.payload,
-            }
+            };
             break;
         case "POST_USER_REJECTED":
             return {
-                ...state,
-                msg: 'Please try again',
-                style: 'danger',
-                validation: 'error'
-            }
+                ...state, failure: action.payload
+            };
             break;
         case "VERIFY_EMAIL_REJECTED":
             return {

@@ -62,7 +62,7 @@ export function postUser(user) {
         })
         // error posting user
         .catch(function(err) {
-            dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});
+            dispatch({type: "POST_USER_REJECTED", payload: err});
         });
     }
 }

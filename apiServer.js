@@ -82,14 +82,24 @@ app.post('/users', function (req, res) {
             // create user's verification string
             user.verificationToken = crypto.randomBytes(64).toString('hex');
             console.log("verificationToken is: ", user.verificationToken);
+            const query = {username: user.username};
 
-            // store the user in the db
-            Users.create(user, function (err, user) {
+            Users.findOne(query, function (err, foundUser) {
                 if (err) {
                     console.log(err);
                 }
-                res.json(user);
-            })
+                if (foundUser === null) {
+                    // store the user in the db
+                    Users.create(user, function (err, user) {
+                        if (err) {
+                            console.log(err);
+                        }
+                        res.json(user);
+                    })
+                } else {
+                    res.status(401).send("Username already exists, choose new username.");
+                }
+            });
         });
     });
 });
@@ -308,7 +318,7 @@ app.put('/users/:_id', function (req, res) {
 
     // When true returns the updated document
     var options = {new: true};
-
+    
     // i think it has to be {_id: req.params._id} for the query
     Users.findOneAndUpdate(query, update, options, function (err, users) {
         if (err) {
