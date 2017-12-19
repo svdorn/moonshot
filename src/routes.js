@@ -23,7 +23,7 @@ const routes = (
         <IndexRoute component={Home} />
         <Route path ='/login' component={Login} />
         <Route path="/signup" component={Signup} />
-        <Route path="/content" component={Content} />
+        <Route path="/sandbox" component={Content} />
         <Route path="/profile" component={Profile} />
         <Route path="/settings" component={Settings} />
         <Route path="/verifyEmail" component={VerifyEmail} />

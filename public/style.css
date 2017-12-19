@@ -113,3 +113,8 @@ h3{
 .appBar{
   margin-top: 75px;
 }
+
+.dialog{
+  display: flex;
+  justify-content: center;
+}

@@ -69,7 +69,7 @@ class Menu extends Component {
                         </ToolbarGroup>
                         <ToolbarGroup>
                             <FlatButton label="Home" onClick={() => this.goTo('/')} />
-                            <FlatButton label="Content"  onClick={() => this.goTo('/content')} />
+                            <FlatButton label="Sandbox"  onClick={() => this.goTo('/sandbox')} />
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
