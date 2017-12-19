@@ -119,7 +119,7 @@ h3{
   justify-content: center;
 }
 
-.dialog > div > div {
+.youtubeDialog > div > div {
     max-width: none !important;
     width: 100% !important;
 }

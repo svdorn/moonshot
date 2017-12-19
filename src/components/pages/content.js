@@ -37,7 +37,7 @@ class Content extends Component {
                     onRequestClose={this.handleClose}
                     autoScrollBodyContent={true}
                     autoDetectWindowHeight={true}
-                    className="dialog"
+                    className="dialog youtubeDialog"
                 >
                     <YouTube
                         videoId="_cCGBMmMOFw"
