@@ -8,20 +8,26 @@ class Home extends Component{
 
     render(){
         return(
-            <div>
-                {this.props.emailSentMessage ?
-                    <Paper className="messageHeader infoHeader">
-                        {this.props.emailSentMessage}
+            <div class='jsxWrapper'>
+                <div class="fullHeight greenToBlue">
+                </div>
+
+
+                <div>
+                    {this.props.emailSentMessage ?
+                        <Paper className="messageHeader infoHeader">
+                            {this.props.emailSentMessage}
+                        </Paper>
+                        :
+                        null
+                    }
+                    <Paper className="form" zDepth={2}>
+                        <h1>Home</h1>
+                        <h3>
+                            Moonshot learning is a company that is amazing.
+                        </h3>
                     </Paper>
-                    :
-                    null
-                }
-                <Paper className="form" zDepth={2}>
-                    <h1>Home</h1>
-                    <h3>
-                        Moonshot learning is a company that is amazing.
-                    </h3>
-                </Paper>
+                </div>
             </div>
         );
     }

@@ -24,7 +24,7 @@ const muiTheme = getMuiTheme({
         primary2Color: lightBlue500,
         primary3Color: grey400,
         accent1Color: white,
-        accent2Color: grey100,
+        accent2Color: 'transparent',
         accent3Color: grey500,
         textColor: darkBlack,
         alternateTextColor: white,
@@ -35,6 +35,10 @@ const muiTheme = getMuiTheme({
         clockCircleColor: fade(darkBlack, 0.07),
         shadowColor: fullBlack,
     },
+    menu: {
+        textColor: white,
+        accent2Color: darkBlack
+    }
 });
 
 class Main extends Component {
@@ -43,12 +47,10 @@ class Main extends Component {
     }
 
     render() {
-        console.log("here");
         if (this.props.isFetching) {
-            //return <Spinner text="Loading..." style="fa fa-spinner fa-spin" />
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
-                    <Menu/>
+                    <Menu title="menu" />
                     <Footer/>
                 </MuiThemeProvider>
             );
