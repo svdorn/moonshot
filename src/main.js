@@ -18,7 +18,7 @@ import { bindActionCreators } from 'redux';
 
 const muiTheme = getMuiTheme({
     spacing: spacing,
-    fontFamily: 'Roboto, sans-serif',
+    fontFamily: 'Century Gothic, CenturyGothic, AppleGothic, sans-serif',
     palette: {
         primary1Color: '#00c3ff',
         primary2Color: lightBlue500,
@@ -26,7 +26,7 @@ const muiTheme = getMuiTheme({
         accent1Color: white,
         accent2Color: 'transparent',
         accent3Color: grey500,
-        textColor: darkBlack,
+        textColor: white,
         alternateTextColor: white,
         canvasColor: white,
         borderColor: grey300,
@@ -34,10 +34,6 @@ const muiTheme = getMuiTheme({
         pickerHeaderColor: '#00c3ff',
         clockCircleColor: fade(darkBlack, 0.07),
         shadowColor: fullBlack,
-    },
-    menu: {
-        textColor: white,
-        accent2Color: darkBlack
     }
 });
 
@@ -50,7 +46,7 @@ class Main extends Component {
         if (this.props.isFetching) {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
-                    <Menu title="menu" />
+                    <Menu/>
                     <Footer/>
                 </MuiThemeProvider>
             );

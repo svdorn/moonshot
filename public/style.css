@@ -3,6 +3,10 @@ html {
   min-height: 100%;
 }
 
+body {
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+}
+
 :root {
     --moonshotBlue: #00d2ff;
     --moonshotGreen: #3dffdd;
@@ -116,4 +120,14 @@ h3{
 .youtubeDialog > div > div {
     max-width: none !important;
     width: 100% !important;
+}
+
+.infoBox {
+    margin: auto;
+    width: 70%;
+    text-align: center;
+    font-size: 40px;
+    color: white;
+    padding-top: 200px;
+    white-space: nowrap;
 }

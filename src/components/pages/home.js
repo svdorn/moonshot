@@ -10,6 +10,12 @@ class Home extends Component{
         return(
             <div class='jsxWrapper'>
                 <div class="fullHeight greenToBlue">
+                    <div class="infoBox">
+                        Skip the resum&eacute;.<br/>
+                        Learn skills for the future<br/>
+                        that employers want now,<br/>
+                        <i>for free.</i>
+                    </div>
                 </div>
 
 
