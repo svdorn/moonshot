@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { Paper } from 'material-ui';
+import { Paper, RaisedButton } from 'material-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
@@ -10,11 +10,24 @@ class Home extends Component{
         return(
             <div class='jsxWrapper'>
                 <div class="fullHeight greenToBlue">
-                    <div class="infoBox">
+                    <div class="infoBox whiteText">
                         Skip the resum&eacute;.<br/>
                         Learn skills for the future<br/>
                         that employers want now,<br/>
-                        <i>for free.</i>
+                        <i>for free.</i><br/>
+                        <button class="outlineButton blueWhiteButton">
+                            Get Started
+                        </button>
+                    </div>
+                </div>
+                <div class="fullHeight">
+                    <div class="infoBox greenText">
+                        <i>Companies are searching<br/>
+                        for people to spearhead<br/>
+                        the future of technology</i><br/>
+                        <button class="outlineButton whiteBlueButton">
+                            Join the Movement
+                        </button>
                     </div>
                 </div>
 
