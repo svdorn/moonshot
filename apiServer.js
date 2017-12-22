@@ -546,7 +546,7 @@ app.put('/users/changepassword/:_id', function (req, res) {
     });
 });
 
-//----->> GET USER IMAGES <<------
+//----->> GET IMAGES <<------
 app.get('/images', function (req, res) {
     const imgFolder = __dirname + '/public/images/';
     // REQUIRE FILE SYSTEM

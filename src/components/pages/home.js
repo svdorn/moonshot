@@ -8,24 +8,24 @@ class Home extends Component{
 
     render(){
         return(
-            <div class='jsxWrapper'>
-                <div class="fullHeight greenToBlue">
-                    <div class="infoBox whiteText">
+            <div className='jsxWrapper'>
+                <div className="fullHeight greenToBlue">
+                    <div className="infoBox whiteText">
                         Skip the resum&eacute;.<br/>
                         Learn skills for the future<br/>
                         that employers want now,<br/>
                         <i>for free.</i><br/>
-                        <button class="outlineButton blueWhiteButton">
+                        <button className="outlineButton blueWhiteButton">
                             Get Started
                         </button>
                     </div>
                 </div>
-                <div class="fullHeight">
-                    <div class="infoBox greenText">
+                <div className="fullHeight">
+                    <div className="infoBox greenText">
                         <i>Companies are searching<br/>
                         for people to spearhead<br/>
                         the future of technology</i><br/>
-                        <button class="outlineButton whiteBlueButton">
+                        <button className="outlineButton whiteBlueButton">
                             Join the Movement
                         </button>
                     </div>

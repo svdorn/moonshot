@@ -1,10 +1,12 @@
 "use strict"
-import React, {Component} from 'react';
-import {AppBar, FlatButton, ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarTitle} from 'material-ui';
+import React, { Component } from 'react';
+import { AppBar, FlatButton, ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarTitle } from 'material-ui';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import {bindActionCreators} from 'redux';
-import {signout} from "../actions/usersActions";
+import { bindActionCreators } from 'redux';
+import { signout } from "../actions/usersActions";
+import { getHomepageImages } from "../actions/imageactions";
+import { axios } from 'axios';
 
 const styles = {
     title: {
@@ -28,6 +30,44 @@ class Menu extends Component {
         this.state = {value: 1};
     }
 
+    // constructor() {
+    //     super();
+    //     this.state = {
+    //       value: 1,
+    //       images:[{}],
+    //       img:'/images/MoonshotLogo.png'
+    //     }
+    //   }
+    //
+    //   componentDidMount() {
+    //     // GET IMAGES FROM API
+    //     axios.get('/api/images')
+    //       .then(response => {
+    //         this.setState({images: response.data})
+    //       })
+    //       .catch(err => {
+    //         this.setState({images:'error loading image files from the server', img:''})
+    //       })
+    //   }
+
+
+    //componentDidMount() {
+        //GET IMAGES FROM API
+        // if (this.props.images.length == 0) {
+        //     this.props.getHomepageImages();
+        // } else {
+        //   console.log("not getting images");
+        //     console.log(this.props);
+        // }
+        // let moonshotLogo = {};
+        // const imgs = this.props.images;
+        // for (let imgIdx = 0; imgIdx < imgs.length; imgIdx++) {
+        //     if (imgs[imgIdx].name == "MoonshotTempLogo.png") {
+        //         moonshotLogo = imgs[imgIdx];
+        //     }
+        // }
+    //}
+
     handleChange = (event, index, value) => {
         if (value === 1) {
             browserHistory.push('/profile');
@@ -45,15 +85,12 @@ class Menu extends Component {
     }
 
     render() {
-        console.log("in menu");
-        console.log(this.props.currentUser);
-
         if (this.props.isFetching) {
             return (
                 <header>
                     <Toolbar>
                         <ToolbarGroup>
-                            <ToolbarTitle text="Moonshot Learning" />
+                            <img width={300} height={100} alt="300x100" src="/images/MoonshotTempLogo.png" />
                         </ToolbarGroup>
                     </Toolbar>
                 </header>
@@ -65,7 +102,7 @@ class Menu extends Component {
                 {this.props.currentUser ?
                     <Toolbar>
                         <ToolbarGroup>
-                            <ToolbarTitle text="Moonshot Learning" />
+                            <img width={300} height={100} alt="300x100" src="/images/MoonshotTempLogo.png" />
                         </ToolbarGroup>
                         <ToolbarGroup>
                             <FlatButton label="Home" onClick={() => this.goTo('/')} />
@@ -101,14 +138,16 @@ class Menu extends Component {
 }
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        signout
+        signout,
+        getHomepageImages
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        isFetching: state.users.isFetching
+        isFetching: state.users.isFetching,
+        images: state.images.images
     };
 }
 
