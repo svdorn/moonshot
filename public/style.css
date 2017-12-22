@@ -174,6 +174,34 @@ h3{
 
 .noWrap { white-space: nowrap; }
 
+.gradientBorder {
+    background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));
+    padding: 5px;
+}
+.gradientBorder > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+
+.pathwayImgContainer {
+    display: inline-block;
+    height: 220px;
+    width: 270px;
+    margin-top: 10px;
+}
+
+.pathwayList {
+    text-align: center;
+    padding-left: 0px;
+}
+.pathwayList li {
+    display: inline-block;
+    margin: 0px 20px;
+}
+.pathwayList li:first-child { margin-left: 0px; }
+.pathwayList li:last-child { margin-right: 0px; }
+
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
 .smallText { font-size: 15px; }

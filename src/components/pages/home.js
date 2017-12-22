@@ -4,6 +4,7 @@ import { Paper, RaisedButton } from 'material-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
+import PathwayPreview from '../childComponents/pathwayPreview'
 
 class Home extends Component{
 
@@ -59,6 +60,14 @@ class Home extends Component{
                         We work with employers to create course pathways that
                         teach you the skills they want you to know.
                     </div>
+                </div>
+
+                <div className="fullHeight">
+                    <ul className="pathwayList">
+                        <li><PathwayPreview /></li>
+                        <li><PathwayPreview /></li>
+                        <li><PathwayPreview /></li>
+                    </ul>
                 </div>
 
             </div>

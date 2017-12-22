@@ -30,44 +30,6 @@ class Menu extends Component {
         this.state = {value: 1};
     }
 
-    // constructor() {
-    //     super();
-    //     this.state = {
-    //       value: 1,
-    //       images:[{}],
-    //       img:'/images/MoonshotLogo.png'
-    //     }
-    //   }
-    //
-    //   componentDidMount() {
-    //     // GET IMAGES FROM API
-    //     axios.get('/api/images')
-    //       .then(response => {
-    //         this.setState({images: response.data})
-    //       })
-    //       .catch(err => {
-    //         this.setState({images:'error loading image files from the server', img:''})
-    //       })
-    //   }
-
-
-    //componentDidMount() {
-        //GET IMAGES FROM API
-        // if (this.props.images.length == 0) {
-        //     this.props.getHomepageImages();
-        // } else {
-        //   console.log("not getting images");
-        //     console.log(this.props);
-        // }
-        // let moonshotLogo = {};
-        // const imgs = this.props.images;
-        // for (let imgIdx = 0; imgIdx < imgs.length; imgIdx++) {
-        //     if (imgs[imgIdx].name == "MoonshotTempLogo.png") {
-        //         moonshotLogo = imgs[imgIdx];
-        //     }
-        // }
-    //}
-
     handleChange = (event, index, value) => {
         if (value === 1) {
             browserHistory.push('/profile');
