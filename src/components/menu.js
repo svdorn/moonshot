@@ -94,7 +94,7 @@ class Menu extends Component {
                             width={300}
                             height={100}
                             alt="300x100"
-                            className="moonshotLogo"
+                            className="clickable"
                             src="/images/MoonshotTempLogo.png"
                             onClick={() => this.goTo('/')}
                         />
@@ -113,14 +113,14 @@ class Menu extends Component {
                                 width={300}
                                 height={100}
                                 alt="300x100"
-                                className="moonshotLogo"
+                                className="clickable"
                                 src="/images/MoonshotTempLogo.png"
                                 onClick={() => this.goTo('/')}
                             />
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <p className="menuItem" onClick={() => this.goTo('/')}>Home</p>
-                            <p className="menuItem" onClick={() => this.goTo('/sandbox')}>Sandbox</p>
+                            <p className="menuItem clickable" onClick={() => this.goTo('/')}>Home</p>
+                            <p className="menuItem clickable" onClick={() => this.goTo('/sandbox')}>Sandbox</p>
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
@@ -141,16 +141,16 @@ class Menu extends Component {
                         width={300}
                         height={100}
                         alt="300x100"
-                        className="moonshotLogo"
+                        className="clickable"
                         src="/images/MoonshotTempLogo.png"
                         onClick={() => this.goTo('/')}
                     />
                     </ToolbarGroup>
                     <ToolbarGroup>
-                        <p className="menuItem" onClick={() => this.goTo('/')}>Home</p>
-                        <p className="menuItem" onClick={() => this.goTo('/forBusiness')}>For Business</p>
+                        <p className="menuItem clickable" onClick={() => this.goTo('/')}>Home</p>
+                        <p className="menuItem clickable" onClick={() => this.goTo('/forBusiness')}>For Business</p>
                         <div className="menuDivider" />
-                        <p className="menuItem" onClick={() => this.goTo('/login')}>Sign in</p>
+                        <p className="menuItem clickable" onClick={() => this.goTo('/login')}>Sign in</p>
                     </ToolbarGroup>
                 </Toolbar>}
             </header>

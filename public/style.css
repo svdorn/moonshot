@@ -5,13 +5,16 @@ html {
 
 body {
     font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+    min-width: 800px
 }
 
 :root {
-    --moonshotBlue: #00d2ff;
-    --moonshotBlue2: #70cbff;
+    --moonshotLightBlue: #00d2ff;
+    --moonshotMidBlue: #70cbff;
+    --moonshotBlue: #66b1ff;
     --moonshotGreen: #3dffdd;
     --moonshotGreenText: #00e2ba;
+    --moonshotPurple: #cf9bff;
 }
 
 .container {
@@ -68,18 +71,17 @@ footer {
 }
 
 .whiteBlueButton {
-    border: 2px solid var(--moonshotBlue2);
+    border: 2px solid var(--moonshotMidBlue);
     background-color: white;
-    color: var(--moonshotBlue2);
+    color: var(--moonshotMidBlue);
 }
 
 .menuItem {
-    cursor: pointer;
     color: white;
     font-size: 20px;
     margin: 30px 10px 10px 10px;
 }
-.menuItem:hover { text-decoration: underline; }
+
 .menuDivider {
     width: 2px;
     height: 30px;
@@ -87,16 +89,21 @@ footer {
     margin: 15px 15px 0px 15px;
 }
 
-.moonshotLogo:hover { cursor: pointer; }
+.clickable { cursor: pointer; }
+.clickable:hover { text-decoration: underline; }
 
 .fullHeight {
     width: 100%;
     height: 750px;
 }
 
-.greenToBlue {
-    background: linear-gradient(to top right, var(--moonshotGreen), var(--moonshotBlue));
+.halfHeight {
+    width: 100%;
+    height: 375px;
 }
+
+.greenToBlue { background: linear-gradient(to top right, var(--moonshotGreen), var(--moonshotLightBlue)); }
+.purpleToBlue { background: linear-gradient(to top right, var(--moonshotPurple), var(--moonshotBlue)); }
 
 .messageHeader {
     margin-top: 56px;
@@ -137,6 +144,8 @@ h3{
   padding-top: 5px;
 }
 
+.dividerSmall { height: 50px; }
+
 .boxStyle{
   display: inline-block;
   margin: 0 32px 0 32px;
@@ -160,10 +169,14 @@ h3{
     margin: auto;
     width: 70%;
     text-align: center;
-    font-size: 40px;
     padding-top: 200px;
-    white-space: nowrap;
 }
 
+.noWrap { white-space: nowrap; }
+
+.bigText { font-size: 48px; }
+.mediumText { font-size: 40px; }
+.smallText { font-size: 15px; }
 .greenText { color: var(--moonshotGreenText); }
 .whiteText { color: white; }
+.blueText { color: var(--moonshotLightBlue) }
