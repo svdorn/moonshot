@@ -9,6 +9,17 @@ class Home extends Component{
     render(){
         return(
             <div className='jsxWrapper'>
+                <div>
+                    {this.props.emailSentMessage ?
+                        <Paper className="messageHeader infoHeader">
+                            {this.props.emailSentMessage}
+                        </Paper>
+                        :
+                        null
+                    }
+                </div>
+
+
                 <div className="fullHeight greenToBlue">
                     <div className="infoBox whiteText">
                         Skip the resum&eacute;.<br/>
@@ -20,6 +31,7 @@ class Home extends Component{
                         </button>
                     </div>
                 </div>
+
                 <div className="fullHeight">
                     <div className="infoBox greenText">
                         <i>Companies are searching<br/>
@@ -29,23 +41,6 @@ class Home extends Component{
                             Join the Movement
                         </button>
                     </div>
-                </div>
-
-
-                <div>
-                    {this.props.emailSentMessage ?
-                        <Paper className="messageHeader infoHeader">
-                            {this.props.emailSentMessage}
-                        </Paper>
-                        :
-                        null
-                    }
-                    <Paper className="form" zDepth={2}>
-                        <h1>Home</h1>
-                        <h3>
-                            Moonshot learning is a company that is amazing.
-                        </h3>
-                    </Paper>
                 </div>
             </div>
         );

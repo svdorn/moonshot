@@ -10,6 +10,7 @@ import Login from './components/pages/login';
 import Signup from './components/pages/signup';
 import Main from './main';
 import Home from './components/pages/home';
+import ForBusiness from './components/pages/forBusiness';
 import Content from './components/pages/content';
 import Profile from './components/pages/profile';
 import Settings from './components/pages/settings';
@@ -23,6 +24,7 @@ const routes = (
         <IndexRoute component={Home} />
         <Route path ='/login' component={Login} />
         <Route path="/signup" component={Signup} />
+        <Route path ='/forBusiness' component={ForBusiness} />
         <Route path="/sandbox" component={Content} />
         <Route path="/profile" component={Profile} />
         <Route path="/settings" component={Settings} />

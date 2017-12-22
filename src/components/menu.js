@@ -148,7 +148,7 @@ class Menu extends Component {
                     </ToolbarGroup>
                     <ToolbarGroup>
                         <p className="menuItem" onClick={() => this.goTo('/')}>Home</p>
-                        <p className="menuItem" onClick={() => this.goTo('/')}>For Business</p>
+                        <p className="menuItem" onClick={() => this.goTo('/forBusiness')}>For Business</p>
                         <div className="menuDivider" />
                         <p className="menuItem" onClick={() => this.goTo('/login')}>Sign in</p>
                     </ToolbarGroup>
