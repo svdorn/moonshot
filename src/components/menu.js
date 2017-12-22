@@ -105,8 +105,8 @@ class Menu extends Component {
                             <img width={300} height={100} alt="300x100" src="/images/MoonshotTempLogo.png" />
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <FlatButton label="Home" onClick={() => this.goTo('/')} />
-                            <FlatButton label="Sandbox"  onClick={() => this.goTo('/sandbox')} />
+                            <p className="menuItem" onClick={() => this.goTo('/')}>Home</p>
+                            <p className="menuItem" onClick={() => this.goTo('/sandbox')}>Sandbox</p>
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
@@ -123,12 +123,14 @@ class Menu extends Component {
 
                 <Toolbar>
                     <ToolbarGroup>
-                        <ToolbarTitle text="Moonshot Learning" />
+                        <img width={300} height={100} alt="300x100" src="/images/MoonshotTempLogo.png" />
                     </ToolbarGroup>
                     <ToolbarGroup>
-                        <FlatButton label="Home" onClick={() => this.goTo('/')} />
-                        <FlatButton label="Login" onClick={() => this.goTo('/login')} />
-                        <FlatButton label="Signup" onClick={() => this.goTo('/signup')} />
+                        <p className="menuItem" onClick={() => this.goTo('/')}>Home</p>
+                        <p className="menuItem" onClick={() => this.goTo('/')}>For Business</p>
+                        <div className="menuDivider" />
+                        <p className="menuItem" onClick={() => this.goTo('/login')}>Sign in</p>
+                        <p className="menuItem" onClick={() => this.goTo('/signup')}>Sign up</p>
                     </ToolbarGroup>
                 </Toolbar>}
             </header>

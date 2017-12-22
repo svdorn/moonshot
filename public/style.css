@@ -73,6 +73,22 @@ footer {
     color: var(--moonshotBlue2);
 }
 
+.menuItem {
+    cursor: pointer;
+    color: white;
+    font-size: 20px;
+    margin: 30px 10px 10px 10px;
+}
+.menuItem:hover {
+    text-decoration: underline;
+}
+.menuDivider {
+    width: 2px;
+    height: 30px;
+    background-color: white;
+    margin-top: 15px;
+}
+
 .fullHeight {
     width: 100%;
     height: 750px;
