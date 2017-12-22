@@ -8,10 +8,10 @@ class PathwayPreview extends Component {
                     <div className="gradientBorder pathwayImgContainer">
                         <div>
                             <img
-                                width={200}
-                                height={150}
-                                alt="200x150"
-                                src="/images/UnityPathyway.png"
+                                width={260}
+                                height={210}
+                                alt="Unity Image"
+                                src="/images/UnityPathway.png"
                                 onClick={() => this.goTo('/')}
                             />
                         </div>
