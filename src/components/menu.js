@@ -90,7 +90,14 @@ class Menu extends Component {
                 <header>
                     <Toolbar>
                         <ToolbarGroup>
-                            <img width={300} height={100} alt="300x100" src="/images/MoonshotTempLogo.png" />
+                        <img
+                            width={300}
+                            height={100}
+                            alt="300x100"
+                            className="moonshotLogo"
+                            src="/images/MoonshotTempLogo.png"
+                            onClick={() => this.goTo('/')}
+                        />
                         </ToolbarGroup>
                     </Toolbar>
                 </header>
@@ -102,7 +109,14 @@ class Menu extends Component {
                 {this.props.currentUser ?
                     <Toolbar>
                         <ToolbarGroup>
-                            <img width={300} height={100} alt="300x100" src="/images/MoonshotTempLogo.png" />
+                            <img
+                                width={300}
+                                height={100}
+                                alt="300x100"
+                                className="moonshotLogo"
+                                src="/images/MoonshotTempLogo.png"
+                                onClick={() => this.goTo('/')}
+                            />
                         </ToolbarGroup>
                         <ToolbarGroup>
                             <p className="menuItem" onClick={() => this.goTo('/')}>Home</p>
@@ -123,14 +137,20 @@ class Menu extends Component {
 
                 <Toolbar>
                     <ToolbarGroup>
-                        <img width={300} height={100} alt="300x100" src="/images/MoonshotTempLogo.png" />
+                    <img
+                        width={300}
+                        height={100}
+                        alt="300x100"
+                        className="moonshotLogo"
+                        src="/images/MoonshotTempLogo.png"
+                        onClick={() => this.goTo('/')}
+                    />
                     </ToolbarGroup>
                     <ToolbarGroup>
                         <p className="menuItem" onClick={() => this.goTo('/')}>Home</p>
                         <p className="menuItem" onClick={() => this.goTo('/')}>For Business</p>
                         <div className="menuDivider" />
                         <p className="menuItem" onClick={() => this.goTo('/login')}>Sign in</p>
-                        <p className="menuItem" onClick={() => this.goTo('/signup')}>Sign up</p>
                     </ToolbarGroup>
                 </Toolbar>}
             </header>

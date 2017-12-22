@@ -92,7 +92,7 @@ class Login extends Component {
                 }
                 <Paper className="form" zDepth={2}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Login</h1>
+                        <h1>Sign in</h1>
                             <Field
                                 name="username"
                                 component={renderTextField}
@@ -103,9 +103,10 @@ class Login extends Component {
                                 component={renderPasswordField}
                                 label="Password"
                             /><br/><br/>
+                        <a href="/signup">Create account</a><br/>
                         <a href="/forgotPassword">Forgot Password?</a><br/>
                         <RaisedButton type="submit"
-                                      label="Login"
+                                      label="Sign in"
                                       primary={true}
                                       className="button"
                         />

@@ -79,15 +79,15 @@ footer {
     font-size: 20px;
     margin: 30px 10px 10px 10px;
 }
-.menuItem:hover {
-    text-decoration: underline;
-}
+.menuItem:hover { text-decoration: underline; }
 .menuDivider {
     width: 2px;
     height: 30px;
     background-color: white;
-    margin-top: 15px;
+    margin: 15px 15px 0px 15px;
 }
+
+.moonshotLogo:hover { cursor: pointer; }
 
 .fullHeight {
     width: 100%;
