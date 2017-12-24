@@ -89,7 +89,7 @@ footer {
     margin: 15px 15px 0px 15px;
 }
 
-.clickable { cursor: pointer; }
+.clickable, .clickableNoUnderline { cursor: pointer; }
 .clickable:hover { text-decoration: underline; }
 
 .fullHeight {
@@ -183,36 +183,43 @@ h3{
     height: 100%;
     width: 100%;
 }
-.gradientBorder > img {
+.semiOpaqueHoverable {
     opacity: 0.5;
     filter: alpha(opacity=50); /* For IE8 and earlier */
 }
-.gradientBorder > img:hover {
+.semiOpaqueHoverable:hover {
     opacity: 1.0;
     filter: alpha(opacity=100); /* For IE8 and earlier */
 }
 
 .pathwayImgContainer {
     display: inline-block;
-    height: 220px;
-    width: 270px;
+    height: 210px;
+    width: 280px;
     margin-top: 10px;
 }
 
-.pathwayList {
+.horizCenteredList {
     text-align: center;
     padding-left: 0px;
 }
-.pathwayList li {
-    display: inline-block;
-    margin: 0px 20px;
+.horizCenteredList li { display: inline-block; }
+.horizCenteredList li:first-child { margin-left: 0px; }
+.horizCenteredList li:last-child { margin-right: 0px; }
+
+.pathwayPrevList li { margin: 0px 20px; }
+.pathwayPrevIconList li { margin: 0px 4px; }
+
+/* so that the pathway icons are all equally spaced out */
+.pathwayPrevIconList > li > div {
+    width: 91px;
+    font-size: 14px;
 }
-.pathwayList li:first-child { margin-left: 0px; }
-.pathwayList li:last-child { margin-right: 0px; }
 
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
 .smallText { font-size: 15px; }
+.tinyText { font-size: 11px; }
 .greenText { color: var(--moonshotGreenText); }
 .whiteText { color: white; }
 .blueText { color: var(--moonshotLightBlue) }
