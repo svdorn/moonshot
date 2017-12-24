@@ -81,8 +81,8 @@ class Menu extends Component {
                             />
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <p className="menuItem clickable" onClick={() => this.goTo('/')}>Home</p>
-                            <p className="menuItem clickable" onClick={() => this.goTo('/sandbox')}>Sandbox</p>
+                            <p className="menuItem clickable noWrap" onClick={() => this.goTo('/')}>Home</p>
+                            <p className="menuItem clickable noWrap" onClick={() => this.goTo('/sandbox')}>Sandbox</p>
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
@@ -109,10 +109,10 @@ class Menu extends Component {
                     />
                     </ToolbarGroup>
                     <ToolbarGroup>
-                        <p className="menuItem clickable" onClick={() => this.goTo('/')}>Home</p>
-                        <p className="menuItem clickable" onClick={() => this.goTo('/forBusiness')}>For Business</p>
+                        <p className="menuItem clickable noWrap" onClick={() => this.goTo('/')}>Home</p>
+                        <p className="menuItem clickable noWrap" onClick={() => this.goTo('/forBusiness')}>For Business</p>
                         <div className="menuDivider" />
-                        <p className="menuItem clickable" onClick={() => this.goTo('/login')}>Sign in</p>
+                        <p className="menuItem clickable noWrap" onClick={() => this.goTo('/login')}>Sign in</p>
                     </ToolbarGroup>
                 </Toolbar>}
             </header>

@@ -62,7 +62,21 @@ class Home extends Component{
                     </div>
                 </div>
 
-                <div className="fullHeight">
+                <div className="fullHeight" style={{textAlign:"center"}}>
+                    <img
+                        src="/images/PathwaysText.png"
+                        alt="Pathways"
+                        style={{marginTop:"100px", marginBottom:"15px", width:"265px"}}
+                    /><br/>
+                    <div style={{
+                        margin: "0px 160px",
+                        height: "100px",
+                        fontSize: "24px"
+                    }}>
+                        Complete to build your portfolio, be found by
+                        employers, qualify for contract projects and be evaluated
+                        by the sponsor company.
+                    </div>
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
                             <li><PathwayPreview /></li>
