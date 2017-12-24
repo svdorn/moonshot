@@ -6,15 +6,15 @@ class PathwayPreview extends Component {
             <div className="gradientBorder clickable" style={{height:"420px", width:"300px"}}>
                 <div style={{textAlign:"center"}}>
                     <div className="gradientBorder pathwayImgContainer">
-                        <div>
+
                             <img
                                 width={260}
                                 height={210}
-                                alt="Unity Image"
-                                src="/images/UnityPathway.png"
+                                alt="VR Image"
+                                src="/images/Unity_VR_Dev.jpg"
                                 onClick={() => this.goTo('/')}
                             />
-                        </div>
+
                     </div>
                 </div>
             </div>

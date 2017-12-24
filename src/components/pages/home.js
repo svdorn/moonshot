@@ -42,7 +42,7 @@ class Home extends Component{
                     <div className="infoBox greenText bigText nowrap">
                         <i>Companies are searching<br/>
                         for people to spearhead<br/>
-                        the future of technology</i><br/>
+                        the future of technology.</i><br/>
                         <div className="dividerSmall" />
                         <button className="outlineButton whiteBlueButton">
                             Join the Movement
