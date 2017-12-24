@@ -215,6 +215,10 @@ h3{
     width: 91px;
     font-size: 14px;
 }
+.pathwayPrevListContainer {
+    height: 420px;
+    overflow-y: hidden;
+}
 
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }

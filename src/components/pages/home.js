@@ -63,11 +63,13 @@ class Home extends Component{
                 </div>
 
                 <div className="fullHeight">
-                    <ul className="horizCenteredList pathwayPrevList">
-                        <li><PathwayPreview /></li>
-                        <li><PathwayPreview /></li>
-                        <li><PathwayPreview /></li>
-                    </ul>
+                    <div className="pathwayPrevListContainer">
+                        <ul className="horizCenteredList pathwayPrevList">
+                            <li><PathwayPreview /></li>
+                            <li><PathwayPreview /></li>
+                            <li><PathwayPreview /></li>
+                        </ul>
+                    </div>
                 </div>
 
             </div>
