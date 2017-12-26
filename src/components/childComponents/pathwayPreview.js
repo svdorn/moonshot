@@ -28,21 +28,21 @@ class PathwayPreview extends Component {
                     <ul className="horizCenteredList pathwayPrevIconList">
                         <li>
                             <div>
-                                <img src="/icons/CompletionTimeIcon.png" style={iconStyle} /><br/>
+                                <img src="/icons/Clock.png" style={iconStyle} /><br/>
                                 <span className="tinyText">Completion Time</span><br/>
                                 {completionTime}
                             </div>
                         </li>
                         <li>
                             <div>
-                                <img src="/icons/DeadlineIcon.png" style={iconStyle} /><br/>
+                                <img src="/icons/Calendar.png" style={iconStyle} /><br/>
                                 <span className="tinyText">Deadline</span><br/>
                                 {deadline}
                             </div>
                         </li>
                         <li>
                             <div>
-                                <img src="/icons/PriceIcon.png" style={iconStyle} /><br/>
+                                <img src="/icons/Price.png" style={iconStyle} /><br/>
                                 <span className="tinyText">Price</span><br/>
                                 {price}
                             </div>
