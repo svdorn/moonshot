@@ -288,6 +288,16 @@ class Home extends Component{
                         {"I'm Ready For"}<br/>
                         {"The Future"}
                     </button>
+
+                    <img
+                        src="/images/BottomLeftTriangles.png"
+                        style={{
+                            height:"490px",
+                            position:"absolute",
+                            bottom:"0px",
+                            left:"0px"
+                        }}
+                    />
                 </div>
 
 
