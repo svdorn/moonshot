@@ -4,7 +4,8 @@ import { Paper, RaisedButton } from 'material-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import PathwayPreview from '../childComponents/pathwayPreview'
+import PathwayPreview from '../childComponents/pathwayPreview';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 class Home extends Component{
 
@@ -13,8 +14,30 @@ class Home extends Component{
     }
 
     render(){
+        const logosInfo = [
+            {name: "amazon.png", height:"90px", left:"55%", top:"80%"},
+            {name: "ArchVirtual.png", height:"50px", left:"70%", top:"57%"},
+            {name: "Epic.png", height:"70px", left:"7%", top:"55%"},
+            {name: "holos.png", height:"50px", left:"85%", top:"70%"},
+            {name: "Singlewire.png", height:"80px", left:"20%", top:"10%"},
+            {name: "Unity.png", height:"60px", left:"70%", top:"12%"},
+            {name: "XES.png", height:"100px", left:"20%", top:"77%"}
+        ]
+
+        const backgroundLogos = logosInfo.map(function(logo) {
+            return (
+                <img src={"/logos/" + logo.name} style={{
+                    position: "absolute",
+                    height: logo.height,
+                    left: logo.left,
+                    top: logo.top
+                }}/>
+            )
+        })
+
         return(
             <div className='jsxWrapper'>
+                <HomepageTriangles />
                 <div>
                     {this.props.emailSentMessage ?
                         <Paper className="messageHeader infoHeader">
@@ -53,6 +76,9 @@ class Home extends Component{
                             <i>Are you an employer? Click here.</i>
                         </p>
                     </div>
+
+                    {backgroundLogos}
+
                 </div>
 
                 <div className="halfHeight purpleToBlue">

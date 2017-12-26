@@ -96,12 +96,14 @@ footer {
     width: 100%;
     height: 750px;
     position: relative;
+    overflow-x: hidden;
 }
 
 .halfHeight {
     width: 100%;
     height: 375px;
     position: relative;
+    overflow-x: hidden;
 }
 
 .greenToBlue { background: linear-gradient(to top right, var(--moonshotGreen), var(--moonshotLightBlue)); }
@@ -250,3 +252,17 @@ button.link {
 .greenText { color: var(--moonshotGreenText); }
 .whiteText { color: white; }
 .blueText { color: var(--moonshotLightBlue) }
+
+
+
+/* decorative triangles */
+
+
+
+/* end decorative triangles */
+
+/* homepage company logos */
+
+
+
+/* end homepage company logos */
