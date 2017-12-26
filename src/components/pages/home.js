@@ -26,7 +26,7 @@ class Home extends Component{
 
         const backgroundLogos = logosInfo.map(function(logo) {
             return (
-                <img src={"/logos/" + logo.name} style={{
+                <img src={"/logos/" + logo.name} key={logo.name} style={{
                     position: "absolute",
                     height: logo.height,
                     left: logo.left,

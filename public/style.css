@@ -263,7 +263,6 @@ button.link {
   position: absolute;
   clip: rect(auto, 180px, auto, 100px);
   z-index: 10;
-  transform: scaleY(.6);
 }
 
 .triangle::after {
