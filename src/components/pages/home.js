@@ -86,6 +86,16 @@ class Home extends Component{
                     </div>
                 </div>
 
+                <div className="homepageSeparatorContainer"><div className="homepageSeparator" /></div>
+
+                <div className="fullHeight" style={{textAlign:"center"}}>
+                    <img
+                        src="/images/TheMoonshotTrajectory.png"
+                        alt="Pathways"
+                        style={{marginTop:"100px", marginBottom:"15px", width:"700px"}}
+                    /><br/>
+                </div>
+
             </div>
         );
     }

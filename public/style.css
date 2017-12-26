@@ -208,6 +208,32 @@ button.link {
     overflow-y: hidden;
 }
 
+.homepageSeparatorContainer {
+    position:relative;
+}
+
+.homepageSeparator {
+  width: 160px;
+  height: 160px;
+  position: absolute;
+  top: -80px;
+  left: -180px;
+  clip: rect(auto, 180px, auto, 100px);
+  transform: scale(5, .03);
+}
+
+.homepageSeparator::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));
+  transform: rotate(-45deg);
+}
+
+
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
 .smallText { font-size: 15px; }
