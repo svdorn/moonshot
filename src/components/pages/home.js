@@ -48,9 +48,8 @@ class Home extends Component{
                     }
                 </div>
 
-
                 <div className="fullHeight greenToBlue">
-                    <div className="infoBox whiteText mediumText noWrap">
+                    <div className="infoBox whiteText mediumText noWrap" style={{zIndex:"20"}}>
                         Skip the resum&eacute;.<br/>
                         Learn skills for the future<br/>
                         that employers want now,<br/>
