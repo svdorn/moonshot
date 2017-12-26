@@ -95,11 +95,13 @@ footer {
 .fullHeight {
     width: 100%;
     height: 750px;
+    position: relative;
 }
 
 .halfHeight {
     width: 100%;
     height: 375px;
+    position: relative;
 }
 
 .greenToBlue { background: linear-gradient(to top right, var(--moonshotGreen), var(--moonshotLightBlue)); }
@@ -236,6 +238,7 @@ button.link {
 
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
+.smallText2 { font-size: 20px; }
 .smallText { font-size: 15px; }
 .tinyText { font-size: 11px; }
 .greenText { color: var(--moonshotGreenText); }
