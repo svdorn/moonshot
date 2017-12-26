@@ -210,6 +210,8 @@ button.link {
     overflow-y: hidden;
 }
 
+.homepageBenefitsList li { margin: 0% 10%; }
+
 .homepageSeparatorContainer {
     position:relative;
 }

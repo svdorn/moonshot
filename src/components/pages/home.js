@@ -161,6 +161,62 @@ class Home extends Component{
                     </div>
                 </div>
 
+                <div className="homepageSeparatorContainer"><div className="homepageSeparator" /></div>
+
+                <div className="fullHeight">
+
+                    <ul className="horizCenteredList homepageBenefitsList">
+                        <li>
+                            <div style={{position:"relative"}}>
+                                <img
+                                    src="/icons/Tree.png"
+                                    alt="Tree"
+                                    style={{
+                                        height:"90px",
+                                        position:"absolute",
+                                        marginTop:"20px",
+                                        marginLeft:"-190px"
+                                    }}
+                                />
+                                <div className="smallText2">
+                                    <h2 style={{fontSize:"30px", color:"#b769ff"}}>
+                                        <strong>PATHWAYS</strong>
+                                    </h2>
+                                    Pathways of courses<br/>
+                                    chosen by employers,<br/>
+                                    curated by us,<br/>
+                                    completed by you.
+                                </div>
+                            </div>
+                        </li>
+                        <li>
+                            <div style={{position:"relative"}}>
+                                <img
+                                    src="/icons/Price.png"
+                                    alt="Price"
+                                    style={{
+                                        height:"90px",
+                                        position:"absolute",
+                                        marginTop:"20px",
+                                        marginLeft:"-190px"
+                                    }}
+                                />
+                                <div className="smallText2">
+                                    <h2 style={{fontSize:"30px", color:"#b769ff"}}>
+                                        <strong>LEARN FOR FREE</strong>
+                                    </h2>
+                                    Prepare for the Future<br/>
+                                    at no cost to you.<br/>
+                                    Learn skills from courses<br/>
+                                    paid for by the employer.
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+
+
+
             </div>
         );
     }

@@ -49,7 +49,7 @@ class Menu extends Component {
     render() {
         if (this.props.isFetching) {
             return (
-                <header>
+                <header style={{zIndex:"100"}}>
                     <Toolbar>
                         <ToolbarGroup>
                         <img
@@ -67,7 +67,7 @@ class Menu extends Component {
         }
 
         return (
-            <header>
+            <header style={{zIndex:"100"}}>
                 {this.props.currentUser ?
                     <Toolbar>
                         <ToolbarGroup>
