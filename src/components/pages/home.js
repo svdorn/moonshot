@@ -163,10 +163,10 @@ class Home extends Component{
 
                 <div className="homepageSeparatorContainer"><div className="homepageSeparator" /></div>
 
-                <div className="fullHeight">
+                <div className="fullHeight" style={{textAlign:"center"}}>
 
                     <ul className="horizCenteredList homepageBenefitsList">
-                        <li>
+                        <li style={{marginRight:"20%"}}>
                             <div style={{position:"relative"}}>
                                 <img
                                     src="/icons/Tree.png"
@@ -178,6 +178,16 @@ class Home extends Component{
                                         marginLeft:"-190px"
                                     }}
                                 />
+                                <img
+                                    src="/icons/BlockyPerson.png"
+                                    alt="Profile"
+                                    style={{
+                                        height:"70px",
+                                        position:"absolute",
+                                        marginTop:"300px",
+                                        marginLeft:"-190px"
+                                    }}
+                                />
                                 <div className="smallText2">
                                     <h2 style={{fontSize:"30px", color:"#b769ff"}}>
                                         <strong>PATHWAYS</strong>
@@ -186,6 +196,15 @@ class Home extends Component{
                                     chosen by employers,<br/>
                                     curated by us,<br/>
                                     completed by you.
+
+                                    <div style={{height:"100px"}} />
+
+                                    <h2 style={{fontSize:"30px", color:"#b769ff"}}>
+                                        <strong>PROFILE</strong>
+                                    </h2>
+                                    See how you stack up<br/>
+                                    against other applicants.<br/>
+                                    View your courses, badges, and stats.<br/>
                                 </div>
                             </div>
                         </li>
@@ -201,6 +220,16 @@ class Home extends Component{
                                         marginLeft:"-190px"
                                     }}
                                 />
+                                <img
+                                    src="/icons/PaperAndPencil.png"
+                                    alt="Contracting"
+                                    style={{
+                                        height:"80px",
+                                        position:"absolute",
+                                        marginTop:"290px",
+                                        marginLeft:"-195px"
+                                    }}
+                                />
                                 <div className="smallText2">
                                     <h2 style={{fontSize:"30px", color:"#b769ff"}}>
                                         <strong>LEARN FOR FREE</strong>
@@ -210,9 +239,30 @@ class Home extends Component{
                                     Learn skills from courses<br/>
                                     paid for by the employer.
                                 </div>
+
+                                <div style={{height:"100px"}} />
+
+                                <div className="smallText2">
+                                    <h2 style={{fontSize:"30px", color:"#b769ff"}}>
+                                        <strong>CONTRACTING</strong>
+                                    </h2>
+                                    Still in school or too busy<br/>
+                                    For a full-time job?<br/>
+                                    Credential yourself for employers<br/>
+                                    looking for contractors.
+                                </div>
                             </div>
                         </li>
                     </ul>
+
+                    <button className="outlineButton" style={{
+                        color:"#b769ff",
+                        border:"3px solid #b769ff",
+                        marginTop:"30px"
+                    }}>
+                        {"I'm Ready For"}<br/>
+                        {"The Future"}
+                    </button>
                 </div>
 
 

@@ -210,7 +210,11 @@ button.link {
     overflow-y: hidden;
 }
 
-.homepageBenefitsList li { margin: 0% 10%; }
+.homepageBenefitsList {
+    margin-top: 100px;
+    padding-left: 40px;
+}
+.homepageBenefitsList li {  vertical-align: top; }
 
 .homepageSeparatorContainer {
     position:relative;
