@@ -191,7 +191,7 @@ class Home extends Component{
                 <div className="fullHeight" style={{textAlign:"center"}}>
 
                     <ul className="horizCenteredList homepageBenefitsList">
-                        <li style={{marginRight:"20%"}}>
+                        <li style={{marginRight:"14%"}}>
                             <div style={{position:"relative"}}>
                                 <img
                                     src="/icons/Tree.png"
@@ -292,10 +292,11 @@ class Home extends Component{
                     <img
                         src="/images/BottomLeftTriangles.png"
                         style={{
-                            height:"490px",
-                            position:"absolute",
-                            bottom:"0px",
-                            left:"0px"
+                            height: "490px",
+                            position: "absolute",
+                            bottom: "0px",
+                            left: "0px",
+                            zIndex: "-10"
                         }}
                     />
                 </div>

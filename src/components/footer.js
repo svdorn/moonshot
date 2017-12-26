@@ -5,7 +5,7 @@ import {Toolbar, ToolbarTitle, FlatButton, ToolbarGroup } from 'material-ui';
 class Footer extends Component {
   render() {
     return (
-      <footer className="footer text-center">
+      <footer className="footer text-center" style={{minWidth:"800px"}}>
         <Toolbar style={{textAlign:'center'}}>
             <ToolbarTitle text="Copyright 2017 Moonshot Learning Inc. All rights reserved."/>
         </Toolbar>
