@@ -4,6 +4,7 @@ class HomepageTriangles extends Component {
     render() {
         let transformations = [];
         let whiteSpace = null;
+        let zIndex = "10";
 
         if (this.props.variation == "1") {
             transformations = [
@@ -52,6 +53,7 @@ class HomepageTriangles extends Component {
                     }}/>
                 </div>
             )
+            zIndex = "-10";
         }
 
         let counter = 0;
@@ -68,7 +70,7 @@ class HomepageTriangles extends Component {
         })
 
         return (
-            <div className="jsxWrapper" style={{position:"relative", width:"100%", zIndex:"10", pointerEvents:"none"}}>
+            <div className="jsxWrapper" style={{position:"relative", width:"100%", zIndex:zIndex, pointerEvents:"none"}}>
                 <div style={{position:"absolute", width:"100%", pointerEvents:"none"}}>
                     <div className="fullHeight" style={{position:"relative", minWidth:"800px", pointerEvents:"none"}}>
                         {triangles}
