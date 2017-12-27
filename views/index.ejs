@@ -6,8 +6,19 @@
   <link rel="stylesheet" href="style.css" type="text/css" />
 </head>
 <body>
-  <div id='app'><%- reactComponent-%></div>
-  <script>window.INITIAL_STATE=<%- initialState -%></script>
-  <script src='bundle.js'></script>
+    <div id="fb-root"></div>
+    <script>(function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.11&appId=93815497157';
+        fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
+    </script>
+
+
+    <div id='app'><%- reactComponent-%></div>
+    <script>window.INITIAL_STATE=<%- initialState -%></script>
+    <script src='bundle.js'></script>
 </body>
 </html>
