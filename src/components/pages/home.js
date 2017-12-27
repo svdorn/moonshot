@@ -37,7 +37,6 @@ class Home extends Component{
 
         return(
             <div className='jsxWrapper'>
-                <HomepageTriangles variation="1" />
                 <div>
                     {this.props.emailSentMessage ?
                         <Paper className="messageHeader infoHeader">
@@ -48,17 +47,22 @@ class Home extends Component{
                     }
                 </div>
 
-                <div className="fullHeight greenToBlue" style={{zIndex:"-15"}}>
+
+                <div className="fullHeight greenToBlue">
+                    <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+
                     <div className="infoBox whiteText mediumText noWrap" style={{zIndex:"20"}}>
                         Skip the resum&eacute;.<br/>
                         Learn skills for the future<br/>
                         that employers want now,<br/>
                         <i>for free.</i><br/>
-                        <button className="outlineButton blueWhiteButton">
+                        <button className="outlineButton blueWhiteButton"
+                            onClick={() => this.goTo('/signup')}>
                             Get Started
                         </button>
                     </div>
                 </div>
+
 
                 <div className="fullHeight">
                     <div className="infoBox greenText bigText nowrap">
@@ -66,7 +70,8 @@ class Home extends Component{
                         for people to spearhead<br/>
                         the future of technology.</i><br/>
                         <div className="dividerSmall" />
-                        <button className="outlineButton whiteBlueButton">
+                        <button className="outlineButton whiteBlueButton"
+                            onClick={() => this.goTo('/signup')}>
                             Join the Movement
                         </button>
                         <p  className="clickable blueText smallText"
@@ -286,8 +291,8 @@ class Home extends Component{
                     <button className="outlineButton" style={{
                         color:"#b769ff",
                         border:"3px solid #b769ff",
-                        marginTop:"30px"
-                    }}>
+                        marginTop:"30px" }}
+                        onClick={() => this.goTo('/signup')}>
                         {"I'm Ready For"}<br/>
                         {"The Future"}
                     </button>
