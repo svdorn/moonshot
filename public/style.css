@@ -272,14 +272,13 @@ button.link {
   bottom: 10px;
   left: 10px;
   right: 10px;
-  background: linear-gradient(to top, rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.6));
   transform: rotate(-45deg);
 }
 
+.whiteTriangle::after {
+    background: linear-gradient(to top, rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.6));
+}
+.purpleTriangle::after { background: var(--moonshotPurple); }
+.greenTriangle::after { background: var(--moonshotGreen); }
+
 /* end decorative triangles */
-
-/* homepage company logos */
-
-
-
-/* end homepage company logos */

@@ -37,7 +37,7 @@ class Home extends Component{
 
         return(
             <div className='jsxWrapper'>
-                <HomepageTriangles />
+                <HomepageTriangles variation="1" />
                 <div>
                     {this.props.emailSentMessage ?
                         <Paper className="messageHeader infoHeader">
@@ -48,7 +48,7 @@ class Home extends Component{
                     }
                 </div>
 
-                <div className="fullHeight greenToBlue">
+                <div className="fullHeight greenToBlue" style={{zIndex:"-15"}}>
                     <div className="infoBox whiteText mediumText noWrap" style={{zIndex:"20"}}>
                         Skip the resum&eacute;.<br/>
                         Learn skills for the future<br/>
@@ -114,74 +114,77 @@ class Home extends Component{
                 <div className="homepageSeparatorContainer"><div className="homepageSeparator" /></div>
 
                 <div className="fullHeight" style={{textAlign:"center"}}>
-                    <img
-                        src="/images/TheMoonshotTrajectory.png"
-                        alt="Pathways"
-                        style={{marginTop:"45px", marginBottom:"15px", width:"700px"}}
-                    /><br/>
-                    <div style={{
-                        float:"left",
-                        textAlign:"left",
-                        position:"relative",
-                        marginLeft:"100px"
-                    }}>
+                    <HomepageTriangles variation="2" />
+                    <div style={{zIndex: 0}}>
                         <img
-                            src="/icons/Lightbulb.png"
-                            alt="Lightbulb"
-                            style={{height:"90px", position:"absolute", top:"50%", marginTop:"-45px"}}
-                        />
-                        <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
-                            <h2 className="greenText" style={{fontSize:"32px"}}>
-                                Complete Pathways<br/>
-                                And Learn Skills<br/>
-                            </h2>
-                            We work directly with the most<br/>
-                            innovative companies to curate<br/>
-                            pathways that consist of courses to<br/>
-                            teach you the skills that they look for.
+                            src="/images/TheMoonshotTrajectory.png"
+                            alt="Pathways"
+                            style={{marginTop:"45px", marginBottom:"15px", width:"700px"}}
+                        /><br/>
+                        <div style={{
+                            float:"left",
+                            textAlign:"left",
+                            position:"relative",
+                            marginLeft:"100px"
+                        }}>
+                            <img
+                                src="/icons/Lightbulb.png"
+                                alt="Lightbulb"
+                                style={{height:"90px", position:"absolute", top:"50%", marginTop:"-45px"}}
+                            />
+                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
+                                <h2 className="greenText" style={{fontSize:"32px"}}>
+                                    Complete Pathways<br/>
+                                    And Learn Skills<br/>
+                                </h2>
+                                We work directly with the most<br/>
+                                innovative companies to curate<br/>
+                                pathways that consist of courses to<br/>
+                                teach you the skills that they look for.
+                            </div>
                         </div>
-                    </div>
-                    <div style={{
-                        float:"right",
-                        textAlign:"left",
-                        position:"relative",
-                        marginRight:"100px",
-                        clear:"both"
-                    }}>
-                        <img
-                            src="/icons/Person.png"
-                            alt="Person"
-                            style={{height:"90px", position:"absolute", top:"50%", marginTop:"-45px"}}
-                        />
-                        <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
-                            <h2 style={{fontSize:"32px", color:"#2ab6ff"}}>
-                                Build Your Profile<br/>
-                            </h2>
-                            Earn badges by completing pathways.<br/>
-                            Add them to your profile to make yourself<br/>
-                            more attractive to employers.<br/>
+                        <div style={{
+                            float:"right",
+                            textAlign:"left",
+                            position:"relative",
+                            marginRight:"100px",
+                            clear:"both"
+                        }}>
+                            <img
+                                src="/icons/Person.png"
+                                alt="Person"
+                                style={{height:"90px", position:"absolute", top:"50%", marginTop:"-45px"}}
+                            />
+                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
+                                <h2 style={{fontSize:"32px", color:"#2ab6ff"}}>
+                                    Build Your Profile<br/>
+                                </h2>
+                                Earn badges by completing pathways.<br/>
+                                Add them to your profile to make yourself<br/>
+                                more attractive to employers.<br/>
+                            </div>
                         </div>
-                    </div>
-                    <div style={{
-                        float:"left",
-                        textAlign:"left",
-                        position:"relative",
-                        marginLeft:"100px",
-                        clear:"both"
-                    }}>
-                        <img
-                            src="/icons/Badge.png"
-                            alt="Badge"
-                            style={{height:"90px", position:"absolute", top:"50%", marginTop:"-45px"}}
-                        />
-                        <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
-                            <h2 style={{fontSize:"32px", color:"#b25fff"}}>
-                                Get Hired By The Most<br/>
-                                Innovative Companies<br/>
-                            </h2>
-                            Get hired for full-time, part-time,<br/>
-                            internship and contract positions by<br/>
-                            the most forward-thinking companies.
+                        <div style={{
+                            float:"left",
+                            textAlign:"left",
+                            position:"relative",
+                            marginLeft:"100px",
+                            clear:"both"
+                        }}>
+                            <img
+                                src="/icons/Badge.png"
+                                alt="Badge"
+                                style={{height:"90px", position:"absolute", top:"50%", marginTop:"-45px"}}
+                            />
+                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
+                                <h2 style={{fontSize:"32px", color:"#b25fff"}}>
+                                    Get Hired By The Most<br/>
+                                    Innovative Companies<br/>
+                                </h2>
+                                Get hired for full-time, part-time,<br/>
+                                internship and contract positions by<br/>
+                                the most forward-thinking companies.
+                            </div>
                         </div>
                     </div>
                 </div>
