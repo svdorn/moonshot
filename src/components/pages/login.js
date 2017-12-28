@@ -82,7 +82,7 @@ class Login extends Component {
     render() {
         console.log("props are:", this.props);
         return (
-            <div>
+            <div className="fullHeight greenToBlue">
                 {this.props.loginError ?
                     <Paper className="messageHeader errorHeader">
                         {this.props.loginError.response.data}

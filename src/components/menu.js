@@ -19,8 +19,8 @@ const styles = {
         textColor: '#00c3ff',
     },
     anchorOrigin: {
-        vertical: 'center',
-        horizontal: 'middle'
+        vertical: 'top',
+        horizontal: 'left'
     }
 };
 
@@ -87,6 +87,8 @@ class Menu extends Component {
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
                                           anchorOrigin={styles.anchorOrigin}
+                                          style={{fontSize:"20px", marginTop:"11px"}}
+                                          className="headerDropdown"
                             >
                                 <MenuItem value={1} primaryText="Profile" />
                                 <Divider />

@@ -90,6 +90,11 @@ footer {
     margin: 15px 15px 0px 15px;
 }
 
+/* So that the menu text color is the same as the rest of the header */
+.headerDropdown > div > div:nth-child(2) {
+    color: white !important;
+}
+
 .clickable, .clickableNoUnderline { cursor: pointer; }
 .clickable:hover { text-decoration: underline; }
 

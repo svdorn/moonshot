@@ -101,7 +101,7 @@ class Signup extends Component {
     render() {
         console.log(this.props);
         return (
-            <div>
+            <div className="fullHeight greenToBlue">
                 {this.props.failure !== undefined ?
                     <Paper className="messageHeader errorHeader">
                         {this.props.failure.response.data}
