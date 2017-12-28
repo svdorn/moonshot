@@ -74,6 +74,7 @@ app.get('/userSession', function (req, res) {
 // --->>> END SESSION SET UP <<<---
 
 var Users = require('./models/users.js');
+var Pathways = require('./models/pathways.js');
 
 //----->> POST USER <<------
 app.post('/users', function (req, res) {
