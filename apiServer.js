@@ -8,6 +8,7 @@ const credentials = require('./credentials');
 var bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
+const sanitizeHtml = require('sanitize-html');
 
 
 var app = express();
@@ -76,9 +77,24 @@ app.get('/userSession', function (req, res) {
 var Users = require('./models/users.js');
 var Pathways = require('./models/pathways.js');
 
+// strictly sanitize, only allow bold and italics
+const sanitizeOptions = {
+    allowedTags: [ 'b', 'i', 'em', 'strong' ],
+    allowedAttributes: []
+}
+
 //----->> POST USER <<------
 app.post('/users', function (req, res) {
     var user = req.body[0];
+
+    // sanitize user info
+    for (var prop in user) {
+        // skip loop if the property is from prototype
+        if(!user.hasOwnProperty(prop)) continue;
+        if (typeof user[prop] === "string") {
+            user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
+        }
+    }
 
     console.log("SIGNING UP A USER: ");
     console.log(user.username);
@@ -160,9 +176,13 @@ app.post('/verifyEmail', function (req, res) {
 
 // VERIFY CHANGE PASSWORD
 app.post('/users/changePasswordForgot', function (req, res) {
-    const token = req.body.token;
-    const password = req.body.password;
+    let token = req.body.token;
+    let password = req.body.password;
     console.log(token);
+
+    // sanitize token
+    token = sanitizeHtml(token, sanitizeOptions);
+    password = sanitizeHtml(password, sanitizeOptions);
 
     var query = {passwordToken: token};
     Users.findOne(query, function (err, user) {
@@ -217,7 +237,7 @@ app.post('/users/changePasswordForgot', function (req, res) {
 app.post('/sendVerificationEmail', function (req, res) {
     console.log("ABOUT TO TRY TO SEND EMAIL");
 
-    let username = req.body.username;
+    let username = sanitizeHtml(req.body.username, sanitizeOptions);
     let query = {username: username};
 
     Users.findOne(query, function (err, user) {
@@ -241,7 +261,7 @@ app.post('/sendVerificationEmail', function (req, res) {
 // SEND EMAIL FOR PASSWORD RESET
 app.post('/forgotPassword', function (req,res) {
 
-    let email = req.body.email;
+    let email = sanitizeHtml(req.body.email, sanitizeOptions);
     let query = {email: email};
 
     const user = getUserByQuery(query, function(user) {
@@ -334,7 +354,7 @@ function sendEmail(recipients, subject, content, callback) {
 }
 
 app.post('/getUserByQuery', function (req, res) {
-    const query = req.body.query;
+    const query = sanitizeHtml(req.body.query, sanitizeOptions);
     const user = getUserByQuery(query, function(user) {
         res.json(user);
     });
@@ -357,8 +377,8 @@ function getUserByQuery(query, callback) {
 
 // LOGIN USER
 app.post('/login', function (req, res) {
-    var username = req.body.username;
-    var password = req.body.password;
+    var username = sanitizeHtml(req.body.username, sanitizeOptions);
+    var password = sanitizeHtml(req.body.password, sanitizeOptions);
 
     console.log("TRYING TO LOG IN USER: ");
     console.log(username);
@@ -427,7 +447,7 @@ app.get('/users', function (req, res) {
 
 //----->> DELETE USER <<------
 app.delete('/users/:_id', function (req, res) {
-    var query = {_id: req.params._id};
+    var query = { _id: sanitizeHtml(req.params._id, sanitizeOptions) };
 
     Users.remove(query, function (err, user) {
         if (err) {
@@ -440,7 +460,17 @@ app.delete('/users/:_id', function (req, res) {
 //----->> UPDATE USER <<------
 app.put('/users/:_id', function (req, res) {
     var user = req.body;
-    var query = {_id: req.params._id};
+
+    // sanitize user info
+    for (var prop in user) {
+        // skip loop if the property is from prototype
+        if(!user.hasOwnProperty(prop)) continue;
+        if (typeof user[prop] === "string") {
+            user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
+        }
+    }
+
+    var query = { _id: sanitizeHtml(req.params._id, sanitizeOptions) };
     console.log("in api server");
     console.log(user);
     console.log(query);
@@ -492,7 +522,16 @@ app.put('/users/:_id', function (req, res) {
 //----->> CHANGE PASSWORD <<------
 app.put('/users/changepassword/:_id', function (req, res) {
     var user = req.body;
-    var query = {_id: req.params._id};
+    var query = { _id: sanitizeHtml(req.params._id, sanitizeOptions) };
+
+    // sanitize user info
+    for (var prop in user) {
+        // skip loop if the property is from prototype
+        if(!user.hasOwnProperty(prop)) continue;
+        if (typeof user[prop] === "string") {
+            user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
+        }
+    }
 
     // if the field doesn't exist, $set will set a new field
     const saltRounds = 10;
