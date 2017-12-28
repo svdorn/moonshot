@@ -10,7 +10,10 @@ import HomepageTriangles from '../miscComponents/HomepageTriangles';
 class Home extends Component{
 
     goTo (route)  {
+        // goes to the wanted page
         browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
     render(){
