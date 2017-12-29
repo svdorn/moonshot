@@ -12,12 +12,20 @@ class Notification extends Component {
     }
 
     render() {
+        const messageStyle = {
+            display: "inline-block",
+            verticalAlign: "top",
+            paddingTop: "13px"
+        }
+
         return(
             <div>
                 {this.props.notification ?
                     <Paper className={"messageHeader " + this.props.notification.type}>
-                        <div>{this.props.notification.message}</div>
-                        <IconButton onClick={this.onCloseClick.bind(this)}>
+                        <div style={messageStyle}>{this.props.notification.message}</div>
+                        <IconButton
+                            onClick={this.onCloseClick.bind(this)}
+                            style={{marginTop: "-3px"}}>
                             <ContentClear />
                         </IconButton>
                     </Paper>
