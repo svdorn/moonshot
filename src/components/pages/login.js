@@ -83,9 +83,9 @@ class Login extends Component {
         console.log("props are:", this.props);
         return (
             <div className="fullHeight greenToBlue">
-                {this.props.loginError ?
-                    <Paper className="messageHeader errorHeader">
-                        {this.props.loginError.response.data}
+                {this.props.notification ?
+                    <Paper className={"messageHeader " + this.props.notification.type}>
+                        {this.props.notification.message}
                     </Paper>
                     :
                     null
@@ -128,7 +128,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
-        loginError: state.users.loginError
+        notification: state.users.notification
     };
 }
 

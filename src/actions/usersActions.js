@@ -58,7 +58,7 @@ export function login(user) {
             });
       })
       .catch(function(err) {
-        dispatch({type: "LOGIN_REJECTED", payload: err});
+        dispatch({type: "LOGIN_REJECTED", payload: {message: err.response.data, type: "errorHeader"}});
       });
   }
 }
@@ -93,13 +93,15 @@ export function postUser(user) {
                     // successfully sent verification email
                     .then(function(emailResponse) {
                         console.log("email sent");
-                        dispatch({type:"POST_USER", payload:emailResponse.data});
+                        console.log("emailResponse is: ");
+                        console.log(emailResponse);
+                        dispatch({type:"POST_USER", payload:{message: emailResponse.data, type: "infoHeader"}});
                         browserHistory.push('/');
                     })
                     // error sending verification email
                     .catch(function(emailError) {
                         console.log("user successfully posted but error sending email: ", emailError)
-                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", payload:response.data});
+                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", payload:{message: response.data, type: "errorHeader"}});
                         browserHistory.push('/login');
                     });
             })

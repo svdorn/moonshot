@@ -41,9 +41,9 @@ class Home extends Component{
         return(
             <div className='jsxWrapper'>
                 <div>
-                    {this.props.emailSentMessage ?
-                        <Paper className="messageHeader infoHeader">
-                            {this.props.emailSentMessage}
+                    {this.props.notification ?
+                        <Paper className={"messageHeader " + this.props.notification.type }>
+                            {this.props.notification.message}
                         </Paper>
                         :
                         null
@@ -328,7 +328,7 @@ class Home extends Component{
 
 function mapStateToProps(state) {
     return {
-        emailSentMessage: state.users.emailSentMessage
+        notification: state.users.notification
     };
 }
 

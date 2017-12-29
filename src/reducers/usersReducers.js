@@ -34,13 +34,13 @@ export function usersReducers(state = initialState, action) {
         case "LOGIN":
             console.log("printing payload");
             console.log(action.payload);
-            return {...state, loginError: undefined, currentUser: action.payload};
+            return {...state, notification: undefined, currentUser: action.payload};
             break;
         case "LOGIN_REJECTED":
             // TODO deal with failed login
             console.log("LOGIN FAILED");
             console.log(action.payload);
-            return {...state, loginError: action.payload};
+            return {...state, notification: action.payload};
             break;
         case "SIGNOUT":
             return {...state, currentUser:undefined};
@@ -54,7 +54,7 @@ export function usersReducers(state = initialState, action) {
         case "POST_USER":
             return {
                 ...state,
-                emailSentMessage: action.payload,
+                notification: action.payload,
                 loadingSomething: false
             };
             break;

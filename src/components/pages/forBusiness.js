@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 import {postUser, getUsers} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
+import style from '../../../public/styles';
 
 const styles = {
     floatingLabelStyle: {
@@ -99,7 +100,6 @@ class Signup extends Component {
 
     //name, username, email, password, confirm password, signup button
     render() {
-        console.log(this.props);
         return (
             <div>
                 {this.props.failure !== undefined ?
@@ -109,9 +109,13 @@ class Signup extends Component {
                     :
                     null
                 }
-                <Paper className="form" zDepth={2}>
+                <div className="form" zDepth={2}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Businesses</h1>
+                        <h3>
+                            Work with us to create pathways to<br/>
+                            help you source specialized talent, for less.
+                        </h3>
                         <Field
                             name="name"
                             component={renderTextField}
@@ -144,7 +148,7 @@ class Signup extends Component {
                         />
                     </form>
                     { this.props.loadingCreateUser ? <CircularProgress /> : "" }
-                </Paper>
+                </div>
             </div>
         );
     }
