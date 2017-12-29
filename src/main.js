@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import Menu from './components/menu';
 import Footer from './components/footer';
+import Notification from './components/notification'
 
 import { Paper } from 'material-ui'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
@@ -57,13 +58,8 @@ class Main extends Component {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <Menu/>
-                        {this.props.notification ?
-                            <Paper className={"messageHeader " + this.props.notification.type}>
-                                {this.props.notification.message}
-                            </Paper>
-                            :
-                            null
-                        }
+                    <Notification/>
+
                         { this.props.children }
                     <Footer/>
                 </MuiThemeProvider>

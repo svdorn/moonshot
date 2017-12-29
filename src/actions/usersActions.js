@@ -114,6 +114,12 @@ export function postUser(user) {
     }
 }
 
+export function closeNotification() {
+    return function(dispatch) {
+        dispatch({type: "CLOSE_NOTIFICATION"});
+    }
+}
+
 // FORGOT PASSWORD
 export function forgotPassword(user) {
     return function(dispatch) {

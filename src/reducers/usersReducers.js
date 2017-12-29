@@ -129,6 +129,11 @@ export function usersReducers(state = initialState, action) {
                 ...state, notification: action.notification, loadingSomething: false
             };
             break;
+        case "CLOSE_NOTIFICATION":
+            return {
+                ...state, notification: undefined
+            }
+            break;
     }
 
     return state
