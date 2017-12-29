@@ -64,7 +64,7 @@ class PasswordChange extends Component {
     //name, username, email, password, confirm password, signup button
     render() {
         return (
-            <div>
+            <div className="fullHeight greenToBlue">
                 <Paper className="form">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Change Password</h1>

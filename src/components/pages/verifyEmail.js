@@ -15,7 +15,7 @@ class VerifyEmail extends Component {
         console.log("props: ", this.props);
 
         return(
-            <div>
+            <div className="fullHeight greenToBlue">
                 {this.props.verifyEmailErrorMsg !== undefined ?
                     <Paper className="messageHeader errorHeader">
                         {this.props.verifyEmailErrorMsg}

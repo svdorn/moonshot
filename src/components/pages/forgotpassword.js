@@ -66,7 +66,7 @@ class ForgotPassword extends Component {
     render() {
         console.log("props are:", this.props);
         return (
-            <div>
+            <div className="fullHeight greenToBlue">
                 {this.props.forgotPassSuccess ?
                     <Paper className="messageHeader infoHeader">
                         {this.props.forgotPassSuccess}
