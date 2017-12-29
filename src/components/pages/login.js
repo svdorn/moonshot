@@ -83,7 +83,6 @@ class Login extends Component {
         console.log("props are:", this.props);
         return (
             <div className="fullHeight greenToBlue">
-                
                 <Paper className="form" zDepth={2}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Sign in</h1>
@@ -122,7 +121,6 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
-        notification: state.users.notification
     };
 }
 

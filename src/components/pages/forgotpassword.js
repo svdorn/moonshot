@@ -67,13 +67,6 @@ class ForgotPassword extends Component {
         console.log("props are:", this.props);
         return (
             <div className="fullHeight greenToBlue">
-                {this.props.notification ?
-                    <Paper className={"messageHeader " + this.props.notification.type}>
-                        {this.props.notification.message}
-                    </Paper>
-                    :
-                    null
-                }
                 <Paper className="form" zDepth={2}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Forgot Password</h1>
@@ -88,7 +81,7 @@ class ForgotPassword extends Component {
                                       className="button"
                         />
                     </form>
-                    { this.props.loading ? <CircularProgress /> : "" }
+                    { this.props.loading ? <CircularProgress style={{marginTop:"20px"}} /> : "" }
                 </Paper>
             </div>
         );
@@ -105,7 +98,6 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
-        notification: state.users.notification,
         loading: state.users.loadingSomething
     };
 }

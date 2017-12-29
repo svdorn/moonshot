@@ -16,13 +16,6 @@ class VerifyEmail extends Component {
 
         return(
             <div className="fullHeight greenToBlue">
-                {this.props.notification !== undefined ?
-                    <Paper className={"messageHeader " + this.props.notification.type}>
-                        {this.props.notification.message}
-                    </Paper>
-                    :
-                    null
-                }
                 <Paper className="form" zDepth={2}>
                     <h1>Verify Email</h1>
                     <RaisedButton

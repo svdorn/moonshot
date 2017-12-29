@@ -99,16 +99,8 @@ class Signup extends Component {
 
     //name, username, email, password, confirm password, signup button
     render() {
-        console.log(this.props);
         return (
             <div className="fullHeight greenToBlue">
-                {this.props.failure !== undefined ?
-                    <Paper className="messageHeader errorHeader">
-                        {this.props.failure.response.data}
-                    </Paper>
-                    :
-                    null
-                }
                 <Paper className="form" zDepth={2}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Sign Up</h1>
@@ -143,7 +135,7 @@ class Signup extends Component {
                                       className="button"
                         />
                     </form>
-                    { this.props.loadingCreateUser ? <CircularProgress /> : "" }
+                    { this.props.loadingCreateUser ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
                 </Paper>
             </div>
         );
@@ -160,7 +152,6 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         formData: state.form,
-        failure: state.users.failure,
         loadingCreateUser: state.users.loadingSomething,
     };
 }

@@ -58,7 +58,7 @@ export function login(user) {
             });
       })
       .catch(function(err) {
-        dispatch({type: "LOGIN_REJECTED", payload: {message: err.response.data, type: "errorHeader"}});
+        dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
       });
   }
 }
@@ -95,19 +95,21 @@ export function postUser(user) {
                         console.log("email sent");
                         console.log("emailResponse is: ");
                         console.log(emailResponse);
-                        dispatch({type:"POST_USER", payload:{message: emailResponse.data, type: "infoHeader"}});
+                        dispatch({type:"POST_USER", notification:{message: emailResponse.data, type: "infoHeader"}});
                         browserHistory.push('/');
                     })
                     // error sending verification email
                     .catch(function(emailError) {
                         console.log("user successfully posted but error sending email: ", emailError)
-                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", payload:{message: response.data, type: "errorHeader"}});
+                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: response.data, type: "errorHeader"}});
                         browserHistory.push('/login');
                     });
             })
             // error posting user
             .catch(function(err) {
-                dispatch({type: "POST_USER_REJECTED", payload: {message: "Error creating new user", type: "errorHeader"}});
+                console.log("error posting user");
+                console.log(err);
+                dispatch({type: "POST_USER_REJECTED", notification:{message: err.response.data, type: "errorHeader"}});
             });
     }
 }
@@ -119,10 +121,10 @@ export function forgotPassword(user) {
 
         axios.post("/api/forgotPassword", user)
             .then(function(response) {
-                dispatch({type:"FORGOT_PASSWORD", payload:{message: response.data, type:"infoHeader"}})
+                dispatch({type:"FORGOT_PASSWORD", notification:{message: response.data, type:"infoHeader"}})
             })
             .catch(function(err) {
-                dispatch({type:"FORGOT_PASSWORD_REJECTED", payload:{message: err.response.data, type:"errorHeader"}})
+                dispatch({type:"FORGOT_PASSWORD_REJECTED", notification:{message: err.response.data, type:"errorHeader"}})
             })
     }
 }
@@ -150,6 +152,7 @@ export function changePassword(user) {
                 dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
             })
             .catch(function(err){
+                console.log(err);
                 dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: "Error changing password", type: "errorHeader"}})
             });
     }
@@ -166,7 +169,7 @@ export function verifyEmail(token) {
             })
             .catch(function(err) {
                 console.log("EMAIL VERIFIED REJECTED");
-                dispatch({type: "VERIFY_EMAIL_REJECTED", payload: {message: "Error verifying email", type: "errorHeader"}});
+                dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: "Error verifying email", type: "errorHeader"}});
             });
     }
 }
@@ -175,11 +178,11 @@ export function changePasswordForgot(user) {
     return function(dispatch) {
         axios.post("api/users/changePasswordForgot", user)
             .then(function(response) {
-                dispatch({type:"LOGIN", payload:{message:response.data, type:"infoHeader"}});
+                dispatch({type:"LOGIN", notification:{message:response.data, type:"infoHeader"}});
                 browserHistory.push('/');
             })
             .catch(function(err) {
-                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", payload: {message: "Error changing password", type: "errorHeader"}})
+                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: "Error changing password", type: "errorHeader"}})
             })
     }
 }

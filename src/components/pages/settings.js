@@ -49,7 +49,6 @@ class Settings extends Component {
 
 function mapStateToProps(state) {
     return {
-        notification: state.users.notification
     };
 }
 

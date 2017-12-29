@@ -157,7 +157,6 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         formData: state.form,
-        failure: state.users.failure,
         loadingCreateUser: state.users.loadingSomething,
     };
 }

@@ -40,17 +40,6 @@ class Home extends Component{
 
         return(
             <div className='jsxWrapper'>
-                <div>
-                    {this.props.notification ?
-                        <Paper className={"messageHeader " + this.props.notification.type }>
-                            {this.props.notification.message}
-                        </Paper>
-                        :
-                        null
-                    }
-                </div>
-
-
                 <div className="fullHeight greenToBlue">
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
 

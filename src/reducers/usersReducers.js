@@ -40,7 +40,7 @@ export function usersReducers(state = initialState, action) {
             // TODO deal with failed login
             console.log("LOGIN FAILED");
             console.log(action.payload);
-            return {...state, notification: action.payload};
+            return {...state, notification: action.notification};
             break;
         case "SIGNOUT":
             return {...state, currentUser:undefined};
@@ -54,20 +54,22 @@ export function usersReducers(state = initialState, action) {
         case "POST_USER":
             return {
                 ...state,
-                notification: action.payload,
+                notification: action.notification,
                 loadingSomething: false
             };
             break;
         case "POST_USER_REJECTED":
             console.log("user rejected");
             return {
-                ...state, notification: action.payload
+                ...state,
+                notification: action.notification,
+                loadingSomething: false
             };
             break;
         case "VERIFY_EMAIL_REJECTED":
             return {
                 ...state,
-                notification: action.payload
+                notification: action.notification
             }
         case "RESET_BUTTON":
             return {
@@ -119,12 +121,12 @@ export function usersReducers(state = initialState, action) {
             break;
         case "FORGOT_PASSWORD":
             return {
-                ...state, notification: action.payload, loadingSomething: false
+                ...state, notification: action.notification, loadingSomething: false
             };
             break;
         case "FORGOT_PASSWORD_REJECTED":
             return {
-                ...state, notification: action.payload, loadingSomething: false
+                ...state, notification: action.notification, loadingSomething: false
             };
             break;
     }
