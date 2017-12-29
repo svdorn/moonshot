@@ -102,13 +102,6 @@ class Signup extends Component {
     render() {
         return (
             <div>
-                {this.props.failure !== undefined ?
-                    <Paper className="messageHeader errorHeader">
-                        {this.props.failure.response.data}
-                    </Paper>
-                    :
-                    null
-                }
                 <div className="form" zDepth={2}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Businesses</h1>

@@ -83,13 +83,7 @@ class Login extends Component {
         console.log("props are:", this.props);
         return (
             <div className="fullHeight greenToBlue">
-                {this.props.notification ?
-                    <Paper className={"messageHeader " + this.props.notification.type}>
-                        {this.props.notification.message}
-                    </Paper>
-                    :
-                    null
-                }
+                
                 <Paper className="form" zDepth={2}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Sign in</h1>

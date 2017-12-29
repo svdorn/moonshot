@@ -67,16 +67,9 @@ class ForgotPassword extends Component {
         console.log("props are:", this.props);
         return (
             <div className="fullHeight greenToBlue">
-                {this.props.forgotPassSuccess ?
-                    <Paper className="messageHeader infoHeader">
-                        {this.props.forgotPassSuccess}
-                    </Paper>
-                    :
-                    null
-                }
-                {this.props.forgotPassFailure ?
-                    <Paper className="messageHeader errorHeader">
-                        {this.props.forgotPassFailure.response.data}
+                {this.props.notification ?
+                    <Paper className={"messageHeader " + this.props.notification.type}>
+                        {this.props.notification.message}
                     </Paper>
                     :
                     null
@@ -112,8 +105,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
-        forgotPassSuccess: state.users.forgotPassSuccess,
-        forgotPassFailure: state.users.forgotPassFailure,
+        notification: state.users.notification,
         loading: state.users.loadingSomething
     };
 }

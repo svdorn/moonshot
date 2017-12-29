@@ -20,16 +20,9 @@ class Settings extends Component {
         console.log(this.props);
         return (
             <div className="fullHeight greenToBlue">
-                {this.props.failure !== undefined ?
-                    <Paper className="messageHeader errorHeader">
-                        {this.props.failure.response.data}
-                    </Paper>
-                    :
-                    null
-                }
-                {this.props.success ?
-                    <Paper className="messageHeader infoHeader">
-                        {this.props.success}
+                {this.props.notification !== undefined ?
+                    <Paper className={"messageHeader " + this.props.notification.type}>
+                        {this.props.notification.message}
                     </Paper>
                     :
                     null
@@ -56,8 +49,7 @@ class Settings extends Component {
 
 function mapStateToProps(state) {
     return {
-        failure: state.users.failure,
-        success: state.users.success,
+        notification: state.users.notification
     };
 }
 

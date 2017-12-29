@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import Menu from './components/menu';
 import Footer from './components/footer';
 
+import { Paper } from 'material-ui'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {
@@ -56,6 +57,13 @@ class Main extends Component {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <Menu/>
+                        {this.props.notification ?
+                            <Paper className={"messageHeader " + this.props.notification.type}>
+                                {this.props.notification.message}
+                            </Paper>
+                            :
+                            null
+                        }
                         { this.props.children }
                     <Footer/>
                 </MuiThemeProvider>
@@ -73,7 +81,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        isFetching: state.users.isFetching
+        isFetching: state.users.isFetching,
+        notification: state.users.notification
     };
 }
 

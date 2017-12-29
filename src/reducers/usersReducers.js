@@ -61,7 +61,7 @@ export function usersReducers(state = initialState, action) {
         case "POST_USER_REJECTED":
             console.log("user rejected");
             return {
-                ...state, failure: action.payload
+                ...state, notification: action.payload
             };
             break;
         case "VERIFY_EMAIL_REJECTED":
@@ -99,32 +99,32 @@ export function usersReducers(state = initialState, action) {
             console.log("in reducer");
             console.log("what newUser is: ", action.payload);
             return {
-                ...state, currentUser: action.payload, success: "User Updated"
+                ...state, currentUser: action.payload, notification: action.notification
             };
             break;
         case "UPDATE_USER_REJECTED":
             return {
-                ...state, failure: action.payload
+                ...state, notification: action.notification
             };
             break;
         case "CHANGE_PASSWORD":
             return {
-                ...state, success: "Password Changed"
+                ...state, notification: action.notification
             };
             break;
         case "CHANGE_PASSWORD_REJECTED":
             return {
-                ...state, failure: action.payload
+                ...state, notification: action.notification
             };
             break;
         case "FORGOT_PASSWORD":
             return {
-                ...state, forgotPassSuccess: action.payload, loadingSomething: false
+                ...state, notification: action.payload, loadingSomething: false
             };
             break;
         case "FORGOT_PASSWORD_REJECTED":
             return {
-                ...state, forgotPassFailure: action.payload, loadingSomething: false
+                ...state, notification: action.payload, loadingSomething: false
             };
             break;
     }

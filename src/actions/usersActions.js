@@ -107,7 +107,7 @@ export function postUser(user) {
             })
             // error posting user
             .catch(function(err) {
-                dispatch({type: "POST_USER_REJECTED", payload: "there was an error while posting a new user"});
+                dispatch({type: "POST_USER_REJECTED", payload: {message: "Error creating new user", type: "errorHeader"}});
             });
     }
 }
@@ -119,10 +119,10 @@ export function forgotPassword(user) {
 
         axios.post("/api/forgotPassword", user)
             .then(function(response) {
-                dispatch({type:"FORGOT_PASSWORD", payload:response.data})
+                dispatch({type:"FORGOT_PASSWORD", payload:{message: response.data, type:"infoHeader"}})
             })
             .catch(function(err) {
-                dispatch({type:"FORGOT_PASSWORD_REJECTED", payload:err})
+                dispatch({type:"FORGOT_PASSWORD_REJECTED", payload:{message: err.response.data, type:"errorHeader"}})
             })
     }
 }
@@ -134,10 +134,10 @@ export function updateUser(user) {
         // update user on the database
         axios.put("/api/users/" + user._id, user)
             .then(function(response) {
-                dispatch({type:"UPDATE_USER", payload:response.data})
+                dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}})
             })
             .catch(function(err) {
-
+                dispatch({type:"UPDATE_USER_REJECTED", notification: {message: "Error updating settings", type: "errorHeader"}})
             });
     }
 }
@@ -147,10 +147,10 @@ export function changePassword(user) {
 
         axios.put('/api/users/changepassword/' +user._id, user)
             .then(function(response) {
-                dispatch({type:"CHANGE_PASSWORD", payload:response.data})
+                dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
             })
             .catch(function(err){
-                dispatch({type:"CHANGE_PASSWORD_REJECTED", payload:err})
+                dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: "Error changing password", type: "errorHeader"}})
             });
     }
 }
@@ -175,11 +175,11 @@ export function changePasswordForgot(user) {
     return function(dispatch) {
         axios.post("api/users/changePasswordForgot", user)
             .then(function(response) {
-                dispatch({type:"LOGIN", payload:response.data});
+                dispatch({type:"LOGIN", payload:{message:response.data, type:"infoHeader"}});
                 browserHistory.push('/');
             })
             .catch(function(err) {
-                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED"})
+                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", payload: {message: "Error changing password", type: "errorHeader"}})
             })
     }
 }
