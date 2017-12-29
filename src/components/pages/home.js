@@ -6,10 +6,13 @@ import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import { closeNotification } from "../../actions/usersActions";
 
 class Home extends Component{
 
     goTo (route)  {
+        // closes any notification
+        this.props.closeNotification();
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
@@ -308,12 +311,11 @@ class Home extends Component{
     }
 }
 
-// function mapDispatchToProps(dispatch) {
-//     return bindActionCreators({
-//         postUser,
-//         getUsers
-//     }, dispatch);
-// }
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        closeNotification
+    }, dispatch);
+}
 
 function mapStateToProps(state) {
     return {
@@ -321,4 +323,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Home);
+export default connect(mapStateToProps, mapDispatchToProps)(Home);

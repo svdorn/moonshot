@@ -47,6 +47,7 @@ export function login(user) {
     axios.post("/api/login", user)
       .then(function(response) {
         dispatch({type:"LOGIN", payload: response.data});
+        dispatch({type: "CLOSE_NOTIFICATION"});
         browserHistory.push('/');
 
         axios.post("/api/userSession", {userId: response.data._id})
@@ -170,7 +171,7 @@ export function verifyEmail(token) {
         axios.post("/api/verifyEmail", {token: token})
             .then(function(response) {
                 console.log("EMAIL VERIFIED!");
-                dispatch({type: "LOGIN", payload:response.data});
+                dispatch({type: "LOGIN", payload:response.data, notification:{message: "Account verified!", type: "infoHeader"}});
                 browserHistory.push('/');
             })
             .catch(function(err) {

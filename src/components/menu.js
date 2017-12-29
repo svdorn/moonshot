@@ -4,7 +4,7 @@ import { AppBar, FlatButton, ToolbarGroup, DropDownMenu, MenuItem, Divider, Tool
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { signout } from "../actions/usersActions";
+import { signout, closeNotification } from "../actions/usersActions";
 import { getHomepageImages } from "../actions/imageactions";
 import { axios } from 'axios';
 
@@ -32,18 +32,23 @@ class Menu extends Component {
 
     handleChange = (event, index, value) => {
         if (value === 1) {
-            browserHistory.push('/profile');
+            this.goTo('/profile');
         } else if (value === 2) {
-            browserHistory.push('/settings');
+            this.goTo('/settings');
         } else {
             this.props.signout();
-            browserHistory.push('/');
+            this.goTo('/');
         }
         this.setState({value})
     };
 
     goTo (route)  {
+        // closes any notification
+        this.props.closeNotification();
+        // goes to the wanted page
         browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
     render() {
@@ -125,7 +130,8 @@ class Menu extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         signout,
-        getHomepageImages
+        getHomepageImages,
+        closeNotification
     }, dispatch);
 }
 
