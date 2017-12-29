@@ -16,9 +16,9 @@ class VerifyEmail extends Component {
 
         return(
             <div className="fullHeight greenToBlue">
-                {this.props.verifyEmailErrorMsg !== undefined ?
-                    <Paper className="messageHeader errorHeader">
-                        {this.props.verifyEmailErrorMsg}
+                {this.props.notification !== undefined ?
+                    <Paper className={"messageHeader " + this.props.notification.type}>
+                        {this.props.notification.message}
                     </Paper>
                     :
                     null
@@ -44,7 +44,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        verifyEmailErrorMsg: state.users.verifyEmailErrorMsg
+        notification: state.users.notification
     };
 }
 

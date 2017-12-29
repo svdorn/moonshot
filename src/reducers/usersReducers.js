@@ -67,7 +67,7 @@ export function usersReducers(state = initialState, action) {
         case "VERIFY_EMAIL_REJECTED":
             return {
                 ...state,
-                verifyEmailErrorMsg: 'Error verifying email'
+                notification: action.payload
             }
         case "RESET_BUTTON":
             return {

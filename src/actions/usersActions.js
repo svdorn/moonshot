@@ -166,7 +166,7 @@ export function verifyEmail(token) {
             })
             .catch(function(err) {
                 console.log("EMAIL VERIFIED REJECTED");
-                dispatch({type: "VERIFY_EMAIL_REJECTED"});
+                dispatch({type: "VERIFY_EMAIL_REJECTED", payload: {message: "Error verifying email", type: "errorHeader"}});
             });
     }
 }
