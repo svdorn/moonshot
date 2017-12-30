@@ -86,7 +86,7 @@ class Menu extends Component {
                             />
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <p className="menuItem clickable noWrap" onClick={() => this.goTo('/')}>Home</p>
+                            <p className="menuItem clickable noWrap" onClick={() => this.goTo('/discover')}>Discover</p>
                             <p className="menuItem clickable noWrap" onClick={() => this.goTo('/sandbox')}>Sandbox</p>
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}

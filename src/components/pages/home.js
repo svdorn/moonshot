@@ -318,9 +318,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-    return {
-        notification: state.users.notification
-    };
+    return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
