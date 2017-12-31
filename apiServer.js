@@ -76,8 +76,101 @@ app.get('/userSession', function (req, res) {
 
 var Users = require('./models/users.js');
 var Pathways = require('./models/pathways.js');
+var Articles = require('./models/articles.js');
+var Videos = require('./models/videos.js');
+var Quizzes = require('./models/quizzes.js');
 
-// strictly sanitize, only allow bold and italics
+
+
+
+
+
+
+// --->>> EXAMPLE PATHWAY CREATION <<<---
+
+// const exampleVideo = {
+//     link: "https://www.youtube.com/watch?v=3IW3kAGcLM0"
+// }
+//
+// Videos.create(exampleVideo, function(err, video) {
+//     console.log(err);
+//     console.log(video);
+//
+//     const exampleQuiz = {
+//         name: "Big quiz",
+//         random: false,
+//         numQuestions: 1,
+//         questions: [{
+//             order: 1,
+//             options: [{
+//                 body: "What is the answer to life?",
+//                 answers: [{
+//                     body: "42",
+//                     correct: true
+//                 },
+//                 {
+//                     body: "6",
+//                     correct: false
+//                 }],
+//                 multipleCorrect: false,
+//                 needAllCorrect: true
+//             }]
+//         }]
+//     }
+//
+//     Quizzes.create(exampleQuiz, function(err2, quiz) {
+//         console.log(err2);
+//         console.log(quiz);
+//
+//         const examplePathway = {
+//             name: "Unity VR Development",
+//             previewImage: "/images/Unity_VR_Dev.jpg",
+//             sponsor: { name: "Holos", logo: "/Logos/holos.png" },
+//             estimatedCompletionTime: "18 Hours",
+//             deadline: new Date(2018, 11, 19, 0, 0, 0, 0),
+//             price: "Free",
+//             comments: [{ username: "frizzkitten", body: "amazing pathway, I learned so much stuff", date: new Date(2017, 11, 19, 11, 37, 5, 6) }],
+//             ratings: [{ username: "frizzkitten", rating: 4 }],
+//             avgRating: 4,
+//             tags: [ "Unity", "Game Development", "Virtual Reality" ],
+//             projects: [{
+//                 name: "Make a Bouncing Ball Game",
+//                 description: "Create a game where you drop a ball and it bounces.",
+//                 difficulty: "Easy",
+//                 estimatedTime: "2 Hours"
+//             }],
+//             steps: [
+//                 {
+//                     order: 1,
+//                     name: "Get started",
+//                     contentType: "video",
+//                     contentID: video._id,
+//                     comments: [{ username: "kelvinnkat", body: "what a great first step", date: new Date(2017, 9, 9, 1, 33, 2, 9) }]
+//                 },
+//                 {
+//                     order: 2,
+//                     name: "Review what you learned in the first step",
+//                     contentType: "quiz",
+//                     contentID: quiz._id,
+//                     comments: [{ username: "acethebetterone", body: "2 hard 4 me", date: new Date(2017, 6, 3, 1, 33, 2, 9) }]
+//                 }
+//             ]
+//         }
+//
+//         Pathways.create(examplePathway, function(err3, pathway) {
+//             console.log(err3);
+//             console.log(pathway);
+//         });
+//     })
+// });
+
+// --->>> END EXAMPLE PATHWAY CREATION <<<---
+
+
+
+
+
+// strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
     allowedTags: [ 'b', 'i', 'em', 'strong' ],
     allowedAttributes: []
