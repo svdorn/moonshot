@@ -16,9 +16,8 @@ class Home extends Component{
 
         let emptyPathway = {
             name: "",
-            image: "",
-            logo: "",
-            sponsorName: "",
+            previewImage: "",
+            sponsor: {name: "", logo: ""},
             completionTime: "",
             deadline: "",
             price: "",
@@ -30,18 +29,6 @@ class Home extends Component{
             // the backend
             pathways: [emptyPathway, emptyPathway, emptyPathway]
         }
-
-        console.log("getting top pathways")
-        axios.get("/api/topPathways", {
-            params: { numPathways: 3 }
-        }).then(function(res) {
-            console.log("Pathways result is")
-            console.log(res.data);
-            // this.setState({ pathways: res.data });
-            // console.log("State was set");
-        }).catch(function(err) {
-            console.log("error getting top pathways");
-        })
     }
 
     goTo (route)  {
@@ -53,28 +40,30 @@ class Home extends Component{
         window.scrollTo(0, 0);
     }
 
-    // componentDidMount() {
-    //     this.props.getTopPathways(3)
-    //     .then(function(res) {
-    //         this.setState({ pathways: res })
-    //     })
-    //     .err(function(err) {
-    //         console.log("error getting the top pathways", err);
-    //     });
-    // }
+    componentDidMount() {
+        axios.get("/api/topPathways", {
+            params: { numPathways: 3 }
+        }).then(res => {
+            this.setState({ pathways: res.data });
+        }).catch(function(err) {
+            console.log("error getting top pathways");
+        })
+    }
 
     render(){
         let key = 0;
         const pathwayPreviews = this.state.pathways.map(function(pathway) {
             key++;
+            const deadline = new Date(pathway.deadline);
+            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
                 <li><PathwayPreview
                     name = {pathway.name}
-                    image = {pathway.image}
-                    logo = {pathway.logo}
-                    sponsorName = {pathway.sponsorName}
+                    image = {pathway.previewImage}
+                    logo = {pathway.sponsor.logo}
+                    sponsorName = {pathway.sponsor.name}
                     completionTime = {pathway.completionTime}
-                    deadline = {pathway.deadline}
+                    deadline = {formattedDeadline}
                     price = {pathway.price}
                     _id = {pathway._id}
                     key = {key}

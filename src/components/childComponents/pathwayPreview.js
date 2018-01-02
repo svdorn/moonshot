@@ -28,8 +28,6 @@ class PathwayPreview extends Component {
 
         const iconStyle = {width:"40px", height:"40px"};
 
-        console.log("PATHWAY NAME IS: " + this.props.pathwayName);
-
         // axios.get('/api/pathway', {
         //     params: {
         //         name: this.props.pathwayName
@@ -48,7 +46,7 @@ class PathwayPreview extends Component {
                             width={270}
                             height={200}
                             alt="VR Image"
-                            src={"/images/" + this.props.image}
+                            src={this.props.image}
                         />
                     </div>
                     <h2>{this.props.name}</h2>
@@ -78,7 +76,7 @@ class PathwayPreview extends Component {
                     <div style={{position:"absolute", bottom:"5px", right:"20px"}}>
                         Sponsored by
                         <img
-                            src={"/images/" + this.props.logo}
+                            src={this.props.logo}
                             alt={this.props.sponsorName}
                             height={25}
                         />
