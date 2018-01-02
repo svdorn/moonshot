@@ -136,7 +136,7 @@ class ForBusiness extends Component {
                             label="Message"
                         /><br/>
                         <RaisedButton type="submit"
-                                      label="Send Email"
+                                      label="Contact Us"
                                       primary={true}
                                       className="button"
                         />

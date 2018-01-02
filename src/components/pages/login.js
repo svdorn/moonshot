@@ -73,7 +73,7 @@ class Login extends Component {
 
         console.log(user);
 
-        this.props.login(user)
+        this.props.login(user);
 
         console.log("here");
         console.log("current user is" + this.props.currentUser);
