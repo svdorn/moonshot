@@ -12,45 +12,18 @@ var pathwaysSchema = mongoose.Schema({
   ratings: [{ username: String, rating: Number }],
   avgRating: Number,
   tags: [ String ],
+  projects: [{
+      name: String,
+      description: String,
+      difficulty: String,
+      estimatedTime: String
+  }],
   steps: [{
       order: Number,
       name: String,
-      type: String,
-      video: {
-          name: String,
-          link: String
-      },
-      article: {
-          name: String,
-          link: String
-      },
-      quiz: {
-          name: String,
-          // if true, order of questions is ignored and all are randomized
-          random: Boolean,
-          numQuestions: Number,
-          questions: [{
-              order: Number,
-              // quiz should be different each time, so there are multiple
-              // questions at each question number
-              options: [{
-                  body: String,
-                  answers: [{
-                      body: String,
-                      correct: Boolean
-                  }],
-                  multipleCorrect: Boolean,
-                  needAllCorrect: Boolean
-              }]
-          }]
-      },
-      comments: [{ username: String, body: String, date: Date }],
-      projects: [{
-          name: String,
-          description: String,
-          difficulty: String,
-          estimatedTime: String
-      }]
+      contentType: String,
+      contentID: mongoose.Schema.Types.ObjectId,
+      comments: [{ username: String, body: String, date: Date }]
   }]
 });
 

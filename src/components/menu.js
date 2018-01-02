@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { signout, closeNotification } from "../actions/usersActions";
-import { getHomepageImages } from "../actions/imageactions";
 import { axios } from 'axios';
 
 const styles = {
@@ -87,7 +86,7 @@ class Menu extends Component {
                             />
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <p className="menuItem clickable noWrap" onClick={() => this.goTo('/')}>Home</p>
+                            <p className="menuItem clickable noWrap" onClick={() => this.goTo('/discover')}>Discover</p>
                             <p className="menuItem clickable noWrap" onClick={() => this.goTo('/sandbox')}>Sandbox</p>
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
@@ -131,7 +130,6 @@ class Menu extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         signout,
-        getHomepageImages,
         closeNotification
     }, dispatch);
 }
@@ -139,8 +137,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        isFetching: state.users.isFetching,
-        images: state.images.images
+        isFetching: state.users.isFetching
     };
 }
 

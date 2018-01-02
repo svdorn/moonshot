@@ -7,8 +7,29 @@ import { browserHistory } from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import { closeNotification } from "../../actions/usersActions";
+import axios from 'axios';
 
 class Home extends Component{
+
+    constructor(props) {
+        super(props);
+
+        let emptyPathway = {
+            name: "",
+            previewImage: "",
+            sponsor: {name: "", logo: ""},
+            estimatedCompletionTime: "",
+            deadline: "",
+            price: "",
+            _id: undefined
+        }
+
+        this.state = {
+            // three empty pathways until we get the top three pathways from
+            // the backend
+            pathways: [emptyPathway, emptyPathway, emptyPathway]
+        }
+    }
 
     goTo (route)  {
         // closes any notification
@@ -19,7 +40,41 @@ class Home extends Component{
         window.scrollTo(0, 0);
     }
 
+    componentDidMount() {
+        axios.get("/api/topPathways", {
+            params: { numPathways: 3 }
+        }).then(res => {
+            // make sure component is mounted before changing state
+            if (this.refs.home) {
+                this.setState({ pathways: res.data });
+            }
+        }).catch(function(err) {
+            console.log("error getting top pathways");
+        })
+    }
+
     render(){
+
+        // create the pathway previews
+        let pathwayKey = 0;
+        const pathwayPreviews = this.state.pathways.map(function(pathway) {
+            pathwayKey++;
+            const deadline = new Date(pathway.deadline);
+            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            return (
+                <li style={{verticalAlign: "top"}} key={pathwayKey}><PathwayPreview
+                    name = {pathway.name}
+                    image = {pathway.previewImage}
+                    logo = {pathway.sponsor.logo}
+                    sponsorName = {pathway.sponsor.name}
+                    completionTime = {pathway.estimatedCompletionTime}
+                    deadline = {formattedDeadline}
+                    price = {pathway.price}
+                    _id = {pathway._id}
+                /></li>
+            );
+        });
+
         const logosInfo = [
             {name: "amazon.png", height:"90px", left:"55%", top:"80%"},
             {name: "ArchVirtual.png", height:"50px", left:"70%", top:"57%"},
@@ -42,7 +97,7 @@ class Home extends Component{
         })
 
         return(
-            <div className='jsxWrapper'>
+            <div className='jsxWrapper' ref='home'>
                 <div className="fullHeight greenToBlue">
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
 
@@ -104,9 +159,7 @@ class Home extends Component{
                     </div>
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
-                            <li><PathwayPreview /></li>
-                            <li><PathwayPreview /></li>
-                            <li><PathwayPreview /></li>
+                            {pathwayPreviews}
                         </ul>
                     </div>
                 </div>
@@ -318,9 +371,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-    return {
-        notification: state.users.notification
-    };
+    return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
