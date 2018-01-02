@@ -141,13 +141,13 @@ class ForBusiness extends Component {
                 </div>
 
 
-                <div className="fullHeight" style={{textAlign:"center", height:"950px"}}>
+                <div className="fullHeight" style={{textAlign:"center", height:"1000px"}}>
                     <HomepageTriangles variation="2" />
                     <div style={{zIndex: 0}}>
                         <img
                             src="/images/TheMoonshotMethod.png"
                             alt="The Moonshot Method"
-                            style={{marginTop:"45px", marginBottom:"15px", width:"700px"}}
+                            style={{marginTop:"65px", marginBottom:"70px", width:"700px"}}
                         /><br/>
 
                         <div style={{...styles.purpleText, ...styles.leftLi}}>
@@ -164,7 +164,7 @@ class ForBusiness extends Component {
                             </div>
                         </div>
 
-                        <div style={{...styles.rightLi, ...styles.purpleText}}>
+                        <div style={{...styles.rightLi, ...styles.blueText}}>
                             <img
                                 src="/icons/TreeBlue.png"
                                 alt="Tree"
