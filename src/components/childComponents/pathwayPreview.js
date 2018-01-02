@@ -2,40 +2,8 @@ import React, { Component } from 'react';
 import axios from 'axios';
 
 class PathwayPreview extends Component {
-    // constructor(props) {
-    //     super(props);
-    //     this.state = {
-    //         name: "",
-    //         image: "",
-    //         logo: "",
-    //         sponsorName: "",
-    //         completionTime: "",
-    //         deadline: "",
-    //         price: ""
-    //     }
-    // }
-
-    // componentDidMount = NEED TO GET THE
-
     render() {
-        const pathwayName = "Unity Development";
-        const pathwayImage = "Unity_VR_Dev.jpg";
-        const companyLogo = "HolosLogo.png";
-        const companyName = "Holos";
-        const completionTime = "18 Hours";
-        const deadline = "12/28/2022";
-        const price = "Free";
-
         const iconStyle = {width:"40px", height:"40px"};
-
-        // axios.get('/api/pathway', {
-        //     params: {
-        //         name: this.props.pathwayName
-        //     }
-        // }).then(function(result) {
-        //
-        // });
-
 
         const titleDivStyle = {
             width: "100%",
@@ -102,8 +70,6 @@ class PathwayPreview extends Component {
             </div>
         )
     }
-
-
 }
 
 export default PathwayPreview;

@@ -51,9 +51,11 @@ class Home extends Component{
     }
 
     render(){
-        let key = 0;
+
+        // create the pathway previews
+        let pathwayKey = 0;
         const pathwayPreviews = this.state.pathways.map(function(pathway) {
-            key++;
+            pathwayKey++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
@@ -66,7 +68,7 @@ class Home extends Component{
                     deadline = {formattedDeadline}
                     price = {pathway.price}
                     _id = {pathway._id}
-                    key = {key}
+                    key = {pathwayKey}
                 /></li>
             );
         });
