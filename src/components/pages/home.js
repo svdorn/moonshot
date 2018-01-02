@@ -57,7 +57,7 @@ class Home extends Component{
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li><PathwayPreview
+                <li style={{verticalAlign: "top"}}><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
                     logo = {pathway.sponsor.logo}
