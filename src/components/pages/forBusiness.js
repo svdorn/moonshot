@@ -11,7 +11,27 @@ import HomepageTriangles from '../miscComponents/HomepageTriangles';
 const styles = {
     floatingLabelStyle: {
         color: '#00c3ff',
-    },
+    }, greenText: {
+        color: style.colors.moonshotGreenText
+    }, blueText: {
+        color: style.colors.moonshotMidBlue
+    }, purpleText: {
+        color: style.colors.moonshotPurple
+    }, bigFont: {
+        fontSize: "32px"
+    }, leftLi: {
+        float: "left",
+        textAlign: "left",
+        position: "relative",
+        marginLeft: "100px",
+        clear: "both"
+    }, rightLi: {
+        float: "right",
+        textAlign: "left",
+        position: "relative",
+        marginRight: "100px",
+        clear: "both"
+    }
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -105,20 +125,98 @@ class ForBusiness extends Component {
     render() {
         return (
             <div className="jsxWrapper">
-            <div className="fullHeight purpleToBlue">
-                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <div className="fullHeight purpleToBlue">
+                    <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
 
-                <div className="infoBox whiteText mediumText noWrap" style={{zIndex:"20"}}>
-                    Hire innovation.<br/>
-                    Source and evaluate<br/>
-                    <i>more</i> talent, for <i>less</i><br/>
-                    <button className="outlineButton"
-                        style={{backgroundColor:"transparent", border:"2px solid white"}}
-                        onClick={ () => this.scrollToForm() }>
-                        {"Let's begin"}
-                    </button>
+                    <div className="infoBox whiteText mediumText noWrap" style={{zIndex:"20"}}>
+                        Hire innovation.<br/>
+                        Source and evaluate<br/>
+                        <i>more</i> talent, for <i>less</i><br/>
+                        <button className="outlineButton"
+                            style={{backgroundColor:"transparent", border:"2px solid white"}}
+                            onClick={ () => this.scrollToForm() }>
+                            {"Let's begin"}
+                        </button>
+                    </div>
                 </div>
-            </div>
+
+
+                <div className="fullHeight" style={{textAlign:"center", height:"950px"}}>
+                    <HomepageTriangles variation="2" />
+                    <div style={{zIndex: 0}}>
+                        <img
+                            src="/images/TheMoonshotMethod.png"
+                            alt="The Moonshot Method"
+                            style={{marginTop:"45px", marginBottom:"15px", width:"700px"}}
+                        /><br/>
+
+                        <div style={{...styles.purpleText, ...styles.leftLi}}>
+                            <img
+                                src="/icons/GraduationHat.png"
+                                alt="Graduation Hat"
+                                style={{height:"60px", position:"absolute", top:"50%", marginTop:"-45px"}}
+                            />
+                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
+                                <h2>We Source<br/></h2>
+                                We find the most forward-thinking<br/>
+                                and talented college students<br/>
+                                to be potential applicants.
+                            </div>
+                        </div>
+
+                        <div style={{...styles.rightLi, ...styles.purpleText}}>
+                            <img
+                                src="/icons/TreeBlue.png"
+                                alt="Tree"
+                                style={{height:"90px", position:"absolute", top:"50%", marginTop:"-45px"}}
+                            />
+                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
+                                <h2>We Train<br/></h2>
+                                Pathways are a series of intensive<br/>
+                                courses, assessments, and projects<br/>
+                                curated by us, approved by you.<br/>
+                                Students are trained in market<br/>
+                                demanded skills that are not taught in<br/>
+                                traditional education.<br/>
+                            </div>
+                        </div>
+
+                        <div style={{...styles.leftLi, ...styles.greenText}}>
+                            <img
+                                src="/icons/PaperAndPencilGreen.png"
+                                alt="Paper and pencil"
+                                style={{height:"80px", position:"absolute", top:"50%", marginTop:"-45px"}}
+                            />
+                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
+                                <h2>We Evaluate<br/></h2>
+                                Using qualitative and quantitative<br/>
+                                metrics, we assess an individual{"'"}s<br/>
+                                performance on a pathway and<br/>
+                                compare them side by side with<br/>
+                                other candidates<br/>
+                            </div>
+                        </div>
+
+                        <div style={{...styles.rightLi, ...styles.purpleText}}>
+                            <img
+                                src="/icons/Badge.png"
+                                alt="Badge"
+                                style={{height:"90px", position:"absolute", top:"50%", marginTop:"-45px"}}
+                            />
+                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
+                                <h2>You Hire<br/></h2>
+                                After pathway completion, we send<br/>
+                                the candidates over to you. You can<br/>
+                                look over their metrics and contact<br/>
+                                them to determine if they are a<br/>
+                                good fit for you.<br/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
 
 
                 <div className="form" zDepth={2}>

@@ -36,7 +36,7 @@ class HomepageTriangles extends Component {
             whiteSpace = (
                 <div style={{width:"100%", height:"100%"}}>
                     <div style={{
-                        width: "40%",
+                        width: "50%",
                         height: "45%",
                         float: "right",
                         zIndex: "-5",
@@ -44,7 +44,7 @@ class HomepageTriangles extends Component {
                     }}/>
                     <div style={{ float: "right", height: "15%", width: "40%", clear: "both" }} />
                     <div style={{
-                        width: "40%",
+                        width: "50%",
                         height: "40%",
                         float: "right",
                         clear: "both",
