@@ -724,7 +724,10 @@ app.get('/topPathways', function(req, res) {
     const numPathways = parseInt(req.query.numPathways);
 
     // gets the most popular pathways, the number of pathways is numPathways
-    Pathways.find().sort({rating: -1}).limit(numPathways)
+    Pathways.find()
+    .sort({rating: -1})
+    .limit(numPathways)
+    .select("name previewImage sponsor estimatedCompletionTime deadline price")
     .exec(function(err, pathways) {
         if (err) {
             console.log("ERROR GETTING TOP PATHWAYS: ");

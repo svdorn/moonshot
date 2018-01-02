@@ -18,7 +18,7 @@ class Home extends Component{
             name: "",
             previewImage: "",
             sponsor: {name: "", logo: ""},
-            completionTime: "",
+            estimatedCompletionTime: "",
             deadline: "",
             price: "",
             _id: undefined
@@ -44,7 +44,10 @@ class Home extends Component{
         axios.get("/api/topPathways", {
             params: { numPathways: 3 }
         }).then(res => {
-            this.setState({ pathways: res.data });
+            // make sure component is mounted before changing state
+            if (this.refs.home) {
+                this.setState({ pathways: res.data });
+            }
         }).catch(function(err) {
             console.log("error getting top pathways");
         })
@@ -59,16 +62,15 @@ class Home extends Component{
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={{verticalAlign: "top"}}><PathwayPreview
+                <li style={{verticalAlign: "top"}} key={pathwayKey}><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
                     logo = {pathway.sponsor.logo}
                     sponsorName = {pathway.sponsor.name}
-                    completionTime = {pathway.completionTime}
+                    completionTime = {pathway.estimatedCompletionTime}
                     deadline = {formattedDeadline}
                     price = {pathway.price}
                     _id = {pathway._id}
-                    key = {pathwayKey}
                 /></li>
             );
         });
@@ -95,7 +97,7 @@ class Home extends Component{
         })
 
         return(
-            <div className='jsxWrapper'>
+            <div className='jsxWrapper' ref='home'>
                 <div className="fullHeight greenToBlue">
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
 
