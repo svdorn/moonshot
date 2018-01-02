@@ -291,7 +291,7 @@ app.post('/users/forBusinessEmail', function (req, res) {
 
     sendEmail(recipient, subject, content, function(success, msg) {
         if (success) {
-            res.json(msg);
+            res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
             res.status(500).send(msg);
         }
