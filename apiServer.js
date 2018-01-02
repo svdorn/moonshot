@@ -679,26 +679,55 @@ app.put('/users/changepassword/:_id', function (req, res) {
     });
 });
 
-//----->> GET IMAGES <<------
-app.get('/images', function (req, res) {
-    const imgFolder = __dirname + '/public/images/';
-    // REQUIRE FILE SYSTEM
-    const fs = require('fs');
-    // READ ALL FILES IN THE DIRECTORY
-    fs.readdir(imgFolder, function (err, files) {
+app.get('/topPathways', function(req, res) {
+    const numPathways = parseInt(req.query.numPathways);
+
+    // gets the most popular pathways, the number of pathways is numPathways
+    Pathways.find().sort({rating: -1}).limit(numPathways)
+    .exec(function(err, pathways) {
         if (err) {
-            return console.error(err);
+            console.log("ERROR GETTING TOP PATHWAYS: ");
+            console.log(err)
+            res.status(500).send("Not able to get top pathways");
+        } else if (pathways.length == 0) {
+            console.log("No pathways found");
+            res.status(500).send("No pathways found");
+        } else {
+            // if there weren't enough pathways
+            if ( pathways.length < numPathways ) {
+                for (let i = pathways.length; i < numPathways; i++) {
+                    // extend the pathways with the last pathway until you have
+                    // the number you wanted
+                    pathways.push(pathways[i-1]);
+                }
+            }
+            console.log(pathways);
+            res.json(pathways);
         }
-        //CREATE AN EMPTY ARRAY
-        const filesArr = [];
-        // ITERATE ALL IMAGES IN THE DIRECTORY AND ADD TO THE ARRAY
-        files.forEach(function (file) {
-            filesArr.push({name: file});
-        });
-        // SEND THE JSON RESPONSE WITH THE ARRAY
-        res.json(filesArr);
-    })
-})
+    });
+
+});
+
+//----->> GET IMAGES <<------
+// app.get('/images', function (req, res) {
+//     const imgFolder = __dirname + '/public/images/';
+//     // REQUIRE FILE SYSTEM
+//     const fs = require('fs');
+//     // READ ALL FILES IN THE DIRECTORY
+//     fs.readdir(imgFolder, function (err, files) {
+//         if (err) {
+//             return console.error(err);
+//         }
+//         //CREATE AN EMPTY ARRAY
+//         const filesArr = [];
+//         // ITERATE ALL IMAGES IN THE DIRECTORY AND ADD TO THE ARRAY
+//         files.forEach(function (file) {
+//             filesArr.push({name: file});
+//         });
+//         // SEND THE JSON RESPONSE WITH THE ARRAY
+//         res.json(filesArr);
+//     })
+// })
 
 // END APIs
 

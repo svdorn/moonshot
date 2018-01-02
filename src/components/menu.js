@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { signout, closeNotification } from "../actions/usersActions";
-import { getHomepageImages } from "../actions/imageactions";
 import { axios } from 'axios';
 
 const styles = {
@@ -130,7 +129,6 @@ class Menu extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         signout,
-        getHomepageImages,
         closeNotification
     }, dispatch);
 }
@@ -138,8 +136,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        isFetching: state.users.isFetching,
-        images: state.images.images
+        isFetching: state.users.isFetching
     };
 }
 

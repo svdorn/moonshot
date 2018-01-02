@@ -10,6 +10,5 @@ import { reducer as reducerForm } from 'redux-form';
 // comine the reducers
 export default combineReducers({
     form: reducerForm,
-    users: usersReducers,
-    images: imageReducers
+    users: usersReducers
 })

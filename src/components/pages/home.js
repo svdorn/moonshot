@@ -7,8 +7,42 @@ import { browserHistory } from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import { closeNotification } from "../../actions/usersActions";
+import axios from 'axios';
 
 class Home extends Component{
+
+    constructor(props) {
+        super(props);
+
+        let emptyPathway = {
+            name: "",
+            image: "",
+            logo: "",
+            sponsorName: "",
+            completionTime: "",
+            deadline: "",
+            price: "",
+            _id: undefined
+        }
+
+        this.state = {
+            // three empty pathways until we get the top three pathways from
+            // the backend
+            pathways: [emptyPathway, emptyPathway, emptyPathway]
+        }
+
+        console.log("getting top pathways")
+        axios.get("/api/topPathways", {
+            params: { numPathways: 3 }
+        }).then(function(res) {
+            console.log("Pathways result is")
+            console.log(res.data);
+            // this.setState({ pathways: res.data });
+            // console.log("State was set");
+        }).catch(function(err) {
+            console.log("error getting top pathways");
+        })
+    }
 
     goTo (route)  {
         // closes any notification
@@ -19,7 +53,35 @@ class Home extends Component{
         window.scrollTo(0, 0);
     }
 
+    // componentDidMount() {
+    //     this.props.getTopPathways(3)
+    //     .then(function(res) {
+    //         this.setState({ pathways: res })
+    //     })
+    //     .err(function(err) {
+    //         console.log("error getting the top pathways", err);
+    //     });
+    // }
+
     render(){
+        let key = 0;
+        const pathwayPreviews = this.state.pathways.map(function(pathway) {
+            key++;
+            return (
+                <li><PathwayPreview
+                    name = {pathway.name}
+                    image = {pathway.image}
+                    logo = {pathway.logo}
+                    sponsorName = {pathway.sponsorName}
+                    completionTime = {pathway.completionTime}
+                    deadline = {pathway.deadline}
+                    price = {pathway.price}
+                    _id = {pathway._id}
+                    key = {key}
+                /></li>
+            );
+        });
+
         const logosInfo = [
             {name: "amazon.png", height:"90px", left:"55%", top:"80%"},
             {name: "ArchVirtual.png", height:"50px", left:"70%", top:"57%"},
@@ -104,9 +166,7 @@ class Home extends Component{
                     </div>
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
-                            <li><PathwayPreview /></li>
-                            <li><PathwayPreview /></li>
-                            <li><PathwayPreview /></li>
+                            {pathwayPreviews}
                         </ul>
                     </div>
                 </div>
