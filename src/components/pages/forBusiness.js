@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postUser, getUsers} from '../../actions/usersActions';
+import {forBusiness, getUsers} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
@@ -24,15 +24,15 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     />
 );
 
-const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
+const renderMultilineTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
+        multiLine={true}
+        rows={2}
         hintText={label}
         floatingLabelText={label}
-        errorText={touched && error}
         floatingLabelStyle={styles.floatingLabelStyle}
         {...input}
         {...custom}
-        type="password"
     />
 );
 
@@ -40,10 +40,10 @@ const validate = values => {
     const errors = {};
     const requiredFields = [
         'name',
-        'username',
         'email',
-        'password',
-        'password2',
+        'company',
+        'title',
+        'phone'
     ];
     requiredFields.forEach(field => {
         if (!values[field]) {
@@ -53,49 +53,45 @@ const validate = values => {
     if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email address';
     }
-    if (values.password && values.password2 && (values.password != values.password2)) {
-        errors.password2 = 'Passwords must match';
-    }
     return errors
 };
 
-class Signup extends Component {
+class ForBusiness extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
 
         // Check if valid
-        const vals = this.props.formData.signup.values;
+        const vals = this.props.formData.forBusiness.values;
 
         // check if all fields have a value
-        let valsCounter = 0;
-        for (let i in vals) {
-            valsCounter++;
-        }
-
-        if (!vals || valsCounter !== 5) {
-            return;
-        }
+        // let valsCounter = 0;
+        // for (let i in vals) {
+        //     valsCounter++;
+        // }
+        //
+        // if (!vals || valsCounter !== 5) {
+        //     return;
+        // }
 
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
             return;
         }
-        if (vals.password != vals.password2) {
-            return;
-        }
-        const user = [{
-            name: this.props.formData.signup.values.name,
-            username: this.props.formData.signup.values.username,
-            userType: "student",
-            password: this.props.formData.signup.values.password,
-            email: this.props.formData.signup.values.email,
-        }];
 
-        console.log("POSTING USER: ", user);
+        const user = {
+            name: this.props.formData.forBusiness.values.name,
+            company: this.props.formData.forBusiness.values.company,
+            title: this.props.formData.forBusiness.values.title,
+            email: this.props.formData.forBusiness.values.email,
+            message: this.props.formData.forBusiness.values.message,
+            phone: this.props.formData.forBusiness.values.phone,
+        };
 
-        this.props.postUser(user);
+        console.log("SENDING EMAIL: ", user);
 
-        console.log("posted");
+        this.props.forBusiness(user);
+
+        console.log("email sent");
     }
 
     //name, username, email, password, confirm password, signup button
@@ -115,27 +111,32 @@ class Signup extends Component {
                             label="Full Name"
                         /><br/>
                         <Field
-                            name="username"
-                            component={renderTextField}
-                            label="Username"
-                        /><br/>
-                        <Field
                             name="email"
                             component={renderTextField}
                             label="Email"
                         /><br/>
                         <Field
-                            name="password"
-                            component={renderPasswordField}
-                            label="Password"
+                            name="phone"
+                            component={renderTextField}
+                            label="Phone Number"
                         /><br/>
                         <Field
-                            name="password2"
-                            component={renderPasswordField}
-                            label="Confirm Password"
+                            name="company"
+                            component={renderTextField}
+                            label="Company"
+                        /><br/>
+                        <Field
+                            name="title"
+                            component={renderTextField}
+                            label="Title"
+                        /><br/>
+                        <Field
+                            name="message"
+                            component={renderMultilineTextField}
+                            label="Message"
                         /><br/>
                         <RaisedButton type="submit"
-                                      label="Sign up"
+                                      label="Send Email"
                                       primary={true}
                                       className="button"
                         />
@@ -149,7 +150,7 @@ class Signup extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        postUser,
+        forBusiness,
         getUsers
     }, dispatch);
 }
@@ -161,9 +162,9 @@ function mapStateToProps(state) {
     };
 }
 
-Signup = reduxForm({
-    form: 'signup',
+ForBusiness = reduxForm({
+    form: 'forBusiness',
     validate,
-})(Signup);
+})(ForBusiness);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+export default connect(mapStateToProps, mapDispatchToProps)(ForBusiness);

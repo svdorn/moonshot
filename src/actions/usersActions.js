@@ -194,6 +194,19 @@ export function changePasswordForgot(user) {
     }
 }
 
+export function forBusiness(user){
+    return function(dispatch) {
+        axios.post("api/users/forBusinessEmail", user)
+            .then(function(response) {
+                dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}})
+                browserHistory.push('/');
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
 // DELETE A USER
 export function deleteUser(id) {
   return function(dispatch) {
