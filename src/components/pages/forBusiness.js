@@ -6,6 +6,7 @@ import {forBusiness, getUsers} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
     floatingLabelStyle: {
@@ -97,7 +98,23 @@ class ForBusiness extends Component {
     //name, username, email, password, confirm password, signup button
     render() {
         return (
-            <div>
+            <div className="jsxWrapper">
+            <div className="fullHeight purpleToBlue">
+                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+
+                <div className="infoBox whiteText mediumText noWrap" style={{zIndex:"20"}}>
+                    Hire innovation.<br/>
+                    Source and evaluate<br/>
+                    <i>more</i> talent, for <i>less</i><br/>
+                    <button className="outlineButton"
+                        style={{backgroundColor:"transparent", border:"2px solid white"}}
+                        onClick={() => this.goTo('/signup')}>
+                        {"Let's begin"}
+                    </button>
+                </div>
+            </div>
+
+
                 <div className="form" zDepth={2}>
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Businesses</h1>
