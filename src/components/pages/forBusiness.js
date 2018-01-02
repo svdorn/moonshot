@@ -95,6 +95,12 @@ class ForBusiness extends Component {
         console.log("email sent");
     }
 
+    scrollToForm() {
+        document.querySelector('.form').scrollIntoView({
+            behavior: 'smooth'
+        });
+    }
+
     //name, username, email, password, confirm password, signup button
     render() {
         return (
@@ -108,7 +114,7 @@ class ForBusiness extends Component {
                     <i>more</i> talent, for <i>less</i><br/>
                     <button className="outlineButton"
                         style={{backgroundColor:"transparent", border:"2px solid white"}}
-                        onClick={() => this.goTo('/signup')}>
+                        onClick={ () => this.scrollToForm() }>
                         {"Let's begin"}
                     </button>
                 </div>
