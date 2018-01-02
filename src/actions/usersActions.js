@@ -199,6 +199,7 @@ export function forBusiness(user){
         axios.post("api/users/forBusinessEmail", user)
             .then(function(response) {
                 dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}})
+                browserHistory.push('/');
             })
             .catch(function(err) {
                 dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
