@@ -36,6 +36,7 @@ class Menu extends Component {
         } else if (value === 2) {
             this.goTo('/settings');
         } else {
+            value = 1;
             this.props.signout();
             this.goTo('/');
         }
