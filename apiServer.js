@@ -258,6 +258,46 @@ app.post('/sendVerificationEmail', function (req, res) {
     });
 });
 
+// SEND EMAIL FOR FOR BUSINESS
+app.post('/users/forBusinessEmail', function (req, res) {
+
+    let message = "None";
+    if (req.body.message) {
+        message = req.body.message;
+    }
+    let recipient = "kyle.treige@moonshotlearning.org";
+    let subject = 'Moonshot Sales Lead - From For Business Page';
+    let content = "<div>"
+        + "<h3>Sales Lead from For Business Page:</h3>"
+        + "<p>Name: "
+        + req.body.name
+        + "</p>"
+        + "<p>Company: "
+        + req.body.company
+        + "</p>"
+        + "<p>Title: "
+        + req.body.title
+        + "</p>"
+        + "<p>Email: "
+        + req.body.email
+        + "</p>"
+        + "<p>Phone Number: "
+        + req.body.phone
+        + "</p>"
+        + "<p>Message: "
+        + message
+        + "</p>"
+        + "</div>";
+
+    sendEmail(recipient, subject, content, function(success, msg) {
+        if (success) {
+            res.json(msg);
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+});
+
 // SEND EMAIL FOR PASSWORD RESET
 app.post('/forgotPassword', function (req,res) {
 
@@ -311,6 +351,7 @@ app.post('/forgotPassword', function (req,res) {
 });
 // callback needs to be a function of a success boolean and string to return
 function sendEmail(recipients, subject, content, callback) {
+    console.log("here");
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
     nodemailer.createTestAccount((err, account) => {
