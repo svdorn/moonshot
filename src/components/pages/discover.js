@@ -20,6 +20,38 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
 );
 
 class Discover extends Component{
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            explorePathways: [],
+            featuredPathways: []
+        }
+    }
+
+    componentDidMount() {
+        axios.get("/api/search", {
+            params: { searchParam: {} }
+        }).then(res => {
+            // make sure component is mounted before changing state
+            if (this.refs.discover) {
+                this.setState({ explorePathways: res.data });
+            }
+        }).catch(function(err) {
+            console.log("error getting explore pathways");
+        })
+
+        axios.get("/api/search", {
+            params: { searchParam: {} }
+        }).then(res => {
+            // make sure component is mounted before changing state
+            if (this.refs.discover) {
+                this.setState({ featuredPathways: res.data });
+            }
+        }).catch(function(err) {
+            console.log("error getting featured pathways");
+        })
+    }
 
     goTo (route)  {
         // closes any notification
@@ -47,8 +79,55 @@ class Discover extends Component{
     }
 
     render(){
+        // create the pathway previews
+        let pathwayKey = 0;
+        const explorePathwayPreviews = this.state.explorePathways.map(function(pathway) {
+            pathwayKey++;
+            const deadline = new Date(pathway.deadline);
+            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            return (
+                <li style={{verticalAlign: "top"}} key={pathwayKey}><PathwayPreview
+                    name = {pathway.name}
+                    image = {pathway.previewImage}
+                    logo = {pathway.sponsor.logo}
+                    sponsorName = {pathway.sponsor.name}
+                    completionTime = {pathway.estimatedCompletionTime}
+                    deadline = {formattedDeadline}
+                    price = {pathway.price}
+                    _id = {pathway._id}
+                /></li>
+            );
+        });
+
+        // create the pathway previews
+        pathwayKey = 0;
+        const featuredPathwayPreviews = this.state.featuredPathways.map(function(pathway) {
+            pathwayKey++;
+            const deadline = new Date(pathway.deadline);
+            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            return (
+                <li style={{verticalAlign: "top"}} key={pathwayKey}><PathwayPreview
+                    name = {pathway.name}
+                    image = {pathway.previewImage}
+                    logo = {pathway.sponsor.logo}
+                    sponsorName = {pathway.sponsor.name}
+                    completionTime = {pathway.estimatedCompletionTime}
+                    deadline = {formattedDeadline}
+                    price = {pathway.price}
+                    _id = {pathway._id}
+                /></li>
+            );
+        });
+
+
+
+
+
+
+
+
         return(
-            <div className='jsxWrapper'>
+            <div className='jsxWrapper' ref='discover'>
                 <div className='fullHeight greenToBlue'>
                     <h1>Discover cool pathways</h1>
                     <Field
@@ -59,9 +138,12 @@ class Discover extends Component{
                     />
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
-                            <li><Category /></li>
-                            <li><Category /></li>
-                            <li><Category /></li>
+                            {featuredPathwayPreviews}
+                        </ul>
+                    </div>
+                    <div className="pathwayPrevListContainer">
+                        <ul className="horizCenteredList pathwayPrevList">
+                            {explorePathwayPreviews}
                         </ul>
                     </div>
                 </div>
