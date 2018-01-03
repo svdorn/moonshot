@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {forBusiness, getUsers} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper, CircularProgress } from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress, Divider } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
@@ -234,6 +234,9 @@ class ForBusiness extends Component {
                             We <u>source</u> the talent and <u>create</u><br/>
                             a full assessment based on the skills you're hiring for.<br/>
                             More information to make better decisions.
+                        </h2>
+                        <h2 className="whiteText">
+                            Contact Us
                         </h2>
                         <Field
                             name="name"
