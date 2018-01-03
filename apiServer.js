@@ -123,21 +123,21 @@ var Quizzes = require('./models/quizzes.js');
 //         console.log(quiz);
 //
 //         const examplePathway = {
-//             name: "Unity VR Development",
-//             previewImage: "/images/Unity_VR_Dev.jpg",
-//             sponsor: { name: "Holos", logo: "/Logos/holos.png" },
-//             estimatedCompletionTime: "18 Hours",
-//             deadline: new Date(2018, 11, 19, 0, 0, 0, 0),
+//             name: "Create Video Game AI",
+//             previewImage: "/images/Mortal_Kombat.png",
+//             sponsor: { name: "Blizzard", logo: "/Logos/Blizzard.png" },
+//             estimatedCompletionTime: "16 Hours",
+//             deadline: new Date(2018, 7, 6, 0, 0, 0, 0),
 //             price: "Free",
 //             comments: [{ username: "frizzkitten", body: "amazing pathway, I learned so much stuff", date: new Date(2017, 11, 19, 11, 37, 5, 6) }],
-//             ratings: [{ username: "frizzkitten", rating: 4 }],
-//             avgRating: 4,
-//             tags: [ "Unity", "Game Development", "Virtual Reality" ],
+//             ratings: [{ username: "frizzkitten", rating: 3 }, { username: "kelvinnkat", rating: 2 }],
+//             avgRating: 2.5,
+//             tags: [ "Artifical Intelligence", "Programming", "Video Games" ],
 //             projects: [{
-//                 name: "Make a Bouncing Ball Game",
-//                 description: "Create a game where you drop a ball and it bounces.",
-//                 difficulty: "Easy",
-//                 estimatedTime: "2 Hours"
+//                 name: "Make a Dota 2 AI",
+//                 description: "Have it beat Elon Musk's",
+//                 difficulty: "Hard",
+//                 estimatedTime: "17 Hours"
 //             }],
 //             steps: [
 //                 {

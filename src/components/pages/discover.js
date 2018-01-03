@@ -9,6 +9,27 @@ import Category from '../childComponents/category'
 import { closeNotification } from "../../actions/usersActions";
 
 class Discover extends Component{
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            explorePathways: [],
+            featuredPathways: []
+        }
+    }
+
+    componentDidMount() {
+        axios.get("/api/search", {
+            params: { numPathways: 3 }
+        }).then(res => {
+            // make sure component is mounted before changing state
+            if (this.refs.home) {
+                this.setState({ pathways: res.data });
+            }
+        }).catch(function(err) {
+            console.log("error getting top pathways");
+        })
+    }
 
     goTo (route)  {
         // closes any notification
