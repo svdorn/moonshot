@@ -66,7 +66,7 @@ class Discover extends Component{
     onSearchChange(term) {
         this.setState({...this.state, term: term});
 
-        if (term === undefined || term === "") {
+        if (term === undefined) {
             //don't search
             console.log("search box is empty");
         }

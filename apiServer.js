@@ -758,7 +758,8 @@ app.get('/search', function(req, res) {
     let query;
     console.log("search term is");
     console.log(req.query.searchTerm);
-    if (req.query.searchTerm) {
+    const term = req.query.searchTerm;
+    if (term && term !== "" ) {
         // if there is a search term, search using that
         const termRegex = new RegExp(req.query.searchTerm);
         query = { name: termRegex }
