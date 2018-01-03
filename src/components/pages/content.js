@@ -49,8 +49,7 @@ class Content extends Component {
                 </Dialog>
                 <Paper className="form" zDepth={2}>
                     <h1>Sandbox</h1>
-                    <RaisedButton onClick={this.handleOpen}>
-                        <Card>
+                        <Card className="clickable" onClick={this.handleOpen}>
                             <CardHeader
                                 title="Unity Dev"
                             />
@@ -63,7 +62,6 @@ class Content extends Component {
                                 Basic description of youtube thing here.
                             </CardText>
                         </Card>
-                    </RaisedButton>
                 </Paper>
             </div>
         );
