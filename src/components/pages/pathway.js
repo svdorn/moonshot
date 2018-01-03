@@ -20,11 +20,7 @@ class Pathway extends Component {
     componentDidMount() {
         console.log(this.props.params._id);
         const id = this.props.params._id;
-        axios.get("/api/search", {
-            params: {
-                searchTerm: term
-            }
-        })
+
         axios.get("/api/getPathwayById", {
             params: {
                 _id: id
@@ -35,7 +31,7 @@ class Pathway extends Component {
             // make sure component is mounted before changing state
             this.setState({pathway: res.data});
         }).catch(function(err) {
-            console.log("error getting searched for pathways");
+            console.log("error getting searched for pathw");
         })
     }
 
