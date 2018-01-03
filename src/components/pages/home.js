@@ -256,7 +256,7 @@ class Home extends Component{
                                         height:"90px",
                                         position:"absolute",
                                         marginTop:"20px",
-                                        marginLeft:"-190px"
+                                        marginLeft:"-200px"
                                     }}
                                 />
                                 <img
