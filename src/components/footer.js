@@ -32,12 +32,12 @@ class Footer extends Component {
                                         height={20}
                                         src="/logos/Facebook.png"/>
                                 </a>
-                                <a href="https://www.facebook.com/MoonshotLearning/" target="_blank"
+                                <a href="https://twitter.com/moonshotteched" target="_blank"
                                    style={{marginLeft: "10px"}}>
                                     <img
                                         width={20}
                                         height={20}
-                                        src="/logos/Instagram.png"/>
+                                        src="/logos/Twitter.png"/>
                                 </a>
                                 <a href="https://www.linkedin.com/company/18233111/" target="_blank"
                                    style={{marginLeft: "10px"}}>
