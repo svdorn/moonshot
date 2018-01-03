@@ -131,6 +131,24 @@ class Discover extends Component{
             );
         });
 
+        const style = {
+            pathwaySeparator: {
+                width: "80%",
+                margin: "30px auto",
+                textAlign: "center"
+            },
+            pathwaySeparatorText: {
+                padding: "0px 40px",
+                backgroundColor: "white",
+                display: "inline-block"
+            },
+            pathwaySeparatorLine: {
+                width: "100%",
+                height: "5px",
+                backgroundColor: "blue"
+            }
+        }
+
         return(
             <div className='jsxWrapper' ref='discover'>
                 <div className="headerSpace greenToBlue" />
@@ -142,6 +160,12 @@ class Discover extends Component{
                     />
                 </div>
                 <div>
+                    <div style={style.pathwaySeparator}>
+                        <div style={style.pathwaySeparatorLine} />
+                        <div style={style.pathwaySeparatorText}>
+                            Explore Featured Pathways
+                        </div>
+                    </div>
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
                             {featuredPathwayPreviews}
