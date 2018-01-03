@@ -34,7 +34,7 @@ const routes = (
         <Route path="/forgotPassword" component={ForgotPassword}/>
         <Route path="/changePassword" component={ChangePassword} />
         <Route path="/discover" component={Discover} />
-        <Route path="/pathway/:id" component={Pathway} />
+        <Route path="/pathway/:_id" component={Pathway}/>
     </Route>
   </Router>
 );

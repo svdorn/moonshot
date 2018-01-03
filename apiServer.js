@@ -63,7 +63,7 @@ app.get('/userSession', function (req, res) {
         // TODO this could be a source of slowdown, if site is running too slow
         // consider changing the session to hold the entire user. This will take
         // more memory but will be faster
-        getUserByQuery({_id: req.session.userId}, function(user) {
+        getUserByQuery({_id: req.session.userId}, function (user) {
             res.json(user);
         })
     }
@@ -79,11 +79,6 @@ var Pathways = require('./models/pathways.js');
 var Articles = require('./models/articles.js');
 var Videos = require('./models/videos.js');
 var Quizzes = require('./models/quizzes.js');
-
-
-
-
-
 
 
 // --->>> EXAMPLE PATHWAY CREATION <<<---
@@ -167,12 +162,9 @@ var Quizzes = require('./models/quizzes.js');
 // --->>> END EXAMPLE PATHWAY CREATION <<<---
 
 
-
-
-
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
-    allowedTags: [ 'b', 'i', 'em', 'strong' ],
+    allowedTags: ['b', 'i', 'em', 'strong'],
     allowedAttributes: []
 }
 
@@ -183,7 +175,7 @@ app.post('/users', function (req, res) {
     // sanitize user info
     for (var prop in user) {
         // skip loop if the property is from prototype
-        if(!user.hasOwnProperty(prop)) continue;
+        if (!user.hasOwnProperty(prop)) continue;
         if (typeof user[prop] === "string") {
             user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
         }
@@ -288,7 +280,7 @@ app.post('/users/changePasswordForgot', function (req, res) {
         console.log(user.username);
         const time = Date.now() - user.time;
         console.log("time is : " + time);
-        if (time > (1*60*60*1000)) {
+        if (time > (1 * 60 * 60 * 1000)) {
             res.status(401).send("Time ran out, try sending email again");
         }
 
@@ -341,7 +333,7 @@ app.post('/sendVerificationEmail', function (req, res) {
             + user.verificationToken
             + "'>Click me</a>";
 
-        sendEmail(recipient, subject, content, function(success, msg) {
+        sendEmail(recipient, subject, content, function (success, msg) {
             if (success) {
                 res.json(msg);
             } else {
@@ -382,7 +374,7 @@ app.post('/users/forBusinessEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipient, subject, content, function(success, msg) {
+    sendEmail(recipient, subject, content, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
@@ -392,12 +384,12 @@ app.post('/users/forBusinessEmail', function (req, res) {
 });
 
 // SEND EMAIL FOR PASSWORD RESET
-app.post('/forgotPassword', function (req,res) {
+app.post('/forgotPassword', function (req, res) {
 
     let email = sanitizeHtml(req.body.email, sanitizeOptions);
     let query = {email: email};
 
-    const user = getUserByQuery(query, function(user) {
+    const user = getUserByQuery(query, function (user) {
         if (user == undefined) {
             res.status(401).send("Cannot find user");
         } else {
@@ -431,7 +423,7 @@ app.post('/forgotPassword', function (req,res) {
                     + "<a href='http://localhost:3000/changePassword?"
                     + newPasswordToken
                     + "'>Click me</a>";
-                sendEmail(recipient, subject, content, function(success, msg) {
+                sendEmail(recipient, subject, content, function (success, msg) {
                     if (success) {
                         res.json(msg);
                     } else {
@@ -442,6 +434,7 @@ app.post('/forgotPassword', function (req,res) {
         }
     })
 });
+
 // callback needs to be a function of a success boolean and string to return
 function sendEmail(recipients, subject, content, callback) {
     console.log("here");
@@ -489,7 +482,7 @@ function sendEmail(recipients, subject, content, callback) {
 
 app.post('/getUserByQuery', function (req, res) {
     const query = sanitizeHtml(req.body.query, sanitizeOptions);
-    const user = getUserByQuery(query, function(user) {
+    const user = getUserByQuery(query, function (user) {
         res.json(user);
     });
 });
@@ -534,7 +527,7 @@ app.post('/login', function (req, res) {
         }
         console.log("users pass: " + user.password);
 
-        bcrypt.compare(password, user.password, function(passwordError, passwordsMatch) {
+        bcrypt.compare(password, user.password, function (passwordError, passwordsMatch) {
             // if hashing password fails
             if (passwordError) {
                 console.log("error hashing password");
@@ -581,7 +574,7 @@ app.get('/users', function (req, res) {
 
 //----->> DELETE USER <<------
 app.delete('/users/:_id', function (req, res) {
-    var query = { _id: sanitizeHtml(req.params._id, sanitizeOptions) };
+    var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
 
     Users.remove(query, function (err, user) {
         if (err) {
@@ -598,13 +591,13 @@ app.put('/users/:_id', function (req, res) {
     // sanitize user info
     for (var prop in user) {
         // skip loop if the property is from prototype
-        if(!user.hasOwnProperty(prop)) continue;
+        if (!user.hasOwnProperty(prop)) continue;
         if (typeof user[prop] === "string") {
             user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
         }
     }
 
-    var query = { _id: sanitizeHtml(req.params._id, sanitizeOptions) };
+    var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
     console.log("in api server");
     console.log(user);
     console.log(query);
@@ -624,7 +617,7 @@ app.put('/users/:_id', function (req, res) {
     console.log(findQuery);
     Users.findOne(findQuery, function (err, foundUser) {
         console.log("inside");
-        if (err){
+        if (err) {
             console.log(err);
         }
         let bool = false;
@@ -656,12 +649,12 @@ app.put('/users/:_id', function (req, res) {
 //----->> CHANGE PASSWORD <<------
 app.put('/users/changepassword/:_id', function (req, res) {
     var user = req.body;
-    var query = { _id: sanitizeHtml(req.params._id, sanitizeOptions) };
+    var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
 
     // sanitize user info
     for (var prop in user) {
         // skip loop if the property is from prototype
-        if(!user.hasOwnProperty(prop)) continue;
+        if (!user.hasOwnProperty(prop)) continue;
         if (typeof user[prop] === "string") {
             user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
         }
@@ -673,7 +666,7 @@ app.put('/users/changepassword/:_id', function (req, res) {
         bcrypt.hash(user.password, salt, function (err, hash) {
             // change the stored password to be the hash
             var update = {
-                $set : {
+                $set: {
                     password: hash
                 }
             }
@@ -721,48 +714,64 @@ app.put('/users/changepassword/:_id', function (req, res) {
 });
 
 //----->> GET TOP PATHWAYS <<------
-app.get('/topPathways', function(req, res) {
+app.get('/topPathways', function (req, res) {
     const numPathways = parseInt(req.query.numPathways);
 
     // gets the most popular pathways, the number of pathways is numPathways
     Pathways.find()
-    .sort({rating: -1})
-    .limit(numPathways)
-    .select("name previewImage sponsor estimatedCompletionTime deadline price")
-    .exec(function(err, pathways) {
-        if (err) {
-            console.log("ERROR GETTING TOP PATHWAYS: ");
-            console.log(err)
-            res.status(500).send("Not able to get top pathways");
-        } else if (pathways.length == 0) {
-            console.log("No pathways found");
-            res.status(500).send("No pathways found");
-        } else {
-            // if there weren't enough pathways
-            if ( pathways.length < numPathways ) {
-                for (let i = pathways.length; i < numPathways; i++) {
-                    // extend the pathways with the last pathway until you have
-                    // the number you wanted
-                    pathways.push(pathways[i-1]);
+        .sort({rating: -1})
+        .limit(numPathways)
+        .select("name previewImage sponsor estimatedCompletionTime deadline price")
+        .exec(function (err, pathways) {
+            if (err) {
+                console.log("ERROR GETTING TOP PATHWAYS: ");
+                console.log(err)
+                res.status(500).send("Not able to get top pathways");
+            } else if (pathways.length == 0) {
+                console.log("No pathways found");
+                res.status(500).send("No pathways found");
+            } else {
+                // if there weren't enough pathways
+                if (pathways.length < numPathways) {
+                    for (let i = pathways.length; i < numPathways; i++) {
+                        // extend the pathways with the last pathway until you have
+                        // the number you wanted
+                        pathways.push(pathways[i - 1]);
+                    }
                 }
+                console.log(pathways);
+                res.json(pathways);
             }
-            console.log(pathways);
-            res.json(pathways);
-        }
-    });
+        });
 
 });
 
+//----->> GET PATHWAY BY ID <<-----
+app.get('/getPathwayById', function (req, res) {
+    console.log("here");
+    const _id = req.query._id;
+    const query = {_id: _id};
+
+    Pathways.findOne(query, function (err, pathway) {
+        if (err) {
+            console.log("error in get pathway by id")
+        } else {
+            res.json(pathway);
+        }
+
+    })
+});
+
 //----->> SEARCH PATHWAYS <<------
-app.get('/search', function(req, res) {
+app.get('/search', function (req, res) {
     let query;
     console.log("search term is");
     console.log(req.query.searchTerm);
     const term = req.query.searchTerm;
-    if (term && term !== "" ) {
+    if (term && term !== "") {
         // if there is a search term, search using that
         const termRegex = new RegExp(req.query.searchTerm);
-        query = { name: termRegex }
+        query = {name: termRegex}
     } else {
         // if there is no search term, a query must be given
     }
@@ -776,18 +785,18 @@ app.get('/search', function(req, res) {
     const select = "name previewImage sponsor estimatedCompletionTime deadline price";
 
     Pathways.find(query)
-    .limit(limit)
-    .sort(sort)
-    .select(select)
-    .exec(function(err, pathways) {
-       if (err) {
-           console.log("error getting searched-for pathways", err);
-           res.status(500).send("Error getting searched-for pathways");
-       } else {
-           console.log(pathways);
-           res.json(pathways);
-       }
-    })
+        .limit(limit)
+        .sort(sort)
+        .select(select)
+        .exec(function (err, pathways) {
+            if (err) {
+                console.log("error getting searched-for pathways", err);
+                res.status(500).send("Error getting searched-for pathways");
+            } else {
+                console.log(pathways);
+                res.json(pathways);
+            }
+        })
 
     // Pathways.find(query, function (err, pathways) {
     //     if (err){

@@ -6,9 +6,40 @@ import {forBusiness, getUsers} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Divider } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
+import axios from 'axios';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 class Pathway extends Component {
+    constructor(props){
+        super(props);
+        this.state = {
+            pathway: {},
+        }
+    }
+
+    componentDidMount() {
+        console.log(this.props.params._id);
+        const id = this.props.params._id;
+        axios.get("/api/search", {
+            params: {
+                searchTerm: term
+            }
+        })
+        axios.get("/api/getPathwayById", {
+            params: {
+                _id: id
+            }
+        }).then(res => {
+            console.log("resultant pathway:");
+            console.log(res.data);
+            // make sure component is mounted before changing state
+            this.setState({pathway: res.data});
+        }).catch(function(err) {
+            console.log("error getting searched for pathways");
+        })
+    }
+
+
     render() {
         return (
             <div className="jsxWrapper">
