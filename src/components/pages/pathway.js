@@ -95,7 +95,7 @@ class Pathway extends Component {
                         </div>
                     </div>
 
-                    : null}
+                    : <CircularProgress/>}
             </div>
         );
     }
