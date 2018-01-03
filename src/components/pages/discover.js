@@ -93,13 +93,14 @@ class Discover extends Component{
 
     render(){
         // create the pathway previews
+        let self = this;
         let pathwayKey = 0;
         const explorePathwayPreviews = this.state.explorePathways.map(function(pathway) {
             pathwayKey++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={{verticalAlign: "top"}} key={pathwayKey}><PathwayPreview
+                <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
                     logo = {pathway.sponsor.logo}
@@ -119,7 +120,7 @@ class Discover extends Component{
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={{verticalAlign: "top"}} key={pathwayKey}><PathwayPreview
+                <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
                     logo = {pathway.sponsor.logo}

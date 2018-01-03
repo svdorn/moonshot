@@ -18,8 +18,6 @@ class Pathway extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.params._id);
-        console.log("HERE");
         const id = this.props.params._id;
 
         axios.get("/api/getPathwayById", {
@@ -27,9 +25,6 @@ class Pathway extends Component {
                 _id: id
             }
         }).then(res => {
-            console.log("resultant pathway:");
-            console.log(res.data);
-            // make sure component is mounted before changing state
             this.setState({pathway: res.data});
         }).catch(function(err) {
             console.log("error getting searched for pathw");
@@ -60,10 +55,4 @@ function mapDispatchToProps(dispatch) {
     }, dispatch);
 }
 
-function mapStateToProps(state) {
-    return {
-
-    };
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Pathway);
+export default connect(null, mapDispatchToProps)(Pathway);
