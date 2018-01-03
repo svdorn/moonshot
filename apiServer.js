@@ -755,14 +755,45 @@ app.get('/topPathways', function(req, res) {
 
 //----->> SEARCH PATHWAYS <<------
 app.get('/search', function(req, res) {
-   const query = req.body.searchParam;
+    let query;
+    console.log("search term is");
+    console.log(req.query.searchTerm);
+    if (req.query.searchTerm) {
+        // if there is a search term, search using that
+        const termRegex = new RegExp(req.query.searchTerm);
+        query = { name: termRegex }
+    } else {
+        // if there is no search term, a query must be given
+    }
+    const queryNOTYET = req.body.query;
+    const limitNOTYET = req.body.limit;
+    const sortNOTYET = req.body.sort;
+    const selectNOTYET = req.body.select;
 
-   Pathways.find(query, function (err, pathways) {
-       if (err){
-           console.log(err);
+    const limit = 3;
+    const sort = {};
+    const select = "name previewImage sponsor estimatedCompletionTime deadline price";
+
+    Pathways.find(query)
+    .limit(limit)
+    .sort(sort)
+    .select(select)
+    .exec(function(err, pathways) {
+       if (err) {
+           console.log("error getting searched-for pathways", err);
+           res.status(500).send("Error getting searched-for pathways");
+       } else {
+           console.log(pathways);
+           res.json(pathways);
        }
-       res.json(pathways);
-   })
+    })
+
+    // Pathways.find(query, function (err, pathways) {
+    //     if (err){
+    //         console.log(err);
+    //     }
+    //     res.json(pathways);
+    // })
 });
 
 //----->> GET IMAGES <<------

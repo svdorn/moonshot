@@ -32,7 +32,7 @@ class Discover extends Component{
 
     componentDidMount() {
         axios.get("/api/search", {
-            params: { searchParam: {} }
+            params: {  }
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.discover) {
@@ -43,7 +43,7 @@ class Discover extends Component{
         })
 
         axios.get("/api/search", {
-            params: { searchParam: {} }
+            params: {  }
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.discover) {
@@ -63,25 +63,6 @@ class Discover extends Component{
         window.scrollTo(0, 0);
     }
 
-    onSearchChange() {
-        console.log("here");
-        console.log(this.props.formData.discover.values.search);
-        // const param = this.props.formData.discover.values.search;
-        //
-        // if (param === undefined || param === '') {
-        //     //don't search
-        // }
-        // axios.get("/api/search", {
-        //     params: { searchParam: param }
-        // }).then(res => {
-        //     // make sure component is mounted before changing state
-        //     if (this.refs.discover) {
-        //         this.setState({ featuredPathways: res.data });
-        //     }
-        // }).catch(function(err) {
-        //     console.log("error getting featured pathways");
-        // })
-    }
     onSearchChange(term) {
         this.setState({...this.state, term: term});
 
@@ -90,15 +71,17 @@ class Discover extends Component{
             console.log("search box is empty");
         }
         else {
-
+            console.log("about to search")
             // CURRENTLY THERE IS NO SEARCH PARAM, MUST INCLUDE TERM SOMEWHERE
             axios.get("/api/search", {
                 params: {
-                    searchParam: {}
+                    searchTerm: term
                 }
             }).then(res => {
+                console.log("resultant pathways:");
+                console.log(res.data)
                 // make sure component is mounted before changing state
-                if (this.refs.home) {
+                if (this.refs.discover) {
                     this.setState({ explorePathways: res.data });
                 }
             }).catch(function(err) {
@@ -152,6 +135,13 @@ class Discover extends Component{
             <div className='jsxWrapper' ref='discover'>
                 <div className='fullHeight greenToBlue'>
                     <h1>Discover cool pathways</h1>
+
+                    <div className="pathwayPrevListContainer">
+                        <ul className="horizCenteredList pathwayPrevList">
+                            {featuredPathwayPreviews}
+                        </ul>
+                    </div>
+
                     <Field
                         name="search"
                         component={renderTextField}
@@ -159,11 +149,7 @@ class Discover extends Component{
                         onChange={event => this.onSearchChange(event.target.value)}
                         value={this.state.searchTerm}
                     />
-                    <div className="pathwayPrevListContainer">
-                        <ul className="horizCenteredList pathwayPrevList">
-                            {featuredPathwayPreviews}
-                        </ul>
-                    </div>
+
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
                             {explorePathwayPreviews}
