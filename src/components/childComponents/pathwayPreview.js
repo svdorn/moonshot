@@ -1,8 +1,23 @@
 import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
 import axios from 'axios';
 
 class PathwayPreview extends Component {
+    constructor(props){
+        super(props);
+    }
+
+    goTo (route)  {
+        // closes any notification
+        this.props.closeNotification();
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
+    }
+
     render() {
+
         const iconStyle = {width:"40px", height:"40px"};
 
         const titleDivStyle = {
@@ -17,6 +32,7 @@ class PathwayPreview extends Component {
             margin: "auto",
             fontSize: "30px"
         };
+
 
         return (
             <div className="gradientBorder clickableNoUnderline" style={{height:"440px", width:"310px"}}>
