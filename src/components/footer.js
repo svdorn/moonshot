@@ -1,25 +1,8 @@
 "use strict"
 import React, {Component} from 'react';
 import {browserHistory} from 'react-router';
-import {Toolbar, ToolbarTitle, FlatButton, ToolbarGroup} from 'material-ui';
 
 class Footer extends Component {
-
-
-    // <Toolbar style={{textAlign:'center'}}>
-    //     <ToolbarTitle
-    //         text="Copyright 2017 Moonshot Learning Inc. All rights reserved."
-    //         style={{
-    //             textAlign:"center",
-    //             fontSize:"12px"
-    //         }}
-    //     />
-    // </Toolbar>
-    //
-    // <script src="//platform.linkedin.com/in.js" type="text/javascript">
-    //     lang: en_US
-    // </script>
-    // <script type="IN/FollowCompany" data-id="18233111" data-counter="top"></script>
 
     goTo(route) {
         // goes to the wanted page
