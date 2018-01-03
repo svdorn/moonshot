@@ -39,8 +39,8 @@ class Footer extends Component {
                                 height={100}
                                 alt="300x100"
                                 src="/images/MoonshotTempLogo.png"/>
-                            <div className="whiteText smallText">
-                                Copyright 2017 Moonshot Learning Inc. All rights reserved.
+                            <div className="whiteText tinyText">
+                                &copy; 2018 Moonshot Learning Inc. All rights reserved.
                             </div>
                             <div style={{marginTop: "10px"}}>
                                 <a href="https://www.facebook.com/MoonshotLearning/" target="_blank">
