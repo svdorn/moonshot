@@ -270,7 +270,10 @@ class ForBusiness extends Component {
                         /><br/>
                         <button type="submit"
                                       className="outlineButton whiteBlueButton"
-                        >Send</button>
+                        >Send</button><br/>
+                        <p className="whiteText tinyText">
+                            We'll get back to you with an email shortly.
+                        </p>
                     </form>
                     { this.props.loadingEmailSend ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
                 </div>
