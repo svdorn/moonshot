@@ -35,29 +35,41 @@ class Footer extends Component {
                     <ul className="horizCenteredList">
                         <li className="center">
                             <img
-                            width={300}
-                            height={100}
-                            alt="300x100"
-                            src="/images/MoonshotTempLogo.png"/>
+                                width={300}
+                                height={100}
+                                alt="300x100"
+                                src="/images/MoonshotTempLogo.png"/>
                             <div className="whiteText smallText">
                                 Copyright 2017 Moonshot Learning Inc. All rights reserved.
                             </div>
-                        </li>
-                        <li className="center">
-                            <p className="whiteText smallText">
-                                Moonshot Learning trains college students in<br/> market-demanded technology
-                                skills.<br/>
-                                Students learn for free and companies<br/> source and evaluate talent, for less.
-                            </p>
-                        </li>
-                        <li className="center">
-                            <div style={{margin: '10px'}}>
-                                <a onClick={() => this.goTo('/')} className="smallText2 whiteText clickableNoUnderline" style={{marginRight:'15px'}}>Home</a>
-                                <a onClick={() => this.goTo('/forBusiness')} className="smallText2 whiteText clickableNoUnderline">For Business</a>
-                            </div>
-                            <div>
-                                <a onClick={() => this.goTo('/signup')} className="smallText2 whiteText clickableNoUnderline" style={{marginRight:'15px'}}>Student Sign Up</a>
-                                <a onClick={() => this.goTo('/forBusiness')} className="smallText2 whiteText clickableNoUnderline">Contact Us</a>
+                            <div style={{marginTop: "10px"}}>
+                                <a href="https://www.facebook.com/MoonshotLearning/" target="_blank">
+                                    <img
+                                        width={20}
+                                        height={20}
+                                        src="/logos/Facebook.png"/>
+                                </a>
+                                <a href="https://www.facebook.com/MoonshotLearning/" target="_blank"
+                                   style={{marginLeft: "10px"}}>
+                                    <img
+                                        width={20}
+                                        height={20}
+                                        src="/logos/Instagram.png"/>
+                                </a>
+                                <a href="https://www.linkedin.com/company/18233111/" target="_blank"
+                                   style={{marginLeft: "10px"}}>
+                                    <img
+                                        width={20}
+                                        height={20}
+                                        src="/logos/LinkedIn.png"/>
+                                </a>
+                                <a href="https://www.youtube.com/channel/UCDna-8OVMOONwwqQk21f6ZQ" target="_blank"
+                                   style={{marginLeft: "10px"}}>
+                                    <img
+                                        width={20}
+                                        height={20}
+                                        src="/logos/YouTube.png"/>
+                                </a>
                             </div>
                         </li>
                     </ul>
