@@ -790,6 +790,14 @@ app.get('/search', function (req, res) {
         query["tags"] = category;
     }
 
+    // add company to query if it exists
+    const company = req.query.company;
+    console.log("company is", company)
+    if (company && company !== "") {
+        query["sponsor.name"] = company;
+    }
+
+    console.log("query is ", query);
 
     //const limit = 4;
     const sort = {};

@@ -27,6 +27,7 @@ class Discover extends Component{
         this.state = {
             searchTerm: "",
             category: "",
+            company: "",
             explorePathways: [],
             featuredPathways: []
         }
@@ -75,12 +76,20 @@ class Discover extends Component{
         })
     };
 
+    handleCompanyChange = (event, index, company) => {
+        console.log(company);
+        this.setState({company}, () => {
+            this.search();
+        })
+    };
+
     search() {
         console.log("getting pathways with category: ", this.state.category);
         axios.get("/api/search", {
             params: {
                 searchTerm: this.state.term,
-                category: this.state.category
+                category: this.state.category,
+                company: this.state.company
             }
         }).then(res => {
             console.log("resultant pathways:");
@@ -90,7 +99,7 @@ class Discover extends Component{
                 this.setState({ explorePathways: res.data });
             }
         }).catch(function(err) {
-            console.log("error getting searched for pathway");
+            console.log("error getting searched-for pathway");
         })
     }
 
@@ -140,6 +149,12 @@ class Discover extends Component{
         const tags = ["Artificial Intelligence", "UI/UX", "Game Development", "Virtual Reality"];
         const categoryItems = tags.map(function(tag) {
             return <MenuItem value={tag} primaryText={tag} key={tag} />
+        })
+
+        // TODO get companies from DB
+        const companies = ["Epic", "Google", "Tesla", "Holos", "Blizzard"];
+        const companyItems = companies.map(function(company) {
+            return <MenuItem value={company} primaryText={company} key={company} />
         })
 
 
@@ -217,6 +232,17 @@ class Discover extends Component{
                         <MenuItem value={""} primaryText="Category" />
                         <Divider />
                         {categoryItems}
+                    </DropDownMenu>
+
+                    <DropDownMenu value={this.state.company}
+                                  onChange={this.handleCompanyChange}
+                                  underlineStyle={styles.underlineStyle}
+                                  anchorOrigin={styles.anchorOrigin}
+                                  style={{fontSize:"20px", marginTop:"11px"}}
+                    >
+                        <MenuItem value={""} primaryText="Company" />
+                        <Divider />
+                        {companyItems}
                     </DropDownMenu>
 
                     <div className="pathwayPrevListContainer">
