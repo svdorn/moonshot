@@ -9,6 +9,7 @@ import Category from '../childComponents/category'
 import { closeNotification } from "../../actions/usersActions";
 import { Field, reduxForm } from 'redux-form';
 import axios from 'axios';
+import styles from '../../../public/styles';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -132,20 +133,27 @@ class Discover extends Component{
         });
 
         const style = {
-            pathwaySeparator: {
-                width: "80%",
-                margin: "30px auto",
+            separator: {
+                width: "70%",
+                margin: "5px auto",
+                position: "relative",
+                height: "40px",
                 textAlign: "center"
             },
-            pathwaySeparatorText: {
+            separatorText: {
                 padding: "0px 40px",
                 backgroundColor: "white",
-                display: "inline-block"
+                display: "inline-block",
+                position: "relative",
+                fontSize: "23px",
+                color: styles.colors.moonshotLightBlue
             },
-            pathwaySeparatorLine: {
+            separatorLine: {
                 width: "100%",
-                height: "5px",
-                backgroundColor: "blue"
+                height: "3px",
+                backgroundColor: styles.colors.moonshotLightBlue,
+                position: "absolute",
+                top: "12px"
             }
         }
 
@@ -160,9 +168,9 @@ class Discover extends Component{
                     />
                 </div>
                 <div>
-                    <div style={style.pathwaySeparator}>
-                        <div style={style.pathwaySeparatorLine} />
-                        <div style={style.pathwaySeparatorText}>
+                    <div style={style.separator}>
+                        <div style={style.separatorLine} />
+                        <div style={style.separatorText}>
                             Explore Featured Pathways
                         </div>
                     </div>
