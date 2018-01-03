@@ -44,7 +44,7 @@ class Pathway extends Component {
             <div className="jsxWrapper">
                 {this.state.pathway.sponsor !== undefined ?
                     <div>
-                        <div className="halfHeight purpleToBlue">
+                        <div className="purpleToBlue">
                             <div className="pathwayPrevListContainer">
                                 <ul className="horizCenteredList pathwayPrevList">
                                     <li className="pathwayHeaderText whiteText mediumText noWrap"
