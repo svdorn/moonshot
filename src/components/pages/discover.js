@@ -45,14 +45,14 @@ class Discover extends Component{
         })
 
         axios.get("/api/search", {
-            params: {  }
+            params: {}
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.discover) {
                 this.setState({ featuredPathways: res.data });
             }
         }).catch(function(err) {
-            console.log("error getting featured pathways");
+            console.log("error getting searched for pathway");
         })
     }
 
@@ -66,46 +66,38 @@ class Discover extends Component{
     }
 
     onSearchChange(term) {
-        this.setState({...this.state, term: term});
-
-        if (term === undefined) {
-            //don't search
-            console.log("search box is empty");
-        }
-        else {
-            console.log("about to search")
-            // CURRENTLY THERE IS NO SEARCH PARAM, MUST INCLUDE TERM SOMEWHERE
-            axios.get("/api/search", {
-                params: {
-                    searchTerm: term
-                }
-            }).then(res => {
-                console.log("resultant pathways:");
-                console.log(res.data)
-                // make sure component is mounted before changing state
-                if (this.refs.discover) {
-                    this.setState({ explorePathways: res.data });
-                }
-            }).catch(function(err) {
-                console.log("error getting searched for pathwa");
-            })
-        }
+        this.setState({...this.state, term: term}, () => {
+            if (term !== undefined) {
+                this.search();
+            }
+        });
     }
 
     handleCategoryChange = (event, index, category) => {
-        console.log("THING CLICKED")
-        // if (value === 1) {
-        //     this.goTo('/profile');
-        // } else if (value === 2) {
-        //     this.goTo('/settings');
-        // } else {
-        //     value = 1;
-        //     this.props.signout();
-        //     this.goTo('/');
-        // }
-        this.setState({category})
         console.log(category);
+        this.setState({category}, () => {
+            this.search();
+        })
     };
+
+    search() {
+        console.log("getting pathways with category: ", this.state.category);
+        axios.get("/api/search", {
+            params: {
+                searchTerm: this.state.term,
+                category: this.state.category
+            }
+        }).then(res => {
+            console.log("resultant pathways:");
+            console.log(res.data)
+            // make sure component is mounted before changing state
+            if (this.refs.discover) {
+                this.setState({ explorePathways: res.data });
+            }
+        }).catch(function(err) {
+            console.log("error getting searched for pathway");
+        })
+    }
 
     render(){
         // create the pathway previews
@@ -149,9 +141,9 @@ class Discover extends Component{
         });
 
         // TODO get tags from DB
-        const tags = ["Artifical Intelligence", "UX/UI", "Game Development", "Virtual Reality"];
+        const tags = ["Artificial Intelligence", "UI/UX", "Game Development", "Virtual Reality"];
         const categoryItems = tags.map(function(tag) {
-            return <MenuItem value={tag} primaryText={tag} />
+            return <MenuItem value={tag} primaryText={tag} key={tag} />
         })
 
 
