@@ -57,12 +57,13 @@ class Home extends Component{
 
         // create the pathway previews
         let pathwayKey = 0;
+        let self = this;
         const pathwayPreviews = this.state.pathways.map(function(pathway) {
             pathwayKey++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={{verticalAlign: "top"}} key={pathwayKey}><PathwayPreview
+                <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/forBusiness')} ><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
                     logo = {pathway.sponsor.logo}
@@ -71,7 +72,7 @@ class Home extends Component{
                     deadline = {formattedDeadline}
                     price = {pathway.price}
                     _id = {pathway._id}
-                    onClick={() => this.goTo('/pathway/' + pathway.name)}/></li>
+                    /></li>
             );
         });
 
