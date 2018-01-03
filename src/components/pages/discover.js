@@ -24,6 +24,7 @@ class Discover extends Component{
         super(props);
 
         this.state = {
+            searchTerm: "",
             explorePathways: [],
             featuredPathways: []
         }
@@ -81,6 +82,30 @@ class Discover extends Component{
         //     console.log("error getting featured pathways");
         // })
     }
+    onSearchChange(term) {
+        this.setState({...this.state, term: term});
+
+        if (term === undefined || term === "") {
+            //don't search
+            console.log("search box is empty");
+        }
+        else {
+
+            // CURRENTLY THERE IS NO SEARCH PARAM, MUST INCLUDE TERM SOMEWHERE
+            axios.get("/api/search", {
+                params: {
+                    searchParam: {}
+                }
+            }).then(res => {
+                // make sure component is mounted before changing state
+                if (this.refs.home) {
+                    this.setState({ explorePathways: res.data });
+                }
+            }).catch(function(err) {
+                console.log("error getting searched for pathways");
+            })
+        }
+    }
 
     render(){
         // create the pathway previews
@@ -131,7 +156,8 @@ class Discover extends Component{
                         name="search"
                         component={renderTextField}
                         label="Search"
-                        onChange={this.onSearchChange}
+                        onChange={event => this.onSearchChange(event.target.value)}
+                        value={this.state.searchTerm}
                     />
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
