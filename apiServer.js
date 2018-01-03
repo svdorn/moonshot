@@ -720,6 +720,7 @@ app.put('/users/changepassword/:_id', function (req, res) {
     });
 });
 
+//----->> GET TOP PATHWAYS <<------
 app.get('/topPathways', function(req, res) {
     const numPathways = parseInt(req.query.numPathways);
 
@@ -750,6 +751,18 @@ app.get('/topPathways', function(req, res) {
         }
     });
 
+});
+
+//----->> SEARCH PATHWAYS <<------
+app.get('/search', function(req, res) {
+   const query = req.body.searchParam;
+
+   Pathways.find(query, function (err, pathways) {
+       if (err){
+           console.log(err);
+       }
+       res.json(pathways);
+   })
 });
 
 //----->> GET IMAGES <<------
