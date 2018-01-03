@@ -171,13 +171,22 @@ class Discover extends Component{
                     <div style={style.separator}>
                         <div style={style.separatorLine} />
                         <div style={style.separatorText}>
-                            Explore Featured Pathways
+                            Featured
                         </div>
                     </div>
+
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
                             {featuredPathwayPreviews}
                         </ul>
+                    </div>
+
+
+                    <div style={style.separator}>
+                        <div style={style.separatorLine} />
+                        <div style={style.separatorText}>
+                            Explore
+                        </div>
                     </div>
 
                     <Field

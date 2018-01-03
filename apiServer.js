@@ -771,7 +771,7 @@ app.get('/search', function(req, res) {
     const sortNOTYET = req.body.sort;
     const selectNOTYET = req.body.select;
 
-    const limit = 3;
+    const limit = 4;
     const sort = {};
     const select = "name previewImage sponsor estimatedCompletionTime deadline price";
 
