@@ -189,6 +189,11 @@ button.link {
     padding-top: 200px;
 }
 
+.pathwayHeaderText {
+    margin-left: 50px;
+    padding-top: 100px;
+}
+
 .noWrap { white-space: nowrap; }
 .center { text-align: center; }
 
