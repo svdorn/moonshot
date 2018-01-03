@@ -9,8 +9,8 @@ import style from '../../../public/styles';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
+    hintStyle: {
+        color: 'white',
     }, greenText: {
         color: style.colors.moonshotGreenText
     }, blueText: {
@@ -37,9 +37,8 @@ const styles = {
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
-        floatingLabelText={label}
+        hintStyle={styles.hintStyle}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
         {...input}
         {...custom}
     />
@@ -48,10 +47,8 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
 const renderMultilineTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         multiLine={true}
-        rows={2}
+        hintStyle={styles.hintStyle}
         hintText={label}
-        floatingLabelText={label}
-        floatingLabelStyle={styles.floatingLabelStyle}
         {...input}
         {...custom}
     />
@@ -116,7 +113,7 @@ class ForBusiness extends Component {
     }
 
     scrollToForm() {
-        document.querySelector('.form').scrollIntoView({
+        document.querySelector('.form-right').scrollIntoView({
             behavior: 'smooth'
         });
     }
@@ -231,11 +228,12 @@ class ForBusiness extends Component {
 
 
 
-                <div className="form" zDepth={2}>
+                <div className="form-right greenToBlue">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h2>
-                            Work with us to create pathways to<br/>
-                            help you source specialized talent, for less.
+                        <h2 className="whiteText">
+                            We <u>source</u> the talent and <u>create</u><br/>
+                            a full assessment based on the skills you're hiring for.<br/>
+                            More information to make better decisions.
                         </h2>
                         <Field
                             name="name"
@@ -267,13 +265,11 @@ class ForBusiness extends Component {
                             component={renderMultilineTextField}
                             label="Message"
                         /><br/>
-                        <RaisedButton type="submit"
-                                      label="Contact Us"
-                                      primary={true}
-                                      className="button"
-                        />
+                        <button type="submit"
+                                      className="outlineButton whiteBlueButton"
+                        >Send</button>
                     </form>
-                    { this.props.loadingCreateUser ? <CircularProgress /> : "" }
+                    { this.props.loadingEmailSend ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
                 </div>
             </div>
         );
@@ -290,7 +286,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         formData: state.form,
-        loadingCreateUser: state.users.loadingSomething,
+        loadingEmailSend: state.users.loadingSomething,
     };
 }
 

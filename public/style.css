@@ -50,6 +50,12 @@ footer {
   padding-top: 10px;
 }
 
+.form-right{
+    text-align: center;
+    padding-bottom: 40px;
+    padding-top: 20px;
+}
+
 .formOther{
   text-align: center;
   margin-top: 140px;
@@ -77,6 +83,11 @@ footer {
     border: 2px solid var(--moonshotMidBlue);
     background-color: white;
     color: var(--moonshotMidBlue);
+}
+
+.whiteButton {
+    background-color: white;
+    color: var(--moonshotGreenText);
 }
 
 .menuItem {

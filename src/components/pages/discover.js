@@ -10,7 +10,7 @@ import { closeNotification } from "../../actions/usersActions";
 import { Field, reduxForm } from 'redux-form';
 import axios from 'axios';
 
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
+const renderTextField = ({input, label, ...custom}) => (
     <TextField
         hintText={label}
         floatingLabelText={label}
@@ -63,18 +63,22 @@ class Discover extends Component{
     }
 
     onSearchChange() {
-        const param = this.props.formData.discover.values.search;
-
-        if (param === undefined || param === '') {
-            //don't search
-        }
-        // axios.get("/api/search", param).then(res => {
+        console.log("here");
+        console.log(this.props.formData.discover.values.search);
+        // const param = this.props.formData.discover.values.search;
+        //
+        // if (param === undefined || param === '') {
+        //     //don't search
+        // }
+        // axios.get("/api/search", {
+        //     params: { searchParam: param }
+        // }).then(res => {
         //     // make sure component is mounted before changing state
-        //     if (this.refs.home) {
-        //         this.setState({ pathways: res.data });
+        //     if (this.refs.discover) {
+        //         this.setState({ featuredPathways: res.data });
         //     }
         // }).catch(function(err) {
-        //     console.log("error getting searched for pathways");
+        //     console.log("error getting featured pathways");
         // })
     }
 
@@ -118,13 +122,6 @@ class Discover extends Component{
                 /></li>
             );
         });
-
-
-
-
-
-
-
 
         return(
             <div className='jsxWrapper' ref='discover'>
