@@ -33,19 +33,14 @@ class Discover extends Component{
     }
 
     componentDidMount() {
-        axios.get("/api/search", {
-            params: {  }
-        }).then(res => {
-            // make sure component is mounted before changing state
-            if (this.refs.discover) {
-                this.setState({ explorePathways: res.data });
-            }
-        }).catch(function(err) {
-            console.log("error getting explore pathways");
-        })
+        // populate explorePathways with initial pathways
+        this.search();
 
+        // populate featuredPathways with initial pathways
         axios.get("/api/search", {
-            params: {}
+            params: {
+                limit: 4
+            }
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.discover) {

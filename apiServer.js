@@ -764,32 +764,34 @@ app.get('/getPathwayById', function (req, res) {
 
 //----->> SEARCH PATHWAYS <<------
 app.get('/search', function (req, res) {
+    const MAX_PATHWAYS_TO_RETURN = 1000;
     let query = {};
-    console.log("search term is");
-    console.log(req.query.searchTerm);
+
     const term = req.query.searchTerm;
-    // if (term && term !== "") {
-    //     // if there is a search term, search using that
-    //     const termRegex = new RegExp(req.query.searchTerm);
-    //     query = {name: termRegex}
-    // } else {
-    //     // if there is no search term, a query must be given
-    // }
+    if (term && term !== "") {
+        // if there is a search term, add it to the query
+        const termRegex = new RegExp(req.query.searchTerm);
+        query["name"] = termRegex;
+    }
+
     const queryNOTYET = req.body.query;
-    const limitNOTYET = req.body.limit;
+    let limit = parseInt(req.query.limit);
+    if (limit === NaN) {
+        limit = MAX_PATHWAYS_TO_RETURN;
+    }
     const sortNOTYET = req.body.sort;
     const selectNOTYET = req.body.select;
 
     console.log("category is: ", req.query.category);
 
-    if (req.query.category) {
-        query = {
-            tags: req.query.category
-        }
+    // add category to query if it exists
+    const category = req.query.category;
+    if (category && category !== "") {
+        query["tags"] = category;
     }
 
 
-    const limit = 4;
+    //const limit = 4;
     const sort = {};
     const select = "name previewImage sponsor estimatedCompletionTime deadline price tags";
 
