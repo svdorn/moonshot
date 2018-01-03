@@ -24,6 +24,7 @@ class Discover extends Component{
         super(props);
 
         this.state = {
+            searchTerm: "",
             explorePathways: [],
             featuredPathways: []
         }
@@ -62,20 +63,29 @@ class Discover extends Component{
         window.scrollTo(0, 0);
     }
 
-    onSearchChange() {
-        const param = this.props.formData.discover.values.search;
+    onSearchChange(term) {
+        this.setState({...this.state, term: term});
 
-        if (param === undefined || param === '') {
+        if (term === undefined || term === "") {
             //don't search
+            console.log("search box is empty");
         }
-        // axios.get("/api/search", param).then(res => {
-        //     // make sure component is mounted before changing state
-        //     if (this.refs.home) {
-        //         this.setState({ pathways: res.data });
-        //     }
-        // }).catch(function(err) {
-        //     console.log("error getting searched for pathways");
-        // })
+        else {
+
+            // CURRENTLY THERE IS NO SEARCH PARAM, MUST INCLUDE TERM SOMEWHERE
+            axios.get("/api/search", {
+                params: {
+                    searchParam: {}
+                }
+            }).then(res => {
+                // make sure component is mounted before changing state
+                if (this.refs.home) {
+                    this.setState({ explorePathways: res.data });
+                }
+            }).catch(function(err) {
+                console.log("error getting searched for pathways");
+            })
+        }
     }
 
     render(){
@@ -134,7 +144,8 @@ class Discover extends Component{
                         name="search"
                         component={renderTextField}
                         label="Search"
-                        onChange={this.onSearchChange}
+                        onChange={event => this.onSearchChange(event.target.value)}
+                        value={this.state.searchTerm}
                     />
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
