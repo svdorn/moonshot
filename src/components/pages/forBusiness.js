@@ -232,7 +232,7 @@ class ForBusiness extends Component {
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h2 className="whiteText">
                             We <u>source</u> the talent and <u>create</u><br/>
-                            a full assessment based on the skills you're hiring for.<br/>
+                            a full assessment based on the skills you{"'"}re hiring for.<br/>
                             More information to make better decisions.
                         </h2>
                         <h2 className="whiteText">
