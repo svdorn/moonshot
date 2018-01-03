@@ -71,7 +71,7 @@ class Home extends Component{
                     deadline = {formattedDeadline}
                     price = {pathway.price}
                     _id = {pathway._id}
-                /></li>
+                    onClick={() => this.goTo('/pathway/' + pathway.name)}/></li>
             );
         });
 
