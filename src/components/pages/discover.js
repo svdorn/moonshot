@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { Paper, RaisedButton, TextField } from 'material-ui';
+import { Paper, RaisedButton, TextField, DropDownMenu, MenuItem, Divider  } from 'material-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -26,6 +26,7 @@ class Discover extends Component{
 
         this.state = {
             searchTerm: "",
+            category: "",
             explorePathways: [],
             featuredPathways: []
         }
@@ -91,15 +92,30 @@ class Discover extends Component{
         }
     }
 
+    handleCategoryChange = (event, index, category) => {
+        console.log("THING CLICKED")
+        // if (value === 1) {
+        //     this.goTo('/profile');
+        // } else if (value === 2) {
+        //     this.goTo('/settings');
+        // } else {
+        //     value = 1;
+        //     this.props.signout();
+        //     this.goTo('/');
+        // }
+        this.setState({category})
+        console.log(category);
+    };
+
     render(){
         // create the pathway previews
-        let pathwayKey = 0;
+        let key = 0;
         const explorePathwayPreviews = this.state.explorePathways.map(function(pathway) {
-            pathwayKey++;
+            key++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={{verticalAlign: "top"}} key={pathwayKey}><PathwayPreview
+                <li style={{verticalAlign: "top"}} key={key}><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
                     logo = {pathway.sponsor.logo}
@@ -113,13 +129,13 @@ class Discover extends Component{
         });
 
         // create the pathway previews
-        pathwayKey = 0;
+        key = 0;
         const featuredPathwayPreviews = this.state.featuredPathways.map(function(pathway) {
-            pathwayKey++;
+            key++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={{verticalAlign: "top"}} key={pathwayKey}><PathwayPreview
+                <li style={{verticalAlign: "top"}} key={key}><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
                     logo = {pathway.sponsor.logo}
@@ -131,6 +147,13 @@ class Discover extends Component{
                 /></li>
             );
         });
+
+        // TODO get tags from DB
+        const tags = ["Artifical Intelligence", "UX/UI", "Game Development", "Virtual Reality"];
+        const categoryItems = tags.map(function(tag) {
+            return <MenuItem value={tag} primaryText={tag} />
+        })
+
 
         const style = {
             separator: {
@@ -196,6 +219,17 @@ class Discover extends Component{
                         onChange={event => this.onSearchChange(event.target.value)}
                         value={this.state.searchTerm}
                     />
+
+                    <DropDownMenu value={this.state.category}
+                                  onChange={this.handleCategoryChange}
+                                  underlineStyle={styles.underlineStyle}
+                                  anchorOrigin={styles.anchorOrigin}
+                                  style={{fontSize:"20px", marginTop:"11px"}}
+                    >
+                        <MenuItem value={""} primaryText="Category" />
+                        <Divider />
+                        {categoryItems}
+                    </DropDownMenu>
 
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
