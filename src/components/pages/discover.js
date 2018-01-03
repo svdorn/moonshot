@@ -133,9 +133,15 @@ class Discover extends Component{
 
         return(
             <div className='jsxWrapper' ref='discover'>
-                <div className='fullHeight greenToBlue'>
-                    <h1>Discover cool pathways</h1>
-
+                <div className="headerSpace greenToBlue" />
+                <div>
+                    <img
+                        src="/images/DiscoverHeader.png"
+                        alt="Learn skills employers want - for free."
+                        style={{width:"100%"}}
+                    />
+                </div>
+                <div>
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
                             {featuredPathwayPreviews}
