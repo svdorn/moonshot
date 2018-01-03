@@ -101,22 +101,14 @@ class Discover extends Component{
 
     render(){
         // create the pathway previews
-<<<<<<< HEAD
         let key = 0;
-=======
         let self = this;
-        let pathwayKey = 0;
->>>>>>> 2b0db317c66cf1a3d58f262fdaa4b36f93c0e962
         const explorePathwayPreviews = this.state.explorePathways.map(function(pathway) {
             key++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-<<<<<<< HEAD
-                <li style={{verticalAlign: "top"}} key={key}><PathwayPreview
-=======
-                <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
->>>>>>> 2b0db317c66cf1a3d58f262fdaa4b36f93c0e962
+                <li style={{verticalAlign: "top"}} key={key} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
                     logo = {pathway.sponsor.logo}
