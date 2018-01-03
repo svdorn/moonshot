@@ -11,12 +11,12 @@ class PathwayPreview extends Component {
             display: "grid",
             marginTop: "7px",
             overflow: "hidden"
-        }
+        };
 
         const titleSpanStyle = {
             margin: "auto",
             fontSize: "30px"
-        }
+        };
 
         return (
             <div className="gradientBorder clickableNoUnderline" style={{height:"440px", width:"310px"}}>

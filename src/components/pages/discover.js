@@ -1,12 +1,23 @@
 "use strict"
 import React, { Component } from 'react';
-import { Paper, RaisedButton } from 'material-ui';
+import { Paper, RaisedButton, TextField } from 'material-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import Category from '../childComponents/category'
 import { closeNotification } from "../../actions/usersActions";
+import { Field, reduxForm } from 'redux-form';
+import axios from 'axios';
+
+const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        {...input}
+        {...custom}
+    />
+);
 
 class Discover extends Component{
 
@@ -19,11 +30,33 @@ class Discover extends Component{
         window.scrollTo(0, 0);
     }
 
+    onSearchChange() {
+        const param = this.props.formData.discover.values.search;
+
+        if (param === undefined || param === '') {
+            //don't search
+        }
+        // axios.get("/api/search", param).then(res => {
+        //     // make sure component is mounted before changing state
+        //     if (this.refs.home) {
+        //         this.setState({ pathways: res.data });
+        //     }
+        // }).catch(function(err) {
+        //     console.log("error getting searched for pathways");
+        // })
+    }
+
     render(){
         return(
             <div className='jsxWrapper'>
                 <div className='fullHeight greenToBlue'>
                     <h1>Discover cool pathways</h1>
+                    <Field
+                        name="search"
+                        component={renderTextField}
+                        label="Search"
+                        onChange={this.onSearchChange}
+                    />
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
                             <li><Category /></li>
@@ -45,8 +78,13 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        notification: state.users.notification
+        formData: state.form,
+        notification: state.users.notification,
     };
 }
+
+Discover = reduxForm({
+    form: 'discover',
+})(Discover);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Discover);
