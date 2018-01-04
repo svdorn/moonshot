@@ -4,7 +4,20 @@ var mongoose = require('mongoose');
 var pathwaysSchema = mongoose.Schema({
   name: String,
   previewImage: String,
-  sponsor: { name: String, logo: String },
+  sponsor: {
+      name: String,
+      logo: String,
+      description: String,
+      homepage: String,
+      blog: String,
+      demo: String,
+      quote: {
+          body: String,
+          speakerImage: String,
+          speakerName: String,
+          speakerTitle: String
+      }
+  },
   estimatedCompletionTime: String,
   deadline: Date,
   price: String,
@@ -12,6 +25,8 @@ var pathwaysSchema = mongoose.Schema({
   ratings: [{ username: String, rating: Number }],
   avgRating: Number,
   tags: [ String ],
+  industry: { averageSalary: String, title: String },
+  extraInfo: String,
   projects: [{
       name: String,
       description: String,

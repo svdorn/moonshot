@@ -50,19 +50,42 @@ class Pathway extends Component {
 
 
     render() {
+
+        const style = {
+            descriptionAndSalary: {
+                height: "80px",
+                width: "100%",
+                position: "relative"
+            },
+            descriptionAndSalaryLi: {
+                width: "40%",
+                verticalAlign: "top",
+                margin: "0px 20px",
+                position: "relative"
+            },
+            descriptionAndSalaryUl: {
+                fontSize: "20px"
+            }
+        }
+
         console.log(this.state.pathway);
         const deadline = new Date(this.state.pathway.deadline);
         const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+
+        const pathway = this.state.pathway;
+
+
+
         return (
             <div className="jsxWrapper">
-                {this.state.pathway.sponsor !== undefined ?
+                {pathway.sponsor !== undefined ?
                     <div>
                         <div className="purpleToBlue">
                             <div className="pathwayPrevListContainer">
                                 <ul className="horizCenteredList pathwayPrevList">
                                     <li className="pathwayHeaderText whiteText mediumText noWrap"
                                         style={{zIndex: "20"}}>
-                                        {this.state.pathway.name}<br/>
+                                        {pathway.name}<br/>
                                         <button className="outlineButton"
                                                 style={{backgroundColor: "transparent", border: "2px solid white"}}
                                                 onClick={this.handleClick.bind(this)}>
@@ -71,8 +94,8 @@ class Pathway extends Component {
                                         <br/>
                                         Sponsored By:
                                         <img
-                                            src={this.state.pathway.sponsor.logo}
-                                            alt={this.state.pathway.sponsor.name}
+                                            src={pathway.sponsor.logo}
+                                            alt={pathway.sponsor.name}
                                             height={25}
                                             style={{paddingLeft: '15px'}}
                                         />
@@ -93,7 +116,7 @@ class Pathway extends Component {
                             <ul className="horizCenteredList pathwayPrevList whiteText smallText2">
                                 <li>
                                     Completion Time<br/>
-                                    {this.state.pathway.estimatedCompletionTime}
+                                    {pathway.estimatedCompletionTime}
                                 </li>
                                 <li>
                                     Complete By<br/>
@@ -101,10 +124,61 @@ class Pathway extends Component {
                                 </li>
                                 <li>
                                     Cost<br/>
-                                    {this.state.pathway.price}
+                                    {pathway.price}
                                 </li>
                             </ul>
                         </div>
+
+                        { pathway.description || pathway.industry ?
+                            <div style={style.descriptionAndSalary}>
+                                <ul className="horizCenteredList" style={style.descriptionAndSalaryUl}>
+                                    { pathway.description ?
+                                        <li style={style.descriptionAndSalaryLi}>
+                                            { pathway.description }
+                                        </li>
+                                    : null }
+
+                                    { pathway.industry ?
+                                        <li style={style.descriptionAndSalaryLi}>
+
+                                            Industry average salary<br/>
+                                            { pathway.industry.averageSalary }<br/>
+                                            { pathway.industry.title }
+                                        </li>
+                                    : null}
+                                </ul>
+                            </div>
+                        : null }
+
+                        <div>
+                            <div>
+                                <h1>Sponsor {pathway.sponsor.name}</h1>
+                                {pathway.sponsor.description}
+                                Homepage: <a href={pathway.sponsor.homepage}>{pathway.sponsor.name}</a>
+                                {pathway.sponsor.blog ? <a href={pathway.sponsor.blog}>Blog</a> : null}
+                                {pathway.sponsor.demo ? <a href={pathway.sponsor.demo}>Demo</a> : null}
+                            </div>
+                            {pathway.sponsor.quote ?
+                                <div>
+                                    {pathway.sponsor.quote.body}
+                                    {pathway.sponsor.quote.speakerImage}
+                                    {pathway.sponsor.quote.speakerName}
+                                    {pathway.sponsor.quote.speakerTitle}
+                                </div>
+                                : null
+                            }
+                        </div>
+
+                        <div>
+                            Course overview
+                        </div>
+
+                        {pathway.extraInfo ?
+                            <div>
+                                {pathway.extraInfo}
+                            </div>
+                            : null
+                        }
                     </div>
                     : <CircularProgress/>}
             </div>
