@@ -134,7 +134,8 @@ class Discover extends Component{
                 marginBottom: "30px"
             },
             pathwayPreviewLi: {
-                verticalAlign: "top"
+                verticalAlign: "top",
+                marginBottom: "40px"
             },
             pathwayPreviewUl: {
                 width:"125%",
@@ -155,8 +156,15 @@ class Discover extends Component{
             },
             headerDiv: {
                 position: "relative",
-                height: "500px",
+                height: "400px",
                 width: "100%"
+            },
+            treeText: {
+                color: "white",
+                position: "absolute",
+                top: "150px",
+                left: "65px",
+                fontSize: "20px"
             }
         }
 
@@ -168,16 +176,20 @@ class Discover extends Component{
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={style.pathwayPreviewLi} key={key} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
-                    name = {pathway.name}
-                    image = {pathway.previewImage}
-                    logo = {pathway.sponsor.logo}
-                    sponsorName = {pathway.sponsor.name}
-                    completionTime = {pathway.estimatedCompletionTime}
-                    deadline = {formattedDeadline}
-                    price = {pathway.price}
-                    _id = {pathway._id}
-                /></li>
+                <li style={style.pathwayPreviewLi}
+                    key={key}
+                    onClick={() => self.goTo('/pathway/' + pathway._id)}>
+                    <PathwayPreview
+                        name = {pathway.name}
+                        image = {pathway.previewImage}
+                        logo = {pathway.sponsor.logo}
+                        sponsorName = {pathway.sponsor.name}
+                        completionTime = {pathway.estimatedCompletionTime}
+                        deadline = {formattedDeadline}
+                        price = {pathway.price}
+                        _id = {pathway._id}
+                    />
+                </li>
             );
         });
 
@@ -188,16 +200,20 @@ class Discover extends Component{
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={style.pathwayPreviewLi} key={key} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
-                    name = {pathway.name}
-                    image = {pathway.previewImage}
-                    logo = {pathway.sponsor.logo}
-                    sponsorName = {pathway.sponsor.name}
-                    completionTime = {pathway.estimatedCompletionTime}
-                    deadline = {formattedDeadline}
-                    price = {pathway.price}
-                    _id = {pathway._id}
-                /></li>
+                <li style={style.pathwayPreviewLi}
+                    key={key}
+                    onClick={() => self.goTo('/pathway/' + pathway._id)}>
+                    <PathwayPreview
+                        name = {pathway.name}
+                        image = {pathway.previewImage}
+                        logo = {pathway.sponsor.logo}
+                        sponsorName = {pathway.sponsor.name}
+                        completionTime = {pathway.estimatedCompletionTime}
+                        deadline = {formattedDeadline}
+                        price = {pathway.price}
+                        _id = {pathway._id}
+                    />
+                </li>
             );
         });
 
@@ -217,6 +233,14 @@ class Discover extends Component{
         return(
             <div className='jsxWrapper' ref='discover'>
                 <div className="greenToBlue" style={style.headerDiv}>
+                <div style={style.treeText}>
+                    <h2 style={{fontSize:"40px"}}>
+                        Discover Pathways<br/>
+                    </h2>
+                    Follow pathways to learn skills employers want,<br/>
+                    for free. Build your profile, prove your talent<br/>
+                    and get hired by innovators in technology.<br/>
+                </div>
                     <img
                         src="/images/TreeBigWhite.png"
                         style={style.treeImg}
@@ -280,7 +304,7 @@ class Discover extends Component{
                         </ToolbarGroup>
                     </Toolbar>
 
-                    <div className="pathwayPrevListContainer">
+                    <div>
                         <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
                             {explorePathwayPreviews}
                         </ul>

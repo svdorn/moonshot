@@ -74,18 +74,19 @@ class Menu extends Component {
         return (
             <header style={{zIndex:"100"}}>
                 {this.props.currentUser ?
-                    <Toolbar>
+                    <Toolbar style={{marginTop:"20px"}}>
                         <ToolbarGroup>
                             <img
-                                width={300}
-                                height={100}
-                                alt="300x100"
+                                style={{marginLeft:"35px"}}
+                                width={250}
+                                height={80}
+                                alt="Moonshot"
                                 className="clickable"
                                 src="/images/MoonshotTempLogo.png"
                                 onClick={() => this.goTo('/')}
                             />
                         </ToolbarGroup>
-                        <ToolbarGroup>
+                        <ToolbarGroup style={{marginTop:"20px"}}>
                             <p className="menuItem clickable noWrap" onClick={() => this.goTo('/discover')}>Discover</p>
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
