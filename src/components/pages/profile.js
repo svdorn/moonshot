@@ -20,7 +20,7 @@ class Profile extends Component{
     componentDidMount() {
         // populate featuredPathways with initial pathways
         for (let i = 0; i < this.props.currentUser.pathways.length; i++) {
-            let id = this.props.currentUser.pathways[i];
+            let id = this.props.currentUser.pathways[i].pathwayId;
             axios.get("/api/getPathwayById", {
                 params: {
                     _id: id
@@ -95,7 +95,7 @@ class Profile extends Component{
                 </li>
             );
         });
-            
+
         return(
             <div className='jsxWrapper' ref='discover'>
                 <div className="greenToBlue" style={style.headerDiv}>

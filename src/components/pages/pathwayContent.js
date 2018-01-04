@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
-import PathwayPreview from '../childComponents/pathwayPreview';
+import PathwayStepList from '../childComponents/pathwayStepList';
 import axios from 'axios';
 
 class PathwayContent extends Component {

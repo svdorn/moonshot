@@ -815,12 +815,14 @@ app.get('/topPathways', function (req, res) {
 app.get('/getPathwayById', function (req, res) {
     console.log("here");
     const _id = req.query._id;
+    console.log(_id)
     const query = {_id: _id};
 
     Pathways.findOne(query, function (err, pathway) {
         if (err) {
             console.log("error in get pathway by id")
         } else {
+            console.log("got pathway by id: ", pathway);
             res.json(pathway);
         }
 

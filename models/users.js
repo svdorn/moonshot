@@ -2,17 +2,20 @@
 var mongoose = require('mongoose');
 
 var usersSchema = mongoose.Schema({
-  name: String,
-  email: String,
-  username: String,
-  userType: String,
-  password: String,
-  verificationToken: String,
-  passwordToken: String,
-  time: Number,
-  verified: Boolean,
-  images: String,
-    pathways: [ String ],
+    name: String,
+    email: String,
+    username: String,
+    userType: String,
+    password: String,
+    verificationToken: String,
+    passwordToken: String,
+    time: Number,
+    verified: Boolean,
+    images: String,
+    pathways: [{
+        pathwayId: mongoose.Schema.Types.ObjectId,
+        currentStep: mongoose.Schema.Types.ObjectId,
+    }],
 });
 
 // 'Users' means we will use the 'users' collection. if 'Books' was in there
