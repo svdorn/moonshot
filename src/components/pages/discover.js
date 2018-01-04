@@ -134,7 +134,8 @@ class Discover extends Component{
                 marginBottom: "30px"
             },
             pathwayPreviewLi: {
-                verticalAlign: "top"
+                verticalAlign: "top",
+                marginBottom: "40px"
             },
             pathwayPreviewUl: {
                 width:"125%",
@@ -168,16 +169,20 @@ class Discover extends Component{
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={style.pathwayPreviewLi} key={key} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
-                    name = {pathway.name}
-                    image = {pathway.previewImage}
-                    logo = {pathway.sponsor.logo}
-                    sponsorName = {pathway.sponsor.name}
-                    completionTime = {pathway.estimatedCompletionTime}
-                    deadline = {formattedDeadline}
-                    price = {pathway.price}
-                    _id = {pathway._id}
-                /></li>
+                <li style={style.pathwayPreviewLi}
+                    key={key}
+                    onClick={() => self.goTo('/pathway/' + pathway._id)}>
+                    <PathwayPreview
+                        name = {pathway.name}
+                        image = {pathway.previewImage}
+                        logo = {pathway.sponsor.logo}
+                        sponsorName = {pathway.sponsor.name}
+                        completionTime = {pathway.estimatedCompletionTime}
+                        deadline = {formattedDeadline}
+                        price = {pathway.price}
+                        _id = {pathway._id}
+                    />
+                </li>
             );
         });
 
@@ -188,16 +193,20 @@ class Discover extends Component{
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={style.pathwayPreviewLi} key={key} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
-                    name = {pathway.name}
-                    image = {pathway.previewImage}
-                    logo = {pathway.sponsor.logo}
-                    sponsorName = {pathway.sponsor.name}
-                    completionTime = {pathway.estimatedCompletionTime}
-                    deadline = {formattedDeadline}
-                    price = {pathway.price}
-                    _id = {pathway._id}
-                /></li>
+                <li style={style.pathwayPreviewLi}
+                    key={key}
+                    onClick={() => self.goTo('/pathway/' + pathway._id)}>
+                    <PathwayPreview
+                        name = {pathway.name}
+                        image = {pathway.previewImage}
+                        logo = {pathway.sponsor.logo}
+                        sponsorName = {pathway.sponsor.name}
+                        completionTime = {pathway.estimatedCompletionTime}
+                        deadline = {formattedDeadline}
+                        price = {pathway.price}
+                        _id = {pathway._id}
+                    />
+                </li>
             );
         });
 
@@ -280,7 +289,7 @@ class Discover extends Component{
                         </ToolbarGroup>
                     </Toolbar>
 
-                    <div className="pathwayPrevListContainer">
+                    <div>
                         <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
                             {explorePathwayPreviews}
                         </ul>
