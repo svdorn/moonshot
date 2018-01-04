@@ -21,9 +21,15 @@ class PathwayStepList extends Component {
     }
 
     render() {
+        const style = {
+            enclosingBox: {
+
+            }
+        }
 
         return (
-            <Paper>
+            <Paper style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
+                Step List!
             </Paper>
         )
     }

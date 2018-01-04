@@ -33,11 +33,18 @@ class PathwayContent extends Component {
     }
 
     render(){
+        const style = {
+            stepList: {
+                height: "800px",
+                width: "400px"
+            }
+        }
+
         const pathway = this.state.pathway;
 
         return (
-            <div>
-                <PathwayStepList steps={pathway.steps} />
+            <div className="greenToBlue">
+                <PathwayStepList steps={pathway.steps} style={style.stepList} />
                 Pathway Content
             </div>
         );
