@@ -8,6 +8,7 @@ var pathwaysSchema = mongoose.Schema({
       name: String,
       logo: String,
       description: String,
+      hiring: String,
       homepage: String,
       blog: String,
       demo: String,

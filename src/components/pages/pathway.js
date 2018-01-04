@@ -219,6 +219,9 @@ class Pathway extends Component {
                             <h1>Sponsor {pathway.sponsor.name}</h1>
                             <div style={style.quote.leftSide}>
                                 {pathway.sponsor.description}<br/>
+                                {pathway.sponsor.hiring ?
+                                    <div>Actively hiring {pathway.sponsor.hiring}<br/></div>
+                                : null}
                                 Homepage: <a href={pathway.sponsor.homepage}>{pathway.sponsor.name}</a><br/>
                                 {pathway.sponsor.blog ? <a href={pathway.sponsor.blog}>Blog</a> : null}<br/>
                                 {pathway.sponsor.demo ? <a href={pathway.sponsor.demo}>Demo</a> : null}<br/>
