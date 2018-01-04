@@ -227,8 +227,8 @@ button.link {
     padding-left: 0px;
 }
 .horizCenteredList li { display: inline-block; }
-.horizCenteredList li:first-child { margin-left: 0px; }
-.horizCenteredList li:last-child { margin-right: 0px; }
+/* .horizCenteredList li:first-child { margin-left: 0px; } */
+/* .horizCenteredList li:last-child { margin-right: 0px; } */
 
 .pathwayPrevList li { margin: 0px 20px; }
 .pathwayPrevIconList li { margin: 0px 4px; }

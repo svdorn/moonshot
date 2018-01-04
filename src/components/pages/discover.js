@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { Paper, RaisedButton, TextField, DropDownMenu, MenuItem, Divider  } from 'material-ui';
+import { Paper, RaisedButton, TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup } from 'material-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -104,6 +104,51 @@ class Discover extends Component{
     }
 
     render(){
+        const style = {
+            separator: {
+                width: "70%",
+                margin: "25px auto 0px",
+                position: "relative",
+                height: "40px",
+                textAlign: "center"
+            },
+            separatorText: {
+                padding: "0px 40px",
+                backgroundColor: "white",
+                display: "inline-block",
+                position: "relative",
+                fontSize: "23px",
+                color: styles.colors.moonshotLightBlue
+            },
+            separatorLine: {
+                width: "100%",
+                height: "3px",
+                backgroundColor: styles.colors.moonshotLightBlue,
+                position: "absolute",
+                top: "12px"
+            },
+            searchBar: {
+                width: "80%",
+                margin: "auto",
+                marginTop: "0px",
+                marginBottom: "30px"
+            },
+            pathwayPreviewLi: {
+                verticalAlign: "top"
+            },
+            pathwayPreviewUl: {
+                width:"125%",
+                transform: "scale(.8)",
+                marginLeft:"-12.5%",
+                WebkitTransformOriginY: "0",
+                MozTransformOriginY: "0",
+                MsTransformOriginY: "0"
+            },
+            pathwayPreviewContainer: {
+                height: "352px"
+            }
+        }
+
         // create the pathway previews
         let key = 0;
         let self = this;
@@ -112,7 +157,7 @@ class Discover extends Component{
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={{verticalAlign: "top"}} key={key} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
+                <li style={style.pathwayPreviewLi} key={key} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
                     logo = {pathway.sponsor.logo}
@@ -132,7 +177,7 @@ class Discover extends Component{
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={{verticalAlign: "top"}} key={key} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
+                <li style={style.pathwayPreviewLi} key={key} onClick={() => self.goTo('/pathway/' + pathway._id)}><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
                     logo = {pathway.sponsor.logo}
@@ -158,31 +203,6 @@ class Discover extends Component{
         })
 
 
-        const style = {
-            separator: {
-                width: "70%",
-                margin: "5px auto",
-                position: "relative",
-                height: "40px",
-                textAlign: "center"
-            },
-            separatorText: {
-                padding: "0px 40px",
-                backgroundColor: "white",
-                display: "inline-block",
-                position: "relative",
-                fontSize: "23px",
-                color: styles.colors.moonshotLightBlue
-            },
-            separatorLine: {
-                width: "100%",
-                height: "3px",
-                backgroundColor: styles.colors.moonshotLightBlue,
-                position: "absolute",
-                top: "12px"
-            }
-        }
-
         return(
             <div className='jsxWrapper' ref='discover'>
                 <div className="headerSpace greenToBlue" />
@@ -201,8 +221,8 @@ class Discover extends Component{
                         </div>
                     </div>
 
-                    <div className="pathwayPrevListContainer">
-                        <ul className="horizCenteredList pathwayPrevList">
+                    <div className="pathwayPrevListContainer" style={style.pathwayPreviewContainer}>
+                        <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
                             {featuredPathwayPreviews}
                         </ul>
                     </div>
@@ -215,38 +235,43 @@ class Discover extends Component{
                         </div>
                     </div>
 
-                    <Field
-                        name="search"
-                        component={renderTextField}
-                        label="Search"
-                        onChange={event => this.onSearchChange(event.target.value)}
-                        value={this.state.searchTerm}
-                    />
+                    <Toolbar style={style.searchBar}>
+                        <ToolbarGroup>
+                            <Field
+                                name="search"
+                                component={renderTextField}
+                                label="Search"
+                                onChange={event => this.onSearchChange(event.target.value)}
+                                value={this.state.searchTerm}
+                            />
+                        </ToolbarGroup>
 
-                    <DropDownMenu value={this.state.category}
-                                  onChange={this.handleCategoryChange}
-                                  underlineStyle={styles.underlineStyle}
-                                  anchorOrigin={styles.anchorOrigin}
-                                  style={{fontSize:"20px", marginTop:"11px"}}
-                    >
-                        <MenuItem value={""} primaryText="Category" />
-                        <Divider />
-                        {categoryItems}
-                    </DropDownMenu>
-
-                    <DropDownMenu value={this.state.company}
-                                  onChange={this.handleCompanyChange}
-                                  underlineStyle={styles.underlineStyle}
-                                  anchorOrigin={styles.anchorOrigin}
-                                  style={{fontSize:"20px", marginTop:"11px"}}
-                    >
-                        <MenuItem value={""} primaryText="Company" />
-                        <Divider />
-                        {companyItems}
-                    </DropDownMenu>
+                        <ToolbarGroup>
+                            <DropDownMenu value={this.state.category}
+                                          onChange={this.handleCategoryChange}
+                                          underlineStyle={styles.underlineStyle}
+                                          anchorOrigin={styles.anchorOrigin}
+                                          style={{fontSize:"20px", marginTop:"11px"}}
+                            >
+                                <MenuItem value={""} primaryText="Category" />
+                                <Divider />
+                                {categoryItems}
+                            </DropDownMenu>
+                            <DropDownMenu value={this.state.company}
+                                          onChange={this.handleCompanyChange}
+                                          underlineStyle={styles.underlineStyle}
+                                          anchorOrigin={styles.anchorOrigin}
+                                          style={{fontSize:"20px", marginTop:"11px"}}
+                            >
+                                <MenuItem value={""} primaryText="Company" />
+                                <Divider />
+                                {companyItems}
+                            </DropDownMenu>
+                        </ToolbarGroup>
+                    </Toolbar>
 
                     <div className="pathwayPrevListContainer">
-                        <ul className="horizCenteredList pathwayPrevList">
+                        <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
                             {explorePathwayPreviews}
                         </ul>
                     </div>
