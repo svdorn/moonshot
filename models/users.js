@@ -11,7 +11,8 @@ var usersSchema = mongoose.Schema({
   passwordToken: String,
   time: Number,
   verified: Boolean,
-  images: String
+  images: String,
+    pathways: [ String ],
 });
 
 // 'Users' means we will use the 'users' collection. if 'Books' was in there
