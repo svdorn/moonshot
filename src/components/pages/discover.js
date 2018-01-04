@@ -146,6 +146,17 @@ class Discover extends Component{
             },
             pathwayPreviewContainer: {
                 height: "352px"
+            },
+            treeImg: {
+                height: "300px",
+                position: "absolute",
+                bottom: "-14px",
+                right: "0px"
+            },
+            headerDiv: {
+                position: "relative",
+                height: "500px",
+                width: "100%"
             }
         }
 
@@ -205,14 +216,13 @@ class Discover extends Component{
 
         return(
             <div className='jsxWrapper' ref='discover'>
-                <div className="headerSpace greenToBlue" />
-                <div>
+                <div className="greenToBlue" style={style.headerDiv}>
                     <img
-                        src="/images/DiscoverHeader.png"
-                        alt="Learn skills employers want - for free."
-                        style={{width:"100%"}}
+                        src="/images/TreeBigWhite.png"
+                        style={style.treeImg}
                     />
                 </div>
+
                 <div>
                     <div style={style.separator}>
                         <div style={style.separatorLine} />
