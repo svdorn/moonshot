@@ -194,6 +194,7 @@ export function changePasswordForgot(user) {
     }
 }
 
+// Send an email when form filled out on forBusiness page
 export function forBusiness(user){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
@@ -206,6 +207,19 @@ export function forBusiness(user){
             })
             .catch(function(err) {
                 dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when a student registers for a pathway
+export function registerForPathway(user) {
+    return function(dispatch) {
+        axios.post("/api/users/registerForPathway", user)
+            .then(function(response) {
+                dispatch({type:"REGISTER_FOR_PATHWAY", notification: {message:response.data, type:"infoHeader"}});
+            })
+            .catch(function(err) {
+                dispatch({type:"REGISTER_FOR_PATHWAY", notification: {message: "Error sending email and registering, please try again.", type: "errorHeader"}})
             })
     }
 }

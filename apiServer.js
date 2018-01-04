@@ -343,6 +343,37 @@ app.post('/sendVerificationEmail', function (req, res) {
     });
 });
 
+// SEND EMAIL FOR REGISTERING FOR PATHWAYS
+app.post('/users/registerForPathway', function(req, res) {
+    console.log("in registering for pathways");
+    console.log(req.body);
+    // let recipient1 = "kyle.treige@moonshotlearning.org";
+    let recipient1 = "stevedorn9@gmail.com";
+    let subject1 = "Student Registration for " + req.body.pathway;
+    let content1 = "<div>"
+        + "<h3>Student Registration for Pathway:</h3>"
+        + "<h4>Pathway: "
+        + req.body.pathway
+        + "</h4>"
+        + "<h4>Student: "
+        + req.body.name
+        + "</h4>"
+        + "<h4>Student Email: "
+        + req.body.email
+        + "</h4>"
+        + "<p>If the student doesn't get back to you soon with an email, make sure to reach out to them.</p>"
+        + "<p>-Moonshot</p>"
+        +  "</div>"
+
+        sendEmail(recipient1, subject1, content1, function (success, msg) {
+            if (success) {
+                res.json("Check your email for instructions on how to get started.");
+            } else {
+                res.status(500).send(msg);
+            }
+        })
+});
+
 // SEND EMAIL FOR FOR BUSINESS
 app.post('/users/forBusinessEmail', function (req, res) {
 

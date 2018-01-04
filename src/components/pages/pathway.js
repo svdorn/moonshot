@@ -2,12 +2,13 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {forBusiness, getUsers} from '../../actions/usersActions';
+import {registerForPathway, getUsers} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Divider} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
 import axios from 'axios';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import { browserHistory } from 'react-router';
 
 class Pathway extends Component {
     constructor(props) {
@@ -33,6 +34,18 @@ class Pathway extends Component {
 
     handleClick() {
         console.log("in handle click");
+        if (this.props.currentUser) {
+            console.log(this.props.currentUser);
+            const user = {
+                pathway: this.state.pathway.name,
+                name: this.props.currentUser.name,
+                email: this.props.currentUser.email,
+            };
+            this.props.registerForPathway(user);
+        } else {
+            // Not logged in
+            browserHistory.push('/login');
+        }
     }
 
 
@@ -52,7 +65,7 @@ class Pathway extends Component {
                                         {this.state.pathway.name}<br/>
                                         <button className="outlineButton"
                                                 style={{backgroundColor: "transparent", border: "2px solid white"}}
-                                                onClick={this.handleClick}>
+                                                onClick={this.handleClick.bind(this)}>
                                             {"Sign Up"}
                                         </button>
                                         <br/>
@@ -99,10 +112,19 @@ class Pathway extends Component {
     }
 }
 
+function mapStateToProps(state) {
+    return {
+        currentUser: state.users.currentUser,
+        isFetching: state.users.isFetching
+    };
+}
+
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUsers,
+        registerForPathway,
     }, dispatch);
 }
 
-export default connect(null, mapDispatchToProps)(Pathway);
+
+export default connect(mapStateToProps, mapDispatchToProps)(Pathway);
