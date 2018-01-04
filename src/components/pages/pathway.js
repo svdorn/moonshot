@@ -53,7 +53,7 @@ class Pathway extends Component {
 
         const style = {
             descriptionAndSalary: {
-                height: "80px",
+                height: "200px",
                 width: "100%",
                 position: "relative"
             },
@@ -65,7 +65,41 @@ class Pathway extends Component {
             },
             descriptionAndSalaryUl: {
                 fontSize: "20px"
+            },
+            descriptionAndSalaryIcon: {
+                height: "50px",
+                float: "left",
+                margin: "12px 20px 0px 0px"
+            },
+            descriptionAndSalaryText: {
+                float: "left",
+                maxWidth: "calc(100% - 70px)"
+            },
+            quote:{
+                everything: {
+                    textAlign: "center",
+                    padding: "20px 0px"
+                },
+                container: {
+                    border: "2px solid blue",
+                    fontSize: "30px",
+                    padding: "10px"
+                },
+                leftSide: {
+                    width: "35%",
+                    display: "inline-block",
+                    verticalAlign: "top",
+                    marginRight: "5%"
+                },
+                rightSide: {
+                    width: "55%",
+                    display: "inline-block",
+                    verticalAlign: "top"
+                }
+
             }
+
+
         }
 
         console.log(this.state.pathway);
@@ -134,36 +168,54 @@ class Pathway extends Component {
                                 <ul className="horizCenteredList" style={style.descriptionAndSalaryUl}>
                                     { pathway.description ?
                                         <li style={style.descriptionAndSalaryLi}>
-                                            { pathway.description }
+                                            <img
+                                                src="/icons/MagnifyingGlass.png"
+                                                style={style.descriptionAndSalaryIcon}
+                                            />
+                                            <div style={style.descriptionAndSalaryText}>
+                                                { pathway.description }
+                                            </div>
                                         </li>
                                     : null }
 
                                     { pathway.industry ?
                                         <li style={style.descriptionAndSalaryLi}>
-
-                                            Industry average salary<br/>
-                                            { pathway.industry.averageSalary }<br/>
-                                            { pathway.industry.title }
+                                            <div>
+                                                <img
+                                                    src="/icons/Price.png"
+                                                    style={style.descriptionAndSalaryIcon}
+                                                />
+                                                <div style={style.descriptionAndSalaryText}>
+                                                    Industry average salary<br/>
+                                                    { pathway.industry.averageSalary }<br/>
+                                                    { pathway.industry.title }
+                                                </div>
+                                            </div>
                                         </li>
                                     : null}
                                 </ul>
                             </div>
                         : null }
 
-                        <div>
-                            <div>
-                                <h1>Sponsor {pathway.sponsor.name}</h1>
-                                {pathway.sponsor.description}
-                                Homepage: <a href={pathway.sponsor.homepage}>{pathway.sponsor.name}</a>
-                                {pathway.sponsor.blog ? <a href={pathway.sponsor.blog}>Blog</a> : null}
-                                {pathway.sponsor.demo ? <a href={pathway.sponsor.demo}>Demo</a> : null}
+                        <div className="greenToBlue" style={style.quote.everything}>
+                            <h1>Sponsor {pathway.sponsor.name}</h1>
+                            <div style={style.quote.leftSide}>
+                                {pathway.sponsor.description}<br/>
+                                Homepage: <a href={pathway.sponsor.homepage}>{pathway.sponsor.name}</a><br/>
+                                {pathway.sponsor.blog ? <a href={pathway.sponsor.blog}>Blog</a> : null}<br/>
+                                {pathway.sponsor.demo ? <a href={pathway.sponsor.demo}>Demo</a> : null}<br/>
                             </div>
                             {pathway.sponsor.quote ?
-                                <div>
-                                    {pathway.sponsor.quote.body}
-                                    {pathway.sponsor.quote.speakerImage}
-                                    {pathway.sponsor.quote.speakerName}
-                                    {pathway.sponsor.quote.speakerTitle}
+                                <div style={style.quote.rightSide}>
+                                    <div style={style.quote.container}>
+                                        {"\""}{pathway.sponsor.quote.body}{"\""}<br/>
+
+                                        <img
+                                            src={pathway.sponsor.quote.speakerImage}
+                                        />
+                                        {pathway.sponsor.quote.speakerName}<br/>
+                                        {pathway.sponsor.quote.speakerTitle}
+                                    </div>
                                 </div>
                                 : null
                             }
