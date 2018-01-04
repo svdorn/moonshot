@@ -91,10 +91,8 @@ class Pathway extends Component {
                                     {this.state.pathway.price}
                                 </li>
                             </ul>
-
                         </div>
                     </div>
-
                     : <CircularProgress/>}
             </div>
         );
