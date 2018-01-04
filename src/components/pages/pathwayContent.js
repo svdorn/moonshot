@@ -33,10 +33,13 @@ class PathwayContent extends Component {
     }
 
     render(){
+        const pathway = this.state.pathway;
+
         return (
-          <div>
-              Pathway Content
-          </div>
+            <div>
+                <PathwayStepList steps={pathway.steps} />
+                Pathway Content
+            </div>
         );
     }
 }
