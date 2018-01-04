@@ -1,11 +1,7 @@
 "use strict"
 import React, { Component } from 'react';
-import { AppBar, Paper } from 'material-ui';
-import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
-import { closeNotification } from "../../actions/usersActions";
-import { bindActionCreators } from 'redux';
-import PathwayPreview from '../childComponents/pathwayPreview';
+import PathwayContentLink from '../childComponents/pathwayContentLink';
+import PathwayContentVideo from '../childComponents/pathwayContentVideo';
 import axios from 'axios';
 
 class PathwayContent extends Component {
@@ -26,7 +22,6 @@ class PathwayContent extends Component {
         }).then(res => {
             this.setState({pathway: res.data});
             console.log(this.state.pathway);
-
         }).catch(function (err) {
             console.log("error getting searched for pathw");
         })
