@@ -79,9 +79,19 @@ var Pathways = require('./models/pathways.js');
 var Articles = require('./models/articles.js');
 var Videos = require('./models/videos.js');
 var Quizzes = require('./models/quizzes.js');
+var Links = require('./models/links.js');
 
 
 // --->>> EXAMPLE PATHWAY CREATION <<<---
+
+// const exampleLink = {
+//     url: "https://www.youtube.com/watch?v=J3hH-JckQ-U",
+//     company: "Treehouse"
+// }
+// Links.create(exampleLink, function(err, link) {
+//     console.log(err);
+//     console.log(link);
+// })
 
 // const exampleVideo = {
 //     link: "https://www.youtube.com/watch?v=3IW3kAGcLM0"
