@@ -35,11 +35,15 @@ var pathwaysSchema = mongoose.Schema({
       estimatedTime: String
   }],
   steps: [{
-      order: Number,
       name: String,
-      contentType: String,
-      contentID: mongoose.Schema.Types.ObjectId,
-      comments: [{ username: String, body: String, date: Date }]
+      order: Number,
+      subSteps: [{
+          order: Number,
+          name: String,
+          contentType: String,
+          contentID: mongoose.Schema.Types.ObjectId,
+          comments: [{ username: String, body: String, date: Date }]
+      }]
   }]
 });
 
