@@ -156,8 +156,15 @@ class Discover extends Component{
             },
             headerDiv: {
                 position: "relative",
-                height: "500px",
+                height: "400px",
                 width: "100%"
+            },
+            treeText: {
+                color: "white",
+                position: "absolute",
+                top: "150px",
+                left: "65px",
+                fontSize: "20px"
             }
         }
 
@@ -226,6 +233,14 @@ class Discover extends Component{
         return(
             <div className='jsxWrapper' ref='discover'>
                 <div className="greenToBlue" style={style.headerDiv}>
+                <div style={style.treeText}>
+                    <h2 style={{fontSize:"40px"}}>
+                        Discover Pathways<br/>
+                    </h2>
+                    Follow pathways to learn skills employers want,<br/>
+                    for free. Build your profile, prove your talent<br/>
+                    and get hired by innovators in technology.<br/>
+                </div>
                     <img
                         src="/images/TreeBigWhite.png"
                         style={style.treeImg}
