@@ -2,6 +2,9 @@
 import React, { Component } from 'react';
 import { AppBar, Paper } from 'material-ui';
 import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+import { closeNotification } from "../../actions/usersActions";
+import { bindActionCreators } from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
 
@@ -28,6 +31,15 @@ class Profile extends Component{
                 console.log("error getting searched for pathw");
             })
         }
+    }
+
+    goTo (route)  {
+        // closes any notification
+        this.props.closeNotification();
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
     render(){
@@ -69,7 +81,7 @@ class Profile extends Component{
             return (
                 <li style={style.pathwayPreviewLi}
                     key={key}
-                    onClick={() => self.goTo('/pathway/' + pathway._id)}>
+                    onClick={() => self.goTo('/pathwayContent/' + pathway._id)}>
                     <PathwayPreview
                         name = {pathway.name}
                         image = {pathway.previewImage}
@@ -114,4 +126,10 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Profile);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        closeNotification
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
