@@ -104,11 +104,12 @@ class Menu extends Component {
                     </Toolbar>
                     :
 
-                <Toolbar>
+                <Toolbar style={{marginTop:"20px"}}>
                     <ToolbarGroup>
                     <img
-                        width={300}
-                        height={100}
+                        style={{marginLeft:"35px"}}
+                        width={250}
+                        height={80}
                         alt="300x100"
                         className="clickable"
                         src="/images/MoonshotTempLogo.png"
