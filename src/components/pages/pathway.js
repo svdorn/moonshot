@@ -83,7 +83,7 @@ class Pathway extends Component {
                 container: {
                     border: "2px solid blue",
                     fontSize: "30px",
-                    padding: "10px"
+                    padding: "20px"
                 },
                 leftSide: {
                     width: "35%",
@@ -95,8 +95,26 @@ class Pathway extends Component {
                     width: "55%",
                     display: "inline-block",
                     verticalAlign: "top"
+                },
+                speakerImage: {
+                    borderRadius: "50%",
+                    height: "50px",
+                    width: "50px",
+                    position: "absolute"
+                },
+                speakerInfo: {
+                    marginLeft: "60px",
+                    fontSize: "20px"
+                },
+                content: {
+                    textAlign: "justify",
+                    marginBottom: "20px"
                 }
 
+            },
+            imageLeftTextRight: {
+                position: "relative",
+                textAlign: "left"
             }
 
 
@@ -208,13 +226,27 @@ class Pathway extends Component {
                             {pathway.sponsor.quote ?
                                 <div style={style.quote.rightSide}>
                                     <div style={style.quote.container}>
-                                        {"\""}{pathway.sponsor.quote.body}{"\""}<br/>
+                                        <div style={style.quote.content}>
+                                            {"\""}{pathway.sponsor.quote.body}{"\""}<br/>
+                                        </div>
 
-                                        <img
-                                            src={pathway.sponsor.quote.speakerImage}
-                                        />
-                                        {pathway.sponsor.quote.speakerName}<br/>
-                                        {pathway.sponsor.quote.speakerTitle}
+                                        <div style={style.imageLeftTextRight}>
+                                            <img
+                                                src={pathway.sponsor.quote.speakerImage}
+                                                style={style.quote.speakerImage}
+                                                alt={""}
+                                            />
+                                            <div style={style.quote.speakerInfo}>
+                                                {pathway.sponsor.quote.speakerName}<br/>
+                                                {pathway.sponsor.quote.speakerTitle}
+                                            </div>
+                                        </div>
+
+
+
+
+
+
                                     </div>
                                 </div>
                                 : null
