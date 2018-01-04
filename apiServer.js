@@ -347,8 +347,7 @@ app.post('/sendVerificationEmail', function (req, res) {
 app.post('/users/registerForPathway', function(req, res) {
     console.log("in registering for pathways");
     console.log(req.body);
-    // let recipient1 = "kyle.treige@moonshotlearning.org";
-    let recipient1 = "stevedorn9@gmail.com";
+    let recipient1 = "kyle.treige@moonshotlearning.org";
     let subject1 = "Student Registration for " + req.body.pathway;
     let content1 = "<div>"
         + "<h3>Student Registration for Pathway:</h3>"
@@ -363,15 +362,40 @@ app.post('/users/registerForPathway', function(req, res) {
         + "</h4>"
         + "<p>If the student doesn't get back to you soon with an email, make sure to reach out to them.</p>"
         + "<p>-Moonshot</p>"
-        +  "</div>"
+        +  "</div>";
 
-        sendEmail(recipient1, subject1, content1, function (success, msg) {
-            if (success) {
-                res.json("Check your email for instructions on how to get started.");
-            } else {
-                res.status(500).send(msg);
-            }
-        })
+    let name = req.body.name.replace(/(([^\s]+\s\s*){1})(.*)/,"$1").trim();
+    let recipient2 = req.body.email;
+    let subject2 = "First steps for " + req.body.pathway + " Pathway - book a 15 min call";
+    let content2 = "<div>"
+        + "<p>Hi " + name + "," + "</p>"
+        + "<p>My name is Kyle and I’m one of the founders at Moonshot. We are excited for you to get going on the pathway!</p>"
+        + "<p>Before you do we've got a few things to cover:<br/>"
+        + "- There are limited scholarships that the sponsor company offers.<br/>"
+        + "- So … We need to learn a bit about you first!<br/>"
+        + "- Step 1: " + "<a href='https://calendly.com/kyle-treige'>Book a 15 minute call with me</a>" + " so we can get things going." + "</p>"
+        + "<p>If you have any questions, shoot me a message at kyle.treige@moonshotlearning.org.</p>"
+        + "<p>Talk soon,<br/>"
+        + "Kyle</p>"
+        + "<p>-------------------------------------------<br/>"
+        + "Kyle Treige, Co-Founder & CEO <br/>"
+        + "<a href='https://www.moonshotlearning.org/'>Moonshot Learning</a><br/>"
+        + "608-438-4478</p>"
+        + "</div>";
+
+    sendEmail(recipient1, subject1, content1, function (success, msg) {
+        if (success) {
+            sendEmail(recipient2, subject2, content2, function (success, msg) {
+                if (success) {
+                    res.json("Check your email for instructions on how to get started.");
+                } else {
+                    res.status(500).send(msg);
+                }
+            })
+        } else {
+            res.status(500).send(msg);
+        }
+    })
 });
 
 // SEND EMAIL FOR FOR BUSINESS

@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 var pathwayCategoriesSchema = mongoose.Schema({
     name: String,
-    pathwayIDs: [{ $oid: String }]
+    pathwayIDs: [{ $oid: String }],
     image: String
 });
 
