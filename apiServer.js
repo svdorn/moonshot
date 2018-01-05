@@ -811,7 +811,7 @@ app.get('/topPathways', function (req, res) {
 
 });
 
-//----->> GET PATHWAY BY ID <<-----
+//----->> GET LINK BY ID <<-----
 app.get('/getLink', function (req, res) {
     console.log("here");
     const _id = req.query._id;
@@ -820,9 +820,27 @@ app.get('/getLink', function (req, res) {
 
     Links.findOne(query, function (err, link) {
         if (err) {
-            console.log("error in get pathway by id")
+            console.log("error in get link by id")
         } else {
-            console.log("got pathway by id: ", link);
+            console.log("got link by id: ", link);
+            res.json(link);
+        }
+
+    })
+});
+
+//----->> GET VIDEO BY ID <<-----
+app.get('/getVideo', function (req, res) {
+    console.log("here");
+    const _id = req.query._id;
+    console.log(_id)
+    const query = {_id: _id};
+
+    Videos.findOne(query, function (err, link) {
+        if (err) {
+            console.log("error in get video by id")
+        } else {
+            console.log("got video by id: ", link);
             res.json(link);
         }
 
