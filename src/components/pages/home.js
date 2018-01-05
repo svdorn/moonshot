@@ -80,7 +80,7 @@ class Home extends Component{
             {name: "amazon.png", height:"90px", left:"55%", top:"80%"},
             {name: "ArchVirtual.png", height:"50px", left:"70%", top:"57%"},
             {name: "Epic.png", height:"70px", left:"7%", top:"55%"},
-            {name: "holos.png", height:"50px", left:"85%", top:"70%"},
+            {name: "holosHomepage.png", height:"50px", left:"85%", top:"70%"},
             {name: "Singlewire.png", height:"80px", left:"20%", top:"10%"},
             {name: "Unity.png", height:"60px", left:"70%", top:"12%"},
             {name: "XES.png", height:"100px", left:"20%", top:"77%"}

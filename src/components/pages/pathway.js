@@ -149,26 +149,25 @@ class Pathway extends Component {
                                 <img
                                     src={pathway.sponsor.logo}
                                     alt={pathway.sponsor.name}
-                                    height={25}
+                                    height={40}
                                     style={{paddingLeft: '15px'}}
                                 />
                             </div>
-                            <div>
-                                <ul className="horizCenteredList pathwayPrevList whiteText smallText2">
-                                    <li>
-                                        Completion Time<br/>
-                                        {pathway.estimatedCompletionTime}
-                                    </li>
-                                    <li>
-                                        Complete By<br/>
-                                        {formattedDeadline}
-                                    </li>
-                                    <li>
-                                        Cost<br/>
-                                        {pathway.price}
-                                    </li>
-                                </ul>
-                            </div>
+                            <ul className="horizCenteredList whiteText smallText2"
+                                style={{position: 'absolute', bottom: 0, width:'100%'}}>
+                                <li style={{width: '200px'}}>
+                                    Completion Time<br/>
+                                    {pathway.estimatedCompletionTime}
+                                </li>
+                                <li style={{width: '200px'}}>
+                                    Complete By<br/>
+                                    {formattedDeadline}
+                                </li>
+                                <li style={{width: '200px'}}>
+                                    Cost<br/>
+                                    {pathway.price}
+                                </li>
+                            </ul>
                         </div>
 
 
