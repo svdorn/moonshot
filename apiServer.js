@@ -892,6 +892,38 @@ app.get('/search', function (req, res) {
     // })
 });
 
+
+app.post("/userCurrentStep", function (req, res) {
+    console.log("req is: ");
+    console.log(req);
+    const userId = req.body.params.userId;
+    const pathwayId = req.body.params.pathwayId;
+
+    var update = {
+        "_id": userId,
+        "pathways.pathwayId": pathwayId,
+
+    }
+//     var user = req.body;
+//     let query2 = {_id: user._id};
+//     var update = {
+//         '$set': {
+//             pathways: newPasswordToken,
+//             time: newTime,
+//         }
+//     };
+//     console.log(update);
+//
+//     var options = {new: true};
+//
+// Users.findOneAndUpdate(query2, update, options, function (err, foundUser) {
+//     if (err) {
+//         console.log(err);
+//     }
+    res.json(true)
+});
+
+
 //----->> GET IMAGES <<------
 // app.get('/images', function (req, res) {
 //     const imgFolder = __dirname + '/public/images/';

@@ -14,7 +14,10 @@ var usersSchema = mongoose.Schema({
     images: String,
     pathways: [{
         pathwayId: mongoose.Schema.Types.ObjectId,
-        currentStep: mongoose.Schema.Types.ObjectId,
+        currentStep: {
+            step: Number,
+            subStep: Number
+        },
     }],
 });
 

@@ -25,7 +25,11 @@ class PathwayStepList extends Component {
     }
 
     updateStepInReduxState() {
-        this.props.updateCurrentSubStep(this.props.steps[this.state.stepIndex].subSteps[this.state.subStepIndex]);
+        const userId = this.props.currentUserId;
+        const pathwayId = this.props.pathwayId;
+        const stepNumber = this.state.stepIndex + 1;
+        const substep = this.props.steps[this.state.stepIndex].subSteps[this.state.subStepIndex]
+        this.props.updateCurrentSubStep(userId, pathwayId, stepNumber, substep);
     }
 
     goTo (route)  {
@@ -63,15 +67,17 @@ class PathwayStepList extends Component {
         if (subStepIndex < 1) {
             this.setState({
                 subStepIndex: subStepIndex + 1
+            }, function() {
+                this.updateStepInReduxState();
             });
         } else if (stepIndex < 2) {
             this.setState({
                 stepIndex: stepIndex + 1,
                 subStepIndex: 0
+            }, function() {
+                this.updateStepInReduxState();
             });
         }
-
-        this.updateStepInReduxState();
     };
 
     handlePrevSub = () => {
@@ -80,15 +86,17 @@ class PathwayStepList extends Component {
         if (subStepIndex > 0) {
             this.setState({
                 subStepIndex: subStepIndex - 1
+            }, function() {
+                this.updateStepInReduxState();
             });
         } else if (stepIndex > 0) {
             this.setState({
                 stepIndex: stepIndex - 1,
                 subStepIndex: 1
+            }, function() {
+                this.updateStepInReduxState();
             })
         }
-
-        this.updateStepInReduxState();
     };
 
     renderStepActions(step) {
@@ -294,7 +302,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        //currentStep: state.users.currentUser
+        currentUserId: state.users.currentUser._id
     };
 }
 

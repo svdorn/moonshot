@@ -237,9 +237,26 @@ export function deleteUser(id) {
   }
 }
 
-export function updateCurrentSubStep(subStep) {
+export function updateCurrentSubStep(userId, pathwayId, stepNumber, subStep) {
     return function(dispatch) {
         dispatch({type: "UPDATE_CURRENT_SUBSTEP", payload: subStep});
+
+        axios.post("/api/userCurrentStep", {
+            params: {
+                userId: userId,
+                pathwayId: pathwayId,
+                stepNumber: stepNumber,
+                subStepNumber: subStep.order
+            }
+        })
+        .then(function(response) {
+            console.log("current step saved");
+        })
+        .catch(function(err) {
+            console.log("error saving current step: ", err)
+        });
+
+
     }
 }
 
