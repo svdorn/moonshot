@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 class PathwayContentVideo extends Component {
     render() {
         return (
-            <div></div>
+            <div>Video</div>
         );
     }
 }
