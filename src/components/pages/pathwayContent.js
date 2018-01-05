@@ -63,6 +63,7 @@ class PathwayContent extends Component {
 
         const pathway = this.state.pathway;
         console.log("pathway in render is: ", pathway);
+        console.log("rerendering")
 
         return (
             <div>

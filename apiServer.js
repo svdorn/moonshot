@@ -829,6 +829,24 @@ app.get('/getPathwayById', function (req, res) {
     })
 });
 
+//----->> GET LINK BY ID <<-----
+app.get('/getLink', function (req, res) {
+    console.log("here");
+    const _id = req.query._id;
+    console.log(_id)
+    const query = {_id: _id};
+
+    Links.findOne(query, function (err, link) {
+        if (err) {
+            console.log("error in getting link by id")
+        } else {
+            console.log("got link by id: ", link);
+            res.json(link);
+        }
+
+    })
+});
+
 //----->> SEARCH PATHWAYS <<------
 app.get('/search', function (req, res) {
     const MAX_PATHWAYS_TO_RETURN = 1000;
