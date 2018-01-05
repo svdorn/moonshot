@@ -68,7 +68,6 @@ class PathwayContent extends Component {
                             {pathway.name}
                         </div>
                         <PathwayStepList steps={pathway.steps} style={style.stepList} />
-                        Pathway Content
                     </div>
                 : null }
             </div>
