@@ -812,6 +812,24 @@ app.get('/topPathways', function (req, res) {
 });
 
 //----->> GET PATHWAY BY ID <<-----
+app.get('/getLink', function (req, res) {
+    console.log("here");
+    const _id = req.query._id;
+    console.log(_id)
+    const query = {_id: _id};
+
+    Links.findOne(query, function (err, link) {
+        if (err) {
+            console.log("error in get pathway by id")
+        } else {
+            console.log("got pathway by id: ", link);
+            res.json(link);
+        }
+
+    })
+});
+
+//----->> GET PATHWAY BY ID <<-----
 app.get('/getPathwayById', function (req, res) {
     console.log("here");
     const _id = req.query._id;
