@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Paper } from 'material-ui';
 import { bindActionCreators } from 'redux';
+import { Paper } from 'material-ui';
 
 class PathwayStepList extends Component {
     constructor(props){
@@ -21,9 +22,15 @@ class PathwayStepList extends Component {
     }
 
     render() {
+        const style = {
+            enclosingBox: {
+
+            }
+        }
 
         return (
-            <Paper>
+            <Paper style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
+                Step List!
             </Paper>
         )
     }

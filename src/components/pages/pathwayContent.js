@@ -2,6 +2,11 @@
 import React, { Component } from 'react';
 import PathwayContentLink from '../childComponents/pathwayContentLink';
 import PathwayContentVideo from '../childComponents/pathwayContentVideo';
+import { AppBar, Paper } from 'material-ui';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+import { closeNotification } from "../../actions/usersActions";
+import { bindActionCreators } from 'redux';
 import PathwayStepList from '../childComponents/pathwayStepList';
 import axios from 'axios';
 
@@ -29,11 +34,18 @@ class PathwayContent extends Component {
     }
 
     render(){
+        const style = {
+            stepList: {
+                height: "800px",
+                width: "400px"
+            }
+        }
+
         const pathway = this.state.pathway;
 
         return (
-            <div>
-                <PathwayStepList steps={pathway.steps} />
+            <div className="greenToBlue">
+                <PathwayStepList steps={pathway.steps} style={style.stepList} />
                 Pathway Content
             </div>
         );
