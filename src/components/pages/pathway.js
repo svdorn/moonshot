@@ -52,14 +52,14 @@ class Pathway extends Component {
 
         const style = {
             descriptionAndSalary: {
-                height: "200px",
+                height: "125px",
                 width: "100%",
                 position: "relative"
             },
             descriptionAndSalaryLi: {
                 width: "40%",
                 verticalAlign: "top",
-                margin: "0px 20px",
+                margin: "0px 40px",
                 position: "relative"
             },
             descriptionAndSalaryUl: {
@@ -156,15 +156,15 @@ class Pathway extends Component {
                             <ul className="horizCenteredList whiteText smallText2"
                                 style={{position: 'absolute', bottom: 0, width:'100%'}}>
                                 <li style={{width: '200px'}}>
-                                    Completion Time<br/>
+                                    <i>Completion Time</i><br/>
                                     {pathway.estimatedCompletionTime}
                                 </li>
                                 <li style={{width: '200px'}}>
-                                    Complete By<br/>
+                                    <i>Complete By</i><br/>
                                     {formattedDeadline}
                                 </li>
                                 <li style={{width: '200px'}}>
-                                    Cost<br/>
+                                    <i>Cost</i><br/>
                                     {pathway.price}
                                 </li>
                             </ul>
@@ -177,7 +177,7 @@ class Pathway extends Component {
                                     {pathway.description ?
                                         <li style={style.descriptionAndSalaryLi}>
                                             <img
-                                                src="/icons/MagnifyingGlass.png"
+                                                src="/icons/GraduationHat.png"
                                                 style={style.descriptionAndSalaryIcon}
                                             />
                                             <div style={style.descriptionAndSalaryText}>
@@ -195,8 +195,8 @@ class Pathway extends Component {
                                                 />
                                                 <div style={style.descriptionAndSalaryText}>
                                                     Industry average salary<br/>
-                                                    {pathway.industry.averageSalary}<br/>
-                                                    {pathway.industry.title}
+                                                    for {pathway.industry.title}<br/>
+                                                    <i>{pathway.industry.averageSalary}</i>
                                                 </div>
                                             </div>
                                         </li>
