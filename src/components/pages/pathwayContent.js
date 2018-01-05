@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import PathwayContentLink from '../childComponents/pathwayContentLink';
 import PathwayContentVideo from '../childComponents/pathwayContentVideo';
+import PathwayStepList from '../childComponents/pathwayStepList';
 import axios from 'axios';
 
 class PathwayContent extends Component {
