@@ -8,7 +8,7 @@ import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
 import axios from 'axios';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import { browserHistory } from 'react-router';
+import {browserHistory} from 'react-router';
 
 class Pathway extends Component {
     constructor(props) {
@@ -48,7 +48,6 @@ class Pathway extends Component {
         }
     }
 
-
     render() {
 
         const style = {
@@ -75,7 +74,7 @@ class Pathway extends Component {
                 float: "left",
                 maxWidth: "calc(100% - 70px)"
             },
-            quote:{
+            quote: {
                 everything: {
                     textAlign: "center",
                     padding: "20px 0px"
@@ -127,41 +126,32 @@ class Pathway extends Component {
         const pathway = this.state.pathway;
 
 
-
         return (
             <div className="jsxWrapper">
                 {pathway.sponsor !== undefined ?
                     <div>
-                        <div className="purpleToBlue">
-                            <div className="pathwayPrevListContainer">
-                                <ul className="horizCenteredList pathwayPrevList">
-                                    <li className="pathwayHeaderText whiteText mediumText noWrap"
-                                        style={{zIndex: "20"}}>
-                                        {pathway.name}<br/>
-                                        <button className="outlineButton"
-                                                style={{backgroundColor: "transparent", border: "2px solid white"}}
-                                                onClick={this.handleClick.bind(this)}>
-                                            {"Sign Up"}
-                                        </button>
-                                        <br/>
-                                        Sponsored By:
-                                        <img
-                                            src={pathway.sponsor.logo}
-                                            alt={pathway.sponsor.name}
-                                            height={25}
-                                            style={{paddingLeft: '15px'}}
-                                        />
-                                    </li>
-                                    <li className="pathwayHeaderText whiteText mediumText noWrap"
-                                        style={{zIndex: "20"}}>
-                                        Change Logo Next Time <br/>
-                                        <img
-                                            src="/images/MoonshotTempLogo.png"
-                                            alt="Moonshot Learning"
-                                            style={{width: "450px", height: '150px'}}
-                                        />
-                                    </li>
-                                </ul>
+                        <div className="fullHeight purpleToBlue">
+                            <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
+
+                            <div className="infoBox whiteText mediumText noWrap" style={{zIndex: "20"}}>
+                                {pathway.sponsor.pathwayHomepage[0]}<br/>
+                                {pathway.sponsor.pathwayHomepage[1]}<br/>
+                                {pathway.sponsor.pathwayHomepage[2]}<br/>
+                                <button className="outlineButton"
+                                        style={{backgroundColor: "transparent", border: "2px solid white"}}
+                                        onClick={this.handleClick.bind(this)}>
+                                    {"Sign Up"}
+                                </button>
+                            </div>
+                            <br/>
+                            <div className="whiteText smallText2 noWrap" style={{textAlign: 'center'}}>
+                                Sponsored By:
+                                <img
+                                    src={pathway.sponsor.logo}
+                                    alt={pathway.sponsor.name}
+                                    height={25}
+                                    style={{paddingLeft: '15px'}}
+                                />
                             </div>
                         </div>
                         <div className="greenToBlue">
@@ -181,22 +171,22 @@ class Pathway extends Component {
                             </ul>
                         </div>
 
-                        { pathway.description || pathway.industry ?
+                        {pathway.description || pathway.industry ?
                             <div style={style.descriptionAndSalary}>
                                 <ul className="horizCenteredList" style={style.descriptionAndSalaryUl}>
-                                    { pathway.description ?
+                                    {pathway.description ?
                                         <li style={style.descriptionAndSalaryLi}>
                                             <img
                                                 src="/icons/MagnifyingGlass.png"
                                                 style={style.descriptionAndSalaryIcon}
                                             />
                                             <div style={style.descriptionAndSalaryText}>
-                                                { pathway.description }
+                                                {pathway.description}
                                             </div>
                                         </li>
-                                    : null }
+                                        : null}
 
-                                    { pathway.industry ?
+                                    {pathway.industry ?
                                         <li style={style.descriptionAndSalaryLi}>
                                             <div>
                                                 <img
@@ -205,15 +195,15 @@ class Pathway extends Component {
                                                 />
                                                 <div style={style.descriptionAndSalaryText}>
                                                     Industry average salary<br/>
-                                                    { pathway.industry.averageSalary }<br/>
-                                                    { pathway.industry.title }
+                                                    {pathway.industry.averageSalary}<br/>
+                                                    {pathway.industry.title}
                                                 </div>
                                             </div>
                                         </li>
-                                    : null}
+                                        : null}
                                 </ul>
                             </div>
-                        : null }
+                            : null}
 
                         <div className="greenToBlue" style={style.quote.everything}>
                             <h1>Sponsor {pathway.sponsor.name}</h1>
@@ -221,7 +211,7 @@ class Pathway extends Component {
                                 {pathway.sponsor.description}<br/>
                                 {pathway.sponsor.hiring ?
                                     <div>Actively hiring {pathway.sponsor.hiring}<br/></div>
-                                : null}
+                                    : null}
                                 Homepage: <a href={pathway.sponsor.homepage}>{pathway.sponsor.name}</a><br/>
                                 {pathway.sponsor.blog ? <a href={pathway.sponsor.blog}>Blog</a> : null}<br/>
                                 {pathway.sponsor.demo ? <a href={pathway.sponsor.demo}>Demo</a> : null}<br/>
@@ -244,10 +234,6 @@ class Pathway extends Component {
                                                 {pathway.sponsor.quote.speakerTitle}
                                             </div>
                                         </div>
-
-
-
-
 
 
                                     </div>
