@@ -1,5 +1,7 @@
 "use strict"
 import React, { Component } from 'react';
+import PathwayContentLink from '../childComponents/pathwayContentLink';
+import PathwayContentVideo from '../childComponents/pathwayContentVideo';
 import { AppBar, Paper } from 'material-ui';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
@@ -28,7 +30,6 @@ class PathwayContent extends Component {
             this.setState({pathway: res.data, hasPathway: true});
 
             console.log(this.state.pathway);
-
         }).catch(function (err) {
             console.log("error getting searched for pathw");
         })
