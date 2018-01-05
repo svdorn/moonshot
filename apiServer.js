@@ -829,24 +829,6 @@ app.get('/getPathwayById', function (req, res) {
     })
 });
 
-//----->> GET LINK BY ID <<-----
-app.get('/getLink', function (req, res) {
-    console.log("here");
-    const _id = req.query._id;
-    console.log(_id)
-    const query = {_id: _id};
-
-    Links.findOne(query, function (err, link) {
-        if (err) {
-            console.log("error in getting link by id")
-        } else {
-            console.log("got link by id: ", link);
-            res.json(link);
-        }
-
-    })
-});
-
 //----->> SEARCH PATHWAYS <<------
 app.get('/search', function (req, res) {
     const MAX_PATHWAYS_TO_RETURN = 1000;
@@ -901,44 +883,30 @@ app.get('/search', function (req, res) {
                 res.json(pathways);
             }
         })
-
-    // Pathways.find(query, function (err, pathways) {
-    //     if (err){
-    //         console.log(err);
-    //     }
-    //     res.json(pathways);
-    // })
 });
 
 
 app.post("/userCurrentStep", function (req, res) {
-    console.log("req is: ");
-    console.log(req);
     const userId = req.body.params.userId;
     const pathwayId = req.body.params.pathwayId;
+    const stepNumber = req.body.params.stepNumber;
+    const subStepNumber = req.body.params.subStepNumber;
 
-    var update = {
-        "_id": userId,
-        "pathways.pathwayId": pathwayId,
-
-    }
-//     var user = req.body;
-//     let query2 = {_id: user._id};
-//     var update = {
-//         '$set': {
-//             pathways: newPasswordToken,
-//             time: newTime,
-//         }
-//     };
-//     console.log(update);
-//
-//     var options = {new: true};
-//
-// Users.findOneAndUpdate(query2, update, options, function (err, foundUser) {
-//     if (err) {
-//         console.log(err);
-//     }
-    res.json(true)
+    Users.findById(userId, function(err, user) {
+        let pathwayIndex = user.pathways.findIndex(function(path) {
+            return path.pathwayId == pathwayId;
+        });
+        user.pathways[pathwayIndex].currentStep = {
+            subStep: subStepNumber,
+            step: stepNumber
+        }
+        user.save(function() {
+            res.json(true);
+        });
+    })
+    .catch(function(err) {
+        console.log("error saving the current step, ", err);
+    })
 });
 
 
