@@ -14,8 +14,7 @@ class PathwayContent extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            pathway: {},
-            hasPathway: false
+            pathway: undefined
         }
     }
 
@@ -27,11 +26,11 @@ class PathwayContent extends Component {
                 _id: id
             }
         }).then(res => {
-            this.setState({pathway: res.data, hasPathway: true});
-
-            console.log(this.state.pathway);
+            this.setState({pathway: res.data}, () => {
+                console.log("the pathway is ", this.state.pathway);
+            });
         }).catch(function (err) {
-            console.log("error getting searched for pathw");
+            console.log("error getting searched-for pathway");
         })
     }
 
@@ -58,18 +57,20 @@ class PathwayContent extends Component {
         }
 
         const pathway = this.state.pathway;
-        console.log(pathway);
+        console.log("pathway in render is: ", pathway);
 
         return (
             <div>
-                <div style={style.headerSpace} className="greenToBlue" />
-                <div style={style.pathwayHeader}>
-                    {pathway.name}
-                </div>
-                {this.state.hasPathway ?
-                    <PathwayStepList steps={pathway.steps} style={style.stepList} />
-                : null}
-                Pathway Content
+                { this.state.pathway ?
+                    <div>
+                        <div style={style.headerSpace} className="greenToBlue" />
+                        <div style={style.pathwayHeader}>
+                            {pathway.name}
+                        </div>
+                        <PathwayStepList steps={pathway.steps} style={style.stepList} />
+                        Pathway Content
+                    </div>
+                : null }
             </div>
         );
     }

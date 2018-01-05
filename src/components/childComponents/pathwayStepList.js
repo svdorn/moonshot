@@ -3,8 +3,7 @@ import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Paper } from 'material-ui';
 import { bindActionCreators } from 'redux';
-import PathwayStep from '../childComponents/pathwayStepList';
-import { Paper } from 'material-ui'
+import PathwayStep from '../childComponents/pathwayStep';
 
 class PathwayStepList extends Component {
     constructor(props){
@@ -33,11 +32,14 @@ class PathwayStepList extends Component {
         console.log("steps are: ");
         console.log(steps);
 
-        const stepItems = steps.map(function(step) {
-            return (
-                <PathwayStep step={step}/>
-            )
-        });
+
+        const stepItems = steps ?
+            steps.map(function(step) {
+                return (
+                    <PathwayStep step={step} key={step.name} />
+                )
+            })
+            : null;
 
         return (
             <Paper style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
