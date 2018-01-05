@@ -196,6 +196,7 @@ button.link {
 
 .noWrap { white-space: nowrap; }
 .center { text-align: center; }
+.centerButton { display:flex; justify-content: center; }
 
 .gradientBorder {
     background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));

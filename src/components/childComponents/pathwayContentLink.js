@@ -1,10 +1,10 @@
-import React, { Component } from 'react';
-import { Paper } from 'material-ui';
-import { connect } from 'react-redux';
+import React, {Component} from 'react';
+import {Paper} from 'material-ui';
+import {connect} from 'react-redux';
 import axios from 'axios';
 
 class PathwayContentLink extends Component {
-    constructor(props){
+    constructor(props) {
         super(props);
         this.state = {
             content: undefined,
@@ -21,7 +21,7 @@ class PathwayContentLink extends Component {
                     _id: id
                 }
             }).then(res => {
-                this.setState({content: res.data, currStep:this.props.step});
+                this.setState({content: res.data, currStep: this.props.step});
                 console.log(this.state.content);
             }).catch(function (err) {
                 console.log("error getting searched for link");
@@ -38,7 +38,7 @@ class PathwayContentLink extends Component {
                     _id: id
                 }
             }).then(res => {
-                this.setState({content: res.data, currStep:this.props.step});
+                this.setState({content: res.data, currStep: this.props.step});
                 console.log(this.state.content);
             }).catch(function (err) {
                 console.log("error getting searched for link");
@@ -47,12 +47,40 @@ class PathwayContentLink extends Component {
     }
 
     render() {
+        console.log(this.state.content);
+        const content = this.state.content;
         return (
             <Paper style={{...this.props.style}} zDepth={1}>
-                <div>
-                    Here:
-                    {this.state.content !== undefined ? <div>{this.state.content.url}</div> : <div>Here</div>}
-                </div>
+                {this.state.content !== undefined ?
+                    <div className="center" style={{marginBottom: "10px"}}>
+                        <img src="/images/OfficialLogoBlue.png" key="moonshot" style={{
+                            height: "100px",
+                            width: "320px",
+                            display: "inline-block",
+                            marginBottom: "30px",
+                            marginLeft: "15px",
+                        }}/>
+                        <img src="/icons/PlusSign.png" key="plusSign" style={{
+                            display: "inline-block",
+                            height: "25px",
+                            width: "25px",
+                            marginTop: "5px",
+                            marginLeft: "5px",
+                        }}/>
+                        <img src={content.logo} key={content.company} style={{
+                            height: "190px",
+                            width: "360px",
+                            display: "inline-block"
+                        }}/>
+                        <h4>Instructions</h4>
+                        <p>{content.instructions}</p>
+                        <button className="outlineButton whiteBlueButton">
+                            <a href={content.url} target="_blank" style={{textDecoration: 'none', color: '#70cbff'}}>
+                                Start Lesson
+                            </a>
+                        </button>
+                    </div>
+                    : null}
             </Paper>
         );
     }
