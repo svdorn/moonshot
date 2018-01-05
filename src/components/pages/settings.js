@@ -29,11 +29,11 @@ class Settings extends Component {
                 }
                 <div className="container">
                     <Paper className="boxStyle">
-                        <Menu value={this.state.value} onChange={this.handleChange} style={{backgroundColor:'#00c3ff'}}>
+                        <Menu value={this.state.value} onChange={this.handleChange} style={{}}>
                             <MenuItem primaryText="Account" disabled={true}/>
                             <Divider/>
                             <MenuItem value={1} primaryText="Settings"/>
-                            <MenuItem value={2} style={{color:'white'}} primaryText="Change Password"/>
+                            <MenuItem value={2} primaryText="Change Password"/>
                         </Menu>
                     </Paper>
                     {this.state.value === 1 ?
