@@ -14,22 +14,64 @@ class Profile extends Component{
 
         this.state = {
             pathways: [],
+            userPathwayPreviews: undefined
         }
     }
 
     componentDidMount() {
-        // populate featuredPathways with initial pathways
-        for (let i = 0; i < this.props.currentUser.pathways.length; i++) {
-            let id = this.props.currentUser.pathways[i].pathwayId;
-            axios.get("/api/getPathwayById", {
-                params: {
-                    _id: id
-                }
-            }).then(res => {
-                this.setState({ pathways: [...this.state.pathways, res.data] });
-            }).catch(function (err) {
-                console.log("error getting searched for pathw");
-            })
+        // check if there is a logged-in user first, then create the user's pathways
+        if (this.props.currentUser) {
+            // populate featuredPathways with initial pathways
+            for (let i = 0; i < this.props.currentUser.pathways.length; i++) {
+                let id = this.props.currentUser.pathways[i].pathwayId;
+                axios.get("/api/getPathwayById", {
+                    params: {
+                        _id: id
+                    }
+                }).then(res => {
+                    let pathways = res.data;
+                    console.log("pathways are: ");
+                    console.log(pathways);
+                    let key = 0;
+                    let self = this;
+
+                    // if the user only has one pathway, the returned pathways
+                    // will be an object, not an array. Convert to array.
+                    if (!Array.isArray(pathways)) {
+                        pathways = [pathways];
+                    }
+
+                    // use the received pathways to make pathway previews
+                    const userPathwayPreviews = pathways.map(function(pathway) {
+                        key++;
+                        const deadline = new Date(pathway.deadline);
+                        const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                        return (
+                            <li key={key}
+                                onClick={() => self.goTo('/pathwayContent/' + pathway._id)}>
+                                <PathwayPreview
+                                    name = {pathway.name}
+                                    image = {pathway.previewImage}
+                                    logo = {pathway.sponsor.logo}
+                                    sponsorName = {pathway.sponsor.name}
+                                    completionTime = {pathway.estimatedCompletionTime}
+                                    deadline = {formattedDeadline}
+                                    price = {pathway.price}
+                                    _id = {pathway._id}
+                                />
+                            </li>
+                        );
+                    });
+
+                    this.setState({
+                        pathways,
+                        userPathwayPreviews
+                    });
+                }).catch(function (err) {
+                    console.log("error getting searched-for pathway");
+                    console.log(err);
+                })
+            }
         }
     }
 
@@ -72,51 +114,36 @@ class Profile extends Component{
                 MsTransformOriginY: "0"
             },
         };
-        let key = 0;
-        let self = this;
-        const userPathwayPreviews = this.state.pathways.map(function(pathway) {
-            key++;
-            const deadline = new Date(pathway.deadline);
-            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
-            return (
-                <li style={style.pathwayPreviewLi}
-                    key={key}
-                    onClick={() => self.goTo('/pathwayContent/' + pathway._id)}>
-                    <PathwayPreview
-                        name = {pathway.name}
-                        image = {pathway.previewImage}
-                        logo = {pathway.sponsor.logo}
-                        sponsorName = {pathway.sponsor.name}
-                        completionTime = {pathway.estimatedCompletionTime}
-                        deadline = {formattedDeadline}
-                        price = {pathway.price}
-                        _id = {pathway._id}
-                    />
-                </li>
-            );
-        });
+
 
         return(
             <div className='jsxWrapper' ref='discover'>
-                <div className="greenToBlue" style={style.headerDiv}>
-                    <div style={style.treeText}>
-                        <h2 style={{fontSize:"40px"}}>
-                            {this.props.currentUser.name}<br/>
-                        </h2>
+                { this.props.currentUser ?
+                    <div>
+                        <div className="greenToBlue" style={style.headerDiv}>
+                            <div style={style.treeText}>
+                                <h2 style={{fontSize:"40px"}}>
+                                    {this.props.currentUser.name}<br/>
+                                </h2>
+                            </div>
+                        </div>
+                        { this.state.userPathwayPreviews ?
+                            <div>
+                                <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
+                                    {this.state.userPathwayPreviews}
+                                </ul>
+                            </div>
+                        : null }
                     </div>
-                </div>
-                <div>
-                    <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
-                        {userPathwayPreviews}
-                    </ul>
-                </div>
+                : null }
             </div>
-            // {/*<div>*/}
-            //         {/*<AppBar className="appBar"*/}
-            //                 {/*showMenuIconButton={false}*/}
-            //                 {/*title={this.props.currentUser.name}/>*/}
-            // {/*</div>*/}
+
         );
+        // {/*<div>*/}
+        //         {/*<AppBar className="appBar"*/}
+        //                 {/*showMenuIconButton={false}*/}
+        //                 {/*title={this.props.currentUser.name}/>*/}
+        // {/*</div>*/}
     }
 }
 

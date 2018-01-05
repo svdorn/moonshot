@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Paper } from 'material-ui'
 
-class PathwayStepItem extends Component {
+class PathwayStep extends Component {
     constructor(props){
         super(props);
 
@@ -24,6 +24,7 @@ class PathwayStepItem extends Component {
 
         return (
             <Paper>
+                {this.props.step.name}
             </Paper>
         )
     }
@@ -41,4 +42,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(PathwayStepItem);
+export default connect(mapStateToProps, mapDispatchToProps)(PathwayStep);

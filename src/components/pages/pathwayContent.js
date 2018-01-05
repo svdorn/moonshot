@@ -13,6 +13,7 @@ class PathwayContent extends Component {
         super(props);
         this.state = {
             pathway: {},
+            hasPathway: false
         }
     }
 
@@ -24,7 +25,8 @@ class PathwayContent extends Component {
                 _id: id
             }
         }).then(res => {
-            this.setState({pathway: res.data});
+            this.setState({pathway: res.data, hasPathway: true});
+
             console.log(this.state.pathway);
 
         }).catch(function (err) {
@@ -35,16 +37,37 @@ class PathwayContent extends Component {
     render(){
         const style = {
             stepList: {
-                height: "800px",
-                width: "400px"
+                height: "600px",
+                width: "400px",
+                marginLeft: "30px"
+            },
+            pathwayHeader: {
+                width: "100%",
+                height: "50px",
+                backgroundColor: "white",
+                borderTop: "2px solid black",
+                borderBottom: "2px solid black",
+                padding: "10px 30px",
+                fontSize: "20px"
+            },
+            headerSpace: {
+                width: "100%",
+                height: "120px"
             }
         }
 
         const pathway = this.state.pathway;
+        console.log(pathway);
 
         return (
-            <div className="greenToBlue">
-                <PathwayStepList steps={pathway.steps} style={style.stepList} />
+            <div>
+                <div style={style.headerSpace} className="greenToBlue" />
+                <div style={style.pathwayHeader}>
+                    {pathway.name}
+                </div>
+                {this.state.hasPathway ?
+                    <PathwayStepList steps={pathway.steps} style={style.stepList} />
+                : null}
                 Pathway Content
             </div>
         );
