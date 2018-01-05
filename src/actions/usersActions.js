@@ -237,6 +237,12 @@ export function deleteUser(id) {
   }
 }
 
+export function updateCurrentSubStep(subStep) {
+    return function(dispatch) {
+        dispatch({type: "UPDATE_CURRENT_SUBSTEP", payload: subStep});
+    }
+}
+
 // RESET BUTTON
 export function resetButton() {
   return {

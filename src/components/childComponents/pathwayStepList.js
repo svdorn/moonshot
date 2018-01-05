@@ -3,6 +3,7 @@ import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Paper } from 'material-ui';
 import { bindActionCreators } from 'redux';
+import { updateCurrentSubStep } from '../../actions/usersActions';
 //import PathwayStep from '../childComponents/pathwayStep';
 import {
   Step,
@@ -24,7 +25,7 @@ class PathwayStepList extends Component {
     }
 
     updateStepInReduxState() {
-        //this.props.upateCurrentSubStep(this.props.steps[this.state.stepIndex].subSteps[this.state.subStepIndex]);
+        this.props.updateCurrentSubStep(this.props.steps[this.state.stepIndex].subSteps[this.state.subStepIndex]);
     }
 
     goTo (route)  {
@@ -287,7 +288,7 @@ class PathwayStepList extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        updateCurrentSubStep
     }, dispatch);
 }
 

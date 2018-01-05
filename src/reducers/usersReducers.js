@@ -144,6 +144,11 @@ export function usersReducers(state = initialState, action) {
                 ...state, notification: action.notification, loadingSomething: false
             };
             break;
+        case "UPDATE_CURRENT_SUBSTEP":
+            return {
+                ...state, currentSubStep: action.payload
+            }
+            break;
         case "CLOSE_NOTIFICATION":
             return {
                 ...state, notification: undefined
