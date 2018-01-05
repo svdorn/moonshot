@@ -23,9 +23,12 @@ class PathwayStep extends Component {
 
     render() {
 
+        const currentStepId = this.props.currentStepId;
+
         return (
             <Paper>
                 {this.props.step.name}
+                {}
             </Paper>
         )
     }
@@ -39,7 +42,9 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        //currentStep: state.users.currentUser
+        currentStep: state.users.currentUser.pathways.find(function(p) {
+            return true;
+        })
     };
 }
 
