@@ -153,23 +153,24 @@ class Pathway extends Component {
                                     style={{paddingLeft: '15px'}}
                                 />
                             </div>
+                            <div>
+                                <ul className="horizCenteredList pathwayPrevList whiteText smallText2">
+                                    <li>
+                                        Completion Time<br/>
+                                        {pathway.estimatedCompletionTime}
+                                    </li>
+                                    <li>
+                                        Complete By<br/>
+                                        {formattedDeadline}
+                                    </li>
+                                    <li>
+                                        Cost<br/>
+                                        {pathway.price}
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                        <div className="greenToBlue">
-                            <ul className="horizCenteredList pathwayPrevList whiteText smallText2">
-                                <li>
-                                    Completion Time<br/>
-                                    {pathway.estimatedCompletionTime}
-                                </li>
-                                <li>
-                                    Complete By<br/>
-                                    {formattedDeadline}
-                                </li>
-                                <li>
-                                    Cost<br/>
-                                    {pathway.price}
-                                </li>
-                            </ul>
-                        </div>
+
 
                         {pathway.description || pathway.industry ?
                             <div style={style.descriptionAndSalary}>

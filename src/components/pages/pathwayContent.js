@@ -39,7 +39,12 @@ class PathwayContent extends Component {
             stepList: {
                 height: "600px",
                 width: "400px",
-                marginLeft: "30px"
+                marginLeft: "30px",
+                display: "inline-block",
+            },
+            content: {
+                display: "inline-block",
+                marginLeft: "20px"
             },
             pathwayHeader: {
                 width: "100%",
@@ -68,6 +73,7 @@ class PathwayContent extends Component {
                             {pathway.name}
                         </div>
                         <PathwayStepList steps={pathway.steps} style={style.stepList} />
+                        <PathwayContentLink style={style.content}/>
                     </div>
                 : null }
             </div>
