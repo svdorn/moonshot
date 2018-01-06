@@ -126,6 +126,9 @@ class Pathway extends Component {
             },
             spaceTop: {
                 marginTop: '20px',
+            },
+            title: {
+                width: "50%",
             }
         }
 
@@ -143,10 +146,8 @@ class Pathway extends Component {
                         <div className="fullHeight purpleToBlue">
                             <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
-                            <div className="infoBox whiteText mediumText noWrap" style={{zIndex: "20"}}>
-                                {pathway.sponsor.pathwayHomepage[0]}<br/>
-                                {pathway.sponsor.pathwayHomepage[1]}<br/>
-                                {pathway.sponsor.pathwayHomepage[2]}<br/>
+                            <div className="infoBox whiteText mediumText" style={{zIndex: "20", width: '40%'}}>
+                                {pathway.sponsor.pathwayHomepage}<br/>
                                 <button className="outlineButton"
                                         style={{backgroundColor: "transparent", border: "2px solid white"}}
                                         onClick={this.handleClick.bind(this)}>
@@ -260,10 +261,13 @@ class Pathway extends Component {
                                         src="/icons/www.png"
                                         style={style.iconsLeft}
                                     />
-                                    <b style={{color: '#B869FF'}} className="mediumText">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
+                                    <b style={{color: '#B869FF'}}
+                                       className="mediumText">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
                                     <a href={pathway.sponsor.homepage} style={style.infoLinks} className="smallText2">Website</a>
-                                    {pathway.sponsor.blog ? <a href={pathway.sponsor.blog} style={style.infoLinks} className="smallText2">Blog</a> : null}
-                                    {pathway.sponsor.demo ? <a href={pathway.sponsor.demo} style={style.infoLinks} className="smallText2">Demo</a> : null}
+                                    {pathway.sponsor.blog ?
+                                        <a href={pathway.sponsor.blog} style={style.infoLinks} className="smallText2">Blog</a> : null}
+                                    {pathway.sponsor.demo ?
+                                        <a href={pathway.sponsor.demo} style={style.infoLinks} className="smallText2">Demo</a> : null}
                                 </div>
                             </div>
                             {pathway.sponsor.quote ?
