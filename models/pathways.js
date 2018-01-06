@@ -39,6 +39,7 @@ var pathwaysSchema = mongoose.Schema({
       order: Number,
       subSteps: [{
           order: Number,
+          superStepOrder: Number,
           name: String,
           contentType: String,
           contentID: mongoose.Schema.Types.ObjectId,

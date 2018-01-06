@@ -928,6 +928,11 @@ app.post("/userCurrentStep", function (req, res) {
     const stepNumber = req.body.params.stepNumber;
     const subStepNumber = req.body.params.subStepNumber;
 
+    console.log("userId is: ", userId);
+    console.log("pathwayId is: ", pathwayId);
+    console.log("stepNumber is: ", stepNumber);
+    console.log("subStepNumber is: ", subStepNumber);
+
     Users.findById(userId, function(err, user) {
         let pathwayIndex = user.pathways.findIndex(function(path) {
             return path.pathwayId == pathwayId;
