@@ -32,35 +32,6 @@ class PathwayStepList extends Component {
         this.props.updateCurrentSubStep(userId, pathwayId, stepNumber, substep);
     }
 
-    goTo (route)  {
-        // closes any notification
-        this.props.closeNotification();
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
-    handleNext = () => {
-        const {stepIndex} = this.state;
-        if (stepIndex < 2) {
-          this.setState({
-              stepIndex: stepIndex + 1,
-              subStepIndex: 0
-          });
-        }
-    };
-
-    handlePrev = () => {
-        const {stepIndex} = this.state;
-        if (stepIndex > 0) {
-          this.setState({
-              stepIndex: stepIndex - 1,
-              subStepIndex: 0
-          });
-        }
-    };
-
     handleNextSub = () => {
         const {subStepIndex} = this.state;
         const {stepIndex} = this.state;
@@ -98,29 +69,6 @@ class PathwayStepList extends Component {
             })
         }
     };
-
-    renderStepActions(step) {
-        return (
-            <div style={{margin: '12px 0'}}>
-            <RaisedButton
-                label="Next"
-                disableTouchRipple={true}
-                disableFocusRipple={true}
-                primary={true}
-                onClick={this.handleNext}
-                style={{marginRight: 12}}
-            />
-            {step > 0 && (
-                <FlatButton
-                    label="Back"
-                    disableTouchRipple={true}
-                    disableFocusRipple={true}
-                    onClick={this.handlePrev}
-                />
-            )}
-            </div>
-        );
-    }
 
     renderSubStepActions(subStep) {
         return (
@@ -160,7 +108,12 @@ class PathwayStepList extends Component {
             const subStepItems = step.subSteps.map(function(subStep) {
                 return (
                     <Step>
-                        <StepButton onClick={() => self.setState({subStepIndex: (subStep.order - 1)})}>
+                        <StepButton onClick={() => self.setState({
+                            subStepIndex: (subStep.order - 1),
+                            stepIndex: (step.order - 1)
+                        }, function() {
+                            self.updateStepInReduxState();
+                        })}>
                             {subStep.name}
                         </StepButton>
                         <StepContent>
@@ -184,7 +137,12 @@ class PathwayStepList extends Component {
 
             return (
                 <Step>
-                    <StepButton onClick={() => self.setState({stepIndex: (step.order - 1)})}>
+                    <StepButton onClick={() => self.setState({
+                        stepIndex: (step.order - 1),
+                        subStepIndex: 0
+                    }, function() {
+                        self.updateStepInReduxState();
+                    })}>
                         {step.name}
                     </StepButton>
                     <StepContent>
