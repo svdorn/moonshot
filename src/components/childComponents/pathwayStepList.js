@@ -21,7 +21,6 @@ class PathwayStepList extends Component {
         let stepIndex = 0;
         let subStepIndex = 0;
 
-        console.log("currentSubStep: ", currentSubStep);
         const currentSubStep = this.props.currentSubStep;
         if (currentSubStep) {
             subStepIndex = currentSubStep.order - 1;
@@ -35,20 +34,26 @@ class PathwayStepList extends Component {
         const userId = this.props.currentUserId;
         const pathwayId = this.props.pathwayId;
         const stepNumber = this.state.stepIndex + 1;
-        const substep = this.props.steps[this.state.stepIndex].subSteps[this.state.subStepIndex]
+        const substep = this.props.steps[this.state.stepIndex].subSteps[this.state.subStepIndex];
         this.props.updateCurrentSubStep(userId, pathwayId, stepNumber, substep);
     }
 
     handleNextSub = () => {
+        const steps = this.props.steps;
         const {subStepIndex} = this.state;
         const {stepIndex} = this.state;
-        if (subStepIndex < 1) {
+
+        // if it is not the next substep, go to next substep
+        if (subStepIndex < steps[stepIndex].subSteps.length - 1) {
             this.setState({
                 subStepIndex: subStepIndex + 1
             }, function() {
                 this.updateStepInReduxState();
             });
-        } else if (stepIndex < 2) {
+        }
+        // if it is the last substep but not last step, advance to first subStep
+        // of next step
+        else if (stepIndex < steps.length - 1) {
             this.setState({
                 stepIndex: stepIndex + 1,
                 subStepIndex: 0
@@ -59,18 +64,24 @@ class PathwayStepList extends Component {
     };
 
     handlePrevSub = () => {
+        const steps = this.props.steps;
         const {subStepIndex} = this.state;
         const {stepIndex} = this.state;
-        if (subStepIndex > 0) {
+
+        // if it is not the first substep, go back to the previous substep
+        if (subStepIndex > 0 && steps[stepIndex].subSteps.length != 1) {
             this.setState({
                 subStepIndex: subStepIndex - 1
             }, function() {
                 this.updateStepInReduxState();
             });
-        } else if (stepIndex > 0) {
+        }
+        // if it is the first substep, but not the first step, go back to the
+        // last substep of the previous step
+        else if (stepIndex > 0) {
             this.setState({
                 stepIndex: stepIndex - 1,
-                subStepIndex: 1
+                subStepIndex: steps[stepIndex - 1].subSteps.length - 1
             }, function() {
                 this.updateStepInReduxState();
             })
@@ -78,6 +89,7 @@ class PathwayStepList extends Component {
     };
 
     renderSubStepActions(subStep, step) {
+        // make a next and previous button
         return (
             <div style={{margin: '12px 0'}}>
             <RaisedButton
@@ -175,89 +187,6 @@ class PathwayStepList extends Component {
             </Paper>
         );
     }
-
-
-
-
-
-    // <Step>
-    //     <StepButton onClick={() => this.setState({stepIndex: 0})}>
-    //         Select campaign settings
-    //     </StepButton>
-    //     <StepContent>
-    //         <p>
-    //             Description!
-    //         </p>
-    //         {this.renderStepActions(0)}
-    //     </StepContent>
-    // </Step>
-    // <Step>
-    // <StepButton onClick={() => this.setState({stepIndex: 1})}>
-    //   Create an ad group
-    // </StepButton>
-    // <StepContent>
-    //   <p>An ad group contains one or more ads which target a shared set of keywords.</p>
-    //   {this.renderStepActions(1)}
-    // </StepContent>
-    // </Step>
-    // <Step>
-    //     <StepButton onClick={() => this.setState({stepIndex: 2})}>
-    //         Create an ad
-    //     </StepButton>
-    //     <StepContent>
-    //         <p>
-    //             Another description!
-    //         </p>
-    //         {this.renderStepActions(2)}
-    //     </StepContent>
-    // </Step>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    // render() {
-    //     const style = {
-    //         enclosingBox: {
-    //
-    //         }
-    //     }
-    //
-    //     const steps = this.props.steps;
-    //     console.log("steps are: ");
-    //     console.log(steps);
-    //
-    //
-    //     // const stepItems = steps ?
-    //     //     steps.map(function(step) {
-    //     //         return (
-    //     //             <PathwayStep step={step} key={step.name} />
-    //     //         )
-    //     //     })
-    //     //     : null;
-    //
-    //     return (
-    //         <Paper style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
-    //
-    //         </Paper>
-    //     )
-    // }
 }
 
 function mapDispatchToProps(dispatch) {
