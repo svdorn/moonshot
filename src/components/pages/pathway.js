@@ -41,6 +41,7 @@ class Pathway extends Component {
                 name: this.props.currentUser.name,
                 email: this.props.currentUser.email,
             };
+            window.scrollTo(0, 0);
             this.props.registerForPathway(user);
         } else {
             // Not logged in
@@ -58,7 +59,8 @@ class Pathway extends Component {
             descriptionAndSalaryLi: {
                 width: "50%",
                 verticalAlign: "top",
-                display: 'inline-block',
+                display: 'inline-block ',
+                left: "-50%", /* or right 50% */
             },
             descriptionAndSalaryUl: {
                 fontSize: "20px",
@@ -130,7 +132,27 @@ class Pathway extends Component {
             },
             title: {
                 width: "50%",
-            }
+            },
+            textIcons: {
+                height: "100px",
+                float: "left",
+                margin: "12px 20px 0px 0px"
+            },
+            text: {
+                float: "left",
+            },
+            textComponent: {
+                marginTop: '20px',
+            },
+            textComponentLi: {
+                width: "50%",
+                verticalAlign: "top",
+                display: 'inline-block',
+            },
+            textComponentUl: {
+                fontSize: "20px",
+                textAlign: 'center',
+            },
         }
 
         console.log(this.state.pathway);
@@ -263,11 +285,14 @@ class Pathway extends Component {
                                     />
                                     <b style={{color: '#B869FF'}}
                                        className="mediumText">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
-                                    <a href={pathway.sponsor.homepage} target="_blank" style={style.infoLinks} className="smallText2">Website</a>
+                                    <a href={pathway.sponsor.homepage} target="_blank" style={style.infoLinks}
+                                       className="smallText2">Website</a>
                                     {pathway.sponsor.blog ?
-                                        <a href={pathway.sponsor.blog} target="_blank" style={style.infoLinks} className="smallText2">Blog</a> : null}
+                                        <a href={pathway.sponsor.blog} target="_blank" style={style.infoLinks}
+                                           className="smallText2">Blog</a> : null}
                                     {pathway.sponsor.demo ?
-                                        <a href={pathway.sponsor.demo} target="_blank" style={style.infoLinks} className="smallText2">Demo</a> : null}
+                                        <a href={pathway.sponsor.demo} target="_blank" style={style.infoLinks}
+                                           className="smallText2">Demo</a> : null}
                                 </div>
                             </div>
                             {pathway.sponsor.quote ?
@@ -300,17 +325,66 @@ class Pathway extends Component {
                             <div className="homepageSeparator"/>
                         </div>
 
+                        <div>
+                            {pathway.sponsor ?
+                                <div style={style.textComponent}>
+                                    <ul style={style.textComponentUl}>
+                                        <li style={style.textComponentLi}>
+                                            <img
+                                                src="/icons/NoMoney.png"
+                                                style={style.textIcons}
+                                            />
+                                            <div style={style.text}>
+                                                It's free.<br/>
+                                                {pathway.sponsor.name} provides scholarships<br/>
+                                                to pay for your pathway.
+                                            </div>
+                                        </li>
 
-                        <div className="center">
-                            <b style={{color: '#B869FF'}}
-                               className="mediumText">
-                                COURSE OVERVIEW
-                            </b>
+                                        <li style={style.textComponentLi}>
+                                            <div>
+                                                <img
+                                                    src="/icons/Portfolio.png"
+                                                    style={style.textIcons}
+                                                />
+                                                <div style={style.text}>
+                                                    Learn {pathway.sponsor.learn}<br/>
+                                                    and build<br/>
+                                                    your {pathway.sponsor.type} portfolio.
+                                                </div>
+                                            </div>
+                                        </li>
+                                    </ul>
+                                    <ul style={style.textComponentUl}>
+                                        <li style={style.textComponentLi}>
+                                            <img
+                                                src="/icons/CheckMark.png"
+                                                style={style.textIcons}
+                                            />
+                                            <div style={style.text}>
+                                                Get evaluated by {pathway.sponsor.name}<br/>
+                                                and other {pathway.sponsor.type} employers<br/>
+                                                based on your performance.
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                : null}
                         </div>
+
+
+                        < div className="homepageSeparatorContainer">
+                            < div className="homepageSeparator"/>
+                        </div>
+
+
+                        < div className="center">
+                            < b style={{color: '#B869FF'}} className="mediumText">COURSE OVERVIEW</ b>
+                        </ div>
 
                         <div className="homepageSeparatorContainer">
-                            <div className="homepageSeparator"/>
-                        </div>
+                            < div className="homepageSeparator"/>
+                        </ div>
 
                         {pathway.extraInfo ?
                             <div className="center">
@@ -320,10 +394,25 @@ class Pathway extends Component {
                             </div>
                             : null
                         }
+                        <div className="center" style={{marginBottom: "20px"}}>
+                            <button className="outlineButton"
+                                    style={{
+                                        backgroundColor: "transparent",
+                                        border: "2px solid #B869FF",
+                                        color: "#B869FF"
+                                    }}
+                                    onClick={this.handleClick.bind(this)}>
+                                {"Get Started"}
+                            </button>
+                        </div>
                     </div>
-                    : <CircularProgress/>}
+                    :
+                    <CircularProgress/>
+                }
+
             </div>
-        );
+        )
+            ;
     }
 }
 
