@@ -81,18 +81,17 @@ class Pathway extends Component {
                 },
                 container: {
                     border: "2px solid #B869FF",
-                    width: '75%',
                     fontSize: "30px",
                     padding: "20px"
                 },
                 leftSide: {
-                    width: "45%",
+                    width: "55%",
                     display: "inline-block",
                     verticalAlign: "top",
                     marginRight: "5%"
                 },
                 rightSide: {
-                    width: "45%",
+                    width: "35%",
                     display: "inline-block",
                     verticalAlign: "top",
                     justifyContent: "center",
@@ -108,7 +107,7 @@ class Pathway extends Component {
                     fontSize: "20px"
                 },
                 content: {
-                    textAlign: "justify",
+                    textAlign: "center",
                     marginBottom: "20px"
                 }
 
@@ -120,7 +119,8 @@ class Pathway extends Component {
             iconsLeft: {
                 height: "45px",
                 marginRight: '10px',
-                marginBottom: '23px',
+                position: 'relative',
+                top: '-15px',
             },
             infoLinks: {
                 marginLeft: '10px',
