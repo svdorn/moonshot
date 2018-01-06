@@ -383,13 +383,14 @@ app.post('/users/registerForPathway', function(req, res) {
         + "<p>Before you do we've got a few things to cover:<br/>"
         + "- There are limited scholarships that the sponsor company offers.<br/>"
         + "- So … We need to learn a bit about you first!<br/>"
-        + "- Step 1: " + "<a href='https://calendly.com/kyle-treige'>Book a 15 minute call with me</a>" + " so we can get things going." + "</p>"
-        + "<p>If you have any questions, shoot me a message at kyle.treige@moonshotlearning.org.</p>"
+        + "- Step 1: " +"<b><u>Send a link to your LinkedIn profile</u></b>" + " (not required but you can also attach"
+        + " your resume, link to a project, something you are proud of, etc) to kyle.treige@moonshotlearning.org." + "</p>"
+        + "<p>If you have any questions, shoot me a message. I'll review everything and be back to you shortly!</p>"
         + "<p>Talk soon,<br/>"
         + "Kyle</p>"
         + "<p>-------------------------------------------<br/>"
         + "Kyle Treige, Co-Founder & CEO <br/>"
-        + "<a href='https://www.moonshotlearning.org/'>Moonshot Learning</a><br/>"
+        + "<a href='https://www.moonshotlearning.org/' target='_blank'>Moonshot Learning</a><br/>"
         + "608-438-4478</p>"
         + "</div>";
 

@@ -71,7 +71,7 @@ class Pathway extends Component {
             },
             descriptionAndSalaryText: {
                 float: "left",
-                width: '50%',
+                width: "50%",
             },
             quote: {
                 everything: {
