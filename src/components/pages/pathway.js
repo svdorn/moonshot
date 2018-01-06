@@ -41,6 +41,7 @@ class Pathway extends Component {
                 name: this.props.currentUser.name,
                 email: this.props.currentUser.email,
             };
+            window.scrollTo(0, 0);
             this.props.registerForPathway(user);
         } else {
             // Not logged in
@@ -393,6 +394,17 @@ class Pathway extends Component {
                             </div>
                             : null
                         }
+                        <div className="center" style={{marginBottom: "20px"}}>
+                            <button className="outlineButton"
+                                    style={{
+                                        backgroundColor: "transparent",
+                                        border: "2px solid #B869FF",
+                                        color: "#B869FF"
+                                    }}
+                                    onClick={this.handleClick.bind(this)}>
+                                {"Get Started"}
+                            </button>
+                        </div>
                     </div>
                     :
                     <CircularProgress/>
