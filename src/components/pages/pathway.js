@@ -80,18 +80,18 @@ class Pathway extends Component {
                     padding: "20px 0px"
                 },
                 container: {
-                    border: "2px solid blue",
+                    border: "2px solid #B869FF",
                     fontSize: "30px",
                     padding: "20px"
                 },
                 leftSide: {
-                    width: "35%",
+                    width: "45%",
                     display: "inline-block",
                     verticalAlign: "top",
                     marginRight: "5%"
                 },
                 rightSide: {
-                    width: "55%",
+                    width: "45%",
                     display: "inline-block",
                     verticalAlign: "top"
                 },
@@ -114,9 +114,19 @@ class Pathway extends Component {
             imageLeftTextRight: {
                 position: "relative",
                 textAlign: "left"
+            },
+            iconsLeft: {
+                height: "45px",
+                marginRight: '10px',
+                marginBottom: '23px',
+            },
+            infoLinks: {
+                marginLeft: '10px',
+                color: 'black',
+            },
+            spaceTop: {
+                marginTop: '20px',
             }
-
-
         }
 
         console.log(this.state.pathway);
@@ -163,7 +173,7 @@ class Pathway extends Component {
                                     </div>
                                 </li>
                                 <li style={{width: '300px'}}>
-                                    <img src="/icons/CalendarWhite.png" className="pathwayLandingIcons" />
+                                    <img src="/icons/CalendarWhite.png" className="pathwayLandingIcons"/>
                                     <div style={{display: 'inline-block'}}>
                                         <i>Complete By</i><br/>
                                         {formattedDeadline}
@@ -214,16 +224,47 @@ class Pathway extends Component {
                             </div>
                             : null}
 
-                        <div className="greenToBlue" style={style.quote.everything}>
-                            <h1>Sponsor {pathway.sponsor.name}</h1>
+                        <div className="homepageSeparatorContainer">
+                            <div className="homepageSeparator"/>
+                        </div>
+
+                        <div style={style.quote.everything}>
+                            <h1>Sponsored by <img
+                                src={pathway.sponsor.logo}
+                                alt={pathway.sponsor.name}
+                                height={70}
+                            /></h1>
                             <div style={style.quote.leftSide}>
-                                {pathway.sponsor.description}<br/>
+                                <div>
+                                    <img
+                                        src="/icons/Information.png"
+                                        style={style.iconsLeft}
+                                    />
+                                    <b style={{color: '#B869FF'}} className="mediumText">ABOUT</b>
+                                </div>
+                                <div className="smallText2">
+                                    {pathway.sponsor.description}
+                                </div>
                                 {pathway.sponsor.hiring ?
-                                    <div>Actively hiring {pathway.sponsor.hiring}<br/></div>
+                                    <div style={style.spaceTop}>
+                                        <img
+                                            src="/icons/Employee.png"
+                                            style={style.iconsLeft}
+                                        />
+                                        <b style={{color: '#B869FF'}} className="mediumText">OPEN POSITIONS</b><br/>
+                                        <div className="smallText2">- {pathway.sponsor.hiring}</div>
+                                    </div>
                                     : null}
-                                Homepage: <a href={pathway.sponsor.homepage}>{pathway.sponsor.name}</a><br/>
-                                {pathway.sponsor.blog ? <a href={pathway.sponsor.blog}>Blog</a> : null}<br/>
-                                {pathway.sponsor.demo ? <a href={pathway.sponsor.demo}>Demo</a> : null}<br/>
+                                <div style={style.spaceTop}>
+                                    <img
+                                        src="/icons/www.png"
+                                        style={style.iconsLeft}
+                                    />
+                                    <b style={{color: '#B869FF'}} className="mediumText">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
+                                    <a href={pathway.sponsor.homepage} style={style.infoLinks} className="smallText2">Website</a>
+                                    {pathway.sponsor.blog ? <a href={pathway.sponsor.blog} style={style.infoLinks} className="smallText2">Blog</a> : null}
+                                    {pathway.sponsor.demo ? <a href={pathway.sponsor.demo} style={style.infoLinks} className="smallText2">Demo</a> : null}
+                                </div>
                             </div>
                             {pathway.sponsor.quote ?
                                 <div style={style.quote.rightSide}>
@@ -250,6 +291,11 @@ class Pathway extends Component {
                                 : null
                             }
                         </div>
+
+                        <div className="homepageSeparatorContainer">
+                            <div className="homepageSeparator"/>
+                        </div>
+
 
                         <div>
                             Course overview
