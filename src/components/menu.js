@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { signout, closeNotification } from "../actions/usersActions";
+import Person from 'material-ui/svg-icons/social/person';
 import { axios } from 'axios';
 
 const styles = {
