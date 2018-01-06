@@ -77,6 +77,7 @@ class PathwayContent extends Component {
                 width: "400px",
                 marginLeft: "30px",
                 display: "inline-block",
+                float: "left"
             },
             content: {
                 display: "inline-block",
@@ -97,6 +98,9 @@ class PathwayContent extends Component {
             },
             div: {
                 display: "inline-block"
+            },
+            contentContainer: {
+                overflow: "auto"
             }
         }
 
@@ -115,17 +119,19 @@ class PathwayContent extends Component {
                         <div style={style.pathwayHeader}>
                             {pathway.name}
                         </div>
-                        <PathwayStepList steps={pathway.steps} pathwayId={pathway._id} style={style.stepList}/>
-                        {this.props.step ?
-                            <div style={style.div}>
-                                {this.props.step.contentType === 'link' ?
-                                    <PathwayContentLink style={style.content}/>
-                                    :
-                                    <div style={style.div}>{this.props.step.contentType === 'video' ?
-                                        <PathwayContentVideo style={style.content}/>
-                                        : <div style={style.div}>Not Video or Link</div>}</div>}
-                            </div>
-                            : <div style={style.div}>here</div>}
+                        <div style={style.contentContainer}>
+                            <PathwayStepList steps={pathway.steps} pathwayId={pathway._id} style={style.stepList}/>
+                            {this.props.step ?
+                                <div style={style.div}>
+                                    {this.props.step.contentType === 'link' ?
+                                        <PathwayContentLink style={style.content}/>
+                                        :
+                                        <div style={style.div}>{this.props.step.contentType === 'video' ?
+                                            <PathwayContentVideo style={style.content}/>
+                                            : <div style={style.div}>Not Video or Link</div>}</div>}
+                                </div>
+                                : <div style={style.div}>here</div>}
+                        </div>
                     </div>
                     : null}
             </div>
