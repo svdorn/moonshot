@@ -58,7 +58,7 @@ class Pathway extends Component {
             descriptionAndSalaryLi: {
                 width: "50%",
                 verticalAlign: "top",
-                display : 'inline-block',
+                display: 'inline-block',
             },
             descriptionAndSalaryUl: {
                 fontSize: "20px",
@@ -81,7 +81,8 @@ class Pathway extends Component {
                 container: {
                     border: "2px solid #B869FF",
                     fontSize: "30px",
-                    padding: "20px"
+                    padding: "20px",
+                    textAlign: "center",
                 },
                 leftSide: {
                     width: "55%",
@@ -106,7 +107,6 @@ class Pathway extends Component {
                     fontSize: "20px"
                 },
                 content: {
-                    textAlign: "center",
                     marginBottom: "20px"
                 }
 
@@ -263,11 +263,11 @@ class Pathway extends Component {
                                     />
                                     <b style={{color: '#B869FF'}}
                                        className="mediumText">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
-                                    <a href={pathway.sponsor.homepage} style={style.infoLinks} className="smallText2">Website</a>
+                                    <a href={pathway.sponsor.homepage} target="_blank" style={style.infoLinks} className="smallText2">Website</a>
                                     {pathway.sponsor.blog ?
-                                        <a href={pathway.sponsor.blog} style={style.infoLinks} className="smallText2">Blog</a> : null}
+                                        <a href={pathway.sponsor.blog} target="_blank" style={style.infoLinks} className="smallText2">Blog</a> : null}
                                     {pathway.sponsor.demo ?
-                                        <a href={pathway.sponsor.demo} style={style.infoLinks} className="smallText2">Demo</a> : null}
+                                        <a href={pathway.sponsor.demo} target="_blank" style={style.infoLinks} className="smallText2">Demo</a> : null}
                                 </div>
                             </div>
                             {pathway.sponsor.quote ?
@@ -301,13 +301,22 @@ class Pathway extends Component {
                         </div>
 
 
-                        <div>
-                            Course overview
+                        <div className="center">
+                            <b style={{color: '#B869FF'}}
+                               className="mediumText">
+                                COURSE OVERVIEW
+                            </b>
+                        </div>
+
+                        <div className="homepageSeparatorContainer">
+                            <div className="homepageSeparator"/>
                         </div>
 
                         {pathway.extraInfo ?
-                            <div>
-                                {pathway.extraInfo}
+                            <div className="center">
+                                <p className="smallText2">
+                                    {pathway.extraInfo}
+                                </p>
                             </div>
                             : null
                         }
