@@ -82,7 +82,7 @@ class PathwayStepList extends Component {
             <div style={{margin: '12px 0'}}>
             <RaisedButton
                 label="Next"
-                labelColor="#ffffff"
+                labelStyle={{color:"white"}}
                 disableTouchRipple={true}
                 disableFocusRipple={true}
                 primary={true}
