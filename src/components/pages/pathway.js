@@ -53,17 +53,16 @@ class Pathway extends Component {
         const style = {
             descriptionAndSalary: {
                 height: "125px",
-                width: "100%",
-                position: "relative"
+                marginTop: '20px',
             },
             descriptionAndSalaryLi: {
-                width: "40%",
+                width: "50%",
                 verticalAlign: "top",
-                margin: "0px 40px",
-                position: "relative"
+                display : 'inline-block',
             },
             descriptionAndSalaryUl: {
-                fontSize: "20px"
+                fontSize: "20px",
+                textAlign: 'center',
             },
             descriptionAndSalaryIcon: {
                 height: "50px",
@@ -72,7 +71,7 @@ class Pathway extends Component {
             },
             descriptionAndSalaryText: {
                 float: "left",
-                maxWidth: "calc(100% - 70px)"
+                width: '50%',
             },
             quote: {
                 everything: {
@@ -195,7 +194,7 @@ class Pathway extends Component {
 
                         {pathway.description || pathway.industry ?
                             <div style={style.descriptionAndSalary}>
-                                <ul className="horizCenteredList" style={style.descriptionAndSalaryUl}>
+                                <ul style={style.descriptionAndSalaryUl}>
                                     {pathway.description ?
                                         <li style={style.descriptionAndSalaryLi}>
                                             <img
@@ -216,8 +215,7 @@ class Pathway extends Component {
                                                     style={style.descriptionAndSalaryIcon}
                                                 />
                                                 <div style={style.descriptionAndSalaryText}>
-                                                    Industry average salary<br/>
-                                                    for {pathway.industry.title}<br/>
+                                                    Industry average salary for {pathway.industry.title}<br/>
                                                     <i>{pathway.industry.averageSalary}</i>
                                                 </div>
                                             </div>
