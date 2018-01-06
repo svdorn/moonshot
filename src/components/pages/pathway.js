@@ -81,6 +81,7 @@ class Pathway extends Component {
                 },
                 container: {
                     border: "2px solid #B869FF",
+                    width: '75%',
                     fontSize: "30px",
                     padding: "20px"
                 },
@@ -93,7 +94,8 @@ class Pathway extends Component {
                 rightSide: {
                     width: "45%",
                     display: "inline-block",
-                    verticalAlign: "top"
+                    verticalAlign: "top",
+                    justifyContent: "center",
                 },
                 speakerImage: {
                     borderRadius: "50%",
