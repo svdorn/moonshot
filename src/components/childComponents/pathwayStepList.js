@@ -18,10 +18,17 @@ class PathwayStepList extends Component {
     constructor(props){
         super(props);
 
-        this.state = {
-            stepIndex: 0,
-            subStepIndex: 0
-        };
+        let stepIndex = 0;
+        let subStepIndex = 0;
+
+        console.log("currentSubStep: ", currentSubStep);
+        const currentSubStep = this.props.currentSubStep;
+        if (currentSubStep) {
+            subStepIndex = currentSubStep.order - 1;
+            stepIndex = currentSubStep.superStepOrder - 1;
+        }
+
+        this.state = { stepIndex, subStepIndex };
     }
 
     updateStepInReduxState() {
@@ -107,7 +114,7 @@ class PathwayStepList extends Component {
         const stepItems = this.props.steps.map(function(step) {
             const subStepItems = step.subSteps.map(function(subStep) {
                 return (
-                    <Step>
+                    <Step key={subStep.name}>
                         <StepButton onClick={() => self.setState({
                             subStepIndex: (subStep.order - 1),
                             stepIndex: (step.order - 1)
@@ -136,7 +143,7 @@ class PathwayStepList extends Component {
             )
 
             return (
-                <Step>
+                <Step key={step.name}>
                     <StepButton onClick={() => self.setState({
                         stepIndex: (step.order - 1),
                         subStepIndex: 0
@@ -260,7 +267,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUserId: state.users.currentUser._id
+        currentUserId: state.users.currentUser._id,
+        currentSubStep: state.users.currentSubStep
     };
 }
 
