@@ -244,6 +244,13 @@ button.link {
     overflow-y: hidden;
 }
 
+.pathwayLandingIcons {
+    height: 45px;
+    width: 45px;
+    margin-right: 10px;
+    margin-bottom: 30px;
+}
+
 .homepageBenefitsList {
     margin-top: 100px;
     padding-left: 40px;

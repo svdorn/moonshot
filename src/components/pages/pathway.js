@@ -154,18 +154,27 @@ class Pathway extends Component {
                                 />
                             </div>
                             <ul className="horizCenteredList whiteText smallText2"
-                                style={{position: 'absolute', bottom: 0, width:'100%'}}>
-                                <li style={{width: '200px'}}>
-                                    <i>Completion Time</i><br/>
-                                    {pathway.estimatedCompletionTime}
+                                style={{position: 'absolute', bottom: 0, width: '100%'}}>
+                                <li style={{width: '300px'}}>
+                                    <img src="/icons/ClockWhite.png" className="pathwayLandingIcons"/>
+                                    <div style={{display: 'inline-block'}}>
+                                        <i>Completion Time</i><br/>
+                                        {pathway.estimatedCompletionTime}
+                                    </div>
                                 </li>
-                                <li style={{width: '200px'}}>
-                                    <i>Complete By</i><br/>
-                                    {formattedDeadline}
+                                <li style={{width: '300px'}}>
+                                    <img src="/icons/CalendarWhite.png" className="pathwayLandingIcons" />
+                                    <div style={{display: 'inline-block'}}>
+                                        <i>Complete By</i><br/>
+                                        {formattedDeadline}
+                                    </div>
                                 </li>
-                                <li style={{width: '200px'}}>
-                                    <i>Cost</i><br/>
-                                    {pathway.price}
+                                <li style={{width: '300px'}}>
+                                    <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons"/>
+                                    <div style={{display: 'inline-block'}}>
+                                        <i>Cost</i><br/>
+                                        {pathway.price}
+                                    </div>
                                 </li>
                             </ul>
                         </div>
