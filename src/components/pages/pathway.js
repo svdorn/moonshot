@@ -124,6 +124,15 @@ class Pathway extends Component {
                 }
 
             },
+            infoBoxes: {
+                image: {
+                    height: "70px",
+                    position: "absolute",
+                    top: "0",
+                    bottom: "0",
+                    margin: "auto -200px auto"
+                },
+            },
             imageLeftTextRight: {
                 position: "relative",
                 textAlign: "left"
@@ -363,27 +372,30 @@ class Pathway extends Component {
 
                         <div>
                             {pathway.sponsor ?
-                                <div style={style.textComponent}>
-                                    <ul style={style.textComponentUl}>
-                                        <li style={style.textComponentLi}>
-                                            <img
-                                                src="/icons/NoMoney.png"
-                                                style={style.textIcons}
-                                            />
-                                            <div style={style.text}>
-                                                It's free.<br/>
+                                <div style={{marginBottom: "70px"}}>
+                                    <ul className="horizCenteredList homepageBenefitsList">
+                                        <li style={{marginRight:"14%"}}>
+                                            <div style={{position:"relative"}}>
+                                                <img
+                                                    src="/icons/NoMoney.png"
+                                                    alt="Free"
+                                                    style={style.infoBoxes.image}
+                                                />
+                                                <div className="smallText2">
+                                                It{"'"}s free.<br/>
                                                 {pathway.sponsor.name} provides scholarships<br/>
                                                 to pay for your pathway.
+                                                </div>
                                             </div>
                                         </li>
-
-                                        <li style={style.textComponentLi}>
-                                            <div>
+                                        <li>
+                                            <div style={{position:"relative"}}>
                                                 <img
                                                     src="/icons/Portfolio.png"
-                                                    style={style.textIcons}
+                                                    alt="Portfolio"
+                                                    style={style.infoBoxes.image}
                                                 />
-                                                <div style={style.text}>
+                                                <div className="smallText2">
                                                     Learn {pathway.sponsor.learn}<br/>
                                                     and build<br/>
                                                     your {pathway.sponsor.type} portfolio.
@@ -391,20 +403,42 @@ class Pathway extends Component {
                                             </div>
                                         </li>
                                     </ul>
-                                    <ul style={style.textComponentUl}>
-                                        <li style={style.textComponentLi}>
-                                            <img
-                                                src="/icons/CheckMark.png"
-                                                style={style.textIcons}
-                                            />
-                                            <div style={style.text}>
-                                                Get evaluated by {pathway.sponsor.name}<br/>
-                                                and other {pathway.sponsor.type} employers<br/>
-                                                based on your performance.
+                                    <ul className="horizCenteredList homepageBenefitsList">
+                                        <li>
+                                            <div style={{position:"relative"}}>
+                                                <img
+                                                    src="/icons/CheckMark.png"
+                                                    alt="Check Mark"
+                                                    style={style.infoBoxes.image}
+                                                />
+                                                <div className="smallText2">
+                                                    Get evaluated by {pathway.sponsor.name}<br/>
+                                                    and other {pathway.sponsor.type} employers<br/>
+                                                    based on your performance.
+                                                </div>
                                             </div>
                                         </li>
                                     </ul>
                                 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                                 : null}
                         </div>
 
