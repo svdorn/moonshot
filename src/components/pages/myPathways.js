@@ -124,7 +124,8 @@ class MyPathways extends Component {
                                         </ul>
                                     </Tab>
                                     <Tab label="Completed" style={style.tab}>
-                                        Here
+                                        <h1 className="center mediumText" style={{color: "#B869FF"}}>Completed Pathways</h1>
+                                        <h1 className="center smallText2">None</h1>
                                     </Tab>
                                 </Tabs>
                             </div>
