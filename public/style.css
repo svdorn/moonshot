@@ -295,9 +295,18 @@ button.link {
 
 
 .videoContainer {
+    position: relative;
     display: inline-block;
     margin-left: 20px;
     width: calc(100% - 470px);
+    padding-top: 40%;
+}
+.videoContainer > span{
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
 }
 .stepScrollerContainer {
     height: 600px;
@@ -312,7 +321,9 @@ button.link {
 @media only screen and (max-width: 1000px) {
     .videoContainer {
         width: 90%;
+        margin-left: 5%;
         min-width: 800px;
+        padding-top: 56.25%
     }
     .stepScrollerContainer {
         margin-left: -800px;
