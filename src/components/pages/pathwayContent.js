@@ -135,7 +135,15 @@ class PathwayContent extends Component {
                             { pathway.name }
                         </div>
                         <div style={style.contentContainer}>
-                            <PathwayStepList className="stepScrollerContainer" steps={pathway.steps} pathwayId={pathway._id} />
+                            <div className="scrollBarAndContactUs">
+                                <PathwayStepList
+                                    className="stepScrollerContainer"
+                                    steps={pathway.steps}
+                                    pathwayId={pathway._id} />
+                                <Paper className="questionsContactUs">
+                                    sup
+                                </Paper>
+                            </div>
                             { content }
                         </div>
                     </div>

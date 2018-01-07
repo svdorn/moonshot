@@ -301,21 +301,28 @@ button.link {
     width: calc(100% - 470px);
     padding-top: 40%;
 }
-.videoContainer > span{
+.videoContainer > span {
     position: absolute;
     top: 0;
     bottom: 0;
     right: 0;
     left: 0;
 }
-.stepScrollerContainer {
-    height: 600px;
+.questionsContactUs {
+    width: 400px;
+    height: 100px;
+}
+.scrollBarAndContactUs {
     width: 400px;
     margin-left: 30px;
     display: inline-block;
     float: left;
     margin-bottom: 20px;
-    visibility: inherit;
+}
+.stepScrollerContainer {
+    height: 600px;
+    width: 400px;
+    margin-bottom: 20px;
 }
 
 @media only screen and (max-width: 1000px) {
