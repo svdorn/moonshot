@@ -29,17 +29,11 @@ class Profile extends Component{
                         _id: id
                     }
                 }).then(res => {
-                    let pathways = res.data;
-                    console.log("pathways are: ");
-                    console.log(pathways);
+                    let pathway = res.data;
                     let key = 0;
                     let self = this;
 
-                    // if the user only has one pathway, the returned pathways
-                    // will be an object, not an array. Convert to array.
-                    if (!Array.isArray(pathways)) {
-                        pathways = [pathways];
-                    }
+                    const pathways = [...this.state.pathways, pathway];
 
                     // use the received pathways to make pathway previews
                     const userPathwayPreviews = pathways.map(function(pathway) {
@@ -66,6 +60,8 @@ class Profile extends Component{
                     this.setState({
                         pathways,
                         userPathwayPreviews
+                    }, function() {
+
                     });
                 }).catch(function (err) {
                     console.log("error getting searched-for pathway");
