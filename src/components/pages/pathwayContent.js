@@ -119,26 +119,30 @@ class PathwayContent extends Component {
 
         }
 
+        let content = <div>"here"</div>;
+        // if the user is on a step, show that content
+        if (this.props.step) {
+            const contentType = this.props.step.contentType;
+            if (contentType == "link") {
+                content = <PathwayContentLink style={style.content}/>;
+            } else if (contentType == "video") {
+                content = <PathwayContentVideo style={style.content}/>;
+            } else {
+                content = <div style={style.div}>Not Video or Link</div>;
+            }
+        }
+
         return (
             <div>
                 {this.state.pathway ?
                     <div>
                         <div style={style.headerSpace} className="greenToBlue"/>
                         <div style={style.pathwayHeader}>
-                            {pathway.name}
+                            { pathway.name }
                         </div>
                         <div style={style.contentContainer}>
                             <PathwayStepList steps={pathway.steps} pathwayId={pathway._id} style={style.stepList}/>
-                            {this.props.step ?
-                                <div style={style.div}>
-                                    {this.props.step.contentType === 'link' ?
-                                        <PathwayContentLink style={style.content}/>
-                                        :
-                                        <div style={style.div}>{this.props.step.contentType === 'video' ?
-                                            <PathwayContentVideo style={style.content}/>
-                                            : <div style={style.div}>Not Video or Link</div>}</div>}
-                                </div>
-                                : <div style={style.div}>here</div>}
+                            { content }
                         </div>
                     </div>
                     : null}
