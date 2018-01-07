@@ -20,6 +20,7 @@ import Discover from './components/pages/discover';
 import Pathway from './components/pages/pathway';
 import PathwayContent from './components/pages/pathwayContent';
 import ContactUs from './components/pages/contactUs';
+import MyPathways from './components/pages/myPathways';
 
 const routes = (
   <Router history={browserHistory}>
@@ -35,6 +36,7 @@ const routes = (
         <Route path="/changePassword" component={ChangePassword} />
         <Route path="/discover" component={Discover} />
         <Route path="/contactUs" component={ContactUs} />
+        <Route path="/myPathways" component={MyPathways} />
         <Route path="/pathway/:_id" component={Pathway}/>
         <Route path="/pathwayContent/:_id" component={PathwayContent}/>
     </Route>

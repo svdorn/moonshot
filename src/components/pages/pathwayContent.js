@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PathwayContentLink from '../childComponents/pathwayContentLink';
 import PathwayContentVideo from '../childComponents/pathwayContentVideo';
 import PathwayContentArticle from '../childComponents/pathwayContentArticle';
-import {AppBar, Paper} from 'material-ui';
+import {AppBar, Paper, CircularProgress} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, updateCurrentSubStep} from "../../actions/usersActions";
@@ -107,7 +107,7 @@ class PathwayContent extends Component {
         // })
     }
 
-    goTo (route)  {
+    goTo(route) {
         // closes any notification
         this.props.closeNotification();
         // goes to the wanted page
@@ -205,38 +205,41 @@ class PathwayContent extends Component {
         }
 
         return (
-            <div style={{marginBottom:"50px"}}>
+            <div style={{marginBottom: "50px"}}>
                 {this.state.pathway ?
                     <div>
                         <div style={style.headerSpace} className="greenToBlue"/>
                         <div style={style.pathwayHeader}>
-                            { pathway.name }
+                            {pathway.name}
                         </div>
                         <div style={style.contentContainer}>
                             <div className="scrollBarAndContactUs">
                                 <PathwayStepList
                                     className="stepScrollerContainer"
                                     steps={pathway.steps}
-                                    pathwayId={pathway._id} />
+                                    pathwayId={pathway._id}/>
                                 <Paper className="questionsContactUs">
                                     <img
                                         src="/icons/VoiceBubble.png"
-                                        style={{height:"50px", width:"50px", position:"absolute"}}
+                                        style={{height: "50px", width: "50px", position: "absolute"}}
                                     />
-                                    <span style={{fontSize:"20px", marginLeft:"75px"}}>
+                                    <span style={{fontSize: "20px", marginLeft: "75px"}}>
                                         Questions?
                                     </span><br/>
-                                    <p  className="clickable blueText"
-                                        style={{margin:"10px 0px 0px 75px"}}
-                                        onClick={() => this.goTo('/contactUs')}>
+                                    <p className="clickable blueText"
+                                       style={{margin: "10px 0px 0px 75px"}}
+                                       onClick={() => this.goTo('/contactUs')}>
                                         Contact Us
                                     </p>
                                 </Paper>
                             </div>
-                            { content }
+                            {content}
                         </div>
                     </div>
-                    : null}
+                    : <div>
+                        <div style={style.headerSpace} className="greenToBlue"/>
+                        <div className="center"><CircularProgress style={{marginTop: "20px"}}/><br/></div>
+                    </div>}
             </div>
         );
     }

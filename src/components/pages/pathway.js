@@ -41,7 +41,6 @@ class Pathway extends Component {
                 name: this.props.currentUser.name,
                 email: this.props.currentUser.email,
             };
-            window.scrollTo(0, 0);
             this.props.registerForPathway(user);
         } else {
             // Not logged in
@@ -195,8 +194,8 @@ class Pathway extends Component {
                                         onClick={this.handleClick.bind(this)}>
                                     {"Sign Up"}
                                 </button>
-                            </div>
-                            <br/>
+                            </div><br/>
+                            { this.props.loading ? <div className="center"><CircularProgress color="white" style={{marginTop:"20px"}}/><br/></div> : "" }
                             <div className="whiteText smallText2 noWrap" style={{textAlign: 'center'}}>
                                 Sponsored By:
                                 <img
@@ -469,6 +468,7 @@ class Pathway extends Component {
                                     onClick={this.handleClick.bind(this)}>
                                 {"Get Started"}
                             </button>
+                            { this.props.loading ? <div><br/><CircularProgress color="#B869FF" style={{marginTop:"20px"}}/></div> : "" }
                         </div>
                     </div>
                     :
@@ -484,7 +484,8 @@ class Pathway extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        isFetching: state.users.isFetching
+        isFetching: state.users.isFetching,
+        loading: state.users.loadingSomething,
     };
 }
 
