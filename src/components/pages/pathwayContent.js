@@ -85,7 +85,8 @@ class PathwayContent extends Component {
                 width: "400px",
                 marginLeft: "30px",
                 display: "inline-block",
-                float: "left"
+                float: "left",
+                marginBottom: "20px"
             },
             content: {
                 display: "inline-block",
@@ -133,7 +134,7 @@ class PathwayContent extends Component {
         }
 
         return (
-            <div>
+            <div style={{marginBottom:"50px"}}>
                 {this.state.pathway ?
                     <div>
                         <div style={style.headerSpace} className="greenToBlue"/>
