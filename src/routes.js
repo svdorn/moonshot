@@ -19,6 +19,7 @@ import ChangePassword from './components/pages/changepasswordforgot';
 import Discover from './components/pages/discover';
 import Pathway from './components/pages/pathway';
 import PathwayContent from './components/pages/pathwayContent';
+import ContactUs from './components/pages/contactUs';
 
 const routes = (
   <Router history={browserHistory}>
@@ -33,6 +34,7 @@ const routes = (
         <Route path="/forgotPassword" component={ForgotPassword}/>
         <Route path="/changePassword" component={ChangePassword} />
         <Route path="/discover" component={Discover} />
+        <Route path="/contactUs" component={ContactUs} />
         <Route path="/pathway/:_id" component={Pathway}/>
         <Route path="/pathwayContent/:_id" component={PathwayContent}/>
     </Route>

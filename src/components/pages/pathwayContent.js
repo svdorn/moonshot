@@ -79,6 +79,15 @@ class PathwayContent extends Component {
         })
     }
 
+    goTo (route)  {
+        // closes any notification
+        this.props.closeNotification();
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
+    }
+
     render() {
         const style = {
             content: {
@@ -144,7 +153,18 @@ class PathwayContent extends Component {
                                     steps={pathway.steps}
                                     pathwayId={pathway._id} />
                                 <Paper className="questionsContactUs">
-                                    sup
+                                    <img
+                                        src="/icons/VoiceBubble.png"
+                                        style={{height:"50px", width:"50px", position:"absolute"}}
+                                    />
+                                    <span style={{fontSize:"20px", marginLeft:"75px"}}>
+                                        Questions?
+                                    </span><br/>
+                                    <p  className="clickable blueText"
+                                        style={{margin:"10px 0px 0px 75px"}}
+                                        onClick={() => this.goTo('/contactUs')}>
+                                        Contact Us
+                                    </p>
                                 </Paper>
                             </div>
                             { content }
@@ -158,7 +178,8 @@ class PathwayContent extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateCurrentSubStep
+        updateCurrentSubStep,
+        closeNotification
     }, dispatch);
 }
 

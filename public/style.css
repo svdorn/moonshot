@@ -311,6 +311,7 @@ button.link {
 .questionsContactUs {
     width: 400px;
     height: 100px;
+    padding: 25px;
 }
 .scrollBarAndContactUs {
     width: 400px;
@@ -332,7 +333,7 @@ button.link {
         min-width: 800px;
         padding-top: 56.25%
     }
-    .stepScrollerContainer {
+    .scrollBarAndContactUs {
         margin-left: -800px;
     }
 }
