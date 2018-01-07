@@ -260,6 +260,30 @@ export function updateCurrentSubStep(userId, pathwayId, stepNumber, subStep) {
     }
 }
 
+// Send an email when form filled out on contactUs page
+export function contactUs(user){
+    return function(dispatch) {
+        dispatch({type: "CONTACT_US_REQUESTED"});
+
+        axios.post("api/users/contactUsEmail", user)
+            .then(function(response) {
+                dispatch({type:"CONTACT_US", notification: {message:response.data, type:"infoHeader"}});
+                browserHistory.push('/profile');
+                window.scrollTo(0, 0);
+            })
+            .catch(function(err) {
+                dispatch({type:"CONTACT_US", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+export function formError() {
+    return function(dispatch) {
+        dispatch({type:"FORM_ERROR", notification: {message: "Fields must all be filled in to submit form.", type: "errorHeader"}})
+
+    }
+}
+
 // RESET BUTTON
 export function resetButton() {
   return {

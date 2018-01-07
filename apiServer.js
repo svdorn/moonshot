@@ -449,6 +449,37 @@ app.post('/users/forBusinessEmail', function (req, res) {
     })
 });
 
+// SEND EMAIL FOR CONTACT US
+app.post('/users/contactUsEmail', function (req, res) {
+
+    let message = "None";
+    if (req.body.message) {
+        message = req.body.message;
+    }
+    let recipient = "kyle.treige@moonshotlearning.org";
+    let subject = 'Moonshot Pathway Question -- Contact Us Form';
+    let content = "<div>"
+        + "<h3>Questions from pathway:</h3>"
+        + "<p>Name: "
+        + req.body.name
+        + "</p>"
+        + "<p>Email: "
+        + req.body.email
+        + "</p>"
+        + "<p>Message: "
+        + message
+        + "</p>"
+        + "</div>";
+
+    sendEmail(recipient, subject, content, function (success, msg) {
+        if (success) {
+            res.json("Email sent successfully, our team will be in contact with you shortly!");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+});
+
 // SEND EMAIL FOR PASSWORD RESET
 app.post('/forgotPassword', function (req, res) {
 

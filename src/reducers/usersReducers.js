@@ -129,6 +129,16 @@ export function usersReducers(state = initialState, action) {
                 ...state, notification: action.notification, loadingSomething: false
             };
             break;
+        case "CONTACT_US_REQUESTED":
+            return {
+                ...state, loadingSomething: true
+            };
+            break;
+        case "CONTACT_US":
+            return {
+                ...state, notification: action.notification, loadingSomething: false
+            };
+            break;
         case "REGISTER_FOR_PATHWAY":
             return {
                 ...state, notification: action.notification, loadingSomething: false
@@ -140,6 +150,11 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "FORGOT_PASSWORD_REJECTED":
+            return {
+                ...state, notification: action.notification, loadingSomething: false
+            };
+            break;
+        case "FORM_ERROR":
             return {
                 ...state, notification: action.notification, loadingSomething: false
             };
