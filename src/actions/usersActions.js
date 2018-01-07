@@ -214,8 +214,11 @@ export function forBusiness(user){
 // Send an email when a student registers for a pathway
 export function registerForPathway(user) {
     return function(dispatch) {
+        dispatch({type: "REGISTER_FOR_PATHWAY_REQUESTED"});
+
         axios.post("/api/users/registerForPathway", user)
             .then(function(response) {
+                window.scrollTo(0, 0);
                 dispatch({type:"REGISTER_FOR_PATHWAY", notification: {message:response.data, type:"infoHeader"}});
             })
             .catch(function(err) {

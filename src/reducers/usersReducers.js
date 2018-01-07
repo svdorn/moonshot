@@ -144,6 +144,11 @@ export function usersReducers(state = initialState, action) {
                 ...state, notification: action.notification, loadingSomething: false
             };
             break;
+        case "REGISTER_FOR_PATHWAY_REQUESTED":
+            return {
+                ...state, loadingSomething: true
+            };
+            break;
         case "FORGOT_PASSWORD":
             return {
                 ...state, notification: action.notification, loadingSomething: false
