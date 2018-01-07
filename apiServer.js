@@ -830,6 +830,23 @@ app.get('/getLink', function (req, res) {
     })
 });
 
+//----->> GET ARTICLE BY ID <<-----
+app.get('/getArticle', function (req, res) {
+    const _id = req.query._id;
+    console.log(_id)
+    const query = {_id: _id};
+
+    Articles.findOne(query, function (err, article) {
+        if (err) {
+            console.log("error in get article by id")
+        } else {
+            console.log("got article by id: ", article);
+            res.json(article);
+        }
+
+    })
+});
+
 //----->> GET VIDEO BY ID <<-----
 app.get('/getVideo', function (req, res) {
     console.log("here");

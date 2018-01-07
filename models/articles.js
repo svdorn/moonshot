@@ -2,7 +2,8 @@
 var mongoose = require('mongoose');
 
 var articlesSchema = mongoose.Schema({
-    link: String
+    link: String,
+    name: String,
 });
 
 var Articles = mongoose.model('Articles', articlesSchema);
