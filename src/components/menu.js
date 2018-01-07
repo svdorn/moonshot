@@ -89,6 +89,7 @@ class Menu extends Component {
                         </ToolbarGroup>
                         <ToolbarGroup style={{marginTop:"20px"}}>
                             <p className="menuItem clickable noWrap" onClick={() => this.goTo('/discover')}>Discover</p>
+                            <p className="menuItem clickable noWrap" onClick={() => this.goTo('/myPathways')}>My Pathways</p>
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
