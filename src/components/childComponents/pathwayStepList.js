@@ -38,14 +38,14 @@ class PathwayStepList extends Component {
 
     updateStepInReduxState() {
         const self = this;
-        const userId = this.props.currentUser._id;
+        const user = this.props.currentUser;
         const pathwayId = this.props.pathwayId;
         const substep = this.props.steps.find(function(step) {
             return step.order == self.state.stepIndex + 1
         }).subSteps.find(function(sub) {
             return sub.order == self.state.subStepIndex + 1;
         });
-        this.props.updateCurrentSubStep(userId, pathwayId, substep);
+        this.props.updateCurrentSubStep(user, pathwayId, substep);
     }
 
     handleNextSub = () => {

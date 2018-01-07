@@ -237,9 +237,17 @@ export function deleteUser(id) {
   }
 }
 
-export function updateCurrentSubStep(userId, pathwayId, subStep) {
+export function updateCurrentSubStep(user, pathwayId, subStep) {
     return function(dispatch) {
-        dispatch({type: "UPDATE_CURRENT_SUBSTEP", pathwayId: pathwayId, subStep: subStep});
+        const pathwayIndex = user.pathways.findIndex(function(path) {
+            return path.pathwayId == pathwayId;
+        });
+        // update current step of current pathway in user object
+        user.pathways[pathwayIndex].currentStep = subStep;
+
+        dispatch({type: "UPDATE_CURRENT_SUBSTEP", user: user});
+
+        const userId = user._id;
 
         axios.post("/api/userCurrentStep", {
             params: {

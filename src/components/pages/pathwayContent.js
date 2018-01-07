@@ -51,10 +51,15 @@ class PathwayContent extends Component {
 
                 currentStep = subStep;
                 // update the current step in the user document, both in db and redux state
-                this.props.updateCurrentSubStep(userId, pathwayId, subStep);
+                this.props.updateCurrentSubStep(user, pathwayId, subStep);
             }
 
             this.setState({pathway, currentStep});
+
+
+
+
+
 
             // // if we don't know what step we're currently on
             // if (this.props.step == undefined) {
@@ -97,9 +102,9 @@ class PathwayContent extends Component {
             //     this.setState({pathway})
             // }
         })
-        .catch(function (err) {
-            console.log("error getting searched-for pathway");
-        })
+        // .catch(function (err) {
+        //     console.log("error getting searched-for pathway");
+        // })
     }
 
     goTo (route)  {
@@ -111,7 +116,23 @@ class PathwayContent extends Component {
         window.scrollTo(0, 0);
     }
 
+    componentDidUpdate() {
+        console.log("DID UPDATE")
+        if (this.state.pathway) {
+            const user = this.props.currentUser;
+            const pathwayId = this.state.pathway._id;
+            // the current step of the current pathway
+            const currentStep = user.pathways.find(function(path) {
+                return path.pathwayId == pathwayId;
+            }).currentStep;
+            if (currentStep != this.state.currentStep) {
+                this.setState({...this.state, currentStep});
+            }
+        }
+    }
+
     render() {
+        console.log("RENDERING")
         const style = {
             content: {
                 display: "inline-block",
@@ -149,12 +170,29 @@ class PathwayContent extends Component {
         //     path.pathwayId == pathway.id
         // }).currentStep;
 
+        //const currentStep = this.state.currentStep;
+
+
+
+
+        // let currentStep = undefined;
+        //
+        // if (this.state.pathway) {
+        //     const user = this.props.currentUser;
+        //     const pathwayId = this.state.pathway._id
+        //     // the current step of the current pathway
+        //     currentStep = user.pathways.find(function(path) {
+        //         return path.pathwayId == pathwayId;
+        //     }).currentStep;
+        //     console.log("currentStep is: ", currentStep);
+        // }
+
         const currentStep = this.state.currentStep;
 
-        let content = <div>"here"</div>;
+        let content = <div>"loading"</div>;
         // if the user is on a step, show that content
-        if (this.props.step) {
-            const contentType = this.props.step.contentType;
+        if (currentStep) {
+            const contentType = currentStep.contentType;
             if (contentType == "link") {
                 content = <PathwayContentLink style={style.content} step={currentStep}/>;
             } else if (contentType == "video") {
