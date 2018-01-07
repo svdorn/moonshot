@@ -1,14 +1,14 @@
 "use strict"
-import React, { Component } from 'react';
-import { AppBar, Paper } from 'material-ui';
-import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
-import { closeNotification } from "../../actions/usersActions";
-import { bindActionCreators } from 'redux';
+import React, {Component} from 'react';
+import {Tabs, Tab} from 'material-ui/Tabs';
+import {connect} from 'react-redux';
+import {browserHistory} from 'react-router';
+import {closeNotification} from "../../actions/usersActions";
+import {bindActionCreators} from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
 
-class MyPathways extends Component{
+class MyPathways extends Component {
     constructor(props) {
         super(props);
 
@@ -36,7 +36,7 @@ class MyPathways extends Component{
                     const pathways = [...this.state.pathways, pathway];
 
                     // use the received pathways to make pathway previews
-                    const userPathwayPreviews = pathways.map(function(pathway) {
+                    const userPathwayPreviews = pathways.map(function (pathway) {
                         key++;
                         const deadline = new Date(pathway.deadline);
                         const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
@@ -44,14 +44,14 @@ class MyPathways extends Component{
                             <li key={key}
                                 onClick={() => self.goTo('/pathwayContent/' + pathway._id)}>
                                 <PathwayPreview
-                                    name = {pathway.name}
-                                    image = {pathway.previewImage}
-                                    logo = {pathway.sponsor.logo}
-                                    sponsorName = {pathway.sponsor.name}
-                                    completionTime = {pathway.estimatedCompletionTime}
-                                    deadline = {formattedDeadline}
-                                    price = {pathway.price}
-                                    _id = {pathway._id}
+                                    name={pathway.name}
+                                    image={pathway.previewImage}
+                                    logo={pathway.sponsor.logo}
+                                    sponsorName={pathway.sponsor.name}
+                                    completionTime={pathway.estimatedCompletionTime}
+                                    deadline={formattedDeadline}
+                                    price={pathway.price}
+                                    _id={pathway._id}
                                 />
                             </li>
                         );
@@ -60,7 +60,7 @@ class MyPathways extends Component{
                     this.setState({
                         pathways,
                         userPathwayPreviews
-                    }, function() {
+                    }, function () {
 
                     });
                 }).catch(function (err) {
@@ -71,7 +71,7 @@ class MyPathways extends Component{
         }
     }
 
-    goTo (route)  {
+    goTo(route) {
         // closes any notification
         this.props.closeNotification();
         // goes to the wanted page
@@ -80,7 +80,7 @@ class MyPathways extends Component{
         window.scrollTo(0, 0);
     }
 
-    render(){
+    render() {
 
         const style = {
             headerDiv: {
@@ -89,32 +89,48 @@ class MyPathways extends Component{
                 width: "100%"
             },
             pathwayPreviewUl: {
-                width:"125%",
+                width: "125%",
                 transform: "scale(.8)",
-                marginLeft:"-12.5%",
+                marginLeft: "-12.5%",
                 marginTop: "20px",
                 WebkitTransformOriginY: "0",
                 MozTransformOriginY: "0",
                 MsTransformOriginY: "0"
             },
+            tabs: {
+                marginTop: '20px',
+            },
+            tab: {
+                backgroundColor: "#B869FF",
+                color: 'white',
+                textDecorationColor:'white',
+            }
         };
 
 
-        return(
+        return (
             <div className='jsxWrapper' ref='discover'>
-                { this.props.currentUser ?
+                {this.props.currentUser ?
                     <div>
-                        <div className="greenToBlue" style={style.headerDiv} />
-                        { this.state.userPathwayPreviews ?
-                            <div>
-                                <h1 className="center mediumText" style={{color: "#B869FF"}}>My Pathways</h1>
-                                <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
-                                    {this.state.userPathwayPreviews}
-                                </ul>
+                        <div className="greenToBlue" style={style.headerDiv}/>
+                        {this.state.userPathwayPreviews ?
+                            <div className="center">
+                                <Tabs style={style.tabs} inkBarStyle={{background: 'white'}} tabItemContainerStyle={{width: '40%'}}>
+                                    <Tab label="Ongoing" style={style.tab}>
+                                        <h1 className="center mediumText" style={{color: "#B869FF"}}>My Pathways</h1>
+                                        <ul className="horizCenteredList pathwayPrevList"
+                                            style={style.pathwayPreviewUl}>
+                                            {this.state.userPathwayPreviews}
+                                        </ul>
+                                    </Tab>
+                                    <Tab label="Completed" style={style.tab}>
+                                        Here
+                                    </Tab>
+                                </Tabs>
                             </div>
-                            : null }
+                            : null}
                     </div>
-                    : null }
+                    : null}
             </div>
 
         );

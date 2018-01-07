@@ -102,6 +102,12 @@ footer {
     margin: 30px 10px 10px 10px;
 }
 
+.menuItem2 {
+    color: var(--moonshotDarkPurple);
+    font-size: 20px;
+    margin: 30px 10px 10px 10px;
+}
+
 .menuDivider {
     width: 2px;
     height: 30px;
