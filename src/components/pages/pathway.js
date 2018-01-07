@@ -53,27 +53,38 @@ class Pathway extends Component {
 
         const style = {
             descriptionAndSalary: {
-                height: "125px",
-                marginTop: '20px',
-            },
-            descriptionAndSalaryLi: {
-                width: "50%",
-                verticalAlign: "top",
-                display: 'inline-block ',
-                left: "-50%", /* or right 50% */
-            },
-            descriptionAndSalaryUl: {
-                fontSize: "20px",
-                textAlign: 'center',
+                position: "relative",
+                height: "150px"
             },
             descriptionAndSalaryIcon: {
                 height: "50px",
-                float: "left",
-                margin: "12px 20px 0px 0px"
+                position: "absolute",
+                top: "0",
+                bottom: "0",
+                right: "80%",
+                margin: "auto"
             },
             descriptionAndSalaryText: {
-                float: "left",
                 width: "50%",
+                fontSize: "20px",
+                right: "0",
+                left: "0",
+                margin: "auto",
+                textAlign: "center",
+                position: "absolute",
+                top: "50%",
+                transform: "translateY(-50%)"
+            },
+            descriptionAndSalaryHalf: {
+                width: "50%",
+                float: "left",
+                position: "relative",
+                height: "150px"
+            },
+            descriptionAndSalaryFull: {
+                width: "100%",
+                position: "relative",
+                height: "150px"
             },
             quote: {
                 everything: {
@@ -161,6 +172,27 @@ class Pathway extends Component {
 
         const pathway = this.state.pathway;
 
+        // let descriptionDiv = null;
+        // let salaryDiv = null;
+        // if (pathway.description) {
+        //     descriptionDiv = (
+        //         <div style={ pathway.industry ?
+        //             style.descriptionAndSalaryContainerHalf
+        //             :
+        //             style.descriptionAndSalaryContainerFull
+        //         }>
+        //             <img
+        //                 src="/icons/GraduationHat.png"
+        //                 style={style.descriptionAndSalaryIcon}
+        //             />
+        //             <div style={style.descriptionAndSalaryText}>
+        //                 {pathway.description}
+        //             </div>
+        //         </div>
+        //     );
+        // }
+
+
 
         return (
             <div className="jsxWrapper">
@@ -216,34 +248,38 @@ class Pathway extends Component {
 
                         {pathway.description || pathway.industry ?
                             <div style={style.descriptionAndSalary}>
-                                <ul style={style.descriptionAndSalaryUl}>
-                                    {pathway.description ?
-                                        <li style={style.descriptionAndSalaryLi}>
-                                            <img
-                                                src="/icons/GraduationHat.png"
-                                                style={style.descriptionAndSalaryIcon}
-                                            />
-                                            <div style={style.descriptionAndSalaryText}>
-                                                {pathway.description}
-                                            </div>
-                                        </li>
-                                        : null}
+                                {pathway.description ?
+                                    <div style={pathway.industry ?
+                                            style.descriptionAndSalaryHalf
+                                            :
+                                            style.descriptionAndSalaryFull
+                                    }>
+                                        <img
+                                            src="/icons/GraduationHat.png"
+                                            style={style.descriptionAndSalaryIcon}
+                                        />
+                                        <div style={style.descriptionAndSalaryText}>
+                                            {pathway.description}
+                                        </div>
+                                    </div>
+                                    : null}
 
-                                    {pathway.industry ?
-                                        <li style={style.descriptionAndSalaryLi}>
-                                            <div>
-                                                <img
-                                                    src="/icons/Price.png"
-                                                    style={style.descriptionAndSalaryIcon}
-                                                />
-                                                <div style={style.descriptionAndSalaryText}>
-                                                    Industry average salary for {pathway.industry.title}<br/>
-                                                    <i>{pathway.industry.averageSalary}</i>
-                                                </div>
-                                            </div>
-                                        </li>
-                                        : null}
-                                </ul>
+                                {pathway.industry ?
+                                    <div style={pathway.description ?
+                                        style.descriptionAndSalaryHalf
+                                        :
+                                        style.descriptionAndSalaryFull
+                                    }>
+                                        <img
+                                            src="/icons/Price.png"
+                                            style={style.descriptionAndSalaryIcon}
+                                        />
+                                        <div style={style.descriptionAndSalaryText}>
+                                            Industry average salary for {pathway.industry.title}<br/>
+                                            <i>{pathway.industry.averageSalary}</i>
+                                        </div>
+                                    </div>
+                                    : null}
                             </div>
                             : null}
 
