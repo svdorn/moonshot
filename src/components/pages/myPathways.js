@@ -115,17 +115,16 @@ class MyPathways extends Component {
                         <div className="greenToBlue" style={style.headerDiv}/>
                         {this.state.userPathwayPreviews ?
                             <div className="center">
+                                <h1 className="center mediumText" style={{color: "#B869FF"}}>My Pathways</h1>
                                 <Tabs style={style.tabs} inkBarStyle={{background: 'white'}} tabItemContainerStyle={{width: '40%'}}>
                                     <Tab label="Ongoing" style={style.tab}>
-                                        <h1 className="center mediumText" style={{color: "#B869FF"}}>My Pathways</h1>
                                         <ul className="horizCenteredList pathwayPrevList"
                                             style={style.pathwayPreviewUl}>
                                             {this.state.userPathwayPreviews}
                                         </ul>
                                     </Tab>
                                     <Tab label="Completed" style={style.tab}>
-                                        <h1 className="center mediumText" style={{color: "#B869FF"}}>Completed Pathways</h1>
-                                        <h1 className="center smallText2">None</h1>
+                                        <h1 className="center mediumText">None</h1>
                                     </Tab>
                                 </Tabs>
                             </div>
