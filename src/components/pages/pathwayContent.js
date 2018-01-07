@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PathwayContentLink from '../childComponents/pathwayContentLink';
 import PathwayContentVideo from '../childComponents/pathwayContentVideo';
 import PathwayContentArticle from '../childComponents/pathwayContentArticle';
-import {AppBar, Paper} from 'material-ui';
+import {AppBar, Paper, CircularProgress} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, updateCurrentSubStep} from "../../actions/usersActions";
@@ -36,7 +36,7 @@ class PathwayContent extends Component {
             // if we don't know what step we're currently on
             if (this.props.step == undefined) {
                 // find the current pathway in the user's profile
-                let userPath = this.props.currentUser.pathways.find(function(path) {
+                let userPath = this.props.currentUser.pathways.find(function (path) {
                     return path.pathwayId == pathwayId;
                 });
 
@@ -46,9 +46,9 @@ class PathwayContent extends Component {
                 // the step is set the first step
                 if (userPath.currentStep.step == undefined) {
                     const stepNumber = 1;
-                    const subStep = pathway.steps.find(function(step) {
+                    const subStep = pathway.steps.find(function (step) {
                         return step.order == 1;
-                    }).subSteps.find(function(subStep) {
+                    }).subSteps.find(function (subStep) {
                         return subStep.order == 1;
                     });
                     this.props.updateCurrentSubStep(userId, pathwayId, stepNumber, subStep);
@@ -56,9 +56,9 @@ class PathwayContent extends Component {
                 // otherwise save the step that was saved in the db to redux state
                 else {
                     const stepNumber = userPath.currentStep.step;
-                    const subStep = pathway.steps.find(function(step) {
+                    const subStep = pathway.steps.find(function (step) {
                         return step.order == stepNumber;
-                    }).subSteps.find(function(subStep) {
+                    }).subSteps.find(function (subStep) {
                         return subStep.order == userPath.currentStep.subStep;
                     })
                     this.props.updateCurrentSubStep(userId, pathwayId, stepNumber, subStep);
@@ -74,12 +74,12 @@ class PathwayContent extends Component {
                 this.setState({pathway})
             }
         })
-        .catch(function (err) {
-            console.log("error getting searched-for pathway");
-        })
+            .catch(function (err) {
+                console.log("error getting searched-for pathway");
+            })
     }
 
-    goTo (route)  {
+    goTo(route) {
         // closes any notification
         this.props.closeNotification();
         // goes to the wanted page
@@ -130,7 +130,7 @@ class PathwayContent extends Component {
             if (contentType == "link") {
                 content = <PathwayContentLink style={style.content}/>;
             } else if (contentType == "video") {
-                content = <PathwayContentVideo className="videoContainer" />;
+                content = <PathwayContentVideo className="videoContainer"/>;
             } else if (contentType == "article") {
                 content = <PathwayContentArticle style={style.content}/>
             } else {
@@ -139,38 +139,41 @@ class PathwayContent extends Component {
         }
 
         return (
-            <div style={{marginBottom:"50px"}}>
+            <div style={{marginBottom: "50px"}}>
                 {this.state.pathway ?
                     <div>
                         <div style={style.headerSpace} className="greenToBlue"/>
                         <div style={style.pathwayHeader}>
-                            { pathway.name }
+                            {pathway.name}
                         </div>
                         <div style={style.contentContainer}>
                             <div className="scrollBarAndContactUs">
                                 <PathwayStepList
                                     className="stepScrollerContainer"
                                     steps={pathway.steps}
-                                    pathwayId={pathway._id} />
+                                    pathwayId={pathway._id}/>
                                 <Paper className="questionsContactUs">
                                     <img
                                         src="/icons/VoiceBubble.png"
-                                        style={{height:"50px", width:"50px", position:"absolute"}}
+                                        style={{height: "50px", width: "50px", position: "absolute"}}
                                     />
-                                    <span style={{fontSize:"20px", marginLeft:"75px"}}>
+                                    <span style={{fontSize: "20px", marginLeft: "75px"}}>
                                         Questions?
                                     </span><br/>
-                                    <p  className="clickable blueText"
-                                        style={{margin:"10px 0px 0px 75px"}}
-                                        onClick={() => this.goTo('/contactUs')}>
+                                    <p className="clickable blueText"
+                                       style={{margin: "10px 0px 0px 75px"}}
+                                       onClick={() => this.goTo('/contactUs')}>
                                         Contact Us
                                     </p>
                                 </Paper>
                             </div>
-                            { content }
+                            {content}
                         </div>
                     </div>
-                    : null}
+                    : <div>
+                        <div style={style.headerSpace} className="greenToBlue"/>
+                        <div className="center"><CircularProgress style={{marginTop: "20px"}}/><br/></div>
+                    </div>}
             </div>
         );
     }
