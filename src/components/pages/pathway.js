@@ -181,28 +181,6 @@ class Pathway extends Component {
 
         const pathway = this.state.pathway;
 
-        // let descriptionDiv = null;
-        // let salaryDiv = null;
-        // if (pathway.description) {
-        //     descriptionDiv = (
-        //         <div style={ pathway.industry ?
-        //             style.descriptionAndSalaryContainerHalf
-        //             :
-        //             style.descriptionAndSalaryContainerFull
-        //         }>
-        //             <img
-        //                 src="/icons/GraduationHat.png"
-        //                 style={style.descriptionAndSalaryIcon}
-        //             />
-        //             <div style={style.descriptionAndSalaryText}>
-        //                 {pathway.description}
-        //             </div>
-        //         </div>
-        //     );
-        // }
-
-
-
         return (
             <div className="jsxWrapper">
                 {pathway.sponsor !== undefined ?

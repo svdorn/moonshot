@@ -11,8 +11,12 @@ import PathwayStepList from '../childComponents/pathwayStepList';
 import axios from 'axios';
 
 class PathwayContent extends Component {
+
+
     constructor(props) {
         super(props);
+
+        console.log("here");
         this.state = {
             pathway: undefined
         }
@@ -35,11 +39,10 @@ class PathwayContent extends Component {
                     return path.pathwayId == pathwayId;
                 });
 
-                console.log("userPath is: ", userPath);
-
                 const userId = this.props.currentUser._id;
 
-                // if the user doesn't have a step saved, the step is set the first step
+                // if the user doesn't have a step saved in db for this pathway,
+                // the step is set the first step
                 if (userPath.currentStep.step == undefined) {
                     const stepNumber = 1;
                     const subStep = pathway.steps.find(function(step) {
@@ -64,10 +67,15 @@ class PathwayContent extends Component {
                     console.log("the pathway is ", this.state.pathway);
                 });
             }
+
+            // we do know what step we're currently on, simply set the state
+            else {
+                this.setState({pathway})
+            }
         })
-        // .catch(function (err) {
-        //     console.log("error getting searched-for pathway");
-        // })
+        .catch(function (err) {
+            console.log("error getting searched-for pathway");
+        })
     }
 
     render() {
