@@ -80,17 +80,19 @@ class PathwayContent extends Component {
 
     render() {
         const style = {
-            stepList: {
-                height: "600px",
-                width: "400px",
-                marginLeft: "30px",
-                display: "inline-block",
-                float: "left",
-                marginBottom: "20px"
-            },
+            // stepList: {
+            //     height: "600px",
+            //     width: "400px",
+            //     marginLeft: "30px",
+            //     display: "inline-block",
+            //     float: "left",
+            //     marginBottom: "20px",
+            //     visibility: "inherit"
+            // },
             content: {
                 display: "inline-block",
-                marginLeft: "20px"
+                marginLeft: "20px",
+                width: "calc(100% - 470px)"
             },
             pathwayHeader: {
                 width: "100%",
@@ -113,6 +115,13 @@ class PathwayContent extends Component {
             }
         }
 
+        // if the window is small enough, hide scroll bar and make video take whole screen
+        if (window.innerWidth <= 1000) {
+            style.content.width = "90%";
+            style.stepList.visibility = "hidden";
+            style.stepList.width = "0";
+        }
+
         const pathway = this.state.pathway;
         if (this.props.step !== undefined) {
             console.log(this.props.step.contentType);
@@ -127,7 +136,7 @@ class PathwayContent extends Component {
             if (contentType == "link") {
                 content = <PathwayContentLink style={style.content}/>;
             } else if (contentType == "video") {
-                content = <PathwayContentVideo style={style.content}/>;
+                content = <PathwayContentVideo className="videoContainer" />;
             } else {
                 content = <div style={style.div}>Not Video or Link</div>;
             }
@@ -142,7 +151,7 @@ class PathwayContent extends Component {
                             { pathway.name }
                         </div>
                         <div style={style.contentContainer}>
-                            <PathwayStepList steps={pathway.steps} pathwayId={pathway._id} style={style.stepList}/>
+                            <PathwayStepList className="stepScrollerContainer" steps={pathway.steps} pathwayId={pathway._id} style={style.stepList}/>
                             { content }
                         </div>
                     </div>

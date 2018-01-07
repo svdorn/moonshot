@@ -49,15 +49,15 @@ class PathwayContentVideo extends Component {
     render() {
 
         const opts = {
-            height: '390',
-            width: '640',
+            height: '100%',
+            width: '100%',
             playerVars: { // https://developers.google.com/youtube/player_parameters
                 autoplay: 0
             }
         };
 
         return (
-            <div>
+            <div style={this.props.style} className={this.props.className}>
                 {this.state.content !== undefined ?
                     <YouTube
                         videoId={this.state.content.link}

@@ -294,6 +294,31 @@ button.link {
 .blueText { color: var(--moonshotLightBlue) }
 
 
+.videoContainer {
+    display: inline-block;
+    margin-left: 20px;
+    width: calc(100% - 470px);
+}
+.stepScrollerContainer {
+    height: 600px;
+    width: 400px;
+    margin-left: 30px;
+    display: inline-block;
+    float: left;
+    margin-bottom: 20px;
+    visibility: inherit;
+}
+
+@media only screen and (max-width: 1000px) {
+    .videoContainer {
+        width: 90%;
+        min-width: 800px;
+    }
+    .stepScrollerContainer {
+        margin-left: -800px;
+    }
+}
+
 
 /* decorative triangles */
 

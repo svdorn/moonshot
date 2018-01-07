@@ -127,7 +127,7 @@ class PathwayStepList extends Component {
         const stepItems = this.props.steps.map(function(step) {
             const subStepItems = step.subSteps.map(function(subStep) {
                 return (
-                    <Step key={subStep.name}>
+                    <Step key={"" + step.order + ", " + subStep.order}>
                         <StepButton onClick={() => self.setState({
                             subStepIndex: (subStep.order - 1),
                             stepIndex: (step.order - 1)
@@ -177,7 +177,7 @@ class PathwayStepList extends Component {
 
 
         return (
-            <Paper style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
+            <Paper className={this.props.className} style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
                 <div style={{maxWidth: 380, margin: 'auto'}}>
                     <Stepper
                       activeStep={stepIndex}
