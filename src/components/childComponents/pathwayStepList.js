@@ -144,7 +144,7 @@ class PathwayStepList extends Component {
             })
 
             let subStepper = (
-                <div style={{maxWidth: 380, margin: 'auto'}}>
+                <div style={{maxWidth: 380, margin: 'auto', ...bottomMargin}}>
                     <Stepper
                       activeStep={subStepIndex}
                       linear={false}
@@ -155,8 +155,11 @@ class PathwayStepList extends Component {
                 </div>
             )
 
+            // give the last step a margin at the bottom
+            const bottomMargin = (step.order == self.props.steps.length) ? {marginBottom: "20px"} : {};
+
             return (
-                <Step key={step.name}>
+                <Step key={step.name} style={bottomMargin}>
                     <StepButton onClick={() => self.setState({
                         stepIndex: (step.order - 1),
                         subStepIndex: 0
