@@ -54,6 +54,35 @@ class HomepageTriangles extends Component {
                 </div>
             )
             zIndex = "-10";
+        } else if (this.props.variation == "3") {
+            transformations = [
+                {top: "10%", right: "0%", rotate: -30, scale: .4, className: " darkPurpleTriangle"},
+                {top: "14%", right: "14%", rotate: -60, scale: .8, className: " darkPurpleTriangle"},
+                {top: "20%", right: "4%", rotate: -11, scale: .7, className: " darkPurpleTriangle"},
+                {top: "24%", right: "23%", rotate: -134, scale: .3, className: " darkPurpleTriangle"},
+                {top: "30%", right: "16%", rotate: -19, scale: .5, className: " darkPurpleTriangle"},
+            ];
+            whiteSpace = (
+                <div style={{width:"100%", height:"100%"}}>
+                    <div style={{
+                        width: "50%",
+                        height: "45%",
+                        float: "right",
+                        zIndex: "-5",
+                        background: "linear-gradient(to bottom left, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0))"
+                    }}/>
+                    <div style={{ float: "right", height: "15%", width: "40%", clear: "both" }} />
+                    <div style={{
+                        width: "50%",
+                        height: "40%",
+                        float: "right",
+                        clear: "both",
+                        zIndex: "-5",
+                        background: "linear-gradient(to left, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0))"
+                    }}/>
+                </div>
+            )
+            zIndex = "-10";
         }
 
         let counter = 0;
