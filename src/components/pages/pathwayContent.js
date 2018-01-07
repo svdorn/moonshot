@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import PathwayContentLink from '../childComponents/pathwayContentLink';
 import PathwayContentVideo from '../childComponents/pathwayContentVideo';
+import PathwayContentArticle from '../childComponents/pathwayContentArticle';
 import {AppBar, Paper} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
@@ -121,6 +122,8 @@ class PathwayContent extends Component {
                 content = <PathwayContentLink style={style.content}/>;
             } else if (contentType == "video") {
                 content = <PathwayContentVideo className="videoContainer" />;
+            } else if (contentType == "article") {
+                content = <PathwayContentArticle style={style.content}/>
             } else {
                 content = <div style={style.div}>Not Video or Link</div>;
             }
