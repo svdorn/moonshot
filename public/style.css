@@ -15,6 +15,7 @@ body {
     --moonshotGreen: #3dffdd;
     --moonshotGreenText: #00e2ba;
     --moonshotPurple: #cf9bff;
+    --moonshotDarkPurple: #B869FF;
 }
 
 .container {
@@ -318,6 +319,7 @@ button.link {
     background: linear-gradient(to top, rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.6));
 }
 .purpleTriangle::after { background: var(--moonshotPurple); }
+.darkPurpleTriangle::after { background: var(--moonshotDarkPurple); }
 .greenTriangle::after { background: var(--moonshotGreen); }
 
 /* end decorative triangles */

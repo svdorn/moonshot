@@ -237,9 +237,9 @@ class Pathway extends Component {
                             <div style={style.descriptionAndSalary}>
                                 {pathway.description ?
                                     <div style={pathway.industry ?
-                                            style.descriptionAndSalaryHalf
-                                            :
-                                            style.descriptionAndSalaryFull
+                                        style.descriptionAndSalaryHalf
+                                        :
+                                        style.descriptionAndSalaryFull
                                     }>
                                         <img
                                             src="/icons/GraduationHat.png"
@@ -351,23 +351,24 @@ class Pathway extends Component {
                         <div>
                             {pathway.sponsor ?
                                 <div style={{marginBottom: "70px"}}>
+                                    <HomepageTriangles variation="3" />
                                     <ul className="horizCenteredList homepageBenefitsList">
-                                        <li style={{marginRight:"14%"}}>
-                                            <div style={{position:"relative"}}>
+                                        <li style={{marginRight: "14%"}}>
+                                            <div style={{position: "relative"}}>
                                                 <img
                                                     src="/icons/NoMoney.png"
                                                     alt="Free"
                                                     style={style.infoBoxes.image}
                                                 />
                                                 <div className="smallText2">
-                                                It{"'"}s free.<br/>
-                                                {pathway.sponsor.name} provides scholarships<br/>
-                                                to pay for your pathway.
+                                                    It{"'"}s free.<br/>
+                                                    {pathway.sponsor.name} provides scholarships<br/>
+                                                    to pay for your pathway.
                                                 </div>
                                             </div>
                                         </li>
                                         <li>
-                                            <div style={{position:"relative"}}>
+                                            <div style={{position: "relative"}}>
                                                 <img
                                                     src="/icons/Portfolio.png"
                                                     alt="Portfolio"
@@ -383,7 +384,7 @@ class Pathway extends Component {
                                     </ul>
                                     <ul className="horizCenteredList homepageBenefitsList">
                                         <li>
-                                            <div style={{position:"relative"}}>
+                                            <div style={{position: "relative"}}>
                                                 <img
                                                     src="/icons/CheckMark.png"
                                                     alt="Check Mark"
@@ -398,23 +399,6 @@ class Pathway extends Component {
                                         </li>
                                     </ul>
                                 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
                                 : null}
