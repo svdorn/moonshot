@@ -101,9 +101,8 @@ class MyPathways extends Component {
                 marginTop: '20px',
             },
             tab: {
-                backgroundColor: "#B869FF",
-                color: 'white',
-                textDecorationColor:'white',
+                backgroundColor: "white",
+                color: '#B869FF',
             }
         };
 
@@ -116,7 +115,7 @@ class MyPathways extends Component {
                         {this.state.userPathwayPreviews ?
                             <div className="center">
                                 <h1 className="center mediumText" style={{color: "#B869FF"}}>My Pathways</h1>
-                                <Tabs style={style.tabs} inkBarStyle={{background: 'white'}} tabItemContainerStyle={{width: '40%'}}>
+                                <Tabs style={style.tabs} inkBarStyle={{background: '#B869FF'}} tabItemContainerStyle={{width: '40%'}}>
                                     <Tab label="Ongoing" style={style.tab}>
                                         <ul className="horizCenteredList pathwayPrevList"
                                             style={style.pathwayPreviewUl}>
