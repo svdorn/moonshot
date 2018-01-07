@@ -81,15 +81,6 @@ class PathwayContent extends Component {
 
     render() {
         const style = {
-            // stepList: {
-            //     height: "600px",
-            //     width: "400px",
-            //     marginLeft: "30px",
-            //     display: "inline-block",
-            //     float: "left",
-            //     marginBottom: "20px",
-            //     visibility: "inherit"
-            // },
             content: {
                 display: "inline-block",
                 marginLeft: "20px",
@@ -114,13 +105,6 @@ class PathwayContent extends Component {
             contentContainer: {
                 overflow: "auto"
             }
-        }
-
-        // if the window is small enough, hide scroll bar and make video take whole screen
-        if (window.innerWidth <= 1000) {
-            style.content.width = "90%";
-            style.stepList.visibility = "hidden";
-            style.stepList.width = "0";
         }
 
         const pathway = this.state.pathway;
@@ -154,7 +138,7 @@ class PathwayContent extends Component {
                             { pathway.name }
                         </div>
                         <div style={style.contentContainer}>
-                            <PathwayStepList className="stepScrollerContainer" steps={pathway.steps} pathwayId={pathway._id} style={style.stepList}/>
+                            <PathwayStepList className="stepScrollerContainer" steps={pathway.steps} pathwayId={pathway._id} />
                             { content }
                         </div>
                     </div>
