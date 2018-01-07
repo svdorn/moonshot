@@ -85,7 +85,7 @@ class MyPathways extends Component {
         const style = {
             headerDiv: {
                 position: "relative",
-                height: "115px",
+                height: "120px",
                 width: "100%"
             },
             pathwayPreviewUl: {
