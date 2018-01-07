@@ -116,7 +116,7 @@ class PathwayStepList extends Component {
     render() {
         const style = {
             enclosingBox: {
-
+                overflow: "scroll"
             }
         }
 
@@ -144,7 +144,7 @@ class PathwayStepList extends Component {
             })
 
             let subStepper = (
-                <div style={{maxWidth: 380, maxHeight: 400, margin: 'auto'}}>
+                <div style={{maxWidth: 380, margin: 'auto'}}>
                     <Stepper
                       activeStep={subStepIndex}
                       linear={false}
@@ -175,7 +175,7 @@ class PathwayStepList extends Component {
 
         return (
             <Paper style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
-                <div style={{maxWidth: 380, maxHeight: 400, margin: 'auto'}}>
+                <div style={{maxWidth: 380, margin: 'auto'}}>
                     <Stepper
                       activeStep={stepIndex}
                       linear={false}
