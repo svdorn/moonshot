@@ -1,6 +1,6 @@
 "use strict"
 import React, {Component} from 'react';
-import {Tabs, Tab} from 'material-ui/Tabs';
+import {Tabs, Tab, CircularProgress} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../actions/usersActions";
@@ -128,7 +128,7 @@ class MyPathways extends Component {
                                     </Tab>
                                 </Tabs>
                             </div>
-                            : null}
+                            : <div className="center"><CircularProgress style={{marginTop: "20px", marginBottom: "20px"}}/></div>}
                     </div>
                     : null}
             </div>
