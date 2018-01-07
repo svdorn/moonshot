@@ -19,7 +19,8 @@ class PathwayContent extends Component {
 
         console.log("here");
         this.state = {
-            pathway: undefined
+            pathway: undefined,
+            currentStep: undefined
         }
     }
 
@@ -33,46 +34,68 @@ class PathwayContent extends Component {
         }).then(res => {
             const pathway = res.data;
 
-            // if we don't know what step we're currently on
-            if (this.props.step == undefined) {
-                // find the current pathway in the user's profile
-                let userPath = this.props.currentUser.pathways.find(function(path) {
-                    return path.pathwayId == pathwayId;
+            const user = this.props.currentUser;
+            // the current step of the current pathway
+            let currentStep = user.pathways.find(function(path) {
+                return path.pathwayId == pathwayId;
+            }).currentStep;
+
+            // if the current step in the current path isn't set, set it to the beginning
+            if (currentStep == undefined) {
+                // get the first substep
+                const subStep = pathway.steps.find(function(step) {
+                    return step.order == 1;
+                }).subSteps.find(function(subStep) {
+                    return subStep.order == 1;
                 });
 
-                const userId = this.props.currentUser._id;
-
-                // if the user doesn't have a step saved in db for this pathway,
-                // the step is set the first step
-                if (userPath.currentStep.step == undefined) {
-                    const stepNumber = 1;
-                    const subStep = pathway.steps.find(function(step) {
-                        return step.order == 1;
-                    }).subSteps.find(function(subStep) {
-                        return subStep.order == 1;
-                    });
-                    this.props.updateCurrentSubStep(userId, pathwayId, stepNumber, subStep);
-                }
-                // otherwise save the step that was saved in the db to redux state
-                else {
-                    const stepNumber = userPath.currentStep.step;
-                    const subStep = pathway.steps.find(function(step) {
-                        return step.order == stepNumber;
-                    }).subSteps.find(function(subStep) {
-                        return subStep.order == userPath.currentStep.subStep;
-                    })
-                    this.props.updateCurrentSubStep(userId, pathwayId, stepNumber, subStep);
-                }
-
-                this.setState({pathway}, () => {
-                    console.log("the pathway is ", this.state.pathway);
-                });
+                currentStep = subStep;
+                // update the current step in the user document, both in db and redux state
+                this.props.updateCurrentSubStep(userId, pathwayId, subStep);
             }
 
-            // we do know what step we're currently on, simply set the state
-            else {
-                this.setState({pathway})
-            }
+            this.setState({pathway, currentStep});
+
+            // // if we don't know what step we're currently on
+            // if (this.props.step == undefined) {
+            //     // find the current pathway in the user's profile
+            //     let userPath = this.props.currentUser.pathways.find(function(path) {
+            //         return path.pathwayId == pathwayId;
+            //     });
+            //
+            //     const userId = this.props.currentUser._id;
+            //
+            //     // if the user doesn't have a step saved in db for this pathway,
+            //     // the step is set the first step
+            //     if (userPath.currentStep.step == undefined) {
+            //         const stepNumber = 1;
+            //         const subStep = pathway.steps.find(function(step) {
+            //             return step.order == 1;
+            //         }).subSteps.find(function(subStep) {
+            //             return subStep.order == 1;
+            //         });
+            //         this.props.updateCurrentSubStep(userId, pathwayId, stepNumber, subStep);
+            //     }
+            //     // otherwise save the step that was saved in the db to redux state
+            //     else {
+            //         const stepNumber = userPath.currentStep.step;
+            //         const subStep = pathway.steps.find(function(step) {
+            //             return step.order == stepNumber;
+            //         }).subSteps.find(function(subStep) {
+            //             return subStep.order == userPath.currentStep.subStep;
+            //         })
+            //         this.props.updateCurrentSubStep(userId, pathwayId, stepNumber, subStep);
+            //     }
+            //
+            //     this.setState({pathway}, () => {
+            //         console.log("the pathway is ", this.state.pathway);
+            //     });
+            // }
+            //
+            // // we do know what step we're currently on, simply set the state
+            // else {
+            //     this.setState({pathway})
+            // }
         })
         .catch(function (err) {
             console.log("error getting searched-for pathway");
@@ -120,19 +143,24 @@ class PathwayContent extends Component {
         if (this.props.step !== undefined) {
             console.log(this.props.step.contentType);
             console.log(this.props.step);
-
         }
+
+        // const currentStep = this.props.currentUser.pathways.find(function(path) {
+        //     path.pathwayId == pathway.id
+        // }).currentStep;
+
+        const currentStep = this.state.currentStep;
 
         let content = <div>"here"</div>;
         // if the user is on a step, show that content
         if (this.props.step) {
             const contentType = this.props.step.contentType;
             if (contentType == "link") {
-                content = <PathwayContentLink style={style.content}/>;
+                content = <PathwayContentLink style={style.content} step={currentStep}/>;
             } else if (contentType == "video") {
-                content = <PathwayContentVideo className="videoContainer" />;
+                content = <PathwayContentVideo className="videoContainer" step={currentStep}/>;
             } else if (contentType == "article") {
-                content = <PathwayContentArticle style={style.content}/>
+                content = <PathwayContentArticle style={style.content} step={currentStep}/>
             } else {
                 content = <div style={style.div}>Not Video or Link</div>;
             }
@@ -185,7 +213,6 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        step: state.users.currentSubStep,
         currentUser: state.users.currentUser
     };
 }

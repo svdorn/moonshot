@@ -16,12 +16,18 @@ import FlatButton from 'material-ui/FlatButton';
 
 class PathwayStepList extends Component {
     constructor(props){
+        console.log("constructing");
         super(props);
 
         let stepIndex = 0;
         let subStepIndex = 0;
 
-        const currentSubStep = this.props.currentSubStep;
+        const pathwayId = this.props.pathwayId;
+        const user = this.props.currentUser;
+        const currentSubStep = user.pathways.find(function(path) {
+            return path.pathwayId == pathwayId;
+        }).currentStep;
+
         if (currentSubStep) {
             subStepIndex = currentSubStep.order - 1;
             stepIndex = currentSubStep.superStepOrder - 1;
@@ -31,11 +37,15 @@ class PathwayStepList extends Component {
     }
 
     updateStepInReduxState() {
-        const userId = this.props.currentUserId;
+        const self = this;
+        const userId = this.props.currentUser._id;
         const pathwayId = this.props.pathwayId;
-        const stepNumber = this.state.stepIndex + 1;
-        const substep = this.props.steps[this.state.stepIndex].subSteps[this.state.subStepIndex];
-        this.props.updateCurrentSubStep(userId, pathwayId, stepNumber, substep);
+        const substep = this.props.steps.find(function(step) {
+            return step.order == self.state.stepIndex + 1
+        }).subSteps.find(function(sub) {
+            return sub.order == self.state.subStepIndex + 1;
+        });
+        this.props.updateCurrentSubStep(userId, pathwayId, substep);
     }
 
     handleNextSub = () => {
@@ -144,11 +154,12 @@ class PathwayStepList extends Component {
             })
 
             let subStepper = (
-                <div style={{maxWidth: 380, margin: 'auto', ...bottomMargin}}>
+                <div style={{maxWidth: 380, margin: 'auto', ...bottomMargin}} key={step.order}>
                     <Stepper
                       activeStep={subStepIndex}
                       linear={false}
                       orientation="vertical"
+                      key={step.order}
                     >
                         {subStepItems}
                     </Stepper>
@@ -200,8 +211,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUserId: state.users.currentUser._id,
-        currentSubStep: state.users.currentSubStep
+        currentUser: state.users.currentUser
     };
 }
 

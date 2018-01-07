@@ -237,16 +237,13 @@ export function deleteUser(id) {
   }
 }
 
-export function updateCurrentSubStep(userId, pathwayId, stepNumber, subStep) {
+export function updateCurrentSubStep(userId, pathwayId, subStep) {
     return function(dispatch) {
-        dispatch({type: "UPDATE_CURRENT_SUBSTEP", payload: subStep});
+        dispatch({type: "UPDATE_CURRENT_SUBSTEP", pathwayId: pathwayId, subStep: subStep});
 
         axios.post("/api/userCurrentStep", {
             params: {
-                userId: userId,
-                pathwayId: pathwayId,
-                stepNumber: stepNumber,
-                subStepNumber: subStep.order
+                userId, pathwayId, subStep
             }
         })
         .then(function(response) {

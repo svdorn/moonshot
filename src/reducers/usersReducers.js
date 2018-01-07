@@ -145,8 +145,15 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "UPDATE_CURRENT_SUBSTEP":
+            let user = state.currentUser;
+            // find the right pathway
+            const pathwayIndex = user.pathways.findIndex(function(path) {
+                return path.pathwayId == action.pathwayId;
+            })
+            // update current step of current pathway in user object
+            user.pathways[pathwayIndex].currentStep = action.subStep;
             return {
-                ...state, currentSubStep: action.payload
+                ...state, currentUser: user
             }
             break;
         case "CLOSE_NOTIFICATION":
