@@ -16,20 +16,12 @@ import FlatButton from 'material-ui/FlatButton';
 
 class PathwayStepList extends Component {
     constructor(props){
-        console.log("constructing");
         super(props);
 
         let stepIndex = 0;
         let subStepIndex = 0;
 
-        // const pathwayId = this.props.pathwayId;
-        // const user = this.props.currentUser;
-        // const currentSubStep = user.pathways.find(function(path) {
-        //     return path.pathwayId == pathwayId;
-        // }).currentStep;
-
-        const currentSubStep = this.props.currentStep;
-
+        const currentSubStep = this.props.currentSubStep;
         if (currentSubStep) {
             subStepIndex = currentSubStep.order - 1;
             stepIndex = currentSubStep.superStepOrder - 1;
@@ -39,15 +31,11 @@ class PathwayStepList extends Component {
     }
 
     updateStepInReduxState() {
-        const self = this;
         const user = this.props.currentUser;
         const pathwayId = this.props.pathwayId;
-        const substep = this.props.steps.find(function(step) {
-            return step.order == self.state.stepIndex + 1
-        }).subSteps.find(function(sub) {
-            return sub.order == self.state.subStepIndex + 1;
-        });
-        this.props.updateCurrentSubStep(user, pathwayId, substep);
+        const stepNumber = this.state.stepIndex + 1;
+        const substep = this.props.steps[this.state.stepIndex].subSteps[this.state.subStepIndex];
+        this.props.updateCurrentSubStep(user, pathwayId, stepNumber, substep);
     }
 
     handleNextSub = () => {
@@ -156,12 +144,11 @@ class PathwayStepList extends Component {
             })
 
             let subStepper = (
-                <div style={{maxWidth: 380, margin: 'auto', ...bottomMargin}} key={step.order}>
+                <div style={{maxWidth: 380, margin: 'auto', ...bottomMargin}}>
                     <Stepper
                       activeStep={subStepIndex}
                       linear={false}
                       orientation="vertical"
-                      key={step.order}
                     >
                         {subStepItems}
                     </Stepper>
@@ -172,7 +159,7 @@ class PathwayStepList extends Component {
             const bottomMargin = (step.order == self.props.steps.length) ? {marginBottom: "20px"} : {};
 
             return (
-                <Step key={step.name + ", " + step.order} style={bottomMargin}>
+                <Step key={step.name} style={bottomMargin}>
                     <StepButton onClick={() => self.setState({
                         stepIndex: (step.order - 1),
                         subStepIndex: 0
@@ -212,12 +199,9 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-    console.log("UGH");
     return {
         currentUser: state.users.currentUser,
-        currentStep: state.currentPathwayId ?
-            state.users.currentUser.pathways[state.currentPathwayId].currentStep
-            : undefined
+        currentSubStep: state.users.currentSubStep
     };
 }
 

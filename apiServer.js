@@ -974,17 +974,22 @@ app.get('/search', function (req, res) {
 app.post("/userCurrentStep", function (req, res) {
     const userId = req.body.params.userId;
     const pathwayId = req.body.params.pathwayId;
-    const subStep = req.body.params.subStep;
+    const stepNumber = req.body.params.stepNumber;
+    const subStepNumber = req.body.params.subStepNumber;
 
-    console.log("subStep is ", subStep);
+    console.log("userId is: ", userId);
+    console.log("pathwayId is: ", pathwayId);
+    console.log("stepNumber is: ", stepNumber);
+    console.log("subStepNumber is: ", subStepNumber);
 
     Users.findById(userId, function(err, user) {
-        console.log("user is: ", user);
         let pathwayIndex = user.pathways.findIndex(function(path) {
             return path.pathwayId == pathwayId;
         });
-        console.log("pathwayIndex is ", pathwayIndex);
-        user.pathways[pathwayIndex].currentStep = subStep;
+        user.pathways[pathwayIndex].currentStep = {
+            subStep: subStepNumber,
+            step: stepNumber
+        }
         user.save(function() {
             res.json(true);
         });

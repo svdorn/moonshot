@@ -15,12 +15,8 @@ var usersSchema = mongoose.Schema({
     pathways: [{
         pathwayId: mongoose.Schema.Types.ObjectId,
         currentStep: {
-            order: Number,
-            superStepOrder: Number,
-            name: String,
-            contentType: String,
-            contentID: mongoose.Schema.Types.ObjectId,
-            comments: [{ username: String, body: String, date: Date }]
+            step: Number,
+            subStep: Number
         },
     }],
 });

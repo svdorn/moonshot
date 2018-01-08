@@ -87,7 +87,9 @@ class PathwayContentLink extends Component {
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        step: state.users.currentSubStep
+    };
 }
 
 export default connect(mapStateToProps)(PathwayContentLink);

@@ -165,14 +165,9 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "UPDATE_CURRENT_SUBSTEP":
+            const subStep = {...action.payload, pathwayId: action.pathwayId}
             return {
-                ...state, currentUser: action.user
-            };
-            break;
-        case "SET_PATHWAY_ID":
-            console.log("setting pathway id");
-            return {
-                ...state, pathwayId: action.pathwayId
+                ...state, currentSubStep: subStep, currentUser: action.currentUser
             }
             break;
         case "CLOSE_NOTIFICATION":

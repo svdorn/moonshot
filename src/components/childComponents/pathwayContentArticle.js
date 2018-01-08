@@ -6,7 +6,6 @@ import axios from 'axios';
 class PathwayContentLink extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             content: undefined,
             currStep: {},
@@ -68,7 +67,9 @@ class PathwayContentLink extends Component {
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        step: state.users.currentSubStep
+    };
 }
 
 export default connect(mapStateToProps)(PathwayContentLink);

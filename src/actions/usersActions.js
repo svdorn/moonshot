@@ -240,21 +240,21 @@ export function deleteUser(id) {
   }
 }
 
-export function updateCurrentSubStep(user, pathwayId, subStep) {
+export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
     return function(dispatch) {
-        const pathwayIndex = user.pathways.findIndex(function(path) {
-            return path.pathwayId == pathwayId;
-        });
-        // update current step of current pathway in user object
-        user.pathways[pathwayIndex].currentStep = subStep;
-
-        dispatch({type: "UPDATE_CURRENT_SUBSTEP", user: user});
-
-        const userId = user._id;
+        let currentUser = Object.assign({}, user);
+        // set the current step for the user in redux state
+        currentUser.pathways.find(function(path) {
+            return path.pathwayId == pathwayId
+        }).currentStep = {subStep: subStep.order, step: stepNumber};
+        dispatch({type: "UPDATE_CURRENT_SUBSTEP", payload: subStep, pathwayId, currentUser});
 
         axios.post("/api/userCurrentStep", {
             params: {
-                userId, pathwayId, subStep
+                userId: user._id,
+                pathwayId: pathwayId,
+                stepNumber: stepNumber,
+                subStepNumber: subStep.order
             }
         })
         .then(function(response) {
@@ -263,15 +263,6 @@ export function updateCurrentSubStep(user, pathwayId, subStep) {
         .catch(function(err) {
             console.log("error saving current step: ", err)
         });
-
-
-    }
-}
-
-export function setPathwayId(pathwayId) {
-    return function(dispatch) {
-        console.log("setting pathway id in action");
-        dispatch({type: "SET_PATHWAY_ID", pathwayId})
     }
 }
 

@@ -72,7 +72,9 @@ class PathwayContentVideo extends Component {
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        step: state.users.currentSubStep
+    };
 }
 
 export default connect(mapStateToProps)(PathwayContentVideo);
