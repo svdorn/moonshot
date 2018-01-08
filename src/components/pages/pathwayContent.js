@@ -126,10 +126,6 @@ class PathwayContent extends Component {
                 padding: "10px 30px",
                 fontSize: "20px"
             },
-            headerSpace: {
-                width: "100%",
-                height: "100px"
-            },
             div: {
                 display: "inline-block"
             },
@@ -180,7 +176,7 @@ class PathwayContent extends Component {
             <div style={{marginBottom: "50px"}}>
                 {this.state.pathway ?
                     <div>
-                        <div style={style.headerSpace} className="greenToBlue"/>
+                        <div className="greenToBlue headerDiv"/>
                         <Paper style={style.pathwayHeader}>
                             {pathway.name}
                         </Paper>

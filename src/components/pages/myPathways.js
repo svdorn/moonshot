@@ -132,11 +132,6 @@ class MyPathways extends Component {
     render() {
 
         const style = {
-            headerDiv: {
-                position: "relative",
-                height: "100px",
-                width: "100%"
-            },
             pathwayPreviewUl: {
                 width: "125%",
                 transform: "scale(.8)",
@@ -160,7 +155,7 @@ class MyPathways extends Component {
             <div className='jsxWrapper' ref='discover'>
                 {this.props.currentUser ?
                     <div>
-                        <div className="greenToBlue" style={style.headerDiv}/>
+                        <div className="greenToBlue headerDiv"/>
                         {this.state.userPathwayPreviews ?
                             <div className="center">
                                 <h1 className="center mediumText" style={{color: "#B869FF"}}>My Pathways</h1>

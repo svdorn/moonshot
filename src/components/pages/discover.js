@@ -160,11 +160,6 @@ class Discover extends Component {
                 bottom: "-14px",
                 right: "0px"
             },
-            headerDiv: {
-                position: "relative",
-                height: "100px",
-                width: "100%"
-            },
             treeText: {
                 color: "white",
                 position: "absolute",
@@ -238,7 +233,7 @@ class Discover extends Component {
 
         return (
             <div className='jsxWrapper' ref='discover'>
-                <div className="greenToBlue" style={style.headerDiv}/>
+                <div className="greenToBlue headerDiv"/>
                 <div className="center darkPurpleText mediumText" style={{marginTop:'15px', marginBottom:'10px'}}>
                     Discover Pathways
                 </div>

@@ -353,6 +353,12 @@ button.link {
     margin-left: 30% !important;
 }
 
+.headerDiv {
+    position: relative;
+    height: 100px;
+    width: 100%;
+}
+
 
 /* decorative triangles */
 
