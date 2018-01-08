@@ -53,7 +53,8 @@ class Pathway extends Component {
         const style = {
             descriptionAndSalary: {
                 position: "relative",
-                height: "150px"
+                height: "150px",
+                margin: "30px"
             },
             descriptionAndSalaryIcon: {
                 height: "50px",
@@ -381,15 +382,13 @@ class Pathway extends Component {
                                                 {pathway.sponsor.quote.speakerTitle}
                                             </div>
                                         </div>
-
-
                                     </div>
                                 </div>
                                 : null
                             }
                         </div>
 
-                        <div className="homepageSeparatorContainer">
+                        <div className="homepageSeparatorContainer" style={{marginTop:"30px"}}>
                             <div className="homepageSeparator"/>
                         </div>
 
@@ -449,27 +448,23 @@ class Pathway extends Component {
                                 : null}
                         </div>
 
-                        < div className="homepageSeparatorContainer">
+                        < div className="homepageSeparatorContainer" style={{marginTop:"30px"}}>
                             < div className="homepageSeparator"/>
                         </div>
 
                         {pathway.steps ?
                             <div>
-                                <div className="center">
+                                <div className="center" style={{margin: "100px 0 40px 0"}}>
                                     < b style={{color: '#B869FF'}} className="mediumText">Course Overview</ b>
                                 </ div>
 
                                 { pathwaySteps }
-
-                                <div className="homepageSeparatorContainer">
-                                    < div className="homepageSeparator"/>
-                                </ div>
                             </div>
                             : null
                         }
 
                         {pathway.extraInfo ?
-                            <div className="center" style={{marginTop:"50px", clear:"both"}}>
+                            <div className="center" style={{margin: "650px 0 30px", clear:"both"}}>
                                 <p className="smallText2">
                                     {pathway.extraInfo}
                                 </p>
