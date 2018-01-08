@@ -266,13 +266,13 @@ class Pathway extends Component {
                             {this.props.loading ? <div className="center"><CircularProgress color="white"
                                                                                             style={{marginTop: "20px"}}/><br/>
                             </div> : ""}
-                            <div className="whiteText smallText2 noWrap" style={{textAlign: 'center'}}>
-                                Sponsored By:
+                            <div className="whiteText smallText3 noWrap" style={{textAlign: 'center'}}>
+                                Sponsored by
                                 <img
                                     src={pathway.sponsor.logo}
                                     alt={pathway.sponsor.name}
-                                    height={40}
-                                    style={{paddingLeft: '15px'}}
+                                    height={60}
+                                    style={{paddingLeft: '10px'}}
                                 />
                             </div>
                             <ul className="horizCenteredList whiteText smallText2"
@@ -301,6 +301,21 @@ class Pathway extends Component {
                             </ul>
                         </div>
 
+                        <div>
+                            {pathway.skills ?
+                                <div>
+                                    <div className="center" style={{marginTop: '20px'}}>
+                                        < b style={{color: '#B869FF'}} className="mediumText">Skills</ b>
+                                    </ div>
+                                    <div className="center smallText2" style={{marginBottom:"20px"}}>
+                                        Earn these skills upon pathway completion.
+                                    </div>
+                                    <div className="center">
+                                        {pathwaySkills}
+                                    </div>
+                                </div>
+                                : null}
+                        </div>
 
                         {pathway.description || pathway.industry ?
                             <div style={style.descriptionAndSalary}>
@@ -468,26 +483,6 @@ class Pathway extends Component {
                                 </div>
 
 
-                                : null}
-                        </div>
-
-                        < div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                            < div className="homepageSeparator"/>
-                        </div>
-
-                        <div>
-                            {pathway.skills ?
-                                <div>
-                                    <div className="center" style={{marginTop: '100px'}}>
-                                        < b style={{color: '#B869FF'}} className="mediumText">Skills</ b>
-                                    </ div>
-                                    <div className="center smallText2" style={{marginBottom:"20px"}}>
-                                        Earn these skills upon pathway completion.
-                                    </div>
-                                    <div className="center" style={{marginBottom:"60px"}}>
-                                        {pathwaySkills}
-                                    </div>
-                                </div>
                                 : null}
                         </div>
 
