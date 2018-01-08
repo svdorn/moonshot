@@ -116,12 +116,6 @@ class PathwayContent extends Component {
                 marginTop: "20px",
                 width: "calc(100% - 470px)"
             },
-            overviewAndCommentBox: {
-                display: "inline-block",
-                marginLeft: "20px",
-                width: "calc(100% - 470px)",
-                marginTop: "10px",
-            },
             threeInfo: {
                 display: "inline-block",
                 width: "200px",
@@ -229,12 +223,13 @@ class PathwayContent extends Component {
                             {content}
 
                             <RaisedButton
-                                label="Open Drawer"
+                                label="Open Step List"
                                 onClick={this.handleToggle}
                                 primary={true}
+                                className="drawerOpener"
                             />
 
-                            <Paper style={style.overviewAndCommentBox}>
+                            <Paper className="overviewAndCommentBox">
                                 <Paper style={{width: "100%"}}>
                                     <ul className="horizCenteredList darkPurpleText smallText2">
                                         <li>

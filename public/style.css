@@ -355,7 +355,15 @@ button.link {
     width: 400px;
 }
 .drawerOpener {
-    visibility: hidden;;
+    left: -300px;
+    visibility: hidden;
+    position: absolute;
+}
+.overviewAndCommentBox {
+    display: inline-block;
+    margin-left: 20px;
+    width: calc(100% - 470px);
+    margin-top: 10px;
 }
 
 @media only screen and (max-width: 1000px) {
@@ -370,6 +378,14 @@ button.link {
     }
     .drawerOpener {
         visibility: visible;
+        position: relative;
+        width: 150px;
+        display: block !important;
+        margin: 10px auto;
+        left: 0;
+    }
+    .overviewAndCommentBox {
+        width: 100%;
     }
 }
 
