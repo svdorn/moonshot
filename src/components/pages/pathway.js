@@ -189,22 +189,32 @@ class Pathway extends Component {
                 // if (step.order % 2 == 0) {
                 //     className = "rightSideStep";
                 // }
+                let topSeparators = null;
+                if (step.order <= 2) {
+                    topSeparators = (
+                        <div>
+                            <div className="stepSeparatorLeft" style={{top:"0"}} />
+                            <div className="stepSeparatorRight" style={{top:"0"}} />
+                        </div>
+                    )
+                }
 
                 return (
-                    <div className="halfWidthStep">
+                    <div className="halfWidthStep" key={step.order}>
+                        { topSeparators }
                         <img
                             src={"/icons/" + step.order + ".png"}
                             alt={step.order}
 
                         />
-                        <div>
-                            <div className="smallText2" style={{color:'#B869FF'}}>
-                                Step {step.order}
+                        <div className="halfWidthStepText">
+                            <div className="smallText" style={{color:'#B869FF'}}>
+                                STEP {step.order}
                             </div>
-                            <div className="smallText2">
+                            <div className="smallText2 halfWidthStepTitle">
                                 {step.name}
                             </div>
-                            <div className="smallText2">
+                            <div className="smallText halfWidthStepDesc">
                                 {step.description}
                             </div>
                         </div>
@@ -214,40 +224,6 @@ class Pathway extends Component {
                 );
             });
         }
-        // {pathway.steps ?
-        //     <ul className="horizCenteredList homepageBenefitsList">
-        //         <li style={{marginRight: "14%"}}>
-        //             <div style={{position: "relative"}}>
-        //                 <img
-        //                     src="/icons/1.png"
-        //                     alt="Free"
-        //                     style={style.infoBoxes.image}
-        //                 />
-        //                 <div className="smallText2" style={{color:'#B869FF'}}>
-        //                     Step 1
-        //                 </div>
-        //                 <div className="smallText2">
-        //                     {pathway.steps[0].name}
-        //                 </div>
-        //             </div>
-        //         </li>
-        //         <li>
-        //             <div style={{position: "relative"}}>
-        //                 <img
-        //                     src="/icons/2.png"
-        //                     alt="Portfolio"
-        //                     style={style.infoBoxes.image}
-        //                 />
-        //                 <div className="smallText2" style={{color:'#B869FF'}}>
-        //                     Step 2
-        //                 </div>
-        //                 <div className="smallText2">
-        //                     {pathway.steps[1].name}
-        //                 </div>
-        //             </div>
-        //         </li>
-        //     </ul>
-        //     : null}
 
 
         return (

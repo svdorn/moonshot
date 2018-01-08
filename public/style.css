@@ -290,16 +290,20 @@ button.link {
 }
 
 .stepSeparatorLeft {
-    border-right: 25% solid purple;
-    border-top: 4px;
-    border-bottom: 4px;
-    border-left: 0px;
+    border-right: 150px solid #B869FF;
+    right: 50%;
 }
 .stepSeparatorRight {
-    border-left: 25% solid purple;
-    border-top: 4px;
-    border-bottom: 4px;
-    border-right: 0px;
+    border-left: 150px solid #B869FF;
+    left: 50%;
+}
+.stepSeparatorRight, .stepSeparatorLeft {
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    bottom: 0;
 }
 
 
@@ -370,15 +374,28 @@ button.link {
     text-align: left;
     width: 50%;
     float: left;
-}
-.halfWidthStep > div {
-    float: left;
+    position: relative;
+    padding: 10px 3%;
 }
 .halfWidthStep > img {
     height: 70px;
     float: left;
+    margin: 10px 20px 10px 0;
 }
-
+.halfWidthStepText {
+     float: left;
+     width: calc(100% - 90px);
+}
+.halfWidthStepDesc {
+    height: 40px;
+    overflow-y: hidden;
+}
+.halfWidthStepTitle {
+    color: #B869FF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
 
 /* decorative triangles */
 
