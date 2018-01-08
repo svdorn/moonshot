@@ -107,6 +107,7 @@ class PathwayContent extends Component {
             content: {
                 display: "inline-block",
                 marginLeft: "20px",
+                marginTop: "20px",
                 width: "calc(100% - 470px)"
             },
             overviewAndCommentBox: {
@@ -201,7 +202,10 @@ class PathwayContent extends Component {
                                     </p>
                                 </Paper>
                             </div>
+
+                            <div style={{height:"10px"}}/>
                             {content}
+
                             <Paper style={style.overviewAndCommentBox}>
                                 <Paper style={{width: "100%"}}>
                                     <ul className="horizCenteredList darkPurpleText smallText2">
