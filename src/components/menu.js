@@ -84,7 +84,7 @@ class Menu extends Component {
                                 alt="Moonshot"
                                 className="clickable"
                                 src="/images/MoonshotTempLogo.png"
-                                onClick={() => this.goTo('/')}
+                                onClick={() => this.goTo('/discover')}
                             />
                         </ToolbarGroup>
                         <ToolbarGroup>

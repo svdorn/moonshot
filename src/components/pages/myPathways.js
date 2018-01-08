@@ -72,7 +72,6 @@ class MyPathways extends Component {
             }
             for (let i = 0; i < this.props.currentUser.completedPathways.length; i++) {
                 let id = this.props.currentUser.completedPathways[i].pathwayId;
-                console.log(i);
                 axios.get("/api/getPathwayById", {
                     params: {
                         _id: id
@@ -147,7 +146,7 @@ class MyPathways extends Component {
             tab: {
                 backgroundColor: "white",
                 color: '#B869FF',
-            }
+            },
         };
 
 
@@ -158,7 +157,7 @@ class MyPathways extends Component {
                         <div className="greenToBlue headerDiv"/>
                         {this.state.userPathwayPreviews ?
                             <div className="center">
-                                <h1 className="center mediumText" style={{color: "#B869FF"}}>My Pathways</h1>
+                                <h1 className="center smallText3" style={{color: "#B869FF"}}>My Pathways</h1>
                                 <Tabs
                                     style={style.tabs}
                                     inkBarStyle={{background: '#B869FF'}}
