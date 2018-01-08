@@ -151,6 +151,12 @@ class Profile extends Component {
             img: {
                 height: "70px",
             },
+            locationImg: {
+                display: 'inline-block',
+                height: '15px',
+                marginBottom: '4px',
+                marginRight: '2px'
+            },
             pictureInfoSkills: {
                 everything: {
                     padding: "20px 0px",
@@ -160,7 +166,7 @@ class Profile extends Component {
                     width: "20%",
                     display: "inline-block",
                     verticalAlign: "top",
-                    marginRight: "5%"
+                    marginRight: "5%",
                 },
                 rightSide: {
                     width: "70%",
@@ -172,11 +178,14 @@ class Profile extends Component {
         };
 
         let profileSkills = null;
-        const skills = this.props.currentUser.skills;
+        let skills = undefined;
+        if (this.props.currentUser) {
+            skills = this.props.currentUser.skills;
+        }
         if (skills) {
             profileSkills = skills.map(function (skill) {
                 return (
-                    <div style={{display: 'inline-block', marginTop: '5px'}}>
+                    <div style={{display: 'inline-block', marginTop: '10px'}}>
                         <Chip key={skill}
                               backgroundColor='#white'
                               labelColor="#00d2ff"
@@ -205,9 +214,19 @@ class Profile extends Component {
                                             style={style.img}
                                         />
                                         <div>
-                                            {this.props.currentUser.name}<br/>
-                                            {this.props.currentUser.title}<br/>
-                                            {this.props.currentUser.city}, {this.props.currentUser.state}<br/>
+                                            <div
+                                                className="blueText smallText2">{this.props.currentUser.name.toUpperCase()}</div>
+                                            <b className="smallText">{this.props.currentUser.title}</b><br/>
+                                            <div>
+                                                <img
+                                                    src="/icons/Location.png"
+                                                    alt="Portfolio"
+                                                    style={style.locationImg}
+                                                />
+                                                <div className="smallText" style={{display: 'inline-block'}}>
+                                                    {this.props.currentUser.city}, {this.props.currentUser.state}
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div style={style.pictureInfoSkills.rightSide}>
