@@ -169,7 +169,7 @@ class Profile extends Component {
                     marginRight: "5%",
                 },
                 rightSide: {
-                    width: "70%",
+                    width: "60%",
                     display: "inline-block",
                     verticalAlign: "top",
                     justifyContent: "center",
