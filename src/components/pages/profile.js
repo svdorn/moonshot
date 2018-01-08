@@ -137,13 +137,7 @@ class Profile extends Component {
 
         const style = {
             pathwayPreviewUl: {
-                width: "125%",
-                transform: "scale(.8)",
-                marginLeft: "-12.5%",
                 marginTop: "20px",
-                WebkitTransformOriginY: "0",
-                MozTransformOriginY: "0",
-                MsTransformOriginY: "0"
             },
             tabs: {
                 marginTop: '5px',

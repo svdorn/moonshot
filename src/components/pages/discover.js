@@ -144,12 +144,7 @@ class Discover extends Component {
                 marginBottom: "40px"
             },
             pathwayPreviewUl: {
-                width: "125%",
-                transform: "scale(.8)",
-                marginLeft: "-12.5%",
-                WebkitTransformOriginY: "0",
-                MozTransformOriginY: "0",
-                MsTransformOriginY: "0"
+
             },
             pathwayPreviewContainer: {
                 height: "352px"

@@ -207,7 +207,7 @@ button.link {
 
 .gradientBorder {
     background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));
-    padding: 5px;
+    padding: 4px;
 }
 .gradientBorder > div {
     background: white;
@@ -225,9 +225,9 @@ button.link {
 
 .pathwayImgContainer {
     display: inline-block;
-    height: 210px;
-    width: 280px;
-    margin-top: 10px;
+    height: 168px;
+    width: 224px;
+    margin-top: 8px;
 }
 
 .horizCenteredList {
@@ -238,16 +238,16 @@ button.link {
 /* .horizCenteredList li:first-child { margin-left: 0px; } */
 /* .horizCenteredList li:last-child { margin-right: 0px; } */
 
-.pathwayPrevList li { margin: 0px 20px; }
-.pathwayPrevIconList li { margin: 0px 4px; }
+.pathwayPrevList li { margin: 0px 10px; }
+.pathwayPrevIconList li { margin: 0px 3.2px; }
 
 /* so that the pathway icons are all equally spaced out */
 .pathwayPrevIconList > li > div {
-    width: 91px;
-    font-size: 14px;
+    width: 72.8px;
+    font-size: 11.2px;
 }
 .pathwayPrevListContainer {
-    height: 440px;
+    height: 352px;
     overflow-y: hidden;
 }
 
@@ -312,7 +312,7 @@ button.link {
 .smallText3 { font-size: 30px; }
 .smallText2 { font-size: 20px; }
 .smallText { font-size: 15px; }
-.tinyText { font-size: 11px; }
+.tinyText { font-size: 8.8px; }
 .greenText { color: var(--moonshotGreenText); }
 .whiteText { color: white; }
 .blueText { color: var(--moonshotLightBlue) }
