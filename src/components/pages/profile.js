@@ -155,6 +155,7 @@ class Profile extends Component {
             img: {
                 height: "120px",
                 borderRadius: '50%',
+                border: "3px solid #00d2ff",
             },
             locationImg: {
                 display: 'inline-block',
