@@ -54,7 +54,8 @@ class Pathway extends Component {
             descriptionAndSalary: {
                 position: "relative",
                 height: "150px",
-                margin: "30px"
+                marginTop: "15px",
+                marginBottom: "25px"
             },
             descriptionAndSalaryIcon: {
                 height: "50px",
