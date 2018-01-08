@@ -252,6 +252,7 @@ class Profile extends Component {
                                     </div>
                                     <div className="profileSeparatorTri">
                                     </div>
+                                    <div style={{clear: "both"}}/>
                                 </div>
 
                                 <div className="center">
@@ -262,10 +263,12 @@ class Profile extends Component {
                                         className="myPathwaysTabs"
                                     >
                                         <Tab label="Ongoing" style={style.tab}>
-                                            <ul className="horizCenteredList pathwayPrevList"
-                                                style={style.pathwayPreviewUl}>
-                                                {this.state.userPathwayPreviews}
-                                            </ul>
+                                            {this.state.userPathwayPreviews ?
+                                                <ul className="horizCenteredList pathwayPrevList"
+                                                    style={style.pathwayPreviewUl}>
+                                                    {this.state.userPathwayPreviews}
+                                                </ul>
+                                                : <h1 className="center mediumText">None</h1>}
                                         </Tab>
                                         <Tab label="Completed" style={style.tab}>
                                             {this.state.userCompletedPathwayPreviews ?
@@ -284,8 +287,8 @@ class Profile extends Component {
                                     </div>
                                     <div className="profileSeparatorTri">
                                     </div>
+                                    <div style={{clear: "both"}}/>
                                 </div>
-
 
 
                                 <div className="profileSeparator">
@@ -294,6 +297,7 @@ class Profile extends Component {
                                     </div>
                                     <div className="profileSeparatorTri">
                                     </div>
+                                    <div style={{clear: "both"}}/>
                                 </div>
 
                             </div>
