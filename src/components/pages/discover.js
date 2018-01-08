@@ -105,6 +105,12 @@ class Discover extends Component {
 
     render() {
         const style = {
+            separator1: {
+                width: "70%",
+                margin: "12px auto 0px",
+                position: "relative",
+                height: "40px",
+                textAlign: "center"},
             separator: {
                 width: "70%",
                 margin: "25px auto 0px",
@@ -238,7 +244,7 @@ class Discover extends Component {
                 </div>
 
                 <div>
-                    <div style={style.separator}>
+                    <div style={style.separator1}>
                         <div style={style.separatorLine}/>
                         <div style={style.separatorText}>
                             Featured
