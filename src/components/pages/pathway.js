@@ -131,7 +131,7 @@ class Pathway extends Component {
                     position: "absolute",
                     top: "0",
                     bottom: "0",
-                    margin: "auto -200px auto"
+                    margin: "auto -210px auto"
                 },
             },
             imageLeftTextRight: {
@@ -347,7 +347,8 @@ class Pathway extends Component {
                                             style={style.descriptionAndSalaryIcon}
                                         />
                                         <div style={style.descriptionAndSalaryText}>
-                                            Industry average salary for {pathway.industry.title}<br/>
+                                            Industry average salary for<br/>
+                                            {pathway.industry.title}<br/>
                                             <i>{pathway.industry.averageSalary}</i>
                                         </div>
                                     </div>
@@ -516,7 +517,8 @@ class Pathway extends Component {
                                     style={{
                                         backgroundColor: "transparent",
                                         border: "2px solid #B869FF",
-                                        color: "#B869FF"
+                                        color: "#B869FF",
+                                        marginBottom: '20px'
                                     }}
                                     onClick={this.handleClick.bind(this)}>
                                 {"Get Started"}
