@@ -290,11 +290,11 @@ button.link {
 }
 
 .stepSeparatorLeft {
-    border-right: 150px solid #B869FF;
+    border-right: 200px solid #B869FF;
     right: 50%;
 }
 .stepSeparatorRight {
-    border-left: 150px solid #B869FF;
+    border-left: 200px solid #B869FF;
     left: 50%;
 }
 .stepSeparatorRight, .stepSeparatorLeft {
@@ -340,10 +340,9 @@ button.link {
 }
 .scrollBarAndContactUs {
     width: 400px;
-    margin-left: 30px;
     display: inline-block;
     float: left;
-    margin-bottom: 20px;
+    margin: 10px 30px 20px 0;
 }
 .stepScrollerContainer {
     height: 600px;
@@ -370,24 +369,32 @@ button.link {
     margin-left: 30% !important;
 }
 
-.halfWidthStep {
+.halfWidthStepRight, .halfWidthStepLeft {
     text-align: left;
     width: 50%;
     float: left;
     position: relative;
-    padding: 10px 3%;
+    padding: 20px 3% 10px;
 }
-.halfWidthStep > img {
-    height: 70px;
+.halfWidthStepRight { padding: 20px 3% 10px 1%; }
+.halfWidthStepLeft { padding: 20px 1% 10px 3%; }
+.halfWidthStepRight > img, .halfWidthStepLeft > img {
+    height: 80px;
     float: left;
-    margin: 10px 20px 10px 0;
+    margin: 10px 20px 10px 20px;
 }
 .halfWidthStepText {
      float: left;
-     width: calc(100% - 90px);
+     margin-left: 10px;
+     width: calc(100% - 130px);
+}
+.halfWidthStepNumber {
+    color: #B869FF;
+    font-size: 18px;
+    margin-bottom: 3px;
 }
 .halfWidthStepDesc {
-    height: 40px;
+    height: 50px;
     overflow-y: hidden;
 }
 .halfWidthStepTitle {
@@ -395,6 +402,7 @@ button.link {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 30px;
 }
 
 .headerDiv {

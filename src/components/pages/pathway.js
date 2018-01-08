@@ -184,12 +184,8 @@ class Pathway extends Component {
         let pathwaySteps = null;
         const steps = pathway.steps;
         if (steps) {
-            pathwaySteps = steps.map(function (step) {
-                // return left side if odd numbered step, right if even
-                // let className = "leftSideStep";
-                // if (step.order % 2 == 0) {
-                //     className = "rightSideStep";
-                // }
+
+            pathwaySteps = steps.map(function(step) {
                 let topSeparators = null;
                 if (step.order <= 2) {
                     topSeparators = (
@@ -200,23 +196,30 @@ class Pathway extends Component {
                     )
                 }
 
+                let side = "Left";
+                if (step.order % 2 == 0) {
+                    side = "Right";
+                }
+
                 return (
-                    <div className="halfWidthStep" key={step.order}>
-                        {topSeparators}
+
+                    <div className={"halfWidthStep" + side} key={step.order}>
+                        { topSeparators }
                         <img
                             src={"/icons/" + step.order + ".png"}
                             alt={step.order}
-
                         />
                         <div className="halfWidthStepText">
-                            <div className="smallText" style={{color: '#B869FF'}}>
+
+                            <div className="halfWidthStepNumber">
                                 STEP {step.order}
                             </div>
-                            <div className="smallText2 halfWidthStepTitle">
+                            <div className="halfWidthStepTitle">
                                 {step.name}
                             </div>
                             <div className="smallText halfWidthStepDesc">
                                 {step.description}
+                                This is the description of the step. It will eventually describe the step.
                             </div>
                         </div>
                         <div className="stepSeparatorLeft"/>
@@ -504,7 +507,8 @@ class Pathway extends Component {
                         }
 
                         {pathway.extraInfo ?
-                            <div className="center" style={{margin: "650px 0 30px", clear: "both"}}>
+
+                            <div className="center" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
                                 <p className="smallText2">
                                     {pathway.extraInfo}
                                 </p>
