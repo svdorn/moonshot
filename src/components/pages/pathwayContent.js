@@ -143,8 +143,10 @@ class PathwayContent extends Component {
                 color: '#B869FF',
             },
             insideTab:{
-                marginTop:"10px"
-            }
+                marginTop:"10px",
+                marginLeft: "5%",
+                marginRight:"5%"
+            },
         }
 
         const pathway = this.state.pathway;
