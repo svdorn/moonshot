@@ -241,6 +241,16 @@ class Profile extends Component {
                                             : null}
                                     </div>
                                 </div>
+
+                                <div className="profileSeparator">
+                                    <div className="profileSeparatorRect">
+                                        <b>PATHWAYS</b>
+                                    </div>
+                                    <div className="profileSeparatorTri">
+                                    </div>
+                                    <div style={{clear:"both"}}></div>
+                                </div>
+
                                 <div className="center">
                                     <Tabs
                                         style={style.tabs}
@@ -264,6 +274,25 @@ class Profile extends Component {
                                         </Tab>
                                     </Tabs>
                                 </div>
+
+                                <div className="profileSeparator">
+                                    <div className="profileSeparatorRect">
+                                        <b>PROJECTS</b>
+                                    </div>
+                                    <div className="profileSeparatorTri">
+                                    </div>
+                                </div>
+
+
+
+                                <div className="profileSeparator">
+                                    <div className="profileSeparatorRect">
+                                        <b>ABOUT ME</b>
+                                    </div>
+                                    <div className="profileSeparatorTri">
+                                    </div>
+                                </div>
+
                             </div>
                             : <div className="center"><CircularProgress
                                 style={{marginTop: "20px", marginBottom: "20px"}}/></div>}

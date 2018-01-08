@@ -412,6 +412,28 @@ button.link {
     width: 100%;
 }
 
+.profileSeparator {
+
+}
+.profileSeparatorRect {
+    color: white;
+    background-color: #00d2ff;
+    width: 300px;
+    height: 46px;
+    margin: "30px 0";
+    font-size: 20px;
+    float: left;
+    padding: 10px 0 0 80px;
+}
+.profileSeparatorTri {
+    border-left: 40px solid #00d2ff;
+    border-top: 23px solid transparent;
+    border-bottom: 23px solid transparent;
+    height: 0px;
+    width: 0px;
+    float: left;
+}
+
 /* decorative triangles */
 
 .triangle{
