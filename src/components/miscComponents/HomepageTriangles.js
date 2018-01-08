@@ -62,30 +62,19 @@ class HomepageTriangles extends Component {
                 {top: "24%", right: "23%", rotate: -134, scale: .3, className: " darkPurpleTriangle"},
                 {top: "30%", right: "16%", rotate: -19, scale: .5, className: " darkPurpleTriangle"},
 
-                {top: "0%", left: "-10%", rotate: -30, scale: .8, className: " darkPurpleTriangle"},
-                {top: "14%", left: "14%", rotate: -60, scale: .8, className: " darkPurpleTriangle"},
-                {top: "20%", left: "4%", rotate: -11, scale: .7, className: " darkPurpleTriangle"},
-                {top: "24%", left: "23%", rotate: -134, scale: .3, className: " darkPurpleTriangle"},
-                {top: "30%", left: "16%", rotate: -19, scale: .8, className: " darkPurpleTriangle"},
+                {top: "7%", left: "0%", rotate: -15, scale: .9, className: " darkPurpleTriangle"},
+                {top: "20%", left: "8%", rotate: -35, scale: .7, className: " darkPurpleTriangle"},
+                {top: "32%", left: "0%", rotate: -110, scale: 1.2, className: " darkPurpleTriangle"},
 
             ];
             whiteSpace = (
                 <div style={{width:"100%", height:"100%"}}>
                     <div style={{
-                        width: "50%",
-                        height: "45%",
-                        float: "right",
+                        width: "100%",
+                        height: "100%",
+                        float: "left",
                         zIndex: "-5",
-                        background: "linear-gradient(to bottom left, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0))"
-                    }}/>
-                    <div style={{ float: "right", height: "15%", width: "40%", clear: "both" }} />
-                    <div style={{
-                        width: "50%",
-                        height: "40%",
-                        float: "right",
-                        clear: "both",
-                        zIndex: "-5",
-                        background: "linear-gradient(to left, rgba(255, 255, 255, 0.0), rgba(255, 255, 255, 1.0))"
+                        background: "linear-gradient(to right, rgba(255, 255, 255, 0.6), rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.2))"
                     }}/>
                 </div>
             )
@@ -99,6 +88,7 @@ class HomepageTriangles extends Component {
                 <div className={"triangle" + t.className} key={"triangle" + counter} style={{
                     top: t.top,
                     right: t.right,
+                    left: t.left,
                     zIndex: "-10",
                     transform: "rotate("+t.rotate+"deg) scale("+t.scale+", "+(t.scale*.6)+")"
                 }}/>
