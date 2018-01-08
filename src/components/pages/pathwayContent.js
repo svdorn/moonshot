@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PathwayContentLink from '../childComponents/pathwayContentLink';
 import PathwayContentVideo from '../childComponents/pathwayContentVideo';
 import PathwayContentArticle from '../childComponents/pathwayContentArticle';
-import {Tabs, Tab, CircularProgress, Paper} from 'material-ui';
+import {Tabs, Tab, CircularProgress, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, updateCurrentSubStep} from "../../actions/usersActions";
@@ -19,7 +19,8 @@ class PathwayContent extends Component {
 
         console.log("here");
         this.state = {
-            pathway: undefined
+            pathway: undefined,
+            drawerOpen: false
         }
     }
 
@@ -102,6 +103,11 @@ class PathwayContent extends Component {
         window.scrollTo(0, 0);
     }
 
+    handleToggle = () => {
+        console.log("toggling");
+        this.setState({drawerOpen: !this.state.drawerOpen});
+    }
+
     render() {
         const style = {
             content: {
@@ -181,12 +187,28 @@ class PathwayContent extends Component {
                         <Paper style={style.pathwayHeader}>
                             {pathway.name}
                         </Paper>
+
+
+                        <Drawer
+                            docked={false}
+                            width={400}
+                            open={this.state.drawerOpen}
+                            onRequestChange={(drawerOpen) => this.setState({drawerOpen})}
+                        >
+                            <PathwayStepList
+                                className="stepScrollerContainerInDrawer"
+                                steps={pathway.steps}
+                                pathwayId={pathway._id}/>
+                        </Drawer>
+
+
                         <div style={style.contentContainer}>
                             <div className="scrollBarAndContactUs">
                                 <PathwayStepList
                                     className="stepScrollerContainer"
                                     steps={pathway.steps}
                                     pathwayId={pathway._id}/>
+
                                 <Paper className="questionsContactUs">
                                     <img
                                         src="/icons/VoiceBubble.png"
@@ -205,6 +227,12 @@ class PathwayContent extends Component {
 
                             <div style={{height:"10px"}}/>
                             {content}
+
+                            <RaisedButton
+                                label="Open Drawer"
+                                onClick={this.handleToggle}
+                                primary={true}
+                            />
 
                             <Paper style={style.overviewAndCommentBox}>
                                 <Paper style={{width: "100%"}}>

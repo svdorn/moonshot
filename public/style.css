@@ -350,6 +350,13 @@ button.link {
     width: 400px;
     margin-bottom: 20px;
 }
+.stepScrollerContainer {
+    height: 100%;
+    width: 400px;
+}
+.drawerOpener {
+    visibility: hidden;;
+}
 
 @media only screen and (max-width: 1000px) {
     .videoContainer {
@@ -360,6 +367,9 @@ button.link {
     }
     .scrollBarAndContactUs {
         margin-left: -800px;
+    }
+    .drawerOpener {
+        visibility: visible;
     }
 }
 
