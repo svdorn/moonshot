@@ -251,7 +251,6 @@ class Profile extends Component {
                                     </div>
                                     <div className="profileSeparatorTri">
                                     </div>
-                                    <div style={{clear:"both"}}></div>
                                 </div>
 
                                 <div className="center">
