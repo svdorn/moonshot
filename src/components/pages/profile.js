@@ -183,8 +183,10 @@ class Profile extends Component {
 
         let profileSkills = null;
         let skills = undefined;
+        let mailtoEmail = undefined;
         if (this.props.currentUser) {
             skills = this.props.currentUser.skills;
+            mailtoEmail = "mailto:" + this.props.currentUser.email;
         }
         if (skills) {
             profileSkills = skills.map(function (skill) {
@@ -201,7 +203,6 @@ class Profile extends Component {
                 );
             });
         }
-
 
         return (
             <div className='jsxWrapper' ref='discover'>
@@ -231,6 +232,7 @@ class Profile extends Component {
                                                     {this.props.currentUser.city}, {this.props.currentUser.state}
                                                 </div>
                                             </div>
+                                            <a className="smallText blueText" href={mailtoEmail}>Contact</a>
                                         </div>
                                     </div>
                                     <div style={style.pictureInfoSkills.rightSide}>
