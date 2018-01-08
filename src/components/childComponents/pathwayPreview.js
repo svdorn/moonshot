@@ -18,30 +18,30 @@ class PathwayPreview extends Component {
 
     render() {
 
-        const iconStyle = {width:"40px", height:"40px"};
+        const iconStyle = {width:"32px", height:"32px"};
 
         const titleDivStyle = {
             width: "100%",
-            height: "89px",
+            height: "71.2px",
             display: "grid",
-            marginTop: "7px",
+            marginTop: "5.6px",
             overflow: "hidden"
         };
 
         const titleSpanStyle = {
             margin: "auto",
-            fontSize: "30px"
+            fontSize: "24px"
         };
 
 
         return (
-            <div className="gradientBorder clickableNoUnderline" style={{height:"440px", width:"310px"}}>
+            <div className="gradientBorder clickableNoUnderline" style={{height:"352px", width:"248px"}}>
                 <div style={{textAlign:"center", position:"relative"}}>
                     <div className="gradientBorder pathwayImgContainer">
                         <img
                             className="semiOpaqueHoverable"
-                            width={270}
-                            height={200}
+                            width={216}
+                            height={160}
                             alt="VR Image"
                             src={this.props.image}
                         />
@@ -49,7 +49,7 @@ class PathwayPreview extends Component {
                     <div style={titleDivStyle}>
                         <span style={titleSpanStyle}>{this.props.name}</span>
                     </div>
-                    <div style={{position: "absolute", width: "100%", bottom: "33px"}}>
+                    <div style={{position: "absolute", width: "100%", bottom: "26.4px"}}>
                         <ul className="horizCenteredList pathwayPrevIconList">
                             <li>
                                 <div>
@@ -74,12 +74,12 @@ class PathwayPreview extends Component {
                             </li>
                         </ul>
                     </div>
-                    <div style={{position:"absolute", bottom:"5px", right:"20px"}}>
+                    <div style={{position:"absolute", bottom:"4px", right:"16px"}}>
                         Sponsored by
                         <img
                             src={this.props.logo}
                             alt={this.props.sponsorName}
-                            height={25}
+                            height={20}
                         />
                     </div>
                 </div>
