@@ -14,7 +14,9 @@ class MyPathways extends Component {
 
         this.state = {
             pathways: [],
-            userPathwayPreviews: undefined
+            completedPathways: [],
+            userPathwayPreviews: undefined,
+            userCompletedPathwayPreviews: undefined
         }
     }
 
@@ -41,7 +43,7 @@ class MyPathways extends Component {
                         const deadline = new Date(pathway.deadline);
                         const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                         return (
-                            <li key={key}
+                            <li key={key} style={{verticalAlign: "top"}}
                                 onClick={() => self.goTo('/pathwayContent/' + pathway._id)}>
                                 <PathwayPreview
                                     name={pathway.name}
@@ -68,6 +70,53 @@ class MyPathways extends Component {
                     console.log(err);
                 })
             }
+            for (let i = 0; i < this.props.currentUser.completedPathways.length; i++) {
+                let id = this.props.currentUser.completedPathways[i].pathwayId;
+                console.log(i);
+                axios.get("/api/getPathwayById", {
+                    params: {
+                        _id: id
+                    }
+                }).then(res => {
+                    let pathway = res.data;
+                    let key = 0;
+                    let self = this;
+
+                    const completedPathways = [...this.state.completedPathways, pathway];
+
+                    // use the received pathways to make pathway previews
+                    const userCompletedPathwayPreviews = completedPathways.map(function (pathway) {
+                        key++;
+                        const deadline = new Date(pathway.deadline);
+                        const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                        return (
+                            <li key={key} style={{verticalAlign: "top"}}
+                                onClick={() => self.goTo('/pathway/' + pathway._id)}>
+                                <PathwayPreview
+                                    name={pathway.name}
+                                    image={pathway.previewImage}
+                                    logo={pathway.sponsor.logo}
+                                    sponsorName={pathway.sponsor.name}
+                                    completionTime={pathway.estimatedCompletionTime}
+                                    deadline={formattedDeadline}
+                                    price={pathway.price}
+                                    _id={pathway._id}
+                                />
+                            </li>
+                        );
+                    });
+
+                    this.setState({
+                        completedPathways,
+                        userCompletedPathwayPreviews
+                    }, function () {
+
+                    });
+                }).catch(function (err) {
+                    console.log("error getting searched-for completed pathway");
+                    console.log(err);
+                })
+            }
         }
     }
 
@@ -83,11 +132,6 @@ class MyPathways extends Component {
     render() {
 
         const style = {
-            headerDiv: {
-                position: "relative",
-                height: "120px",
-                width: "100%"
-            },
             pathwayPreviewUl: {
                 width: "125%",
                 transform: "scale(.8)",
@@ -111,7 +155,7 @@ class MyPathways extends Component {
             <div className='jsxWrapper' ref='discover'>
                 {this.props.currentUser ?
                     <div>
-                        <div className="greenToBlue" style={style.headerDiv}/>
+                        <div className="greenToBlue headerDiv"/>
                         {this.state.userPathwayPreviews ?
                             <div className="center">
                                 <h1 className="center mediumText" style={{color: "#B869FF"}}>My Pathways</h1>
@@ -128,11 +172,17 @@ class MyPathways extends Component {
                                         </ul>
                                     </Tab>
                                     <Tab label="Completed" style={style.tab}>
-                                        <h1 className="center mediumText">None</h1>
+                                        {this.state.userCompletedPathwayPreviews ?
+                                            <ul className="horizCenteredList pathwayPrevList"
+                                                style={style.pathwayPreviewUl}>
+                                                {this.state.userCompletedPathwayPreviews}
+                                            </ul>
+                                            : <h1 className="center mediumText">None</h1>}
                                     </Tab>
                                 </Tabs>
                             </div>
-                            : <div className="center"><CircularProgress style={{marginTop: "20px", marginBottom: "20px"}}/></div>}
+                            : <div className="center"><CircularProgress
+                                style={{marginTop: "20px", marginBottom: "20px"}}/></div>}
                     </div>
                     : null}
             </div>

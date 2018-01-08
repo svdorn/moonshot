@@ -397,6 +397,12 @@ button.link {
     text-overflow: ellipsis;
 }
 
+.headerDiv {
+    position: relative;
+    height: 100px;
+    width: 100%;
+}
+
 /* decorative triangles */
 
 .triangle{

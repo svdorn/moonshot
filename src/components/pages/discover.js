@@ -1,13 +1,13 @@
 "use strict"
-import React, { Component } from 'react';
-import { Paper, RaisedButton, TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup } from 'material-ui';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { browserHistory } from 'react-router';
+import React, {Component} from 'react';
+import {Paper, RaisedButton, TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup} from 'material-ui';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import Category from '../childComponents/category'
-import { closeNotification } from "../../actions/usersActions";
-import { Field, reduxForm } from 'redux-form';
+import {closeNotification} from "../../actions/usersActions";
+import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
 import styles from '../../../public/styles';
 
@@ -20,7 +20,7 @@ const renderTextField = ({input, label, ...custom}) => (
     />
 );
 
-class Discover extends Component{
+class Discover extends Component {
     constructor(props) {
         super(props);
 
@@ -45,14 +45,14 @@ class Discover extends Component{
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.discover) {
-                this.setState({ featuredPathways: res.data });
+                this.setState({featuredPathways: res.data});
             }
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.log("error getting searched for pathway");
         })
     }
 
-    goTo (route)  {
+    goTo(route) {
         // closes any notification
         this.props.closeNotification();
         // goes to the wanted page
@@ -96,15 +96,21 @@ class Discover extends Component{
             console.log(res.data)
             // make sure component is mounted before changing state
             if (this.refs.discover) {
-                this.setState({ explorePathways: res.data });
+                this.setState({explorePathways: res.data});
             }
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.log("error getting searched-for pathway");
         })
     }
 
-    render(){
+    render() {
         const style = {
+            separator1: {
+                width: "70%",
+                margin: "12px auto 0px",
+                position: "relative",
+                height: "40px",
+                textAlign: "center"},
             separator: {
                 width: "70%",
                 margin: "25px auto 0px",
@@ -138,9 +144,9 @@ class Discover extends Component{
                 marginBottom: "40px"
             },
             pathwayPreviewUl: {
-                width:"125%",
+                width: "125%",
                 transform: "scale(.8)",
-                marginLeft:"-12.5%",
+                marginLeft: "-12.5%",
                 WebkitTransformOriginY: "0",
                 MozTransformOriginY: "0",
                 MsTransformOriginY: "0"
@@ -154,11 +160,6 @@ class Discover extends Component{
                 bottom: "-14px",
                 right: "0px"
             },
-            headerDiv: {
-                position: "relative",
-                height: "400px",
-                width: "100%"
-            },
             treeText: {
                 color: "white",
                 position: "absolute",
@@ -171,7 +172,7 @@ class Discover extends Component{
         // create the pathway previews
         let key = 0;
         let self = this;
-        const explorePathwayPreviews = this.state.explorePathways.map(function(pathway) {
+        const explorePathwayPreviews = this.state.explorePathways.map(function (pathway) {
             key++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
@@ -180,14 +181,14 @@ class Discover extends Component{
                     key={key}
                     onClick={() => self.goTo('/pathway/' + pathway._id)}>
                     <PathwayPreview
-                        name = {pathway.name}
-                        image = {pathway.previewImage}
-                        logo = {pathway.sponsor.logo}
-                        sponsorName = {pathway.sponsor.name}
-                        completionTime = {pathway.estimatedCompletionTime}
-                        deadline = {formattedDeadline}
-                        price = {pathway.price}
-                        _id = {pathway._id}
+                        name={pathway.name}
+                        image={pathway.previewImage}
+                        logo={pathway.sponsor.logo}
+                        sponsorName={pathway.sponsor.name}
+                        completionTime={pathway.estimatedCompletionTime}
+                        deadline={formattedDeadline}
+                        price={pathway.price}
+                        _id={pathway._id}
                     />
                 </li>
             );
@@ -195,7 +196,7 @@ class Discover extends Component{
 
         // create the pathway previews
         key = 0;
-        const featuredPathwayPreviews = this.state.featuredPathways.map(function(pathway) {
+        const featuredPathwayPreviews = this.state.featuredPathways.map(function (pathway) {
             key++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
@@ -204,14 +205,14 @@ class Discover extends Component{
                     key={key}
                     onClick={() => self.goTo('/pathway/' + pathway._id)}>
                     <PathwayPreview
-                        name = {pathway.name}
-                        image = {pathway.previewImage}
-                        logo = {pathway.sponsor.logo}
-                        sponsorName = {pathway.sponsor.name}
-                        completionTime = {pathway.estimatedCompletionTime}
-                        deadline = {formattedDeadline}
-                        price = {pathway.price}
-                        _id = {pathway._id}
+                        name={pathway.name}
+                        image={pathway.previewImage}
+                        logo={pathway.sponsor.logo}
+                        sponsorName={pathway.sponsor.name}
+                        completionTime={pathway.estimatedCompletionTime}
+                        deadline={formattedDeadline}
+                        price={pathway.price}
+                        _id={pathway._id}
                     />
                 </li>
             );
@@ -219,37 +220,27 @@ class Discover extends Component{
 
         // TODO get tags from DB
         const tags = ["Artificial Intelligence", "UI/UX", "Game Development", "Virtual Reality"];
-        const categoryItems = tags.map(function(tag) {
-            return <MenuItem value={tag} primaryText={tag} key={tag} />
+        const categoryItems = tags.map(function (tag) {
+            return <MenuItem value={tag} primaryText={tag} key={tag}/>
         })
 
         // TODO get companies from DB
         const companies = ["Epic", "Google", "Tesla", "Holos", "Blizzard"];
-        const companyItems = companies.map(function(company) {
-            return <MenuItem value={company} primaryText={company} key={company} />
+        const companyItems = companies.map(function (company) {
+            return <MenuItem value={company} primaryText={company} key={company}/>
         })
 
 
-        return(
+        return (
             <div className='jsxWrapper' ref='discover'>
-                <div className="greenToBlue" style={style.headerDiv}>
-                <div style={style.treeText}>
-                    <h2 style={{fontSize:"40px"}}>
-                        Discover Pathways<br/>
-                    </h2>
-                    Follow pathways to learn skills employers want,<br/>
-                    for free. Build your profile, prove your talent<br/>
-                    and get hired by innovators in technology.<br/>
-                </div>
-                    <img
-                        src="/images/TreeBigWhite.png"
-                        style={style.treeImg}
-                    />
+                <div className="greenToBlue headerDiv"/>
+                <div className="center darkPurpleText mediumText" style={{marginTop:'15px', marginBottom:'10px'}}>
+                    Discover Pathways
                 </div>
 
                 <div>
-                    <div style={style.separator}>
-                        <div style={style.separatorLine} />
+                    <div style={style.separator1}>
+                        <div style={style.separatorLine}/>
                         <div style={style.separatorText}>
                             Featured
                         </div>
@@ -263,7 +254,7 @@ class Discover extends Component{
 
 
                     <div style={style.separator}>
-                        <div style={style.separatorLine} />
+                        <div style={style.separatorLine}/>
                         <div style={style.separatorText}>
                             Explore
                         </div>
@@ -285,20 +276,20 @@ class Discover extends Component{
                                           onChange={this.handleCategoryChange}
                                           underlineStyle={styles.underlineStyle}
                                           anchorOrigin={styles.anchorOrigin}
-                                          style={{fontSize:"20px", marginTop:"11px"}}
+                                          style={{fontSize: "20px", marginTop: "11px"}}
                             >
-                                <MenuItem value={""} primaryText="Category" />
-                                <Divider />
+                                <MenuItem value={""} primaryText="Category"/>
+                                <Divider/>
                                 {categoryItems}
                             </DropDownMenu>
                             <DropDownMenu value={this.state.company}
                                           onChange={this.handleCompanyChange}
                                           underlineStyle={styles.underlineStyle}
                                           anchorOrigin={styles.anchorOrigin}
-                                          style={{fontSize:"20px", marginTop:"11px"}}
+                                          style={{fontSize: "20px", marginTop: "11px"}}
                             >
-                                <MenuItem value={""} primaryText="Company" />
-                                <Divider />
+                                <MenuItem value={""} primaryText="Company"/>
+                                <Divider/>
                                 {companyItems}
                             </DropDownMenu>
                         </ToolbarGroup>

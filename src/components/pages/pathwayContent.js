@@ -123,20 +123,15 @@ class PathwayContent extends Component {
                 width: "100%",
                 height: "50px",
                 backgroundColor: "white",
-                borderTop: "2px solid black",
-                borderBottom: "2px solid black",
                 padding: "10px 30px",
                 fontSize: "20px"
-            },
-            headerSpace: {
-                width: "100%",
-                height: "120px"
             },
             div: {
                 display: "inline-block"
             },
             contentContainer: {
-                overflow: "auto"
+                overflow: "auto",
+                marginTop: '5px',
             },
             tab: {
                 backgroundColor: "white",
@@ -181,10 +176,10 @@ class PathwayContent extends Component {
             <div style={{marginBottom: "50px"}}>
                 {this.state.pathway ?
                     <div>
-                        <div style={style.headerSpace} className="greenToBlue"/>
-                        <div style={style.pathwayHeader}>
+                        <div className="greenToBlue headerDiv"/>
+                        <Paper style={style.pathwayHeader}>
                             {pathway.name}
-                        </div>
+                        </Paper>
                         <div style={style.contentContainer}>
                             <div className="scrollBarAndContactUs">
                                 <PathwayStepList

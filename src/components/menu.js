@@ -79,15 +79,15 @@ class Menu extends Component {
                         <ToolbarGroup>
                             <img
                                 style={{marginLeft:"35px"}}
-                                width={250}
-                                height={80}
+                                width={187.5}
+                                height={60}
                                 alt="Moonshot"
                                 className="clickable"
                                 src="/images/MoonshotTempLogo.png"
                                 onClick={() => this.goTo('/')}
                             />
                         </ToolbarGroup>
-                        <ToolbarGroup style={{marginTop:"20px"}}>
+                        <ToolbarGroup>
                             <p className="menuItem clickable noWrap" onClick={() => this.goTo('/discover')}>Discover</p>
                             <p className="menuItem clickable noWrap" onClick={() => this.goTo('/myPathways')}>My Pathways</p>
                             <DropDownMenu value={this.state.value}

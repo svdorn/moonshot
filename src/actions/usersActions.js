@@ -274,7 +274,7 @@ export function contactUs(user){
         axios.post("api/users/contactUsEmail", user)
             .then(function(response) {
                 dispatch({type:"CONTACT_US", notification: {message:response.data, type:"infoHeader"}});
-                browserHistory.push('/profile');
+                browserHistory.push('/myPathways');
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
