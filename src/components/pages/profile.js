@@ -153,7 +153,8 @@ class Profile extends Component {
                 color: '#B869FF',
             },
             img: {
-                height: "70px",
+                height: "120px",
+                borderRadius: '50%',
             },
             locationImg: {
                 display: 'inline-block',
@@ -163,7 +164,7 @@ class Profile extends Component {
             },
             pictureInfoSkills: {
                 everything: {
-                    padding: "20px 0px",
+                    padding: "40px 0px",
                     textAlign: 'center'
                 },
                 leftSide: {
@@ -214,8 +215,8 @@ class Profile extends Component {
                                 <div style={style.pictureInfoSkills.everything}>
                                     <div style={style.pictureInfoSkills.leftSide}>
                                         <img
-                                            src="/icons/Portfolio.png"
-                                            alt="Portfolio"
+                                            src="/icons/stephenProfile.jpg"
+                                            alt="Profile picture"
                                             style={style.img}
                                         />
                                         <div>
