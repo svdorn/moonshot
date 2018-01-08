@@ -143,7 +143,8 @@ class Profile extends Component {
             },
             tab: {
                 backgroundColor: "white",
-                color: '#B869FF',
+                color: 'black',
+                fontSize: '18px'
             },
             img: {
                 height: "120px",
@@ -251,7 +252,7 @@ class Profile extends Component {
                                 <div className="center">
                                     <Tabs
                                         style={style.tabs}
-                                        inkBarStyle={{background: '#B869FF'}}
+                                        inkBarStyle={{background: 'black'}}
                                         tabItemContainerStyle={{width: '40%'}}
                                         className="myPathwaysTabs"
                                     >
