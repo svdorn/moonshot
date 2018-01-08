@@ -159,7 +159,7 @@ class PathwayStepList extends Component {
             const bottomMargin = (step.order == self.props.steps.length) ? {marginBottom: "20px"} : {};
 
             return (
-                <Step key={step.name} style={bottomMargin}>
+                <Step key={step.order + ", " + step.name} style={bottomMargin}>
                     <StepButton onClick={() => self.setState({
                         stepIndex: (step.order - 1),
                         subStepIndex: 0
