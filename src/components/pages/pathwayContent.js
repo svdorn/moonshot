@@ -138,10 +138,12 @@ class PathwayContent extends Component {
             contentContainer: {
                 overflow: "auto"
             },
-            tabs: {},
             tab: {
                 backgroundColor: "white",
                 color: '#B869FF',
+            },
+            insideTab:{
+                marginTop:"10px"
             }
         }
 
@@ -230,19 +232,18 @@ class PathwayContent extends Component {
                                 </Paper>
                                 <div style={{textAlign: "center"}}>
                                     <Tabs
-                                        style={style.tabs}
                                         inkBarStyle={{background: '#B869FF'}}
                                         tabItemContainerStyle={{width: '40%'}}
                                         className="myPathwaysTabs"
                                     >
                                         <Tab label="Overview" style={style.tab}>
-                                            <p className="smallText2 center">{pathway.overview}</p>
+                                            <p className="smallText2 center" style={style.insideTab}>{pathway.overview}</p>
                                         </Tab>
                                         <Tab label="Exercise Files" style={style.tab}>
-                                            <h1 className="center smallText2">No exercise files yet.</h1>
+                                            <h1 className="center smallText2" style={style.insideTab}>No exercise files yet.</h1>
                                         </Tab>
                                         <Tab label="Comments" style={style.tab}>
-                                            <h1 className="center smallText2">No comments yet.</h1>
+                                            <h1 className="center smallText2" style={style.insideTab}>No comments yet.</h1>
                                         </Tab>
                                     </Tabs>
                                 </div>
