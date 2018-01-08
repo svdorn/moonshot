@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import YouTube from 'react-youtube';
+import {CircularProgress} from 'material-ui';
 import {connect} from 'react-redux';
 import axios from 'axios';
 
@@ -57,15 +58,19 @@ class PathwayContentVideo extends Component {
         };
 
         return (
-            <div style={this.props.style} className={this.props.className}>
+            <div>
                 {this.state.content !== undefined ?
+                    <div style={this.props.style} className={this.props.className}>
                     <YouTube
                         videoId={this.state.content.link}
                         opts={opts}
                         onReady={this._onReady}
                         onEnd={this._onEnd}
                     />
-                    : null}
+                    </div>
+                    : <div style={{textAlign: 'center', verticalAlign:'middle'}}>
+                        <CircularProgress/>
+                    </div>}
             </div>
         );
     }

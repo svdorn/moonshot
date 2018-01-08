@@ -182,6 +182,9 @@ class PathwayContent extends Component {
                                 </Paper>
                             </div>
                             { content }
+                            <Paper style={style.content}>
+                                Here
+                            </Paper>
                         </div>
                     </div>
                     : null}
