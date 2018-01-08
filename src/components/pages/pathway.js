@@ -180,6 +180,76 @@ class Pathway extends Component {
         const deadline = new Date(this.state.pathway.deadline);
         const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
 
+        let pathwaySteps = null;
+        const steps = pathway.steps;
+        if (steps) {
+            pathwaySteps = steps.map(function(step) {
+                // return left side if odd numbered step, right if even
+                // let className = "leftSideStep";
+                // if (step.order % 2 == 0) {
+                //     className = "rightSideStep";
+                // }
+
+                return (
+                    <div className="halfWidthStep">
+                        <img
+                            src={"/icons/" + step.order + ".png"}
+                            alt={step.order}
+
+                        />
+                        <div>
+                            <div className="smallText2" style={{color:'#B869FF'}}>
+                                Step {step.order}
+                            </div>
+                            <div className="smallText2">
+                                {step.name}
+                            </div>
+                            <div className="smallText2">
+                                {step.description}
+                            </div>
+                        </div>
+                        <div className="stepSeparatorLeft" />
+                        <div className="stepSeparatorRight" />
+                    </div>
+                );
+            });
+        }
+        // {pathway.steps ?
+        //     <ul className="horizCenteredList homepageBenefitsList">
+        //         <li style={{marginRight: "14%"}}>
+        //             <div style={{position: "relative"}}>
+        //                 <img
+        //                     src="/icons/1.png"
+        //                     alt="Free"
+        //                     style={style.infoBoxes.image}
+        //                 />
+        //                 <div className="smallText2" style={{color:'#B869FF'}}>
+        //                     Step 1
+        //                 </div>
+        //                 <div className="smallText2">
+        //                     {pathway.steps[0].name}
+        //                 </div>
+        //             </div>
+        //         </li>
+        //         <li>
+        //             <div style={{position: "relative"}}>
+        //                 <img
+        //                     src="/icons/2.png"
+        //                     alt="Portfolio"
+        //                     style={style.infoBoxes.image}
+        //                 />
+        //                 <div className="smallText2" style={{color:'#B869FF'}}>
+        //                     Step 2
+        //                 </div>
+        //                 <div className="smallText2">
+        //                     {pathway.steps[1].name}
+        //                 </div>
+        //             </div>
+        //         </li>
+        //     </ul>
+        //     : null}
+
+
         return (
             <div className="jsxWrapper">
                 {pathway.sponsor !== undefined ?
@@ -403,62 +473,34 @@ class Pathway extends Component {
                                 : null}
                         </div>
 
-
                         < div className="homepageSeparatorContainer">
                             < div className="homepageSeparator"/>
                         </div>
 
-                        < div className="center">
-                            < b style={{color: '#B869FF'}} className="mediumText">COURSE OVERVIEW</ b>
-                            {pathway.steps ?
-                                <ul className="horizCenteredList homepageBenefitsList">
-                                    <li style={{marginRight: "14%"}}>
-                                        <div style={{position: "relative"}}>
-                                            <img
-                                                src="/icons/1.png"
-                                                alt="Free"
-                                                style={style.infoBoxes.image}
-                                            />
-                                            <div className="smallText2" style={{color:'#B869FF'}}>
-                                                Step 1
-                                            </div>
-                                            <div className="smallText2">
-                                                {pathway.steps[0].name}
-                                            </div>
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div style={{position: "relative"}}>
-                                            <img
-                                                src="/icons/2.png"
-                                                alt="Portfolio"
-                                                style={style.infoBoxes.image}
-                                            />
-                                            <div className="smallText2" style={{color:'#B869FF'}}>
-                                                Step 2
-                                            </div>
-                                            <div className="smallText2">
-                                                {pathway.steps[1].name}
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                                : null}
-                        </ div>
+                        {pathway.steps ?
+                            <div>
+                                <div className="center">
+                                    < b style={{color: '#B869FF'}} className="mediumText">Course Overview</ b>
+                                </ div>
 
-                        <div className="homepageSeparatorContainer">
-                            < div className="homepageSeparator"/>
-                        </ div>
+                                { pathwaySteps }
+
+                                <div className="homepageSeparatorContainer">
+                                    < div className="homepageSeparator"/>
+                                </ div>
+                            </div>
+                            : null
+                        }
 
                         {pathway.extraInfo ?
-                            <div className="center">
+                            <div className="center" style={{marginTop:"50px", clear:"both"}}>
                                 <p className="smallText2">
                                     {pathway.extraInfo}
                                 </p>
                             </div>
                             : null
                         }
-                        <div className="center" style={{marginBottom: "20px"}}>
+                        <div className="center" style={{marginBottom: "20px", clear:"both"}}>
                             <button className="outlineButton"
                                     style={{
                                         backgroundColor: "transparent",

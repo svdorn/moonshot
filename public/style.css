@@ -289,6 +289,19 @@ button.link {
   transform: rotate(-45deg);
 }
 
+.stepSeparatorLeft {
+    border-right: 25% solid purple;
+    border-top: 4px;
+    border-bottom: 4px;
+    border-left: 0px;
+}
+.stepSeparatorRight {
+    border-left: 25% solid purple;
+    border-top: 4px;
+    border-bottom: 4px;
+    border-right: 0px;
+}
+
 
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
@@ -351,6 +364,19 @@ button.link {
 }
 .myPathwaysTabs > div:nth-of-type(2) {
     margin-left: 30% !important;
+}
+
+.halfWidthStep {
+    text-align: left;
+    width: 50%;
+    float: left;
+}
+.halfWidthStep > div {
+    float: left;
+}
+.halfWidthStep > img {
+    height: 70px;
+    float: left;
 }
 
 
