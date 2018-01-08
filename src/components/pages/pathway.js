@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {registerForPathway, getUsers} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper, CircularProgress, Divider} from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
 import axios from 'axios';
@@ -184,7 +184,7 @@ class Pathway extends Component {
         let pathwaySteps = null;
         const steps = pathway.steps;
         if (steps) {
-            pathwaySteps = steps.map(function(step) {
+            pathwaySteps = steps.map(function (step) {
                 // return left side if odd numbered step, right if even
                 // let className = "leftSideStep";
                 // if (step.order % 2 == 0) {
@@ -194,22 +194,22 @@ class Pathway extends Component {
                 if (step.order <= 2) {
                     topSeparators = (
                         <div>
-                            <div className="stepSeparatorLeft" style={{top:"0"}} />
-                            <div className="stepSeparatorRight" style={{top:"0"}} />
+                            <div className="stepSeparatorLeft" style={{top: "0"}}/>
+                            <div className="stepSeparatorRight" style={{top: "0"}}/>
                         </div>
                     )
                 }
 
                 return (
                     <div className="halfWidthStep" key={step.order}>
-                        { topSeparators }
+                        {topSeparators}
                         <img
                             src={"/icons/" + step.order + ".png"}
                             alt={step.order}
 
                         />
                         <div className="halfWidthStepText">
-                            <div className="smallText" style={{color:'#B869FF'}}>
+                            <div className="smallText" style={{color: '#B869FF'}}>
                                 STEP {step.order}
                             </div>
                             <div className="smallText2 halfWidthStepTitle">
@@ -219,13 +219,30 @@ class Pathway extends Component {
                                 {step.description}
                             </div>
                         </div>
-                        <div className="stepSeparatorLeft" />
-                        <div className="stepSeparatorRight" />
+                        <div className="stepSeparatorLeft"/>
+                        <div className="stepSeparatorRight"/>
                     </div>
                 );
             });
         }
 
+        let pathwaySkills = null;
+        const skills = pathway.skills;
+        if (skills) {
+            pathwaySkills = skills.map(function (skill) {
+                return (
+                    <div style={{display: 'inline-block'}}>
+                        <Chip key={skill}
+                              backgroundColor='#white'
+                              labelColor="#00d2ff"
+                              labelStyle={{fontSize: '20px'}}
+                              style={{marginLeft: '20px', border:"1px solid #00d2ff"}}>
+                            {skill}
+                        </Chip>
+                    </div>
+                );
+            });
+        }
 
         return (
             <div className="jsxWrapper">
@@ -241,8 +258,11 @@ class Pathway extends Component {
                                         onClick={this.handleClick.bind(this)}>
                                     {"Sign Up"}
                                 </button>
-                            </div><br/>
-                            { this.props.loading ? <div className="center"><CircularProgress color="white" style={{marginTop:"20px"}}/><br/></div> : "" }
+                            </div>
+                            <br/>
+                            {this.props.loading ? <div className="center"><CircularProgress color="white"
+                                                                                            style={{marginTop: "20px"}}/><br/>
+                            </div> : ""}
                             <div className="whiteText smallText2 noWrap" style={{textAlign: 'center'}}>
                                 Sponsored By:
                                 <img
@@ -388,14 +408,14 @@ class Pathway extends Component {
                             }
                         </div>
 
-                        <div className="homepageSeparatorContainer" style={{marginTop:"30px"}}>
+                        <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
                             <div className="homepageSeparator"/>
                         </div>
 
                         <div>
                             {pathway.sponsor ?
                                 <div style={{marginBottom: "70px"}}>
-                                    <HomepageTriangles variation="3" />
+                                    <HomepageTriangles variation="3"/>
                                     <ul className="horizCenteredList homepageBenefitsList">
                                         <li style={{marginRight: "14%"}}>
                                             <div style={{position: "relative"}}>
@@ -448,30 +468,50 @@ class Pathway extends Component {
                                 : null}
                         </div>
 
-                        < div className="homepageSeparatorContainer" style={{marginTop:"30px"}}>
+                        < div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
+                            < div className="homepageSeparator"/>
+                        </div>
+
+                        <div>
+                            {pathway.skills ?
+                                <div>
+                                    <div className="center" style={{marginTop: '100px'}}>
+                                        < b style={{color: '#B869FF'}} className="mediumText">Skills</ b>
+                                    </ div>
+                                    <div className="center smallText2" style={{marginBottom:"20px"}}>
+                                        Earn these skills upon pathway completion.
+                                    </div>
+                                    <div className="center" style={{marginBottom:"60px"}}>
+                                        {pathwaySkills}
+                                    </div>
+                                </div>
+                                : null}
+                        </div>
+
+                        < div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
                             < div className="homepageSeparator"/>
                         </div>
 
                         {pathway.steps ?
                             <div>
                                 <div className="center" style={{margin: "100px 0 40px 0"}}>
-                                    < b style={{color: '#B869FF'}} className="mediumText">Course Overview</ b>
+                                    < b style={{color: '#B869FF'}} className="mediumText">Pathway Overview</ b>
                                 </ div>
 
-                                { pathwaySteps }
+                                {pathwaySteps}
                             </div>
                             : null
                         }
 
                         {pathway.extraInfo ?
-                            <div className="center" style={{margin: "650px 0 30px", clear:"both"}}>
+                            <div className="center" style={{margin: "650px 0 30px", clear: "both"}}>
                                 <p className="smallText2">
                                     {pathway.extraInfo}
                                 </p>
                             </div>
                             : null
                         }
-                        <div className="center" style={{marginBottom: "20px", clear:"both"}}>
+                        <div className="center" style={{marginBottom: "20px", clear: "both"}}>
                             <button className="outlineButton"
                                     style={{
                                         backgroundColor: "transparent",
@@ -481,7 +521,8 @@ class Pathway extends Component {
                                     onClick={this.handleClick.bind(this)}>
                                 {"Get Started"}
                             </button>
-                            { this.props.loading ? <div><br/><CircularProgress color="#B869FF" style={{marginTop:"20px"}}/></div> : "" }
+                            {this.props.loading ?
+                                <div><br/><CircularProgress color="#B869FF" style={{marginTop: "20px"}}/></div> : ""}
                         </div>
                     </div>
                     :
