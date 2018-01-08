@@ -87,6 +87,11 @@ class Pathway extends Component {
                 position: "relative",
                 height: "150px"
             },
+            descriptionAndSalarySpacer: {
+                width: "80%",
+                height: "100%",
+                position: "relative"
+            },
             quote: {
                 everything: {
                     textAlign: "center",
@@ -326,13 +331,18 @@ class Pathway extends Component {
                                         :
                                         style.descriptionAndSalaryFull
                                     }>
-                                        <img
-                                            src="/icons/GraduationHat.png"
-                                            style={style.descriptionAndSalaryIcon}
-                                        />
-                                        <div style={style.descriptionAndSalaryText}>
-                                            {pathway.description}
-                                        </div>
+                                            <div style={pathway.industry ?
+                                                {...style.descriptionAndSalarySpacer, marginLeft: "20%"}
+                                                : {}}
+                                            >
+                                                <img
+                                                    src="/icons/GraduationHat.png"
+                                                    style={style.descriptionAndSalaryIcon}
+                                                />
+                                                <div style={style.descriptionAndSalaryText}>
+                                                    {pathway.description}
+                                                </div>
+                                            </div>
                                     </div>
                                     : null}
 
@@ -342,14 +352,19 @@ class Pathway extends Component {
                                         :
                                         style.descriptionAndSalaryFull
                                     }>
-                                        <img
-                                            src="/icons/Price.png"
-                                            style={style.descriptionAndSalaryIcon}
-                                        />
-                                        <div style={style.descriptionAndSalaryText}>
-                                            Industry average salary for<br/>
-                                            {pathway.industry.title}<br/>
-                                            <i>{pathway.industry.averageSalary}</i>
+                                        <div style={pathway.description ?
+                                            {...style.descriptionAndSalarySpacer, marginRight: "20%"}
+                                            : {}}
+                                        >
+                                            <img
+                                                src="/icons/Price.png"
+                                                style={style.descriptionAndSalaryIcon}
+                                            />
+                                            <div style={style.descriptionAndSalaryText}>
+                                                Industry average salary for<br/>
+                                                {pathway.industry.title}<br/>
+                                                <i>{pathway.industry.averageSalary}</i>
+                                            </div>
                                         </div>
                                     </div>
                                     : null}
