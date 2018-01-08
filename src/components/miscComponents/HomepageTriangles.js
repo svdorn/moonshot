@@ -61,6 +61,13 @@ class HomepageTriangles extends Component {
                 {top: "20%", right: "4%", rotate: -11, scale: .7, className: " darkPurpleTriangle"},
                 {top: "24%", right: "23%", rotate: -134, scale: .3, className: " darkPurpleTriangle"},
                 {top: "30%", right: "16%", rotate: -19, scale: .5, className: " darkPurpleTriangle"},
+
+                {top: "0%", left: "-10%", rotate: -30, scale: .8, className: " darkPurpleTriangle"},
+                {top: "14%", left: "14%", rotate: -60, scale: .8, className: " darkPurpleTriangle"},
+                {top: "20%", left: "4%", rotate: -11, scale: .7, className: " darkPurpleTriangle"},
+                {top: "24%", left: "23%", rotate: -134, scale: .3, className: " darkPurpleTriangle"},
+                {top: "30%", left: "16%", rotate: -19, scale: .8, className: " darkPurpleTriangle"},
+
             ];
             whiteSpace = (
                 <div style={{width:"100%", height:"100%"}}>
