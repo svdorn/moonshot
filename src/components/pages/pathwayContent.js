@@ -128,7 +128,7 @@ class PathwayContent extends Component {
             },
             headerSpace: {
                 width: "100%",
-                height: "120px"
+                height: "100px"
             },
             div: {
                 display: "inline-block"

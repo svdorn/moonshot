@@ -162,7 +162,7 @@ class Discover extends Component {
             },
             headerDiv: {
                 position: "relative",
-                height: "125px",
+                height: "100px",
                 width: "100%"
             },
             treeText: {
