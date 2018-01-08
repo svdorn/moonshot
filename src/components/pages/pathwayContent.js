@@ -110,12 +110,6 @@ class PathwayContent extends Component {
 
     render() {
         const style = {
-            content: {
-                display: "inline-block",
-                marginLeft: "20px",
-                marginTop: "20px",
-                width: "calc(100% - 470px)"
-            },
             threeInfo: {
                 display: "inline-block",
                 width: "200px",
@@ -157,11 +151,11 @@ class PathwayContent extends Component {
         if (this.props.step) {
             const contentType = this.props.step.contentType;
             if (contentType == "link") {
-                content = <PathwayContentLink style={style.content}/>;
+                content = <PathwayContentLink className="pathwayContent"/>;
             } else if (contentType == "video") {
                 content = <PathwayContentVideo className="videoContainer"/>;
             } else if (contentType == "article") {
-                content = <PathwayContentArticle style={style.content}/>
+                content = <PathwayContentArticle className="pathwayContent"/>
             } else {
                 content = <div style={style.div}>Not Video or Link</div>;
             }

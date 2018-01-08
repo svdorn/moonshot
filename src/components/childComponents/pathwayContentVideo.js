@@ -61,12 +61,12 @@ class PathwayContentVideo extends Component {
             <div>
                 {this.state.content !== undefined ?
                     <div style={this.props.style} className={this.props.className}>
-                    <YouTube
-                        videoId={this.state.content.link}
-                        opts={opts}
-                        onReady={this._onReady}
-                        onEnd={this._onEnd}
-                    />
+                        <YouTube
+                            videoId={this.state.content.link}
+                            opts={opts}
+                            onReady={this._onReady}
+                            onEnd={this._onEnd}
+                        />
                     </div>
                     : <div style={{textAlign: 'center', verticalAlign:'middle'}}>
                         <CircularProgress/>

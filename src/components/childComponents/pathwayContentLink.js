@@ -50,7 +50,7 @@ class PathwayContentLink extends Component {
         console.log(this.state.content);
         const content = this.state.content;
         return (
-            <Paper style={{...this.props.style}} zDepth={1}>
+            <Paper className={this.props.className} style={{...this.props.style}} zDepth={1}>
                 {this.state.content !== undefined ?
                     <div className="center" style={{marginBottom: "10px"}}>
                         <img src="/images/OfficialLogoBlue.png" key="moonshot" style={{

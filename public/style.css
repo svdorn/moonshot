@@ -359,7 +359,7 @@ button.link {
     visibility: hidden;
     position: absolute;
 }
-.overviewAndCommentBox {
+.overviewAndCommentBox, .pathwayContent {
     display: inline-block;
     margin-left: 20px;
     width: calc(100% - 470px);
@@ -384,7 +384,7 @@ button.link {
         margin: 10px auto;
         left: 0;
     }
-    .overviewAndCommentBox {
+    .overviewAndCommentBox, .pathwayContent {
         width: 100%;
     }
 }
