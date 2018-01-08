@@ -22,11 +22,13 @@ class PathwayStepList extends Component {
         let stepIndex = 0;
         let subStepIndex = 0;
 
-        const pathwayId = this.props.pathwayId;
-        const user = this.props.currentUser;
-        const currentSubStep = user.pathways.find(function(path) {
-            return path.pathwayId == pathwayId;
-        }).currentStep;
+        // const pathwayId = this.props.pathwayId;
+        // const user = this.props.currentUser;
+        // const currentSubStep = user.pathways.find(function(path) {
+        //     return path.pathwayId == pathwayId;
+        // }).currentStep;
+
+        const currentSubStep = this.props.currentStep;
 
         if (currentSubStep) {
             subStepIndex = currentSubStep.order - 1;
@@ -170,7 +172,7 @@ class PathwayStepList extends Component {
             const bottomMargin = (step.order == self.props.steps.length) ? {marginBottom: "20px"} : {};
 
             return (
-                <Step key={step.name} style={bottomMargin}>
+                <Step key={step.name + ", " + step.order} style={bottomMargin}>
                     <StepButton onClick={() => self.setState({
                         stepIndex: (step.order - 1),
                         subStepIndex: 0
@@ -210,8 +212,12 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
+    console.log("UGH");
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        currentStep: state.currentPathwayId ?
+            state.users.currentUser.pathways[state.currentPathwayId].currentStep
+            : undefined
     };
 }
 

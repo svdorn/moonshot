@@ -169,6 +169,12 @@ export function usersReducers(state = initialState, action) {
                 ...state, currentUser: action.user
             };
             break;
+        case "SET_PATHWAY_ID":
+            console.log("setting pathway id");
+            return {
+                ...state, pathwayId: action.pathwayId
+            }
+            break;
         case "CLOSE_NOTIFICATION":
             return {
                 ...state, notification: undefined

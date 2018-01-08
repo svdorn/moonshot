@@ -6,7 +6,7 @@ import PathwayContentArticle from '../childComponents/pathwayContentArticle';
 import {AppBar, Paper, CircularProgress} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, updateCurrentSubStep} from "../../actions/usersActions";
+import {closeNotification, updateCurrentSubStep, setPathwayId} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayStepList from '../childComponents/pathwayStepList';
 import axios from 'axios';
@@ -19,13 +19,17 @@ class PathwayContent extends Component {
 
         console.log("here");
         this.state = {
-            pathway: undefined,
-            currentStep: undefined
+            pathway: undefined
         }
     }
 
     componentDidMount() {
         const pathwayId = this.props.params._id;
+
+        console.log("checking");
+        if (this.props.pathwayId != pathwayId) {
+            setPathwayId(pathwayId);
+        }
 
         axios.get("/api/getPathwayById", {
             params: {
@@ -54,7 +58,9 @@ class PathwayContent extends Component {
                 this.props.updateCurrentSubStep(user, pathwayId, subStep);
             }
 
-            this.setState({pathway, currentStep});
+            //const currentStep = this.props.currentStep;
+
+            this.setState({pathway});
 
 
 
@@ -116,20 +122,20 @@ class PathwayContent extends Component {
         window.scrollTo(0, 0);
     }
 
-    componentDidUpdate() {
-        console.log("DID UPDATE")
-        if (this.state.pathway) {
-            const user = this.props.currentUser;
-            const pathwayId = this.state.pathway._id;
-            // the current step of the current pathway
-            const currentStep = user.pathways.find(function(path) {
-                return path.pathwayId == pathwayId;
-            }).currentStep;
-            if (currentStep != this.state.currentStep) {
-                this.setState({...this.state, currentStep});
-            }
-        }
-    }
+    // componentDidUpdate() {
+    //     console.log("DID UPDATE")
+    //     if (this.state.pathway) {
+    //         const user = this.props.currentUser;
+    //         const pathwayId = this.state.pathway._id;
+    //         // the current step of the current pathway
+    //         const currentStep = user.pathways.find(function(path) {
+    //             return path.pathwayId == pathwayId;
+    //         }).currentStep;
+    //         if (currentStep != this.state.currentStep) {
+    //             this.setState({...this.state, currentStep});
+    //         }
+    //     }
+    // }
 
     render() {
         console.log("RENDERING")
@@ -187,7 +193,9 @@ class PathwayContent extends Component {
         //     console.log("currentStep is: ", currentStep);
         // }
 
-        const currentStep = this.state.currentStep;
+        //const currentStep = this.state.currentStep;
+
+        const currentStep = this.props.currentStep;
 
         let content = <div>"loading"</div>;
         // if the user is on a step, show that content
@@ -248,13 +256,18 @@ class PathwayContent extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateCurrentSubStep,
-        closeNotification
+        closeNotification,
+        setPathwayId
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        currentPathwayId: state.users.currentPathwayId,
+        currentStep: state.currentPathwayId ?
+            state.users.currentUser.pathways[state.currentPathwayId].currentStep
+            : undefined
     };
 }
 

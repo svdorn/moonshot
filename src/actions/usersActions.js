@@ -268,6 +268,13 @@ export function updateCurrentSubStep(user, pathwayId, subStep) {
     }
 }
 
+export function setPathwayId(pathwayId) {
+    return function(dispatch) {
+        console.log("setting pathway id in action");
+        dispatch({type: "SET_PATHWAY_ID", pathwayId})
+    }
+}
+
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
     return function(dispatch) {
