@@ -14,7 +14,9 @@ class MyPathways extends Component {
 
         this.state = {
             pathways: [],
-            userPathwayPreviews: undefined
+            completedPathways: [],
+            userPathwayPreviews: undefined,
+            userCompletedPathwayPreviews: undefined
         }
     }
 
@@ -65,6 +67,53 @@ class MyPathways extends Component {
                     });
                 }).catch(function (err) {
                     console.log("error getting searched-for pathway");
+                    console.log(err);
+                })
+            }
+            for (let i = 0; i < this.props.currentUser.completedPathways.length; i++) {
+                let id = this.props.currentUser.completedPathways[i].pathwayId;
+                console.log(i);
+                axios.get("/api/getPathwayById", {
+                    params: {
+                        _id: id
+                    }
+                }).then(res => {
+                    let pathway = res.data;
+                    let key = 0;
+                    let self = this;
+
+                    const completedPathways = [...this.state.completedPathways, pathway];
+
+                    // use the received pathways to make pathway previews
+                    const userCompletedPathwayPreviews = completedPathways.map(function (pathway) {
+                        key++;
+                        const deadline = new Date(pathway.deadline);
+                        const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                        return (
+                            <li key={key}
+                                onClick={() => self.goTo('/pathway/' + pathway._id)}>
+                                <PathwayPreview
+                                    name={pathway.name}
+                                    image={pathway.previewImage}
+                                    logo={pathway.sponsor.logo}
+                                    sponsorName={pathway.sponsor.name}
+                                    completionTime={pathway.estimatedCompletionTime}
+                                    deadline={formattedDeadline}
+                                    price={pathway.price}
+                                    _id={pathway._id}
+                                />
+                            </li>
+                        );
+                    });
+
+                    this.setState({
+                        completedPathways,
+                        userCompletedPathwayPreviews
+                    }, function () {
+
+                    });
+                }).catch(function (err) {
+                    console.log("error getting searched-for completed pathway");
                     console.log(err);
                 })
             }
@@ -128,11 +177,17 @@ class MyPathways extends Component {
                                         </ul>
                                     </Tab>
                                     <Tab label="Completed" style={style.tab}>
-                                        <h1 className="center mediumText">None</h1>
+                                        {this.state.userCompletedPathwayPreviews ?
+                                            <ul className="horizCenteredList pathwayPrevList"
+                                                style={style.pathwayPreviewUl}>
+                                                {this.state.userCompletedPathwayPreviews}
+                                            </ul>
+                                            : <h1 className="center mediumText">None</h1>}
                                     </Tab>
                                 </Tabs>
                             </div>
-                            : <div className="center"><CircularProgress style={{marginTop: "20px", marginBottom: "20px"}}/></div>}
+                            : <div className="center"><CircularProgress
+                                style={{marginTop: "20px", marginBottom: "20px"}}/></div>}
                     </div>
                     : null}
             </div>
