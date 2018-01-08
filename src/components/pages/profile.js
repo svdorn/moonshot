@@ -146,7 +146,6 @@ class Profile extends Component {
                 MsTransformOriginY: "0"
             },
             tabs: {
-                marginTop: '5px',
             },
             tab: {
                 backgroundColor: "white",
@@ -193,7 +192,7 @@ class Profile extends Component {
         if (skills) {
             profileSkills = skills.map(function (skill) {
                 return (
-                    <div style={{display: 'inline-block', marginTop: '10px'}}>
+                    <div style={{display: 'inline-block', marginTop: '15px'}}>
                         <Chip key={skill}
                               backgroundColor='#white'
                               labelColor="#00d2ff"
