@@ -239,7 +239,7 @@ class Discover extends Component {
         return (
             <div className='jsxWrapper' ref='discover'>
                 <div className="greenToBlue" style={style.headerDiv}/>
-                <div className="center darkPurpleText mediumText" style={{marginTop:'5px'}}>
+                <div className="center darkPurpleText mediumText" style={{marginTop:'15px', marginBottom:'10px'}}>
                     Discover Pathways
                 </div>
 
