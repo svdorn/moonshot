@@ -109,6 +109,16 @@ class PathwayContent extends Component {
                 marginLeft: "20px",
                 width: "calc(100% - 470px)"
             },
+            overviewAndCommentBox: {
+                display: "inline-block",
+                marginLeft: "20px",
+                width: "calc(100% - 470px)",
+                marginTop: "10px",
+            },
+            threeInfo: {
+                display: "inline-block",
+                width: "200px",
+            },
             pathwayHeader: {
                 width: "100%",
                 height: "50px",
@@ -152,6 +162,12 @@ class PathwayContent extends Component {
             }
         }
 
+        let formattedDeadline = '';
+        if (this.state.pathway) {
+            const deadline = new Date(this.state.pathway.deadline);
+            formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+        }
+
         return (
             <div style={{marginBottom:"50px"}}>
                 {this.state.pathway ?
@@ -182,7 +198,31 @@ class PathwayContent extends Component {
                                 </Paper>
                             </div>
                             { content }
-                            <Paper style={style.content}>
+                            <Paper style={style.overviewAndCommentBox}>
+                                <Paper style={{width: "100%"}}>
+                                    <ul className="horizCenteredList darkPurpleText smallText2">
+                                        <li>
+                                            <div style={style.threeInfo}>
+                                                <i>Sponsor</i><br/>
+                                                <img src={pathway.sponsor.logo}
+                                                     alt={pathway.sponsor.name}
+                                                     height={35}/>
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div style={style.threeInfo}>
+                                                <i>Completion Time</i><br/>
+                                                {pathway.estimatedCompletionTime}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div style={style.threeInfo}>
+                                                <i>Complete By</i><br/>
+                                                {formattedDeadline}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </Paper>
                                 Here
                             </Paper>
                         </div>

@@ -298,6 +298,8 @@ button.link {
 .greenText { color: var(--moonshotGreenText); }
 .whiteText { color: white; }
 .blueText { color: var(--moonshotLightBlue) }
+.purpleText { color: var(--moonshotPurple) }
+.darkPurpleText { color: var(--moonshotDarkPurple) }
 
 
 .videoContainer {

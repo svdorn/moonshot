@@ -175,10 +175,10 @@ class Pathway extends Component {
         }
 
         console.log(this.state.pathway);
-        const deadline = new Date(this.state.pathway.deadline);
-        const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
 
         const pathway = this.state.pathway;
+        const deadline = new Date(this.state.pathway.deadline);
+        const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
 
         return (
             <div className="jsxWrapper">
