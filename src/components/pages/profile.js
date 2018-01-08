@@ -164,7 +164,7 @@ class Profile extends Component {
             },
             pictureInfoSkills: {
                 everything: {
-                    padding: "40px 0px",
+                    paddingTop:'40px',
                     textAlign: 'center'
                 },
                 leftSide: {
