@@ -140,7 +140,6 @@ class Profile extends Component {
                 marginTop: "20px",
             },
             tabs: {
-                marginTop: '5px',
             },
             tab: {
                 backgroundColor: "white",
@@ -187,7 +186,7 @@ class Profile extends Component {
         if (skills) {
             profileSkills = skills.map(function (skill) {
                 return (
-                    <div style={{display: 'inline-block', marginTop: '10px'}}>
+                    <div style={{display: 'inline-block', marginTop: '15px'}}>
                         <Chip key={skill}
                               backgroundColor='#white'
                               labelColor="#00d2ff"
@@ -246,6 +245,7 @@ class Profile extends Component {
                                     </div>
                                     <div className="profileSeparatorTri">
                                     </div>
+                                    <div style={{clear: "both"}}/>
                                 </div>
 
                                 <div className="center">
@@ -256,10 +256,12 @@ class Profile extends Component {
                                         className="myPathwaysTabs"
                                     >
                                         <Tab label="Ongoing" style={style.tab}>
-                                            <ul className="horizCenteredList pathwayPrevList"
-                                                style={style.pathwayPreviewUl}>
-                                                {this.state.userPathwayPreviews}
-                                            </ul>
+                                            {this.state.userPathwayPreviews ?
+                                                <ul className="horizCenteredList pathwayPrevList"
+                                                    style={style.pathwayPreviewUl}>
+                                                    {this.state.userPathwayPreviews}
+                                                </ul>
+                                                : <h1 className="center mediumText">None</h1>}
                                         </Tab>
                                         <Tab label="Completed" style={style.tab}>
                                             {this.state.userCompletedPathwayPreviews ?
@@ -278,8 +280,8 @@ class Profile extends Component {
                                     </div>
                                     <div className="profileSeparatorTri">
                                     </div>
+                                    <div style={{clear: "both"}}/>
                                 </div>
-
 
 
                                 <div className="profileSeparator">
@@ -288,6 +290,7 @@ class Profile extends Component {
                                     </div>
                                     <div className="profileSeparatorTri">
                                     </div>
+                                    <div style={{clear: "both"}}/>
                                 </div>
 
                             </div>
