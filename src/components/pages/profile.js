@@ -158,8 +158,8 @@ class Profile extends Component {
             locationImg: {
                 display: 'inline-block',
                 height: '15px',
-                marginBottom: '4px',
-                marginRight: '2px'
+                marginBottom: '5px',
+                marginRight: '5px'
             },
             pictureInfoSkills: {
                 everything: {
