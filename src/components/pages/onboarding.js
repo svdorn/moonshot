@@ -2,11 +2,285 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Paper, Menu, MenuItem, Divider} from 'material-ui';
-import { designAndDevInterests, dataInterests, softwareDevInterests, businessInterests, creationAndMarketingInterests }
-from '../consts/onboardingInterests';
 
 class Onboarding extends Component {
+    constructor(props) {
+        super(props);
 
+        this.state = {
+            designAndDevInterests : [
+                {
+                    title: "Virtual Reality",
+                    selected: false
+                },
+                {
+                    title: "Augmented Relity",
+                    selected: false
+                },
+                {
+                    title: "3D Printing",
+                    selected: false
+                },
+                {
+                    title: "UX Design",
+                    selected: false
+                },
+                {
+                    title: "IOT",
+                    selected: false
+                },
+                {
+                    title: "Wireframing",
+                    selected: false
+                },
+                {
+                    title: "User Testing",
+                    selected: false
+                },
+                {
+                    title: "A/B Testing",
+                    selected: false
+                },
+                {
+                    title: "User Research",
+                    selected: false
+                },
+                {
+                    title: "Electrical Engineering",
+                    selected: false
+                },
+                {
+                    title: "Mechanical Engineering",
+                    selected: false
+                },
+                {
+                    title: "Robotics",
+                    selected: false
+                },
+                {
+                    title: "Mobile",
+                    selected: false
+                },
+                {
+                    title: "Web",
+                    selected: false
+                },
+                {
+                    title: "Lean Methodology",
+                    selected: false
+                },
+                {
+                    title: "Responsive Design",
+                    selected: false
+                },
+
+            ],
+            dataInterests : [
+                {
+                    title: "SQL",
+                    selected: false
+                },
+                {
+                    title: "MySQL",
+                    selected: false
+                },
+                {
+                    title: "Database Analysis",
+                    selected: false
+                },
+                {
+                    title: "Data Security",
+                    selected: false
+                },
+                {
+                    title: "Machine Learning",
+                    selected: false
+                },
+                {
+                    title: "Big Data",
+                    selected: false
+                },
+                {
+                    title: "Data Science",
+                    selected: false
+                },
+                {
+                    title: "Data Structures",
+                    selected: false
+                },
+                {
+                    title: "Database Administration",
+                    selected: false
+                },
+                {
+                    title: "Database Development",
+                    selected: false
+                },
+            ],
+            softwareDevInterests : [
+                {
+                    title: "Angular",
+                    selected: false
+                },
+                {
+                    title: "React",
+                    selected: false
+                },
+                {
+                    title: "Javascript",
+                    selected: false
+                },
+                {
+                    title: "Java",
+                    selected: false
+                },
+                {
+                    title: "Python",
+                    selected: false
+                },
+                {
+                    title: "Node.js",
+                    selected: false
+                },
+                {
+                    title: "Git",
+                    selected: false
+                },
+                {
+                    title: "AWS",
+                    selected: false
+                },
+                {
+                    title: "REST",
+                    selected: false
+                },
+                {
+                    title: "C",
+                    selected: false
+                },
+                {
+                    title: "C#",
+                    selected: false
+                },
+                {
+                    title: "C++",
+                    selected: false
+                },
+                {
+                    title: "HTML",
+                    selected: false
+                },
+                {
+                    title: "CSS",
+                    selected: false
+                },
+            ],
+            businessInterests : [
+                {
+                    title: "Google Analytics",
+                    selected: false
+                },
+                {
+                    title: "Project Management",
+                    selected: false
+                },
+                {
+                    title: "Agile",
+                    selected: false
+                },
+                {
+                    title: "Data Visualization",
+                    selected: false
+                },
+                {
+                    title: "Data Analysis",
+                    selected: false
+                },
+                {
+                    title: "Customer Service",
+                    selected: false
+                },
+                {
+                    title: "Startups",
+                    selected: false
+                },
+                {
+                    title: "Entrepreneurship",
+                    selected: false
+                },
+                {
+                    title: "CRM",
+                    selected: false
+                },
+                {
+                    title: "Management",
+                    selected: false
+                },
+                {
+                    title: "Communication",
+                    selected: false
+                },
+                {
+                    title: "Problem Solving",
+                    selected: false
+                },
+                {
+                    title: "IT Fundamentals",
+                    selected: false
+                },
+                {
+                    title: "Salesforce",
+                    selected: false
+                },
+                {
+                    title: "Productivity",
+                    selected: false
+                },
+            ],
+            creationAndMarketingInterests : [
+                {
+                    title: "Virtual Marketing",
+                    selected: false
+                },
+                {
+                    title: "Pay Per Click",
+                    selected: false
+                },
+                {
+                    title: "Social Media",
+                    selected: false
+                },
+                {
+                    title: "UX",
+                    selected: false
+                },
+                {
+                    title: "UI Design",
+                    selected: false
+                },
+                {
+                    title: "Web Design",
+                    selected: false
+                },
+                {
+                    title: "Photoshop",
+                    selected: false
+                },
+                {
+                    title: "Graphic Design",
+                    selected: false
+                },
+                {
+                    title: "SEO",
+                    selected: false
+                },
+                {
+                    title: "Content Marketing",
+                    selected: false
+                },
+            ]
+        }
+    }
     render() {
 
         const style = {
