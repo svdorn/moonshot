@@ -205,6 +205,16 @@ button.link {
 .center { text-align: center; }
 .centerButton { display:flex; justify-content: center; }
 
+.gradientBorderBlue {
+    background: linear-gradient(to bottom right, #5deaff, #3dabff);
+    padding: 2px;
+}
+.gradientBorderBlue > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+
 .gradientBorder {
     background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));
     padding: 4px;
@@ -533,6 +543,10 @@ button.link {
     height: 0px;
     width: 0px;
     float: left;
+}
+
+.skill {
+
 }
 
 /* decorative triangles */
