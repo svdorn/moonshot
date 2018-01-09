@@ -389,7 +389,7 @@ button.link {
     }
 }
 
-.myPathwaysTabs, .overviewExercisesComments > div:first-of-type {
+.myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
     display: inline-block !important;
 }
 .myPathwaysTabs > div:nth-of-type(2) {
