@@ -87,7 +87,7 @@ class Onboarding extends Component {
                 },
                 {
                     title: "Database Analysis",
-                    selected: true
+                    selected: false
                 },
                 {
                     title: "Data Security",
@@ -283,9 +283,29 @@ class Onboarding extends Component {
         }
     }
 
-    componentDidMount() {
+    handleClick(index) {
+        let chosen = undefined;
+        switch (index) {
+            case 1:
+                chosen = this.state.designAndDevInterests;
+                break;
+            case 2:
+                chosen = this.state.dataInterests;
+                break;
+            case 3:
+                chosen = this.state.softwareDevInterests;
+                break;
+            case 4:
+                chosen = this.state.creationAndMarketingInterests;
+                break;
+            case 5:
+                chosen = this.state.businessInterests;
+                break;
+            default:
+                break;
+        }
         this.setState({
-            currInterestArea: this.state.dataInterests
+            currInterestArea: chosen
         })
     }
 
@@ -325,7 +345,6 @@ class Onboarding extends Component {
                             </div>
                             :
                             <div className="gradientBorderBlue center" style={{marginRight: '20px', marginTop: '20px'}}>
-
                                 <div className="onboardingPage1Text3 smallText">
                                     {interest.title}
                                 </div>
@@ -350,27 +369,90 @@ class Onboarding extends Component {
                 </div>
                 <div>
                     <ul className="horizCenteredList onboardingListContainer">
-                        <li style={style.iconLi} className="clickableNoUnderline">
-                            <img src="/icons/Cube.png" className="onboardingIcons"/>
-                            <div className="onboardingIconsText center"><b>Product Design<br/>and Development</b></div>
+                        <li style={style.iconLi} className="clickableNoUnderline"
+                            onClick={() => this.handleClick(1)}>
+                            {this.state.currInterestArea === this.state.designAndDevInterests ?
+                                <div className="gradientBorderBlue center">
+                                    <div style={{padding: '5px'}}>
+                                        <img src="/icons/Cube.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Product Design<br/>and
+                                            Development</b>
+                                        </div>
+                                    </div>
+                                </div>
+                                :
+                                <div>
+                                    <img src="/icons/Cube.png" className="onboardingIcons"/>
+                                    <div className="onboardingIconsText center"><b>Product Design<br/>and
+                                        Development</b>
+                                    </div>
+                                </div>
+                            }
                         </li>
-                        <li style={style.iconLi} className="clickableNoUnderline">
-                            <img src="/icons/Data.png" className="onboardingIcons"/>
-                            <div className="onboardingIconsText center"><b>Data</b></div>
+                        <li style={style.iconLi} className="clickableNoUnderline"
+                            onClick={() => this.handleClick(2)}>
+                            {this.state.currInterestArea === this.state.dataInterests ?
+                                <div className="gradientBorderBlue center">
+                                    <div style={{padding: '5px'}}>
+                                        <img src="/icons/Data.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Data</b></div>
+                                    </div>
+                                </div>
+                                :
+                                <div>
+                                    <img src="/icons/Data.png" className="onboardingIcons"/>
+                                    <div className="onboardingIconsText center"><b>Data</b></div>
+                                </div>
+                            }
                         </li>
-                        <li className="clickableNoUnderline">
-                            <img src="/icons/Computer.png" className="onboardingIcons"/>
-                            <div className="onboardingIconsText center"><b>Software<br/> Development</b></div>
+                        <li className="clickableNoUnderline" onClick={() => this.handleClick(3)}>
+                            {this.state.currInterestArea === this.state.softwareDevInterests ?
+                                <div className="gradientBorderBlue center">
+                                    <div style={{padding: '5px'}}>
+                                        <img src="/icons/Computer.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Software<br/> Development</b>
+                                        </div>
+                                    </div>
+                                </div>
+                                :
+                                <div>
+                                    <img src="/icons/Computer.png" className="onboardingIcons"/>
+                                    <div className="onboardingIconsText center"><b>Software<br/> Development</b></div>
+                                </div>
+                            }
                         </li>
                     </ul>
                     <ul className="horizCenteredList onboardingListContainer">
-                        <li style={style.iconLi} className="clickableNoUnderline">
-                            <img src="/icons/Creation.png" className="onboardingIcons"/>
-                            <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b></div>
+                        <li style={style.iconLi} className="clickableNoUnderline" onClick={() => this.handleClick(4)}>
+                            {this.state.currInterestArea === this.state.creationAndMarketingInterests ?
+                                <div className="gradientBorderBlue center">
+                                    <div style={{padding: '5px'}}>
+                                        <img src="/icons/Creation.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b>
+                                        </div>
+                                    </div>
+                                </div>
+                                :
+                                <div>
+                                    <img src="/icons/Creation.png" className="onboardingIcons"/>
+                                    <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b></div>
+                                </div>
+                            }
                         </li>
-                        <li className="clickableNoUnderline">
-                            <img src="/icons/Business.png" className="onboardingIcons"/>
-                            <div className="onboardingIconsText center"><b>Business</b></div>
+                        <li className="clickableNoUnderline" onClick={() => this.handleClick(5)}>
+                            {this.state.currInterestArea === this.state.businessInterests ?
+                                <div className="gradientBorderBlue center">
+                                    <div style={{padding: '5px'}}>
+                                        <img src="/icons/Business.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Business</b></div>
+                                    </div>
+                                </div>
+                                :
+                                <div>
+                                    <img src="/icons/Business.png" className="onboardingIcons"/>
+                                    <div className="onboardingIconsText center"><b>Business</b></div>
+                                </div>
+                            }
                         </li>
                     </ul>
                 </div>
