@@ -186,7 +186,8 @@ class PathwayContent extends Component {
                             <PathwayStepList
                                 className="stepScrollerContainerInDrawer"
                                 steps={pathway.steps}
-                                pathwayId={pathway._id}/>
+                                pathwayId={pathway._id}
+                            />
                         </Drawer>
 
 
