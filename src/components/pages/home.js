@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { Paper, RaisedButton } from 'material-ui';
+import { Paper, RaisedButton, Chip } from 'material-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -104,6 +104,32 @@ class Home extends Component{
             );
         })
 
+        const skills = [
+            "UX Design", "Data Science", "Machine Learning", "Graphic Design", "<br/>",
+            "Front End Web Dev", "Virtual Reality", "3D Printing", "Javascript", "<br/>",
+            "Agile", "Game Design", "SQL", "IoT", "Cloud", "<br/>",
+            "DevOps", "SEO", "Social Media", "Growth Marketing", "<br/>",
+            "Google Analytics", "Project Management", "Entrepeneurship"
+        ]
+
+        const exampleSkills = skills.map(function (skill) {
+            if (skill == "<br/>") {
+                return <br/>;
+            } else {
+                return (
+                    <div style={{display: 'inline-block', marginTop: '15px'}}>
+                        <Chip key={skill}
+                              backgroundColor='#white'
+                              labelColor="#00d2ff"
+                              labelStyle={{fontSize: '20px'}}
+                              style={{marginLeft: '20px', border: "1px solid #00d2ff"}}>
+                            {skill}
+                        </Chip>
+                    </div>
+                );
+            }
+        });
+
         return(
             <div className='jsxWrapper' ref='home'>
                 <div className="fullHeight greenToBlue">
@@ -174,6 +200,19 @@ class Home extends Component{
                                 </div>
                             </li>
                         </ul>
+                    </div>
+                </div>
+
+                <div className="homepageSeparatorContainer"><div className="homepageSeparator" /></div>
+
+
+                <div className="center">
+                    <h1 className="isolatedHeader">
+                        Build a skillset<br/>
+                        adapted to the speed of technology.
+                    </h1>
+                    <div>
+                        { exampleSkills }
                     </div>
                 </div>
 

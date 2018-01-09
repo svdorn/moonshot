@@ -202,7 +202,13 @@ button.link {
     top: 0;
     bottom: 0;
     margin: auto -210px auto;
-},
+}
+
+.isolatedHeader {
+    font-size: 30px;
+    margin: 60px 0px 30px;
+    display: inline-block;
+}
 
 .pathwayHeaderText {
     margin-left: 50px;
