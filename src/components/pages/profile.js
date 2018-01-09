@@ -180,9 +180,10 @@ class Profile extends Component {
         let profileSkills = null;
         let skills = undefined;
         let mailtoEmail = undefined;
-        if (this.props.currentUser) {
-            skills = this.props.currentUser.skills;
-            mailtoEmail = "mailto:" + this.props.currentUser.email;
+        let user = this.props.currentUser;
+        if (user) {
+            skills = user.skills;
+            mailtoEmail = "mailto:" + user.email;
         }
         if (skills) {
             profileSkills = skills.map(function (skill) {
@@ -198,6 +199,120 @@ class Profile extends Component {
                     </div>
                 );
             });
+        }
+
+        let divs = [];
+
+        if (user) {
+            const education = user.info.education;
+            const links = user.info.links;
+            const interests = user.info.interests;
+            const goals = user.info.goals;
+            const birthDate = user.info.birthDate;
+            const languages = user.info.languages;
+
+            let index = -1;
+
+            if (education && education.length > 0) {
+                const schools = education.map(function(edu) {
+                    // ADD THIS {edu.startDate.getFullYear()}-{edu.endDate.getFullYear()}
+                    return (
+                        <div>
+                            {edu.school} <br/>
+                            {edu.degree}
+                        </div>
+                    );
+                });
+                divs.push(
+                    <div>
+                        <img src="/icons/Book.png" />
+                        Education
+                        {schools}
+                    </div>
+                )
+            }
+            if (links && links.length > 0) {
+                index = -1;
+                const linkOuts = links.map(function(link) {
+                    // so that index is at the current place
+                    index++;
+                    return (
+                        <div>
+                            <a href={link.url}>{link.displayString}</a>
+                            {index < links.length - 1 ?
+                                <div className="menuDivider"/>
+                                : null
+                            }
+                        </div>
+                    );
+                });
+
+                divs.push(
+                    <div>
+                        <img src="/icons/Link.png" />
+                        Links
+                        {linkOuts}
+                    </div>
+                );
+            }
+            if (interests && interests.length > 0) {
+                index = -1;
+                const interestsDiv = interests.map(function(interest) {
+                    index++;
+                    const comma = (index < interests.length - 1) ? ", " : "";
+                    return (
+                        <div>{interest + comma}</div>
+                    );
+                });
+                divs.push(
+                    <div>
+                        <img src="/icons/Star.png" />
+                        Interests
+                        {interestsDiv}
+                    </div>
+                );
+            }
+            if (goals && goals.length > 0) {
+                const goalsDiv = goals.map(function(goal) {
+                    return (
+                        <div>{goal + ", "}</div>
+                    );
+                });
+                divs.push(
+                    <div>
+                        <img src="/icons/Target.png" />
+                        Goals
+                        {goalsDiv}
+                    </div>
+                );
+            }
+            if (birthDate) {
+                // ADD THIS {(birthDate.getMonth() + 1) + "/" + birthDate.getDate() + "/" + birthDate.getYear()}
+                divs.push(
+                    <div>
+                        <img src="/icons/CalendarBlue.png" />
+                        D.O.B.
+
+                    </div>
+                );
+            }
+            if (languages && languages.length > 0) {
+                index = -1;
+                const languagesDiv = interests.map(function(language) {
+                    index++;
+                    const comma = (index < languages.length - 1) ? ", " : "";
+                    return (
+                        <div>{language + comma}</div>
+                    );
+                });
+                divs.push(
+                    <div>
+                        <img src="/icons/SpeechBubbleOutline.png" />
+                        Languages
+                        {languagesDiv}
+                    </div>
+                );
+            }
         }
 
         return (
@@ -217,7 +332,7 @@ class Profile extends Component {
                                         <div>
                                             <div
                                                 className="blueText smallText2">{this.props.currentUser.name.toUpperCase()}</div>
-                                            <b className="smallText">{this.props.currentUser.title}</b><br/>
+                                            <b className="smallText">{this.props.currentUser.info.title}</b><br/>
                                             <div>
                                                 <img
                                                     src="/icons/Location.png"
@@ -225,7 +340,7 @@ class Profile extends Component {
                                                     style={style.locationImg}
                                                 />
                                                 <div className="smallText" style={{display: 'inline-block'}}>
-                                                    {this.props.currentUser.city}, {this.props.currentUser.state}
+                                                    {this.props.currentUser.info.city}, {this.props.currentUser.info.state}
                                                 </div>
                                             </div>
                                             <a className="smallText blueText" href={mailtoEmail}>Contact</a>
@@ -292,6 +407,10 @@ class Profile extends Component {
                                     <div className="profileSeparatorTri">
                                     </div>
                                     <div style={{clear: "both"}}/>
+                                </div>
+
+                                <div>
+                                    { divs }
                                 </div>
 
                             </div>

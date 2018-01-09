@@ -12,7 +12,35 @@ var usersSchema = mongoose.Schema({
     time: Number,
     verified: Boolean,
     images: String,
+    skills: [ String ],
+    info: {
+        title: String,
+        city: String,
+        state: String,
+        description: String,
+        education: [{
+            school: String,
+            degree: String,
+            startDate: Date,
+            endDate: Date
+        }],
+        interests: [ String ],
+        birthDate: Date,
+        links: [{
+            url: String,
+            displayString: String
+        }],
+        goals: [ String ],
+        languages: [ String ]
+    },
     pathways: [{
+        pathwayId: mongoose.Schema.Types.ObjectId,
+        currentStep: {
+            step: Number,
+            subStep: Number
+        },
+    }],
+    completedPathways: [{
         pathwayId: mongoose.Schema.Types.ObjectId,
         currentStep: {
             step: Number,
