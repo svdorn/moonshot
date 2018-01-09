@@ -370,6 +370,20 @@ button.link {
     color: white !important;
 }
 
+.aboutMeLi > img:first-of-type {
+    height: 40px;
+}
+.aboutMeLi {
+    width: 50%;
+    vertical-align: top;
+    text-align: left;
+    padding-left: 5%;
+}
+.aboutMeLi > h2 {
+    display: inline;
+    margin-left: 50px;
+}
+
 @media only screen and (max-width: 1000px) {
     .videoContainer {
         width: 90%;
