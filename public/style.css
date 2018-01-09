@@ -352,6 +352,10 @@ button.link {
 .onboardingListContainer {
     margin-top: 30px;
 }
+.onboardingInterestsListContainer {
+    margin: 30px auto 0;
+    width: 50%;
+}
 
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
@@ -368,6 +372,20 @@ button.link {
     background: linear-gradient(to right, #5deaff, #3dabff);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
+}
+.onboardingPage1Text2 {
+    color: white;
+    padding: 0 5px 0 5px;
+}
+.onboardingPage1Text3 {
+    color: #00c3ff;
+    padding: 0 5px 0 5px;
+}
+.onboardingPage1Text2Background{
+    background: linear-gradient(to right, #5deaff, #3dabff);
+    padding: 2px;
+    margin-right: 20px;
+    margin-top: 20px;
 }
 
 
@@ -548,10 +566,6 @@ button.link {
     height: 0px;
     width: 0px;
     float: left;
-}
-
-.skill {
-
 }
 
 /* decorative triangles */

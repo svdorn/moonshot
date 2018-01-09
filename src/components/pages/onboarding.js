@@ -8,7 +8,8 @@ class Onboarding extends Component {
         super(props);
 
         this.state = {
-            designAndDevInterests : [
+            currInterestArea: undefined,
+            designAndDevInterests: [
                 {
                     title: "Virtual Reality",
                     selected: false
@@ -75,7 +76,7 @@ class Onboarding extends Component {
                 },
 
             ],
-            dataInterests : [
+            dataInterests: [
                 {
                     title: "SQL",
                     selected: false
@@ -86,7 +87,7 @@ class Onboarding extends Component {
                 },
                 {
                     title: "Database Analysis",
-                    selected: false
+                    selected: true
                 },
                 {
                     title: "Data Security",
@@ -117,7 +118,7 @@ class Onboarding extends Component {
                     selected: false
                 },
             ],
-            softwareDevInterests : [
+            softwareDevInterests: [
                 {
                     title: "Angular",
                     selected: false
@@ -175,7 +176,7 @@ class Onboarding extends Component {
                     selected: false
                 },
             ],
-            businessInterests : [
+            businessInterests: [
                 {
                     title: "Google Analytics",
                     selected: false
@@ -237,7 +238,7 @@ class Onboarding extends Component {
                     selected: false
                 },
             ],
-            creationAndMarketingInterests : [
+            creationAndMarketingInterests: [
                 {
                     title: "Virtual Marketing",
                     selected: false
@@ -281,6 +282,13 @@ class Onboarding extends Component {
             ]
         }
     }
+
+    componentDidMount() {
+        this.setState({
+            currInterestArea: this.state.dataInterests
+        })
+    }
+
     render() {
 
         const style = {
@@ -300,6 +308,33 @@ class Onboarding extends Component {
                 marginRight: '90px',
             }
         };
+
+        let interests = undefined;
+        if (this.state.currInterestArea !== undefined) {
+            let key = 0;
+            let self = this;
+            interests = this.state.currInterestArea.map(function (interest) {
+                key++;
+                return (
+                    <li style={{verticalAlign: "top"}} key={key}>
+                        {interest.selected ?
+                            <div className="onboardingPage1Text2Background">
+                                <div className="smallText onboardingPage1Text2">
+                                    {interest.title}
+                                </div>
+                            </div>
+                            :
+                            <div className="gradientBorderBlue center" style={{marginRight: '20px', marginTop: '20px'}}>
+
+                                <div className="onboardingPage1Text3 smallText">
+                                    {interest.title}
+                                </div>
+                            </div>
+                        }
+                    </li>
+                );
+            });
+        }
 
         return (
             <div style={{marginBottom: '50px'}}>
@@ -339,8 +374,12 @@ class Onboarding extends Component {
                         </li>
                     </ul>
                 </div>
-                <div>
-
+                <div className="center">
+                    {interests ?
+                        <ul className="horizCenteredList onboardingInterestsListContainer">
+                            {interests}
+                        </ul>
+                        : null}
                 </div>
             </div>
         );
