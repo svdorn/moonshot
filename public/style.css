@@ -413,6 +413,12 @@ button.link {
     margin-right: 20px;
     margin-top: 20px;
 }
+.onboardingPage1Button{
+    background: linear-gradient(to right, #5deaff, #3dabff);
+    border: #3dabff;
+    padding: 7px;
+    margin-top: 20px;
+}
 
 
 .videoContainer {

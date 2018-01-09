@@ -1,7 +1,8 @@
 "use strict"
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Paper, Menu, MenuItem, Divider} from 'material-ui';
+import {updateInterests} from "../../actions/usersActions";
+import {bindActionCreators} from 'redux';
 
 class Onboarding extends Component {
     constructor(props) {
@@ -15,7 +16,7 @@ class Onboarding extends Component {
                     selected: false
                 },
                 {
-                    title: "Augmented Relity",
+                    title: "Augmented Reality",
                     selected: false
                 },
                 {
@@ -283,7 +284,7 @@ class Onboarding extends Component {
         }
     }
 
-    handleClick(index) {
+    handleIconClick(index) {
         let chosen = undefined;
         switch (index) {
             case 1:
@@ -307,6 +308,57 @@ class Onboarding extends Component {
         this.setState({
             currInterestArea: chosen
         })
+    }
+
+    handleInterestClick(interest) {
+        if (this.state.currInterestArea !== undefined) {
+            for (let i = 0; i < this.state.currInterestArea.length; i++) {
+                let int = this.state.currInterestArea[i];
+                if (int === interest) {
+                    if (interest.selected) {
+                        interest.selected = false;
+                    } else {
+                        interest.selected = true;
+                    }
+                    let area = this.state.currInterestArea[i];
+                    this.setState({area: interest});
+                    break;
+                }
+            }
+        }
+    }
+
+    handleButtonClick() {
+        let interests = [];
+        for (let i = 0; i < this.state.designAndDevInterests.length; i++) {
+            if (this.state.designAndDevInterests[i].selected) {
+                interests.push(this.state.designAndDevInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.dataInterests.length; i++) {
+            if (this.state.dataInterests[i].selected) {
+                interests.push(this.state.dataInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.softwareDevInterests.length; i++) {
+            if (this.state.softwareDevInterests[i].selected) {
+                interests.push(this.state.softwareDevInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.businessInterests.length; i++) {
+            if (this.state.businessInterests[i].selected) {
+                interests.push(this.state.businessInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.creationAndMarketingInterests.length; i++) {
+            if (this.state.creationAndMarketingInterests[i].selected) {
+                interests.push(this.state.creationAndMarketingInterests[i].title);
+            }
+        }
+        console.log(interests);
+        if (interests.length > 0) {
+            this.props.updateInterests(this.props.currentUser, interests);
+        }
     }
 
     render() {
@@ -336,7 +388,8 @@ class Onboarding extends Component {
             interests = this.state.currInterestArea.map(function (interest) {
                 key++;
                 return (
-                    <li style={{verticalAlign: "top"}} key={key}>
+                    <li style={{verticalAlign: "top"}} key={key} className="clickableNoUnderline"
+                        onClick={() => self.handleInterestClick(interest)}>
                         {interest.selected ?
                             <div className="onboardingPage1Text2Background">
                                 <div className="smallText onboardingPage1Text2">
@@ -370,7 +423,7 @@ class Onboarding extends Component {
                 <div>
                     <ul className="horizCenteredList onboardingListContainer">
                         <li style={style.iconLi} className="clickableNoUnderline"
-                            onClick={() => this.handleClick(1)}>
+                            onClick={() => this.handleIconClick(1)}>
                             {this.state.currInterestArea === this.state.designAndDevInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
@@ -390,7 +443,7 @@ class Onboarding extends Component {
                             }
                         </li>
                         <li style={style.iconLi} className="clickableNoUnderline"
-                            onClick={() => this.handleClick(2)}>
+                            onClick={() => this.handleIconClick(2)}>
                             {this.state.currInterestArea === this.state.dataInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
@@ -405,7 +458,7 @@ class Onboarding extends Component {
                                 </div>
                             }
                         </li>
-                        <li className="clickableNoUnderline" onClick={() => this.handleClick(3)}>
+                        <li className="clickableNoUnderline" onClick={() => this.handleIconClick(3)}>
                             {this.state.currInterestArea === this.state.softwareDevInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
@@ -423,7 +476,8 @@ class Onboarding extends Component {
                         </li>
                     </ul>
                     <ul className="horizCenteredList onboardingListContainer">
-                        <li style={style.iconLi} className="clickableNoUnderline" onClick={() => this.handleClick(4)}>
+                        <li style={style.iconLi} className="clickableNoUnderline"
+                            onClick={() => this.handleIconClick(4)}>
                             {this.state.currInterestArea === this.state.creationAndMarketingInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
@@ -439,7 +493,7 @@ class Onboarding extends Component {
                                 </div>
                             }
                         </li>
-                        <li className="clickableNoUnderline" onClick={() => this.handleClick(5)}>
+                        <li className="clickableNoUnderline" onClick={() => this.handleIconClick(5)}>
                             {this.state.currInterestArea === this.state.businessInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
@@ -463,17 +517,28 @@ class Onboarding extends Component {
                         </ul>
                         : null}
                 </div>
+                <div className="center">
+                    <button className="onboardingPage1Button" onClick={this.handleButtonClick.bind(this)}>
+                        <div className="smallText2 onboardingPage1Text2">
+                            Next
+                        </div>
+                    </button>
+                </div>
             </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        currentUser: state.users.currentUser,
+    };
 }
 
 function mapDispatchToProps(dispatch) {
-    return {};
+    return bindActionCreators({
+        updateInterests
+    }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Onboarding);
