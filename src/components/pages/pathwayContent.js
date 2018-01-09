@@ -221,7 +221,7 @@ class PathwayContent extends Component {
                                 label="Open Step List"
                                 onClick={this.handleToggle}
                                 primary={true}
-                                className="drawerOpener"
+                                className="drawerOpener raisedButtonWhiteText"
                             />
 
                             <Paper className="overviewAndCommentBox">

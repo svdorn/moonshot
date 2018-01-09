@@ -366,6 +366,10 @@ button.link {
     margin-top: 10px;
 }
 
+.raisedButtonWhiteText > button > div > div > span {
+    color: white !important;
+}
+
 @media only screen and (max-width: 1000px) {
     .videoContainer {
         width: 90%;
