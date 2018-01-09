@@ -268,7 +268,7 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
 
 export function updateInterests(user, interests) {
     return function(dispatch) {
-        axios.post("api/updateInterests", {
+        axios.post("/api/updateInterests", {
             params: {
                 userId: user._id,
                 interests: interests

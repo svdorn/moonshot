@@ -1000,6 +1000,7 @@ app.post("/userCurrentStep", function (req, res) {
 });
 
 app.post("/updateInterests", function(req, res) {
+    console.log("In API");
     const interests = req.body.params.interests;
     const userId = req.body.params.userId;
 
@@ -1008,10 +1009,11 @@ app.post("/updateInterests", function(req, res) {
         if (err) {
             console.log(err);
         }
-        for (let i = 0; i < user.info.interests.length; i++) {
+
+        for (let i = 0; i < interests.length; i++) {
             user.info.interests.push(interests[i]);
         }
-        console.log(user.info.interests);
+
         user.save(function (err, updatedUser) {
             if (err) {
                 console.log(err);
