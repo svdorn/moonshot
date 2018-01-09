@@ -39,31 +39,34 @@ class Onboarding extends Component {
                 <div className="smallText center" style={style.title.text}>What skills do you want to learn or
                     improve?
                 </div>
-                <div className="center">
+                <div>
                     <ul className="horizCenteredList onboardingListContainer">
-                        <li style={style.iconLi}>
+                        <li style={style.iconLi} className="clickableNoUnderline">
                             <img src="/icons/Cube.png" className="onboardingIcons"/>
                             <div className="onboardingIconsText center"><b>Product Design<br/>and Development</b></div>
                         </li>
-                        <li style={style.iconLi}>
+                        <li style={style.iconLi} className="clickableNoUnderline">
                             <img src="/icons/Data.png" className="onboardingIcons"/>
                             <div className="onboardingIconsText center"><b>Data</b></div>
                         </li>
-                        <li>
+                        <li className="clickableNoUnderline">
                             <img src="/icons/Computer.png" className="onboardingIcons"/>
                             <div className="onboardingIconsText center"><b>Software<br/> Development</b></div>
                         </li>
                     </ul>
                     <ul className="horizCenteredList onboardingListContainer">
-                        <li style={style.iconLi}>
+                        <li style={style.iconLi} className="clickableNoUnderline">
                             <img src="/icons/Creation.png" className="onboardingIcons"/>
                             <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b></div>
                         </li>
-                        <li>
+                        <li className="clickableNoUnderline">
                             <img src="/icons/Business.png" className="onboardingIcons"/>
                             <div className="onboardingIconsText center"><b>Business</b></div>
                         </li>
                     </ul>
+                </div>
+                <div>
+
                 </div>
             </div>
         );
