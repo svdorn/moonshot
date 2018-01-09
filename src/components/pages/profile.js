@@ -201,7 +201,7 @@ class Profile extends Component {
             });
         }
 
-        let divs = [];
+        let aboutMeLis = [];
 
         if (user) {
             const education = user.info.education;
@@ -210,26 +210,27 @@ class Profile extends Component {
             const goals = user.info.goals;
             const birthDate = user.info.birthDate;
             const languages = user.info.languages;
+            let aboutMeItems = [];
 
             let index = -1;
 
             if (education && education.length > 0) {
                 const schools = education.map(function(edu) {
                     // ADD THIS {edu.startDate.getFullYear()}-{edu.endDate.getFullYear()}
+                    const dates = edu.startDate.substring(0,4) + "-" + edu.endDate.substring(0,4);
                     return (
                         <div>
-                            {edu.school} <br/>
-                            {edu.degree}
+                            <div style={{float:"left"}}>{edu.school}</div>
+                            <div style={{float:"right"}}>{dates}</div><br/>
+                            <div style={{clear:"both", marginLeft:"60px"}}><i>{edu.degree}</i></div>
                         </div>
                     );
                 });
-                divs.push(
-                    <div>
-                        <img src="/icons/Book.png" />
-                        Education
-                        {schools}
-                    </div>
-                )
+                aboutMeItems.push({
+                    icon: "GraduationHat.png",
+                    title: "Education",
+                    content: schools
+                });
             }
             if (links && links.length > 0) {
                 index = -1;
@@ -237,82 +238,86 @@ class Profile extends Component {
                     // so that index is at the current place
                     index++;
                     return (
-                        <div>
-                            <a href={link.url}>{link.displayString}</a>
+                        <span>
+                            <a href={link.url} target="_blank">{link.displayString}</a>
                             {index < links.length - 1 ?
-                                <div className="menuDivider"/>
+                                <div className="linkSeparator" style={{backgroundColor:"black"}}/>
                                 : null
                             }
-                        </div>
+                        </span>
                     );
                 });
-
-                divs.push(
-                    <div>
-                        <img src="/icons/Link.png" />
-                        Links
-                        {linkOuts}
-                    </div>
-                );
+                aboutMeItems.push({
+                    icon: "Badge.png",
+                    title: "Links",
+                    content: linkOuts
+                });
             }
             if (interests && interests.length > 0) {
                 index = -1;
-                const interestsDiv = interests.map(function(interest) {
+                const interestsSpans = interests.map(function(interest) {
                     index++;
                     const comma = (index < interests.length - 1) ? ", " : "";
                     return (
-                        <div>{interest + comma}</div>
+                        <span>{interest + comma}</span>
                     );
                 });
-                divs.push(
-                    <div>
-                        <img src="/icons/Star.png" />
-                        Interests
-                        {interestsDiv}
-                    </div>
-                );
+                aboutMeItems.push({
+                    icon: "Lightbulb.png",
+                    title: "Interests",
+                    content: <div>{interestsSpans}</div>
+                });
             }
             if (goals && goals.length > 0) {
-                const goalsDiv = goals.map(function(goal) {
+                index = -1;
+                const goalsSpans = goals.map(function(goal) {
+                    index++;
+                    const comma = (index < goals.length - 1) ? ", " : "";
                     return (
-                        <div>{goal + ", "}</div>
+                        <span>{goal + comma}</span>
                     );
                 });
-                divs.push(
-                    <div>
-                        <img src="/icons/Target.png" />
-                        Goals
-                        {goalsDiv}
-                    </div>
-                );
+                aboutMeItems.push({
+                    icon: "GraduationHat.png",
+                    title: "Goals",
+                    content: <div>{goalsSpans}</div>
+                });
             }
             if (birthDate) {
+                console.log(birthDate);
                 // ADD THIS {(birthDate.getMonth() + 1) + "/" + birthDate.getDate() + "/" + birthDate.getYear()}
-                divs.push(
-                    <div>
-                        <img src="/icons/CalendarBlue.png" />
-                        D.O.B.
-
-                    </div>
-                );
+                const date = birthDate.substring(5, 7) + "/" + birthDate.substring(8, 10) + "/" + birthDate.substring(0, 2);
+                aboutMeItems.push({
+                    icon: "CalendarBlue.png",
+                    title: "D.O.B.",
+                    content: date
+                });
             }
             if (languages && languages.length > 0) {
                 index = -1;
-                const languagesDiv = interests.map(function(language) {
+                const languagesSpans = languages.map(function(language) {
                     index++;
                     const comma = (index < languages.length - 1) ? ", " : "";
                     return (
-                        <div>{language + comma}</div>
+                        <span>{language + comma}</span>
                     );
                 });
-                divs.push(
-                    <div>
-                        <img src="/icons/SpeechBubbleOutline.png" />
-                        Languages
-                        {languagesDiv}
-                    </div>
-                );
+                aboutMeItems.push({
+                    icon: "SpeechBubble.png",
+                    title: "Languages",
+                    content: <div>{languagesSpans}</div>
+                });
             }
+
+            aboutMeLis = aboutMeItems.map(function(item) {
+                return (
+                    <li className="aboutMeLi" key={item.title}>
+                        <img src={"/icons/" + item.icon} />
+                        <div>{item.title}</div>
+                        {item.content}
+                    </li>
+                );
+            });
         }
 
         return (
@@ -409,9 +414,11 @@ class Profile extends Component {
                                     <div style={{clear: "both"}}/>
                                 </div>
 
-                                <div>
-                                    { divs }
-                                </div>
+                                {user.info.description}
+
+                                <ul className="horizCenteredList">
+                                    { aboutMeLis }
+                                </ul>
 
                             </div>
                             : <div className="center"><CircularProgress
