@@ -266,6 +266,23 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
     }
 }
 
+export function updateInterests(user, interests) {
+    return function(dispatch) {
+        axios.post("api/updateInterests", {
+            params: {
+                userId: user._id,
+                interests: interests
+            }
+        })
+            .then(function(response) {
+                console.log("updates to interests saved")
+            })
+            .catch(function(err) {
+                console.log("error updating interests: ", err)
+            });
+    }
+}
+
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
     return function(dispatch) {

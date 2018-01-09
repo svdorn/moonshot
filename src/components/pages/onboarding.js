@@ -1,7 +1,8 @@
 "use strict"
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Paper, Menu, MenuItem, Divider} from 'material-ui';
+import {updateInterests} from "../../actions/usersActions";
+import {bindActionCreators} from 'redux';
 
 class Onboarding extends Component {
     constructor(props) {
@@ -327,6 +328,39 @@ class Onboarding extends Component {
         }
     }
 
+    handleButtonClick() {
+        let interests = [];
+        for (let i = 0; i < this.state.designAndDevInterests.length; i++) {
+            if (this.state.designAndDevInterests[i].selected) {
+                interests.push(this.state.designAndDevInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.dataInterests.length; i++) {
+            if (this.state.dataInterests[i].selected) {
+                interests.push(this.state.dataInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.softwareDevInterests.length; i++) {
+            if (this.state.softwareDevInterests[i].selected) {
+                interests.push(this.state.softwareDevInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.businessInterests.length; i++) {
+            if (this.state.businessInterests[i].selected) {
+                interests.push(this.state.businessInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.creationAndMarketingInterests.length; i++) {
+            if (this.state.creationAndMarketingInterests[i].selected) {
+                interests.push(this.state.creationAndMarketingInterests[i].title);
+            }
+        }
+        console.log(interests);
+        if (interests.length > 0) {
+            this.props.updateInterests(this.props.currentUser, interests);
+        }
+    }
+
     render() {
 
         const style = {
@@ -442,7 +476,8 @@ class Onboarding extends Component {
                         </li>
                     </ul>
                     <ul className="horizCenteredList onboardingListContainer">
-                        <li style={style.iconLi} className="clickableNoUnderline" onClick={() => this.handleIconClick(4)}>
+                        <li style={style.iconLi} className="clickableNoUnderline"
+                            onClick={() => this.handleIconClick(4)}>
                             {this.state.currInterestArea === this.state.creationAndMarketingInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
@@ -482,17 +517,28 @@ class Onboarding extends Component {
                         </ul>
                         : null}
                 </div>
+                <div className="center">
+                    <button className="onboardingPage1Button" onClick={this.handleButtonClick.bind(this)}>
+                        <div className="smallText2 onboardingPage1Text2">
+                            Next
+                        </div>
+                    </button>
+                </div>
             </div>
         );
     }
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        currentUser: state.users.currentUser,
+    };
 }
 
 function mapDispatchToProps(dispatch) {
-    return {};
+    return bindActionCreators({
+        updateInterests
+    }, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Onboarding);

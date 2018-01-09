@@ -999,6 +999,30 @@ app.post("/userCurrentStep", function (req, res) {
     })
 });
 
+app.post("/updateInterests", function(req, res) {
+    const interests = req.body.params.interests;
+    const userId = req.body.params.userId;
+
+    // When true returns the updated document
+    Users.findById(userId, function(err, user) {
+        if (err) {
+            console.log(err);
+        }
+        for (let i = 0; i < user.info.interests.length; i++) {
+            user.info.interests.push(interests[i]);
+        }
+        console.log(user.info.interests);
+        user.save(function (err, updatedUser) {
+            if (err) {
+                console.log(err);
+                res.send(false);
+            }
+            res.send(true);
+        });
+    })
+
+});
+
 
 //----->> GET IMAGES <<------
 // app.get('/images', function (req, res) {
