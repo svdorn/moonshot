@@ -59,7 +59,6 @@ class Main extends Component {
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <Menu/>
                     <Notification/>
-
                         { this.props.children }
                     <Footer/>
                 </MuiThemeProvider>
@@ -78,7 +77,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
-        notification: state.users.notification
+        notification: state.users.notification,
     };
 }
 
