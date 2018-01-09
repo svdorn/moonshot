@@ -394,15 +394,6 @@ class Profile extends Component {
                                     </Tabs>
                                 </div>
 
-                                <div className="profileSeparator">
-                                    <div className="profileSeparatorRect">
-                                        <b>PROJECTS</b>
-                                    </div>
-                                    <div className="profileSeparatorTri">
-                                    </div>
-                                    <div style={{clear: "both"}}/>
-                                </div>
-
 
                                 <div className="profileSeparator">
                                     <div className="profileSeparatorRect">
