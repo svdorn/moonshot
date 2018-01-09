@@ -137,8 +137,7 @@ class Home extends Component{
 
                     <div className="infoBox whiteText mediumText noWrap" style={{zIndex:"20"}}>
                         Skip the resum&eacute;.<br/>
-                        Learn skills for the future<br/>
-                        that employers want now,<br/>
+                        Learn the skills that employers want<br/>
                         <i>for free.</i><br/>
                         <button className="outlineButton blueWhiteButton"
                             onClick={() => this.goTo('/signup')}>
@@ -210,8 +209,7 @@ class Home extends Component{
 
                 <div className="center">
                     <h1 className="isolatedHeader">
-                        Build a skillset<br/>
-                        adapted to the speed of technology.
+                        <b>Build a skillset adapted to the speed of technology.</b>
                     </h1>
                     <div>
                         { exampleSkills }

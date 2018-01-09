@@ -226,7 +226,7 @@ class Profile extends Component {
                     );
                 });
                 aboutMeItems.push({
-                    icon: "GraduationHat.png",
+                    icon: "BookBlue.png",
                     title: "Education",
                     content: schools
                 });
@@ -247,7 +247,7 @@ class Profile extends Component {
                     );
                 });
                 aboutMeItems.push({
-                    icon: "Badge.png",
+                    icon: "Links.png",
                     title: "Links",
                     content: linkOuts
                 });
@@ -262,7 +262,7 @@ class Profile extends Component {
                     );
                 });
                 aboutMeItems.push({
-                    icon: "Lightbulb.png",
+                    icon: "StarBlue.png",
                     title: "Interests",
                     content: <div>{interestsSpans}</div>
                 });
@@ -277,7 +277,7 @@ class Profile extends Component {
                     );
                 });
                 aboutMeItems.push({
-                    icon: "GraduationHat.png",
+                    icon: "TargetBlue.png",
                     title: "Goals",
                     content: <div>{goalsSpans}</div>
                 });
@@ -302,7 +302,7 @@ class Profile extends Component {
                     );
                 });
                 aboutMeItems.push({
-                    icon: "SpeechBubble.png",
+                    icon: "SingleSpeechBubbleBlue.png",
                     title: "Languages",
                     content: <div>{languagesSpans}</div>
                 });
