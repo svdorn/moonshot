@@ -216,7 +216,6 @@ class Profile extends Component {
 
             if (education && education.length > 0) {
                 const schools = education.map(function(edu) {
-                    // ADD THIS {edu.startDate.getFullYear()}-{edu.endDate.getFullYear()}
                     const dates = edu.startDate.substring(0,4) + "-" + edu.endDate.substring(0,4);
                     return (
                         <div>
@@ -414,7 +413,7 @@ class Profile extends Component {
                                     <div style={{clear: "both"}}/>
                                 </div>
 
-                                {user.info.description}
+                                <div className="textWithMargin">{user.info.description}</div>
 
                                 <ul className="horizCenteredList">
                                     { aboutMeLis }

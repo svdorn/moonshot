@@ -386,7 +386,7 @@ button.link {
     vertical-align: top;
     text-align: left;
     padding-left: 5%;
-    font-size: 18px;
+    font-size: 20px;
     margin-bottom: 30px;
 }
 .aboutMeLi > div:first-of-type {
@@ -397,6 +397,11 @@ button.link {
 .aboutMeLi > span > a {
     color: black;
     text-decoration: underline;
+}
+.textWithMargin {
+    font-size: 20px;
+    padding-top: 10px;
+    margin: 0px 80px 50px 55px;
 }
 
 
