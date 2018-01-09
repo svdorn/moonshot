@@ -130,15 +130,6 @@ class Pathway extends Component {
                 }
 
             },
-            infoBoxes: {
-                image: {
-                    height: "70px",
-                    position: "absolute",
-                    top: "0",
-                    bottom: "0",
-                    margin: "auto -210px auto"
-                },
-            },
             imageLeftTextRight: {
                 position: "relative",
                 textAlign: "left"
@@ -457,7 +448,7 @@ class Pathway extends Component {
                                                 <img
                                                     src="/icons/NoMoney.png"
                                                     alt="Free"
-                                                    style={style.infoBoxes.image}
+                                                    className="infoBoxImage"
                                                 />
                                                 <div className="smallText2">
                                                     It{"'"}s free.<br/>
@@ -471,7 +462,7 @@ class Pathway extends Component {
                                                 <img
                                                     src="/icons/Portfolio.png"
                                                     alt="Portfolio"
-                                                    style={style.infoBoxes.image}
+                                                    className="infoBoxImage"
                                                 />
                                                 <div className="smallText2">
                                                     Learn {pathway.sponsor.learn}<br/>
@@ -487,7 +478,7 @@ class Pathway extends Component {
                                                 <img
                                                     src="/icons/CheckMark.png"
                                                     alt="Check Mark"
-                                                    style={style.infoBoxes.image}
+                                                    className="infoBoxImage"
                                                 />
                                                 <div className="smallText2">
                                                     Get evaluated by {pathway.sponsor.name}<br/>

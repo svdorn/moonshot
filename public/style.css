@@ -196,6 +196,20 @@ button.link {
     padding-top: 200px;
 }
 
+.infoBoxImage {
+    height: 70px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto -210px auto;
+}
+
+.isolatedHeader {
+    font-size: 30px;
+    margin: 100px 0px 30px;
+    display: inline-block;
+}
+
 .pathwayHeaderText {
     margin-left: 50px;
     padding-top: 100px;
@@ -355,6 +369,18 @@ button.link {
 .onboardingInterestsListContainer {
     margin: 30px auto 0;
     width: 50%;
+}
+
+.logoBar {
+    text-align: center;
+    margin: 20px 0px;
+}
+.logoBar > img:last-of-type {
+    margin-right: 0px;
+}
+.logoBarLogo {
+    height: 50px;
+    margin-right: 30px;
 }
 
 .bigText { font-size: 48px; }
