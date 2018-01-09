@@ -217,20 +217,15 @@ class Profile extends Component {
             if (education && education.length > 0) {
                 const schools = education.map(function(edu) {
                     // ADD THIS {edu.startDate.getFullYear()}-{edu.endDate.getFullYear()}
+                    const dates = edu.startDate.substring(0,4) + "-" + edu.endDate.substring(0,4);
                     return (
                         <div>
-                            {edu.school} <br/>
-                            {edu.degree}
+                            <div style={{float:"left"}}>{edu.school}</div>
+                            <div style={{float:"right"}}>{dates}</div><br/>
+                            <div style={{clear:"both", marginLeft:"60px"}}><i>{edu.degree}</i></div>
                         </div>
                     );
                 });
-                // divs.push(
-                //     <li className="aboutMeLi">
-                //         <img src="/icons/GraduationHat.png" />
-                //         Education
-                //         {schools}
-                //     </li>
-                // )
                 aboutMeItems.push({
                     icon: "GraduationHat.png",
                     title: "Education",
@@ -243,23 +238,15 @@ class Profile extends Component {
                     // so that index is at the current place
                     index++;
                     return (
-                        <div>
+                        <span>
                             <a href={link.url} target="_blank">{link.displayString}</a>
                             {index < links.length - 1 ?
-                                <div className="menuDivider"/>
+                                <div className="menuDivider" style={{backgroundColor:"black"}}/>
                                 : null
                             }
-                        </div>
+                        </span>
                     );
                 });
-
-                // divs.push(
-                //     <li className="aboutMeLi">
-                //         <img src="/icons/Badge.png" />
-                //         Links
-                //         {linkOuts}
-                //     </li>
-                // );
                 aboutMeItems.push({
                     icon: "Badge.png",
                     title: "Links",
@@ -268,61 +255,63 @@ class Profile extends Component {
             }
             if (interests && interests.length > 0) {
                 index = -1;
-                const interestsDiv = interests.map(function(interest) {
+                const interestsSpans = interests.map(function(interest) {
                     index++;
                     const comma = (index < interests.length - 1) ? ", " : "";
                     return (
-                        <div>{interest + comma}</div>
+                        <span>{interest + comma}</span>
                     );
                 });
                 aboutMeItems.push({
                     icon: "Lightbulb.png",
                     title: "Interests",
-                    content: interestsDiv
+                    content: <div>{interestsSpans}</div>
                 });
             }
             if (goals && goals.length > 0) {
                 index = -1;
-                const goalsDiv = goals.map(function(goal) {
+                const goalsSpans = goals.map(function(goal) {
                     index++;
-                    const comma = (index < interests.length - 1) ? ", " : "";
+                    const comma = (index < goals.length - 1) ? ", " : "";
                     return (
-                        <div>{goal + comma}</div>
+                        <span>{goal + comma}</span>
                     );
                 });
                 aboutMeItems.push({
                     icon: "GraduationHat.png",
                     title: "Goals",
-                    content: goalsDiv
+                    content: <div>{goalsSpans}</div>
                 });
             }
             if (birthDate) {
+                console.log(birthDate);
                 // ADD THIS {(birthDate.getMonth() + 1) + "/" + birthDate.getDate() + "/" + birthDate.getYear()}
+                const date = birthDate.substring(5, 7) + "/" + birthDate.substring(8, 10) + "/" + birthDate.substring(0, 2);
                 aboutMeItems.push({
                     icon: "CalendarBlue.png",
                     title: "D.O.B.",
-                    content: null
+                    content: date
                 });
             }
             if (languages && languages.length > 0) {
                 index = -1;
-                const languagesDiv = languages.map(function(language) {
+                const languagesSpans = languages.map(function(language) {
                     index++;
                     const comma = (index < languages.length - 1) ? ", " : "";
                     return (
-                        <div>{language + comma}</div>
+                        <span>{language + comma}</span>
                     );
                 });
                 aboutMeItems.push({
                     icon: "SpeechBubble.png",
                     title: "Languages",
-                    content: languagesDiv
+                    content: <div>{languagesSpans}</div>
                 });
             }
 
             aboutMeLis = aboutMeItems.map(function(item) {
                 return (
-                    <li className="aboutMeLi">
+                    <li className="aboutMeLi" key={item.title}>
                         <img src={"/icons/" + item.icon} />
                         <h2>{item.title}</h2>
                         {item.content}
