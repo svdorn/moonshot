@@ -205,6 +205,16 @@ button.link {
 .center { text-align: center; }
 .centerButton { display:flex; justify-content: center; }
 
+.gradientBorderBlue {
+    background: linear-gradient(to bottom right, #5deaff, #3dabff);
+    padding: 2px;
+}
+.gradientBorderBlue > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+
 .gradientBorder {
     background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));
     padding: 4px;
@@ -313,6 +323,35 @@ button.link {
     width: 2px;
 }
 
+.onboardingDividerLeft {
+    background-image: linear-gradient(to right, #5deaff, #3dabff);
+    border-right: 200px solid #00c3ff;
+    right: 50%;
+}
+.onboardingDividerRight {
+    background-image: linear-gradient(to right, #5deaff, #3dabff);
+    border-left: 200px solid #00c3ff;
+    left: 50%;
+}
+.onboardingDividerRight, .onboardingDividerLeft {
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    bottom: 0;
+}
+
+.onboardingIcons {
+    height: 60px;
+    vertical-align: top;
+}
+.onboardingIconsText {
+    font-size: 16px;
+}
+.onboardingListContainer {
+    margin-top: 30px;
+}
 
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
@@ -325,6 +364,11 @@ button.link {
 .blueText { color: var(--moonshotLightBlue) }
 .purpleText { color: var(--moonshotPurple) }
 .darkPurpleText { color: var(--moonshotDarkPurple) }
+.onboardingPage1Text {
+    background: linear-gradient(to right, #5deaff, #3dabff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
 
 
 .videoContainer {
@@ -504,6 +548,10 @@ button.link {
     height: 0px;
     width: 0px;
     float: left;
+}
+
+.skill {
+
 }
 
 /* decorative triangles */
