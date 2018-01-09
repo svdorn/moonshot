@@ -267,19 +267,17 @@ class Profile extends Component {
                     content: <div>{interestsSpans}</div>
                 });
             }
-            if (goals && goals.length > 0) {
+            if (goals && goals.positionType && goals.positionTitle) {
                 index = -1;
-                const goalsSpans = goals.map(function(goal) {
-                    index++;
-                    const comma = (index < goals.length - 1) ? ", " : "";
-                    return (
-                        <span>{goal + comma}</span>
-                    );
-                });
                 aboutMeItems.push({
                     icon: "TargetBlue.png",
                     title: "Goals",
-                    content: <div>{goalsSpans}</div>
+                    content: (
+                        <div>
+                            {goals.positionType}<br/>
+                            {goals.positionTitle}
+                        </div>
+                    )
                 });
             }
             if (birthDate) {
