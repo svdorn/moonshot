@@ -15,7 +15,7 @@ class Onboarding extends Component {
                     selected: false
                 },
                 {
-                    title: "Augmented Relity",
+                    title: "Augmented Reality",
                     selected: false
                 },
                 {
@@ -283,7 +283,7 @@ class Onboarding extends Component {
         }
     }
 
-    handleClick(index) {
+    handleIconClick(index) {
         let chosen = undefined;
         switch (index) {
             case 1:
@@ -307,6 +307,24 @@ class Onboarding extends Component {
         this.setState({
             currInterestArea: chosen
         })
+    }
+
+    handleInterestClick(interest) {
+        if (this.state.currInterestArea !== undefined) {
+            for (let i = 0; i < this.state.currInterestArea.length; i++) {
+                let int = this.state.currInterestArea[i];
+                if (int === interest) {
+                    if (interest.selected) {
+                        interest.selected = false;
+                    } else {
+                        interest.selected = true;
+                    }
+                    let area = this.state.currInterestArea[i];
+                    this.setState({area: interest});
+                    break;
+                }
+            }
+        }
     }
 
     render() {
@@ -336,7 +354,8 @@ class Onboarding extends Component {
             interests = this.state.currInterestArea.map(function (interest) {
                 key++;
                 return (
-                    <li style={{verticalAlign: "top"}} key={key}>
+                    <li style={{verticalAlign: "top"}} key={key} className="clickableNoUnderline"
+                        onClick={() => self.handleInterestClick(interest)}>
                         {interest.selected ?
                             <div className="onboardingPage1Text2Background">
                                 <div className="smallText onboardingPage1Text2">
@@ -370,7 +389,7 @@ class Onboarding extends Component {
                 <div>
                     <ul className="horizCenteredList onboardingListContainer">
                         <li style={style.iconLi} className="clickableNoUnderline"
-                            onClick={() => this.handleClick(1)}>
+                            onClick={() => this.handleIconClick(1)}>
                             {this.state.currInterestArea === this.state.designAndDevInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
@@ -390,7 +409,7 @@ class Onboarding extends Component {
                             }
                         </li>
                         <li style={style.iconLi} className="clickableNoUnderline"
-                            onClick={() => this.handleClick(2)}>
+                            onClick={() => this.handleIconClick(2)}>
                             {this.state.currInterestArea === this.state.dataInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
@@ -405,7 +424,7 @@ class Onboarding extends Component {
                                 </div>
                             }
                         </li>
-                        <li className="clickableNoUnderline" onClick={() => this.handleClick(3)}>
+                        <li className="clickableNoUnderline" onClick={() => this.handleIconClick(3)}>
                             {this.state.currInterestArea === this.state.softwareDevInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
@@ -423,7 +442,7 @@ class Onboarding extends Component {
                         </li>
                     </ul>
                     <ul className="horizCenteredList onboardingListContainer">
-                        <li style={style.iconLi} className="clickableNoUnderline" onClick={() => this.handleClick(4)}>
+                        <li style={style.iconLi} className="clickableNoUnderline" onClick={() => this.handleIconClick(4)}>
                             {this.state.currInterestArea === this.state.creationAndMarketingInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
@@ -439,7 +458,7 @@ class Onboarding extends Component {
                                 </div>
                             }
                         </li>
-                        <li className="clickableNoUnderline" onClick={() => this.handleClick(5)}>
+                        <li className="clickableNoUnderline" onClick={() => this.handleIconClick(5)}>
                             {this.state.currInterestArea === this.state.businessInterests ?
                                 <div className="gradientBorderBlue center">
                                     <div style={{padding: '5px'}}>
