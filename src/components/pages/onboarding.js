@@ -14,12 +14,15 @@ class Onboarding extends Component {
                 },
                 divider: {
                     position: 'relative',
-                    marginBottom: '25px',
+                    marginBottom: '20px',
                 },
                 text: {
-                    marginBottom: '20px',
+                    marginBottom: '30px',
                 }
             },
+            iconLi: {
+                marginRight: '90px',
+            }
         };
 
         return (
@@ -33,6 +36,32 @@ class Onboarding extends Component {
                 </div>
                 <div className="smallText center" style={style.title.text}>What skills do you want to learn or
                     improve?
+                </div>
+                <div className="center">
+                    <ul className="horizCenteredList onboardingListContainer">
+                        <li style={style.iconLi}>
+                            <img src="/icons/Cube.png" className="onboardingIcons"/>
+                            <div className="onboardingIconsText center"><b>Product Design<br/>and Development</b></div>
+                        </li>
+                        <li style={style.iconLi}>
+                            <img src="/icons/Data.png" className="onboardingIcons"/>
+                            <div className="onboardingIconsText center"><b>Data</b></div>
+                        </li>
+                        <li>
+                            <img src="/icons/Computer.png" className="onboardingIcons"/>
+                            <div className="onboardingIconsText center"><b>Software<br/> Development</b></div>
+                        </li>
+                    </ul>
+                    <ul className="horizCenteredList onboardingListContainer">
+                        <li style={style.iconLi}>
+                            <img src="/icons/Creation.png" className="onboardingIcons"/>
+                            <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b></div>
+                        </li>
+                        <li>
+                            <img src="/icons/Business.png" className="onboardingIcons"/>
+                            <div className="onboardingIconsText center"><b>Business</b></div>
+                        </li>
+                    </ul>
                 </div>
             </div>
         );

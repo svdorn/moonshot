@@ -332,6 +332,17 @@ button.link {
     bottom: 0;
 }
 
+.onboardingIcons {
+    height: 60px;
+    vertical-align: top;
+}
+.onboardingIconsText {
+    font-size: 16px;
+}
+.onboardingListContainer {
+    margin-top: 30px;
+}
+
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
 .smallText3 { font-size: 30px; }
