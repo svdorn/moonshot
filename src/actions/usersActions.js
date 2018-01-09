@@ -48,9 +48,7 @@ export function login(user) {
       .then(function(response) {
         dispatch({type:"LOGIN", payload: response.data});
         dispatch({type: "CLOSE_NOTIFICATION"});
-          // TEMPORARY, SWITCH BACK TO PUSHING THEM TO LANDING PAGE
-          browserHistory.push('/onboarding');
-        // browserHistory.push('/discover');
+        browserHistory.push('/discover');
 
         axios.post("/api/userSession", {userId: response.data._id})
             .then(function(response) {
