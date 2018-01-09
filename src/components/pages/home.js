@@ -255,10 +255,127 @@ class Home extends Component{
 
 
 
+
+
+
+
+
             </div>
         );
     }
 }
+
+// <div className="fullHeight" >
+//     <div style={{textAlign:"center", width: "50%"}}>
+//         <ul className="horizCenteredList homepageBenefitsList">
+//             <li style={{marginRight:"14%"}}>
+//                 <div style={{position:"relative"}}>
+//                     <img
+//                         src="/icons/Tree.png"
+//                         alt="Tree"
+//                         style={{
+//                             height:"90px",
+//                             position:"absolute",
+//                             marginTop:"20px",
+//                             marginLeft:"-200px"
+//                         }}
+//                     />
+//                     <img
+//                         src="/icons/BlockyPerson.png"
+//                         alt="Profile"
+//                         style={{
+//                             height:"70px",
+//                             position:"absolute",
+//                             marginTop:"300px",
+//                             marginLeft:"-190px"
+//                         }}
+//                     />
+//                     <div className="smallText2">
+//                         Free
+//
+//                         <div style={{height:"100px"}} />
+//
+//                         Relevant to your future<br/>
+//                         and on pace with technology<br/>
+//                     </div>
+//                 </div>
+//             </li>
+//             <li>
+//                 <div style={{position:"relative"}}>
+//                     <img
+//                         src="/icons/Price.png"
+//                         alt="Price"
+//                         style={{
+//                             height:"90px",
+//                             position:"absolute",
+//                             marginTop:"20px",
+//                             marginLeft:"-190px"
+//                         }}
+//                     />
+//                     <img
+//                         src="/icons/PaperAndPencil.png"
+//                         alt="Contracting"
+//                         style={{
+//                             height:"80px",
+//                             position:"absolute",
+//                             marginTop:"290px",
+//                             marginLeft:"-195px"
+//                         }}
+//                     />
+//                     <div className="smallText2">
+//                         Prepare for the Future<br/>
+//                         at no cost to you.<br/>
+//                         Learn skills from courses<br/>
+//                         paid for by the employer.
+//                     </div>
+//
+//                     <div style={{height:"100px"}} />
+//
+//                     <div className="smallText2">
+//                         <h2 style={{fontSize:"30px", color:"#b769ff"}}>
+//                             <strong>CONTRACTING</strong>
+//                         </h2>
+//                         Still in school or too busy<br/>
+//                         For a full-time job?<br/>
+//                         Credential yourself for employers<br/>
+//                         looking for contractors.
+//                     </div>
+//                 </div>
+//             </li>
+//         </ul>
+//
+//         <button className="outlineButton" style={{
+//             color:"#b769ff",
+//             border:"3px solid #b769ff",
+//             marginTop:"30px" }}
+//             onClick={() => this.goTo('/signup')}>
+//             {"I'm Ready For"}<br/>
+//             {"The Future"}
+//         </button>
+//     </div>
+// </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 // <div className="fullHeight">
