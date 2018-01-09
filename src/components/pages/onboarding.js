@@ -2,6 +2,8 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Paper, Menu, MenuItem, Divider} from 'material-ui';
+import { designAndDevInterests, dataInterests, softwareDevInterests, businessInterests, creationAndMarketingInterests }
+from '../consts/onboardingInterests';
 
 class Onboarding extends Component {
 
