@@ -146,7 +146,7 @@ class PathwayContent extends Component {
 
         }
 
-        let content = <div>"here"</div>;
+        let content = <div>"loading"</div>;
         // if the user is on a step, show that content
         if (this.props.step) {
             const contentType = this.props.step.contentType;
@@ -199,7 +199,7 @@ class PathwayContent extends Component {
 
                                 <Paper className="questionsContactUs">
                                     <img
-                                        src="/icons/VoiceBubble.png"
+                                        src="/icons/SpeechBubble.png"
                                         style={{height: "50px", width: "50px", position: "absolute"}}
                                     />
                                     <span style={{fontSize: "20px", marginLeft: "75px"}}>
@@ -251,8 +251,8 @@ class PathwayContent extends Component {
                                 <div style={{textAlign: "center"}}>
                                     <Tabs
                                         inkBarStyle={{background: '#B869FF'}}
-                                        tabItemContainerStyle={{width: '40%'}}
-                                        className="myPathwaysTabs"
+                                        tabItemContainerStyle={{width: '60%'}}
+                                        className="overviewExercisesComments"
                                     >
                                         <Tab label="Overview" style={style.tab}>
                                             <p className="smallText2 center" style={style.insideTab}>{pathway.overview}</p>
