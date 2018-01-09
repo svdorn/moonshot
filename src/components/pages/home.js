@@ -203,7 +203,9 @@ class Home extends Component{
                     </div>
                 </div>
 
-                <div className="homepageSeparatorContainer"><div className="homepageSeparator" /></div>
+                <div className="homepageSeparatorContainer">
+                    <div className="homepageSeparator" style={{marginTop:"40px"}}/>
+                </div>
 
 
                 <div className="center">
@@ -217,11 +219,16 @@ class Home extends Component{
                 </div>
 
 
+                <div className="homepageSeparatorContainer" style={{marginTop: "80px"}}>
+                    <div className="homepageSeparator" />
+                </div>
+
+
                 <div className="fullHeight" style={{textAlign:"center"}}>
                     <img
                         src="/images/PathwaysText.png"
                         alt="Pathways"
-                        style={{marginTop:"100px", marginBottom:"15px", width:"265px"}}
+                        style={{marginTop:"60px", marginBottom:"15px", width:"265px"}}
                     /><br/>
                     <div style={{
                         margin: "0px 160px",
@@ -236,10 +243,16 @@ class Home extends Component{
                             {pathwayPreviews}
                         </ul>
                     </div>
+                    <button
+                        className="outlineButton whiteBlueButton"
+                        style={{marginTop:"30px"}}
+                        onClick={() => this.goTo('/signup')}>
+                        Create your free account
+                    </button>
                 </div>
 
 
-
+                <div className="homepageSeparatorContainer"><div className="homepageSeparator" /></div>
 
 
 
