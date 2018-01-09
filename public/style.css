@@ -305,6 +305,13 @@ button.link {
     position: absolute;
     bottom: 0;
 }
+.linkSeparator {
+    background-color: black;
+    display: inline-block;
+    margin: 0px 20px;
+    height: 16px;
+    width: 2px;
+}
 
 
 .bigText { font-size: 48px; }
@@ -380,12 +387,20 @@ button.link {
     text-align: left;
     padding-left: 5%;
     font-size: 18px;
+    margin-bottom: 30px;
 }
-.aboutMeLi > h2 {
-    display: inline;
-    margin-left: 70px;
+.aboutMeLi > div:first-of-type {
+    margin: 5px 70px 15px;
     color: #00d2ff;
+    font-size: 26px;
 }
+.aboutMeLi > span > a {
+    color: black;
+    text-decoration: underline;
+}
+
+
+
 
 @media only screen and (max-width: 1000px) {
     .videoContainer {

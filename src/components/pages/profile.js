@@ -241,7 +241,7 @@ class Profile extends Component {
                         <span>
                             <a href={link.url} target="_blank">{link.displayString}</a>
                             {index < links.length - 1 ?
-                                <div className="menuDivider" style={{backgroundColor:"black"}}/>
+                                <div className="linkSeparator" style={{backgroundColor:"black"}}/>
                                 : null
                             }
                         </span>
@@ -313,7 +313,7 @@ class Profile extends Component {
                 return (
                     <li className="aboutMeLi" key={item.title}>
                         <img src={"/icons/" + item.icon} />
-                        <h2>{item.title}</h2>
+                        <div>{item.title}</div>
                         {item.content}
                     </li>
                 );
