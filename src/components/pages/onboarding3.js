@@ -10,8 +10,36 @@ class Onboarding3 extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {}
+        this.state = {
+            location: {
+                city: "",
+                state: "",
+                country: "",
+                zip: ""
+            },
+            dateOfBirth: "",
+            bio: "",
+            description: "",
+            educationAreas: [(
+                <ul className="horizCenteredList">
+                    <li className="onboardingLeftInput">
+                        School<br/>
+                        <input /> <br/>
+                        Graduation Date<br/>
+                        <input /><br/>
+                    </li>
+                    <li className="onboardingRightInput">
+                        {"MAJORS(s), minors"}<br/>
+                        <input /><br/>
+                        G.P.A.<br/>
+                        <input /><br/>
+                    </li>
+                </ul>
+            )]
+        }
     }
+
+
 
 
     handleButtonClick() {
@@ -20,8 +48,35 @@ class Onboarding3 extends Component {
         window.scrollTo(0,0);
     }
 
-    render() {
+    addEducationArea() {
+        console.log("adding education area");
+        // copy the old education area array
+        let educationAreas = this.state.educationAreas.slice();
 
+        educationAreas.push(
+            <ul className="horizCenteredList">
+                <li className="onboardingLeftInput">
+                    School<br/>
+                    <input /> <br/>
+                    Graduation Date<br/>
+                    <input /><br/>
+                </li>
+                <li className="onboardingRightInput">
+                    {"MAJORS(s), minors"}<br/>
+                    <input /><br/>
+                    G.P.A.<br/>
+                    <input /><br/>
+                </li>
+            </ul>
+        );
+
+        this.setState({
+            ...this.state,
+            educationAreas
+        })
+    }
+
+    render() {
         const style = {
             title: {
                 topTitle: {
@@ -35,6 +90,8 @@ class Onboarding3 extends Component {
                     marginBottom: '30px',
                 }
             },
+            leftInput: { marginLeft:"80px" },
+            rightInput: { marginRight:"80px" },
             iconLi: {
                 marginRight: '90px',
             },
@@ -63,20 +120,20 @@ class Onboarding3 extends Component {
                 </div>
 
                 <div className="horizCenteredList">
-                    <li style={style.leftInput}>
-                        Date of Birth
-                        <input />
-                        Bio
-                        <input />
-                        Description
-                        <input />
+                    <li className="onboardingLeftInput">
+                        Date of Birth<br/>
+                        <input /> <br/>
+                        Bio<br/>
+                        <input /><br/>
+                        Description<br/>
+                        <input /><br/>
                     </li>
-                    <li style={style.rightInput}>
-                        Location
-                        <input />
-                        <input />
-                        <input />
-                        <input />
+                    <li className="onboardingRightInput">
+                        Location<br/>
+                        <input /><br/>
+                        <input /><br/>
+                        <input /><br/>
+                        <input /><br/>
                     </li>
                 </div>
 
@@ -84,6 +141,14 @@ class Onboarding3 extends Component {
                     <img src="/icons/GraduationHat.png" className="onboardingIcons" style={style.icons}/>
                     <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Education</b></div>
                 </div>
+
+                {this.state.educationAreas}
+
+                <button onClick={this.addEducationArea.bind(this)}>
+                    Add another school
+                </button>
+
+
                 <div className="center">
                     <button className="onboardingPage3Button" onClick={this.handleButtonClick.bind(this)}>
                         <div className="smallText2 onboardingPage1Text2">
