@@ -84,7 +84,7 @@ class Onboarding2 extends Component {
         if (goals.length > 0) {
             this.props.updateGoals(this.props.currentUser, goals);
         } else {
-            browserHistory.push('/');
+            browserHistory.push('/onboarding3');
             window.scrollTo(0, 0);
         }
     }
