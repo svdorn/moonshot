@@ -43,8 +43,8 @@ const routes = (
         <Route path="/onboarding" component={Onboarding} />
         <Route path="/onboarding2" component={Onboarding2} />
         <Route path="/onboarding3" component={Onboarding3} />
-        <Route path="/pathway/:_id" component={Pathway}/>
-        <Route path="/pathwayContent/:_id" component={PathwayContent}/>
+        <Route path="/pathway" component={Pathway}/>
+        <Route path="/pathwayContent" component={PathwayContent}/>
     </Route>
   </Router>
 );

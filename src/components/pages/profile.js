@@ -56,7 +56,7 @@ class Profile extends Component {
                             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathwayContent/' + pathway._id)}>
+                                    onClick={() => self.goTo('/pathwayContent?' + pathway._id)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
@@ -102,7 +102,7 @@ class Profile extends Component {
                             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathway/' + pathway._id)}>
+                                    onClick={() => self.goTo('/pathway?' + pathway._id)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}

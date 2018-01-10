@@ -19,7 +19,7 @@ class Pathway extends Component {
     }
 
     componentDidMount() {
-        const id = this.props.params._id;
+        const id = this.props.location.search.substr(1);
 
         axios.get("/api/getPathwayById", {
             params: {
