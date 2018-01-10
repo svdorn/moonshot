@@ -11,48 +11,49 @@ class Onboarding2 extends Component {
         super(props);
 
         this.state = {
-            goals: [
-                {
-                    title: "Get a Full-Time Job",
-                    selected: false
-                },
-                {
-                    title: "Find an Internship",
-                    selected: false
-                },
-                {
-                    title: "Find Part-Time/Contract Work",
-                    selected: false
-                },
-                {
-                    title: "Discover Your Dream Job",
-                    selected: false
-                },
-                {
-                    title: "Explore Emerging Career Path",
-                    selected: false
-                },
-                {
-                    title: "Learn About New Technologies",
-                    selected: false
-                },
-                {
-                    title: "Learn New Skills",
-                    selected: false
-                },
-                {
-                    title: "Improve Your Current Skills",
-                    selected: false
-                },
-                {
-                    title: "Build Your Portfolio",
-                    selected: false
-                },
-                {
-                    title: "Start a Business",
-                    selected: false
-                }
-            ],
+            goals: []
+            // goals: [
+            //     {
+            //         title: "Get a Full-Time Job",
+            //         selected: false
+            //     },
+            //     {
+            //         title: "Find an Internship",
+            //         selected: false
+            //     },
+            //     {
+            //         title: "Find Part-Time/Contract Work",
+            //         selected: false
+            //     },
+            //     {
+            //         title: "Discover Your Dream Job",
+            //         selected: false
+            //     },
+            //     {
+            //         title: "Explore Emerging Career Path",
+            //         selected: false
+            //     },
+            //     {
+            //         title: "Learn About New Technologies",
+            //         selected: false
+            //     },
+            //     {
+            //         title: "Learn New Skills",
+            //         selected: false
+            //     },
+            //     {
+            //         title: "Improve Your Current Skills",
+            //         selected: false
+            //     },
+            //     {
+            //         title: "Build Your Portfolio",
+            //         selected: false
+            //     },
+            //     {
+            //         title: "Start a Business",
+            //         selected: false
+            //     }
+            // ],
         }
     }
 
@@ -61,52 +62,40 @@ class Onboarding2 extends Component {
             axios.get("/api/infoByUserId", {
                 params: {
                     userId: this.props.currentUser._id,
-                    info: "goals"
+                    infoType: "goals"
                 }
             }).then(res => {
-                const userGoals= res.data;
+                const userGoals = res.data;
 
                 const potentialGoals = [
-                        "Virtual Reality",
-                        "Augmented Reality",
-                        "3D Printing",
-                        "UX Design",
-                        "IOT",
-                        "Wireframing",
-                        "User Testing",
-                        "A/B Testing",
-                        "User Research",
-                        "Electrical Engineering",
-                        "Mechanical Engineering",
-                        "Robotics",
-                        "Mobile",
-                        "Web",
-                        "Lean Methodology",
-                        "Responsive Design"
+                    "Get a Full-Time Job",
+                    "Find an Internship",
+                    "Find Part-Time/Contract Work",
+                    "Discover Your Dream Job",
+                    "Explore Emerging Career Path",
+                    "Learn About New Technologies",
+                    "Learn New Skills",
+                    "Improve Your Current Skills",
+                    "Build Your Portfolio",
+                    "Start a Business"
                 ];
 
-                // let interestObjects = {};
-                //
-                // // go over each type of interest (each of which is an object which contains a list of interests)
-                // interestTypes.forEach(function(interestsObj, listIndex) {
-                //     // for each type of interest, set the interests object to a list of interest objects
-                //     interestObjects[interestsObj.name] = interestsObj.interests.map(function(interest) {
-                //         // if the user already has that interest, mark it as selected
-                //         let alreadyHasInterest = userInterests.some(function(userInterest) {
-                //             return userInterest == interest;
-                //         })
-                //         return {
-                //             title: interest,
-                //             selected: alreadyHasInterest
-                //         };
-                //     });
-                // })
-                //
-                // this.setState({
-                //     ...this.state,
-                //     ...interestObjects
-                // })
+                let goalsObjects = [];
 
+                potentialGoals.forEach(function(goal, goalIndex) {
+                    let alreadyHasGoal = userGoals.some(function(userGoal) {
+                        return userGoal == goal;
+                    });
+                    goalsObjects.push({
+                        title: goal,
+                        selected: alreadyHasGoal
+                    });
+                });
+
+                this.setState({
+                    ...this.state,
+                    goals: goalsObjects
+                });
             });
         }
     }
