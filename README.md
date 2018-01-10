@@ -25,15 +25,15 @@ Go to localhost:3000 and the site will be up.
 
 ### Prerequisites
 
-[Node](https://nodejs.org/en/) - Javascript runtime
-[npm](https://www.npmjs.com/) - Installs automatically when you intall node
+* [Node](https://nodejs.org/en/) - Javascript runtime
+* [npm](https://www.npmjs.com/) - Installs automatically when you intall node
 
 ### Installing
 
 Software that you need to install.
 
-[MongoDB](https://docs.mongodb.com/manual/installation/) - Database management, install it globally
-[Webpack](https://www.npmjs.com/package/webpack) - Module bundler - install it globally
+* [MongoDB](https://docs.mongodb.com/manual/installation/) - Database management, install it globally
+* [Webpack](https://www.npmjs.com/package/webpack) - Module bundler - install it globally
 ```
 npm install --save -g mongodb
 npm install -g webpack
