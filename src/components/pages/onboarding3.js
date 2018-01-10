@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {updateGoals, endOnboarding} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
+import axios from 'axios';
 
 class Onboarding3 extends Component {
     constructor(props) {
@@ -53,12 +54,32 @@ class Onboarding3 extends Component {
                     <div className="onboarding3DividerRight" style={{bottom: "0"}}/>
                 </div>
                 <div className="smallText center" style={style.title.text}>
-                    The more complete your profile, the more appealing you look to employers.
+                    The more complete your profile, the more appealing you look to employers.<br/>
+                    <a href="#" target="_blank">View an example profile</a>
                 </div>
                 <div className="center">
                     <img src="/icons/Portfolio.png" className="onboardingIcons" style={style.icons}/>
                     <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Personal</b></div>
                 </div>
+
+                <div className="horizCenteredList">
+                    <li style={style.leftInput}>
+                        Date of Birth
+                        <input />
+                        Bio
+                        <input />
+                        Description
+                        <input />
+                    </li>
+                    <li style={style.rightInput}>
+                        Location
+                        <input />
+                        <input />
+                        <input />
+                        <input />
+                    </li>
+                </div>
+
                 <div className="center">
                     <img src="/icons/GraduationHat.png" className="onboardingIcons" style={style.icons}/>
                     <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Education</b></div>

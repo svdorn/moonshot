@@ -24,7 +24,6 @@ class MyPathways extends Component {
         // check if there is a logged-in user first, then create the user's pathways
         if (this.props.currentUser) {
             // populate featuredPathways with initial pathways
-            console.log("hey")
             if (this.props.currentUser.pathways) {
                 if (this.props.currentUser.pathways.length == 0) {
                     const pathways = [];
