@@ -10,16 +10,28 @@ class Onboarding3 extends Component {
     constructor(props) {
         super(props);
 
+        let user = this.props.currentUser;
+
+        let city = "";
+        let state = "";
+        let country = "";
+        let zip = "";
+        let birthDate: "";
+        let bio: "";
+        let description: "";
+
+        if (user && user.info) {
+            city = user.info.city ? user.info.city : "";
+            state = user.info.state ? user.info.state : "";
+            country = user.info.country ? user.info.country : "";
+            zip = user.info.zip ? user.info.zip : "";
+            birthDate = user.info.birthDate ? user.info.birthDate : "";
+            bio = user.info.bio ? user.info.bio : "";
+            description = user.info.description ? user.info.description : "";
+        }
+
         this.state = {
-            location: {
-                city: "",
-                state: "",
-                country: "",
-                zip: ""
-            },
-            dateOfBirth: "",
-            bio: "",
-            description: "",
+            city, state, country, zip, birthDate, bio, description,
             educationAreas: [(
                 <ul className="horizCenteredList">
                     <li className="onboardingLeftInput">
@@ -38,9 +50,6 @@ class Onboarding3 extends Component {
             )]
         }
     }
-
-
-
 
     handleButtonClick() {
         this.props.endOnboarding();
@@ -73,6 +82,16 @@ class Onboarding3 extends Component {
         this.setState({
             ...this.state,
             educationAreas
+        })
+    }
+
+    handleInputChange(e, field) {
+        const updatedField = {};
+        updatedField[field] = e.target.value;
+
+        this.setState({
+            ...this.state,
+            ...updatedField
         })
     }
 
@@ -122,7 +141,7 @@ class Onboarding3 extends Component {
                 <div className="horizCenteredList">
                     <li className="onboardingLeftInput">
                         Date of Birth<br/>
-                        <input /> <br/>
+                        <input type="text" value={this.state.birthDate} onChange={(e) => this.handleInputChange(e, "birthDate")}/> <br/>
                         Bio<br/>
                         <input /><br/>
                         Description<br/>

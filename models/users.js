@@ -17,6 +17,8 @@ var usersSchema = mongoose.Schema({
         title: String,
         city: String,
         state: String,
+        country: String,
+        zip: String,
         description: String,
         education: [{
             school: String,
