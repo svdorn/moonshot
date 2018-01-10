@@ -143,7 +143,7 @@ class MyPathways extends Component {
             },
             tab: {
                 backgroundColor: "white",
-                color: '#B869FF',
+                color: 'black',
             },
         };
 
@@ -155,10 +155,10 @@ class MyPathways extends Component {
                         <div className="greenToBlue headerDiv"/>
                         {this.state.userPathwayPreviews ?
                             <div className="center">
-                                <h1 className="center smallText3" style={{color: "#B869FF"}}>My Pathways</h1>
+                                <h1 className="center mediumText">My Pathways</h1>
                                 <Tabs
                                     style={style.tabs}
-                                    inkBarStyle={{background: '#B869FF'}}
+                                    inkBarStyle={{background: 'black'}}
                                     tabItemContainerStyle={{width: '40%'}}
                                     className="myPathwaysTabs"
                                 >
