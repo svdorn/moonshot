@@ -97,13 +97,13 @@ export function postUser(user) {
                         console.log("emailResponse is: ");
                         console.log(emailResponse);
                         dispatch({type:"POST_USER", notification:{message: emailResponse.data, type: "infoHeader"}});
-                        browserHistory.push('/');
+                        window.scrollTo(0,0);
                     })
                     // error sending verification email
                     .catch(function(emailError) {
                         console.log("user successfully posted but error sending email: ", emailError)
                         dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: response.data, type: "errorHeader"}});
-                        browserHistory.push('/login');
+                        window.scrollTo(0,0);
                     });
             })
             // error posting user

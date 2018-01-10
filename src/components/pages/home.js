@@ -223,18 +223,14 @@ class Home extends Component{
 
 
                 <div className="fullHeight" style={{textAlign:"center"}}>
-                    <img
-                        src="/images/PathwaysText.png"
-                        alt="Pathways"
-                        style={{marginTop:"60px", marginBottom:"15px", width:"265px"}}
-                    /><br/>
+                    <div className="center mediumText blueText" style={{marginTop: "40px"}}>Pathways</div>
                     <div style={{
                         margin: "0px 160px",
-                        height: "100px",
-                        fontSize: "24px"
+                        height: "60px",
+                        fontSize: "15px"
                     }}>
                         Moonshot pathways are organized in pathways and
-                        sponsored by employers hiring for those skills.
+                        sponsored by<br/> employers hiring for those skills.
                     </div>
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
