@@ -133,12 +133,19 @@ class Profile extends Component {
         window.scrollTo(0, 0);
     }
 
-    render() {
+    // turnHeaderTextBlue() {
+    //     document.getElementById("moonshotLogo").src="../images/OfficialLogoBlue.png";
+    //     let menuItems = document.getElementsByClassName('menuItem');
+    //     for (let itemIdx = 0; itemIdx < menuItems.length; itemIdx++) {
+    //         menuItems[itemIdx].style.color = 'blue';
+    //     }
+    //     document.getElementById("menuDropdown").classList.remove('headerDropdownWhite');
+    //     document.getElementById("menuDropdown").classList.add('headerDropdownBlue');
+    // }
 
-        // let menuItems = document.getElementsByClassName('menuItem')
-        // for (let itemIdx = 0; itemIdx < menuItems.length; i++) {
-        //     menuItems[itemIdx].style.color = 'blue';
-        // }
+    render() {
+        // (() => this.turnHeaderTextBlue())();
+
 
 
         const style = {
@@ -330,6 +337,15 @@ class Profile extends Component {
                 {this.props.currentUser ?
                     <div>
                         <div className="greenToBlue headerDiv"/>
+
+                        <button className="outlineButton whiteBlueButton"
+                            onClick={() => this.turnHeaderTextBlue()}>
+                            turn blue
+                        </button>
+
+
+
+
                         {this.state.userPathwayPreviews ?
                             <div>
                                 <div style={style.pictureInfoSkills.everything}>

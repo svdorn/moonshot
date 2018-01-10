@@ -302,6 +302,12 @@ export function updateGoals(user, goals) {
     }
 }
 
+export function startOnboarding(user){
+    return function(dispatch) {
+        dispatch({type: "START_ONBOARDING"});
+    }
+}
+
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
     return function(dispatch) {

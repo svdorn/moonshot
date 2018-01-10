@@ -1,7 +1,7 @@
 "use strict"
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {updateInterests} from "../../actions/usersActions";
+import {updateInterests, startOnboarding} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 
 class Onboarding extends Component {
@@ -284,6 +284,10 @@ class Onboarding extends Component {
         }
     }
 
+    componentDidMount() {
+        this.props.startOnboarding();
+    }
+
     handleIconClick(index) {
         let chosen = undefined;
         switch (index) {
@@ -362,7 +366,6 @@ class Onboarding extends Component {
     }
 
     render() {
-
         const style = {
             title: {
                 topTitle: {
@@ -537,7 +540,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateInterests
+        updateInterests,
+        startOnboarding
     }, dispatch);
 }
 

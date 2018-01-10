@@ -7,7 +7,8 @@ const initialState = {
     isFetching: false,
     headerMessage: undefined,
     headerType: undefined,
-    headerExpirationTime: undefined
+    headerExpirationTime: undefined,
+    isOnboarding: false
 }
 export function usersReducers(state = initialState, action) {
     switch (action.type) {
@@ -175,6 +176,10 @@ export function usersReducers(state = initialState, action) {
                 ...state, notification: undefined
             }
             break;
+        case "START_ONBOARDING":
+            return {
+                ...state, isOnboarding: "true"
+            }
     }
 
     return state

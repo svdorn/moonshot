@@ -116,8 +116,11 @@ footer {
 }
 
 /* So that the menu text color is the same as the rest of the header */
-.headerDropdown > div > div:nth-child(2) {
+.headerDropdownWhite > div:first-child > div:nth-child(2) {
     color: white !important;
+}
+.headerDropdownBlue > div:first-child > div:nth-child(2) {
+    color: blue !important;
 }
 
 .clickable, .clickableNoUnderline { cursor: pointer; }

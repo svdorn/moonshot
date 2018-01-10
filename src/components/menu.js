@@ -53,6 +53,11 @@ class Menu extends Component {
     }
 
     render() {
+        if (this.props.isOnboarding) {
+            return null;
+        }
+
+
         if (this.props.isFetching) {
             return (
                 <header style={{zIndex:"100"}}>
@@ -63,6 +68,7 @@ class Menu extends Component {
                             height={100}
                             alt="300x100"
                             className="clickable"
+                            id="moonshotLogo"
                             src="/images/MoonshotTempLogo.png"
                             onClick={() => this.goTo('/')}
                         />
@@ -83,6 +89,7 @@ class Menu extends Component {
                                 height={60}
                                 alt="Moonshot"
                                 className="clickable"
+                                id="moonshotLogo"
                                 src="/images/MoonshotTempLogo.png"
                                 onClick={() => this.goTo('/discover')}
                             />
@@ -95,7 +102,8 @@ class Menu extends Component {
                                           underlineStyle={styles.underlineStyle}
                                           anchorOrigin={styles.anchorOrigin}
                                           style={{fontSize:"20px", marginTop:"11px"}}
-                                          className="headerDropdown"
+                                          className="headerDropdownWhite"
+                                          id="menuDropdown"
                             >
                                 <MenuItem value={1} primaryText="Profile" />
                                 <Divider />
@@ -114,6 +122,7 @@ class Menu extends Component {
                         height={80}
                         alt="300x100"
                         className="clickable"
+                        id="moonshotLogo"
                         src="/images/MoonshotTempLogo.png"
                         onClick={() => this.goTo('/')}
                     />
@@ -139,7 +148,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        isFetching: state.users.isFetching
+        isFetching: state.users.isFetching,
+        isOnboarding: state.users.isOnboarding
     };
 }
 
