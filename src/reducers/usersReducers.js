@@ -8,7 +8,8 @@ const initialState = {
     headerMessage: undefined,
     headerType: undefined,
     headerExpirationTime: undefined,
-    isOnboarding: false
+    isOnboarding: false,
+    blueHeader: false
 }
 export function usersReducers(state = initialState, action) {
     switch (action.type) {
@@ -190,6 +191,11 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state, currentUser: action.payload
             };
+            break;
+        case "TURN_HEADER_BLUE":
+            return {
+                ...state, blueHeader: action.shouldBeBlue
+            }
             break;
     }
 

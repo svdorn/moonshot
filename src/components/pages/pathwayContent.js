@@ -6,7 +6,7 @@ import PathwayContentArticle from '../childComponents/pathwayContentArticle';
 import {Tabs, Tab, CircularProgress, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, updateCurrentSubStep} from "../../actions/usersActions";
+import {closeNotification, updateCurrentSubStep, setHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayStepList from '../childComponents/pathwayStepList';
 import axios from 'axios';
@@ -25,6 +25,8 @@ class PathwayContent extends Component {
     }
 
     componentDidMount() {
+        // this.props.setHeaderBlue(true);
+
         const pathwayId = this.props.params._id;
 
         axios.get("/api/getPathwayById", {
@@ -97,6 +99,8 @@ class PathwayContent extends Component {
     goTo(route) {
         // closes any notification
         this.props.closeNotification();
+        // turns header back to normal
+        // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
@@ -278,7 +282,8 @@ class PathwayContent extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateCurrentSubStep,
-        closeNotification
+        closeNotification,
+        setHeaderBlue
     }, dispatch);
 }
 

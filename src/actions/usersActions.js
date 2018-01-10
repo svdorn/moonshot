@@ -318,9 +318,9 @@ export function endOnboarding(){
     }
 }
 
-export function turnHeaderBlue() {
+export function setHeaderBlue(shouldBeBlue) {
     return function(dispatch) {
-        dispatch({type: "TURN_HEADER_BLUE"});
+        dispatch({type: "TURN_HEADER_BLUE", shouldBeBlue});
     }
 }
 

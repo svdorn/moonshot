@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {AppBar, Paper, Tabs, Tab, CircularProgress, Chip} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, turnHeaderBlue} from "../../actions/usersActions";
+import {closeNotification, setHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
@@ -21,7 +21,7 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        this.props.turnHeaderBlue();
+        // this.props.setHeaderBlue(true);
 
         // check if there is a logged-in user first, then create the user's pathways
         if (this.props.currentUser) {
@@ -129,21 +129,13 @@ class Profile extends Component {
     goTo(route) {
         // closes any notification
         this.props.closeNotification();
+        // sets header back to normal
+        // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
-
-    // turnHeaderTextBlue() {
-    //     document.getElementById("moonshotLogo").src="../images/OfficialLogoBlue.png";
-    //     let menuItems = document.getElementsByClassName('menuItem');
-    //     for (let itemIdx = 0; itemIdx < menuItems.length; itemIdx++) {
-    //         menuItems[itemIdx].style.color = 'blue';
-    //     }
-    //     document.getElementById("menuDropdown").classList.remove('headerDropdownWhite');
-    //     document.getElementById("menuDropdown").classList.add('headerDropdownBlue');
-    // }
 
     render() {
         const style = {
@@ -336,9 +328,6 @@ class Profile extends Component {
                     <div>
                         <div className="greenToBlue headerDiv"/>
 
-
-
-
                         {this.state.userPathwayPreviews ?
                             <div>
                                 <div style={style.pictureInfoSkills.everything}>
@@ -450,7 +439,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        turnHeaderBlue
+        setHeaderBlue
     }, dispatch);
 }
 

@@ -4,7 +4,7 @@ import { AppBar, FlatButton, ToolbarGroup, DropDownMenu, MenuItem, Divider, Tool
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { signout, closeNotification } from "../actions/usersActions";
+import { signout, closeNotification, setHeaderBlue } from "../actions/usersActions";
 import Person from 'material-ui/svg-icons/social/person';
 import { axios } from 'axios';
 
@@ -46,6 +46,8 @@ class Menu extends Component {
     goTo (route)  {
         // closes any notification
         this.props.closeNotification();
+        // sets header to white
+        // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
@@ -55,6 +57,15 @@ class Menu extends Component {
     render() {
         if (this.props.isOnboarding) {
             return null;
+        }
+
+        let moonshotLogo = "/images/MoonshotTempLogo.png";
+        let dropdownClass = "headerDropdownWhite";
+        let menuItemClass = "menuItem clickable noWrap whiteText"
+        if (this.props.blueHeader) {
+            moonshotLogo = "/images/OfficialLogoBlue.png";
+            dropdownClass = "headerDropdownBlue";
+            menuItemClass = "menuItem clickable noWrap blueText"
         }
 
 
@@ -69,7 +80,7 @@ class Menu extends Component {
                             alt="300x100"
                             className="clickable"
                             id="moonshotLogo"
-                            src="/images/MoonshotTempLogo.png"
+                            src={moonshotLogo}
                             onClick={() => this.goTo('/')}
                         />
                         </ToolbarGroup>
@@ -90,19 +101,19 @@ class Menu extends Component {
                                 alt="Moonshot"
                                 className="clickable"
                                 id="moonshotLogo"
-                                src="/images/MoonshotTempLogo.png"
+                                src={moonshotLogo}
                                 onClick={() => this.goTo('/discover')}
                             />
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <p className="menuItem clickable noWrap" onClick={() => this.goTo('/discover')}>Discover</p>
-                            <p className="menuItem clickable noWrap" onClick={() => this.goTo('/myPathways')}>My Pathways</p>
+                            <p className={menuItemClass} onClick={() => this.goTo('/discover')}>Discover</p>
+                            <p className={menuItemClass} onClick={() => this.goTo('/myPathways')}>My Pathways</p>
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
                                           anchorOrigin={styles.anchorOrigin}
                                           style={{fontSize:"20px", marginTop:"11px"}}
-                                          className="headerDropdownWhite"
+                                          className={dropdownClass}
                                           id="menuDropdown"
                             >
                                 <MenuItem value={1} primaryText="Profile" />
@@ -123,15 +134,15 @@ class Menu extends Component {
                         alt="300x100"
                         className="clickable"
                         id="moonshotLogo"
-                        src="/images/MoonshotTempLogo.png"
+                        src={moonshotLogo}
                         onClick={() => this.goTo('/')}
                     />
                     </ToolbarGroup>
                     <ToolbarGroup>
-                        <p className="menuItem clickable noWrap" onClick={() => this.goTo('/')}>Home</p>
-                        <p className="menuItem clickable noWrap" onClick={() => this.goTo('/forBusiness')}>For Business</p>
+                        <p className={menuItemClass} onClick={() => this.goTo('/')}>Home</p>
+                        <p className={menuItemClass} onClick={() => this.goTo('/forBusiness')}>For Business</p>
                         <div className="menuDivider" />
-                        <p className="menuItem clickable noWrap" onClick={() => this.goTo('/login')}>Sign in</p>
+                        <p className={menuItemClass} onClick={() => this.goTo('/login')}>Sign in</p>
                     </ToolbarGroup>
                 </Toolbar>}
             </header>
@@ -141,7 +152,8 @@ class Menu extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         signout,
-        closeNotification
+        closeNotification,
+        setHeaderBlue
     }, dispatch);
 }
 
@@ -149,7 +161,8 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
-        isOnboarding: state.users.isOnboarding
+        isOnboarding: state.users.isOnboarding,
+        blueHeader: state.users.blueHeader
     };
 }
 

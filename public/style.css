@@ -97,7 +97,6 @@ footer {
 }
 
 .menuItem {
-    color: white;
     font-size: 20px;
     margin: 30px 10px 10px 10px;
 }
@@ -120,7 +119,7 @@ footer {
     color: white !important;
 }
 .headerDropdownBlue > div:first-child > div:nth-child(2) {
-    color: blue !important;
+    color: var(--moonshotLightBlue) !important;
 }
 
 .clickable, .clickableNoUnderline { cursor: pointer; }
