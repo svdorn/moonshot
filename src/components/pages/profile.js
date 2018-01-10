@@ -380,31 +380,42 @@ class Profile extends Component {
                                     <div style={{clear: "both"}}/>
                                 </div>
 
-                                <div className="center">
-                                    <Tabs
-                                        style={style.tabs}
-                                        inkBarStyle={{background: 'black'}}
-                                        tabItemContainerStyle={{width: '40%'}}
-                                        className="myPathwaysTabs"
-                                    >
-                                        <Tab label="Ongoing" style={style.tab}>
-                                            {this.state.userPathwayPreviews ?
-                                                <ul className="horizCenteredList pathwayPrevList"
-                                                    style={style.pathwayPreviewUl}>
-                                                    {this.state.userPathwayPreviews}
-                                                </ul>
-                                                : <h1 className="center mediumText">None</h1>}
-                                        </Tab>
-                                        <Tab label="Completed" style={style.tab}>
-                                            {this.state.userCompletedPathwayPreviews ?
-                                                <ul className="horizCenteredList pathwayPrevList"
-                                                    style={style.pathwayPreviewUl}>
-                                                    {this.state.userCompletedPathwayPreviews}
-                                                </ul>
-                                                : <h1 className="center mediumText">None</h1>}
-                                        </Tab>
-                                    </Tabs>
-                                </div>
+                                { this.state.userPathwayPreviews.length > 0 ?
+                                    <div className="center">
+                                        <Tabs
+                                            style={style.tabs}
+                                            inkBarStyle={{background: 'black'}}
+                                            tabItemContainerStyle={{width: '40%'}}
+                                            className="myPathwaysTabs"
+                                        >
+                                            <Tab label="Ongoing" style={style.tab}>
+                                                {this.state.userPathwayPreviews ?
+                                                    <ul className="horizCenteredList pathwayPrevList"
+                                                        style={style.pathwayPreviewUl}>
+                                                        {this.state.userPathwayPreviews}
+                                                    </ul>
+                                                    : <h1 className="center mediumText">None</h1>}
+                                            </Tab>
+                                            <Tab label="Completed" style={style.tab}>
+                                                {this.state.userCompletedPathwayPreviews ?
+                                                    <ul className="horizCenteredList pathwayPrevList"
+                                                        style={style.pathwayPreviewUl}>
+                                                        {this.state.userCompletedPathwayPreviews}
+                                                    </ul>
+                                                    : <h1 className="center mediumText">None</h1>}
+                                            </Tab>
+                                        </Tabs>
+                                    </div>
+                                :
+                                    <div className="center">
+                                        <ul className="horizCenteredList pathwayPrevList"
+                                            style={style.pathwayPreviewUl}>
+                                            <li onClick={() => this.goTo('/discover')}>
+                                                <PathwayPreview type="addOne"/>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                }
 
 
                                 <div className="profileSeparator">
