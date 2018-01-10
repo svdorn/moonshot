@@ -177,7 +177,7 @@ class Discover extends Component {
             return (
                 <li style={style.pathwayPreviewLi}
                     key={key}
-                    onClick={() => self.goTo('/pathway/' + pathway._id)}>
+                    onClick={() => self.goTo('/pathway?' + pathway._id)}>
                     <PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
@@ -201,7 +201,7 @@ class Discover extends Component {
             return (
                 <li style={style.pathwayPreviewLi}
                     key={key}
-                    onClick={() => self.goTo('/pathway/' + pathway._id)}>
+                    onClick={() => self.goTo('/pathway?' + pathway._id)}>
                     <PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
