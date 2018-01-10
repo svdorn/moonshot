@@ -1000,7 +1000,6 @@ app.post("/userCurrentStep", function (req, res) {
 });
 
 app.post("/updateInterests", function(req, res) {
-    console.log("In API");
     const interests = req.body.params.interests;
     const userId = req.body.params.userId;
 

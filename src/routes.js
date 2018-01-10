@@ -22,6 +22,7 @@ import PathwayContent from './components/pages/pathwayContent';
 import ContactUs from './components/pages/contactUs';
 import MyPathways from './components/pages/myPathways';
 import Onboarding from './components/pages/onboarding';
+import Onboarding2 from './components/pages/onboarding2';
 
 const routes = (
   <Router history={browserHistory}>
@@ -39,6 +40,7 @@ const routes = (
         <Route path="/contactUs" component={ContactUs} />
         <Route path="/myPathways" component={MyPathways} />
         <Route path="/onboarding" component={Onboarding} />
+        <Route path="/onboarding2" component={Onboarding2} />
         <Route path="/pathway/:_id" component={Pathway}/>
         <Route path="/pathwayContent/:_id" component={PathwayContent}/>
     </Route>

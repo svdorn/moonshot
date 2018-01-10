@@ -275,6 +275,7 @@ export function updateInterests(user, interests) {
             }
         })
             .then(function(response) {
+                browserHistory.push('/onboarding2');
                 console.log("updates to interests saved")
             })
             .catch(function(err) {

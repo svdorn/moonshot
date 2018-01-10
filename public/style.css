@@ -229,6 +229,16 @@ button.link {
     width: 100%;
 }
 
+.gradientBorderPurple {
+    background: linear-gradient(to bottom right, #be6aff, #7f0eff);
+    padding: 2px;
+}
+.gradientBorderPurple > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+
 .gradientBorder {
     background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));
     padding: 4px;
@@ -355,6 +365,24 @@ button.link {
     position: absolute;
     bottom: 0;
 }
+.onboarding2DividerLeft {
+    background: linear-gradient(to right, #be6aff, #7f0eff);
+    border-right: 200px solid #9727ff;
+    right: 50%;
+}
+.onboarding2DividerRight {
+    background: linear-gradient(to right, #be6aff, #7f0eff);
+    border-left: 200px solid #9727ff;
+    left: 50%;
+}
+.onboarding2DividerRight, .onboarding2DividerLeft {
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    bottom: 0;
+}
 
 .onboardingIcons {
     height: 60px;
@@ -369,6 +397,12 @@ button.link {
 .onboardingInterestsListContainer {
     margin: 30px auto 0;
     width: 50%;
+}
+.onboardingGoalsListContainer {
+    margin: auto;
+    width: 30%;
+    padding: 0;
+    list-style: none;
 }
 
 .logoBar {
@@ -419,6 +453,26 @@ button.link {
     padding: 7px;
     margin-top: 20px;
 }
+.onboardingPage2Text {
+    background: linear-gradient(to right, #be6aff, #7f0eff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.onboardingPage2Button{
+    background: linear-gradient(to right, #be6aff, #7f0eff);
+    border: #9727ff;
+    padding: 7px;
+    margin-top: 20px;
+}
+.onboardingPage2Text3 {
+    color: #9727ff;
+}
+.onboardingPage2Text2Background{
+    background: linear-gradient(to right, #be6aff, #7f0eff);
+    padding: 2px;
+    margin-top: 20px;
+}
+
 
 
 .videoContainer {
