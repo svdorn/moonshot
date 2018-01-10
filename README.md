@@ -11,7 +11,7 @@ git clone https://github.com/MoonshotLearning/moonshot.git
 cd moonshot
 npm install
 ```
-Have the prerequisites installed and do the steps under installing.
+Have the prerequisites installed and do the steps under installing, after completing that, do these steps:
 ```
 cd /moonshot
 webpack
