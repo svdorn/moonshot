@@ -30,10 +30,7 @@ var usersSchema = mongoose.Schema({
             url: String,
             displayString: String
         }],
-        goals: {
-            positionType: String,
-            positionTitle: String
-        },
+        goals: [String],
         languages: [ String ]
     },
     pathways: [{

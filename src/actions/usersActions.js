@@ -284,6 +284,24 @@ export function updateInterests(user, interests) {
     }
 }
 
+export function updateGoals(user, goals) {
+    return function(dispatch) {
+        axios.post("/api/updateGoals", {
+            params: {
+                userId: user._id,
+                goals: goals
+            }
+        })
+            .then(function(response) {
+                browserHistory.push('/');
+                console.log("updates to goals saved")
+            })
+            .catch(function(err) {
+                console.log("error updating goals: ", err)
+            });
+    }
+}
+
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
     return function(dispatch) {

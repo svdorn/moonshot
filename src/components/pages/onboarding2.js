@@ -1,7 +1,7 @@
 "use strict"
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {updateInterests} from "../../actions/usersActions";
+import {updateGoals} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 
 class Onboarding2 extends Component {
@@ -72,6 +72,19 @@ class Onboarding2 extends Component {
         }
     }
 
+    handleButtonClick() {
+        let goals = [];
+        for (let i = 0; i < this.state.goals.length; i++) {
+            if (this.state.goals[i].selected) {
+                goals.push(this.state.goals[i].title);
+            }
+        }
+        console.log(goals);
+        if (goals.length > 0) {
+            this.props.updateGoals(this.props.currentUser, goals);
+        }
+    }
+
     render() {
 
         const style = {
@@ -139,7 +152,7 @@ class Onboarding2 extends Component {
                         : null}
                 </div>
                 <div className="center">
-                    <button className="onboardingPage2Button">
+                    <button className="onboardingPage2Button" onClick={this.handleButtonClick.bind(this)}>
                         <div className="smallText2 onboardingPage1Text2">
                             Next
                         </div>
@@ -158,7 +171,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        updateGoals
     }, dispatch);
 }
 

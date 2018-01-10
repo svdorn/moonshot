@@ -1024,6 +1024,31 @@ app.post("/updateInterests", function(req, res) {
 
 });
 
+app.post("/updateGoals", function(req, res) {
+    const goals = req.body.params.goals;
+    const userId = req.body.params.userId;
+
+    // When true returns the updated document
+    Users.findById(userId, function(err, user) {
+        if (err) {
+            console.log(err);
+        }
+
+        for (let i = 0; i < goals.length; i++) {
+            user.info.goals.push(goals[i]);
+        }
+
+        user.save(function (err, updatedUser) {
+            if (err) {
+                console.log(err);
+                res.send(false);
+            }
+            res.send(true);
+        });
+    })
+
+});
+
 
 //----->> GET IMAGES <<------
 // app.get('/images', function (req, res) {
