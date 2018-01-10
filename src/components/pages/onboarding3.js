@@ -1,7 +1,7 @@
 "use strict"
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {updateGoals} from "../../actions/usersActions";
+import {updateGoals, endOnboarding} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 
@@ -80,6 +80,9 @@ class Onboarding3 extends Component {
                 goals.push(this.state.goals[i].title);
             }
         }
+
+        this.props.endOnboarding();
+
         console.log(goals);
         if (goals.length > 0) {
             this.props.updateGoals(this.props.currentUser, goals);
@@ -175,7 +178,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateGoals
+        updateGoals,
+        endOnboarding
     }, dispatch);
 }
 

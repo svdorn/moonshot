@@ -178,7 +178,12 @@ export function usersReducers(state = initialState, action) {
             break;
         case "START_ONBOARDING":
             return {
-                ...state, isOnboarding: "true"
+                ...state, isOnboarding: true
+            }
+            break;
+        case "END_ONBOARDING":
+            return {
+                ...state, isOnboarding: false
             }
             break;
         case "UPDATE_USER_ONBOARDING":

@@ -306,9 +306,15 @@ export function updateGoals(user, goals) {
     }
 }
 
-export function startOnboarding(user){
+export function startOnboarding(){
     return function(dispatch) {
         dispatch({type: "START_ONBOARDING"});
+    }
+}
+
+export function endOnboarding(){
+    return function(dispatch) {
+        dispatch({type: "END_ONBOARDING"});
     }
 }
 
