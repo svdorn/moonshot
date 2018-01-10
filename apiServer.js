@@ -1016,7 +1016,7 @@ app.get("/interestsByUserId", function(req, res) {
     });
 });
 
-app.post("/updateInterests", function(req, res) {
+app.post("/addInterests", function(req, res) {
     const interests = req.body.params.interests;
     const userId = req.body.params.userId;
 
@@ -1032,6 +1032,28 @@ app.post("/updateInterests", function(req, res) {
                 user.info.interests.push(interests[i]);
             }
         }
+
+        user.save(function (err, updatedUser) {
+            if (err) {
+                console.log(err);
+                res.send(false);
+            }
+            res.send(updatedUser);
+        });
+    })
+});
+
+app.post("/updateInterests", function(req, res) {
+    const interests = req.body.params.interests;
+    const userId = req.body.params.userId;
+
+    // When true returns the updated document
+    Users.findById(userId, function(err, user) {
+        if (err) {
+            console.log(err);
+        }
+
+        user.info.interests = interests;
 
         user.save(function (err, updatedUser) {
             if (err) {
