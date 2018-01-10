@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
+import { Paper } from 'material-ui';
 import axios from 'axios';
 
 class PathwayPreview extends Component {
     constructor(props){
         super(props);
+        this.state = { shadow: 2 }
+
     }
 
     goTo (route)  {
@@ -15,6 +18,9 @@ class PathwayPreview extends Component {
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
+
+    onMouseOver = () => this.setState({ shadow: 4 });
+    onMouseOut = () => this.setState({ shadow: 2 });
 
     render() {
 
@@ -35,11 +41,13 @@ class PathwayPreview extends Component {
 
 
         return (
-            <div className="gradientBorder clickableNoUnderline" style={{height:"352px", width:"248px"}}>
+            <Paper className="clickableNoUnderline gradientBorder" style={{height:"352px", width:"248px"}}
+                   onMouseOver={this.onMouseOver}
+                   onMouseOut={this.onMouseOut}
+                   zDepth={this.state.shadow}>
                 <div style={{textAlign:"center", position:"relative"}}>
                     <div className="gradientBorder pathwayImgContainer">
                         <img
-                            className="semiOpaqueHoverable"
                             width={216}
                             height={160}
                             alt="VR Image"
@@ -83,7 +91,7 @@ class PathwayPreview extends Component {
                         />
                     </div>
                 </div>
-            </div>
+            </Paper>
         )
     }
 }

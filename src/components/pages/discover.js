@@ -149,6 +149,9 @@ class Discover extends Component {
             pathwayPreviewContainer: {
                 height: "352px"
             },
+            pathwayPreviewFeaturedContainer: {
+                height: "360px"
+            },
             treeImg: {
                 height: "300px",
                 position: "absolute",
@@ -241,7 +244,7 @@ class Discover extends Component {
                         </div>
                     </div>
 
-                    <div className="pathwayPrevListContainer" style={style.pathwayPreviewContainer}>
+                    <div className="pathwayPrevListContainer" style={style.pathwayPreviewFeaturedContainer}>
                         <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
                             {featuredPathwayPreviews}
                         </ul>

@@ -243,7 +243,6 @@ button.link {
 }
 
 .gradientBorder {
-    background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));
     padding: 4px;
 }
 .gradientBorder > div {
@@ -284,7 +283,7 @@ button.link {
     font-size: 11.2px;
 }
 .pathwayPrevListContainer {
-    height: 352px;
+    height: 360px;
     overflow-y: hidden;
 }
 
@@ -446,7 +445,8 @@ button.link {
 .tinyText { font-size: 8.8px; }
 .greenText { color: var(--moonshotGreenText); }
 .whiteText { color: white; }
-.blueText { color: var(--moonshotLightBlue) }
+.blueText { color: var(--moonshotLightBlue); }
+.darkBlueText { color: var(--moonshotMidBlue); }
 .purpleText { color: var(--moonshotPurple) }
 .darkPurpleText { color: var(--moonshotDarkPurple) }
 .onboardingPage1Text {

@@ -223,11 +223,7 @@ class Home extends Component{
 
 
                 <div className="fullHeight" style={{textAlign:"center"}}>
-                    <img
-                        src="/images/PathwaysText.png"
-                        alt="Pathways"
-                        style={{marginTop:"60px", marginBottom:"15px", width:"265px"}}
-                    /><br/>
+                    <div className="center bigText blueText" style={{marginTop: "40px", marginBottom:'10px'}}>Pathways</div>
                     <div style={{
                         margin: "0px 160px",
                         height: "100px",
