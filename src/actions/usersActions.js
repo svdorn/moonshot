@@ -318,6 +318,12 @@ export function endOnboarding(){
     }
 }
 
+export function turnHeaderBlue() {
+    return function(dispatch) {
+        dispatch({type: "TURN_HEADER_BLUE"});
+    }
+}
+
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
     return function(dispatch) {

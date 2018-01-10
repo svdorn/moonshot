@@ -146,10 +146,6 @@ class Profile extends Component {
     // }
 
     render() {
-        // (() => this.turnHeaderTextBlue())();
-
-
-
         const style = {
             pathwayPreviewUl: {
                 marginTop: "20px",
@@ -339,11 +335,6 @@ class Profile extends Component {
                 {this.props.currentUser ?
                     <div>
                         <div className="greenToBlue headerDiv"/>
-
-                        <button className="outlineButton whiteBlueButton"
-                            onClick={() => this.turnHeaderTextBlue()}>
-                            turn blue
-                        </button>
 
 
 
