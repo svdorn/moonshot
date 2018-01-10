@@ -296,7 +296,7 @@ export function updateGoals(user, goals) {
         })
             .then(function(response) {
                 dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
-                browserHistory.push('/');
+                browserHistory.push('/onboarding3');
                 window.scrollTo(0, 0);
                 console.log("updates to goals saved")
             })
