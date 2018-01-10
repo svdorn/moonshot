@@ -1,6 +1,7 @@
 "use strict"
-import React, {Component} from 'react';
-import {browserHistory} from 'react-router';
+import React, { Component } from 'react';
+import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
 
 class Footer extends Component {
 
@@ -12,6 +13,10 @@ class Footer extends Component {
     }
 
     render() {
+        if (this.props.isOnboarding) {
+            return null;
+        }
+
         return (
             <div className="jsxWrapper">
                 <footer className="footer purpleToBlue" style={{minWidth: "800px"}}>
@@ -62,4 +67,10 @@ class Footer extends Component {
     }
 }
 
-export default Footer;
+function mapStateToProps(state) {
+    return {
+        isOnboarding: state.users.isOnboarding
+    };
+}
+
+export default connect(mapStateToProps)(Footer);
