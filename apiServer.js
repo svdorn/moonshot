@@ -1027,7 +1027,10 @@ app.post("/updateInterests", function(req, res) {
         }
 
         for (let i = 0; i < interests.length; i++) {
-            user.info.interests.push(interests[i]);
+            // only add the interest if the user didn't already have it
+            if (user.info.interests.indexOf(interests[i]) === -1) {
+                user.info.interests.push(interests[i]);
+            }
         }
 
         user.save(function (err, updatedUser) {
