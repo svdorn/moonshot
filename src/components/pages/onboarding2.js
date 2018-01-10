@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {updateGoals} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
+import {browserHistory} from 'react-router';
 
 class Onboarding2 extends Component {
     constructor(props) {
@@ -82,6 +83,9 @@ class Onboarding2 extends Component {
         console.log(goals);
         if (goals.length > 0) {
             this.props.updateGoals(this.props.currentUser, goals);
+        } else {
+            browserHistory.push('/');
+            window.scrollTo(0, 0);
         }
     }
 

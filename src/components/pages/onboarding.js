@@ -2,6 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {updateInterests, startOnboarding} from "../../actions/usersActions";
+import {browserHistory} from 'react-router';
 import {bindActionCreators} from 'redux';
 
 class Onboarding extends Component {
@@ -362,6 +363,9 @@ class Onboarding extends Component {
         console.log(interests);
         if (interests.length > 0) {
             this.props.updateInterests(this.props.currentUser, interests);
+        } else {
+            browserHistory.push('/onboarding2');
+            window.scrollTo(0, 0);
         }
     }
 
