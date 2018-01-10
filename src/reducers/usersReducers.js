@@ -175,6 +175,11 @@ export function usersReducers(state = initialState, action) {
                 ...state, notification: undefined
             }
             break;
+        case "UPDATE_USER_ONBOARDING":
+            return {
+                ...state, currentUser: action.payload
+            };
+            break;
     }
 
     return state
