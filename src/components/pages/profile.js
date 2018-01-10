@@ -23,10 +23,20 @@ class Profile extends Component {
     componentDidMount() {
         // this.props.setHeaderBlue(true);
 
+        let userPathwayPreviews = undefined;
+
         // check if there is a logged-in user first, then create the user's pathways
         if (this.props.currentUser) {
             // populate featuredPathways with initial pathways
             if (this.props.currentUser.pathways) {
+                console.log("hey")
+                if (this.props.currentUser.pathways.length == 0) {
+                    this.setState({
+                        pathways: [],
+                        userPathwayPreviews: []
+                    });
+                }
+
                 for (let i = 0; i < this.props.currentUser.pathways.length; i++) {
                     let id = this.props.currentUser.pathways[i].pathwayId;
                     axios.get("/api/getPathwayById", {
@@ -41,7 +51,7 @@ class Profile extends Component {
                         const pathways = [...this.state.pathways, pathway];
 
                         // use the received pathways to make pathway previews
-                        const userPathwayPreviews = pathways.map(function (pathway) {
+                        userPathwayPreviews = pathways.map(function (pathway) {
                             key++;
                             const deadline = new Date(pathway.deadline);
                             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
@@ -65,8 +75,6 @@ class Profile extends Component {
                         this.setState({
                             pathways,
                             userPathwayPreviews
-                        }, function () {
-
                         });
                     }).catch(function (err) {
                         console.log("error getting searched-for pathway");
