@@ -35,7 +35,7 @@ Software that you need to install.
 * [MongoDB](https://docs.mongodb.com/manual/installation/) - Database management, install it globally
 * [Webpack](https://www.npmjs.com/package/webpack) - Module bundler - install it globally
 ```
-npm install --save -g mongodb
+npm install -g mongodb
 npm install -g webpack
 ```
 
