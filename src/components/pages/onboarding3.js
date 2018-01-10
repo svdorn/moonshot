@@ -36,23 +36,35 @@ class Onboarding3 extends Component {
             },
             iconLi: {
                 marginRight: '90px',
-            }
+            },
+            icons: {
+                paddingBottom: '15px',
+
+            },
         };
 
         return (
             <div style={{marginBottom: '50px'}}>
-                <div className="onboardingPage2Text mediumText center" style={style.title.topTitle}>
-                    What Are Your Goals?
+                <div className="onboardingPage3TextTitle mediumText center" style={style.title.topTitle}>
+                    Start Building Your Profile
                 </div>
                 <div style={style.title.divider}>
-                    <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
-                    <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
+                    <div className="onboarding3DividerLeft" style={{bottom: "0"}}/>
+                    <div className="onboarding3DividerRight" style={{bottom: "0"}}/>
                 </div>
                 <div className="smallText center" style={style.title.text}>
-                    Select All That Apply.
+                    The more complete your profile, the more appealing you look to employers.
                 </div>
                 <div className="center">
-                    <button className="onboardingPage2Button" onClick={this.handleButtonClick.bind(this)}>
+                    <img src="/icons/Portfolio.png" className="onboardingIcons" style={style.icons}/>
+                    <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Personal</b></div>
+                </div>
+                <div className="center">
+                    <img src="/icons/GraduationHat.png" className="onboardingIcons" style={style.icons}/>
+                    <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Education</b></div>
+                </div>
+                <div className="center">
+                    <button className="onboardingPage3Button" onClick={this.handleButtonClick.bind(this)}>
                         <div className="smallText2 onboardingPage1Text2">
                             Next
                         </div>
