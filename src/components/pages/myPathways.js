@@ -24,52 +24,67 @@ class MyPathways extends Component {
         // check if there is a logged-in user first, then create the user's pathways
         if (this.props.currentUser) {
             // populate featuredPathways with initial pathways
+            console.log("hey")
             if (this.props.currentUser.pathways) {
-                for (let i = 0; i < this.props.currentUser.pathways.length; i++) {
-                    let id = this.props.currentUser.pathways[i].pathwayId;
-                    axios.get("/api/getPathwayById", {
-                        params: {
-                            _id: id
-                        }
-                    }).then(res => {
-                        let pathway = res.data;
-                        let key = 0;
-                        let self = this;
+                if (this.props.currentUser.pathways.length == 0) {
+                    const pathways = [];
+                    const userPathwayPreviews = (
+                        <li onClick={() => this.goTo('/discover')}>
+                            <PathwayPreview type="addOne"/>
+                        </li>
+                    );
 
-                        const pathways = [...this.state.pathways, pathway];
+                    this.setState({
+                        pathways,
+                        userPathwayPreviews
+                    });
+                }
 
-                        // use the received pathways to make pathway previews
-                        const userPathwayPreviews = pathways.map(function (pathway) {
-                            key++;
-                            const deadline = new Date(pathway.deadline);
-                            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
-                            return (
-                                <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathwayContent/' + pathway._id)}>
-                                    <PathwayPreview
-                                        name={pathway.name}
-                                        image={pathway.previewImage}
-                                        logo={pathway.sponsor.logo}
-                                        sponsorName={pathway.sponsor.name}
-                                        completionTime={pathway.estimatedCompletionTime}
-                                        deadline={formattedDeadline}
-                                        price={pathway.price}
-                                        _id={pathway._id}
-                                    />
-                                </li>
-                            );
-                        });
+                else {
+                    for (let i = 0; i < this.props.currentUser.pathways.length; i++) {
+                        let id = this.props.currentUser.pathways[i].pathwayId;
+                        axios.get("/api/getPathwayById", {
+                            params: {
+                                _id: id
+                            }
+                        }).then(res => {
+                            let pathway = res.data;
+                            let key = 0;
+                            let self = this;
 
-                        this.setState({
-                            pathways,
-                            userPathwayPreviews
-                        }, function () {
+                            const pathways = [...this.state.pathways, pathway];
 
-                        });
-                    }).catch(function (err) {
-                        console.log("error getting searched-for pathway");
-                        console.log(err);
-                    })
+                            // use the received pathways to make pathway previews
+                            const userPathwayPreviews = pathways.map(function (pathway) {
+                                key++;
+                                const deadline = new Date(pathway.deadline);
+                                const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                                return (
+                                    <li key={key} style={{verticalAlign: "top"}}
+                                        onClick={() => self.goTo('/pathwayContent/' + pathway._id)}>
+                                        <PathwayPreview
+                                            name={pathway.name}
+                                            image={pathway.previewImage}
+                                            logo={pathway.sponsor.logo}
+                                            sponsorName={pathway.sponsor.name}
+                                            completionTime={pathway.estimatedCompletionTime}
+                                            deadline={formattedDeadline}
+                                            price={pathway.price}
+                                            _id={pathway._id}
+                                        />
+                                    </li>
+                                );
+                            });
+
+                            this.setState({
+                                pathways,
+                                userPathwayPreviews
+                            });
+                        }).catch(function (err) {
+                            console.log("error getting searched-for pathway");
+                            console.log(err);
+                        })
+                    }
                 }
             }
             if (this.props.currentUser.completedPathways) {
