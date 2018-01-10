@@ -1018,7 +1018,7 @@ app.post("/updateInterests", function(req, res) {
                 console.log(err);
                 res.send(false);
             }
-            res.send(true);
+            res.send(updatedUser);
         });
     })
 
@@ -1043,7 +1043,7 @@ app.post("/updateGoals", function(req, res) {
                 console.log(err);
                 res.send(false);
             }
-            res.send(true);
+            res.send(updatedUser);
         });
     })
 

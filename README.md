@@ -11,30 +11,32 @@ git clone https://github.com/MoonshotLearning/moonshot.git
 cd moonshot
 npm install
 ```
+Have the prerequisites installed and do the steps under installing, after completing that, do these steps:
+```
+cd /moonshot
+webpack
+```
+Open new terminal
+```
+cd /moonshot
+nodemon
+```
+Go to localhost:3000 and the site will be up.
 
 ### Prerequisites
 
-Software that you need to install.
-
-[MongoDB](https://docs.mongodb.com/manual/installation/) - Database, install it globally
-```
-npm install --save -g mongodb
-```
+* [Node](https://nodejs.org/en/) - Javascript runtime
+* [npm](https://www.npmjs.com/) - Installs automatically when you intall node
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
+Software that you need to install.
 
-Say what the step will be
-
+* [MongoDB](https://docs.mongodb.com/manual/installation/) - Database management, install it globally
+* [Webpack](https://www.npmjs.com/package/webpack) - Module bundler - install it globally
 ```
-Give the example
-```
-
-And repeat
-
-```
-until finished
+npm install -g mongodb
+npm install -g webpack
 ```
 
 End with an example of getting some data out of the system or using it for a little demo

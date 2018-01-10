@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {AppBar, Paper, Tabs, Tab, CircularProgress, Chip} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification} from "../../actions/usersActions";
+import {closeNotification, turnHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
@@ -21,6 +21,8 @@ class Profile extends Component {
     }
 
     componentDidMount() {
+        this.props.turnHeaderBlue();
+
         // check if there is a logged-in user first, then create the user's pathways
         if (this.props.currentUser) {
             // populate featuredPathways with initial pathways
@@ -456,7 +458,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        closeNotification
+        closeNotification,
+        turnHeaderBlue
     }, dispatch);
 }
 

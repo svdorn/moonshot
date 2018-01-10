@@ -180,6 +180,12 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state, isOnboarding: "true"
             }
+            break;
+        case "UPDATE_USER_ONBOARDING":
+            return {
+                ...state, currentUser: action.payload
+            };
+            break;
     }
 
     return state
