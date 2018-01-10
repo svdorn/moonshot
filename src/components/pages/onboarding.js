@@ -18,9 +18,10 @@ class Onboarding extends Component {
     componentDidMount() {
         this.props.startOnboarding();
         if (this.props.currentUser) {
-            axios.get("/api/interestsByUserId", {
+            axios.get("/api/infoByUserId", {
                 params: {
-                    userId: this.props.currentUser._id
+                    userId: this.props.currentUser._id,
+                    infoType: "interests"
                 }
             }).then(res => {
                 const userInterests = res.data;

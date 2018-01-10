@@ -999,7 +999,8 @@ app.post("/userCurrentStep", function (req, res) {
     })
 });
 
-app.get("/interestsByUserId", function(req, res) {
+app.get("/infoByUserId", function(req, res) {
+    infoType = req.query.infoType;
     const userId = sanitizeHtml(req.query.userId, sanitizeOptions);
 
     Users.findById(userId, function(err, user) {
@@ -1011,7 +1012,7 @@ app.get("/interestsByUserId", function(req, res) {
             if (!user.info) {
                 res.json([]);
             }
-            res.json(user.info.interests);
+            res.json(user.info[infoType]);
         }
     });
 });

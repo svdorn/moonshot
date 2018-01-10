@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {updateGoals} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
+import axios from 'axios';
 
 class Onboarding2 extends Component {
     constructor(props) {
@@ -52,6 +53,61 @@ class Onboarding2 extends Component {
                     selected: false
                 }
             ],
+        }
+    }
+
+    componentDidMount() {
+        if (this.props.currentUser) {
+            axios.get("/api/infoByUserId", {
+                params: {
+                    userId: this.props.currentUser._id,
+                    info: "goals"
+                }
+            }).then(res => {
+                const userGoals= res.data;
+
+                const potentialGoals = [
+                        "Virtual Reality",
+                        "Augmented Reality",
+                        "3D Printing",
+                        "UX Design",
+                        "IOT",
+                        "Wireframing",
+                        "User Testing",
+                        "A/B Testing",
+                        "User Research",
+                        "Electrical Engineering",
+                        "Mechanical Engineering",
+                        "Robotics",
+                        "Mobile",
+                        "Web",
+                        "Lean Methodology",
+                        "Responsive Design"
+                ];
+
+                // let interestObjects = {};
+                //
+                // // go over each type of interest (each of which is an object which contains a list of interests)
+                // interestTypes.forEach(function(interestsObj, listIndex) {
+                //     // for each type of interest, set the interests object to a list of interest objects
+                //     interestObjects[interestsObj.name] = interestsObj.interests.map(function(interest) {
+                //         // if the user already has that interest, mark it as selected
+                //         let alreadyHasInterest = userInterests.some(function(userInterest) {
+                //             return userInterest == interest;
+                //         })
+                //         return {
+                //             title: interest,
+                //             selected: alreadyHasInterest
+                //         };
+                //     });
+                // })
+                //
+                // this.setState({
+                //     ...this.state,
+                //     ...interestObjects
+                // })
+
+            });
         }
     }
 
