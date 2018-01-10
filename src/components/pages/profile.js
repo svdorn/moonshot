@@ -29,7 +29,6 @@ class Profile extends Component {
         if (this.props.currentUser) {
             // populate featuredPathways with initial pathways
             if (this.props.currentUser.pathways) {
-                console.log("hey")
                 if (this.props.currentUser.pathways.length == 0) {
                     this.setState({
                         pathways: [],

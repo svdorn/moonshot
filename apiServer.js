@@ -999,6 +999,23 @@ app.post("/userCurrentStep", function (req, res) {
     })
 });
 
+app.get("/interestsByUserId", function(req, res) {
+    const userId = sanitizeHtml(req.query.userId, sanitizeOptions);
+
+    Users.findById(userId, function(err, user) {
+        if (err) {
+            console.log("couldn't get user. err: ", err);
+            res.status(500).send("Could not get user");
+        } else {
+            // if the user doesn't have info saved in db, return empty array
+            if (!user.info) {
+                res.json([]);
+            }
+            res.json(user.info.interests);
+        }
+    });
+});
+
 app.post("/updateInterests", function(req, res) {
     const interests = req.body.params.interests;
     const userId = req.body.params.userId;
