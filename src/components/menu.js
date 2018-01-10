@@ -56,7 +56,7 @@ class Menu extends Component {
         if (this.props.isFetching) {
             return (
                 <header style={{zIndex:"100"}}>
-                    <Toolbar>
+                    <Toolbar id="menu">
                         <ToolbarGroup>
                         <img
                             width={300}
@@ -75,7 +75,7 @@ class Menu extends Component {
         return (
             <header style={{zIndex:"100"}}>
                 {this.props.currentUser ?
-                    <Toolbar style={{marginTop:"20px"}}>
+                    <Toolbar id="menu" style={{marginTop:"20px"}}>
                         <ToolbarGroup>
                             <img
                                 style={{marginLeft:"35px"}}
@@ -106,7 +106,7 @@ class Menu extends Component {
                     </Toolbar>
                     :
 
-                <Toolbar style={{marginTop:"20px"}}>
+                <Toolbar style={{marginTop:"20px"}} id="menu">
                     <ToolbarGroup>
                     <img
                         style={{marginLeft:"35px"}}
@@ -126,7 +126,6 @@ class Menu extends Component {
                     </ToolbarGroup>
                 </Toolbar>}
             </header>
-
         )
     }
 }

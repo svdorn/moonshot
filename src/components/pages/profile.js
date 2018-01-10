@@ -135,6 +135,12 @@ class Profile extends Component {
 
     render() {
 
+        // let menuItems = document.getElementsByClassName('menuItem')
+        // for (let itemIdx = 0; itemIdx < menuItems.length; i++) {
+        //     menuItems[itemIdx].style.color = 'blue';
+        // }
+
+
         const style = {
             pathwayPreviewUl: {
                 marginTop: "20px",
@@ -267,17 +273,19 @@ class Profile extends Component {
                     content: <div>{interestsSpans}</div>
                 });
             }
-            if (goals && goals.positionType && goals.positionTitle) {
+            if (goals && goals.length > 0) {
                 index = -1;
+                const goalsSpans = goals.map(function(goal) {
+                    index++;
+                    const comma = (index < goals.length - 1) ? ", " : "";
+                    return (
+                        <span>{goal + comma}</span>
+                    );
+                });
                 aboutMeItems.push({
-                    icon: "TargetBlue.png",
+                    icon: "StarBlue.png",
                     title: "Goals",
-                    content: (
-                        <div>
-                            {goals.positionType}<br/>
-                            {goals.positionTitle}
-                        </div>
-                    )
+                    content: <div>{goalsSpans}</div>
                 });
             }
             if (birthDate) {
