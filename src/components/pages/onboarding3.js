@@ -21,6 +21,7 @@ class Onboarding3 extends Component {
         let linkedIn = "";
         let personal = "";
         let willRelocateTo = "";
+        let eduInfo = [];
 
         if (user && user.info) {
             let info = user.info;
@@ -31,32 +32,35 @@ class Onboarding3 extends Component {
             bio = info.bio ? info.bio : "";
             willRelocateTo = info.willRelocateTo ? info.willRelocateTo : "";
 
-            if (info.links) {
-                let links = info.links;
-                gitHub = links.gitHub ? links.gitHub : "";
-                linkedIn = links.linkedIn ? links.linkedIn : "";
-                personal = links.personal ? links.personal : "";
+            let links = info.links;
+            if (links) {
+                links.forEach(function(link, linkIdx) {
+                    if (link.displayString == "GitHub") {
+                        gitHub = link.url;
+                    } else if (link.displayString == "LinkedIn") {
+                        linkedIn = link.url;
+                    } else if (link.displayString == "Personal") {
+                        personal = link.url;
+                    }
+                });
+            }
+
+            let eduArray = info.education;
+            if (eduArray) {
+                eduInfo = eduArray.map(function(edu) {
+                    return {
+                        school: edu.school ? edu.school : "",
+                        majors: edu.majors ? edu.majors : "",
+                        minors: edu.minors ? edu.minors : "",
+                        endDate: edu.endDate ? edu.endDate : "",
+                    };
+                });
             }
         }
 
         this.state = {
-            location, birthDate, desiredJobs, title, gitHub, linkedIn, personal,
-            educationAreas: [(
-                <ul className="horizCenteredList">
-                    <li className="onboardingLeftInput">
-                        School<br/>
-                        <input /> <br/>
-                        Graduation Date<br/>
-                        <input /><br/>
-                    </li>
-                    <li className="onboardingRightInput">
-                        {"MAJORS(s), minors"}<br/>
-                        <input /><br/>
-                        G.P.A.<br/>
-                        <input /><br/>
-                    </li>
-                </ul>
-            )]
+            location, birthDate, desiredJobs, title, bio, gitHub, linkedIn,
+            personal, willRelocateTo, eduInfo
         }
     }
 
@@ -67,30 +71,17 @@ class Onboarding3 extends Component {
     }
 
     addEducationArea() {
-        console.log("adding education area");
-        // copy the old education area array
-        let educationAreas = this.state.educationAreas.slice();
-
-        educationAreas.push(
-            <ul className="horizCenteredList">
-                <li className="onboardingLeftInput">
-                    School<br/>
-                    <input /> <br/>
-                    Graduation Date<br/>
-                    <input /><br/>
-                </li>
-                <li className="onboardingRightInput">
-                    {"MAJORS(s), minors"}<br/>
-                    <input /><br/>
-                    G.P.A.<br/>
-                    <input /><br/>
-                </li>
-            </ul>
-        );
+        let eduInfo = this.state.eduInfo.slice();
+        eduInfo.push({
+            school: "",
+            majors: "",
+            minors: "",
+            endDate: "",
+        })
 
         this.setState({
             ...this.state,
-            educationAreas
+            eduInfo
         })
     }
 
@@ -101,6 +92,17 @@ class Onboarding3 extends Component {
         this.setState({
             ...this.state,
             ...updatedField
+        })
+    }
+
+    handleEduInputChange(e, field) {
+        const eduIdx = parseInt(e.target.attributes.eduidx.value);
+        let eduInfo = this.state.eduInfo.slice();
+        eduInfo[eduIdx][field] = e.target.value;
+
+        this.setState({
+            ...this.state,
+            ...eduInfo
         })
     }
 
@@ -129,7 +131,29 @@ class Onboarding3 extends Component {
             },
         };
 
-
+        // make the education uls
+        let eduInfo = this.state.eduInfo;
+        let eduIdx = -1;
+        let self = this;
+        let educationUls = eduInfo.map(function(edu) {
+            eduIdx++;
+            return (
+                <ul className="horizCenteredList" key={eduIdx + "ul"}>
+                    <li className="onboardingLeftInput" key={eduIdx + "left"}>
+                        School<br/>
+                        <input type="text" eduidx={eduIdx} key={eduIdx + "school"} value={self.state.eduInfo[eduIdx].school} onChange={(e) => self.handleEduInputChange(e, "school")}/> <br/>
+                        Graduation Date<br/>
+                        <input type="text" eduidx={eduIdx} key={eduIdx + "date"} value={self.state.eduInfo[eduIdx].endDate} onChange={(e) => self.handleEduInputChange(e, "endDate")}/> <br/>
+                    </li>
+                    <li className="onboardingRightInput" key={eduIdx + "left"}>
+                        {"Major(s)"}<br/>
+                        <input type="text" eduidx={eduIdx} key={eduIdx + "majors"} value={self.state.eduInfo[eduIdx].majors} onChange={(e) => self.handleEduInputChange(e, "majors")}/> <br/>
+                        {"Minor(s)"}<br/>
+                        <input type="text" eduidx={eduIdx} key={eduIdx + "minors"} value={self.state.eduInfo[eduIdx].minors} onChange={(e) => self.handleEduInputChange(e, "minors")}/> <br/>
+                    </li>
+                </ul>
+            );
+        });
 
         return (
             <div style={{marginBottom: '50px'}}>
@@ -177,7 +201,7 @@ class Onboarding3 extends Component {
                     <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Education</b></div>
                 </div>
 
-                {this.state.educationAreas}
+                {educationUls}
 
                 <button onClick={this.addEducationArea.bind(this)}>
                     Add another school

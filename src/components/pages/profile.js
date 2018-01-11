@@ -226,7 +226,10 @@ class Profile extends Component {
 
             if (education && education.length > 0) {
                 const schools = education.map(function(edu) {
-                    const dates = edu.startDate.substring(0,4) + "-" + edu.endDate.substring(0,4);
+                    // how to show the dates if the date is stored as a Date
+                    //const dates = edu.startDate.substring(0,4) + "-" + edu.endDate.substring(0,4);
+                    // how to show the dates if the dates are stored as Strings
+                    const dates = edu.endDate;
                     return (
                         <div>
                             <div style={{float:"left"}}>{edu.school}</div>
@@ -241,7 +244,22 @@ class Profile extends Component {
                     content: schools
                 });
             }
-            if (links && links.length > 0) {
+            if (links) {
+                // index = -1;
+                // for (const link in links) {
+                //     if (links.hasOwnProperty(link)) {
+                //         index++;
+                //         linkOuts.push(
+                //             <span>
+                //                 <a href={link.url} target="_blank">{link.displayString}</a>
+                //                 {index < links.length - 1 ?
+                //                     <div className="linkSeparator" style={{backgroundColor:"black"}}/>
+                //                     : null
+                //                 }
+                //             </span>
+                //         );
+                //     }
+                // }
                 index = -1;
                 const linkOuts = links.map(function(link) {
                     // so that index is at the current place

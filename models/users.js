@@ -26,9 +26,11 @@ var usersSchema = mongoose.Schema({
         },
         education: [{
             school: String,
+            majors: String,
+            minors: String,
             degree: String,
-            startDate: Date,
-            endDate: Date
+            startDate: String,
+            endDate: String
         }],
         interests: [ String ],
         birthDate: Date,
