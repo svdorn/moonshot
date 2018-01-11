@@ -80,6 +80,14 @@ footer {
     cursor: pointer;
 }
 
+.greenButton {
+    background-color: white;
+    border: 2px solid var(--moonshotGreenText);
+    color: var(--moonshotGreenText);
+    padding-top: 5px;
+    margin-bottom: 10px;
+}
+
 .blueWhiteButton {
     background-color: #2de7ef;
     border: 2px solid white;
@@ -685,6 +693,60 @@ button.link {
     width: 0px;
     float: left;
 }
+
+
+.onboarding3 {
+    color: var(--moonshotGreenText);
+    font-size: 18px;
+}
+.greenCheckbox {
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    border: 2px solid var(--moonshotGreenText);
+    cursor: pointer;
+    margin: -5px 10px 0px 0px;
+    vertical-align: middle;
+}
+.greenCheckbox > .checkMarktrue, .greenCheckbox > .checkMarkfalse {
+    margin-top: -15px;
+    margin-left: 2px;
+    height: 15px;
+    width: 15px;
+}
+.greenCheckbox > .checkMarkfalse { visibility: hidden; }
+.greenCheckbox > .checkMarktrue { visibility: visible; }
+.onboardingLeftInput, .onboardingRightInput {
+    vertical-align: top;
+    color: var(--moonshotGreenText);
+    font-size: 20px;
+}
+.onboardingLeftInput > span, .onboardingRightInput > span {
+    display: inline-block;
+    margin-bottom: 8px;
+}
+.inputSeparator {
+    width: 7%;
+    min-width: 20px;
+}
+.greenInput {
+    border-top: 2px solid var(--moonshotGreenText);
+    border-bottom: 2px solid var(--moonshotGreenText);
+    border-left: 3px solid var(--moonshotGreenText);
+    border-right: 3px solid var(--moonshotGreenText);
+    padding-top: 5px;
+    font-size: 20px;
+    text-align: center;
+    height: 40px;
+    width: 350px;
+    color: black;
+    margin-bottom: 15px;
+}
+.greenInput::placeholder { color: #B6B6B6; }
+.greenInput::-webkit-input-placeholder { color: #B6B6B6; }
+.greenInput:-moz-placeholder { color: #B6B6B6; }
+.greenInput::-moz-placeholder { color: #B6B6B6; }
+.greenInput:-ms-input-placeholder { color: #B6B6B6; }
 
 /* decorative triangles */
 

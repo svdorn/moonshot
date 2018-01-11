@@ -23,6 +23,8 @@ class Onboarding3 extends Component {
         let willRelocateTo = "";
         let eduInfo = [];
 
+        let inSchool = false;
+
         if (user && user.info) {
             let info = user.info;
             location = info.location ? info.location : "";
@@ -31,6 +33,7 @@ class Onboarding3 extends Component {
             title = info.title ? info.title : "";
             bio = info.bio ? info.bio : "";
             willRelocateTo = info.willRelocateTo ? info.willRelocateTo : "";
+            inSchool = info.inSchool ? info.inSchool : false;
 
             let links = info.links;
             if (links) {
@@ -60,7 +63,7 @@ class Onboarding3 extends Component {
 
         this.state = {
             location, birthDate, desiredJobs, bio, gitHub, title,
-            linkedIn, personal, willRelocateTo, eduInfo
+            linkedIn, personal, willRelocateTo, eduInfo, inSchool
         }
     }
 
@@ -69,6 +72,7 @@ class Onboarding3 extends Component {
 
         const state = this.state;
 
+        const inSchool = state.inSchool;
         const location = state.location;
         const birthDate = state.birthDate;
         const desiredJobs = state.desiredJobs;
@@ -83,7 +87,7 @@ class Onboarding3 extends Component {
         const education = state.eduInfo;
         this.props.updateInfo(this.props.currentUser, {
             location, birthDate, desiredJobs, title,
-            bio, links, willRelocateTo, education
+            bio, links, willRelocateTo, education, inSchool
         });
         browserHistory.push('/');
         window.scrollTo(0,0);
@@ -139,6 +143,13 @@ class Onboarding3 extends Component {
         })
     }
 
+    handleCheckMarkClick() {
+        this.setState({
+            ...this.state,
+            inSchool: !this.state.inSchool
+        })
+    }
+
     render() {
         const style = {
             title: {
@@ -174,21 +185,56 @@ class Onboarding3 extends Component {
                 <div key={eduIdx + "div"}>
                     <ul className="horizCenteredList" key={eduIdx + "ul"}>
                         <li className="onboardingLeftInput" key={eduIdx + "left"}>
-                            School<br/>
-                            <input type="text" eduidx={eduIdx} key={eduIdx + "school"} placeholder="e.g. Columbia University" value={self.state.eduInfo[eduIdx].school} onChange={(e) => self.handleEduInputChange(e, "school")}/> <br/>
-                            Graduation Date<br/>
-                            <input type="text" eduidx={eduIdx} key={eduIdx + "date"} placeholder="e.g. May 2020" value={self.state.eduInfo[eduIdx].endDate} onChange={(e) => self.handleEduInputChange(e, "endDate")}/> <br/>
+                            <span>School</span><br/>
+                            <input
+                                type="text"
+                                eduidx={eduIdx}
+                                className="greenInput"
+                                key={eduIdx + "school"}
+                                placeholder="e.g. Columbia University"
+                                value={self.state.eduInfo[eduIdx].school}
+                                onChange={(e) => self.handleEduInputChange(e, "school")}
+                            /> <br/>
+                            <span>Graduation Date</span><br/>
+                            <input
+                                type="text"
+                                eduidx={eduIdx}
+                                key={eduIdx + "date"}
+                                className="greenInput"
+                                placeholder="e.g. May 2020"
+                                value={self.state.eduInfo[eduIdx].endDate}
+                                onChange={(e) => self.handleEduInputChange(e, "endDate")}
+                            /> <br/>
                         </li>
+                        <li className="inputSeparator" />
                         <li className="onboardingRightInput" key={eduIdx + "right"}>
-                            {"Major(s)"}<br/>
-                            <input type="text" eduidx={eduIdx} key={eduIdx + "majors"} placeholder="e.g. Computer Science" value={self.state.eduInfo[eduIdx].majors} onChange={(e) => self.handleEduInputChange(e, "majors")}/> <br/>
-                            {"Minor(s)"}<br/>
-                            <input type="text" eduidx={eduIdx} key={eduIdx + "minors"} placeholder="e.g. Economics" value={self.state.eduInfo[eduIdx].minors} onChange={(e) => self.handleEduInputChange(e, "minors")}/> <br/>
+                            <span>{"Major(s)"}</span><br/>
+                            <input
+                                type="text"
+                                eduidx={eduIdx}
+                                className="greenInput"
+                                key={eduIdx + "majors"}
+                                placeholder="e.g. Computer Science"
+                                value={self.state.eduInfo[eduIdx].majors}
+                                onChange={(e) => self.handleEduInputChange(e, "majors")}
+                            /> <br/>
+                            <span>{"Minor(s)"}</span><br/>
+                            <input
+                                type="text"
+                                eduidx={eduIdx}
+                                className="greenInput"
+                                key={eduIdx + "minors"}
+                                placeholder="e.g. Economics"
+                                value={self.state.eduInfo[eduIdx].minors}
+                                onChange={(e) => self.handleEduInputChange(e, "minors")}
+                            /> <br/>
                         </li>
                     </ul>
-                    <button eduidx={eduIdx} onClick={(e) => self.removeEducationArea(e)}>
-                        Remove school
-                    </button>
+                    <div className="center">
+                        <button className="greenButton" eduidx={eduIdx} onClick={(e) => self.removeEducationArea(e)}>
+                            Remove school
+                        </button>
+                    </div>
                 </div>
             );
         });
@@ -213,24 +259,79 @@ class Onboarding3 extends Component {
 
                 <div className="horizCenteredList">
                     <li className="onboardingLeftInput">
-                        Date of Birth<br/>
-                        <input type="text" placeholder="mm/dd/yyyy" value={this.state.birthDate} onChange={(e) => this.handleInputChange(e, "birthDate")}/> <br/>
-                        Location<br/>
-                        <input type="text" placeholder="City, State, Country" value={this.state.location} onChange={(e) => this.handleInputChange(e, "location")}/> <br/>
-                        Willing to relocate to<br/>
-                        <input type="text" placeholder="e.g. San Francisco, East Coast..." value={this.state.willRelocateTo} onChange={(e) => this.handleInputChange(e, "willRelocateTo")}/> <br/>
-                        {"Desired Job(s)"}<br/>
-                        <input type="text" placeholder="e.g. VR/AR Developer..." value={this.state.desiredJobs} onChange={(e) => this.handleInputChange(e, "desiredJobs")}/> <br/>
+                        <span>Date of Birth</span><br/>
+                        <input
+                            type="text"
+                            className="greenInput"
+                            placeholder="mm/dd/yyyy"
+                            value={this.state.birthDate}
+                            onChange={(e) => this.handleInputChange(e, "birthDate")}
+                        /> <br/>
+                        <span>Location</span><br/>
+                        <input
+                            type="text"
+                            className="greenInput"
+                            placeholder="City, State, Country"
+                            value={this.state.location}
+                            onChange={(e) => this.handleInputChange(e, "location")}
+                        /> <br/>
+                        <span>Willing to relocate to</span><br/>
+                        <input
+                            type="text"
+                            className="greenInput"
+                            placeholder="e.g. San Francisco, East Coast..."
+                            value={this.state.willRelocateTo}
+                            onChange={(e) => this.handleInputChange(e, "willRelocateTo")}
+                            /> <br/>
+                        <span>{"Desired Job(s)"}</span><br/>
+                        <input
+                            type="text"
+                            className="greenInput"
+                            placeholder="e.g. VR/AR Developer..."
+                            value={this.state.desiredJobs}
+                            onChange={(e) => this.handleInputChange(e, "desiredJobs")}
+                        /> <br/>
                     </li>
+                    <li className="inputSeparator" />
                     <li className="onboardingRightInput">
-                        Title<br/>
-                        <input type="text" placeholder="e.g. Front End Developer passionate about UX" value={this.state.title} onChange={(e) => this.handleInputChange(e, "title")}/> <br/>
-                        Bio<br/>
-                        <input type="text" placeholder="e.g. I have been creating virtual reality..." value={this.state.bio} onChange={(e) => this.handleInputChange(e, "bio")}/> <br/>
-                        Links<br/>
-                        <input type="text" placeholder="LinkedIn Profile" value={this.state.linkedIn} onChange={(e) => this.handleInputChange(e, "linkedIn")}/> <br/>
-                        <input type="text" placeholder="GitHub Profile" value={this.state.gitHub} onChange={(e) => this.handleInputChange(e, "gitHub")}/> <br/>
-                        <input type="text" placeholder="Personal Site" value={this.state.personal} onChange={(e) => this.handleInputChange(e, "personal")}/> <br/>
+                        <span>Title</span><br/>
+                        <input
+                            type="text"
+                            className="greenInput"
+                            placeholder="e.g. Front End Developer passionate about UX"
+                            value={this.state.title}
+                            onChange={(e) => this.handleInputChange(e, "title")}
+                        /> <br/>
+                        <span>Bio</span><br/>
+                        <input
+                            type="text"
+                            className="greenInput"
+                            placeholder="e.g. I have been creating virtual reality..."
+                            value={this.state.bio}
+                            onChange={(e) => this.handleInputChange(e, "bio")}
+                        /> <br/>
+                        <span>Links</span><br/>
+                        <input
+                            type="text"
+                            className="greenInput"
+                            placeholder="LinkedIn Profile"
+                            value={this.state.linkedIn}
+                            onChange={(e) => this.handleInputChange(e, "linkedIn")}
+                        /> <br/>
+                        <input
+                            type="text"
+                            className="greenInput"
+                            placeholder="GitHub Profile"
+                            value={this.state.gitHub}
+                            onChange={(e) => this.handleInputChange(e, "gitHub")}
+                        /> <br/>
+                        <input
+                            type="text"
+                            className="greenInput"
+                            placeholder="Personal Site"
+                            value={this.state.personal}
+                            onChange={(e) => this.handleInputChange(e, "personal")}
+                        /> <br/>
                     </li>
                 </div>
 
@@ -241,9 +342,20 @@ class Onboarding3 extends Component {
 
                 {educationUls}
 
-                <button onClick={this.addEducationArea.bind(this)}>
-                    Add another school
-                </button>
+                <div className="center onboarding3">
+                    <button className="greenButton" onClick={this.addEducationArea.bind(this)}>
+                        Add another school
+                    </button><br/>
+                    <div className="greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                        <img
+                            className={"checkMark"  + this.state.inSchool}
+                            src="/icons/CheckMark.png"
+                            height={15}
+                            width={15}
+                        />
+                    </div>
+                    I am currently in school<br/>
+                </div>
 
 
                 <div className="center">

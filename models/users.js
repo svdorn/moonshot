@@ -19,6 +19,7 @@ var usersSchema = mongoose.Schema({
         willRelocateTo: String,
         bio: String,
         desiredJobs: String,
+        inSchool: Boolean,
         links: {
             linkedIn: String,
             gitHub: String,
