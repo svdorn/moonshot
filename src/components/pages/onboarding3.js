@@ -85,6 +85,20 @@ class Onboarding3 extends Component {
         })
     }
 
+    removeEducationArea(e) {
+        const eduIdx = parseInt(e.target.attributes.eduidx.value);
+        const oldEduInfo = this.state.eduInfo;
+
+        let eduInfo = oldEduInfo.slice(0, eduIdx).concat(oldEduInfo.slice(eduIdx + 1));
+
+        this.setState({
+            ...this.state,
+            eduInfo
+        }, function() {
+            console.log(this.state);
+        });
+    }
+
     handleInputChange(e, field) {
         const updatedField = {};
         updatedField[field] = e.target.value;
@@ -138,20 +152,25 @@ class Onboarding3 extends Component {
         let educationUls = eduInfo.map(function(edu) {
             eduIdx++;
             return (
-                <ul className="horizCenteredList" key={eduIdx + "ul"}>
-                    <li className="onboardingLeftInput" key={eduIdx + "left"}>
-                        School<br/>
-                        <input type="text" eduidx={eduIdx} key={eduIdx + "school"} value={self.state.eduInfo[eduIdx].school} onChange={(e) => self.handleEduInputChange(e, "school")}/> <br/>
-                        Graduation Date<br/>
-                        <input type="text" eduidx={eduIdx} key={eduIdx + "date"} value={self.state.eduInfo[eduIdx].endDate} onChange={(e) => self.handleEduInputChange(e, "endDate")}/> <br/>
-                    </li>
-                    <li className="onboardingRightInput" key={eduIdx + "left"}>
-                        {"Major(s)"}<br/>
-                        <input type="text" eduidx={eduIdx} key={eduIdx + "majors"} value={self.state.eduInfo[eduIdx].majors} onChange={(e) => self.handleEduInputChange(e, "majors")}/> <br/>
-                        {"Minor(s)"}<br/>
-                        <input type="text" eduidx={eduIdx} key={eduIdx + "minors"} value={self.state.eduInfo[eduIdx].minors} onChange={(e) => self.handleEduInputChange(e, "minors")}/> <br/>
-                    </li>
-                </ul>
+                <div key={eduIdx + "div"}>
+                    <ul className="horizCenteredList" key={eduIdx + "ul"}>
+                        <li className="onboardingLeftInput" key={eduIdx + "left"}>
+                            School<br/>
+                            <input type="text" eduidx={eduIdx} key={eduIdx + "school"} value={self.state.eduInfo[eduIdx].school} onChange={(e) => self.handleEduInputChange(e, "school")}/> <br/>
+                            Graduation Date<br/>
+                            <input type="text" eduidx={eduIdx} key={eduIdx + "date"} value={self.state.eduInfo[eduIdx].endDate} onChange={(e) => self.handleEduInputChange(e, "endDate")}/> <br/>
+                        </li>
+                        <li className="onboardingRightInput" key={eduIdx + "right"}>
+                            {"Major(s)"}<br/>
+                            <input type="text" eduidx={eduIdx} key={eduIdx + "majors"} value={self.state.eduInfo[eduIdx].majors} onChange={(e) => self.handleEduInputChange(e, "majors")}/> <br/>
+                            {"Minor(s)"}<br/>
+                            <input type="text" eduidx={eduIdx} key={eduIdx + "minors"} value={self.state.eduInfo[eduIdx].minors} onChange={(e) => self.handleEduInputChange(e, "minors")}/> <br/>
+                        </li>
+                    </ul>
+                    <button eduidx={eduIdx} onClick={(e) => self.removeEducationArea(e)}>
+                        Remove school
+                    </button>
+                </div>
             );
         });
 
