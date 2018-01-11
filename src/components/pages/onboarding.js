@@ -1,7 +1,7 @@
 "use strict"
 import React, { Component}  from 'react';
 import { connect } from 'react-redux';
-import { startOnboarding } from "../../actions/usersActions";
+import { updateInfo, updateGoals, updateInterests, startOnboarding, endOnboarding } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
 import { Tabs, Tab } from 'material-ui/Tabs';
 import Onboarding1 from './onboarding1';
@@ -10,20 +10,543 @@ import Onboarding3 from './onboarding3';
 
 
 class Onboarding extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            currInterestArea: undefined,
+            goals: [],
+            tabValue: "interests"
+        }
+    }
+
     componentDidMount() {
         this.props.startOnboarding();
+        const user = this.props.currentUser;
+
+        if (user) {
+            const info = user.info;
+            if (info) {
+                const userInterests = info.interests;
+                if (userInterests) {
+                    const interestTypes = [
+                        {
+                            name: "designAndDevInterests",
+                            interests: [
+                                "Virtual Reality",
+                                "Augmented Reality",
+                                "3D Printing",
+                                "UX Design",
+                                "IOT",
+                                "Wireframing",
+                                "User Testing",
+                                "A/B Testing",
+                                "User Research",
+                                "Electrical Engineering",
+                                "Mechanical Engineering",
+                                "Robotics",
+                                "Mobile",
+                                "Web",
+                                "Lean Methodology",
+                                "Responsive Design"
+                            ]
+                        },
+                        {
+                            name: "dataInterests",
+                            interests: [
+                                "SQL",
+                                "MySQL",
+                                "Database Analysis",
+                                "Data Security",
+                                "Machine Learning",
+                                "Big Data",
+                                "Data Science",
+                                "Data Structures",
+                                "Database Administration",
+                                "Database Development"
+                            ]
+                        },
+                        {
+                            name: "softwareDevInterests",
+                            interests: [
+                                "Angular",
+                                "React",
+                                "Javascript",
+                                "Java",
+                                "Python",
+                                "Node.js",
+                                "Git",
+                                "AWS",
+                                "REST",
+                                "C",
+                                "C#",
+                                "C++",
+                                "HTML",
+                                "CSS"
+                            ]
+                        },
+                        {
+                            name: "businessInterests",
+                            interests: [
+                                "Google Analytics",
+                                "Project Management",
+                                "Agile",
+                                "Data Visualization",
+                                "Data Analysis",
+                                "Customer Service",
+                                "Startups",
+                                "Entrepreneurship",
+                                "CRM",
+                                "Management",
+                                "Communication",
+                                "Problem Solving",
+                                "IT Fundamentals",
+                                "Salesforce",
+                                "Productivity"
+                            ]
+                        },
+                        {
+                            name: "creationAndMarketingInterests",
+                            interests: [
+                                "Virtual Marketing",
+                                "Pay Per Click",
+                                "Social Media",
+                                "UX",
+                                "UI Design",
+                                "Web Design",
+                                "Photoshop",
+                                "Graphic Design",
+                                 "SEO",
+                                "Content Marketing",
+                            ]
+                        }
+                    ];
+
+                    let interestObjects = {};
+
+                    // go over each type of interest (each of which is an object which contains a list of interests)
+                    interestTypes.forEach(function(interestsObj, listIndex) {
+                        // for each type of interest, set the interests object to a list of interest objects
+                        interestObjects[interestsObj.name] = interestsObj.interests.map(function(interest) {
+                            // if the user already has that interest, mark it as selected
+                            let alreadyHasInterest = userInterests.some(function(userInterest) {
+                                return userInterest == interest;
+                            })
+                            return {
+                                title: interest,
+                                selected: alreadyHasInterest
+                            };
+                        });
+                    })
+
+                    this.setState({
+                        ...this.state,
+                        ...interestObjects
+                    })
+                }
+
+
+
+                // GOALS
+                const userGoals = info.goals;
+
+                const potentialGoals = [
+                    "Get a Full-Time Job",
+                    "Find an Internship",
+                    "Find Part-Time/Contract Work",
+                    "Discover Your Dream Job",
+                    "Explore Emerging Career Path",
+                    "Learn About New Technologies",
+                    "Learn New Skills",
+                    "Improve Your Current Skills",
+                    "Build Your Portfolio",
+                    "Start a Business"
+                ];
+
+                let goalsObjects = [];
+
+                potentialGoals.forEach(function(goal, goalIndex) {
+                    let alreadyHasGoal = userGoals.some(function(userGoal) {
+                        return userGoal == goal;
+                    });
+                    goalsObjects.push({
+                        title: goal,
+                        selected: alreadyHasGoal
+                    });
+                });
+
+                this.setState({
+                    ...this.state,
+                    goals: goalsObjects
+                });
+            }
+        }
+    }
+
+    handleIconClick(index) {
+        let chosen = undefined;
+        switch (index) {
+            case 1:
+                chosen = this.state.designAndDevInterests;
+                break;
+            case 2:
+                chosen = this.state.dataInterests;
+                break;
+            case 3:
+                chosen = this.state.softwareDevInterests;
+                break;
+            case 4:
+                chosen = this.state.creationAndMarketingInterests;
+                break;
+            case 5:
+                chosen = this.state.businessInterests;
+                break;
+            default:
+                break;
+        }
+        this.setState({
+            currInterestArea: chosen
+        })
+    }
+
+    handleInterestClick(interest) {
+        if (this.state.currInterestArea !== undefined) {
+            for (let i = 0; i < this.state.currInterestArea.length; i++) {
+                let int = this.state.currInterestArea[i];
+                if (int === interest) {
+                    if (interest.selected) {
+                        interest.selected = false;
+                    } else {
+                        interest.selected = true;
+                    }
+                    let area = this.state.currInterestArea[i];
+                    this.setState({area: interest});
+                    break;
+                }
+            }
+        }
+    }
+
+    handleStep1ButtonClick() {
+        let interests = [];
+        for (let i = 0; i < this.state.designAndDevInterests.length; i++) {
+            if (this.state.designAndDevInterests[i].selected) {
+                interests.push(this.state.designAndDevInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.dataInterests.length; i++) {
+            if (this.state.dataInterests[i].selected) {
+                interests.push(this.state.dataInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.softwareDevInterests.length; i++) {
+            if (this.state.softwareDevInterests[i].selected) {
+                interests.push(this.state.softwareDevInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.businessInterests.length; i++) {
+            if (this.state.businessInterests[i].selected) {
+                interests.push(this.state.businessInterests[i].title);
+            }
+        }
+        for (let i = 0; i < this.state.creationAndMarketingInterests.length; i++) {
+            if (this.state.creationAndMarketingInterests[i].selected) {
+                interests.push(this.state.creationAndMarketingInterests[i].title);
+            }
+        }
+        if (interests.length > 0) {
+            this.props.updateInterests(this.props.currentUser, interests);
+        }
+        this.setState({
+            ...this.state,
+            tabValue: "goals"
+        })
+        window.scrollTo(0, 0);
+    }
+
+
+    // GOALS
+    handleGoalClick(goal) {
+        if (this.state.goals !== undefined) {
+            for (let i = 0; i < this.state.goals.length; i++) {
+                let g = this.state.goals[i];
+                if (goal === g) {
+                    if (goal.selected) {
+                        goal.selected = false;
+                    } else {
+                        goal.selected = true;
+                    }
+                    let area = this.state.goals[i];
+                    this.setState({area: goal});
+                    break;
+                }
+            }
+        }
+    }
+
+    handleGoalsButtonClick() {
+        let goals = [];
+        for (let i = 0; i < this.state.goals.length; i++) {
+            if (this.state.goals[i].selected) {
+                goals.push(this.state.goals[i].title);
+            }
+        }
+
+        if (goals.length > 0) {
+            this.props.updateGoals(this.props.currentUser, goals);
+        }
+
+        this.setState({
+            ...this.state,
+            tabValue: "info"
+        })
+        window.scrollTo(0, 0);
+    }
+
+
+    handleTabChange = (value) => {
+        console.log(value);
+        this.setState({
+            tabValue: value,
+        });
+        this.saveAllInfo();
+    };
+
+
+    saveAllInfo() {
+        //this.props.saveAllInfo();
     }
 
     render() {
+        const style = {
+            title: {
+                topTitle: {
+                    margin: '20px 0 10px 0',
+                },
+                divider: {
+                    position: 'relative',
+                    marginBottom: '20px',
+                },
+                text: {
+                    marginBottom: '30px',
+                }
+            },
+            iconLi: {
+                marginRight: '90px',
+            }
+        };
+
+        // INTERESTS
+        let interests = undefined;
+        if (this.state.currInterestArea !== undefined) {
+            let key = 0;
+            let self = this;
+            interests = this.state.currInterestArea.map(function (interest) {
+                key++;
+                return (
+                    <li style={{verticalAlign: "top"}} key={key} className="clickableNoUnderline"
+                        onClick={() => self.handleInterestClick(interest)}>
+                        {interest.selected ?
+                            <div className="onboardingPage1Text2Background">
+                                <div className="smallText onboardingPage1Text2">
+                                    {interest.title}
+                                </div>
+                            </div>
+                            :
+                            <div className="gradientBorderBlue center" style={{marginRight: '20px', marginTop: '20px'}}>
+                                <div className="onboardingPage1Text3 smallText">
+                                    {interest.title}
+                                </div>
+                            </div>
+                        }
+                    </li>
+                );
+            });
+        }
+
+        // GOALS
+        let goals = undefined;
+        if (this.state.goals !== undefined) {
+            let key = 0;
+            let self = this;
+            goals = this.state.goals.map(function (goal) {
+                key++;
+                return (
+                    <li key={key} className="clickableNoUnderline"
+                        onClick={() => self.handleGoalClick(goal)}>
+                        {goal.selected ?
+                            <div className="onboardingPage2Text2Background center">
+                                <div className="smallText onboardingPage1Text2">
+                                    {goal.title}
+                                </div>
+                            </div>
+                            :
+                            <div className="gradientBorderPurple center" style={{marginTop: '20px'}}>
+                                <div className="onboardingPage2Text3 smallText">
+                                    {goal.title}
+                                </div>
+                            </div>
+                        }
+                    </li>
+                );
+            });
+        }
+
+
         return (
-            <Tabs>
-                <Tab label="Interests" >
-                    <Onboarding1 />
+            <Tabs
+                value={this.state.tabValue}
+                onChange={this.handleTabChange}
+            >
+                <Tab label="Interests" value="interests">
+                <div style={{marginBottom: '50px', minWidth: '100%'}}>
+                    <div className="onboardingPage1Text mediumText center" style={style.title.topTitle}>Select Your
+                        Interests
+                    </div>
+                    <div style={style.title.divider}>
+                        <div className="onboardingDividerLeft" style={{bottom: "0"}}/>
+                        <div className="onboardingDividerRight" style={{bottom: "0"}}/>
+                    </div>
+                    <div className="smallText center" style={style.title.text}>What skills do you want to learn or
+                        improve?
+                    </div>
+                    <div>
+                        <ul className="horizCenteredList onboardingListContainer">
+                            <li style={style.iconLi} className="clickableNoUnderline"
+                                onClick={() => this.handleIconClick(1)}>
+                                {this.state.currInterestArea === this.state.designAndDevInterests ?
+                                    <div className="gradientBorderBlue center">
+                                        <div style={{padding: '5px'}}>
+                                            <img src="/icons/Cube.png" className="onboardingIcons"/>
+                                            <div className="onboardingIconsText center"><b>Product Design<br/>and
+                                                Development</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img src="/icons/Cube.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Product Design<br/>and
+                                            Development</b>
+                                        </div>
+                                    </div>
+                                }
+                            </li>
+                            <li style={style.iconLi} className="clickableNoUnderline"
+                                onClick={() => this.handleIconClick(2)}>
+                                {this.state.currInterestArea === this.state.dataInterests ?
+                                    <div className="gradientBorderBlue center">
+                                        <div style={{padding: '5px'}}>
+                                            <img src="/icons/Data.png" className="onboardingIcons"/>
+                                            <div className="onboardingIconsText center"><b>Data</b></div>
+                                        </div>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img src="/icons/Data.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Data</b></div>
+                                    </div>
+                                }
+                            </li>
+                            <li className="clickableNoUnderline" onClick={() => this.handleIconClick(3)}>
+                                {this.state.currInterestArea === this.state.softwareDevInterests ?
+                                    <div className="gradientBorderBlue center">
+                                        <div style={{padding: '5px'}}>
+                                            <img src="/icons/Computer.png" className="onboardingIcons"/>
+                                            <div className="onboardingIconsText center"><b>Software<br/> Development</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img src="/icons/Computer.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Software<br/> Development</b></div>
+                                    </div>
+                                }
+                            </li>
+                        </ul>
+                        <ul className="horizCenteredList onboardingListContainer">
+                            <li style={style.iconLi} className="clickableNoUnderline"
+                                onClick={() => this.handleIconClick(4)}>
+                                {this.state.currInterestArea === this.state.creationAndMarketingInterests ?
+                                    <div className="gradientBorderBlue center">
+                                        <div style={{padding: '5px'}}>
+                                            <img src="/icons/Creation.png" className="onboardingIcons"/>
+                                            <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img src="/icons/Creation.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b></div>
+                                    </div>
+                                }
+                            </li>
+                            <li className="clickableNoUnderline" onClick={() => this.handleIconClick(5)}>
+                                {this.state.currInterestArea === this.state.businessInterests ?
+                                    <div className="gradientBorderBlue center">
+                                        <div style={{padding: '5px'}}>
+                                            <img src="/icons/Business.png" className="onboardingIcons"/>
+                                            <div className="onboardingIconsText center"><b>Business</b></div>
+                                        </div>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img src="/icons/Business.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Business</b></div>
+                                    </div>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="center">
+                        {interests ?
+                            <ul className="horizCenteredList onboardingInterestsListContainer">
+                                {interests}
+                            </ul>
+                            : null}
+                    </div>
+                    <div className="center">
+                        <button className="onboardingPage1Button" onClick={this.handleStep1ButtonClick.bind(this)}>
+                            <div className="smallText2 onboardingPage1Text2">
+                                Next
+                            </div>
+                        </button>
+                    </div>
+                </div>
                 </Tab>
-                <Tab label="Goals" >
-                    <Onboarding2 />
+
+
+                <Tab label="Goals" value="goals">
+                <div style={{marginBottom: '50px'}}>
+                    <div className="onboardingPage2Text mediumText center" style={style.title.topTitle}>
+                        What Are Your Goals?
+                    </div>
+                    <div style={style.title.divider}>
+                        <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
+                        <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
+                    </div>
+                    <div className="smallText center" style={style.title.text}>
+                        Select All That Apply.
+                    </div>
+                    <div>
+                        {goals ?
+                            <ul className="onboardingGoalsListContainer">
+                                {goals}
+                            </ul>
+                            : null}
+                    </div>
+                    <div className="center">
+                        <button className="onboardingPage2Button" onClick={this.handleGoalsButtonClick.bind(this)}>
+                            <div className="smallText2 onboardingPage1Text2">
+                                Next
+                            </div>
+                        </button>
+                    </div>
+                </div>
                 </Tab>
-                <Tab label="Info">
+                <Tab label="Info" value="info">
                     <Onboarding3 />
                 </Tab>
             </Tabs>
@@ -32,12 +555,18 @@ class Onboarding extends Component {
 }
 
 function mapStateToProps(state) {
-    return {  };
+    return {
+        currentUser: state.users.currentUser,
+    };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        startOnboarding
+        updateInfo,
+        updateGoals,
+        updateInterests,
+        startOnboarding,
+        endOnboarding
     }, dispatch);
 }
 
