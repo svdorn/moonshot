@@ -175,15 +175,15 @@ class Onboarding3 extends Component {
                     <ul className="horizCenteredList" key={eduIdx + "ul"}>
                         <li className="onboardingLeftInput" key={eduIdx + "left"}>
                             School<br/>
-                            <input type="text" eduidx={eduIdx} key={eduIdx + "school"} value={self.state.eduInfo[eduIdx].school} onChange={(e) => self.handleEduInputChange(e, "school")}/> <br/>
+                            <input type="text" eduidx={eduIdx} key={eduIdx + "school"} placeholder="e.g. Columbia University" value={self.state.eduInfo[eduIdx].school} onChange={(e) => self.handleEduInputChange(e, "school")}/> <br/>
                             Graduation Date<br/>
-                            <input type="text" eduidx={eduIdx} key={eduIdx + "date"} value={self.state.eduInfo[eduIdx].endDate} onChange={(e) => self.handleEduInputChange(e, "endDate")}/> <br/>
+                            <input type="text" eduidx={eduIdx} key={eduIdx + "date"} placeholder="e.g. May 2020" value={self.state.eduInfo[eduIdx].endDate} onChange={(e) => self.handleEduInputChange(e, "endDate")}/> <br/>
                         </li>
                         <li className="onboardingRightInput" key={eduIdx + "right"}>
                             {"Major(s)"}<br/>
-                            <input type="text" eduidx={eduIdx} key={eduIdx + "majors"} value={self.state.eduInfo[eduIdx].majors} onChange={(e) => self.handleEduInputChange(e, "majors")}/> <br/>
+                            <input type="text" eduidx={eduIdx} key={eduIdx + "majors"} placeholder="e.g. Computer Science" value={self.state.eduInfo[eduIdx].majors} onChange={(e) => self.handleEduInputChange(e, "majors")}/> <br/>
                             {"Minor(s)"}<br/>
-                            <input type="text" eduidx={eduIdx} key={eduIdx + "minors"} value={self.state.eduInfo[eduIdx].minors} onChange={(e) => self.handleEduInputChange(e, "minors")}/> <br/>
+                            <input type="text" eduidx={eduIdx} key={eduIdx + "minors"} placeholder="e.g. Economics" value={self.state.eduInfo[eduIdx].minors} onChange={(e) => self.handleEduInputChange(e, "minors")}/> <br/>
                         </li>
                     </ul>
                     <button eduidx={eduIdx} onClick={(e) => self.removeEducationArea(e)}>
@@ -214,23 +214,23 @@ class Onboarding3 extends Component {
                 <div className="horizCenteredList">
                     <li className="onboardingLeftInput">
                         Date of Birth<br/>
-                        <input type="text" value={this.state.birthDate} onChange={(e) => this.handleInputChange(e, "birthDate")}/> <br/>
+                        <input type="text" placeholder="mm/dd/yyyy" value={this.state.birthDate} onChange={(e) => this.handleInputChange(e, "birthDate")}/> <br/>
                         Location<br/>
-                        <input type="text" value={this.state.location} onChange={(e) => this.handleInputChange(e, "location")}/> <br/>
+                        <input type="text" placeholder="City, State, Country" value={this.state.location} onChange={(e) => this.handleInputChange(e, "location")}/> <br/>
                         Willing to relocate to<br/>
-                        <input type="text" value={this.state.willRelocateTo} onChange={(e) => this.handleInputChange(e, "willRelocateTo")}/> <br/>
+                        <input type="text" placeholder="e.g. San Francisco, East Coast..." value={this.state.willRelocateTo} onChange={(e) => this.handleInputChange(e, "willRelocateTo")}/> <br/>
                         {"Desired Job(s)"}<br/>
-                        <input type="text" value={this.state.desiredJobs} onChange={(e) => this.handleInputChange(e, "desiredJobs")}/> <br/>
+                        <input type="text" placeholder="e.g. VR/AR Developer..." value={this.state.desiredJobs} onChange={(e) => this.handleInputChange(e, "desiredJobs")}/> <br/>
                     </li>
                     <li className="onboardingRightInput">
                         Title<br/>
-                        <input type="text" value={this.state.title} onChange={(e) => this.handleInputChange(e, "title")}/> <br/>
+                        <input type="text" placeholder="e.g. Front End Developer passionate about UX" value={this.state.title} onChange={(e) => this.handleInputChange(e, "title")}/> <br/>
                         Bio<br/>
-                        <input type="text" value={this.state.bio} onChange={(e) => this.handleInputChange(e, "bio")}/> <br/>
+                        <input type="text" placeholder="e.g. I have been creating virtual reality..." value={this.state.bio} onChange={(e) => this.handleInputChange(e, "bio")}/> <br/>
                         Links<br/>
-                        <input type="text" value={this.state.linkedIn} onChange={(e) => this.handleInputChange(e, "linkedIn")}/> <br/>
-                        <input type="text" value={this.state.gitHub} onChange={(e) => this.handleInputChange(e, "gitHub")}/> <br/>
-                        <input type="text" value={this.state.personal} onChange={(e) => this.handleInputChange(e, "personal")}/> <br/>
+                        <input type="text" placeholder="LinkedIn Profile" value={this.state.linkedIn} onChange={(e) => this.handleInputChange(e, "linkedIn")}/> <br/>
+                        <input type="text" placeholder="GitHub Profile" value={this.state.gitHub} onChange={(e) => this.handleInputChange(e, "gitHub")}/> <br/>
+                        <input type="text" placeholder="Personal Site" value={this.state.personal} onChange={(e) => this.handleInputChange(e, "personal")}/> <br/>
                     </li>
                 </div>
 
