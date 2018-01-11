@@ -15,11 +15,15 @@ var usersSchema = mongoose.Schema({
     skills: [ String ],
     info: {
         title: String,
-        city: String,
-        state: String,
-        country: String,
-        zip: String,
-        description: String,
+        location: String,
+        willRelocateTo: String,
+        bio: String,
+        desiredJobs: String,
+        links: {
+            linkedIn: String,
+            gitHub: String,
+            personal: String
+        },
         education: [{
             school: String,
             degree: String,
