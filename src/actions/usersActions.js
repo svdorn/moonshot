@@ -306,6 +306,23 @@ export function updateGoals(user, goals) {
     }
 }
 
+export function updateInfo(user, info) {
+    return function(dispatch) {
+        axios.post("/api/updateInfo", {
+            params: {
+                userId: user._id,
+                info
+            }
+        })
+            .then(function(response) {
+                dispatch({type:"UPDATE_USER_ONBOARDING", payload: response.data});
+            })
+            .catch(function(err) {
+                console.log("error updating info: ", err)
+            });
+    }
+}
+
 export function startOnboarding(){
     return function(dispatch) {
         dispatch({type: "START_ONBOARDING"});

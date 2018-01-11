@@ -1,7 +1,7 @@
 "use strict"
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {updateGoals, endOnboarding} from "../../actions/usersActions";
+import {updateInfo, endOnboarding} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import axios from 'axios';
@@ -59,13 +59,32 @@ class Onboarding3 extends Component {
         }
 
         this.state = {
-            location, birthDate, desiredJobs, title, bio, gitHub, linkedIn,
-            personal, willRelocateTo, eduInfo
+            location, birthDate, desiredJobs, bio, gitHub, title,
+            linkedIn, personal, willRelocateTo, eduInfo
         }
     }
 
     handleButtonClick() {
         this.props.endOnboarding();
+
+        const state = this.state;
+
+        const location = state.location;
+        const birthDate = state.birthDate;
+        const desiredJobs = state.desiredJobs;
+        const title = state.title;
+        const bio = state.bio;
+        const willRelocateTo = state.willRelocateTo;
+        const links = [
+            {url: state.gitHub, displayString: "GitHub"},
+            {url: state.linkedIn, displayString: "LinkedIn"},
+            {url: state.personal, displayString: "Personal"}
+        ];
+        const education = state.eduInfo;
+        this.props.updateInfo(this.props.currentUser, {
+            location, birthDate, desiredJobs, title,
+            bio, links, willRelocateTo, education
+        });
         browserHistory.push('/');
         window.scrollTo(0,0);
     }
@@ -247,7 +266,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateGoals,
+        updateInfo,
         endOnboarding
     }, dispatch);
 }

@@ -1077,8 +1077,33 @@ app.post("/updateGoals", function(req, res) {
             console.log(err);
         }
 
-        for (let i = 0; i < goals.length; i++) {
-            user.info.goals.push(goals[i]);
+        user.info.goals = goals;
+
+        user.save(function (err, updatedUser) {
+            if (err) {
+                console.log(err);
+                res.send(false);
+            }
+            res.send(updatedUser);
+        });
+    })
+
+});
+
+app.post("/updateInfo", function(req, res) {
+    const info = req.body.params.info;
+    const userId = req.body.params.userId;
+
+    // When true returns the updated document
+    Users.findById(userId, function(err, user) {
+        if (err) {
+            console.log(err);
+        }
+
+        for (const prop in info) {
+            if (info.hasOwnProperty(prop)) {
+                user.info[prop] = info[prop];
+            }
         }
 
         user.save(function (err, updatedUser) {
