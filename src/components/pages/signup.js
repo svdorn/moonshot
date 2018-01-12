@@ -39,7 +39,6 @@ const validate = values => {
     const errors = {};
     const requiredFields = [
         'name',
-        'username',
         'email',
         'password',
         'password2',
@@ -63,6 +62,8 @@ class Signup extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
+        console.log("signing up")
+
         // Check if valid
         const vals = this.props.formData.signup.values;
 
@@ -72,7 +73,7 @@ class Signup extends Component {
             valsCounter++;
         }
 
-        if (!vals || valsCounter !== 5) {
+        if (!vals || valsCounter !== 4) {
             return;
         }
 
@@ -84,7 +85,6 @@ class Signup extends Component {
         }
         const user = [{
             name: this.props.formData.signup.values.name,
-            username: this.props.formData.signup.values.username,
             userType: "student",
             password: this.props.formData.signup.values.password,
             email: this.props.formData.signup.values.email,
@@ -97,7 +97,7 @@ class Signup extends Component {
         console.log("posted");
     }
 
-    //name, username, email, password, confirm password, signup button
+    //name, email, password, confirm password, signup button
     render() {
         return (
             <div className="fullHeight greenToBlue">
@@ -108,11 +108,6 @@ class Signup extends Component {
                             name="name"
                             component={renderTextField}
                             label="Full Name"
-                        /><br/>
-                        <Field
-                            name="username"
-                            component={renderTextField}
-                            label="Username"
                         /><br/>
                         <Field
                             name="email"

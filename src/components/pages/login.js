@@ -40,7 +40,7 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
 const validate = values => {
     const errors = {};
     const requiredFields = [
-        'username',
+        'email',
         'password',
     ];
     requiredFields.forEach(field => {
@@ -67,7 +67,7 @@ class Login extends Component {
             return;
         }
         const user = {
-            username: this.props.formData.login.values.username,
+            email: this.props.formData.login.values.email,
             password: this.props.formData.login.values.password
         };
 
@@ -87,9 +87,9 @@ class Login extends Component {
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Sign in</h1>
                             <Field
-                                name="username"
+                                name="email"
                                 component={renderTextField}
-                                label="Username"
+                                label="Email"
                             /><br/>
                             <Field
                                 name="password"

@@ -90,7 +90,7 @@ export function postUser(user) {
             .then(function(response) {
                 // send verification email
                 console.log("about to try to send email");
-                axios.post("/api/sendVerificationEmail", {username: user[0].username})
+                axios.post("/api/sendVerificationEmail", {email: user[0].email})
                     // successfully sent verification email
                     .then(function(emailResponse) {
                         console.log("email sent");

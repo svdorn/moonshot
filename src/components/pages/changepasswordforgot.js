@@ -61,7 +61,7 @@ class PasswordChange extends Component {
         this.props.changePasswordForgot(user);
     }
 
-    //name, username, email, password, confirm password, signup button
+    //name, email, password, confirm password, signup button
     render() {
         return (
             <div className="fullHeight greenToBlue">

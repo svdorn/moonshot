@@ -15,7 +15,7 @@ class Settings extends Component {
         this.setState({value: index})
     };
 
-    //name, username, email, password, confirm password, signup button
+    //name, email, password, confirm password, signup button
     render() {
         console.log(this.props);
         return (

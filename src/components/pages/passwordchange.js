@@ -75,7 +75,7 @@ class PasswordChange extends Component {
         this.props.changePassword(user);
     }
 
-    //name, username, email, password, confirm password, signup button
+    //name, email, password, confirm password, signup button
     render() {
         console.log(this.props);
         return (

@@ -134,8 +134,8 @@ var Links = require('./models/links.js');
 //             estimatedCompletionTime: "16 Hours",
 //             deadline: new Date(2018, 7, 6, 0, 0, 0, 0),
 //             price: "Free",
-//             comments: [{ username: "frizzkitten", body: "amazing pathway, I learned so much stuff", date: new Date(2017, 11, 19, 11, 37, 5, 6) }],
-//             ratings: [{ username: "frizzkitten", rating: 3 }, { username: "kelvinnkat", rating: 2 }],
+//             comments: [{ email: "frizzkitten@gmail.com", body: "amazing pathway, I learned so much stuff", date: new Date(2017, 11, 19, 11, 37, 5, 6) }],
+//             ratings: [{ email: "frizzkitten@gmail.com", rating: 3 }, { email: "misterkelvinn@gmail.com", rating: 2 }],
 //             avgRating: 2.5,
 //             tags: [ "Artifical Intelligence", "Programming", "Video Games" ],
 //             projects: [{
@@ -150,14 +150,14 @@ var Links = require('./models/links.js');
 //                     name: "Get started",
 //                     contentType: "video",
 //                     contentID: video._id,
-//                     comments: [{ username: "kelvinnkat", body: "what a great first step", date: new Date(2017, 9, 9, 1, 33, 2, 9) }]
+//                     comments: [{ email: "misterkelvinn@gmail.com", body: "what a great first step", date: new Date(2017, 9, 9, 1, 33, 2, 9) }]
 //                 },
 //                 {
 //                     order: 2,
 //                     name: "Review what you learned in the first step",
 //                     contentType: "quiz",
 //                     contentID: quiz._id,
-//                     comments: [{ username: "acethebetterone", body: "2 hard 4 me", date: new Date(2017, 6, 3, 1, 33, 2, 9) }]
+//                     comments: [{ email: "acethebetterone@gmail.com", body: "2 hard 4 me", date: new Date(2017, 6, 3, 1, 33, 2, 9) }]
 //                 }
 //             ]
 //         }
@@ -191,9 +191,6 @@ app.post('/users', function (req, res) {
         }
     }
 
-    console.log("SIGNING UP A USER: ");
-    console.log(user.username);
-
     // hash the user's password
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function (err, salt) {
@@ -205,7 +202,7 @@ app.post('/users', function (req, res) {
             // create user's verification string
             user.verificationToken = crypto.randomBytes(64).toString('hex');
             console.log("verificationToken is: ", user.verificationToken);
-            const query = {username: user.username};
+            const query = {email: user.email};
 
             Users.findOne(query, function (err, foundUser) {
                 if (err) {
@@ -220,7 +217,7 @@ app.post('/users', function (req, res) {
                         res.json(user);
                     })
                 } else {
-                    res.status(401).send("Username already exists, choose new username.");
+                    res.status(401).send("An account with that email address already exists.");
                 }
             });
         });
@@ -238,7 +235,7 @@ app.post('/verifyEmail', function (req, res) {
         }
 
         console.log("Found user from ver token: ");
-        console.log(user.username);
+        console.log(user.email);
         console.log("verification status: ");
         console.log(user.verified);
 
@@ -262,7 +259,7 @@ app.post('/verifyEmail', function (req, res) {
                 console.log(err);
             }
 
-            console.log("logging in user ", user.username);
+            console.log("logging in user ", user.email);
             user.password = undefined;
             res.json(user);
         });
@@ -287,7 +284,7 @@ app.post('/users/changePasswordForgot', function (req, res) {
         }
 
         console.log("Found user from ver token: ");
-        console.log(user.username);
+        console.log(user.email);
         const time = Date.now() - user.time;
         console.log("time is : " + time);
         if (time > (1 * 60 * 60 * 1000)) {
@@ -319,7 +316,7 @@ app.post('/users/changePasswordForgot', function (req, res) {
                         console.log(err);
                     }
 
-                    console.log("logging in user ", newUser.username);
+                    console.log("logging in user ", newUser.email);
                     newUser.password = undefined;
                     res.json(newUser);
                 });
@@ -332,8 +329,8 @@ app.post('/users/changePasswordForgot', function (req, res) {
 app.post('/sendVerificationEmail', function (req, res) {
     console.log("ABOUT TO TRY TO SEND EMAIL");
 
-    let username = sanitizeHtml(req.body.username, sanitizeOptions);
-    let query = {username: username};
+    let email = sanitizeHtml(req.body.email, sanitizeOptions);
+    let query = {email: email};
 
     Users.findOne(query, function (err, user) {
         let recipient = user.email;
@@ -601,14 +598,10 @@ function getUserByQuery(query, callback) {
 
 // LOGIN USER
 app.post('/login', function (req, res) {
-    var username = sanitizeHtml(req.body.username, sanitizeOptions);
+    var email = sanitizeHtml(req.body.email, sanitizeOptions);
     var password = sanitizeHtml(req.body.password, sanitizeOptions);
 
-    console.log("TRYING TO LOG IN USER: ");
-    console.log(username);
-    console.log("initial pass: " + password);
-
-    var query = {username: username};
+    var query = {email: email};
     Users.findOne(query, function (err, user) {
         if (err) {
             console.log("error performing query to find user in db", err);
@@ -619,10 +612,9 @@ app.post('/login', function (req, res) {
         // CHECK IF A USER WAS FOUND
         if (!user) {
             console.log('no user found');
-            res.status(404).send("No user with that username was found.");
+            res.status(404).send("No user with that email was found.");
             return;
         }
-        console.log("users pass: " + user.password);
 
         bcrypt.compare(password, user.password, function (passwordError, passwordsMatch) {
             // if hashing password fails
@@ -635,7 +627,7 @@ app.post('/login', function (req, res) {
             else if (passwordsMatch) {
                 // check if user verified email address
                 if (user.verified) {
-                    console.log("LOGGING IN USER: ", user.username);
+                    console.log("LOGGING IN USER: ", user.email);
                     user.password = undefined;
                     res.json(user);
                     return;
@@ -702,7 +694,6 @@ app.put('/users/:_id', function (req, res) {
     // if the field doesn't exist, $set will set a new field
     var update = {
         '$set': {
-            username: user.username,
             name: user.name,
             email: user.email
         }
@@ -710,7 +701,7 @@ app.put('/users/:_id', function (req, res) {
 
     // When true returns the updated document
     var options = {new: true};
-    const findQuery = {username: user.username};
+    const findQuery = {email: user.email};
     console.log(findQuery);
     Users.findOne(findQuery, function (err, foundUser) {
         console.log("inside");
@@ -725,7 +716,7 @@ app.put('/users/:_id', function (req, res) {
                 console.log("id's equal");
                 bool = true;
             } else {
-                res.status(401).send("Username is taken. Choose a different username");
+                res.status(401).send("Email is taken. Choose a different email.");
             }
         }
         if (bool) {
@@ -776,7 +767,7 @@ app.put('/users/changepassword/:_id', function (req, res) {
 
                 // CHECK IF A USER WAS FOUND
                 if (!users) {
-                    res.status(404).send("No user with that username was found.");
+                    res.status(404).send("No user with that email was found.");
                     return;
                 }
 

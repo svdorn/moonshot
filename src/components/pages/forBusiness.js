@@ -118,7 +118,7 @@ class ForBusiness extends Component {
         });
     }
 
-    //name, username, email, password, confirm password, signup button
+    //name, email, password, confirm password, signup button
     render() {
         return (
             <div className="jsxWrapper">
