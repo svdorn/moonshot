@@ -78,6 +78,12 @@ export function signout() {
     }
 }
 
+export function onSignUpPage() {
+    return function(dispatch) {
+        dispatch({type: "ON_SIGNUP_PAGE"});
+    }
+}
+
 // POST USERS
 export function postUser(user) {
     return function(dispatch) {
@@ -96,7 +102,7 @@ export function postUser(user) {
                         console.log("email sent");
                         console.log("emailResponse is: ");
                         console.log(emailResponse);
-                        dispatch({type:"POST_USER", notification:{message: emailResponse.data, type: "infoHeader"}});
+                        dispatch({type:"POST_USER"});
                         window.scrollTo(0,0);
                     })
                     // error sending verification email

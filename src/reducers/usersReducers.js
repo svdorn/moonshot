@@ -9,7 +9,8 @@ const initialState = {
     headerType: undefined,
     headerExpirationTime: undefined,
     isOnboarding: false,
-    blueHeader: false
+    blueHeader: false,
+    userPosted: false
 }
 export function usersReducers(state = initialState, action) {
     switch (action.type) {
@@ -53,10 +54,17 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 loadingSomething: true
             }
+            break;
+        case "ON_SIGNUP_PAGE":
+            return {
+                ...state,
+                userPosted: false
+            }
+            break;
         case "POST_USER":
             return {
                 ...state,
-                notification: action.notification,
+                userPosted: true,
                 loadingSomething: false
             };
             break;

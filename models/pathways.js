@@ -22,8 +22,8 @@ var pathwaysSchema = mongoose.Schema({
   estimatedCompletionTime: String,
   deadline: Date,
   price: String,
-  comments: [{ username: String, body: String, date: Date }],
-  ratings: [{ username: String, rating: Number }],
+  comments: [{ email: String, body: String, date: Date }],
+  ratings: [{ email: String, rating: Number }],
   avgRating: Number,
   tags: [ String ],
   industry: { averageSalary: String, title: String },
@@ -43,7 +43,7 @@ var pathwaysSchema = mongoose.Schema({
           name: String,
           contentType: String,
           contentID: mongoose.Schema.Types.ObjectId,
-          comments: [{ username: String, body: String, date: Date }]
+          comments: [{ email: String, body: String, date: Date }]
       }]
   }]
 });
