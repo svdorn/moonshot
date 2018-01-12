@@ -359,6 +359,20 @@ button.link {
 }
 
 
+.onboardingDots > div {
+    background-color: green;
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.onboardingDots > div:first-child {
+    margin-right: 50px
+}
+.onboardingDots > div:last-child {
+    margin-left: 50px
+}
 .onboardingTabs {
     margin-top: -50px;
 }
