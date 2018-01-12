@@ -360,7 +360,6 @@ button.link {
 
 
 .onboardingDots > div {
-    background-color: green;
     width: 20px;
     height: 20px;
     display: inline-block;
@@ -368,11 +367,33 @@ button.link {
     cursor: pointer;
 }
 .onboardingDots > div:first-child {
-    margin-right: 50px
+    margin-right: 80px
 }
 .onboardingDots > div:last-child {
-    margin-left: 50px
+    margin-left: 80px
 }
+.onboardingDotsinterests > div {
+    background-color: var(--moonshotLightBlue);
+    opacity: .3;
+}
+.onboardingDotsgoals > div {
+    background-color: var(--moonshotPurple);
+    opacity: .3;
+}
+.onboardingDotsinfo > div {
+    background-color: var(--moonshotGreen);
+    opacity: .3;
+}
+.onboardingDotsinterests > div:first-child {
+    opacity: 1;
+}
+.onboardingDotsgoals > div:nth-child(2) {
+    opacity: 1;
+}
+.onboardingDotsinfo > div:nth-child(3) {
+    opacity: 1;
+}
+
 .onboardingTabs {
     margin-top: -50px;
 }

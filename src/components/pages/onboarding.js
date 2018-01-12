@@ -619,7 +619,7 @@ class Onboarding extends Component {
                     onChange={this.handleTabChange}
                 >
                     <Tab label="Interests" value="interests">
-                    <div style={{marginBottom: '50px', minWidth: '100%'}}>
+                    <div style={{marginBottom: '20px', minWidth: '100%'}}>
                         <div className="onboardingPage1Text mediumText center" style={style.title.topTitle}>Select Your
                             Interests
                         </div>
@@ -739,7 +739,7 @@ class Onboarding extends Component {
 
 
                     <Tab label="Goals" value="goals">
-                    <div style={{marginBottom: '50px'}}>
+                    <div style={{marginBottom: '20px'}}>
                         <div className="onboardingPage2Text mediumText center" style={style.title.topTitle}>
                             What Are Your Goals?
                         </div>
@@ -769,7 +769,7 @@ class Onboarding extends Component {
 
 
                     <Tab label="Info" value="info">
-                    <div style={{marginBottom: '50px'}}>
+                    <div style={{marginBottom: '20px'}}>
                         <div className="onboardingPage3TextTitle mediumText center" style={style.title.topTitle}>
                             Start Building Your Profile
                         </div>
