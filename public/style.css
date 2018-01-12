@@ -247,6 +247,7 @@ button.link {
     background: white;
     height: 100%;
     width: 100%;
+    padding-top: 3px;
 }
 
 .gradientBorder {
@@ -501,7 +502,7 @@ button.link {
 }
 .onboardingPage2Text2Background{
     background: linear-gradient(to right, #be6aff, #7f0eff);
-    padding: 2px;
+    padding: 5px 2px 2px 2px;
     margin-top: 20px;
 }
 .onboardingPage3TextTitle {

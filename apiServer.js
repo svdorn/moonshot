@@ -977,11 +977,6 @@ app.post("/userCurrentStep", function (req, res) {
     const stepNumber = req.body.params.stepNumber;
     const subStepNumber = req.body.params.subStepNumber;
 
-    console.log("userId is: ", userId);
-    console.log("pathwayId is: ", pathwayId);
-    console.log("stepNumber is: ", stepNumber);
-    console.log("subStepNumber is: ", subStepNumber);
-
     Users.findById(userId, function(err, user) {
         let pathwayIndex = user.pathways.findIndex(function(path) {
             return path.pathwayId == pathwayId;
@@ -1003,68 +998,79 @@ app.get("/infoByUserId", function(req, res) {
     infoType = req.query.infoType;
     const userId = sanitizeHtml(req.query.userId, sanitizeOptions);
 
-    Users.findById(userId, function(err, user) {
-        if (err) {
-            console.log("couldn't get user. err: ", err);
-            res.status(500).send("Could not get user");
-        } else {
-            // if the user doesn't have info saved in db, return empty array
-            if (!user.info) {
-                res.json([]);
+    if (userId && infoType) {
+        Users.findById(userId, function(err, user) {
+            if (err) {
+                console.log("couldn't get user. err: ", err);
+                res.status(500).send("Could not get user");
+            } else {
+                // if the user doesn't have info saved in db, return empty array
+                if (!user.info) {
+                    res.json([]);
+                }
+                res.json(user.info[infoType]);
             }
-            res.json(user.info[infoType]);
-        }
-    });
+        });
+    } else {
+        res.send(undefined);
+    }
 });
 
 app.post("/addInterests", function(req, res) {
     const interests = req.body.params.interests;
     const userId = req.body.params.userId;
 
-    // When true returns the updated document
-    Users.findById(userId, function(err, user) {
-        if (err) {
-            console.log(err);
-        }
-
-        for (let i = 0; i < interests.length; i++) {
-            // only add the interest if the user didn't already have it
-            if (user.info.interests.indexOf(interests[i]) === -1) {
-                user.info.interests.push(interests[i]);
-            }
-        }
-
-        user.save(function (err, updatedUser) {
+    if (interests && userId) {
+        // When true returns the updated document
+        Users.findById(userId, function(err, user) {
             if (err) {
                 console.log(err);
-                res.send(false);
             }
-            res.send(updatedUser);
-        });
-    })
+
+            for (let i = 0; i < interests.length; i++) {
+                // only add the interest if the user didn't already have it
+                if (user.info.interests.indexOf(interests[i]) === -1) {
+                    user.info.interests.push(interests[i]);
+                }
+            }
+
+            user.save(function (err, updatedUser) {
+                if (err) {
+                    console.log(err);
+                    res.send(false);
+                }
+                res.send(updatedUser);
+            });
+        })
+    } else {
+        res.send(undefined);
+    }
 });
 
 app.post("/updateInterests", function(req, res) {
     const interests = req.body.params.interests;
     const userId = req.body.params.userId;
 
-    // When true returns the updated document
-    Users.findById(userId, function(err, user) {
-        if (err) {
-            console.log(err);
-        }
-
-        user.info.interests = interests;
-
-        user.save(function (err, updatedUser) {
+    if (interests && userId) {
+        // When true returns the updated document
+        Users.findById(userId, function(err, user) {
             if (err) {
                 console.log(err);
-                res.send(false);
             }
-            res.send(updatedUser);
-        });
-    })
 
+            user.info.interests = interests;
+
+            user.save(function (err, updatedUser) {
+                if (err) {
+                    console.log(err);
+                    res.send(false);
+                }
+                res.send(updatedUser);
+            });
+        })
+    } else {
+        res.send(undefined);
+    }
 });
 
 app.post("/updateGoals", function(req, res) {
@@ -1099,27 +1105,30 @@ app.post("/updateInfo", function(req, res) {
     const info = req.body.params.info;
     const userId = req.body.params.userId;
 
-    // When true returns the updated document
-    Users.findById(userId, function(err, user) {
-        if (err) {
-            console.log(err);
-        }
-
-        for (const prop in info) {
-            if (info.hasOwnProperty(prop)) {
-                user.info[prop] = info[prop];
-            }
-        }
-
-        user.save(function (err, updatedUser) {
+    if (info && userId) {
+        // When true returns the updated document
+        Users.findById(userId, function(err, user) {
             if (err) {
                 console.log(err);
-                res.send(false);
             }
-            res.send(updatedUser);
-        });
-    })
 
+            for (const prop in info) {
+                if (info.hasOwnProperty(prop)) {
+                    user.info[prop] = info[prop];
+                }
+            }
+
+            user.save(function (err, updatedUser) {
+                if (err) {
+                    console.log(err);
+                    res.send(false);
+                }
+                res.send(updatedUser);
+            });
+        })
+    } else {
+        res.send(undefined);
+    }
 });
 
 
