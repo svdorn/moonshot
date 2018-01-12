@@ -18,7 +18,8 @@ import { getUserFromSession } from './actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-const muiTheme = getMuiTheme({
+let theme = {
+    userAgent: 'all',
     spacing: spacing,
     fontFamily: 'Century Gothic, CenturyGothic, AppleGothic, sans-serif',
     palette: {
@@ -37,19 +38,24 @@ const muiTheme = getMuiTheme({
         clockCircleColor: fade(darkBlack, 0.07),
         shadowColor: fullBlack,
     }
-});
+}
+
+let muiTheme = getMuiTheme(theme);
 
 class Main extends Component {
     componentDidMount() {
         this.props.getUserFromSession();
+        //this.props.getUserAgent();
     }
 
     render() {
         if (this.props.isFetching) {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
-                    <Menu/>
-                    <Footer/>
+                    <div>
+                        <Menu/>
+                        <Footer/>
+                    </div>
                 </MuiThemeProvider>
             );
         }
@@ -57,10 +63,12 @@ class Main extends Component {
         else {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
-                    <Menu/>
-                    <Notification/>
+                    <div>
+                        <Menu/>
+                        <Notification/>
                         { this.props.children }
-                    <Footer/>
+                        <Footer/>
+                    </div>
                 </MuiThemeProvider>
             );
         }

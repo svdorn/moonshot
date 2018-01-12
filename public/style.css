@@ -356,6 +356,10 @@ button.link {
     width: 2px;
 }
 
+
+.onboardingTabs > div:first-child > button > div > div {
+    color: white;
+}
 .onboardingDividerLeft {
     background-image: linear-gradient(to right, #5deaff, #3dabff);
     border-right: 200px solid #00c3ff;

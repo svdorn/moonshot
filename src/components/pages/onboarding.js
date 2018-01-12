@@ -609,6 +609,7 @@ class Onboarding extends Component {
 
         return (
             <Tabs
+                className="onboardingTabs"
                 value={this.state.tabValue}
                 onChange={this.handleTabChange}
             >
@@ -874,7 +875,7 @@ class Onboarding extends Component {
                         <div className="greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
                                 className={"checkMark"  + this.state.inSchool}
-                                src="/icons/CheckMark.png"
+                                src="/icons/CheckMarkGreen.png"
                                 height={15}
                                 width={15}
                             />
