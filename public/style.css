@@ -359,6 +359,9 @@ button.link {
 }
 
 
+.onboardingTabs {
+    margin-top: -50px;
+}
 .onboardingTabs > div:first-child > button > div > div {
     color: white;
 }
