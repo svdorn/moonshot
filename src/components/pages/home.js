@@ -100,7 +100,7 @@ class Home extends Component{
         const logos = ["Epic.png", "XES.png", "amazon.png", "holosHomepage.png", "Unity.png"];
         const logoBar = logos.map(function(logo) {
             return (
-                <img src={"/logos/" + logo} className="logoBarLogo"/>
+                <img key={logo} src={"/logos/" + logo} className="logoBarLogo"/>
             );
         })
 
@@ -112,12 +112,14 @@ class Home extends Component{
             "Google Analytics", "Project Management", "Entrepeneurship"
         ]
 
+        let brKey = -1;
         const exampleSkills = skills.map(function (skill) {
+            brKey++;
             if (skill == "<br/>") {
-                return <br/>;
+                return <br key={brKey + "br"}/>;
             } else {
                 return (
-                    <div style={{display: 'inline-block', marginTop: '15px'}}>
+                    <div key={skill + "div"} style={{display: 'inline-block', marginTop: '15px'}}>
                         <Chip key={skill}
                               backgroundColor='#white'
                               labelColor="#00d2ff"
