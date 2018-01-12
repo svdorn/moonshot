@@ -3,10 +3,8 @@ import React, { Component}  from 'react';
 import { connect } from 'react-redux';
 import { updateInfo, updateGoals, updateInterests, startOnboarding, endOnboarding } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
+import { browserHistory } from 'react-router';
 import { Tabs, Tab } from 'material-ui/Tabs';
-import Onboarding1 from './onboarding1';
-import Onboarding2 from './onboarding2';
-import Onboarding3 from './onboarding3';
 
 
 class Onboarding extends Component {

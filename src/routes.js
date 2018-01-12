@@ -41,8 +41,6 @@ const routes = (
         <Route path="/contactUs" component={ContactUs} />
         <Route path="/myPathways" component={MyPathways} />
         <Route path="/onboarding" component={Onboarding} />
-        <Route path="/onboarding2" component={Onboarding2} />
-        <Route path="/onboarding3" component={Onboarding3} />
         <Route path="/pathway" component={Pathway}/>
         <Route path="/pathwayContent" component={PathwayContent}/>
     </Route>
