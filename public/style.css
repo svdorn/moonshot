@@ -242,12 +242,13 @@ button.link {
 .gradientBorderPurple {
     background: linear-gradient(to bottom right, #be6aff, #7f0eff);
     padding: 2px;
+    display: inline-block;
 }
 .gradientBorderPurple > div {
     background: white;
     height: 100%;
     width: 100%;
-    padding-top: 3px;
+    padding: 6px 13px 0px;
 }
 
 .gradientBorder {
@@ -419,6 +420,7 @@ button.link {
 .onboardingIcons {
     height: 60px;
     vertical-align: top;
+    margin-bottom: 7px;
 }
 .onboardingIconsText {
     font-size: 16px;
@@ -432,9 +434,9 @@ button.link {
 }
 .onboardingGoalsListContainer {
     margin: auto;
-    width: 25%;
     padding: 0;
     list-style: none;
+    text-align: center;
 }
 
 .logoBar {
@@ -468,11 +470,11 @@ button.link {
 }
 .onboardingPage1Text2 {
     color: white;
-    padding: 0 5px 0 5px;
+    padding: 3px 15px 0;
 }
 .onboardingPage1Text3 {
     color: #00c3ff;
-    padding: 0 5px 0 5px;
+    padding: 3px 5px 0 5px;
 }
 .onboardingPage1Text2Background{
     background: linear-gradient(to right, #5deaff, #3dabff);
@@ -495,7 +497,7 @@ button.link {
     background: linear-gradient(to right, #be6aff, #7f0eff);
     border: #9727ff;
     padding: 7px;
-    margin-top: 20px;
+    margin-top: 30px;
 }
 .onboardingPage2Text3 {
     color: #9727ff;
@@ -504,6 +506,7 @@ button.link {
     background: linear-gradient(to right, #be6aff, #7f0eff);
     padding: 5px 2px 2px 2px;
     margin-top: 20px;
+    display: inline-block;
 }
 .onboardingPage3TextTitle {
     background: linear-gradient(to right, #3dffef, #3affd2);
@@ -758,6 +761,15 @@ button.link {
     height: 0px;
     width: 0px;
     float: left;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 

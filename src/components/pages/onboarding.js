@@ -520,7 +520,7 @@ class Onboarding extends Component {
             goals = this.state.goals.map(function (goal) {
                 key++;
                 return (
-                    <li key={key} className="clickableNoUnderline"
+                    <li key={key} className="clickableNoUnderline noselect"
                         onClick={() => self.handleGoalClick(goal)}>
                         {goal.selected ?
                             <div className="onboardingPage2Text2Background center">
@@ -742,7 +742,7 @@ class Onboarding extends Component {
                         <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="smallText center" style={style.title.text}>
+                    <div className="smallText center" style={{marginBottom: "20px"}}>
                         Select All That Apply.
                     </div>
                     <div>
