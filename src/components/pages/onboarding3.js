@@ -62,6 +62,7 @@ class Onboarding3 extends Component {
         }
 
         this.state = {
+            ...this.state,
             location, birthDate, desiredJobs, bio, gitHub, title,
             linkedIn, personal, willRelocateTo, eduInfo, inSchool
         }

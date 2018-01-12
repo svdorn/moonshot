@@ -1071,22 +1071,27 @@ app.post("/updateGoals", function(req, res) {
     const goals = req.body.params.goals;
     const userId = req.body.params.userId;
 
-    // When true returns the updated document
-    Users.findById(userId, function(err, user) {
-        if (err) {
-            console.log(err);
-        }
-
-        user.info.goals = goals;
-
-        user.save(function (err, updatedUser) {
+    if (userId && goals) {
+        // When true returns the updated document
+        Users.findById(userId, function(err, user) {
             if (err) {
                 console.log(err);
-                res.send(false);
             }
-            res.send(updatedUser);
-        });
-    })
+
+            user.info.goals = goals;
+
+            user.save(function (err, updatedUser) {
+                if (err) {
+                    console.log(err);
+                    res.send(false);
+                }
+                res.send(updatedUser);
+            });
+        })
+    } else {
+        res.send(undefined)
+    }
+
 
 });
 
