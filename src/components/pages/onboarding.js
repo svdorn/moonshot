@@ -492,16 +492,17 @@ class Onboarding extends Component {
             interests = this.state.currInterestArea.map(function (interest) {
                 key++;
                 return (
-                    <li style={{verticalAlign: "top"}} key={key} className="clickableNoUnderline"
-                        onClick={() => self.handleInterestClick(interest)}>
+                    <li style={{verticalAlign: "top"}} key={key}>
                         {interest.selected ?
-                            <div className="onboardingPage1Text2Background">
+                            <div className="onboardingPage1Text2Background clickableNoUnderline noselect"
+                                onClick={() => self.handleInterestClick(interest)}>
                                 <div className="smallText onboardingPage1Text2">
                                     {interest.title}
                                 </div>
                             </div>
                             :
-                            <div className="gradientBorderBlue center" style={{marginRight: '20px', marginTop: '20px'}}>
+                            <div className="gradientBorderBlue center clickableNoUnderline noselect" style={{marginRight: '20px', marginTop: '20px'}}
+                                onClick={() => self.handleInterestClick(interest)}>
                                 <div className="onboardingPage1Text3 smallText">
                                     {interest.title}
                                 </div>
@@ -520,16 +521,15 @@ class Onboarding extends Component {
             goals = this.state.goals.map(function (goal) {
                 key++;
                 return (
-                    <li key={key} className="clickableNoUnderline noselect"
-                        onClick={() => self.handleGoalClick(goal)}>
+                    <li key={key} className="noselect">
                         {goal.selected ?
-                            <div className="onboardingPage2Text2Background center">
+                            <div className="clickableNoUnderline onboardingPage2Text2Background center" onClick={() => self.handleGoalClick(goal)}>
                                 <div className="smallText onboardingPage1Text2">
                                     {goal.title}
                                 </div>
                             </div>
                             :
-                            <div className="gradientBorderPurple center" style={{marginTop: '20px'}}>
+                            <div className="clickableNoUnderline gradientBorderPurple center" style={{marginTop: '20px'}} onClick={() => self.handleGoalClick(goal)}>
                                 <div className="onboardingPage2Text3 smallText">
                                     {goal.title}
                                 </div>

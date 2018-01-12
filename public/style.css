@@ -474,7 +474,7 @@ button.link {
 }
 .onboardingPage1Text3 {
     color: #00c3ff;
-    padding: 3px 5px 0 5px;
+    padding: 3px 15px 0;
 }
 .onboardingPage1Text2Background{
     background: linear-gradient(to right, #5deaff, #3dabff);
