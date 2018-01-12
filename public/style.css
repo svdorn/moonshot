@@ -359,6 +359,7 @@ button.link {
 }
 
 
+.onboardingDots { margin-bottom: 40px; }
 .onboardingDots > div {
     width: 20px;
     height: 20px;
@@ -384,16 +385,11 @@ button.link {
     background-color: var(--moonshotGreen);
     opacity: .3;
 }
-.onboardingDotsinterests > div:first-child {
-    opacity: 1;
-}
-.onboardingDotsgoals > div:nth-child(2) {
-    opacity: 1;
-}
+.onboardingDotsinterests > div:first-child,
+.onboardingDotsgoals > div:nth-child(2),
 .onboardingDotsinfo > div:nth-child(3) {
     opacity: 1;
 }
-
 .onboardingTabs {
     margin-top: -50px;
 }
