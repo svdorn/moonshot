@@ -774,10 +774,6 @@ class Onboarding extends Component {
                     </div>
                     <div className="smallText2 center" style={style.title.text}>
                         The more complete your profile, the more appealing you look to employers.<br/>
-                        <a href="#" target="_blank" className="onboardingPage3Link">
-                            View an example profile
-                        </a>
-                    </div>
                     <div className="center">
                         <img src="/icons/Portfolio.png" className="onboardingIcons" style={style.icons}/>
                         <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Personal</b></div>
