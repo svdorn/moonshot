@@ -22,8 +22,6 @@ import PathwayContent from './components/pages/pathwayContent';
 import ContactUs from './components/pages/contactUs';
 import MyPathways from './components/pages/myPathways';
 import Onboarding from './components/pages/onboarding';
-import Onboarding2 from './components/pages/onboarding2';
-import Onboarding3 from './components/pages/onboarding3';
 
 const routes = (
   <Router history={browserHistory}>
