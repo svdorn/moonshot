@@ -325,20 +325,23 @@ app.post('/users/changePasswordForgot', function (req, res) {
     });
 });
 
+
 // SEND EMAIL
 app.post('/sendVerificationEmail', function (req, res) {
-    console.log("ABOUT TO TRY TO SEND EMAIL");
-
     let email = sanitizeHtml(req.body.email, sanitizeOptions);
     let query = {email: email};
 
     Users.findOne(query, function (err, user) {
         let recipient = user.email;
         let subject = 'Verify email';
-        let content = 'Click this link to verify your account: '
-            + "<a href='http://localhost:3000/verifyEmail?"
-            + user.verificationToken
-            + "'>Click me</a>";
+        let content =
+             '<div style="text-align:center">'
+            +   '<a href="https://www.moonshotlearning.org/"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
+            +   '<span style="margin-bottom:20px;">Hi ' + user.name + ', we are ready to activate your account. Verify your address and let\'s get started!</span><br/>'
+            +   '<a style="display:inline-block;height:40px;width:200px;font-size:27px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="http://localhost:3000/verifyEmail?'
+            +   user.verificationToken
+            +   '">Verify Address</a>';
+            +'</div>'
 
         sendEmail(recipient, subject, content, function (success, msg) {
             if (success) {
