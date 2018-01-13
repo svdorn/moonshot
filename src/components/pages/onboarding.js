@@ -812,7 +812,7 @@ class Onboarding extends Component {
                             <input
                                 type="text"
                                 className="greenInput"
-                                placeholder="City, State, Country"
+                                placeholder="City, State"
                                 value={this.state.location}
                                 onChange={(e) => this.handleInfoInputChange(e, "location")}
                             /> <br/>
