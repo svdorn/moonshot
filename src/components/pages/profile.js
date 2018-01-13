@@ -413,7 +413,7 @@ class Profile extends Component {
                                                     style={style.locationImg}
                                                 />
                                                 <div className="smallText" style={{display: 'inline-block'}}>
-                                                    {user.info.city}, {user.info.state}
+                                                    {user.info.location}
                                                 </div>
                                             </div>
                                             <a className="smallText blueText" href={mailtoEmail}>Contact</a>

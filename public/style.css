@@ -359,6 +359,12 @@ button.link {
 }
 
 
+#onboardingBioTextarea {
+    width: calc(700px + 8%);
+    height: initial;
+    text-align: initial;
+    padding: 5px 10px;
+}
 .onboardingDots { margin-bottom: 40px; }
 .onboardingDots > div {
     width: 20px;
@@ -579,7 +585,8 @@ button.link {
 }
 .greenCheckbox > .checkMarkfalse { visibility: hidden; }
 .greenCheckbox > .checkMarktrue { visibility: visible; }
-.onboardingLeftInput, .onboardingRightInput {
+.onboardingLeftInput, .onboardingRightInput,
+#onboardingBioTextareaSpan {
     vertical-align: top;
     color: var(--moonshotGreenText);
     font-size: 20px;

@@ -842,14 +842,6 @@ class Onboarding extends Component {
                                 value={this.state.title}
                                 onChange={(e) => this.handleInfoInputChange(e, "title")}
                             /> <br/>
-                            <span>Bio</span><br/>
-                            <input
-                                type="text"
-                                className="greenInput"
-                                placeholder="e.g. I have been creating virtual reality..."
-                                value={this.state.bio}
-                                onChange={(e) => this.handleInfoInputChange(e, "bio")}
-                            /> <br/>
                             <span>Links</span><br/>
                             <input
                                 type="text"
@@ -873,6 +865,17 @@ class Onboarding extends Component {
                                 onChange={(e) => this.handleInfoInputChange(e, "personal")}
                             /> <br/>
                         </li>
+                    </div>
+
+                    <div className="center">
+                        <span id="onboardingBioTextareaSpan">Bio</span><br/>
+                        <textarea
+                            className="greenInput"
+                            id="onboardingBioTextarea"
+                            placeholder="e.g. I have been creating virtual reality..."
+                            value={this.state.bio}
+                            onChange={(e) => this.handleInfoInputChange(e, "bio")}
+                        /> <br/>
                     </div>
 
                     <div className="center">
