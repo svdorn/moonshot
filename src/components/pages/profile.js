@@ -14,30 +14,69 @@ class Profile extends Component {
 
         this.state = {
             pathways: [],
+            onOwnProfile: false,
             completedPathways: [],
             userPathwayPreviews: undefined,
-            userCompletedPathwayPreviews: undefined
+            userCompletedPathwayPreviews: undefined,
+            user: undefined
         }
     }
 
     componentDidMount() {
+        const userId = this.props.location.search.substr(1);
+        const currentUser = this.props.currentUser;
+        // looking at your own profile
+        if ((userId == "") || (currentUser && currentUser._id == userId)) {
+            this.setState({
+                ...this.state,
+                onOwnProfile: true,
+                user: currentUser
+            }, () => {
+                this.makePathways();
+            })
+        }
+
+        // looking at someone else's profile
+        else {
+            console.log("posting");
+            axios.post("/api/getUserById", { _id: userId }
+            ).then(res => {
+                console.log("found user is: ", res.data);
+                const user = res.data;
+
+                this.setState({
+                    ...this.state,
+                    onOwnProfile: false,
+                    user
+                }, () => {
+                    this.makePathways();
+                })
+            })
+        }
+
         // this.props.setHeaderBlue(true);
 
+
+    }
+
+    makePathways() {
         let userPathwayPreviews = undefined;
 
-        // check if there is a logged-in user first, then create the user's pathways
-        if (this.props.currentUser) {
+        const user = this.state.user;
+
+        // check if there is a user first, then create the user's pathways
+        if (user) {
             // populate featuredPathways with initial pathways
-            if (this.props.currentUser.pathways) {
-                if (this.props.currentUser.pathways.length == 0) {
+            if (user.pathways) {
+                if (user.pathways.length == 0) {
                     this.setState({
                         pathways: [],
                         userPathwayPreviews: []
                     });
                 }
 
-                for (let i = 0; i < this.props.currentUser.pathways.length; i++) {
-                    let id = this.props.currentUser.pathways[i].pathwayId;
+                for (let i = 0; i < user.pathways.length; i++) {
+                    let id = user.pathways[i].pathwayId;
                     axios.get("/api/getPathwayById", {
                         params: {
                             _id: id
@@ -81,9 +120,9 @@ class Profile extends Component {
                     })
                 }
             }
-            if (this.props.currentUser.completedPathways) {
-                for (let i = 0; i < this.props.currentUser.completedPathways.length; i++) {
-                    let id = this.props.currentUser.completedPathways[i].pathwayId;
+            if (user.completedPathways) {
+                for (let i = 0; i < user.completedPathways.length; i++) {
+                    let id = user.completedPathways[i].pathwayId;
                     axios.get("/api/getPathwayById", {
                         params: {
                             _id: id
@@ -190,7 +229,7 @@ class Profile extends Component {
         let profileSkills = null;
         let skills = undefined;
         let mailtoEmail = undefined;
-        let user = this.props.currentUser;
+        let user = this.state.user;
         if (user) {
             skills = user.skills;
             mailtoEmail = "mailto:" + user.email;
@@ -349,7 +388,7 @@ class Profile extends Component {
 
         return (
             <div className='jsxWrapper' ref='discover'>
-                {this.props.currentUser ?
+                {user ?
                     <div>
                         <div className="greenToBlue headerDiv"/>
 
@@ -364,8 +403,8 @@ class Profile extends Component {
                                         />
                                         <div>
                                             <div
-                                                className="blueText smallText2">{this.props.currentUser.name.toUpperCase()}</div>
-                                            <b className="smallText">{this.props.currentUser.info.title}</b><br/>
+                                                className="blueText smallText2">{user.name.toUpperCase()}</div>
+                                            <b className="smallText">{user.info.title}</b><br/>
                                             <div>
                                                 <img
                                                     src="/icons/Location.png"
@@ -373,14 +412,14 @@ class Profile extends Component {
                                                     style={style.locationImg}
                                                 />
                                                 <div className="smallText" style={{display: 'inline-block'}}>
-                                                    {this.props.currentUser.info.city}, {this.props.currentUser.info.state}
+                                                    {user.info.city}, {user.info.state}
                                                 </div>
                                             </div>
                                             <a className="smallText blueText" href={mailtoEmail}>Contact</a>
                                         </div>
                                     </div>
                                     <div style={style.pictureInfoSkills.rightSide}>
-                                        {this.props.currentUser.skills ?
+                                        {user.skills ?
                                             <div className="center">
                                                 {profileSkills}
                                             </div>

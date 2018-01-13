@@ -574,6 +574,14 @@ function sendEmail(recipients, subject, content, callback) {
     });
 }
 
+app.post('/getUserById', function(req, res) {
+    const _id = sanitizeHtml(req.body._id, sanitizeOptions);
+    const query = { _id };
+    getUserByQuery(query, function (user) {
+        res.json(user);
+    })
+});
+
 app.post('/getUserByQuery', function (req, res) {
     const query = sanitizeHtml(req.body.query, sanitizeOptions);
     const user = getUserByQuery(query, function (user) {
@@ -583,7 +591,7 @@ app.post('/getUserByQuery', function (req, res) {
 
 function getUserByQuery(query, callback) {
     Users.findOne(query, function (err, foundUser) {
-        if (foundUser !== null) {
+        if (foundUser) {
             foundUser.password = undefined;
             callback(foundUser);
             return;
@@ -687,9 +695,6 @@ app.put('/users/:_id', function (req, res) {
     }
 
     var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
-    console.log("in api server");
-    console.log(user);
-    console.log(query);
 
     // if the field doesn't exist, $set will set a new field
     var update = {
