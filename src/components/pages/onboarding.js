@@ -184,12 +184,14 @@ class Onboarding extends Component {
         if (user && user.info) {
             let info = user.info;
             location = info.location ? info.location : "";
-            birthDate = info.birthDate ? info.birthDate : "";
             desiredJobs = info.desiredJobs ? info.desiredJobs : "";
             title = info.title ? info.title : "";
             bio = info.bio ? info.bio : "";
             willRelocateTo = info.willRelocateTo ? info.willRelocateTo : "";
             inSchool = info.inSchool ? info.inSchool : false;
+            birthDate = info.birthDate ?
+                info.birthDate.substring(5, 7) + "/" + info.birthDate.substring(8, 10) + "/" + info.birthDate.substring(0, 4)
+                : "";
 
             let links = info.links;
             if (links) {
@@ -375,7 +377,6 @@ class Onboarding extends Component {
 
         const inSchool = state.inSchool;
         const location = state.location;
-        const birthDate = state.birthDate;
         const desiredJobs = state.desiredJobs;
         const title = state.title;
         const bio = state.bio;
@@ -386,6 +387,22 @@ class Onboarding extends Component {
             {url: state.personal, displayString: "Personal"}
         ];
         const education = state.eduInfo;
+
+        const bDayString = state.birthDate;
+        let birthDate = undefined;
+        let indexes = [];
+        for (let i = 0; i < bDayString.length; i++) {
+            if (bDayString[i] == "/") {
+                indexes.push(i);
+            }
+        }
+        if (indexes.length == 2 && indexes[1] < bDayString.length - 1) {
+            const month = bDayString.substring(0, indexes[0]);
+            const day = bDayString.substring(indexes[0]+1, indexes[1]);
+            const year = bDayString.substring(indexes[1] + 1);
+            birthDate = new Date(year, month, day);
+        }
+
         this.props.updateInfo(this.props.currentUser, {
             location, birthDate, desiredJobs, title,
             bio, links, willRelocateTo, education, inSchool
@@ -610,292 +627,294 @@ class Onboarding extends Component {
             );
         });
 
+        let onBoardingHtml = null;
+        let tabValue = this.state.tabValue;
 
-        return (
-            <div>
-                <Tabs
-                    className="onboardingTabs"
-                    value={this.state.tabValue}
-                    onChange={this.handleTabChange}
-                >
-                    <Tab label="Interests" value="interests">
-                    <div style={{marginBottom: '20px', minWidth: '100%'}}>
-                        <div className="onboardingPage1Text mediumText center" style={style.title.topTitle}>Select Your
-                            Interests
-                        </div>
-                        <div style={style.title.divider}>
-                            <div className="onboardingDividerLeft" style={{bottom: "0"}}/>
-                            <div className="onboardingDividerRight" style={{bottom: "0"}}/>
-                        </div>
-                        <div className="smallText center" style={style.title.text}>What skills do you want to learn or
-                            improve?
-                        </div>
-                        <div>
-                            <ul className="horizCenteredList onboardingListContainer">
-                                <li style={style.iconLi} className="clickableNoUnderline"
-                                    onClick={() => this.handleIconClick(1)}>
-                                    {this.state.currInterestArea === this.state.designAndDevInterests ?
-                                        <div className="gradientBorderBlue center">
-                                            <div style={{padding: '5px'}}>
-                                                <img src="/icons/Cube.png" className="onboardingIcons"/>
-                                                <div className="onboardingIconsText center"><b>Product Design<br/>and
-                                                    Development</b>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        :
-                                        <div>
+        if (!tabValue || tabValue == "interests") {
+            onBoardingHtml =
+                <div style={{marginBottom: '20px', minWidth: '100%'}}>
+                    <div className="onboardingPage1Text mediumText center" style={style.title.topTitle}>Select Your
+                        Interests
+                    </div>
+                    <div style={style.title.divider}>
+                        <div className="onboardingDividerLeft" style={{bottom: "0"}}/>
+                        <div className="onboardingDividerRight" style={{bottom: "0"}}/>
+                    </div>
+                    <div className="smallText center" style={style.title.text}>What skills do you want to learn or
+                        improve?
+                    </div>
+                    <div>
+                        <ul className="horizCenteredList onboardingListContainer">
+                            <li style={style.iconLi} className="clickableNoUnderline"
+                                onClick={() => this.handleIconClick(1)}>
+                                {this.state.currInterestArea === this.state.designAndDevInterests ?
+                                    <div className="gradientBorderBlue center">
+                                        <div style={{padding: '5px'}}>
                                             <img src="/icons/Cube.png" className="onboardingIcons"/>
                                             <div className="onboardingIconsText center"><b>Product Design<br/>and
                                                 Development</b>
                                             </div>
                                         </div>
-                                    }
-                                </li>
-                                <li style={style.iconLi} className="clickableNoUnderline"
-                                    onClick={() => this.handleIconClick(2)}>
-                                    {this.state.currInterestArea === this.state.dataInterests ?
-                                        <div className="gradientBorderBlue center">
-                                            <div style={{padding: '5px'}}>
-                                                <img src="/icons/Data.png" className="onboardingIcons"/>
-                                                <div className="onboardingIconsText center"><b>Data</b></div>
-                                            </div>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img src="/icons/Cube.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Product Design<br/>and
+                                            Development</b>
                                         </div>
-                                        :
-                                        <div>
+                                    </div>
+                                }
+                            </li>
+                            <li style={style.iconLi} className="clickableNoUnderline"
+                                onClick={() => this.handleIconClick(2)}>
+                                {this.state.currInterestArea === this.state.dataInterests ?
+                                    <div className="gradientBorderBlue center">
+                                        <div style={{padding: '5px'}}>
                                             <img src="/icons/Data.png" className="onboardingIcons"/>
                                             <div className="onboardingIconsText center"><b>Data</b></div>
                                         </div>
-                                    }
-                                </li>
-                                <li className="clickableNoUnderline" onClick={() => this.handleIconClick(3)}>
-                                    {this.state.currInterestArea === this.state.softwareDevInterests ?
-                                        <div className="gradientBorderBlue center">
-                                            <div style={{padding: '5px'}}>
-                                                <img src="/icons/Computer.png" className="onboardingIcons"/>
-                                                <div className="onboardingIconsText center"><b>Software<br/> Development</b>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        :
-                                        <div>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img src="/icons/Data.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Data</b></div>
+                                    </div>
+                                }
+                            </li>
+                            <li className="clickableNoUnderline" onClick={() => this.handleIconClick(3)}>
+                                {this.state.currInterestArea === this.state.softwareDevInterests ?
+                                    <div className="gradientBorderBlue center">
+                                        <div style={{padding: '5px'}}>
                                             <img src="/icons/Computer.png" className="onboardingIcons"/>
-                                            <div className="onboardingIconsText center"><b>Software<br/> Development</b></div>
-                                        </div>
-                                    }
-                                </li>
-                            </ul>
-                            <ul className="horizCenteredList onboardingListContainer">
-                                <li style={style.iconLi} className="clickableNoUnderline"
-                                    onClick={() => this.handleIconClick(4)}>
-                                    {this.state.currInterestArea === this.state.creationAndMarketingInterests ?
-                                        <div className="gradientBorderBlue center">
-                                            <div style={{padding: '5px'}}>
-                                                <img src="/icons/Creation.png" className="onboardingIcons"/>
-                                                <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b>
-                                                </div>
+                                            <div className="onboardingIconsText center"><b>Software<br/> Development</b>
                                             </div>
                                         </div>
-                                        :
-                                        <div>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img src="/icons/Computer.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Software<br/> Development</b></div>
+                                    </div>
+                                }
+                            </li>
+                        </ul>
+                        <ul className="horizCenteredList onboardingListContainer">
+                            <li style={style.iconLi} className="clickableNoUnderline"
+                                onClick={() => this.handleIconClick(4)}>
+                                {this.state.currInterestArea === this.state.creationAndMarketingInterests ?
+                                    <div className="gradientBorderBlue center">
+                                        <div style={{padding: '5px'}}>
                                             <img src="/icons/Creation.png" className="onboardingIcons"/>
-                                            <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b></div>
-                                        </div>
-                                    }
-                                </li>
-                                <li className="clickableNoUnderline" onClick={() => this.handleIconClick(5)}>
-                                    {this.state.currInterestArea === this.state.businessInterests ?
-                                        <div className="gradientBorderBlue center">
-                                            <div style={{padding: '5px'}}>
-                                                <img src="/icons/Business.png" className="onboardingIcons"/>
-                                                <div className="onboardingIconsText center"><b>Business</b></div>
+                                            <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b>
                                             </div>
                                         </div>
-                                        :
-                                        <div>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img src="/icons/Creation.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b></div>
+                                    </div>
+                                }
+                            </li>
+                            <li className="clickableNoUnderline" onClick={() => this.handleIconClick(5)}>
+                                {this.state.currInterestArea === this.state.businessInterests ?
+                                    <div className="gradientBorderBlue center">
+                                        <div style={{padding: '5px'}}>
                                             <img src="/icons/Business.png" className="onboardingIcons"/>
                                             <div className="onboardingIconsText center"><b>Business</b></div>
                                         </div>
-                                    }
-                                </li>
+                                    </div>
+                                    :
+                                    <div>
+                                        <img src="/icons/Business.png" className="onboardingIcons"/>
+                                        <div className="onboardingIconsText center"><b>Business</b></div>
+                                    </div>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                    <div className="center">
+                        {interests ?
+                            <ul className="horizCenteredList onboardingInterestsListContainer">
+                                {interests}
                             </ul>
-                        </div>
-                        <div className="center">
-                            {interests ?
-                                <ul className="horizCenteredList onboardingInterestsListContainer">
-                                    {interests}
-                                </ul>
-                                : null}
-                        </div>
-                        <div className="center">
-                            <button className="onboardingPage1Button" onClick={this.handleStep1ButtonClick.bind(this)}>
-                                <div className="smallText2 onboardingPage1Text2">
-                                    Next
-                                </div>
-                            </button>
-                        </div>
+                            : null}
                     </div>
-                    </Tab>
-
-
-                    <Tab label="Goals" value="goals">
-                    <div style={{marginBottom: '20px'}}>
-                        <div className="onboardingPage2Text mediumText center" style={style.title.topTitle}>
-                            What Are Your Goals?
-                        </div>
-                        <div style={style.title.divider}>
-                            <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
-                            <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
-                        </div>
-                        <div className="smallText center" style={{marginBottom: "20px"}}>
-                            Select All That Apply.
-                        </div>
-                        <div>
-                            {goals ?
-                                <ul className="onboardingGoalsListContainer">
-                                    {goals}
-                                </ul>
-                                : null}
-                        </div>
-                        <div className="center">
-                            <button className="onboardingPage2Button" onClick={this.handleGoalsButtonClick.bind(this)}>
-                                <div className="smallText2 onboardingPage1Text2">
-                                    Next
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                    </Tab>
-
-
-                    <Tab label="Info" value="info">
-                    <div style={{marginBottom: '20px'}}>
-                        <div className="onboardingPage3TextTitle mediumText center" style={style.title.topTitle}>
-                            Start Building Your Profile
-                        </div>
-                        <div style={style.title.divider}>
-                            <div className="onboarding3DividerLeft" style={{bottom: "0"}}/>
-                            <div className="onboarding3DividerRight" style={{bottom: "0"}}/>
-                        </div>
-                        <div className="smallText2 center" style={style.title.text}>
-                            The more complete your profile, the more appealing you look to employers.<br/>
-                        </div>
-                        <div className="center">
-                            <img src="/icons/Portfolio.png" className="onboardingIcons" style={style.icons}/>
-                            <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Personal</b></div>
-                        </div>
-
-                        <div className="horizCenteredList">
-                            <li className="onboardingLeftInput">
-                                <span>Date of Birth</span><br/>
-                                <input
-                                    type="text"
-                                    className="greenInput"
-                                    placeholder="mm/dd/yyyy"
-                                    value={this.state.birthDate}
-                                    onChange={(e) => this.handleInfoInputChange(e, "birthDate")}
-                                /> <br/>
-                                <span>Location</span><br/>
-                                <input
-                                    type="text"
-                                    className="greenInput"
-                                    placeholder="City, State, Country"
-                                    value={this.state.location}
-                                    onChange={(e) => this.handleInfoInputChange(e, "location")}
-                                /> <br/>
-                                <span>Willing to relocate to</span><br/>
-                                <input
-                                    type="text"
-                                    className="greenInput"
-                                    placeholder="e.g. San Francisco, East Coast..."
-                                    value={this.state.willRelocateTo}
-                                    onChange={(e) => this.handleInfoInputChange(e, "willRelocateTo")}
-                                    /> <br/>
-                                <span>{"Desired Job(s)"}</span><br/>
-                                <input
-                                    type="text"
-                                    className="greenInput"
-                                    placeholder="e.g. VR/AR Developer..."
-                                    value={this.state.desiredJobs}
-                                    onChange={(e) => this.handleInfoInputChange(e, "desiredJobs")}
-                                /> <br/>
-                            </li>
-                            <li className="inputSeparator" />
-                            <li className="onboardingRightInput">
-                                <span>Title</span><br/>
-                                <input
-                                    type="text"
-                                    className="greenInput"
-                                    placeholder="e.g. Front End Developer passionate about UX"
-                                    value={this.state.title}
-                                    onChange={(e) => this.handleInfoInputChange(e, "title")}
-                                /> <br/>
-                                <span>Bio</span><br/>
-                                <input
-                                    type="text"
-                                    className="greenInput"
-                                    placeholder="e.g. I have been creating virtual reality..."
-                                    value={this.state.bio}
-                                    onChange={(e) => this.handleInfoInputChange(e, "bio")}
-                                /> <br/>
-                                <span>Links</span><br/>
-                                <input
-                                    type="text"
-                                    className="greenInput"
-                                    placeholder="LinkedIn Profile"
-                                    value={this.state.linkedIn}
-                                    onChange={(e) => this.handleInfoInputChange(e, "linkedIn")}
-                                /> <br/>
-                                <input
-                                    type="text"
-                                    className="greenInput"
-                                    placeholder="GitHub Profile"
-                                    value={this.state.gitHub}
-                                    onChange={(e) => this.handleInfoInputChange(e, "gitHub")}
-                                /> <br/>
-                                <input
-                                    type="text"
-                                    className="greenInput"
-                                    placeholder="Personal Site"
-                                    value={this.state.personal}
-                                    onChange={(e) => this.handleInfoInputChange(e, "personal")}
-                                /> <br/>
-                            </li>
-                        </div>
-
-                        <div className="center">
-                            <img src="/icons/GraduationHat.png" className="onboardingIcons" style={style.icons}/>
-                            <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Education</b></div>
-                        </div>
-
-                        {educationUls}
-
-                        <div className="center onboardingPage3">
-                            <button className="greenButton" onClick={this.addEducationArea.bind(this)}>
-                                Add another school
-                            </button><br/>
-                            <div className="greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
-                                <img
-                                    className={"checkMark"  + this.state.inSchool}
-                                    src="/icons/CheckMarkGreen.png"
-                                    height={15}
-                                    width={15}
-                                />
+                    <div className="center">
+                        <button className="onboardingPage1Button" onClick={this.handleStep1ButtonClick.bind(this)}>
+                            <div className="smallText2 onboardingPage1Text2">
+                                Next
                             </div>
-                            I am currently in school<br/>
-                        </div>
-
-
-                        <div className="center">
-                            <button className="onboardingPage3Button" onClick={this.handleFinishButtonClick.bind(this)}>
-                                <div className="smallText2 onboardingPage1Text2">
-                                    Finish
-                                </div>
-                            </button>
-                        </div>
+                        </button>
                     </div>
-                    </Tab>
-                </Tabs>
+                </div>
+        }
+
+        else if (tabValue == "goals") {
+            onBoardingHtml =
+                <div style={{marginBottom: '20px'}}>
+                    <div className="onboardingPage2Text mediumText center" style={style.title.topTitle}>
+                        What Are Your Goals?
+                    </div>
+                    <div style={style.title.divider}>
+                        <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
+                        <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
+                    </div>
+                    <div className="smallText center" style={{marginBottom: "20px"}}>
+                        Select All That Apply.
+                    </div>
+                    <div>
+                        {goals ?
+                            <ul className="onboardingGoalsListContainer">
+                                {goals}
+                            </ul>
+                            : null}
+                    </div>
+                    <div className="center">
+                        <button className="onboardingPage2Button" onClick={this.handleGoalsButtonClick.bind(this)}>
+                            <div className="smallText2 onboardingPage1Text2">
+                                Next
+                            </div>
+                        </button>
+                    </div>
+                </div>
+        }
+
+        else if (tabValue == "info") {
+            onBoardingHtml =
+                <div style={{marginBottom: '20px'}}>
+                    <div className="onboardingPage3TextTitle mediumText center" style={style.title.topTitle}>
+                        Start Building Your Profile
+                    </div>
+                    <div style={style.title.divider}>
+                        <div className="onboarding3DividerLeft" style={{bottom: "0"}}/>
+                        <div className="onboarding3DividerRight" style={{bottom: "0"}}/>
+                    </div>
+                    <div className="smallText2 center" style={style.title.text}>
+                        The more complete your profile, the more appealing you look to employers.<br/>
+                    </div>
+                    <div className="center">
+                        <img src="/icons/Portfolio.png" className="onboardingIcons" style={style.icons}/>
+                        <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Personal</b></div>
+                    </div>
+
+                    <div className="horizCenteredList">
+                        <li className="onboardingLeftInput">
+                            <span>Date of Birth</span><br/>
+                            <input
+                                type="text"
+                                className="greenInput"
+                                placeholder="mm/dd/yyyy"
+                                value={this.state.birthDate}
+                                onChange={(e) => this.handleInfoInputChange(e, "birthDate")}
+                            /> <br/>
+                            <span>Location</span><br/>
+                            <input
+                                type="text"
+                                className="greenInput"
+                                placeholder="City, State, Country"
+                                value={this.state.location}
+                                onChange={(e) => this.handleInfoInputChange(e, "location")}
+                            /> <br/>
+                            <span>Willing to relocate to</span><br/>
+                            <input
+                                type="text"
+                                className="greenInput"
+                                placeholder="e.g. San Francisco, East Coast..."
+                                value={this.state.willRelocateTo}
+                                onChange={(e) => this.handleInfoInputChange(e, "willRelocateTo")}
+                                /> <br/>
+                            <span>{"Desired Job(s)"}</span><br/>
+                            <input
+                                type="text"
+                                className="greenInput"
+                                placeholder="e.g. VR/AR Developer..."
+                                value={this.state.desiredJobs}
+                                onChange={(e) => this.handleInfoInputChange(e, "desiredJobs")}
+                            /> <br/>
+                        </li>
+                        <li className="inputSeparator" />
+                        <li className="onboardingRightInput">
+                            <span>Title</span><br/>
+                            <input
+                                type="text"
+                                className="greenInput"
+                                placeholder="e.g. Front End Developer passionate about UX"
+                                value={this.state.title}
+                                onChange={(e) => this.handleInfoInputChange(e, "title")}
+                            /> <br/>
+                            <span>Bio</span><br/>
+                            <input
+                                type="text"
+                                className="greenInput"
+                                placeholder="e.g. I have been creating virtual reality..."
+                                value={this.state.bio}
+                                onChange={(e) => this.handleInfoInputChange(e, "bio")}
+                            /> <br/>
+                            <span>Links</span><br/>
+                            <input
+                                type="text"
+                                className="greenInput"
+                                placeholder="LinkedIn Profile"
+                                value={this.state.linkedIn}
+                                onChange={(e) => this.handleInfoInputChange(e, "linkedIn")}
+                            /> <br/>
+                            <input
+                                type="text"
+                                className="greenInput"
+                                placeholder="GitHub Profile"
+                                value={this.state.gitHub}
+                                onChange={(e) => this.handleInfoInputChange(e, "gitHub")}
+                            /> <br/>
+                            <input
+                                type="text"
+                                className="greenInput"
+                                placeholder="Personal Site"
+                                value={this.state.personal}
+                                onChange={(e) => this.handleInfoInputChange(e, "personal")}
+                            /> <br/>
+                        </li>
+                    </div>
+
+                    <div className="center">
+                        <img src="/icons/GraduationHat.png" className="onboardingIcons" style={style.icons}/>
+                        <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Education</b></div>
+                    </div>
+
+                    {educationUls}
+
+                    <div className="center onboardingPage3">
+                        <button className="greenButton" onClick={this.addEducationArea.bind(this)}>
+                            Add another school
+                        </button><br/>
+                        <div className="greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                            <img
+                                className={"checkMark"  + this.state.inSchool}
+                                src="/icons/CheckMarkGreen.png"
+                                height={15}
+                                width={15}
+                            />
+                        </div>
+                        I am currently in school<br/>
+                    </div>
+
+
+                    <div className="center">
+                        <button className="onboardingPage3Button" onClick={this.handleFinishButtonClick.bind(this)}>
+                            <div className="smallText2 onboardingPage1Text2">
+                                Finish
+                            </div>
+                        </button>
+                    </div>
+                </div>
+        }
+
+
+
+        return (
+            <div>
+                {onBoardingHtml}
+
                 <div className={"onboardingDots center onboardingDots" + this.state.tabValue}>
                     <div
                         className="onboardingDot"
