@@ -3,7 +3,7 @@ import React from 'react';
 import { render } from 'react-dom';
 
 //REACT_ROUTER
-import { Router, Route, IndexRoute, browserHistory } from 'react-router';
+import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
 
 
 import Login from './components/pages/login';
@@ -22,6 +22,7 @@ import PathwayContent from './components/pages/pathwayContent';
 import ContactUs from './components/pages/contactUs';
 import MyPathways from './components/pages/myPathways';
 import Onboarding from './components/pages/onboarding';
+import Error404 from './components/pages/error404';
 
 const routes = (
   <Router history={browserHistory}>
@@ -41,6 +42,7 @@ const routes = (
         <Route path="/onboarding" component={Onboarding} />
         <Route path="/pathway" component={Pathway}/>
         <Route path="/pathwayContent" component={PathwayContent}/>
+        <Route path='/*' component={Error404} />
     </Route>
   </Router>
 );
