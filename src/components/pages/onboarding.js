@@ -397,10 +397,10 @@ class Onboarding extends Component {
             }
         }
         if (indexes.length == 2 && indexes[1] < bDayString.length - 1) {
-            const month = bDayString.substring(0, indexes[0]);
-            const day = bDayString.substring(indexes[0]+1, indexes[1]);
-            const year = bDayString.substring(indexes[1] + 1);
-            birthDate = new Date(year, month, day);
+            const month = parseInt(bDayString.substring(0, indexes[0]));
+            const day = parseInt(bDayString.substring(indexes[0]+1, indexes[1]));
+            const year = parseInt(bDayString.substring(indexes[1] + 1));
+            birthDate = new Date(year, month - 1, day);
         }
 
         this.props.updateInfo(this.props.currentUser, {
@@ -468,7 +468,6 @@ class Onboarding extends Component {
 
 
     handleTabChange = (value) => {
-        console.log(value);
         setTabAndSave(value);
     };
 
