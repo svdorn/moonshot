@@ -353,7 +353,7 @@ class Profile extends Component {
             if (birthDate) {
                 console.log(birthDate);
                 // ADD THIS {(birthDate.getMonth() + 1) + "/" + birthDate.getDate() + "/" + birthDate.getYear()}
-                const date = birthDate.substring(5, 7) + "/" + birthDate.substring(8, 10) + "/" + birthDate.substring(0, 2);
+                const date = birthDate.substring(5, 7) + "/" + birthDate.substring(8, 10) + "/" + birthDate.substring(0, 4);
                 aboutMeItems.push({
                     icon: "CalendarBlue.png",
                     title: "D.O.B.",
