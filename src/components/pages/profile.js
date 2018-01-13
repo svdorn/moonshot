@@ -254,7 +254,7 @@ class Profile extends Component {
 
         if (user) {
             const education = user.info.education;
-            const links = user.info.links;
+            let links = user.info.links;
             const interests = user.info.interests;
             const goals = user.info.goals;
             const birthDate = user.info.birthDate;
@@ -300,6 +300,7 @@ class Profile extends Component {
                 //     }
                 // }
                 index = -1;
+                links = links.filter(link => (link && link.url && link.url != ""));
                 const linkOuts = links.map(function(link) {
                     // so that index is at the current place
                     index++;
