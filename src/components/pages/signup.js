@@ -131,26 +131,38 @@ class Signup extends Component {
                         <div>
                             <form onSubmit={this.handleSubmit.bind(this)}>
                                 <h1>Sign Up</h1>
-                                <Field
-                                    name="name"
-                                    component={renderTextField}
-                                    label="Full Name"
-                                /><br/>
-                                <Field
-                                    name="email"
-                                    component={renderTextField}
-                                    label="Email"
-                                /><br/>
-                                <Field
-                                    name="password"
-                                    component={renderPasswordField}
-                                    label="Password"
-                                /><br/>
-                                <Field
-                                    name="password2"
-                                    component={renderPasswordField}
-                                    label="Confirm Password"
-                                /><br/>
+                                <div className="inputContainer">
+                                    <div className="fieldWhiteSpace"/>
+                                    <Field
+                                        name="name"
+                                        component={renderTextField}
+                                        label="Full Name"
+                                    /><br/>
+                                </div>
+                                <div className="inputContainer">
+                                    <div className="fieldWhiteSpace"/>
+                                    <Field
+                                        name="email"
+                                        component={renderTextField}
+                                        label="Email"
+                                    /><br/>
+                                </div>
+                                <div className="inputContainer">
+                                    <div className="fieldWhiteSpace"/>
+                                    <Field
+                                        name="password"
+                                        component={renderPasswordField}
+                                        label="Password"
+                                    /><br/>
+                                </div>
+                                <div className="inputContainer">
+                                    <div className="fieldWhiteSpace"/>
+                                    <Field
+                                        name="password2"
+                                        component={renderPasswordField}
+                                        label="Confirm Password"
+                                    /><br/>
+                                </div>
                                 <button
                                     type="submit"
                                     className="formSubmitButton"
