@@ -4,6 +4,8 @@ import { verifyEmail } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Paper, RaisedButton } from 'material-ui';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
+
 class VerifyEmail extends Component {
 
     onVerifyClick() {
@@ -15,15 +17,17 @@ class VerifyEmail extends Component {
         console.log("props: ", this.props);
 
         return(
-            <div className="fullHeight greenToBlue">
-                <Paper className="form" zDepth={2}>
+            <div className="fullHeight greenToBlue center">
+                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightWhiteForm">
                     <h1>Verify Email</h1>
-                    <RaisedButton
-                        label="Verify my account"
-                        primary={true}
+                    <button
+                        className="semiOpaqueWhiteBlueButton smallText2"
                         onClick={this.onVerifyClick.bind(this)}
-                    />
-                </Paper>
+                    >
+                        Verify my account
+                    </button>
+                </div>
             </div>
         );
     }

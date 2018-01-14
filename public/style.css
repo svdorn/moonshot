@@ -71,6 +71,7 @@ footer {
 }
 .lightWhiteForm {
     background-color: rgba(255,255,255,.6);
+    color: var(--moonshotBlue);
 }
 .formSubmitButton {
     padding: 3px 25px 0px;
@@ -133,13 +134,13 @@ form > h1 {
     border: 2px solid white;
 }
 
-.whiteBlueButton {
-    padding-top:3px;
+.whiteBlueButton, .semiOpaqueWhiteBlueButton {
+    padding-top: 5px;
     border: 2px solid var(--moonshotMidBlue);
-    background-color: white;
     color: var(--moonshotMidBlue);
 }
-
+.semiOpaqueWhiteBlueButton { background-color: rgba(255,255,255,.4); }
+.whiteBlueButton { background-color: white; }
 .whiteButton {
     background-color: white;
     color: var(--moonshotGreenText);
