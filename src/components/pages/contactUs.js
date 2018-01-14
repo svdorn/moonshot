@@ -71,23 +71,27 @@ class ContactUs extends Component {
 
     render() {
         return (
-            <div className="fullHeight greenToBlue">
-                <Paper className="form" zDepth={2}>
+            <div className="fullHeight greenToBlue center">
+                <div className="form lightWhiteForm">
+                    <h1>Contact Us</h1>
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Contact Us</h1>
-                        <Field
-                            name="message"
-                            component={renderTextField}
-                            label="Message"
-                        /><br/>
-                        <RaisedButton type="submit"
-                                      label="Contact Us"
-                                      primary={true}
-                                      className="button"
-                        />
+                        <div className="inputContainer messageInputContainer">
+                            <div className="messageFieldWhiteSpace"/>
+                            <Field
+                                name="message"
+                                component={renderTextField}
+                                label="Message"
+                            /><br/>
+                        </div>
+                        <button
+                            type="submit"
+                            className="semiOpaqueWhiteBlueButton"
+                        >
+                            Contact Us
+                        </button>
                     </form>
                     { this.props.loading ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
-                </Paper>
+                </div>
 
             </div>
         );
