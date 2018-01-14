@@ -88,16 +88,22 @@ class Login extends Component {
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Sign in</h1>
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="email"
                                 component={renderTextField}
                                 label="Email"
                             /><br/>
+                        </div>
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="password"
                                 component={renderPasswordField}
                                 label="Password"
                             /><br/><br/>
+                        </div>
                         <a href="/signup">Create account</a><br/>
                         <a href="/forgotPassword">Forgot Password?</a><br/>
                         <button

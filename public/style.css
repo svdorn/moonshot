@@ -46,15 +46,39 @@ footer {
   margin: 20px 0;
 }
 
+
+.inputContainer {
+    position: relative;
+    text-align: center;
+}
+/* padding for text in input */
+.inputContainer > div:nth-child(2) > input {
+    padding-left: 5px !important;
+}
+.inputContainer > div:nth-child(2) > div:nth-child(2) {
+    left: 5px;
+}
+.inputContainer > div:nth-child(2) > label:nth-child(1) {
+    left: 5px;
+}
+.fieldWhiteSpace {
+    position: absolute;
+    width: 255px;
+    height: 28px;
+    background-color: rgba(255,255,255, .4);
+    top: 35px;
+    display: inline-block;
+}
 .lightWhiteForm {
     background-color: rgba(255,255,255,.6);
 }
 .formSubmitButton {
     padding: 3px 25px 0px;
     border: 2px solid var(--moonshotMidBlue);
-    background-color: rgba(255,255,255,.5);
+    background-color: rgba(255,255,255,.4);
     color: var(--moonshotMidBlue);
     font-size: 25px;
+    margin-top: 10px;
 }
 .formContainer {
     text-align: center;
