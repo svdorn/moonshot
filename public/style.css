@@ -46,14 +46,30 @@ footer {
   margin: 20px 0;
 }
 
+.lightWhiteForm {
+    background-color: rgba(255,255,255,.6);
+}
+.formSubmitButton {
+    padding: 3px 25px 0px;
+    border: 2px solid var(--moonshotMidBlue);
+    background-color: rgba(255,255,255,.5);
+    color: var(--moonshotMidBlue);
+    font-size: 25px;
+}
+.formContainer {
+    text-align: center;
+}
 .form{
-  text-align: center;
-  margin-top: 140px;
-  margin-right: 15%;
-  margin-bottom: 100px;
-  margin-left: 15%;
-  padding-bottom: 20px;
-  padding-top: 10px;
+    text-align: center;
+    margin-top: 140px;
+    margin-bottom: 100px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    width: 550px;
+    display: inline-block;
+}
+form > h1 {
+    color: var(--moonshotBlue);
 }
 
 .form-right{
@@ -94,6 +110,7 @@ footer {
 }
 
 .whiteBlueButton {
+    padding-top:3px;
     border: 2px solid var(--moonshotMidBlue);
     background-color: white;
     color: var(--moonshotMidBlue);

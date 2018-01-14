@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 import {postUser, getUsers, onSignUpPage} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
     floatingLabelStyle: {
@@ -118,8 +119,9 @@ class Signup extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <div className="fullHeight greenToBlue">
-                <Paper className="form" zDepth={2}>
+            <div className="fullHeight greenToBlue formContainer">
+                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightWhiteForm">
                     {this.state.email != "" && this.props.userPosted ?
                         <div className="center">
                             <h1>Verify your email address</h1>
@@ -149,16 +151,17 @@ class Signup extends Component {
                                     component={renderPasswordField}
                                     label="Confirm Password"
                                 /><br/>
-                                <RaisedButton type="submit"
-                                              label="Sign up"
-                                              primary={true}
-                                              className="button"
-                                />
+                                <button
+                                    type="submit"
+                                    className="formSubmitButton"
+                                >
+                                    Sign Up
+                                </button>
                             </form>
                             { this.props.loadingCreateUser ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
                         </div>
                     }
-                </Paper>
+                </div>
             </div>
         );
     }

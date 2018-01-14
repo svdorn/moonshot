@@ -5,6 +5,7 @@ import { login } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Field, reduxForm } from 'redux-form';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 
 const styles = {
@@ -82,8 +83,9 @@ class Login extends Component {
     render() {
         console.log("props are:", this.props);
         return (
-            <div className="fullHeight greenToBlue">
-                <Paper className="form" zDepth={2}>
+            <div className="fullHeight greenToBlue formContainer">
+                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Sign in</h1>
                             <Field
@@ -98,13 +100,14 @@ class Login extends Component {
                             /><br/><br/>
                         <a href="/signup">Create account</a><br/>
                         <a href="/forgotPassword">Forgot Password?</a><br/>
-                        <RaisedButton type="submit"
-                                      label="Sign in"
-                                      primary={true}
-                                      className="button"
-                        />
+                        <button
+                            type="submit"
+                            className="formSubmitButton"
+                        >
+                            Sign In
+                        </button>
                     </form>
-                </Paper>
+                </div>
 
             </div>
         );
