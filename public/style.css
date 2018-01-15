@@ -46,6 +46,9 @@ footer {
   margin: 20px 0;
 }
 
+.moonshotMenuLogo {
+    margin-left: 35px;
+}
 
 .inputContainer {
     position: relative;
@@ -159,7 +162,7 @@ form > h1 {
 
 .menuItem {
     font-size: 20px;
-    margin: 30px 10px 10px 10px;
+    margin: 40px 10px 10px 10px;
 }
 
 .menuItem2 {
@@ -172,7 +175,12 @@ form > h1 {
     width: 2px;
     height: 30px;
     background-color: white;
-    margin: 15px 15px 0px 15px;
+    margin: 25px 15px 0px 15px;
+}
+
+.smallScreenMenu {
+    margin-top: 25px;
+    margin-right: 18px;
 }
 
 /* So that the menu text color is the same as the rest of the header */
@@ -254,7 +262,8 @@ button.link {
 
 .infoBox {
     margin: auto;
-    /*width: 70%;*/
+    width: 80%;
+    max-width: 600px;
     text-align: center;
     padding-top: 200px;
 }
@@ -1014,6 +1023,31 @@ button.link {
     }
     .topMarginOnSmallScreen {
         margin-top: 300px;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .smallScreenMenu {
+        display: inherit;
+    }
+    .wideScreenMenuItem {
+        display: none !important;
+    }
+}
+@media only screen and (min-width: 701px) {
+    .smallScreenMenu {
+        display: none !important;
+    }
+    .wideScreenMenuItem {
+        display: inherit;
+    }
+}
+@media only screen and (max-width: 375px) {
+    .smallScreenMenu {
+        margin-right: 0px;
+    }
+    .moonshotMenuLogo {
+        margin-left: 0px;
     }
 }
 

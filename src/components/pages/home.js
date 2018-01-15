@@ -157,9 +157,8 @@ class Home extends Component{
                 <div className="fullHeight greenToBlue">
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
 
-                    <div className="infoBox whiteText mediumText noWrap" style={{zIndex:"20"}}>
-                        Skip the resum&eacute;.<br/>
-                        Learn the skills that employers need<br/>
+                    <div className="infoBox whiteText mediumText" style={{zIndex:"20"}}>
+                        Skip the resum&eacute;. Learn the skills that employers need <br/>
                         <i>for free.</i><br/>
                         <button className="outlineButton blueWhiteButton"
                             onClick={() => this.goTo('/signup')}>

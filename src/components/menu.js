@@ -1,6 +1,7 @@
 "use strict"
 import React, { Component } from 'react';
-import { AppBar, FlatButton, ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarTitle } from 'material-ui';
+import { AppBar, FlatButton, ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarTitle, IconMenu, IconButton } from 'material-ui';
+import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
@@ -43,6 +44,18 @@ class Menu extends Component {
         this.setState({value})
     };
 
+    selectItem(route, value) {
+        this.goTo(route);
+        this.setState({value});
+    }
+
+    signOut() {
+        value = 1;
+        this.props.signout();
+        this.goTo('/');
+        this.setState({value});
+    }
+
     goTo (route)  {
         // closes any notification
         this.props.closeNotification();
@@ -60,25 +73,26 @@ class Menu extends Component {
         }
 
         let moonshotLogo = "/images/MoonshotTempLogo.png";
-        let dropdownClass = "headerDropdownWhite";
-        let menuItemClass = "menuItem clickable noWrap whiteText"
+        let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
+        let menuItemClass = "menuItem clickable noWrap whiteText wideScreenMenuItem"
         if (this.props.blueHeader) {
             moonshotLogo = "/images/OfficialLogoBlue.png";
-            dropdownClass = "headerDropdownBlue";
-            menuItemClass = "menuItem clickable noWrap blueText"
+            dropdownClass = "headerDropdownBlue wideScreenMenuItem";
+            menuItemClass = "menuItem clickable noWrap blueText wideScreenMenuItem"
         }
 
 
         if (this.props.isFetching) {
             return (
                 <header style={{zIndex:"100"}}>
-                    <Toolbar id="menu">
+                    <Toolbar id="menu" style={{marginTop:"10px"}}>
                         <ToolbarGroup>
                         <img
-                            width={300}
-                            height={100}
-                            alt="300x100"
-                            className="clickable"
+                            width={187.5}
+                            height={60}
+                            alt="Moonshot Logo"
+                            title="Moonshot Logo"
+                            className="clickable moonshotMenuLogo"
                             id="moonshotLogo"
                             src={moonshotLogo}
                             onClick={() => this.goTo('/')}
@@ -92,14 +106,13 @@ class Menu extends Component {
         return (
             <header style={{zIndex:"100"}}>
                 {this.props.currentUser ?
-                    <Toolbar id="menu" style={{marginTop:"20px"}}>
-                        <ToolbarGroup>
+                    <Toolbar id="menu" style={{marginTop:"10px"}}>
+                        <ToolbarGroup className="logoToolbarGroup">
                             <img
-                                style={{marginLeft:"35px"}}
                                 width={187.5}
                                 height={60}
                                 alt="Moonshot"
-                                className="clickable"
+                                className="clickable moonshotMenuLogo"
                                 id="moonshotLogo"
                                 src={moonshotLogo}
                                 onClick={() => this.goTo('/discover')}
@@ -112,7 +125,7 @@ class Menu extends Component {
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
                                           anchorOrigin={styles.anchorOrigin}
-                                          style={{fontSize:"20px", marginTop:"11px"}}
+                                          style={{fontSize:"20px", marginTop:"21px"}}
                                           className={dropdownClass}
                                           id="menuDropdown"
                             >
@@ -121,18 +134,33 @@ class Menu extends Component {
                                 <MenuItem value={2} primaryText="Settings" />
                                 <MenuItem value={3} primaryText="Sign Out"/>
                             </DropDownMenu>
+
+
+                            <IconMenu
+                                iconButtonElement={<IconButton><MoreHorizIcon /></IconButton>}
+                                anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                                targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                                className="smallScreenMenu"
+                                iconStyle={{fill: "white"}}
+                            >
+                                <MenuItem primaryText="Discover" onClick={() => this.goTo('/discover')} />
+                                <MenuItem primaryText="My Pathways" onClick={() => this.goTo('/myPathways')} />
+                                <MenuItem primaryText="Profile" onClick={() => this.selectItem('/profile', 1)} />
+                                <MenuItem primaryText="Settings" onClick={() => this.selectItem('/settings', 2)} />
+                                <MenuItem primaryText="Sign out" onClick={() => this.signOut()} />
+                            </IconMenu>
                         </ToolbarGroup>
                     </Toolbar>
                     :
 
-                <Toolbar style={{marginTop:"20px"}} id="menu">
+                <Toolbar style={{marginTop:"10px"}} id="menu">
                     <ToolbarGroup>
                     <img
-                        style={{marginLeft:"35px"}}
-                        width={250}
-                        height={80}
-                        alt="300x100"
-                        className="clickable"
+                        width={187.5}
+                        height={60}
+                        alt="Moonshot Logo"
+                        title="Moonshot Logo"
+                        className="clickable moonshotMenuLogo"
                         id="moonshotLogo"
                         src={moonshotLogo}
                         onClick={() => this.goTo('/')}
@@ -141,7 +169,7 @@ class Menu extends Component {
                     <ToolbarGroup>
                         <p className={menuItemClass} onClick={() => this.goTo('/')}>Home</p>
                         <p className={menuItemClass} onClick={() => this.goTo('/forBusiness')}>For Business</p>
-                        <div className="menuDivider" />
+                        <div className="menuDivider wideScreenMenuItem" />
                         <p className={menuItemClass} onClick={() => this.goTo('/login')}>Sign in</p>
                     </ToolbarGroup>
                 </Toolbar>}
