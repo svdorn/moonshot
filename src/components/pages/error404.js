@@ -13,7 +13,7 @@ class error404 extends Component {
 
     render () {
         return (
-            <div className="fullHeight greenToBlue">
+            <div className="fullHeight greenToBlue" style={{textAlign:"center"}}>
                 <Paper className="form" zDepth={2}>
                     <h1 className="bigText">404</h1>
                     <h2>Page not found</h2>

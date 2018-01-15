@@ -53,7 +53,7 @@ class Menu extends Component {
         value = 1;
         this.props.signout();
         this.goTo('/');
-        this.setState({value});
+        this.setState({value:1});
     }
 
     goTo (route)  {
