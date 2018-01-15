@@ -2,6 +2,7 @@
 import React, { Component } from 'react';
 import { Paper } from 'material-ui';
 import { browserHistory } from 'react-router';
+import {connect} from 'react-redux';
 
 class error404 extends Component {
     goTo (route)  {
@@ -12,6 +13,10 @@ class error404 extends Component {
     }
 
     render () {
+        let route = '/';
+        if (this.props.currentUser) {
+            route = '/discover';
+        }
         return (
             <div className="fullHeight greenToBlue" style={{textAlign:"center"}}>
                 <Paper className="form" zDepth={2}>
@@ -19,7 +24,7 @@ class error404 extends Component {
                     <h2>Page not found</h2>
                     You are lost but we can show you the way!
                     <p  className="clickable blueText"
-                        onClick={() => this.goTo('/discover')}>
+                        onClick={() => this.goTo(route)}>
                         Follow me!
                     </p>
                 </Paper>
@@ -28,4 +33,10 @@ class error404 extends Component {
     }
 }
 
-export default error404;
+function mapStateToProps(state) {
+    return {
+        currentUser: state.users.currentUser,
+    };
+}
+
+export default connect(mapStateToProps)(error404);
