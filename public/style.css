@@ -5,7 +5,7 @@ html {
 
 body {
     font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-    min-width: 800px
+    /*min-width: 800px*/
 }
 
 :root {
@@ -254,7 +254,7 @@ button.link {
 
 .infoBox {
     margin: auto;
-    width: 70%;
+    /*width: 70%;*/
     text-align: center;
     padding-top: 200px;
 }
@@ -980,6 +980,40 @@ button.link {
     }
     .homepageTrajectoryImagesLeft > img {
         left: 0;
+    }
+}
+
+/* mobile */
+@media only screen and (max-width: 800px) {
+    .homepageTrajectoryImagesRight { visibility: hidden; }
+    .homepageTrajectoryImagesLeft { visibility: hidden; }
+    .homepageTrajectory {
+        height: 0px;
+        text-align: center;
+    }
+    .homepageTrajectoryTextLeft > div,
+    .homepageTrajectoryTextRight > div {
+        float: initial;
+        display: inline-block;
+        text-align: left;
+        margin-left: 0px;
+    }
+    .homepageTrajectoryTextLeft > div {
+        padding-left: 120px;
+    }
+    .homepageTrajectoryTextRight > div {
+        padding-left: 170px;
+    }
+    .homepageTrajectoryTextLeft > img,
+    .homepageTrajectoryTextRight > img {
+        right: calc(50% + 120px);
+    }
+    .homepageTrajectoryTextLeft,
+    .homepageTrajectoryTextRight {
+        float: initial;
+    }
+    .topMarginOnSmallScreen {
+        margin-top: 300px;
     }
 }
 
