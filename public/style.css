@@ -269,7 +269,7 @@ button.link {
 
 .isolatedHeader {
     font-size: 34px;
-    margin: 100px 0px 30px;
+    margin: 0px 0px 30px;
     display: inline-block;
 }
 
@@ -336,7 +336,7 @@ button.link {
 /* .horizCenteredList li:first-child { margin-left: 0px; } */
 /* .horizCenteredList li:last-child { margin-right: 0px; } */
 
-.pathwayPrevList li { margin: 0px 10px; }
+.pathwayPrevList li { margin: 0px 10px 10px; }
 .pathwayPrevIconList li { margin: 0px 3.2px; }
 
 /* so that the pathway icons are all equally spaced out */
@@ -541,7 +541,7 @@ button.link {
 }
 .logoBarLogo {
     height: 50px;
-    margin-right: 30px;
+    margin-right: 5%;
 }
 
 .bigText { font-size: 48px; }
@@ -834,6 +834,13 @@ button.link {
     width: 100%;
 }
 
+.purpleToGreenSpacer {
+    width: 60%;
+    height: 2px;
+    margin: 50px 20% 100px;
+    background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
+}
+
 .profileSeparator {
     margin: 30px 0;
     width: 100%;
@@ -866,6 +873,115 @@ button.link {
     user-select: none;
 }
 
+.homepageTrajectory {
+    text-align: left;
+    position: relative;
+    margin: 0 5%;
+    clear: both;
+    height: 320px;
+}
+.homepageTrajectoryTextLeft {
+    float: left;
+}
+.homepageTrajectoryTextRight {
+    float: right;
+}
+.homepageTrajectoryTextLeft,
+.homepageTrajectoryTextRight {
+    margin-top: 30px;
+    width: 54%;
+}
+.homepageTrajectoryTextLeft > img,
+.homepageTrajectoryTextRight > img {
+    height: 90px;
+    position: absolute;
+    margin-top: 45px;
+    font-size: 23px;
+}
+.homepageTrajectoryImagesRight {
+    float: right;
+    margin-right: 2%;
+}
+.homepageTrajectoryImagesLeft {
+    float: left;
+}
+.homepageTrajectoryImagesLeft > img,
+.homepageTrajectoryImagesRight > img {
+    height: 270px;
+    z-index: 10;
+    width: 400px;
+    position: absolute;
+}
+.homepageTrajectoryImagesRight > img {
+    right: 2%;
+    margin: 20px 20px 0 0;
+}
+.homepageTrajectoryImagesLeft > img {
+    margin: 20px 0 0 20px;
+    left: 2%;
+}
+.homepageImgBackgroundLeft,
+.homepageImgBackgroundRight {
+    height: 270px;
+    position: absolute;
+    width: 400px;
+    z-index: 5;
+}
+.homepageImgBackgroundLeft {
+    left: 2%;
+}
+.homepageImgBackgroundRight {
+    right: 2%;
+}
+.greenGradient {
+    background: linear-gradient(to top right, #28EBC3, #6EFEE4);
+}
+.blueGradient {
+    background: linear-gradient(to top left, #32C4FC, #2CFCFE);
+}
+.purpleToRed {
+    background: linear-gradient(to top left, #DD5E8E, var(--moonshotDarkPurple));
+}
+.purpleText {
+    color: var(--moonshotDarkPurple);
+}
+.blueText {
+    color: var(--moonshotBlue);
+}
+
+.homepageTrajectoryTextLeft > div,
+.homepageTrajectoryTextRight > div {
+    float: right;
+    margin-left: 110px;
+}
+
+@media only screen and (max-width: 1050px) {
+    .homepageTrajectoryTextLeft {
+        width: 40%;
+    }
+    .homepageTrajectoryTextLeft > img,
+    .homepageTrajectoryTextRight > img {
+        visibility: hidden;
+    }
+    .homepageTrajectoryTextLeft > div {
+        margin-left: 0px;
+    }
+    .homepageTrajectoryTextRight > div {
+        margin-right: 0px;
+    }
+    .homepageImgBackgroundLeft {
+        left: 0;
+    }
+    .homepageImgBackgroundRight {
+        right: 0;
+    }
+    .homepageTrajectoryImagesRight > img {
+        right: 0;
+    }
+    .homepageTrajectoryImagesLeft > img {
+        left: 0;
+    }
+}
 
 /* decorative triangles */
 

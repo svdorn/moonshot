@@ -55,26 +55,6 @@ class Home extends Component{
 
     render(){
 
-        const style = {
-            hiringPartners: {
-                fontSize: "15px",
-                color: "gray",
-                marginBottom: "30px"
-            }, leftLi: {
-                float: "left",
-                textAlign: "left",
-                position: "relative",
-                marginLeft: "100px",
-                clear: "both"
-            }, rightLi: {
-                float: "right",
-                textAlign: "left",
-                position: "relative",
-                marginRight: "100px",
-                clear: "both"
-            }
-        }
-
         // create the pathway previews
         let pathwayKey = 0;
         let self = this;
@@ -159,7 +139,7 @@ class Home extends Component{
 
                     <div className="infoBox whiteText mediumText noWrap" style={{zIndex:"20"}}>
                         Skip the resum&eacute;.<br/>
-                        Learn the skills that employers need<br/>
+                        Learn the skills that employers want<br/>
                         <i>for free.</i><br/>
                         <button className="outlineButton blueWhiteButton"
                             onClick={() => this.goTo('/signup')}>
@@ -170,90 +150,86 @@ class Home extends Component{
 
 
                 <div className="logoBar">
-                    <h3 style={style.hiringPartners}>Our Hiring Partners</h3>
                     { logoBar }
                 </div>
 
-                <div className="purpleToGreenSpacer" />
-
-
                 <div>
-                    <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextLeft">
-                            <img
-                                src="/icons/Lightbulb.png"
-                                alt="Lightbulb"
-                                title="Lightbulb icon"
-                            />
-                            <div className="smallText2">
-                                <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
-                                Our pathways are built with
-                                leading companies and feature skills
-                                demanded by the market.
-                            </div>
-                        </div>
-                        <div className="homepageTrajectoryImagesRight">
-                            <div className="homepageImgBackgroundRight greenGradient" />
-                            <img
-                                src="/images/VRGuy.jpg"
-                            />
-                        </div>
-                    </div>
-
-                    <br/>
-
-                    <div className="homepageTrajectory">
-                    <div className="homepageTrajectoryTextRight">
-                        <img
-                            src="/icons/Person.png"
-                            alt="Person icon"
-                            title="Person icon"
-                        />
-                        <div className="smallText2">
-                            <h2 className="blueText">Build Your Profile</h2>
-                            Add your skills, completed projects and
-                            finished pathways. Prove yourself through
-                            your profile.
-                        </div>
-                    </div>
-                        <div className="homepageTrajectoryImagesLeft">
-                            <div className="homepageImgBackgroundLeft blueGradient" />
-                            <img
-                                src="/images/TwoPeopleInOffice.jpg"
-                            />
-                        </div>
-                    </div>
-
-                    <br />
-
-                    <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextLeft">
-                            <img
-                                src="/icons/Badge.png"
-                                alt="Badge icon"
-                                title="Badge icon"
-                            />
-                            <div className="smallText2">
-                                <h2 className="purpleText">Get Hired By Companies<br/>Leading the future</h2>
-                                Compete for open positions with
-                                sponsor employers by excelling in
-                                pathways and strengthening your profile.
-                            </div>
-                        </div>
-                        <div className="homepageTrajectoryImagesRight">
-                            <div className="homepageImgBackgroundRight purpleToRed" />
-                            <img
-                                src="/images/HappyBeardGuy.jpeg"
-                            />
-                        </div>
+                    <div style={{marginBottom: "70px"}}>
+                        <HomepageTriangles variation="3"/>
+                        <ul className="horizCenteredList homepageBenefitsList">
+                            <li style={{marginRight: "14%", marginTop: "14px"}}>
+                                <div style={{position: "relative"}}>
+                                    <img
+                                        src="/icons/CompassGreen.png"
+                                        alt="Explore"
+                                        className="infoBoxImage"
+                                    />
+                                    <div className="smallText2">
+                                        Explore emerging career<br/>
+                                        paths and technologies.
+                                    </div>
+                                </div>
+                            </li>
+                            <li>
+                                <div style={{position: "relative"}}>
+                                    <img
+                                        src="/icons/GraduationHat.png"
+                                        alt="Portfolio"
+                                        className="infoBoxImage"
+                                    />
+                                    <div className="smallText2">
+                                        Employers sponsor<br/>
+                                        pathways so you can<br/>
+                                        learn new skills for free.
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                        <ul className="horizCenteredList homepageBenefitsList">
+                            <li>
+                                <div style={{position: "relative"}}>
+                                    <img
+                                        src="/icons/CheckMark.png"
+                                        alt="Check Mark"
+                                        className="infoBoxImage"
+                                    />
+                                    <div className="smallText2">
+                                        Compete for open<br/>
+                                        positions at sponsor companies<br/>
+                                        by completing pathways.
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
 
-                <div className="topMarginOnSmallScreen" style={{textAlign:"center"}}>
-                    <div className="center mediumText blueText" style={{marginTop: "40px", fontSize:"60px"}}>Pathways</div>
+                <div className="homepageSeparatorContainer">
+                    <div className="homepageSeparator" style={{marginTop:"40px"}}/>
+                </div>
+
+
+                <div className="center">
+                    <h1 className="isolatedHeader">
+                        <b>Build a skillset adapted to the speed of technology.</b>
+                    </h1>
+                    <div>
+                        { exampleSkills }
+                    </div>
+                </div>
+
+
+                <div className="homepageSeparatorContainer" style={{marginTop: "80px"}}>
+                    <div className="homepageSeparator" />
+                </div>
+
+
+                <div className="fullHeight" style={{textAlign:"center"}}>
+                    <div className="center mediumText blueText" style={{marginTop: "40px"}}>Pathways</div>
                     <div style={{
-                        height: "100px",
-                        fontSize: "26px"
+                        margin: "0px 160px",
+                        height: "60px",
+                        fontSize: "15px"
                     }}>
                         Moonshot pathways are organized in pathways and
                         sponsored by<br/> employers hiring for those skills.
@@ -265,22 +241,23 @@ class Home extends Component{
                     </div>
                     <button
                         className="outlineButton whiteBlueButton"
-                        style={{marginTop:"30px", padding:"10px 50px 4px", lineHeight:"35px"}}
+                        style={{marginTop:"30px"}}
                         onClick={() => this.goTo('/signup')}>
-                        Create Your <br/>Free Account
+                        Create your free account
                     </button>
                 </div>
 
-                <div className="purpleToGreenSpacer" />
 
-                <div className="center" style={{marginBottom:"50px"}}>
-                    <h1 className="isolatedHeader">
-                        <b>Build a skillset adapted to the speed of technology.</b>
-                    </h1>
-                    <div>
-                        { exampleSkills }
-                    </div>
-                </div>
+                <div className="homepageSeparatorContainer"><div className="homepageSeparator" /></div>
+
+
+
+
+
+
+
+
+
             </div>
         );
     }

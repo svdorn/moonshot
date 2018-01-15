@@ -100,7 +100,7 @@ class Onboarding extends Component {
                         {
                             name: "creationAndMarketingInterests",
                             interests: [
-                                "Virtual Marketing",
+                                "Viral Marketing",
                                 "Pay Per Click",
                                 "Social Media",
                                 "UX",
