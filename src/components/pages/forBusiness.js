@@ -32,13 +32,13 @@ const styles = {
         marginRight: "100px",
         clear: "both"
     },
-    descriptionAndSalary: {
+    horizList: {
         position: "relative",
         height: "150px",
         marginTop: "15px",
         marginBottom: "25px"
     },
-    descriptionAndSalaryIcon: {
+    horizListIcon: {
         height: "50px",
         position: "absolute",
         top: "0",
@@ -46,7 +46,7 @@ const styles = {
         right: "80%",
         margin: "auto"
     },
-    descriptionAndSalaryText: {
+    horizListText: {
         width: "60%",
         fontSize: "20px",
         right: "0",
@@ -57,13 +57,13 @@ const styles = {
         top: "50%",
         transform: "translateY(-50%)"
     },
-    descriptionAndSalaryFull: {
+    horizListFull: {
         width: "33%",
         float: "left",
         position: "relative",
         height: "150px"
     },
-    descriptionAndSalarySpacer: {
+    horizListSpacer: {
         height: "100%",
         position: "relative"
     },
@@ -175,15 +175,15 @@ class ForBusiness extends Component {
                     <div className="center mediumText">
                         <b>Top College Students and Recent Graduates<br/> Competing to Work for You.</b>
                     </div>
-                    <div style={styles.descriptionAndSalary}>
-                        <div style={styles.descriptionAndSalaryFull}>
-                            <div style={{...styles.descriptionAndSalarySpacer, marginLeft: "20%"}}
+                    <div style={styles.horizList}>
+                        <div style={styles.horizListFull}>
+                            <div style={{...styles.horizListSpacer, marginLeft: "20%"}}
                             >
                                 <img
                                     src="/icons/Key.png"
-                                    style={styles.descriptionAndSalaryIcon}
+                                    style={styles.horizListIcon}
                                 />
-                                <div style={styles.descriptionAndSalaryText}>
+                                <div style={styles.horizListText}>
                                     <b>Established Pipeline</b><br/>
                                     Instant access to a pool
                                     of top tier talent.
@@ -191,26 +191,26 @@ class ForBusiness extends Component {
                             </div>
                         </div>
 
-                        <div style={styles.descriptionAndSalaryFull}>
-                            <div style={{...styles.descriptionAndSalarySpacer, marginLeft: "12%"}}>
+                        <div style={styles.horizListFull}>
+                            <div style={{...styles.horizListSpacer, marginLeft: "12%"}}>
                                 <img
                                     src="/icons/Evaluate.png"
-                                    style={styles.descriptionAndSalaryIcon}
+                                    style={styles.horizListIcon}
                                 />
-                                <div style={styles.descriptionAndSalaryText}>
+                                <div style={styles.horizListText}>
                                     <b>Evaluative Metrics</b><br/>
                                     Skill evaluation curated to
                                     your company's needs.
                                 </div>
                             </div>
                         </div>
-                        <div style={styles.descriptionAndSalaryFull}>
-                            <div style={{...styles.descriptionAndSalarySpacer, marginRight: "20%"}}>
+                        <div style={styles.horizListFull}>
+                            <div style={{...styles.horizListSpacer, marginRight: "20%"}}>
                                 <img
                                     src="/icons/Employee.png"
-                                    style={styles.descriptionAndSalaryIcon}
+                                    style={styles.horizListIcon}
                                 />
-                                <div style={styles.descriptionAndSalaryText}>
+                                <div style={styles.horizListText}>
                                     <b>Hire Talent</b><br/>
                                     See their skills and work
                                     before you hire.
