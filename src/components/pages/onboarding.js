@@ -366,9 +366,7 @@ class Onboarding extends Component {
             }
         }
 
-        if (goals.length > 0) {
-            this.props.updateGoals(this.props.currentUser, goals);
-        }
+        this.props.updateGoals(this.props.currentUser, goals);
     }
 
 
