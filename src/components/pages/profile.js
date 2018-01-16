@@ -263,6 +263,7 @@ class Profile extends Component {
 
             let index = -1;
 
+            console.log('makin edu');
             if (education && education.length > 0) {
                 const schools = education.map(function(edu) {
                     // how to show the dates if the date is stored as a Date

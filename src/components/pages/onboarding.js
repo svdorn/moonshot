@@ -207,7 +207,7 @@ class Onboarding extends Component {
             }
 
             let eduArray = info.education;
-            if (eduArray) {
+            if (eduArray && eduArray.length > 0) {
                 eduInfo = eduArray.map(function(edu) {
                     return {
                         school: edu.school ? edu.school : "",
@@ -215,6 +215,14 @@ class Onboarding extends Component {
                         minors: edu.minors ? edu.minors : "",
                         endDate: edu.endDate ? edu.endDate : "",
                     };
+                });
+            } else {
+                // add empty edu area if none written down
+                eduInfo.push({
+                    school: "",
+                    majors: "",
+                    minors: "",
+                    endDate: "",
                 });
             }
         }
@@ -386,7 +394,11 @@ class Onboarding extends Component {
             {url: state.linkedIn, displayString: "LinkedIn"},
             {url: state.personal, displayString: "Personal"}
         ];
-        const education = state.eduInfo;
+        let education = state.eduInfo;
+
+        education = education.filter(function(edu) {
+            return (edu.school != "" || edu.endDate != "" || edu.majors != "" || edu.minors != "");
+        });
 
         const bDayString = state.birthDate;
         let birthDate = undefined;
