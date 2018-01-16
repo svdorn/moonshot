@@ -769,28 +769,7 @@ button.link {
     height: 100px;
 }
 
-@media only screen and (max-width: 1000px) {
-    .videoContainer {
-        width: 90%;
-        margin-left: 5%;
-        min-width: 800px;
-        padding-top: 56.25%
-    }
-    .scrollBarAndContactUs {
-        margin-left: -800px;
-    }
-    .drawerOpener {
-        visibility: visible;
-        position: relative;
-        width: 150px;
-        display: block !important;
-        margin: 10px auto;
-        left: 0;
-    }
-    .overviewAndCommentBox, .pathwayContent {
-        width: 100%;
-    }
-}
+
 
 .myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
     display: inline-block !important;
@@ -967,6 +946,73 @@ button.link {
     margin-left: 110px;
 }
 
+
+
+
+
+.homePathwaysTitle {
+    color: var(--moonshotBlue);
+}
+.homePathwaysDesc {
+    margin: auto;
+    padding: 0px 10%;
+    margin-bottom: 20px;
+    font-size: 26px;
+}
+
+
+/* decorative triangles */
+
+.triangle{
+  width: 160px;
+  height: 160px;
+  position: absolute;
+  clip: rect(auto, 180px, auto, 100px);
+  z-index: 10;
+}
+
+.triangle::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  transform: rotate(-45deg);
+}
+
+.whiteTriangle::after {
+    background: linear-gradient(to top, rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.6));
+}
+.purpleTriangle::after { background: var(--moonshotPurple); }
+.darkPurpleTriangle::after { background: var(--moonshotDarkPurple); }
+.greenTriangle::after { background: var(--moonshotGreen); }
+
+/* end decorative triangles */
+
+@media only screen and (max-width: 1000px) {
+    .videoContainer {
+        width: 90%;
+        margin-left: 5%;
+        min-width: 800px;
+        padding-top: 56.25%
+    }
+    .scrollBarAndContactUs {
+        margin-left: -800px;
+    }
+    .drawerOpener {
+        visibility: visible;
+        position: relative;
+        width: 150px;
+        display: block !important;
+        margin: 10px auto;
+        left: 0;
+    }
+    .overviewAndCommentBox, .pathwayContent {
+        width: 100%;
+    }
+}
+
 @media only screen and (max-width: 1050px) {
     .homepageTrajectoryTextLeft {
         width: 40%;
@@ -995,17 +1041,6 @@ button.link {
     }
 }
 
-
-
-.homePathwaysTitle {
-    color: var(--moonshotBlue);
-}
-.homePathwaysDesc {
-    margin: auto;
-    padding: 0px 10%;
-    margin-bottom: 20px;
-    font-size: 26px;
-}
 @media only screen and (min-width: 501px) {
     .homePathwaysTitle {
         margin-top: 0px;
@@ -1095,32 +1130,3 @@ button.link {
         height: 80px;
     }
 }
-
-/* decorative triangles */
-
-.triangle{
-  width: 160px;
-  height: 160px;
-  position: absolute;
-  clip: rect(auto, 180px, auto, 100px);
-  z-index: 10;
-}
-
-.triangle::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  transform: rotate(-45deg);
-}
-
-.whiteTriangle::after {
-    background: linear-gradient(to top, rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.6));
-}
-.purpleTriangle::after { background: var(--moonshotPurple); }
-.darkPurpleTriangle::after { background: var(--moonshotDarkPurple); }
-.greenTriangle::after { background: var(--moonshotGreen); }
-
-/* end decorative triangles */
