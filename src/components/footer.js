@@ -19,13 +19,13 @@ class Footer extends Component {
 
         return (
             <div className="jsxWrapper">
-                <footer className="footer purpleToBlue" style={{minWidth: "800px"}}>
+                <footer className="footer purpleToBlue">
                     <ul className="horizCenteredList">
                         <li className="center">
                             <img
-                                width={300}
-                                height={100}
-                                alt="300x100"
+                                className="footerMoonshotLogo"
+                                alt="Moonshot Logo"
+                                title="Moonshot Logo"
                                 src="/images/MoonshotTempLogo.png"/>
                             <div className="whiteText tinyText">
                                 &copy; 2018 Moonshot Learning Inc. All rights reserved.

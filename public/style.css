@@ -764,8 +764,10 @@ button.link {
     margin: 0px 80px 50px 55px;
 }
 
-
-
+.footerMoonshotLogo {
+    width: 300px;
+    height: 100px;
+}
 
 @media only screen and (max-width: 1000px) {
     .videoContainer {
@@ -1087,6 +1089,10 @@ button.link {
     }
     .moonshotMenuLogo {
         margin-left: 0px;
+    }
+    .footerMoonshotLogo {
+        width: 240px;
+        height: 80px;
     }
 }
 
