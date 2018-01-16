@@ -3,14 +3,14 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {forBusiness, getUsers} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper, CircularProgress, Divider, Step, Stepper} from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress, Dialog, FlatButton} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
     hintStyle: {
-        color: 'white',
+        color: 'black',
     }, greenText: {
         color: style.colors.moonshotGreenText
     }, blueText: {
@@ -130,6 +130,17 @@ const validate = values => {
 };
 
 class ForBusiness extends Component {
+    state = {
+        open: false,
+    };
+
+    handleOpen = () => {
+        this.setState({open: true});
+    };
+
+    handleClose = () => {
+        this.setState({open: false});
+    };
 
     handleSubmit(e) {
         e.preventDefault();
@@ -175,8 +186,67 @@ class ForBusiness extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
+
+        const actions = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onClick={this.handleClose}
+            />,
+        ];
+
         return (
             <div className="jsxWrapper">
+                <Dialog
+                    title="Contact Us"
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                >
+                    <form onSubmit={this.handleSubmit.bind(this)} className="center">
+                        <Field
+                            name="name"
+                            component={renderTextField}
+                            label="Full Name"
+                        /><br/>
+                        <Field
+                            name="email"
+                            component={renderTextField}
+                            label="Email"
+                        /><br/>
+                        <Field
+                            name="phone"
+                            component={renderTextField}
+                            label="Phone Number"
+                        /><br/>
+                        <Field
+                            name="company"
+                            component={renderTextField}
+                            label="Company"
+                        /><br/>
+                        <Field
+                            name="title"
+                            component={renderTextField}
+                            label="Title"
+                        /><br/>
+                        <Field
+                            name="message"
+                            component={renderMultilineTextField}
+                            label="Message"
+                        /><br/>
+                        <button type="submit"
+                                className="outlineButton whiteBlueButton"
+                        >Send
+                        </button>
+                        <br/>
+                        <p className="tinyText">
+                            We{"''"}ll get back to you with an email shortly.
+                        </p>
+                        {this.props.loadingEmailSend ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
+                    </form>
+                </Dialog>
                 <div className="fullHeight purpleToBlue">
                     <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
@@ -185,7 +255,7 @@ class ForBusiness extends Component {
                         better hiring decisions. <br/>
                         <button className="outlineButton"
                                 style={{backgroundColor: "transparent", border: "2px solid white", marginTop: '20px'}}
-                                onClick={() => this.scrollToForm()}>
+                                onClick={this.handleOpen}>
                             {"Let's begin"}
                         </button>
                     </div>
@@ -396,62 +466,9 @@ class ForBusiness extends Component {
                 </div>
 
                 <div className="center" style={{marginBottom: '20px'}}>
-                    <button className="outlineButton whiteBlueButton">
+                    <button className="outlineButton whiteBlueButton" onClick={this.handleOpen}>
                         Contact Us
                     </button>
-                </div>
-
-
-                <div className="form-right greenToBlue">
-                    <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h2 className="whiteText">
-                            We <u>source</u> the talent and <u>create</u><br/>
-                            a full assessment based on the skills you{"'"}re hiring for.<br/>
-                            More information to make better decisions.
-                        </h2>
-                        <h2 className="whiteText">
-                            Contact Us
-                        </h2>
-                        <Field
-                            name="name"
-                            component={renderTextField}
-                            label="Full Name"
-                        /><br/>
-                        <Field
-                            name="email"
-                            component={renderTextField}
-                            label="Email"
-                        /><br/>
-                        <Field
-                            name="phone"
-                            component={renderTextField}
-                            label="Phone Number"
-                        /><br/>
-                        <Field
-                            name="company"
-                            component={renderTextField}
-                            label="Company"
-                        /><br/>
-                        <Field
-                            name="title"
-                            component={renderTextField}
-                            label="Title"
-                        /><br/>
-                        <Field
-                            name="message"
-                            component={renderMultilineTextField}
-                            label="Message"
-                        /><br/>
-                        <button type="submit"
-                                className="outlineButton whiteBlueButton"
-                        >Send
-                        </button>
-                        <br/>
-                        <p className="whiteText tinyText">
-                            We{"''"}ll get back to you with an email shortly.
-                        </p>
-                    </form>
-                    {this.props.loadingEmailSend ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
                 </div>
             </div>
         );
