@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {forBusiness, getUsers} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper, CircularProgress, Divider } from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress, Divider, Step, Stepper} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
@@ -31,7 +31,42 @@ const styles = {
         position: "relative",
         marginRight: "100px",
         clear: "both"
-    }
+    },
+    horizList: {
+        position: "relative",
+        height: "150px",
+        marginTop: "15px",
+        marginBottom: "25px"
+    },
+    horizListIcon: {
+        height: "50px",
+        position: "absolute",
+        top: "0",
+        bottom: "0",
+        right: "80%",
+        margin: "auto"
+    },
+    horizListText: {
+        width: "60%",
+        fontSize: "20px",
+        right: "0",
+        left: "0",
+        margin: "auto",
+        textAlign: "center",
+        position: "absolute",
+        top: "50%",
+        transform: "translateY(-50%)"
+    },
+    horizListFull: {
+        width: "33%",
+        float: "left",
+        position: "relative",
+        height: "150px"
+    },
+    horizListSpacer: {
+        height: "100%",
+        position: "relative"
+    },
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -123,109 +158,152 @@ class ForBusiness extends Component {
         return (
             <div className="jsxWrapper">
                 <div className="fullHeight purpleToBlue">
-                    <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                    <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
-                    <div className="infoBox whiteText mediumText noWrap" style={{zIndex:"20"}}>
-                        Hire innovation.<br/>
-                        Source and evaluate<br/>
-                        <i>more</i> talent, for <i>less</i><br/>
+                    <div className="infoBox whiteText mediumText" style={{zIndex: "20"}}>
+                        Better information, <br/>
+                        better hiring decisions. <br/>
                         <button className="outlineButton"
-                            style={{backgroundColor:"transparent", border:"2px solid white"}}
-                            onClick={ () => this.scrollToForm() }>
+                                style={{backgroundColor: "transparent", border: "2px solid white", marginTop: '20px'}}
+                                onClick={() => this.scrollToForm()}>
                             {"Let's begin"}
                         </button>
                     </div>
                 </div>
 
-
-                <div className="fullHeight" style={{textAlign:"center", height:"1000px"}}>
-                    <HomepageTriangles variation="2" />
-                    <div style={{zIndex: 0}}>
-                        <img
-                            src="/images/TheMoonshotMethod.png"
-                            alt="The Moonshot Method"
-                            style={{marginTop:"65px", marginBottom:"70px", width:"700px"}}
-                        /><br/>
-
-                        <div style={{...styles.purpleText, ...styles.leftLi}}>
-                            <img
-                                src="/icons/GraduationHat.png"
-                                alt="Graduation Hat"
-                                style={{height:"60px", position:"absolute", top:"50%", marginTop:"-45px"}}
-                            />
-                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
-                                <h2>We Source<br/></h2>
-                                We find the most forward-thinking<br/>
-                                and talented college students<br/>
-                                to be potential applicants.
+                <div style={{marginTop: '60px'}}>
+                    <div className="center mediumText">
+                        <b>Top College Students and Recent Graduates<br/> Competing to Work for You.</b>
+                    </div>
+                    <div style={styles.horizList}>
+                        <div style={styles.horizListFull}>
+                            <div style={{...styles.horizListSpacer, marginLeft: "20%"}}
+                            >
+                                <img
+                                    src="/icons/Key.png"
+                                    style={styles.horizListIcon}
+                                />
+                                <div style={styles.horizListText}>
+                                    <b>Established Pipeline</b><br/>
+                                    Instant access to a pool
+                                    of top tier talent.
+                                </div>
                             </div>
                         </div>
 
-                        <div style={{...styles.rightLi, ...styles.blueText}}>
-                            <img
-                                src="/icons/TreeBlue.png"
-                                alt="Tree"
-                                style={{height:"90px", position:"absolute", top:"50%", marginTop:"-45px"}}
-                            />
-                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
-                                <h2>We Train<br/></h2>
-                                Pathways are a series of intensive<br/>
-                                courses, assessments, and projects<br/>
-                                curated by us, approved by you.<br/>
-                                Students are trained in market<br/>
-                                demanded skills that are not taught in<br/>
-                                traditional education.<br/>
+                        <div style={styles.horizListFull}>
+                            <div style={{...styles.horizListSpacer, marginLeft: "12%"}}>
+                                <img
+                                    src="/icons/Evaluate.png"
+                                    style={styles.horizListIcon}
+                                />
+                                <div style={styles.horizListText}>
+                                    <b>Evaluative Metrics</b><br/>
+                                    Skill evaluation curated to
+                                    your company's needs.
+                                </div>
                             </div>
                         </div>
-
-                        <div style={{...styles.leftLi, ...styles.greenText}}>
-                            <img
-                                src="/icons/PaperAndPencilGreen.png"
-                                alt="Paper and pencil"
-                                style={{height:"80px", position:"absolute", top:"50%", marginTop:"-45px"}}
-                            />
-                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
-                                <h2>We Evaluate<br/></h2>
-                                Using qualitative and quantitative<br/>
-                                metrics, we assess an individual{"'"}s<br/>
-                                performance on a pathway and<br/>
-                                compare them side by side with<br/>
-                                other candidates<br/>
-                            </div>
-                        </div>
-
-                        <div style={{...styles.rightLi, ...styles.purpleText}}>
-                            <img
-                                src="/icons/Badge.png"
-                                alt="Badge"
-                                style={{height:"90px", position:"absolute", top:"50%", marginTop:"-45px"}}
-                            />
-                            <div className="smallText2" style={{float:"right", marginLeft:"140px"}}>
-                                <h2>You Hire<br/></h2>
-                                After pathway completion, we send<br/>
-                                the candidates over to you. You can<br/>
-                                look over their metrics and contact<br/>
-                                them to determine if they are a<br/>
-                                good fit for you.<br/>
+                        <div style={styles.horizListFull}>
+                            <div style={{...styles.horizListSpacer, marginRight: "20%"}}>
+                                <img
+                                    src="/icons/Employee.png"
+                                    style={styles.horizListIcon}
+                                />
+                                <div style={styles.horizListText}>
+                                    <b>Hire Talent</b><br/>
+                                    See their skills and work
+                                    before you hire.
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
+                <div className="purpleToGreenSpacer"/>
 
-                <div className="fullHeight">
-                    <div className="infoBox blueText bigText nowrap">
-                        Pay based on success.<br/>
-                        No upfront cost. No risk.<br/>
-                        No hidden fees.<br/>
-                        <div className="dividerSmall" />
-                        <button className="outlineButton whiteBlueButton"
-                            onClick={ () => this.scrollToForm() }>
-                            Get Started
-                        </button>
+                <div style={{marginTop: '60px'}}>
+                    <div className="center smallText3" style={{marginBottom: '40px'}}>
+                        <h1 className="purpleText"><b>Our Scholarships to Hire Program</b></h1>
+                        A scholarship for potential hires to learn the skills you need.<br/>
+                        Scholarships made for your company.
+                    </div>
+                    <div className="homepageTrajectory">
+                        <div className="forBusinessTrajectoryTextLeft">
+                            <div className="smallText4">
+                                <h2 className="blueText"><b>What Skills Are You Hiring For?</b></h2>
+                                UX Design, Data Science, Full Stack
+                                Development, Marketing, Adobe...
+                            </div>
+                        </div>
+                        <div className="homepageTrajectoryImagesRight">
+                            <div className="homepageImgBackgroundRight blueGradient"/>
+                            <img
+                                src="/images/HappySmallerBeardGuy.jpeg"
+                            />
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <div className="homepageTrajectory">
+                        <div className="forBusinessTrajectoryTextRight">
+                            <div className="smallText4">
+                                <h2 className="greenText"><b>Course Pathways Curated<br/>to the Skills You Need.</b>
+                                </h2>
+                                Expert led, interactive learning
+                                through videos, articles, skill
+                                assessments and real-world projects.
+                            </div>
+                        </div>
+                        <div className="homepageTrajectoryImagesLeft">
+                            <div className="homepageImgBackgroundLeft greenGradient"/>
+                            <img
+                                src="/images/WomanAtComputer.jpg"
+                            />
+                        </div>
+                    </div>
+
+                    <br/>
+
+                    <div className="homepageTrajectory">
+                        <div className="forBusinessTrajectoryTextLeft">
+                            <div className="smallText4">
+                                <h2 className="purpleText"><b>Sponsor Students</b></h2>
+                                Moonshot can source the talent,
+                                you can sponsor your pool
+                                of candidates, or we can do both.
+                            </div>
+                        </div>
+
+                        <div className="homepageTrajectoryImagesRight">
+                            <div className="homepageImgBackgroundRight purpleToRed"/>
+                            <img
+                                src="/images/WhiteboardWork.jpg"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="homepageTrajectory">
+                        <div className="forBusinessTrajectoryTextRight">
+                            <div className="smallText4">
+                                <h2 className="blueText"><b>Evaluate for Hire</b></h2>
+                                Comprehensive data on each candidate
+                                from skill assessments, qualitative
+                                responses, quantitative scoring relative to
+                                their peers and real-world projects.
+                            </div>
+                        </div>
+                        <div className="homepageTrajectoryImagesLeft">
+                            <div className="homepageImgBackgroundLeft blueGradient"/>
+                            <img
+                                src="/images/TalkingBeardGuy.jpeg"
+                            />
+                        </div>
                     </div>
                 </div>
 
+                <div className="purpleToGreenSpacer"/>
 
 
                 <div className="form-right greenToBlue">
@@ -269,13 +347,15 @@ class ForBusiness extends Component {
                             label="Message"
                         /><br/>
                         <button type="submit"
-                                      className="outlineButton whiteBlueButton"
-                        >Send</button><br/>
+                                className="outlineButton whiteBlueButton"
+                        >Send
+                        </button>
+                        <br/>
                         <p className="whiteText tinyText">
                             We{"''"}ll get back to you with an email shortly.
                         </p>
                     </form>
-                    { this.props.loadingEmailSend ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
+                    {this.props.loadingEmailSend ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
                 </div>
             </div>
         );
