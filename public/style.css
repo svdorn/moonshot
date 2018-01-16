@@ -719,7 +719,7 @@ button.link {
     width: 400px;
     display: inline-block;
     float: left;
-    margin: 10px 30px 20px 0;
+    margin: 10px 30px 20px 10px;
 }
 .stepScrollerContainer {
     height: 500px;
@@ -738,7 +738,10 @@ button.link {
 .overviewAndCommentBox, .pathwayContent {
     display: inline-block;
     margin-left: 20px;
-    width: calc(100% - 470px);
+    width: calc(100% - 470px);    
+}
+
+.overviewAndCommentBox {
     margin-top: 10px;
 }
 
