@@ -495,11 +495,7 @@ class Pathway extends Component {
 
                                 : null}
                         </div>
-
-                        < div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                            < div className="homepageSeparator"/>
-                        </div>
-
+                        
                         {pathway.steps ?
                             <div>
                                 <div className="center" style={{margin: "100px 0 40px 0"}}>
