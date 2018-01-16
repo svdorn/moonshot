@@ -143,6 +143,7 @@ class Pathway extends Component {
             infoLinks: {
                 marginLeft: '10px',
                 color: 'black',
+                textDecoration: 'underline'
             },
             spaceTop: {
                 marginTop: '20px',
@@ -367,10 +368,11 @@ class Pathway extends Component {
                         </div>
 
                         <div style={style.quote.everything}>
-                            <h1>Sponsored by <img
+                            <h1 style={{marginBottom:'30px'}}>Sponsored by <img
                                 src={pathway.sponsor.logo}
                                 alt={pathway.sponsor.name}
                                 height={70}
+                                style={{marginTop:'-15px'}}
                             /></h1>
                             <div style={style.quote.leftSide}>
                                 <div>
