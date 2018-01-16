@@ -67,6 +67,26 @@ const styles = {
         height: "100%",
         position: "relative"
     },
+    bottomList: {
+        height: '130px',
+    },
+    bottomListItem: {
+        width: '50%',
+        margin: 'auto',
+        display: 'inline-block',
+        top: '0',
+        verticalAlign: 'top',
+    },
+    bottomListImg: {
+        marginBottom: '10px',
+        height: '50px'
+    },
+    bottomListText: {
+        width: '90%',
+    },
+    resumeTitle: {
+        paddingLeft: '120px'
+    }
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -304,6 +324,82 @@ class ForBusiness extends Component {
                 </div>
 
                 <div className="purpleToGreenSpacer"/>
+
+                <div className="homepageTrajectory" style={{marginBottom: '40px'}}>
+                    <div className="smallText3" style={styles.resumeTitle}><b>A Resum&eacute; Can't Do This.</b></div>
+                    <div className="forBusinessTrajectoryTextLeft">
+                        <div style={styles.bottomList}>
+                            <div style={styles.bottomListItem}>
+                                <img src="/icons/Project.png" style={styles.bottomListImg}/>
+                                <div className="smallText" style={styles.bottomListText}>See their quality of work under
+                                    pressure with real-world
+                                    projects relevant to your company.
+                                </div>
+                            </div>
+                            <div style={styles.bottomListItem}>
+                                <img src="/icons/BarGraph.png" style={styles.bottomListImg}/>
+                                <div className="smallText" style={styles.bottomListText}>Look at quantitative breakdowns
+                                    and precise scoring of their skills.
+                                </div>
+                            </div>
+                        </div>
+                        <div style={{...styles.bottomList, marginTop: '20px'}}>
+                            <div style={styles.bottomListItem}>
+                                <img src="/icons/EvaluatePurple.png" style={styles.bottomListImg}/>
+                                <div className="smallText" style={styles.bottomListText}>
+                                    Evaluate candidates with standardized criteria and assessments.
+                                </div>
+                            </div>
+                            <div style={styles.bottomListItem}>
+                                <img src="/icons/Filter.png" style={styles.bottomListImg}/>
+                                <div className="smallText" style={styles.bottomListText}>
+                                    Filter out the unqualified and uncommitted.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="homepageTrajectoryImagesRight">
+                        <div className="homepageImgBackgroundRight purpleToRed"/>
+                        <img
+                            src="/images/OpenLaptop.jpeg"
+                        />
+                    </div>
+                </div>
+
+                <div className="purpleToGreenSpacer"/>
+
+                <div className="forBusinessBoxesContainer">
+                    <Paper zDepth={3} className="paperBox">
+                        <div className="gradientBorderBlueBox">
+                            <div>
+                                <div className="mediumText" style={{paddingTop: '20px'}}>Program</div>
+                                <div className="mediumText blueText">$1500 USD</div>
+                                <div>PER PROGRAM</div>
+                                <br/>
+                                <p>Program curated to your<br/> company's needs. Skill evaluation<br/> of up to 15
+                                    candidates.</p>
+                            </div>
+                        </div>
+                    </Paper>
+                    <Paper zDepth={3} className="paperBox">
+                        <div className="gradientBorderPurpleToRedBox">
+                            <div>
+                                <div className="mediumText" style={{paddingTop: '20px'}}>Evaluation</div>
+                                <div className="mediumText purpleText">$500 USD</div>
+                                <div>PER HIRE</div>
+                                <br/>
+                                <p>When students are successful in your<br/>programs, you can hire them<br/> for a small
+                                    fee.</p>
+                            </div>
+                        </div>
+                    </Paper>
+                </div>
+
+                <div className="center" style={{marginBottom: '20px'}}>
+                    <button className="outlineButton whiteBlueButton">
+                        Contact Us
+                    </button>
+                </div>
 
 
                 <div className="form-right greenToBlue">

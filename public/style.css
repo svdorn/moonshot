@@ -167,7 +167,6 @@ form > h1 {
     background-color: white;
     color: var(--moonshotGreenText);
 }
-
 .menuItem {
     font-size: 20px;
     margin: 40px 10px 10px 10px;
@@ -307,6 +306,36 @@ button.link {
     background: white;
     height: 100%;
     width: 100%;
+}
+.gradientBorderBlueBox {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to bottom right, #3dabff, #5deaff);
+    padding: 3px;
+    top: 0;
+}
+.gradientBorderBlueBox > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+.gradientBorderPurpleToRedBox {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to bottom right, var(--moonshotDarkPurple), #DD5E8E);
+    padding: 3px;
+    top: 0;
+}
+.gradientBorderPurpleToRedBox > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+.paperBox {
+    height: 300px;
+    width: 400px;
+    display: inline-block;
+    margin: 0 20px 0 20px;
 }
 
 .gradientBorderPurple {
@@ -984,6 +1013,13 @@ button.link {
 .forBusinessTrajectoryTextLeft > div,
 .forBusinessTrajectoryTextRight > div {
     float: right;
+}
+
+.forBusinessBoxesContainer {
+    height: 350px;
+    width: 900px;
+    margin: auto;
+    text-align: center;
 }
 
 .homePathwaysTitle {
