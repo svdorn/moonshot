@@ -169,7 +169,7 @@ class Onboarding extends Component {
 
         // INFO
         let location = "";
-        let birthDate: "";
+        let birthDate = "";
         let desiredJobs = "";
         let bio = "";
         let title = "";

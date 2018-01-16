@@ -251,7 +251,7 @@ class Home extends Component{
                 <div className="purpleToGreenSpacer" />
 
                 <div className="topMarginOnSmallScreen" style={{textAlign:"center"}}>
-                    <div className="center mediumText blueText" className="homePathwaysTitle">Pathways</div>
+                    <div className="center mediumText blueText homePathwaysTitle">Pathways</div>
                     <div className="homePathwaysDesc">
                         Moonshot pathways are organized in pathways and
                         sponsored by employers hiring for those skills.

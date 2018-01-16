@@ -556,6 +556,7 @@ button.link {
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
 .smallText3 { font-size: 30px; }
+.smallText4 { font-size: 25px; }
 .smallText2 { font-size: 20px; }
 .smallText { font-size: 15px; }
 .tinyText { font-size: 8.8px; }
@@ -889,6 +890,27 @@ button.link {
     margin-top: 45px;
     font-size: 23px;
 }
+.forBusinessTrajectoryTextLeft {
+    float: left;
+    text-align: center;
+}
+.forBusinessTrajectoryTextRight {
+    float: right;
+    text-align: center;
+}
+.forBusinessTrajectoryTextLeft,
+.forBusinessTrajectoryTextRight {
+    margin-top: 30px;
+    width: 50%;
+    overflow: auto;
+}
+.forBusinessTrajectoryTextLeft > img,
+.forBusinessTrajectoryTextRight > img {
+    height: 90px;
+    position: absolute;
+    margin-top: 45px;
+    font-size: 23px;
+}
 .homepageTrajectoryImagesRight {
     float: right;
     margin-right: 2%;
@@ -944,6 +966,10 @@ button.link {
 .homepageTrajectoryTextRight > div {
     float: right;
     margin-left: 110px;
+}
+.forBusinessTrajectoryTextLeft > div,
+.forBusinessTrajectoryTextRight > div {
+    float: right;
 }
 
 
@@ -1027,6 +1053,19 @@ button.link {
     .homepageTrajectoryTextRight > div {
         margin-right: 0px;
     }
+    .forBusinessTrajectoryTextLeft {
+        width: 40%;
+    }
+    .forBusinessTrajectoryTextLeft > img,
+    .forBusinessTrajectoryTextRight > img {
+        visibility: hidden;
+    }
+    .forBusinessTrajectoryTextLeft > div {
+        margin-left: 0px;
+    }
+    .forBusinessTrajectoryTextRight > div {
+        margin-right: 0px;
+    }
     .homepageImgBackgroundLeft {
         left: 0;
     }
@@ -1059,6 +1098,11 @@ button.link {
         float: initial;
         margin-left: 0px;
     }
+    .forBusinessTrajectoryTextLeft { float: initial; }
+    .forBusinessTrajectoryTextRight {
+        float: initial;
+        margin-left: 0px;
+    }
     .homepageTrajectory {
         text-align: center;
         height: 0px;
@@ -1083,6 +1127,23 @@ button.link {
     .homepageTrajectoryTextRight > img {
         margin-left: -40%;
     }
+    .forBusinessTrajectoryTextLeft,
+    .forBusinessTrajectoryTextRight {
+        width: 80%;
+        margin: auto;
+    }
+    .forBusinessTrajectoryTextLeft > div, .forBusinessTrajectoryTextRight > div {
+        text-align: center;
+        margin-left: 0px;
+        margin-bottom: 20px;
+    }
+    .forBusinessTrajectoryTextLeft > img,
+    .forBusinessTrajectoryTextRight > img {
+        visibility: initial;
+    }
+    .forBusinessTrajectoryTextLeft > img,
+    .forBusinessTrajectoryTextRight > img {
+    }
     .homePathwaysDesc {
         font-size: 20px;
     }
@@ -1096,6 +1157,15 @@ button.link {
     }
     .homepageTrajectoryTextLeft > img,
     .homepageTrajectoryTextRight > img {
+        display: none;
+    }
+    .forBusinessTrajectoryTextLeft > div,
+    .forBusinessTrajectoryTextRight > div {
+        text-align: center;
+        padding-left: 0px;
+    }
+    .forBusinessTrajectoryTextLeft > img,
+    .forBusinessTrajectoryTextRight > img {
         display: none;
     }
     .homePathwaysDesc { display: none; }
