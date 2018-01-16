@@ -315,6 +315,7 @@ class Discover extends Component {
                             <Divider/>
                             {categoryItems}
                         </DropDownMenu>
+                        <div><br/></div>
                         <DropDownMenu value={this.state.company}
                                       onChange={this.handleCompanyChange}
                                       underlineStyle={styles.underlineStyle}

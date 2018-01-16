@@ -1058,6 +1058,9 @@ button.link {
         display: inherit;
         text-align: center;
     }
+    #discoverSearchBarMedScreen > div:nth-child(4) {
+        display: none;
+    }
 
     .homepageTrajectoryImagesRight { display: none; }
     .homepageTrajectoryImagesLeft { display: none; }
@@ -1097,9 +1100,12 @@ button.link {
 }
 
 @media only screen and (max-width: 600px) {
-    #discoverSearchBarMedScreen {
+    #discoverSearchBarMedScreen > div:nth-child(4) {
         display: inherit;
-        text-align: center;
+        margin-top: -30px;
+    }
+    #discoverSearchBarMedScreen > div:nth-child(5) {
+        margin-bottom: 25px;
     }
 }
 
