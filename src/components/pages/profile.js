@@ -268,12 +268,24 @@ class Profile extends Component {
                     // how to show the dates if the date is stored as a Date
                     //const dates = edu.startDate.substring(0,4) + "-" + edu.endDate.substring(0,4);
                     // how to show the dates if the dates are stored as Strings
-                    const dates = edu.endDate;
+                    console.log(edu.endDate);
+                    const date = edu.endDate;
+                    let majorsAndMinors = edu.majors ? edu.majors : "";
+                    if (edu.minors && edu.minors.length > 0) {
+                        let comma = "";
+                        if (majorsAndMinors.length > 0) {
+                            comma = ", "
+                        }
+                        majorsAndMinors = majorsAndMinors + comma + edu.minors
+                    }
                     return (
                         <div>
                             <div style={{float:"left"}}>{edu.school}</div>
-                            <div style={{float:"right"}}>{dates}</div><br/>
-                            <div style={{clear:"both", marginLeft:"60px"}}><i>{edu.degree}</i></div>
+                            <div style={{float:"right"}}>{date}</div><br/>
+                            {majorsAndMinors.length > 0 ?
+                                <div style={{clear:"both", marginLeft:"60px"}}><i>{majorsAndMinors}</i></div>
+                                : null
+                            }
                         </div>
                     );
                 });
