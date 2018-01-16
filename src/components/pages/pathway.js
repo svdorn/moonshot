@@ -328,7 +328,7 @@ class Pathway extends Component {
                                                 : {}}
                                             >
                                                 <img
-                                                    src="/icons/GraduationHat.png"
+                                                    src="/icons/GraduationHatPurple.png"
                                                     style={style.descriptionAndSalaryIcon}
                                                 />
                                                 <div style={style.descriptionAndSalaryText}>
@@ -349,7 +349,7 @@ class Pathway extends Component {
                                             : {}}
                                         >
                                             <img
-                                                src="/icons/Price.png"
+                                                src="/icons/DollarSignPurple.jpg"
                                                 style={style.descriptionAndSalaryIcon}
                                             />
                                             <div style={style.descriptionAndSalaryText}>
