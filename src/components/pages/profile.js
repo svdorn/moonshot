@@ -38,7 +38,6 @@ class Profile extends Component {
 
         // looking at someone else's profile
         else {
-            console.log("posting");
             axios.post("/api/getUserById", { _id: userId }
             ).then(res => {
                 console.log("found user is: ", res.data);
@@ -262,8 +261,6 @@ class Profile extends Component {
             let aboutMeItems = [];
 
             let index = -1;
-
-            console.log('makin edu');
             if (education && education.length > 0) {
                 const schools = education.map(function(edu) {
                     // how to show the dates if the date is stored as a Date
@@ -327,11 +324,13 @@ class Profile extends Component {
                         </span>
                     );
                 });
-                aboutMeItems.push({
-                    icon: "Links.png",
-                    title: "Links",
-                    content: linkOuts
-                });
+                if (links.length > 0) {
+                    aboutMeItems.push({
+                        icon: "Links.png",
+                        title: "Links",
+                        content: linkOuts
+                    });
+                }
             }
             if (interests && interests.length > 0) {
                 index = -1;
@@ -364,7 +363,6 @@ class Profile extends Component {
                 });
             }
             if (birthDate) {
-                console.log(birthDate);
                 // ADD THIS {(birthDate.getMonth() + 1) + "/" + birthDate.getDate() + "/" + birthDate.getYear()}
                 const date = birthDate.substring(5, 7) + "/" + birthDate.substring(8, 10) + "/" + birthDate.substring(0, 4);
                 aboutMeItems.push({
