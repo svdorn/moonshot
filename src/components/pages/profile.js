@@ -278,10 +278,10 @@ class Profile extends Component {
                     }
                     return (
                         <div>
-                            <div style={{float:"left"}}>{edu.school}</div>
-                            <div style={{float:"right"}}>{date}</div><br/>
+                            <div className="profileSchoolName">{edu.school}</div>
+                            <div className="profileSchoolDate">{date}</div><div className="above700only"><br/></div>
                             {majorsAndMinors.length > 0 ?
-                                <div style={{clear:"both", marginLeft:"60px"}}><i>{majorsAndMinors}</i></div>
+                                <div className="profileSchoolMajorsAndMinors"><i>{majorsAndMinors}</i></div>
                                 : null
                             }
                         </div>
