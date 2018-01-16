@@ -40,7 +40,7 @@ class Discover extends Component {
         // populate featuredPathways with initial pathways
         axios.get("/api/search", {
             params: {
-                limit: 4
+                limit: 3
             }
         }).then(res => {
             // make sure component is mounted before changing state
@@ -326,6 +326,8 @@ class Discover extends Component {
                             {companyItems}
                         </DropDownMenu>
                     </div>
+
+
 
                     <div>
                         <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>

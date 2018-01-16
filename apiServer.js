@@ -815,7 +815,7 @@ app.get('/topPathways', function (req, res) {
 
     // gets the most popular pathways, the number of pathways is numPathways
     Pathways.find()
-        .sort({rating: -1})
+        .sort({rating: 1})
         .limit(numPathways)
         .select("name previewImage sponsor estimatedCompletionTime deadline price")
         .exec(function (err, pathways) {
@@ -951,7 +951,7 @@ app.get('/search', function (req, res) {
     console.log("query is ", query);
 
     //const limit = 4;
-    const sort = {};
+    const sort = {avgRating: -1};
     const select = "name previewImage sponsor estimatedCompletionTime deadline price tags";
 
     Pathways.find(query)
