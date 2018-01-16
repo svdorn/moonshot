@@ -536,20 +536,26 @@ class Pathway extends Component {
                         {pathway.extraInfo ?
 
                             <div key="extraInfo" className="center smallText2" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
-                                {contactUsExists ?
-                                    <div key="hasContactUs">
-                                        {beforeContact}
-                                        <span   key="hasContactUsSpan"
-                                                className="clickable underline"
-                                                style={{marginTop:"10px"}}
-                                                onClick={() => this.goTo('/contactUs')}>
-                                            {contactUsPart}
-                                        </span>
-                                        {afterContact}
-                                    </div>
-                                    :
-                                    {extraInfo}
-                                }
+                                <img
+                                    src="/icons/ToolPurple.png"
+                                    id="toolIconExtraInfo"
+                                />
+                                <div style={{display: "inline-block"}}>
+                                    {contactUsExists ?
+                                        <div key="hasContactUs">
+                                            {beforeContact}
+                                            <span   key="hasContactUsSpan"
+                                                    className="clickable underline"
+                                                    style={{marginTop:"10px"}}
+                                                    onClick={() => this.goTo('/contactUs')}>
+                                                {contactUsPart}
+                                            </span>
+                                            {afterContact}
+                                        </div>
+                                        :
+                                        {extraInfo}
+                                    }
+                                </div>
                             </div>
                             : null
                         }

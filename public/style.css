@@ -44,6 +44,12 @@ footer {
 
 .underline { text-decoration: underline; }
 
+#toolIconExtraInfo {
+    width: 25px;
+    display: inline;
+    margin: -10px 10px 0px 0px;
+}
+
 .container .footer-text {
   margin: 20px 0;
 }
