@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {registerForPathway, getUsers} from '../../actions/usersActions';
+import {registerForPathway, getUsers, closeNotification} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
@@ -16,6 +16,15 @@ class Pathway extends Component {
         this.state = {
             pathway: {},
         }
+    }
+
+    goTo (route)  {
+        // closes any notification
+        this.props.closeNotification();
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
     componentDidMount() {
@@ -143,6 +152,7 @@ class Pathway extends Component {
             infoLinks: {
                 marginLeft: '10px',
                 color: 'black',
+                textDecoration: 'underline'
             },
             spaceTop: {
                 marginTop: '20px',
@@ -244,6 +254,23 @@ class Pathway extends Component {
             });
         }
 
+        let extraInfo = pathway.extraInfo;
+        let contactUsExists = false;
+        let beforeContact = "";
+        let contactUsPart = "";
+        let afterContact = "";
+        if (extraInfo) {
+            const contactIndex = extraInfo.toLowerCase().indexOf("contact us");
+            if (contactIndex > -1) {
+                contactUsExists = true;
+                beforeContact = extraInfo.substring(0, contactIndex);
+                contactUsPart = extraInfo.substring(contactIndex, contactIndex + 10);
+                if (extraInfo.length > contactIndex + 10) {
+                    afterContact = extraInfo.substring(contactIndex + 10);
+                }
+            }
+        }
+
         return (
             <div className="jsxWrapper">
                 {pathway.sponsor !== undefined ?
@@ -327,7 +354,7 @@ class Pathway extends Component {
                                                 : {}}
                                             >
                                                 <img
-                                                    src="/icons/GraduationHat.png"
+                                                    src="/icons/GraduationHatPurple.png"
                                                     style={style.descriptionAndSalaryIcon}
                                                 />
                                                 <div style={style.descriptionAndSalaryText}>
@@ -348,7 +375,7 @@ class Pathway extends Component {
                                             : {}}
                                         >
                                             <img
-                                                src="/icons/Price.png"
+                                                src="/icons/DollarSignPurple.jpg"
                                                 style={style.descriptionAndSalaryIcon}
                                             />
                                             <div style={style.descriptionAndSalaryText}>
@@ -367,10 +394,11 @@ class Pathway extends Component {
                         </div>
 
                         <div style={style.quote.everything}>
-                            <h1>Sponsored by <img
+                            <h1 style={{marginBottom:'30px'}}>Sponsored by <img
                                 src={pathway.sponsor.logo}
                                 alt={pathway.sponsor.name}
                                 height={70}
+                                style={{marginTop:'-15px'}}
                             /></h1>
                             <div style={style.quote.leftSide}>
                                 <div>
@@ -476,8 +504,8 @@ class Pathway extends Component {
                                         <li>
                                             <div style={{position: "relative"}}>
                                                 <img
-                                                    src="/icons/CheckMark.png"
-                                                    alt="Check Mark"
+                                                    src="/icons/DataPurple.png"
+                                                    alt="Data"
                                                     className="infoBoxImage"
                                                 />
                                                 <div className="smallText2">
@@ -494,10 +522,6 @@ class Pathway extends Component {
                                 : null}
                         </div>
 
-                        < div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                            < div className="homepageSeparator"/>
-                        </div>
-
                         {pathway.steps ?
                             <div>
                                 <div className="center" style={{margin: "100px 0 40px 0"}}>
@@ -511,10 +535,27 @@ class Pathway extends Component {
 
                         {pathway.extraInfo ?
 
-                            <div className="center" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
-                                <p className="smallText2">
-                                    {pathway.extraInfo}
-                                </p>
+                            <div key="extraInfo" className="center smallText2" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
+                                <img
+                                    src="/icons/ToolPurple.png"
+                                    id="toolIconExtraInfo"
+                                />
+                                <div style={{display: "inline-block"}}>
+                                    {contactUsExists ?
+                                        <div key="hasContactUs">
+                                            {beforeContact}
+                                            <span   key="hasContactUsSpan"
+                                                    className="clickable underline"
+                                                    style={{marginTop:"10px"}}
+                                                    onClick={() => this.goTo('/contactUs')}>
+                                                {contactUsPart}
+                                            </span>
+                                            {afterContact}
+                                        </div>
+                                        :
+                                        {extraInfo}
+                                    }
+                                </div>
                             </div>
                             : null
                         }
@@ -555,6 +596,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUsers,
         registerForPathway,
+        closeNotification
     }, dispatch);
 }
 

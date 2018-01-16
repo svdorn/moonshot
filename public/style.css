@@ -42,6 +42,14 @@ footer {
     padding: 10px;
 }
 
+.underline { text-decoration: underline; }
+
+#toolIconExtraInfo {
+    width: 25px;
+    display: inline;
+    margin: -10px 10px 0px 0px;
+}
+
 .container .footer-text {
   margin: 20px 0;
 }
@@ -740,7 +748,7 @@ button.link {
     width: 400px;
     display: inline-block;
     float: left;
-    margin: 10px 30px 20px 0;
+    margin: 10px 30px 20px 10px;
 }
 .stepScrollerContainer {
     height: 500px;
@@ -759,7 +767,10 @@ button.link {
 .overviewAndCommentBox, .pathwayContent {
     display: inline-block;
     margin-left: 20px;
-    width: calc(100% - 470px);
+    width: calc(100% - 470px);    
+}
+
+.overviewAndCommentBox {
     margin-top: 10px;
 }
 
@@ -1023,6 +1034,13 @@ button.link {
 }
 #discoverSearchBarMedScreen { display: none; }
 
+#exampleSkillsContainer {
+    width: 70%;
+    margin: auto;
+    max-height: 450px;
+    overflow-y: hidden;
+}
+
 
 /* decorative triangles */
 
@@ -1226,7 +1244,10 @@ button.link {
         display: none;
     }
     .homePathwaysDesc { display: none; }
-    .homePathwaysTitle { font-size: 40px; }
+    .homePathwaysTitle {
+        font-size: 40px;
+        margin-bottom: 20px
+    }
 }
 
 @media only screen and (max-width: 700px) {

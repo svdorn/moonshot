@@ -47,7 +47,6 @@ class Home extends Component{
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.home) {
-                console.log('suh');
                 const returnedPathways = res.data;
                 let pathways2 = undefined;
                 let pathways1 = [];
@@ -128,7 +127,6 @@ class Home extends Component{
                         /></li>
                 );
             });
-            console.log('yuh');
         }
 
 
@@ -161,31 +159,27 @@ class Home extends Component{
         // })
 
         const skills = [
-            "UX Design", "Data Science", "Machine Learning", "Graphic Design", "<br/>",
-            "Front End Web Dev", "Virtual Reality", "3D Printing", "Javascript", "<br/>",
-            "Agile", "Game Design", "SQL", "IoT", "Cloud", "<br/>",
-            "DevOps", "SEO", "Social Media", "Growth Marketing", "<br/>",
+            "UX Design", "Data Science", "Machine Learning", "Graphic Design",
+            "Front End Web Dev", "Virtual Reality", "3D Printing", "Javascript",
+            "Agile", "Game Design", "SQL", "IoT", "Cloud",
+            "DevOps", "SEO", "Social Media", "Growth Marketing",
             "Google Analytics", "Project Management", "Entrepeneurship"
         ]
 
         let brKey = -1;
         const exampleSkills = skills.map(function (skill) {
             brKey++;
-            if (skill == "<br/>") {
-                return <br key={brKey + "br"}/>;
-            } else {
-                return (
-                    <div key={skill + "div"} style={{display: 'inline-block', marginTop: '15px'}}>
-                        <Chip key={skill}
-                              backgroundColor='#white'
-                              labelColor="#00d2ff"
-                              labelStyle={{fontSize: '20px'}}
-                              style={{marginLeft: '20px', border: "1px solid #00d2ff"}}>
-                            {skill}
-                        </Chip>
-                    </div>
-                );
-            }
+            return (
+                <div key={skill + "div"} style={{display: 'inline-block', marginTop: '15px'}}>
+                    <Chip key={skill}
+                          backgroundColor='#white'
+                          labelColor="#00d2ff"
+                          labelStyle={{fontSize: '20px'}}
+                          style={{marginLeft: '20px', border: "1px solid #00d2ff"}}>
+                        {skill}
+                    </Chip>
+                </div>
+            );
         });
 
 
@@ -294,7 +288,7 @@ class Home extends Component{
                             {pathwayPreviews1}
                         </ul>
                     </div>
-                    {this.state.pathwayPreviews2 ?
+                    {pathwayPreviews2 ?
                         <div className="pathwayPrevListContainer">
                             <ul className="horizCenteredList pathwayPrevList">
                                 {pathwayPreviews2}
@@ -316,7 +310,7 @@ class Home extends Component{
                     <h1 className="isolatedHeader">
                         <b>Build Your Skillset</b>
                     </h1>
-                    <div>
+                    <div id="exampleSkillsContainer">
                         { exampleSkills }
                     </div>
                 </div>
