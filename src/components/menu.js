@@ -50,7 +50,6 @@ class Menu extends Component {
     }
 
     signOut() {
-        value = 1;
         this.props.signout();
         this.goTo('/');
         this.setState({value:1});
