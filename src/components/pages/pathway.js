@@ -478,8 +478,8 @@ class Pathway extends Component {
                                         <li>
                                             <div style={{position: "relative"}}>
                                                 <img
-                                                    src="/icons/CheckMark.png"
-                                                    alt="Check Mark"
+                                                    src="/icons/DataPurple.png"
+                                                    alt="Data"
                                                     className="infoBoxImage"
                                                 />
                                                 <div className="smallText2">
