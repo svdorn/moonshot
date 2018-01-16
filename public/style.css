@@ -778,6 +778,9 @@ button.link {
     color: white !important;
 }
 
+#aboutMeAreas {
+    text-align: inherit;
+}
 .aboutMeLi > img:first-of-type {
     height: 40px;
     position: absolute;

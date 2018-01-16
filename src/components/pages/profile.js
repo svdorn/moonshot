@@ -505,7 +505,7 @@ class Profile extends Component {
 
                                 <div className="textWithMargin">{user.info.description}</div>
 
-                                <ul className="horizCenteredList">
+                                <ul className="horizCenteredList" id="aboutMeAreas">
                                     { aboutMeLis }
                                 </ul>
 
