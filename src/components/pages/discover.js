@@ -258,7 +258,7 @@ class Discover extends Component {
                         </div>
                     </div>
 
-                    <Toolbar style={style.searchBar}>
+                    <Toolbar style={style.searchBar} id="discoverSearchBarWideScreen">
                         <ToolbarGroup>
                             <Field
                                 name="search"
@@ -292,6 +292,40 @@ class Discover extends Component {
                             </DropDownMenu>
                         </ToolbarGroup>
                     </Toolbar>
+
+
+                    <div id="discoverSearchBarMedScreen">
+                        <Field
+                            name="search"
+                            component={renderTextField}
+                            label="Search"
+                            onChange={event => this.onSearchChange(event.target.value)}
+                            value={this.state.searchTerm}
+                        />
+
+                        <br/>
+
+                        <DropDownMenu value={this.state.category}
+                                      onChange={this.handleCategoryChange}
+                                      underlineStyle={styles.underlineStyle}
+                                      anchorOrigin={styles.anchorOrigin}
+                                      style={{fontSize: "20px", marginTop: "11px"}}
+                        >
+                            <MenuItem value={""} primaryText="Category"/>
+                            <Divider/>
+                            {categoryItems}
+                        </DropDownMenu>
+                        <DropDownMenu value={this.state.company}
+                                      onChange={this.handleCompanyChange}
+                                      underlineStyle={styles.underlineStyle}
+                                      anchorOrigin={styles.anchorOrigin}
+                                      style={{fontSize: "20px", marginTop: "11px"}}
+                        >
+                            <MenuItem value={""} primaryText="Company"/>
+                            <Divider/>
+                            {companyItems}
+                        </DropDownMenu>
+                    </div>
 
                     <div>
                         <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>

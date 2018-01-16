@@ -196,7 +196,7 @@ form > h1 {
 
 .fullHeight {
     width: 100%;
-    height: 750px;
+    height: 710px;
     position: relative;
     overflow-x: hidden;
 }
@@ -543,7 +543,7 @@ button.link {
 
 .logoBar {
     text-align: center;
-    margin: 20px 0px;
+    margin: 20px 0px 40px;
 }
 .logoBar > img:last-of-type {
     margin-right: 0px;
@@ -946,19 +946,20 @@ button.link {
     margin-left: 110px;
 }
 
-
-
-
-
 .homePathwaysTitle {
     color: var(--moonshotBlue);
 }
 .homePathwaysDesc {
     margin: auto;
-    padding: 0px 10%;
-    margin-bottom: 20px;
-    font-size: 26px;
+    margin-bottom: 30px;
+    font-size: 18px;
 }
+
+/* make Category and Company more to the right */
+#discoverSearchBarWideScreen > div:nth-child(2) > div:nth-child(2) {
+    margin-right: -30px;
+}
+#discoverSearchBarMedScreen { display: none; }
 
 
 /* decorative triangles */
@@ -1052,6 +1053,12 @@ button.link {
 }
 /* mobile */
 @media only screen and (max-width: 800px) {
+    #discoverSearchBarWideScreen { display: none !important; }
+    #discoverSearchBarMedScreen {
+        display: inherit;
+        text-align: center;
+    }
+
     .homepageTrajectoryImagesRight { display: none; }
     .homepageTrajectoryImagesLeft { display: none; }
     .homepageTrajectoryTextLeft { float: initial; }
@@ -1084,7 +1091,15 @@ button.link {
         margin-left: -40%;
     }
     .homePathwaysDesc {
-        font-size: 20px;
+        font-size: 15px;
+        padding: 0px 10%;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    #discoverSearchBarMedScreen {
+        display: inherit;
+        text-align: center;
     }
 }
 

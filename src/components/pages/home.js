@@ -27,7 +27,8 @@ class Home extends Component{
         this.state = {
             // three empty pathways until we get the top three pathways from
             // the backend
-            pathways: [emptyPathway, emptyPathway, emptyPathway]
+            pathways1: [emptyPathway, emptyPathway, emptyPathway, emptyPathway],
+            pathways2: undefined
         }
     }
 
@@ -42,11 +43,22 @@ class Home extends Component{
 
     componentDidMount() {
         axios.get("/api/topPathways", {
-            params: { numPathways: 3 }
+            params: { numPathways: 12 }
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.home) {
-                this.setState({ pathways: res.data });
+                console.log('suh');
+                const returnedPathways = res.data;
+                let pathways2 = undefined;
+                let pathways1 = [];
+                if (returnedPathways.length >= 6) {
+                    const halfwayPoint = returnedPathways.length / 2;
+                    pathways2 = returnedPathways.slice(halfwayPoint);
+                    pathways1 = returnedPathways.slice(0, halfwayPoint);
+                } else {
+                    pathways1 = returnedPathways;
+                }
+                this.setState({ pathways1, pathways2 });
             }
         }).catch(function(err) {
             console.log("error getting top pathways");
@@ -57,7 +69,7 @@ class Home extends Component{
 
         const style = {
             hiringPartners: {
-                fontSize: "15px",
+                fontSize: "12px",
                 color: "gray",
                 marginBottom: "30px"
             }, leftLi: {
@@ -78,7 +90,7 @@ class Home extends Component{
         // create the pathway previews
         let pathwayKey = 0;
         let self = this;
-        const pathwayPreviews = this.state.pathways.map(function(pathway) {
+        const pathwayPreviews1 = this.state.pathways1.map(function(pathway) {
             pathwayKey++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
@@ -95,6 +107,30 @@ class Home extends Component{
                     /></li>
             );
         });
+
+        let pathwayPreviews2 = undefined;
+        if (this.state.pathways2) {
+            pathwayKey = 100;
+            pathwayPreviews2 = this.state.pathways2.map(function(pathway) {
+                pathwayKey++;
+                const deadline = new Date(pathway.deadline);
+                const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                return (
+                    <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/pathway?' + pathway._id)} ><PathwayPreview
+                        name = {pathway.name}
+                        image = {pathway.previewImage}
+                        logo = {pathway.sponsor.logo}
+                        sponsorName = {pathway.sponsor.name}
+                        completionTime = {pathway.estimatedCompletionTime}
+                        deadline = {formattedDeadline}
+                        price = {pathway.price}
+                        _id = {pathway._id}
+                        /></li>
+                );
+            });
+            console.log('yuh');
+        }
+
 
         // const logosInfo = [
         //     {name: "amazon.png", height:"90px", left:"55%", top:"80%"},
@@ -117,12 +153,12 @@ class Home extends Component{
         //     )
         // })
 
-        const logos = ["Epic.png", "XES.png", "amazon.png", "holosHomepage.png", "Unity.png"];
-        const logoBar = logos.map(function(logo) {
-            return (
-                <img key={logo} src={"/logos/" + logo} className="logoBarLogo"/>
-            );
-        })
+        // const logos = [all the company images e.g. "Moonshot.png"];
+        // const logoBar = logos.map(function(logo) {
+        //     return (
+        //         <img key={logo} src={"/logos/" + logo} className="logoBarLogo"/>
+        //     );
+        // })
 
         const skills = [
             "UX Design", "Data Science", "Machine Learning", "Graphic Design", "<br/>",
@@ -152,7 +188,13 @@ class Home extends Component{
             }
         });
 
-        return(
+
+        // <div className="logoBar">
+        //     <h3 style={style.hiringPartners}>Our Hiring Partners</h3>
+        //     { logoBar }
+        // </div>
+
+        return (
             <div className='jsxWrapper' ref='home'>
                 <div className="fullHeight greenToBlue">
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
@@ -167,16 +209,7 @@ class Home extends Component{
                     </div>
                 </div>
 
-
-                <div className="logoBar">
-                    <h3 style={style.hiringPartners}>Our Hiring Partners</h3>
-                    { logoBar }
-                </div>
-
-                <div className="purpleToGreenSpacer" />
-
-
-                <div>
+                <div style={{marginTop:"30px"}}>
                     <div className="homepageTrajectory">
                         <div className="homepageTrajectoryTextLeft">
                             <img
@@ -258,9 +291,17 @@ class Home extends Component{
                     </div>
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
-                            {pathwayPreviews}
+                            {pathwayPreviews1}
                         </ul>
                     </div>
+                    {this.state.pathwayPreviews2 ?
+                        <div className="pathwayPrevListContainer">
+                            <ul className="horizCenteredList pathwayPrevList">
+                                {pathwayPreviews2}
+                            </ul>
+                        </div>
+                        : null
+                    }
                     <button
                         className="outlineButton whiteBlueButton"
                         style={{marginTop:"30px", padding:"10px 50px 4px", lineHeight:"35px"}}

@@ -827,14 +827,14 @@ app.get('/topPathways', function (req, res) {
                 console.log("No pathways found");
                 res.status(500).send("No pathways found");
             } else {
-                // if there weren't enough pathways
-                if (pathways.length < numPathways) {
-                    for (let i = pathways.length; i < numPathways; i++) {
-                        // extend the pathways with the last pathway until you have
-                        // the number you wanted
-                        pathways.push(pathways[i - 1]);
-                    }
-                }
+                // // if there weren't enough pathways
+                // if (pathways.length < numPathways) {
+                //     for (let i = pathways.length; i < numPathways; i++) {
+                //         // extend the pathways with the last pathway until you have
+                //         // the number you wanted
+                //         pathways.push(pathways[i - 1]);
+                //     }
+                // }
                 console.log(pathways);
                 res.json(pathways);
             }
