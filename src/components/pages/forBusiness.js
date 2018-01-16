@@ -67,6 +67,26 @@ const styles = {
         height: "100%",
         position: "relative"
     },
+    bottomList: {
+        height: '130px',
+    },
+    bottomListItem: {
+        width: '50%',
+        margin: 'auto',
+        display: 'inline-block',
+        top:'0',
+        verticalAlign: 'top',
+    },
+    bottomListImg: {
+        marginBottom: '10px',
+        height: '50px'
+    },
+    bottomListText: {
+        width: '90%',
+    },
+    resumeTitle: {
+        paddingLeft: '120px'
+    }
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -300,6 +320,46 @@ class ForBusiness extends Component {
                                 src="/images/TalkingBeardGuy.jpeg"
                             />
                         </div>
+                    </div>
+                </div>
+
+                <div className="purpleToGreenSpacer"/>
+
+                <div className="homepageTrajectory">
+                    <div className="smallText3" style={styles.resumeTitle}><b>A Resum&eacute; Can't Do This.</b></div>
+                    <div className="forBusinessTrajectoryTextLeft">
+                        <div style={styles.bottomList}>
+                            <div style={styles.bottomListItem}>
+                                <img src="/icons/Project.png" style={styles.bottomListImg}/>
+                                <div className="smallText" style={styles.bottomListText}>See their quality of work under pressure with real-world
+                                    projects relevant to your company.
+                                </div>
+                            </div>
+                            <div style={styles.bottomListItem}>
+                                <img src="/icons/BarGraph.png" style={styles.bottomListImg}/>
+                                <div className="smallText" style={styles.bottomListText}>Look at quantitative breakdowns and precise scoring of their skills.</div>
+                            </div>
+                        </div>
+                        <div style={{...styles.bottomList, marginTop: '20px'}}>
+                            <div style={styles.bottomListItem}>
+                                <img src="/icons/EvaluatePurple.png" style={styles.bottomListImg}/>
+                                <div className="smallText" style={styles.bottomListText}>
+                                    Evaluate candidates with standardized criteria and assessments.
+                                </div>
+                            </div>
+                            <div style={styles.bottomListItem}>
+                                <img src="/icons/Filter.png" style={styles.bottomListImg}/>
+                                <div className="smallText" style={styles.bottomListText}>
+                                    Filter out the unqualified and uncommitted.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div className="homepageTrajectoryImagesRight">
+                        <div className="homepageImgBackgroundRight purpleToRed"/>
+                        <img
+                            src="/images/OpenLaptop.jpeg"
+                        />
                     </div>
                 </div>
 
