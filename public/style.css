@@ -5,7 +5,7 @@ html {
 
 body {
     font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-    /*min-width: 800px*/
+    min-width: 300px;
 }
 
 :root {
@@ -846,7 +846,7 @@ button.link {
 .purpleToGreenSpacer {
     width: 60%;
     height: 2px;
-    margin: 50px 20% 100px;
+    margin: 50px 20% 50px;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
 }
 
@@ -899,6 +899,7 @@ button.link {
 .homepageTrajectoryTextRight {
     margin-top: 30px;
     width: 54%;
+    overflow: auto;
 }
 .homepageTrajectoryTextLeft > img,
 .homepageTrajectoryTextRight > img {
@@ -992,38 +993,76 @@ button.link {
     }
 }
 
+
+
+.homePathwaysTitle {
+    color: var(--moonshotBlue);
+}
+.homePathwaysDesc {
+    margin: auto;
+    padding: 0px 10%;
+    margin-bottom: 20px;
+    font-size: 26px;
+}
+@media only screen and (min-width: 501px) {
+    .homePathwaysTitle {
+        margin-top: 0px;
+        font-size: 60px;
+    }
+    .homePathwaysDesc {
+        max-width: 700px;
+    }
+}
 /* mobile */
 @media only screen and (max-width: 800px) {
-    .homepageTrajectoryImagesRight { visibility: hidden; }
-    .homepageTrajectoryImagesLeft { visibility: hidden; }
-    .homepageTrajectory {
-        height: 0px;
-        text-align: center;
-    }
-    .homepageTrajectoryTextLeft > div,
-    .homepageTrajectoryTextRight > div {
+    .homepageTrajectoryImagesRight { display: none; }
+    .homepageTrajectoryImagesLeft { display: none; }
+    .homepageTrajectoryTextLeft { float: initial; }
+    .homepageTrajectoryTextRight {
         float: initial;
-        display: inline-block;
-        text-align: left;
         margin-left: 0px;
     }
-    .homepageTrajectoryTextLeft > div {
-        padding-left: 120px;
-    }
-    .homepageTrajectoryTextRight > div {
-        padding-left: 170px;
-    }
-    .homepageTrajectoryTextLeft > img,
-    .homepageTrajectoryTextRight > img {
-        right: calc(50% + 120px);
+    .homepageTrajectory {
+        text-align: center;
+        height: 0px;
+        display: table;
     }
     .homepageTrajectoryTextLeft,
     .homepageTrajectoryTextRight {
-        float: initial;
+        width: 80%;
+        margin: auto;
     }
-    .topMarginOnSmallScreen {
-        margin-top: 300px;
+    .homepageTrajectoryTextLeft > div, .homepageTrajectoryTextRight > div {
+        text-align: left;
+        padding-left: 120px;
+        margin-left: 0px;
+        margin-bottom: 20px;
     }
+    .homepageTrajectoryTextLeft > img,
+    .homepageTrajectoryTextRight > img {
+        visibility: initial;
+    }
+    .homepageTrajectoryTextLeft > img,
+    .homepageTrajectoryTextRight > img {
+        margin-left: -40%;
+    }
+    .homePathwaysDesc {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .homepageTrajectoryTextLeft > div,
+    .homepageTrajectoryTextRight > div {
+        text-align: center;
+        padding-left: 0px;
+    }
+    .homepageTrajectoryTextLeft > img,
+    .homepageTrajectoryTextRight > img {
+        display: none;
+    }
+    .homePathwaysDesc { display: none; }
+    .homePathwaysTitle { font-size: 40px; }
 }
 
 @media only screen and (max-width: 700px) {
