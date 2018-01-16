@@ -780,6 +780,7 @@ button.link {
 
 #aboutMeAreas {
     text-align: inherit;
+    margin-bottom: 60px;
 }
 .aboutMeLi > img:first-of-type {
     height: 40px;
@@ -1047,6 +1048,13 @@ button.link {
     overflow-y: hidden;
 }
 
+.profileSchoolName { float: left; }
+.profileSchoolDate { float: right; }
+.profileSchoolMajorsAndMinors {
+    clear: both;
+    margin-left: 60px;
+}
+
 
 /* decorative triangles */
 
@@ -1217,6 +1225,29 @@ button.link {
     .homePathwaysDesc {
         font-size: 15px;
         padding: 0px 10%;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .aboutMeLi {
+        width: 100%;
+        text-align: center;
+        padding-left: 40px;
+        padding-right: 40px;
+        margin-left: 0px;
+    }
+    .profileSchoolName {
+        float: inherit;
+    }
+    .profileSchoolDate {
+        float: inherit;
+    }
+    .profileSchoolMajorsAndMinors {
+        float: inherit;
+        margin-left: 0px;
+    }
+    .above700only {
+        display: none;
     }
 }
 
