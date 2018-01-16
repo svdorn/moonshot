@@ -389,9 +389,17 @@ class Profile extends Component {
                 });
             }
 
+            // every other li is a right one, starting with the first not being one
+            let rightLi = false;
             aboutMeLis = aboutMeItems.map(function(item) {
+                let additionalClass = "";
+                if (rightLi) {
+                    additionalClass = " aboutMeLiRight"
+                }
+                rightLi = !rightLi;
+
                 return (
-                    <li className="aboutMeLi" key={item.title}>
+                    <li className={"aboutMeLi" + additionalClass} key={item.title}>
                         <img src={"/icons/" + item.icon} />
                         <div>{item.title}</div>
                         {item.content}

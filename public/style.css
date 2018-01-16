@@ -738,7 +738,7 @@ button.link {
 .overviewAndCommentBox, .pathwayContent {
     display: inline-block;
     margin-left: 20px;
-    width: calc(100% - 470px);    
+    width: calc(100% - 470px);
 }
 
 .overviewAndCommentBox {
@@ -769,6 +769,9 @@ button.link {
 .aboutMeLi > span > a {
     color: black;
     text-decoration: underline;
+}
+.aboutMeLiRight {
+    padding-right: 5%;
 }
 .textWithMargin {
     font-size: 20px;
