@@ -42,6 +42,8 @@ footer {
     padding: 10px;
 }
 
+.underline { text-decoration: underline; }
+
 .container .footer-text {
   margin: 20px 0;
 }

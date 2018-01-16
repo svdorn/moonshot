@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {registerForPathway, getUsers} from '../../actions/usersActions';
+import {registerForPathway, getUsers, closeNotification} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
@@ -16,6 +16,15 @@ class Pathway extends Component {
         this.state = {
             pathway: {},
         }
+    }
+
+    goTo (route)  {
+        // closes any notification
+        this.props.closeNotification();
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
     componentDidMount() {
@@ -243,6 +252,23 @@ class Pathway extends Component {
                     </div>
                 );
             });
+        }
+
+        let extraInfo = pathway.extraInfo;
+        let contactUsExists = false;
+        let beforeContact = "";
+        let contactUsPart = "";
+        let afterContact = "";
+        if (extraInfo) {
+            const contactIndex = extraInfo.toLowerCase().indexOf("contact us");
+            if (contactIndex > -1) {
+                contactUsExists = true;
+                beforeContact = extraInfo.substring(0, contactIndex);
+                contactUsPart = extraInfo.substring(contactIndex, contactIndex + 10);
+                if (extraInfo.length > contactIndex + 10) {
+                    afterContact = extraInfo.substring(contactIndex + 10);
+                }
+            }
         }
 
         return (
@@ -495,7 +521,7 @@ class Pathway extends Component {
 
                                 : null}
                         </div>
-                        
+
                         {pathway.steps ?
                             <div>
                                 <div className="center" style={{margin: "100px 0 40px 0"}}>
@@ -509,10 +535,21 @@ class Pathway extends Component {
 
                         {pathway.extraInfo ?
 
-                            <div className="center" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
-                                <p className="smallText2">
-                                    {pathway.extraInfo}
-                                </p>
+                            <div key="extraInfo" className="center smallText2" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
+                                {contactUsExists ?
+                                    <div key="hasContactUs">
+                                        {beforeContact}
+                                        <span   key="hasContactUsSpan"
+                                                className="clickable underline"
+                                                style={{marginTop:"10px"}}
+                                                onClick={() => this.goTo('/contactUs')}>
+                                            {contactUsPart}
+                                        </span>
+                                        {afterContact}
+                                    </div>
+                                    :
+                                    {extraInfo}
+                                }
                             </div>
                             : null
                         }
@@ -553,6 +590,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         getUsers,
         registerForPathway,
+        closeNotification
     }, dispatch);
 }
 
