@@ -170,6 +170,18 @@ class Menu extends Component {
                         <p className={menuItemClass} onClick={() => this.goTo('/forBusiness')}>For Business</p>
                         <div className="menuDivider wideScreenMenuItem" />
                         <p className={menuItemClass} onClick={() => this.goTo('/login')}>Sign in</p>
+
+                        <IconMenu
+                            iconButtonElement={<IconButton><MoreHorizIcon /></IconButton>}
+                            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                            targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                            className="smallScreenMenu"
+                            iconStyle={{fill: "white"}}
+                        >
+                            <MenuItem primaryText="Home" onClick={() => this.goTo('/')} />
+                            <MenuItem primaryText="For Business" onClick={() => this.goTo('/forBusiness')} />
+                            <MenuItem primaryText="Sign In" onClick={() => this.goTo('/login')} />
+                        </IconMenu>
                     </ToolbarGroup>
                 </Toolbar>}
             </header>
