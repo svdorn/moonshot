@@ -453,6 +453,9 @@ class ForBusiness extends Component {
 
                 <div className="purpleToGreenSpacer"/>
 
+                <div className="center mediumText" style={{marginBottom: '20px'}}>
+                    <b>Your Pipeline to Fully-Vetted Talent</b>
+                </div>
                 <div className="forBusinessBoxesContainer">
                     <Paper zDepth={3} className="paperBox">
                         <div className="gradientBorderBlueBox">
