@@ -435,6 +435,9 @@ app.post('/users/forBusinessEmail', function (req, res) {
         + "<p>Phone Number: "
         + req.body.phone
         + "</p>"
+        + "<p>Positions they're hiring for: "
+        + req.body.positions
+        + "</p>"
         + "<p>Message: "
         + message
         + "</p>"

@@ -172,6 +172,7 @@ class ForBusiness extends Component {
             email: this.props.formData.forBusiness.values.email,
             message: this.props.formData.forBusiness.values.message,
             phone: this.props.formData.forBusiness.values.phone,
+            positions: this.props.formData.forBusiness.values.positions,
         };
 
         console.log("SENDING EMAIL: ", user);
@@ -236,6 +237,11 @@ class ForBusiness extends Component {
                                 name="title"
                                 component={renderTextField}
                                 label="Title"
+                            /><br/>
+                            <Field
+                                name="positions"
+                                component={renderMultilineTextField}
+                                label="Positions You're Hiring For"
                             /><br/>
                             <Field
                                 name="message"
