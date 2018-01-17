@@ -98,9 +98,11 @@ class HomepageTriangles extends Component {
         return (
             <div className="jsxWrapper" style={{position:"relative", width:"100%", zIndex:zIndex, pointerEvents:"none"}}>
                 <div style={{position:"absolute", width:"100%", pointerEvents:"none"}}>
-                    <div className="fullHeight" style={{position:"relative", minWidth:"800px", pointerEvents:"none"}}>
-                        {triangles}
-                        {whiteSpace}
+                    <div className="fullHeight" style={{position:"relative", pointerEvents:"none"}}>
+                        <div className="above800only">
+                            {triangles}
+                            {whiteSpace}
+                        </div>
                     </div>
                 </div>
             </div>

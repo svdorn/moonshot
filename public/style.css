@@ -1167,6 +1167,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 /* mobile */
 @media only screen and (max-width: 800px) {
+    .above800only {
+        display: none;
+    }
+
     #discoverSearchBarWideScreen { display: none !important; }
     #discoverSearchBarMedScreen {
         display: inherit;
@@ -1256,6 +1260,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .above700only {
         display: none;
     }
+    .smallScreenMenu {
+        display: inherit;
+    }
+    .wideScreenMenuItem {
+        display: none !important;
+    }
 }
 
 @media only screen and (max-width: 600px) {
@@ -1292,16 +1302,17 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         font-size: 40px;
         margin-bottom: 20px
     }
+    .fullHeight {
+        height: 550px;
+    }
+    .infoBox {
+        padding-top: 170px;
+    }
+    .mediumText {
+        font-size: 25px;
+    }
 }
 
-@media only screen and (max-width: 700px) {
-    .smallScreenMenu {
-        display: inherit;
-    }
-    .wideScreenMenuItem {
-        display: none !important;
-    }
-}
 @media only screen and (min-width: 701px) {
     .smallScreenMenu {
         display: none !important;
