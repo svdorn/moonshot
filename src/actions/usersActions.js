@@ -193,7 +193,7 @@ export function changePasswordForgot(user) {
         axios.post("api/users/changePasswordForgot", user)
             .then(function(response) {
                 dispatch({type:"LOGIN", notification:{message:response.data, type:"infoHeader"}});
-                browserHistory.push('/');
+                browserHistory.push('/login');
             })
             .catch(function(err) {
                 dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: "Error changing password", type: "errorHeader"}})

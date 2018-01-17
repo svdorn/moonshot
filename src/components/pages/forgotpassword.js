@@ -1,11 +1,11 @@
 "use strict"
-import React, { Component } from 'react';
-import { TextField, RaisedButton, Paper, Snackbar, CircularProgress } from 'material-ui';
-import { forgotPassword } from '../../actions/usersActions';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Field, reduxForm } from 'redux-form';
-
+import React, {Component} from 'react';
+import {TextField, RaisedButton, Paper, Snackbar, CircularProgress} from 'material-ui';
+import {forgotPassword} from '../../actions/usersActions';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {Field, reduxForm} from 'redux-form';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
     floatingLabelStyle: {
@@ -66,23 +66,28 @@ class ForgotPassword extends Component {
     render() {
         console.log("props are:", this.props);
         return (
-            <div className="fullHeight greenToBlue">
-                <Paper className="form" zDepth={2}>
+            <div className="fullHeight greenToBlue formContainer">
+                <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
+                <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Forgot Password</h1>
-                        <Field
-                            name="email"
-                            component={renderTextField}
-                            label="Email"
-                        /><br/>
-                        <RaisedButton type="submit"
-                                      label="Send Email"
-                                      primary={true}
-                                      className="button"
-                        />
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
+                            <Field
+                                name="email"
+                                component={renderTextField}
+                                label="Email"
+                            /><br/>
+                        </div>
+                        <button
+                            type="submit"
+                            className="formSubmitButton"
+                        >
+                            Send Email
+                        </button>
                     </form>
-                    { this.props.loading ? <CircularProgress style={{marginTop:"20px"}} /> : "" }
-                </Paper>
+                    {this.props.loading ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
+                </div>
             </div>
         );
     }
@@ -103,7 +108,7 @@ function mapStateToProps(state) {
 }
 
 ForgotPassword = reduxForm({
-    form:'forgot',
+    form: 'forgot',
     validate,
 })(ForgotPassword);
 
