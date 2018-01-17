@@ -1322,3 +1322,17 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 80px;
     }
 }
+
+@media only screen and (max-width: 200px) {
+    .messageHeader {
+        font-size: 12px;
+    }
+    .messageHeader > button {
+        padding-right: 0px !important;
+        padding-left: 6px !important;
+        width: initial !important;
+    }
+    .messageHeader > button > div {
+        width: 24px;
+    }
+}
