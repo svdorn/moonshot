@@ -218,16 +218,6 @@ class ForBusiness extends Component {
                                 component={renderTextField}
                                 label="Full Name"
                             /> < br/>
-                            < Field
-                                name="email"
-                                component={renderTextField}
-                                label="Email"
-                            /><br/>
-                            <Field
-                                name="phone"
-                                component={renderTextField}
-                                label="Phone Number"
-                            /><br/>
                             <Field
                                 name="company"
                                 component={renderTextField}
@@ -237,6 +227,16 @@ class ForBusiness extends Component {
                                 name="title"
                                 component={renderTextField}
                                 label="Title"
+                            /><br/>
+                            < Field
+                                name="email"
+                                component={renderTextField}
+                                label="Email"
+                            /><br/>
+                            <Field
+                                name="phone"
+                                component={renderTextField}
+                                label="Phone Number"
                             /><br/>
                             <Field
                                 name="positions"
