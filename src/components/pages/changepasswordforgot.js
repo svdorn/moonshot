@@ -2,9 +2,9 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { changePasswordForgot } from '../../actions/usersActions';
-import { TextField, RaisedButton } from 'material-ui';
-import { Field, reduxForm } from 'redux-form';
+import {changePasswordForgot} from '../../actions/usersActions';
+import {TextField, RaisedButton} from 'material-ui';
+import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
@@ -66,20 +66,26 @@ class PasswordChange extends Component {
     render() {
         return (
             <div className="fullHeight greenToBlue formContainer">
-                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Change Password</h1>
-                        <Field
-                            name="password"
-                            component={renderPasswordField}
-                            label="New Password"
-                        /><br/>
-                        <Field
-                            name="password2"
-                            component={renderPasswordField}
-                            label="Confirm New Password"
-                        /><br/>
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
+                            <Field
+                                name="password"
+                                component={renderPasswordField}
+                                label="New Password"
+                            /><br/>
+                        </div>
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
+                            <Field
+                                name="password2"
+                                component={renderPasswordField}
+                                label="Confirm New Password"
+                            /><br/>
+                        </div>
                         <button
                             type="submit"
                             className="formSubmitButton"
