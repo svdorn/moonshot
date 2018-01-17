@@ -74,7 +74,9 @@ class Login extends Component {
 
         console.log(user);
 
-        this.props.login(user);
+        let saveSession = true;
+
+        this.props.login(user, saveSession);
 
         console.log("here");
         console.log("current user is" + this.props.currentUser);

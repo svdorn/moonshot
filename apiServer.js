@@ -57,25 +57,37 @@ app.use(session({
 //     });
 // });
 
+app.post('/signOut', function (req, res) {
+    req.session.userId = undefined;
+    req.session.hashedVerificationToken = undefined;
+    req.session.save(function(err) {
+        if (err) {
+            console.log("error removing user session: ", err);
+        }
+        res.json("success");
+    })
+})
+
 // GET USER SESSION
 app.get('/userSession', function (req, res) {
     if (typeof req.session.userId !== 'undefined') {
         // TODO this could be a source of slowdown, if site is running too slow
         // consider changing the session to hold the entire user. This will take
         // more memory but will be faster
+
         getUserByQuery({_id: req.session.userId}, function (user) {
-            bcrypt.compare(user.verificationToken, req.session.hashedVerificationToken, function(err, tokenMatches) {
-                if (tokenMatches) {
+            //bcrypt.compare(user.verificationToken, req.session.hashedVerificationToken, function(err, tokenMatches) {
+            //    if (tokenMatches) {
                     res.json(user);
-                } else {
-                    console.log("verification tokens did not match when getting user from session");
-                    res.json("no user");
-                }
-            });
+            //    } else {
+            //        console.log("verification tokens did not match when getting user from session");
+            //        res.json(undefined);
+            //    }
+            //});
         })
     }
     else {
-        res.json("no user");
+        res.json(undefined);
     }
 });
 
@@ -619,10 +631,11 @@ function getUserByQuery(query, callback) {
 
 // LOGIN USER
 app.post('/login', function (req, res) {
+    console.log("body is: ", req.body)
     const reqUser = req.body.user;
     let saveSession = req.body.saveSession;
     console.log("saveSession is: ", saveSession);
-    console.log("saveSession is a boolean: ", (typeof saveSession !== "boolean"));
+    console.log("saveSession is a boolean: ", (typeof saveSession === "boolean"));
     if (typeof saveSession !== "boolean") {
         saveSession = false;
     }
@@ -659,6 +672,7 @@ app.post('/login', function (req, res) {
 
                     cleanUser(user, function(newUser) {
                         user = newUser;
+                        console.log("saving session: ", saveSession);
                         if (saveSession) {
                             req.session.userId = user._id;
                             req.session.hashedVerificationToken = user.hashedVerificationToken;

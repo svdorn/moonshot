@@ -42,9 +42,9 @@ export function getUserFromSession() {
     };
 }
 
-export function login(user, storeSession) {
+export function login(user, saveSession) {
     return function(dispatch) {
-        axios.post("/api/login", {user, storeSession})
+        axios.post("/api/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
@@ -69,13 +69,20 @@ export function login(user, storeSession) {
 export function signout() {
     return function(dispatch) {
         dispatch({type:"SIGNOUT"});
-        axios.post("/api/userSession", {userId: undefined})
+        axios.post("/api/signOut")
             .then(function(response) {
                 console.log("removed user from session");
             })
             .catch(function(err) {
                 console.log("error removing user from session", err);
             });
+        // axios.post("/api/userSession", {userId: undefined})
+        //     .then(function(response) {
+        //         console.log("removed user from session");
+        //     })
+        //     .catch(function(err) {
+        //         console.log("error removing user from session", err);
+        //     });
     }
 }
 
