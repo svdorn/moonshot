@@ -44,11 +44,10 @@ export function getUserFromSession() {
 
 export function login(user, storeSession) {
     return function(dispatch) {
-        const apiCall = storeSession ? "/api/loginAndStoreSession" : "/api/login";
-        axios.post(apiCall, user)
+        axios.post("/api/login", {user, storeSession})
             .then(function(response) {
-                const user = response.data;
-                dispatch({type:"LOGIN", payload: user});
+                const returnedUser = response.data;
+                dispatch({type:"LOGIN", payload: returnedUser});
                 dispatch({type: "CLOSE_NOTIFICATION"});
                 browserHistory.push('/discover');
 
