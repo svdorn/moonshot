@@ -205,47 +205,50 @@ class ForBusiness extends Component {
                     onRequestClose={this.handleClose}
                     autoScrollBodyContent={true}
                 >
-                    <form onSubmit={this.handleSubmit.bind(this)} className="center">
+                    {this.props.loadingEmailSend ? <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
+                        : < form onSubmit = {this.handleSubmit.bind(this)} className="center">
                         <Field
-                            name="name"
-                            component={renderTextField}
-                            label="Full Name"
+                        name="name"
+                        component={renderTextField}
+                        label="Full Name"
+                        /> < br/>
+                        < Field
+                        name="email"
+                        component={renderTextField}
+                        label="Email"
                         /><br/>
                         <Field
-                            name="email"
-                            component={renderTextField}
-                            label="Email"
+                        name="phone"
+                        component={renderTextField}
+                        label="Phone Number"
                         /><br/>
                         <Field
-                            name="phone"
-                            component={renderTextField}
-                            label="Phone Number"
+                        name="company"
+                        component={renderTextField}
+                        label="Company"
                         /><br/>
                         <Field
-                            name="company"
-                            component={renderTextField}
-                            label="Company"
+                        name="title"
+                        component={renderTextField}
+                        label="Title"
                         /><br/>
                         <Field
-                            name="title"
-                            component={renderTextField}
-                            label="Title"
+                        name="message"
+                        component={renderMultilineTextField}
+                        label="Message"
                         /><br/>
-                        <Field
-                            name="message"
-                            component={renderMultilineTextField}
-                            label="Message"
-                        /><br/>
-                        <button type="submit"
-                                className="outlineButton whiteBlueButton"
-                        >Send
-                        </button>
+                        <RaisedButton
+                        label="Send"
+                        type="submit"
+                        primary={true}
+                        className="raisedButtonWhiteText"
+                        />
                         <br/>
                         <p className="tinyText">
-                            We{"''"}ll get back to you with an email shortly.
+                        We{"''"}ll get back to you with an email shortly.
                         </p>
-                        {this.props.loadingEmailSend ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
-                    </form>
+                        </form>
+                    }
                 </Dialog>
                 <div className="fullHeight purpleToBlue">
                     <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
