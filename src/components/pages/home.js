@@ -169,15 +169,25 @@ class Home extends Component{
         let brKey = -1;
         const exampleSkills = skills.map(function (skill) {
             brKey++;
+            // return (
+            //     <div key={skill + "div"} style={{display: 'inline-block', marginTop: '15px'}}>
+            //         <Chip key={skill}
+            //               backgroundColor='#white'
+            //               labelColor="#00d2ff"
+            //               labelStyle={{fontSize: '20px'}}
+            //               style={{marginLeft: '20px', border: "1px solid #00d2ff"}}>
+            //             {skill}
+            //         </Chip>
+            //     </div>
+            // );
             return (
-                <div key={skill + "div"} style={{display: 'inline-block', marginTop: '15px'}}>
-                    <Chip key={skill}
-                          backgroundColor='#white'
-                          labelColor="#00d2ff"
-                          labelStyle={{fontSize: '20px'}}
-                          style={{marginLeft: '20px', border: "1px solid #00d2ff"}}>
+                <div key={skill + "div"}
+                    style={{display: 'inline-block', marginTop: '15px'}}
+                    className="gradientBorderPurpleToPinkChip"
+                >
+                    <div key={skill} className="purpleText">
                         {skill}
-                    </Chip>
+                    </div>
                 </div>
             );
         });
@@ -306,7 +316,7 @@ class Home extends Component{
                 <div className="purpleToGreenSpacer" />
 
                 <div className="center" style={{marginBottom:"50px"}}>
-                    <h1 className="isolatedHeader">
+                    <h1 className="isolatedHeader purpleText">
                         <b>Build Your Skillset</b>
                     </h1>
                     <div id="exampleSkillsContainer">

@@ -331,6 +331,21 @@ button.link {
     height: 100%;
     width: 100%;
 }
+.gradientBorderPurpleToPinkChip {
+    height: 40px;
+    background: linear-gradient(to bottom right, var(--moonshotDarkPurple), #ff79b7);
+    padding: 3px;
+    border-radius: 25px;
+    margin-left: 20px;
+}
+.gradientBorderPurpleToPinkChip > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+    font-size: 20px;
+    padding: 4px 10px;
+    border-radius: 25px;
+}
 .paperBox {
     height: 300px;
     width: 400px;
