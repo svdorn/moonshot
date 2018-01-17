@@ -42,26 +42,27 @@ export function getUserFromSession() {
     };
 }
 
-export function login(user) {
-  return function(dispatch) {
-    axios.post("/api/login", user)
-      .then(function(response) {
-        dispatch({type:"LOGIN", payload: response.data});
-        dispatch({type: "CLOSE_NOTIFICATION"});
-        browserHistory.push('/discover');
-
-        axios.post("/api/userSession", {userId: response.data._id})
+export function login(user, storeSession) {
+    return function(dispatch) {
+        axios.post("/api/login", {user, storeSession})
             .then(function(response) {
-                console.log("added user to session");
+                const returnedUser = response.data;
+                dispatch({type:"LOGIN", payload: returnedUser});
+                dispatch({type: "CLOSE_NOTIFICATION"});
+                browserHistory.push('/discover');
+
+                // axios.post("/api/userSession", {userId: user._id, hashedVerificationToken: user.hashedVerificationToken})
+                //     .then(function(response) {
+                //         console.log("added user to session");
+                //     })
+                //     .catch(function(err) {
+                //         console.log("error adding user to session", err);
+                //     });
             })
             .catch(function(err) {
-                console.log("error adding user to session", err);
+                dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
-      })
-      .catch(function(err) {
-        dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
-      });
-  }
+    }
 }
 
 // LOG USER OUT

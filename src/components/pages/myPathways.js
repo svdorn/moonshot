@@ -21,6 +21,7 @@ class MyPathways extends Component {
     }
 
     componentDidMount() {
+        console.log("check")
         // check if there is a logged-in user first, then create the user's pathways
         if (this.props.currentUser) {
             // populate featuredPathways with initial pathways

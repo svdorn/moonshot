@@ -45,17 +45,17 @@ app.use(session({
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
 
-// SAVE USER SESSION
-app.post('/userSession', function (req, res) {
-    let userId = req.body.userId;
-    req.session.userId = userId;
-    req.session.save(function (err) {
-        if (err) {
-            console.log("error saving user session", err);
-        }
-        res.json(req.session.userId);
-    });
-});
+// // SAVE USER SESSION
+// app.post('/userSession', function (req, res) {
+//     let userId = req.body.userId;
+//     req.session.userId = userId;
+//     req.session.save(function (err) {
+//         if (err) {
+//             console.log("error saving user session", err);
+//         }
+//         res.json(req.session.userId);
+//     });
+// });
 
 // GET USER SESSION
 app.get('/userSession', function (req, res) {
@@ -64,11 +64,18 @@ app.get('/userSession', function (req, res) {
         // consider changing the session to hold the entire user. This will take
         // more memory but will be faster
         getUserByQuery({_id: req.session.userId}, function (user) {
-            res.json(user);
+            bcrypt.compare(user.verificationToken, req.session.hashedVerificationToken, function(err, tokenMatches) {
+                if (tokenMatches) {
+                    res.json(user);
+                } else {
+                    console.log("verification tokens did not match when getting user from session");
+                    res.json("no user");
+                }
+            });
         })
     }
     else {
-        res.json(undefined);
+        res.json("no user");
     }
 });
 
@@ -199,9 +206,10 @@ app.post('/users', function (req, res) {
             user.password = hash;
             user.verified = false;
 
-            // create user's verification string
+            // create user's verification strings
+            user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
             user.verificationToken = crypto.randomBytes(64).toString('hex');
-            console.log("verificationToken is: ", user.verificationToken);
+            console.log("emailVerificationToken is: ", user.emailVerificationToken);
             const query = {email: user.email};
 
             Users.findOne(query, function (err, foundUser) {
@@ -214,7 +222,9 @@ app.post('/users', function (req, res) {
                         if (err) {
                             console.log(err);
                         }
-                        res.json(user);
+                        cleanUser(user, function(cleanedUser) {
+                            res.json(cleanedUser);
+                        })
                     })
                 } else {
                     res.status(401).send("An account with that email address already exists.");
@@ -227,7 +237,7 @@ app.post('/users', function (req, res) {
 app.post('/verifyEmail', function (req, res) {
     const token = req.body.token;
 
-    var query = {verificationToken: token};
+    var query = {emailVerificationToken: token};
     Users.findOne(query, function (err, user) {
         if (err || user == undefined) {
             res.status(404).send("User not found from token");
@@ -247,7 +257,7 @@ app.post('/verifyEmail', function (req, res) {
                 verified: true
             },
             '$unset': {
-                verificationToken: ""
+                emailVerificationToken: ""
             }
         };
 
@@ -339,7 +349,7 @@ app.post('/sendVerificationEmail', function (req, res) {
             +   '<a href="https://www.moonshotlearning.org/"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
             +   '<span style="margin-bottom:20px;">Hi ' + user.name + ', we are ready to activate your account. Verify your address and let\'s get started!</span><br/>'
             +   '<a style="display:inline-block;height:40px;width:200px;font-size:27px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="http://localhost:3000/verifyEmail?'
-            +   user.verificationToken
+            +   user.emailVerificationToken
             +   '">Verify Address</a>';
             +'</div>'
 
@@ -612,8 +622,15 @@ function getUserByQuery(query, callback) {
 
 // LOGIN USER
 app.post('/login', function (req, res) {
-    var email = sanitizeHtml(req.body.email, sanitizeOptions);
-    var password = sanitizeHtml(req.body.password, sanitizeOptions);
+    const reqUser = req.body.user;
+    let saveSession = req.body.saveSession;
+    console.log("saveSession is: ", saveSession);
+    console.log("saveSession is a boolean: ", (typeof saveSession !== "boolean"));
+    if (typeof saveSession !== "boolean") {
+        saveSession = false;
+    }
+    var email = sanitizeHtml(reqUser.email, sanitizeOptions);
+    var password = sanitizeHtml(reqUser.password, sanitizeOptions);
 
     var query = {email: email};
     Users.findOne(query, function (err, user) {
@@ -642,9 +659,24 @@ app.post('/login', function (req, res) {
                 // check if user verified email address
                 if (user.verified) {
                     console.log("LOGGING IN USER: ", user.email);
-                    user.password = undefined;
-                    res.json(user);
-                    return;
+
+                    cleanUser(user, function(newUser) {
+                        user = newUser;
+                        if (saveSession) {
+                            req.session.userId = user._id;
+                            req.session.hashedVerificationToken = user.hashedVerificationToken;
+                            req.session.save(function (err) {
+                                if (err) {
+                                    console.log("error saving user session", err);
+                                }
+                                res.json(user);
+                            });
+                        } else {
+                            res.json(user);
+                            return;
+                        }
+                    });
+
                 }
                 // if user has not yet verified email address, don't log in
                 else {
@@ -661,9 +693,19 @@ app.post('/login', function (req, res) {
             }
         });
     });
-
-
 });
+
+function cleanUser(user, callback) {
+    const saltRounds = 10;
+    bcrypt.hash(user.verificationToken, saltRounds, function(err, hash) {
+        let newUser = user;
+        newUser.password = undefined;
+        newUser.verificationToken = undefined;
+        newUser.hashedVerificationToken = hash;
+        callback(newUser);
+    });
+}
+
 
 //----->> GET USERS <<------
 app.get('/users', function (req, res) {

@@ -139,10 +139,6 @@ class Discover extends Component {
                 marginTop: "0px",
                 marginBottom: "30px"
             },
-            pathwayPreviewLi: {
-                verticalAlign: "top",
-                marginBottom: "40px"
-            },
             pathwayPreviewUl: {
 
             },
@@ -150,7 +146,7 @@ class Discover extends Component {
                 height: "352px"
             },
             pathwayPreviewFeaturedContainer: {
-                height: "360px"
+                height: "400px"
             },
             treeImg: {
                 height: "300px",
@@ -175,7 +171,7 @@ class Discover extends Component {
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={style.pathwayPreviewLi}
+                <li className="pathwayPreviewLi explorePathwayPreview"
                     key={key}
                     onClick={() => self.goTo('/pathway?' + pathway._id)}>
                     <PathwayPreview
@@ -199,7 +195,7 @@ class Discover extends Component {
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={style.pathwayPreviewLi}
+                <li className="pathwayPreviewLi featuredPathwayPreview"
                     key={key}
                     onClick={() => self.goTo('/pathway?' + pathway._id)}>
                     <PathwayPreview

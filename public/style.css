@@ -382,7 +382,10 @@ button.link {
 /* .horizCenteredList li:first-child { margin-left: 0px; } */
 /* .horizCenteredList li:last-child { margin-right: 0px; } */
 
-.pathwayPrevList li { margin: 0px 10px 10px; }
+.pathwayPrevList li {
+    margin: 0px 10px 10px;
+    vertical-align: top;
+}
 .pathwayPrevIconList li { margin: 0px 3.2px; }
 
 /* so that the pathway icons are all equally spaced out */
@@ -1046,6 +1049,7 @@ button.link {
     margin: auto;
     max-height: 450px;
     overflow-y: hidden;
+    padding-right: 20px;
 }
 
 .profileSchoolName { float: left; }
@@ -1055,6 +1059,9 @@ button.link {
     margin-left: 60px;
 }
 
+.pathwayPreviewLi { vertical-align: top; }
+li.pathwayPreviewLi.explorePathwayPreview { margin-bottom: 40px; }
+li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 /* decorative triangles */
 
