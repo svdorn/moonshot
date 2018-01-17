@@ -5,7 +5,7 @@ import { forgotPassword } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Field, reduxForm } from 'redux-form';
-
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
     floatingLabelStyle: {
@@ -66,8 +66,9 @@ class ForgotPassword extends Component {
     render() {
         console.log("props are:", this.props);
         return (
-            <div className="fullHeight greenToBlue">
-                <Paper className="form" zDepth={2}>
+            <div className="fullHeight greenToBlue formContainer">
+                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Forgot Password</h1>
                         <Field
@@ -75,14 +76,15 @@ class ForgotPassword extends Component {
                             component={renderTextField}
                             label="Email"
                         /><br/>
-                        <RaisedButton type="submit"
-                                      label="Send Email"
-                                      primary={true}
-                                      className="button"
-                        />
+                        <button
+                            type="submit"
+                            className="formSubmitButton"
+                        >
+                            Send Email
+                        </button>
                     </form>
                     { this.props.loading ? <CircularProgress style={{marginTop:"20px"}} /> : "" }
-                </Paper>
+                </div>
             </div>
         );
     }

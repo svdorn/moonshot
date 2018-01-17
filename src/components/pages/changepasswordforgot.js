@@ -3,8 +3,9 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import { changePasswordForgot } from '../../actions/usersActions';
-import { TextField, RaisedButton, Paper } from 'material-ui';
+import { TextField, RaisedButton } from 'material-ui';
 import { Field, reduxForm } from 'redux-form';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
     floatingLabelStyle: {
@@ -64,8 +65,9 @@ class PasswordChange extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <div className="fullHeight greenToBlue">
-                <Paper className="form">
+            <div className="fullHeight greenToBlue formContainer">
+                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Change Password</h1>
                         <Field
@@ -78,13 +80,14 @@ class PasswordChange extends Component {
                             component={renderPasswordField}
                             label="Confirm New Password"
                         /><br/>
-                        <RaisedButton type="submit"
-                                      label="Change Password"
-                                      primary={true}
-                                      className="button"
-                        />
+                        <button
+                            type="submit"
+                            className="formSubmitButton"
+                        >
+                            Change Password
+                        </button>
                     </form>
-                </Paper>
+                </div>
             </div>
         );
     }

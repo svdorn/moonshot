@@ -10,7 +10,7 @@ import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
     hintStyle: {
-        color: 'black',
+        color: '#00d2ff',
     }, greenText: {
         color: style.colors.moonshotGreenText
     }, blueText: {
@@ -86,6 +86,9 @@ const styles = {
     },
     resumeTitle: {
         paddingLeft: '120px'
+    },
+    marginTop: {
+        marginTop: '10px',
     }
 };
 
@@ -204,49 +207,52 @@ class ForBusiness extends Component {
                     open={this.state.open}
                     onRequestClose={this.handleClose}
                     autoScrollBodyContent={true}
+                    titleStyle={{textAlign: 'center'}}
                 >
-                    {this.props.loadingEmailSend ? <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
-                        : < form onSubmit = {this.handleSubmit.bind(this)} className="center">
-                        <Field
-                        name="name"
-                        component={renderTextField}
-                        label="Full Name"
-                        /> < br/>
-                        < Field
-                        name="email"
-                        component={renderTextField}
-                        label="Email"
-                        /><br/>
-                        <Field
-                        name="phone"
-                        component={renderTextField}
-                        label="Phone Number"
-                        /><br/>
-                        <Field
-                        name="company"
-                        component={renderTextField}
-                        label="Company"
-                        /><br/>
-                        <Field
-                        name="title"
-                        component={renderTextField}
-                        label="Title"
-                        /><br/>
-                        <Field
-                        name="message"
-                        component={renderMultilineTextField}
-                        label="Message"
-                        /><br/>
-                        <RaisedButton
-                        label="Send"
-                        type="submit"
-                        primary={true}
-                        className="raisedButtonWhiteText"
-                        />
-                        <br/>
-                        <p className="tinyText">
-                        We{"''"}ll get back to you with an email shortly.
-                        </p>
+                    {this.props.loadingEmailSend ?
+                        <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
+                        : < form onSubmit={this.handleSubmit.bind(this)} className="center">
+                            <Field
+                                name="name"
+                                component={renderTextField}
+                                label="Full Name"
+                            /> < br/>
+                            < Field
+                                name="email"
+                                component={renderTextField}
+                                label="Email"
+                            /><br/>
+                            <Field
+                                name="phone"
+                                component={renderTextField}
+                                label="Phone Number"
+                            /><br/>
+                            <Field
+                                name="company"
+                                component={renderTextField}
+                                label="Company"
+                            /><br/>
+                            <Field
+                                name="title"
+                                component={renderTextField}
+                                label="Title"
+                            /><br/>
+                            <Field
+                                name="message"
+                                component={renderMultilineTextField}
+                                label="Message"
+                            /><br/>
+                            <RaisedButton
+                                label="Send"
+                                type="submit"
+                                primary={true}
+                                className="raisedButtonWhiteText"
+                                style={styles.marginTop}
+                            />
+                            <br/>
+                            <p className="tinyText" style={styles.marginTop}>
+                                We{"''"}ll get back to you with an email shortly.
+                            </p>
                         </form>
                     }
                 </Dialog>

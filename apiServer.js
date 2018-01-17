@@ -516,7 +516,7 @@ app.post('/forgotPassword', function (req, res) {
 
                 console.log("foundUser pass token: " + foundUser.passwordToken);
                 foundUser.password = undefined;
-                let content = 'Click this link to change your password:'
+                let content = 'Click this link to change your password: '
                     + "<a href='http://localhost:3000/changePassword?"
                     + newPasswordToken
                     + "'>Click me</a>";
