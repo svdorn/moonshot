@@ -172,6 +172,7 @@ class ForBusiness extends Component {
             email: this.props.formData.forBusiness.values.email,
             message: this.props.formData.forBusiness.values.message,
             phone: this.props.formData.forBusiness.values.phone,
+            positions: this.props.formData.forBusiness.values.positions,
         };
 
         console.log("SENDING EMAIL: ", user);
@@ -217,6 +218,16 @@ class ForBusiness extends Component {
                                 component={renderTextField}
                                 label="Full Name"
                             /> < br/>
+                            <Field
+                                name="company"
+                                component={renderTextField}
+                                label="Company"
+                            /><br/>
+                            <Field
+                                name="title"
+                                component={renderTextField}
+                                label="Title"
+                            /><br/>
                             < Field
                                 name="email"
                                 component={renderTextField}
@@ -228,14 +239,9 @@ class ForBusiness extends Component {
                                 label="Phone Number"
                             /><br/>
                             <Field
-                                name="company"
-                                component={renderTextField}
-                                label="Company"
-                            /><br/>
-                            <Field
-                                name="title"
-                                component={renderTextField}
-                                label="Title"
+                                name="positions"
+                                component={renderMultilineTextField}
+                                label="Positions You're Hiring For"
                             /><br/>
                             <Field
                                 name="message"
@@ -447,6 +453,9 @@ class ForBusiness extends Component {
 
                 <div className="purpleToGreenSpacer"/>
 
+                <div className="center mediumText" style={{marginBottom: '20px'}}>
+                    <b>Your Pipeline to Fully-Vetted Talent</b>
+                </div>
                 <div className="forBusinessBoxesContainer">
                     <Paper zDepth={3} className="paperBox">
                         <div className="gradientBorderBlueBox">
