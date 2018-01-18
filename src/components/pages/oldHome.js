@@ -49,7 +49,6 @@ class Home extends Component{
                 this.setState({ pathways: res.data });
             }
         }).catch(function(err) {
-            console.log("error getting top pathways");
         })
     }
 

@@ -58,13 +58,9 @@ class ForgotPassword extends Component {
         }
 
         this.props.forgotPassword(vals);
-
-        console.log("here");
-        console.log("current user is" + this.props.currentUser);
     }
 
     render() {
-        console.log("props are:", this.props);
         return (
             <div className="fullHeight greenToBlue formContainer">
                 <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>

@@ -23,7 +23,6 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "GET_USER_FROM_SESSION":
-            console.log("setting current user from session: ", action.payload);
             return {
                 ...state,
                 currentUser: action.payload,
@@ -35,14 +34,10 @@ export function usersReducers(state = initialState, action) {
             return {...state, users: [...action.payload]};
             break;
         case "LOGIN":
-            console.log("printing payload");
-            console.log(action.payload);
             return {...state, notification: undefined, currentUser: action.payload};
             break;
         case "LOGIN_REJECTED":
             // TODO deal with failed login
-            console.log("LOGIN FAILED");
-            console.log(action.payload);
             return {...state, notification: action.notification};
             break;
         case "SIGNOUT":
@@ -69,7 +64,6 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "POST_USER_REJECTED":
-            console.log("user rejected");
             return {
                 ...state,
                 notification: action.notification,
@@ -108,8 +102,6 @@ export function usersReducers(state = initialState, action) {
 
         case "UPDATE_USER":
             // Create a copy of the current array of users
-            console.log("in reducer");
-            console.log("what newUser is: ", action.payload);
             return {
                 ...state, currentUser: action.payload, notification: action.notification
             };

@@ -60,31 +60,30 @@ class Home extends Component{
                 this.setState({ pathways1, pathways2 });
             }
         }).catch(function(err) {
-            console.log("error getting top pathways");
         })
     }
 
     render(){
 
-        const style = {
-            hiringPartners: {
-                fontSize: "12px",
-                color: "gray",
-                marginBottom: "30px"
-            }, leftLi: {
-                float: "left",
-                textAlign: "left",
-                position: "relative",
-                marginLeft: "100px",
-                clear: "both"
-            }, rightLi: {
-                float: "right",
-                textAlign: "left",
-                position: "relative",
-                marginRight: "100px",
-                clear: "both"
-            }
-        }
+        // const style = {
+        //     hiringPartners: {
+        //         fontSize: "12px",
+        //         color: "gray",
+        //         marginBottom: "30px"
+        //     }, leftLi: {
+        //         float: "left",
+        //         textAlign: "left",
+        //         position: "relative",
+        //         marginLeft: "100px",
+        //         clear: "both"
+        //     }, rightLi: {
+        //         float: "right",
+        //         textAlign: "left",
+        //         position: "relative",
+        //         marginRight: "100px",
+        //         clear: "both"
+        //     }
+        // }
 
         // create the pathway previews
         let pathwayKey = 0;

@@ -37,14 +37,11 @@ class Pathway extends Component {
         }).then(res => {
             this.setState({pathway: res.data});
         }).catch(function (err) {
-            console.log("error getting searched for pathw");
         })
     }
 
     handleClick() {
-        console.log("in handle click");
         if (this.props.currentUser) {
-            console.log(this.props.currentUser);
             const user = {
                 pathway: this.state.pathway.name,
                 name: this.props.currentUser.name,
@@ -181,8 +178,6 @@ class Pathway extends Component {
                 textAlign: 'center',
             },
         }
-
-        console.log(this.state.pathway);
 
         const pathway = this.state.pathway;
         const deadline = new Date(this.state.pathway.deadline);

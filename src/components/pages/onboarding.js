@@ -444,7 +444,6 @@ class Onboarding extends Component {
             ...this.state,
             eduInfo
         }, function() {
-            console.log(this.state);
         });
     }
 

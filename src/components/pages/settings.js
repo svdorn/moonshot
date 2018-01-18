@@ -17,7 +17,6 @@ class Settings extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
-        console.log(this.props);
         return (
             <div className="fullHeight greenToBlue">
                 {this.props.notification !== undefined ?

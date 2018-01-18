@@ -17,7 +17,6 @@ class PathwayContent extends Component {
     constructor(props) {
         super(props);
 
-        console.log("here");
         this.state = {
             pathway: undefined,
             drawerOpen: false
@@ -68,7 +67,6 @@ class PathwayContent extends Component {
                 }
 
                 this.setState({pathway}, () => {
-                    console.log("the pathway is ", this.state.pathway);
                 });
             }
 
@@ -108,7 +106,6 @@ class PathwayContent extends Component {
     }
 
     handleToggle = () => {
-        console.log("toggling");
         this.setState({drawerOpen: !this.state.drawerOpen});
     }
 
@@ -144,11 +141,6 @@ class PathwayContent extends Component {
         }
 
         const pathway = this.state.pathway;
-        if (this.props.step !== undefined) {
-            console.log(this.props.step.contentType);
-            console.log(this.props.step);
-
-        }
 
         let content = <div>"loading"</div>;
         // if the user is on a step, show that content

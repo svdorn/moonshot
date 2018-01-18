@@ -13,7 +13,8 @@ import Menu from './components/menu';
 import Footer from './components/footer';
 
 // STEP 1 create the store
-const middleware = applyMiddleware(thunk, logger);
+//const middleware = applyMiddleware(thunk, logger);
+const middleware = applyMiddleware(thunk);
 // WE WILL PASS INITIAL STATE FROM SERVER STORE
 const initialState = window.INITIAL_STATE;
 const store = createStore(reducers, initialState, middleware);

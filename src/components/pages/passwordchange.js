@@ -77,7 +77,6 @@ class PasswordChange extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
-        console.log(this.props);
         return (
             <Paper className="formOther">
                 <form onSubmit={this.handleSubmit.bind(this)}>

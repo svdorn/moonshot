@@ -45,18 +45,6 @@ app.use(session({
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
 
-// // SAVE USER SESSION
-// app.post('/userSession', function (req, res) {
-//     let userId = req.body.userId;
-//     req.session.userId = userId;
-//     req.session.save(function (err) {
-//         if (err) {
-//             console.log("error saving user session", err);
-//         }
-//         res.json(req.session.userId);
-//     });
-// });
-
 app.post('/signOut', function (req, res) {
     req.session.userId = undefined;
     req.session.hashedVerificationToken = undefined;
@@ -221,7 +209,6 @@ app.post('/users', function (req, res) {
             // create user's verification strings
             user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
             user.verificationToken = crypto.randomBytes(64).toString('hex');
-            console.log("emailVerificationToken is: ", user.emailVerificationToken);
             const query = {email: user.email};
 
             Users.findOne(query, function (err, foundUser) {
@@ -256,11 +243,6 @@ app.post('/verifyEmail', function (req, res) {
             return;
         }
 
-        console.log("Found user from ver token: ");
-        console.log(user.email);
-        console.log("verification status: ");
-        console.log(user.verified);
-
         let query = {_id: user._id}
 
         // if the field doesn't exist, $set will set a new field
@@ -281,7 +263,6 @@ app.post('/verifyEmail', function (req, res) {
                 console.log(err);
             }
 
-            console.log("logging in user ", user.email);
             user.password = undefined;
             res.json(user);
         });
@@ -292,7 +273,6 @@ app.post('/verifyEmail', function (req, res) {
 app.post('/users/changePasswordForgot', function (req, res) {
     let token = req.body.token;
     let password = req.body.password;
-    console.log(token);
 
     // sanitize token
     token = sanitizeHtml(token, sanitizeOptions);
@@ -305,10 +285,7 @@ app.post('/users/changePasswordForgot', function (req, res) {
             return;
         }
 
-        console.log("Found user from ver token: ");
-        console.log(user.email);
         const time = Date.now() - user.time;
-        console.log("time is : " + time);
         if (time > (1 * 60 * 60 * 1000)) {
             res.status(401).send("Time ran out, try sending email again");
         }
@@ -338,7 +315,6 @@ app.post('/users/changePasswordForgot', function (req, res) {
                         console.log(err);
                     }
 
-                    console.log("logging in user ", newUser.email);
                     newUser.password = undefined;
                     res.json(newUser);
                 });
@@ -382,8 +358,6 @@ app.post('/sendVerificationEmail', function (req, res) {
 
 // SEND EMAIL FOR REGISTERING FOR PATHWAYS
 app.post('/users/registerForPathway', function(req, res) {
-    console.log("in registering for pathways");
-    console.log(req.body);
     let recipient1 = "kyle.treige@moonshotlearning.org";
     let subject1 = "Student Registration for " + req.body.pathway;
     let content1 = "<div>"
@@ -524,7 +498,6 @@ app.post('/forgotPassword', function (req, res) {
             let subject = 'Change Password';
             const newPasswordToken = crypto.randomBytes(64).toString('hex');
             const newTime = Date.now();
-            console.log("new pass token" + newPasswordToken);
 
             let query2 = {_id: user._id};
             var update = {
@@ -533,7 +506,6 @@ app.post('/forgotPassword', function (req, res) {
                     time: newTime,
                 }
             };
-            console.log(update);
 
             var options = {new: true};
 
@@ -542,9 +514,6 @@ app.post('/forgotPassword', function (req, res) {
                     console.log(err);
                 }
 
-                console.log(foundUser);
-
-                console.log("foundUser pass token: " + foundUser.passwordToken);
                 foundUser.password = undefined;
                 let content = 'Click this link to change your password: '
                     + "<a href='http://localhost:3000/changePassword?"
@@ -564,7 +533,6 @@ app.post('/forgotPassword', function (req, res) {
 
 // callback needs to be a function of a success boolean and string to return
 function sendEmail(recipients, subject, content, callback) {
-    console.log("here");
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
     nodemailer.createTestAccount((err, account) => {
@@ -600,7 +568,6 @@ function sendEmail(recipients, subject, content, callback) {
                 callback(false, "Error sending email to user");
                 return;
             }
-            console.log('Message sent: %s', info.messageId);
             callback(true, "Email sent! Check your email.");
             return;
         });
@@ -639,11 +606,9 @@ function getUserByQuery(query, callback) {
 
 // LOGIN USER
 app.post('/login', function (req, res) {
-    console.log("body is: ", req.body)
     const reqUser = req.body.user;
     let saveSession = req.body.saveSession;
-    console.log("saveSession is: ", saveSession);
-    console.log("saveSession is a boolean: ", (typeof saveSession === "boolean"));
+
     if (typeof saveSession !== "boolean") {
         saveSession = false;
     }
@@ -653,14 +618,12 @@ app.post('/login', function (req, res) {
     var query = {email: email};
     Users.findOne(query, function (err, user) {
         if (err) {
-            console.log("error performing query to find user in db", err);
             res.status(500).send("Error performing query to find user in db. ", err);
             return;
         }
 
         // CHECK IF A USER WAS FOUND
         if (!user) {
-            console.log('no user found');
             res.status(404).send("No user with that email was found.");
             return;
         }
@@ -668,7 +631,6 @@ app.post('/login', function (req, res) {
         bcrypt.compare(password, user.password, function (passwordError, passwordsMatch) {
             // if hashing password fails
             if (passwordError) {
-                console.log("error hashing password");
                 res.status(500).send("Error logging in, try again later.");
                 return;
             }
@@ -676,11 +638,9 @@ app.post('/login', function (req, res) {
             else if (passwordsMatch) {
                 // check if user verified email address
                 if (user.verified) {
-                    console.log("LOGGING IN USER: ", user.email);
 
                     cleanUser(user, function(newUser) {
                         user = newUser;
-                        console.log("saving session: ", saveSession);
                         if (saveSession) {
                             req.session.userId = user._id;
                             req.session.hashedVerificationToken = user.hashedVerificationToken;
@@ -699,14 +659,12 @@ app.post('/login', function (req, res) {
                 }
                 // if user has not yet verified email address, don't log in
                 else {
-                    console.log("user hasn't verified email yet");
                     res.status(401).send("Email not yet verified");
                     return;
                 }
             }
             // wrong password
             else {
-                console.log('wrong password');
                 res.status(400).send("Password is incorrect.");
                 return;
             }
@@ -774,9 +732,7 @@ app.put('/users/:_id', function (req, res) {
     // When true returns the updated document
     var options = {new: true};
     const findQuery = {email: user.email};
-    console.log(findQuery);
     Users.findOne(findQuery, function (err, foundUser) {
-        console.log("inside");
         if (err) {
             console.log(err);
         }
@@ -785,7 +741,6 @@ app.put('/users/:_id', function (req, res) {
             bool = true;
         } else {
             if (foundUser._id == user._id) {
-                console.log("id's equal");
                 bool = true;
             } else {
                 res.status(401).send("Email is taken. Choose a different email.");
@@ -797,7 +752,6 @@ app.put('/users/:_id', function (req, res) {
                     console.log(err);
                 }
 
-                console.log("printing users" + users);
                 users.password = undefined;
                 res.json(users);
             });
@@ -845,11 +799,9 @@ app.put('/users/changepassword/:_id', function (req, res) {
 
                 bcrypt.compare(user.oldpass, users.password, function (passwordError, passwordsMatch) {
                     if (passwordError) {
-                        console.log("error hashing password");
                         res.status(500).send("Error logging in, try again later.");
                         return;
                     } else if (passwordsMatch) {
-                        console.log("ok");
                         // When true returns the updated document
                         var options = {new: true};
 
@@ -858,12 +810,10 @@ app.put('/users/changepassword/:_id', function (req, res) {
                             if (err) {
                                 console.log(err);
                             }
-                            console.log("printing users" + users);
                             users.password = undefined;
                             res.json(users);
                         });
                     } else {
-                        console.log('wrong password');
                         res.status(400).send("Old password is incorrect.");
                         return;
                     }
@@ -884,11 +834,8 @@ app.get('/topPathways', function (req, res) {
         .select("name previewImage sponsor estimatedCompletionTime deadline price")
         .exec(function (err, pathways) {
             if (err) {
-                console.log("ERROR GETTING TOP PATHWAYS: ");
-                console.log(err)
                 res.status(500).send("Not able to get top pathways");
             } else if (pathways.length == 0) {
-                console.log("No pathways found");
                 res.status(500).send("No pathways found");
             } else {
                 // // if there weren't enough pathways
@@ -899,7 +846,6 @@ app.get('/topPathways', function (req, res) {
                 //         pathways.push(pathways[i - 1]);
                 //     }
                 // }
-                console.log(pathways);
                 res.json(pathways);
             }
         });
@@ -908,16 +854,13 @@ app.get('/topPathways', function (req, res) {
 
 //----->> GET LINK BY ID <<-----
 app.get('/getLink', function (req, res) {
-    console.log("here");
     const _id = req.query._id;
-    console.log(_id)
     const query = {_id: _id};
 
     Links.findOne(query, function (err, link) {
         if (err) {
             console.log("error in get link by id")
         } else {
-            console.log("got link by id: ", link);
             res.json(link);
         }
 
@@ -927,14 +870,12 @@ app.get('/getLink', function (req, res) {
 //----->> GET ARTICLE BY ID <<-----
 app.get('/getArticle', function (req, res) {
     const _id = req.query._id;
-    console.log(_id)
     const query = {_id: _id};
 
     Articles.findOne(query, function (err, article) {
         if (err) {
             console.log("error in get article by id")
         } else {
-            console.log("got article by id: ", article);
             res.json(article);
         }
 
@@ -943,16 +884,13 @@ app.get('/getArticle', function (req, res) {
 
 //----->> GET VIDEO BY ID <<-----
 app.get('/getVideo', function (req, res) {
-    console.log("here");
     const _id = req.query._id;
-    console.log(_id)
     const query = {_id: _id};
 
     Videos.findOne(query, function (err, link) {
         if (err) {
             console.log("error in get video by id")
         } else {
-            console.log("got video by id: ", link);
             res.json(link);
         }
 
@@ -961,16 +899,13 @@ app.get('/getVideo', function (req, res) {
 
 //----->> GET PATHWAY BY ID <<-----
 app.get('/getPathwayById', function (req, res) {
-    console.log("here");
     const _id = req.query._id;
-    console.log(_id)
     const query = {_id: _id};
 
     Pathways.findOne(query, function (err, pathway) {
         if (err) {
             console.log("error in get pathway by id")
         } else {
-            console.log("got pathway by id: ", pathway);
             res.json(pathway);
         }
 
@@ -997,8 +932,6 @@ app.get('/search', function (req, res) {
     const sortNOTYET = req.body.sort;
     const selectNOTYET = req.body.select;
 
-    console.log("category is: ", req.query.category);
-
     // add category to query if it exists
     const category = req.query.category;
     if (category && category !== "") {
@@ -1007,12 +940,9 @@ app.get('/search', function (req, res) {
 
     // add company to query if it exists
     const company = req.query.company;
-    console.log("company is", company)
     if (company && company !== "") {
         query["sponsor.name"] = company;
     }
-
-    console.log("query is ", query);
 
     //const limit = 4;
     const sort = {avgRating: -1};
@@ -1024,10 +954,8 @@ app.get('/search', function (req, res) {
         .select(select)
         .exec(function (err, pathways) {
             if (err) {
-                console.log("error getting searched-for pathways", err);
                 res.status(500).send("Error getting searched-for pathways");
             } else {
-                console.log(pathways);
                 res.json(pathways);
             }
         })
@@ -1064,7 +992,6 @@ app.get("/infoByUserId", function(req, res) {
     if (userId && infoType) {
         Users.findById(userId, function(err, user) {
             if (err) {
-                console.log("couldn't get user. err: ", err);
                 res.status(500).send("Could not get user");
             } else {
                 // if the user doesn't have info saved in db, return empty array
@@ -1099,7 +1026,6 @@ app.post("/addInterests", function(req, res) {
 
             user.save(function (err, updatedUser) {
                 if (err) {
-                    console.log(err);
                     res.send(false);
                 }
                 res.send(updatedUser);
@@ -1125,7 +1051,6 @@ app.post("/updateInterests", function(req, res) {
 
             user.save(function (err, updatedUser) {
                 if (err) {
-                    console.log(err);
                     res.send(false);
                 }
                 res.send(updatedUser);
@@ -1151,7 +1076,6 @@ app.post("/updateGoals", function(req, res) {
 
             user.save(function (err, updatedUser) {
                 if (err) {
-                    console.log(err);
                     res.send(false);
                 }
                 res.send(updatedUser);
@@ -1183,7 +1107,6 @@ app.post("/updateInfo", function(req, res) {
 
             user.save(function (err, updatedUser) {
                 if (err) {
-                    console.log(err);
                     res.send(false);
                 }
                 res.send(updatedUser);
@@ -1222,5 +1145,4 @@ app.listen(3001, function (err) {
     if (err) {
         return console.log(err);
     }
-    console.log('API Server is listening on http://localhost:3001');
 })

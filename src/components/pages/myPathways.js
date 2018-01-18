@@ -21,7 +21,6 @@ class MyPathways extends Component {
     }
 
     componentDidMount() {
-        console.log("check")
         // check if there is a logged-in user first, then create the user's pathways
         if (this.props.currentUser) {
             // populate featuredPathways with initial pathways
@@ -81,8 +80,6 @@ class MyPathways extends Component {
                                 userPathwayPreviews
                             });
                         }).catch(function (err) {
-                            console.log("error getting searched-for pathway");
-                            console.log(err);
                         })
                     }
                 }
@@ -130,8 +127,6 @@ class MyPathways extends Component {
 
                         });
                     }).catch(function (err) {
-                        console.log("error getting searched-for completed pathway");
-                        console.log(err);
                     })
                 }
             }
