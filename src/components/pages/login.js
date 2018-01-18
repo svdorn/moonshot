@@ -72,18 +72,12 @@ class Login extends Component {
             password: this.props.formData.login.values.password
         };
 
-        console.log(user);
-
         let saveSession = true;
 
         this.props.login(user, saveSession);
-
-        console.log("here");
-        console.log("current user is" + this.props.currentUser);
     }
 
     render() {
-        console.log("props are:", this.props);
         return (
             <div className="fullHeight greenToBlue formContainer">
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />

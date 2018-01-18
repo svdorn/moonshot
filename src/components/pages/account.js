@@ -55,7 +55,6 @@ class Account extends Component {
         }
 
         if (!vals || valsCounter < 3) {
-            console.log("not enough values");
             return;
         }
 
@@ -68,16 +67,11 @@ class Account extends Component {
             _id: this.props.currentUser._id,
         };
 
-        console.log("UPDATING USER: ", user);
-
         this.props.updateUser(user);
-
-        console.log("updated");
     }
 
     //name, email, password, confirm password, signup button
     render() {
-        console.log(this.props);
         return (
             <Paper className="formOther">
                 <form onSubmit={this.handleSubmit.bind(this)}>

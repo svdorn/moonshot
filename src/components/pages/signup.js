@@ -74,8 +74,6 @@ class Signup extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        console.log("signing up")
-
         // Check if valid
         const vals = this.props.formData.signup.values;
 
@@ -104,16 +102,12 @@ class Signup extends Component {
             userType: "student",
         }];
 
-        console.log("POSTING USER: ", user);
-
         this.props.postUser(user);
 
         this.setState({
             ...this.state,
             email
         })
-
-        console.log("posted");
     }
 
     //name, email, password, confirm password, signup button

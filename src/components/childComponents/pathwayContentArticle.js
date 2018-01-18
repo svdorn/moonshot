@@ -22,7 +22,6 @@ class PathwayContentLink extends Component {
                 }
             }).then(res => {
                 this.setState({content: res.data, currStep: this.props.step});
-                console.log(this.state.content);
             }).catch(function (err) {
                 console.log("error getting searched for article");
             })
@@ -39,7 +38,6 @@ class PathwayContentLink extends Component {
                 }
             }).then(res => {
                 this.setState({content: res.data, currStep: this.props.step});
-                console.log(this.state.content);
             }).catch(function (err) {
                 console.log("error getting searched for article");
             })
@@ -47,7 +45,6 @@ class PathwayContentLink extends Component {
     }
 
     render() {
-        console.log(this.state.content);
         const content = this.state.content;
         return (
             <Paper className={this.props.className} style={{...this.props.style}} zDepth={1}>

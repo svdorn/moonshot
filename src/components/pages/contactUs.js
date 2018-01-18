@@ -63,8 +63,6 @@ class ContactUs extends Component {
             email: this.props.currentUser.email,
         };
 
-        console.log(user);
-
         this.props.contactUs(user);
 
     }

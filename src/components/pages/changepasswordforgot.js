@@ -58,7 +58,6 @@ class PasswordChange extends Component {
             token: token,
             password: vals.password,
         };
-        console.log("changing password");
         this.props.changePasswordForgot(user);
     }
 

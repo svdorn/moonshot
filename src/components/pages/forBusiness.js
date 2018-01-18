@@ -175,11 +175,7 @@ class ForBusiness extends Component {
             positions: this.props.formData.forBusiness.values.positions,
         };
 
-        console.log("SENDING EMAIL: ", user);
-
         this.props.forBusiness(user);
-
-        console.log("email sent");
     }
 
     scrollToForm() {

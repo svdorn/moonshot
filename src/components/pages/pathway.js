@@ -42,9 +42,7 @@ class Pathway extends Component {
     }
 
     handleClick() {
-        console.log("in handle click");
         if (this.props.currentUser) {
-            console.log(this.props.currentUser);
             const user = {
                 pathway: this.state.pathway.name,
                 name: this.props.currentUser.name,
@@ -181,8 +179,6 @@ class Pathway extends Component {
                 textAlign: 'center',
             },
         }
-
-        console.log(this.state.pathway);
 
         const pathway = this.state.pathway;
         const deadline = new Date(this.state.pathway.deadline);

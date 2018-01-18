@@ -23,7 +23,6 @@ class PathwayContentVideo extends Component {
                 }
             }).then(res => {
                 this.setState({content: res.data, currStep: this.props.step});
-                console.log(this.state.content);
             }).catch(function (err) {
                 console.log("error getting searched for video");
             })
@@ -40,7 +39,6 @@ class PathwayContentVideo extends Component {
                 }
             }).then(res => {
                 this.setState({content: res.data, currStep: this.props.step});
-                console.log(this.state.content);
             }).catch(function (err) {
                 console.log("error getting searched for video");
             })

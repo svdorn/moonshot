@@ -24,10 +24,8 @@ export function getUserFromSession() {
             errorMessage: undefined
         });
 
-        console.log("about to get the user");
         axios.get("/api/userSession")
             .then(function(response) {
-                console.log("got the user, dispatching");
                 dispatch({
                     type: "GET_USER_FROM_SESSION",
                     payload: response.data,
@@ -71,7 +69,6 @@ export function signout() {
         dispatch({type:"SIGNOUT"});
         axios.post("/api/signOut")
             .then(function(response) {
-                console.log("removed user from session");
             })
             .catch(function(err) {
                 console.log("error removing user from session", err);
@@ -103,13 +100,9 @@ export function postUser(user) {
             // user successfully posted
             .then(function(response) {
                 // send verification email
-                console.log("about to try to send email");
                 axios.post("/api/sendVerificationEmail", {email: user[0].email})
                     // successfully sent verification email
                     .then(function(emailResponse) {
-                        console.log("email sent");
-                        console.log("emailResponse is: ");
-                        console.log(emailResponse);
                         dispatch({type:"POST_USER"});
                         window.scrollTo(0,0);
                     })
@@ -123,7 +116,6 @@ export function postUser(user) {
             // error posting user
             .catch(function(err) {
                 console.log("error posting user");
-                console.log(err);
                 dispatch({type: "POST_USER_REJECTED", notification:{message: err.response.data, type: "errorHeader"}});
             });
     }
@@ -184,12 +176,10 @@ export function verifyEmail(token) {
     return function(dispatch) {
         axios.post("/api/verifyEmail", {token: token})
             .then(function(response) {
-                console.log("EMAIL VERIFIED!");
                 dispatch({type: "LOGIN", payload:response.data, notification:{message: "Account verified!", type: "infoHeader"}});
                 browserHistory.push('/onboarding');
             })
             .catch(function(err) {
-                console.log("EMAIL VERIFIED REJECTED");
                 dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: "Error verifying email", type: "errorHeader"}});
             });
     }
@@ -272,7 +262,6 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
             }
         })
         .then(function(response) {
-            console.log("current step saved");
         })
         .catch(function(err) {
             console.log("error saving current step: ", err)
@@ -290,7 +279,6 @@ export function updateInterests(user, interests) {
         })
             .then(function(response) {
                 dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
-                console.log("updates to interests saved")
             })
             .catch(function(err) {
                 console.log("error updating interests: ", err)
@@ -308,7 +296,6 @@ export function updateGoals(user, goals) {
         })
             .then(function(response) {
                 dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
-                console.log("updates to goals saved")
             })
             .catch(function(err) {
                 console.log("error updating goals: ", err)

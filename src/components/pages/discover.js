@@ -70,21 +70,18 @@ class Discover extends Component {
     }
 
     handleCategoryChange = (event, index, category) => {
-        console.log(category);
         this.setState({category}, () => {
             this.search();
         })
     };
 
     handleCompanyChange = (event, index, company) => {
-        console.log(company);
         this.setState({company}, () => {
             this.search();
         })
     };
 
     search() {
-        console.log("getting pathways with category: ", this.state.category);
         axios.get("/api/search", {
             params: {
                 searchTerm: this.state.term,
@@ -92,8 +89,6 @@ class Discover extends Component {
                 company: this.state.company
             }
         }).then(res => {
-            console.log("resultant pathways:");
-            console.log(res.data)
             // make sure component is mounted before changing state
             if (this.refs.discover) {
                 this.setState({explorePathways: res.data});

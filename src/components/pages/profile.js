@@ -40,7 +40,6 @@ class Profile extends Component {
         else {
             axios.post("/api/getUserById", { _id: userId }
             ).then(res => {
-                console.log("found user is: ", res.data);
                 const user = res.data;
 
                 this.setState({
@@ -115,7 +114,6 @@ class Profile extends Component {
                         });
                     }).catch(function (err) {
                         console.log("error getting searched-for pathway");
-                        console.log(err);
                     })
                 }
             }
@@ -163,7 +161,6 @@ class Profile extends Component {
                         });
                     }).catch(function (err) {
                         console.log("error getting searched-for completed pathway");
-                        console.log(err);
                     })
                 }
             }
@@ -266,7 +263,6 @@ class Profile extends Component {
                     // how to show the dates if the date is stored as a Date
                     //const dates = edu.startDate.substring(0,4) + "-" + edu.endDate.substring(0,4);
                     // how to show the dates if the dates are stored as Strings
-                    console.log(edu.endDate);
                     const date = edu.endDate;
                     let majorsAndMinors = edu.majors ? edu.majors : "";
                     if (edu.minors && edu.minors.length > 0) {
