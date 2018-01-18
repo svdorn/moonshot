@@ -347,7 +347,6 @@ app.post('/users/changePasswordForgot', function (req, res) {
     });
 });
 
-
 // SEND EMAIL
 app.post('/sendVerificationEmail', function (req, res) {
     let email = sanitizeHtml(req.body.email, sanitizeOptions);
@@ -357,13 +356,19 @@ app.post('/sendVerificationEmail', function (req, res) {
         let recipient = user.email;
         let subject = 'Verify email';
         let content =
-             '<div style="text-align:center">'
+             '<div style="font-size:15px;text-align:center;font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;">'
             +   '<a href="https://www.moonshotlearning.org/"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
-            +   '<span style="margin-bottom:20px;">Hi ' + user.name + ', we are ready to activate your account. Verify your address and let\'s get started!</span><br/>'
-            +   '<a style="display:inline-block;height:40px;width:200px;font-size:27px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="http://localhost:3000/verifyEmail?'
+            +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
+            +       '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways and learning new skills, please <a href="http://localhost:3000/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>. Once you verify your account, you can start building your profile. We hope you have a blast!</span><br/>'
+            +       '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.com">Support@MoonshotLearning.com</a>.</span><br/>'
+            +   '</div>'
+            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="http://localhost:3000/verifyEmail?'
             +   user.emailVerificationToken
-            +   '">Verify Address</a>';
-            +'</div>'
+            +   '">VERIFY ACCOUNT</a>'
+            +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
+            +       '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
+            +   '</div>'
+            +'</div>';
 
         sendEmail(recipient, subject, content, function (success, msg) {
             if (success) {
