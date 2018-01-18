@@ -34,38 +34,17 @@ const styles = {
     },
     horizList: {
         position: "relative",
-        height: "150px",
         marginTop: "15px",
         marginBottom: "25px"
     },
     horizListIcon: {
         height: "50px",
-        position: "absolute",
-        top: "0",
-        bottom: "0",
-        right: "80%",
-        margin: "auto"
-    },
-    horizListText: {
-        width: "60%",
-        fontSize: "20px",
-        right: "0",
-        left: "0",
-        margin: "auto",
-        textAlign: "center",
-        position: "absolute",
-        top: "50%",
-        transform: "translateY(-50%)"
-    },
-    horizListFull: {
-        width: "33%",
-        float: "left",
-        position: "relative",
-        height: "150px"
-    },
-    horizListSpacer: {
-        height: "100%",
-        position: "relative"
+        marginBottom: "10px"
+        // position: "absolute",
+        // top: "0",
+        // bottom: "0",
+        // right: "80%",
+        // margin: "auto"
     },
     bottomList: {
         height: '130px',
@@ -276,19 +255,19 @@ class ForBusiness extends Component {
                     </div>
                 </div>
 
-                <div style={{marginTop: '60px'}}>
-                    <div className="center mediumTextDoubleShrink">
-                        <b>Top College Students and Recent Graduates<br/> Competing to Work for You.</b>
+                <div style={{marginTop: '60px', overflow: 'auto'}}>
+                    <div className="center mediumTextDoubleShrink" style={{marginBottom: "50px"}}>
+                        <b>Top College Students and <div className="under500only br"><br/></div>Recent Graduates<br/> Competing to Work for You.</b>
                     </div>
                     <div style={styles.horizList}>
-                        <div style={styles.horizListFull}>
-                            <div style={{...styles.horizListSpacer, marginLeft: "20%"}}
+                        <div className="horizListFull">
+                            <div className="horizListSpacer" style={{marginLeft: "20%"}}
                             >
-                                <img
-                                    src="/icons/Key.png"
-                                    style={styles.horizListIcon}
-                                />
-                                <div style={styles.horizListText}>
+                                <div className="horizListText">
+                                    <img
+                                        src="/icons/Key.png"
+                                        style={styles.horizListIcon}
+                                    /><br/>
                                     <b>Established Pipeline</b><br/>
                                     Instant access to a pool
                                     of top tier talent.
@@ -296,26 +275,26 @@ class ForBusiness extends Component {
                             </div>
                         </div>
 
-                        <div style={styles.horizListFull}>
-                            <div style={{...styles.horizListSpacer, marginLeft: "12%"}}>
-                                <img
-                                    src="/icons/Evaluate.png"
-                                    style={styles.horizListIcon}
-                                />
-                                <div style={styles.horizListText}>
+                        <div className="horizListFull">
+                            <div className="horizListSpacer" style={{marginLeft: "12%"}}>
+                                <div className="horizListText">
+                                    <img
+                                        src="/icons/Evaluate.png"
+                                        style={styles.horizListIcon}
+                                    /><br/>
                                     <b>Evaluative Metrics</b><br/>
                                     Skill evaluation curated to
-                                    your company's needs.
+                                    your company{"'"}s needs.
                                 </div>
                             </div>
                         </div>
-                        <div style={styles.horizListFull}>
-                            <div style={{...styles.horizListSpacer, marginRight: "20%"}}>
-                                <img
-                                    src="/icons/Employee.png"
-                                    style={styles.horizListIcon}
-                                />
-                                <div style={styles.horizListText}>
+                        <div className="horizListFull">
+                            <div className="horizListSpacer" style={{marginRight: "20%"}}>
+                                <div className="horizListText">
+                                    <img
+                                        src="/icons/Employee.png"
+                                        style={styles.horizListIcon}
+                                    /><br/>
                                     <b>Hire Talent</b><br/>
                                     See their skills and work
                                     before you hire.
@@ -411,7 +390,7 @@ class ForBusiness extends Component {
                 <div className="purpleToGreenSpacer"/>
 
                 <div className="homepageTrajectory" style={{marginBottom: '40px'}}>
-                    <div className="smallText3" style={styles.resumeTitle}><b>A Resum&eacute; Can't Do This.</b></div>
+                    <div className="smallText3" style={styles.resumeTitle}><b>A Resum&eacute; Can{"'"}t Do This.</b></div>
                     <div className="forBusinessTrajectoryTextLeft">
                         <div style={styles.bottomList}>
                             <div style={styles.bottomListItem}>
@@ -464,7 +443,7 @@ class ForBusiness extends Component {
                                 <div className="mediumText blueText">$1500 USD</div>
                                 <div>PER PROGRAM</div>
                                 <br/>
-                                <p>Program curated to your<br/> company's needs. Skill evaluation<br/> of up to 15
+                                <p>Program curated to your<br/> company{"'"}s needs. Skill evaluation<br/> of up to 15
                                     candidates.</p>
                             </div>
                         </div>
