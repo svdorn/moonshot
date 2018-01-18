@@ -610,7 +610,7 @@ button.link {
 
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
-.mediumTextDoubleShrink { font-size: 40px; }
+.mediumTextDoubleShrink { font-size: 35px; }
 .smallText3 { font-size: 30px; }
 .smallText4 { font-size: 25px; }
 .smallText2 { font-size: 20px; }
@@ -737,7 +737,15 @@ button.link {
 .greenInput::-moz-placeholder { color: #B6B6B6; }
 .greenInput:-ms-input-placeholder { color: #B6B6B6; }
 
-
+.horizListSpacer {
+    height: 100%;
+    position: relative;
+}
+.horizListFull {
+    width: 33%;
+    float: left;
+    position: relative;
+}
 
 
 
@@ -949,8 +957,8 @@ button.link {
     width: 54%;
     overflow: auto;
 }
-.homepageTrajectoryTextLeft > img,
-.homepageTrajectoryTextRight > img {
+.homepageTrajectoryTextLeftIcon,
+.homepageTrajectoryTextRightIcon {
     height: 90px;
     position: absolute;
     margin-top: 45px;
@@ -1141,6 +1149,14 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     transition: opacity .5s linear;
 }
 
+.horizListText {
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+}
+
+.br { display: inline; }
+
 @media only screen and (max-width: 1000px) {
     .mediumTextDoubleShrink { font-size: 30px; }
 
@@ -1170,8 +1186,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextLeft {
         width: 40%;
     }
-    .homepageTrajectoryTextLeft > img,
-    .homepageTrajectoryTextRight > img {
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
         visibility: hidden;
     }
     .homepageTrajectoryTextLeft > div {
@@ -1208,6 +1224,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (min-width: 501px) {
+    .under500only { display: none; }
     .homePathwaysTitle {
         margin-top: 0px;
         font-size: 60px;
@@ -1227,6 +1244,13 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         opacity: 0;
         transition: visibility 0s .5s, opacity .5s linear;
     }
+
+    .mediumTextDoubleShrink { font-size: 25px; }
+
+    .horizListText {
+        font-size: 15px;
+    }
+
 
     #exampleSkillsContainer { width: 85%; }
 
@@ -1267,12 +1291,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         margin-left: 0px;
         margin-bottom: 20px;
     }
-    .homepageTrajectoryTextLeft > img,
-    .homepageTrajectoryTextRight > img {
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
         visibility: initial;
     }
-    .homepageTrajectoryTextLeft > img,
-    .homepageTrajectoryTextRight > img {
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
         margin-left: -40%;
     }
     .forBusinessTrajectoryTextLeft,
@@ -1343,6 +1367,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         font-size: 20px;
         padding: 2px 20px 0px;
     }
+    .mediumTextDoubleShrink {
+        font-size: 20px;
+    }
 }
 
 @media only screen and (max-width: 500px) {
@@ -1381,7 +1408,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .infoBox {
         padding-top: 170px;
     }
-    .mediumText, .mediumTextDoubleShrink {
+    .mediumText {
         font-size: 25px;
     }
 
@@ -1425,8 +1452,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 325px) {
-    .homepageTrajectoryTextLeft > img,
-    .homepageTrajectoryTextRight > img {
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
         display: none;
     }
     .homepageTrajectoryTextLeft > div,
