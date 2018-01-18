@@ -48,7 +48,6 @@ class Discover extends Component {
                 this.setState({featuredPathways: res.data});
             }
         }).catch(function (err) {
-            console.log("error getting searched for pathway");
         })
     }
 
@@ -94,7 +93,6 @@ class Discover extends Component {
                 this.setState({explorePathways: res.data});
             }
         }).catch(function (err) {
-            console.log("error getting searched-for pathway");
         })
     }
 

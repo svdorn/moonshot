@@ -71,7 +71,6 @@ export function signout() {
             .then(function(response) {
             })
             .catch(function(err) {
-                console.log("error removing user from session", err);
             });
         // axios.post("/api/userSession", {userId: undefined})
         //     .then(function(response) {
@@ -108,14 +107,12 @@ export function postUser(user) {
                     })
                     // error sending verification email
                     .catch(function(emailError) {
-                        console.log("user successfully posted but error sending email: ", emailError)
                         dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: response.data, type: "errorHeader"}});
                         window.scrollTo(0,0);
                     });
             })
             // error posting user
             .catch(function(err) {
-                console.log("error posting user");
                 dispatch({type: "POST_USER_REJECTED", notification:{message: err.response.data, type: "errorHeader"}});
             });
     }
@@ -165,7 +162,6 @@ export function changePassword(user) {
                 dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
             })
             .catch(function(err){
-                console.log(err);
                 dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: "Error changing password", type: "errorHeader"}})
             });
     }
@@ -264,7 +260,6 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
         .then(function(response) {
         })
         .catch(function(err) {
-            console.log("error saving current step: ", err)
         });
     }
 }
@@ -281,7 +276,6 @@ export function updateInterests(user, interests) {
                 dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
             })
             .catch(function(err) {
-                console.log("error updating interests: ", err)
             });
     }
 }
@@ -298,7 +292,6 @@ export function updateGoals(user, goals) {
                 dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
             })
             .catch(function(err) {
-                console.log("error updating goals: ", err)
             });
     }
 }
@@ -315,7 +308,6 @@ export function updateInfo(user, info) {
                 dispatch({type:"UPDATE_USER_ONBOARDING", payload: response.data});
             })
             .catch(function(err) {
-                console.log("error updating info: ", err)
             });
     }
 }

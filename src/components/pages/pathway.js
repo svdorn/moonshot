@@ -37,7 +37,6 @@ class Pathway extends Component {
         }).then(res => {
             this.setState({pathway: res.data});
         }).catch(function (err) {
-            console.log("error getting searched for pathw");
         })
     }
 

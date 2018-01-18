@@ -113,7 +113,6 @@ class Profile extends Component {
                             userPathwayPreviews
                         });
                     }).catch(function (err) {
-                        console.log("error getting searched-for pathway");
                     })
                 }
             }
@@ -160,7 +159,6 @@ class Profile extends Component {
 
                         });
                     }).catch(function (err) {
-                        console.log("error getting searched-for completed pathway");
                     })
                 }
             }

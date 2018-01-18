@@ -80,7 +80,6 @@ class MyPathways extends Component {
                                 userPathwayPreviews
                             });
                         }).catch(function (err) {
-                            console.log("error getting searched-for pathway");
                         })
                     }
                 }
@@ -128,7 +127,6 @@ class MyPathways extends Component {
 
                         });
                     }).catch(function (err) {
-                        console.log("error getting searched-for completed pathway");
                     })
                 }
             }
