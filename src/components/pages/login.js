@@ -5,6 +5,7 @@ import { login } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Field, reduxForm } from 'redux-form';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 
 const styles = {
@@ -40,7 +41,7 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
 const validate = values => {
     const errors = {};
     const requiredFields = [
-        'username',
+        'email',
         'password',
     ];
     requiredFields.forEach(field => {
@@ -67,50 +68,48 @@ class Login extends Component {
             return;
         }
         const user = {
-            username: this.props.formData.login.values.username,
+            email: this.props.formData.login.values.email,
             password: this.props.formData.login.values.password
         };
 
-        console.log(user);
+        let saveSession = true;
 
-        this.props.login(user)
-
-        console.log("here");
-        console.log("current user is" + this.props.currentUser);
+        this.props.login(user, saveSession);
     }
 
     render() {
-        console.log("props are:", this.props);
         return (
-            <div>
-                {this.props.loginError ?
-                    <Paper className="messageHeader errorHeader">
-                        {this.props.loginError.response.data}
-                    </Paper>
-                    :
-                    null
-                }
-                <Paper className="form" zDepth={2}>
+            <div className="fullHeight greenToBlue formContainer">
+                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Login</h1>
+                        <h1>Sign in</h1>
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
                             <Field
-                                name="username"
+                                name="email"
                                 component={renderTextField}
-                                label="Username"
+                                label="Email"
                             /><br/>
+                        </div>
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="password"
                                 component={renderPasswordField}
                                 label="Password"
                             /><br/><br/>
+                        </div>
+                        <a href="/signup">Create account</a><br/>
                         <a href="/forgotPassword">Forgot Password?</a><br/>
-                        <RaisedButton type="submit"
-                                      label="Login"
-                                      primary={true}
-                                      className="button"
-                        />
+                        <button
+                            type="submit"
+                            className="formSubmitButton"
+                        >
+                            Sign In
+                        </button>
                     </form>
-                </Paper>
+                </div>
 
             </div>
         );
@@ -127,7 +126,6 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
-        loginError: state.users.loginError
     };
 }
 

@@ -27,7 +27,6 @@ const validate = values => {
     const errors = {};
     const requiredFields = [
         'name',
-        'username',
         'email',
     ];
     requiredFields.forEach(field => {
@@ -63,22 +62,16 @@ class Account extends Component {
             return;
         }
         const user = {
-            username: this.props.formData.settings.values.username,
             name: this.props.formData.settings.values.name,
             email: this.props.formData.settings.values.email,
             _id: this.props.currentUser._id,
         };
 
-        console.log("UPDATING USER: ", user);
-
         this.props.updateUser(user);
-
-        console.log("updated");
     }
 
-    //name, username, email, password, confirm password, signup button
+    //name, email, password, confirm password, signup button
     render() {
-        console.log(this.props);
         return (
             <Paper className="formOther">
                 <form onSubmit={this.handleSubmit.bind(this)}>
@@ -87,11 +80,6 @@ class Account extends Component {
                         name="name"
                         component={renderTextField}
                         label="Full Name"
-                    /><br/>
-                    <Field
-                        name="username"
-                        component={renderTextField}
-                        label="Username"
                     /><br/>
                     <Field
                         name="email"

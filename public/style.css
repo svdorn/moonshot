@@ -3,6 +3,21 @@ html {
   min-height: 100%;
 }
 
+body {
+    font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
+    min-width: 300px;
+}
+
+:root {
+    --moonshotLightBlue: #00d2ff;
+    --moonshotMidBlue: #70cbff;
+    --moonshotBlue: #66b1ff;
+    --moonshotGreen: #3dffdd;
+    --moonshotGreenText: #00e2ba;
+    --moonshotPurple: #cf9bff;
+    --moonshotDarkPurple: #B869FF;
+}
+
 .container {
   width: auto;
   max-width: 900px;
@@ -15,28 +30,104 @@ header {
   width: 100%;
 }
 
+.headerSpace {
+    width: 100%;
+    height: 80px;
+}
+
 footer {
-  position: absolute;
+  position: relative;
   bottom: 0;
   width: 100%;
+    padding: 10px;
+}
+
+.underline { text-decoration: underline; }
+
+#toolIconExtraInfo {
+    width: 25px;
+    display: inline;
+    margin: -10px 10px 0px 0px;
 }
 
 .container .footer-text {
   margin: 20px 0;
 }
 
+.moonshotMenuLogo {
+    margin-left: 35px;
+}
+
+.inputContainer {
+    position: relative;
+    text-align: center;
+}
+/* padding for text in input */
+.inputContainer > div:nth-child(2) > input {
+    padding-left: 5px !important;
+}
+.messageInputContainer > div:nth-child(2) > div:first-child {
+    padding-left: 5px !important;
+}
+.inputContainer > div:nth-child(2) > div:nth-child(2) {
+    left: 5px;
+}
+.inputContainer > div:nth-child(2) > label:nth-child(1) {
+    left: 5px;
+}
+.fieldWhiteSpace, .messageFieldWhiteSpace {
+    position: absolute;
+    height: 28px;
+    background-color: rgba(255,255,255, .4);
+    display: inline-block;
+}
+.fieldWhiteSpace {
+    width: 255px;
+    top: 35px;
+}
+.messageFieldWhiteSpace {
+    width: 500px;
+    top: 12px;
+    height: calc(100% - 20px);
+    min-height: 28px;
+}
+.lightWhiteForm {
+    background-color: rgba(255,255,255,.6);
+    color: var(--moonshotBlue);
+}
+.formSubmitButton {
+    padding: 3px 25px 0px;
+    border: 2px solid var(--moonshotMidBlue);
+    background-color: rgba(255,255,255,.4);
+    color: var(--moonshotMidBlue);
+    font-size: 25px;
+    margin-top: 10px;
+}
+.formContainer {
+    text-align: center;
+}
 .form{
-  text-align: center;
-  margin-top: 100px;
-  margin-right: 15%;
-  margin-bottom: 100px;
-  margin-left: 15%;
-  padding-bottom: 20px;
+    text-align: center;
+    margin-top: 140px;
+    margin-bottom: 100px;
+    padding-bottom: 20px;
+    padding-top: 10px;
+    width: 550px;
+    display: inline-block;
+}
+form > h1 {
+    color: var(--moonshotBlue);
+}
+
+.form-right{
+    text-align: center;
+    padding-bottom: 40px;
+    padding-top: 20px;
 }
 
 .formOther{
   text-align: center;
-  margin-top: 10%;
+  margin-top: 140px;
   display: inline-block;
   padding: 0 60px 15px 60px;
 }
@@ -45,34 +136,96 @@ footer {
   margin-top: 12px;
 }
 
-.loader {
-  border: 10px solid #f3f3f3;
-  border-radius: 50%;
-  border-top: 10px solid #3498db;
-  width: 60px;
-  height: 60px;
-  -webkit-animation: spin 1s linear infinite; /* Safari */
-  animation: spin 1s linear infinite;
+.outlineButton {
+    font-size: 30px;
+    padding: 10px 20px 5px 20px;
+    margin-top: 10px;
+    cursor: pointer;
 }
 
-/* Safari */
-@-webkit-keyframes spin {
-  0% { -webkit-transform: rotate(0deg); }
-  100% { -webkit-transform: rotate(360deg); }
+.greenButton {
+    background-color: white;
+    border: 2px solid var(--moonshotGreenText);
+    color: var(--moonshotGreenText);
+    padding-top: 5px;
+    margin-bottom: 10px;
 }
 
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+.blueWhiteButton {
+    background-color: #2de7ef;
+    border: 2px solid white;
 }
+
+.whiteBlueButton, .semiOpaqueWhiteBlueButton {
+    padding-top: 5px;
+    border: 2px solid var(--moonshotMidBlue);
+    color: var(--moonshotMidBlue);
+}
+.semiOpaqueWhiteBlueButton { background-color: rgba(255,255,255,.4); }
+.whiteBlueButton { background-color: white; }
+.whiteButton {
+    background-color: white;
+    color: var(--moonshotGreenText);
+}
+.menuItem {
+    font-size: 20px;
+    margin: 40px 10px 10px 10px;
+}
+
+.menuItem2 {
+    color: var(--moonshotDarkPurple);
+    font-size: 20px;
+    margin: 30px 10px 10px 10px;
+}
+
+.menuDivider {
+    width: 2px;
+    height: 30px;
+    background-color: white;
+    margin: 25px 15px 0px 15px;
+}
+
+.smallScreenMenu {
+    margin-top: 25px;
+    margin-right: 18px;
+}
+
+/* So that the menu text color is the same as the rest of the header */
+.headerDropdownWhite > div:first-child > div:nth-child(2) {
+    color: white !important;
+}
+.headerDropdownBlue > div:first-child > div:nth-child(2) {
+    color: var(--moonshotLightBlue) !important;
+}
+
+.clickable, .clickableNoUnderline { cursor: pointer; }
+.clickable:hover { text-decoration: underline; }
+
+.fullHeight {
+    width: 100%;
+    height: 710px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.halfHeight {
+    width: 100%;
+    height: 375px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+.greenToBlue { background: linear-gradient(to top right, var(--moonshotGreen), var(--moonshotLightBlue)); }
+.purpleToBlue { background: linear-gradient(to top right, var(--moonshotPurple), var(--moonshotBlue)); }
 
 .messageHeader {
-    margin-top: 56px;
+    margin-top: 90px;
     text-align: center;
     height: 40px;
-    margin-bottom: 10px;
     padding-bottom: 10px;
-    padding-top: 10px;
+    position: absolute;
+    width: 100%;
+    z-index: 10;
 }
 
 .errorHeader {
@@ -93,17 +246,7 @@ button.link {
   color: white;
 }
 
-h1{
-  color: #00B7FF;
-  font-family: Roboto, sans-serif;
-  padding-top: 5px;
-}
-
-h3{
-  color: #00B7FF;
-  font-family: Roboto, sans-serif;
-  padding-top: 5px;
-}
+.dividerSmall { height: 50px; }
 
 .boxStyle{
   display: inline-block;
@@ -112,4 +255,1235 @@ h3{
 
 .appBar{
   margin-top: 75px;
+}
+
+.dialog{
+  display: flex;
+  justify-content: center;
+}
+
+.youtubeDialog > div > div {
+    max-width: none !important;
+    width: 100% !important;
+}
+
+.infoBox {
+    margin: auto;
+    width: 80%;
+    max-width: 600px;
+    text-align: center;
+    padding-top: 200px;
+}
+
+.infoBoxImage {
+    height: 70px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto -210px auto;
+}
+
+.isolatedHeader {
+    font-size: 34px;
+    margin: 0px 0px 30px;
+    display: inline-block;
+}
+
+.pathwayHeaderText {
+    margin-left: 50px;
+    padding-top: 100px;
+}
+
+.noWrap { white-space: nowrap; }
+.center { text-align: center; }
+.centerButton { display:flex; justify-content: center; }
+
+.gradientBorderBlue {
+    background: linear-gradient(to bottom right, #5deaff, #3dabff);
+    padding: 2px;
+}
+.gradientBorderBlue > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+.gradientBorderBlueBox {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to bottom right, #3dabff, #5deaff);
+    padding: 3px;
+    top: 0;
+}
+.gradientBorderBlueBox > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+.gradientBorderPurpleToRedBox {
+    height: 100%;
+    width: 100%;
+    background: linear-gradient(to bottom right, var(--moonshotDarkPurple), #DD5E8E);
+    padding: 3px;
+    top: 0;
+}
+.gradientBorderPurpleToRedBox > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+.gradientBorderPurpleToPinkChip {
+    height: 40px;
+    background: linear-gradient(to bottom right, var(--moonshotDarkPurple), #ff79b7);
+    padding: 3px;
+    border-radius: 25px;
+    margin-left: 20px;
+}
+.gradientBorderPurpleToPinkChip > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+    font-size: 20px;
+    padding: 4px 10px;
+    border-radius: 25px;
+}
+.paperBox {
+    height: 300px;
+    width: 400px;
+    display: inline-block;
+    margin: 0 20px 0 20px;
+}
+
+.gradientBorderPurple {
+    background: linear-gradient(to bottom right, #be6aff, #7f0eff);
+    padding: 2px;
+    display: inline-block;
+}
+.gradientBorderPurple > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+    padding: 6px 13px 0px;
+}
+
+.gradientBorder {
+    padding: 4px;
+}
+.gradientBorder > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+.semiOpaqueHoverable {
+    opacity: 0.5;
+    filter: alpha(opacity=50); /* For IE8 and earlier */
+}
+.semiOpaqueHoverable:hover {
+    opacity: 1.0;
+    filter: alpha(opacity=100); /* For IE8 and earlier */
+}
+
+.pathwayImgContainer {
+    display: inline-block;
+    height: 168px;
+    width: 224px;
+    margin-top: 8px;
+}
+
+.horizCenteredList {
+    text-align: center;
+    padding-left: 0px;
+}
+.horizCenteredList li { display: inline-block; }
+/* .horizCenteredList li:first-child { margin-left: 0px; } */
+/* .horizCenteredList li:last-child { margin-right: 0px; } */
+
+.pathwayPrevList li {
+    margin: 0px 10px 10px;
+    vertical-align: top;
+}
+.pathwayPrevIconList li { margin: 0px 3.2px; }
+
+/* so that the pathway icons are all equally spaced out */
+.pathwayPrevIconList > li > div {
+    width: 72.8px;
+    font-size: 11.2px;
+}
+.pathwayPrevListContainer {
+    height: 360px;
+    overflow-y: hidden;
+}
+
+.pathwayLandingIcons {
+    height: 45px;
+    width: 45px;
+    margin-right: 10px;
+    margin-bottom: 30px;
+}
+
+.homepageBenefitsList {
+    margin-top: 100px;
+    padding-left: 40px;
+}
+.homepageBenefitsList li {  vertical-align: top; }
+
+.homepageSeparatorContainer {
+    position:relative;
+}
+
+.homepageSeparator {
+  width: 160px;
+  height: 160px;
+  position: absolute;
+  top: -80px;
+  left: -180px;
+  clip: rect(auto, 180px, auto, 100px);
+  transform: scale(5, .03);
+}
+
+.homepageSeparator::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));
+  transform: rotate(-45deg);
+}
+
+.stepSeparatorLeft {
+    border-right: 200px solid #B869FF;
+    right: 50%;
+}
+.stepSeparatorRight {
+    border-left: 200px solid #B869FF;
+    left: 50%;
+}
+.stepSeparatorRight, .stepSeparatorLeft {
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    bottom: 0;
+}
+.linkSeparator {
+    background-color: black;
+    display: inline-block;
+    margin: 0px 20px;
+    height: 16px;
+    width: 2px;
+}
+
+
+#onboardingBioTextarea {
+    width: calc(700px + 8%);
+    height: initial;
+    text-align: initial;
+    padding: 5px 10px;
+}
+.onboardingDots { margin-bottom: 40px; }
+.onboardingDots > div {
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+    border-radius: 10px;
+    cursor: pointer;
+}
+.onboardingDots > div:first-child {
+    margin-right: 80px
+}
+.onboardingDots > div:last-child {
+    margin-left: 80px
+}
+.onboardingDotsinterests > div {
+    background-color: var(--moonshotLightBlue);
+    opacity: .3;
+}
+.onboardingDotsgoals > div {
+    background-color: var(--moonshotPurple);
+    opacity: .3;
+}
+.onboardingDotsinfo > div {
+    background-color: var(--moonshotGreen);
+    opacity: .3;
+}
+.onboardingDotsinterests > div:first-child,
+.onboardingDotsgoals > div:nth-child(2),
+.onboardingDotsinfo > div:nth-child(3) {
+    opacity: 1;
+}
+.onboardingTabs {
+    margin-top: -50px;
+}
+.onboardingTabs > div:first-child > button > div > div {
+    color: white;
+}
+.onboardingDividerLeft {
+    background-image: linear-gradient(to right, #5deaff, #3dabff);
+    border-right: 200px solid #00c3ff;
+    right: 50%;
+}
+.onboardingDividerRight {
+    background-image: linear-gradient(to right, #5deaff, #3dabff);
+    border-left: 200px solid #00c3ff;
+    left: 50%;
+}
+.onboardingDividerRight, .onboardingDividerLeft {
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    bottom: 0;
+}
+.onboarding2DividerLeft {
+    background: linear-gradient(to right, #be6aff, #7f0eff);
+    border-right: 200px solid #9727ff;
+    right: 50%;
+}
+.onboarding2DividerRight {
+    background: linear-gradient(to right, #be6aff, #7f0eff);
+    border-left: 200px solid #9727ff;
+    left: 50%;
+}
+.onboarding2DividerRight, .onboarding2DividerLeft {
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    bottom: 0;
+}
+.onboarding3DividerLeft {
+    background: linear-gradient(to right, #3dffef, #3affd2);
+    border-right: 200px solid #01f3c8;
+    right: 50%;
+}
+.onboarding3DividerRight {
+    background: linear-gradient(to right, #3dffef, #3affd2);
+    border-left: 200px solid #01f3c8;
+    left: 50%;
+}
+.onboarding3DividerRight, .onboarding3DividerLeft {
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+    height: 0px;
+    width: 0px;
+    position: absolute;
+    bottom: 0;
+}
+
+.onboardingIcons {
+    height: 60px;
+    vertical-align: top;
+    margin-bottom: 7px;
+}
+.onboardingIconsText {
+    font-size: 16px;
+}
+.onboardingListContainer {
+    margin-top: 30px;
+}
+.onboardingInterestsListContainer {
+    margin: 30px auto 0;
+    width: 50%;
+}
+.onboardingGoalsListContainer {
+    margin: auto;
+    padding: 0;
+    list-style: none;
+    text-align: center;
+}
+
+.logoBar {
+    text-align: center;
+    margin: 20px 0px 40px;
+}
+.logoBar > img:last-of-type {
+    margin-right: 0px;
+}
+.logoBarLogo {
+    height: 50px;
+    margin-right: 5%;
+}
+
+.bigText { font-size: 48px; }
+.mediumText { font-size: 40px; }
+.mediumTextDoubleShrink { font-size: 35px; }
+.smallText3 { font-size: 30px; }
+.smallText4 { font-size: 25px; }
+.smallText2 { font-size: 20px; }
+.smallText { font-size: 15px; }
+.tinyText { font-size: 8.8px; }
+.greenText { color: var(--moonshotGreenText); }
+.whiteText { color: white; }
+.blueText { color: var(--moonshotLightBlue); }
+.darkBlueText { color: var(--moonshotMidBlue); }
+.purpleText { color: var(--moonshotPurple) }
+.darkPurpleText { color: var(--moonshotDarkPurple) }
+.onboardingPage1Text {
+    background: linear-gradient(to right, #5deaff, #3dabff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.onboardingPage1Text2 {
+    color: white;
+    padding: 3px 15px 0;
+}
+.onboardingPage1Text3 {
+    color: #00c3ff;
+    padding: 3px 15px 0;
+}
+.onboardingPage1Text2Background{
+    background: linear-gradient(to right, #5deaff, #3dabff);
+    padding: 2px;
+    margin-right: 20px;
+    margin-top: 20px;
+}
+.onboardingPage1Button{
+    background: linear-gradient(to right, #5deaff, #3dabff);
+    border: #3dabff;
+    padding: 7px;
+    margin-top: 20px;
+}
+.onboardingPage2Text {
+    background: linear-gradient(to right, #be6aff, #7f0eff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.onboardingPage2Button{
+    background: linear-gradient(to right, #be6aff, #7f0eff);
+    border: #9727ff;
+    padding: 7px;
+    margin-top: 30px;
+}
+.onboardingPage2Text3 {
+    color: #9727ff;
+}
+.onboardingPage2Text2Background{
+    background: linear-gradient(to right, #be6aff, #7f0eff);
+    padding: 5px 2px 2px 2px;
+    margin-top: 20px;
+    display: inline-block;
+}
+.onboardingPage3TextTitle {
+    background: linear-gradient(to right, #3dffef, #3affd2);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.onboardingPage3Text { color: #01f3c8; }
+.onboardingPage3Button{
+    background: linear-gradient(to right, #3dffef, #3affd2);
+    border: #01f3c8;
+    padding: 7px;
+    margin-top: 20px;
+}
+.onboardingPage3 {
+    color: var(--moonshotGreenText);
+    font-size: 18px;
+}
+.onboardingPage3Link {
+    color: var(--moonshotGreenText);
+    text-decoration: underline;
+}
+.greenCheckbox {
+    display: inline-block;
+    height: 18px;
+    width: 18px;
+    border: 2px solid var(--moonshotGreenText);
+    cursor: pointer;
+    margin: -5px 10px 0px 0px;
+    vertical-align: middle;
+}
+.greenCheckbox > .checkMarktrue, .greenCheckbox > .checkMarkfalse {
+    margin-top: -15px;
+    margin-left: 2px;
+    height: 15px;
+    width: 15px;
+}
+.greenCheckbox > .checkMarkfalse { visibility: hidden; }
+.greenCheckbox > .checkMarktrue { visibility: visible; }
+.onboardingLeftInput, .onboardingRightInput,
+#onboardingBioTextareaSpan {
+    vertical-align: top;
+    color: var(--moonshotGreenText);
+    font-size: 20px;
+}
+.onboardingLeftInput > span, .onboardingRightInput > span {
+    display: inline-block;
+    margin-bottom: 8px;
+}
+.inputSeparator {
+    width: 7%;
+    min-width: 20px;
+}
+.greenInput {
+    border-top: 2px solid var(--moonshotGreenText);
+    border-bottom: 2px solid var(--moonshotGreenText);
+    border-left: 3px solid var(--moonshotGreenText);
+    border-right: 3px solid var(--moonshotGreenText);
+    padding-top: 5px;
+    font-size: 20px;
+    text-align: center;
+    height: 40px;
+    width: 350px;
+    color: black;
+    margin-bottom: 15px;
+}
+.greenInput::placeholder { color: #B6B6B6; }
+.greenInput::-webkit-input-placeholder { color: #B6B6B6; }
+.greenInput:-moz-placeholder { color: #B6B6B6; }
+.greenInput::-moz-placeholder { color: #B6B6B6; }
+.greenInput:-ms-input-placeholder { color: #B6B6B6; }
+
+.horizListSpacer {
+    height: 100%;
+    position: relative;
+}
+.horizListFull {
+    width: 33%;
+    float: left;
+    position: relative;
+}
+
+
+
+
+
+
+.videoContainer {
+    position: relative;
+    display: inline-block;
+    margin-left: 20px;
+    width: calc(100% - 470px);
+    padding-top: 40%;
+}
+.videoContainer > span {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+.questionsContactUs {
+    width: 400px;
+    height: 100px;
+    padding: 25px;
+}
+.scrollBarAndContactUs {
+    width: 400px;
+    display: inline-block;
+    float: left;
+    margin: 10px 30px 20px 10px;
+}
+.stepScrollerContainer {
+    height: 500px;
+    width: 400px;
+    margin-bottom: 20px;
+}
+.stepScrollerContainerInDrawer {
+    height: 100%;
+    width: 400px;
+}
+.drawerOpener {
+    left: -300px;
+    visibility: hidden;
+    position: absolute;
+}
+.overviewAndCommentBox, .pathwayContent {
+    display: inline-block;
+    margin-left: 20px;
+    width: calc(100% - 470px);
+}
+
+.overviewAndCommentBox {
+    margin-top: 10px;
+}
+
+.raisedButtonWhiteText > button > div > div > span {
+    color: white !important;
+}
+
+#aboutMeAreas {
+    text-align: inherit;
+    margin-bottom: 60px;
+}
+.aboutMeLi > img:first-of-type {
+    height: 40px;
+    position: absolute;
+}
+.aboutMeLi {
+    width: 50%;
+    vertical-align: top;
+    text-align: left;
+    padding-left: 5%;
+    font-size: 20px;
+    margin-bottom: 30px;
+}
+.aboutMeLi > div:first-of-type {
+    margin: 5px 70px 15px;
+    color: #00d2ff;
+    font-size: 26px;
+}
+.aboutMeLi > span > a {
+    color: black;
+    text-decoration: underline;
+}
+.aboutMeLiRight {
+    padding-right: 5%;
+}
+.textWithMargin {
+    font-size: 20px;
+    padding-top: 10px;
+    margin: 0px 80px 50px 55px;
+}
+
+.footerMoonshotLogo {
+    width: 300px;
+    height: 100px;
+}
+
+
+
+.myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
+    display: inline-block !important;
+}
+.myPathwaysTabs > div:nth-of-type(2) {
+    margin-left: 30% !important;
+}
+.overviewExercisesComments > div:nth-of-type(2) {
+    margin-left: 20% !important;
+}
+
+
+.halfWidthStepRight, .halfWidthStepLeft {
+    text-align: left;
+    width: 50%;
+    float: left;
+    position: relative;
+    padding: 20px 3% 10px;
+}
+.halfWidthStepRight { padding: 20px 3% 10px 1%; }
+.halfWidthStepLeft { padding: 20px 1% 10px 3%; }
+.halfWidthStepRight > img, .halfWidthStepLeft > img {
+    height: 80px;
+    float: left;
+    margin: 10px 20px 10px 20px;
+}
+.halfWidthStepText {
+     float: left;
+     margin-left: 10px;
+     width: calc(100% - 130px);
+}
+.halfWidthStepNumber {
+    color: #B869FF;
+    font-size: 18px;
+    margin-bottom: 3px;
+}
+.halfWidthStepDesc {
+    height: 50px;
+    overflow-y: hidden;
+}
+.halfWidthStepTitle {
+    color: #B869FF;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 30px;
+}
+
+.headerDiv {
+    position: relative;
+    height: 100px;
+    width: 100%;
+}
+
+.purpleToGreenSpacer {
+    width: 60%;
+    height: 2px;
+    margin: 50px 20% 50px;
+    background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
+}
+
+.profileSeparator {
+    margin: 30px 0;
+    width: 100%;
+    height: 46px;
+}
+.profileSeparatorRect {
+    color: white;
+    background-color: #00d2ff;
+    width: 300px;
+    height: 46px;
+    font-size: 20px;
+    float: left;
+    padding: 10px 0 0 80px;
+}
+.profileSeparatorTri {
+    border-left: 40px solid #00d2ff;
+    border-top: 23px solid transparent;
+    border-bottom: 23px solid transparent;
+    height: 0px;
+    width: 0px;
+    float: left;
+}
+
+.noselect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.homepageTrajectory {
+    text-align: left;
+    position: relative;
+    margin: 0 5%;
+    clear: both;
+    height: 320px;
+}
+.homepageTrajectoryTextLeft {
+    float: left;
+}
+.homepageTrajectoryTextRight {
+    float: right;
+}
+.homepageTrajectoryTextLeft,
+.homepageTrajectoryTextRight {
+    margin-top: 30px;
+    width: 54%;
+    overflow: auto;
+}
+.homepageTrajectoryTextLeft.forBusiness,
+.homepageTrajectoryTextRight.forBusiness {
+    width: 45%;
+}
+.homepageTrajectoryTextLeftIcon,
+.homepageTrajectoryTextRightIcon {
+    height: 90px;
+    position: absolute;
+    margin-top: 45px;
+    font-size: 23px;
+}
+.forBusinessTrajectoryTextLeft {
+    float: left;
+    text-align: center;
+}
+.forBusinessTrajectoryTextRight {
+    float: right;
+    text-align: center;
+}
+.forBusinessTrajectoryTextLeft,
+.forBusinessTrajectoryTextRight {
+    margin-top: 30px;
+    width: 50%;
+    overflow: auto;
+}
+.forBusinessTrajectoryTextLeft > img,
+.forBusinessTrajectoryTextRight > img {
+    height: 90px;
+    position: absolute;
+    margin-top: 45px;
+    font-size: 23px;
+}
+.homepageTrajectoryImagesRight {
+    float: right;
+    margin-right: 2%;
+}
+.homepageTrajectoryImagesLeft {
+    float: left;
+}
+.homepageTrajectoryImagesLeft > img,
+.homepageTrajectoryImagesRight > img {
+    height: 270px;
+    z-index: 10;
+    width: 400px;
+    position: absolute;
+}
+.homepageTrajectoryImagesRight > img {
+    right: 2%;
+    margin: 20px 20px 0 0;
+}
+.homepageTrajectoryImagesLeft > img {
+    margin: 20px 0 0 20px;
+    left: 2%;
+}
+.homepageImgBackgroundLeft,
+.homepageImgBackgroundRight {
+    height: 270px;
+    position: absolute;
+    width: 400px;
+    z-index: 5;
+}
+.homepageImgBackgroundLeft {
+    left: 2%;
+}
+.homepageImgBackgroundRight {
+    right: 2%;
+}
+.greenGradient {
+    background: linear-gradient(to top right, #28EBC3, #6EFEE4);
+}
+.blueGradient {
+    background: linear-gradient(to top left, #32C4FC, #2CFCFE);
+}
+.purpleToRed {
+    background: linear-gradient(to top left, #DD5E8E, var(--moonshotDarkPurple));
+}
+.purpleText {
+    color: var(--moonshotDarkPurple);
+}
+.blueText {
+    color: var(--moonshotBlue);
+}
+
+.homepageTrajectoryTextLeftDiv,
+.homepageTrajectoryTextRightDiv {
+    float: right;
+    margin-left: 110px;
+}
+.homepageTrajectoryTextLeftDiv.forBusiness,
+.homepageTrajectoryTextRightDiv.forBusiness {
+    margin-left: 0px;
+    text-align: center;
+}
+.forBusinessTrajectoryTextLeftDiv,
+.forBusinessTrajectoryTextRightDiv {
+    float: right;
+}
+
+.forBusinessBoxesContainer {
+    height: 350px;
+    width: 900px;
+    margin: auto;
+    text-align: center;
+}
+
+.homePathwaysTitle {
+    color: var(--moonshotBlue);
+}
+.homePathwaysDesc {
+    margin: auto;
+    margin-bottom: 30px;
+    font-size: 18px;
+}
+
+/* make Category and Company more to the right */
+#discoverSearchBarWideScreen > div:nth-child(2) > div:nth-child(2) {
+    margin-right: -30px;
+}
+#discoverSearchBarMedScreen { display: none; }
+
+#exampleSkillsContainer {
+    width: 70%;
+    margin: auto;
+    max-height: 450px;
+    overflow-y: hidden;
+    padding-right: 20px;
+}
+
+.profileSchoolName { float: left; }
+.profileSchoolDate { float: right; }
+.profileSchoolMajorsAndMinors {
+    clear: both;
+    margin-left: 60px;
+}
+
+.bigCreateYourFreeAccount {
+    margin-top: 30px;
+    padding:10px 50px 4px;
+}
+
+.pathwayPreviewLi { vertical-align: top; }
+li.pathwayPreviewLi.explorePathwayPreview { margin-bottom: 40px; }
+li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
+
+.above600only {
+    display: initial;
+}
+.semiOpaquePaper {
+    background-color: rgba(255, 255, 255, .6) !important;
+}
+.form.bigForm {
+    width: 80%;
+    max-width: 800px;
+}
+#image404 {
+    width: 80%;
+    max-width: 500px;
+    margin-left: -2%;
+    margin-bottom: 15px;
+}
+
+.blueTextImportant {
+    color: var(--moonshotBlue) !important;
+}
+
+
+/* decorative triangles */
+
+.triangle{
+  width: 160px;
+  height: 160px;
+  position: absolute;
+  clip: rect(auto, 180px, auto, 100px);
+  z-index: 10;
+}
+
+.triangle::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  transform: rotate(-45deg);
+}
+
+.whiteTriangle::after {
+    background: linear-gradient(to top, rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.6));
+}
+.purpleTriangle::after { background: var(--moonshotPurple); }
+.darkPurpleTriangle::after { background: var(--moonshotDarkPurple); }
+.greenTriangle::after { background: var(--moonshotGreen); }
+
+/* end decorative triangles */
+
+.above800fade {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .5s linear;
+}
+
+.horizListText {
+    width: 100%;
+    font-size: 20px;
+    text-align: center;
+}
+
+.br { display: inline; }
+
+@media only screen and (max-width: 1000px) {
+    .mediumTextDoubleShrink { font-size: 30px; }
+
+    .videoContainer {
+        width: 90%;
+        margin-left: 5%;
+        min-width: 800px;
+        padding-top: 56.25%
+    }
+    .scrollBarAndContactUs {
+        margin-left: -800px;
+    }
+    .drawerOpener {
+        visibility: visible;
+        position: relative;
+        width: 150px;
+        display: block !important;
+        margin: 10px auto;
+        left: 0;
+    }
+    .overviewAndCommentBox, .pathwayContent {
+        width: 100%;
+    }
+}
+
+@media only screen and (max-width: 1050px) {
+    .homepageTrajectoryTextLeft {
+        width: 40%;
+    }
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
+        visibility: hidden;
+    }
+    .homepageTrajectoryTextLeftDiv {
+        margin-left: 0px;
+    }
+    .homepageTrajectoryTextRightDiv {
+        margin-right: 0px;
+    }
+    .forBusinessTrajectoryTextLeft {
+        width: 40%;
+    }
+    .forBusinessTrajectoryTextLeft > img,
+    .forBusinessTrajectoryTextRight > img {
+        visibility: hidden;
+    }
+    .forBusinessTrajectoryTextLeft > div {
+        margin-left: 0px;
+    }
+    .forBusinessTrajectoryTextRight > div {
+        margin-right: 0px;
+    }
+    .homepageImgBackgroundLeft {
+        left: 0;
+    }
+    .homepageImgBackgroundRight {
+        right: 0;
+    }
+    .homepageTrajectoryImagesRight > img {
+        right: 0;
+    }
+    .homepageTrajectoryImagesLeft > img {
+        left: 0;
+    }
+}
+
+@media only screen and (min-width: 501px) {
+    .under500only { display: none; }
+    .homePathwaysTitle {
+        margin-top: 0px;
+        font-size: 60px;
+    }
+    .homePathwaysDesc {
+        max-width: 700px;
+    }
+}
+/* mobile */
+@media only screen and (max-width: 800px) {
+    .above800only {
+        display: none;
+    }
+
+    .above800fade {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s .5s, opacity .5s linear;
+    }
+
+    .mediumTextDoubleShrink { font-size: 25px; }
+
+    .horizListText {
+        font-size: 15px;
+    }
+
+
+    #exampleSkillsContainer { width: 85%; }
+
+    #discoverSearchBarWideScreen { display: none !important; }
+    #discoverSearchBarMedScreen {
+        display: inherit;
+        text-align: center;
+    }
+    #discoverSearchBarMedScreen > div:nth-child(4) {
+        display: none;
+    }
+
+    .homepageTrajectoryImagesRight { display: none; }
+    .homepageTrajectoryImagesLeft { display: none; }
+    .homepageTrajectoryTextLeft { float: initial; }
+    .homepageTrajectoryTextRight {
+        float: initial;
+        margin-left: 0px;
+    }
+    .forBusinessTrajectoryTextLeft { float: initial; }
+    .forBusinessTrajectoryTextRight {
+        float: initial;
+        margin-left: 0px;
+    }
+    .homepageTrajectory {
+        text-align: center;
+        height: 0px;
+        display: table;
+    }
+    .homepageTrajectoryTextLeft,
+    .homepageTrajectoryTextRight {
+        width: 80%;
+        margin: auto;
+    }
+    .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
+        text-align: left;
+        padding-left: 120px;
+        margin-left: 0px;
+        margin-bottom: 20px;
+    }
+    .homepageTrajectoryTextLeftDiv.forBusiness, .homepageTrajectoryTextRightDiv.forBusiness {
+        padding-left: 120px;
+    }
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
+        visibility: initial;
+    }
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
+        margin-left: -40%;
+    }
+    .forBusinessTrajectoryTextLeft,
+    .forBusinessTrajectoryTextRight {
+        width: 80%;
+        margin: auto;
+    }
+    .forBusinessTrajectoryTextLeft > div, .forBusinessTrajectoryTextRight > div {
+        text-align: center;
+        margin-left: 0px;
+        margin-bottom: 20px;
+    }
+    .forBusinessTrajectoryTextLeft > img,
+    .forBusinessTrajectoryTextRight > img {
+        visibility: initial;
+    }
+    .forBusinessTrajectoryTextLeft > img,
+    .forBusinessTrajectoryTextRight > img {
+    }
+    .homePathwaysDesc {
+        font-size: 15px;
+        padding: 0px 10%;
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .aboutMeLi {
+        width: 100%;
+        text-align: center;
+        padding-left: 40px;
+        padding-right: 40px;
+        margin-left: 0px;
+    }
+    .profileSchoolName {
+        float: inherit;
+    }
+    .profileSchoolDate {
+        float: inherit;
+    }
+    .profileSchoolMajorsAndMinors {
+        float: inherit;
+        margin-left: 0px;
+    }
+    .above700only {
+        display: none;
+    }
+    .smallScreenMenu {
+        display: inherit;
+    }
+    .wideScreenMenuItem {
+        display: none !important;
+    }
+    .smallText2 {
+        font-size: 15px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .above600only { display: none; }
+    #discoverSearchBarMedScreen > div:nth-child(4) {
+        display: inherit;
+        margin-top: -30px;
+    }
+    #discoverSearchBarMedScreen > div:nth-child(5) {
+        margin-bottom: 25px;
+    }
+    .bigCreateYourFreeAccount {
+        font-size: 20px;
+        padding: 2px 20px 0px;
+    }
+    .mediumTextDoubleShrink {
+        font-size: 20px;
+    }
+}
+
+@media only screen and (max-width: 500px) {
+    .homepageTrajectory { margin-bottom: -65px; }
+    .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
+        transform: scale(.7);
+        width: 120%;
+        margin-left: -10%;
+    }
+    /* move icons over to the left */
+    .homepageTrajectoryContainer > div:nth-child(1) > div > img,
+    .homepageTrajectoryContainer > div:nth-child(3) > div > img {
+        margin-left: -51%;
+    }
+    /* move the third icon less to the left since it is smaller */
+    .homepageTrajectoryContainer > div:nth-child(5) > div > img {
+        margin-left: -48%;
+    }
+    .forBusinessTrajectoryTextLeft > div,
+    .forBusinessTrajectoryTextRight > div {
+        text-align: center;
+        padding-left: 0px;
+    }
+    .forBusinessTrajectoryTextLeft > img,
+    .forBusinessTrajectoryTextRight > img {
+        display: none;
+    }
+    .homePathwaysDesc { display: none; }
+    .homePathwaysTitle {
+        font-size: 40px;
+        margin-bottom: 20px
+    }
+    .fullHeight {
+        height: 550px;
+    }
+    .infoBox {
+        padding-top: 170px;
+    }
+    .mediumText {
+        font-size: 25px;
+    }
+
+    .gradientBorderPurpleToPinkChip {
+        height: 30px;
+    }
+    .gradientBorderPurpleToPinkChip > div {
+        font-size: 15px;
+        padding-top: 2px;
+
+    }
+
+    .outlineButton { font-size: 20px; }
+
+    #exampleSkillsContainer {
+        width: 95%;
+        max-height: 460px;
+    }
+
+}
+
+@media only screen and (min-width: 701px) {
+    .smallScreenMenu {
+        display: none !important;
+    }
+    .wideScreenMenuItem {
+        display: inherit;
+    }
+}
+@media only screen and (max-width: 375px) {
+    .smallScreenMenu {
+        margin-right: 0px;
+    }
+    .moonshotMenuLogo {
+        margin-left: 0px;
+    }
+    .footerMoonshotLogo {
+        width: 240px;
+        height: 80px;
+    }
+}
+
+@media only screen and (max-width: 325px) {
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
+        display: none;
+    }
+    .homepageTrajectoryTextLeftDiv,
+    .homepageTrajectoryTextRightDiv {
+        padding-left: 0px;
+    }
+}
+
+@media only screen and (max-width: 200px) {
+    .messageHeader {
+        font-size: 12px;
+    }
+    .messageHeader > button {
+        padding-right: 0px !important;
+        padding-left: 6px !important;
+        width: initial !important;
+    }
+    .messageHeader > button > div {
+        width: 24px;
+    }
 }

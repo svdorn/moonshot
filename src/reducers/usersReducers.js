@@ -7,7 +7,10 @@ const initialState = {
     isFetching: false,
     headerMessage: undefined,
     headerType: undefined,
-    headerExpirationTime: undefined
+    headerExpirationTime: undefined,
+    isOnboarding: false,
+    blueHeader: false,
+    userPosted: false
 }
 export function usersReducers(state = initialState, action) {
     switch (action.type) {
@@ -20,7 +23,6 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "GET_USER_FROM_SESSION":
-            console.log("setting current user from session: ", action.payload);
             return {
                 ...state,
                 currentUser: action.payload,
@@ -32,15 +34,11 @@ export function usersReducers(state = initialState, action) {
             return {...state, users: [...action.payload]};
             break;
         case "LOGIN":
-            console.log("printing payload");
-            console.log(action.payload);
-            return {...state, loginError: undefined, currentUser: action.payload};
+            return {...state, notification: undefined, currentUser: action.payload};
             break;
         case "LOGIN_REJECTED":
             // TODO deal with failed login
-            console.log("LOGIN FAILED");
-            console.log(action.payload);
-            return {...state, loginError: action.payload};
+            return {...state, notification: action.notification};
             break;
         case "SIGNOUT":
             return {...state, currentUser:undefined};
@@ -51,23 +49,31 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 loadingSomething: true
             }
+            break;
+        case "ON_SIGNUP_PAGE":
+            return {
+                ...state,
+                userPosted: false
+            }
+            break;
         case "POST_USER":
             return {
                 ...state,
-                emailSentMessage: action.payload,
+                userPosted: true,
                 loadingSomething: false
             };
             break;
         case "POST_USER_REJECTED":
-            console.log("user rejected");
             return {
-                ...state, failure: action.payload
+                ...state,
+                notification: action.notification,
+                loadingSomething: false
             };
             break;
         case "VERIFY_EMAIL_REJECTED":
             return {
                 ...state,
-                verifyEmailErrorMsg: 'Error verifying email'
+                notification: action.notification
             }
         case "RESET_BUTTON":
             return {
@@ -96,36 +102,100 @@ export function usersReducers(state = initialState, action) {
 
         case "UPDATE_USER":
             // Create a copy of the current array of users
-            console.log("in reducer");
-            console.log("what newUser is: ", action.payload);
             return {
-                ...state, currentUser: action.payload, success: "User Updated"
+                ...state, currentUser: action.payload, notification: action.notification
             };
             break;
         case "UPDATE_USER_REJECTED":
             return {
-                ...state, failure: action.payload
+                ...state, notification: action.notification
             };
             break;
         case "CHANGE_PASSWORD":
             return {
-                ...state, success: "Password Changed"
+                ...state, notification: action.notification
             };
             break;
         case "CHANGE_PASSWORD_REJECTED":
             return {
-                ...state, failure: action.payload
+                ...state, notification: action.notification
+            };
+            break;
+        case "FOR_BUSINESS_REQUESTED":
+            return {
+                ...state, loadingSomething: true
+            };
+            break;
+        case "FOR_BUSINESS":
+            return {
+                ...state, notification: action.notification, loadingSomething: false
+            };
+            break;
+        case "CONTACT_US_REQUESTED":
+            return {
+                ...state, loadingSomething: true
+            };
+            break;
+        case "CONTACT_US":
+            return {
+                ...state, notification: action.notification, loadingSomething: false
+            };
+            break;
+        case "REGISTER_FOR_PATHWAY":
+            return {
+                ...state, notification: action.notification, loadingSomething: false
+            };
+            break;
+        case "REGISTER_FOR_PATHWAY_REQUESTED":
+            return {
+                ...state, loadingSomething: true
             };
             break;
         case "FORGOT_PASSWORD":
             return {
-                ...state, forgotPassSuccess: action.payload, loadingSomething: false
+                ...state, notification: action.notification, loadingSomething: false
             };
             break;
         case "FORGOT_PASSWORD_REJECTED":
             return {
-                ...state, forgotPassFailure: action.payload, loadingSomething: false
+                ...state, notification: action.notification, loadingSomething: false
             };
+            break;
+        case "FORM_ERROR":
+            return {
+                ...state, notification: action.notification, loadingSomething: false
+            };
+            break;
+        case "UPDATE_CURRENT_SUBSTEP":
+            const subStep = {...action.payload, pathwayId: action.pathwayId}
+            return {
+                ...state, currentSubStep: subStep, currentUser: action.currentUser
+            }
+            break;
+        case "CLOSE_NOTIFICATION":
+            return {
+                ...state, notification: undefined
+            }
+            break;
+        case "START_ONBOARDING":
+            return {
+                ...state, isOnboarding: true
+            }
+            break;
+        case "END_ONBOARDING":
+            return {
+                ...state, isOnboarding: false
+            }
+            break;
+        case "UPDATE_USER_ONBOARDING":
+            return {
+                ...state, currentUser: action.payload
+            };
+            break;
+        case "TURN_HEADER_BLUE":
+            return {
+                ...state, blueHeader: action.shouldBeBlue
+            }
             break;
     }
 

@@ -2,9 +2,10 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postUser, getUsers} from '../../actions/usersActions';
+import {postUser, getUsers, onSignUpPage} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
     floatingLabelStyle: {
@@ -39,7 +40,6 @@ const validate = values => {
     const errors = {};
     const requiredFields = [
         'name',
-        'username',
         'email',
         'password',
         'password2',
@@ -59,6 +59,17 @@ const validate = values => {
 };
 
 class Signup extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            email: ""
+        }
+    }
+
+    componentDidMount() {
+        this.props.onSignUpPage();
+    }
 
     handleSubmit(e) {
         e.preventDefault();
@@ -72,7 +83,7 @@ class Signup extends Component {
             valsCounter++;
         }
 
-        if (!vals || valsCounter !== 5) {
+        if (!vals || valsCounter !== 4) {
             return;
         }
 
@@ -82,69 +93,81 @@ class Signup extends Component {
         if (vals.password != vals.password2) {
             return;
         }
-        const user = [{
-            name: this.props.formData.signup.values.name,
-            username: this.props.formData.signup.values.username,
-            userType: "student",
-            password: this.props.formData.signup.values.password,
-            email: this.props.formData.signup.values.email,
-        }];
 
-        console.log("POSTING USER: ", user);
+        const name = this.props.formData.signup.values.name;
+        const password = this.props.formData.signup.values.password;
+        const email = this.props.formData.signup.values.email;
+        const user = [{
+            name, password, email,
+            userType: "student",
+        }];
 
         this.props.postUser(user);
 
-        console.log("posted");
+        this.setState({
+            ...this.state,
+            email
+        })
     }
 
-    //name, username, email, password, confirm password, signup button
+    //name, email, password, confirm password, signup button
     render() {
-        console.log(this.props);
         return (
-            <div>
-                {this.props.failure !== undefined ?
-                    <Paper className="messageHeader errorHeader">
-                        {this.props.failure.response.data}
-                    </Paper>
-                    :
-                    null
-                }
-                <Paper className="form" zDepth={2}>
-                    <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Sign Up</h1>
-                        <Field
-                            name="name"
-                            component={renderTextField}
-                            label="Full Name"
-                        /><br/>
-                        <Field
-                            name="username"
-                            component={renderTextField}
-                            label="Username"
-                        /><br/>
-                        <Field
-                            name="email"
-                            component={renderTextField}
-                            label="Email"
-                        /><br/>
-                        <Field
-                            name="password"
-                            component={renderPasswordField}
-                            label="Password"
-                        /><br/>
-                        <Field
-                            name="password2"
-                            component={renderPasswordField}
-                            label="Confirm Password"
-                        /><br/>
-                        <RaisedButton type="submit"
-                                      label="Sign up"
-                                      primary={true}
-                                      className="button"
-                        />
-                    </form>
-                    { this.props.loadingCreateUser ? <CircularProgress /> : "" }
-                </Paper>
+            <div className="fullHeight greenToBlue formContainer">
+                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightWhiteForm">
+                    {this.state.email != "" && this.props.userPosted ?
+                        <div className="center">
+                            <h1>Verify your email address</h1>
+                            <p>We sent {this.state.email} a verification link. Check your junk folder if you can{"'"}t find our email.</p>
+                        </div>
+                        :
+                        <div>
+                            <form onSubmit={this.handleSubmit.bind(this)}>
+                                <h1>Sign Up</h1>
+                                <div className="inputContainer">
+                                    <div className="fieldWhiteSpace"/>
+                                    <Field
+                                        name="name"
+                                        component={renderTextField}
+                                        label="Full Name"
+                                    /><br/>
+                                </div>
+                                <div className="inputContainer">
+                                    <div className="fieldWhiteSpace"/>
+                                    <Field
+                                        name="email"
+                                        component={renderTextField}
+                                        label="Email"
+                                    /><br/>
+                                </div>
+                                <div className="inputContainer">
+                                    <div className="fieldWhiteSpace"/>
+                                    <Field
+                                        name="password"
+                                        component={renderPasswordField}
+                                        label="Password"
+                                    /><br/>
+                                </div>
+                                <div className="inputContainer">
+                                    <div className="fieldWhiteSpace"/>
+                                    <Field
+                                        name="password2"
+                                        component={renderPasswordField}
+                                        label="Confirm Password"
+                                    /><br/>
+                                </div>
+                                <button
+                                    type="submit"
+                                    className="formSubmitButton"
+                                >
+                                    Sign Up
+                                </button>
+                            </form>
+                            { this.props.loadingCreateUser ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
+                        </div>
+                    }
+                </div>
             </div>
         );
     }
@@ -153,15 +176,16 @@ class Signup extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         postUser,
-        getUsers
+        getUsers,
+        onSignUpPage
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         formData: state.form,
-        failure: state.users.failure,
         loadingCreateUser: state.users.loadingSomething,
+        userPosted: state.users.userPosted
     };
 }
 

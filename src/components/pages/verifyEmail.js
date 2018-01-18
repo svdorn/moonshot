@@ -4,6 +4,8 @@ import { verifyEmail } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { Paper, RaisedButton } from 'material-ui';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
+
 class VerifyEmail extends Component {
 
     onVerifyClick() {
@@ -12,25 +14,19 @@ class VerifyEmail extends Component {
     }
 
     render() {
-        console.log("props: ", this.props);
 
         return(
-            <div>
-                {this.props.verifyEmailErrorMsg !== undefined ?
-                    <Paper className="messageHeader errorHeader">
-                        {this.props.verifyEmailErrorMsg}
-                    </Paper>
-                    :
-                    null
-                }
-                <Paper className="form" zDepth={2}>
+            <div className="fullHeight greenToBlue center">
+                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightWhiteForm">
                     <h1>Verify Email</h1>
-                    <RaisedButton
-                        label="Verify my account"
-                        primary={true}
+                    <button
+                        className="semiOpaqueWhiteBlueButton smallText2"
                         onClick={this.onVerifyClick.bind(this)}
-                    />
-                </Paper>
+                    >
+                        Verify my account
+                    </button>
+                </div>
             </div>
         );
     }
@@ -43,9 +39,7 @@ function mapDispatchToProps(dispatch) {
 }
 
 function mapStateToProps(state) {
-    return {
-        verifyEmailErrorMsg: state.users.verifyEmailErrorMsg
-    };
+    return {};
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(VerifyEmail);

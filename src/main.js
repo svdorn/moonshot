@@ -2,7 +2,9 @@
 import React, { Component } from 'react';
 import Menu from './components/menu';
 import Footer from './components/footer';
+import Notification from './components/notification'
 
+import { Paper } from 'material-ui'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {
@@ -16,40 +18,44 @@ import { getUserFromSession } from './actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 
-const muiTheme = getMuiTheme({
+let theme = {
+    userAgent: 'all',
     spacing: spacing,
-    fontFamily: 'Roboto, sans-serif',
+    fontFamily: 'Century Gothic, CenturyGothic, AppleGothic, sans-serif',
     palette: {
         primary1Color: '#00c3ff',
         primary2Color: lightBlue500,
         primary3Color: grey400,
-        accent1Color: white,
-        accent2Color: grey100,
+        accent1Color: lightBlue500,
+        accent2Color: 'rgba(0,0,0,0)',
         accent3Color: grey500,
         textColor: darkBlack,
-        alternateTextColor: white,
+        alternateTextColor: darkBlack,
         canvasColor: white,
         borderColor: grey300,
         disabledColor: fade(darkBlack, 0.3),
         pickerHeaderColor: '#00c3ff',
         clockCircleColor: fade(darkBlack, 0.07),
         shadowColor: fullBlack,
-    },
-});
+    }
+}
+
+let muiTheme = getMuiTheme(theme);
 
 class Main extends Component {
     componentDidMount() {
         this.props.getUserFromSession();
+        //this.props.getUserAgent();
     }
 
     render() {
-        console.log("here");
         if (this.props.isFetching) {
-            //return <Spinner text="Loading..." style="fa fa-spinner fa-spin" />
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
-                    <Menu/>
-                    <Footer/>
+                    <div>
+                        <Menu/>
+                        <Footer/>
+                    </div>
                 </MuiThemeProvider>
             );
         }
@@ -57,9 +63,12 @@ class Main extends Component {
         else {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
-                    <Menu/>
+                    <div>
+                        <Menu/>
+                        <Notification/>
                         { this.props.children }
-                    <Footer/>
+                        <Footer/>
+                    </div>
                 </MuiThemeProvider>
             );
         }
@@ -75,7 +84,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        isFetching: state.users.isFetching
+        isFetching: state.users.isFetching,
+        notification: state.users.notification,
     };
 }
 

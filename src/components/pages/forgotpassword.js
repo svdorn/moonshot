@@ -1,11 +1,11 @@
 "use strict"
-import React, { Component } from 'react';
-import { TextField, RaisedButton, Paper, Snackbar, CircularProgress } from 'material-ui';
-import { forgotPassword } from '../../actions/usersActions';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Field, reduxForm } from 'redux-form';
-
+import React, {Component} from 'react';
+import {TextField, RaisedButton, Paper, Snackbar, CircularProgress} from 'material-ui';
+import {forgotPassword} from '../../actions/usersActions';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {Field, reduxForm} from 'redux-form';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 const styles = {
     floatingLabelStyle: {
@@ -58,45 +58,32 @@ class ForgotPassword extends Component {
         }
 
         this.props.forgotPassword(vals);
-
-        console.log("here");
-        console.log("current user is" + this.props.currentUser);
     }
 
     render() {
-        console.log("props are:", this.props);
         return (
-            <div>
-                {this.props.forgotPassSuccess ?
-                    <Paper className="messageHeader infoHeader">
-                        {this.props.forgotPassSuccess}
-                    </Paper>
-                    :
-                    null
-                }
-                {this.props.forgotPassFailure ?
-                    <Paper className="messageHeader errorHeader">
-                        {this.props.forgotPassFailure.response.data}
-                    </Paper>
-                    :
-                    null
-                }
-                <Paper className="form" zDepth={2}>
+            <div className="fullHeight greenToBlue formContainer">
+                <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
+                <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Forgot Password</h1>
-                        <Field
-                            name="email"
-                            component={renderTextField}
-                            label="Email"
-                        /><br/>
-                        <RaisedButton type="submit"
-                                      label="Send Email"
-                                      primary={true}
-                                      className="button"
-                        />
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
+                            <Field
+                                name="email"
+                                component={renderTextField}
+                                label="Email"
+                            /><br/>
+                        </div>
+                        <button
+                            type="submit"
+                            className="formSubmitButton"
+                        >
+                            Send Email
+                        </button>
                     </form>
-                    { this.props.loading ? <CircularProgress /> : "" }
-                </Paper>
+                    {this.props.loading ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
+                </div>
             </div>
         );
     }
@@ -112,14 +99,12 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
-        forgotPassSuccess: state.users.forgotPassSuccess,
-        forgotPassFailure: state.users.forgotPassFailure,
         loading: state.users.loadingSomething
     };
 }
 
 ForgotPassword = reduxForm({
-    form:'forgot',
+    form: 'forgot',
     validate,
 })(ForgotPassword);
 
