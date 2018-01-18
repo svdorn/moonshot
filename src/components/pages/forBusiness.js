@@ -310,7 +310,10 @@ class ForBusiness extends Component {
                     </div>
 
                     <div className="forBusinessLineWithCircles">
-                        
+                        <div className="forBusinessLine" />
+                        <div className="forBusinessCircle" />
+                        <div className="forBusinessCircle" />
+                        <div className="forBusinessCircle" />
                     </div>
 
 
@@ -393,7 +396,7 @@ class ForBusiness extends Component {
 
                 <div className="homepageTrajectory" style={{marginBottom: '40px'}}>
                     <div className="smallText3" style={styles.resumeTitle}><b>A Resum&eacute; Can{"'"}t Do This.</b></div>
-                    <div className="homePageTrajectoryTextLeft">
+                    <div className="forBusinessTrajectoryTextLeft">
                         <div style={styles.bottomList}>
                             <div style={styles.bottomListItem}>
                                 <img src="/icons/Project.png" style={styles.bottomListImg}/>
