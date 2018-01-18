@@ -277,7 +277,7 @@ class ForBusiness extends Component {
                 </div>
 
                 <div style={{marginTop: '60px'}}>
-                    <div className="center mediumText">
+                    <div className="center mediumTextDoubleShrink">
                         <b>Top College Students and Recent Graduates<br/> Competing to Work for You.</b>
                     </div>
                     <div style={styles.horizList}>

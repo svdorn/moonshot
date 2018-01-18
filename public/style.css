@@ -610,6 +610,7 @@ button.link {
 
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
+.mediumTextDoubleShrink { font-size: 40px; }
 .smallText3 { font-size: 30px; }
 .smallText4 { font-size: 25px; }
 .smallText2 { font-size: 20px; }
@@ -1123,6 +1124,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 1000px) {
+    .mediumTextDoubleShrink { font-size: 30px; }
+
     .videoContainer {
         width: 90%;
         margin-left: 5%;
@@ -1357,7 +1360,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .infoBox {
         padding-top: 170px;
     }
-    .mediumText {
+    .mediumText, .mediumTextDoubleShrink {
         font-size: 25px;
     }
 
@@ -1371,7 +1374,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 
     .outlineButton { font-size: 20px; }
-    
+
     #exampleSkillsContainer {
         width: 95%;
         max-height: 460px;
