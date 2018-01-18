@@ -1036,13 +1036,13 @@ button.link {
     color: var(--moonshotBlue);
 }
 
-.homepageTrajectoryTextLeft > div,
-.homepageTrajectoryTextRight > div {
+.homepageTrajectoryTextLeftDiv,
+.homepageTrajectoryTextRightDiv {
     float: right;
     margin-left: 110px;
 }
-.forBusinessTrajectoryTextLeft > div,
-.forBusinessTrajectoryTextRight > div {
+.forBusinessTrajectoryTextLeftDiv,
+.forBusinessTrajectoryTextRightDiv {
     float: right;
 }
 
@@ -1190,10 +1190,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextRightIcon {
         visibility: hidden;
     }
-    .homepageTrajectoryTextLeft > div {
+    .homepageTrajectoryTextLeftDiv {
         margin-left: 0px;
     }
-    .homepageTrajectoryTextRight > div {
+    .homepageTrajectoryTextRightDiv {
         margin-right: 0px;
     }
     .forBusinessTrajectoryTextLeft {
@@ -1285,7 +1285,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 80%;
         margin: auto;
     }
-    .homepageTrajectoryTextLeft > div, .homepageTrajectoryTextRight > div {
+    .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
         text-align: left;
         padding-left: 120px;
         margin-left: 0px;
@@ -1456,8 +1456,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextRightIcon {
         display: none;
     }
-    .homepageTrajectoryTextLeft > div,
-    .homepageTrajectoryTextRight > div {
+    .homepageTrajectoryTextLeftDiv,
+    .homepageTrajectoryTextRightDiv {
         padding-left: 0px;
     }
 }

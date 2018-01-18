@@ -221,7 +221,7 @@ class Home extends Component{
                                 title="Lightbulb icon"
                                 className="homepageTrajectoryTextRightIcon"
                             />
-                            <div className="smallText2">
+                            <div className="smallText2 homepageTrajectoryTextLeftDiv">
                                 <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
                                 Our pathways are built with
                                 leading companies and feature skills
@@ -239,20 +239,20 @@ class Home extends Component{
                     <br/>
 
                     <div className="homepageTrajectory">
-                    <div className="homepageTrajectoryTextRight">
-                        <img
-                            src="/icons/Person.png"
-                            alt="Person icon"
-                            title="Person icon"
-                            className="homepageTrajectoryTextRightIcon"
-                        />
-                        <div className="smallText2">
-                            <h2 className="blueText">Build Your Profile</h2>
-                            Add your skills, completed projects and
-                            finished pathways. Prove yourself through
-                            your profile.
+                        <div className="homepageTrajectoryTextRight">
+                            <img
+                                src="/icons/Person.png"
+                                alt="Person icon"
+                                title="Person icon"
+                                className="homepageTrajectoryTextRightIcon"
+                            />
+                            <div className="smallText2 homepageTrajectoryTextRightDiv">
+                                <h2 className="blueText">Build Your Profile</h2>
+                                Add your skills, completed projects and
+                                finished pathways. Prove yourself through
+                                your profile.
+                            </div>
                         </div>
-                    </div>
                         <div className="homepageTrajectoryImagesLeft">
                             <div className="homepageImgBackgroundLeft blueGradient" />
                             <img
@@ -271,7 +271,7 @@ class Home extends Component{
                                 title="Badge icon"
                                 className="homepageTrajectoryTextLeftIcon"
                             />
-                            <div className="smallText2">
+                            <div className="smallText2 homepageTrajectoryTextLeftDiv">
                                 <h2 className="purpleText">Get Hired By Companies<br/>Leading the future</h2>
                                 Compete for open positions with
                                 sponsor employers by excelling in
