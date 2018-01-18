@@ -19,13 +19,15 @@ class error404 extends Component {
         }
         return (
             <div className="fullHeight greenToBlue" style={{textAlign:"center"}}>
-                <Paper className="form" zDepth={2}>
-                    <h1 className="bigText">404</h1>
-                    <h2>Page not found</h2>
-                    You are lost but we can show you the way!
-                    <p  className="clickable blueText"
+                <Paper className="form bigForm semiOpaquePaper blueTextImportant smallText2" zDepth={2}>
+                    <img
+                        src="/images/404.png"
+                        id="image404"
+                    /><br/>
+                    You seem a little lost,<br/> but we can show you the way!
+                    <p  className="clickable blueText underline"
                         onClick={() => this.goTo(route)}>
-                        Follow me!
+                        Follow Me
                     </p>
                 </Paper>
             </div>

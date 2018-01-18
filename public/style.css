@@ -1087,6 +1087,24 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .above600only {
     display: initial;
 }
+.semiOpaquePaper {
+    background-color: rgba(255, 255, 255, .6) !important;
+}
+.form.bigForm {
+    width: 80%;
+    max-width: 800px;
+}
+#image404 {
+    width: 80%;
+    max-width: 500px;
+    margin-left: -2%;
+    margin-bottom: 15px;
+}
+
+.blueTextImportant {
+    color: var(--moonshotBlue) !important;
+}
+
 
 /* decorative triangles */
 
@@ -1306,6 +1324,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .wideScreenMenuItem {
         display: none !important;
+    }
+    .smallText2 {
+        font-size: 15px;
     }
 }
 

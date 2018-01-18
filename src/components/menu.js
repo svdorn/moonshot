@@ -71,7 +71,7 @@ class Menu extends Component {
             return null;
         }
 
-        let moonshotLogo = "/images/MoonshotTempLogo.png";
+        let moonshotLogo = "/images/OfficialLogoWhite.png";
         let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
         let menuItemClass = "menuItem clickable noWrap whiteText wideScreenMenuItem"
         if (this.props.blueHeader) {
