@@ -313,10 +313,14 @@ class ForBusiness extends Component {
                         Scholarships made for your company.
                     </div>
 
+                    <div className="forBusinessLineWithCircles">
+                        
+                    </div>
+
 
                     <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextLeft">
-                            <div className="smallText4 homepageTrajectoryTextLeftDiv">
+                        <div className="homepageTrajectoryTextLeft forBusiness">
+                            <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
                                 <h2 className="blueText"><b>What Skills Are You Hiring For?</b></h2>
                                 UX Design, Data Science, Full Stack
                                 Development, Marketing, Adobe...
@@ -333,8 +337,8 @@ class ForBusiness extends Component {
                     <br/>
 
                     <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextRight">
-                            <div className="smallText4 homepageTrajectoryTextRightDiv">
+                        <div className="homepageTrajectoryTextRight forBusiness">
+                            <div className="smallText4 homepageTrajectoryTextRightDiv forBusiness">
                                 <h2 className="greenText"><b>Course Pathways Curated<br/>to the Skills You Need.</b>
                                 </h2>
                                 Expert led, interactive learning
@@ -353,8 +357,8 @@ class ForBusiness extends Component {
                     <br/>
 
                     <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextLeft">
-                            <div className="smallText4 homepageTrajectoryTextLeftDiv">
+                        <div className="homepageTrajectoryTextLeft forBusiness">
+                            <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
                                 <h2 className="purpleText"><b>Sponsor Students</b></h2>
                                 Moonshot can source the talent,
                                 you can sponsor your pool
@@ -371,8 +375,8 @@ class ForBusiness extends Component {
                     </div>
 
                     <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextRight">
-                            <div className="smallText4 homepageTrajectoryTextRightDiv">
+                        <div className="homepageTrajectoryTextRight forBusiness">
+                            <div className="smallText4 homepageTrajectoryTextRightDiv forBusiness">
                                 <h2 className="blueText"><b>Evaluate for Hire</b></h2>
                                 Comprehensive data on each candidate
                                 from skill assessments, qualitative

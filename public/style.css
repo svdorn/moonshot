@@ -957,6 +957,10 @@ button.link {
     width: 54%;
     overflow: auto;
 }
+.homepageTrajectoryTextLeft.forBusiness,
+.homepageTrajectoryTextRight.forBusiness {
+    width: 45%;
+}
 .homepageTrajectoryTextLeftIcon,
 .homepageTrajectoryTextRightIcon {
     height: 90px;
@@ -1040,6 +1044,11 @@ button.link {
 .homepageTrajectoryTextRightDiv {
     float: right;
     margin-left: 110px;
+}
+.homepageTrajectoryTextLeftDiv.forBusiness,
+.homepageTrajectoryTextRightDiv.forBusiness {
+    margin-left: 0px;
+    text-align: center;
 }
 .forBusinessTrajectoryTextLeftDiv,
 .forBusinessTrajectoryTextRightDiv {
@@ -1290,6 +1299,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         padding-left: 120px;
         margin-left: 0px;
         margin-bottom: 20px;
+    }
+    .homepageTrajectoryTextLeftDiv.forBusiness, .homepageTrajectoryTextRightDiv.forBusiness {
+        padding-left: 120px;
     }
     .homepageTrajectoryTextLeftIcon,
     .homepageTrajectoryTextRightIcon {
