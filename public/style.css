@@ -1116,6 +1116,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 /* end decorative triangles */
 
+.above800fade {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity .5s linear;
+}
+
 @media only screen and (max-width: 1000px) {
     .videoContainer {
         width: 90%;
@@ -1193,6 +1199,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 @media only screen and (max-width: 800px) {
     .above800only {
         display: none;
+    }
+
+    .above800fade {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s .5s, opacity .5s linear;
     }
 
     #exampleSkillsContainer { width: 85%; }
