@@ -1062,7 +1062,7 @@ button.link {
 #exampleSkillsContainer {
     width: 70%;
     margin: auto;
-    max-height: 460px;
+    max-height: 450px;
     overflow-y: hidden;
     padding-right: 20px;
 }
@@ -1194,6 +1194,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .above800only {
         display: none;
     }
+
+    #exampleSkillsContainer { width: 85%; }
 
     #discoverSearchBarWideScreen { display: none !important; }
     #discoverSearchBarMedScreen {
@@ -1357,6 +1359,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     #exampleSkillsContainer {
         width: 95%;
+        max-height: 460px;
     }
 
 }
