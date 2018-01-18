@@ -272,7 +272,7 @@ class ForBusiness extends Component {
                         </div>
 
                         <div className="horizListFull">
-                            <div className="horizListSpacer" style={{marginLeft: "12%"}}>
+                            <div className="horizListSpacer" style={{marginLeft: "5%", marginRight: '5%'}}>
                                 <div className="horizListText">
                                     <img
                                         src="/icons/Evaluate.png"
