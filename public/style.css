@@ -1062,7 +1062,7 @@ button.link {
 #exampleSkillsContainer {
     width: 70%;
     margin: auto;
-    max-height: 450px;
+    max-height: 460px;
     overflow-y: hidden;
     padding-right: 20px;
 }
@@ -1074,9 +1074,18 @@ button.link {
     margin-left: 60px;
 }
 
+.bigCreateYourFreeAccount {
+    margin-top: 30px;
+    padding:10px 50px 4px;
+}
+
 .pathwayPreviewLi { vertical-align: top; }
 li.pathwayPreviewLi.explorePathwayPreview { margin-bottom: 40px; }
 li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
+
+.above600only {
+    display: initial;
+}
 
 /* decorative triangles */
 
@@ -1284,12 +1293,17 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 600px) {
+    .above600only { display: none; }
     #discoverSearchBarMedScreen > div:nth-child(4) {
         display: inherit;
         margin-top: -30px;
     }
     #discoverSearchBarMedScreen > div:nth-child(5) {
         margin-bottom: 25px;
+    }
+    .bigCreateYourFreeAccount {
+        font-size: 20px;
+        padding: 2px 20px 0px;
     }
 }
 
@@ -1326,6 +1340,19 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .mediumText {
         font-size: 25px;
     }
+
+    .gradientBorderPurpleToPinkChip {
+        height: 30px;
+    }
+    .gradientBorderPurpleToPinkChip > div {
+        font-size: 15px;
+        padding-top: 2px;
+
+    }
+    #exampleSkillsContainer {
+        width: 95%;
+    }
+
 }
 
 @media only screen and (min-width: 701px) {

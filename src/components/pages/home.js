@@ -306,10 +306,9 @@ class Home extends Component{
                         : null
                     }
                     <button
-                        className="outlineButton whiteBlueButton"
-                        style={{marginTop:"30px", padding:"10px 50px 4px", lineHeight:"35px"}}
+                        className="outlineButton whiteBlueButton bigCreateYourFreeAccount"
                         onClick={() => this.goTo('/signup')}>
-                        Create Your <br/>Free Account
+                        Create Your <div className="above600only"><br/></div>Free Account
                     </button>
                 </div>
 
