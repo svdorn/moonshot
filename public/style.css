@@ -957,8 +957,8 @@ button.link {
     width: 54%;
     overflow: auto;
 }
-.homepageTrajectoryTextLeft > img,
-.homepageTrajectoryTextRight > img {
+.homepageTrajectoryTextLeftIcon,
+.homepageTrajectoryTextRightIcon {
     height: 90px;
     position: absolute;
     margin-top: 45px;
@@ -1186,8 +1186,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextLeft {
         width: 40%;
     }
-    .homepageTrajectoryTextLeft > img,
-    .homepageTrajectoryTextRight > img {
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
         visibility: hidden;
     }
     .homepageTrajectoryTextLeft > div {
@@ -1291,12 +1291,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         margin-left: 0px;
         margin-bottom: 20px;
     }
-    .homepageTrajectoryTextLeft > img,
-    .homepageTrajectoryTextRight > img {
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
         visibility: initial;
     }
-    .homepageTrajectoryTextLeft > img,
-    .homepageTrajectoryTextRight > img {
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
         margin-left: -40%;
     }
     .forBusinessTrajectoryTextLeft,
@@ -1452,8 +1452,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 325px) {
-    .homepageTrajectoryTextLeft > img,
-    .homepageTrajectoryTextRight > img {
+    .homepageTrajectoryTextLeftIcon,
+    .homepageTrajectoryTextRightIcon {
         display: none;
     }
     .homepageTrajectoryTextLeft > div,

@@ -312,6 +312,8 @@ class ForBusiness extends Component {
                         A scholarship for potential hires to learn the skills you need.<br/>
                         Scholarships made for your company.
                     </div>
+
+
                     <div className="homepageTrajectory">
                         <div className="forBusinessTrajectoryTextLeft">
                             <div className="smallText4">

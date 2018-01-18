@@ -219,6 +219,7 @@ class Home extends Component{
                                 src="/icons/Lightbulb.png"
                                 alt="Lightbulb"
                                 title="Lightbulb icon"
+                                className="homepageTrajectoryTextRightIcon"
                             />
                             <div className="smallText2">
                                 <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
@@ -243,6 +244,7 @@ class Home extends Component{
                             src="/icons/Person.png"
                             alt="Person icon"
                             title="Person icon"
+                            className="homepageTrajectoryTextRightIcon"
                         />
                         <div className="smallText2">
                             <h2 className="blueText">Build Your Profile</h2>
@@ -267,6 +269,7 @@ class Home extends Component{
                                 src="/icons/Badge.png"
                                 alt="Badge icon"
                                 title="Badge icon"
+                                className="homepageTrajectoryTextLeftIcon"
                             />
                             <div className="smallText2">
                                 <h2 className="purpleText">Get Hired By Companies<br/>Leading the future</h2>
