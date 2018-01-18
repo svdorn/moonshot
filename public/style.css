@@ -999,6 +999,7 @@ button.link {
 }
 .homepageTrajectoryImagesLeft > img,
 .homepageTrajectoryImagesRight > img {
+    transition: all 0.2s ease-in;
     height: 270px;
     z-index: 10;
     width: 400px;
@@ -1014,6 +1015,7 @@ button.link {
 }
 .homepageImgBackgroundLeft,
 .homepageImgBackgroundRight {
+    transition: all 0.2s ease-in;
     height: 270px;
     position: absolute;
     width: 400px;
@@ -1200,37 +1202,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .forBusinessCircle:nth-child(4) { top: 665px; }
 .forBusinessCircle:nth-child(5) { bottom: 0px; }
 
-@media only screen and (max-width: 1000px) {
-    .mediumTextDoubleShrink { font-size: 30px; }
-
-    .above1000fade {
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0s .5s, opacity .5s linear;
-    }
-
-    .videoContainer {
-        width: 90%;
-        margin-left: 5%;
-        min-width: 800px;
-        padding-top: 56.25%
-    }
-    .scrollBarAndContactUs {
-        margin-left: -800px;
-    }
-    .drawerOpener {
-        visibility: visible;
-        position: relative;
-        width: 150px;
-        display: block !important;
-        margin: 10px auto;
-        left: 0;
-    }
-    .overviewAndCommentBox, .pathwayContent {
-        width: 100%;
-    }
-}
-
 @media only screen and (max-width: 1050px) {
     .homepageTrajectoryTextLeft {
         width: 40%;
@@ -1272,17 +1243,59 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 }
 
-@media only screen and (min-width: 501px) {
-    .under500only { display: none; }
-    .homePathwaysTitle {
-        margin-top: 0px;
-        font-size: 60px;
+@media only screen and (max-width: 1000px) {
+    .mediumTextDoubleShrink { font-size: 30px; }
+
+    .above1000fade {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s .5s, opacity .5s linear;
     }
-    .homePathwaysDesc {
-        max-width: 700px;
+
+    .homepageTrajectoryImagesLeft > img,
+    .homepageTrajectoryImagesRight > img,
+    .homepageImgBackgroundLeft,
+    .homepageImgBackgroundRight {
+        height: 216px;
+        width: 320px;
+        transition: all 0.2s ease-out;
+    }
+    .homepageTrajectoryImagesLeft,
+    .homepageTrajectoryImagesRight {
+        margin-top: 30px;
+    }
+
+    .smallText4 { font-size: 20px; }
+    .forBusiness > h2 > b {
+        font-size: 25px;
+    }
+
+    .videoContainer {
+        width: 90%;
+        margin-left: 5%;
+        min-width: 800px;
+        padding-top: 56.25%
+    }
+    .scrollBarAndContactUs {
+        margin-left: -800px;
+    }
+    .drawerOpener {
+        visibility: visible;
+        position: relative;
+        width: 150px;
+        display: block !important;
+        margin: 10px auto;
+        left: 0;
+    }
+    .overviewAndCommentBox, .pathwayContent {
+        width: 100%;
     }
 }
-/* mobile */
+
+@media only screen and (max-width: 900px) {
+
+}
+
 @media only screen and (max-width: 800px) {
     .above800only {
         display: none;
@@ -1299,7 +1312,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .horizListText {
         font-size: 15px;
     }
-
 
     #exampleSkillsContainer { width: 85%; }
 
@@ -1341,7 +1353,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         margin-bottom: 20px;
     }
     .homepageTrajectoryTextLeftDiv.forBusiness, .homepageTrajectoryTextRightDiv.forBusiness {
-        padding-left: 120px;
+        padding-left: 20%;
     }
     .homepageTrajectoryTextLeftIcon,
     .homepageTrajectoryTextRightIcon {
@@ -1365,12 +1377,43 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .forBusinessTrajectoryTextRight > img {
         visibility: initial;
     }
-    .forBusinessTrajectoryTextLeft > img,
-    .forBusinessTrajectoryTextRight > img {
+    .homepageTrajectoryTextLeft.forBusiness,
+    .homepageTrajectoryTextRight.forBusiness {
+        /* margin-top: -30px; */
+        margin-left: 0px;
+        width: 100%;
+    }
+    .homepageTrajectoryTextLeftDiv.forBusiness,
+    .homepageTrajectoryTextRightDiv.forBusiness {
+        text-align: left;
+        margin-bottom: 0px;
     }
     .homePathwaysDesc {
         font-size: 15px;
         padding: 0px 10%;
+    }
+    .forBusinessLineWithCirclesContainer {
+        left: 12%;
+        right: initial;
+        margin: 25px 0 0;
+    }
+    .forBusinessCircle:nth-child(3) { top: 155px; }
+    .forBusinessCircle:nth-child(4) { top: 312px; }
+    .forBusinessLine { height: 450px; }
+    .homepageTrajectory.forBusiness {
+        height: initial;
+    }
+    .homepageTrajectoryTextLeft.forBusiness {
+        margin-top: 0;
+    }
+}
+
+@media only screen and (min-width: 701px) {
+    .smallScreenMenu {
+        display: none !important;
+    }
+    .wideScreenMenuItem {
+        display: inherit;
     }
 }
 
@@ -1421,6 +1464,17 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .mediumTextDoubleShrink {
         font-size: 20px;
+    }
+}
+
+@media only screen and (min-width: 501px) {
+    .under500only { display: none; }
+    .homePathwaysTitle {
+        margin-top: 0px;
+        font-size: 60px;
+    }
+    .homePathwaysDesc {
+        max-width: 700px;
     }
 }
 
@@ -1482,14 +1536,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 }
 
-@media only screen and (min-width: 701px) {
-    .smallScreenMenu {
-        display: none !important;
-    }
-    .wideScreenMenuItem {
-        display: inherit;
-    }
-}
 @media only screen and (max-width: 375px) {
     .smallScreenMenu {
         margin-right: 0px;

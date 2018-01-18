@@ -309,7 +309,7 @@ class ForBusiness extends Component {
                         Scholarships made for your company.
                     </div>
 
-                    <div className="forBusinessLineWithCirclesContainer above1000fade">
+                    <div className="forBusinessLineWithCirclesContainer">
                         <div className="forBusinessLineWithCircles">
                             <div className="forBusinessLine" />
                             <div className="forBusinessCircle" />
@@ -320,10 +320,10 @@ class ForBusiness extends Component {
                     </div>
 
 
-                    <div className="homepageTrajectory">
+                    <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
-                                <h2 className="blueText"><b>What Skills Are You Hiring For?</b></h2>
+                                <h2 className="blueText"><b>What Skills Are You <div className="above800only br"><br/></div> Hiring For?</b></h2>
                                 UX Design, Data Science, Full Stack
                                 Development, Marketing, Adobe...
                             </div>
@@ -338,7 +338,7 @@ class ForBusiness extends Component {
 
                     <br/>
 
-                    <div className="homepageTrajectory">
+                    <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextRight forBusiness">
                             <div className="smallText4 homepageTrajectoryTextRightDiv forBusiness">
                                 <h2 className="greenText"><b>Course Pathways Curated<br/>to the Skills You Need.</b>
@@ -358,7 +358,7 @@ class ForBusiness extends Component {
 
                     <br/>
 
-                    <div className="homepageTrajectory">
+                    <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
                                 <h2 className="purpleText"><b>Sponsor Students</b></h2>
@@ -376,7 +376,7 @@ class ForBusiness extends Component {
                         </div>
                     </div>
 
-                    <div className="homepageTrajectory">
+                    <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextRight forBusiness">
                             <div className="smallText4 homepageTrajectoryTextRightDiv forBusiness">
                                 <h2 className="blueText"><b>Evaluate for Hire</b></h2>
