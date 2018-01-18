@@ -1308,14 +1308,20 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 500px) {
-    .homepageTrajectoryTextLeft > div,
-    .homepageTrajectoryTextRight > div {
-        text-align: center;
-        padding-left: 0px;
+    .homepageTrajectory { margin-bottom: -65px; }
+    .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
+        transform: scale(.7);
+        width: 120%;
+        margin-left: -10%;
     }
-    .homepageTrajectoryTextLeft > img,
-    .homepageTrajectoryTextRight > img {
-        display: none;
+    /* move icons over to the left */
+    .homepageTrajectoryContainer > div:nth-child(1) > div > img,
+    .homepageTrajectoryContainer > div:nth-child(3) > div > img {
+        margin-left: -51%;
+    }
+    /* move the third icon less to the left since it is smaller */
+    .homepageTrajectoryContainer > div:nth-child(5) > div > img {
+        margin-left: -48%;
     }
     .forBusinessTrajectoryTextLeft > div,
     .forBusinessTrajectoryTextRight > div {
@@ -1373,6 +1379,17 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .footerMoonshotLogo {
         width: 240px;
         height: 80px;
+    }
+}
+
+@media only screen and (max-width: 325px) {
+    .homepageTrajectoryTextLeft > img,
+    .homepageTrajectoryTextRight > img {
+        display: none;
+    }
+    .homepageTrajectoryTextLeft > div,
+    .homepageTrajectoryTextRight > div {
+        padding-left: 0px;
     }
 }
 

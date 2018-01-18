@@ -212,7 +212,7 @@ class Home extends Component{
                     </div>
                 </div>
 
-                <div style={{marginTop:"30px"}}>
+                <div className="homepageTrajectoryContainer" style={{marginTop:"30px"}}>
                     <div className="homepageTrajectory">
                         <div className="homepageTrajectoryTextLeft">
                             <img
