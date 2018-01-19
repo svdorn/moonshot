@@ -292,7 +292,7 @@ class ForBusiness extends Component {
                 <div style={{marginTop: '60px', minWidth: "215px"}}>
                     <div className="center smallText2" style={{marginBottom:'40px',width:'90%',marginLeft:"5%"}}>
                         <h1 className="purpleText h1Shrink"><b>Our Scholarships to Hire Program</b></h1>
-                        A scholarship for potential hires to learn the skills you need.<br/>
+                        A scholarship for potential hires <div className="under500only br"><br/></div>to learn the skills you need.<br/>
                         Scholarships made for your company.
                     </div>
 
@@ -382,7 +382,7 @@ class ForBusiness extends Component {
                     </div>
                 </div>
 
-                <div className="homepageSeparatorContainer" style={{margin:"60px 0 0"}}>
+                <div className="homepageSeparatorContainer marginTopOnDesktop">
                     <div className="homepageSeparator" />
                 </div>
 

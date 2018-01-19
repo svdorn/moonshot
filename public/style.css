@@ -1237,6 +1237,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .forBusinessCircle:nth-child(5) { bottom: 0px; }
 
 .forBusinessBox { padding-top: 38px; }
+.marginTopOnDesktop { margin-top: 60px; }
 
 @media only screen and (max-width: 1050px) {
     .homepageTrajectoryTextLeft {
@@ -1546,6 +1547,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .h1Shrink { font-size: 20px; }
     .smallText { font-size: 12px;  }
     .homepageSeparator { transform: scale(3, .02); }
+    .marginTopOnDesktop { margin-top: 0px;}
 
     .homepageTrajectory { margin-bottom: -65px; }
     .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
@@ -1649,6 +1651,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 95%;
         max-height: 460px;
     }
+
+    .aResumeCantDoThis { margin-top: 90px; }
 }
 
 @media only screen and (min-width: 400px) {
