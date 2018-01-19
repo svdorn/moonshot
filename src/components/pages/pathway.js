@@ -273,14 +273,14 @@ class Pathway extends Component {
             //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
             <div className="jsxWrapper">
                 {pathway.sponsor !== undefined ?
-                    <div>
+                    <div style={{minWidth:"250px"}}>
                         <div className="fullHeight purpleGradient">
 
 
                             <div className="infoBox whiteText mediumText" style={{zIndex: "20"}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
                                 <button className="outlineButton"
-                                        style={{backgroundColor: "transparent", border: "2px solid white"}}
+                                        style={{backgroundColor: "#9B6BFB", border: "2px solid white"}}
                                         onClick={this.handleClick.bind(this)}>
                                     {"Sign Up"}
                                 </button>
@@ -302,6 +302,7 @@ class Pathway extends Component {
                                 style={{position: 'absolute', bottom: 0, width: '100%'}}>
                                 <li>
                                     <img src="/icons/ClockWhite.png" className="pathwayLandingIcons"/>
+                                    <div className="under500only br"><br/></div>
                                     <div style={{display: 'inline-block'}}>
                                         <i>Time</i><br/>
                                         {pathway.estimatedCompletionTime}
@@ -309,6 +310,7 @@ class Pathway extends Component {
                                 </li>
                                 <li>
                                     <img src="/icons/CalendarWhite.png" className="pathwayLandingIcons"/>
+                                    <div className="under500only br"><br/></div>
                                     <div style={{display: 'inline-block'}}>
                                         <i>Complete By</i><br/>
                                         {formattedDeadline}
@@ -316,6 +318,7 @@ class Pathway extends Component {
                                 </li>
                                 <li>
                                     <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons"/>
+                                    <div className="under500only br"><br/></div>
                                     <div style={{display: 'inline-block'}}>
                                         <i>Cost</i><br/>
                                         {pathway.price}
