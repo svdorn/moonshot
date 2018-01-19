@@ -251,7 +251,7 @@ class ForBusiness extends Component {
                                         src="/icons/Key.png"
                                         style={styles.horizListIcon}
                                     /><br/>
-                                    <b>Established Pipeline</b><br/>
+                                    <b>Established <div className="under500only br"><br/></div>Pipeline</b><br/>
                                     Instant access to a pool
                                     of top tier talent.
                                 </div>
@@ -265,7 +265,7 @@ class ForBusiness extends Component {
                                         src="/icons/Evaluate.png"
                                         style={styles.horizListIcon}
                                     /><br/>
-                                    <b>Evaluative Metrics</b><br/>
+                                    <b>Evaluative <div className="under500only br"><br/></div>Metrics</b><br/>
                                     Skill evaluation curated to
                                     your company{"'"}s needs.
                                 </div>
@@ -278,7 +278,7 @@ class ForBusiness extends Component {
                                         src="/icons/Employee.png"
                                         style={styles.horizListIcon}
                                     /><br/>
-                                    <b>Hire Talent</b><br/>
+                                    <b>Hire <div className="under500only br"><br/></div>Talent</b><br/>
                                     See their skills and work
                                     before you hire.
                                 </div>
@@ -382,9 +382,11 @@ class ForBusiness extends Component {
                     </div>
                 </div>
 
-                <div className="purpleToGreenSpacer"/>
+                <div className="homepageSeparatorContainer" style={{margin:"60px 0 0"}}>
+                    <div className="homepageSeparator" />
+                </div>
 
-                <div className="resumeCantDoThis">
+                <div className="aResumeCantDoThis">
                     <div className="smallText3" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do This.</b></div>
                     <div id="aResumeCantDoThisContent" >
                         <div>
@@ -434,9 +436,11 @@ class ForBusiness extends Component {
                     </div>
                 </div>
 
-                <div className="purpleToGreenSpacer"/>
+                <div className="homepageSeparatorContainer" style={{margin:"60px 0 0"}}>
+                    <div className="homepageSeparator" />
+                </div>
 
-                <div className="center mediumTextDoubleShrink" style={{marginBottom:'40px',minWidth:"250px"}}>
+                <div className="center mediumTextDoubleShrink" style={{marginBottom:'40px',marginTop:"120px",minWidth:"250px"}}>
                     <b>Your Pipeline to <div className="under400only br"><br/></div>Fully-Vetted Talent</b>
                 </div>
                 <div className="forBusinessBoxesContainer">

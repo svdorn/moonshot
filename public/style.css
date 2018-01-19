@@ -1139,9 +1139,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 #aResumeCantDoThisTitle {
     padding-left: 8%;
 }
-.resumeCantDoThis {
+.aResumeCantDoThis {
     position: relative;
-    margin: 0 5% 40px;
+    margin: 140px 5% 40px;
     overflow: auto;
 }
 #aResumeCantDoThisContent {
@@ -1348,6 +1348,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         transition: visibility 0s .5s, opacity .5s linear;
     }
 
+    .homepageSeparator { transform: scale(4, .025); }
+
     .mediumTextDoubleShrink { font-size: 25px; }
     .h1Shrink { font-size: 30px; }
     .smallText3 { font-size: 20px; }
@@ -1543,6 +1545,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .above500only { display: none; }
     .h1Shrink { font-size: 20px; }
     .smallText { font-size: 12px;  }
+    .homepageSeparator { transform: scale(3, .02); }
 
     .homepageTrajectory { margin-bottom: -65px; }
     .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
@@ -1690,6 +1693,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextRightDiv {
         padding-left: 0px;
     }
+
+    .homepageSeparator { transform: scale(2.5, .02); }
 }
 
 @media only screen and (max-width: 200px) {
