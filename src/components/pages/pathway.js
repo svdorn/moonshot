@@ -277,7 +277,7 @@ class Pathway extends Component {
                         <div className="fullHeight purpleGradient">
 
 
-                            <div className="infoBox whiteText mediumText" style={{zIndex: "20", width: '40%'}}>
+                            <div className="infoBox whiteText mediumText" style={{zIndex: "20"}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
                                 <button className="outlineButton"
                                         style={{backgroundColor: "transparent", border: "2px solid white"}}
@@ -298,23 +298,23 @@ class Pathway extends Component {
                                     style={{paddingLeft: '10px'}}
                                 />
                             </div>
-                            <ul className="horizCenteredList whiteText smallText2"
+                            <ul className="horizCenteredList whiteText smallText2" id="pathwayLandingTopInfoList"
                                 style={{position: 'absolute', bottom: 0, width: '100%'}}>
-                                <li style={{width: '300px'}}>
+                                <li>
                                     <img src="/icons/ClockWhite.png" className="pathwayLandingIcons"/>
                                     <div style={{display: 'inline-block'}}>
-                                        <i>Completion Time</i><br/>
+                                        <i>Time</i><br/>
                                         {pathway.estimatedCompletionTime}
                                     </div>
                                 </li>
-                                <li style={{width: '300px'}}>
+                                <li>
                                     <img src="/icons/CalendarWhite.png" className="pathwayLandingIcons"/>
                                     <div style={{display: 'inline-block'}}>
                                         <i>Complete By</i><br/>
                                         {formattedDeadline}
                                     </div>
                                 </li>
-                                <li style={{width: '300px'}}>
+                                <li>
                                     <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons"/>
                                     <div style={{display: 'inline-block'}}>
                                         <i>Cost</i><br/>

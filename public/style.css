@@ -1160,6 +1160,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin-left: 5%;
 }
 
+#pathwayLandingTopInfoList > li {
+    width: 200px;
+    margin: 0 2%;
+}
+
 
 /* decorative triangles */
 
@@ -1511,6 +1516,13 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .smallText2 {
         font-size: 15px;
+    }
+    #pathwayLandingTopInfoList > li {
+        width: 145px;
+    }
+    .pathwayLandingIcons {
+        height: 36px;
+        width: 36px;
     }
 }
 
