@@ -309,11 +309,14 @@ class ForBusiness extends Component {
                         Scholarships made for your company.
                     </div>
 
-                    <div className="forBusinessLineWithCircles">
-                        <div className="forBusinessLine" />
-                        <div className="forBusinessCircle" />
-                        <div className="forBusinessCircle" />
-                        <div className="forBusinessCircle" />
+                    <div className="forBusinessLineWithCirclesContainer above1000fade">
+                        <div className="forBusinessLineWithCircles">
+                            <div className="forBusinessLine" />
+                            <div className="forBusinessCircle" />
+                            <div className="forBusinessCircle" />
+                            <div className="forBusinessCircle" />
+                            <div className="forBusinessCircle" />
+                        </div>
                     </div>
 
 
