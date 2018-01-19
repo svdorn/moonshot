@@ -1122,6 +1122,25 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     color: var(--moonshotLightBlue) !important;
 }
 
+#aResumeCantDoThisTitle {
+    padding-left: 8%;
+}
+.resumeCantDoThis {
+    position: relative;
+    margin: 0 5% 40px;
+    overflow: auto;
+}
+#resumeCantDoThisContent {
+    margin-top: 30px;
+    width: 55%;
+    float: left;
+    text-align: center;
+}
+.forBusinessIcon {
+    margin-bottom: 20px;
+    height: 70px;
+}
+
 
 /* decorative triangles */
 
@@ -1305,6 +1324,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 
     .mediumTextDoubleShrink { font-size: 25px; }
+    .h1Shrink { font-size: 30px; }
+    .smallText3 { font-size: 20px; }
 
     .horizListText {
         font-size: 15px;
@@ -1486,6 +1507,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 @media only screen and (max-width: 500px) {
     .above500only { display: none; }
+    .h1Shrink { font-size: 20px; }
+
     .homepageTrajectory { margin-bottom: -65px; }
     .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
         transform: scale(.7);

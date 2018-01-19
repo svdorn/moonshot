@@ -46,9 +46,6 @@ const styles = {
         // right: "80%",
         // margin: "auto"
     },
-    bottomList: {
-        height: '130px',
-    },
     bottomListItem: {
         width: '50%',
         margin: 'auto',
@@ -56,15 +53,8 @@ const styles = {
         top: '0',
         verticalAlign: 'top',
     },
-    bottomListImg: {
-        marginBottom: '10px',
-        height: '50px'
-    },
     bottomListText: {
         width: '90%',
-    },
-    resumeTitle: {
-        paddingLeft: '120px'
     },
     marginTop: {
         marginTop: '10px',
@@ -303,8 +293,8 @@ class ForBusiness extends Component {
                 <div className="purpleToGreenSpacer"/>
 
                 <div style={{marginTop: '60px', minWidth: "215px"}}>
-                    <div className="center smallText3" style={{marginBottom: '40px'}}>
-                        <h1 className="purpleText"><b>Our Scholarships to Hire Program</b></h1>
+                    <div className="center smallText2" style={{marginBottom:'40px',width:'90%',marginLeft:"5%"}}>
+                        <h1 className="purpleText h1Shrink"><b>Our Scholarships to Hire Program</b></h1>
                         A scholarship for potential hires to learn the skills you need.<br/>
                         Scholarships made for your company.
                     </div>
@@ -397,33 +387,33 @@ class ForBusiness extends Component {
 
                 <div className="purpleToGreenSpacer"/>
 
-                <div className="homepageTrajectory" style={{marginBottom: '40px'}}>
-                    <div className="smallText3" style={styles.resumeTitle}><b>A Resum&eacute; Can{"'"}t Do This.</b></div>
-                    <div className="forBusinessTrajectoryTextLeft">
-                        <div style={styles.bottomList}>
+                <div className="resumeCantDoThis">
+                    <div className="smallText3" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do This.</b></div>
+                    <div id="resumeCantDoThisContent" >
+                        <div>
                             <div style={styles.bottomListItem}>
-                                <img src="/icons/Project.png" style={styles.bottomListImg}/>
+                                <img src="/icons/Project.png" className="forBusinessIcon"/>
                                 <div className="smallText" style={styles.bottomListText}>See their quality of work under
                                     pressure with real-world
                                     projects relevant to your company.
                                 </div>
                             </div>
                             <div style={styles.bottomListItem}>
-                                <img src="/icons/BarGraph.png" style={styles.bottomListImg}/>
+                                <img src="/icons/BarGraph.png" className="forBusinessIcon"/>
                                 <div className="smallText" style={styles.bottomListText}>Look at quantitative breakdowns
                                     and precise scoring of their skills.
                                 </div>
                             </div>
                         </div>
-                        <div style={{...styles.bottomList, marginTop: '20px'}}>
+                        <div style={{marginTop: '20px'}}>
                             <div style={styles.bottomListItem}>
-                                <img src="/icons/EvaluatePurple.png" style={styles.bottomListImg}/>
+                                <img src="/icons/EvaluatePurple.png" className="forBusinessIcon"/>
                                 <div className="smallText" style={styles.bottomListText}>
                                     Evaluate candidates with standardized criteria and assessments.
                                 </div>
                             </div>
                             <div style={styles.bottomListItem}>
-                                <img src="/icons/Filter.png" style={styles.bottomListImg}/>
+                                <img src="/icons/Filter.png" className="forBusinessIcon"/>
                                 <div className="smallText" style={styles.bottomListText}>
                                     Filter out the unqualified and uncommitted.
                                 </div>
