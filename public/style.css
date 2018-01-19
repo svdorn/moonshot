@@ -217,6 +217,7 @@ form > h1 {
 
 .greenToBlue { background: linear-gradient(to top right, var(--moonshotGreen), var(--moonshotLightBlue)); }
 .purpleToBlue { background: linear-gradient(to top right, var(--moonshotPurple), var(--moonshotBlue)); }
+.purpleGradient { background: linear-gradient(to top right, #CE9EFC, #a048fb); }
 
 .messageHeader {
     margin-top: 90px;

@@ -180,8 +180,11 @@ class Pathway extends Component {
         }
 
         const pathway = this.state.pathway;
-        const deadline = new Date(this.state.pathway.deadline);
-        const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+        const deadline = this.state.pathway.deadline;
+        let formattedDeadline = "";
+        if (deadline) {
+            formattedDeadline = deadline.substring(5, 7) + "/" + deadline.substring(8, 10) + "/" + deadline.substring(0, 4);
+        }
 
         let pathwaySteps = null;
         const steps = pathway.steps;
@@ -267,11 +270,12 @@ class Pathway extends Component {
         }
 
         return (
+            //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
             <div className="jsxWrapper">
                 {pathway.sponsor !== undefined ?
                     <div>
-                        <div className="fullHeight purpleToBlue">
-                            <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
+                        <div className="fullHeight purpleGradient">
+
 
                             <div className="infoBox whiteText mediumText" style={{zIndex: "20", width: '40%'}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
@@ -285,12 +289,12 @@ class Pathway extends Component {
                             {this.props.loading ? <div className="center"><CircularProgress color="white"
                                                                                             style={{marginTop: "20px"}}/><br/>
                             </div> : ""}
-                            <div className="whiteText smallText3 noWrap" style={{textAlign: 'center'}}>
+                            <div className="whiteText smallText2 noWrap" style={{textAlign: 'center'}}>
                                 Sponsored by
                                 <img
                                     src={pathway.sponsor.logo}
                                     alt={pathway.sponsor.name}
-                                    height={60}
+                                    height={40}
                                     style={{paddingLeft: '10px'}}
                                 />
                             </div>
