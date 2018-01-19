@@ -416,6 +416,15 @@ class ForBusiness extends Component {
                                 </div>
                             </div>
                         </div>
+
+                        <button className="purpleToPinkButtonExterior bigButton"
+                                onClick={this.handleOpen}
+                                style={{marginTop: "40px"}}
+                        >
+                            <div className="gradientBorderButtonInterior">
+                                Learn More
+                            </div>
+                        </button>
                     </div>
                     <div className="homepageTrajectoryImagesRight">
                         <div className="homepageImgBackgroundRight purpleToRed"/>
@@ -427,7 +436,7 @@ class ForBusiness extends Component {
 
                 <div className="purpleToGreenSpacer"/>
 
-                <div className="center mediumTextDoubleShrink" style={{marginBottom:'20px',minWidth:"250px"}}>
+                <div className="center mediumTextDoubleShrink" style={{marginBottom:'40px',minWidth:"250px"}}>
                     <b>Your Pipeline to <div className="under400only br"><br/></div>Fully-Vetted Talent</b>
                 </div>
                 <div className="forBusinessBoxesContainer">
