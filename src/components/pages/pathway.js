@@ -381,8 +381,7 @@ class Pathway extends Component {
                                                 style={style.descriptionAndSalaryIcon}
                                             />
                                             <div style={style.descriptionAndSalaryText}>
-                                                Industry average salary for<br/>
-                                                {pathway.industry.title}<br/>
+                                                Industry average salary for {pathway.industry.title}<br/>
                                                 <i>{pathway.industry.averageSalary}</i>
                                             </div>
                                         </div>

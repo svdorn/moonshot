@@ -50,6 +50,12 @@ footer {
     margin: -10px 10px 0px 0px;
 }
 
+#menuDropdown:hover {
+    text-decoration: underline;
+    text-decoration-color: white;
+}
+#menuDropdown { text-decoration-color: white; }
+
 .container .footer-text {
   margin: 20px 0;
 }
