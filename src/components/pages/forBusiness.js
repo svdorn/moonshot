@@ -302,7 +302,7 @@ class ForBusiness extends Component {
 
                 <div className="purpleToGreenSpacer"/>
 
-                <div style={{marginTop: '60px'}}>
+                <div style={{marginTop: '60px', minWidth: "215px"}}>
                     <div className="center smallText3" style={{marginBottom: '40px'}}>
                         <h1 className="purpleText"><b>Our Scholarships to Hire Program</b></h1>
                         A scholarship for potential hires to learn the skills you need.<br/>
@@ -320,7 +320,7 @@ class ForBusiness extends Component {
                     </div>
 
 
-                    <div className="homepageTrajectory forBusiness">
+                    <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
                                 <h2 className="blueText"><b>What Skills Are You <div className="above800only br"><br/></div> Hiring For?</b></h2>
@@ -341,7 +341,7 @@ class ForBusiness extends Component {
                     <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextRight forBusiness">
                             <div className="smallText4 homepageTrajectoryTextRightDiv forBusiness">
-                                <h2 className="greenText"><b>Course Pathways Curated<br/>to the Skills You Need.</b>
+                                <h2 className="greenText"><b>Course Pathways Curated <div className="above500only br"><br/></div> to the Skills You Need.</b>
                                 </h2>
                                 Expert led, interactive learning
                                 through videos, articles, skill
@@ -358,7 +358,7 @@ class ForBusiness extends Component {
 
                     <br/>
 
-                    <div className="homepageTrajectory forBusiness">
+                    <div className="homepageTrajectory forBusiness" id="sponsorStudentsForBusiness">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
                                 <h2 className="purpleText"><b>Sponsor Students</b></h2>

@@ -5,11 +5,11 @@ html {
 
 body {
     font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;
-    min-width: 300px;
+    min-width: 200px;
 }
 
 :root {
-    --moonshotLightBlue: #00d2ff;
+    --moonshotLightBlue: #00c3ff;
     --moonshotMidBlue: #70cbff;
     --moonshotBlue: #66b1ff;
     --moonshotGreen: #3dffdd;
@@ -334,7 +334,7 @@ button.link {
 .gradientBorderPurpleToPinkChip {
     height: 40px;
     background: linear-gradient(to bottom right, var(--moonshotDarkPurple), #ff79b7);
-    padding: 3px;
+    padding: 2px;
     border-radius: 25px;
     margin-left: 20px;
 }
@@ -1039,9 +1039,6 @@ button.link {
 .purpleText {
     color: var(--moonshotDarkPurple);
 }
-.blueText {
-    color: var(--moonshotBlue);
-}
 
 .homepageTrajectoryTextLeftDiv,
 .homepageTrajectoryTextRightDiv {
@@ -1122,7 +1119,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 .blueTextImportant {
-    color: var(--moonshotBlue) !important;
+    color: var(--moonshotLightBlue) !important;
 }
 
 
@@ -1398,11 +1395,20 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         margin: 25px 0 0;
     }
     .forBusinessCircle:nth-child(3) { top: 155px; }
-    .forBusinessCircle:nth-child(4) { top: 312px; }
-    .forBusinessLine { height: 450px; }
+    .forBusinessCircle:nth-child(4) { top: 340px; }
+    .forBusinessLine { height: 539px; }
+
     .homepageTrajectory.forBusiness {
-        height: initial;
+        height: 180px;
     }
+    .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor {
+        height: 120px;
+    }
+    .homepageTrajectoryTextRight.forBusiness
+    .homepageTrajectoryTextLeft.forBusiness {
+        height: 180px;
+    }
+    #whatSkillsAreYouHiringFor > div { height: initial; }
     .homepageTrajectoryTextLeft.forBusiness {
         margin-top: 0;
     }
@@ -1479,6 +1485,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 500px) {
+    .above500only { display: none; }
     .homepageTrajectory { margin-bottom: -65px; }
     .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
         transform: scale(.7);
@@ -1494,7 +1501,41 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryContainer > div:nth-child(5) > div > img {
         margin-left: -48%;
     }
-    .forBusinessTrajectoryTextLeft > div,
+    .homepageTrajectoryTextLeftDiv.forBusiness,
+    .homepageTrajectoryTextRightDiv.forBusiness {
+        padding-left: 24%;
+        font-size: 13px;
+        padding-right: 5%;
+        height: 172px;
+    }
+    .homepageTrajectoryTextRight.forBusiness,
+    .homepageTrajectoryTextLeft.forBusiness {
+        height: 152px;
+        overflow: visible;
+    }
+    /* #whatSkillsAreYouHiringFor > div {
+        height: 135px;
+    }
+    #whatSkillsAreYouHiringFor {
+        height: 135px;
+        overflow: visible;
+    } */
+    .homepageTrajectoryTextLeftDiv.forBusiness {
+        height: 135px;
+    }
+    .forBusiness > h2 > b {
+        font-size: 18px;
+    }
+    .forBusiness > h2 { margin-top: 0; }
+    .homepageTrajectory.forBusiness {
+        margin: 0px;
+    }
+    .forBusinessLineWithCirclesContainer { margin-top: 8px; }
+    .homepageTrajectoryTextLeft,
+    .homepageTrajectoryTextRight {
+        transform: none;
+    }
+    /* .forBusinessTrajectoryTextLeft > div,
     .forBusinessTrajectoryTextRight > div {
         text-align: center;
         padding-left: 0px;
@@ -1502,7 +1543,22 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .forBusinessTrajectoryTextLeft > img,
     .forBusinessTrajectoryTextRight > img {
         display: none;
+    } */
+
+    .homepageTrajectory.forBusiness {
+        height: 180px;
     }
+    .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor,
+    .homepageTrajectory.forBusiness#sponsorStudentsForBusiness,
+    .homepageTrajectoryTextLeft.forBusiness {
+        height: 120px;
+    }
+    .homepageTrajectoryTextRight.forBusiness { height: 180px; }
+    .homepageTrajectoryTextLeft.forBusiness { margin-top: 0; }
+    .forBusinessCircle:nth-child(4) { top: 355px; }
+    .forBusinessLine { height: 510px; }
+
+
     .homePathwaysDesc { display: none; }
     .homePathwaysTitle {
         font-size: 40px;
@@ -1533,7 +1589,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 95%;
         max-height: 460px;
     }
-
 }
 
 @media only screen and (max-width: 375px) {

@@ -332,16 +332,16 @@ app.post('/sendVerificationEmail', function (req, res) {
         let recipient = user.email;
         let subject = 'Verify email';
         let content =
-             '<div style="font-size:15px;text-align:center;font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;">'
-            +   '<a href="https://www.moonshotlearning.org/"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
-            +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways and learning new skills, please <a href="http://localhost:3000/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>. Once you verify your account, you can start building your profile. We hope you have a blast!</span><br/>'
-            +       '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.com">Support@MoonshotLearning.com</a>.</span><br/>'
+             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+            +   '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
+            +   '<div style="text-align:left;width:80%;margin-left:10%;">'
+            +       '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways and learning new skills, please <a href="http://moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>. Once you verify your account, you can start building your profile. We hope you have a blast!</span><br/>'
+            +       '<span style="display:inline-block;">If you have any questions or concerns, or if you just want to talk about the weather, please feel free to email us at <span style="color:#686868"><a href="mailto:Support@MoonshotLearning.com">Support@MoonshotLearning.com</a>.</span></span><br/>'
             +   '</div>'
             +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="http://localhost:3000/verifyEmail?'
             +   user.emailVerificationToken
             +   '">VERIFY ACCOUNT</a>'
-            +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
+            +   '<div style="text-align:left;width:80%;margin-left:10%;">'
             +       '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
             +   '</div>'
             +'</div>';
