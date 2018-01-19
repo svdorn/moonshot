@@ -427,37 +427,37 @@ class ForBusiness extends Component {
 
                 <div className="purpleToGreenSpacer"/>
 
-                <div className="center mediumText" style={{marginBottom: '20px'}}>
-                    <b>Your Pipeline to Fully-Vetted Talent</b>
+                <div className="center mediumTextDoubleShrink" style={{marginBottom:'20px',minWidth:"250px"}}>
+                    <b>Your Pipeline to <div className="under400only br"><br/></div>Fully-Vetted Talent</b>
                 </div>
                 <div className="forBusinessBoxesContainer">
                     <Paper zDepth={3} className="paperBox">
                         <div className="gradientBorderBlueBox">
-                            <div>
-                                <div className="mediumText" style={{paddingTop: '20px'}}>Program</div>
+                            <div className="forBusinessBox">
+                                <div className="mediumText">Program</div>
                                 <div className="mediumText blueText">$1500 USD</div>
                                 <div>PER PROGRAM</div>
-                                <br/>
-                                <p>Program curated to your<br/> company{"'"}s needs. Skill evaluation<br/> of up to 15
+                                <div className="br"><br/></div>
+                                <p>Program curated to your<br/> company{"'"}s needs. Skill evaluation<div className="br"><br/></div> of up to 15
                                     candidates.</p>
                             </div>
                         </div>
                     </Paper>
                     <Paper zDepth={3} className="paperBox">
                         <div className="gradientBorderPurpleToRedBox">
-                            <div>
-                                <div className="mediumText" style={{paddingTop: '20px'}}>Evaluation</div>
+                            <div className="forBusinessBox">
+                                <div className="mediumText">Evaluation</div>
                                 <div className="mediumText purpleText">$500 USD</div>
                                 <div>PER HIRE</div>
-                                <br/>
-                                <p>When students are successful in your<br/>programs, you can hire them<br/> for a small
+                                <div className="br"><br/></div>
+                                <p>When students are successful in your<br/>programs, you can hire them<div className="br"><br/></div> for a small
                                     fee.</p>
                             </div>
                         </div>
                     </Paper>
                 </div>
 
-                <div className="center" style={{marginBottom: '20px'}}>
+                <div className="center" style={{margin:'40px 0 20px'}}>
                     <button className="outlineButton whiteBlueButton" onClick={this.handleOpen}>
                         Contact Us
                     </button>

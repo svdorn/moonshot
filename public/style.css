@@ -350,7 +350,7 @@ button.link {
     height: 300px;
     width: 400px;
     display: inline-block;
-    margin: 0 20px 0 20px;
+    margin: 0 25px 40px;
 }
 
 .gradientBorderPurple {
@@ -1056,8 +1056,6 @@ button.link {
 }
 
 .forBusinessBoxesContainer {
-    height: 350px;
-    width: 900px;
     margin: auto;
     text-align: center;
 }
@@ -1222,6 +1220,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .forBusinessCircle:nth-child(4) { top: 665px; }
 .forBusinessCircle:nth-child(5) { bottom: 0px; }
 
+.forBusinessBox { padding-top: 38px; }
+
 @media only screen and (max-width: 1050px) {
     .homepageTrajectoryTextLeft {
         width: 40%;
@@ -1313,7 +1313,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 900px) {
-
+    .paperBox {
+        height: 225px;
+        width: 300px;
+    }
+    .forBusinessBox > div.mediumText { font-size: 25px; }
+    .forBusinessBox { padding-top: 20px; }
 }
 
 @media only screen and (max-width: 800px) {
@@ -1628,6 +1633,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 }
 
+@media only screen and (min-width: 400px) {
+    .under400only { display: none; }
+}
+
 @media only screen and (max-width: 375px) {
     .smallScreenMenu {
         margin-right: 0px;
@@ -1640,6 +1649,22 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 80px;
     }
 }
+
+@media only screen and (max-width: 350px) {
+    .paperBox {
+        height: 150px;
+        width: 200px;
+    }
+    .forBusinessBox > div.mediumText {
+        font-size: 17px;
+    }
+    .forBusinessBox { padding-top: 10px; }
+    .forBusinessBox > p {
+        font-size: 11px;
+        margin-top: -7px;
+    }
+}
+
 
 @media only screen and (max-width: 325px) {
     .homepageTrajectoryTextLeftIcon,
