@@ -53,9 +53,6 @@ const styles = {
         top: '0',
         verticalAlign: 'top',
     },
-    bottomListText: {
-        width: '90%',
-    },
     marginTop: {
         marginTop: '10px',
     }
@@ -389,18 +386,18 @@ class ForBusiness extends Component {
 
                 <div className="resumeCantDoThis">
                     <div className="smallText3" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do This.</b></div>
-                    <div id="resumeCantDoThisContent" >
+                    <div id="aResumeCantDoThisContent" >
                         <div>
                             <div style={styles.bottomListItem}>
                                 <img src="/icons/Project.png" className="forBusinessIcon"/>
-                                <div className="smallText" style={styles.bottomListText}>See their quality of work under
+                                <div className="smallText aResumeCantDoThisText">See their quality of work under
                                     pressure with real-world
                                     projects relevant to your company.
                                 </div>
                             </div>
                             <div style={styles.bottomListItem}>
                                 <img src="/icons/BarGraph.png" className="forBusinessIcon"/>
-                                <div className="smallText" style={styles.bottomListText}>Look at quantitative breakdowns
+                                <div className="smallText aResumeCantDoThisText">Look at quantitative breakdowns
                                     and precise scoring of their skills.
                                 </div>
                             </div>
@@ -408,13 +405,13 @@ class ForBusiness extends Component {
                         <div style={{marginTop: '20px'}}>
                             <div style={styles.bottomListItem}>
                                 <img src="/icons/EvaluatePurple.png" className="forBusinessIcon"/>
-                                <div className="smallText" style={styles.bottomListText}>
+                                <div className="smallText aResumeCantDoThisText">
                                     Evaluate candidates with standardized criteria and assessments.
                                 </div>
                             </div>
                             <div style={styles.bottomListItem}>
                                 <img src="/icons/Filter.png" className="forBusinessIcon"/>
-                                <div className="smallText" style={styles.bottomListText}>
+                                <div className="smallText aResumeCantDoThisText">
                                     Filter out the unqualified and uncommitted.
                                 </div>
                             </div>

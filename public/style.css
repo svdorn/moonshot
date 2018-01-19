@@ -1130,7 +1130,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin: 0 5% 40px;
     overflow: auto;
 }
-#resumeCantDoThisContent {
+#aResumeCantDoThisContent {
     margin-top: 30px;
     width: 55%;
     float: left;
@@ -1139,6 +1139,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .forBusinessIcon {
     margin-bottom: 20px;
     height: 70px;
+}
+.aResumeCantDoThisText {
+    width: 90%;
+    margin-left: 5%;
 }
 
 
@@ -1433,6 +1437,15 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextLeft.forBusiness {
         margin-top: 0;
     }
+
+    #aResumeCantDoThisTitle {
+        text-align: center;
+        padding-left: 0;
+    }
+    #aResumeCantDoThisContent {
+        width: 85%;
+        margin-left: 7%;
+    }
 }
 
 @media only screen and (min-width: 701px) {
@@ -1508,6 +1521,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 @media only screen and (max-width: 500px) {
     .above500only { display: none; }
     .h1Shrink { font-size: 20px; }
+    .smallText { font-size: 12px;  }
 
     .homepageTrajectory { margin-bottom: -65px; }
     .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
