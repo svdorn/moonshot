@@ -190,6 +190,8 @@ form > h1 {
     background-color: white;
     margin: 25px 15px 0px 15px;
 }
+.menuDivider.loggedOut { margin: 25px 15px 0px 15px; }
+.menuDivider.loggedIn { margin: 25px -3px 0px 12px; }
 
 .smallScreenMenu {
     margin-top: 25px;

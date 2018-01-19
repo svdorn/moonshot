@@ -120,6 +120,7 @@ class Menu extends Component {
                         <ToolbarGroup>
                             <p className={menuItemClass} onClick={() => this.goTo('/discover')}>Discover</p>
                             <p className={menuItemClass} onClick={() => this.goTo('/myPathways')}>My Pathways</p>
+                            <div className="menuDivider loggedIn wideScreenMenuItem" />
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
@@ -168,7 +169,7 @@ class Menu extends Component {
                     <ToolbarGroup>
                         <p className={menuItemClass} onClick={() => this.goTo('/')}>Home</p>
                         <p className={menuItemClass} onClick={() => this.goTo('/forBusiness')}>For Business</p>
-                        <div className="menuDivider wideScreenMenuItem" />
+                        <div className="menuDivider loggedOut wideScreenMenuItem" />
                         <p className={menuItemClass} onClick={() => this.goTo('/login')}>Sign in</p>
 
                         <IconMenu
