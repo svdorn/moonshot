@@ -198,6 +198,21 @@ form > h1 {
     margin-right: 18px;
 }
 
+.pathwayLandingSkillChip {
+    border: 1px solid rgb(184, 105, 255);
+    border-radius: 10px;
+    background-color: white;
+    color: rgb(184, 105, 255);
+}
+.skillChip {
+    border-radius: 30px;
+    background-color: white;
+    font-size: 20px;
+    padding: 5px 10px 1px;
+}
+.skillChips > div { margin-left: 20px; }
+.skillChips > div:first-child { margin-left: 0px; }
+
 /* So that the menu text color is the same as the rest of the header */
 .headerDropdownWhite > div:first-child > div:nth-child(2) {
     color: white !important;
