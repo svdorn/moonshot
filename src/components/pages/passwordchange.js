@@ -57,16 +57,23 @@ class PasswordChange extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-
-        // Check if valid
         const vals = this.props.formData.settings.values;
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'oldpass',
+            'password',
+            'password2',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
+        if (vals.password != vals.password2) return;
 
-        if (!(vals.oldpass && vals.password && vals.password2)) {
-            return;
-        }
-        if (vals.password != vals.password2) {
-            return;
-        }
         const user = {
             _id: this.props.currentUser._id,
             oldpass: this.props.formData.settings.values.oldpass,
