@@ -291,7 +291,7 @@ class Home extends Component{
                     <div className="center mediumText blueText homePathwaysTitle">Pathways</div>
                     <div className="homePathwaysDesc">
                         Moonshot courses are organized in pathways and
-                        sponsored by employers hiring for those skills.
+                        sponsored by<br/> employers hiring for those skills.
                     </div>
                     <div className="pathwayPrevListContainer">
                         <ul className="horizCenteredList pathwayPrevList">
