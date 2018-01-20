@@ -415,6 +415,15 @@ class ForBusiness extends Component {
                     <div id="exampleSkillsContainer">
                         { exampleRoles }
                     </div>
+
+                    <button className="purpleToPinkButtonExterior bigButton"
+                            onClick={this.handleOpen}
+                            style={{marginTop: "40px"}}
+                    >
+                        <div className="gradientBorderButtonInterior">
+                            Hire With Us
+                        </div>
+                    </button>
                 </div>
 
                 <div className="homepageSeparatorContainer marginTopOnDesktop">
