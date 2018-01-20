@@ -1761,7 +1761,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
     #exampleSkillsContainer {
         width: 95%;
-        max-height: 460px;
+        max-height: 320px;
     }
 
     .aResumeCantDoThis { margin-top: 90px; }
