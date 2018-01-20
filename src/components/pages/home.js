@@ -310,6 +310,15 @@ class Home extends Component{
                     <div id="exampleSkillsContainer">
                         { exampleSkills }
                     </div>
+
+                    <button className="purpleToPinkButtonExterior bigButton"
+                            onClick={this.handleOpen}
+                            style={{marginTop: "40px"}}
+                    >
+                        <div className="gradientBorderButtonInterior">
+                            Make Your<div className="under600only"> </div><div className="above600only"><br/></div>Free Profile
+                        </div>
+                    </button>
                 </div>
             </div>
         );
