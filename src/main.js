@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import Menu from './components/menu';
 import Footer from './components/footer';
 import Notification from './components/notification'
-
-import { Paper } from 'material-ui'
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
 import getMuiTheme from 'material-ui/styles/getMuiTheme';
 import {
@@ -53,6 +51,7 @@ class Main extends Component {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <div>
+                        <div className="greenToBlue headerDiv"/>
                         <Menu/>
                         <Footer/>
                     </div>

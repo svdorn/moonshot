@@ -4,13 +4,11 @@ import { render } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import { applyMiddleware, createStore } from 'redux';
-import logger from 'redux-logger';
+//import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 
 // import combined reducers
 import reducers from './reducers/index';
-import Menu from './components/menu';
-import Footer from './components/footer';
 
 // STEP 1 create the store
 const middleware = applyMiddleware(thunk);

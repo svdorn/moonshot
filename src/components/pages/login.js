@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { TextField, RaisedButton, Paper, Snackbar } from 'material-ui';
+import { TextField } from 'material-ui';
 import { login } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';

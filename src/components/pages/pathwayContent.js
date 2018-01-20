@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PathwayContentLink from '../childComponents/pathwayContentLink';
 import PathwayContentVideo from '../childComponents/pathwayContentVideo';
 import PathwayContentArticle from '../childComponents/pathwayContentArticle';
-import {Tabs, Tab, CircularProgress, Paper, Drawer, RaisedButton} from 'material-ui';
+import {Tabs, Tab, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, updateCurrentSubStep, setHeaderBlue} from "../../actions/usersActions";

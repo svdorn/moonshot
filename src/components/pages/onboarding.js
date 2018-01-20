@@ -4,8 +4,6 @@ import { connect } from 'react-redux';
 import { updateInfo, updateGoals, updateInterests, startOnboarding, endOnboarding } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { Tabs, Tab } from 'material-ui/Tabs';
-
 
 class Onboarding extends Component {
     constructor(props) {

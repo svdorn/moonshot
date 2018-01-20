@@ -1,6 +1,6 @@
 "use strict"
 import React, {Component} from 'react';
-import {Card, CardHeader, CardActions, CardText, CardMedia, CardTitle, Dialog, RaisedButton, Paper} from 'material-ui';
+import {Card, CardHeader, CardText, CardMedia, CardTitle, Dialog, Paper} from 'material-ui';
 import YouTube from 'react-youtube';
 
 class Content extends Component {

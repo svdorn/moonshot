@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { closeNotification } from '../actions/usersActions';
-import { Paper, RaisedButton, IconButton } from 'material-ui';
+import { Paper, IconButton } from 'material-ui';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 
 class Notification extends Component {
