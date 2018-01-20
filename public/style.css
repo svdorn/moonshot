@@ -728,6 +728,7 @@ button.link {
 .smallText4 { font-size: 25px; }
 .smallText2 { font-size: 20px; }
 .smallText { font-size: 15px; }
+.tinyText2 { font-size: 11px; }
 .tinyText { font-size: 8.8px; }
 .greenText { color: var(--moonshotGreenText); }
 .whiteText { color: white; }
@@ -1213,6 +1214,18 @@ button.link {
     margin-top: 30px;
     padding: 1px 25px 4px;
     font-size: 25px;
+}
+
+.dialogForBiz {
+    max-width: 450px;
+    margin: auto;
+    background-color: rgba(255, 255, 255, .9) !important;
+}
+.dialogOverlay {
+    filter: none;
+}
+.dialogForBizOverlay {
+    filter: blur(10px);
 }
 
 .pathwayPreviewLi { vertical-align: top; }
