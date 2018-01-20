@@ -49,28 +49,18 @@ class Main extends Component {
 
     componentDidMount() {
         const self = this;
-        this.props.getUserFromSession(function (work) {
-            if (work) {
-                self.setState({load: true});
-            }
-        })
+            this.props.getUserFromSession(function (work) {
+                if (work) {
+                    self.setState({load: true});
+                }
+            })
     }
 
     render() {
         if (!this.state.load) {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
-                    <div className="centerOfPage">
-                        <Paper style={{padding:'10px'}}>
-                            <img src="/images/OfficialLogoBlue.png" style={{
-                                height: "100px",
-                                width: "320px",
-                                marginBottom: "30px",
-                            }}/>
-                            <div className="center blueText mediumText">
-                                Loading...
-                            </div>
-                        </Paper>
+                    <div>
                     </div>
                 </MuiThemeProvider>
             );

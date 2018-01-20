@@ -513,11 +513,10 @@ class ForBusiness extends Component {
                                 <div className="mediumText blueText">$1500 USD</div>
                                 <div>PER PROGRAM</div>
                                 <div className="br"><br/></div>
-                                <p>Program curated to your<br/> company{"'"}s needs. Skill evaluation
+                                Program curated to your<br/> company{"'"}s needs. Skill evaluation
                                     <div className="br"><br/></div>
                                     of up to 15
                                     candidates.
-                                </p>
                             </div>
                         </div>
                     </Paper>
@@ -528,11 +527,10 @@ class ForBusiness extends Component {
                                 <div className="mediumText purpleText">$500 USD</div>
                                 <div>PER HIRE</div>
                                 <div className="br"><br/></div>
-                                <p>When students are successful in your<br/>programs, you can hire them
+                                When students are successful in your<br/>programs, you can hire them
                                     <div className="br"><br/></div>
                                     for a small
                                     fee.
-                                </p>
                             </div>
                         </div>
                     </Paper>
