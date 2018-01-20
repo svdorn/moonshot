@@ -196,8 +196,8 @@ class MyPathways extends Component {
                             </div>
                             :
                             <div>
-                                <div className="fullHeight purpleGradient"/>
-                                <div className="fullHeight purpleGradient"/>
+                                <div className="fullHeight"/>
+                                <div className="fullHeight"/>
                             </div>}
                     </div>
                     : null}
