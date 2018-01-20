@@ -1154,7 +1154,7 @@ button.link {
 .homePathwaysDesc {
     margin: auto;
     margin-bottom: 30px;
-    font-size: 18px;
+    font-size: 22px;
 }
 
 /* make Category and Company more to the right */
@@ -1517,10 +1517,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         text-align: left;
         margin-bottom: 0px;
     }
-    .homePathwaysDesc {
-        font-size: 15px;
-        padding: 0px 10%;
-    }
     .forBusinessLineWithCirclesContainer {
         left: 12%;
         right: initial;
@@ -1567,6 +1563,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 @media only screen and (max-width: 700px) {
     .smallText2, .smallText2.homepageTrajectoryTextRightDiv.onHome, .smallText2.homepageTrajectoryTextLeftDiv.onHome {
         font-size: 15px;
+    }
+
+    .homePathwaysDesc {
+        font-size: 15px;
+        padding: 0px 10%;
     }
 
     .aboutMeLi {
