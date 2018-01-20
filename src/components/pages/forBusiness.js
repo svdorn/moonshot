@@ -233,7 +233,7 @@ class ForBusiness extends Component {
                         <button className="outlineButton"
                                 style={{backgroundColor: "transparent", border: "2px solid white", marginTop: '20px'}}
                                 onClick={this.handleOpen}>
-                            {"Let's begin"}
+                            {"Let's Begin"}
                         </button>
                     </div>
                 </div>
@@ -391,7 +391,7 @@ class ForBusiness extends Component {
                     <div id="aResumeCantDoThisContent" >
                         <div>
                             <div style={styles.bottomListItem}>
-                                <img src="/icons/Project.png" className="forBusinessIcon"/>
+                                <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon"/>
                                 <div className="smallText aResumeCantDoThisText">See their quality of work under
                                     pressure with real-world
                                     projects relevant to your company.

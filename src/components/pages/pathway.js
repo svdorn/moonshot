@@ -3,7 +3,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {registerForPathway, getUsers, closeNotification} from '../../actions/usersActions';
-import {CircularProgress, Chip} from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
+import {Field, reduxForm} from 'redux-form';
+import style from '../../../public/styles';
+//import '../../../public/stylesheets/pathway.css';
 import axios from 'axios';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {browserHistory} from 'react-router';
@@ -55,51 +58,11 @@ class Pathway extends Component {
     render() {
 
         const style = {
-            descriptionAndSalary: {
-                position: "relative",
-                height: "150px",
-                marginTop: "15px",
-                marginBottom: "25px"
-            },
-            descriptionAndSalaryIcon: {
-                height: "50px",
-                position: "absolute",
-                top: "0",
-                bottom: "0",
-                right: "80%",
-                margin: "auto"
-            },
-            descriptionAndSalaryText: {
-                width: "50%",
-                fontSize: "20px",
-                right: "0",
-                left: "0",
-                margin: "auto",
-                textAlign: "center",
-                position: "absolute",
-                top: "50%",
-                transform: "translateY(-50%)"
-            },
-            descriptionAndSalaryHalf: {
-                width: "50%",
-                float: "left",
-                position: "relative",
-                height: "150px"
-            },
-            descriptionAndSalaryFull: {
-                width: "100%",
-                position: "relative",
-                height: "150px"
-            },
-            descriptionAndSalarySpacer: {
-                width: "80%",
-                height: "100%",
-                position: "relative"
-            },
+
             quote: {
                 everything: {
                     textAlign: "center",
-                    padding: "20px 0px"
+                    padding: "40px 0px"
                 },
                 container: {
                     border: "2px solid #B869FF",
@@ -237,14 +200,12 @@ class Pathway extends Component {
         if (skills) {
             pathwaySkills = skills.map(function (skill) {
                 return (
-                    <div style={{display: 'inline-block'}}>
-                        <Chip key={skill}
-                              backgroundColor='#white'
-                              labelColor="#00d2ff"
-                              labelStyle={{fontSize: '20px'}}
-                              style={{marginLeft: '20px', border:"1px solid #00d2ff"}}>
+                    <div key={skill + "Surrounder"} style={{display: 'inline-block'}}>
+                        <div key={skill}
+                             className="skillChip pathwayLandingSkillChip"
+                        >
                             {skill}
-                        </Chip>
+                        </div>
                     </div>
                 );
             });
@@ -269,7 +230,7 @@ class Pathway extends Component {
 
         return (
             //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
-            <div className="jsxWrapper">
+            <div className="jsxWrapper noOverflowX">
                 {pathway.sponsor !== undefined ?
                     <div style={{minWidth:"250px"}}>
                         <div className="fullHeight purpleGradient">
@@ -334,7 +295,7 @@ class Pathway extends Component {
                                     <div className="center smallText2" style={{marginBottom:"20px"}}>
                                         Earn these skills upon pathway completion.
                                     </div>
-                                    <div className="center">
+                                    <div className="center skillChips">
                                         {pathwaySkills}
                                     </div>
                                 </div>
@@ -342,22 +303,22 @@ class Pathway extends Component {
                         </div>
 
                         {pathway.description || pathway.industry ?
-                            <div style={style.descriptionAndSalary}>
+                            <div id="pathwayDescriptionAndSalary">
                                 {pathway.description ?
-                                    <div style={pathway.industry ?
-                                        style.descriptionAndSalaryHalf
+                                    <div className={pathway.industry ?
+                                        "pathwayDescriptionAndSalaryHalf"
                                         :
-                                        style.descriptionAndSalaryFull
+                                        "pathwayDescriptionAndSalaryFull"
                                     }>
-                                            <div style={pathway.industry ?
-                                                {...style.descriptionAndSalarySpacer, marginLeft: "20%"}
-                                                : {}}
+                                            <div className={pathway.industry ? "pathwayDescriptionAndSalarySpacer" : ""}
+                                                 id={pathway.industry ? "pathwayShortDescription" : ""}
                                             >
                                                 <img
                                                     src="/icons/GraduationHatPurple.png"
-                                                    style={style.descriptionAndSalaryIcon}
+                                                    className="pathwayDescriptionAndSalaryIcon"
+                                                    id="pathwayHatIcon"
                                                 />
-                                                <div style={style.descriptionAndSalaryText}>
+                                                <div className="pathwayDescriptionAndSalaryText">
                                                     {pathway.description}
                                                 </div>
                                             </div>
@@ -365,22 +326,21 @@ class Pathway extends Component {
                                     : null}
 
                                 {pathway.industry ?
-                                    <div style={pathway.description ?
-                                        style.descriptionAndSalaryHalf
+                                    <div className={pathway.description ?
+                                        "pathwayDescriptionAndSalaryHalf"
                                         :
-                                        style.descriptionAndSalaryFull
+                                        "pathwayDescriptionAndSalaryFull"
                                     }>
-                                        <div style={pathway.description ?
-                                            {...style.descriptionAndSalarySpacer, marginRight: "20%"}
-                                            : {}}
+                                        <div className={pathway.industry ? "pathwayDescriptionAndSalarySpacer" : ""}
+                                             id={pathway.industry ? "pathwaySalaryInfo" : ""}
                                         >
                                             <img
                                                 src="/icons/DollarSignPurple.jpg"
-                                                style={style.descriptionAndSalaryIcon}
+                                                className="pathwayDescriptionAndSalaryIcon"
+                                                id="pathwayMoneyIcon"
                                             />
-                                            <div style={style.descriptionAndSalaryText}>
-                                                Industry average salary for<br/>
-                                                {pathway.industry.title}<br/>
+                                            <div className="pathwayDescriptionAndSalaryText">
+                                                Industry average salary for {pathway.industry.title}<br/>
                                                 <i>{pathway.industry.averageSalary}</i>
                                             </div>
                                         </div>
