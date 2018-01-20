@@ -51,6 +51,7 @@ class Main extends Component {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <div>
+                        <div className="greenToBlue headerDiv"/>
                         <Menu/>
                         <Footer/>
                     </div>
