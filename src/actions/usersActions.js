@@ -16,7 +16,7 @@ export function getUsers() {
 }
 
 // GET USER FROM SESSION
-export function getUserFromSession() {
+export function getUserFromSession(callback) {
     return function(dispatch) {
         dispatch({
             type: "GET_USER_FROM_SESSION_REQUEST",
@@ -30,12 +30,14 @@ export function getUserFromSession() {
                     type: "GET_USER_FROM_SESSION",
                     payload: response.data,
                     isFetching: false});
+                callback(true);
             })
             .catch(function(err) {
                 dispatch({
                     type: "GET_USER_FROM_SESSION_REJECTED",
                     errorMessage:"error getting user from session",
-                    isFetching: false})
+                    isFetching: false});
+                callback(true);
             })
     };
 }

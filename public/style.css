@@ -370,6 +370,12 @@ button.link {
 .noWrap { white-space: nowrap; }
 .center { text-align: center; }
 .centerButton { display:flex; justify-content: center; }
+.centerOfPage {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
 
 .gradientBorderBlue {
     background: linear-gradient(to bottom right, #5deaff, #3dabff);
