@@ -426,14 +426,14 @@ class ForBusiness extends Component {
                     <div id="aResumeCantDoThisContent" >
                         <div>
                             <div style={styles.bottomListItem}>
-                                <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon"/>
+                                <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon" style={{marginRight:'10px'}}/>
                                 <div className="smallText aResumeCantDoThisText">See their quality of work under
                                     pressure with real-world
                                     projects relevant to your company.
                                 </div>
                             </div>
                             <div style={styles.bottomListItem}>
-                                <img src="/icons/BarGraph.png" className="forBusinessIcon"/>
+                                <img src="/icons/BarGraph.png" className="forBusinessIcon" style={{marginLeft:'10px'}}/>
                                 <div className="smallText aResumeCantDoThisText">Look at quantitative breakdowns
                                     and precise scoring of their skills.
                                 </div>
