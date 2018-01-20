@@ -274,7 +274,7 @@ class Home extends Component{
                     </div>
                 </div>
 
-                <div className="purpleToGreenSpacer" />
+                <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer" />
 
                 <div className="topMarginOnSmallScreen" style={{textAlign:"center"}}>
                     <div className="center mediumText blueText homePathwaysTitle">Pathways</div>
@@ -303,7 +303,7 @@ class Home extends Component{
                             Create Account
                         </div>
                     </button>
-                    <div className="smallText blueText" style={{marginTop:"10px"}}><i>{"Don't worry, it's free."}</i></div>
+                    <div className="smallText blueText" style={{margin:"10px 0 55px"}}><i>{"Don't worry, it's free."}</i></div>
                 </div>
 
                 <div className="purpleToGreenSpacer" />

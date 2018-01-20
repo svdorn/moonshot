@@ -1020,6 +1020,10 @@ button.link {
     margin: 50px 20% 50px;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
 }
+#picturesToPathwaysHomepageSpacer {
+    margin-top: 60px;
+    margin-bottom: 40px;
+}
 
 .profileSeparator {
     margin: 30px 0;
@@ -1393,6 +1397,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         transition: visibility 0s .5s, opacity .5s linear;
     }
 
+    #picturesToPathwaysHomepageSpacer {
+        margin-top: 40px;
+    }
+
     .homepageTrajectoryImagesLeft > img,
     .homepageTrajectoryImagesRight > img,
     .homepageImgBackgroundLeft,
@@ -1671,7 +1679,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 @media only screen and (min-width: 501px) {
     .under500only { display: none; }
     .homePathwaysTitle {
-        margin-top: 0px;
+        /* margin-top: -20px; */
     }
     .homePathwaysDesc {
         max-width: 700px;
@@ -1685,7 +1693,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .h1Shrink { font-size: 20px; }
     .smallText { font-size: 12px;  }
     .homepageSeparator { transform: scale(3, .02); }
-    .marginTopOnDesktop { margin-top: 0px;}
+    .marginTopOnDesktop { margin-top: 0px; }
+
+    #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
 
     .homepageTrajectory { margin-bottom: -65px; }
     .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
