@@ -44,23 +44,24 @@ class Account extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-
-        // Check if valid
         const vals = this.props.formData.settings.values;
 
-        // check if all fields have a value
-        let valsCounter = 0;
-        for (let i in vals) {
-            valsCounter++;
-        }
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'name',
+            'email',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
 
-        if (!vals || valsCounter < 3) {
-            return;
-        }
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) return;
 
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
-            return;
-        }
         const user = {
             name: this.props.formData.settings.values.name,
             email: this.props.formData.settings.values.email,

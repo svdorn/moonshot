@@ -45,9 +45,12 @@ const validate = values => {
         'email',
         'password',
     ];
+    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address';
+    }
     requiredFields.forEach(field => {
         if (!values[field]) {
-            errors[field] = 'This field is required'
+            errors[field] = 'This field is required';
         }
     });
 
@@ -55,19 +58,29 @@ const validate = values => {
 };
 
 class Login extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {showErrors: true};
+    }
+
     handleSubmit(e) {
         e.preventDefault();
         const vals = this.props.formData.login.values;
 
-        // check if all fields have a value
-        let valsCounter = 0;
-        for (let i in vals) {
-            valsCounter++;
-        }
+        // Check if the form is valid
+        let notValid = false;
+        const requiredFields = [
+            'email',
+            'password',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
 
-        if (!vals || valsCounter !== 2) {
-            return;
-        }
         const user = {
             email: this.props.formData.login.values.email,
             password: this.props.formData.login.values.password

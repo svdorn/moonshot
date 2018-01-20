@@ -73,19 +73,23 @@ class Signup extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-
-        // Check if valid
         const vals = this.props.formData.signup.values;
 
-        // check if all fields have a value
-        let valsCounter = 0;
-        for (let i in vals) {
-            valsCounter++;
-        }
-
-        if (!vals || valsCounter !== 4) {
-            return;
-        }
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'name',
+            'email',
+            'password',
+            'password2',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
 
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
             return;
