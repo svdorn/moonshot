@@ -36,7 +36,8 @@ export function getUserFromSession(callback) {
                 dispatch({
                     type: "GET_USER_FROM_SESSION_REJECTED",
                     errorMessage:"error getting user from session",
-                    isFetching: false})
+                    isFetching: false});
+                callback(true);
             })
     };
 }

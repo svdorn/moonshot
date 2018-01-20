@@ -54,7 +54,6 @@ class Main extends Component {
                 self.setState({load: true});
             }
         })
-        //this.props.getUserAgent();
     }
 
     render() {
