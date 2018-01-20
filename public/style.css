@@ -158,7 +158,7 @@ form > h1 {
 }
 
 .blueWhiteButton {
-    background-color: #2de7ef;
+    background: rgba(255,255,255,.2);
     border: 2px solid white;
 }
 
