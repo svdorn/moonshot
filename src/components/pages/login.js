@@ -1,9 +1,10 @@
 "use strict"
 import React, { Component } from 'react';
 import { TextField } from 'material-ui';
-import { login } from '../../actions/usersActions';
+import { login, closeNotification } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
@@ -77,6 +78,17 @@ class Login extends Component {
         this.props.login(user, saveSession);
     }
 
+    goTo (route)  {
+        // closes any notification
+        this.props.closeNotification();
+        // sets header to white
+        // this.props.setHeaderBlue(false);
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
+    }
+
     render() {
         return (
             <div className="fullHeight greenToBlue formContainer">
@@ -100,8 +112,8 @@ class Login extends Component {
                                 label="Password"
                             /><br/><br/>
                         </div>
-                        <a href="/signup">Create account</a><br/>
-                        <a href="/forgotPassword">Forgot Password?</a><br/>
+                        <div className="clickable" onClick={() => this.goTo('/signup')}>Create account</div>
+                        <div className="clickable" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
                         <button
                             type="submit"
                             className="formSubmitButton"
@@ -118,7 +130,8 @@ class Login extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        login
+        login,
+        closeNotification
     }, dispatch);
 }
 

@@ -61,7 +61,7 @@ class Main extends Component {
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <div className="centerOfPage">
-                        <Paper style={{padding:'10px'}}>
+                        <Paper style={{padding: '10px'}}>
                             <img src="/images/OfficialLogoBlue.png" style={{
                                 height: "100px",
                                 width: "320px",
