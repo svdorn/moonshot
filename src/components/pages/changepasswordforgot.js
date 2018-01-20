@@ -49,10 +49,21 @@ class PasswordChange extends Component {
 
         // Check if valid
         const vals = this.props.formData.forgotPassChange.values;
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'password',
+            'password2',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
+        if (vals.password != vals.password2) return;
 
-        if (vals.password != vals.password2) {
-            return;
-        }
         const token = this.props.location.search.substr(1);
         const user = {
             token: token,

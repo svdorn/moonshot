@@ -73,11 +73,9 @@ class Signup extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-
-        // Check if valid
         const vals = this.props.formData.signup.values;
 
-        // check if all fields have a value
+        // Form validation before submit
         let notValid = false;
         const requiredFields = [
             'name',
