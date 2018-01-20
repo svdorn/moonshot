@@ -47,15 +47,18 @@ class ContactUs extends Component {
         e.preventDefault();
         const vals = this.props.formData.contactUs.values;
 
-        let valsCounter = 0;
-        for (let i in vals) {
-            valsCounter++;
-        }
-
-        if (!vals || valsCounter !== 1) {
-            this.props.formError();
-            return;
-        }
+        // Check if the form is valid
+        let notValid = false;
+        const requiredFields = [
+            'message'
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
 
         const user = {
             message: vals.message,
