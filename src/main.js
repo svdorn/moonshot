@@ -20,7 +20,7 @@ import {bindActionCreators} from 'redux';
 let theme = {
     userAgent: 'all',
     spacing: spacing,
-    fontFamily: 'Century Gothic, CenturyGothic, AppleGothic, sans-serif',
+    fontFamily: 'Didact Gothic, sans-serif',
     palette: {
         primary1Color: '#00c3ff',
         primary2Color: lightBlue500,
