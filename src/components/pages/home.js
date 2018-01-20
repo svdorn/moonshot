@@ -191,7 +191,7 @@ class Home extends Component{
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
 
                     <div className="infoBox whiteText mediumText" style={{zIndex:"20", width:"100%"}}>
-                        Skip the resum&eacute;.<br/> Learn the skills that<br/> employers need<div className="under400only br"><br/></div> <i>for free.</i><br/>
+                        Skip the resum&eacute;.<br/> Learn skills that employers<div className="from500to600only under400only br"><br/></div> need<div className="outside500to600only above400only br"><br/></div> <i>for free, forever.</i><br/>
                         <button className="outlineButton blueWhiteButton"
                             onClick={() => this.goTo('/signup')}>
                             Get Started
@@ -274,7 +274,7 @@ class Home extends Component{
                     </div>
                 </div>
 
-                <div className="purpleToGreenSpacer" />
+                <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer" />
 
                 <div className="topMarginOnSmallScreen" style={{textAlign:"center"}}>
                     <div className="center mediumText blueText homePathwaysTitle">Pathways</div>
@@ -295,11 +295,15 @@ class Home extends Component{
                         </div>
                         : null
                     }
-                    <button
-                        className="outlineButton whiteBlueButton bigCreateYourFreeAccount"
-                        onClick={() => this.goTo('/signup')}>
-                        Create Your <div className="above600only"><br/></div>Free Account
+                    <button className="blueGradientButtonExterior bigButton"
+                            onClick={() => this.goTo('/signup')}
+                            style={{marginTop: "40px"}}
+                    >
+                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                            Create Account
+                        </div>
                     </button>
+                    <div className="smallText blueText" style={{margin:"10px 0 55px"}}><i>{"Don't worry, it's free."}</i></div>
                 </div>
 
                 <div className="purpleToGreenSpacer" />
@@ -315,8 +319,8 @@ class Home extends Component{
                             onClick={() => this.goTo('/signup')}
                             style={{marginTop: "40px"}}
                     >
-                        <div className="gradientBorderButtonInterior">
-                            Make Your<div className="under600only"> </div><div className="above600only"><br/></div>Free Profile
+                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                            Start Profile
                         </div>
                     </button>
                 </div>

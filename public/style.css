@@ -144,7 +144,7 @@ form > h1 {
 
 .outlineButton {
     font-size: 30px;
-    padding: 9px 20px 5px 20px;
+    padding: 2px 18px 5px;
     margin-top: 25px;
     cursor: pointer;
     line-height: initial;
@@ -161,6 +161,9 @@ form > h1 {
 .blueWhiteButton {
     background: rgba(255,255,255,.2);
     border: 2px solid white;
+}
+.blueWhiteButton:hover {
+    background: linear-gradient(to top right, #3dffef, #3de1ff);
 }
 
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
@@ -187,12 +190,12 @@ form > h1 {
 
 .menuDivider {
     width: 2px;
-    height: 26px;
+    height: 21px;
     background-color: white;
-    margin: 25px 15px 0px 15px;
+    margin: 30px 15px 0px 15px;
 }
-.menuDivider.loggedOut { margin: 25px 15px 0px 15px; }
-.menuDivider.loggedIn { margin: 25px -3px 0px 12px; }
+.menuDivider.loggedOut { margin: 30px 15px 0px 15px; }
+.menuDivider.loggedIn { margin: 30px -3px 0px 12px; }
 
 .smallScreenMenu {
     margin-top: 25px;
@@ -425,20 +428,27 @@ button.link {
     padding: 2px 10px;
     border-radius: 25px;
 }
+
+.blueGradientButtonExterior {
+    background: linear-gradient(to bottom right, #5dfdff, #3dabff);
+    color: var(--moonshotLightBlue);
+}
 .purpleToPinkButtonExterior {
     background: linear-gradient(to bottom right, var(--moonshotDarkPurple), #ff79b7);
-    padding: 2px;
     color: var(--moonshotDarkPurple);
-    border: none;
-    border-radius: 2px;
 }
 .blueToPurpleButtonExterior {
     background: linear-gradient(to right, #00fcff, #b25fff);
-    padding: 2px;
     color: var(--moonshotLightBlue);
+}
+.purpleToPinkButtonExterior,
+.blueGradientButtonExterior,
+.blueToPurpleButtonExterior {
+    padding: 2px;
     border: none;
     border-radius: 2px;
 }
+
 .gradientBorderButtonInterior {
     width: 100%;
     height: 100%;
@@ -446,8 +456,9 @@ button.link {
 }
 .bigButton {
     font-size: 25px;
+    line-height: 120%;
 }
-.bigButton > div { padding: 0px 15px 1px; }
+.bigButton > div { padding: 4px 15px 5px; }
 .paperBox {
     height: 300px;
     width: 400px;
@@ -850,6 +861,11 @@ button.link {
     position: relative;
 }
 
+.invertColorOnHover.gradientBorderButtonInterior:hover {
+    color: white;
+    background-color: rgba(0,0,0,0);
+    background: rgba(0,0,0,0);
+}
 
 
 
@@ -1008,6 +1024,10 @@ button.link {
     margin: 50px 20% 50px;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
 }
+#picturesToPathwaysHomepageSpacer {
+    margin-top: 60px;
+    margin-bottom: 40px;
+}
 
 .profileSeparator {
     margin: 30px 0;
@@ -1165,7 +1185,7 @@ button.link {
 
 .homePathwaysDesc {
     margin: auto;
-    margin-bottom: 30px;
+    margin-bottom: 40px;
     font-size: 22px;
 }
 
@@ -1391,6 +1411,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         visibility: hidden;
         opacity: 0;
         transition: visibility 0s .5s, opacity .5s linear;
+    }
+
+    #picturesToPathwaysHomepageSpacer {
+        margin-top: 40px;
     }
 
     .homepageTrajectoryImagesLeft > img,
@@ -1637,12 +1661,16 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 601px) {
     .under600only { display: none; }
+    .from500to600only { display: none; }
+    .outside500to600only { display: initial; }
 }
 
 @media only screen and (max-width: 600px) {
     .above600only { display: none; }
+    .from500to600only { display: initial; }
+    .outside500to600only { display: none; }
     #discoverSearchBarMedScreen > div:nth-child(4) {
         display: inherit;
         margin-top: -30px;
@@ -1667,7 +1695,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 @media only screen and (min-width: 501px) {
     .under500only { display: none; }
     .homePathwaysTitle {
-        margin-top: 0px;
+        /* margin-top: -20px; */
     }
     .homePathwaysDesc {
         max-width: 700px;
@@ -1675,11 +1703,15 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 500px) {
+    .outside500to600only { display: initial; }
+    .from500to600only { display: none; }
     .above500only { display: none; }
     .h1Shrink { font-size: 20px; }
     .smallText { font-size: 12px;  }
     .homepageSeparator { transform: scale(3, .02); }
-    .marginTopOnDesktop { margin-top: 0px;}
+    .marginTopOnDesktop { margin-top: 0px; }
+
+    #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
 
     .homepageTrajectory { margin-bottom: -65px; }
     .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
@@ -1805,11 +1837,13 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .pathwayDescriptionAndSalaryIcon { padding-right: 10px; }
 }
 
-@media only screen and (min-width: 400px) {
+@media only screen and (min-width: 401px) {
     .under400only { display: none; }
 }
 
 @media only screen and (max-width: 400px) {
+    .under400only { display: initial; }
+    .above400only { display: none; }
     .pathwayLandingIcons {
         height: 30px;
         width: 30px;
