@@ -61,7 +61,7 @@ class Pathway extends Component {
             quote: {
                 everything: {
                     textAlign: "center",
-                    padding: "20px 0px"
+                    padding: "40px 0px"
                 },
                 container: {
                     border: "2px solid #B869FF",
