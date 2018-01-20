@@ -332,7 +332,7 @@ class ForBusiness extends Component {
                                 </h2>
                                 Expert led, interactive learning
                                 through videos, articles, skill
-                                assessments and real-world projects.
+                                assessments <div className="above800only br"><br/></div>and real-world projects.
                             </div>
                         </div>
                         <div className="homepageTrajectoryImagesLeft">
@@ -351,7 +351,7 @@ class ForBusiness extends Component {
                                 <h2 className="purpleText"><b>Sponsor Students</b></h2>
                                 Moonshot can source the talent,
                                 you can sponsor your pool
-                                of candidates, or we can do both.
+                                of candidates, <div className="above800only br"><br/></div>or we can do both.
                             </div>
                         </div>
 
