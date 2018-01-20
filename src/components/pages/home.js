@@ -191,7 +191,7 @@ class Home extends Component{
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
 
                     <div className="infoBox whiteText mediumText" style={{zIndex:"20", width:"100%"}}>
-                        Skip the resum&eacute;.<br/> Learn the skills that<br/> employers need<div className="under400only br"><br/></div> <i>for free.</i><br/>
+                        Skip the resum&eacute;.<br/> Learn skills that employers<div className="from500to600only under400only br"><br/></div> need<div className="outside500to600only above400only br"><br/></div> <i>for free, forever.</i><br/>
                         <button className="outlineButton blueWhiteButton"
                             onClick={() => this.goTo('/signup')}>
                             Get Started
@@ -316,7 +316,7 @@ class Home extends Component{
                             style={{marginTop: "40px"}}
                     >
                         <div className="gradientBorderButtonInterior">
-                            Make Your<div className="under600only"> </div><div className="above600only"><br/></div>Free Profile
+                            Create Profile
                         </div>
                     </button>
                 </div>

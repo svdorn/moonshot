@@ -187,12 +187,12 @@ form > h1 {
 
 .menuDivider {
     width: 2px;
-    height: 26px;
+    height: 21px;
     background-color: white;
-    margin: 25px 15px 0px 15px;
+    margin: 30px 15px 0px 15px;
 }
-.menuDivider.loggedOut { margin: 25px 15px 0px 15px; }
-.menuDivider.loggedIn { margin: 25px -3px 0px 12px; }
+.menuDivider.loggedOut { margin: 30px 15px 0px 15px; }
+.menuDivider.loggedIn { margin: 30px -3px 0px 12px; }
 
 .smallScreenMenu {
     margin-top: 25px;
@@ -1624,12 +1624,16 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 601px) {
     .under600only { display: none; }
+    .from500to600only { display: none; }
+    .outside500to600only { display: initial; }
 }
 
 @media only screen and (max-width: 600px) {
     .above600only { display: none; }
+    .from500to600only { display: initial; }
+    .outside500to600only { display: none; }
     #discoverSearchBarMedScreen > div:nth-child(4) {
         display: inherit;
         margin-top: -30px;
@@ -1662,6 +1666,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 500px) {
+    .outside500to600only { display: initial; }
+    .from500to600only { display: none; }
     .above500only { display: none; }
     .h1Shrink { font-size: 20px; }
     .smallText { font-size: 12px;  }
@@ -1792,11 +1798,13 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .pathwayDescriptionAndSalaryIcon { padding-right: 10px; }
 }
 
-@media only screen and (min-width: 400px) {
+@media only screen and (min-width: 401px) {
     .under400only { display: none; }
 }
 
 @media only screen and (max-width: 400px) {
+    .under400only { display: initial; }
+    .above400only { display: none; }
     .pathwayLandingIcons {
         height: 30px;
         width: 30px;
