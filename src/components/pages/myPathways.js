@@ -194,7 +194,11 @@ class MyPathways extends Component {
                                     </Tab>
                                 </Tabs>
                             </div>
-                            : <div className="full" />}
+                            :
+                            <div>
+                                <div className="fullHeight purpleGradient"/>
+                                <div className="fullHeight purpleGradient"/>
+                            </div>}
                     </div>
                     : null}
             </div>
