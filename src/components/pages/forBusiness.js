@@ -162,11 +162,10 @@ class ForBusiness extends Component {
         ];
 
         const roles = [
-            "UX Design", "Data Science", "Machine Learning", "Graphic Design",
-            "Front End Web Dev", "Virtual Reality", "3D Printing", "Javascript",
-            "Agile", "Game Design", "SQL", "IoT", "Cloud",
-            "DevOps", "SEO", "Social Media", "Growth Marketing",
-            "Google Analytics", "Project Management", "Entrepeneurship"
+            "Data Scientist", "VR Developer", "UX Designer", "Digital Marketer",
+            "Front-End Developer", "Software Engineer", "Product Manager",
+            "Social Media Director", "Business Analyst", "Scrum Master",
+            "Machine Learning Engineer", "Back-End Developer", "Business Development"
         ]
 
         let brKey = -1;
