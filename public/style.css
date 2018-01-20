@@ -1045,7 +1045,7 @@ button.link {
     width: 54%;
     overflow: auto;
 }
-.homepageTrajectoryTextLeft:first-child { margin-top: 60px; }
+/* .homepageTrajectoryTextLeft:first-child { margin-top: 60px; } */
 .homepageTrajectoryTextLeft.forBusiness,
 .homepageTrajectoryTextRight.forBusiness {
     width: 45%;
@@ -1565,6 +1565,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 700px) {
+    .smallText2, .smallText2.homepageTrajectoryTextRightDiv.onHome, .smallText2.homepageTrajectoryTextLeftDiv.onHome {
+        font-size: 15px;
+    }
+
     .aboutMeLi {
         width: 100%;
         text-align: center;
@@ -1650,6 +1654,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 120%;
         margin-left: -10%;
     }
+    .homepageTrajectoryTextLeft.onHome, .homepageTrajectoryTextRight.onHome {
+        overflow: hidden;
+        min-height: 130px;
+    }
     /* move icons over to the left */
     .homepageTrajectoryContainer > div:nth-child(1) > div > img,
     .homepageTrajectoryContainer > div:nth-child(3) > div > img {
@@ -1689,8 +1697,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         margin: 0px;
     }
     .forBusinessLineWithCirclesContainer { margin-top: 8px; }
-    .homepageTrajectoryTextLeft,
-    .homepageTrajectoryTextRight {
+    .homepageTrajectoryTextLeft.forBusiness,
+    .homepageTrajectoryTextRight.forBusiness {
         transform: none;
     }
     /* .forBusinessTrajectoryTextLeft > div,

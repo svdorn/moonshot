@@ -213,21 +213,21 @@ class Home extends Component{
 
                 <div className="homepageTrajectoryContainer" style={{marginTop:"30px"}}>
                     <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextLeft">
+                        <div className="homepageTrajectoryTextLeft onHome">
                             <img
                                 src="/icons/Lightbulb.png"
                                 alt="Lightbulb"
                                 title="Lightbulb icon"
                                 className="homepageTrajectoryTextRightIcon"
                             />
-                            <div className="smallText2 homepageTrajectoryTextLeftDiv">
+                            <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
                                 <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
                                 Our pathways are built with
                                 leading companies and feature skills
                                 demanded by the market.
                             </div>
                         </div>
-                        <div className="homepageTrajectoryImagesRight">
+                        <div className="homepageTrajectoryImagesRight onHome">
                             <div className="homepageImgBackgroundRight greenGradient" />
                             <img
                                 src="/images/VRGuy.jpg"
@@ -238,14 +238,14 @@ class Home extends Component{
                     <br/>
 
                     <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextRight">
+                        <div className="homepageTrajectoryTextRight onHome">
                             <img
                                 src="/icons/Person.png"
                                 alt="Person icon"
                                 title="Person icon"
                                 className="homepageTrajectoryTextRightIcon"
                             />
-                            <div className="smallText2 homepageTrajectoryTextRightDiv">
+                            <div className="smallText2 homepageTrajectoryTextRightDiv onHome">
                                 <h2 className="blueText">Build Your Profile</h2>
                                 Add your skills, completed projects and
                                 finished pathways. Prove yourself through
@@ -263,14 +263,14 @@ class Home extends Component{
                     <br />
 
                     <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextLeft">
+                        <div className="homepageTrajectoryTextLeft onHome">
                             <img
                                 src="/icons/Badge.png"
                                 alt="Badge icon"
                                 title="Badge icon"
                                 className="homepageTrajectoryTextLeftIcon"
                             />
-                            <div className="smallText2 homepageTrajectoryTextLeftDiv">
+                            <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
                                 <h2 className="purpleText">Get Hired By Companies<br/>Leading the future</h2>
                                 Compete for open positions with
                                 sponsor employers by excelling in
