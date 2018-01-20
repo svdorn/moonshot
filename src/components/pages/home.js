@@ -295,11 +295,15 @@ class Home extends Component{
                         </div>
                         : null
                     }
-                    <button
-                        className="outlineButton whiteBlueButton bigCreateYourFreeAccount"
-                        onClick={() => this.goTo('/signup')}>
-                        Create Your <div className="above600only"><br/></div>Free Account
+                    <button className="blueGradientButtonExterior bigButton"
+                            onClick={() => this.goTo('/signup')}
+                            style={{marginTop: "40px"}}
+                    >
+                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                            Create Account
+                        </div>
                     </button>
+                    <div className="smallText blueText" style={{marginTop:"10px"}}><i>{"Don't worry, it's free."}</i></div>
                 </div>
 
                 <div className="purpleToGreenSpacer" />
@@ -312,11 +316,11 @@ class Home extends Component{
                     </div>
 
                     <button className="purpleToPinkButtonExterior bigButton"
-                            onClick={this.handleOpen}
+                            onClick={() => this.goTo('/signup')}
                             style={{marginTop: "40px"}}
                     >
-                        <div className="gradientBorderButtonInterior">
-                            Create Profile
+                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                            Start Profile
                         </div>
                     </button>
                 </div>
