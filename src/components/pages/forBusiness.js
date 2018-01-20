@@ -231,7 +231,7 @@ class ForBusiness extends Component {
                         Better information, <br/>
                         better hiring decisions. <br/>
                         <button className="outlineButton"
-                                style={{backgroundColor: "transparent", border: "2px solid white", marginTop: '20px'}}
+                                style={{backgroundColor: "transparent", border: "2px solid white"}}
                                 onClick={this.handleOpen}>
                             {"Let's Begin"}
                         </button>
@@ -470,7 +470,7 @@ class ForBusiness extends Component {
                     </Paper>
                 </div>
 
-                <div className="center" style={{margin:'40px 0 20px'}}>
+                <div className="center" style={{margin:'25px 0 20px'}}>
                     <button className="outlineButton whiteBlueButton" onClick={this.handleOpen}>
                         Contact Us
                     </button>
