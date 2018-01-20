@@ -428,8 +428,7 @@ class ForBusiness extends Component {
                             <div style={styles.bottomListItem}>
                                 <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon" style={{marginRight:'10px'}}/>
                                 <div className="smallText aResumeCantDoThisText">See their quality of work under
-                                    pressure with real-world
-                                    projects relevant to your company.
+                                    pressure with real-world projects relevant <div className="above800only br"><br/></div>to your company.
                                 </div>
                             </div>
                             <div style={styles.bottomListItem}>
@@ -449,7 +448,7 @@ class ForBusiness extends Component {
                             <div style={styles.bottomListItem}>
                                 <img src="/icons/Filter.png" className="forBusinessIcon"/>
                                 <div className="smallText aResumeCantDoThisText">
-                                    Filter out the unqualified and uncommitted.
+                                    Filter out the unqualified <div className="above800only br"><br/></div>and uncommitted.
                                 </div>
                             </div>
                         </div>
