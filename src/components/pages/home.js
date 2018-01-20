@@ -167,17 +167,6 @@ class Home extends Component{
         let brKey = -1;
         const exampleSkills = skills.map(function (skill) {
             brKey++;
-            // return (
-            //     <div key={skill + "div"} style={{display: 'inline-block', marginTop: '15px'}}>
-            //         <Chip key={skill}
-            //               backgroundColor='#white'
-            //               labelColor="#00d2ff"
-            //               labelStyle={{fontSize: '20px'}}
-            //               style={{marginLeft: '20px', border: "1px solid #00d2ff"}}>
-            //             {skill}
-            //         </Chip>
-            //     </div>
-            // );
             return (
                 <div key={skill + "div"}
                     style={{display: 'inline-block', marginTop: '15px'}}

@@ -161,6 +161,28 @@ class ForBusiness extends Component {
             />,
         ];
 
+        const roles = [
+            "Data Scientist", "VR Developer", "UX Designer", "Digital Marketer",
+            "Front-End Developer", "Software Engineer", "Product Manager",
+            "Social Media Director", "Business Analyst", "Scrum Master",
+            "Machine Learning Engineer", "Back-End Developer", "Business Development"
+        ]
+
+        let brKey = -1;
+        const exampleRoles = roles.map(function (role) {
+            brKey++;
+            return (
+                <div key={role + "div"}
+                    style={{display: 'inline-block', marginTop: '15px'}}
+                    className="gradientBorderPurpleToPinkChip"
+                >
+                    <div key={role} className="purpleText">
+                        {role}
+                    </div>
+                </div>
+            );
+        });
+
         return (
             <div className="jsxWrapper">
                 <Dialog
@@ -310,7 +332,7 @@ class ForBusiness extends Component {
                     <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
-                                <h2 className="blueText"><b>What Skills Are You <div className="above800only br"><br/></div> Hiring For?</b></h2>
+                                <h2 className="blueText"><b>What Skills Are You <div className="above800only br"><br/></div> Looking For?</b></h2>
                                 UX Design, Data Science, Full Stack
                                 Development, Marketing, Adobe...
                             </div>
@@ -349,7 +371,7 @@ class ForBusiness extends Component {
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
                                 <h2 className="purpleText"><b>Sponsor Students</b></h2>
-                                Moonshot can source the talent,
+                                Moonshot can find the talent,
                                 you can sponsor your pool
                                 of candidates, <div className="above800only br"><br/></div>or we can do both.
                             </div>
@@ -379,6 +401,19 @@ class ForBusiness extends Component {
                                 src="/images/TalkingBeardGuy.jpeg"
                             />
                         </div>
+                    </div>
+                </div>
+
+                <div className="homepageSeparatorContainer marginTopOnDesktop">
+
+                </div>
+
+                <div className="center" style={{marginBottom:"50px"}}>
+                    <h1 className="isolatedHeader purpleText">
+                        <b>What Positions Are You Hiring For?</b>
+                    </h1>
+                    <div id="exampleSkillsContainer">
+                        { exampleRoles }
                     </div>
                 </div>
 
