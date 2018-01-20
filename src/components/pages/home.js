@@ -312,7 +312,7 @@ class Home extends Component{
                     </div>
 
                     <button className="purpleToPinkButtonExterior bigButton"
-                            onClick={this.handleOpen}
+                            onClick={() => this.goTo('/signup')}
                             style={{marginTop: "40px"}}
                     >
                         <div className="gradientBorderButtonInterior">
