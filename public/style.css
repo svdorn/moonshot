@@ -198,6 +198,8 @@ form > h1 {
     margin-right: 18px;
 }
 
+.noOverflowX { overflow-x: hidden; }
+
 .pathwayLandingSkillChip {
     border: 1px solid rgb(184, 105, 255);
     border-radius: 10px;
@@ -210,8 +212,8 @@ form > h1 {
     font-size: 20px;
     padding: 5px 10px 1px;
 }
-.skillChips > div { margin-left: 20px; }
-.skillChips > div:first-child { margin-left: 0px; }
+.center.skillChips { margin: 0px 15px; }
+.skillChips > div { margin: 0px 10px 10px; }
 
 /* So that the menu text color is the same as the rest of the header */
 .headerDropdownWhite > div:first-child > div:nth-child(2) {
@@ -303,6 +305,8 @@ form > h1 {
     height: 100%;
     position: relative;
 }
+#pathwaySalaryInfo { margin-left: 9%; margin-right: 20%; }
+#pathwayShortDescription { margin-left: 20%; }
 
 
 button.link {
@@ -1417,6 +1421,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         display: none;
     }
 
+    #pathwaySalaryInfo { margin-left: 16%; margin-right: 10%; }
+    #pathwayShortDescription { margin-left: 25%; }
+
+    .pathwayDescriptionAndSalaryText { width: 70%; }
+    .pathwayDescriptionAndSalaryIcon { padding-right: 25px; }
+
     .above800fade {
         visibility: hidden;
         opacity: 0;
@@ -1610,6 +1620,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .mediumTextDoubleShrink {
         font-size: 20px;
     }
+    .pathwayDescriptionAndSalaryText {
+        font-size: 15px;
+    }
+    #pathwayMoneyIcon { height: 48px; }
+    #pathwayHatIcon { height: 38px; }
 }
 
 @media only screen and (min-width: 501px) {
@@ -1739,6 +1754,15 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     #pathwayLandingTopInfoList > li {
         width: 100px;
     }
+}
+
+@media only screen and (max-width: 450px) {
+    .pathwayDescriptionAndSalaryText {
+        font-size: 12px;
+    }
+    #pathwayMoneyIcon { height: 40px; }
+    #pathwayHatIcon { height: 32px; }
+    .pathwayDescriptionAndSalaryIcon { padding-right: 10px; }
 }
 
 @media only screen and (min-width: 400px) {

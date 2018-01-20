@@ -199,7 +199,7 @@ class Pathway extends Component {
         if (skills) {
             pathwaySkills = skills.map(function (skill) {
                 return (
-                    <div style={{display: 'inline-block'}}>
+                    <div key={skill + "Surrounder"} style={{display: 'inline-block'}}>
                         <div key={skill}
                              className="skillChip pathwayLandingSkillChip"
                         >
@@ -229,7 +229,7 @@ class Pathway extends Component {
 
         return (
             //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
-            <div className="jsxWrapper">
+            <div className="jsxWrapper noOverflowX">
                 {pathway.sponsor !== undefined ?
                     <div style={{minWidth:"250px"}}>
                         <div className="fullHeight purpleGradient">
@@ -310,7 +310,7 @@ class Pathway extends Component {
                                         "pathwayDescriptionAndSalaryFull"
                                     }>
                                             <div className={pathway.industry ? "pathwayDescriptionAndSalarySpacer" : ""}
-                                                 style={pathway.industry ? {marginLeft: "20%"} : {}}
+                                                 id={pathway.industry ? "pathwayShortDescription" : ""}
                                             >
                                                 <img
                                                     src="/icons/GraduationHatPurple.png"
@@ -331,7 +331,7 @@ class Pathway extends Component {
                                         "pathwayDescriptionAndSalaryFull"
                                     }>
                                         <div className={pathway.industry ? "pathwayDescriptionAndSalarySpacer" : ""}
-                                             style={pathway.industry ? {marginLeft:"9%", marginRight:"20%"} : {}}
+                                             id={pathway.industry ? "pathwaySalaryInfo" : ""}
                                         >
                                             <img
                                                 src="/icons/DollarSignPurple.jpg"
