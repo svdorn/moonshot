@@ -147,6 +147,7 @@ form > h1 {
     padding: 9px 20px 5px 20px;
     margin-top: 25px;
     cursor: pointer;
+    line-height: initial;
 }
 
 .greenButton {
@@ -164,8 +165,8 @@ form > h1 {
 
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
     padding-top: 5px;
-    border: 2px solid var(--moonshotMidBlue);
-    color: var(--moonshotMidBlue);
+    border: 2px solid var(--moonshotLightBlue);
+    color: var(--moonshotLightBlue);
 }
 .semiOpaqueWhiteBlueButton { background-color: rgba(255,255,255,.4); }
 .whiteBlueButton { background-color: white; }
@@ -1180,7 +1181,8 @@ button.link {
 
 .bigCreateYourFreeAccount {
     margin-top: 30px;
-    padding:10px 50px 4px;
+    padding: 10px 50px 4px;
+    font-size: 23px;
 }
 
 .pathwayPreviewLi { vertical-align: top; }

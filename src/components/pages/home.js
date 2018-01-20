@@ -14,7 +14,7 @@ class Home extends Component{
         super(props);
 
         let emptyPathway = {
-            name: "",
+            name: "Loading...",
             previewImage: "",
             sponsor: {name: "", logo: ""},
             estimatedCompletionTime: "",
