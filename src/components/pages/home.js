@@ -305,9 +305,8 @@ class Home extends Component{
                 <div className="purpleToGreenSpacer" />
 
                 <div className="center" style={{marginBottom:"50px"}}>
-                    <h1 className="isolatedHeader purpleText">
-                        Build Your Skillset
-                    </h1>
+                    <div className="mediumText purpleText homePathwaysTitle">Build Your Skillset</div>
+
                     <div id="exampleSkillsContainer">
                         { exampleSkills }
                     </div>
