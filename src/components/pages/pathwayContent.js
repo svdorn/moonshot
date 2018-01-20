@@ -133,10 +133,10 @@ class PathwayContent extends Component {
                 backgroundColor: "white",
                 color: '#B869FF',
             },
-            insideTab:{
-                marginTop:"10px",
+            insideTab: {
+                marginTop: "10px",
                 marginLeft: "5%",
-                marginRight:"5%"
+                marginRight: "5%"
             },
         }
 
@@ -210,7 +210,7 @@ class PathwayContent extends Component {
                                 </Paper>
                             </div>
 
-                            <div style={{height:"10px"}}/>
+                            <div style={{height: "10px"}}/>
                             {content}
 
                             <RaisedButton
@@ -252,20 +252,27 @@ class PathwayContent extends Component {
                                         className="overviewExercisesComments"
                                     >
                                         <Tab label="Overview" style={style.tab}>
-                                            <p className="smallText2 center" style={style.insideTab}>{pathway.overview}</p>
+                                            <p className="smallText2 center"
+                                               style={style.insideTab}>{pathway.overview}</p>
                                         </Tab>
                                         <Tab label="Exercise Files" style={style.tab}>
-                                            <h1 className="center smallText2" style={style.insideTab}>No exercise files yet.</h1>
+                                            <h1 className="center smallText2" style={style.insideTab}>No exercise files
+                                                yet.</h1>
                                         </Tab>
                                         <Tab label="Comments" style={style.tab}>
-                                            <h1 className="center smallText2" style={style.insideTab}>No comments yet.</h1>
+                                            <h1 className="center smallText2" style={style.insideTab}>No comments
+                                                yet.</h1>
                                         </Tab>
                                     </Tabs>
                                 </div>
                             </Paper>
                         </div>
                     </div>
-                    : null}
+                    :
+                    <div>
+                        <div className="fullHeight"/>
+                        <div className="fullHeight"/>
+                    </div>}
             </div>
         );
     }

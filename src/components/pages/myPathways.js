@@ -178,7 +178,9 @@ class MyPathways extends Component {
                                                 style={style.pathwayPreviewUl}>
                                                 {this.state.userPathwayPreviews}
                                             </ul>
-                                            : <h1 className="center mediumText">None</h1>}
+                                            : <div className="fullHeight">
+                                                <h1 className="center mediumText">None</h1>
+                                            </div>}
                                     </Tab>
                                     <Tab label="Completed" style={style.tab}>
                                         {this.state.userCompletedPathwayPreviews ?
@@ -186,12 +188,13 @@ class MyPathways extends Component {
                                                 style={style.pathwayPreviewUl}>
                                                 {this.state.userCompletedPathwayPreviews}
                                             </ul>
-                                            : <h1 className="center mediumText">None</h1>}
+                                            : <div className="fullHeight">
+                                                <h1 className="center mediumText">None</h1>
+                                            </div>}
                                     </Tab>
                                 </Tabs>
                             </div>
-                            : <div className="center"><CircularProgress
-                                style={{marginTop: "20px", marginBottom: "20px"}}/></div>}
+                            : <div className="full" />}
                     </div>
                     : null}
             </div>
