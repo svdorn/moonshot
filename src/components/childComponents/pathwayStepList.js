@@ -1,10 +1,8 @@
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { Paper } from 'material-ui';
 import { bindActionCreators } from 'redux';
 import { updateCurrentSubStep } from '../../actions/usersActions';
-//import PathwayStep from '../childComponents/pathwayStep';
 import {
   Step,
   Stepper,

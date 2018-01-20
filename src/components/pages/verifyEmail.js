@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { verifyEmail } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Paper, RaisedButton } from 'material-ui';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 class VerifyEmail extends Component {

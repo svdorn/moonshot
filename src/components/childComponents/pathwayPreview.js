@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { browserHistory } from 'react-router';
 import { Paper } from 'material-ui';
-import axios from 'axios';
 
 class PathwayPreview extends Component {
     constructor(props){

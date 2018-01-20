@@ -1,12 +1,11 @@
 "use strict"
 import React, { Component } from 'react';
-import { AppBar, FlatButton, ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarTitle, IconMenu, IconButton } from 'material-ui';
+import { ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, IconMenu, IconButton } from 'material-ui';
 import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { signout, closeNotification, setHeaderBlue } from "../actions/usersActions";
-import Person from 'material-ui/svg-icons/social/person';
 import { axios } from 'axios';
 
 const styles = {

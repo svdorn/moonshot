@@ -1,6 +1,6 @@
 "use strict"
 import React, {Component} from 'react';
-import {AppBar, Paper, Tabs, Tab, CircularProgress, Chip} from 'material-ui';
+import {Tabs, Tab, CircularProgress, Chip} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, setHeaderBlue} from "../../actions/usersActions";

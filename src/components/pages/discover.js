@@ -1,11 +1,10 @@
 "use strict"
 import React, {Component} from 'react';
-import {Paper, RaisedButton, TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup} from 'material-ui';
+import {TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup} from 'material-ui';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
-import Category from '../childComponents/category'
 import {closeNotification} from "../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';

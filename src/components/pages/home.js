@@ -1,6 +1,5 @@
 "use strict"
 import React, { Component } from 'react';
-import { Paper, RaisedButton, Chip } from 'material-ui';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
