@@ -1155,9 +1155,6 @@ button.link {
     text-align: center;
 }
 
-.homePathwaysTitle {
-    color: var(--moonshotLightBlue);
-}
 .homePathwaysDesc {
     margin: auto;
     margin-bottom: 30px;
@@ -1187,8 +1184,8 @@ button.link {
 
 .bigCreateYourFreeAccount {
     margin-top: 30px;
-    padding: 10px 50px 4px;
-    font-size: 23px;
+    padding: 10px 25px 4px;
+    font-size: 25px;
 }
 
 .pathwayPreviewLi { vertical-align: top; }
@@ -1243,6 +1240,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     width: 200px;
     margin: 0 2%;
 }
+
+.homePathwaysTitle { font-size: 55px; }
 
 
 /* decorative triangles */
@@ -1578,6 +1577,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         padding: 0px;
     }
 
+    .homePathwaysTitle { font-size: 45px; }
+
     .aboutMeLi {
         width: 100%;
         text-align: center;
@@ -1643,7 +1644,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .under500only { display: none; }
     .homePathwaysTitle {
         margin-top: 0px;
-        font-size: 60px;
     }
     .homePathwaysDesc {
         max-width: 700px;

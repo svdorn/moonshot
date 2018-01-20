@@ -259,7 +259,7 @@ class Home extends Component{
                                 className="homepageTrajectoryTextLeftIcon"
                             />
                             <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
-                                <h2 className="purpleText">Get Hired By Companies<br/>Leading the future</h2>
+                                <h2 className="purpleText">Get Hired By Companies<br/>Leading The Future</h2>
                                 Compete for open positions with
                                 sponsor employers by excelling in
                                 pathways and strengthening your profile.
@@ -305,9 +305,8 @@ class Home extends Component{
                 <div className="purpleToGreenSpacer" />
 
                 <div className="center" style={{marginBottom:"50px"}}>
-                    <h1 className="isolatedHeader purpleText">
-                        <b>Build Your Skillset</b>
-                    </h1>
+                    <div className="mediumText purpleText homePathwaysTitle">Build Your Skillset</div>
+
                     <div id="exampleSkillsContainer">
                         { exampleSkills }
                     </div>
