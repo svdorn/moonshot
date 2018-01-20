@@ -173,8 +173,8 @@ class ForBusiness extends Component {
             brKey++;
             return (
                 <div key={role + "div"}
-                    style={{display: 'inline-block', marginTop: '15px'}}
-                    className="gradientBorderPurpleToPinkChip"
+                     style={{display: 'inline-block', marginTop: '15px'}}
+                     className="gradientBorderPurpleToPinkChip"
                 >
                     <div key={role} className="purpleText">
                         {role}
@@ -262,7 +262,8 @@ class ForBusiness extends Component {
 
                 <div style={{marginTop: '60px', overflow: 'auto'}}>
                     <div className="center mediumTextDoubleShrink" style={{marginBottom: "50px"}}>
-                        <b>Top College Students and <div className="under500only br"><br/></div>Recent Graduates<br/> Competing to Work for You.</b>
+                        <b>Top College Students and<div className="under500only br"><br/></div> Recent Graduates<br/>
+                            Competing to Work for You.</b>
                     </div>
                     <div style={styles.horizList}>
                         <div className="horizListFull">
@@ -273,7 +274,7 @@ class ForBusiness extends Component {
                                         src="/icons/Key.png"
                                         style={styles.horizListIcon}
                                     /><br/>
-                                    <b>Established <div className="under500only br"><br/></div>Pipeline</b><br/>
+                                    <b>Established<div className="under500only br"><br/></div> Pipeline</b><br/>
                                     Instant access to a pool
                                     of top tier talent.
                                 </div>
@@ -287,7 +288,7 @@ class ForBusiness extends Component {
                                         src="/icons/Evaluate.png"
                                         style={styles.horizListIcon}
                                     /><br/>
-                                    <b>Evaluative <div className="under500only br"><br/></div>Metrics</b><br/>
+                                    <b>Evaluative<div className="under500only br"><br/></div> Metrics</b><br/>
                                     Skill evaluation curated to
                                     your company{"'"}s needs.
                                 </div>
@@ -300,7 +301,7 @@ class ForBusiness extends Component {
                                         src="/icons/Employee.png"
                                         style={styles.horizListIcon}
                                     /><br/>
-                                    <b>Hire <div className="under500only br"><br/></div>Talent</b><br/>
+                                    <b>Hire<div className="under500only br"><br/></div> Talent</b><br/>
                                     See their skills and work
                                     before you hire.
                                 </div>
@@ -312,19 +313,21 @@ class ForBusiness extends Component {
                 <div className="purpleToGreenSpacer"/>
 
                 <div style={{marginTop: '60px', minWidth: "215px"}}>
-                    <div className="center smallText2" style={{marginBottom:'40px',width:'90%',marginLeft:"5%"}}>
+                    <div className="center smallText2" style={{marginBottom: '40px', width: '90%', marginLeft: "5%"}}>
                         <h1 className="purpleText h1Shrink"><b>Our Scholarships to Hire Program</b></h1>
-                        A scholarship for potential hires <div className="under500only br"><br/></div>to learn the skills you need.<br/>
+                        A scholarship for potential hires
+                        <div className="under500only br"><br/></div>
+                        to learn the skills you need.<br/>
                         Scholarships made for your company.
                     </div>
 
                     <div className="forBusinessLineWithCirclesContainer">
                         <div className="forBusinessLineWithCircles">
-                            <div className="forBusinessLine" />
-                            <div className="forBusinessCircle" />
-                            <div className="forBusinessCircle" />
-                            <div className="forBusinessCircle" />
-                            <div className="forBusinessCircle" />
+                            <div className="forBusinessLine"/>
+                            <div className="forBusinessCircle"/>
+                            <div className="forBusinessCircle"/>
+                            <div className="forBusinessCircle"/>
+                            <div className="forBusinessCircle"/>
                         </div>
                     </div>
 
@@ -332,7 +335,9 @@ class ForBusiness extends Component {
                     <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
-                                <h2 className="blueText"><b>What Skills Are You <div className="above800only br"><br/></div> Looking For?</b></h2>
+                                <h2 className="blueText"><b>What Skills Are You
+                                    <div className="above800only br"><br/></div>
+                                    Looking For?</b></h2>
                                 UX Design, Data Science, Full Stack
                                 Development, Marketing, Adobe...
                             </div>
@@ -350,11 +355,15 @@ class ForBusiness extends Component {
                     <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextRight forBusiness">
                             <div className="smallText4 homepageTrajectoryTextRightDiv forBusiness">
-                                <h2 className="greenText"><b>Course Pathways Curated <div className="above500only br"><br/></div> to the Skills You Need.</b>
+                                <h2 className="greenText"><b>Course Pathways Curated
+                                    <div className="above500only br"><br/></div>
+                                    to the Skills You Need.</b>
                                 </h2>
                                 Expert led, interactive learning
                                 through videos, articles, skill
-                                assessments <div className="above800only br"><br/></div>and real-world projects.
+                                assessments
+                                <div className="above800only br"><br/></div>
+                                and real-world projects.
                             </div>
                         </div>
                         <div className="homepageTrajectoryImagesLeft">
@@ -373,7 +382,9 @@ class ForBusiness extends Component {
                                 <h2 className="purpleText"><b>Sponsor Students</b></h2>
                                 Moonshot can find the talent,
                                 you can sponsor your pool
-                                of candidates, <div className="above800only br"><br/></div>or we can do both.
+                                of candidates,
+                                <div className="above800only br"><br/></div>
+                                or we can do both.
                             </div>
                         </div>
 
@@ -408,12 +419,12 @@ class ForBusiness extends Component {
 
                 </div>
 
-                <div className="center" style={{marginBottom:"50px"}}>
+                <div className="center" style={{marginBottom: "50px"}}>
                     <h1 className="isolatedHeader purpleText">
                         <b>What Positions Are You Hiring For?</b>
                     </h1>
                     <div id="exampleSkillsContainer">
-                        { exampleRoles }
+                        {exampleRoles}
                     </div>
 
                     <button className="purpleToPinkButtonExterior bigButton"
@@ -427,21 +438,26 @@ class ForBusiness extends Component {
                 </div>
 
                 <div className="homepageSeparatorContainer marginTopOnDesktop">
-                    <div className="homepageSeparator" />
+                    <div className="homepageSeparator"/>
                 </div>
 
                 <div className="aResumeCantDoThis">
-                    <div className="smallText3" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do This.</b></div>
-                    <div id="aResumeCantDoThisContent" >
+                    <div className="smallText3" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do This.</b>
+                    </div>
+                    <div id="aResumeCantDoThisContent">
                         <div>
                             <div style={styles.bottomListItem}>
-                                <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon" style={{marginRight:'10px'}}/>
+                                <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon"
+                                     style={{marginRight: '10px'}}/>
                                 <div className="smallText aResumeCantDoThisText">See their quality of work under
-                                    pressure with real-world projects relevant <div className="above800only br"><br/></div>to your company.
+                                    pressure with real-world projects relevant
+                                    <div className="above800only br"><br/></div>
+                                    to your company.
                                 </div>
                             </div>
                             <div style={styles.bottomListItem}>
-                                <img src="/icons/BarGraph.png" className="forBusinessIcon" style={{marginLeft:'10px'}}/>
+                                <img src="/icons/BarGraph.png" className="forBusinessIcon"
+                                     style={{marginLeft: '10px'}}/>
                                 <div className="smallText aResumeCantDoThisText">Look at quantitative breakdowns
                                     and precise scoring of their skills.
                                 </div>
@@ -457,7 +473,9 @@ class ForBusiness extends Component {
                             <div style={styles.bottomListItem}>
                                 <img src="/icons/Filter.png" className="forBusinessIcon"/>
                                 <div className="smallText aResumeCantDoThisText">
-                                    Filter out the unqualified <div className="above800only br"><br/></div>and uncommitted.
+                                    Filter out the unqualified
+                                    <div className="above800only br"><br/></div>
+                                    and uncommitted.
                                 </div>
                             </div>
                         </div>
@@ -479,12 +497,13 @@ class ForBusiness extends Component {
                     </div>
                 </div>
 
-                <div className="homepageSeparatorContainer" style={{margin:"60px 0 0"}}>
-                    <div className="homepageSeparator" />
+                <div className="homepageSeparatorContainer" style={{margin: "60px 0 0"}}>
+                    <div className="homepageSeparator"/>
                 </div>
 
-                <div className="center mediumTextDoubleShrink" style={{marginBottom:'40px',marginTop:"120px",minWidth:"250px"}}>
-                    <b>Your Pipeline to <div className="under400only br"><br/></div>Fully-Vetted Talent</b>
+                <div className="center mediumTextDoubleShrink"
+                     style={{marginBottom: '40px', marginTop: "120px", minWidth: "250px"}}>
+                    <b>Your Pipeline to<div className="under400only br"><br/></div> Fully-Vetted Talent</b>
                 </div>
                 <div className="forBusinessBoxesContainer">
                     <Paper zDepth={3} className="paperBox">
@@ -494,8 +513,11 @@ class ForBusiness extends Component {
                                 <div className="mediumText blueText">$1500 USD</div>
                                 <div>PER PROGRAM</div>
                                 <div className="br"><br/></div>
-                                <p>Program curated to your<br/> company{"'"}s needs. Skill evaluation<div className="br"><br/></div> of up to 15
-                                    candidates.</p>
+                                <p>Program curated to your<br/> company{"'"}s needs. Skill evaluation
+                                    <div className="br"><br/></div>
+                                    of up to 15
+                                    candidates.
+                                </p>
                             </div>
                         </div>
                     </Paper>
@@ -506,16 +528,23 @@ class ForBusiness extends Component {
                                 <div className="mediumText purpleText">$500 USD</div>
                                 <div>PER HIRE</div>
                                 <div className="br"><br/></div>
-                                <p>When students are successful in your<br/>programs, you can hire them<div className="br"><br/></div> for a small
-                                    fee.</p>
+                                <p>When students are successful in your<br/>programs, you can hire them
+                                    <div className="br"><br/></div>
+                                    for a small
+                                    fee.
+                                </p>
                             </div>
                         </div>
                     </Paper>
                 </div>
 
-                <div className="center" style={{margin:'25px 0 20px'}}>
-                    <button className="outlineButton whiteBlueButton" onClick={this.handleOpen}>
-                        Contact Us
+                <div className="center" style={{marginBottom:'20px'}}>
+                    <button className="blueToPurpleButtonExterior bigButton"
+                            onClick={this.handleOpen}
+                    >
+                        <div className="gradientBorderButtonInterior">
+                            Contact Us
+                        </div>
                     </button>
                 </div>
             </div>
