@@ -1699,7 +1699,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         background-color: rgba(255,255,255,.4);
         color: var(--moonshotLightBlue);
         font-size: 17px;
-        vertical-align: middle;
         margin: 10px auto;
     }
     .pathwayDescriptionAndSalaryText {
