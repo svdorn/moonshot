@@ -87,14 +87,14 @@ class PathwayPreview extends Component {
                                     </li>
                                 </ul>
                             </div>
-                            <div style={{position:"absolute", bottom:"4px", right:"16px"}}>
-                                Sponsored by
-                                <img
-                                    src={this.props.logo}
-                                    alt={this.props.sponsorName}
-                                    height={20}
-                                />
-                            </div>
+                            {/*<div style={{position:"absolute", bottom:"4px", right:"16px"}}>*/}
+                                {/*Sponsored by*/}
+                                {/*<img*/}
+                                    {/*src={this.props.logo}*/}
+                                    {/*alt={this.props.sponsorName}*/}
+                                    {/*height={20}*/}
+                                {/*/>*/}
+                            {/*</div>*/}
                         </div>
                     }
                 </div>

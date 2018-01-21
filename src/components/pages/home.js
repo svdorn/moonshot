@@ -104,8 +104,8 @@ class Home extends Component{
                 <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/pathway?' + pathway._id)} ><PathwayPreview
                     name = {pathway.name}
                     image = {pathway.previewImage}
-                    logo = {pathway.sponsor.logo}
-                    sponsorName = {pathway.sponsor.name}
+                    //<!-- logo = {pathway.sponsor.logo} -->
+                    //<!-- sponsorName = {pathway.sponsor.name} -->
                     completionTime = {pathway.estimatedCompletionTime}
                     deadline = {formattedDeadline}
                     price = {pathway.price}
@@ -125,8 +125,8 @@ class Home extends Component{
                     <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/pathway?' + pathway._id)} ><PathwayPreview
                         name = {pathway.name}
                         image = {pathway.previewImage}
-                        logo = {pathway.sponsor.logo}
-                        sponsorName = {pathway.sponsor.name}
+                        //<!-- logo = {pathway.sponsor.logo} -->
+                        //<!-- sponsorName = {pathway.sponsor.name} -->
                         completionTime = {pathway.estimatedCompletionTime}
                         deadline = {formattedDeadline}
                         price = {pathway.price}
