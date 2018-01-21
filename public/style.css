@@ -1106,6 +1106,10 @@ button.link {
     margin-top: 45px;
     font-size: 23px;
 }
+.homepageTrajectoryTextRightIcon.onHome {
+    height: 78px;
+    margin-top: 33px;
+}
 .forBusinessTrajectoryTextLeft {
     float: left;
     text-align: center;
@@ -1562,6 +1566,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextRightIcon {
         margin-left: -40%;
     }
+    .homepageTrajectoryTextLeftIcon.smallerWidthIcon {
+        margin-left: -38%;
+    }
     .forBusinessTrajectoryTextLeft,
     .forBusinessTrajectoryTextRight {
         width: 80%;
@@ -1767,7 +1774,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     /* move icons over to the left */
     .homepageTrajectoryContainer > div:nth-child(1) > div > img,
     .homepageTrajectoryContainer > div:nth-child(3) > div > img {
-        margin-left: -51%;
+        margin-left: -50%;
     }
     /* move the third icon less to the left since it is smaller */
     .homepageTrajectoryContainer > div:nth-child(5) > div > img {
