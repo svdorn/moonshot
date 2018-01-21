@@ -1,14 +1,14 @@
 "use strict"
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { browserHistory } from 'react-router';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import { closeNotification } from "../../actions/usersActions";
+import {closeNotification} from "../../actions/usersActions";
 import axios from 'axios';
 
-class Home extends Component{
+class Home extends Component {
 
     constructor(props) {
         super(props);
@@ -31,7 +31,7 @@ class Home extends Component{
         }
     }
 
-    goTo (route)  {
+    goTo(route) {
         // closes any notification
         this.props.closeNotification();
         // goes to the wanted page
@@ -42,7 +42,7 @@ class Home extends Component{
 
     componentDidMount() {
         axios.get("/api/topPathways", {
-            params: { numPathways: 12 }
+            params: {numPathways: 12}
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.home) {
@@ -56,9 +56,9 @@ class Home extends Component{
                 } else {
                     pathways1 = returnedPathways;
                 }
-                this.setState({ pathways1, pathways2 });
+                this.setState({pathways1, pathways2});
             }
-        }).catch(function(err) {
+        }).catch(function (err) {
         })
     }
 
@@ -71,7 +71,7 @@ class Home extends Component{
         });
     }
 
-    render(){
+    render() {
 
         // const style = {
         //     hiringPartners: {
@@ -96,42 +96,44 @@ class Home extends Component{
         // create the pathway previews
         let pathwayKey = 0;
         let self = this;
-        const pathwayPreviews1 = this.state.pathways1.map(function(pathway) {
+        const pathwayPreviews1 = this.state.pathways1.map(function (pathway) {
             pathwayKey++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/pathway?' + pathway._id)} ><PathwayPreview
-                    name = {pathway.name}
-                    image = {pathway.previewImage}
+                <li style={{verticalAlign: "top"}} key={pathwayKey}
+                    onClick={() => self.goTo('/pathway?' + pathway._id)}><PathwayPreview
+                    name={pathway.name}
+                    image={pathway.previewImage}
                     //<!-- logo = {pathway.sponsor.logo} -->
                     //<!-- sponsorName = {pathway.sponsor.name} -->
-                    completionTime = {pathway.estimatedCompletionTime}
-                    deadline = {formattedDeadline}
-                    price = {pathway.price}
-                    _id = {pathway._id}
-                    /></li>
+                    completionTime={pathway.estimatedCompletionTime}
+                    deadline={formattedDeadline}
+                    price={pathway.price}
+                    _id={pathway._id}
+                /></li>
             );
         });
 
         let pathwayPreviews2 = undefined;
         if (this.state.pathways2) {
             pathwayKey = 100;
-            pathwayPreviews2 = this.state.pathways2.map(function(pathway) {
+            pathwayPreviews2 = this.state.pathways2.map(function (pathway) {
                 pathwayKey++;
                 const deadline = new Date(pathway.deadline);
                 const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                 return (
-                    <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/pathway?' + pathway._id)} ><PathwayPreview
-                        name = {pathway.name}
-                        image = {pathway.previewImage}
+                    <li style={{verticalAlign: "top"}} key={pathwayKey}
+                        onClick={() => self.goTo('/pathway?' + pathway._id)}><PathwayPreview
+                        name={pathway.name}
+                        image={pathway.previewImage}
                         //<!-- logo = {pathway.sponsor.logo} -->
                         //<!-- sponsorName = {pathway.sponsor.name} -->
-                        completionTime = {pathway.estimatedCompletionTime}
-                        deadline = {formattedDeadline}
-                        price = {pathway.price}
-                        _id = {pathway._id}
-                        /></li>
+                        completionTime={pathway.estimatedCompletionTime}
+                        deadline={formattedDeadline}
+                        price={pathway.price}
+                        _id={pathway._id}
+                    /></li>
                 );
             });
         }
@@ -178,8 +180,8 @@ class Home extends Component{
             brKey++;
             return (
                 <div key={skill + "div"}
-                    style={{display: 'inline-block', marginTop: '15px'}}
-                    className="gradientBorderPurpleToPinkChip"
+                     style={{display: 'inline-block', marginTop: '15px'}}
+                     className="gradientBorderPurpleToPinkChip"
                 >
                     <div key={skill} className="purpleText">
                         {skill}
@@ -197,12 +199,16 @@ class Home extends Component{
         return (
             <div className='jsxWrapper' ref='home'>
                 <div className="fullHeight greenToBlue">
-                    <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                    <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
-                    <div className="infoBox whiteText mediumText" style={{zIndex:"20", width:"100%"}}>
-                        Skip the resum&eacute;.<br/> Learn skills that employers<div className="from500to600only under400only br"><br/></div> need<div className="outside500to600only above400only br"><br/></div> <i>for free, forever.</i><br/>
+                    <div className="infoBox whiteText mediumText" style={{zIndex: "20", width: "100%"}}>
+                        Skip the resum&eacute;.<br/> Learn skills that employers
+                        <div className="from500to600only under400only br"><br/></div>
+                        need
+                        <div className="outside500to600only above400only br"><br/></div>
+                        <i>for free, forever.</i><br/>
                         <button className="outlineButton blueWhiteButton"
-                            onClick={() => this.goTo('/signup')}>
+                                onClick={() => this.goTo('/signup')}>
                             Get Started
                         </button>
                         <br/>
@@ -214,7 +220,7 @@ class Home extends Component{
                     </div>
                 </div>
 
-                <div className="homepageTrajectoryContainer" style={{marginTop:"30px"}}>
+                <div className="homepageTrajectoryContainer" style={{marginTop: "30px"}}>
                     <div className="homepageTrajectory">
                         <div className="homepageTrajectoryTextLeft onHome">
                             <img
@@ -231,7 +237,7 @@ class Home extends Component{
                             </div>
                         </div>
                         <div className="homepageTrajectoryImagesRight onHome">
-                            <div className="homepageImgBackgroundRight greenGradient" />
+                            <div className="homepageImgBackgroundRight greenGradient"/>
                             <img
                                 src="/images/VRGuy.jpg"
                             />
@@ -256,14 +262,14 @@ class Home extends Component{
                             </div>
                         </div>
                         <div className="homepageTrajectoryImagesLeft">
-                            <div className="homepageImgBackgroundLeft blueGradient" />
+                            <div className="homepageImgBackgroundLeft blueGradient"/>
                             <img
                                 src="/images/TwoPeopleInOffice.jpg"
                             />
                         </div>
                     </div>
 
-                    <br />
+                    <br/>
 
                     <div className="homepageTrajectory">
                         <div className="homepageTrajectoryTextLeft onHome">
@@ -281,7 +287,7 @@ class Home extends Component{
                             </div>
                         </div>
                         <div className="homepageTrajectoryImagesRight">
-                            <div className="homepageImgBackgroundRight purpleToRed" />
+                            <div className="homepageImgBackgroundRight purpleToRed"/>
                             <img
                                 src="/images/HappyBeardGuy.jpeg"
                             />
@@ -289,9 +295,9 @@ class Home extends Component{
                     </div>
                 </div>
 
-                <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer" />
+                <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
 
-                <div className="topMarginOnSmallScreen" style={{textAlign:"center"}}>
+                <div className="topMarginOnSmallScreen" style={{textAlign: "center"}}>
                     <div className="center mediumText blueText homePathwaysTitle">Pathways</div>
                     <div className="homePathwaysDesc">
                         Moonshot courses are organized in pathways and
@@ -303,13 +309,18 @@ class Home extends Component{
                         </ul>
                     </div>
                     {pathwayPreviews2 ?
-                        <div className="pathwayPrevListContainer">
+                        <div className="pathwayPrevListContainer" style={{marginTop: '20px'}}>
                             <ul className="horizCenteredList pathwayPrevList">
                                 {pathwayPreviews2}
                             </ul>
                         </div>
                         : null
                     }
+                    <div className="pathwayPrevListContainer pathwayPrevMobileThird">
+                        <ul className="horizCenteredList pathwayPrevList">
+                            {pathwayPreviews1[2]}
+                        </ul>
+                    </div>
                     <button className="blueGradientButtonExterior bigButton"
                             onClick={() => this.goTo('/signup')}
                             style={{marginTop: "40px"}}
@@ -318,16 +329,17 @@ class Home extends Component{
                             Create Account
                         </div>
                     </button>
-                    <div className="smallText blueText" style={{margin:"10px 0 55px"}}><i>{"Don't worry, it's free."}</i></div>
+                    <div className="smallText blueText" style={{margin: "10px 0 55px"}}>
+                        <i>{"Don't worry, it's free."}</i></div>
                 </div>
 
-                <div className="purpleToGreenSpacer" />
+                <div className="purpleToGreenSpacer"/>
 
-                <div className="center" style={{marginBottom:"50px"}}>
+                <div className="center" style={{marginBottom: "50px"}}>
                     <div className="mediumText purpleText homePathwaysTitle">Build Your Skillset</div>
 
                     <div id="exampleSkillsContainer">
-                        { exampleSkills }
+                        {exampleSkills}
                     </div>
 
                     <button className="purpleToPinkButtonExterior bigButton"
@@ -433,28 +445,6 @@ class Home extends Component{
 //         </button>
 //     </div>
 // </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // <div className="fullHeight">
@@ -680,10 +670,6 @@ class Home extends Component{
 //         }}
 //     />
 // </div>
-
-
-
-
 
 
 function mapDispatchToProps(dispatch) {
