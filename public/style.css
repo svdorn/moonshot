@@ -1685,6 +1685,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .mediumTextDoubleShrink {
         font-size: 20px;
     }
+    .form {
+        max-width: 450px;
+    }
     .pathwayDescriptionAndSalaryText {
         font-size: 15px;
     }
@@ -1819,6 +1822,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 95%;
         max-height: 320px;
     }
+    .form {
+        max-width: 350px;
+    }
 
     .aResumeCantDoThis { margin-top: 90px; }
 
@@ -1847,6 +1853,20 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .pathwayLandingIcons {
         height: 30px;
         width: 30px;
+    }
+    .form {
+        max-width: 300px;
+    }
+    .formSubmitButton {
+        padding: 3px 25px 0px;
+        border: 2px solid var(--moonshotMidBlue);
+        background-color: rgba(255,255,255,.4);
+        color: var(--moonshotMidBlue);
+        font-size: 17px;
+        margin-top: 10px;
+    }
+    h1 {
+        font-size: 25px;
     }
     .smallText2 { font-size: 10px; }
     #pathwayLandingTopInfoList > li {
