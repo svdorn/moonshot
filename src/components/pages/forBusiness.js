@@ -517,9 +517,7 @@ class ForBusiness extends Component {
 
                     <div className="center mediumTextDoubleShrink"
                          style={{marginBottom: '40px', marginTop: "120px", minWidth: "250px"}}>
-                        <b>Your Pipeline to
-                            <div className="under400only br"><br/></div>
-                            Fully-Vetted Talent</b>
+                        <b>Your Pipeline to<div className="under400only br"><br/></div> Fully-Vetted Talent</b>
                     </div>
                     <div className="forBusinessBoxesContainer">
                         <Paper zDepth={3} className="paperBox">
