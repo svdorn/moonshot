@@ -176,7 +176,7 @@ class ForBusiness extends Component {
         const roles = [
             "Data Scientist", "VR Developer", "UX Designer", "Digital Marketer",
             "Front-End Developer", "Software Engineer", "Product Manager",
-            "Social Media Director", "Business Analyst", "Scrum Master",
+            "Social Media Specialist", "Business Analyst", "Scrum Master",
             "Machine Learning Engineer", "Back-End Developer", "Business Development"
         ]
 

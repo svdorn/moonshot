@@ -278,6 +278,29 @@ form > h1 {
     width: 24px;
 }
 
+.comingSoonBanner {
+    position: absolute;
+    z-index: 10;
+    overflow: hidden;
+    width: 150px;
+    height: 250px;
+}
+.comingSoonBanner > div {
+    position: relative
+}
+.comingSoonBanner > div > div {
+    background: linear-gradient(to right, #5de2ff, #3dabff);
+    width: 222px;
+    height: 40px;
+    position: absolute;
+    transform: rotate(-45deg) translate(-63px, -10px);
+    color: white;
+    padding-top: 3px;
+    font-size: 22px;
+}
+
+
+
 #pathwayDescriptionAndSalary {
     position: relative;
     height: 150px;

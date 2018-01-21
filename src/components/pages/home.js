@@ -110,6 +110,7 @@ class Home extends Component{
                     deadline = {formattedDeadline}
                     price = {pathway.price}
                     _id = {pathway._id}
+                    comingSoon = {pathway.comingSoon}
                     /></li>
             );
         });
@@ -131,6 +132,7 @@ class Home extends Component{
                         deadline = {formattedDeadline}
                         price = {pathway.price}
                         _id = {pathway._id}
+                        comingSoon = {pathway.comingSoon}
                         /></li>
                 );
             });

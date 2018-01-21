@@ -39,67 +39,81 @@ class PathwayPreview extends Component {
             fontSize: "24px"
         };
 
+        console.log(this.props.comingSoon);
 
         return (
-            <Paper className="clickableNoUnderline gradientBorder" style={{height:"352px", width:"248px"}}
-                   onMouseOver={this.onMouseOver}
-                   onMouseOut={this.onMouseOut}
-                   zDepth={this.state.shadow}>
-                <div style={{textAlign:"center", position:"relative"}}>
-                    { this.props.type == "addOne" ?
-                        <img style={{width:"80px", marginTop:"120px"}}
-                            src="/icons/PlusSign.png"
-                        />
-                    :
+            <div>
+                {this.props.comingSoon ?
+                    <div className="comingSoonBanner">
                         <div>
-                            <div className="pathwayImgContainer imgBorder">
-                                <img
-                                    width={216}
-                                    height={160}
-                                    alt="VR Image"
-                                    src={this.props.image}
-                                />
+                            <div>
+                                Coming Soon
                             </div>
-                            <div style={titleDivStyle}>
-                                <span style={titleSpanStyle}>{this.props.name}</span>
-                            </div>
-                            <div style={{position: "absolute", width: "100%", bottom: "26.4px"}}>
-                                <ul className="horizCenteredList pathwayPrevIconList">
-                                    <li>
-                                        <div>
-                                            <img src="/icons/ClockBlue.png" style={iconStyle} /><br/>
-                                            <span className="tinyText">Completion Time</span><br/>
-                                            {this.props.completionTime}
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div>
-                                            <img src="/icons/CalandarBlueGradient.png" style={iconStyle} /><br/>
-                                            <span className="tinyText">Deadline</span><br/>
-                                            {this.props.deadline}
-                                        </div>
-                                    </li>
-                                    <li>
-                                        <div>
-                                            <img src="/icons/DollarSignBlue.png" style={priceIconStyle} /><br/>
-                                            <span className="tinyText">Price</span><br/>
-                                            {this.props.price}
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            {/*<div style={{position:"absolute", bottom:"4px", right:"16px"}}>*/}
-                                {/*Sponsored by*/}
-                                {/*<img*/}
-                                    {/*src={this.props.logo}*/}
-                                    {/*alt={this.props.sponsorName}*/}
-                                    {/*height={20}*/}
-                                {/*/>*/}
-                            {/*</div>*/}
                         </div>
-                    }
-                </div>
-            </Paper>
+                    </div>
+                    : null
+                }
+
+                <Paper className="clickableNoUnderline gradientBorder" style={{height:"352px", width:"248px"}}
+                       onMouseOver={this.onMouseOver}
+                       onMouseOut={this.onMouseOut}
+                       zDepth={this.state.shadow}>
+                    <div style={{textAlign:"center", position:"relative"}}>
+                        { this.props.type == "addOne" ?
+                            <img style={{width:"80px", marginTop:"120px"}}
+                                src="/icons/PlusSign.png"
+                            />
+                        :
+                            <div>
+                                <div className="pathwayImgContainer imgBorder">
+                                    <img
+                                        width={216}
+                                        height={160}
+                                        alt="VR Image"
+                                        src={this.props.image}
+                                    />
+                                </div>
+                                <div style={titleDivStyle}>
+                                    <span style={titleSpanStyle}>{this.props.name}</span>
+                                </div>
+                                <div style={{position: "absolute", width: "100%", bottom: "26.4px"}}>
+                                    <ul className="horizCenteredList pathwayPrevIconList">
+                                        <li>
+                                            <div>
+                                                <img src="/icons/ClockBlue.png" style={iconStyle} /><br/>
+                                                <span className="tinyText">Completion Time</span><br/>
+                                                {this.props.completionTime}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <img src="/icons/CalandarBlueGradient.png" style={iconStyle} /><br/>
+                                                <span className="tinyText">Deadline</span><br/>
+                                                {this.props.deadline}
+                                            </div>
+                                        </li>
+                                        <li>
+                                            <div>
+                                                <img src="/icons/DollarSignBlue.png" style={priceIconStyle} /><br/>
+                                                <span className="tinyText">Price</span><br/>
+                                                {this.props.price}
+                                            </div>
+                                        </li>
+                                    </ul>
+                                </div>
+                                {/*<div style={{position:"absolute", bottom:"4px", right:"16px"}}>*/}
+                                    {/*Sponsored by*/}
+                                    {/*<img*/}
+                                        {/*src={this.props.logo}*/}
+                                        {/*alt={this.props.sponsorName}*/}
+                                        {/*height={20}*/}
+                                    {/*/>*/}
+                                {/*</div>*/}
+                            </div>
+                        }
+                    </div>
+                </Paper>
+            </div>
         )
     }
 }

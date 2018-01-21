@@ -831,7 +831,7 @@ app.get('/topPathways', function (req, res) {
     Pathways.find()
         .sort({avgRating: -1})
         .limit(numPathways)
-        .select("name previewImage sponsor estimatedCompletionTime deadline price")
+        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon")
         .exec(function (err, pathways) {
             if (err) {
                 res.status(500).send("Not able to get top pathways");
