@@ -1,19 +1,17 @@
 "use strict"
-import React, { Component } from 'react';
-import { TextField, CircularProgress } from 'material-ui';
-import { contactUs, formError } from '../../actions/usersActions';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { Field, reduxForm } from 'redux-form';
+import React, {Component} from 'react';
+import {TextField, CircularProgress} from 'material-ui';
+import {contactUs, formError} from '../../actions/usersActions';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {Field, reduxForm} from 'redux-form';
 
 
 const styles = {
     hintStyle: {
         color: '#00c3ff',
     },
-    style: {
-        width: '500px',
-    }
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -21,7 +19,6 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         errorText={touched && error}
         multiLine={true}
         hintStyle={styles.hintStyle}
-        style={styles.style}
         hintText={label}
         {...input}
         {...custom}
@@ -73,11 +70,12 @@ class ContactUs extends Component {
     render() {
         return (
             <div className="fullHeight greenToBlue center">
+                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+
                 <div className="form lightWhiteForm">
                     <h1>Contact Us</h1>
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <div className="inputContainer messageInputContainer">
-                            <div className="messageFieldWhiteSpace"/>
+                        <div className="inputContainer">
                             <Field
                                 name="message"
                                 component={renderTextField}
@@ -86,12 +84,12 @@ class ContactUs extends Component {
                         </div>
                         <button
                             type="submit"
-                            className="semiOpaqueWhiteBlueButton"
+                            className="formSubmitButton"
                         >
                             Contact Us
                         </button>
                     </form>
-                    { this.props.loading ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
+                    {this.props.loading ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
                 </div>
 
             </div>
@@ -115,7 +113,7 @@ function mapStateToProps(state) {
 }
 
 ContactUs = reduxForm({
-    form:'contactUs',
+    form: 'contactUs',
     validate,
 })(ContactUs);
 
