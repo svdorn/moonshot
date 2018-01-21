@@ -317,7 +317,7 @@ class ForBusiness extends Component {
                                 <div className="horizListSpacer" style={{marginRight: "20%"}}>
                                     <div className="horizListText">
                                         <img
-                                            src="/icons/Employee.png"
+                                            src="/icons/Badge.png"
                                             style={styles.horizListIcon}
                                         /><br/>
                                         <b>Hire
