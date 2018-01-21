@@ -124,7 +124,9 @@ class Home extends Component {
                 const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                 return (
                     <li style={{verticalAlign: "top"}} key={pathwayKey}
-                        onClick={() => self.goTo('/pathway?' + pathway._id)}><PathwayPreview
+                        //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                        
+                    ><PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
                         //<!-- logo = {pathway.sponsor.logo} -->
