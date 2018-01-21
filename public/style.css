@@ -251,9 +251,8 @@ form > h1 {
 .messageHeader {
     margin-top: 90px;
     text-align: center;
-    height: 40px;
-    padding-bottom: 10px;
     position: absolute;
+    padding-bottom: 10px;
     width: 100%;
     z-index: 10;
 }
@@ -263,7 +262,20 @@ form > h1 {
 }
 
 .infoHeader {
-    background-color: #21ea2182 !important
+    background-color: rgba(255,255,255,.5) !important;
+    color: var(--moonshotBlue) !important;
+}
+#notificationCloseButton {
+    position: absolute !important;
+    right: 0;
+    padding: 3px !important;
+    top: 0px;
+    width: 40px !important;
+    height: 40px !important;
+    transform: scale(.7,.7);
+}
+#notificationCloseButton > div {
+    width: 24px;
 }
 
 #pathwayDescriptionAndSalary {

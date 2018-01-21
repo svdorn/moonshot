@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { closeNotification } from '../actions/usersActions';
-import { Paper, IconButton } from 'material-ui';
+import { Paper, SvgIcon } from 'material-ui';
 import ContentClear from 'material-ui/svg-icons/content/clear';
 
 class Notification extends Component {
@@ -20,7 +20,9 @@ class Notification extends Component {
         const messageStyle = {
             display: "inline-block",
             verticalAlign: "top",
-            paddingTop: "13px"
+            paddingTop: "13px",
+            marginRight: "30px",
+            marginLeft: "30px"
         }
 
         return(
@@ -28,11 +30,13 @@ class Notification extends Component {
                 {this.props.notification ?
                     <Paper className={"messageHeader " + this.props.notification.type}>
                         <div style={messageStyle}>{this.props.notification.message}</div>
-                        <IconButton
+                        <SvgIcon
+                            id="notificationCloseButton"
                             onClick={this.onCloseClick.bind(this)}
-                            style={{marginTop: "-3px"}}>
-                            <ContentClear />
-                        </IconButton>
+                            style={{marginTop: "-3px"}}
+                            className="clickable">
+                            <ContentClear color="#66b1ff" />
+                        </SvgIcon>
                     </Paper>
                     :
                     null
