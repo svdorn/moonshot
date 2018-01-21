@@ -24,6 +24,7 @@ class PathwayPreview extends Component {
     render() {
 
         const iconStyle = {width:"32px", height:"32px"};
+        const priceIconStyle = {width:"18px", height:"32px"};
 
         const titleDivStyle = {
             width: "100%",
@@ -51,7 +52,7 @@ class PathwayPreview extends Component {
                         />
                     :
                         <div>
-                            <div className="gradientBorder pathwayImgContainer">
+                            <div className="pathwayImgContainer imgBorder">
                                 <img
                                     width={216}
                                     height={160}
@@ -66,21 +67,21 @@ class PathwayPreview extends Component {
                                 <ul className="horizCenteredList pathwayPrevIconList">
                                     <li>
                                         <div>
-                                            <img src="/icons/Clock.png" style={iconStyle} /><br/>
+                                            <img src="/icons/ClockBlue.png" style={iconStyle} /><br/>
                                             <span className="tinyText">Completion Time</span><br/>
                                             {this.props.completionTime}
                                         </div>
                                     </li>
                                     <li>
                                         <div>
-                                            <img src="/icons/Calendar.png" style={iconStyle} /><br/>
+                                            <img src="/icons/CalandarBlueGradient.png" style={iconStyle} /><br/>
                                             <span className="tinyText">Deadline</span><br/>
                                             {this.props.deadline}
                                         </div>
                                     </li>
                                     <li>
                                         <div>
-                                            <img src="/icons/Price.png" style={iconStyle} /><br/>
+                                            <img src="/icons/DollarSignBlue.png" style={priceIconStyle} /><br/>
                                             <span className="tinyText">Price</span><br/>
                                             {this.props.price}
                                         </div>

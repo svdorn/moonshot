@@ -479,13 +479,18 @@ button.link {
 }
 
 .gradientBorder {
-    padding: 4px;
+    padding: 3px;
+    background: linear-gradient(to bottom right, #5dfdff, #3dabff);
 }
 .gradientBorder > div {
     background: white;
     height: 100%;
     width: 100%;
 }
+.imgBorder {
+    padding: 3px;
+}
+
 .semiOpaqueHoverable {
     opacity: 0.5;
     filter: alpha(opacity=50); /* For IE8 and earlier */
