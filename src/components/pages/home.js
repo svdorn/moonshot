@@ -62,6 +62,15 @@ class Home extends Component{
         })
     }
 
+    scrollDown() {
+        const scrollPosTop = window.innerWidth > 500 ? 710 : 550;
+        window.scroll({
+            top: scrollPosTop,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
+
     render(){
 
         // const style = {
@@ -196,6 +205,11 @@ class Home extends Component{
                             onClick={() => this.goTo('/signup')}>
                             Get Started
                         </button>
+                        <img
+                            className="scrollDownButton"
+                            src="/icons/Scroll.png"
+                            onClick={() => this.scrollDown()}
+                        />
                     </div>
                 </div>
 

@@ -438,8 +438,8 @@ button.link {
     color: var(--moonshotDarkPurple);
 }
 .blueToPurpleButtonExterior {
-    background: linear-gradient(to right, #00fcff, #b25fff);
-    color: var(--moonshotLightBlue);
+    background: linear-gradient(to right, #00fcff, #c383ff);
+    color: #00deff;
 }
 .purpleToPinkButtonExterior,
 .blueGradientButtonExterior,
@@ -493,6 +493,17 @@ button.link {
 .semiOpaqueHoverable:hover {
     opacity: 1.0;
     filter: alpha(opacity=100); /* For IE8 and earlier */
+}
+
+.scrollDownButton {
+    height: 22px;
+    position: absolute;
+    bottom: 40px;
+    left: 0;
+    right: 0;
+    margin: auto;
+    opacity: .8;
+    cursor: pointer;
 }
 
 .pathwayImgContainer {
@@ -1280,6 +1291,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     width: 200px;
     margin: 0 2%;
 }
+#pathwayLandingTopInfoList {
+    position: absolute;
+    bottom: 70px;
+    width: 100%;
+}
 
 .homePathwaysTitle { font-size: 55px; }
 
@@ -1713,6 +1729,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .smallText { font-size: 12px;  }
     .homepageSeparator { transform: scale(3, .02); }
     .marginTopOnDesktop { margin-top: 0px; }
+    .smallText2.earlyShrink {
+        font-size: 10px;
+    }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
 
@@ -1768,6 +1787,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextLeft.forBusiness,
     .homepageTrajectoryTextRight.forBusiness {
         transform: none;
+    }
+
+    .scrollDownButton.lowerOnSmallScreen {
+        bottom: 15px;
     }
     /* .forBusinessTrajectoryTextLeft > div,
     .forBusinessTrajectoryTextRight > div {
@@ -1829,8 +1852,19 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .aResumeCantDoThis { margin-top: 90px; }
 
     .pathwayLandingIcons { margin: 0px 0px 10px 3px; }
-    #pathwayLandingTopInfoList > li {
+    /* #pathwayLandingTopInfoList > li {
         width: 100px;
+    } */
+    #pathwayLandingTopInfoList {
+        bottom: 25px;
+    }
+    #pathwayLandingTopInfoList > li {
+        width: 70px;
+        margin-bottom: 20px;
+    }
+    .pathwayLandingIcons {
+        height: 30px;
+        width: 30px;
     }
 }
 
@@ -1850,10 +1884,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 @media only screen and (max-width: 400px) {
     .under400only { display: initial; }
     .above400only { display: none; }
-    .pathwayLandingIcons {
-        height: 30px;
-        width: 30px;
-    }
     .form {
         max-width: 300px;
     }
@@ -1869,10 +1899,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         font-size: 25px;
     }
     .smallText2 { font-size: 10px; }
-    #pathwayLandingTopInfoList > li {
-        width: 70px;
-        margin-bottom: 20px;
-    }
 }
 
 @media only screen and (max-width: 375px) {
