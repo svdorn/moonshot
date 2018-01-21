@@ -1837,6 +1837,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .form {
         max-width: 350px;
+        margin-top: 95px;
     }
 
     .aResumeCantDoThis { margin-top: 90px; }
