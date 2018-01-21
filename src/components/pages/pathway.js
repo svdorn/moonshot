@@ -19,7 +19,7 @@ class Pathway extends Component {
         }
     }
 
-    goTo(route) {
+    goTo (route)  {
         // closes any notification
         this.props.closeNotification();
         // goes to the wanted page
@@ -53,6 +53,15 @@ class Pathway extends Component {
             // Not logged in
             browserHistory.push('/login');
         }
+    }
+
+    scrollDown() {
+        const scrollPosTop = window.innerWidth > 500 ? 710 : 550;
+        window.scroll({
+            top: scrollPosTop,
+            left: 0,
+            behavior: 'smooth'
+        });
     }
 
     render() {
@@ -151,7 +160,7 @@ class Pathway extends Component {
         const steps = pathway.steps;
         if (steps) {
 
-            pathwaySteps = steps.map(function (step) {
+            pathwaySteps = steps.map(function(step) {
                 let topSeparators = null;
                 if (step.order <= 2) {
                     topSeparators = (
@@ -170,7 +179,7 @@ class Pathway extends Component {
                 return (
 
                     <div className={"halfWidthStep" + side} key={step.order}>
-                        {topSeparators}
+                        { topSeparators }
                         <img
                             src={"/icons/" + step.order + ".png"}
                             alt={step.order}
@@ -232,7 +241,7 @@ class Pathway extends Component {
             //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
             <div className="jsxWrapper noOverflowX">
                 {pathway.sponsor !== undefined ?
-                    <div style={{minWidth: "250px"}}>
+                    <div style={{minWidth:"250px"}}>
                         <div className="fullHeight purpleGradient">
 
 
@@ -245,10 +254,10 @@ class Pathway extends Component {
                                 </button>
                             </div>
                             <br/>
-                            {this.props.loadingEmail ? <div className="center"><CircularProgress color="white"
-                                                                                                 style={{marginTop: "20px"}}/><br/>
+                            {this.props.loading ? <div className="center"><CircularProgress color="white"
+                                                                                            style={{marginTop: "20px"}}/><br/>
                             </div> : ""}
-                            <div className="whiteText smallText2 noWrap" style={{textAlign: 'center'}}>
+                            <div className="whiteText smallText2 earlyShrink noWrap" style={{textAlign: 'center'}}>
                                 Sponsored by
                                 <img
                                     src={pathway.sponsor.logo}
@@ -257,8 +266,7 @@ class Pathway extends Component {
                                     style={{paddingLeft: '10px'}}
                                 />
                             </div>
-                            <ul className="horizCenteredList whiteText smallText2" id="pathwayLandingTopInfoList"
-                                style={{position: 'absolute', bottom: 0, width: '100%'}}>
+                            <ul className="horizCenteredList whiteText smallText2 earlyShrink" id="pathwayLandingTopInfoList">
                                 <li>
                                     <img src="/icons/ClockWhite.png" className="pathwayLandingIcons"/>
                                     <div className="under500only br"><br/></div>
@@ -284,6 +292,12 @@ class Pathway extends Component {
                                     </div>
                                 </li>
                             </ul>
+
+                            <img
+                                className="scrollDownButton lowerOnSmallScreen"
+                                src="/icons/Scroll.png"
+                                onClick={() => this.scrollDown()}
+                            />
                         </div>
 
                         <div>
@@ -292,7 +306,7 @@ class Pathway extends Component {
                                     <div className="center" style={{marginTop: '20px'}}>
                                         < b style={{color: '#B869FF'}} className="mediumText">Skills</ b>
                                     </ div>
-                                    <div className="center smallText2" style={{marginBottom: "20px"}}>
+                                    <div className="center smallText2" style={{marginBottom:"20px"}}>
                                         Earn these skills upon pathway completion.
                                     </div>
                                     <div className="center skillChips">
@@ -310,18 +324,18 @@ class Pathway extends Component {
                                         :
                                         "pathwayDescriptionAndSalaryFull"
                                     }>
-                                        <div className={pathway.industry ? "pathwayDescriptionAndSalarySpacer" : ""}
-                                             id={pathway.industry ? "pathwayShortDescription" : ""}
-                                        >
-                                            <img
-                                                src="/icons/GraduationHatPurple.png"
-                                                className="pathwayDescriptionAndSalaryIcon"
-                                                id="pathwayHatIcon"
-                                            />
-                                            <div className="pathwayDescriptionAndSalaryText">
-                                                {pathway.description}
+                                            <div className={pathway.industry ? "pathwayDescriptionAndSalarySpacer" : ""}
+                                                 id={pathway.industry ? "pathwayShortDescription" : ""}
+                                            >
+                                                <img
+                                                    src="/icons/GraduationHatPurple.png"
+                                                    className="pathwayDescriptionAndSalaryIcon"
+                                                    id="pathwayHatIcon"
+                                                />
+                                                <div className="pathwayDescriptionAndSalaryText">
+                                                    {pathway.description}
+                                                </div>
                                             </div>
-                                        </div>
                                     </div>
                                     : null}
 
@@ -354,11 +368,11 @@ class Pathway extends Component {
                         </div>
 
                         <div style={style.quote.everything}>
-                            <h1 style={{marginBottom: '30px'}}>Sponsored by <img
+                            <h1 style={{marginBottom:'30px'}}>Sponsored by <img
                                 src={pathway.sponsor.logo}
                                 alt={pathway.sponsor.name}
                                 height={70}
-                                style={{marginTop: '-15px'}}
+                                style={{marginTop:'-15px'}}
                             /></h1>
                             <div style={style.quote.leftSide}>
                                 <div>
@@ -374,7 +388,7 @@ class Pathway extends Component {
                                 {pathway.sponsor.hiring ?
                                     <div style={style.spaceTop}>
                                         <img
-                                            src="/icons/Employee.png"
+                                            src="/icons/Badge.png"
                                             style={style.iconsLeft}
                                         />
                                         <b style={{color: '#B869FF'}} className="mediumText">OPEN POSITIONS</b><br/>
@@ -495,8 +509,7 @@ class Pathway extends Component {
 
                         {pathway.extraInfo ?
 
-                            <div key="extraInfo" className="center smallText2"
-                                 style={{marginBottom: "30px", clear: "both", paddingTop: "50px"}}>
+                            <div key="extraInfo" className="center smallText2" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
                                 <img
                                     src="/icons/ToolPurple.png"
                                     id="toolIconExtraInfo"
@@ -505,10 +518,10 @@ class Pathway extends Component {
                                     {contactUsExists ?
                                         <div key="hasContactUs">
                                             {beforeContact}
-                                            <span key="hasContactUsSpan"
-                                                  className="clickable underline"
-                                                  style={{marginTop: "10px"}}
-                                                  onClick={() => this.goTo('/contactUs')}>
+                                            <span   key="hasContactUsSpan"
+                                                    className="clickable underline"
+                                                    style={{marginTop:"10px"}}
+                                                    onClick={() => this.goTo('/contactUs')}>
                                                 {contactUsPart}
                                             </span>
                                             {afterContact}
@@ -531,15 +544,12 @@ class Pathway extends Component {
                                     onClick={this.handleClick.bind(this)}>
                                 {"Get Started"}
                             </button>
-                            {this.props.loadingEmail ?
+                            {this.props.loading ?
                                 <div><br/><CircularProgress color="#B869FF" style={{marginTop: "20px"}}/></div> : ""}
                         </div>
                     </div>
                     :
-                    <div>
-                        <div className="fullHeight purpleGradient"/>
-                        <div className="fullHeight purpleGradient"/>
-                    </div>
+                    <CircularProgress/>
                 }
 
             </div>
@@ -552,7 +562,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
-        loadingEmail: state.users.loadingEmail,
+        loading: state.users.loadingSomething,
     };
 }
 

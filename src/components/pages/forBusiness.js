@@ -153,6 +153,15 @@ class ForBusiness extends Component {
         });
     }
 
+    scrollDown() {
+        const scrollPosTop = window.innerWidth > 500 ? 710 : 550;
+        window.scroll({
+            top: scrollPosTop,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
+
     //name, email, password, confirm password, signup button
     render() {
 
@@ -271,6 +280,12 @@ class ForBusiness extends Component {
                                 {"Let's Begin"}
                             </button>
                         </div>
+
+                        <img
+                            className="scrollDownButton"
+                            src="/icons/Scroll.png"
+                            onClick={() => this.scrollDown()}
+                        />
                     </div>
 
                     <div style={{marginTop: '60px', overflow: 'auto'}}>
@@ -444,7 +459,7 @@ class ForBusiness extends Component {
                                 onClick={this.handleOpen}
                                 style={{marginTop: "40px"}}
                         >
-                            <div className="gradientBorderButtonInterior">
+                            <div className="invertColorOnHover gradientBorderButtonInterior">
                                 Hire With Us
                             </div>
                         </button>
@@ -498,7 +513,7 @@ class ForBusiness extends Component {
                                     onClick={this.handleOpen}
                                     style={{marginTop: "40px"}}
                             >
-                                <div className="gradientBorderButtonInterior">
+                                <div className="invertColorOnHover gradientBorderButtonInterior">
                                     Learn More
                                 </div>
                             </button>
@@ -524,8 +539,8 @@ class ForBusiness extends Component {
                             <div className="gradientBorderBlueBox">
                                 <div className="forBusinessBox">
                                     <div className="mediumText">Program</div>
-                                    <div className="mediumText blueText">$1500 USD</div>
-                                    <div>PER PROGRAM</div>
+                                    <div className="mediumText blueText">$200 USD</div>
+                                    <div>PER CANDIDATE</div>
                                     <div className="br"><br/></div>
                                     Program curated to your<br/> company{"'"}s needs. Skill evaluation
                                     <div className="br"><br/></div>
@@ -554,7 +569,7 @@ class ForBusiness extends Component {
                         <button className="blueToPurpleButtonExterior bigButton"
                                 onClick={this.handleOpen}
                         >
-                            <div className="gradientBorderButtonInterior">
+                            <div className="invertColorOnHover gradientBorderButtonInterior">
                                 Contact Us
                             </div>
                         </button>
