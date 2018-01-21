@@ -16,7 +16,7 @@ class HomepageTriangles extends Component {
                 {top: "68%", right: "3%", rotate: -72, scale: .4, className: " whiteTriangle"},
                 {top: "71%", right: "32%", rotate: -111, scale: .7, className: " whiteTriangle"},
                 {top: "74%", right: "19%", rotate: -98, scale: .6, className: " whiteTriangle"},
-                {top: "67%", right: "49%", rotate: -2, scale: .3, className: " whiteTriangle"},
+                {top: "77%", right: "52%", rotate: -2, scale: .3, className: " whiteTriangle"},
                 {top: "80%", right: "27%", rotate: -58, scale: .4, className: " whiteTriangle"}
             ];
         } else if (this.props.variation == "2"){

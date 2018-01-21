@@ -205,6 +205,7 @@ class Home extends Component{
                             onClick={() => this.goTo('/signup')}>
                             Get Started
                         </button>
+                        <br/>
                         <img
                             className="scrollDownButton"
                             src="/icons/Scroll.png"
