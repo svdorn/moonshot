@@ -278,14 +278,13 @@ class ForBusiness extends Component {
                                     style={{backgroundColor: "transparent", border: "2px solid white"}}
                                     onClick={this.handleOpen}>
                                 {"Let's Begin"}
-                            </button>
+                            </button><br/>
+                            <img
+                                className="scrollDownButton"
+                                src="/icons/Scroll.png"
+                                onClick={() => this.scrollDown()}
+                            />
                         </div>
-
-                        <img
-                            className="scrollDownButton"
-                            src="/icons/Scroll.png"
-                            onClick={() => this.scrollDown()}
-                        />
                     </div>
 
                     <div style={{marginTop: '60px', overflow: 'auto'}}>

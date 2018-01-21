@@ -205,6 +205,7 @@ class Home extends Component{
                             onClick={() => this.goTo('/signup')}>
                             Get Started
                         </button>
+                        <br/>
                         <img
                             className="scrollDownButton"
                             src="/icons/Scroll.png"
@@ -220,12 +221,12 @@ class Home extends Component{
                                 src="/icons/Lightbulb.png"
                                 alt="Lightbulb"
                                 title="Lightbulb icon"
-                                className="homepageTrajectoryTextRightIcon"
+                                className="homepageTrajectoryTextRightIcon onHome"
                             />
                             <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
                                 <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
-                                Our pathways are built with
-                                leading companies and feature skills
+                                Pathways are a series of courses
+                                designed to teach you skills
                                 demanded by the market.
                             </div>
                         </div>
@@ -245,7 +246,7 @@ class Home extends Component{
                                 src="/icons/Person.png"
                                 alt="Person icon"
                                 title="Person icon"
-                                className="homepageTrajectoryTextRightIcon"
+                                className="homepageTrajectoryTextRightIcon onHome"
                             />
                             <div className="smallText2 homepageTrajectoryTextRightDiv onHome">
                                 <h2 className="blueText">Build Your Profile</h2>
@@ -270,7 +271,7 @@ class Home extends Component{
                                 src="/icons/Badge.png"
                                 alt="Badge icon"
                                 title="Badge icon"
-                                className="homepageTrajectoryTextLeftIcon"
+                                className="homepageTrajectoryTextLeftIcon smallerWidthIcon"
                             />
                             <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
                                 <h2 className="purpleText">Get Hired By Companies<br/>Leading The Future</h2>
@@ -309,11 +310,6 @@ class Home extends Component{
                         </div>
                         : null
                     }
-                    <div className="pathwayPrevListContainer pathwayPrevMobileThird">
-                        <ul className="horizCenteredList pathwayPrevList">
-                            {pathwayPreviews1[2]}
-                        </ul>
-                    </div>
                     <button className="blueGradientButtonExterior bigButton"
                             onClick={() => this.goTo('/signup')}
                             style={{marginTop: "40px"}}

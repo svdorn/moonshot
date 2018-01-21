@@ -509,6 +509,18 @@ button.link {
     margin: auto;
     opacity: .8;
     cursor: pointer;
+    animation: MoveUpDown 1.2s linear infinite;
+}
+@keyframes MoveUpDown {
+  0% {
+    bottom: 172px;
+  }
+  50% {
+    bottom: 180px;
+  }
+  100% {
+    bottom: 172px;
+  }
 }
 
 .pathwayImgContainer {
@@ -1111,6 +1123,10 @@ button.link {
     margin-top: 45px;
     font-size: 23px;
 }
+.homepageTrajectoryTextRightIcon.onHome {
+    height: 78px;
+    margin-top: 33px;
+}
 .forBusinessTrajectoryTextLeft {
     float: left;
     text-align: center;
@@ -1329,7 +1345,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 .whiteTriangle::after {
-    background: linear-gradient(to top, rgba(255, 255, 255, 1.0), rgba(255, 255, 255, 0.6));
+    background: linear-gradient(to top, rgba(255, 255, 255, .7), rgba(255, 255, 255, .3));
 }
 .purpleTriangle::after { background: var(--moonshotPurple); }
 .darkPurpleTriangle::after { background: var(--moonshotDarkPurple); }
@@ -1567,6 +1583,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextRightIcon {
         margin-left: -40%;
     }
+    .homepageTrajectoryTextLeftIcon.smallerWidthIcon {
+        margin-left: -38%;
+    }
     .forBusinessTrajectoryTextLeft,
     .forBusinessTrajectoryTextRight {
         width: 80%;
@@ -1772,7 +1791,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     /* move icons over to the left */
     .homepageTrajectoryContainer > div:nth-child(1) > div > img,
     .homepageTrajectoryContainer > div:nth-child(3) > div > img {
-        margin-left: -51%;
+        margin-left: -50%;
     }
     /* move the third icon less to the left since it is smaller */
     .homepageTrajectoryContainer > div:nth-child(5) > div > img {
