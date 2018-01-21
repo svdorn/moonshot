@@ -122,7 +122,7 @@ footer {
     display: inline-block;
 }
 form > h1 {
-    color: var(--moonshotBlue);
+    color: var(--moonshotLightBlue);
 }
 
 .form-right{
@@ -1694,12 +1694,13 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         font-size: 25px;
     }
     .formSubmitButton {
-        padding: 3px 25px 0px;
-        border: 2px solid var(--moonshotMidBlue);
+        padding: 0px 25px 0px;
+        border: 2px solid var(--moonshotLightBlue);
         background-color: rgba(255,255,255,.4);
-        color: var(--moonshotMidBlue);
+        color: var(--moonshotLightBlue);
         font-size: 17px;
-        margin-top: 10px;
+        vertical-align: middle;
+        margin: 10px auto;
     }
     .pathwayDescriptionAndSalaryText {
         font-size: 15px;
@@ -1837,7 +1838,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .form {
         max-width: 350px;
-        margin-top: 90px;
     }
 
     .aResumeCantDoThis { margin-top: 90px; }
@@ -1870,7 +1870,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .form {
         max-width: 300px;
-        margin-top: 85px;
     }
     .smallText2 { font-size: 10px; }
     #pathwayLandingTopInfoList > li {
