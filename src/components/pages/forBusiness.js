@@ -276,8 +276,7 @@ class ForBusiness extends Component {
                     <div style={{marginTop: '60px', overflow: 'auto'}}>
                         <div className="center mediumTextDoubleShrink" style={{marginBottom: "50px"}}>
                             <b>Top College Students and
-                                <div className="under500only br"><br/></div>
-                                Recent Graduates<br/>
+                                <div className="under500only br"><br/></div> Recent Graduates<br/>
                                 Competing to Work for You.</b>
                         </div>
                         <div style={styles.horizList}>
@@ -289,9 +288,7 @@ class ForBusiness extends Component {
                                             src="/icons/Key.png"
                                             style={styles.horizListIcon}
                                         /><br/>
-                                        <b>Established
-                                            <div className="under500only br"><br/></div>
-                                            Pipeline</b><br/>
+                                        <b>Established<div className="under500only br"><br/></div> Pipeline</b><br/>
                                         Instant access to a pool
                                         of top tier talent.
                                     </div>
@@ -305,9 +302,7 @@ class ForBusiness extends Component {
                                             src="/icons/Evaluate.png"
                                             style={styles.horizListIcon}
                                         /><br/>
-                                        <b>Evaluative
-                                            <div className="under500only br"><br/></div>
-                                            Metrics</b><br/>
+                                        <b>Evaluative<div className="under500only br"><br/></div> Metrics</b><br/>
                                         Skill evaluation curated to
                                         your company{"'"}s needs.
                                     </div>
@@ -320,9 +315,7 @@ class ForBusiness extends Component {
                                             src="/icons/Employee.png"
                                             style={styles.horizListIcon}
                                         /><br/>
-                                        <b>Hire
-                                            <div className="under500only br"><br/></div>
-                                            Talent</b><br/>
+                                        <b>Hire<div className="under500only br"><br/></div> Talent</b><br/>
                                         See their skills and work
                                         before you hire.
                                     </div>

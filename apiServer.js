@@ -358,7 +358,7 @@ app.post('/sendVerificationEmail', function (req, res) {
 
 // SEND EMAIL FOR REGISTERING FOR PATHWAYS
 app.post('/users/registerForPathway', function(req, res) {
-    let recipient1 = "kyle.treige@moonshotlearning.org";
+    let recipient1 = "kyle@moonshotlearning.org";
     let subject1 = "Student Registration for " + req.body.pathway;
     let content1 = "<div>"
         + "<h3>Student Registration for Pathway:</h3>"
@@ -385,7 +385,7 @@ app.post('/users/registerForPathway', function(req, res) {
         + "- There are limited scholarships that the sponsor company offers.<br/>"
         + "- So … We need to learn a bit about you first!<br/>"
         + "- Step 1: " +"<b><u>Send a link to your LinkedIn profile</u></b>" + " (not required but you can also attach"
-        + " your resume, link to a project, something you are proud of, etc) to kyle.treige@moonshotlearning.org." + "</p>"
+        + " your resume, link to a project, something you are proud of, etc) to kyle@moonshotlearning.org." + "</p>"
         + "<p>If you have any questions, shoot me a message. I'll review everything and be back to you shortly!</p>"
         + "<p>Talk soon,<br/>"
         + "Kyle</p>"
@@ -417,7 +417,7 @@ app.post('/users/forBusinessEmail', function (req, res) {
     if (req.body.message) {
         message = req.body.message;
     }
-    let recipient = "kyle.treige@moonshotlearning.org";
+    let recipient = "kyle@moonshotlearning.org";
     let subject = 'Moonshot Sales Lead - From For Business Page';
     let content = "<div>"
         + "<h3>Sales Lead from For Business Page:</h3>"
@@ -460,7 +460,7 @@ app.post('/users/contactUsEmail', function (req, res) {
     if (req.body.message) {
         message = req.body.message;
     }
-    let recipient = "kyle.treige@moonshotlearning.org";
+    let recipient = "kyle@moonshotlearning.org";
     let subject = 'Moonshot Pathway Question -- Contact Us Form';
     let content = "<div>"
         + "<h3>Questions from pathway:</h3>"
