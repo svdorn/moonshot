@@ -525,6 +525,9 @@ button.link {
     height: 360px;
     overflow-y: hidden;
 }
+.pathwayPrevMobileThird {
+    display: none;
+}
 
 .pathwayLandingIcons {
     height: 45px;
@@ -1726,6 +1729,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .smallText { font-size: 12px;  }
     .homepageSeparator { transform: scale(3, .02); }
     .marginTopOnDesktop { margin-top: 0px; }
+    .pathwayPrevMobileThird {
+        display: block;
+    }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
 

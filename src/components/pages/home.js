@@ -295,6 +295,11 @@ class Home extends Component{
                         </div>
                         : null
                     }
+                    <div className="pathwayPrevListContainer pathwayPrevMobileThird">
+                        <ul className="horizCenteredList pathwayPrevList">
+                            {pathwayPreviews1[2]}
+                        </ul>
+                    </div>
                     <button className="blueGradientButtonExterior bigButton"
                             onClick={() => this.goTo('/signup')}
                             style={{marginTop: "40px"}}
