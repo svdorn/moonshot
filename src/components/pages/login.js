@@ -125,8 +125,8 @@ class Login extends Component {
                                 label="Password"
                             /><br/><br/>
                         </div>
-                        <div className="clickable" onClick={() => this.goTo('/signup')}>Create account</div>
-                        <div className="clickable" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
+                        <div className="clickable blueText" onClick={() => this.goTo('/signup')}>Create account</div>
+                        <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
                         <button
                             type="submit"
                             className="formSubmitButton"

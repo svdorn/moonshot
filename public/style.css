@@ -122,7 +122,7 @@ footer {
     display: inline-block;
 }
 form > h1 {
-    color: var(--moonshotBlue);
+    color: var(--moonshotLightBlue);
 }
 
 .form-right{
@@ -535,6 +535,9 @@ button.link {
 .pathwayPrevListContainer {
     height: 360px;
     overflow-y: hidden;
+}
+.pathwayPrevMobileThird {
+    display: none;
 }
 
 .pathwayLandingIcons {
@@ -1703,6 +1706,19 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .form {
         max-width: 450px;
+        margin-top: 110px;
+        overflow: hidden;
+    }
+    form > h1 {
+        font-size: 25px;
+    }
+    .formSubmitButton {
+        padding: 0px 25px 0px;
+        border: 2px solid var(--moonshotLightBlue);
+        background-color: rgba(255,255,255,.4);
+        color: var(--moonshotLightBlue);
+        font-size: 17px;
+        margin: 10px auto;
     }
     .pathwayDescriptionAndSalaryText {
         font-size: 15px;
@@ -1729,6 +1745,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .smallText { font-size: 12px;  }
     .homepageSeparator { transform: scale(3, .02); }
     .marginTopOnDesktop { margin-top: 0px; }
+    .pathwayPrevMobileThird {
+        display: block;
+    }
     .smallText2.earlyShrink {
         font-size: 10px;
     }
@@ -1847,6 +1866,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .form {
         max-width: 350px;
+        margin-top: 95px;
     }
 
     .aResumeCantDoThis { margin-top: 90px; }
@@ -1886,17 +1906,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .above400only { display: none; }
     .form {
         max-width: 300px;
-    }
-    .formSubmitButton {
-        padding: 3px 25px 0px;
-        border: 2px solid var(--moonshotMidBlue);
-        background-color: rgba(255,255,255,.4);
-        color: var(--moonshotMidBlue);
-        font-size: 17px;
-        margin-top: 10px;
-    }
-    h1 {
-        font-size: 25px;
     }
     .smallText2 { font-size: 10px; }
 }
