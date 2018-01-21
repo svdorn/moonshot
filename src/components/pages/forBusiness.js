@@ -276,8 +276,7 @@ class ForBusiness extends Component {
                     <div style={{marginTop: '60px', overflow: 'auto'}}>
                         <div className="center mediumTextDoubleShrink" style={{marginBottom: "50px"}}>
                             <b>Top College Students and
-                                <div className="under500only br"><br/></div>
-                                Recent Graduates<br/>
+                                <div className="under500only br"><br/></div> Recent Graduates<br/>
                                 Competing to Work for You.</b>
                         </div>
                         <div style={styles.horizList}>
@@ -289,9 +288,7 @@ class ForBusiness extends Component {
                                             src="/icons/Key.png"
                                             style={styles.horizListIcon}
                                         /><br/>
-                                        <b>Established
-                                            <div className="under500only br"><br/></div>
-                                            Pipeline</b><br/>
+                                        <b>Established<div className="under500only br"><br/></div> Pipeline</b><br/>
                                         Instant access to a pool
                                         of top tier talent.
                                     </div>
@@ -305,9 +302,7 @@ class ForBusiness extends Component {
                                             src="/icons/Evaluate.png"
                                             style={styles.horizListIcon}
                                         /><br/>
-                                        <b>Evaluative
-                                            <div className="under500only br"><br/></div>
-                                            Metrics</b><br/>
+                                        <b>Evaluative<div className="under500only br"><br/></div> Metrics</b><br/>
                                         Skill evaluation curated to
                                         your company{"'"}s needs.
                                     </div>
@@ -320,9 +315,7 @@ class ForBusiness extends Component {
                                             src="/icons/Badge.png"
                                             style={styles.horizListIcon}
                                         /><br/>
-                                        <b>Hire
-                                            <div className="under500only br"><br/></div>
-                                            Talent</b><br/>
+                                        <b>Hire<div className="under500only br"><br/></div> Talent</b><br/>
                                         See their skills and work
                                         before you hire.
                                     </div>
@@ -337,9 +330,7 @@ class ForBusiness extends Component {
                         <div className="center smallText2"
                              style={{marginBottom: '40px', width: '90%', marginLeft: "5%"}}>
                             <h1 className="purpleText h1Shrink"><b>Our Scholarships to Hire Program</b></h1>
-                            A scholarship for potential hires
-                            <div className="under500only br"><br/></div>
-                            to learn the skills you need.<br/>
+                            A scholarship for potential hires<div className="under500only br"><br/></div> to learn the skills you need.<br/>
                             Scholarships made for your company.
                         </div>
 
@@ -526,9 +517,7 @@ class ForBusiness extends Component {
 
                     <div className="center mediumTextDoubleShrink"
                          style={{marginBottom: '40px', marginTop: "120px", minWidth: "250px"}}>
-                        <b>Your Pipeline to
-                            <div className="under400only br"><br/></div>
-                            Fully-Vetted Talent</b>
+                        <b>Your Pipeline to<div className="under400only br"><br/></div> Fully-Vetted Talent</b>
                     </div>
                     <div className="forBusinessBoxesContainer">
                         <Paper zDepth={3} className="paperBox">

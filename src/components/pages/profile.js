@@ -504,8 +504,11 @@ class Profile extends Component {
                                 </ul>
 
                             </div>
-                            : <div className="center"><CircularProgress
-                                style={{marginTop: "20px", marginBottom: "20px"}}/></div>}
+                            :
+                            <div>
+                                <div className="fullHeight" />
+                                <div className="fullHeight" />
+                            </div>}
                     </div>
                     : null}
             </div>
