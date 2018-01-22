@@ -102,7 +102,6 @@ class Discover extends Component {
     handleOpen = (pathway) => {
         // tell the user they are preregistered if logged in
         const currentUser = this.props.currentUser;
-        console.log("hey");
         if (currentUser && currentUser != "no user") {
             const user = {
                 name: currentUser.name,

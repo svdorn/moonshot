@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import {closeNotification, changeCurrentRoute} from "../../actions/usersActions";
+import {closeNotification, changeCurrentRoute, comingSoon} from "../../actions/usersActions";
 import {TextField, RaisedButton, Paper, CircularProgress, Dialog, FlatButton} from 'material-ui';
 import ComingSoonForm from '../childComponents/comingSoonForm';
 import axios from 'axios';
@@ -46,7 +46,22 @@ class Home extends Component {
     }
 
     handleOpen = (pathway) => {
-        this.setState({open: true, dialogPathway: pathway});
+        // tell the user they are preregistered if logged in
+        const currentUser = this.props.currentUser;
+        if (currentUser && currentUser != "no user") {
+            const user = {
+                name: currentUser.name,
+                email: currentUser.email,
+                pathway: this.props.pathway,
+            }
+            const signedIn = true;
+            this.props.comingSoon(user, signedIn);
+            this.setState({open: true});
+        }
+        // if not logged in, prompt for user info
+        else {
+            this.setState({open: true, dialogPathway: pathway});
+        }
     };
 
     handleClose = () => {
@@ -240,10 +255,20 @@ class Home extends Component {
                         contentClassName="center"
                         overlayClassName="dialogOverlay"
                     >
-                        <ComingSoonForm
-                            pathway={this.state.dialogPathway}
-                            onSubmit={this.handleClose}
-                        />
+                        {this.props.currentUser && this.props.currentUser != "no user" ?
+                            <div>
+                                {this.props.loadingEmailSend ?
+                                    <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
+                                    :
+                                    <div style={{color:"#00c3ff"}}>Your spot has been reserved!</div>
+                                }
+                            </div>
+                            :
+                            <ComingSoonForm
+                                pathway={this.state.dialogPathway}
+                                onSubmit={this.handleClose}
+                            />
+                        }
                     </Dialog>
                     <div className="fullHeight greenToBlue">
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
@@ -729,11 +754,15 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
         changeCurrentRoute,
+        comingSoon
     }, dispatch);
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        currentUser: state.users.currentUser,
+        loadingEmailSend: state.users.loadingSomething
+    };
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(Home);
