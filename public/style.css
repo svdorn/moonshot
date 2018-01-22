@@ -2294,7 +2294,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 }
 
+@media only screen and (min-width: 350px) {
+    .under350only { display: none; }
+}
+
 @media only screen and (max-width: 350px) {
+    .above350only { display: none; }
     .paperBox {
         height: 195px;
         width: 260px;
