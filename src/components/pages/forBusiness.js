@@ -339,7 +339,7 @@ class ForBusiness extends Component {
                     <div className="purpleToGreenSpacer"/>
 
                     <div style={{marginTop: '60px', minWidth: "215px"}}>
-                        <div className="center smallText2"
+                        <div className="center smallText4 smallText4shrinkAt500"
                              style={{marginBottom: '40px', width: '90%', marginLeft: "5%"}}>
                             <h1 className="purpleText h1Shrink"><b>Our Scholarships to Hire Program</b></h1>
                             A scholarship for potential hires<div className="under500only br"><br/></div> to learn the skills you need.<br/>

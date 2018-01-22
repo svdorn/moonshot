@@ -1438,6 +1438,27 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .forBusinessBox { padding-top: 38px; }
 .marginTopOnDesktop { margin-top: 60px; }
 
+
+.font40px { font-size: 40px; }
+.font38px { font-size: 38px; }
+.font36px { font-size: 36px; }
+.font34px { font-size: 34px; }
+.font32px { font-size: 32px; }
+.font30px { font-size: 30px; }
+.font28px { font-size: 28px; }
+.font26px { font-size: 26px; }
+.font24px { font-size: 24px; }
+.font22px { font-size: 22px; }
+.font20px { font-size: 20px; }
+.font18px { font-size: 18px; }
+.font16px { font-size: 16px; }
+.font14px { font-size: 14px; }
+.font12px { font-size: 12px; }
+.font10px { font-size: 10px; }
+.font8px { font-size: 8px; }
+.font6px { font-size: 6px; }
+
+
 @media only screen and (max-width: 1050px) {
     .homepageTrajectoryTextLeft {
         width: 40%;
@@ -1530,6 +1551,25 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .overviewAndCommentBox, .pathwayContent {
         width: 100%;
     }
+
+    .font40pxUnder1000 { font-size: 40px; }
+    .font38pxUnder1000 { font-size: 38px; }
+    .font36pxUnder1000 { font-size: 36px; }
+    .font34pxUnder1000 { font-size: 34px; }
+    .font32pxUnder1000 { font-size: 32px; }
+    .font30pxUnder1000 { font-size: 30px; }
+    .font28pxUnder1000 { font-size: 28px; }
+    .font26pxUnder1000 { font-size: 26px; }
+    .font24pxUnder1000 { font-size: 24px; }
+    .font22pxUnder1000 { font-size: 22px; }
+    .font20pxUnder1000 { font-size: 20px; }
+    .font18pxUnder1000 { font-size: 18px; }
+    .font16pxUnder1000 { font-size: 16px; }
+    .font14pxUnder1000 { font-size: 14px; }
+    .font12pxUnder1000 { font-size: 12px; }
+    .font10pxUnder1000 { font-size: 10px; }
+    .font8pxUnder1000 { font-size: 8px; }
+    .font6pxUnder1000 { font-size: 6px; }
 }
 
 @media only screen and (max-width: 900px) {
@@ -1539,6 +1579,25 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .forBusinessBox > div.mediumText { font-size: 25px; }
     .forBusinessBox { padding-top: 20px; }
+
+    .font40pxUnder900 { font-size: 40px; }
+    .font38pxUnder900 { font-size: 38px; }
+    .font36pxUnder900 { font-size: 36px; }
+    .font34pxUnder900 { font-size: 34px; }
+    .font32pxUnder900 { font-size: 32px; }
+    .font30pxUnder900 { font-size: 30px; }
+    .font28pxUnder900 { font-size: 28px; }
+    .font26pxUnder900 { font-size: 26px; }
+    .font24pxUnder900 { font-size: 24px; }
+    .font22pxUnder900 { font-size: 22px; }
+    .font20pxUnder900 { font-size: 20px; }
+    .font18pxUnder900 { font-size: 18px; }
+    .font16pxUnder900 { font-size: 16px; }
+    .font14pxUnder900 { font-size: 14px; }
+    .font12pxUnder900 { font-size: 12px; }
+    .font10pxUnder900 { font-size: 10px; }
+    .font8pxUnder900 { font-size: 8px; }
+    .font6pxUnder900 { font-size: 6px; }
 }
 
 @media only screen and (max-width: 800px) {
@@ -1678,6 +1737,25 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 85%;
         margin-left: 7%;
     }
+
+    .font40pxUnder800 { font-size: 40px; }
+    .font38pxUnder800 { font-size: 38px; }
+    .font36pxUnder800 { font-size: 36px; }
+    .font34pxUnder800 { font-size: 34px; }
+    .font32pxUnder800 { font-size: 32px; }
+    .font30pxUnder800 { font-size: 30px; }
+    .font28pxUnder800 { font-size: 28px; }
+    .font26pxUnder800 { font-size: 26px; }
+    .font24pxUnder800 { font-size: 24px; }
+    .font22pxUnder800 { font-size: 22px; }
+    .font20pxUnder800 { font-size: 20px; }
+    .font18pxUnder800 { font-size: 18px; }
+    .font16pxUnder800 { font-size: 16px; }
+    .font14pxUnder800 { font-size: 14px; }
+    .font12pxUnder800 { font-size: 12px; }
+    .font10pxUnder800 { font-size: 10px; }
+    .font8pxUnder800 { font-size: 8px; }
+    .font6pxUnder800 { font-size: 6px; }
 }
 
 @media only screen and (min-width: 701px) {
@@ -1737,6 +1815,25 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 36px;
         width: 36px;
     }
+
+    .font40pxUnder700 { font-size: 40px; }
+    .font38pxUnder700 { font-size: 38px; }
+    .font36pxUnder700 { font-size: 36px; }
+    .font34pxUnder700 { font-size: 34px; }
+    .font32pxUnder700 { font-size: 32px; }
+    .font30pxUnder700 { font-size: 30px; }
+    .font28pxUnder700 { font-size: 28px; }
+    .font26pxUnder700 { font-size: 26px; }
+    .font24pxUnder700 { font-size: 24px; }
+    .font22pxUnder700 { font-size: 22px; }
+    .font20pxUnder700 { font-size: 20px; }
+    .font18pxUnder700 { font-size: 18px; }
+    .font16pxUnder700 { font-size: 16px; }
+    .font14pxUnder700 { font-size: 14px; }
+    .font12pxUnder700 { font-size: 12px; }
+    .font10pxUnder700 { font-size: 10px; }
+    .font8pxUnder700 { font-size: 8px; }
+    .font6pxUnder700 { font-size: 6px; }
 }
 
 @media only screen and (min-width: 601px) {
@@ -1784,6 +1881,25 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     #pathwayMoneyIcon { height: 48px; }
     #pathwayHatIcon { height: 38px; }
+
+    .font40pxUnder600 { font-size: 40px; }
+    .font38pxUnder600 { font-size: 38px; }
+    .font36pxUnder600 { font-size: 36px; }
+    .font34pxUnder600 { font-size: 34px; }
+    .font32pxUnder600 { font-size: 32px; }
+    .font30pxUnder600 { font-size: 30px; }
+    .font28pxUnder600 { font-size: 28px; }
+    .font26pxUnder600 { font-size: 26px; }
+    .font24pxUnder600 { font-size: 24px; }
+    .font22pxUnder600 { font-size: 22px; }
+    .font20pxUnder600 { font-size: 20px; }
+    .font18pxUnder600 { font-size: 18px; }
+    .font16pxUnder600 { font-size: 16px; }
+    .font14pxUnder600 { font-size: 14px; }
+    .font12pxUnder600 { font-size: 12px; }
+    .font10pxUnder600 { font-size: 10px; }
+    .font8pxUnder600 { font-size: 8px; }
+    .font6pxUnder600 { font-size: 6px; }
 }
 
 @media only screen and (min-width: 501px) {
@@ -1835,7 +1951,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextLeftDiv.forBusiness,
     .homepageTrajectoryTextRightDiv.forBusiness {
         padding-left: 24%;
-        font-size: 13px;
+        font-size: 14px;
         padding-right: 5%;
         height: 172px;
     }
@@ -1945,6 +2061,25 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 30px;
         width: 30px;
     }
+
+    .font40pxUnder500 { font-size: 40px; }
+    .font38pxUnder500 { font-size: 38px; }
+    .font36pxUnder500 { font-size: 36px; }
+    .font34pxUnder500 { font-size: 34px; }
+    .font32pxUnder500 { font-size: 32px; }
+    .font30pxUnder500 { font-size: 30px; }
+    .font28pxUnder500 { font-size: 28px; }
+    .font26pxUnder500 { font-size: 26px; }
+    .font24pxUnder500 { font-size: 24px; }
+    .font22pxUnder500 { font-size: 22px; }
+    .font20pxUnder500 { font-size: 20px; }
+    .font18pxUnder500 { font-size: 18px; }
+    .font16pxUnder500 { font-size: 16px; }
+    .font14pxUnder500 { font-size: 14px; }
+    .font12pxUnder500 { font-size: 12px; }
+    .font10pxUnder500 { font-size: 10px; }
+    .font8pxUnder500 { font-size: 8px; }
+    .font6pxUnder500 { font-size: 6px; }
 }
 
 @media only screen and (max-width: 450px) {
@@ -1967,6 +2102,25 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         max-width: 300px;
     }
     .smallText2 { font-size: 10px; }
+
+    .font40pxUnder400 { font-size: 40px; }
+    .font38pxUnder400 { font-size: 38px; }
+    .font36pxUnder400 { font-size: 36px; }
+    .font34pxUnder400 { font-size: 34px; }
+    .font32pxUnder400 { font-size: 32px; }
+    .font30pxUnder400 { font-size: 30px; }
+    .font28pxUnder400 { font-size: 28px; }
+    .font26pxUnder400 { font-size: 26px; }
+    .font24pxUnder400 { font-size: 24px; }
+    .font22pxUnder400 { font-size: 22px; }
+    .font20pxUnder400 { font-size: 20px; }
+    .font18pxUnder400 { font-size: 18px; }
+    .font16pxUnder400 { font-size: 16px; }
+    .font14pxUnder400 { font-size: 14px; }
+    .font12pxUnder400 { font-size: 12px; }
+    .font10pxUnder400 { font-size: 10px; }
+    .font8pxUnder400 { font-size: 8px; }
+    .font6pxUnder400 { font-size: 6px; }
 }
 
 @media only screen and (max-width: 375px) {
@@ -1995,6 +2149,25 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         font-size: 11px;
         margin-top: -7px;
     }
+
+    .font40pxUnder350 { font-size: 40px; }
+    .font38pxUnder350 { font-size: 38px; }
+    .font36pxUnder350 { font-size: 36px; }
+    .font34pxUnder350 { font-size: 34px; }
+    .font32pxUnder350 { font-size: 32px; }
+    .font30pxUnder350 { font-size: 30px; }
+    .font28pxUnder350 { font-size: 28px; }
+    .font26pxUnder350 { font-size: 26px; }
+    .font24pxUnder350 { font-size: 24px; }
+    .font22pxUnder350 { font-size: 22px; }
+    .font20pxUnder350 { font-size: 20px; }
+    .font18pxUnder350 { font-size: 18px; }
+    .font16pxUnder350 { font-size: 16px; }
+    .font14pxUnder350 { font-size: 14px; }
+    .font12pxUnder350 { font-size: 12px; }
+    .font10pxUnder350 { font-size: 10px; }
+    .font8pxUnder350 { font-size: 8px; }
+    .font6pxUnder350 { font-size: 6px; }
 }
 
 
@@ -2009,18 +2182,4 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 
     .homepageSeparator { transform: scale(2.5, .02); }
-}
-
-@media only screen and (max-width: 200px) {
-    .messageHeader {
-        font-size: 12px;
-    }
-    .messageHeader > button {
-        padding-right: 0px !important;
-        padding-left: 6px !important;
-        width: initial !important;
-    }
-    .messageHeader > button > div {
-        width: 24px;
-    }
 }
