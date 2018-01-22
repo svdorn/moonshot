@@ -272,8 +272,9 @@ class ForBusiness extends Component {
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
                         <div className="infoBox whiteText mediumText" style={{zIndex: "20"}}>
-                            Better information, <br/>
-                            better hiring decisions. <br/>
+                            Data-driven hiring.<br/>
+                            Skill training and assessments<br/>
+                            curated to your needs.<br/>
                             <button className="outlineButton"
                                     style={{backgroundColor: "transparent", border: "2px solid white"}}
                                     onClick={this.handleOpen}>
@@ -302,9 +303,8 @@ class ForBusiness extends Component {
                                             src="/icons/Key.png"
                                             style={styles.horizListIcon}
                                         /><br/>
-                                        <b>Established<div className="under500only br"><br/></div> Pipeline</b><br/>
-                                        Instant access to a pool
-                                        of top tier talent.
+                                        <b>Specialized<div className="under500only br"><br/></div> Training</b><br/>
+                                        We train our students in the skills you need.
                                     </div>
                                 </div>
                             </div>
@@ -317,8 +317,7 @@ class ForBusiness extends Component {
                                             style={styles.horizListIcon}
                                         /><br/>
                                         <b>Evaluative<div className="under500only br"><br/></div> Metrics</b><br/>
-                                        Skill evaluation curated to
-                                        your company{"'"}s needs.
+                                        Quantitative skill assessments and comparative data.
                                     </div>
                                 </div>
                             </div>
@@ -329,9 +328,8 @@ class ForBusiness extends Component {
                                             src="/icons/Badge.png"
                                             style={styles.horizListIcon}
                                         /><br/>
-                                        <b>Hire<div className="under500only br"><br/></div> Talent</b><br/>
-                                        See their skills and work
-                                        before you hire.
+                                        <b>Real<div className="under500only br"><br/></div> Projects</b><br/>
+                                        See their quality of work and application of skills before you hire.
                                     </div>
                                 </div>
                             </div>
@@ -345,7 +343,6 @@ class ForBusiness extends Component {
                              style={{marginBottom: '40px', width: '90%', marginLeft: "5%"}}>
                             <h1 className="purpleText h1Shrink"><b>Our Scholarships to Hire Program</b></h1>
                             A scholarship for potential hires<div className="under500only br"><br/></div> to learn the skills you need.<br/>
-                            Scholarships made for your company.
                         </div>
 
                         <div className="forBusinessLineWithCirclesContainer">
@@ -364,9 +361,8 @@ class ForBusiness extends Component {
                                 <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
                                     <h2 className="blueText"><b>What Skills Are You
                                         <div className="above800only br"><br/></div>
-                                        Looking For?</b></h2>
-                                    UX Design, Data Science, Full Stack
-                                    Development, Marketing, Adobe...
+                                        Hiring For?</b></h2>
+                                    UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe...
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight">
@@ -407,11 +403,9 @@ class ForBusiness extends Component {
                             <div className="homepageTrajectoryTextLeft forBusiness">
                                 <div className="smallText4 homepageTrajectoryTextLeftDiv forBusiness">
                                     <h2 className="purpleText"><b>Sponsor Students</b></h2>
-                                    Moonshot can find the talent,
-                                    you can sponsor your pool
-                                    of candidates,
-                                    <div className="above800only br"><br/></div>
-                                    or we can do both.
+                                    Provide sponsorships for students to learn
+                                    the skills you need. We can find the talent or you
+                                    can sponsor your own candidates.
                                 </div>
                             </div>
 
@@ -478,16 +472,14 @@ class ForBusiness extends Component {
                                     <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon"
                                          style={{marginRight: '10px'}}/>
                                     <div className="smallText aResumeCantDoThisText">See their quality of work under
-                                        pressure with real-world projects relevant
-                                        <div className="above800only br"><br/></div>
-                                        to your company.
+                                        pressure.
                                     </div>
                                 </div>
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/BarGraph.png" className="forBusinessIcon"
                                          style={{marginLeft: '10px'}}/>
-                                    <div className="smallText aResumeCantDoThisText">Look at quantitative breakdowns
-                                        and precise scoring of their skills.
+                                    <div className="smallText aResumeCantDoThisText">
+                                        Quantitatively score and break down their skills.
                                     </div>
                                 </div>
                             </div>
@@ -495,7 +487,7 @@ class ForBusiness extends Component {
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/EvaluatePurple.png" className="forBusinessIcon"/>
                                     <div className="smallText aResumeCantDoThisText">
-                                        Evaluate candidates with standardized criteria and assessments.
+                                        Compare candidates against their peers.
                                     </div>
                                 </div>
                                 <div style={styles.bottomListItem}>
@@ -537,14 +529,14 @@ class ForBusiness extends Component {
                         <Paper zDepth={3} className="paperBox">
                             <div className="gradientBorderBlueBox">
                                 <div className="forBusinessBox">
-                                    <div className="mediumText">Program</div>
+                                    <div className="mediumText">Training</div>
                                     <div className="mediumText blueText">$200 USD</div>
-                                    <div>PER CANDIDATE</div>
+                                    <div>PER STUDENT</div>
                                     <div className="br"><br/></div>
-                                    Program curated to your<br/> company{"'"}s needs. Skill evaluation
-                                    <div className="br"><br/></div>
-                                    of up to 15
-                                    candidates.
+                                    A program curated to your<br/>
+                                    company{"'"}s needs. Skill training and<br/>
+                                    evaluation of up to 20<br/>
+                                    potential candidates.
                                 </div>
                             </div>
                         </Paper>
@@ -552,13 +544,13 @@ class ForBusiness extends Component {
                             <div className="gradientBorderPurpleToRedBox">
                                 <div className="forBusinessBox">
                                     <div className="mediumText">Evaluation</div>
-                                    <div className="mediumText purpleText">$500 USD</div>
-                                    <div>PER HIRE</div>
+                                    <div className="mediumText purpleText">$50 USD</div>
+                                    <div>PER CANDIDATE</div>
                                     <div className="br"><br/></div>
-                                    When students are successful in your<br/>programs, you can hire them
-                                    <div className="br"><br/></div>
-                                    for a small
-                                    fee.
+                                    Skill evaluation of your existing<br/>
+                                    candidate pool. Don{"'"}t guess<br/>
+                                    how good your candidates are,<br/>
+                                    know.
                                 </div>
                             </div>
                         </Paper>
