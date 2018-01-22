@@ -223,7 +223,7 @@ class Home extends Component{
                                 src="/icons/Lightbulb.png"
                                 alt="Lightbulb"
                                 title="Lightbulb icon"
-                                className="homepageTrajectoryTextRightIcon onHome"
+                                className="homepageTrajectoryTextLeftIcon onHome"
                             />
                             <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
                                 <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
