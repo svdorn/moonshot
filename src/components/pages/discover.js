@@ -235,7 +235,7 @@ class Discover extends Component {
                     </div>
 
                     <div className="pathwayPrevListContainer" style={style.pathwayPreviewFeaturedContainer}>
-                        <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
+                        <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList" style={style.pathwayPreviewUl}>
                             {featuredPathwayPreviews}
                         </ul>
                     </div>

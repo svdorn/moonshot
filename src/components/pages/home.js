@@ -355,20 +355,20 @@ class Home extends Component {
                             sponsored by<br/> employers hiring for those skills.
                         </div>
                         <div className="pathwayPrevListContainer">
-                            <ul className="horizCenteredList pathwayPrevList">
+                            <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">
                                 {pathwayPreviews1}
                             </ul>
                         </div>
                         {pathwayPreviews2 ?
                             <div className="pathwayPrevListContainer" style={{marginTop: '20px'}}>
-                                <ul className="horizCenteredList pathwayPrevList">
+                                <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">
                                     {pathwayPreviews2}
                                 </ul>
                             </div>
                             : null
                         }
                         <div className="pathwayPrevListContainer pathwayPrevMobileThird">
-                            <ul className="horizCenteredList pathwayPrevList">
+                            <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">
                                 {pathwayPreviews1[2]}
                             </ul>
                         </div>
