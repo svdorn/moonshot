@@ -201,8 +201,8 @@ class Home extends Component{
                 <div className="fullHeight greenToBlue">
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
 
-                    <div className="infoBox whiteText mediumText" style={{zIndex:"20", width:"100%"}}>
-                        Skip the resum&eacute;.<br/> Learn skills that employers<div className="from500to600only under400only br"><br/></div> need<div className="outside500to600only above400only br"><br/></div> <i>for free, forever.</i><br/>
+                    <div className="infoBox whiteText font40px font30pxUnder700 font20pxUnder500 font18pxUnder400" style={{zIndex:"20", width:"100%"}}>
+                        Skip the resum&eacute;.<br/> Learn skills that employers need<br/><i>for free, forever.</i><br/>
                         <button className="outlineButton blueWhiteButton"
                             onClick={() => this.goTo('/signup')}>
                             Get Started

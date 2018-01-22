@@ -271,7 +271,7 @@ class ForBusiness extends Component {
                     <div className="fullHeight purpleToBlue">
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
-                        <div className="infoBox whiteText mediumText" style={{zIndex: "20"}}>
+                        <div className="infoBox whiteText font40px font30pxUnder700 font20pxUnder500 font18pxUnder400" style={{zIndex: "20"}}>
                             Data-driven hiring.<br/>
                             Skill training and assessments<br/>
                             curated to your needs.<br/>
