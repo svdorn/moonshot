@@ -618,8 +618,6 @@ button.link {
 .scrollDownButton {
     height: 28px;
     width: 52px;
-    bottom: 174px;
-    position: absolute;
     left: 0;
     right: 0;
     margin: auto;
@@ -627,15 +625,15 @@ button.link {
     animation: MoveUpDown 1.2s linear infinite;
 }
 @keyframes MoveUpDown {
-  0% {
-    bottom: 174px;
-  }
-  50% {
-    bottom: 180px;
-  }
-  100% {
-    bottom: 174px;
-  }
+    0% {
+        margin-top: 24px;
+    }
+    50% {
+        margin-top: 30px;
+    }
+    100% {
+        margin-top: 24px;
+    }
 }
 
 .pathwayImgContainer {
