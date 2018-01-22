@@ -1186,7 +1186,7 @@ button.link {
     font-size: 23px;
 }
 .homepageTrajectoryTextRightIcon.onHome {
-    height: 74px;
+    height: 70px;
     margin-top: 36px;
 }
 .forBusinessTrajectoryTextLeft {
@@ -1487,7 +1487,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .font6px { font-size: 6px; }
 
 @media only screen and (min-width: 1051px) {
-    .homepageTrajectoryTextRightIcon.onHome { margin-left: 10px; }
+    .homepageTrajectoryTextRightIcon.onHome { margin-left: 14px; }
 }
 
 @media only screen and (max-width: 1050px) {
