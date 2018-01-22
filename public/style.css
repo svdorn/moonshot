@@ -1539,6 +1539,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .font8px { font-size: 8px; }
 .font6px { font-size: 6px; }
 
+.inline { display: inline; }
+.inline-block { display: inline-block; }
+
 @media only screen and (min-width: 1051px) {
     .homepageTrajectoryTextRightIcon.onHome { margin-left: 14px; }
 }
@@ -1584,8 +1587,13 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 }
 
+@media only screen and (min-width: 1001px) {
+    .under1000only { display: none; }
+}
+
 @media only screen and (max-width: 1000px) {
     .mediumTextDoubleShrink { font-size: 30px; }
+    .above1000only { display: none; }
 
     .above1000fade {
         visibility: hidden;
@@ -1656,7 +1664,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .font6pxUnder1000 { font-size: 6px; }
 }
 
+@media only screen and (min-width: 901px) {
+    .under900only { display: none; }
+}
+
 @media only screen and (max-width: 900px) {
+    .above900only { display: none; }
     .paperBox {
         height: 225px;
         width: 300px;
@@ -1688,6 +1701,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(3) {
         display: none;
     }
+}
+
+@media only screen and (min-width: 801px) {
+    .under800only { display: none; }
 }
 
 @media only screen and (max-width: 800px) {
@@ -1855,6 +1872,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .wideScreenMenuItem {
         display: inherit;
     }
+    .under700only { display: none; }
 }
 
 @media only screen and (max-width: 700px) {
@@ -1993,7 +2011,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 547px) {
-    .pathwayPrevList > li:nth-child(2) {
+    .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(2) {
         display: none;
     }
 }

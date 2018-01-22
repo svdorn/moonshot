@@ -308,7 +308,7 @@ class ForBusiness extends Component {
                                             style={styles.horizListIcon}
                                         /><br/>
                                         <b>Specialized<div className="under500only br"><br/></div> Training</b><br/>
-                                        We train our students in the skills you need.
+                                        We train our students in <div className="above600only"><br/></div>the skills you need.
                                     </div>
                                 </div>
                             </div>
@@ -321,7 +321,7 @@ class ForBusiness extends Component {
                                             style={styles.horizListIcon}
                                         /><br/>
                                         <b>Evaluative<div className="under500only br"><br/></div> Metrics</b><br/>
-                                        Quantitative skill assessments and comparative data.
+                                        Quantitative skill assessments <div className="above600only"><br/></div>and comparative data.
                                     </div>
                                 </div>
                             </div>
@@ -333,7 +333,7 @@ class ForBusiness extends Component {
                                             style={styles.horizListIcon}
                                         /><br/>
                                         <b>Real<div className="under500only br"><br/></div> Projects</b><br/>
-                                        See their quality of work and application of skills before you hire.
+                                        See their quality of work and application of skills<div className="above500only inline"> before you hire</div>.
                                     </div>
                                 </div>
                             </div>
