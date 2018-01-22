@@ -42,7 +42,7 @@ class PathwayPreview extends Component {
         console.log(this.props.comingSoon);
 
         return (
-            <div>
+            <div style={{position:"relative"}}>
                 {this.props.comingSoon ?
                     <div className="comingSoonBanner">
                         <div>
