@@ -435,7 +435,7 @@ class ForBusiness extends Component {
                     </div>
 
                     <div className="center" style={{marginBottom: "50px"}}>
-                        <h1 className="isolatedHeader purpleText">
+                        <h1 className="isolatedHeader purpleText font36px font30pxUnder700 font26pxUnder500">
                             <b>What Positions Are You Hiring For?</b>
                         </h1>
                         <div id="exampleSkillsContainer">
