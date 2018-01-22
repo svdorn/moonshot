@@ -358,7 +358,7 @@ app.post('/sendVerificationEmail', function (req, res) {
 
 // SEND EMAIL FOR REGISTERING FOR PATHWAYS
 app.post('/users/registerForPathway', function(req, res) {
-    let recipient1 = "kyle@moonshotlearning.org";
+    let recipient1 = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
     let subject1 = "Student Registration for " + req.body.pathway;
     let content1 = "<div>"
         + "<h3>Student Registration for Pathway:</h3>"
@@ -456,7 +456,7 @@ app.post('/users/forBusinessEmail', function (req, res) {
 // SEND COMING SOON EMAIL
 app.post('/users/comingSoonEmail', function (req, res) {
 
-    let recipient = "kyle@moonshotlearning.org";
+    let recipient = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
     let subject = 'Moonshot Coming Soon Pathway';
     let content = "<div>"
         + "<h3>Pathway:</h3>"
@@ -972,7 +972,7 @@ app.get('/search', function (req, res) {
 
     //const limit = 4;
     const sort = {avgRating: -1};
-    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags";
+    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon";
 
     Pathways.find(query)
         .limit(limit)

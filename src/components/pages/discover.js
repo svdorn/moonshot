@@ -1,10 +1,11 @@
 "use strict"
 import React, {Component} from 'react';
-import {TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup} from 'material-ui';
+import {TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup, Dialog, FlatButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
+import ComingSoonForm from '../childComponents/comingSoonForm';
 import {closeNotification} from "../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
@@ -28,7 +29,9 @@ class Discover extends Component {
             category: "",
             company: "",
             explorePathways: [],
-            featuredPathways: []
+            featuredPathways: [],
+            open: false,
+            dialogPathway: null,
         }
     }
 
@@ -94,6 +97,14 @@ class Discover extends Component {
         }).catch(function (err) {
         })
     }
+
+    handleOpen = (pathway) => {
+        this.setState({open: true, dialogPathway: pathway});
+    };
+
+    handleClose = () => {
+        this.setState({open: false, dialogPathway: null});
+    };
 
     render() {
         const style = {
@@ -166,6 +177,7 @@ class Discover extends Component {
                 <li className="pathwayPreviewLi explorePathwayPreview"
                     key={key}
                     //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                    onClick={() => self.handleOpen(pathway.name)}
                 >
                     <PathwayPreview
                         name={pathway.name}
@@ -176,6 +188,7 @@ class Discover extends Component {
                         deadline={formattedDeadline}
                         price={pathway.price}
                         _id={pathway._id}
+                        comingSoon = {pathway.comingSoon}
                     />
                 </li>
             );
@@ -191,6 +204,7 @@ class Discover extends Component {
                 <li className="pathwayPreviewLi featuredPathwayPreview"
                     key={key}
                     //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                    onClick={() => self.handleOpen(pathway.name)}
                 >
                     <PathwayPreview
                         name={pathway.name}
@@ -201,6 +215,7 @@ class Discover extends Component {
                         deadline={formattedDeadline}
                         price={pathway.price}
                         _id={pathway._id}
+                        comingSoon = {pathway.comingSoon}
                     />
                 </li>
             );
@@ -213,14 +228,41 @@ class Discover extends Component {
         })
 
         // TODO get companies from DB
-        const companies = ["Epic", "Google", "Tesla", "Holos", "Blizzard"];
+        const companies = ["Moonshot"];
         const companyItems = companies.map(function (company) {
             return <MenuItem value={company} primaryText={company} key={company}/>
         })
 
+        let blurredClass = "";
+        if (this.state.open) {
+            blurredClass = " dialogForBizOverlay";
+        }
+        const actions = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onClick={this.handleClose}
+            />,
+        ];
 
         return (
-            <div className='jsxWrapper' ref='discover'>
+            <div className={"jsxWrapper" + blurredClass} ref='discover'>
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    paperClassName="dialogForBiz"
+                    contentClassName="center"
+                    overlayClassName="dialogOverlay"
+                >
+                    <ComingSoonForm
+                        pathway={this.state.dialogPathway}
+                        onSubmit={this.handleClose}
+                    />
+                </Dialog>
+
                 <div className="greenToBlue headerDiv"/>
                 <div className="center mediumText" style={{marginTop:'15px', marginBottom:'10px'}}>
                     Discover Pathways
