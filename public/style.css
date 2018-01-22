@@ -534,14 +534,42 @@ button.link {
     filter: alpha(opacity=100); /* For IE8 and earlier */
 }
 
-.scrollDownButton {
-    height: 22px;
+.scrollDownButton > div {
+    position: relative;
+    float: left;
+    overflow: hidden;
+    width: 26px;
+    height: 28px;
+}
+.scrollDownButton > div > div {
+    width: 30px;
+    height: 3px;
+    background-color: rgba(255,255,255,.8);
     position: absolute;
-    bottom: 40px;
+    top: 7px;
+}
+.scrollDownButton > div:nth-child(1) > div {
+    transform: rotate(30deg);
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+}
+.scrollDownButton > div:nth-child(2) > div {
+    margin-left: -4px;
+    transform: rotate(-30deg);
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
+}
+.scrollDownButton > div > div:nth-child(2) {
+    margin-top: 10px;
+}
+.scrollDownButton {
+    height: 28px;
+    width: 52px;
+    bottom: 174px;
+    position: absolute;
     left: 0;
     right: 0;
     margin: auto;
-    opacity: .8;
     cursor: pointer;
     animation: MoveUpDown 1.2s linear infinite;
 }
@@ -1086,7 +1114,7 @@ button.link {
 .purpleToGreenSpacer {
     width: 60%;
     height: 2px;
-    margin: 50px 20% 50px;
+    margin: 65px 20% 65px;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
 }
 #picturesToPathwaysHomepageSpacer {
@@ -1932,6 +1960,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
+
+    .scrollDownButton { transform: scale(.6); }
 
     .homepageTrajectory { margin-bottom: -65px; }
     .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
