@@ -1241,7 +1241,7 @@ button.link {
 .homepageTrajectoryTextLeftDiv.forBusiness,
 .homepageTrajectoryTextRightDiv.forBusiness {
     margin-left: 0px;
-    text-align: center;
+    text-align: left;
 }
 .forBusinessTrajectoryTextLeftDiv,
 .forBusinessTrajectoryTextRightDiv {

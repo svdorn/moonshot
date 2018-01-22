@@ -382,10 +382,10 @@ class ForBusiness extends Component {
                                         <div className="above500only br"><br/></div>
                                         to the Skills You Need.</b>
                                     </h2>
-                                    Expert led, interactive learning
+                                    Expert-led, interactive learning
                                     through videos, articles, skill
                                     assessments
-                                    <div className="above800only br"><br/></div>
+                                    
                                     and real-world projects.
                                 </div>
                             </div>
