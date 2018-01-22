@@ -308,7 +308,7 @@ class Home extends Component {
                                 <div className="smallText2 homepageTrajectoryTextRightDiv onHome">
                                     <h2 className="blueText">Build Your Profile</h2>
                                     Add your skills, completed projects and
-                                    finished pathways. Prove yourself through to employers
+                                    finished pathways. Prove yourself to employers through
                                     your profile.
                                 </div>
                             </div>

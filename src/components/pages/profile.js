@@ -190,7 +190,7 @@ class Profile extends Component {
                 fontSize: '18px'
             },
             img: {
-                height: "120px",
+                height: "100px",
                 borderRadius: '50%',
                 border: "3px solid #00d2ff",
             },
@@ -411,7 +411,7 @@ class Profile extends Component {
                                 <div style={style.pictureInfoSkills.everything}>
                                     <div style={style.pictureInfoSkills.leftSide}>
                                         <img
-                                            src="/icons/stephenProfile.jpg"
+                                            src="/icons/Portfolio.png"
                                             alt="Profile picture"
                                             style={style.img}
                                         />
