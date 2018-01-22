@@ -304,7 +304,7 @@ class Home extends Component {
                                     title="Lightbulb icon"
                                     className="homepageTrajectoryTextLeftIcon onHome"
                                 />
-                                <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
+                                <div className="homepageTrajectoryTextLeftDiv onHome font20px font18pxUnder600 font20pxUnder500">
                                     <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
                                     Pathways are a series of courses
                                     designed to teach you skills
@@ -329,7 +329,7 @@ class Home extends Component {
                                     title="Person icon"
                                     className="homepageTrajectoryTextRightIcon onHome"
                                 />
-                                <div className="smallText2 homepageTrajectoryTextRightDiv onHome">
+                                <div className="homepageTrajectoryTextRightDiv onHome font20px font18pxUnder600 font20pxUnder500">
                                     <h2 className="blueText">Build Your Profile</h2>
                                     Add your skills, completed projects and
                                     finished pathways. Prove yourself to employers through
@@ -354,7 +354,7 @@ class Home extends Component {
                                     title="Badge icon"
                                     className="homepageTrajectoryTextLeftIcon smallerWidthIcon"
                                 />
-                                <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
+                                <div className="homepageTrajectoryTextLeftDiv onHome font20px font18pxUnder600 font20pxUnder500">
                                     <h2 className="purpleText">Get Hired By Companies<br/>Leading The Future</h2>
                                     Compete for open positions with
                                     sponsor companies by excelling in
