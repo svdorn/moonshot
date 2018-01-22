@@ -162,9 +162,12 @@ form > h1 {
     background: rgba(255,255,255,.2);
     border: 2px solid white;
 }
-.blueWhiteButton:hover {
-    background: linear-gradient(to top right, #3dffef, #3de1ff);
+.blueWhiteButton:hover { background: linear-gradient(to top right, #3dffef, #3de1ff); }
+.darkBlueButton {
+    background-color: rgba(102,160,255,.3);
+    border: 2px solid white;
 }
+.darkBlueButton:hover { background: linear-gradient(to top right, var(--moonshotBlue), var(--moonshotPurple)); }
 
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
     padding-top: 5px;
