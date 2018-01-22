@@ -460,7 +460,7 @@ app.post('/users/contactUsEmail', function (req, res) {
     if (req.body.message) {
         message = req.body.message;
     }
-    let recipient = "kyle@moonshotlearning.org";
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
     let subject = 'Moonshot Pathway Question -- Contact Us Form';
     let content = "<div>"
         + "<h3>Questions from pathway:</h3>"
@@ -475,7 +475,7 @@ app.post('/users/contactUsEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipient, subject, content, function (success, msg) {
+    sendEmail(recipients, subject, content, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
