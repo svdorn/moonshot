@@ -103,9 +103,9 @@ footer {
 }
 .formSubmitButton {
     padding: 3px 25px 0px;
-    border: 2px solid var(--moonshotMidBlue);
+    border: 2px solid var(--moonshotLightBlue);
     background-color: rgba(255,255,255,.4);
-    color: var(--moonshotMidBlue);
+    color: var(--moonshotLightBlue);
     font-size: 25px;
     margin-top: 10px;
 }
