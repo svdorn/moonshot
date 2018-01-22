@@ -24,6 +24,7 @@ import MyPathways from './components/pages/myPathways';
 import Onboarding from './components/pages/onboarding';
 import Error404 from './components/pages/error404';
 import Email from './components/pages/email';
+import Unsubscribe from './components/pages/unsubscribe';
 
 const routes = (
   <Router history={browserHistory}>
@@ -44,6 +45,7 @@ const routes = (
         <Route path="/pathway" component={Pathway}/>
         <Route path="/pathwayContent" component={PathwayContent}/>
         <Route path="/email" component={Email}/>
+        <Route path="/unsubscribe" component={Unsubscribe} />
         <Route path='/*' component={Error404} />
     </Route>
   </Router>

@@ -1,7 +1,7 @@
 "use strict"
 import React, { Component } from 'react';
-import { TextField } from 'material-ui';
-import { login, closeNotification } from '../../actions/usersActions';
+import { TextField, CircularProgress } from 'material-ui';
+import { unsubscribe, closeNotification } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -27,23 +27,10 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     />
 );
 
-const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
-        {...input}
-        {...custom}
-        type="password"
-    />
-);
-
 const validate = values => {
     const errors = {};
     const requiredFields = [
         'email',
-        'password',
     ];
     if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
         errors.email = 'Invalid email address';
@@ -57,7 +44,7 @@ const validate = values => {
     return errors
 };
 
-class Login extends Component {
+class Unsubscribe extends Component {
     constructor(props) {
         super(props);
         this.state = {showErrors: true};
@@ -65,13 +52,12 @@ class Login extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        const vals = this.props.formData.login.values;
+        const vals = this.props.formData.unsubscribe.values;
 
         // Check if the form is valid
         let notValid = false;
         const requiredFields = [
             'email',
-            'password',
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -85,13 +71,10 @@ class Login extends Component {
         }
 
         const user = {
-            email: this.props.formData.login.values.email,
-            password: this.props.formData.login.values.password
+            email: this.props.formData.unsubscribe.values.email,
         };
 
-        let saveSession = true;
-
-        this.props.login(user, saveSession);
+        this.props.unsubscribe(user);
     }
 
     goTo (route)  {
@@ -111,7 +94,8 @@ class Login extends Component {
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Sign in</h1>
+                        <h1>Unsubscribe</h1>
+                        <div className="smallText2 font20pxUnder500 blueText">Enter your email to unsubscribe.</div>
                         <div className="inputContainer">
                             <div className="fieldWhiteSpace"/>
                             <Field
@@ -120,22 +104,13 @@ class Login extends Component {
                                 label="Email"
                             /><br/>
                         </div>
-                        <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
-                            <Field
-                                name="password"
-                                component={renderPasswordField}
-                                label="Password"
-                            /><br/><br/>
-                        </div>
-                        <div className="clickable blueText" onClick={() => this.goTo('/signup')}>Create account</div>
-                        <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
                         <button
                             type="submit"
                             className="formSubmitButton"
                         >
-                            Sign In
+                            Submit
                         </button>
+                        { this.props.loadingSomething ? <div className="center"><CircularProgress style={{marginTop:"20px"}}/></div> : "" }
                     </form>
                 </div>
 
@@ -146,7 +121,7 @@ class Login extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        login,
+        unsubscribe,
         closeNotification,
     }, dispatch);
 }
@@ -155,12 +130,13 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
+        loadingSomething: state.users.loadingSomething,
     };
 }
 
-Login = reduxForm({
-    form:'login',
+Unsubscribe = reduxForm({
+    form:'unsubscribe',
     validate,
-})(Login);
+})(Unsubscribe);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Login);
+export default connect(mapStateToProps, mapDispatchToProps)(Unsubscribe);

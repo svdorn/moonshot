@@ -213,6 +213,22 @@ export function forBusiness(user){
     }
 }
 
+// Send an email when form filled out on unsubscribe page
+export function unsubscribe(user){
+    return function(dispatch) {
+        dispatch({type: "FOR_BUSINESS_REQUESTED"});
+
+        axios.post("api/users/unsubscribeEmail", user)
+            .then(function(response) {
+                dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
+                window.scrollTo(0, 0);
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
 // Send an email when form filled out on comingSoon page
 export function comingSoon(user){
     return function(dispatch) {

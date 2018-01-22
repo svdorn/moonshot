@@ -66,7 +66,6 @@ class Menu extends Component {
     }
 
     render() {
-        console.log(this.props.location);
         if (this.props.isOnboarding) {
             return null;
         }
