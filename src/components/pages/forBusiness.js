@@ -421,8 +421,8 @@ class ForBusiness extends Component {
                                     <h2 className="blueText"><b>Evaluate for Hire</b></h2>
                                     Comprehensive data on each candidate
                                     from skill assessments, qualitative
-                                    responses, quantitative scoring relative to
-                                    their peers and real-world projects.
+                                    responses, quantitative scoring
+                                    and real-world projects.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesLeft">
