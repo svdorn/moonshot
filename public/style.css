@@ -1870,6 +1870,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor {
         height: 120px;
+        margin-top: -5px;
     }
     .homepageTrajectoryTextRight.forBusiness
     .homepageTrajectoryTextLeft.forBusiness {
@@ -2083,6 +2084,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
+    .forBusinessLine { height: 534px; }
 
     .scrollDownButton { transform: scale(.6); }
 
@@ -2108,7 +2110,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextLeftDiv.forBusiness,
     .homepageTrajectoryTextRightDiv.forBusiness {
         padding-left: 24%;
-        font-size: 14px;
         padding-right: 5%;
         height: 172px;
     }
@@ -2157,14 +2158,15 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 180px;
     }
     .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor,
-    .homepageTrajectory.forBusiness#sponsorStudentsForBusiness,
     .homepageTrajectoryTextLeft.forBusiness {
         height: 120px;
+    }
+    .homepageTrajectory.forBusiness#sponsorStudentsForBusiness {
+        height: 160px;
     }
     .homepageTrajectoryTextRight.forBusiness { height: 180px; }
     .homepageTrajectoryTextLeft.forBusiness { margin-top: 0; }
     .forBusinessCircle:nth-child(4) { top: 355px; }
-    .forBusinessLine { height: 510px; }
 
 
     .homePathwaysDesc { display: none; }
