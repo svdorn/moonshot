@@ -247,7 +247,7 @@ class Home extends Component {
                     <div className="fullHeight greenToBlue">
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
-                        <div className="infoBox whiteText font40px font30pxUnder700 font20pxUnder500 font18pxUnder400" style={{zIndex: "20", width: "100%"}}>
+                        <div className="infoBox whiteText font40px font30pxUnder700 font20pxUnder500 font20pxUnder400" style={{zIndex: "20", width: "100%"}}>
                             Skip the resum&eacute;.<br/>
                             Learn skills that employers need<br/>
                             <i>for free, forever.</i><br/>
@@ -284,7 +284,7 @@ class Home extends Component {
                                     <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
                                     Pathways are a series of courses
                                     designed to teach you skills
-                                    demanded by the market.
+                                    demanded by employers.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight onHome">
@@ -308,7 +308,7 @@ class Home extends Component {
                                 <div className="smallText2 homepageTrajectoryTextRightDiv onHome">
                                     <h2 className="blueText">Build Your Profile</h2>
                                     Add your skills, completed projects and
-                                    finished pathways. Prove yourself through
+                                    finished pathways. Prove yourself through to employers
                                     your profile.
                                 </div>
                             </div>
@@ -333,7 +333,7 @@ class Home extends Component {
                                 <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
                                     <h2 className="purpleText">Get Hired By Companies<br/>Leading The Future</h2>
                                     Compete for open positions with
-                                    sponsor employers by excelling in
+                                    sponsor companies by excelling in
                                     pathways and strengthening your profile.
                                 </div>
                             </div>

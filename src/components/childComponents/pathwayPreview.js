@@ -87,7 +87,7 @@ class PathwayPreview extends Component {
                                             <div>
                                                 <img src="/icons/CalandarBlueGradient.png" style={iconStyle} /><br/>
                                                 <span className="tinyText">Deadline</span><br/>
-                                                {this.props.deadline}
+                                                TBA
                                             </div>
                                         </li>
                                         <li>
