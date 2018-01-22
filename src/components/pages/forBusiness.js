@@ -359,9 +359,7 @@ class ForBusiness extends Component {
                         <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
                             <div className="homepageTrajectoryTextLeft forBusiness">
                                 <div className="font24px font20pxUnder800 font14pxUnder500 homepageTrajectoryTextLeftDiv forBusiness">
-                                    <h2 className="blueText"><b>What Skills Are You
-                                        <div className="above800only br"><br/></div>
-                                        Hiring For?</b></h2>
+                                    <h2 className="blueText"><b>What Skills Are You <div className="above800only br"><br/></div>Hiring For?</b></h2>
                                     UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe...
                                 </div>
                             </div>
@@ -378,15 +376,11 @@ class ForBusiness extends Component {
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextRight forBusiness">
                                 <div className="font24px font20pxUnder800 font14pxUnder500 homepageTrajectoryTextRightDiv forBusiness">
-                                    <h2 className="greenText"><b>Course Pathways Curated
-                                        <div className="above500only br"><br/></div>
-                                        to the Skills You Need.</b>
+                                    <h2 className="greenText"><b>Course Pathways Curated <div className="above500only br"><br/></div>to the Skills You Need.</b>
                                     </h2>
                                     Expert-led, interactive learning
                                     through videos, articles, skill
-                                    assessments
-                                    
-                                    and real-world projects.
+                                    assessments and real-world projects.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesLeft">
