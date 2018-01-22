@@ -165,12 +165,13 @@ class Discover extends Component {
             return (
                 <li className="pathwayPreviewLi explorePathwayPreview"
                     key={key}
-                    onClick={() => self.goTo('/pathway?' + pathway._id)}>
+                    //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                >
                     <PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
-                        logo={pathway.sponsor.logo}
-                        sponsorName={pathway.sponsor.name}
+                        //<!-- logo = {pathway.sponsor.logo} -->
+                        //<!-- sponsorName = {pathway.sponsor.name} -->
                         completionTime={pathway.estimatedCompletionTime}
                         deadline={formattedDeadline}
                         price={pathway.price}
@@ -189,12 +190,13 @@ class Discover extends Component {
             return (
                 <li className="pathwayPreviewLi featuredPathwayPreview"
                     key={key}
-                    onClick={() => self.goTo('/pathway?' + pathway._id)}>
+                    //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                >
                     <PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
-                        logo={pathway.sponsor.logo}
-                        sponsorName={pathway.sponsor.name}
+                        //<!-- logo = {pathway.sponsor.logo} -->
+                        //<!-- sponsorName = {pathway.sponsor.name} -->
                         completionTime={pathway.estimatedCompletionTime}
                         deadline={formattedDeadline}
                         price={pathway.price}

@@ -1925,6 +1925,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .marginTopOnDesktop { margin-top: 0px; }
     .pathwayPrevMobileThird {
         display: block;
+        margin-top: 20px;
     }
     .smallText2.earlyShrink {
         font-size: 10px;

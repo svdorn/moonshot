@@ -453,6 +453,32 @@ app.post('/users/forBusinessEmail', function (req, res) {
     })
 });
 
+// SEND COMING SOON EMAIL
+app.post('/users/comingSoonEmail', function (req, res) {
+
+    let recipient = "kyle@moonshotlearning.org";
+    let subject = 'Moonshot Coming Soon Pathway';
+    let content = "<div>"
+        + "<h3>Pathway:</h3>"
+        + "<p>Name: "
+        + req.body.name
+        + "<p>Email: "
+        + req.body.email
+        + "</p>"
+        + "<p>Pathway: "
+        + req.body.pathway
+        + "</p>"
+        + "</div>";
+
+    sendEmail(recipient, subject, content, function (success, msg) {
+        if (success) {
+            res.json("Email sent successfully, our team will be in contact with you shortly!");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+});
+
 // SEND EMAIL FOR CONTACT US
 app.post('/users/contactUsEmail', function (req, res) {
 

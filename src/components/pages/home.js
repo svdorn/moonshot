@@ -1,14 +1,16 @@
 "use strict"
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import { browserHistory } from 'react-router';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
+import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import { closeNotification } from "../../actions/usersActions";
+import {closeNotification} from "../../actions/usersActions";
+import {TextField, RaisedButton, Paper, CircularProgress, Dialog, FlatButton} from 'material-ui';
+import ComingSoonForm from '../childComponents/comingSoonForm';
 import axios from 'axios';
 
-class Home extends Component{
+class Home extends Component {
 
     constructor(props) {
         super(props);
@@ -27,11 +29,13 @@ class Home extends Component{
             // three empty pathways until we get the top three pathways from
             // the backend
             pathways1: [emptyPathway, emptyPathway, emptyPathway, emptyPathway],
-            pathways2: undefined
+            pathways2: undefined,
+            open: false,
+            dialogPathway: null,
         }
     }
 
-    goTo (route)  {
+    goTo(route) {
         // closes any notification
         this.props.closeNotification();
         // goes to the wanted page
@@ -40,9 +44,17 @@ class Home extends Component{
         window.scrollTo(0, 0);
     }
 
+    handleOpen = (pathway) => {
+        this.setState({open: true, dialogPathway: pathway});
+    };
+
+    handleClose = () => {
+        this.setState({open: false, dialogPathway: null});
+    };
+
     componentDidMount() {
         axios.get("/api/topPathways", {
-            params: { numPathways: 12 }
+            params: {numPathways: 12}
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.home) {
@@ -56,9 +68,9 @@ class Home extends Component{
                 } else {
                     pathways1 = returnedPathways;
                 }
-                this.setState({ pathways1, pathways2 });
+                this.setState({pathways1, pathways2});
             }
-        }).catch(function(err) {
+        }).catch(function (err) {
         })
     }
 
@@ -71,7 +83,7 @@ class Home extends Component{
         });
     }
 
-    render(){
+    render() {
 
         // const style = {
         //     hiringPartners: {
@@ -96,14 +108,17 @@ class Home extends Component{
         // create the pathway previews
         let pathwayKey = 0;
         let self = this;
-        const pathwayPreviews1 = this.state.pathways1.map(function(pathway) {
+        const pathwayPreviews1 = this.state.pathways1.map(function (pathway) {
             pathwayKey++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
-                <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/pathway?' + pathway._id)} ><PathwayPreview
-                    name = {pathway.name}
-                    image = {pathway.previewImage}
+                <li style={{verticalAlign: "top"}} key={pathwayKey}
+                    //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                    onClick={() => self.handleOpen(pathway.name)}
+                ><PathwayPreview
+                    name={pathway.name}
+                    image={pathway.previewImage}
                     //<!-- logo = {pathway.sponsor.logo} -->
                     //<!-- sponsorName = {pathway.sponsor.name} -->
                     completionTime = {pathway.estimatedCompletionTime}
@@ -111,21 +126,24 @@ class Home extends Component{
                     price = {pathway.price}
                     _id = {pathway._id}
                     comingSoon = {pathway.comingSoon}
-                    /></li>
+                /></li>
             );
         });
 
         let pathwayPreviews2 = undefined;
         if (this.state.pathways2) {
             pathwayKey = 100;
-            pathwayPreviews2 = this.state.pathways2.map(function(pathway) {
+            pathwayPreviews2 = this.state.pathways2.map(function (pathway) {
                 pathwayKey++;
                 const deadline = new Date(pathway.deadline);
                 const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                 return (
-                    <li style={{verticalAlign: "top"}} key={pathwayKey} onClick={() => self.goTo('/pathway?' + pathway._id)} ><PathwayPreview
-                        name = {pathway.name}
-                        image = {pathway.previewImage}
+                    <li style={{verticalAlign: "top"}} key={pathwayKey}
+                        //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                        onClick={() => self.handleOpen(pathway.name)}
+                    ><PathwayPreview
+                        name={pathway.name}
+                        image={pathway.previewImage}
                         //<!-- logo = {pathway.sponsor.logo} -->
                         //<!-- sponsorName = {pathway.sponsor.name} -->
                         completionTime = {pathway.estimatedCompletionTime}
@@ -133,7 +151,7 @@ class Home extends Component{
                         price = {pathway.price}
                         _id = {pathway._id}
                         comingSoon = {pathway.comingSoon}
-                        /></li>
+                    /></li>
                 );
             });
         }
@@ -180,8 +198,8 @@ class Home extends Component{
             brKey++;
             return (
                 <div key={skill + "div"}
-                    style={{display: 'inline-block', marginTop: '15px'}}
-                    className="gradientBorderPurpleToPinkChip"
+                     style={{display: 'inline-block', marginTop: '15px'}}
+                     className="gradientBorderPurpleToPinkChip"
                 >
                     <div key={skill} className="purpleText">
                         {skill}
@@ -189,6 +207,18 @@ class Home extends Component{
                 </div>
             );
         });
+
+        let blurredClass = '';
+        if (this.state.open) {
+            blurredClass = 'dialogForBizOverlay';
+        }
+        const actions = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onClick={this.handleClose}
+            />,
+        ];
 
 
         // <div className="logoBar">
@@ -198,148 +228,174 @@ class Home extends Component{
 
         return (
             <div className='jsxWrapper' ref='home'>
-                <div className="fullHeight greenToBlue">
-                    <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
-
-                    <div className="infoBox whiteText font40px font30pxUnder700 font20pxUnder500 font18pxUnder400" style={{zIndex:"20", width:"100%"}}>
-                        Skip the resum&eacute;.<br/> Learn skills that employers need<br/><i>for free, forever.</i><br/>
-                        <button className="outlineButton blueWhiteButton"
-                            onClick={() => this.goTo('/signup')}>
-                            Get Started
-                        </button>
-                        <br/>
-                        <img
-                            className="scrollDownButton"
-                            src="/icons/Scroll.png"
-                            onClick={() => this.scrollDown()}
+                <div className={blurredClass}>
+                    <Dialog
+                        actions={actions}
+                        modal={false}
+                        open={this.state.open}
+                        onRequestClose={this.handleClose}
+                        autoScrollBodyContent={true}
+                        paperClassName="dialogForBiz"
+                        contentClassName="center"
+                        overlayClassName="dialogOverlay"
+                    >
+                        <ComingSoonForm
+                            pathway={this.state.dialogPathway}
+                            onSubmit={this.handleClose}
                         />
-                    </div>
-                </div>
+                    </Dialog>
+                    <div className="fullHeight greenToBlue">
+                        <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
-                <div className="homepageTrajectoryContainer" style={{marginTop:"30px"}}>
-                    <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextLeft onHome">
+                        <div className="infoBox whiteText font40px font30pxUnder700 font20pxUnder500 font18pxUnder400" style={{zIndex: "20", width: "100%"}}>
+                            Skip the resum&eacute;.<br/> Learn skills that employers
+                            <div className="from500to600only under400only br"><br/></div> need
+                            <div className="outside500to600only above400only br"><br/></div>
+                            <i>for free, forever.</i><br/>
+                            <button className="outlineButton blueWhiteButton"
+                                    onClick={() => this.goTo('/signup')}>
+                                Get Started
+                            </button>
+                            <br/>
                             <img
-                                src="/icons/Lightbulb.png"
-                                alt="Lightbulb"
-                                title="Lightbulb icon"
-                                className="homepageTrajectoryTextLeftIcon onHome"
+                                className="scrollDownButton"
+                                src="/icons/Scroll.png"
+                                onClick={() => this.scrollDown()}
                             />
-                            <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
-                                <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
-                                Pathways are a series of courses
-                                designed to teach you skills
-                                demanded by the market.
+                            </div>
+                            </div>
+
+                            <div className="homepageTrajectoryContainer" style={{marginTop:"30px"}}>
+                            <div className="homepageTrajectory">
+                            <div className="homepageTrajectoryTextLeft onHome">
+                                <img
+                                    src="/icons/Lightbulb.png"
+                                    alt="Lightbulb"
+                                    title="Lightbulb icon"
+                                    className="homepageTrajectoryTextLeftIcon onHome"
+                                />
+                                <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
+                                    <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
+                                    Pathways are a series of courses
+                                    designed to teach you skills
+                                    demanded by the market.
+                                </div>
+                            </div>
+                            <div className="homepageTrajectoryImagesRight onHome">
+                                <div className="homepageImgBackgroundRight greenGradient" />
+                                <img
+                                    src="/images/VRGuy.jpg"
+                                />
                             </div>
                         </div>
-                        <div className="homepageTrajectoryImagesRight onHome">
-                            <div className="homepageImgBackgroundRight greenGradient" />
-                            <img
-                                src="/images/VRGuy.jpg"
-                            />
-                        </div>
-                    </div>
 
-                    <br/>
+                        <br/>
 
-                    <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextRight onHome">
-                            <img
-                                src="/icons/Person.png"
-                                alt="Person icon"
-                                title="Person icon"
-                                className="homepageTrajectoryTextRightIcon onHome"
-                            />
-                            <div className="smallText2 homepageTrajectoryTextRightDiv onHome">
-                                <h2 className="blueText">Build Your Profile</h2>
-                                Add your skills, completed projects and
-                                finished pathways. Prove yourself through
-                                your profile.
+                        <div className="homepageTrajectory">
+                            <div className="homepageTrajectoryTextRight onHome">
+                                <img
+                                    src="/icons/Person.png"
+                                    alt="Person icon"
+                                    title="Person icon"
+                                    className="homepageTrajectoryTextRightIcon onHome"
+                                />
+                                <div className="smallText2 homepageTrajectoryTextRightDiv onHome">
+                                    <h2 className="blueText">Build Your Profile</h2>
+                                    Add your skills, completed projects and
+                                    finished pathways. Prove yourself through
+                                    your profile.
+                                </div>
+                            </div>
+                            <div className="homepageTrajectoryImagesLeft">
+                                <div className="homepageImgBackgroundLeft blueGradient"/>
+                                <img
+                                    src="/images/TwoPeopleInOffice.jpg"
+                                />
                             </div>
                         </div>
-                        <div className="homepageTrajectoryImagesLeft">
-                            <div className="homepageImgBackgroundLeft blueGradient" />
-                            <img
-                                src="/images/TwoPeopleInOffice.jpg"
-                            />
-                        </div>
-                    </div>
 
-                    <br />
+                        <br/>
 
-                    <div className="homepageTrajectory">
-                        <div className="homepageTrajectoryTextLeft onHome">
-                            <img
-                                src="/icons/Badge.png"
-                                alt="Badge icon"
-                                title="Badge icon"
-                                className="homepageTrajectoryTextLeftIcon smallerWidthIcon"
-                            />
-                            <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
-                                <h2 className="purpleText">Get Hired By Companies<br/>Leading The Future</h2>
-                                Compete for open positions with
-                                sponsor employers by excelling in
-                                pathways and strengthening your profile.
+                        <div className="homepageTrajectory">
+                            <div className="homepageTrajectoryTextLeft onHome">
+                                <img
+                                    src="/icons/Badge.png"
+                                    alt="Badge icon"
+                                    title="Badge icon"
+                                    className="homepageTrajectoryTextLeftIcon smallerWidthIcon"
+                                />
+                                <div className="smallText2 homepageTrajectoryTextLeftDiv onHome">
+                                    <h2 className="purpleText">Get Hired By Companies<br/>Leading The Future</h2>
+                                    Compete for open positions with
+                                    sponsor employers by excelling in
+                                    pathways and strengthening your profile.
+                                </div>
+                            </div>
+                            <div className="homepageTrajectoryImagesRight">
+                                <div className="homepageImgBackgroundRight purpleToRed"/>
+                                <img
+                                    src="/images/HappyBeardGuy.jpeg"
+                                />
                             </div>
                         </div>
-                        <div className="homepageTrajectoryImagesRight">
-                            <div className="homepageImgBackgroundRight purpleToRed" />
-                            <img
-                                src="/images/HappyBeardGuy.jpeg"
-                            />
+                    </div>
+
+                    <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
+
+                    <div className="topMarginOnSmallScreen" style={{textAlign: "center"}}>
+                        <div className="center mediumText blueText homePathwaysTitle">Pathways</div>
+                        <div className="homePathwaysDesc">
+                            Moonshot courses are organized in pathways and
+                            sponsored by<br/> employers hiring for those skills.
                         </div>
-                    </div>
-                </div>
-
-                <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer" />
-
-                <div className="topMarginOnSmallScreen" style={{textAlign:"center"}}>
-                    <div className="center mediumText blueText homePathwaysTitle">Pathways</div>
-                    <div className="homePathwaysDesc">
-                        Moonshot courses are organized in pathways and
-                        sponsored by<br/> employers hiring for those skills.
-                    </div>
-                    <div className="pathwayPrevListContainer">
-                        <ul className="horizCenteredList pathwayPrevList">
-                            {pathwayPreviews1}
-                        </ul>
-                    </div>
-                    {pathwayPreviews2 ?
                         <div className="pathwayPrevListContainer">
                             <ul className="horizCenteredList pathwayPrevList">
-                                {pathwayPreviews2}
+                                {pathwayPreviews1}
                             </ul>
                         </div>
-                        : null
-                    }
-                    <button className="blueGradientButtonExterior bigButton"
-                            onClick={() => this.goTo('/signup')}
-                            style={{marginTop: "40px"}}
-                    >
-                        <div className="invertColorOnHover gradientBorderButtonInterior">
-                            Create Account
+                        {pathwayPreviews2 ?
+                            <div className="pathwayPrevListContainer" style={{marginTop: '20px'}}>
+                                <ul className="horizCenteredList pathwayPrevList">
+                                    {pathwayPreviews2}
+                                </ul>
+                            </div>
+                            : null
+                        }
+                        <div className="pathwayPrevListContainer pathwayPrevMobileThird">
+                            <ul className="horizCenteredList pathwayPrevList">
+                                {pathwayPreviews1[2]}
+                            </ul>
                         </div>
-                    </button>
-                    <div className="smallText blueText" style={{margin:"10px 0 55px"}}><i>{"Don't worry, it's free."}</i></div>
-                </div>
-
-                <div className="purpleToGreenSpacer" />
-
-                <div className="center" style={{marginBottom:"50px"}}>
-                    <div className="mediumText purpleText homePathwaysTitle">Build Your Skillset</div>
-
-                    <div id="exampleSkillsContainer">
-                        { exampleSkills }
+                        <button className="blueGradientButtonExterior bigButton"
+                                onClick={() => this.goTo('/signup')}
+                                style={{marginTop: "40px"}}
+                        >
+                            <div className="invertColorOnHover gradientBorderButtonInterior">
+                                Create Account
+                            </div>
+                        </button>
+                        <div className="smallText blueText" style={{margin: "10px 0 55px"}}>
+                            <i>{"Don't worry, it's free."}</i></div>
                     </div>
 
-                    <button className="purpleToPinkButtonExterior bigButton"
-                            onClick={() => this.goTo('/signup')}
-                            style={{marginTop: "40px"}}
-                    >
-                        <div className="invertColorOnHover gradientBorderButtonInterior">
-                            Start Profile
+                    <div className="purpleToGreenSpacer"/>
+
+                    <div className="center" style={{marginBottom: "50px"}}>
+                        <div className="mediumText purpleText homePathwaysTitle">Build Your Skillset</div>
+
+                        <div id="exampleSkillsContainer">
+                            {exampleSkills}
                         </div>
-                    </button>
+
+                        <button className="purpleToPinkButtonExterior bigButton"
+                                onClick={() => this.goTo('/signup')}
+                                style={{marginTop: "40px"}}
+                        >
+                            <div className="invertColorOnHover gradientBorderButtonInterior">
+                                Start Profile
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </div>
         );
@@ -435,28 +491,6 @@ class Home extends Component{
 //         </button>
 //     </div>
 // </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 // <div className="fullHeight">
@@ -682,10 +716,6 @@ class Home extends Component{
 //         }}
 //     />
 // </div>
-
-
-
-
 
 
 function mapDispatchToProps(dispatch) {
