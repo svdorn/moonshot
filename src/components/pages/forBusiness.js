@@ -277,7 +277,7 @@ class ForBusiness extends Component {
                             curated to your needs.<br/>
                             <button className="outlineButton"
                                     style={{backgroundColor: "transparent", border: "2px solid white"}}
-                                    onClick={this.handleOpen}>
+                                    onClick={() => this.scrollDown()}>
                                 {"Let's Begin"}
                             </button><br/>
 
