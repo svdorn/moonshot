@@ -87,7 +87,7 @@ class ComingSoonForm extends Component {
                     <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
                     : < form onSubmit={this.handleSubmit.bind(this)} className="center">
                         <div className="blueTextImportant mediumTextDoubleShrink">
-                            Contact Us
+                            Reserve Your Spot
                         </div>
                         <Field
                             name="name"
