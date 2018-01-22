@@ -229,6 +229,7 @@ form > h1 {
 
 .clickable, .clickableNoUnderline { cursor: pointer; }
 .clickable:hover { text-decoration: underline; }
+.currentRoute { text-decoration: underline; }
 
 .fullHeight {
     width: 100%;

@@ -2,11 +2,14 @@
 import React, { Component } from 'react';
 import { Paper } from 'material-ui';
 import { browserHistory } from 'react-router';
+import {changeCurrentRoute} from "../../actions/usersActions";
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 
 class error404 extends Component {
     goTo (route)  {
         // goes to the wanted page
+        this.props.changeCurrentRoute(route);
         browserHistory.push(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
@@ -35,10 +38,16 @@ class error404 extends Component {
     }
 }
 
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        changeCurrentRoute
+    }, dispatch);
+}
+
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
     };
 }
 
-export default connect(mapStateToProps)(error404);
+export default connect(mapStateToProps, mapDispatchToProps)(error404);

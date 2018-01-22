@@ -9,15 +9,6 @@ class PathwayPreview extends Component {
 
     }
 
-    goTo (route)  {
-        // closes any notification
-        this.props.closeNotification();
-        // goes to the wanted page
-        browserHistory.push(route);
-        // goes to the top of the new page
-        window.scrollTo(0, 0);
-    }
-
     onMouseOver = () => this.setState({ shadow: 4 });
     onMouseOut = () => this.setState({ shadow: 2 });
 
