@@ -529,9 +529,9 @@ class ForBusiness extends Component {
                                     <div>PER STUDENT</div>
                                     <div className="br"><br/></div>
                                     A program curated to your<br/>
-                                    company{"'"}s needs. Skills training and<br/>
-                                    evaluation of up to 20<br/>
-                                    potential candidates.
+                                    company{"'"}s needs. Skills training<br/>
+                                    and evaluation of up to<br/>
+                                    20 potential candidates.
                                 </div>
                             </div>
                         </Paper>
@@ -543,9 +543,9 @@ class ForBusiness extends Component {
                                     <div>PER CANDIDATE</div>
                                     <div className="br"><br/></div>
                                     Skills evaluation of your existing<br/>
-                                    candidate pool. Don{"'"}t guess<br/>
-                                    how good your candidates are,<br/>
-                                    know.
+                                    candidate pool of students.<br/>
+                                    Don{"'"}t guess how good<br/>
+                                    your candidates are, know.
                                 </div>
                             </div>
                         </Paper>
