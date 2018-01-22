@@ -1542,8 +1542,28 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .inline { display: inline; }
 .inline-block { display: inline-block; }
 
+@media only screen and (max-width: 1643px) {
+    .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(6) {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 1369px) {
+    .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(5) {
+        display: none;
+    }
+}
+
+@media only screen and (max-width: 1095px) {
+    .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(4) {
+        display: none;
+    }
+}
+
 @media only screen and (min-width: 1051px) {
     .homepageTrajectoryTextRightIcon.onHome { margin-left: 14px; }
+    .homepageTrajectoryTextLeft.forBusiness { margin-left: 2%; }
+    .homepageTrajectoryTextRight.forBusiness { width: 43%; }
 }
 
 @media only screen and (max-width: 1050px) {
