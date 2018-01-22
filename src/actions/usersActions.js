@@ -218,16 +218,20 @@ export function forBusiness(user){
 }
 
 // Send an email when form filled out on comingSoon page
-export function comingSoon(user){
+export function comingSoon(user, signedIn){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
         axios.post("api/users/comingSoonEmail", user)
             .then(function(response) {
-                dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
-                browserHistory.push('/login')
-                dispatch({type:"CHANGE_CURRENT_ROUTE", payload:'/login'})
-                window.scrollTo(0, 0);
+                if (!signedIn) {
+                    dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
+                    browserHistory.push('/login')
+                    dispatch({type:"CHANGE_CURRENT_ROUTE", payload:'/login'})
+                    window.scrollTo(0, 0);
+                } else {
+                    dispatch({type:"FOR_BUSINESS", notification: undefined});
+                }
             })
             .catch(function(err) {
                 dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})

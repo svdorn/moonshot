@@ -76,7 +76,8 @@ class ComingSoonForm extends Component {
             pathway: this.props.pathway,
         };
 
-        this.props.comingSoon(user);
+        const signedIn = false;
+        this.props.comingSoon(user, signedIn);
     }
 
 

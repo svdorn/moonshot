@@ -127,9 +127,11 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "FOR_BUSINESS":
-            return {
-                ...state, notification: action.notification, loadingSomething: false
-            };
+            let newState = {...state, loadingSomething: false};
+            if (action.notification) {
+                newState.notification = action.notification;
+            }
+            return newState;
             break;
         case "CONTACT_US_REQUESTED":
             return {

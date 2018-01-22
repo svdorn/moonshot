@@ -1,12 +1,12 @@
 "use strict"
 import React, {Component} from 'react';
-import {TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup, Dialog, FlatButton} from 'material-ui';
+import {TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup, Dialog, FlatButton, CircularProgress} from 'material-ui';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import ComingSoonForm from '../childComponents/comingSoonForm';
-import {closeNotification, changeCurrentRoute} from "../../actions/usersActions";
+import {closeNotification, changeCurrentRoute, comingSoon} from "../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
 import styles from '../../../public/styles';
@@ -100,7 +100,23 @@ class Discover extends Component {
     }
 
     handleOpen = (pathway) => {
-        this.setState({open: true, dialogPathway: pathway});
+        // tell the user they are preregistered if logged in
+        const currentUser = this.props.currentUser;
+        console.log("hey");
+        if (currentUser && currentUser != "no user") {
+            const user = {
+                name: currentUser.name,
+                email: currentUser.email,
+                pathway: this.props.pathway,
+            }
+            const signedIn = true;
+            this.props.comingSoon(user, signedIn);
+            this.setState({open: true});
+        }
+        // if not logged in, prompt for user info
+        else {
+            this.setState({open: true, dialogPathway: pathway});
+        }
     };
 
     handleClose = () => {
@@ -258,10 +274,21 @@ class Discover extends Component {
                     contentClassName="center"
                     overlayClassName="dialogOverlay"
                 >
-                    <ComingSoonForm
-                        pathway={this.state.dialogPathway}
-                        onSubmit={this.handleClose}
-                    />
+                    {this.props.currentUser && this.props.currentUser != "no user" ?
+                        <div>
+                            {this.props.loadingEmailSend ?
+                                <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
+                                :
+                                <div style={{color:"#00c3ff"}}>Your spot has been reserved!</div>
+                            }
+                        </div>
+                        :
+                        <ComingSoonForm
+                            pathway={this.state.dialogPathway}
+                            onSubmit={this.handleClose}
+                        />
+                    }
+
                 </Dialog>
 
                 <div className="greenToBlue headerDiv"/>
@@ -377,7 +404,8 @@ class Discover extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        changeCurrentRoute
+        changeCurrentRoute,
+        comingSoon
     }, dispatch);
 }
 
@@ -385,6 +413,8 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         notification: state.users.notification,
+        currentUser: state.users.currentUser,
+        loadingEmailSend: state.users.loadingSomething
     };
 }
 
