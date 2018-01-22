@@ -280,10 +280,11 @@ form > h1 {
 
 .comingSoonBanner {
     position: absolute;
+    pointer-events: none;
     z-index: 10;
     overflow: hidden;
     width: 150px;
-    height: 250px;
+    height: 150px;
 }
 .comingSoonBanner > div {
     position: relative
