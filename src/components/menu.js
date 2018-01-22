@@ -99,6 +99,9 @@ class Menu extends Component {
         if (this.props.location.pathname === '/myPathways') {
             myPathwaysClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
+        if (this.props.location.pathname === '/profile' || this.props.location.pathname === '/settings' ) {
+            dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+        }
 
 
         if (this.props.isFetching) {
