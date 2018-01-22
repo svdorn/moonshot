@@ -73,6 +73,7 @@ class ComingSoonForm extends Component {
         const user = {
             name: vals.name,
             email: vals.email,
+            pathway: this.props.pathway,
         };
 
         this.props.comingSoon(user);
@@ -96,13 +97,14 @@ class ComingSoonForm extends Component {
                         <Field
                             name="email"
                             component={renderTextField}
-                            label="Message"
+                            label="Email"
                         /><br/>
                         <RaisedButton
                             label="Send"
                             type="submit"
                             primary={true}
                             className="raisedButtonWhiteText"
+                            style={{marginTop:'20px'}}
                         />
                     </form>
                 }

@@ -457,13 +457,16 @@ app.post('/users/forBusinessEmail', function (req, res) {
 app.post('/users/comingSoonEmail', function (req, res) {
 
     let recipient = "kyle@moonshotlearning.org";
-    let subject = 'Moonshot Sales Lead - From For Business Page';
+    let subject = 'Moonshot Coming Soon Pathway';
     let content = "<div>"
         + "<h3>Pathway:</h3>"
         + "<p>Name: "
         + req.body.name
         + "<p>Email: "
         + req.body.email
+        + "</p>"
+        + "<p>Pathway: "
+        + req.body.pathway
         + "</p>"
         + "</div>";
 
@@ -484,7 +487,7 @@ app.post('/users/contactUsEmail', function (req, res) {
         message = req.body.message;
     }
     let recipient = "kyle@moonshotlearning.org";
-    let subject = 'Moonshot Pathway Coming Soon';
+    let subject = 'Moonshot Pathway Question -- Contact Us Form';
     let content = "<div>"
         + "<h3>Questions from pathway:</h3>"
         + "<p>Name: "

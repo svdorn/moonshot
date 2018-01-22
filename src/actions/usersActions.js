@@ -221,7 +221,7 @@ export function comingSoon(user){
         axios.post("api/users/comingSoonEmail", user)
             .then(function(response) {
                 dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
-                browserHistory.push('/');
+                browserHistory.push('/login');
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
