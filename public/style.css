@@ -1198,12 +1198,12 @@ button.link {
     position: absolute;
 }
 .homepageTrajectoryImagesRight > img {
-    right: 1%;
+    right: 2%;
     margin: 30px 30px 0 0;
 }
 .homepageTrajectoryImagesLeft > img {
     margin: 30px 0 0 30px;
-    left: 1%;
+    left: 2%;
 }
 .homepageImgBackgroundLeft,
 .homepageImgBackgroundRight {
