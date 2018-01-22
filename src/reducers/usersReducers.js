@@ -151,6 +151,11 @@ export function usersReducers(state = initialState, action) {
                 ...state, loadingEmail: true
             };
             break;
+        case "CHANGE_CURRENT_ROUTE":
+            return {
+                ...state, currentRoute: action.payload
+            };
+            break;
         case "FORGOT_PASSWORD":
             return {
                 ...state, notification: action.notification, loadingSomething: false

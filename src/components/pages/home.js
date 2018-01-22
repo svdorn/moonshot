@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import {closeNotification} from "../../actions/usersActions";
+import {closeNotification, changeCurrentRoute} from "../../actions/usersActions";
 import {TextField, RaisedButton, Paper, CircularProgress, Dialog, FlatButton} from 'material-ui';
 import ComingSoonForm from '../childComponents/comingSoonForm';
 import axios from 'axios';
@@ -40,6 +40,7 @@ class Home extends Component {
         this.props.closeNotification();
         // goes to the wanted page
         browserHistory.push(route);
+        this.props.changeCurrentRoute(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
@@ -726,7 +727,8 @@ class Home extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        closeNotification
+        closeNotification,
+        changeCurrentRoute,
     }, dispatch);
 }
 

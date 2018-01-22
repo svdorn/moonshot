@@ -3,9 +3,9 @@ import React, { Component } from 'react';
 import { ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, IconMenu, IconButton } from 'material-ui';
 import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+import { browserHistory, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
-import { signout, closeNotification, setHeaderBlue } from "../actions/usersActions";
+import { signout, closeNotification, setHeaderBlue, changeCurrentRoute } from "../actions/usersActions";
 import { axios } from 'axios';
 
 const styles = {
@@ -30,7 +30,11 @@ class Menu extends Component {
         this.state = {value: 1};
     }
 
-    handleChange = (event, index, value) => {
+    componentDidMount() {
+        this.props.changeCurrentRoute(this.props.location.pathname);
+    }
+
+        handleChange = (event, index, value) => {
         if (value === 1) {
             this.goTo('/profile');
         } else if (value === 2) {
@@ -61,6 +65,7 @@ class Menu extends Component {
         // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
+        this.props.changeCurrentRoute(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
@@ -77,6 +82,26 @@ class Menu extends Component {
             moonshotLogo = "/images/OfficialLogoBlue.png";
             dropdownClass = "headerDropdownBlue wideScreenMenuItem";
             menuItemClass = "menuItem clickable noWrap blueText wideScreenMenuItem"
+        }
+        let discoverClass = menuItemClass;
+        if (this.props.currentRoute === '/discover') {
+            discoverClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
+        }
+        let homeClass = menuItemClass;
+        if (this.props.currentRoute === '/') {
+            homeClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
+        }
+        let forBusClass = menuItemClass;
+        if (this.props.currentRoute === '/forBusiness') {
+            forBusClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
+        }
+        let loginClass = menuItemClass;
+        if (this.props.currentRoute === '/login') {
+            loginClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
+        }
+        let myPathwaysClass = menuItemClass;
+        if (this.props.currentRoute === '/myPathways') {
+            myPathwaysClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
 
 
@@ -117,8 +142,8 @@ class Menu extends Component {
                             />
                         </ToolbarGroup>
                         <ToolbarGroup>
-                            <p className={menuItemClass} onClick={() => this.goTo('/discover')}>Discover</p>
-                            <p className={menuItemClass} onClick={() => this.goTo('/myPathways')}>My Pathways</p>
+                            <p className={discoverClass} onClick={() => this.goTo('/discover')}>Discover</p>
+                            <p className={myPathwaysClass} onClick={() => this.goTo('/myPathways')}>My Pathways</p>
                             <div className="menuDivider loggedIn wideScreenMenuItem" />
                             <DropDownMenu value={this.state.value}
                                           onChange={this.handleChange}
@@ -166,10 +191,10 @@ class Menu extends Component {
                     />
                     </ToolbarGroup>
                     <ToolbarGroup>
-                        <p className={menuItemClass} onClick={() => this.goTo('/')}>Home</p>
-                        <p className={menuItemClass} onClick={() => this.goTo('/forBusiness')}>For Business</p>
+                        <p className={homeClass} onClick={() => this.goTo('/')}>Home</p>
+                        <p className={forBusClass} onClick={() => this.goTo('/forBusiness')}>For Business</p>
                         <div className="menuDivider loggedOut wideScreenMenuItem" />
-                        <p className={menuItemClass} onClick={() => this.goTo('/login')}>Sign in</p>
+                        <p className={loginClass} onClick={() => this.goTo('/login')}>Sign in</p>
 
                         <IconMenu
                             iconButtonElement={<IconButton><MoreHorizIcon /></IconButton>}
@@ -192,7 +217,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         signout,
         closeNotification,
-        setHeaderBlue
+        setHeaderBlue,
+        changeCurrentRoute
     }, dispatch);
 }
 
@@ -201,8 +227,11 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
         isOnboarding: state.users.isOnboarding,
-        blueHeader: state.users.blueHeader
+        blueHeader: state.users.blueHeader,
+        currentRoute: state.users.currentRoute,
     };
 }
+
+Menu = withRouter(Menu);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

@@ -6,7 +6,7 @@ import PathwayContentArticle from '../childComponents/pathwayContentArticle';
 import {Tabs, Tab, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, updateCurrentSubStep, setHeaderBlue} from "../../actions/usersActions";
+import {closeNotification, updateCurrentSubStep, setHeaderBlue, changeCurrentRoute} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayStepList from '../childComponents/pathwayStepList';
 import axios from 'axios';
@@ -101,6 +101,7 @@ class PathwayContent extends Component {
         // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
+        this.props.changeCurrentRoute(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
@@ -282,7 +283,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateCurrentSubStep,
         closeNotification,
-        setHeaderBlue
+        setHeaderBlue,
+        changeCurrentRoute
     }, dispatch);
 }
 
