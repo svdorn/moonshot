@@ -2252,8 +2252,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 @media only screen and (max-width: 350px) {
     .paperBox {
-        height: 150px;
-        width: 200px;
+        height: 195px;
+        width: 260px;
+        margin: 0 20px 40px;
     }
     .forBusinessBox > div.mediumText {
         font-size: 17px;
