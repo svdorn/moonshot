@@ -457,7 +457,7 @@ class ForBusiness extends Component {
                     </div>
 
                     <div className="homepageSeparatorContainer marginTopOnDesktop">
-                        <div className="homepageSeparator"/>
+                        <div className="homepageSeparator purplePinkSeparator"/>
                     </div>
 
                     <div className="aResumeCantDoThis">
@@ -513,7 +513,7 @@ class ForBusiness extends Component {
                     </div>
 
                     <div className="homepageSeparatorContainer" style={{margin: "60px 0 0"}}>
-                        <div className="homepageSeparator"/>
+                        <div className="homepageSeparator blueLightBlueSeparator"/>
                     </div>
 
                     <div className="center mediumTextDoubleShrink"

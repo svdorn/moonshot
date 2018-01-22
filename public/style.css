@@ -697,7 +697,7 @@ button.link {
   transform: scale(5, .03);
 }
 
-.homepageSeparator::after {
+.purpleGreenSeparator::after {
   content: "";
   position: absolute;
   top: 10px;
@@ -705,6 +705,26 @@ button.link {
   left: 10px;
   right: 10px;
   background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));
+  transform: rotate(-45deg);
+}
+.purplePinkSeparator::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background: linear-gradient(to bottom right, #ff79b7, var(--moonshotPurple));
+  transform: rotate(-45deg);
+}
+.blueLightBlueSeparator::after {
+  content: "";
+  position: absolute;
+  top: 10px;
+  bottom: 10px;
+  left: 10px;
+  right: 10px;
+  background: linear-gradient(to bottom right, #3dabff, #5deaff);
   transform: rotate(-45deg);
 }
 

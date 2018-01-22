@@ -367,7 +367,7 @@ class Pathway extends Component {
                             : null}
 
                         <div className="homepageSeparatorContainer">
-                            <div className="homepageSeparator"/>
+                            <div className="homepageSeparator purpleGreenSeparator"/>
                         </div>
 
                         <div style={style.quote.everything}>
@@ -440,7 +440,7 @@ class Pathway extends Component {
                         </div>
 
                         <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                            <div className="homepageSeparator"/>
+                            <div className="homepageSeparator purpleGreenSeparator"/>
                         </div>
 
                         <div>
