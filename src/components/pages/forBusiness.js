@@ -491,9 +491,7 @@ class ForBusiness extends Component {
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/Filter.png" className="forBusinessIcon"/>
                                     <div className="smallText aResumeCantDoThisText">
-                                        Filter out the unqualified
-                                        <div className="above800only br"><br/></div>
-                                        and uncommitted.
+                                        Filter out the unqualified<div className="above800only br"><br/></div> and uncommitted.
                                     </div>
                                 </div>
                             </div>
