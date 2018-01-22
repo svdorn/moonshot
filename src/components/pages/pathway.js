@@ -30,6 +30,7 @@ class Pathway extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props.location);
         const id = this.props.location.search.substr(1);
 
         axios.get("/api/getPathwayById", {

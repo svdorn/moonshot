@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { ToolbarGroup, DropDownMenu, MenuItem, Divider, Toolbar, IconMenu, IconButton } from 'material-ui';
 import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import { connect } from 'react-redux';
-import { browserHistory } from 'react-router';
+import { browserHistory, withRouter } from 'react-router';
 import { bindActionCreators } from 'redux';
 import { signout, closeNotification, setHeaderBlue, changeCurrentRoute } from "../actions/usersActions";
 import { axios } from 'axios';
@@ -30,7 +30,11 @@ class Menu extends Component {
         this.state = {value: 1};
     }
 
-    handleChange = (event, index, value) => {
+    componentDidMount() {
+        this.props.changeCurrentRoute(this.props.location.pathname);
+    }
+
+        handleChange = (event, index, value) => {
         if (value === 1) {
             this.goTo('/profile');
         } else if (value === 2) {
@@ -227,5 +231,7 @@ function mapStateToProps(state) {
         currentRoute: state.users.currentRoute,
     };
 }
+
+Menu = withRouter(Menu);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);
