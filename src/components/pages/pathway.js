@@ -293,11 +293,14 @@ class Pathway extends Component {
                                 </li>
                             </ul>
 
-                            <img
-                                className="scrollDownButton lowerOnSmallScreen"
-                                src="/icons/Scroll.png"
-                                onClick={() => this.scrollDown()}
-                            />
+                            <div className="scrollDownButton lowerOnSmallScreen" onClick={() => this.scrollDown()}>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                            </div>
                         </div>
 
                         <div>

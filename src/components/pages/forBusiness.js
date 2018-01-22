@@ -280,11 +280,15 @@ class ForBusiness extends Component {
                                     onClick={this.handleOpen}>
                                 {"Let's Begin"}
                             </button><br/>
-                            <img
-                                className="scrollDownButton"
-                                src="/icons/Scroll.png"
-                                onClick={() => this.scrollDown()}
-                            />
+
+                            <div className="scrollDownButton" onClick={() => this.scrollDown()}>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
