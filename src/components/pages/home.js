@@ -256,11 +256,18 @@ class Home extends Component {
                                 Get Started
                             </button>
                             <br/>
-                            <img
-                                className="scrollDownButton"
-                                src="/icons/Scroll.png"
-                                onClick={() => this.scrollDown()}
-                            />
+
+
+                            <div className="scrollDownButton" onClick={() => this.scrollDown()}>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                            </div>
+
+
                             </div>
                             </div>
 

@@ -273,18 +273,22 @@ class ForBusiness extends Component {
 
                         <div className="infoBox whiteText font40px font30pxUnder700 font20pxUnder500 font20pxUnder400" style={{zIndex: "20"}}>
                             Data-driven hiring.<br/>
-                            Skill training and assessments<br/>
+                            Skills training and assessments<br/>
                             curated to your needs.<br/>
                             <button className="outlineButton"
                                     style={{backgroundColor: "transparent", border: "2px solid white"}}
                                     onClick={this.handleOpen}>
                                 {"Let's Begin"}
                             </button><br/>
-                            <img
-                                className="scrollDownButton"
-                                src="/icons/Scroll.png"
-                                onClick={() => this.scrollDown()}
-                            />
+
+                            <div className="scrollDownButton" onClick={() => this.scrollDown()}>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -528,7 +532,7 @@ class ForBusiness extends Component {
                                     <div>PER STUDENT</div>
                                     <div className="br"><br/></div>
                                     A program curated to your<br/>
-                                    company{"'"}s needs. Skill training and<br/>
+                                    company{"'"}s needs. Skills training and<br/>
                                     evaluation of up to 20<br/>
                                     potential candidates.
                                 </div>
@@ -541,7 +545,7 @@ class ForBusiness extends Component {
                                     <div className="mediumText purpleText">$50 USD</div>
                                     <div>PER CANDIDATE</div>
                                     <div className="br"><br/></div>
-                                    Skill evaluation of your existing<br/>
+                                    Skills evaluation of your existing<br/>
                                     candidate pool. Don{"'"}t guess<br/>
                                     how good your candidates are,<br/>
                                     know.

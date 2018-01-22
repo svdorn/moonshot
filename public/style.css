@@ -280,10 +280,11 @@ form > h1 {
 
 .comingSoonBanner {
     position: absolute;
+    pointer-events: none;
     z-index: 10;
     overflow: hidden;
     width: 150px;
-    height: 250px;
+    height: 150px;
 }
 .comingSoonBanner > div {
     position: relative
@@ -298,7 +299,59 @@ form > h1 {
     padding-top: 3px;
     font-size: 22px;
 }
+.comingSoonPathwayPreview { position: absolute; }
+.reserveYourSpotOnHover {
+    display: none;
+    z-index: 20;
+    background-color: rgba(0,0,0,.55);
+    width: 248px;
+    height: 352px;
+    position: absolute;
+    cursor: pointer;
+}
+.reserveYourSpotOnHover > div {
+    margin-top: 70px;
+}
+.blueButton {
+    background-color: var(--moonshotLightBlue);
+    padding: 2px 15px 5px;
+    width: fit-content;
+    margin: auto;
+}
+/* show "Reserve your spot now" on hover on coming soon pathway preview */
+.pathwayPreview:hover > div:first-child.comingSoonPathwayPreview > div:nth-child(2) {
+    display: initial;
+    -webkit-animation: fadein .2s; /* Safari, Chrome and Opera > 12.1 */
+       -moz-animation: fadein .2s; /* Firefox < 16 */
+        -ms-animation: fadein .2s; /* Internet Explorer */
+         -o-animation: fadein .2s; /* Opera < 12.1 */
+            animation: fadein .2s;
+}
 
+@keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+/* Firefox < 16 */
+@-moz-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+/* Safari, Chrome and Opera > 12.1 */
+@-webkit-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+/* Internet Explorer */
+@-ms-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+/* Opera < 12.1 */
+@-o-keyframes fadein {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
 
 
 #pathwayDescriptionAndSalary {
@@ -534,14 +587,42 @@ button.link {
     filter: alpha(opacity=100); /* For IE8 and earlier */
 }
 
-.scrollDownButton {
-    height: 22px;
+.scrollDownButton > div {
+    position: relative;
+    float: left;
+    overflow: hidden;
+    width: 26px;
+    height: 28px;
+}
+.scrollDownButton > div > div {
+    width: 30px;
+    height: 3px;
+    background-color: rgba(255,255,255,.8);
     position: absolute;
-    bottom: 40px;
+    top: 7px;
+}
+.scrollDownButton > div:nth-child(1) > div {
+    transform: rotate(30deg);
+    border-bottom-left-radius: 2px;
+    border-top-left-radius: 2px;
+}
+.scrollDownButton > div:nth-child(2) > div {
+    margin-left: -4px;
+    transform: rotate(-30deg);
+    border-bottom-right-radius: 2px;
+    border-top-right-radius: 2px;
+}
+.scrollDownButton > div > div:nth-child(2) {
+    margin-top: 10px;
+}
+.scrollDownButton {
+    height: 28px;
+    width: 52px;
+    bottom: 174px;
+    position: absolute;
     left: 0;
     right: 0;
     margin: auto;
-    opacity: .8;
     cursor: pointer;
     animation: MoveUpDown 1.2s linear infinite;
 }
@@ -1086,7 +1167,7 @@ button.link {
 .purpleToGreenSpacer {
     width: 60%;
     height: 2px;
-    margin: 50px 20% 50px;
+    margin: 65px 20% 65px;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
 }
 #picturesToPathwaysHomepageSpacer {
@@ -1158,7 +1239,7 @@ button.link {
     font-size: 23px;
 }
 .homepageTrajectoryTextRightIcon.onHome {
-    height: 74px;
+    height: 70px;
     margin-top: 36px;
 }
 .forBusinessTrajectoryTextLeft {
@@ -1459,7 +1540,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .font6px { font-size: 6px; }
 
 @media only screen and (min-width: 1051px) {
-    .homepageTrajectoryTextRightIcon.onHome { margin-left: 10px; }
+    .homepageTrajectoryTextRightIcon.onHome { margin-left: 14px; }
 }
 
 @media only screen and (max-width: 1050px) {
@@ -1932,6 +2013,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
+
+    .scrollDownButton { transform: scale(.6); }
 
     .homepageTrajectory { margin-bottom: -65px; }
     .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {

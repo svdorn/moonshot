@@ -40,12 +40,22 @@ class PathwayPreview extends Component {
         };
 
         return (
-            <div style={{position:"relative"}}>
+            <div className="pathwayPreview" style={{position:"relative"}}>
                 {this.props.comingSoon ?
-                    <div className="comingSoonBanner">
-                        <div>
+                    <div className="comingSoonPathwayPreview">
+                        <div className="comingSoonBanner">
                             <div>
-                                Coming Soon
+                                <div>
+                                    Coming Soon
+                                </div>
+                            </div>
+                        </div>
+                        <div className="reserveYourSpotOnHover">
+                            <div className="font36px whiteText">
+                                <b>Reserve Your Spot Now</b>
+                                <div className="blueButton font24px" style={{marginTop: "26px"}}>
+                                    Reserve
+                                </div>
                             </div>
                         </div>
                     </div>
