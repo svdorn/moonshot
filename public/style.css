@@ -547,13 +547,13 @@ button.link {
 }
 @keyframes MoveUpDown {
   0% {
-    bottom: 172px;
+    bottom: 174px;
   }
   50% {
     bottom: 180px;
   }
   100% {
-    bottom: 172px;
+    bottom: 174px;
   }
 }
 
@@ -2045,6 +2045,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .form {
         max-width: 350px;
         margin-top: 95px;
+        margin-bottom: 0px;
     }
 
     .aResumeCantDoThis { margin-top: 90px; }
