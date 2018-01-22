@@ -1404,9 +1404,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     color: var(--moonshotLightBlue) !important;
 }
 
-#aResumeCantDoThisTitle {
-    padding-left: 8%;
-}
 .aResumeCantDoThis {
     position: relative;
     margin: 140px 5% 40px;
@@ -1518,6 +1515,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 .forBusinessBox { padding-top: 38px; }
 .marginTopOnDesktop { margin-top: 60px; }
+
+#aResumeCantDoThisTitle {
+    margin-bottom: 30px;
+    margin-top: -34px;
+}
 
 
 .font40px { font-size: 40px; }
@@ -1836,10 +1838,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         margin-top: 0;
     }
 
-    #aResumeCantDoThisTitle {
-        text-align: center;
-        padding-left: 0;
-    }
     #aResumeCantDoThisContent {
         width: 85%;
         margin-left: 7%;

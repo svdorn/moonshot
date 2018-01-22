@@ -461,10 +461,9 @@ class ForBusiness extends Component {
                     </div>
 
                     <div className="aResumeCantDoThis">
-                        <div className="smallText3" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do
-                            This.</b>
-                        </div>
                         <div id="aResumeCantDoThisContent">
+                            <div className="smallText3" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do This.</b>
+                            </div>
                             <div>
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon"
@@ -505,7 +504,7 @@ class ForBusiness extends Component {
                                 </div>
                             </button>
                         </div>
-                        <div className="homepageTrajectoryImagesRight">
+                        <div className="homepageTrajectoryImagesRight" style={{marginTop:"68px"}}>
                             <div className="homepageImgBackgroundRight purpleToRed"/>
                             <img
                                 src="/images/OpenLaptop.jpeg"
