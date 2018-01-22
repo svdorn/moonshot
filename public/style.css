@@ -1511,7 +1511,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .forBusinessCircle:nth-child(4) { top: 665px; }
 .forBusinessCircle:nth-child(5) { bottom: 0px; }
 
-.forBusinessBox { padding-top: 38px; }
+.forBusinessBox { padding-top: 30px; }
 .marginTopOnDesktop { margin-top: 60px; }
 
 #aResumeCantDoThisTitle {
@@ -1675,7 +1675,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 300px;
     }
     .forBusinessBox > div.mediumText { font-size: 25px; }
-    .forBusinessBox { padding-top: 20px; }
+    .forBusinessBox { padding-top: 13px; }
 
     .font40pxUnder900 { font-size: 40px; }
     .font38pxUnder900 { font-size: 38px; }
