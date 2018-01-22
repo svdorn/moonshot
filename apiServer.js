@@ -417,7 +417,7 @@ app.post('/users/forBusinessEmail', function (req, res) {
     if (req.body.message) {
         message = req.body.message;
     }
-    let recipient = "kyle@moonshotlearning.org";
+    let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
     let subject = 'Moonshot Sales Lead - From For Business Page';
     let content = "<div>"
         + "<h3>Sales Lead from For Business Page:</h3>"
@@ -444,7 +444,7 @@ app.post('/users/forBusinessEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipient, subject, content, function (success, msg) {
+    sendEmail(recipients, subject, content, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
@@ -486,7 +486,7 @@ app.post('/users/contactUsEmail', function (req, res) {
     if (req.body.message) {
         message = req.body.message;
     }
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
+    let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
     let subject = 'Moonshot Pathway Question -- Contact Us Form';
     let content = "<div>"
         + "<h3>Questions from pathway:</h3>"
@@ -561,7 +561,7 @@ app.post('/forgotPassword', function (req, res) {
 function sendEmail(recipients, subject, content, callback) {
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
-    nodemailer.createTestAccount((err, account) => {
+    //nodemailer.createTestAccount((err, account) => {
 
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
@@ -597,7 +597,7 @@ function sendEmail(recipients, subject, content, callback) {
             callback(true, "Email sent! Check your email.");
             return;
         });
-    });
+    //});
 }
 
 app.post('/getUserById', function(req, res) {
