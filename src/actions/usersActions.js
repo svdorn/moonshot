@@ -50,7 +50,6 @@ export function login(user, saveSession) {
                 dispatch({type:"LOGIN", payload: returnedUser});
                 dispatch({type: "CLOSE_NOTIFICATION"});
                 browserHistory.push('/discover');
-                dispatch({type:"CHANGE_CURRENT_ROUTE", payload:'/discover'})
 
                 // axios.post("/api/userSession", {userId: user._id, hashedVerificationToken: user.hashedVerificationToken})
                 //     .then(function(response) {
@@ -177,7 +176,6 @@ export function verifyEmail(token) {
             .then(function(response) {
                 dispatch({type: "LOGIN", payload:response.data, notification:{message: "Account verified!", type: "infoHeader"}});
                 browserHistory.push('/onboarding');
-                dispatch({type:"CHANGE_CURRENT_ROUTE", payload:'/onboarding'})
             })
             .catch(function(err) {
                 dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: "Error verifying email", type: "errorHeader"}});
@@ -191,7 +189,6 @@ export function changePasswordForgot(user) {
             .then(function(response) {
                 dispatch({type:"LOGIN", notification:{message:response.data, type:"infoHeader"}});
                 browserHistory.push('/login');
-                dispatch({type:"CHANGE_CURRENT_ROUTE", payload:'/login'})
             })
             .catch(function(err) {
                 dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: "Error changing password", type: "errorHeader"}})
@@ -208,7 +205,6 @@ export function forBusiness(user){
             .then(function(response) {
                 dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/');
-                dispatch({type:"CHANGE_CURRENT_ROUTE", payload:'/'})
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
@@ -226,18 +222,11 @@ export function comingSoon(user){
             .then(function(response) {
                 dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/login')
-                dispatch({type:"CHANGE_CURRENT_ROUTE", payload:'/login'})
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
                 dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
             })
-    }
-}
-
-export function changeCurrentRoute(route){
-    return function(dispatch) {
-        dispatch({type: "CHANGE_CURRENT_ROUTE", payload: route})
     }
 }
 
@@ -369,7 +358,6 @@ export function contactUs(user){
             .then(function(response) {
                 dispatch({type:"CONTACT_US", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/myPathways');
-                dispatch({type:"CHANGE_CURRENT_ROUTE", payload:'/myPathways'})
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {

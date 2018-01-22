@@ -1,7 +1,7 @@
 "use strict"
 import React, { Component } from 'react';
 import { TextField } from 'material-ui';
-import { login, closeNotification, changeCurrentRoute } from '../../actions/usersActions';
+import { login, closeNotification } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -98,7 +98,6 @@ class Login extends Component {
         // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
-        this.props.changeCurrentRoute(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
@@ -146,7 +145,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         login,
         closeNotification,
-        changeCurrentRoute,
     }, dispatch);
 }
 

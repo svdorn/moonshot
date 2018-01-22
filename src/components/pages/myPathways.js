@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Tabs, Tab, CircularProgress} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, changeCurrentRoute} from "../../actions/usersActions";
+import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
@@ -138,7 +138,6 @@ class MyPathways extends Component {
         this.props.closeNotification();
         // goes to the wanted page
         browserHistory.push(route);
-        this.props.changeCurrentRoute(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
@@ -222,7 +221,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        changeCurrentRoute,
     }, dispatch);
 }
 

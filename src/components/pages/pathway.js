@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {registerForPathway, getUsers, closeNotification, changeCurrentRoute} from '../../actions/usersActions';
+import {registerForPathway, getUsers, closeNotification} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
@@ -24,7 +24,6 @@ class Pathway extends Component {
         this.props.closeNotification();
         // goes to the wanted page
         browserHistory.push(route);
-        this.props.changeCurrentRoute(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
@@ -576,7 +575,6 @@ function mapDispatchToProps(dispatch) {
         getUsers,
         registerForPathway,
         closeNotification,
-        changeCurrentRoute
     }, dispatch);
 }
 
