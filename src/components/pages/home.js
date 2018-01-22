@@ -247,8 +247,7 @@ class Home extends Component {
 
                         <div className="infoBox whiteText mediumText" style={{zIndex: "20", width: "100%"}}>
                             Skip the resum&eacute;.<br/> Learn skills that employers
-                            <div className="from500to600only under400only br"><br/></div>
-                            need
+                            <div className="from500to600only under400only br"><br/></div> need
                             <div className="outside500to600only above400only br"><br/></div>
                             <i>for free, forever.</i><br/>
                             <button className="outlineButton blueWhiteButton"
