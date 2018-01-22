@@ -1167,7 +1167,7 @@ button.link {
 .purpleToGreenSpacer {
     width: 60%;
     height: 2px;
-    margin: 65px 20% 65px;
+    margin: 70px 20%;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
 }
 #picturesToPathwaysHomepageSpacer {
