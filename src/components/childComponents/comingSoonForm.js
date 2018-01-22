@@ -1,7 +1,7 @@
 "use strict"
 import React, {Component} from 'react';
 import {TextField, CircularProgress, RaisedButton} from 'material-ui';
-import {login, closeNotification, comingSoon} from '../../actions/usersActions';
+import {closeNotification, comingSoon} from '../../actions/usersActions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
@@ -114,8 +114,8 @@ class ComingSoonForm extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        login,
-        closeNotification
+        closeNotification,
+        comingSoon,
     }, dispatch);
 }
 

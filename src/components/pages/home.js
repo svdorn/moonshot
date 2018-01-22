@@ -6,6 +6,8 @@ import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {closeNotification} from "../../actions/usersActions";
+import {TextField, RaisedButton, Paper, CircularProgress, Dialog, FlatButton} from 'material-ui';
+import ComingSoonForm from '../childComponents/comingSoonForm';
 import axios from 'axios';
 
 class Home extends Component {
@@ -27,7 +29,8 @@ class Home extends Component {
             // three empty pathways until we get the top three pathways from
             // the backend
             pathways1: [emptyPathway, emptyPathway, emptyPathway, emptyPathway],
-            pathways2: undefined
+            pathways2: undefined,
+            open: false,
         }
     }
 
@@ -39,6 +42,14 @@ class Home extends Component {
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
+
+    handleOpen = () => {
+        this.setState({open: true});
+    };
+
+    handleClose = () => {
+        this.setState({open: false});
+    };
 
     componentDidMount() {
         axios.get("/api/topPathways", {
@@ -102,7 +113,8 @@ class Home extends Component {
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             return (
                 <li style={{verticalAlign: "top"}} key={pathwayKey}
-                    onClick={() => self.goTo('/pathway?' + pathway._id)}><PathwayPreview
+                    //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                ><PathwayPreview
                     name={pathway.name}
                     image={pathway.previewImage}
                     //<!-- logo = {pathway.sponsor.logo} -->
@@ -125,7 +137,6 @@ class Home extends Component {
                 return (
                     <li style={{verticalAlign: "top"}} key={pathwayKey}
                         //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                        
                     ><PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
@@ -192,6 +203,18 @@ class Home extends Component {
             );
         });
 
+        let blurredClass = '';
+        if (this.state.open) {
+            blurredClass = 'dialogForBizOverlay';
+        }
+        const actions = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onClick={this.handleClose}
+            />,
+        ];
+
 
         // <div className="logoBar">
         //     <h3 style={style.hiringPartners}>Our Hiring Partners</h3>
@@ -200,6 +223,20 @@ class Home extends Component {
 
         return (
             <div className='jsxWrapper' ref='home'>
+                <div className={blurredClass}>
+                    <Dialog
+                        actions={actions}
+                        modal={false}
+                        open={this.state.open}
+                        onRequestClose={this.handleClose}
+                        autoScrollBodyContent={true}
+                        paperClassName="dialogForBiz"
+                        contentClassName="center"
+                        overlayClassName="dialogOverlay"
+                    >
+                        <ComingSoonForm/>
+                    </Dialog>
+                </div>
                 <div className="fullHeight greenToBlue">
                     <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
