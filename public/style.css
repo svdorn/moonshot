@@ -2084,7 +2084,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
-    .forBusinessLine { height: 534px; }
+    .forBusinessLine {
+        height: 534px;
+        margin-top: -14px;
+    }
 
     .scrollDownButton { transform: scale(.6); }
 

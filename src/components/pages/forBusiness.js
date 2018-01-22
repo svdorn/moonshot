@@ -362,7 +362,7 @@ class ForBusiness extends Component {
                         <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
                             <div className="homepageTrajectoryTextLeft forBusiness">
                                 <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextLeftDiv forBusiness">
-                                    <h2 className="blueText"><b>What Skills Are You <div className="above800only br"><br/></div>Hiring For?</b></h2>
+                                    <h2 className="blueText font18pxUnder500"><b>What Skills Are You <div className="above800only br"><br/></div>Hiring For?</b></h2>
                                     UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe...
                                 </div>
                             </div>
@@ -379,7 +379,7 @@ class ForBusiness extends Component {
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextRight forBusiness">
                                 <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextRightDiv forBusiness">
-                                    <h2 className="greenText"><b>Course Pathways Curated <div className="above500only br"><br/></div>to the Skills You Need.</b>
+                                    <h2 className="greenText font18pxUnder500"><b>Course Pathways Curated <div className="above500only br"><br/></div>to the Skills You Need.</b>
                                     </h2>
                                     Expert-led, interactive learning
                                     through videos, articles, skill
@@ -399,7 +399,7 @@ class ForBusiness extends Component {
                         <div className="homepageTrajectory forBusiness" id="sponsorStudentsForBusiness">
                             <div className="homepageTrajectoryTextLeft forBusiness">
                                 <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextLeftDiv forBusiness">
-                                    <h2 className="purpleText"><b>Sponsor Students</b></h2>
+                                    <h2 className="purpleText font18pxUnder500"><b>Sponsor Students</b></h2>
                                     Provide sponsorships for students to learn
                                     the skills you need. We can find the talent or you
                                     can sponsor your own candidates.
@@ -417,7 +417,7 @@ class ForBusiness extends Component {
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextRight forBusiness">
                                 <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextRightDiv forBusiness">
-                                    <h2 className="blueText"><b>Evaluate for Hire</b></h2>
+                                    <h2 className="blueText font18pxUnder500"><b>Evaluate for Hire</b></h2>
                                     Comprehensive data on each candidate
                                     from skill assessments, qualitative
                                     responses, quantitative scoring
