@@ -39,8 +39,6 @@ class PathwayPreview extends Component {
             fontSize: "24px"
         };
 
-        console.log(this.props.comingSoon);
-
         return (
             <div style={{position:"relative"}}>
                 {this.props.comingSoon ?
