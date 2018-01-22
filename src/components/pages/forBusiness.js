@@ -468,14 +468,14 @@ class ForBusiness extends Component {
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon"
                                          style={{marginRight: '10px'}}/>
-                                    <div className="smallText aResumeCantDoThisText">See their quality of work under
+                                    <div className="font20px font16pxUnder800 font14pxUnder800 aResumeCantDoThisText">See their quality of work under
                                         pressure.
                                     </div>
                                 </div>
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/BarGraph.png" className="forBusinessIcon"
                                          style={{marginLeft: '10px'}}/>
-                                    <div className="smallText aResumeCantDoThisText">
+                                    <div className="font20px font16pxUnder800 font14pxUnder800 aResumeCantDoThisText">
                                         Quantitatively score and break down their skills.
                                     </div>
                                 </div>
@@ -483,13 +483,13 @@ class ForBusiness extends Component {
                             <div style={{marginTop: '20px'}}>
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/EvaluatePurple.png" className="forBusinessIcon"/>
-                                    <div className="smallText aResumeCantDoThisText">
+                                    <div className="font20px font16pxUnder800 font14pxUnder800 aResumeCantDoThisText">
                                         Compare candidates against their peers.
                                     </div>
                                 </div>
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/Filter.png" className="forBusinessIcon"/>
-                                    <div className="smallText aResumeCantDoThisText">
+                                    <div className="font20px font16pxUnder800 font14pxUnder800 aResumeCantDoThisText">
                                         Filter out the unqualified<div className="above800only br"><br/></div> and uncommitted.
                                     </div>
                                 </div>
