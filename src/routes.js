@@ -25,9 +25,15 @@ import Onboarding from './components/pages/onboarding';
 import Error404 from './components/pages/error404';
 import Email from './components/pages/email';
 import Unsubscribe from './components/pages/unsubscribe';
+import ReactGA from 'react-ga';
+ReactGA.initialize('UA-105560654-1'); //Unique Google Analytics tracking number
+
+function fireTracking() {
+    ReactGA.pageview(window.location.pathname + window.location.search);
+}
 
 const routes = (
-  <Router history={browserHistory}>
+  <Router onUpdate={fireTracking} history={browserHistory}>
     <Route path="/" component={Main}>
         <IndexRoute component={Home} />
         <Route path ='/login' component={Login} />
