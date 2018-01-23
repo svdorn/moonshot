@@ -1,6 +1,7 @@
 'use strict'
 import React from 'react';
 import { render } from 'react-dom';
+import credentials from '../credentials.js';
 
 //REACT_ROUTER
 import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-router';
@@ -26,7 +27,7 @@ import Error404 from './components/pages/error404';
 import Email from './components/pages/email';
 import Unsubscribe from './components/pages/unsubscribe';
 import ReactGA from 'react-ga';
-ReactGA.initialize('UA-105560654-1'); //Unique Google Analytics tracking number
+ReactGA.initialize(credentials.googleAnalyticsTrackingNumber);
 
 function fireTracking() {
     ReactGA.pageview(window.location.pathname + window.location.search);
