@@ -453,6 +453,26 @@ app.post('/users/forBusinessEmail', function (req, res) {
     })
 });
 
+app.post('/users/unsubscribeEmail', function (req, res) {
+
+    let recipient = "kyle@moonshotlearning.org";
+    let subject = 'URGENT ACTION - User Unsubscribe from Moonshot';
+    let content = "<div>"
+        + "<h3>This email is Unsubscribing from Moonshot Emails:</h3>"
+        + "<p>Email: "
+        + req.body.email
+        + "</p>"
+        + "</div>";
+
+    sendEmail(recipient, subject, content, function (success, msg) {
+        if (success) {
+            res.json("You have successfully unsubscribed.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+});
+
 // SEND COMING SOON EMAIL
 app.post('/users/comingSoonEmail', function (req, res) {
 

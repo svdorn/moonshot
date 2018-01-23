@@ -6,7 +6,7 @@ import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import ComingSoonForm from '../childComponents/comingSoonForm';
-import {closeNotification, changeCurrentRoute, comingSoon} from "../../actions/usersActions";
+import {closeNotification, comingSoon} from "../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
 import styles from '../../../public/styles';
@@ -56,7 +56,6 @@ class Discover extends Component {
     goTo(route) {
         // closes any notification
         this.props.closeNotification();
-        this.props.changeCurrentRoute(route);
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
@@ -403,7 +402,6 @@ class Discover extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        changeCurrentRoute,
         comingSoon
     }, dispatch);
 }
