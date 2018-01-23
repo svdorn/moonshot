@@ -29,7 +29,7 @@ import ReactGA from 'react-ga';
 ReactGA.initialize('UA-105560654-1'); //Unique Google Analytics tracking number
 
 function fireTracking() {
-    ReactGA.pageview(window.location.pathname);
+    ReactGA.pageview(window.location.pathname + window.location.search);
 }
 
 const routes = (
