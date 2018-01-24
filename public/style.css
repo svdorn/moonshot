@@ -162,6 +162,12 @@ form > h1 {
     border: 2px solid white;
 }
 .darkBlueButton:hover { background: linear-gradient(to top right, var(--moonshotBlue), var(--moonshotPurple)); }
+.purpleGradientButton {
+    background: #9B6BFB;
+    border: 2px solid white;
+}
+.purpleGradientButton:hover { background: linear-gradient(to bottom right, #CE9EFC, #a048fb); }
+
 
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
     padding-top: 5px;
@@ -2197,16 +2203,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .aResumeCantDoThis { margin-top: 90px; }
 
     .pathwayLandingIcons { margin: 0px 0px 10px 3px; }
-    /* #pathwayLandingTopInfoList > li {
-        width: 100px;
-    } */
-    /* #pathwayLandingTopInfoList {
-        bottom: -20px;
-    } */
-    #pathwayLandingTopInfoList > li {
-        width: 70px;
-        /* margin-bottom: 20px; */
-    }
+    #pathwayLandingTopInfoList > li { width: 70px; }
     .pathwayLandingIcons {
         height: 30px;
         width: 30px;
