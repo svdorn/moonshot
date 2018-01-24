@@ -523,28 +523,28 @@ class ForBusiness extends Component {
                         <Paper zDepth={3} className="paperBox">
                             <div className="gradientBorderBlueBox">
                                 <div className="forBusinessBox">
-                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Training</div>
-                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 blueText">$200 USD</div>
-                                    <div>PER STUDENT</div>
+                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Full Access</div>
+                                    <div className="font36px font24pxUnder900 font24pxUnder500 font16pxUnder350 blueText">$200 USD</div>
+                                    <div>PER MONTH</div>
                                     <div className="br"><br/></div>
-                                    A program curated to your<br/>
-                                    company{"'"}s needs. Skills training<br/>
-                                    and evaluation of up to<br/>
-                                    20 potential candidates.
+                                    Full access to students, student data from<br/>
+                                    quantitative assessments, skills scoring and projects,<br/>
+                                    existing pathways and curated pathways for your company.<br/>
+                                    Starts with quarterly plans.
                                 </div>
                             </div>
                         </Paper>
                         <Paper zDepth={3} className="paperBox">
                             <div className="gradientBorderPurpleToRedBox">
                                 <div className="forBusinessBox">
-                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Evaluation</div>
-                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 purpleText">$50 USD</div>
-                                    <div>PER CANDIDATE</div>
+                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Successful Hire</div>
+                                    <div className="font36px font24pxUnder900 font24pxUnder500 font16pxUnder350 purpleText">% of First Year Salary</div>
+                                    <div>PER HIRE</div>
                                     <div className="br"><br/></div>
-                                    Skills evaluation of your existing<br/>
-                                    candidate pool of students.<br/>
-                                    Don{"'"}t guess how good<br/>
-                                    your candidates are, know.
+                                    1% to 3% for full and part time hires.<br/>
+                                    4% to 6% for interns or co-ops.<br/>
+                                    Pay only after he or she meets all of your<br/>
+                                    pre-employment requirements and accepts your offer.
                                 </div>
                             </div>
                         </Paper>
