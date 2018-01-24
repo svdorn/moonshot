@@ -910,7 +910,6 @@ button.link {
     margin-right: 5%;
 }
 
-.mediumText { font-size: 40px; }
 .tinyText2 { font-size: 11px; }
 .tinyText { font-size: 8.8px; }
 .greenText { color: var(--moonshotGreenText); }
@@ -1730,7 +1729,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 225px;
         width: 300px;
     }
-    .forBusinessBox > div.mediumText { font-size: 25px; }
     .forBusinessBox { padding-top: 13px; }
 
     .font40pxUnder900 { font-size: 40px; }
@@ -2175,9 +2173,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .infoBox {
         padding-top: 190px;
     }
-    .mediumText {
-        font-size: 25px;
-    }
 
     .gradientBorderPurpleToPinkChip {
         height: 30px;
@@ -2300,9 +2295,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 195px;
         width: 260px;
         margin: 0 20px 40px;
-    }
-    .forBusinessBox > div.mediumText {
-        font-size: 17px;
     }
     .forBusinessBox { padding-top: 10px; }
     .forBusinessBox > p {
