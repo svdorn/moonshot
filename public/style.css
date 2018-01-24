@@ -1792,7 +1792,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageSeparator { transform: scale(4, .025); }
 
     .mediumTextDoubleShrink { font-size: 25px; }
-    .h1Shrink { font-size: 30px; }
     .smallText3 { font-size: 20px; }
 
     .horizListText {
@@ -2092,7 +2091,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .outside500to600only { display: initial; }
     .from500to600only { display: none; }
     .above500only { display: none; }
-    .h1Shrink { font-size: 20px; }
     .smallText { font-size: 12px;  }
     .homepageSeparator { transform: scale(3, .02); }
     .marginTopOnDesktop { margin-top: 0px; }

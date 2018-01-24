@@ -292,9 +292,9 @@ class ForBusiness extends Component {
                     </div>
 
                     <div style={{marginTop: '60px', overflow: 'auto'}}>
-                        <div className="center mediumTextDoubleShrink" style={{marginBottom: "50px"}}>
+                        <div className="center font36px font30pxUnder700 font26pxUnder500 font22pxUnder400" style={{marginBottom: "50px"}}>
                             <b>Top College Students and
-                                <div className="under500only br"><br/></div> Recent Graduates<br/>
+                                <div className="under600only br"><br/></div> Recent Graduates<br/>
                                 Competing to Work for You.</b>
                         </div>
                         <div style={styles.horizList}>
@@ -344,7 +344,7 @@ class ForBusiness extends Component {
                     <div style={{marginTop: '60px', minWidth: "215px"}}>
                         <div className="center font24px font16pxUnder500"
                              style={{marginBottom: '40px', width: '90%', marginLeft: "5%"}}>
-                            <h1 className="purpleText h1Shrink"><b>Our Scholarships to Hire Program</b></h1>
+                            <h1 className="purpleText font36px font30pxUnder700 font26pxUnder500 font22pxUnder400"><b>Our Scholarships to Hire Program</b></h1>
                             A scholarship for potential hires<div className="under500only br"><br/></div> to learn the skills you need.<br/>
                         </div>
 
@@ -438,7 +438,7 @@ class ForBusiness extends Component {
                     </div>
 
                     <div className="center" style={{marginBottom: "50px"}}>
-                        <h1 className="isolatedHeader purpleText font36px font30pxUnder700 font26pxUnder500">
+                        <h1 className="isolatedHeader purpleText font36px font30pxUnder700 font26pxUnder500 font22pxUnder400">
                             <b>What Positions Are You Hiring For?</b>
                         </h1>
                         <div id="exampleSkillsContainer">
@@ -515,7 +515,7 @@ class ForBusiness extends Component {
                         <div className="homepageSeparator blueLightBlueSeparator"/>
                     </div>
 
-                    <div className="center mediumTextDoubleShrink"
+                    <div className="center font36px font30pxUnder700 font26pxUnder500 font22pxUnder400"
                          style={{marginBottom: '40px', marginTop: "120px", minWidth: "250px"}}>
                         <b>Your Pipeline to<div className="under400only br"><br/></div> Fully-Vetted Talent</b>
                     </div>
