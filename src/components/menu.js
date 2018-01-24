@@ -72,34 +72,39 @@ class Menu extends Component {
 
         let moonshotLogo = "/images/OfficialLogoWhite.png";
         let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
-        let menuItemClass = "menuItem clickable noWrap whiteText wideScreenMenuItem"
+        let menuItemClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem"
         if (this.props.blueHeader) {
             moonshotLogo = "/images/OfficialLogoBlue.png";
             dropdownClass = "headerDropdownBlue wideScreenMenuItem";
-            menuItemClass = "menuItem clickable noWrap blueText wideScreenMenuItem"
+            menuItemClass = "menuItem borderBottomClickable noWrap blueText wideScreenMenuItem"
         }
         let discoverClass = menuItemClass;
         if (this.props.location.pathname === '/discover') {
-            discoverClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
+            discoverClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let homeClass = menuItemClass;
         if (this.props.location.pathname === '/') {
-            homeClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
+            homeClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let forBusClass = menuItemClass;
         if (this.props.location.pathname === '/forBusiness') {
-            forBusClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
+            forBusClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let loginClass = menuItemClass;
         if (this.props.location.pathname === '/login') {
-            loginClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
+            loginClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let myPathwaysClass = menuItemClass;
+        let hoverWidth = "52px";
         if (this.props.location.pathname === '/myPathways') {
-            myPathwaysClass = "menuItem clickable noWrap whiteText wideScreenMenuItem currentRoute";
+            myPathwaysClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
-        if (this.props.location.pathname === '/profile' || this.props.location.pathname === '/settings' ) {
+        if (this.props.location.pathname === '/profile') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+        }
+        if (this.props.location.pathname === '/settings') {
+            dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+            hoverWidth = "68px";
         }
 
 
@@ -153,9 +158,10 @@ class Menu extends Component {
                             >
                                 <MenuItem value={1} primaryText="Profile"/>
                                 <Divider/>
-                                <MenuItem value={2} primaryText="Settings"/>
+                                <MenuItem value ={2} primaryText="Settings"/>
                                 <MenuItem value={3} primaryText="Sign Out"/>
                             </DropDownMenu>
+                            <div className="menuUnderline" style={{width: hoverWidth}}/>
 
 
                             <IconMenu

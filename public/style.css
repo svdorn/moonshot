@@ -50,12 +50,6 @@ footer {
     margin: -10px 10px 0px 0px;
 }
 
-#menuDropdown:hover {
-    text-decoration: underline;
-    text-decoration-color: white;
-}
-#menuDropdown { text-decoration-color: white; }
-
 .container .footer-text {
   margin: 20px 0;
 }
@@ -230,9 +224,36 @@ form > h1 {
     color: var(--moonshotLightBlue) !important;
 }
 
-.clickable, .clickableNoUnderline { cursor: pointer; }
+.clickable, .clickableNoUnderline, .borderBottomClickable { cursor: pointer; }
 .clickable:hover { text-decoration: underline; }
-.currentRoute { text-decoration: underline; }
+.borderBottomClickable:hover { border-bottom: 2px solid white; }
+.currentRoute {
+    /* text-decoration: underline;  */
+    border-bottom: 2px solid white;
+}
+
+
+#menuDropdown:hover + div,
+#menuDropdown.currentRoute + div  {
+    display: inline-block;
+}
+#menuDropdown + div {
+    display: none;
+}
+/* #menuDropdown.currentRoute + div {
+    display: inline-block;
+} */
+#menuDropdown.currentRoute {
+    border-bottom: none;
+}
+.menuUnderline {
+    height: 2px;
+    background-color: white;
+    position: absolute;
+    right: 80px;
+    top: 56px;
+    pointer-events: none;
+}
 
 .fullHeight {
     width: 100%;
