@@ -418,18 +418,18 @@ class Profile extends Component {
                                         <div>
                                             <div
                                                 className="blueText font20px font14pxUnder700 font10pxUnder400">{user.name.toUpperCase()}</div>
-                                            <b className="smallText">{user.info.title}</b><br/>
+                                            <b className="font14px font12pxUnder500">{user.info.title}</b><br/>
                                             <div>
                                                 <img
                                                     src="/icons/Location.png"
                                                     alt="Portfolio"
                                                     style={style.locationImg}
                                                 />
-                                                <div className="smallText" style={{display: 'inline-block'}}>
+                                                <div className="font14px font12pxUnder500" style={{display: 'inline-block'}}>
                                                     {user.info.location}
                                                 </div>
                                             </div>
-                                            <a className="smallText blueText" href={mailtoEmail}>Contact</a>
+                                            <a className="font14px font12pxUnder500 blueText" href={mailtoEmail}>Contact</a>
                                         </div>
                                     </div>
                                     <div style={style.pictureInfoSkills.rightSide}>

@@ -403,7 +403,7 @@ class Home extends Component {
                                 Create Account
                             </div>
                         </button>
-                        <div className="smallText blueText" style={{margin: "10px 0 55px"}}>
+                        <div className="font14px font12pxUnder500 blueText" style={{margin: "10px 0 55px"}}>
                             <i>{"Don't worry, it's free."}</i></div>
                     </div>
 

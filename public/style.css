@@ -910,11 +910,7 @@ button.link {
     margin-right: 5%;
 }
 
-.bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
-.smallText3 { font-size: 30px; }
-.smallText4 { font-size: 25px; }
-.smallText { font-size: 15px; }
 .tinyText2 { font-size: 11px; }
 .tinyText { font-size: 8.8px; }
 .greenText { color: var(--moonshotGreenText); }
@@ -1679,7 +1675,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         margin-top: 30px;
     }
 
-    .smallText4 { font-size: 20px; }
     .forBusiness > h2 > b {
         font-size: 25px;
     }
@@ -1786,8 +1781,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 
     .homepageSeparator { transform: scale(4, .025); }
-
-    .smallText3 { font-size: 20px; }
 
     .horizListText {
         font-size: 15px;
@@ -2075,7 +2068,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .outside500to600only { display: initial; }
     .from500to600only { display: none; }
     .above500only { display: none; }
-    .smallText { font-size: 12px;  }
     .homepageSeparator { transform: scale(3, .02); }
     .marginTopOnDesktop { margin-top: 0px; }
     .pathwayPrevMobileThird {

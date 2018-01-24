@@ -461,7 +461,7 @@ class ForBusiness extends Component {
 
                     <div className="aResumeCantDoThis">
                         <div id="aResumeCantDoThisContent">
-                            <div className="smallText3" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do This.</b>
+                            <div className="font36px font30pxUnder700 font26pxUnder500 font22pxUnder400" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do This.</b>
                             </div>
                             <div>
                                 <div style={styles.bottomListItem}>

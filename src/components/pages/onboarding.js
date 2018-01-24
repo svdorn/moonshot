@@ -523,14 +523,14 @@ class Onboarding extends Component {
                         {interest.selected ?
                             <div className="onboardingPage1Text2Background clickableNoUnderline noselect"
                                 onClick={() => self.handleInterestClick(interest)}>
-                                <div className="smallText onboardingPage1Text2">
+                                <div className="font14px font12pxUnder500 onboardingPage1Text2">
                                     {interest.title}
                                 </div>
                             </div>
                             :
                             <div className="gradientBorderBlue center clickableNoUnderline noselect" style={{marginRight: '20px', marginTop: '20px'}}
                                 onClick={() => self.handleInterestClick(interest)}>
-                                <div className="onboardingPage1Text3 smallText">
+                                <div className="onboardingPage1Text3 font14px font12pxUnder500">
                                     {interest.title}
                                 </div>
                             </div>
@@ -551,13 +551,13 @@ class Onboarding extends Component {
                     <li key={key} className="noselect">
                         {goal.selected ?
                             <div className="clickableNoUnderline onboardingPage2Text2Background center" onClick={() => self.handleGoalClick(goal)}>
-                                <div className="smallText onboardingPage1Text2">
+                                <div className="font14px font12pxUnder500 onboardingPage1Text2">
                                     {goal.title}
                                 </div>
                             </div>
                             :
                             <div className="clickableNoUnderline gradientBorderPurple center" style={{marginTop: '20px'}} onClick={() => self.handleGoalClick(goal)}>
-                                <div className="onboardingPage2Text3 smallText">
+                                <div className="onboardingPage2Text3 font14px font12pxUnder500">
                                     {goal.title}
                                 </div>
                             </div>
@@ -646,7 +646,7 @@ class Onboarding extends Component {
                         <div className="onboardingDividerLeft" style={{bottom: "0"}}/>
                         <div className="onboardingDividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="smallText center" style={style.title.text}>What skills do you want to learn or
+                    <div className="font14px font12pxUnder500 center" style={style.title.text}>What skills do you want to learn or
                         improve?
                     </div>
                     <div>
@@ -766,7 +766,7 @@ class Onboarding extends Component {
                         <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="smallText center" style={{marginBottom: "20px"}}>
+                    <div className="font14px font12pxUnder500 center" style={{marginBottom: "20px"}}>
                         Select All That Apply.
                     </div>
                     <div>
