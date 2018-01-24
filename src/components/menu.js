@@ -27,7 +27,26 @@ const styles = {
 class Menu extends Component {
     constructor(props) {
         super(props);
-        this.state = {value: 1};
+        console.log(this.props.location.pathname);
+        let value = 1;
+        if (this.props.location.pathname === '/settings') {
+            value = 2;
+        }
+        this.state = {value};
+    }
+
+    componentDidUpdate() {
+        console.log("here");
+        if (this.props.location.pathname === '/settings') {
+            if (this.state.value !== 2) {
+                this.setState({value:2});
+            }
+        } else {
+            // set dropdown to be on Profile if not on settings page
+            if (this.state.value !== 1) {
+                this.setState({value:1});
+            }
+        }
     }
 
     handleChange = (event, index, value) => {
@@ -40,7 +59,7 @@ class Menu extends Component {
             this.props.signout();
             this.goTo('/');
         }
-        this.setState({value})
+        this.setState({value});
     };
 
     selectItem(route, value) {
@@ -158,7 +177,7 @@ class Menu extends Component {
                             >
                                 <MenuItem value={1} primaryText="Profile"/>
                                 <Divider/>
-                                <MenuItem value ={2} primaryText="Settings"/>
+                                <MenuItem value={2} primaryText="Settings"/>
                                 <MenuItem value={3} primaryText="Sign Out"/>
                             </DropDownMenu>
                             <div className="menuUnderline" style={{width: hoverWidth}}/>
