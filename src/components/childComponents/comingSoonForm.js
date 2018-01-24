@@ -87,7 +87,7 @@ class ComingSoonForm extends Component {
                 {this.props.loadingEmailSend ?
                     <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
                     : < form onSubmit={this.handleSubmit.bind(this)} className="center">
-                        <div className="blueTextImportant mediumTextDoubleShrink">
+                        <div className="blueTextImportant font36px font30pxUnder700 font26pxUnder500">
                             Reserve Your Spot
                         </div>
                         <Field

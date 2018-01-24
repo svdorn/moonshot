@@ -222,7 +222,7 @@ class PathwayContent extends Component {
 
                             <Paper className="overviewAndCommentBox">
                                 <Paper style={{width: "100%"}}>
-                                    <ul className="horizCenteredList darkPurpleText smallText2">
+                                    <ul className="horizCenteredList darkPurpleText font20px font14pxUnder700 font10pxUnder400">
                                         <li>
                                             <div style={style.threeInfo}>
                                                 <i>Sponsor</i><br/>
@@ -252,15 +252,15 @@ class PathwayContent extends Component {
                                         className="overviewExercisesComments"
                                     >
                                         <Tab label="Overview" style={style.tab}>
-                                            <p className="smallText2 center"
+                                            <p className="font20px font14pxUnder700 font10pxUnder400 center"
                                                style={style.insideTab}>{pathway.overview}</p>
                                         </Tab>
                                         <Tab label="Exercise Files" style={style.tab}>
-                                            <h1 className="center smallText2" style={style.insideTab}>No exercise files
+                                            <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
                                                 yet.</h1>
                                         </Tab>
                                         <Tab label="Comments" style={style.tab}>
-                                            <h1 className="center smallText2" style={style.insideTab}>No comments
+                                            <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
                                                 yet.</h1>
                                         </Tab>
                                     </Tabs>

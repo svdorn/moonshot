@@ -417,7 +417,7 @@ class Profile extends Component {
                                         />
                                         <div>
                                             <div
-                                                className="blueText smallText2">{user.name.toUpperCase()}</div>
+                                                className="blueText font20px font14pxUnder700 font10pxUnder400">{user.name.toUpperCase()}</div>
                                             <b className="smallText">{user.info.title}</b><br/>
                                             <div>
                                                 <img

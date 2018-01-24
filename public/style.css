@@ -912,10 +912,8 @@ button.link {
 
 .bigText { font-size: 48px; }
 .mediumText { font-size: 40px; }
-.mediumTextDoubleShrink { font-size: 35px; }
 .smallText3 { font-size: 30px; }
 .smallText4 { font-size: 25px; }
-.smallText2 { font-size: 20px; }
 .smallText { font-size: 15px; }
 .tinyText2 { font-size: 11px; }
 .tinyText { font-size: 8.8px; }
@@ -1379,7 +1377,6 @@ button.link {
 .homePathwaysDesc {
     margin: auto;
     margin-bottom: 40px;
-    font-size: 22px;
 }
 
 /* make Category and Company more to the right */
@@ -1657,7 +1654,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 1000px) {
-    .mediumTextDoubleShrink { font-size: 30px; }
     .above1000only { display: none; }
 
     .above1000fade {
@@ -1791,7 +1787,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
     .homepageSeparator { transform: scale(4, .025); }
 
-    .mediumTextDoubleShrink { font-size: 25px; }
     .smallText3 { font-size: 20px; }
 
     .horizListText {
@@ -1937,12 +1932,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 @media only screen and (max-width: 700px) {
-    .smallText2, .smallText2.homepageTrajectoryTextRightDiv.onHome, .smallText2.homepageTrajectoryTextLeftDiv.onHome {
-        font-size: 15px;
-    }
-
     .homePathwaysDesc {
-        font-size: 15px;
         padding: 0px;
     }
 
@@ -1973,9 +1963,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .wideScreenMenuItem {
         display: none !important;
-    }
-    .smallText2 {
-        font-size: 15px;
     }
     #pathwayLandingTopInfoList > li {
         width: 145px;
@@ -2025,9 +2012,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .bigCreateYourFreeAccount {
         font-size: 20px;
         padding: 2px 20px 0px;
-    }
-    .mediumTextDoubleShrink {
-        font-size: 20px;
     }
     .form {
         max-width: 450px;
@@ -2097,9 +2081,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .pathwayPrevMobileThird {
         display: block;
         margin-top: 20px;
-    }
-    .smallText2.earlyShrink {
-        font-size: 10px;
     }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
@@ -2283,7 +2264,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .form {
         max-width: 300px;
     }
-    .smallText2 { font-size: 10px; }
 
     .font40pxUnder400 { font-size: 40px; }
     .font38pxUnder400 { font-size: 38px; }

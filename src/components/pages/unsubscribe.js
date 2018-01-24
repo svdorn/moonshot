@@ -95,7 +95,7 @@ class Unsubscribe extends Component {
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Unsubscribe</h1>
-                        <div className="smallText2 font20pxUnder500 blueText">Enter your email to unsubscribe.</div>
+                        <div className="font20px font14pxUnder700 font10pxUnder400 font20pxUnder500 blueText">Enter your email to unsubscribe.</div>
                         <div className="inputContainer">
                             <div className="fieldWhiteSpace"/>
                             <Field
