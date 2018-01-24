@@ -215,6 +215,7 @@ class Menu extends Component {
                         </ToolbarGroup>
                         <ToolbarGroup>
                             <p className={homeClass} onClick={() => this.goTo('/')}>Home</p>
+                            <p className={discoverClass} onClick={() => this.goTo('/discover')}>Discover</p>
                             <p className={forBusClass} onClick={() => this.goTo('/forBusiness')}>For Business</p>
                             <div className="menuDivider loggedOut wideScreenMenuItem"/>
                             <p className={loginClass} onClick={() => this.goTo('/login')}>Sign in</p>
@@ -227,6 +228,7 @@ class Menu extends Component {
                                 iconStyle={{fill: "white"}}
                             >
                                 <MenuItem primaryText="Home" onClick={() => this.goTo('/')}/>
+                                <MenuItem primaryText="Discover" onClick={() => this.goTo('/discover')}/>
                                 <MenuItem primaryText="For Business" onClick={() => this.goTo('/forBusiness')}/>
                                 <MenuItem primaryText="Sign In" onClick={() => this.goTo('/login')}/>
                             </IconMenu>
