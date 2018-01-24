@@ -99,27 +99,6 @@ class Home extends Component {
     }
 
     render() {
-
-        // const style = {
-        //     hiringPartners: {
-        //         fontSize: "12px",
-        //         color: "gray",
-        //         marginBottom: "30px"
-        //     }, leftLi: {
-        //         float: "left",
-        //         textAlign: "left",
-        //         position: "relative",
-        //         marginLeft: "100px",
-        //         clear: "both"
-        //     }, rightLi: {
-        //         float: "right",
-        //         textAlign: "left",
-        //         position: "relative",
-        //         marginRight: "100px",
-        //         clear: "both"
-        //     }
-        // }
-
         // create the pathway previews
         let pathwayKey = 0;
         let self = this;
