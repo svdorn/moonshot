@@ -193,7 +193,7 @@ class Pathway extends Component {
                             <div className="halfWidthStepTitle">
                                 {step.name}
                             </div>
-                            <div className="smallText halfWidthStepDesc">
+                            <div className="font14px font12pxUnder500 halfWidthStepDesc">
                                 {step.description}
                                 This is the description of the step. It will eventually describe the step.
                             </div>
@@ -246,7 +246,7 @@ class Pathway extends Component {
                         <div className="fullHeight purpleGradient">
 
 
-                            <div className="infoBox whiteText mediumText" style={{zIndex: "20"}}>
+                            <div className="infoBox whiteText font40px font24pxUnder500" style={{zIndex: "20"}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
                                 <button className="outlineButton"
                                         style={{backgroundColor: "#9B6BFB", border: "2px solid white"}}
@@ -258,7 +258,7 @@ class Pathway extends Component {
                             {this.props.loading ? <div className="center"><CircularProgress color="white"
                                                                                             style={{marginTop: "20px"}}/><br/>
                             </div> : ""}
-                            <div className="whiteText smallText2 earlyShrink noWrap" style={{textAlign: 'center'}}>
+                            <div className="whiteText font20px font14pxUnder700 font10pxUnder500 noWrap" style={{textAlign: 'center'}}>
                                 Sponsored by
                                 <img
                                     src={pathway.sponsor.logo}
@@ -267,7 +267,7 @@ class Pathway extends Component {
                                     style={{paddingLeft: '10px'}}
                                 />
                             </div>
-                            <ul className="horizCenteredList whiteText smallText2 earlyShrink" id="pathwayLandingTopInfoList">
+                            <ul className="horizCenteredList whiteText font20px font14pxUnder700 font10pxUnder500" id="pathwayLandingTopInfoList">
                                 <li>
                                     <img src="/icons/ClockWhite.png" className="pathwayLandingIcons"/>
                                     <div className="under500only br"><br/></div>
@@ -308,9 +308,9 @@ class Pathway extends Component {
                             {pathway.skills ?
                                 <div>
                                     <div className="center" style={{marginTop: '20px'}}>
-                                        < b style={{color: '#B869FF'}} className="mediumText">Skills</ b>
+                                        < b style={{color: '#B869FF'}} className="font40px font24pxUnder500">Skills</ b>
                                     </ div>
-                                    <div className="center smallText2" style={{marginBottom:"20px"}}>
+                                    <div className="center font20px font14pxUnder700 font10pxUnder400" style={{marginBottom:"20px"}}>
                                         Earn these skills upon pathway completion.
                                     </div>
                                     <div className="center skillChips">
@@ -384,9 +384,9 @@ class Pathway extends Component {
                                         src="/icons/Information.png"
                                         style={style.iconsLeft}
                                     />
-                                    <b style={{color: '#B869FF'}} className="mediumText">ABOUT</b>
+                                    <b style={{color: '#B869FF'}} className="font40px font24pxUnder500">ABOUT</b>
                                 </div>
-                                <div className="smallText2">
+                                <div className="font20px font14pxUnder700 font10pxUnder400">
                                     {pathway.sponsor.description}
                                 </div>
                                 {pathway.sponsor.hiring ?
@@ -395,8 +395,8 @@ class Pathway extends Component {
                                             src="/icons/Badge.png"
                                             style={style.iconsLeft}
                                         />
-                                        <b style={{color: '#B869FF'}} className="mediumText">OPEN POSITIONS</b><br/>
-                                        <div className="smallText2">- {pathway.sponsor.hiring}</div>
+                                        <b style={{color: '#B869FF'}} className="font40px font24pxUnder500">OPEN POSITIONS</b><br/>
+                                        <div className="font20px font14pxUnder700 font10pxUnder400">- {pathway.sponsor.hiring}</div>
                                     </div>
                                     : null}
                                 <div style={style.spaceTop}>
@@ -405,15 +405,15 @@ class Pathway extends Component {
                                         style={style.iconsLeft}
                                     />
                                     <b style={{color: '#B869FF'}}
-                                       className="mediumText">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
+                                       className="font40px font24pxUnder500">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
                                     <a href={pathway.sponsor.homepage} target="_blank" style={style.infoLinks}
-                                       className="smallText2">Website</a>
+                                       className="font20px font14pxUnder700 font10pxUnder400">Website</a>
                                     {pathway.sponsor.blog ?
                                         <a href={pathway.sponsor.blog} target="_blank" style={style.infoLinks}
-                                           className="smallText2">Blog</a> : null}
+                                           className="font20px font14pxUnder700 font10pxUnder400">Blog</a> : null}
                                     {pathway.sponsor.demo ?
                                         <a href={pathway.sponsor.demo} target="_blank" style={style.infoLinks}
-                                           className="smallText2">Demo</a> : null}
+                                           className="font20px font14pxUnder700 font10pxUnder400">Demo</a> : null}
                                 </div>
                             </div>
                             {pathway.sponsor.quote ?
@@ -456,7 +456,7 @@ class Pathway extends Component {
                                                     alt="Free"
                                                     className="infoBoxImage"
                                                 />
-                                                <div className="smallText2">
+                                                <div className="font20px font14pxUnder700 font10pxUnder400">
                                                     It{"'"}s free.<br/>
                                                     {pathway.sponsor.name} provides scholarships<br/>
                                                     to pay for your pathway.
@@ -470,7 +470,7 @@ class Pathway extends Component {
                                                     alt="Portfolio"
                                                     className="infoBoxImage"
                                                 />
-                                                <div className="smallText2">
+                                                <div className="font20px font14pxUnder700 font10pxUnder400">
                                                     Learn {pathway.sponsor.learn}<br/>
                                                     and build<br/>
                                                     your {pathway.sponsor.type} portfolio.
@@ -486,7 +486,7 @@ class Pathway extends Component {
                                                     alt="Data"
                                                     className="infoBoxImage"
                                                 />
-                                                <div className="smallText2">
+                                                <div className="font20px font14pxUnder700 font10pxUnder400">
                                                     Get evaluated by {pathway.sponsor.name}<br/>
                                                     and other {pathway.sponsor.type} employers<br/>
                                                     based on your performance.
@@ -503,7 +503,7 @@ class Pathway extends Component {
                         {pathway.steps ?
                             <div>
                                 <div className="center" style={{margin: "100px 0 40px 0"}}>
-                                    < b style={{color: '#B869FF'}} className="mediumText">Pathway Overview</ b>
+                                    < b style={{color: '#B869FF'}} className="font40px font24pxUnder500">Pathway Overview</ b>
                                 </ div>
 
                                 {pathwaySteps}
@@ -513,7 +513,7 @@ class Pathway extends Component {
 
                         {pathway.extraInfo ?
 
-                            <div key="extraInfo" className="center smallText2" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
+                            <div key="extraInfo" className="center font20px font14pxUnder700 font10pxUnder400" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
                                 <img
                                     src="/icons/ToolPurple.png"
                                     id="toolIconExtraInfo"

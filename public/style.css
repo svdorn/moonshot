@@ -1465,7 +1465,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 #pathwayLandingTopInfoList {
     position: absolute;
-    bottom: 70px;
+    bottom: 0px;
     width: 100%;
 }
 
@@ -2200,12 +2200,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     /* #pathwayLandingTopInfoList > li {
         width: 100px;
     } */
-    #pathwayLandingTopInfoList {
-        bottom: 25px;
-    }
+    /* #pathwayLandingTopInfoList {
+        bottom: -20px;
+    } */
     #pathwayLandingTopInfoList > li {
         width: 70px;
-        margin-bottom: 20px;
+        /* margin-bottom: 20px; */
     }
     .pathwayLandingIcons {
         height: 30px;
