@@ -69,14 +69,14 @@ class Home extends Component {
 
     componentDidMount() {
         axios.get("/api/topPathways", {
-            params: {numPathways: 12}
+            params: {numPathways: 6}
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.home) {
                 const returnedPathways = res.data;
                 let pathways2 = undefined;
                 let pathways1 = [];
-                if (returnedPathways.length >= 6) {
+                if (returnedPathways.length >= 4) {
                     const halfwayPoint = returnedPathways.length / 2;
                     pathways2 = returnedPathways.slice(halfwayPoint);
                     pathways1 = returnedPathways.slice(0, halfwayPoint);
