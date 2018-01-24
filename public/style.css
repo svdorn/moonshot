@@ -975,7 +975,6 @@ button.link {
 }
 .onboardingPage3 {
     color: var(--moonshotGreenText);
-    font-size: 18px;
 }
 .onboardingPage3Link {
     color: var(--moonshotGreenText);
@@ -1002,7 +1001,6 @@ button.link {
 #onboardingBioTextareaSpan {
     vertical-align: top;
     color: var(--moonshotGreenText);
-    font-size: 20px;
 }
 .onboardingLeftInput > span, .onboardingRightInput > span {
     display: inline-block;

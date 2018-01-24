@@ -875,7 +875,7 @@ class Onboarding extends Component {
                     </div>
 
                     <div className="center">
-                        <span id="onboardingBioTextareaSpan">Bio</span><br/>
+                        <span id="onboardingBioTextareaSpan" className="font20px">Bio</span><br/>
                         <textarea
                             className="greenInput"
                             id="onboardingBioTextarea"
@@ -892,7 +892,7 @@ class Onboarding extends Component {
 
                     {educationUls}
 
-                    <div className="center onboardingPage3">
+                    <div className="center onboardingPage3 font18px">
                         <button className="greenButton" onClick={this.addEducationArea.bind(this)}>
                             Add another school
                         </button><br/>
