@@ -553,7 +553,10 @@ class Pathway extends Component {
                         </div>
                     </div>
                     :
-                    <CircularProgress/>
+                    <div>
+                        <div className="fullHeight purpleGradient"/>
+                        <div className="fullHeight purpleGradient"/>
+                    </div>
                 }
 
             </div>
