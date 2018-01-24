@@ -188,25 +188,47 @@ class Discover extends Component {
             key++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
-            return (
-                <li className="pathwayPreviewLi explorePathwayPreview"
-                    key={key}
-                    //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                    onClick={() => self.handleOpen(pathway.name)}
-                >
-                    <PathwayPreview
-                        name={pathway.name}
-                        image={pathway.previewImage}
-                        //<!-- logo = {pathway.sponsor.logo} -->
-                        //<!-- sponsorName = {pathway.sponsor.name} -->
-                        completionTime={pathway.estimatedCompletionTime}
-                        deadline={formattedDeadline}
-                        price={pathway.price}
-                        _id={pathway._id}
-                        comingSoon = {pathway.comingSoon}
-                    />
-                </li>
-            );
+            console.log(pathway.comingSoon);
+            if (pathway.comingSoon) {
+                return (
+                    <li className="pathwayPreviewLi explorePathwayPreview"
+                        key={key}
+                        //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                        onClick={() => self.handleOpen(pathway.name)}
+                    >
+                        <PathwayPreview
+                            name={pathway.name}
+                            image={pathway.previewImage}
+                            //<!-- logo = {pathway.sponsor.logo} -->
+                            //<!-- sponsorName = {pathway.sponsor.name} -->
+                            completionTime={pathway.estimatedCompletionTime}
+                            deadline={formattedDeadline}
+                            price={pathway.price}
+                            _id={pathway._id}
+                            comingSoon = {pathway.comingSoon}
+                        />
+                    </li>
+                );
+            } else {
+                return (
+                    <li className="pathwayPreviewLi explorePathwayPreview"
+                        key={key}
+                        onClick={() => self.goTo('/pathway?' + pathway._id)}
+                    >
+                        <PathwayPreview
+                            name={pathway.name}
+                            image={pathway.previewImage}
+                            logo = {pathway.sponsor.logo}
+                            sponsorName = {pathway.sponsor.name}
+                            completionTime={pathway.estimatedCompletionTime}
+                            deadline={formattedDeadline}
+                            price={pathway.price}
+                            _id={pathway._id}
+                            comingSoon = {pathway.comingSoon}
+                        />
+                    </li>
+                );
+            }
         });
 
         // create the pathway previews
