@@ -372,7 +372,7 @@ class Home extends Component {
                     <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
 
                     <div className="topMarginOnSmallScreen" style={{textAlign: "center"}}>
-                        <div className="center mediumText blueText homePathwaysTitle">Pathways</div>
+                        <div className="center font40px font24pxUnder500 blueText homePathwaysTitle">Pathways</div>
                         <div className="homePathwaysDesc font22px font20pxUnder600">
                             Moonshot courses are organized in pathways and
                             sponsored by<br/> employers hiring for those skills.
@@ -410,7 +410,7 @@ class Home extends Component {
                     <div className="purpleToGreenSpacer"/>
 
                     <div className="center" style={{marginBottom: "50px"}}>
-                        <div className="mediumText purpleText homePathwaysTitle">Build Your Skillset</div>
+                        <div className="font40px font24pxUnder500 purpleText homePathwaysTitle">Build Your Skillset</div>
 
                         <div id="exampleSkillsContainer">
                             {exampleSkills}

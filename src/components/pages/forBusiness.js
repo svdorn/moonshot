@@ -523,8 +523,8 @@ class ForBusiness extends Component {
                         <Paper zDepth={3} className="paperBox">
                             <div className="gradientBorderBlueBox">
                                 <div className="forBusinessBox">
-                                    <div className="mediumText">Training</div>
-                                    <div className="mediumText blueText">$200 USD</div>
+                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Training</div>
+                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 blueText">$200 USD</div>
                                     <div>PER STUDENT</div>
                                     <div className="br"><br/></div>
                                     A program curated to your<br/>
@@ -537,8 +537,8 @@ class ForBusiness extends Component {
                         <Paper zDepth={3} className="paperBox">
                             <div className="gradientBorderPurpleToRedBox">
                                 <div className="forBusinessBox">
-                                    <div className="mediumText">Evaluation</div>
-                                    <div className="mediumText purpleText">$50 USD</div>
+                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Evaluation</div>
+                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 purpleText">$50 USD</div>
                                     <div>PER CANDIDATE</div>
                                     <div className="br"><br/></div>
                                     Skills evaluation of your existing<br/>

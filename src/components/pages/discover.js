@@ -290,7 +290,7 @@ class Discover extends Component {
                 </Dialog>
 
                 <div className="greenToBlue headerDiv"/>
-                <div className="center mediumText" style={{marginTop:'15px', marginBottom:'10px'}}>
+                <div className="center font40px font24pxUnder500" style={{marginTop:'15px', marginBottom:'10px'}}>
                     Discover Pathways
                 </div>
 

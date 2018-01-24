@@ -464,7 +464,7 @@ class Profile extends Component {
                                                         style={style.pathwayPreviewUl}>
                                                         {this.state.userPathwayPreviews}
                                                     </ul>
-                                                    : <h1 className="center mediumText">None</h1>}
+                                                    : <h1 className="center font40px font24pxUnder500">None</h1>}
                                             </Tab>
                                             <Tab label="Completed" style={style.tab}>
                                                 {this.state.userCompletedPathwayPreviews ?
@@ -472,7 +472,7 @@ class Profile extends Component {
                                                         style={style.pathwayPreviewUl}>
                                                         {this.state.userCompletedPathwayPreviews}
                                                     </ul>
-                                                    : <h1 className="center mediumText">None</h1>}
+                                                    : <h1 className="center font40px font24pxUnder500">None</h1>}
                                             </Tab>
                                         </Tabs>
                                     </div>
