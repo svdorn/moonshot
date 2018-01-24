@@ -51,7 +51,7 @@ class PathwayContentLink extends Component {
                 {this.state.content !== undefined ?
                     <div className="center" style={{marginBottom: "10px"}}>
                         <h4>{content.name}</h4>
-                        <button className="outlineButton whiteBlueButton">
+                        <button className="outlineButton font30px font20pxUnder500 whiteBlueButton">
                             <a href={content.link} target="_blank" style={{textDecoration: 'none', color: '#70cbff'}}>
                                 Go to Step
                             </a>

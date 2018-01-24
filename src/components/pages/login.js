@@ -132,7 +132,7 @@ class Login extends Component {
                         <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
                         <button
                             type="submit"
-                            className="formSubmitButton"
+                            className="formSubmitButton font24px font16pxUnder600"
                         >
                             Sign In
                         </button>

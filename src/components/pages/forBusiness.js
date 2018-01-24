@@ -262,7 +262,7 @@ class ForBusiness extends Component {
                                     style={styles.marginTop}
                                 />
                                 <br/>
-                                <p className="tinyText2" style={styles.marginTop}>
+                                <p className="font10px" style={styles.marginTop}>
                                     We{"''"}ll get back to you with an email shortly.
                                 </p>
                             </form>
@@ -275,7 +275,7 @@ class ForBusiness extends Component {
                             Data-driven hiring.<br/>
                             Skills training and assessments<br/>
                             curated to your needs.<br/>
-                            <button className="outlineButton darkBlueButton"
+                            <button className="outlineButton font30px font20pxUnder500 darkBlueButton"
                                     onClick={() => this.scrollDown()}>
                                 {"Let's Begin"}
                             </button><br/>

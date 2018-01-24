@@ -98,7 +98,7 @@ class PasswordChange extends Component {
                         </div>
                         <button
                             type="submit"
-                            className="formSubmitButton"
+                            className="formSubmitButton font24px font16pxUnder600"
                         >
                             Change Password
                         </button>
