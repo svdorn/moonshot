@@ -1,7 +1,7 @@
 "use strict"
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Paper, Menu, MenuItem, Divider} from 'material-ui';
+import {Paper, Menu, MenuItem, Divider, DropDownMenu} from 'material-ui';
 import PasswordChange from './passwordchange';
 import Account from './account';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
@@ -9,7 +9,9 @@ import HomepageTriangles from '../miscComponents/HomepageTriangles';
 class Settings extends Component {
     constructor(props) {
         super(props);
-        this.state = {value: 1};
+        this.state = {
+            value: 1,
+        };
     }
 
     handleChange = (event, index) => {
@@ -37,6 +39,17 @@ class Settings extends Component {
                             <MenuItem value={2} primaryText="Change Password"/>
                         </Menu>
                     </div>
+                    {/*<div className="center dropDownSettings">*/}
+                        {/*<DropDownMenu value={this.state.value}*/}
+                                      {/*onChange={this.handleChange}*/}
+                                      {/*style={{fontSize: "20px"}}*/}
+                        {/*>*/}
+                            {/*<MenuItem primaryText="Category" disabled={true}/>*/}
+                            {/*<Divider/>*/}
+                            {/*<MenuItem value={1} primaryText="Settings"/>*/}
+                            {/*<MenuItem value={2} primaryText="Change Password"/>*/}
+                        {/*</DropDownMenu>*/}
+                    {/*</div>*/}
                     {this.state.value === 1 ?
                         <Account/>
                         :

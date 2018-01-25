@@ -132,6 +132,10 @@ form > h1 {
   padding: 0 60px 15px 60px;
 }
 
+.dropDownSettings {
+    display: none !important;
+}
+
 .button {
   margin-top: 12px;
 }
@@ -1676,7 +1680,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         transition: visibility 0s .5s, opacity .5s linear;
     }
     .boxStyle {
-        display: none;
+        display: none !important;
+    }
+    .dropDownSettings {
+        display: block !important;
+        margin: 5px 0px 10px 0px;
     }
 
     #picturesToPathwaysHomepageSpacer {
