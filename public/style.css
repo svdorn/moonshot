@@ -444,8 +444,10 @@ button.link {
 .dividerSmall { height: 50px; }
 
 .boxStyle{
-  display: inline-block;
-  margin: 0 32px 0 32px;
+    position: absolute;
+    top:0;bottom:0; /* Aligns Vertically - Remove for Horizontal Only */
+    margin: 200px auto 320px 100px;
+    padding: 0px 20px 0px 20px;
 }
 
 .appBar{
@@ -1596,10 +1598,18 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         display: none;
     }
 }
+@media only screen and (max-width: 1175px) {
+    .boxStyle {
+        margin: 200px auto 320px 50px;
+    }
+}
 
 @media only screen and (max-width: 1095px) {
     .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(4) {
         display: none;
+    }
+    .boxStyle {
+        margin: 200px auto 320px 25px;
     }
 }
 
@@ -1648,6 +1658,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryImagesLeft > img {
         left: 0;
     }
+    .boxStyle {
+        margin: 200px auto 320px 10px;
+    }
 }
 
 @media only screen and (min-width: 1001px) {
@@ -1661,6 +1674,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         visibility: hidden;
         opacity: 0;
         transition: visibility 0s .5s, opacity .5s linear;
+    }
+    .boxStyle {
+        display: none;
     }
 
     #picturesToPathwaysHomepageSpacer {
@@ -1957,6 +1973,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .smallScreenMenu {
         display: inherit;
+    }
+    .menuUnderline {
+        display: none !important;
     }
     .wideScreenMenuItem {
         display: none !important;

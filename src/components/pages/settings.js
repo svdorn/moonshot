@@ -1,9 +1,10 @@
 "use strict"
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import { Paper, Menu, MenuItem, Divider } from 'material-ui';
+import {Paper, Menu, MenuItem, Divider} from 'material-ui';
 import PasswordChange from './passwordchange';
 import Account from './account';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 class Settings extends Component {
     constructor(props) {
@@ -19,6 +20,7 @@ class Settings extends Component {
     render() {
         return (
             <div className="fullHeight greenToBlue">
+                <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
                 {this.props.notification !== undefined ?
                     <Paper className={"messageHeader " + this.props.notification.type}>
                         {this.props.notification.message}
@@ -26,19 +28,19 @@ class Settings extends Component {
                     :
                     null
                 }
-                <div className="container">
-                    <Paper className="boxStyle">
+                <div className="center">
+                    <div className="lightWhiteForm boxStyle">
                         <Menu value={this.state.value} onChange={this.handleChange} style={{}}>
                             <MenuItem primaryText="Account" disabled={true}/>
                             <Divider/>
                             <MenuItem value={1} primaryText="Settings"/>
                             <MenuItem value={2} primaryText="Change Password"/>
                         </Menu>
-                    </Paper>
+                    </div>
                     {this.state.value === 1 ?
-                        <Account />
+                        <Account/>
                         :
-                       <PasswordChange />
+                        <PasswordChange/>
                     }
                 </div>
             </div>
@@ -47,8 +49,7 @@ class Settings extends Component {
 }
 
 function mapStateToProps(state) {
-    return {
-    };
+    return {};
 }
 
 export default connect(mapStateToProps)(Settings);
