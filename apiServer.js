@@ -35,11 +35,13 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 // --->>> SET UP SESSIONS <<<---
 app.use(session({
     secret: credentials.secretString,
-    saveUninitialized: false,
-    resave: false,
+    saveUninitialized: false, // doesn't save a session if it is new but not modified
+    rolling: true, // resets maxAge on session when user uses site again
+    proxy: true, // must be true since we are using a reverse proxy
+    resave: false, // session only saved back to the session store if session was modified
     cookie: {
-        maxAge: 1000 * 60 * 60 * 24 * 7, //7 days in milliseconds
-        secure: true
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
+        secure: true // only make the cookie if accessing via https
     },
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
