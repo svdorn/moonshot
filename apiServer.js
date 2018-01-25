@@ -187,6 +187,26 @@ const sanitizeOptions = {
     allowedAttributes: []
 }
 
+
+// update all users with a specific thing, used if something is changed about
+// the user model
+// Users.find({}, function(err, users) {
+//     console.log("err is: ", err);
+//     console.log("\n\nusers are: ", users);
+//
+//     for (let userIdx = 0; userIdx < users.length; userIdx++) {
+//         let user = users[userIdx];
+//         Users.count({name: user.name}, function(err, count) {
+//             console.log("count of users with name ", user.name, ": ", count);
+//             const randomNumber = crypto.randomBytes(8).toString('hex');
+//             user.profileUrl = user.name.split(' ').join('-') + "-" + count + "-" + randomNumber;
+//             user.save(function() {
+//                 console.log("user saved");
+//             });
+//         });
+//     }
+// })
+
 //----->> POST USER <<------
 app.post('/users', function (req, res) {
     var user = req.body[0];
@@ -218,16 +238,21 @@ app.post('/users', function (req, res) {
                     console.log(err);
                 }
                 if (foundUser === null) {
-                    // Users.find(SOMETHING, function(err, foundUsers) {
-                    //
-                    // })
-                    // store the user in the db
-                    Users.create(user, function (err, user) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        cleanUser(user, function(cleanedUser) {
-                            res.json(cleanedUser);
+                    // get count of users with that name to get the profile url
+                    Users.count({name: user.name}, function(err, count) {
+                        console.log("count of users with name ", user.name, ": ", count);
+
+                        const randomNumber = crypto.randomBytes(8).toString('hex');
+                        user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+
+                        // store the user in the db
+                        Users.create(user, function (err, user) {
+                            if (err) {
+                                console.log(err);
+                            }
+                            cleanUser(user, function(cleanedUser) {
+                                res.json(cleanedUser);
+                            })
                         })
                     })
                 } else {
@@ -628,6 +653,14 @@ function sendEmail(recipients, subject, content, callback) {
 app.post('/getUserById', function(req, res) {
     const _id = sanitizeHtml(req.body._id, sanitizeOptions);
     const query = { _id };
+    getUserByQuery(query, function (user) {
+        res.json(user);
+    })
+});
+
+app.post('/getUserByProfileUrl', function(req, res) {
+    const profileUrl = sanitizeHtml(req.body.profileUrl, sanitizeOptions);
+    const query = { profileUrl };
     getUserByQuery(query, function (user) {
         res.json(user);
     })

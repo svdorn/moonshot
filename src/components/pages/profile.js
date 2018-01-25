@@ -23,10 +23,10 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        const userId = this.props.location.search.substr(1);
+        const profileUrl = this.props.location.search.substr(1);
         const currentUser = this.props.currentUser;
         // looking at your own profile
-        if ((userId == "") || (currentUser && currentUser._id == userId)) {
+        if ((profileUrl == "") || (currentUser && currentUser.profileUrl == profileUrl)) {
             this.setState({
                 ...this.state,
                 onOwnProfile: true,
@@ -38,7 +38,7 @@ class Profile extends Component {
 
         // looking at someone else's profile
         else {
-            axios.post("/api/getUserById", { _id: userId }
+            axios.post("/api/getUserByProfileUrl", { profileUrl }
             ).then(res => {
                 const user = res.data;
 
