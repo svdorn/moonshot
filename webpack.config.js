@@ -9,6 +9,9 @@ module.exports = {
     path: path.resolve(__dirname, 'public')
   },
   watch: true,
+  resolve: {
+      extensions: ['', '.js', '.jsx']
+  },
   module: {
     loaders: [
       {
@@ -16,6 +19,7 @@ module.exports = {
         exclude:/node_modules/,
         loader: 'babel-loader',
         query: {
+          cacheDirectory: true,
           presets: ['react', 'es2015', 'stage-1']
         }
       }

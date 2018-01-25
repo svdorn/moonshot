@@ -1550,6 +1550,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .forBusinessCircle:nth-child(5) { bottom: 0px; }
 
 .forBusinessBox { padding-top: 30px; }
+.forBusinessBoxText { padding: 0px 2px; }
 .marginTopOnDesktop { margin-top: 60px; }
 
 #aResumeCantDoThisTitle {

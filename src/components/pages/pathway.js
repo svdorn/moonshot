@@ -6,7 +6,7 @@ import {registerForPathway, getUsers, closeNotification} from '../../actions/use
 import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
-//import '../../../public/stylesheets/pathway.css';
+//import './pathway.css';
 import axios from 'axios';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {browserHistory} from 'react-router';
@@ -426,6 +426,7 @@ class Pathway extends Component {
                                             <img
                                                 src={pathway.sponsor.quote.speakerImage}
                                                 style={style.quote.speakerImage}
+                                                id="speakerImage"
                                                 alt={""}
                                             />
                                             <div style={style.quote.speakerInfo}>
