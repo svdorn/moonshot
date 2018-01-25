@@ -218,6 +218,9 @@ app.post('/users', function (req, res) {
                     console.log(err);
                 }
                 if (foundUser === null) {
+                    // Users.find(SOMETHING, function(err, foundUsers) {
+                    //
+                    // })
                     // store the user in the db
                     Users.create(user, function (err, user) {
                         if (err) {

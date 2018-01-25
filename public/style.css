@@ -585,6 +585,7 @@ button.link {
     width: 400px;
     display: inline-block;
     margin: 0 25px 40px;
+    vertical-align: top;
 }
 
 .gradientBorderPurple {
