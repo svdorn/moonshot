@@ -36,6 +36,15 @@ app.set('view engine', 'ejs');
 app.use(requestHandler);
 
 app.use(function(req, res, next) {
+    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
+        res.redirect('https://' + req.get('Host') + req.url);
+    }
+    else
+      next();
+});
+
+
+        app.use(function(req, res, next) {
 // catch 404 and forward to error handler
   var err = new Error('Not Found');
   err.status = 404;
