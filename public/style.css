@@ -100,7 +100,6 @@ footer {
     border: 2px solid var(--moonshotLightBlue);
     background-color: rgba(255,255,255,.4);
     color: var(--moonshotLightBlue);
-    font-size: 25px;
     margin-top: 10px;
 }
 .formContainer {
@@ -141,7 +140,6 @@ form > h1 {
 }
 
 .outlineButton {
-    font-size: 30px;
     padding: 2px 18px 5px;
     margin-top: 25px;
     cursor: pointer;
@@ -185,7 +183,6 @@ form > h1 {
     color: var(--moonshotGreenText);
 }
 .menuItem {
-    font-size: 20px;
     margin: 40px 10px 10px 10px;
 }
 
@@ -221,7 +218,7 @@ form > h1 {
     border-radius: 30px;
     background-color: white;
     font-size: 20px;
-    padding: 5px 10px 1px;
+    padding: 0px 10px 3px;
 }
 .center.skillChips { margin: 0px 15px; }
 .skillChips > div { margin: 0px 10px 10px; }
@@ -599,7 +596,7 @@ button.link {
     background: white;
     height: 100%;
     width: 100%;
-    padding: 6px 13px 0px;
+    padding: 2px 13px;
 }
 
 .gradientBorder {
@@ -893,9 +890,6 @@ button.link {
     vertical-align: top;
     margin-bottom: 7px;
 }
-.onboardingIconsText {
-    font-size: 16px;
-}
 .onboardingListContainer {
     margin-top: 30px;
 }
@@ -922,8 +916,6 @@ button.link {
     margin-right: 5%;
 }
 
-.tinyText2 { font-size: 11px; }
-.tinyText { font-size: 8.8px; }
 .greenText { color: var(--moonshotGreenText); }
 .whiteText { color: white; }
 .blueText { color: var(--moonshotLightBlue); }
@@ -937,11 +929,11 @@ button.link {
 }
 .onboardingPage1Text2 {
     color: white;
-    padding: 3px 15px 0;
+    padding: 2px 15px;
 }
 .onboardingPage1Text3 {
     color: #00c3ff;
-    padding: 3px 15px 0;
+    padding: 2px 15px;
 }
 .onboardingPage1Text2Background{
     background: linear-gradient(to right, #5deaff, #3dabff);
@@ -971,7 +963,7 @@ button.link {
 }
 .onboardingPage2Text2Background{
     background: linear-gradient(to right, #be6aff, #7f0eff);
-    padding: 5px 2px 2px 2px;
+    padding: 2px;
     margin-top: 20px;
     display: inline-block;
 }
@@ -989,7 +981,6 @@ button.link {
 }
 .onboardingPage3 {
     color: var(--moonshotGreenText);
-    font-size: 18px;
 }
 .onboardingPage3Link {
     color: var(--moonshotGreenText);
@@ -1005,7 +996,7 @@ button.link {
     vertical-align: middle;
 }
 .greenCheckbox > .checkMarktrue, .greenCheckbox > .checkMarkfalse {
-    margin-top: -15px;
+    margin-top: -19px;
     margin-left: 2px;
     height: 15px;
     width: 15px;
@@ -1016,7 +1007,6 @@ button.link {
 #onboardingBioTextareaSpan {
     vertical-align: top;
     color: var(--moonshotGreenText);
-    font-size: 20px;
 }
 .onboardingLeftInput > span, .onboardingRightInput > span {
     display: inline-block;
@@ -1031,7 +1021,6 @@ button.link {
     border-bottom: 2px solid var(--moonshotGreenText);
     border-left: 3px solid var(--moonshotGreenText);
     border-right: 3px solid var(--moonshotGreenText);
-    padding-top: 5px;
     font-size: 20px;
     text-align: center;
     height: 40px;
@@ -1561,6 +1550,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .forBusinessCircle:nth-child(5) { bottom: 0px; }
 
 .forBusinessBox { padding-top: 30px; }
+.forBusinessBoxText { padding: 0px 2px; }
 .marginTopOnDesktop { margin-top: 60px; }
 
 #aResumeCantDoThisTitle {
@@ -2050,7 +2040,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         border: 2px solid var(--moonshotLightBlue);
         background-color: rgba(255,255,255,.4);
         color: var(--moonshotLightBlue);
-        font-size: 17px;
         margin: 10px auto;
     }
     .pathwayDescriptionAndSalaryText {
@@ -2108,7 +2097,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
     .forBusinessLine {
-        height: 534px;
+        height: 516px;
         margin-top: -14px;
     }
 
@@ -2137,7 +2126,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectoryTextRightDiv.forBusiness {
         padding-left: 24%;
         padding-right: 5%;
-        height: 172px;
+        height: 160px;
     }
     .homepageTrajectoryTextRight.forBusiness,
     .homepageTrajectoryTextLeft.forBusiness {
@@ -2181,7 +2170,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     } */
 
     .homepageTrajectory.forBusiness {
-        height: 180px;
+        height: 160px;
     }
     .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor,
     .homepageTrajectoryTextLeft.forBusiness {
@@ -2190,9 +2179,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectory.forBusiness#sponsorStudentsForBusiness {
         height: 160px;
     }
-    .homepageTrajectoryTextRight.forBusiness { height: 180px; }
+    .homepageTrajectoryTextRight.forBusiness { height: 160px; }
     .homepageTrajectoryTextLeft.forBusiness { margin-top: 0; }
-    .forBusinessCircle:nth-child(4) { top: 355px; }
+    .forBusinessCircle:nth-child(4) { top: 336px; }
 
 
     .homePathwaysDesc { display: none; }
@@ -2215,7 +2204,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         padding-top: 2px;
     }
 
-    .outlineButton { font-size: 20px; margin-top: 15px; }
+    .outlineButton { margin-top: 15px; }
 
     #exampleSkillsContainer {
         width: 95%;

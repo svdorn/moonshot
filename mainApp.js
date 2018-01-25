@@ -1,6 +1,12 @@
 require('babel-core/register')({
   "presets":["es2015", "react", "stage-1"]
 })
+// IF ANYTHING WITH CSS FILES IS EVER MESSED UP IT MAY BE BECAUSE OF THIS
+// this fixes the problem of css files not being able to be imported into
+// components directly
+require.extensions['.css'] = () => {
+  return;
+};
 
 var express = require('express');
 var path = require('path');

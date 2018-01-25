@@ -84,7 +84,7 @@ class ForgotPassword extends Component {
                         </div>
                         <button
                             type="submit"
-                            className="formSubmitButton"
+                            className="formSubmitButton font24px font16pxUnder600"
                         >
                             Send Email
                         </button>

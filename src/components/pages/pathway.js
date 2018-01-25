@@ -6,7 +6,7 @@ import {registerForPathway, getUsers, closeNotification} from '../../actions/use
 import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
-//import '../../../public/stylesheets/pathway.css';
+//import './pathway.css';
 import axios from 'axios';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {browserHistory} from 'react-router';
@@ -29,7 +29,6 @@ class Pathway extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.location);
         const id = this.props.location.search.substr(1);
 
         axios.get("/api/getPathwayById", {
@@ -248,7 +247,7 @@ class Pathway extends Component {
 
                             <div className="infoBox whiteText font40px font24pxUnder500" style={{zIndex: "20"}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
-                                <button className="outlineButton purpleGradientButton"
+                                <button className="outlineButton font30px font20pxUnder500 purpleGradientButton"
                                         style={{backgroundColor: "#9B6BFB", border: "2px solid white"}}
                                         onClick={this.handleClick.bind(this)}>
                                     {"Sign Up"}
@@ -427,6 +426,7 @@ class Pathway extends Component {
                                             <img
                                                 src={pathway.sponsor.quote.speakerImage}
                                                 style={style.quote.speakerImage}
+                                                id="speakerImage"
                                                 alt={""}
                                             />
                                             <div style={style.quote.speakerInfo}>
@@ -538,7 +538,7 @@ class Pathway extends Component {
                             : null
                         }
                         <div className="center" style={{marginBottom: "20px", clear: "both"}}>
-                            <button className="outlineButton"
+                            <button className="outlineButton font30px font20pxUnder500"
                                     style={{
                                         backgroundColor: "transparent",
                                         border: "2px solid #B869FF",

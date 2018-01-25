@@ -15,9 +15,6 @@ const styles = {
     underlineStyle: {
         display: 'none',
     },
-    menuItemStyle: {
-        textColor: '#00c3ff',
-    },
     anchorOrigin: {
         vertical: 'top',
         horizontal: 'left'
@@ -27,7 +24,6 @@ const styles = {
 class Menu extends Component {
     constructor(props) {
         super(props);
-        console.log(this.props.location.pathname);
         let value = 1;
         if (this.props.location.pathname === '/settings') {
             value = 2;
@@ -36,7 +32,6 @@ class Menu extends Component {
     }
 
     componentDidUpdate() {
-        console.log("here");
         if (this.props.location.pathname === '/settings') {
             if (this.state.value !== 2) {
                 this.setState({value:2});
@@ -91,32 +86,32 @@ class Menu extends Component {
 
         let moonshotLogo = "/images/OfficialLogoWhite.png";
         let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
-        let menuItemClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem"
+        let menuItemClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem"
         if (this.props.blueHeader) {
             moonshotLogo = "/images/OfficialLogoBlue.png";
             dropdownClass = "headerDropdownBlue wideScreenMenuItem";
-            menuItemClass = "menuItem borderBottomClickable noWrap blueText wideScreenMenuItem"
+            menuItemClass = "menuItem font20px borderBottomClickable noWrap blueText wideScreenMenuItem"
         }
         let discoverClass = menuItemClass;
         if (this.props.location.pathname === '/discover') {
-            discoverClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
+            discoverClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let homeClass = menuItemClass;
         if (this.props.location.pathname === '/') {
-            homeClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
+            homeClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let forBusClass = menuItemClass;
         if (this.props.location.pathname === '/forBusiness') {
-            forBusClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
+            forBusClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let loginClass = menuItemClass;
         if (this.props.location.pathname === '/login') {
-            loginClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
+            loginClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let myPathwaysClass = menuItemClass;
         let hoverWidth = "52px";
         if (this.props.location.pathname === '/myPathways') {
-            myPathwaysClass = "menuItem borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
+            myPathwaysClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         if (this.props.location.pathname === '/profile') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";

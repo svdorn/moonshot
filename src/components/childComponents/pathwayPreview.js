@@ -80,21 +80,21 @@ class PathwayPreview extends Component {
                                         <li>
                                             <div>
                                                 <img src="/icons/ClockBlue.png" style={iconStyle} /><br/>
-                                                <span className="tinyText">Completion Time</span><br/>
+                                                <span className="font8px">Completion Time</span><br/>
                                                 {this.props.completionTime}
                                             </div>
                                         </li>
                                         <li>
                                             <div>
                                                 <img src="/icons/CalandarBlueGradient.png" style={iconStyle} /><br/>
-                                                <span className="tinyText">Deadline</span><br/>
+                                                <span className="font8px">Deadline</span><br/>
                                                 TBA
                                             </div>
                                         </li>
                                         <li>
                                             <div>
                                                 <img src="/icons/DollarSignBlue.png" style={priceIconStyle} /><br/>
-                                                <span className="tinyText">Price</span><br/>
+                                                <span className="font8px">Price</span><br/>
                                                 {this.props.price}
                                             </div>
                                         </li>

@@ -262,7 +262,7 @@ class ForBusiness extends Component {
                                     style={styles.marginTop}
                                 />
                                 <br/>
-                                <p className="tinyText2" style={styles.marginTop}>
+                                <p className="font10px" style={styles.marginTop}>
                                     We{"''"}ll get back to you with an email shortly.
                                 </p>
                             </form>
@@ -275,7 +275,7 @@ class ForBusiness extends Component {
                             Data-driven hiring.<br/>
                             Skills training and assessments<br/>
                             curated to your needs.<br/>
-                            <button className="outlineButton darkBlueButton"
+                            <button className="outlineButton font30px font20pxUnder500 darkBlueButton"
                                     onClick={() => this.scrollDown()}>
                                 {"Let's Begin"}
                             </button><br/>
@@ -363,7 +363,7 @@ class ForBusiness extends Component {
                             <div className="homepageTrajectoryTextLeft forBusiness">
                                 <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextLeftDiv forBusiness">
                                     <h2 className="blueText font18pxUnder500"><b>What Skills Are You <div className="above800only br"><br/></div>Hiring For?</b></h2>
-                                    UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe...
+                                    UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe, SQL, Google Analytics, DevOps, Agile...
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight">
@@ -527,10 +527,12 @@ class ForBusiness extends Component {
                                     <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 blueText">$200 USD</div>
                                     <div>PER MONTH</div>
                                     <div className="br"><br/></div>
+                                    <div className="forBusinessBoxText font14px font12pxUnder900">
                                     Full access to students, student data from<br/>
                                     quantitative assessments, skills scoring and projects,
                                     existing pathways and curated pathways for your company.<br/>
                                     Starts with quarterly plans.
+                                    </div>
                                 </div>
                             </div>
                         </Paper>
@@ -538,13 +540,15 @@ class ForBusiness extends Component {
                             <div className="gradientBorderPurpleToRedBox">
                                 <div className="forBusinessBox">
                                     <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Successful Hire</div>
-                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 purpleText">1-6%</div>
+                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 purpleText">1-3%</div>
                                     <div>GROSS ANNUAL SALARY</div>
                                     <div className="br"><br/></div>
+                                    <div className="forBusinessBoxText font14px font12pxUnder900">
                                     1% to 3% for full and part time hires.<br/>
                                     4% to 6% for interns or co-ops.<br/>
                                     Pay only after he or she meets all of your<br/>
                                     pre-employment requirements and accepts your offer.
+                                    </div>
                                 </div>
                             </div>
                         </Paper>
