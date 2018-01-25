@@ -1,10 +1,10 @@
 "use strict"
-import React, { Component } from 'react';
+import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import { updateUser } from '../../actions/usersActions';
-import { TextField, RaisedButton, Paper } from 'material-ui';
-import { Field, reduxForm } from 'redux-form';
+import {updateUser} from '../../actions/usersActions';
+import {TextField, RaisedButton, Paper} from 'material-ui';
+import {Field, reduxForm} from 'redux-form';
 
 const styles = {
     floatingLabelStyle: {
@@ -74,26 +74,35 @@ class Account extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <Paper className="formOther">
-                <form onSubmit={this.handleSubmit.bind(this)}>
-                    <h1>Settings</h1>
-                    <Field
-                        name="name"
-                        component={renderTextField}
-                        label="Full Name"
-                    /><br/>
-                    <Field
-                        name="email"
-                        component={renderTextField}
-                        label="Email"
-                    /><br/>
-                    <RaisedButton type="submit"
-                                  label="Update User"
-                                  primary={true}
-                                  className="button"
-                    />
-                </form>
-            </Paper>
+            <div className="formContainer" style={{display:'inline-block'}}>
+                <div className="form lightWhiteForm">
+                    <form onSubmit={this.handleSubmit.bind(this)}>
+                        <h1>Settings</h1>
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
+                            <Field
+                                name="name"
+                                component={renderTextField}
+                                label="Full Name"
+                            /></div>
+                        <br/>
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
+                            <Field
+                                name="email"
+                                component={renderTextField}
+                                label="Email"
+                            /></div>
+                        <br/>
+                        <button
+                            type="submit"
+                            className="formSubmitButton"
+                        >
+                            Update User
+                        </button>
+                    </form>
+                </div>
+            </div>
         );
     }
 }
