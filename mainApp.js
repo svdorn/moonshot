@@ -41,18 +41,6 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.use(requestHandler);
 
-app.enable('trust proxy');
-app.use (function (req, res, next) {
-    if (req.secure) {
-        // request was via https, so do no special handling
-        next();
-    } else {
-        // request was via http, so redirect to https
-        res.redirect('https://' + req.headers.host + req.url);
-    }
-});
-
-
 app.use(function(req, res, next) {
 // catch 404 and forward to error handler
   var err = new Error('Not Found');
