@@ -524,7 +524,7 @@ class ForBusiness extends Component {
                             <div className="gradientBorderBlueBox">
                                 <div className="forBusinessBox">
                                     <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Full Access</div>
-                                    <div className="font36px font24pxUnder900 font24pxUnder500 font16pxUnder350 blueText">$200 USD</div>
+                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 blueText">$200 USD</div>
                                     <div>PER MONTH</div>
                                     <div className="br"><br/></div>
                                     Full access to students, student data from<br/>
@@ -538,8 +538,8 @@ class ForBusiness extends Component {
                             <div className="gradientBorderPurpleToRedBox">
                                 <div className="forBusinessBox">
                                     <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Successful Hire</div>
-                                    <div className="font36px font24pxUnder900 font24pxUnder500 font16pxUnder350 purpleText">% of First Year Salary</div>
-                                    <div>PER HIRE</div>
+                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 purpleText">1-6%</div>
+                                    <div>GROSS ANNUAL SALARY</div>
                                     <div className="br"><br/></div>
                                     1% to 3% for full and part time hires.<br/>
                                     4% to 6% for interns or co-ops.<br/>
