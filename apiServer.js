@@ -21,17 +21,14 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+// trust the first proxy encountered because we run through a proxy
+app.set('trust proxy', 1);
 
 // APIs
 var mongoose = require('mongoose');
-// MONGO LAB - OLD
-//mongoose.connect('mongodb://testUser:test@ds111476.mlab.com:11476/bookshop')
-// MONGO LAB - NEW
+// MONGO LAB
 const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds125146.mlab.com:25146/testmoonshot'
 mongoose.connect(dbConnectLink);
-// LOCAL DB
-//mongoose.connect('mongodb://localhost:27017/bookshop');
-
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
@@ -40,7 +37,10 @@ app.use(session({
     secret: credentials.secretString,
     saveUninitialized: false,
     resave: false,
-    cookie: {maxAge: 1000 * 60 * 60 * 24 * 7}, //7 days in milliseconds
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7, //7 days in milliseconds
+        secure: true
+    },
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
