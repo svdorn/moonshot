@@ -8,7 +8,7 @@ var path = require('path');
 app.use(express.static('public'))
 
 app.get('*', function(req, res){
-    res.redirect('https://www.moonshotlearning.org' + req.url);
+  res.sendFile(path.resolve(__dirname, 'public', 'index.html'))
 })
 
 app.listen(8081, function() {
