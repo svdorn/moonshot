@@ -41,16 +41,19 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.set('view engine', 'ejs');
 app.use(requestHandler);
 
-app.use(function(req, res, next) {
-    if((!req.secure) && (req.get('X-Forwarded-Proto') !== 'https')) {
-        res.redirect('https://' + req.get('Host') + req.url);
+app.enable('trust proxy');
+app.use (function (req, res, next) {
+    if (req.secure) {
+        // request was via https, so do no special handling
+        next();
+    } else {
+        // request was via http, so redirect to https
+        res.redirect('https://' + req.headers.host + req.url);
     }
-    else
-      next();
 });
 
 
-        app.use(function(req, res, next) {
+app.use(function(req, res, next) {
 // catch 404 and forward to error handler
   var err = new Error('Not Found');
   err.status = 404;
