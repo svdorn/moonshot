@@ -528,7 +528,7 @@ class ForBusiness extends Component {
                                     <div>PER MONTH</div>
                                     <div className="br"><br/></div>
                                     Full access to students, student data from<br/>
-                                    quantitative assessments, skills scoring and projects,<br/>
+                                    quantitative assessments, skills scoring and projects,
                                     existing pathways and curated pathways for your company.<br/>
                                     Starts with quarterly plans.
                                 </div>
