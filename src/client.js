@@ -7,10 +7,10 @@ let resourceName = "";
 if (url.length > protocolLength + 11)  {
     resourceName = window.location.href.substring(protocolLength + 2, protocolLength + 11);
 }
-if (location.protocol != 'https:' && resourceName !== "localhost") {
+const shouldRedirectToHttps = location.protocol != 'https:' && resourceName !== "localhost";
+if (shouldRedirectToHttps) {
     location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
 }
-
 
 import React from 'react';
 import { render } from 'react-dom';
@@ -24,19 +24,22 @@ import thunk from 'redux-thunk';
 // import combined reducers
 import reducers from './reducers/index';
 
-// STEP 1 create the store
-const middleware = applyMiddleware(thunk);
-// WE WILL PASS INITIAL STATE FROM SERVER STORE
-const initialState = window.INITIAL_STATE;
-const store = createStore(reducers, initialState, middleware);
-
 import routes from './routes'
-const Routes = (
-  <Provider store={store}>
-      {routes}
-  </Provider>
-)
 
-render(
-  Routes, document.getElementById('app')
-);
+if (!shouldRedirectToHttps) {
+    // STEP 1 create the store
+    const middleware = applyMiddleware(thunk);
+    // WE WILL PASS INITIAL STATE FROM SERVER STORE
+    const initialState = window.INITIAL_STATE;
+    const store = createStore(reducers, initialState, middleware);
+
+    const Routes = (
+      <Provider store={store}>
+          {routes}
+      </Provider>
+    )
+
+    render(
+      Routes, document.getElementById('app')
+    );
+}
