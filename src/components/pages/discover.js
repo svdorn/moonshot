@@ -188,11 +188,11 @@ class Discover extends Component {
             key++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
-            if (!pathway.comingSoon && self.props.currentUser) {
+            if (!pathway.comingSoon && self.props.currentUser && self.props.currentUser != "no user") {
                 return (
                     <li className="pathwayPreviewLi explorePathwayPreview"
                         key={key}
-                        onClick={() => self.goTo('/pathway?' + pathway._id)}
+                        onClick={() => self.goTo('/pathway?' + pathway.url)}
                     >
                         <PathwayPreview
                             name={pathway.name}

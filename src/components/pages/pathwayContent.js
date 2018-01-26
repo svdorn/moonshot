@@ -28,7 +28,7 @@ class PathwayContent extends Component {
 
         const pathwayId = this.props.location.search.substr(1);
 
-        axios.get("/api/getPathwayById", {
+        axios.get("/api/pathwayById", {
             params: {
                 _id: pathwayId
             }

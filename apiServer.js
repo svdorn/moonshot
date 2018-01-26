@@ -982,7 +982,7 @@ app.get('/getVideo', function (req, res) {
 });
 
 //----->> GET PATHWAY BY ID <<-----
-app.get('/getPathwayById', function (req, res) {
+app.get('/pathwayById', function (req, res) {
     const _id = req.query._id;
     const query = {_id: _id};
 
@@ -995,6 +995,32 @@ app.get('/getPathwayById', function (req, res) {
 
     })
 });
+
+//----->> GET PATHWAY BY URL <<-----
+app.get('/pathwayByPathwayUrlNoContent', function (req, res) {
+    const pathwayUrl = req.query.pathwayUrl;
+    const query = {url: pathwayUrl};
+
+    Pathways.findOne(query, function (err, pathway) {
+        if (err) {
+            console.log("error in get pathway by url")
+        } else if (pathway) {
+            res.json(removeContentFromPathway(pathway));
+        } else {
+            res.status(404).send("No pathway found");
+        }
+
+    })
+});
+
+function removeContentFromPathway(pathway) {
+    steps = pathway.steps;
+    for (let i = 0; i < steps.length; i++) {
+        steps[i].substeps = undefined;
+    }
+    pathway.steps = steps;
+    return pathway;
+}
 
 //----->> SEARCH PATHWAYS <<------
 app.get('/search', function (req, res) {
@@ -1030,7 +1056,7 @@ app.get('/search', function (req, res) {
 
     //const limit = 4;
     const sort = {avgRating: -1};
-    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon";
+    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon url";
 
     Pathways.find(query)
         .limit(limit)
