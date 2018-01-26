@@ -10,13 +10,14 @@ import reducers from './src/reducers/index';
 import routes from './src/routes';
 
 function handleRender(req, res) {
-  axios.get('http://localhost:3001/users')
-    .then(function(response) {
+//  axios.get('http://localhost:3001/users')
+//    .then(function(response) {
       // var myHtml = JSON.stringify(response.data);
       // res.render('index', {myHtml});
 
       // STEP 1 CREATE A REDUX STORE ON THE SERVER
-      const store = createStore(reducers, {"users": {"users": response.data}});
+//      const store = createStore(reducers, {"users": {"users": response.data}});
+      const store = createStore(reducers, {"users": {"users": []}});
       // STEP 2 GET INITIAL STATE FROM THE STORE
       const initialState = JSON.stringify(store.getState())
           .replace(/<\/script/g, '<\\/script')
@@ -43,10 +44,10 @@ function handleRender(req, res) {
           res.status(404).send('Not Found');
         }
       })
-    })
-    .catch(function(err) {
-      console.log('#Initial Server-side rendering error', err);
-    })
+//    })
+//    .catch(function(err) {
+//      console.log('#Initial Server-side rendering error', err);
+//    })
 }
 
 module.exports = handleRender;
