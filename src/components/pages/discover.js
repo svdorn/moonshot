@@ -83,7 +83,6 @@ class Discover extends Component {
     };
 
     search() {
-        console.log('yo');
         axios.get("/api/search", {
             params: {
                 searchTerm: this.state.term,

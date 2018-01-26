@@ -1,4 +1,17 @@
 'use strict'
+
+// if not on https, redirect to https
+const protocolLength = window.location.protocol.length;
+const url = window.location.href;
+let resourceName = "";
+if (url.length > protocolLength + 11)  {
+    resourceName = window.location.href.substring(protocolLength + 2, protocolLength + 11);
+}
+if (location.protocol != 'https:' && resourceName !== "localhost") {
+    location.href = 'https:' + window.location.href.substring(window.location.protocol.length);
+}
+
+
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
