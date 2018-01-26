@@ -42,14 +42,18 @@ export function getUserFromSession(callback) {
     };
 }
 
-export function login(user, saveSession) {
+export function login(user, saveSession, navigateBackUrl) {
     return function(dispatch) {
         axios.post("/api/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
                 dispatch({type: "CLOSE_NOTIFICATION"});
-                browserHistory.push('/discover');
+                let nextUrl = '/discover';
+                if (navigateBackUrl) {
+                    nextUrl = navigateBackUrl;
+                }
+                browserHistory.push(nextUrl);
 
                 // axios.post("/api/userSession", {userId: user._id, hashedVerificationToken: user.hashedVerificationToken})
                 //     .then(function(response) {
@@ -193,6 +197,12 @@ export function changePasswordForgot(user) {
             .catch(function(err) {
                 dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: "Error changing password", type: "errorHeader"}})
             })
+    }
+}
+
+export function setNavigateBack(navigateBackUrl) {
+    return function(dispatch) {
+        dispatch({type:"SET_NAVIGATE_BACK", navigateBackUrl});
     }
 }
 

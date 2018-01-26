@@ -6,7 +6,7 @@ import PathwayContentArticle from '../childComponents/pathwayContentArticle';
 import {Tabs, Tab, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, updateCurrentSubStep, setHeaderBlue} from "../../actions/usersActions";
+import {closeNotification, updateCurrentSubStep, setHeaderBlue, setNavigateBack} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayStepList from '../childComponents/pathwayStepList';
 import axios from 'axios';
@@ -25,73 +25,83 @@ class PathwayContent extends Component {
 
     componentDidMount() {
         // this.props.setHeaderBlue(true);
+        const user = this.props.currentUser;
 
-        const pathwayId = this.props.location.search.substr(1);
+        if (user && user != "no user") {
+            const pathwayUrl = this.props.location.search.substr(1);
 
-        axios.get("/api/pathwayById", {
-            params: {
-                _id: pathwayId
-            }
-        }).then(res => {
-            const pathway = res.data;
-
-            // if we don't know what step we're currently on
-            if (this.props.step == undefined) {
-                // find the current pathway in the user's profile
-                let userPath = this.props.currentUser.pathways.find(function (path) {
-                    return path.pathwayId == pathwayId;
-                });
-
-                const user = this.props.currentUser;
-
-                // if the user doesn't have a step saved in db for this pathway,
-                // the step is set the first step
-                if (userPath.currentStep.step == undefined) {
-                    const stepNumber = 1;
-                    const subStep = pathway.steps.find(function (step) {
-                        return step.order == 1;
-                    }).subSteps.find(function (subStep) {
-                        return subStep.order == 1;
-                    });
-                    this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
+            axios.get("/api/pathwayByPathwayUrl", {
+                params: {
+                    pathwayUrl,
+                    userCredentials: {
+                        // userId:
+                    }
                 }
-                // otherwise save the step that was saved in the db to redux state
-                else {
-                    const stepNumber = userPath.currentStep.step;
-                    const subStep = pathway.steps.find(function (step) {
-                        return step.order == stepNumber;
-                    }).subSteps.find(function (subStep) {
-                        return subStep.order == userPath.currentStep.subStep;
-                    })
-                    this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
-                }
+            }).then(res => {
+                const pathway = res.data;
+                const pathwayId = pathway._id;
 
-                this.setState({pathway}, () => {
-                });
-            }
-
-            // we do know what step we're currently on
-            else {
-                // if the currently saved step is not for the right pathway
-                if (this.props.step.pathwayId != pathwayId) {
-                    const user = this.props.currentUser;
+                // if we don't know what step we're currently on
+                if (this.props.step == undefined) {
+                    // find the current pathway in the user's profile
                     let userPath = this.props.currentUser.pathways.find(function (path) {
                         return path.pathwayId == pathwayId;
                     });
-                    const stepNumber = userPath.currentStep.step;
-                    const subStep = pathway.steps.find(function (step) {
-                        return step.order == stepNumber;
-                    }).subSteps.find(function (subStep) {
-                        return subStep.order == userPath.currentStep.subStep;
-                    })
-                    this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
+
+                    // if the user doesn't have a step saved in db for this pathway,
+                    // the step is set the first step
+                    if (userPath.currentStep.step == undefined) {
+                        const stepNumber = 1;
+                        const subStep = pathway.steps.find(function (step) {
+                            return step.order == 1;
+                        }).subSteps.find(function (subStep) {
+                            return subStep.order == 1;
+                        });
+                        this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
+                    }
+                    // otherwise save the step that was saved in the db to redux state
+                    else {
+                        const stepNumber = userPath.currentStep.step;
+                        const subStep = pathway.steps.find(function (step) {
+                            return step.order == stepNumber;
+                        }).subSteps.find(function (subStep) {
+                            return subStep.order == userPath.currentStep.subStep;
+                        })
+                        this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
+                    }
+
+                    this.setState({pathway}, () => {
+                    });
                 }
-                this.setState({pathway})
-            }
-        })
-        // .catch(function (err) {
-        //     console.log("error getting searched-for pathway");
-        // })
+
+                // we do know what step we're currently on
+                else {
+                    // if the currently saved step is not for the right pathway
+                    if (this.props.step.pathwayId != pathwayId) {
+                        const user = this.props.currentUser;
+                        let userPath = this.props.currentUser.pathways.find(function (path) {
+                            return path.pathwayId == pathwayId;
+                        });
+                        const stepNumber = userPath.currentStep.step;
+                        const subStep = pathway.steps.find(function (step) {
+                            return step.order == stepNumber;
+                        }).subSteps.find(function (subStep) {
+                            return subStep.order == userPath.currentStep.subStep;
+                        })
+                        this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
+                    }
+                    this.setState({pathway})
+                }
+            })
+        }
+
+        // if no user, redirect to login
+        else {
+            console.log(this.props.location);
+
+            this.props.setNavigateBack("/pathwayContent" + this.props.location.search)
+            this.goTo("/login");
+        }
     }
 
     goTo(route) {
@@ -283,6 +293,7 @@ function mapDispatchToProps(dispatch) {
         updateCurrentSubStep,
         closeNotification,
         setHeaderBlue,
+        setNavigateBack
     }, dispatch);
 }
 

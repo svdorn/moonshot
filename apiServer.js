@@ -1012,6 +1012,22 @@ app.get('/pathwayByPathwayUrlNoContent', function (req, res) {
 
     })
 });
+app.get('/pathwayByPathwayUrl', function (req, res) {
+    const pathwayUrl = req.query.pathwayUrl;
+    const userCredentials = req.query.userCredentials;
+    const query = {url: pathwayUrl};
+
+    Pathways.findOne(query, function (err, pathway) {
+        if (err) {
+            console.log("error in get pathway by url")
+        } else if (pathway) {
+            res.json(pathway);
+        } else {
+            res.status(404).send("No pathway found");
+        }
+
+    })
+});
 
 function removeContentFromPathway(pathway) {
     steps = pathway.steps;

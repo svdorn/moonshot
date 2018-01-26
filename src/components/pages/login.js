@@ -91,7 +91,7 @@ class Login extends Component {
 
         let saveSession = true;
 
-        this.props.login(user, saveSession);
+        this.props.login(user, saveSession, this.props.navigateBackUrl);
     }
 
     goTo (route)  {
@@ -155,6 +155,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
+        navigateBackUrl: state.users.navigateBackUrl
     };
 }
 

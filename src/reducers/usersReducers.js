@@ -34,7 +34,12 @@ export function usersReducers(state = initialState, action) {
             return {...state, users: [...action.payload]};
             break;
         case "LOGIN":
-            return {...state, notification: undefined, currentUser: action.payload};
+            return {
+                ...state,
+                notification: undefined,
+                navigateBackUrl: undefined,
+                currentUser: action.payload
+            };
             break;
         case "LOGIN_REJECTED":
             // TODO deal with failed login
@@ -197,6 +202,11 @@ export function usersReducers(state = initialState, action) {
         case "TURN_HEADER_BLUE":
             return {
                 ...state, blueHeader: action.shouldBeBlue
+            }
+            break;
+        case "SET_NAVIGATE_BACK":
+            return {
+                ...state, navigateBackUrl: action.navigateBackUrl
             }
             break;
     }
