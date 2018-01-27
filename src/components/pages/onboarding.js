@@ -910,12 +910,10 @@ class Onboarding extends Component {
                         <button className="greenButton" onClick={this.addEducationArea.bind(this)}>
                             Add another school
                         </button><br/>
-                        <div className="greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                        <div className="checkbox mediumCheckbox greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
                                 className={"checkMark"  + this.state.inSchool}
                                 src="/icons/CheckMarkGreen.png"
-                                height={15}
-                                width={15}
                             />
                         </div>
                         I am currently in school<br/>

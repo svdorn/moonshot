@@ -987,23 +987,43 @@ button.link {
     color: var(--moonshotGreenText);
     text-decoration: underline;
 }
-.greenCheckbox {
+
+.checkbox {
     display: inline-block;
-    height: 18px;
-    width: 18px;
-    border: 2px solid var(--moonshotGreenText);
     cursor: pointer;
-    margin: -5px 10px 0px 0px;
     vertical-align: middle;
 }
-.greenCheckbox > .checkMarktrue, .greenCheckbox > .checkMarkfalse {
-    margin-top: -19px;
-    margin-left: 2px;
+.smallCheckbox {
+    height: 12px;
+    width: 12px;
+    margin: -3px 5px 0px 0px;
+}
+.mediumCheckbox {
+    height: 18px;
+    width: 18px;
+    margin: -5px 10px 0px 0px;
+}
+.greenCheckbox {
+    border: 2px solid var(--moonshotGreenText);
+}
+.blueCheckbox {
+    border: 2px solid var(--moonshotLightBlue);
+}
+.mediumCheckbox > img {
     height: 15px;
     width: 15px;
+    margin-top: -19px;
+    margin-left: 2px;
 }
-.greenCheckbox > .checkMarkfalse { visibility: hidden; }
-.greenCheckbox > .checkMarktrue { visibility: visible; }
+.smallCheckbox > img {
+    height: 10px;
+    width: 10px;
+    margin-top: -19px;
+    margin-left: 1px;
+}
+.checkbox > .checkMarkfalse { visibility: hidden; }
+.checkbox > .checkMarktrue { visibility: visible; }
+
 .onboardingLeftInput, .onboardingRightInput,
 #onboardingBioTextareaSpan {
     vertical-align: top;

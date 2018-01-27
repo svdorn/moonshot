@@ -71,15 +71,14 @@ class Login extends Component {
         let self = this;
         axios.get("/api/keepMeLoggedIn")
         .then(function(res) {
-            console.log('res is: ', res);
             self.setState({
                 ...self.state,
                 keepMeLoggedIn: res.data
             })
         })
-        // .catch(function(err) {
-        //     console.log("error getting 'keep me logged in' option")
-        // });
+        .catch(function(err) {
+            console.log("error getting 'keep me logged in' option")
+        });
     }
 
     handleSubmit(e) {
@@ -128,7 +127,7 @@ class Login extends Component {
 
         axios.post("/api/keepMeLoggedIn", { stayLoggedIn: !this.state.keepMeLoggedIn })
         .catch(function(err) {
-            console.log("error posting keep me logged in option: ", err);
+            console.log("error posting 'keep me logged in' option: ", err);
         });
         this.setState({
             ...this.state,
@@ -161,14 +160,15 @@ class Login extends Component {
                         </div>
                         <div className="clickable blueText" onClick={() => this.goTo('/signup')}>Create account</div>
                         <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
-                        <div className="greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                        <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
-                                className={"checkMark"  + this.state.keepMeLoggedIn}
-                                src="/icons/CheckMarkGreen.png"
-                                height={15}
-                                width={15}
+                                className={"checkMark" + this.state.keepMeLoggedIn}
+                                src="/icons/CheckMark.png"
                             />
                         </div>
+                        <div className="blueText" style={{display:"inline-block"}}>
+                            Keep me logged in
+                        </div><br/>
                         <button
                             type="submit"
                             className="formSubmitButton font24px font16pxUnder600"
