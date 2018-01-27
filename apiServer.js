@@ -52,10 +52,30 @@ app.post('/signOut', function (req, res) {
     req.session.save(function(err) {
         if (err) {
             console.log("error removing user session: ", err);
+            res.json("failure removing user session");
+        } else {
+            res.json("success");
         }
-        res.json("success");
     })
-})
+});
+
+// change session to store whether user wants default of "Keep Me Logged In"
+// to be checked or unchecked
+app.post("/keepMeLoggedIn", function(req, res) {
+    req.session.stayLoggedIn = req.body.stayLoggedIn;
+    console.log("req.body.stayLoggedIn is: ", req.body.stayLoggedIn);
+    req.session.save(function(err) {
+        if (err) {
+            console.log("error saving 'keep me logged in' setting: ", err);
+            res.json("error saving 'keep me logged in' setting");
+        } else {
+            res.json("success");
+        }
+    })
+});
+app.get("/keepMeLoggedIn", function(req, res) {
+    res.json(req.session.stayLoggedIn);
+});
 
 // GET USER SESSION
 app.get('/userSession', function (req, res) {

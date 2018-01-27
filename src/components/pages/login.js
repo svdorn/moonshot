@@ -1,5 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
+import axios from 'axios';
 import { TextField } from 'material-ui';
 import { login, closeNotification } from '../../actions/usersActions';
 import { connect } from 'react-redux';
@@ -60,7 +61,25 @@ const validate = values => {
 class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = {showErrors: true};
+        this.state = {
+            showErrors: true,
+            keepMeLoggedIn: false
+        };
+    }
+
+    componentDidMount() {
+        let self = this;
+        axios.get("/api/keepMeLoggedIn")
+        .then(function(res) {
+            console.log('res is: ', res);
+            self.setState({
+                ...self.state,
+                keepMeLoggedIn: res.data
+            })
+        })
+        // .catch(function(err) {
+        //     console.log("error getting 'keep me logged in' option")
+        // });
     }
 
     handleSubmit(e) {
@@ -105,6 +124,18 @@ class Login extends Component {
         window.scrollTo(0, 0);
     }
 
+    handleCheckMarkClick() {
+
+        axios.post("/api/keepMeLoggedIn", { stayLoggedIn: !this.state.keepMeLoggedIn })
+        .catch(function(err) {
+            console.log("error posting keep me logged in option: ", err);
+        });
+        this.setState({
+            ...this.state,
+            keepMeLoggedIn: !this.state.keepMeLoggedIn
+        })
+    }
+
     render() {
         return (
             <div className="fullHeight greenToBlue formContainer">
@@ -130,6 +161,14 @@ class Login extends Component {
                         </div>
                         <div className="clickable blueText" onClick={() => this.goTo('/signup')}>Create account</div>
                         <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
+                        <div className="greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                            <img
+                                className={"checkMark"  + this.state.keepMeLoggedIn}
+                                src="/icons/CheckMarkGreen.png"
+                                height={15}
+                                width={15}
+                            />
+                        </div>
                         <button
                             type="submit"
                             className="formSubmitButton font24px font16pxUnder600"

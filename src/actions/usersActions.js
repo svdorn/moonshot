@@ -168,7 +168,7 @@ export function changePassword(user) {
 // VERIFY EMAIL
 export function verifyEmail(token) {
     return function(dispatch) {
-        axios.post("/api/verifyEmail", {token: token})
+        axios.post("/api/verifyEmail", {token})
             .then(function(response) {
                 dispatch({type: "LOGIN", payload:response.data, notification:{message: "Account verified!", type: "infoHeader"}});
                 browserHistory.push('/onboarding');
