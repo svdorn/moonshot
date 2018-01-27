@@ -89,7 +89,7 @@ class Login extends Component {
             password: this.props.formData.login.values.password
         };
 
-        let saveSession = true;
+        let saveSession = this.state.keepMeLoggedIn;
 
         this.props.login(user, saveSession, this.props.navigateBackUrl);
     }

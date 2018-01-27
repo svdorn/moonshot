@@ -1,7 +1,7 @@
 "use strict"
 import React, { Component}  from 'react';
 import { connect } from 'react-redux';
-import { updateInfo, updateGoals, updateInterests, startOnboarding, endOnboarding } from "../../actions/usersActions";
+import { updateInfo, updateGoals, updateInterests, startOnboarding, endOnboarding, setNavigateBack, closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 
@@ -236,8 +236,22 @@ class Onboarding extends Component {
     }
 
     componentDidMount() {
-        this.props.startOnboarding();
+        const user = this.props.currentUser;
+        if (user && user != "no user") {
+            this.props.startOnboarding();
+        } else {
+            this.props.setNavigateBack("/onboarding");
+            this.goTo("/login");
+        }
+    }
 
+    goTo(route) {
+        // closes any notification
+        this.props.closeNotification();
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
     handleIconClick(index) {
@@ -955,7 +969,9 @@ function mapDispatchToProps(dispatch) {
         updateGoals,
         updateInterests,
         startOnboarding,
-        endOnboarding
+        endOnboarding,
+        setNavigateBack,
+        closeNotification
     }, dispatch);
 }
 

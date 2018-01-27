@@ -54,14 +54,6 @@ export function login(user, saveSession, navigateBackUrl) {
                     nextUrl = navigateBackUrl;
                 }
                 browserHistory.push(nextUrl);
-
-                // axios.post("/api/userSession", {userId: user._id, hashedVerificationToken: user.hashedVerificationToken})
-                //     .then(function(response) {
-                //         console.log("added user to session");
-                //     })
-                //     .catch(function(err) {
-                //         console.log("error adding user to session", err);
-                //     });
             })
             .catch(function(err) {
                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});

@@ -49,7 +49,6 @@ app.use(session({
 
 app.post('/signOut', function (req, res) {
     req.session.userId = undefined;
-    req.session.verificationToken = undefined;
     req.session.save(function(err) {
         if (err) {
             console.log("error removing user session: ", err);
@@ -732,7 +731,6 @@ app.post('/login', function (req, res) {
 
                         if (saveSession) {
                             req.session.userId = user._id;
-                            req.session.verificationToken = user.verificationToken;
                             req.session.save(function (err) {
                                 if (err) {
                                     console.log("error saving user session", err);
