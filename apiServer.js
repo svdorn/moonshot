@@ -69,8 +69,6 @@ app.get('/userSession', function (req, res) {
             //bcrypt.compare(user.verificationToken, req.session.hashedVerificationToken, function(err, tokenMatches) {
             //    if (tokenMatches) {
                     //user.
-                    console.log("user in session: ", user);
-                    console.log("session user hash: ", user.verificationToken);
                     res.json(user);
             //    } else {
             //        console.log("verification tokens did not match when getting user from session");
@@ -1028,10 +1026,10 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
     const verificationToken = req.query.verificationToken;
     const query = {url: pathwayUrl};
 
-
     Pathways.findOne(query, function (err, pathway) {
         if (err) {
             console.log("error in get pathway by url");
+            res.status(404).send("Error getting pathway by url");
             return;
         } else if (pathway) {
             // get the user from the database, can't trust user from frontend
@@ -1043,18 +1041,19 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
                     return;
                 } else {
                     // check that user is who they say they are
-                    if (userIsWhoTheySayTheyAre(user, verificationToken)) {
+                    if (userIsVerified(user, verificationToken)) {
                         // check that user has access to that pathway
                         const hasAccessToPathway = user.pathways.some(function(path) {
                             return pathway._id.toString() == path.pathwayId.toString();
                         })
                         console.log("hasAccessToPathway: ", hasAccessToPathway);
                         if (hasAccessToPathway) {
+                            console.log("has access to pathway, sending it");
                             res.json(pathway);
                             return;
                         } else {
                             console.log("user does not have pathway")
-                            res.sendStatus(403).send("User does not have access to this pathway.");
+                            res.status(403).send("User does not have access to this pathway.");
                             return;
                         }
                     } else {
@@ -1062,7 +1061,6 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
                         res.status(403).send("Incorrect user credentials");
                         return;
                     }
-
                 }
             })
         } else {
@@ -1072,15 +1070,7 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
     })
 });
 
-function userIsWhoTheySayTheyAre(user, verificationToken) {
-    // bcrypt.compare(user.verificationToken, hashedVerificationToken, function (error, match) {
-    //     if (match) {
-    //         return true;
-    //     } else if (error) {
-    //         console.log("User doesn't have correct verification token; err: ", error);
-    //     }
-    //     return false;
-    // });
+function userIsVerified(user, verificationToken) {
     return user.verificationToken && user.verificationToken == verificationToken;
 }
 

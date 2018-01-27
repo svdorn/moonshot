@@ -101,6 +101,12 @@ class PathwayContent extends Component {
                     this.setState({pathway})
                 }
             })
+            .catch(err => {
+                console.log("Error: ", err);
+                // go to the pathway landing page for this pathway if the user
+                // does not have access to it
+                this.goTo("/pathway" + this.props.location.search);
+            })
         }
 
         // if no user, redirect to login
