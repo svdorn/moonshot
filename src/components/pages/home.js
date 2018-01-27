@@ -99,6 +99,7 @@ class Home extends Component {
     }
 
     render() {
+        console.log('hey')
         // create the pathway previews
         let pathwayKey = 0;
         let self = this;

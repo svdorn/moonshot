@@ -30,12 +30,14 @@ class PathwayContent extends Component {
         if (user && user != "no user") {
             const pathwayUrl = this.props.location.search.substr(1);
 
+            console.log(user);
+
             axios.get("/api/pathwayByPathwayUrl", {
                 params: {
                     pathwayUrl,
-                    userCredentials: {
-                        // userId:
-                    }
+                    userId: user._id,
+//                    hashedVerificationToken: user.hashedVerificationToken
+                    verificationToken: user.verificationToken
                 }
             }).then(res => {
                 const pathway = res.data;
@@ -62,11 +64,20 @@ class PathwayContent extends Component {
                     // otherwise save the step that was saved in the db to redux state
                     else {
                         const stepNumber = userPath.currentStep.step;
-                        const subStep = pathway.steps.find(function (step) {
+                        const step = pathway.steps.find(function (step) {
                             return step.order == stepNumber;
-                        }).subSteps.find(function (subStep) {
-                            return subStep.order == userPath.currentStep.subStep;
-                        })
+                        });
+                        let subStep = 1;
+                        // if we found the step at that number, find the right substep
+                        if (step) {
+                            subStep = step.subSteps.find(function (subStep) {
+                                return subStep.order == userPath.currentStep.subStep;
+                            });
+                            // if substep not found, set to 1
+                            if (!subStep) {
+                                subStep = 1;
+                            }
+                        }
                         this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
                     }
 
@@ -97,8 +108,6 @@ class PathwayContent extends Component {
 
         // if no user, redirect to login
         else {
-            console.log(this.props.location);
-
             this.props.setNavigateBack("/pathwayContent" + this.props.location.search)
             this.goTo("/login");
         }

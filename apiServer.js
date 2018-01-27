@@ -49,7 +49,7 @@ app.use(session({
 
 app.post('/signOut', function (req, res) {
     req.session.userId = undefined;
-    req.session.hashedVerificationToken = undefined;
+    req.session.verificationToken = undefined;
     req.session.save(function(err) {
         if (err) {
             console.log("error removing user session: ", err);
@@ -68,6 +68,9 @@ app.get('/userSession', function (req, res) {
         getUserByQuery({_id: req.session.userId}, function (user) {
             //bcrypt.compare(user.verificationToken, req.session.hashedVerificationToken, function(err, tokenMatches) {
             //    if (tokenMatches) {
+                    //user.
+                    console.log("user in session: ", user);
+                    console.log("session user hash: ", user.verificationToken);
                     res.json(user);
             //    } else {
             //        console.log("verification tokens did not match when getting user from session");
@@ -250,9 +253,10 @@ app.post('/users', function (req, res) {
                             if (err) {
                                 console.log(err);
                             }
-                            cleanUser(user, function(cleanedUser) {
-                                res.json(cleanedUser);
-                            })
+                            // cleanUser(user, function(cleanedUser) {
+                            //     res.json(cleanedUser);
+                            // })
+                            res.json(cleanUser(user));
                         })
                     })
                 } else {
@@ -676,15 +680,20 @@ app.post('/getUserByQuery', function (req, res) {
 function getUserByQuery(query, callback) {
     Users.findOne(query, function (err, foundUser) {
         if (foundUser) {
-            foundUser.password = undefined;
-            callback(foundUser);
-            return;
+            console.log("foundUser is: ", foundUser);
+            //cleanUser(foundUser, function(cleanedUser) {
+            //    console.log("clean User is: ", cleanedUser);
+            //    console.log("cleaned user hash is: ", cleanedUser.verificationToken);
+            //    callback(cleanedUser);
+                callback(cleanUser(foundUser));
+                return;
+//            })
+        } else {
+            if (err) {
+                console.log(err);
+            }
+            callback(undefined);
         }
-        if (err) {
-            console.log(err);
-        }
-        callback(undefined);
-        return;
     });
 }
 
@@ -722,12 +731,13 @@ app.post('/login', function (req, res) {
             else if (passwordsMatch) {
                 // check if user verified email address
                 if (user.verified) {
+                    user = cleanUser(user);
+//                    cleanUser(user, function(newUser) {
+//                        user = newUser;
 
-                    cleanUser(user, function(newUser) {
-                        user = newUser;
                         if (saveSession) {
                             req.session.userId = user._id;
-                            req.session.hashedVerificationToken = user.hashedVerificationToken;
+                            req.session.verificationToken = user.verificationToken;
                             req.session.save(function (err) {
                                 if (err) {
                                     console.log("error saving user session", err);
@@ -738,7 +748,7 @@ app.post('/login', function (req, res) {
                             res.json(user);
                             return;
                         }
-                    });
+//                    });
 
                 }
                 // if user has not yet verified email address, don't log in
@@ -757,14 +767,19 @@ app.post('/login', function (req, res) {
 });
 
 function cleanUser(user, callback) {
-    const saltRounds = 10;
-    bcrypt.hash(user.verificationToken, saltRounds, function(err, hash) {
+//    const saltRounds = 10;
+//    bcrypt.hash(user.verificationToken, saltRounds, function(err, hash) {
         let newUser = user;
         newUser.password = undefined;
-        newUser.verificationToken = undefined;
-        newUser.hashedVerificationToken = hash;
-        callback(newUser);
-    });
+//        newUser.verificationToken = undefined;
+//        newUser.hashedVerificationToken = hash;
+//        console.log("hash is: ", hash);
+//        console.log("newUser.hashedVerificationToken is: ", newUser.hashedVerificationToken)
+//        console.log("newUser is: ", newUser);
+//        console.log("NEW USER HASHED TOKEN IS: ", newUser.hashedVerificationToken)
+//        callback(newUser);
+//    });
+    return newUser;
 }
 
 
@@ -1014,20 +1029,69 @@ app.get('/pathwayByPathwayUrlNoContent', function (req, res) {
 });
 app.get('/pathwayByPathwayUrl', function (req, res) {
     const pathwayUrl = req.query.pathwayUrl;
-    const userCredentials = req.query.userCredentials;
+    const userId = req.query.userId;
+//    const hashedVerificationToken = req.query.hashedVerificationToken;
+
+    const verificationToken = req.query.verificationToken;
     const query = {url: pathwayUrl};
+
 
     Pathways.findOne(query, function (err, pathway) {
         if (err) {
-            console.log("error in get pathway by url")
+            console.log("error in get pathway by url");
+            return;
         } else if (pathway) {
-            res.json(pathway);
+            // get the user from the database, can't trust user from frontend
+            // because they can change their info there
+            Users.findOne({_id: userId}, function(err, user) {
+                if (err) {
+                    console.log("error getting user: ", err);
+                    res.status(500).send("Error getting pathway");
+                    return;
+                } else {
+                    console.log("user is: ", user);
+                    // check that user is who they say they are
+                    if (userIsWhoTheySayTheyAre(user, verificationToken)) {
+                        // check that user has access to that pathway
+                        const hasAccessToPathway = user.pathways.some(function(path) {
+                            console.log("pathway id: ", pathway._id.toString());
+                            console.log("path id: ", path.pathwayId.toString());
+                            console.log(pathway._id.toString() == path.pathwayId.toString())
+
+                            return pathway._id.toString() == path.pathwayId.toString();
+                        })
+                        console.log("hasAccessToPathway: ", hasAccessToPathway);
+                        if (hasAccessToPathway) {
+                            res.json(pathway);
+                        } else {
+                            console.log("user does not have pathway")
+                            res.send(403).send("User does not have access to this pathway.");
+                        }
+                    } else {
+                        console.log("verification token does not match")
+                        res.status(403).send("Incorrect user credentials");
+                    }
+
+                }
+            })
         } else {
             res.status(404).send("No pathway found");
         }
 
     })
 });
+
+function userIsWhoTheySayTheyAre(user, verificationToken) {
+    // bcrypt.compare(user.verificationToken, hashedVerificationToken, function (error, match) {
+    //     if (match) {
+    //         return true;
+    //     } else if (error) {
+    //         console.log("User doesn't have correct verification token; err: ", error);
+    //     }
+    //     return false;
+    // });
+    return user.verificationToken == verificationToken;
+}
 
 function removeContentFromPathway(pathway) {
     steps = pathway.steps;
