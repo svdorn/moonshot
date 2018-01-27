@@ -26,7 +26,6 @@ export function getUserFromSession(callback) {
 
         axios.get("/api/userSession")
             .then(function(response) {
-                console.log("user is: ", response.data)
                 dispatch({
                     type: "GET_USER_FROM_SESSION",
                     payload: response.data,

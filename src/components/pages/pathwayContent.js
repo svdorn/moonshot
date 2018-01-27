@@ -29,9 +29,6 @@ class PathwayContent extends Component {
 
         if (user && user != "no user") {
             const pathwayUrl = this.props.location.search.substr(1);
-
-            console.log(user);
-
             axios.get("/api/pathwayByPathwayUrl", {
                 params: {
                     pathwayUrl,

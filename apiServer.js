@@ -680,10 +680,7 @@ app.post('/getUserByQuery', function (req, res) {
 function getUserByQuery(query, callback) {
     Users.findOne(query, function (err, foundUser) {
         if (foundUser) {
-            console.log("foundUser is: ", foundUser);
             //cleanUser(foundUser, function(cleanedUser) {
-            //    console.log("clean User is: ", cleanedUser);
-            //    console.log("cleaned user hash is: ", cleanedUser.verificationToken);
             //    callback(cleanedUser);
                 callback(cleanUser(foundUser));
                 return;
@@ -773,10 +770,6 @@ function cleanUser(user, callback) {
         newUser.password = undefined;
 //        newUser.verificationToken = undefined;
 //        newUser.hashedVerificationToken = hash;
-//        console.log("hash is: ", hash);
-//        console.log("newUser.hashedVerificationToken is: ", newUser.hashedVerificationToken)
-//        console.log("newUser is: ", newUser);
-//        console.log("NEW USER HASHED TOKEN IS: ", newUser.hashedVerificationToken)
 //        callback(newUser);
 //    });
     return newUser;
@@ -1049,27 +1042,25 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
                     res.status(500).send("Error getting pathway");
                     return;
                 } else {
-                    console.log("user is: ", user);
                     // check that user is who they say they are
                     if (userIsWhoTheySayTheyAre(user, verificationToken)) {
                         // check that user has access to that pathway
                         const hasAccessToPathway = user.pathways.some(function(path) {
-                            console.log("pathway id: ", pathway._id.toString());
-                            console.log("path id: ", path.pathwayId.toString());
-                            console.log(pathway._id.toString() == path.pathwayId.toString())
-
                             return pathway._id.toString() == path.pathwayId.toString();
                         })
                         console.log("hasAccessToPathway: ", hasAccessToPathway);
                         if (hasAccessToPathway) {
                             res.json(pathway);
+                            return;
                         } else {
                             console.log("user does not have pathway")
-                            res.send(403).send("User does not have access to this pathway.");
+                            res.sendStatus(403).send("User does not have access to this pathway.");
+                            return;
                         }
                     } else {
                         console.log("verification token does not match")
                         res.status(403).send("Incorrect user credentials");
+                        return;
                     }
 
                 }
@@ -1090,7 +1081,7 @@ function userIsWhoTheySayTheyAre(user, verificationToken) {
     //     }
     //     return false;
     // });
-    return user.verificationToken == verificationToken;
+    return user.verificationToken && user.verificationToken == verificationToken;
 }
 
 function removeContentFromPathway(pathway) {

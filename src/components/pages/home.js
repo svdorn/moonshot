@@ -51,7 +51,7 @@ class Home extends Component {
             const user = {
                 name: currentUser.name,
                 email: currentUser.email,
-                pathway: this.props.pathway,
+                pathway: pathway,
             }
             const signedIn = true;
             this.props.comingSoon(user, signedIn);
@@ -99,7 +99,6 @@ class Home extends Component {
     }
 
     render() {
-        console.log('hey')
         // create the pathway previews
         let pathwayKey = 0;
         let self = this;

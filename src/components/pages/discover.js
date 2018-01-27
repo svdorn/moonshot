@@ -105,7 +105,7 @@ class Discover extends Component {
             const user = {
                 name: currentUser.name,
                 email: currentUser.email,
-                pathway: this.props.pathway,
+                pathway: pathway,
             }
             const signedIn = true;
             this.props.comingSoon(user, signedIn);
