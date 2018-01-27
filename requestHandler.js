@@ -30,7 +30,7 @@ function handleRender(req, res) {
       }
       match(Routes, function(err, redirect, props) {
         if (err) {
-          res.status(500).send("Error fulfilling the reqest");
+          res.status(500).send("Error fulfilling the request");
         } else if (redirect) {
           res.status(302, redirect.pathname + redirect.search);
         } else if (props) {

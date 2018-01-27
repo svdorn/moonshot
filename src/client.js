@@ -13,7 +13,7 @@ if (shouldRedirectToHttps) {
 }
 
 import React from 'react';
-import { render } from 'react-dom';
+import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import { applyMiddleware, createStore } from 'redux';
@@ -39,7 +39,7 @@ if (!shouldRedirectToHttps) {
       </Provider>
     )
 
-    render(
+    hydrate(
       Routes, document.getElementById('app')
     );
 }
