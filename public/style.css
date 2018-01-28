@@ -96,11 +96,11 @@ footer {
     color: var(--moonshotBlue);
 }
 .formSubmitButton {
-    padding: 0px 25px 0px;
+    padding: 0px 25px 3px;
     border: 2px solid var(--moonshotLightBlue);
     background-color: rgba(255,255,255,.4);
     color: var(--moonshotLightBlue);
-    margin-top: 10px;
+    margin: 10px auto;
 }
 .formContainer {
     text-align: center;
@@ -2057,11 +2057,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         font-size: 25px;
     }
     .formSubmitButton {
-        padding: 0px 25px 0px;
+        padding: 0px 25px 1px;
         border: 2px solid var(--moonshotLightBlue);
         background-color: rgba(255,255,255,.4);
         color: var(--moonshotLightBlue);
-        margin: 10px auto;
     }
     .pathwayDescriptionAndSalaryText {
         font-size: 15px;

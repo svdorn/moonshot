@@ -141,7 +141,7 @@ class Login extends Component {
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Sign in</h1>
+                        <h1 style={{marginTop:"10px"}}>Sign in</h1>
                         <div className="inputContainer">
                             <div className="fieldWhiteSpace"/>
                             <Field
@@ -158,8 +158,6 @@ class Login extends Component {
                                 label="Password"
                             /><br/><br/>
                         </div>
-                        <div className="clickable blueText" onClick={() => this.goTo('/signup')}>Create account</div>
-                        <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
                         <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
                                 className={"checkMark" + this.state.keepMeLoggedIn}
@@ -175,6 +173,8 @@ class Login extends Component {
                         >
                             Sign In
                         </button>
+                        <div className="clickable blueText" onClick={() => this.goTo('/signup')}>Create account</div>
+                        <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
                     </form>
                 </div>
 
