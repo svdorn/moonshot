@@ -48,10 +48,10 @@ const routes = (
         <Route path="/changePassword" component={ChangePassword} />
         <Route path="/discover" component={Discover} />
         <Route path="/contactUs" component={ContactUs} />
-        <Route path="/myPathways" component={MyPathways} />
-        <Route path="/onboarding" component={Onboarding} />
+        <Route path="/myPathways" component={AuthenticatedComponent} page={<MyPathways/>} />
+        <Route path="/onboarding" component={AuthenticatedComponent} page={<Onboarding/>} />
         <Route path="/pathway" component={Pathway}/>
-        <Route path="/pathwayContent" component={PathwayContent}/>
+        <Route path="/pathwayContent" component={AuthenticatedComponent} page={<PathwayContent/>} />
         <Route path="/email" component={Email}/>
         <Route path="/unsubscribe" component={Unsubscribe} />
         <Route path='/*' component={Error404} />

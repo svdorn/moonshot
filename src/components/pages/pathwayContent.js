@@ -6,7 +6,7 @@ import PathwayContentArticle from '../childComponents/pathwayContentArticle';
 import {Tabs, Tab, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, updateCurrentSubStep, setHeaderBlue, setNavigateBack} from "../../actions/usersActions";
+import {closeNotification, updateCurrentSubStep, setHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayStepList from '../childComponents/pathwayStepList';
 import axios from 'axios';
@@ -107,12 +107,6 @@ class PathwayContent extends Component {
                 // does not have access to it
                 this.goTo("/pathway" + this.props.location.search);
             })
-        }
-
-        // if no user, redirect to login
-        else {
-            this.props.setNavigateBack("/pathwayContent" + this.props.location.search)
-            this.goTo("/login");
         }
     }
 
@@ -304,8 +298,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateCurrentSubStep,
         closeNotification,
-        setHeaderBlue,
-        setNavigateBack
+        setHeaderBlue
     }, dispatch);
 }
 
