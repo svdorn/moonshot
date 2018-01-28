@@ -2436,11 +2436,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .infoBoxImage {
         height: 30px;
-        margin: auto -110px auto;
+        margin: auto -120px auto;
     }
     .infoBoxPortfolioImage {
         height: 30px;
-        margin: auto -110px auto;
+        margin: auto -120px auto;
     }
 
     .font40pxUnder400 { font-size: 40px; }

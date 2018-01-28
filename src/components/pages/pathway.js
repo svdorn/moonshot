@@ -445,7 +445,7 @@ class Pathway extends Component {
                                                     alt="Free"
                                                     className="infoBoxImage"
                                                 />
-                                                <div className="font20px font14pxUnder700 font10pxUnder400">
+                                                <div className="font20px font14pxUnder700 font12pxUnder400">
                                                     It{"'"}s free.<br/>
                                                     {pathway.sponsor.name} provides scholarships<br/>
                                                     to pay for your pathway.
@@ -459,7 +459,7 @@ class Pathway extends Component {
                                                     alt="Portfolio"
                                                     className="infoBoxPortfolioImage"
                                                 />
-                                                <div className="font20px font14pxUnder700 font10pxUnder400">
+                                                <div className="font20px font14pxUnder700 font12pxUnder400">
                                                     Learn {pathway.sponsor.learn}<br/>
                                                     and build<br/>
                                                     your {pathway.sponsor.type} portfolio.
@@ -475,7 +475,7 @@ class Pathway extends Component {
                                                     alt="Data"
                                                     className="infoBoxImage"
                                                 />
-                                                <div className="font20px font14pxUnder700 font10pxUnder400">
+                                                <div className="font20px font14pxUnder700 font12pxUnder400">
                                                     Get evaluated by {pathway.sponsor.name}<br/>
                                                     and other {pathway.sponsor.type} employers<br/>
                                                     based on your performance.
