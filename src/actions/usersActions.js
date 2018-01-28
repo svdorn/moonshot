@@ -192,12 +192,6 @@ export function changePasswordForgot(user) {
     }
 }
 
-export function setNavigateBack(navigateBackUrl) {
-    return function(dispatch) {
-        dispatch({type:"SET_NAVIGATE_BACK", navigateBackUrl});
-    }
-}
-
 // Send an email when form filled out on forBusiness page
 export function forBusiness(user){
     return function(dispatch) {

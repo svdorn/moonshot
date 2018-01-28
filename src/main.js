@@ -65,6 +65,7 @@ class Main extends Component {
                 </MuiThemeProvider>
             );
         } else {
+            console.log("this.props.children: ", this.props.children);
             return (
                 <MuiThemeProvider muiTheme={muiTheme}>
                     <div>

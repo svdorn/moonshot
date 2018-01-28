@@ -71,9 +71,13 @@ class Login extends Component {
         let self = this;
         axios.get("/api/keepMeLoggedIn")
         .then(function(res) {
+            let keepMeLoggedIn = res.data;
+            if (typeof keepMeLoggedIn != "boolean") {
+                keepMeLoggedIn = false;
+            }
             self.setState({
                 ...self.state,
-                keepMeLoggedIn: res.data
+                keepMeLoggedIn
             })
         })
         .catch(function(err) {
@@ -109,7 +113,13 @@ class Login extends Component {
 
         let saveSession = this.state.keepMeLoggedIn;
 
-        this.props.login(user, saveSession, this.props.navigateBackUrl);
+        let navigateBackUrl = undefined;
+        let location = this.props.location;
+        if (location.query && location.query.redirect) {
+            navigateBackUrl = location.query.redirect;
+        }
+
+        this.props.login(user, saveSession, navigateBackUrl);
     }
 
     goTo (route)  {
@@ -193,8 +203,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        formData: state.form,
-        navigateBackUrl: state.users.navigateBackUrl
+        formData: state.form
     };
 }
 

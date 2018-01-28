@@ -38,10 +38,13 @@ app.use(session({
     saveUninitialized: false, // doesn't save a session if it is new but not modified
     rolling: true, // resets maxAge on session when user uses site again
     proxy: true, // must be true since we are using a reverse proxy
-    resave: false, // session only saved back to the session store if session was modified
+    resave: false, // session only saved back to the session store if session was modified,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
-        secure: true // only make the cookie if accessing via https
+        // TODO uncomment this when pushing to aws less frequently.
+        // secure being true makes cookies only save when on https so it'll screw up localhost stuff
+        //secure: true // only make the cookie if accessing via https
+        secure: false // save the cookie even if not on https
     },
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
@@ -63,7 +66,6 @@ app.post('/signOut', function (req, res) {
 // to be checked or unchecked
 app.post("/keepMeLoggedIn", function(req, res) {
     req.session.stayLoggedIn = req.body.stayLoggedIn;
-    console.log("req.body.stayLoggedIn is: ", req.body.stayLoggedIn);
     req.session.save(function(err) {
         if (err) {
             console.log("error saving 'keep me logged in' setting: ", err);
@@ -260,8 +262,6 @@ app.post('/users', function (req, res) {
                 if (foundUser === null) {
                     // get count of users with that name to get the profile url
                     Users.count({name: user.name}, function(err, count) {
-                        console.log("count of users with name ", user.name, ": ", count);
-
                         const randomNumber = crypto.randomBytes(8).toString('hex');
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
 
@@ -1061,13 +1061,10 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
                         const hasAccessToPathway = user.pathways.some(function(path) {
                             return pathway._id.toString() == path.pathwayId.toString();
                         })
-                        console.log("hasAccessToPathway: ", hasAccessToPathway);
                         if (hasAccessToPathway) {
-                            console.log("has access to pathway, sending it");
                             res.json(pathway);
                             return;
                         } else {
-                            console.log("user does not have pathway")
                             res.status(403).send("User does not have access to this pathway.");
                             return;
                         }
@@ -1302,28 +1299,6 @@ app.post("/updateInfo", function(req, res) {
         res.send(undefined);
     }
 });
-
-
-//----->> GET IMAGES <<------
-// app.get('/images', function (req, res) {
-//     const imgFolder = __dirname + '/public/images/';
-//     // REQUIRE FILE SYSTEM
-//     const fs = require('fs');
-//     // READ ALL FILES IN THE DIRECTORY
-//     fs.readdir(imgFolder, function (err, files) {
-//         if (err) {
-//             return console.error(err);
-//         }
-//         //CREATE AN EMPTY ARRAY
-//         const filesArr = [];
-//         // ITERATE ALL IMAGES IN THE DIRECTORY AND ADD TO THE ARRAY
-//         files.forEach(function (file) {
-//             filesArr.push({name: file});
-//         });
-//         // SEND THE JSON RESPONSE WITH THE ARRAY
-//         res.json(filesArr);
-//     })
-// })
 
 // END APIs
 
