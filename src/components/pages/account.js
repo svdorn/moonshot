@@ -96,7 +96,7 @@ class Account extends Component {
                         <br/>
                         <button
                             type="submit"
-                            className="formSubmitButton"
+                            className="formSubmitButton font24px font16pxUnder600"
                         >
                             Update User
                         </button>
