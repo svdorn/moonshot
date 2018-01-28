@@ -549,6 +549,21 @@ button.link {
     padding: 2px 10px;
     border-radius: 25px;
 }
+.lightBlueChip {
+    height: 36px;
+    background: var(--moonshotLightBlue);
+    padding: 1px;
+    border-radius: 25px;
+    margin-left: 20px;
+}
+.lightBlueChip > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+    font-size: 20px;
+    padding: 2px 10px;
+    border-radius: 25px;
+}
 
 .blueGradientButtonExterior {
     background: linear-gradient(to bottom right, #5dfdff, #3dabff);
@@ -785,6 +800,22 @@ button.link {
     margin: 0px 20px;
     height: 16px;
     width: 2px;
+}
+
+.profileInfoSkills {
+    padding-top: 40px;
+    text-align: center;
+}
+.profileInfoSkillsLeft {
+    width: 20%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 5%;
+}
+.profileInfoSkillsRight {
+    width: 60%;
+    display: inline-block;
+    vertical-align: top;
 }
 
 
@@ -1977,6 +2008,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         padding-right: 40px;
         margin-left: 0px;
     }
+    .aboutMeLi > img {
+        display: none;
+    }
     .profileSchoolName {
         float: inherit;
     }
@@ -2222,6 +2256,26 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .gradientBorderPurpleToPinkChip > div {
         font-size: 15px;
         padding-top: 2px;
+    }
+    .lightBlueChip {
+        height: 30px;
+    }
+    .lightBlueChip > div {
+        font-size: 15px;
+        padding-top: 2px;
+    }
+    .profileInfoSkillsLeft {
+        width: 100%;
+        display: block;
+        margin-right: 0;
+    }
+    .profileInfoSkillsRight {
+        width: 95%;
+        display: block;
+        margin: auto;
+        max-height: 461px;
+        overflow-y: hidden;
+        padding-right: 20px;
     }
 
     .outlineButton { margin-top: 15px; }
