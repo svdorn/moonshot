@@ -428,7 +428,7 @@ class Pathway extends Component {
 
                         <div>
                             {pathway.sponsor ?
-                                <div style={{marginBottom: "70px"}}>
+                                <div style={{marginBottom: "30px"}}>
                                     <HomepageTriangles variation="3"/>
                                     <ul className="horizCenteredList homepageBenefitsList list500pxStack">
                                         <li className="pathwayLandingLiMargin">
@@ -485,7 +485,7 @@ class Pathway extends Component {
                         {pathway.steps ?
                             <div>
                                 <div className="center" style={{margin: "100px 0 40px 0"}}>
-                                    < b style={{color: '#B869FF'}} className="font40px font24pxUnder500">Pathway Overview</ b>
+                                    < b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">Pathway Overview</ b>
                                 </ div>
 
                                 {pathwaySteps}

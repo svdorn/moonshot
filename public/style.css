@@ -2100,6 +2100,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 50px;
         margin: auto -120px auto;
     }
+    .halfWidthStepRight > img, .halfWidthStepLeft > img {
+        height: 65px;
+    }
 
     .font40pxUnder700 { font-size: 40px; }
     .font38pxUnder700 { font-size: 38px; }
@@ -2380,6 +2383,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .pathwayLandingLiMargin {
         margin-right: 0;
+    }
+    .halfWidthStepRight > img, .halfWidthStepLeft > img {
+        height: 50px;
     }
 
     .font40pxUnder500 { font-size: 40px; }
