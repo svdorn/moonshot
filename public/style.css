@@ -480,6 +480,13 @@ button.link {
     bottom: 0;
     margin: auto -210px auto;
 }
+.infoBoxPortfolioImage {
+    height: 70px;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    margin: auto -180px auto;
+}
 
 .isolatedHeader {
     margin: 0px 20px 30px;
@@ -1547,6 +1554,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     vertical-align: top;
     justify-content: center;
 }
+.pathwayLandingLiMargin {
+    margin-right: 14%;
+}
 
 .homePathwaysTitle { font-size: 55px; }
 
@@ -2082,6 +2092,14 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 36px;
         top: -10px;
     }
+    .infoBoxImage {
+        height: 50px;
+        margin: auto -150px auto;
+    }
+    .infoBoxPortfolioImage {
+        height: 50px;
+        margin: auto -120px auto;
+    }
 
     .font40pxUnder700 { font-size: 40px; }
     .font38pxUnder700 { font-size: 38px; }
@@ -2353,6 +2371,16 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .pathwayLandingQuoteRight {
         width: 300px;
     }
+    .list500pxStack li {
+        display: block !important;
+        margin-top: 40px;
+    }
+    .listBottom500pxStack {
+        margin-top: 40px;
+    }
+    .pathwayLandingLiMargin {
+        margin-right: 0;
+    }
 
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }
@@ -2392,6 +2420,14 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .above400only { display: none; }
     .form {
         max-width: 300px;
+    }
+    .infoBoxImage {
+        height: 30px;
+        margin: auto -110px auto;
+    }
+    .infoBoxPortfolioImage {
+        height: 30px;
+        margin: auto -110px auto;
     }
 
     .font40pxUnder400 { font-size: 40px; }

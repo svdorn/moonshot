@@ -430,8 +430,8 @@ class Pathway extends Component {
                             {pathway.sponsor ?
                                 <div style={{marginBottom: "70px"}}>
                                     <HomepageTriangles variation="3"/>
-                                    <ul className="horizCenteredList homepageBenefitsList">
-                                        <li style={{marginRight: "14%"}}>
+                                    <ul className="horizCenteredList homepageBenefitsList list500pxStack">
+                                        <li className="pathwayLandingLiMargin">
                                             <div style={{position: "relative"}}>
                                                 <img
                                                     src="/icons/NoMoney.png"
@@ -450,7 +450,7 @@ class Pathway extends Component {
                                                 <img
                                                     src="/icons/Portfolio.png"
                                                     alt="Portfolio"
-                                                    className="infoBoxImage"
+                                                    className="infoBoxPortfolioImage"
                                                 />
                                                 <div className="font20px font14pxUnder700 font10pxUnder400">
                                                     Learn {pathway.sponsor.learn}<br/>
@@ -460,7 +460,7 @@ class Pathway extends Component {
                                             </div>
                                         </li>
                                     </ul>
-                                    <ul className="horizCenteredList homepageBenefitsList">
+                                    <ul className="horizCenteredList homepageBenefitsList listBottom500pxStack">
                                         <li>
                                             <div style={{position: "relative"}}>
                                                 <img
