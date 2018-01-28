@@ -169,13 +169,13 @@ class Pathway extends Component {
                         />
                         <div className="halfWidthStepText">
 
-                            <div className="halfWidthStepNumber">
+                            <div className="halfWidthStepNumber font14pxUnder700 font12pxUnder500">
                                 STEP {step.order}
                             </div>
-                            <div className="halfWidthStepTitle">
+                            <div className="halfWidthStepTitle font font22pxUnder700 font18pxUnder500">
                                 {step.name}
                             </div>
-                            <div className="font14px font12pxUnder500 halfWidthStepDesc">
+                            <div className="font14px font12pxUnder700 font10pxUnder500 halfWidthStepDesc">
                                 {step.description}
                                 This is the description of the step. It will eventually describe the step.
                             </div>

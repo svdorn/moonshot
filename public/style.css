@@ -2387,6 +2387,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .halfWidthStepRight > img, .halfWidthStepLeft > img {
         height: 50px;
     }
+    .halfWidthStepRight, .halfWidthStepLeft {
+        width: 100%;
+        padding: 20px 3% 10px;
+    }
 
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }
