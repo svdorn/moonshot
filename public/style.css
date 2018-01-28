@@ -2330,6 +2330,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         font-size: 15px;
         padding-top: 2px;
     }
+    .skillChip {
+        font-size: 15px;
+    }
     .profileInfoSkillsLeft {
         width: 100%;
         display: block;
@@ -2435,12 +2438,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         max-width: 300px;
     }
     .infoBoxImage {
-        height: 30px;
-        margin: auto -120px auto;
+        height: 38px;
+        margin: auto -125px auto;
     }
     .infoBoxPortfolioImage {
-        height: 30px;
-        margin: auto -120px auto;
+        height: 38px;
+        margin: auto -125px auto;
     }
 
     .font40pxUnder400 { font-size: 40px; }
