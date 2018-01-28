@@ -4,12 +4,10 @@ import {connect} from 'react-redux';
 
 class AuthenticatedComponent extends Component {
     componentWillMount() {
-        console.log("checking user");
         this.checkLoggedIn();
     }
 
     checkLoggedIn() {
-        console.log('in checkLoggedIn')
         if (!this.props.currentUser || this.props.currentUser == "no user") {
             const location = this.props.location;
             const redirect = location.pathname + location.search;
@@ -22,9 +20,12 @@ class AuthenticatedComponent extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
+        // clone the element so that we can put props into the element, such as location
+        const childElement = React.cloneElement(this.props.route.page, { location: this.props.location });
+
         return (
             <div>
-                {this.props.route.page}
+                { childElement }
             </div>
         );
     }
