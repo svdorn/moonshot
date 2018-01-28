@@ -141,7 +141,7 @@ class Login extends Component {
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1 style={{marginTop:"10px"}}>Sign in</h1>
+                        <h1 style={{marginTop:"15px"}}>Sign in</h1>
                         <div className="inputContainer">
                             <div className="fieldWhiteSpace"/>
                             <Field
@@ -165,7 +165,7 @@ class Login extends Component {
                             />
                         </div>
                         <div className="blueText" style={{display:"inline-block"}}>
-                            Keep me logged in
+                            Keep me signed in
                         </div><br/>
                         <button
                             type="submit"

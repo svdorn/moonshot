@@ -218,8 +218,8 @@ const sanitizeOptions = {
 //         let user = users[userIdx];
 //         Users.count({name: user.name}, function(err, count) {
 //             console.log("count of users with name ", user.name, ": ", count);
-//             const randomNumber = crypto.randomBytes(8).toString('hex');
-//             user.profileUrl = user.name.split(' ').join('-') + "-" + count + "-" + randomNumber;
+//             const randomNumber = crypto.randomBytes(32).toString('hex');
+//             user.verificationToken = randomNumber;
 //             user.save(function() {
 //                 console.log("user saved");
 //             });
@@ -270,9 +270,6 @@ app.post('/users', function (req, res) {
                             if (err) {
                                 console.log(err);
                             }
-                            // cleanUser(user, function(cleanedUser) {
-                            //     res.json(cleanedUser);
-                            // })
                             res.json(cleanUser(user));
                         })
                     })
