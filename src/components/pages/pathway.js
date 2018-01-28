@@ -371,17 +371,16 @@ class Pathway extends Component {
                         </div>
 
                         <div style={style.quote.everything}>
-                            <h1 style={{marginBottom:'30px'}}>Sponsored by <img
+                            <h1 style={{marginBottom:'30px'}} className="font40px font30pxUnder500">Sponsored by <img
                                 src={pathway.sponsor.logo}
                                 alt={pathway.sponsor.name}
-                                height={70}
-                                style={{marginTop:'-15px'}}
+                                className="pathwayLandingSponsoredBy"
                             /></h1>
                             <div style={style.quote.leftSide}>
                                 <div>
                                     <img
                                         src="/icons/Information.png"
-                                        style={style.iconsLeft}
+                                        className="pathwayLandingIconsLeft"
                                     />
                                     <b style={{color: '#B869FF'}} className="font40px font24pxUnder500">ABOUT</b>
                                 </div>
@@ -392,7 +391,7 @@ class Pathway extends Component {
                                     <div style={style.spaceTop}>
                                         <img
                                             src="/icons/Badge.png"
-                                            style={style.iconsLeft}
+                                            className="pathwayLandingIconsLeft"
                                         />
                                         <b style={{color: '#B869FF'}} className="font40px font24pxUnder500">OPEN POSITIONS</b><br/>
                                         <div className="font20px font14pxUnder700 font10pxUnder400">- {pathway.sponsor.hiring}</div>
@@ -401,7 +400,7 @@ class Pathway extends Component {
                                 <div style={style.spaceTop}>
                                     <img
                                         src="/icons/www.png"
-                                        style={style.iconsLeft}
+                                        className="pathwayLandingIconsLeft"
                                     />
                                     <b style={{color: '#B869FF'}}
                                        className="font40px font24pxUnder500">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>

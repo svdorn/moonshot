@@ -1521,6 +1521,16 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     bottom: 0px;
     width: 100%;
 }
+.pathwayLandingSponsoredBy {
+    height: 70px;
+    margin-top: -15px;
+}
+.pathwayLandingIconsLeft {
+    height: 45px;
+    margin-right: 10px;
+    position: relative;
+    top: -15px;
+}
 
 .homePathwaysTitle { font-size: 55px; }
 
@@ -2297,6 +2307,13 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .pathwayLandingIcons {
         height: 30px;
         width: 30px;
+    }
+    .pathwayLandingSponsoredBy {
+        height: 50px;
+    }
+    .pathwayLandingIconsLeft {
+        height: 30px;
+        top: -7px;
     }
 
     .font40pxUnder500 { font-size: 40px; }
