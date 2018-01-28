@@ -802,6 +802,23 @@ button.link {
     width: 2px;
 }
 
+.profileInfoSkills {
+    padding-top: 40px;
+    text-align: center;
+}
+.profileInfoSkillsLeft {
+    width: 20%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 5%;
+}
+.profileInfoSkillsRight {
+    width: 60%;
+    display: inline-block;
+    vertical-align: top;
+    justify-content: center;
+}
+
 
 #onboardingBioTextarea {
     width: calc(700px + 8%);

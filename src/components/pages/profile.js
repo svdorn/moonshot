@@ -198,24 +198,6 @@ class Profile extends Component {
                 marginBottom: '5px',
                 marginRight: '5px'
             },
-            pictureInfoSkills: {
-                everything: {
-                    paddingTop: '40px',
-                    textAlign: 'center'
-                },
-                leftSide: {
-                    width: "20%",
-                    display: "inline-block",
-                    verticalAlign: "top",
-                    marginRight: "5%",
-                },
-                rightSide: {
-                    width: "60%",
-                    display: "inline-block",
-                    verticalAlign: "top",
-                    justifyContent: "center",
-                },
-            }
         };
 
         let profileSkills = null;
@@ -406,8 +388,8 @@ class Profile extends Component {
 
                         {this.state.userPathwayPreviews ?
                             <div>
-                                <div style={style.pictureInfoSkills.everything}>
-                                    <div style={style.pictureInfoSkills.leftSide}>
+                                <div className="profileInfoSkills">
+                                    <div className="profileInfoSkillsLeft">
                                         <img
                                             src="/icons/Portfolio.png"
                                             alt="Profile picture"
@@ -439,7 +421,7 @@ class Profile extends Component {
                                                href={mailtoEmail}>Contact</a>
                                         </div>
                                     </div>
-                                    <div style={style.pictureInfoSkills.rightSide}>
+                                    <div className="profileInfoSkillsRight">
                                         {user.skills ?
                                             <div className="center">
                                                 {profileSkills}
