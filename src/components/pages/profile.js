@@ -229,14 +229,13 @@ class Profile extends Component {
         if (skills) {
             profileSkills = skills.map(function (skill) {
                 return (
-                    <div style={{display: 'inline-block', marginTop: '15px'}}>
-                        <Chip key={skill}
-                              backgroundColor='#white'
-                              labelColor="#00d2ff"
-                              labelStyle={{fontSize: '20px'}}
-                              style={{marginLeft: '20px', border: "1px solid #00d2ff"}}>
+                    <div key={skill + "div"}
+                         style={{display: 'inline-block', marginTop: '15px'}}
+                         className="lightBlueChip"
+                    >
+                        <div key={skill} className="blueText">
                             {skill}
-                        </Chip>
+                        </div>
                     </div>
                 );
             });
