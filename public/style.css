@@ -1977,6 +1977,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         padding-right: 40px;
         margin-left: 0px;
     }
+    .aboutMeLi > img {
+        display: none;
+    }
     .profileSchoolName {
         float: inherit;
     }
