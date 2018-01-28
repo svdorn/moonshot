@@ -69,27 +69,11 @@ class Pathway extends Component {
         const style = {
 
             quote: {
-                everything: {
-                    textAlign: "center",
-                    padding: "40px 0px"
-                },
                 container: {
                     border: "2px solid #B869FF",
                     fontSize: "30px",
                     padding: "20px",
                     textAlign: "center",
-                },
-                leftSide: {
-                    width: "55%",
-                    display: "inline-block",
-                    verticalAlign: "top",
-                    marginRight: "5%"
-                },
-                rightSide: {
-                    width: "35%",
-                    display: "inline-block",
-                    verticalAlign: "top",
-                    justifyContent: "center",
                 },
                 speakerImage: {
                     borderRadius: "50%",
@@ -99,7 +83,6 @@ class Pathway extends Component {
                 },
                 speakerInfo: {
                     marginLeft: "60px",
-                    fontSize: "20px"
                 },
                 content: {
                     marginBottom: "20px"
@@ -370,19 +353,19 @@ class Pathway extends Component {
                             <div className="homepageSeparator purpleGreenSeparator"/>
                         </div>
 
-                        <div style={style.quote.everything}>
-                            <h1 style={{marginBottom:'30px'}} className="font40px font30pxUnder500">Sponsored by <img
+                        <div className="pathwayLandingQuote">
+                            <h1 style={{marginBottom:'30px'}} className="font40px font32pxUnder700 font30pxUnder500">Sponsored by <img
                                 src={pathway.sponsor.logo}
                                 alt={pathway.sponsor.name}
                                 className="pathwayLandingSponsoredBy"
                             /></h1>
-                            <div style={style.quote.leftSide}>
+                            <div className="pathwayLandingQuoteLeft">
                                 <div>
                                     <img
                                         src="/icons/Information.png"
                                         className="pathwayLandingIconsLeft"
                                     />
-                                    <b style={{color: '#B869FF'}} className="font40px font24pxUnder500">ABOUT</b>
+                                    <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">ABOUT</b>
                                 </div>
                                 <div className="font20px font14pxUnder700 font10pxUnder400">
                                     {pathway.sponsor.description}
@@ -393,7 +376,7 @@ class Pathway extends Component {
                                             src="/icons/Badge.png"
                                             className="pathwayLandingIconsLeft"
                                         />
-                                        <b style={{color: '#B869FF'}} className="font40px font24pxUnder500">OPEN POSITIONS</b><br/>
+                                        <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">OPEN POSITIONS</b><br/>
                                         <div className="font20px font14pxUnder700 font10pxUnder400">- {pathway.sponsor.hiring}</div>
                                     </div>
                                     : null}
@@ -415,9 +398,9 @@ class Pathway extends Component {
                                 </div>
                             </div>
                             {pathway.sponsor.quote ?
-                                <div style={style.quote.rightSide}>
+                                <div className="pathwayLandingQuoteRight">
                                     <div style={style.quote.container}>
-                                        <div style={style.quote.content}>
+                                        <div style={style.quote.content} className="font20px font14pxUnder700 font10pxUnder400">
                                             {"\""}{pathway.sponsor.quote.body}{"\""}<br/>
                                         </div>
 
@@ -428,7 +411,7 @@ class Pathway extends Component {
                                                 id="speakerImage"
                                                 alt={""}
                                             />
-                                            <div style={style.quote.speakerInfo}>
+                                            <div style={style.quote.speakerInfo} className="font20px font14pxUnder700 font10pxUnder400">
                                                 {pathway.sponsor.quote.speakerName}<br/>
                                                 {pathway.sponsor.quote.speakerTitle}
                                             </div>

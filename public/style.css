@@ -1531,6 +1531,22 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     position: relative;
     top: -15px;
 }
+.pathwayLandingQuote {
+    text-align: center;
+    padding: 40px 0px;
+}
+.pathwayLandingQuoteLeft {
+    width: 55%;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 5%;
+}
+.pathwayLandingQuoteRight {
+    width: 35%;
+    display: inline-block;
+    vertical-align: top;
+    justify-content: center;
+}
 
 .homePathwaysTitle { font-size: 55px; }
 
@@ -1973,6 +1989,18 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 85%;
         margin-left: 7%;
     }
+    .pathwayLandingQuoteLeft {
+        width: 90%;
+        display: block;
+        margin: auto;
+        text-align: center;
+    }
+    .pathwayLandingQuoteRight {
+        width: 500px;
+        display: block;
+        margin: 30px auto;
+        text-align: center;
+    }
 
     .font40pxUnder800 { font-size: 40px; }
     .font38pxUnder800 { font-size: 38px; }
@@ -2050,6 +2078,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 36px;
         width: 36px;
     }
+    .pathwayLandingIconsLeft {
+        height: 36px;
+        top: -10px;
+    }
 
     .font40pxUnder700 { font-size: 40px; }
     .font38pxUnder700 { font-size: 38px; }
@@ -2111,6 +2143,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     #pathwayMoneyIcon { height: 48px; }
     #pathwayHatIcon { height: 38px; }
+    .pathwayLandingQuoteRight {
+        width: 400px;
+    }
 
     .font40pxUnder600 { font-size: 40px; }
     .font38pxUnder600 { font-size: 38px; }
@@ -2315,6 +2350,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 30px;
         top: -7px;
     }
+    .pathwayLandingQuoteRight {
+        width: 300px;
+    }
 
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }
@@ -2404,6 +2442,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .forBusinessBox > p {
         font-size: 11px;
         margin-top: -7px;
+    }
+    .pathwayLandingQuoteRight {
+        width: 240px;
     }
 
     .font40pxUnder350 { font-size: 40px; }
