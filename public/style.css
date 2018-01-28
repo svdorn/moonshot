@@ -816,7 +816,6 @@ button.link {
     width: 60%;
     display: inline-block;
     vertical-align: top;
-    justify-content: center;
 }
 
 
@@ -2264,6 +2263,16 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .lightBlueChip > div {
         font-size: 15px;
         padding-top: 2px;
+    }
+    .profileInfoSkillsLeft {
+        width: 100%;
+        display: block;
+        margin-right: 0;
+    }
+    .profileInfoSkillsRight {
+        width: 100%;
+        display: block;
+        margin: auto;
     }
 
     .outlineButton { margin-top: 15px; }

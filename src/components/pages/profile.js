@@ -423,7 +423,7 @@ class Profile extends Component {
                                     </div>
                                     <div className="profileInfoSkillsRight">
                                         {user.skills ?
-                                            <div className="center">
+                                            <div>
                                                 {profileSkills}
                                             </div>
                                             : null}
