@@ -42,7 +42,7 @@ const routes = (
         <Route path="/signup" component={Signup} />
         <Route path ='/forBusiness' component={ForBusiness} />
         <Route path="/profile" component={Profile} />
-        <Route path="/settings" page={Settings} />
+        <Route path="/settings" component={AuthenticatedComponent} page={<Settings/>}/>
         <Route path="/verifyEmail" component={VerifyEmail} />
         <Route path="/forgotPassword" component={ForgotPassword}/>
         <Route path="/changePassword" component={ChangePassword} />

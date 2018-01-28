@@ -113,7 +113,13 @@ class Login extends Component {
 
         let saveSession = this.state.keepMeLoggedIn;
 
-        this.props.login(user, saveSession, this.props.navigateBackUrl);
+        let navigateBackUrl = undefined;
+        let location = this.props.location;
+        if (location.query && location.query.redirect) {
+            navigateBackUrl = location.query.redirect;
+        }
+
+        this.props.login(user, saveSession, navigateBackUrl);
     }
 
     goTo (route)  {
@@ -140,7 +146,6 @@ class Login extends Component {
     }
 
     render() {
-        console.log("hey");
         return (
             <div className="fullHeight greenToBlue formContainer">
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
@@ -198,8 +203,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        formData: state.form,
-        navigateBackUrl: state.users.navigateBackUrl
+        formData: state.form
     };
 }
 

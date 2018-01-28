@@ -14,7 +14,7 @@ class AuthenticatedComponent extends Component {
             const location = this.props.location;
             const redirect = location.pathname + location.search;
 
-            this.props.router.push('/login?redirect=${redirect}');
+            this.props.router.push('/login?redirect=' + redirect);
         }
     }
 
