@@ -2391,6 +2391,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 100%;
         padding: 20px 3% 10px;
     }
+    .stepSeparatorNoDisplay {
+        display: none;
+    }
 
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }

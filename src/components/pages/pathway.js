@@ -145,9 +145,16 @@ class Pathway extends Component {
 
             pathwaySteps = steps.map(function(step) {
                 let topSeparators = null;
-                if (step.order <= 2) {
+                if (step.order < 2) {
                     topSeparators = (
                         <div>
+                            <div className="stepSeparatorLeft" style={{top: "0"}}/>
+                            <div className="stepSeparatorRight" style={{top: "0"}}/>
+                        </div>
+                    )
+                } else if (step.order === 2) {
+                    topSeparators = (
+                        <div className="stepSeparatorNoDisplay">
                             <div className="stepSeparatorLeft" style={{top: "0"}}/>
                             <div className="stepSeparatorRight" style={{top: "0"}}/>
                         </div>
