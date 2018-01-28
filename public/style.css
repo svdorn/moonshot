@@ -2270,9 +2270,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         margin-right: 0;
     }
     .profileInfoSkillsRight {
-        width: 100%;
+        width: 95%;
         display: block;
         margin: auto;
+        max-height: 461px;
+        overflow-y: hidden;
+        padding-right: 20px;
     }
 
     .outlineButton { margin-top: 15px; }
