@@ -71,9 +71,13 @@ class Login extends Component {
         let self = this;
         axios.get("/api/keepMeLoggedIn")
         .then(function(res) {
+            let keepMeLoggedIn = res.data;
+            if (typeof keepMeLoggedIn != "boolean") {
+                keepMeLoggedIn = false;
+            }
             self.setState({
                 ...self.state,
-                keepMeLoggedIn: res.data
+                keepMeLoggedIn
             })
         })
         .catch(function(err) {
@@ -136,6 +140,7 @@ class Login extends Component {
     }
 
     render() {
+        console.log("hey");
         return (
             <div className="fullHeight greenToBlue formContainer">
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />

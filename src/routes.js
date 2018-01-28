@@ -10,6 +10,7 @@ import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-route
 import Login from './components/pages/login';
 import Signup from './components/pages/signup';
 import Main from './main';
+import AuthenticatedComponent from './components/AuthenticatedComponent';
 import Home from './components/pages/home';
 import ForBusiness from './components/pages/forBusiness';
 import Profile from './components/pages/profile';
@@ -41,7 +42,7 @@ const routes = (
         <Route path="/signup" component={Signup} />
         <Route path ='/forBusiness' component={ForBusiness} />
         <Route path="/profile" component={Profile} />
-        <Route path="/settings" component={Settings} />
+        <Route path="/settings" component={AuthenticatedComponent} page={Settings} />
         <Route path="/verifyEmail" component={VerifyEmail} />
         <Route path="/forgotPassword" component={ForgotPassword}/>
         <Route path="/changePassword" component={ChangePassword} />

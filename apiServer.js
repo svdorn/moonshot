@@ -260,8 +260,6 @@ app.post('/users', function (req, res) {
                 if (foundUser === null) {
                     // get count of users with that name to get the profile url
                     Users.count({name: user.name}, function(err, count) {
-                        console.log("count of users with name ", user.name, ": ", count);
-
                         const randomNumber = crypto.randomBytes(8).toString('hex');
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
 
@@ -747,11 +745,13 @@ app.post('/login', function (req, res) {
 //                        user = newUser;
 
                         if (saveSession) {
+                            console.log("saving session");
                             req.session.userId = user._id;
                             req.session.save(function (err) {
                                 if (err) {
                                     console.log("error saving user session", err);
                                 }
+                                console.log("req.session: ", req.session);
                                 res.json(user);
                             });
                         } else {
