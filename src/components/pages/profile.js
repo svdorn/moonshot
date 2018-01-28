@@ -507,7 +507,9 @@ class Profile extends Component {
                                     <div style={{clear: "both"}}/>
                                 </div>
 
-                                <div className="textWithMargin">{user.info.description}</div>
+                                {user.info.description ?
+                                    <div className="textWithMargin">{user.info.description}</div>
+                                    : null}
 
                                 <ul className="horizCenteredList" id="aboutMeAreas">
                                     {aboutMeLis}
