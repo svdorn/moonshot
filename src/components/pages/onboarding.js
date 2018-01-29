@@ -804,12 +804,12 @@ class Onboarding extends Component {
                         <div className="onboarding3DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding3DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="font20px font14pxUnder700 font10pxUnder400 center" style={style.title.text}>
+                    <div className="font20px font14pxUnder700 font12pxUnder400 center" style={style.title.text}>
                         The more complete your profile, the more appealing you look to employers.<br/>
                     </div>
                     <div className="center">
                         <img src="/icons/Portfolio.png" className="onboardingIcons" style={style.icons}/>
-                        <div className="onboardingPage3Text font20px font14pxUnder700 font10pxUnder400" style={{display: 'inline-block'}}><b>Personal</b></div>
+                        <div className="onboardingPage3Text font20px" style={{display: 'inline-block'}}><b>Personal</b></div>
                     </div>
 
                     <div className="horizCenteredList">
@@ -895,12 +895,12 @@ class Onboarding extends Component {
 
                     <div className="center">
                         <img src="/icons/GraduationHat.png" className="onboardingIcons" style={style.icons}/>
-                        <div className="onboardingPage3Text font20px font14pxUnder700 font10pxUnder400" style={{display: 'inline-block'}}><b>Education</b></div>
+                        <div className="onboardingPage3Text font20px" style={{display: 'inline-block'}}><b>Education</b></div>
                     </div>
 
                     {educationUls}
 
-                    <div className="center onboardingPage3 font18px">
+                    <div className="center onboardingPage3 font18px font14pxUnder700 font12pxUnder400">
                         <button className="greenButton" onClick={this.addEducationArea.bind(this)}>
                             Add another school
                         </button><br/>
@@ -916,7 +916,7 @@ class Onboarding extends Component {
 
                     <div className="center">
                         <button className="onboardingPage3Button" onClick={this.handleFinishButtonClick.bind(this)}>
-                            <div className="font20px font14pxUnder700 font10pxUnder400 onboardingPage1Text2">
+                            <div className="font20px font14pxUnder700 onboardingPage1Text2">
                                 Finish
                             </div>
                         </button>
