@@ -543,29 +543,29 @@ app.post('/users/forBusinessEmail', function (req, res) {
 
     let message = "None";
     if (req.body.message) {
-        message = req.body.message;
+        message = sanitize(req.body.message);
     }
     let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
     let subject = 'Moonshot Sales Lead - From For Business Page';
     let content = "<div>"
         + "<h3>Sales Lead from For Business Page:</h3>"
         + "<p>Name: "
-        + req.body.name
+        + sanitize(req.body.name)
         + "</p>"
         + "<p>Company: "
-        + req.body.company
+        + sanitize(req.body.company)
         + "</p>"
         + "<p>Title: "
-        + req.body.title
+        + sanitize(req.body.title)
         + "</p>"
         + "<p>Email: "
-        + req.body.email
+        + sanitize(req.body.email)
         + "</p>"
         + "<p>Phone Number: "
-        + req.body.phone
+        + sanitize(req.body.phone)
         + "</p>"
         + "<p>Positions they're hiring for: "
-        + req.body.positions
+        + sanitize(req.body.positions)
         + "</p>"
         + "<p>Message: "
         + message
@@ -588,7 +588,7 @@ app.post('/users/unsubscribeEmail', function (req, res) {
     let content = "<div>"
         + "<h3>This email is Unsubscribing from Moonshot Emails:</h3>"
         + "<p>Email: "
-        + req.body.email
+        + sanitize(req.body.email)
         + "</p>"
         + "</div>";
 
@@ -604,17 +604,17 @@ app.post('/users/unsubscribeEmail', function (req, res) {
 // SEND COMING SOON EMAIL
 app.post('/users/comingSoonEmail', function (req, res) {
 
-    let recipient = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
+    let recipient = "kyle@moonshotlearning.org, justin@moonshotlearning.org, ameyer24@wisc.edu";
     let subject = 'Moonshot Coming Soon Pathway';
     let content = "<div>"
         + "<h3>Pathway:</h3>"
         + "<p>Name: "
-        + req.body.name
+        + sanitize(req.body.name)
         + "<p>Email: "
-        + req.body.email
+        + sanitize(req.body.email)
         + "</p>"
         + "<p>Pathway: "
-        + req.body.pathway
+        + sanitize(req.body.pathway)
         + "</p>"
         + "</div>";
 
@@ -632,17 +632,17 @@ app.post('/users/contactUsEmail', function (req, res) {
 
     let message = "None";
     if (req.body.message) {
-        message = req.body.message;
+        message = sanitize(req.body.message);
     }
     let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
     let subject = 'Moonshot Pathway Question -- Contact Us Form';
     let content = "<div>"
         + "<h3>Questions from pathway:</h3>"
         + "<p>Name: "
-        + req.body.name
+        + sanitize(req.body.name)
         + "</p>"
         + "<p>Email: "
-        + req.body.email
+        + sanitize(req.body.email)
         + "</p>"
         + "<p>Message: "
         + message
@@ -661,7 +661,7 @@ app.post('/users/contactUsEmail', function (req, res) {
 // SEND EMAIL FOR PASSWORD RESET
 app.post('/forgotPassword', function (req, res) {
 
-    let email = sanitizeHtml(req.body.email, sanitizeOptions);
+    let email = sanitize(req.body.email);
     let query = {email: email};
 
     const user = getUserByQuery(query, function (user) {
@@ -749,7 +749,7 @@ function sendEmail(recipients, subject, content, callback) {
 }
 
 app.post('/getUserById', function(req, res) {
-    const _id = sanitizeHtml(req.body._id, sanitizeOptions);
+    const _id = sanitize(req.body._id);
     const query = { _id };
     getUserByQuery(query, function (user) {
         res.json(user);
@@ -757,7 +757,7 @@ app.post('/getUserById', function(req, res) {
 });
 
 app.post('/getUserByProfileUrl', function(req, res) {
-    const profileUrl = sanitizeHtml(req.body.profileUrl, sanitizeOptions);
+    const profileUrl = sanitize(req.body.profileUrl);
     const query = { profileUrl };
     getUserByQuery(query, function (user) {
         res.json(user);
@@ -765,7 +765,7 @@ app.post('/getUserByProfileUrl', function(req, res) {
 });
 
 app.post('/getUserByQuery', function (req, res) {
-    const query = sanitizeHtml(req.body.query, sanitizeOptions);
+    const query = sanitize(req.body.query);
     const user = getUserByQuery(query, function (user) {
         res.json(user);
     });
@@ -790,14 +790,14 @@ function getUserByQuery(query, callback) {
 
 // LOGIN USER
 app.post('/login', function (req, res) {
-    const reqUser = req.body.user;
-    let saveSession = req.body.saveSession;
+    const reqUser = sanitize(req.body.user);
+    let saveSession = sanitize(req.body.saveSession);
 
     if (typeof saveSession !== "boolean") {
         saveSession = false;
     }
-    var email = sanitizeHtml(reqUser.email, sanitizeOptions);
-    var password = sanitizeHtml(reqUser.password, sanitizeOptions);
+    var email = reqUser.email;
+    var password = reqUser.password;
 
     var query = {email: email};
     Users.findOne(query, function (err, user) {
@@ -881,7 +881,7 @@ app.get('/users', function (req, res) {
 
 //----->> DELETE USER <<------
 app.delete('/users/:_id', function (req, res) {
-    var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
+    var query = {_id: sanitize(req.params._id)};
 
     Users.remove(query, function (err, user) {
         if (err) {
@@ -895,7 +895,7 @@ app.delete('/users/:_id', function (req, res) {
 app.put('/users/:_id', function (req, res) {
     var user = sanitize(req.body);
 
-    var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
+    var query = {_id: sanitize(req.params._id)};
 
     // if the field doesn't exist, $set will set a new field
     var update = {
@@ -938,8 +938,8 @@ app.put('/users/:_id', function (req, res) {
 
 //----->> CHANGE PASSWORD <<------
 app.put('/users/changepassword/:_id', function (req, res) {
-    var user = req.body;
-    var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
+    var user = sanitize(req.body);
+    var query = {_id: sanitize(req.params._id)};
 
     // sanitize user info
     for (var prop in user) {
@@ -1001,7 +1001,7 @@ app.put('/users/changepassword/:_id', function (req, res) {
 
 //----->> GET TOP PATHWAYS <<------
 app.get('/topPathways', function (req, res) {
-    const numPathways = parseInt(req.query.numPathways);
+    const numPathways = parseInt(sanitize(req.query.numPathways));
 
     // gets the most popular pathways, the number of pathways is numPathways
     Pathways.find()
@@ -1030,7 +1030,7 @@ app.get('/topPathways', function (req, res) {
 
 //----->> GET LINK BY ID <<-----
 app.get('/getLink', function (req, res) {
-    const _id = req.query._id;
+    const _id = sanitize(req.query._id);
     const query = {_id: _id};
 
     Links.findOne(query, function (err, link) {
@@ -1045,7 +1045,7 @@ app.get('/getLink', function (req, res) {
 
 //----->> GET ARTICLE BY ID <<-----
 app.get('/getArticle', function (req, res) {
-    const _id = req.query._id;
+    const _id = sanitize(req.query._id);
     const query = {_id: _id};
 
     Articles.findOne(query, function (err, article) {
@@ -1060,7 +1060,7 @@ app.get('/getArticle', function (req, res) {
 
 //----->> GET VIDEO BY ID <<-----
 app.get('/getVideo', function (req, res) {
-    const _id = req.query._id;
+    const _id = sanitize(req.query._id);
     const query = {_id: _id};
 
     Videos.findOne(query, function (err, link) {
@@ -1075,7 +1075,7 @@ app.get('/getVideo', function (req, res) {
 
 //----->> GET PATHWAY BY ID <<-----
 app.get('/pathwayById', function (req, res) {
-    const _id = req.query._id;
+    const _id = sanitize(req.query._id);
     const query = {_id: _id};
 
     Pathways.findOne(query, function (err, pathway) {
@@ -1090,7 +1090,7 @@ app.get('/pathwayById', function (req, res) {
 
 //----->> GET PATHWAY BY URL <<-----
 app.get('/pathwayByPathwayUrlNoContent', function (req, res) {
-    const pathwayUrl = req.query.pathwayUrl;
+    const pathwayUrl = sanitize(req.query.pathwayUrl);
     const query = {url: pathwayUrl};
 
     Pathways.findOne(query, function (err, pathway) {
@@ -1105,11 +1105,11 @@ app.get('/pathwayByPathwayUrlNoContent', function (req, res) {
     })
 });
 app.get('/pathwayByPathwayUrl', function (req, res) {
-    const pathwayUrl = req.query.pathwayUrl;
-    const userId = req.query.userId;
+    const pathwayUrl = sanitize(req.query.pathwayUrl);
+    const userId = sanitize(req.query.userId);
 //    const hashedVerificationToken = req.query.hashedVerificationToken;
 
-    const verificationToken = req.query.verificationToken;
+    const verificationToken = sanitize(req.query.verificationToken);
     const query = {url: pathwayUrl};
 
     Pathways.findOne(query, function (err, pathway) {
@@ -1171,29 +1171,29 @@ app.get('/search', function (req, res) {
     const MAX_PATHWAYS_TO_RETURN = 1000;
     let query = {};
 
-    const term = req.query.searchTerm;
+    const term = sanitize(req.query.searchTerm);
     if (term && term !== "") {
         // if there is a search term, add it to the query
-        const termRegex = new RegExp(req.query.searchTerm);
+        const termRegex = new RegExp(term);
         query["name"] = termRegex;
     }
 
-    const queryNOTYET = req.body.query;
-    let limit = parseInt(req.query.limit);
+    const queryNOTYET = sanitize(req.body.query);
+    let limit = parseInt(sanitize(req.query.limit));
     if (limit === NaN) {
         limit = MAX_PATHWAYS_TO_RETURN;
     }
-    const sortNOTYET = req.body.sort;
-    const selectNOTYET = req.body.select;
+    const sortNOTYET = sanitize(req.body.sort);
+    const selectNOTYET = sanitize(req.body.select);
 
     // add category to query if it exists
-    const category = req.query.category;
+    const category = sanitize(req.query.category);
     if (category && category !== "") {
         query["tags"] = category;
     }
 
     // add company to query if it exists
-    const company = req.query.company;
+    const company = sanitize(req.query.company);
     if (company && company !== "") {
         query["sponsor.name"] = company;
     }
@@ -1217,10 +1217,10 @@ app.get('/search', function (req, res) {
 
 
 app.post("/userCurrentStep", function (req, res) {
-    const userId = req.body.params.userId;
-    const pathwayId = req.body.params.pathwayId;
-    const stepNumber = req.body.params.stepNumber;
-    const subStepNumber = req.body.params.subStepNumber;
+    const userId = sanitize(req.body.params.userId);
+    const pathwayId = sanitize(req.body.params.pathwayId);
+    const stepNumber = sanitize(req.body.params.stepNumber);
+    const subStepNumber = sanitize(req.body.params.subStepNumber);
 
     Users.findById(userId, function(err, user) {
         let pathwayIndex = user.pathways.findIndex(function(path) {
@@ -1240,8 +1240,8 @@ app.post("/userCurrentStep", function (req, res) {
 });
 
 app.get("/infoByUserId", function(req, res) {
-    infoType = req.query.infoType;
-    const userId = sanitizeHtml(req.query.userId, sanitizeOptions);
+    infoType = sanitize(req.query.infoType);
+    const userId = sanitize(req.query.userId);
 
     if (userId && infoType) {
         Users.findById(userId, function(err, user) {
@@ -1261,8 +1261,8 @@ app.get("/infoByUserId", function(req, res) {
 });
 
 app.post("/addInterests", function(req, res) {
-    const interests = req.body.params.interests;
-    const userId = req.body.params.userId;
+    const interests = sanitize(req.body.params.interests);
+    const userId = sanitize(req.body.params.userId);
 
     if (interests && userId) {
         // When true returns the updated document
@@ -1291,8 +1291,8 @@ app.post("/addInterests", function(req, res) {
 });
 
 app.post("/updateInterests", function(req, res) {
-    const interests = req.body.params.interests;
-    const userId = req.body.params.userId;
+    const interests = sanitize(req.body.params.interests);
+    const userId = sanitize(req.body.params.userId);
 
     if (interests && userId) {
         // When true returns the updated document
@@ -1316,8 +1316,8 @@ app.post("/updateInterests", function(req, res) {
 });
 
 app.post("/updateGoals", function(req, res) {
-    const goals = req.body.params.goals;
-    const userId = req.body.params.userId;
+    const goals = sanitize(req.body.params.goals);
+    const userId = sanitize(req.body.params.userId);
 
     if (userId && goals) {
         // When true returns the updated document
@@ -1343,8 +1343,8 @@ app.post("/updateGoals", function(req, res) {
 });
 
 app.post("/updateInfo", function(req, res) {
-    const info = req.body.params.info;
-    const userId = req.body.params.userId;
+    const info = sanitize(req.body.params.info);
+    const userId = sanitize(req.body.params.userId);
 
     if (info && userId) {
         // When true returns the updated document
