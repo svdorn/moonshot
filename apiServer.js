@@ -1157,13 +1157,11 @@ app.get('/search', function (req, res) {
         query["name"] = termRegex;
     }
 
-    const queryNOTYET = sanitize(req.body.query);
     let limit = parseInt(sanitize(req.query.limit));
     if (limit === NaN) {
         limit = MAX_PATHWAYS_TO_RETURN;
     }
     const sortNOTYET = sanitize(req.body.sort);
-    const selectNOTYET = sanitize(req.body.select);
 
     // add category to query if it exists
     const category = sanitize(req.query.category);
@@ -1179,6 +1177,7 @@ app.get('/search', function (req, res) {
 
     //const limit = 4;
     const sort = {avgRating: -1};
+    // only get these properties of the pathways
     const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon url";
 
     Pathways.find(query)
