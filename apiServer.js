@@ -79,8 +79,15 @@ app.post("/keepMeLoggedIn", function(req, res) {
         }
     })
 });
+
+
+// get the setting to stay logged in or out
 app.get("/keepMeLoggedIn", function(req, res) {
-    res.json(req.session.stayLoggedIn);
+    let setting = req.session.stayLoggedIn;
+    if (typeof setting !== "boolean") {
+        setting = false;
+    }
+    res.json(setting);
 });
 
 // GET USER SESSION
@@ -90,7 +97,7 @@ app.get('/userSession', function (req, res) {
         // not the session itself, because we don't want the user id in the cookie
         const userId = sanitize(req.session.userId);
         getUserByQuery({_id: userId}, function (user) {
-            res.json(user);
+            res.json(removePassword(user));
         })
     }
     else {
@@ -258,7 +265,7 @@ app.post('/users', function (req, res) {
                             if (err) {
                                 console.log(err);
                             }
-                            res.json(cleanUser(user));
+                            res.json(removePassword(user));
                         })
                     })
                 } else {
@@ -391,8 +398,7 @@ app.post('/verifyEmail', function (req, res) {
                 console.log(err);
             }
 
-            user.password = undefined;
-            res.json(user);
+            res.json(removePassword(user));
         });
     });
 });
@@ -439,8 +445,7 @@ app.post('/users/changePasswordForgot', function (req, res) {
                         console.log(err);
                     }
 
-                    newUser.password = undefined;
-                    res.json(newUser);
+                    res.json(removePassword(newUser));
                 });
             })
         })
@@ -752,7 +757,7 @@ app.post('/getUserById', function(req, res) {
     const _id = sanitize(req.body._id);
     const query = { _id };
     getUserByQuery(query, function (user) {
-        res.json(user);
+        res.json(removePassword(user));
     })
 });
 
@@ -760,25 +765,15 @@ app.post('/getUserByProfileUrl', function(req, res) {
     const profileUrl = sanitize(req.body.profileUrl);
     const query = { profileUrl };
     getUserByQuery(query, function (user) {
-        res.json(user);
+        res.json(safeUser(user));
     })
-});
-
-app.post('/getUserByQuery', function (req, res) {
-    const query = sanitize(req.body.query);
-    const user = getUserByQuery(query, function (user) {
-        res.json(user);
-    });
 });
 
 function getUserByQuery(query, callback) {
     Users.findOne(query, function (err, foundUser) {
         if (foundUser) {
-            //cleanUser(foundUser, function(cleanedUser) {
-            //    callback(cleanedUser);
-                callback(cleanUser(foundUser));
-                return;
-//            })
+            callback(removePassword(foundUser));
+            return;
         } else {
             if (err) {
                 console.log(err);
@@ -822,24 +817,19 @@ app.post('/login', function (req, res) {
             else if (passwordsMatch) {
                 // check if user verified email address
                 if (user.verified) {
-                    user = cleanUser(user);
-//                    cleanUser(user, function(newUser) {
-//                        user = newUser;
-
-                        if (saveSession) {
-                            req.session.userId = user._id;
-                            req.session.save(function (err) {
-                                if (err) {
-                                    console.log("error saving user session", err);
-                                }
-                                res.json(user);
-                            });
-                        } else {
-                            res.json(user);
-                            return;
-                        }
-//                    });
-
+                    user = removePassword(user);
+                    if (saveSession) {
+                        req.session.userId = user._id;
+                        req.session.save(function (err) {
+                            if (err) {
+                                console.log("error saving user session", err);
+                            }
+                            res.json(removePassword(user));
+                        });
+                    } else {
+                        res.json(removePassword(user));
+                        return;
+                    }
                 }
                 // if user has not yet verified email address, don't log in
                 else {
@@ -856,28 +846,26 @@ app.post('/login', function (req, res) {
     });
 });
 
-function cleanUser(user, callback) {
-//    const saltRounds = 10;
-//    bcrypt.hash(user.verificationToken, saltRounds, function(err, hash) {
-        let newUser = user;
-        newUser.password = undefined;
-//        newUser.verificationToken = undefined;
-//        newUser.hashedVerificationToken = hash;
-//        callback(newUser);
-//    });
-    return newUser;
+
+// this user object can now safely be seen by anyone
+function safeUser(user) {
+    let newUser = Object.assign({}, user);
+    newUser.password = undefined;
+    newUser._id = undefined;
+    newUser.verificationToken = undefined;
+    newUser.emailVerificationToken = undefined;
+    newUser.passwordToken = undefined;
 }
 
 
-//----->> GET USERS <<------
-app.get('/users', function (req, res) {
-    Users.find(function (err, users) {
-        if (err) {
-            console.log(err);
-        }
-        res.json(users);
-    })
-});
+// used when passing the user object back to the user, still contains sensitive
+// data such as the user id and verification token
+function removePassword(user) {
+    let newUser = user;
+    newUser.password = undefined;
+    return newUser;
+}
+
 
 //----->> DELETE USER <<------
 app.delete('/users/:_id', function (req, res) {
@@ -887,7 +875,7 @@ app.delete('/users/:_id', function (req, res) {
         if (err) {
             console.log(err);
         }
-        res.json(user);
+        res.json(safeUser(user));
     })
 });
 
@@ -923,13 +911,12 @@ app.put('/users/:_id', function (req, res) {
             }
         }
         if (bool) {
-            Users.findOneAndUpdate(query, update, options, function (err, users) {
+            Users.findOneAndUpdate(query, update, options, function (err, user) {
                 if (err) {
                     console.log(err);
                 }
 
-                users.password = undefined;
-                res.json(users);
+                res.json(removePassword(user));
             });
         }
 
@@ -982,12 +969,11 @@ app.put('/users/changepassword/:_id', function (req, res) {
                         var options = {new: true};
 
                         // i think it has to be {_id: req.params._id} for the query
-                        Users.findOneAndUpdate(query, update, options, function (err, users) {
+                        Users.findOneAndUpdate(query, update, options, function (err, user) {
                             if (err) {
                                 console.log(err);
                             }
-                            users.password = undefined;
-                            res.json(users);
+                            res.json(removePassword(user));
                         });
                     } else {
                         res.status(400).send("Old password is incorrect.");
@@ -1014,14 +1000,6 @@ app.get('/topPathways', function (req, res) {
             } else if (pathways.length == 0) {
                 res.status(500).send("No pathways found");
             } else {
-                // // if there weren't enough pathways
-                // if (pathways.length < numPathways) {
-                //     for (let i = pathways.length; i < numPathways; i++) {
-                //         // extend the pathways with the last pathway until you have
-                //         // the number you wanted
-                //         pathways.push(pathways[i - 1]);
-                //     }
-                // }
                 res.json(pathways);
             }
         });
@@ -1074,7 +1052,7 @@ app.get('/getVideo', function (req, res) {
 });
 
 //----->> GET PATHWAY BY ID <<-----
-app.get('/pathwayById', function (req, res) {
+app.get('/pathwayByIdNoContent', function (req, res) {
     const _id = sanitize(req.query._id);
     const query = {_id: _id};
 
@@ -1082,7 +1060,7 @@ app.get('/pathwayById', function (req, res) {
         if (err) {
             console.log("error in get pathway by id")
         } else {
-            res.json(pathway);
+            res.json(removeContentFromPathway(pathway));
         }
 
     })
@@ -1104,6 +1082,7 @@ app.get('/pathwayByPathwayUrlNoContent', function (req, res) {
 
     })
 });
+
 app.get('/pathwayByPathwayUrl', function (req, res) {
     const pathwayUrl = sanitize(req.query.pathwayUrl);
     const userId = sanitize(req.query.userId);

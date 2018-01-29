@@ -75,7 +75,7 @@ class Profile extends Component {
 
                 for (let i = 0; i < user.pathways.length; i++) {
                     let id = user.pathways[i].pathwayId;
-                    axios.get("/api/pathwayById", {
+                    axios.get("/api/pathwayByIdNoContent", {
                         params: {
                             _id: id
                         }
@@ -119,7 +119,7 @@ class Profile extends Component {
             if (user.completedPathways) {
                 for (let i = 0; i < user.completedPathways.length; i++) {
                     let id = user.completedPathways[i].pathwayId;
-                    axios.get("/api/pathwayById", {
+                    axios.get("/api/pathwayByIdNoContent", {
                         params: {
                             _id: id
                         }

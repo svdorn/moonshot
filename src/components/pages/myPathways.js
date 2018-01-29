@@ -42,7 +42,7 @@ class MyPathways extends Component {
                 else {
                     for (let i = 0; i < this.props.currentUser.pathways.length; i++) {
                         let id = this.props.currentUser.pathways[i].pathwayId;
-                        axios.get("/api/pathwayById", {
+                        axios.get("/api/pathwayByIdNoContent", {
                             params: {
                                 _id: id
                             }
@@ -87,7 +87,7 @@ class MyPathways extends Component {
             if (this.props.currentUser.completedPathways) {
                 for (let i = 0; i < this.props.currentUser.completedPathways.length; i++) {
                     let id = this.props.currentUser.completedPathways[i].pathwayId;
-                    axios.get("/api/pathwayById", {
+                    axios.get("/api/pathwayByIdNoContent", {
                         params: {
                             _id: id
                         }
