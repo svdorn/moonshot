@@ -2094,11 +2094,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .infoBoxImage {
         height: 50px;
-        margin: auto -150px auto;
+        margin: auto -170px auto;
     }
     .infoBoxPortfolioImage {
         height: 50px;
-        margin: auto -120px auto;
+        margin: auto -140px auto;
     }
     .halfWidthStepRight > img, .halfWidthStepLeft > img {
         height: 65px;
@@ -2439,11 +2439,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .infoBoxImage {
         height: 38px;
-        margin: auto -125px auto;
+        margin: auto -140px auto;
     }
     .infoBoxPortfolioImage {
         height: 38px;
-        margin: auto -125px auto;
+        margin: auto -140px auto;
     }
 
     .font40pxUnder400 { font-size: 40px; }

@@ -176,7 +176,7 @@ class Pathway extends Component {
                         />
                         <div className="halfWidthStepText">
 
-                            <div className="halfWidthStepNumber font14pxUnder700 font12pxUnder500">
+                            <div className="halfWidthStepNumber font16pxUnder700 font14pxUnder500">
                                 STEP {step.order}
                             </div>
                             <div className="halfWidthStepTitle font font22pxUnder700 font18pxUnder500">
@@ -374,7 +374,7 @@ class Pathway extends Component {
                                     />
                                     <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">ABOUT</b>
                                 </div>
-                                <div className="font20px font14pxUnder700 font12pxUnder400">
+                                <div className="font20px font16pxUnder700 font14pxUnder400">
                                     {pathway.sponsor.description}
                                 </div>
                                 {pathway.sponsor.hiring ?
@@ -384,7 +384,7 @@ class Pathway extends Component {
                                             className="pathwayLandingIconsLeft"
                                         />
                                         <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">OPEN POSITIONS</b><br/>
-                                        <div className="font20px font14pxUnder700 font12pxUnder400">- {pathway.sponsor.hiring}</div>
+                                        <div className="font20px font16pxUnder700 font14pxUnder400">- {pathway.sponsor.hiring}</div>
                                     </div>
                                     : null}
                                 <div style={style.spaceTop}>
@@ -395,19 +395,19 @@ class Pathway extends Component {
                                     <b style={{color: '#B869FF'}}
                                        className="font40px font24pxUnder500">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
                                     <a href={pathway.sponsor.homepage} target="_blank" style={style.infoLinks}
-                                       className="font20px font14pxUnder700 font12pxUnder400">Website</a>
+                                       className="font20px font16pxUnder700 font14pxUnder400">Website</a>
                                     {pathway.sponsor.blog ?
                                         <a href={pathway.sponsor.blog} target="_blank" style={style.infoLinks}
-                                           className="font20px font14pxUnder700 font12pxUnder400">Blog</a> : null}
+                                           className="font20px font16pxUnder700 font14pxUnder400">Blog</a> : null}
                                     {pathway.sponsor.demo ?
                                         <a href={pathway.sponsor.demo} target="_blank" style={style.infoLinks}
-                                           className="font20px font14pxUnder700 font12pxUnder400">Demo</a> : null}
+                                           className="font20px font16pxUnder700 font14pxUnder400">Demo</a> : null}
                                 </div>
                             </div>
                             {pathway.sponsor.quote ?
                                 <div className="pathwayLandingQuoteRight">
                                     <div style={style.quote.container}>
-                                        <div style={style.quote.content} className="font20px font14pxUnder700 font12pxUnder400">
+                                        <div style={style.quote.content} className="font28px font20pxUnder700 font16pxUnder400">
                                             {"\""}{pathway.sponsor.quote.body}{"\""}<br/>
                                         </div>
 
@@ -418,7 +418,7 @@ class Pathway extends Component {
                                                 id="speakerImage"
                                                 alt={""}
                                             />
-                                            <div style={style.quote.speakerInfo} className="font20px font14pxUnder700 font12pxUnder400">
+                                            <div style={style.quote.speakerInfo} className="font20px font16pxUnder700 font14pxUnder400">
                                                 {pathway.sponsor.quote.speakerName}<br/>
                                                 {pathway.sponsor.quote.speakerTitle}
                                             </div>
@@ -445,7 +445,7 @@ class Pathway extends Component {
                                                     alt="Free"
                                                     className="infoBoxImage"
                                                 />
-                                                <div className="font20px font14pxUnder700 font12pxUnder400">
+                                                <div className="font20px font16pxUnder700 font14pxUnder400">
                                                     It{"'"}s free.<br/>
                                                     {pathway.sponsor.name} provides scholarships<br/>
                                                     to pay for your pathway.
@@ -459,7 +459,7 @@ class Pathway extends Component {
                                                     alt="Portfolio"
                                                     className="infoBoxPortfolioImage"
                                                 />
-                                                <div className="font20px font14pxUnder700 font12pxUnder400">
+                                                <div className="font20px font16pxUnder700 font14pxUnder400">
                                                     Learn {pathway.sponsor.learn}<br/>
                                                     and build<br/>
                                                     your {pathway.sponsor.type} portfolio.
@@ -475,7 +475,7 @@ class Pathway extends Component {
                                                     alt="Data"
                                                     className="infoBoxImage"
                                                 />
-                                                <div className="font20px font14pxUnder700 font12pxUnder400">
+                                                <div className="font20px font16pxUnder700 font14pxUnder400">
                                                     Get evaluated by {pathway.sponsor.name}<br/>
                                                     and other {pathway.sponsor.type} employers<br/>
                                                     based on your performance.
