@@ -536,7 +536,7 @@ class Onboarding extends Component {
                                 </div>
                             </div>
                             :
-                            <div className="gradientBorderBlue center clickableNoUnderline noselect" style={{marginRight: '20px', marginTop: '20px'}}
+                            <div className="gradientBorderBlue center clickableNoUnderline noselect onboardingPage1Margin"
                                 onClick={() => self.handleInterestClick(interest)}>
                                 <div className="onboardingPage1Text3 font14px font12pxUnder500">
                                     {interest.title}
@@ -756,7 +756,7 @@ class Onboarding extends Component {
                     </div>
                     <div className="center">
                         <button className="onboardingPage1Button" onClick={this.handleStep1ButtonClick.bind(this)}>
-                            <div className="font20px font14pxUnder700 font10pxUnder400 onboardingPage1Text2">
+                            <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
                                 Next
                             </div>
                         </button>

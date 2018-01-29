@@ -980,6 +980,10 @@ button.link {
     margin-right: 20px;
     margin-top: 20px;
 }
+.onboardingPage1Margin {
+    margin-top: 20px;
+    margin-right: 20px;
+}
 .onboardingPage1Button{
     background: linear-gradient(to right, #5deaff, #3dabff);
     border: #3dabff;
@@ -2399,6 +2403,24 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .onboardingIcons {
         height: 40px;
+    }
+    .onboardingPage1Text2 {
+        padding: 1px 5px;
+    }
+    .onboardingPage1Text3 {
+        padding: 1px 5px;
+    }
+    .onboardingPage1Text2Background{
+        padding: 2px;
+        margin-right: 10px;
+        margin-top: 10px;
+    }
+    .onboardingPage1Margin {
+        margin-top: 10px;
+        margin-right: 10px;
+    }
+    .onboardingInterestsListContainer {
+        width: 75%;
     }
 
     .font40pxUnder500 { font-size: 40px; }
