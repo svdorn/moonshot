@@ -88,7 +88,7 @@ app.get('/userSession', function (req, res) {
     if (typeof req.session.userId === 'string') {
         // TODO make sure we're only storing the session id in the cookie and
         // not the session itself, because we don't want the user id in the cookie
-        const userId = sanitizeHtml(req.session.userId, sanitizeOptions);
+        const userId = sanitize(req.session.userId);
         getUserByQuery({_id: userId}, function (user) {
             res.json(user);
         })
