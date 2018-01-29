@@ -113,6 +113,8 @@ class Signup extends Component {
             userType: "student",
         }];
 
+        console.log(user);
+
         this.props.postUser(user);
 
         this.setState({
@@ -196,7 +198,8 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         loadingCreateUser: state.users.loadingSomething,
-        userPosted: state.users.userPosted
+        userPosted: state.users.userPosted,
+        currentUser: state.users.currentUser
     };
 }
 

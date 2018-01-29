@@ -21,11 +21,11 @@ var usersSchema = mongoose.Schema({
         bio: String,
         desiredJobs: String,
         inSchool: Boolean,
-        links: {
-            linkedIn: String,
-            gitHub: String,
-            personal: String
-        },
+        // links: {
+        //     linkedIn: String,
+        //     gitHub: String,
+        //     personal: String
+        // },
         education: [{
             school: String,
             majors: String,

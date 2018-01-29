@@ -278,12 +278,42 @@ app.post('/users', function (req, res) {
     });
 });
 
+
+// all this does is sanitize the user, NOT get rid of properties that could
+// contain sensitive data
 function sanitizeUser(user) {
     console.log("user is: ", user);
 
-    let newUser = user;
+    let newUser = {};
+    const stringFields = [
+        "_id",
+        "name",
+        "email",
+        "userType",
+        "profileUrl",
+        "password",
+        "verificationToken",
+        "emailVerificationToken",
+        "passwordToken",
+        "images",
+        "info.title",
+        "info.location",
+        "info.willRelocateTo",
+        "info.bio",
+        "info.desiredJobs",
+    ];
 
-    return newUser;
+    stringFields.forEach(function(field) {
+        if (user[field] && typeof user[field] === "string") {
+            newUser[field] = sanitizeHtml(user[field], sanitizeOptions);
+        }
+    });
+
+
+
+
+    // TODO: change this back to newUser
+    return user;
 }
 
 app.post('/verifyEmail', function (req, res) {
@@ -821,13 +851,15 @@ app.put('/users/:_id', function (req, res) {
     var user = req.body;
 
     // sanitize user info
-    for (var prop in user) {
-        // skip loop if the property is from prototype
-        if (!user.hasOwnProperty(prop)) continue;
-        if (typeof user[prop] === "string") {
-            user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
-        }
-    }
+    // for (var prop in user) {
+    //     // skip loop if the property is from prototype
+    //     if (!user.hasOwnProperty(prop)) continue;
+    //     if (typeof user[prop] === "string") {
+    //         user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
+    //     }
+    // }
+
+    user = sanitizeUser(user);
 
     var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
 
