@@ -290,7 +290,8 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
                 userId: user._id,
                 pathwayId: pathwayId,
                 stepNumber: stepNumber,
-                subStepNumber: subStep.order
+                subStepNumber: subStep.order,
+                verificationToken: user.verificationToken
             }
         })
         .then(function(response) {

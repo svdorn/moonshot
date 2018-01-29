@@ -1060,7 +1060,11 @@ app.get('/pathwayByIdNoContent', function (req, res) {
         if (err) {
             console.log("error in get pathway by id")
         } else {
-            res.json(removeContentFromPathway(pathway));
+            if (pathway) {
+                res.json(removeContentFromPathway(pathway));
+            } else {
+                res.json(undefined);
+            }
         }
 
     })
@@ -1106,7 +1110,7 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
                     return;
                 } else {
                     // check that user is who they say they are
-                    if (userIsVerified(user, verificationToken)) {
+                    if (verifyUser(user, verificationToken)) {
                         // check that user has access to that pathway
                         const hasAccessToPathway = user.pathways.some(function(path) {
                             return pathway._id.toString() == path.pathwayId.toString();
@@ -1132,16 +1136,21 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
     })
 });
 
-function userIsVerified(user, verificationToken) {
+function verifyUser(user, verificationToken) {
     return user.verificationToken && user.verificationToken == verificationToken;
 }
 
 function removeContentFromPathway(pathway) {
-    steps = pathway.steps;
-    for (let i = 0; i < steps.length; i++) {
-        steps[i].substeps = undefined;
+    if (pathway) {
+        steps = pathway.steps;
+        if (steps) {
+            for (let i = 0; i < steps.length; i++) {
+                steps[i].substeps = undefined;
+            }
+            pathway.steps = steps;
+        }
     }
-    pathway.steps = steps;
+
     return pathway;
 }
 
@@ -1199,8 +1208,14 @@ app.post("/userCurrentStep", function (req, res) {
     const pathwayId = sanitize(req.body.params.pathwayId);
     const stepNumber = sanitize(req.body.params.stepNumber);
     const subStepNumber = sanitize(req.body.params.subStepNumber);
+    const verificationToken = sanitize(req.body.params.verificationToken);
 
     Users.findById(userId, function(err, user) {
+        if (!verifyUser(user, verificationToken)) {
+            res.status(401).send("User does not have valid credentials to save step.");
+            return;
+        }
+
         let pathwayIndex = user.pathways.findIndex(function(path) {
             return path.pathwayId == pathwayId;
         });
