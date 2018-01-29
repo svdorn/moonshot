@@ -564,7 +564,7 @@ class Onboarding extends Component {
                                 </div>
                             </div>
                             :
-                            <div className="clickableNoUnderline gradientBorderPurple center" style={{marginTop: '20px'}} onClick={() => self.handleGoalClick(goal)}>
+                            <div className="clickableNoUnderline gradientBorderPurple center onboardingPage2Margin" onClick={() => self.handleGoalClick(goal)}>
                                 <div className="onboardingPage2Text3 font14px font12pxUnder500">
                                     {goal.title}
                                 </div>
@@ -774,7 +774,7 @@ class Onboarding extends Component {
                         <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="font14px font12pxUnder500 center" style={{marginBottom: "20px"}}>
+                    <div className="font14px font10pxUnder500 center" style={{marginBottom: "20px"}}>
                         Select All That Apply.
                     </div>
                     <div>
@@ -786,7 +786,7 @@ class Onboarding extends Component {
                     </div>
                     <div className="center">
                         <button className="onboardingPage2Button" onClick={this.handleGoalsButtonClick.bind(this)}>
-                            <div className="font20px font14pxUnder700 font10pxUnder400 onboardingPage1Text2">
+                            <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
                                 Next
                             </div>
                         </button>
