@@ -514,9 +514,6 @@ class Onboarding extends Component {
                     marginBottom: '30px',
                 }
             },
-            iconLi: {
-                marginRight: '90px',
-            }
         };
 
         // INTERESTS
@@ -659,7 +656,7 @@ class Onboarding extends Component {
                     </div>
                     <div>
                         <ul className="horizCenteredList onboardingListContainer">
-                            <li style={style.iconLi} className="clickableNoUnderline"
+                            <li className="clickableNoUnderline onboardingIconLi"
                                 onClick={() => this.handleIconClick(1)}>
                                 {this.state.currInterestArea === this.state.designAndDevInterests ?
                                     <div className="gradientBorderBlue center">
@@ -679,7 +676,7 @@ class Onboarding extends Component {
                                     </div>
                                 }
                             </li>
-                            <li style={style.iconLi} className="clickableNoUnderline"
+                            <li className="clickableNoUnderline onboardingIconLi"
                                 onClick={() => this.handleIconClick(2)}>
                                 {this.state.currInterestArea === this.state.dataInterests ?
                                     <div className="gradientBorderBlue center">
@@ -713,7 +710,7 @@ class Onboarding extends Component {
                             </li>
                         </ul>
                         <ul className="horizCenteredList onboardingListContainer">
-                            <li style={style.iconLi} className="clickableNoUnderline"
+                            <li className="clickableNoUnderline onboardingIconLi"
                                 onClick={() => this.handleIconClick(4)}>
                                 {this.state.currInterestArea === this.state.creationAndMarketingInterests ?
                                     <div className="gradientBorderBlue center">
