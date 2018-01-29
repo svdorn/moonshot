@@ -76,21 +76,23 @@ class Login extends Component {
     }
 
     componentDidMount() {
-        let self = this;
-        axios.get("/api/keepMeLoggedIn")
-        .then(function(res) {
-            let keepMeLoggedIn = res.data;
-            if (typeof keepMeLoggedIn != "boolean") {
-                keepMeLoggedIn = false;
-            }
-            self.setState({
-                ...self.state,
-                keepMeLoggedIn
-            })
-        })
-        .catch(function(err) {
-            console.log("error getting 'keep me logged in' option")
-        });
+        if (!this.props.currentUser && this.props.currentUser === "no user") {
+            let self = this;
+            axios.get("/api/keepMeLoggedIn")
+                .then(function (res) {
+                    let keepMeLoggedIn = res.data;
+                    if (typeof keepMeLoggedIn != "boolean") {
+                        keepMeLoggedIn = false;
+                    }
+                    self.setState({
+                        ...self.state,
+                        keepMeLoggedIn
+                    })
+                })
+                .catch(function (err) {
+                    console.log("error getting 'keep me logged in' option")
+                });
+        }
     }
 
     handleSubmit(e) {

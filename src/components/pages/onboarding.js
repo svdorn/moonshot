@@ -536,7 +536,7 @@ class Onboarding extends Component {
                                 </div>
                             </div>
                             :
-                            <div className="gradientBorderBlue center clickableNoUnderline noselect" style={{marginRight: '20px', marginTop: '20px'}}
+                            <div className="gradientBorderBlue center clickableNoUnderline noselect onboardingPage1Margin"
                                 onClick={() => self.handleInterestClick(interest)}>
                                 <div className="onboardingPage1Text3 font14px font12pxUnder500">
                                     {interest.title}
@@ -564,7 +564,7 @@ class Onboarding extends Component {
                                 </div>
                             </div>
                             :
-                            <div className="clickableNoUnderline gradientBorderPurple center" style={{marginTop: '20px'}} onClick={() => self.handleGoalClick(goal)}>
+                            <div className="clickableNoUnderline gradientBorderPurple center onboardingPage2Margin" onClick={() => self.handleGoalClick(goal)}>
                                 <div className="onboardingPage2Text3 font14px font12pxUnder500">
                                     {goal.title}
                                 </div>
@@ -756,7 +756,7 @@ class Onboarding extends Component {
                     </div>
                     <div className="center">
                         <button className="onboardingPage1Button" onClick={this.handleStep1ButtonClick.bind(this)}>
-                            <div className="font20px font14pxUnder700 font10pxUnder400 onboardingPage1Text2">
+                            <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
                                 Next
                             </div>
                         </button>
@@ -774,7 +774,7 @@ class Onboarding extends Component {
                         <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="font14px font12pxUnder500 center" style={{marginBottom: "20px"}}>
+                    <div className="font14px font10pxUnder500 center" style={{marginBottom: "20px"}}>
                         Select All That Apply.
                     </div>
                     <div>
@@ -786,7 +786,7 @@ class Onboarding extends Component {
                     </div>
                     <div className="center">
                         <button className="onboardingPage2Button" onClick={this.handleGoalsButtonClick.bind(this)}>
-                            <div className="font20px font14pxUnder700 font10pxUnder400 onboardingPage1Text2">
+                            <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
                                 Next
                             </div>
                         </button>
@@ -804,12 +804,12 @@ class Onboarding extends Component {
                         <div className="onboarding3DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding3DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="font20px font14pxUnder700 font10pxUnder400 center" style={style.title.text}>
+                    <div className="font20px font14pxUnder700 font12pxUnder400 center" style={style.title.text}>
                         The more complete your profile, the more appealing you look to employers.<br/>
                     </div>
                     <div className="center">
                         <img src="/icons/Portfolio.png" className="onboardingIcons" style={style.icons}/>
-                        <div className="onboardingPage3Text font20px font14pxUnder700 font10pxUnder400" style={{display: 'inline-block'}}><b>Personal</b></div>
+                        <div className="onboardingPage3Text font20px" style={{display: 'inline-block'}}><b>Personal</b></div>
                     </div>
 
                     <div className="horizCenteredList">
@@ -895,12 +895,12 @@ class Onboarding extends Component {
 
                     <div className="center">
                         <img src="/icons/GraduationHat.png" className="onboardingIcons" style={style.icons}/>
-                        <div className="onboardingPage3Text font20px font14pxUnder700 font10pxUnder400" style={{display: 'inline-block'}}><b>Education</b></div>
+                        <div className="onboardingPage3Text font20px" style={{display: 'inline-block'}}><b>Education</b></div>
                     </div>
 
                     {educationUls}
 
-                    <div className="center onboardingPage3 font18px">
+                    <div className="center onboardingPage3 font18px font14pxUnder700 font12pxUnder400">
                         <button className="greenButton" onClick={this.addEducationArea.bind(this)}>
                             Add another school
                         </button><br/>
@@ -916,7 +916,7 @@ class Onboarding extends Component {
 
                     <div className="center">
                         <button className="onboardingPage3Button" onClick={this.handleFinishButtonClick.bind(this)}>
-                            <div className="font20px font14pxUnder700 font10pxUnder400 onboardingPage1Text2">
+                            <div className="font20px font14pxUnder700 onboardingPage1Text2">
                                 Finish
                             </div>
                         </button>

@@ -51,13 +51,6 @@ class Footer extends Component {
                                         height={20}
                                         src="/logos/LinkedIn.png"/>
                                 </a>
-                                <a href="https://www.youtube.com/channel/UCDna-8OVMOONwwqQk21f6ZQ" target="_blank"
-                                   style={{marginLeft: "10px"}}>
-                                    <img
-                                        width={20}
-                                        height={20}
-                                        src="/logos/YouTube.png"/>
-                                </a>
                             </div>
                         </li>
                     </ul>
