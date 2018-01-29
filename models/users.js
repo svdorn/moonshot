@@ -21,11 +21,6 @@ var usersSchema = mongoose.Schema({
         bio: String,
         desiredJobs: String,
         inSchool: Boolean,
-        // links: {
-        //     linkedIn: String,
-        //     gitHub: String,
-        //     personal: String
-        // },
         education: [{
             school: String,
             majors: String,
@@ -40,7 +35,7 @@ var usersSchema = mongoose.Schema({
             url: String,
             displayString: String
         }],
-        goals: [String],
+        goals: [ String ],
         languages: [ String ]
     },
     pathways: [{

@@ -85,11 +85,11 @@ app.get("/keepMeLoggedIn", function(req, res) {
 
 // GET USER SESSION
 app.get('/userSession', function (req, res) {
-    if (typeof req.session.userId !== 'undefined') {
+    if (typeof req.session.userId === 'string') {
         // TODO make sure we're only storing the session id in the cookie and
         // not the session itself, because we don't want the user id in the cookie
-
-        getUserByQuery({_id: req.session.userId}, function (user) {
+        const userId = sanitizeHtml(req.session.userId, sanitizeOptions);
+        getUserByQuery({_id: userId}, function (user) {
             res.json(user);
         })
     }
@@ -237,7 +237,7 @@ app.post('/users', function (req, res) {
     //     }
     // }
 
-    user = sanitizeUser(user);
+    user = sanitizeObject(user);
 
     // hash the user's password
     const saltRounds = 10;
@@ -279,41 +279,76 @@ app.post('/users', function (req, res) {
 });
 
 
-// all this does is sanitize the user, NOT get rid of properties that could
-// contain sensitive data
-function sanitizeUser(user) {
-    console.log("user is: ", user);
+function sanitizeObject(obj) {
+    console.log("sanitizing object");
+    if (!obj) {
+        return undefined;
+    }
 
-    let newUser = {};
-    const stringFields = [
-        "_id",
-        "name",
-        "email",
-        "userType",
-        "profileUrl",
-        "password",
-        "verificationToken",
-        "emailVerificationToken",
-        "passwordToken",
-        "images",
-        "info.title",
-        "info.location",
-        "info.willRelocateTo",
-        "info.bio",
-        "info.desiredJobs",
-    ];
+    let newObj = {};
 
-    stringFields.forEach(function(field) {
-        if (user[field] && typeof user[field] === "string") {
-            newUser[field] = sanitizeHtml(user[field], sanitizeOptions);
+    for (var prop in obj) {
+        // skip loop if the property is from prototype
+        if (!obj.hasOwnProperty(prop)) continue;
+        let value = obj[prop];
+        let propType = typeof value;
+
+        switch (propType) {
+            case "undefined":
+                break;
+            case "object":
+                if (Array.isArray(value)) {
+                    newObj[prop] = sanitizeArray(value);
+                } else {
+                    newObj[prop] = sanitizeObject(value);
+                }
+                break;
+            case "boolean":
+            case "number":
+                newObj[prop] = value;
+                break;
+            case "string":
+                newObj[prop] = sanitizeHtml(value, sanitizeOptions);
+                break;
+            default:
+                // don't give the object the property if it isn't one of these things
+        }
+    }
+
+    return newObj;
+}
+
+function sanitizeArray(arr) {
+    if (!arr) {
+        return undefined;
+    }
+
+    const sanitizedArr = arr.map(function(value) {
+        let valueType = (typeof value);
+
+        switch (valueType) {
+            case "object":
+                if (Array.isArray(value)) {
+                    return sanitizeArray(value);
+                } else {
+                    return sanitizeObject(value);
+                }
+                break;
+            case "boolean":
+            case "number":
+                return value;
+                break;
+            case "string":
+                return sanitizeHtml(value, sanitizeOptions);
+                break;
+            case "undefined":
+            default:
+                // don't give the object the property if it isn't one of these things
+                return undefined;
         }
     });
 
-
-
-
-    // TODO: change this back to newUser
-    return user;
+    return sanitizedArr;
 }
 
 app.post('/verifyEmail', function (req, res) {
@@ -848,18 +883,7 @@ app.delete('/users/:_id', function (req, res) {
 
 //----->> UPDATE USER <<------
 app.put('/users/:_id', function (req, res) {
-    var user = req.body;
-
-    // sanitize user info
-    // for (var prop in user) {
-    //     // skip loop if the property is from prototype
-    //     if (!user.hasOwnProperty(prop)) continue;
-    //     if (typeof user[prop] === "string") {
-    //         user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
-    //     }
-    // }
-
-    user = sanitizeUser(user);
+    var user = sanitizeObject(req.body);
 
     var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
 
@@ -1322,6 +1346,8 @@ app.post("/updateInfo", function(req, res) {
             for (const prop in info) {
                 if (info.hasOwnProperty(prop)) {
                     user.info[prop] = info[prop];
+                    console.log(prop, " is: ", info[prop]);
+                    console.log("typeof is: ", (typeof info[prop]));
                 }
             }
 

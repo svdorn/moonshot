@@ -6,6 +6,7 @@ import {postUser, getUsers, onSignUpPage} from '../../actions/usersActions';
 import {TextField, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import { browserHistory } from 'react-router';
 
 const styles = {
     floatingLabelStyle: {
@@ -121,6 +122,13 @@ class Signup extends Component {
             ...this.state,
             email
         })
+    }
+
+    goTo(route) {
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
     //name, email, password, confirm password, signup button
