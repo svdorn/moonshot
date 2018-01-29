@@ -302,6 +302,10 @@ function sanitizeObject(obj) {
         return undefined;
     }
 
+    if (Array.isArray(obj)) {
+        return sanitizeArray(obj);
+    }
+
     let newObj = {};
 
     for (var prop in obj) {
@@ -1253,45 +1257,59 @@ app.get("/infoByUserId", function(req, res) {
     }
 });
 
-app.post("/addInterests", function(req, res) {
-    const interests = sanitize(req.body.params.interests);
-    const userId = sanitize(req.body.params.userId);
-
-    if (interests && userId) {
-        // When true returns the updated document
-        Users.findById(userId, function(err, user) {
-            if (err) {
-                console.log(err);
-            }
-
-            for (let i = 0; i < interests.length; i++) {
-                // only add the interest if the user didn't already have it
-                if (user.info.interests.indexOf(interests[i]) === -1) {
-                    user.info.interests.push(interests[i]);
-                }
-            }
-
-            user.save(function (err, updatedUser) {
-                if (err) {
-                    res.send(false);
-                }
-                res.send(updatedUser);
-            });
-        })
-    } else {
-        res.send(undefined);
-    }
-});
+// app.post("/addInterests", function(req, res) {
+//     const interests = sanitize(req.body.params.interests);
+//     const userId = sanitize(req.body.params.userId);
+//     const verificationToken = sanitize(req.body.params.verificationToken);
+//
+//     if (interests && userId) {
+//         // When true returns the updated document
+//         Users.findById(userId, function(err, user) {
+//             if (err) {
+//                 console.log(err);
+//             }
+//
+//             if (!verifyUser(user, verificationToken)) {
+//                 res.status(401).send("User does not have valid credentials to add interests.");
+//                 return;
+//             }
+//
+//             for (let i = 0; i < interests.length; i++) {
+//                 // only add the interest if the user didn't already have it
+//                 if (user.info.interests.indexOf(interests[i]) === -1) {
+//                     user.info.interests.push(interests[i]);
+//                 }
+//             }
+//
+//             user.save(function (err, updatedUser) {
+//                 if (err) {
+//                     res.send(false);
+//                 }
+//                 res.send(updatedUser);
+//             });
+//         })
+//     } else {
+//         res.send(undefined);
+//     }
+// });
 
 app.post("/updateInterests", function(req, res) {
     const interests = sanitize(req.body.params.interests);
     const userId = sanitize(req.body.params.userId);
+    const verificationToken = sanitize(req.body.params.verificationToken);
 
     if (interests && userId) {
         // When true returns the updated document
         Users.findById(userId, function(err, user) {
+            //console.log('found user: ', user);
             if (err) {
                 console.log(err);
+            }
+
+            if (!verifyUser(user, verificationToken)) {
+                console.log("can't verify user");
+                res.status(401).send("User does not have valid credentials to update interests.");
+                return;
             }
 
             user.info.interests = interests;

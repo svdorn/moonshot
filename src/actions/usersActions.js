@@ -306,6 +306,7 @@ export function updateInterests(user, interests) {
         axios.post("/api/updateInterests", {
             params: {
                 userId: user._id,
+                verificationToken: user.verificationToken,
                 interests: interests
             }
         })
