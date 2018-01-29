@@ -67,6 +67,14 @@ class Login extends Component {
         };
     }
 
+    componentWillMount() {
+        // shouldn't be able to be on sign up page if logged in
+        if (this.props.currentUser && this.props.currentUser != "no user") {
+           //this.goTo("/discover");
+           this.props.router.push("/discover");
+        }
+    }
+
     componentDidMount() {
         let self = this;
         axios.get("/api/keepMeLoggedIn")

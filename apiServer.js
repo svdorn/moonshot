@@ -65,7 +65,11 @@ app.post('/signOut', function (req, res) {
 // change session to store whether user wants default of "Keep Me Logged In"
 // to be checked or unchecked
 app.post("/keepMeLoggedIn", function(req, res) {
-    req.session.stayLoggedIn = req.body.stayLoggedIn;
+    if (typeof req.body.stayLoggedIn === "boolean") {
+        req.session.stayLoggedIn = req.body.stayLoggedIn;
+    } else {
+        req.session.stayLoggedIn = false;
+    }
     req.session.save(function(err) {
         if (err) {
             console.log("error saving 'keep me logged in' setting: ", err);
@@ -82,20 +86,11 @@ app.get("/keepMeLoggedIn", function(req, res) {
 // GET USER SESSION
 app.get('/userSession', function (req, res) {
     if (typeof req.session.userId !== 'undefined') {
-        // TODO this could be a source of slowdown, if site is running too slow
-        // consider changing the session to hold the entire user. This will take
-        // more memory but will be faster
+        // TODO make sure we're only storing the session id in the cookie and
+        // not the session itself, because we don't want the user id in the cookie
 
         getUserByQuery({_id: req.session.userId}, function (user) {
-            //bcrypt.compare(user.verificationToken, req.session.hashedVerificationToken, function(err, tokenMatches) {
-            //    if (tokenMatches) {
-                    //user.
-                    res.json(user);
-            //    } else {
-            //        console.log("verification tokens did not match when getting user from session");
-            //        res.json(undefined);
-            //    }
-            //});
+            res.json(user);
         })
     }
     else {
@@ -234,13 +229,15 @@ app.post('/users', function (req, res) {
     var user = req.body[0];
 
     // sanitize user info
-    for (var prop in user) {
-        // skip loop if the property is from prototype
-        if (!user.hasOwnProperty(prop)) continue;
-        if (typeof user[prop] === "string") {
-            user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
-        }
-    }
+    // for (var prop in user) {
+    //     // skip loop if the property is from prototype
+    //     if (!user.hasOwnProperty(prop)) continue;
+    //     if (typeof user[prop] === "string") {
+    //         user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
+    //     }
+    // }
+
+    user = sanitizeUser(user);
 
     // hash the user's password
     const saltRounds = 10;
@@ -280,6 +277,14 @@ app.post('/users', function (req, res) {
         });
     });
 });
+
+function sanitizeUser(user) {
+    console.log("user is: ", user);
+
+    let newUser = user;
+
+    return newUser;
+}
 
 app.post('/verifyEmail', function (req, res) {
     const token = req.body.token;
