@@ -2397,6 +2397,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .stepSeparatorNoDisplay {
         display: none;
     }
+    .onboardingIcons {
+        height: 40px;
+    }
 
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }

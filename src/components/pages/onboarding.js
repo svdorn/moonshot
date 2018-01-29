@@ -665,7 +665,7 @@ class Onboarding extends Component {
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Cube.png" className="onboardingIcons"/>
-                                            <div className="font16px center"><b>Product Design<br/>and
+                                            <div className="font16px font12pxUnder500 center"><b>Product Design<br/>and
                                                 Development</b>
                                             </div>
                                         </div>
@@ -673,7 +673,7 @@ class Onboarding extends Component {
                                     :
                                     <div>
                                         <img src="/icons/Cube.png" className="onboardingIcons"/>
-                                        <div className="font16px center"><b>Product Design<br/>and
+                                        <div className="font16px font12pxUnder500 center"><b>Product Design<br/>and
                                             Development</b>
                                         </div>
                                     </div>
@@ -685,13 +685,13 @@ class Onboarding extends Component {
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Data.png" className="onboardingIcons"/>
-                                            <div className="font16px center"><b>Data</b></div>
+                                            <div className="font16px font12pxUnder500 center"><b>Data</b></div>
                                         </div>
                                     </div>
                                     :
                                     <div>
                                         <img src="/icons/Data.png" className="onboardingIcons"/>
-                                        <div className="font16px center"><b>Data</b></div>
+                                        <div className="font16px font12pxUnder500 center"><b>Data</b></div>
                                     </div>
                                 }
                             </li>
@@ -700,14 +700,14 @@ class Onboarding extends Component {
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Computer.png" className="onboardingIcons"/>
-                                            <div className="font16px center"><b>Software<br/> Development</b>
+                                            <div className="font16px font12pxUnder500 center"><b>Software<br/> Development</b>
                                             </div>
                                         </div>
                                     </div>
                                     :
                                     <div>
                                         <img src="/icons/Computer.png" className="onboardingIcons"/>
-                                        <div className="font16px center"><b>Software<br/> Development</b></div>
+                                        <div className="font16px font12pxUnder500 center"><b>Software<br/> Development</b></div>
                                     </div>
                                 }
                             </li>
@@ -719,14 +719,14 @@ class Onboarding extends Component {
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Creation.png" className="onboardingIcons"/>
-                                            <div className="font16px center"><b>Creation and<br/> Marketing</b>
+                                            <div className="font16px font12pxUnder500 center"><b>Creation and<br/> Marketing</b>
                                             </div>
                                         </div>
                                     </div>
                                     :
                                     <div>
                                         <img src="/icons/Creation.png" className="onboardingIcons"/>
-                                        <div className="font16px center"><b>Creation and<br/> Marketing</b></div>
+                                        <div className="font16px font12pxUnder500 center"><b>Creation and<br/> Marketing</b></div>
                                     </div>
                                 }
                             </li>
@@ -735,13 +735,13 @@ class Onboarding extends Component {
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Business.png" className="onboardingIcons"/>
-                                            <div className="font16px center"><b>Business</b></div>
+                                            <div className="font16px font12pxUnder500 center"><b>Business</b></div>
                                         </div>
                                     </div>
                                     :
                                     <div>
                                         <img src="/icons/Business.png" className="onboardingIcons"/>
-                                        <div className="font16px center"><b>Business</b></div>
+                                        <div className="font16px font12pxUnder500 center"><b>Business</b></div>
                                     </div>
                                 }
                             </li>
