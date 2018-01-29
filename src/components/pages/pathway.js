@@ -247,7 +247,7 @@ class Pathway extends Component {
                             {this.props.loading ? <div className="center"><CircularProgress color="white"
                                                                                             style={{marginTop: "20px"}}/><br/>
                             </div> : ""}
-                            <div className="whiteText font20px font14pxUnder700 font10pxUnder500 noWrap" style={{textAlign: 'center'}}>
+                            <div className="whiteText font20px font14pxUnder700 font12pxUnder500 noWrap" style={{textAlign: 'center'}}>
                                 Sponsored by
                                 <img
                                     src={pathway.sponsor.logo}
