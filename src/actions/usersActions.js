@@ -323,7 +323,8 @@ export function updateGoals(user, goals) {
         axios.post("/api/updateGoals", {
             params: {
                 userId: user._id,
-                goals: goals
+                verificationToken: user.verificationToken,
+                goals
             }
         })
             .then(function(response) {
@@ -339,6 +340,7 @@ export function updateInfo(user, info) {
         axios.post("/api/updateInfo", {
             params: {
                 userId: user._id,
+                verificationToken: user.verificationToken,
                 info
             }
         })

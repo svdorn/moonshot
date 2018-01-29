@@ -1329,12 +1329,19 @@ app.post("/updateInterests", function(req, res) {
 app.post("/updateGoals", function(req, res) {
     const goals = sanitize(req.body.params.goals);
     const userId = sanitize(req.body.params.userId);
+    const verificationToken = sanitize(req.body.params.verificationToken);
 
     if (userId && goals) {
         // When true returns the updated document
         Users.findById(userId, function(err, user) {
             if (err) {
                 console.log(err);
+            }
+
+            if (!verifyUser(user, verificationToken)) {
+                console.log("can't verify user");
+                res.status(401).send("User does not have valid credentials to update goals.");
+                return;
             }
 
             user.info.goals = goals;
@@ -1356,6 +1363,7 @@ app.post("/updateGoals", function(req, res) {
 app.post("/updateInfo", function(req, res) {
     const info = sanitize(req.body.params.info);
     const userId = sanitize(req.body.params.userId);
+    const verificationToken = sanitize(req.body.params.verificationToken);
 
     if (info && userId) {
         // When true returns the updated document
@@ -1364,11 +1372,15 @@ app.post("/updateInfo", function(req, res) {
                 console.log(err);
             }
 
+            if (!verifyUser(user, verificationToken)) {
+                console.log("can't verify user");
+                res.status(401).send("User does not have valid credentials to update info.");
+                return;
+            }
+
             for (const prop in info) {
                 if (info.hasOwnProperty(prop)) {
                     user.info[prop] = info[prop];
-                    console.log(prop, " is: ", info[prop]);
-                    console.log("typeof is: ", (typeof info[prop]));
                 }
             }
 
