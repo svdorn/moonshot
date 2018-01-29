@@ -932,6 +932,9 @@ button.link {
 .onboardingListContainer {
     margin-top: 30px;
 }
+.onboardingIconLi {
+    margin-right: 90px;
+}
 .onboardingInterestsListContainer {
     margin: 30px auto 0;
     width: 50%;
@@ -2129,6 +2132,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .halfWidthStepRight > img, .halfWidthStepLeft > img {
         height: 65px;
     }
+    .onboardingIconLi {
+        margin-right: 70px;
+    }
 
     .font40pxUnder700 { font-size: 40px; }
     .font38pxUnder700 { font-size: 38px; }
@@ -2474,6 +2480,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .onboardingDots > div {
         width: 15px;
         height: 15px;
+    }
+    .onboardingIconLi {
+        margin-right: 40px;
     }
 
     .font40pxUnder500 { font-size: 40px; }
