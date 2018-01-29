@@ -1057,8 +1057,9 @@ button.link {
 .mediumCheckbox > img {
     height: 15px;
     width: 15px;
-    margin-top: -19px;
-    margin-left: 2px;
+    position: absolute;
+    left: 2px;
+    bottom: 2px;
 }
 .smallCheckbox > img {
     height: 10px;
