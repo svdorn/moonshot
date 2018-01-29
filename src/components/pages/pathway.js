@@ -374,7 +374,7 @@ class Pathway extends Component {
                                     />
                                     <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">ABOUT</b>
                                 </div>
-                                <div className="font20px font14pxUnder700 font10pxUnder400">
+                                <div className="font20px font14pxUnder700 font12pxUnder400">
                                     {pathway.sponsor.description}
                                 </div>
                                 {pathway.sponsor.hiring ?
@@ -384,7 +384,7 @@ class Pathway extends Component {
                                             className="pathwayLandingIconsLeft"
                                         />
                                         <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">OPEN POSITIONS</b><br/>
-                                        <div className="font20px font14pxUnder700 font10pxUnder400">- {pathway.sponsor.hiring}</div>
+                                        <div className="font20px font14pxUnder700 font12pxUnder400">- {pathway.sponsor.hiring}</div>
                                     </div>
                                     : null}
                                 <div style={style.spaceTop}>
