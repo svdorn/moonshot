@@ -228,16 +228,7 @@ const sanitizeOptions = {
 app.post('/users', function (req, res) {
     var user = req.body[0];
 
-    // sanitize user info
-    // for (var prop in user) {
-    //     // skip loop if the property is from prototype
-    //     if (!user.hasOwnProperty(prop)) continue;
-    //     if (typeof user[prop] === "string") {
-    //         user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
-    //     }
-    // }
-
-    user = sanitizeObject(user);
+    user = sanitize(user);
 
     // hash the user's password
     const saltRounds = 10;
@@ -278,9 +269,28 @@ app.post('/users', function (req, res) {
     });
 });
 
+function sanitize(something) {
+    const somethingType = (typeof something);
+    switch (somethingType) {
+        case "object":
+            return sanitizeObject(something);
+            break;
+        case "boolean":
+        case "number":
+            return something;
+            break;
+        case "string":
+            return sanitizeHtml(something, sanitizeOptions);
+            break;
+        case "undefined":
+        case "symbol":
+        case "function":
+        default:
+            return undefined;
+    }
+}
 
 function sanitizeObject(obj) {
-    console.log("sanitizing object");
     if (!obj) {
         return undefined;
     }
@@ -352,7 +362,7 @@ function sanitizeArray(arr) {
 }
 
 app.post('/verifyEmail', function (req, res) {
-    const token = req.body.token;
+    const token = sanitize(req.body.token);
 
     var query = {emailVerificationToken: token};
     Users.findOne(query, function (err, user) {
@@ -389,12 +399,8 @@ app.post('/verifyEmail', function (req, res) {
 
 // VERIFY CHANGE PASSWORD
 app.post('/users/changePasswordForgot', function (req, res) {
-    let token = req.body.token;
-    let password = req.body.password;
-
-    // sanitize token
-    token = sanitizeHtml(token, sanitizeOptions);
-    password = sanitizeHtml(password, sanitizeOptions);
+    let token = sanitize(req.body.token);
+    let password = sanitize(req.body.password);
 
     var query = {passwordToken: token};
     Users.findOne(query, function (err, user) {
@@ -443,7 +449,7 @@ app.post('/users/changePasswordForgot', function (req, res) {
 
 // SEND EMAIL
 app.post('/sendVerificationEmail', function (req, res) {
-    let email = sanitizeHtml(req.body.email, sanitizeOptions);
+    let email = sanitize(req.body.email);
     let query = {email: email};
 
     Users.findOne(query, function (err, user) {
@@ -476,26 +482,30 @@ app.post('/sendVerificationEmail', function (req, res) {
 
 // SEND EMAIL FOR REGISTERING FOR PATHWAYS
 app.post('/users/registerForPathway', function(req, res) {
-    let recipient1 = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
-    let subject1 = "Student Registration for " + req.body.pathway;
+    const pathwayName = sanitize(req.body.pathway);
+    const studentName = sanitize(req.body.name);
+    const studentEmail = sanitize(req.body.email);
+
+    let recipient1 = "kyle@moonshotlearning.org, justin@moonshotlearning.org, ameyer24@wisc.edu";
+    let subject1 = "Student Registration for " + pathwayName;
     let content1 = "<div>"
         + "<h3>Student Registration for Pathway:</h3>"
         + "<h4>Pathway: "
-        + req.body.pathway
+        + pathwayName
         + "</h4>"
         + "<h4>Student: "
-        + req.body.name
+        + studentName
         + "</h4>"
         + "<h4>Student Email: "
-        + req.body.email
+        + studentEmail
         + "</h4>"
         + "<p>If the student doesn't get back to you soon with an email, make sure to reach out to them.</p>"
         + "<p>-Moonshot</p>"
         +  "</div>";
 
-    let name = req.body.name.replace(/(([^\s]+\s\s*){1})(.*)/,"$1").trim();
-    let recipient2 = req.body.email;
-    let subject2 = "First steps for " + req.body.pathway + " Pathway - book a 15 min call";
+    let name = studentName.replace(/(([^\s]+\s\s*){1})(.*)/,"$1").trim();
+    let recipient2 = studentEmail;
+    let subject2 = "First steps for " + pathwayName + " Pathway - book a 15 min call";
     let content2 = "<div>"
         + "<p>Hi " + name + "," + "</p>"
         + "<p>My name is Kyle and I’m one of the founders at Moonshot. We are excited for you to get going on the pathway!</p>"
@@ -883,7 +893,7 @@ app.delete('/users/:_id', function (req, res) {
 
 //----->> UPDATE USER <<------
 app.put('/users/:_id', function (req, res) {
-    var user = sanitizeObject(req.body);
+    var user = sanitize(req.body);
 
     var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
 
