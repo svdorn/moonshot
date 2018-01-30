@@ -254,7 +254,7 @@ class Home extends Component {
                         <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500" style={{zIndex: "20", width: "100%"}}>
                             Skip the resum&eacute;.<br/> Learn skills that employers <div className="br under350only"><br/></div>need <div className="br above350only"><br/></div><i>for free, forever.</i><br/>
                             <button className="outlineButton font30px font20pxUnder500 blueWhiteButton"
-                                    onClick={() => this.goTo('/signup')}>
+                                    onClick={() => this.scrollDown()}>
                                 Get Started
                             </button>
                             <br/>
