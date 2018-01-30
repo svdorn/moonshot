@@ -1187,10 +1187,10 @@ app.get('/search', function (req, res) {
     const MAX_PATHWAYS_TO_RETURN = 1000;
     let query = {};
 
-    const term = sanitize(req.query.searchTerm);
+    let term = sanitize(req.query.searchTerm);
     if (term && term !== "") {
         // if there is a search term, add it to the query
-        const termRegex = new RegExp(term);
+        const termRegex = new RegExp(term, "i");
         query["name"] = termRegex;
     }
 
