@@ -524,14 +524,14 @@ class ForBusiness extends Component {
                             <div className="gradientBorderBlueBox">
                                 <div className="forBusinessBox">
                                     <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Full Access</div>
-                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 blueText">$200 USD</div>
-                                    <div>PER MONTH</div>
+                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 blueText">FREE</div>
+                                    <div>COMPANY LICENSE</div>
                                     <div className="br"><br/></div>
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
                                     Full access to students, student data from<br/>
                                     quantitative assessments, skills scoring and projects,
                                     existing pathways and curated pathways for your company.<br/>
-                                    Starts with quarterly plans.
+                                    Free access to students.
                                     </div>
                                 </div>
                             </div>
@@ -554,6 +554,11 @@ class ForBusiness extends Component {
                         </Paper>
                     </div>
 
+                    <div className="center" style={{marginBottom: '20px'}}>
+                        <div className="font20px font16pxUnder700 font font14pxUnder400">
+                            No upfront costs, no risk, pay only on success.
+                        </div>
+                    </div>
                     <div className="center" style={{marginBottom: '20px'}}>
                         <button className="blueToPurpleButtonExterior bigButton"
                                 onClick={this.handleOpen}
