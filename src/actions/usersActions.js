@@ -2,19 +2,6 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router'
 
-// GET USERS
-export function getUsers() {
-  return function(dispatch) {
-    axios.get("/api/users")
-      .then(function(response) {
-        dispatch({type:"GET_USERS", payload: response.data});
-      })
-      .catch(function(err) {
-        dispatch({type: "GET_USERS_REJECTED", payload: err});
-      });
-  }
-}
-
 // GET USER FROM SESSION
 export function getUserFromSession(callback) {
     return function(dispatch) {
@@ -86,7 +73,7 @@ export function postUser(user) {
         dispatch({type: "POST_USER_REQUESTED"});
 
         // post user to database
-        axios.post("/api/users", user)
+        axios.post("/api/user", user)
             // user successfully posted
             .then(function(response) {
                 // send verification email
@@ -135,7 +122,7 @@ export function updateUser(user) {
     return function(dispatch) {
 
         // update user on the database
-        axios.put("/api/users/" + user._id, user)
+        axios.put("/api/user/" + user._id, user)
             .then(function(response) {
                 dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}})
             })
@@ -148,7 +135,7 @@ export function updateUser(user) {
 export function changePassword(user) {
     return function(dispatch) {
 
-        axios.put('/api/users/changepassword/' +user._id, user)
+        axios.put('/api/user/changepassword/' +user._id, user)
             .then(function(response) {
                 dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
             })
@@ -179,7 +166,7 @@ export function verifyEmail(token) {
 
 export function changePasswordForgot(user) {
     return function(dispatch) {
-        axios.post("api/users/changePasswordForgot", user)
+        axios.post("api/user/changePasswordForgot", user)
             .then(function(response) {
                 dispatch({type:"LOGIN", notification:{message:response.data, type:"infoHeader"}});
                 browserHistory.push('/login');
@@ -195,7 +182,7 @@ export function forBusiness(user){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
-        axios.post("api/users/forBusinessEmail", user)
+        axios.post("api/user/forBusinessEmail", user)
             .then(function(response) {
                 dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/');
@@ -212,7 +199,7 @@ export function unsubscribe(user){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
-        axios.post("api/users/unsubscribeEmail", user)
+        axios.post("api/user/unsubscribeEmail", user)
             .then(function(response) {
                 dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
                 window.scrollTo(0, 0);
@@ -228,7 +215,7 @@ export function comingSoon(user, signedIn){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
-        axios.post("api/users/comingSoonEmail", user)
+        axios.post("api/user/comingSoonEmail", user)
             .then(function(response) {
                 if (!signedIn) {
                     dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
@@ -250,7 +237,7 @@ export function registerForPathway(user) {
     return function(dispatch) {
         dispatch({type: "REGISTER_FOR_PATHWAY_REQUESTED"});
 
-        axios.post("/api/users/registerForPathway", user)
+        axios.post("/api/user/registerForPathway", user)
             .then(function(response) {
                 window.scrollTo(0, 0);
                 dispatch({type:"REGISTER_FOR_PATHWAY", notification: {message:response.data, type:"infoHeader"}});
@@ -264,7 +251,7 @@ export function registerForPathway(user) {
 // DELETE A USER
 export function deleteUser(id) {
   return function(dispatch) {
-    axios.delete("/api/users/" + id)
+    axios.delete("/api/user/" + id)
       .then(function(response) {
         dispatch({type: "DELETE_USER", payload: id});
       })
@@ -373,7 +360,7 @@ export function contactUs(user){
     return function(dispatch) {
         dispatch({type: "CONTACT_US_REQUESTED"});
 
-        axios.post("api/users/contactUsEmail", user)
+        axios.post("api/user/contactUsEmail", user)
             .then(function(response) {
                 dispatch({type:"CONTACT_US", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/myPathways');

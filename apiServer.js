@@ -230,7 +230,7 @@ const sanitizeOptions = {
 // })
 
 //----->> POST USER <<------
-app.post('/users', function (req, res) {
+app.post('/user', function (req, res) {
     var user = req.body[0];
 
     user = sanitize(user);
@@ -432,7 +432,7 @@ app.post('/verifyEmail', function (req, res) {
 });
 
 // VERIFY CHANGE PASSWORD
-app.post('/users/changePasswordForgot', function (req, res) {
+app.post('/user/changePasswordForgot', function (req, res) {
     let token = sanitize(req.body.token);
     let password = sanitize(req.body.password);
 
@@ -514,7 +514,7 @@ app.post('/sendVerificationEmail', function (req, res) {
 });
 
 // SEND EMAIL FOR REGISTERING FOR PATHWAYS
-app.post('/users/registerForPathway', function(req, res) {
+app.post('/user/registerForPathway', function(req, res) {
     const pathwayName = sanitize(req.body.pathway);
     const studentName = sanitize(req.body.name);
     const studentEmail = sanitize(req.body.email);
@@ -572,7 +572,7 @@ app.post('/users/registerForPathway', function(req, res) {
 });
 
 // SEND EMAIL FOR FOR BUSINESS
-app.post('/users/forBusinessEmail', function (req, res) {
+app.post('/user/forBusinessEmail', function (req, res) {
 
     let message = "None";
     if (req.body.message) {
@@ -614,7 +614,7 @@ app.post('/users/forBusinessEmail', function (req, res) {
     })
 });
 
-app.post('/users/unsubscribeEmail', function (req, res) {
+app.post('/user/unsubscribeEmail', function (req, res) {
 
     let recipient = "kyle@moonshotlearning.org";
     let subject = 'URGENT ACTION - User Unsubscribe from Moonshot';
@@ -635,7 +635,7 @@ app.post('/users/unsubscribeEmail', function (req, res) {
 });
 
 // SEND COMING SOON EMAIL
-app.post('/users/comingSoonEmail', function (req, res) {
+app.post('/user/comingSoonEmail', function (req, res) {
 
     let recipient = "kyle@moonshotlearning.org, justin@moonshotlearning.org, ameyer24@wisc.edu";
     let subject = 'Moonshot Coming Soon Pathway';
@@ -661,7 +661,7 @@ app.post('/users/comingSoonEmail', function (req, res) {
 });
 
 // SEND EMAIL FOR CONTACT US
-app.post('/users/contactUsEmail', function (req, res) {
+app.post('/user/contactUsEmail', function (req, res) {
 
     let message = "None";
     if (req.body.message) {
@@ -896,7 +896,7 @@ function removePassword(user) {
 
 
 //----->> DELETE USER <<------
-app.delete('/users/:_id', function (req, res) {
+app.delete('/user/:_id', function (req, res) {
     var query = {_id: sanitize(req.params._id)};
 
     Users.remove(query, function (err, user) {
@@ -908,7 +908,7 @@ app.delete('/users/:_id', function (req, res) {
 });
 
 //----->> UPDATE USER <<------
-app.put('/users/:_id', function (req, res) {
+app.put('/user/:_id', function (req, res) {
     var user = sanitize(req.body);
 
     var query = {_id: sanitize(req.params._id)};
@@ -952,7 +952,7 @@ app.put('/users/:_id', function (req, res) {
 });
 
 //----->> CHANGE PASSWORD <<------
-app.put('/users/changepassword/:_id', function (req, res) {
+app.put('/user/changepassword/:_id', function (req, res) {
     var user = sanitize(req.body);
     var query = {_id: sanitize(req.params._id)};
 

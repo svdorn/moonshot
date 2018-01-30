@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {forBusiness, getUsers} from '../../actions/usersActions';
+import {forBusiness} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Dialog, FlatButton} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
@@ -572,7 +572,6 @@ class ForBusiness extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         forBusiness,
-        getUsers
     }, dispatch);
 }
 

@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postUser, getUsers, onSignUpPage} from '../../actions/usersActions';
+import {postUser, onSignUpPage} from '../../actions/usersActions';
 import {TextField, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
@@ -195,7 +195,6 @@ class Signup extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         postUser,
-        getUsers,
         onSignUpPage
     }, dispatch);
 }

@@ -30,9 +30,6 @@ export function usersReducers(state = initialState, action) {
                 errorMessage: undefined
             };
             break;
-        case "GET_USERS":
-            return {...state, users: [...action.payload]};
-            break;
         case "LOGIN":
             return {
                 ...state,
