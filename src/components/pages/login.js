@@ -70,28 +70,29 @@ class Login extends Component {
     componentWillMount() {
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser && this.props.currentUser != "no user") {
-           //this.goTo("/discover");
-           this.props.router.push("/discover");
+            //this.goTo("/discover");
+            this.props.router.push("/discover");
+            return;
         }
-    }
 
-    componentDidMount() {
-        if (!this.props.currentUser && this.props.currentUser === "no user") {
+        // if not signed in, get the setting for if the user wants to stay
+        // logged in from the cookie
+        else {
             let self = this;
             axios.get("/api/keepMeLoggedIn")
-                .then(function (res) {
-                    let keepMeLoggedIn = res.data;
-                    if (typeof keepMeLoggedIn != "boolean") {
-                        keepMeLoggedIn = false;
-                    }
-                    self.setState({
-                        ...self.state,
-                        keepMeLoggedIn
-                    })
+            .then(function (res) {
+                let keepMeLoggedIn = res.data;
+                if (typeof keepMeLoggedIn != "boolean") {
+                    keepMeLoggedIn = false;
+                }
+                self.setState({
+                    ...self.state,
+                    keepMeLoggedIn
                 })
-                .catch(function (err) {
-                    console.log("error getting 'keep me logged in' option")
-                });
+            })
+            .catch(function (err) {
+                console.log("error getting 'keep me logged in' option")
+            });
         }
     }
 
