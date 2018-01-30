@@ -1803,9 +1803,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         min-width: 800px;
         padding-top: 56.25%
     }
-    .scrollBarAndContactUs {
-        margin-left: -800px;
-    }
     .drawerOpener {
         visibility: visible;
         position: relative;

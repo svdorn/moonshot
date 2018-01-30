@@ -193,6 +193,7 @@ class PathwayContent extends Component {
                             width={400}
                             open={this.state.drawerOpen}
                             onRequestChange={(drawerOpen) => this.setState({drawerOpen})}
+                            className="under1000only"
                         >
                             <PathwayStepList
                                 className="stepScrollerContainerInDrawer"
@@ -203,7 +204,7 @@ class PathwayContent extends Component {
 
 
                         <div style={style.contentContainer}>
-                            <div className="scrollBarAndContactUs">
+                            <div className="scrollBarAndContactUs above1000only">
                                 <PathwayStepList
                                     className="stepScrollerContainer"
                                     steps={pathway.steps}
