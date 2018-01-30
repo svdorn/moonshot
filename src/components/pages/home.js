@@ -403,6 +403,7 @@ class Home extends Component {
                                 Start Profile
                             </div>
                         </button>
+                        <div className="clickable blueText" style={{marginTop: '10px'}} onClick={() => this.goTo('/forBusiness')}><i>Are you an employer?</i></div>
                     </div>
                 </div>
             </div>
