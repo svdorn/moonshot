@@ -1,6 +1,7 @@
 "use strict"
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
+import {browserHistory} from 'react-router';
 import {bindActionCreators} from 'redux';
 import {forBusiness} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Dialog, FlatButton} from 'material-ui';
@@ -162,6 +163,13 @@ class ForBusiness extends Component {
         });
     }
 
+    goTo(route) {
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
+    }
+
     //name, email, password, confirm password, signup button
     render() {
 
@@ -276,7 +284,7 @@ class ForBusiness extends Component {
                             Skills training and assessments<br/>
                             curated to your needs.<br/>
                             <button className="outlineButton font30px font20pxUnder500 darkBlueButton"
-                                    onClick={() => this.scrollDown()}>
+                                    onClick={() => this.goTo("/businessSignup")}>
                                 {"Let's Begin"}
                             </button><br/>
 
