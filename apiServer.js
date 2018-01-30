@@ -65,8 +65,6 @@ app.post('/signOut', function (req, res) {
 // change session to store whether user wants default of "Keep Me Logged In"
 // to be checked or unchecked
 app.post("/keepMeLoggedIn", function(req, res) {
-    console.log("req.body.stayLoggedIn: ", req.body.stayLoggedIn);
-    console.log("typeof req.body.stayLoggedIn: ", typeof req.body.stayLoggedIn);
     if (typeof req.body.stayLoggedIn === "boolean") {
         req.session.stayLoggedIn = req.body.stayLoggedIn;
     } else {

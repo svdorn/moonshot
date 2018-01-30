@@ -70,13 +70,6 @@ export function signout() {
             })
             .catch(function(err) {
             });
-        // axios.post("/api/userSession", {userId: undefined})
-        //     .then(function(response) {
-        //         console.log("removed user from session");
-        //     })
-        //     .catch(function(err) {
-        //         console.log("error removing user from session", err);
-        //     });
     }
 }
 

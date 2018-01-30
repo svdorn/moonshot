@@ -114,8 +114,6 @@ class Signup extends Component {
             userType: "student",
         }];
 
-        console.log(user);
-
         this.props.postUser(user);
 
         this.setState({
