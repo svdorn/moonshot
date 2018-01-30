@@ -40,8 +40,8 @@ export function usersReducers(state = initialState, action) {
                 currentUser: action.payload
             };
             break;
+        case "NOTIFICATION":
         case "LOGIN_REJECTED":
-            // TODO deal with failed login
             return {...state, notification: action.notification};
             break;
         case "SIGNOUT":

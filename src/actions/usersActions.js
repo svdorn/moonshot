@@ -170,8 +170,13 @@ export function verifyEmail(token) {
     return function(dispatch) {
         axios.post("/api/verifyEmail", {token})
             .then(function(response) {
-                dispatch({type: "LOGIN", payload:response.data, notification:{message: "Account verified!", type: "infoHeader"}});
-                browserHistory.push('/onboarding');
+                if (!response.data || response.data === "go to login") {
+                    dispatch({type: "NOTIFICATION", notification:{message: "Account verified!", type: "infoHeader"}});
+                    browserHistory.push('/login');
+                } else {
+                    dispatch({type: "LOGIN", payload:response.data, notification:{message: "Account verified!", type: "infoHeader"}});
+                    browserHistory.push('/onboarding');
+                }
             })
             .catch(function(err) {
                 dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: "Error verifying email", type: "errorHeader"}});

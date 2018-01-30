@@ -77,7 +77,6 @@ app.post("/keepMeLoggedIn", function(req, res) {
             console.log("error saving 'keep me logged in' setting: ", err);
             res.json("error saving 'keep me logged in' setting");
         } else {
-            console.log("session is now: ", req.session);
             res.json("success");
         }
     })
@@ -86,7 +85,7 @@ app.post("/keepMeLoggedIn", function(req, res) {
 
 // get the setting to stay logged in or out
 app.get("/keepMeLoggedIn", function(req, res) {
-    let setting = req.session.stayLoggedIn;
+    let setting = sanitize(req.session.stayLoggedIn);
     if (typeof setting !== "boolean") {
         setting = false;
     }
@@ -96,8 +95,6 @@ app.get("/keepMeLoggedIn", function(req, res) {
 // GET USER SESSION
 app.get('/userSession', function (req, res) {
     if (typeof req.session.userId === 'string') {
-        // TODO make sure we're only storing the session id in the cookie and
-        // not the session itself, because we don't want the user id in the cookie
         const userId = sanitize(req.session.userId);
         getUserByQuery({_id: userId}, function (user) {
             res.json(removePassword(user));
@@ -264,11 +261,22 @@ app.post('/users', function (req, res) {
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
 
                         // store the user in the db
-                        Users.create(user, function (err, user) {
+                        Users.create(user, function (err, newUser) {
                             if (err) {
                                 console.log(err);
                             }
-                            res.json(removePassword(user));
+
+                            req.session.unverifiedUserId = newUser._id;
+                            req.session.save(function(err) {
+                                if (err) {
+                                    console.log("error saving unverifiedUserId to session: ", err);
+                                }
+                            })
+
+                            // no reason to return the user with tokens because
+                            // they will have to verify themselves before they
+                            // can do anything anyway
+                            res.json(safeUser(newUser));
                         })
                     })
                 } else {
@@ -400,12 +408,27 @@ app.post('/verifyEmail', function (req, res) {
         // When true returns the updated document
         var options = {new: true};
 
-        Users.findOneAndUpdate(query, update, options, function (err, user) {
+        Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
             if (err) {
                 console.log(err);
             }
 
-            res.json(removePassword(user));
+            // if the session has the user's id, can immediately log them in
+            sessionUserId = sanitize(req.session.unverifiedUserId);
+            req.session.unverifiedUserId = undefined;
+            req.session.save(function(err) {
+                if (err) {
+                    console.log("error")
+                }
+            });
+            if (sessionUserId && sessionUserId == updatedUser._id) {
+                res.json(removePassword(updatedUser));
+            }
+            // otherwise, bring the user to the login page
+            else {
+                res.json("go to login");
+            }
+
         });
     });
 });
