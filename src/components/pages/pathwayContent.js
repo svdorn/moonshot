@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import PathwayContentLink from '../childComponents/pathwayContentLink';
 import PathwayContentVideo from '../childComponents/pathwayContentVideo';
 import PathwayContentArticle from '../childComponents/pathwayContentArticle';
-import {Tabs, Tab, CircularProgress, Paper, Drawer, RaisedButton} from 'material-ui';
+import {Tabs, Tab, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, updateCurrentSubStep, setHeaderBlue} from "../../actions/usersActions";
@@ -25,73 +25,88 @@ class PathwayContent extends Component {
 
     componentDidMount() {
         // this.props.setHeaderBlue(true);
+        const user = this.props.currentUser;
 
-        const pathwayId = this.props.location.search.substr(1);
-
-        axios.get("/api/getPathwayById", {
-            params: {
-                _id: pathwayId
-            }
-        }).then(res => {
-            const pathway = res.data;
-
-            // if we don't know what step we're currently on
-            if (this.props.step == undefined) {
-                // find the current pathway in the user's profile
-                let userPath = this.props.currentUser.pathways.find(function (path) {
-                    return path.pathwayId == pathwayId;
-                });
-
-                const user = this.props.currentUser;
-
-                // if the user doesn't have a step saved in db for this pathway,
-                // the step is set the first step
-                if (userPath.currentStep.step == undefined) {
-                    const stepNumber = 1;
-                    const subStep = pathway.steps.find(function (step) {
-                        return step.order == 1;
-                    }).subSteps.find(function (subStep) {
-                        return subStep.order == 1;
-                    });
-                    this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
+        if (user && user != "no user") {
+            const pathwayUrl = this.props.location.search.substr(1);
+            axios.get("/api/pathwayByPathwayUrl", {
+                params: {
+                    pathwayUrl,
+                    userId: user._id,
+//                    hashedVerificationToken: user.hashedVerificationToken
+                    verificationToken: user.verificationToken
                 }
-                // otherwise save the step that was saved in the db to redux state
-                else {
-                    const stepNumber = userPath.currentStep.step;
-                    const subStep = pathway.steps.find(function (step) {
-                        return step.order == stepNumber;
-                    }).subSteps.find(function (subStep) {
-                        return subStep.order == userPath.currentStep.subStep;
-                    })
-                    this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
-                }
+            }).then(res => {
+                const pathway = res.data;
+                const pathwayId = pathway._id;
 
-                this.setState({pathway}, () => {
-                });
-            }
-
-            // we do know what step we're currently on
-            else {
-                // if the currently saved step is not for the right pathway
-                if (this.props.step.pathwayId != pathwayId) {
-                    const user = this.props.currentUser;
+                // if we don't know what step we're currently on
+                if (this.props.step == undefined) {
+                    // find the current pathway in the user's profile
                     let userPath = this.props.currentUser.pathways.find(function (path) {
                         return path.pathwayId == pathwayId;
                     });
-                    const stepNumber = userPath.currentStep.step;
-                    const subStep = pathway.steps.find(function (step) {
-                        return step.order == stepNumber;
-                    }).subSteps.find(function (subStep) {
-                        return subStep.order == userPath.currentStep.subStep;
-                    })
-                    this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
+
+                    // if the user doesn't have a step saved in db for this pathway,
+                    // the step is set the first step
+                    if (userPath.currentStep.step == undefined) {
+                        const stepNumber = 1;
+                        const subStep = pathway.steps.find(function (step) {
+                            return step.order == 1;
+                        }).subSteps.find(function (subStep) {
+                            return subStep.order == 1;
+                        });
+                        this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
+                    }
+                    // otherwise save the step that was saved in the db to redux state
+                    else {
+                        const stepNumber = userPath.currentStep.step;
+                        const step = pathway.steps.find(function (step) {
+                            return step.order == stepNumber;
+                        });
+                        let subStep = 1;
+                        // if we found the step at that number, find the right substep
+                        if (step) {
+                            subStep = step.subSteps.find(function (subStep) {
+                                return subStep.order == userPath.currentStep.subStep;
+                            });
+                            // if substep not found, set to 1
+                            if (!subStep) {
+                                subStep = 1;
+                            }
+                        }
+                        this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
+                    }
+
+                    this.setState({pathway}, () => {
+                    });
                 }
-                this.setState({pathway})
-            }
-        })
-        // .catch(function (err) {
-        //     console.log("error getting searched-for pathway");
-        // })
+
+                // we do know what step we're currently on
+                else {
+                    // if the currently saved step is not for the right pathway
+                    if (this.props.step.pathwayId != pathwayId) {
+                        const user = this.props.currentUser;
+                        let userPath = this.props.currentUser.pathways.find(function (path) {
+                            return path.pathwayId == pathwayId;
+                        });
+                        const stepNumber = userPath.currentStep.step;
+                        const subStep = pathway.steps.find(function (step) {
+                            return step.order == stepNumber;
+                        }).subSteps.find(function (subStep) {
+                            return subStep.order == userPath.currentStep.subStep;
+                        })
+                        this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
+                    }
+                    this.setState({pathway})
+                }
+            })
+            .catch(err => {
+                // go to the pathway landing page for this pathway if the user
+                // does not have access to it
+                this.goTo("/pathway" + this.props.location.search);
+            })
+        }
     }
 
     goTo(route) {
@@ -133,10 +148,10 @@ class PathwayContent extends Component {
                 backgroundColor: "white",
                 color: '#B869FF',
             },
-            insideTab:{
-                marginTop:"10px",
+            insideTab: {
+                marginTop: "10px",
                 marginLeft: "5%",
-                marginRight:"5%"
+                marginRight: "5%"
             },
         }
 
@@ -178,6 +193,7 @@ class PathwayContent extends Component {
                             width={400}
                             open={this.state.drawerOpen}
                             onRequestChange={(drawerOpen) => this.setState({drawerOpen})}
+                            className="under1000only"
                         >
                             <PathwayStepList
                                 className="stepScrollerContainerInDrawer"
@@ -188,7 +204,7 @@ class PathwayContent extends Component {
 
 
                         <div style={style.contentContainer}>
-                            <div className="scrollBarAndContactUs">
+                            <div className="scrollBarAndContactUs above1000only">
                                 <PathwayStepList
                                     className="stepScrollerContainer"
                                     steps={pathway.steps}
@@ -210,7 +226,7 @@ class PathwayContent extends Component {
                                 </Paper>
                             </div>
 
-                            <div style={{height:"10px"}}/>
+                            <div style={{height: "10px"}}/>
                             {content}
 
                             <RaisedButton
@@ -222,7 +238,7 @@ class PathwayContent extends Component {
 
                             <Paper className="overviewAndCommentBox">
                                 <Paper style={{width: "100%"}}>
-                                    <ul className="horizCenteredList darkPurpleText smallText2">
+                                    <ul className="horizCenteredList darkPurpleText font20px font14pxUnder700 font10pxUnder400">
                                         <li>
                                             <div style={style.threeInfo}>
                                                 <i>Sponsor</i><br/>
@@ -252,20 +268,27 @@ class PathwayContent extends Component {
                                         className="overviewExercisesComments"
                                     >
                                         <Tab label="Overview" style={style.tab}>
-                                            <p className="smallText2 center" style={style.insideTab}>{pathway.overview}</p>
+                                            <p className="font20px font14pxUnder700 font10pxUnder400 center"
+                                               style={style.insideTab}>{pathway.overview}</p>
                                         </Tab>
                                         <Tab label="Exercise Files" style={style.tab}>
-                                            <h1 className="center smallText2" style={style.insideTab}>No exercise files yet.</h1>
+                                            <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
+                                                yet.</h1>
                                         </Tab>
                                         <Tab label="Comments" style={style.tab}>
-                                            <h1 className="center smallText2" style={style.insideTab}>No comments yet.</h1>
+                                            <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
+                                                yet.</h1>
                                         </Tab>
                                     </Tabs>
                                 </div>
                             </Paper>
                         </div>
                     </div>
-                    : null}
+                    :
+                    <div>
+                        <div className="fullHeight"/>
+                        <div className="fullHeight"/>
+                    </div>}
             </div>
         );
     }

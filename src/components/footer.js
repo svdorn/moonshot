@@ -27,7 +27,7 @@ class Footer extends Component {
                                 alt="Moonshot Logo"
                                 title="Moonshot Logo"
                                 src="/images/OfficialLogoWhite.png"/>
-                            <div className="whiteText tinyText">
+                            <div className="whiteText font8px">
                                 &copy; 2018 Moonshot Learning Inc. All rights reserved.
                             </div>
                             <div style={{marginTop: "10px"}}>
@@ -50,13 +50,6 @@ class Footer extends Component {
                                         width={20}
                                         height={20}
                                         src="/logos/LinkedIn.png"/>
-                                </a>
-                                <a href="https://www.youtube.com/channel/UCDna-8OVMOONwwqQk21f6ZQ" target="_blank"
-                                   style={{marginLeft: "10px"}}>
-                                    <img
-                                        width={20}
-                                        height={20}
-                                        src="/logos/YouTube.png"/>
                                 </a>
                             </div>
                         </li>

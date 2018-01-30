@@ -2,21 +2,8 @@
 import axios from 'axios';
 import { browserHistory } from 'react-router'
 
-// GET USERS
-export function getUsers() {
-  return function(dispatch) {
-    axios.get("/api/users")
-      .then(function(response) {
-        dispatch({type:"GET_USERS", payload: response.data});
-      })
-      .catch(function(err) {
-        dispatch({type: "GET_USERS_REJECTED", payload: err});
-      });
-  }
-}
-
 // GET USER FROM SESSION
-export function getUserFromSession() {
+export function getUserFromSession(callback) {
     return function(dispatch) {
         dispatch({
             type: "GET_USER_FROM_SESSION_REQUEST",
@@ -30,32 +17,30 @@ export function getUserFromSession() {
                     type: "GET_USER_FROM_SESSION",
                     payload: response.data,
                     isFetching: false});
+                callback(true);
             })
             .catch(function(err) {
                 dispatch({
                     type: "GET_USER_FROM_SESSION_REJECTED",
                     errorMessage:"error getting user from session",
-                    isFetching: false})
+                    isFetching: false});
+                callback(true);
             })
     };
 }
 
-export function login(user, saveSession) {
+export function login(user, saveSession, navigateBackUrl) {
     return function(dispatch) {
         axios.post("/api/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
                 dispatch({type: "CLOSE_NOTIFICATION"});
-                browserHistory.push('/discover');
-
-                // axios.post("/api/userSession", {userId: user._id, hashedVerificationToken: user.hashedVerificationToken})
-                //     .then(function(response) {
-                //         console.log("added user to session");
-                //     })
-                //     .catch(function(err) {
-                //         console.log("error adding user to session", err);
-                //     });
+                let nextUrl = '/discover';
+                if (navigateBackUrl) {
+                    nextUrl = navigateBackUrl;
+                }
+                browserHistory.push(nextUrl);
             })
             .catch(function(err) {
                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
@@ -72,13 +57,6 @@ export function signout() {
             })
             .catch(function(err) {
             });
-        // axios.post("/api/userSession", {userId: undefined})
-        //     .then(function(response) {
-        //         console.log("removed user from session");
-        //     })
-        //     .catch(function(err) {
-        //         console.log("error removing user from session", err);
-        //     });
     }
 }
 
@@ -95,7 +73,7 @@ export function postUser(user) {
         dispatch({type: "POST_USER_REQUESTED"});
 
         // post user to database
-        axios.post("/api/users", user)
+        axios.post("/api/user", user)
             // user successfully posted
             .then(function(response) {
                 // send verification email
@@ -144,7 +122,7 @@ export function updateUser(user) {
     return function(dispatch) {
 
         // update user on the database
-        axios.put("/api/users/" + user._id, user)
+        axios.put("/api/user/" + user._id, user)
             .then(function(response) {
                 dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}})
             })
@@ -157,7 +135,7 @@ export function updateUser(user) {
 export function changePassword(user) {
     return function(dispatch) {
 
-        axios.put('/api/users/changepassword/' +user._id, user)
+        axios.put('/api/user/changepassword/' +user._id, user)
             .then(function(response) {
                 dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
             })
@@ -170,10 +148,15 @@ export function changePassword(user) {
 // VERIFY EMAIL
 export function verifyEmail(token) {
     return function(dispatch) {
-        axios.post("/api/verifyEmail", {token: token})
+        axios.post("/api/verifyEmail", {token})
             .then(function(response) {
-                dispatch({type: "LOGIN", payload:response.data, notification:{message: "Account verified!", type: "infoHeader"}});
-                browserHistory.push('/onboarding');
+                if (!response.data || response.data === "go to login") {
+                    dispatch({type: "NOTIFICATION", notification:{message: "Account verified!", type: "infoHeader"}});
+                    browserHistory.push('/login');
+                } else {
+                    dispatch({type: "LOGIN", payload:response.data, notification:{message: "Account verified!", type: "infoHeader"}});
+                    browserHistory.push('/onboarding');
+                }
             })
             .catch(function(err) {
                 dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: "Error verifying email", type: "errorHeader"}});
@@ -183,7 +166,7 @@ export function verifyEmail(token) {
 
 export function changePasswordForgot(user) {
     return function(dispatch) {
-        axios.post("api/users/changePasswordForgot", user)
+        axios.post("api/user/changePasswordForgot", user)
             .then(function(response) {
                 dispatch({type:"LOGIN", notification:{message:response.data, type:"infoHeader"}});
                 browserHistory.push('/login');
@@ -199,11 +182,49 @@ export function forBusiness(user){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
-        axios.post("api/users/forBusinessEmail", user)
+        axios.post("api/user/forBusinessEmail", user)
             .then(function(response) {
                 dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/');
                 window.scrollTo(0, 0);
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on unsubscribe page
+export function unsubscribe(user){
+    return function(dispatch) {
+        dispatch({type: "FOR_BUSINESS_REQUESTED"});
+
+        axios.post("api/user/unsubscribeEmail", user)
+            .then(function(response) {
+                dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
+                window.scrollTo(0, 0);
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on comingSoon page
+export function comingSoon(user, signedIn){
+    return function(dispatch) {
+        dispatch({type: "FOR_BUSINESS_REQUESTED"});
+
+        axios.post("api/user/comingSoonEmail", user)
+            .then(function(response) {
+                if (!signedIn) {
+                    dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
+                    browserHistory.push('/login')
+                    dispatch({type:"CHANGE_CURRENT_ROUTE", payload:'/login'})
+                    window.scrollTo(0, 0);
+                } else {
+                    dispatch({type:"FOR_BUSINESS", notification: undefined});
+                }
             })
             .catch(function(err) {
                 dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
@@ -216,7 +237,7 @@ export function registerForPathway(user) {
     return function(dispatch) {
         dispatch({type: "REGISTER_FOR_PATHWAY_REQUESTED"});
 
-        axios.post("/api/users/registerForPathway", user)
+        axios.post("/api/user/registerForPathway", user)
             .then(function(response) {
                 window.scrollTo(0, 0);
                 dispatch({type:"REGISTER_FOR_PATHWAY", notification: {message:response.data, type:"infoHeader"}});
@@ -230,7 +251,7 @@ export function registerForPathway(user) {
 // DELETE A USER
 export function deleteUser(id) {
   return function(dispatch) {
-    axios.delete("/api/users/" + id)
+    axios.delete("/api/user/" + id)
       .then(function(response) {
         dispatch({type: "DELETE_USER", payload: id});
       })
@@ -254,7 +275,8 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
                 userId: user._id,
                 pathwayId: pathwayId,
                 stepNumber: stepNumber,
-                subStepNumber: subStep.order
+                subStepNumber: subStep.order,
+                verificationToken: user.verificationToken
             }
         })
         .then(function(response) {
@@ -269,6 +291,7 @@ export function updateInterests(user, interests) {
         axios.post("/api/updateInterests", {
             params: {
                 userId: user._id,
+                verificationToken: user.verificationToken,
                 interests: interests
             }
         })
@@ -285,7 +308,8 @@ export function updateGoals(user, goals) {
         axios.post("/api/updateGoals", {
             params: {
                 userId: user._id,
-                goals: goals
+                verificationToken: user.verificationToken,
+                goals
             }
         })
             .then(function(response) {
@@ -301,6 +325,7 @@ export function updateInfo(user, info) {
         axios.post("/api/updateInfo", {
             params: {
                 userId: user._id,
+                verificationToken: user.verificationToken,
                 info
             }
         })
@@ -335,7 +360,7 @@ export function contactUs(user){
     return function(dispatch) {
         dispatch({type: "CONTACT_US_REQUESTED"});
 
-        axios.post("api/users/contactUsEmail", user)
+        axios.post("api/user/contactUsEmail", user)
             .then(function(response) {
                 dispatch({type:"CONTACT_US", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/myPathways');
@@ -352,11 +377,4 @@ export function formError() {
         dispatch({type:"FORM_ERROR", notification: {message: "Fields must all be filled in to submit form.", type: "errorHeader"}})
 
     }
-}
-
-// RESET BUTTON
-export function resetButton() {
-  return {
-    type: "RESET_BUTTON",
-  }
 }

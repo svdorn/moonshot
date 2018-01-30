@@ -2,10 +2,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postUser, getUsers, onSignUpPage} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper, CircularProgress } from 'material-ui';
+import {postUser, onSignUpPage} from '../../actions/usersActions';
+import {TextField, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import { browserHistory } from 'react-router';
 
 const styles = {
     floatingLabelStyle: {
@@ -67,25 +68,36 @@ class Signup extends Component {
         }
     }
 
+    componentWillMount() {
+        // shouldn't be able to be on sign up page if logged in
+        if (this.props.currentUser && this.props.currentUser != "no user") {
+           this.goTo("/discover");
+        }
+    }
+
     componentDidMount() {
         this.props.onSignUpPage();
     }
 
     handleSubmit(e) {
         e.preventDefault();
-
-        // Check if valid
         const vals = this.props.formData.signup.values;
 
-        // check if all fields have a value
-        let valsCounter = 0;
-        for (let i in vals) {
-            valsCounter++;
-        }
-
-        if (!vals || valsCounter !== 4) {
-            return;
-        }
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'name',
+            'email',
+            'password',
+            'password2',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
 
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
             return;
@@ -110,6 +122,13 @@ class Signup extends Component {
         })
     }
 
+    goTo(route) {
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
+    }
+
     //name, email, password, confirm password, signup button
     render() {
         return (
@@ -124,7 +143,7 @@ class Signup extends Component {
                         :
                         <div>
                             <form onSubmit={this.handleSubmit.bind(this)}>
-                                <h1>Sign Up</h1>
+                                <h1 style={{marginTop:"15px"}}>Sign Up</h1>
                                 <div className="inputContainer">
                                     <div className="fieldWhiteSpace"/>
                                     <Field
@@ -159,7 +178,7 @@ class Signup extends Component {
                                 </div>
                                 <button
                                     type="submit"
-                                    className="formSubmitButton"
+                                    className="formSubmitButton font24px font16pxUnder600"
                                 >
                                     Sign Up
                                 </button>
@@ -176,7 +195,6 @@ class Signup extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         postUser,
-        getUsers,
         onSignUpPage
     }, dispatch);
 }
@@ -185,7 +203,8 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         loadingCreateUser: state.users.loadingSomething,
-        userPosted: state.users.userPosted
+        userPosted: state.users.userPosted,
+        currentUser: state.users.currentUser
     };
 }
 

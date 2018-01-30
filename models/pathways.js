@@ -4,6 +4,8 @@ var mongoose = require('mongoose');
 var pathwaysSchema = mongoose.Schema({
   name: String,
   previewImage: String,
+  comingSoon: Boolean,
+  url: String,
   sponsor: {
       name: String,
       logo: String,

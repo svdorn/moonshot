@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import { verifyEmail } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Paper, RaisedButton } from 'material-ui';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
 class VerifyEmail extends Component {
@@ -21,7 +20,7 @@ class VerifyEmail extends Component {
                 <div className="form lightWhiteForm">
                     <h1>Verify Email</h1>
                     <button
-                        className="semiOpaqueWhiteBlueButton smallText2"
+                        className="semiOpaqueWhiteBlueButton font20px font14pxUnder700 font10pxUnder400"
                         onClick={this.onVerifyClick.bind(this)}
                     >
                         Verify my account

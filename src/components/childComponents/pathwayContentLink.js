@@ -71,7 +71,7 @@ class PathwayContentLink extends Component {
                         }}/>
                         <h4>Instructions</h4>
                         <p>{content.instructions}</p>
-                        <button className="outlineButton whiteBlueButton">
+                        <button className="outlineButton font30px font20pxUnder500 whiteBlueButton">
                             <a href={content.url} target="_blank" style={{textDecoration: 'none', color: '#70cbff'}}>
                                 Go to Step
                             </a>

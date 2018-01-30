@@ -2,10 +2,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {registerForPathway, getUsers, closeNotification} from '../../actions/usersActions';
+import {registerForPathway, closeNotification} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
+//import './pathway.css';
 import axios from 'axios';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {browserHistory} from 'react-router';
@@ -28,11 +29,11 @@ class Pathway extends Component {
     }
 
     componentDidMount() {
-        const id = this.props.location.search.substr(1);
+        const pathwayUrl = this.props.location.search.substr(1);
 
-        axios.get("/api/getPathwayById", {
+        axios.get("/api/pathwayByPathwayUrlNoContent", {
             params: {
-                _id: id
+                pathwayUrl
             }
         }).then(res => {
             this.setState({pathway: res.data});
@@ -54,72 +55,25 @@ class Pathway extends Component {
         }
     }
 
+    scrollDown() {
+        const scrollPosTop = window.innerWidth > 500 ? 710 : 550;
+        window.scroll({
+            top: scrollPosTop,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
+
     render() {
 
         const style = {
-            descriptionAndSalary: {
-                position: "relative",
-                height: "150px",
-                marginTop: "15px",
-                marginBottom: "25px"
-            },
-            descriptionAndSalaryIcon: {
-                height: "50px",
-                position: "absolute",
-                top: "0",
-                bottom: "0",
-                right: "80%",
-                margin: "auto"
-            },
-            descriptionAndSalaryText: {
-                width: "50%",
-                fontSize: "20px",
-                right: "0",
-                left: "0",
-                margin: "auto",
-                textAlign: "center",
-                position: "absolute",
-                top: "50%",
-                transform: "translateY(-50%)"
-            },
-            descriptionAndSalaryHalf: {
-                width: "50%",
-                float: "left",
-                position: "relative",
-                height: "150px"
-            },
-            descriptionAndSalaryFull: {
-                width: "100%",
-                position: "relative",
-                height: "150px"
-            },
-            descriptionAndSalarySpacer: {
-                width: "80%",
-                height: "100%",
-                position: "relative"
-            },
+
             quote: {
-                everything: {
-                    textAlign: "center",
-                    padding: "20px 0px"
-                },
                 container: {
                     border: "2px solid #B869FF",
                     fontSize: "30px",
                     padding: "20px",
                     textAlign: "center",
-                },
-                leftSide: {
-                    width: "55%",
-                    display: "inline-block",
-                    verticalAlign: "top",
-                    marginRight: "5%"
-                },
-                rightSide: {
-                    width: "35%",
-                    display: "inline-block",
-                    verticalAlign: "top",
-                    justifyContent: "center",
                 },
                 speakerImage: {
                     borderRadius: "50%",
@@ -129,7 +83,6 @@ class Pathway extends Component {
                 },
                 speakerInfo: {
                     marginLeft: "60px",
-                    fontSize: "20px"
                 },
                 content: {
                     marginBottom: "20px"
@@ -180,8 +133,11 @@ class Pathway extends Component {
         }
 
         const pathway = this.state.pathway;
-        const deadline = new Date(this.state.pathway.deadline);
-        const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+        const deadline = this.state.pathway.deadline;
+        let formattedDeadline = "";
+        if (deadline) {
+            formattedDeadline = deadline.substring(5, 7) + "/" + deadline.substring(8, 10) + "/" + deadline.substring(0, 4);
+        }
 
         let pathwaySteps = null;
         const steps = pathway.steps;
@@ -189,9 +145,16 @@ class Pathway extends Component {
 
             pathwaySteps = steps.map(function(step) {
                 let topSeparators = null;
-                if (step.order <= 2) {
+                if (step.order < 2) {
                     topSeparators = (
                         <div>
+                            <div className="stepSeparatorLeft" style={{top: "0"}}/>
+                            <div className="stepSeparatorRight" style={{top: "0"}}/>
+                        </div>
+                    )
+                } else if (step.order === 2) {
+                    topSeparators = (
+                        <div className="stepSeparatorNoDisplay">
                             <div className="stepSeparatorLeft" style={{top: "0"}}/>
                             <div className="stepSeparatorRight" style={{top: "0"}}/>
                         </div>
@@ -213,13 +176,13 @@ class Pathway extends Component {
                         />
                         <div className="halfWidthStepText">
 
-                            <div className="halfWidthStepNumber">
+                            <div className="halfWidthStepNumber font16pxUnder700 font14pxUnder500">
                                 STEP {step.order}
                             </div>
-                            <div className="halfWidthStepTitle">
+                            <div className="halfWidthStepTitle font font22pxUnder700 font18pxUnder500">
                                 {step.name}
                             </div>
-                            <div className="smallText halfWidthStepDesc">
+                            <div className="font14px font12pxUnder700 font10pxUnder500 halfWidthStepDesc">
                                 {step.description}
                                 This is the description of the step. It will eventually describe the step.
                             </div>
@@ -236,14 +199,12 @@ class Pathway extends Component {
         if (skills) {
             pathwaySkills = skills.map(function (skill) {
                 return (
-                    <div style={{display: 'inline-block'}}>
-                        <Chip key={skill}
-                              backgroundColor='#white'
-                              labelColor="#00d2ff"
-                              labelStyle={{fontSize: '20px'}}
-                              style={{marginLeft: '20px', border:"1px solid #00d2ff"}}>
+                    <div key={skill + "Surrounder"} style={{display: 'inline-block'}}>
+                        <div key={skill}
+                             className="skillChip pathwayLandingSkillChip"
+                        >
                             {skill}
-                        </Chip>
+                        </div>
                     </div>
                 );
             });
@@ -267,16 +228,17 @@ class Pathway extends Component {
         }
 
         return (
-            <div className="jsxWrapper">
+            //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
+            <div className="jsxWrapper noOverflowX">
                 {pathway.sponsor !== undefined ?
-                    <div>
-                        <div className="fullHeight purpleToBlue">
-                            <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
+                    <div style={{minWidth:"250px"}}>
+                        <div className="fullHeight purpleGradient">
 
-                            <div className="infoBox whiteText mediumText" style={{zIndex: "20", width: '40%'}}>
+
+                            <div className="infoBox whiteText font40px font24pxUnder500" style={{zIndex: "20"}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
-                                <button className="outlineButton"
-                                        style={{backgroundColor: "transparent", border: "2px solid white"}}
+                                <button className="outlineButton font30px font20pxUnder500 purpleGradientButton"
+                                        style={{backgroundColor: "#9B6BFB", border: "2px solid white"}}
                                         onClick={this.handleClick.bind(this)}>
                                     {"Sign Up"}
                                 </button>
@@ -285,51 +247,62 @@ class Pathway extends Component {
                             {this.props.loading ? <div className="center"><CircularProgress color="white"
                                                                                             style={{marginTop: "20px"}}/><br/>
                             </div> : ""}
-                            <div className="whiteText smallText3 noWrap" style={{textAlign: 'center'}}>
+                            <div className="whiteText font20px font14pxUnder700 font12pxUnder500 noWrap" style={{textAlign: 'center'}}>
                                 Sponsored by
                                 <img
                                     src={pathway.sponsor.logo}
                                     alt={pathway.sponsor.name}
-                                    height={60}
+                                    height={40}
                                     style={{paddingLeft: '10px'}}
                                 />
                             </div>
-                            <ul className="horizCenteredList whiteText smallText2"
-                                style={{position: 'absolute', bottom: 0, width: '100%'}}>
-                                <li style={{width: '300px'}}>
+                            <ul className="horizCenteredList whiteText font20px font14pxUnder700 font10pxUnder500" id="pathwayLandingTopInfoList">
+                                <li>
                                     <img src="/icons/ClockWhite.png" className="pathwayLandingIcons"/>
+                                    <div className="under500only br"><br/></div>
                                     <div style={{display: 'inline-block'}}>
-                                        <i>Completion Time</i><br/>
+                                        <i>Time</i><br/>
                                         {pathway.estimatedCompletionTime}
                                     </div>
                                 </li>
-                                <li style={{width: '300px'}}>
+                                <li>
                                     <img src="/icons/CalendarWhite.png" className="pathwayLandingIcons"/>
+                                    <div className="under500only br"><br/></div>
                                     <div style={{display: 'inline-block'}}>
                                         <i>Complete By</i><br/>
                                         {formattedDeadline}
                                     </div>
                                 </li>
-                                <li style={{width: '300px'}}>
+                                <li>
                                     <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons"/>
+                                    <div className="under500only br"><br/></div>
                                     <div style={{display: 'inline-block'}}>
                                         <i>Cost</i><br/>
                                         {pathway.price}
                                     </div>
                                 </li>
                             </ul>
+
+                            <div className="scrollDownButton lowerOnSmallScreen" onClick={() => this.scrollDown()}>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                            </div>
                         </div>
 
                         <div>
                             {pathway.skills ?
                                 <div>
                                     <div className="center" style={{marginTop: '20px'}}>
-                                        < b style={{color: '#B869FF'}} className="mediumText">Skills</ b>
+                                        < b style={{color: '#B869FF'}} className="font40px font24pxUnder500">Skills</ b>
                                     </ div>
-                                    <div className="center smallText2" style={{marginBottom:"20px"}}>
+                                    <div className="center font20px font14pxUnder700 font10pxUnder400" style={{marginBottom:"20px"}}>
                                         Earn these skills upon pathway completion.
                                     </div>
-                                    <div className="center">
+                                    <div className="center skillChips">
                                         {pathwaySkills}
                                     </div>
                                 </div>
@@ -337,22 +310,22 @@ class Pathway extends Component {
                         </div>
 
                         {pathway.description || pathway.industry ?
-                            <div style={style.descriptionAndSalary}>
+                            <div id="pathwayDescriptionAndSalary">
                                 {pathway.description ?
-                                    <div style={pathway.industry ?
-                                        style.descriptionAndSalaryHalf
+                                    <div className={pathway.industry ?
+                                        "pathwayDescriptionAndSalaryHalf"
                                         :
-                                        style.descriptionAndSalaryFull
+                                        "pathwayDescriptionAndSalaryFull"
                                     }>
-                                            <div style={pathway.industry ?
-                                                {...style.descriptionAndSalarySpacer, marginLeft: "20%"}
-                                                : {}}
+                                            <div className={pathway.industry ? "pathwayDescriptionAndSalarySpacer" : ""}
+                                                 id={pathway.industry ? "pathwayShortDescription" : ""}
                                             >
                                                 <img
                                                     src="/icons/GraduationHatPurple.png"
-                                                    style={style.descriptionAndSalaryIcon}
+                                                    className="pathwayDescriptionAndSalaryIcon"
+                                                    id="pathwayHatIcon"
                                                 />
-                                                <div style={style.descriptionAndSalaryText}>
+                                                <div className="pathwayDescriptionAndSalaryText">
                                                     {pathway.description}
                                                 </div>
                                             </div>
@@ -360,22 +333,21 @@ class Pathway extends Component {
                                     : null}
 
                                 {pathway.industry ?
-                                    <div style={pathway.description ?
-                                        style.descriptionAndSalaryHalf
+                                    <div className={pathway.description ?
+                                        "pathwayDescriptionAndSalaryHalf"
                                         :
-                                        style.descriptionAndSalaryFull
+                                        "pathwayDescriptionAndSalaryFull"
                                     }>
-                                        <div style={pathway.description ?
-                                            {...style.descriptionAndSalarySpacer, marginRight: "20%"}
-                                            : {}}
+                                        <div className={pathway.industry ? "pathwayDescriptionAndSalarySpacer" : ""}
+                                             id={pathway.industry ? "pathwaySalaryInfo" : ""}
                                         >
                                             <img
                                                 src="/icons/DollarSignPurple.jpg"
-                                                style={style.descriptionAndSalaryIcon}
+                                                className="pathwayDescriptionAndSalaryIcon"
+                                                id="pathwayMoneyIcon"
                                             />
-                                            <div style={style.descriptionAndSalaryText}>
-                                                Industry average salary for<br/>
-                                                {pathway.industry.title}<br/>
+                                            <div className="pathwayDescriptionAndSalaryText">
+                                                Industry average salary for {pathway.industry.title}<br/>
                                                 <i>{pathway.industry.averageSalary}</i>
                                             </div>
                                         </div>
@@ -385,58 +357,57 @@ class Pathway extends Component {
                             : null}
 
                         <div className="homepageSeparatorContainer">
-                            <div className="homepageSeparator"/>
+                            <div className="homepageSeparator purpleGreenSeparator"/>
                         </div>
 
-                        <div style={style.quote.everything}>
-                            <h1 style={{marginBottom:'30px'}}>Sponsored by <img
+                        <div className="pathwayLandingQuote">
+                            <h1 style={{marginBottom:'30px'}} className="font40px font32pxUnder700 font30pxUnder500">Sponsored by <img
                                 src={pathway.sponsor.logo}
                                 alt={pathway.sponsor.name}
-                                height={70}
-                                style={{marginTop:'-15px'}}
+                                className="pathwayLandingSponsoredBy"
                             /></h1>
-                            <div style={style.quote.leftSide}>
+                            <div className="pathwayLandingQuoteLeft">
                                 <div>
                                     <img
                                         src="/icons/Information.png"
-                                        style={style.iconsLeft}
+                                        className="pathwayLandingIconsLeft"
                                     />
-                                    <b style={{color: '#B869FF'}} className="mediumText">ABOUT</b>
+                                    <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">ABOUT</b>
                                 </div>
-                                <div className="smallText2">
+                                <div className="font20px font16pxUnder700 font14pxUnder400">
                                     {pathway.sponsor.description}
                                 </div>
                                 {pathway.sponsor.hiring ?
                                     <div style={style.spaceTop}>
                                         <img
-                                            src="/icons/Employee.png"
-                                            style={style.iconsLeft}
+                                            src="/icons/Badge.png"
+                                            className="pathwayLandingIconsLeft"
                                         />
-                                        <b style={{color: '#B869FF'}} className="mediumText">OPEN POSITIONS</b><br/>
-                                        <div className="smallText2">- {pathway.sponsor.hiring}</div>
+                                        <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">OPEN POSITIONS</b><br/>
+                                        <div className="font20px font16pxUnder700 font14pxUnder400">- {pathway.sponsor.hiring}</div>
                                     </div>
                                     : null}
                                 <div style={style.spaceTop}>
                                     <img
                                         src="/icons/www.png"
-                                        style={style.iconsLeft}
+                                        className="pathwayLandingIconsLeft"
                                     />
                                     <b style={{color: '#B869FF'}}
-                                       className="mediumText">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
+                                       className="font40px font24pxUnder500">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
                                     <a href={pathway.sponsor.homepage} target="_blank" style={style.infoLinks}
-                                       className="smallText2">Website</a>
+                                       className="font20px font16pxUnder700 font14pxUnder400">Website</a>
                                     {pathway.sponsor.blog ?
                                         <a href={pathway.sponsor.blog} target="_blank" style={style.infoLinks}
-                                           className="smallText2">Blog</a> : null}
+                                           className="font20px font16pxUnder700 font14pxUnder400">Blog</a> : null}
                                     {pathway.sponsor.demo ?
                                         <a href={pathway.sponsor.demo} target="_blank" style={style.infoLinks}
-                                           className="smallText2">Demo</a> : null}
+                                           className="font20px font16pxUnder700 font14pxUnder400">Demo</a> : null}
                                 </div>
                             </div>
                             {pathway.sponsor.quote ?
-                                <div style={style.quote.rightSide}>
+                                <div className="pathwayLandingQuoteRight">
                                     <div style={style.quote.container}>
-                                        <div style={style.quote.content}>
+                                        <div style={style.quote.content} className="font28px font20pxUnder700 font16pxUnder400">
                                             {"\""}{pathway.sponsor.quote.body}{"\""}<br/>
                                         </div>
 
@@ -444,9 +415,10 @@ class Pathway extends Component {
                                             <img
                                                 src={pathway.sponsor.quote.speakerImage}
                                                 style={style.quote.speakerImage}
+                                                id="speakerImage"
                                                 alt={""}
                                             />
-                                            <div style={style.quote.speakerInfo}>
+                                            <div style={style.quote.speakerInfo} className="font20px font16pxUnder700 font14pxUnder400">
                                                 {pathway.sponsor.quote.speakerName}<br/>
                                                 {pathway.sponsor.quote.speakerTitle}
                                             </div>
@@ -458,22 +430,22 @@ class Pathway extends Component {
                         </div>
 
                         <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                            <div className="homepageSeparator"/>
+                            <div className="homepageSeparator purpleGreenSeparator"/>
                         </div>
 
                         <div>
                             {pathway.sponsor ?
-                                <div style={{marginBottom: "70px"}}>
+                                <div style={{marginBottom: "30px"}}>
                                     <HomepageTriangles variation="3"/>
-                                    <ul className="horizCenteredList homepageBenefitsList">
-                                        <li style={{marginRight: "14%"}}>
+                                    <ul className="horizCenteredList homepageBenefitsList list500pxStack">
+                                        <li className="pathwayLandingLiMargin">
                                             <div style={{position: "relative"}}>
                                                 <img
                                                     src="/icons/NoMoney.png"
                                                     alt="Free"
                                                     className="infoBoxImage"
                                                 />
-                                                <div className="smallText2">
+                                                <div className="font20px font16pxUnder700 font14pxUnder400">
                                                     It{"'"}s free.<br/>
                                                     {pathway.sponsor.name} provides scholarships<br/>
                                                     to pay for your pathway.
@@ -485,9 +457,9 @@ class Pathway extends Component {
                                                 <img
                                                     src="/icons/Portfolio.png"
                                                     alt="Portfolio"
-                                                    className="infoBoxImage"
+                                                    className="infoBoxPortfolioImage"
                                                 />
-                                                <div className="smallText2">
+                                                <div className="font20px font16pxUnder700 font14pxUnder400">
                                                     Learn {pathway.sponsor.learn}<br/>
                                                     and build<br/>
                                                     your {pathway.sponsor.type} portfolio.
@@ -495,7 +467,7 @@ class Pathway extends Component {
                                             </div>
                                         </li>
                                     </ul>
-                                    <ul className="horizCenteredList homepageBenefitsList">
+                                    <ul className="horizCenteredList homepageBenefitsList listBottom500pxStack">
                                         <li>
                                             <div style={{position: "relative"}}>
                                                 <img
@@ -503,7 +475,7 @@ class Pathway extends Component {
                                                     alt="Data"
                                                     className="infoBoxImage"
                                                 />
-                                                <div className="smallText2">
+                                                <div className="font20px font16pxUnder700 font14pxUnder400">
                                                     Get evaluated by {pathway.sponsor.name}<br/>
                                                     and other {pathway.sponsor.type} employers<br/>
                                                     based on your performance.
@@ -520,7 +492,7 @@ class Pathway extends Component {
                         {pathway.steps ?
                             <div>
                                 <div className="center" style={{margin: "100px 0 40px 0"}}>
-                                    < b style={{color: '#B869FF'}} className="mediumText">Pathway Overview</ b>
+                                    < b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">Pathway Overview</ b>
                                 </ div>
 
                                 {pathwaySteps}
@@ -530,7 +502,7 @@ class Pathway extends Component {
 
                         {pathway.extraInfo ?
 
-                            <div key="extraInfo" className="center smallText2" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
+                            <div key="extraInfo" className="center font20px font14pxUnder700 font10pxUnder400" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
                                 <img
                                     src="/icons/ToolPurple.png"
                                     id="toolIconExtraInfo"
@@ -555,7 +527,7 @@ class Pathway extends Component {
                             : null
                         }
                         <div className="center" style={{marginBottom: "20px", clear: "both"}}>
-                            <button className="outlineButton"
+                            <button className="outlineButton font30px font20pxUnder500"
                                     style={{
                                         backgroundColor: "transparent",
                                         border: "2px solid #B869FF",
@@ -570,7 +542,10 @@ class Pathway extends Component {
                         </div>
                     </div>
                     :
-                    <CircularProgress/>
+                    <div>
+                        <div className="fullHeight purpleGradient"/>
+                        <div className="fullHeight purpleGradient"/>
+                    </div>
                 }
 
             </div>
@@ -589,9 +564,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getUsers,
         registerForPathway,
-        closeNotification
+        closeNotification,
     }, dispatch);
 }
 

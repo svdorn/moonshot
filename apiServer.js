@@ -21,57 +21,81 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+// trust the first proxy encountered because we run through a proxy
+app.set('trust proxy', 1);
 
 // APIs
 var mongoose = require('mongoose');
-// MONGO LAB - OLD
-//mongoose.connect('mongodb://testUser:test@ds111476.mlab.com:11476/bookshop')
-// MONGO LAB - NEW
+// MONGO LAB
 const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds125146.mlab.com:25146/testmoonshot'
 mongoose.connect(dbConnectLink);
-// LOCAL DB
-//mongoose.connect('mongodb://localhost:27017/bookshop');
-
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 // --->>> SET UP SESSIONS <<<---
 app.use(session({
     secret: credentials.secretString,
-    saveUninitialized: false,
-    resave: false,
-    cookie: {maxAge: 1000 * 60 * 60 * 24 * 7}, //7 days in milliseconds
+    saveUninitialized: false, // doesn't save a session if it is new but not modified
+    rolling: true, // resets maxAge on session when user uses site again
+    proxy: true, // must be true since we are using a reverse proxy
+    resave: false, // session only saved back to the session store if session was modified,
+    cookie: {
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
+        // TODO uncomment this when pushing to aws less frequently.
+        // secure being true makes cookies only save when on https so it'll screw up localhost stuff
+        //secure: true // only make the cookie if accessing via https
+        secure: false // save the cookie even if not on https
+    },
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
 
 app.post('/signOut', function (req, res) {
     req.session.userId = undefined;
-    req.session.hashedVerificationToken = undefined;
     req.session.save(function(err) {
         if (err) {
             console.log("error removing user session: ", err);
+            res.json("failure removing user session");
+        } else {
+            res.json("success");
         }
-        res.json("success");
     })
-})
+});
+
+// change session to store whether user wants default of "Keep Me Logged In"
+// to be checked or unchecked
+app.post("/keepMeLoggedIn", function(req, res) {
+    if (typeof req.body.stayLoggedIn === "boolean") {
+        req.session.stayLoggedIn = req.body.stayLoggedIn;
+    } else {
+        req.session.stayLoggedIn = false;
+    }
+    req.session.save(function(err) {
+        if (err) {
+            console.log("error saving 'keep me logged in' setting: ", err);
+            res.json("error saving 'keep me logged in' setting");
+        } else {
+            res.json("success");
+        }
+    })
+});
+
+
+// get the setting to stay logged in or out
+app.get("/keepMeLoggedIn", function(req, res) {
+    let setting = sanitize(req.session.stayLoggedIn);
+    if (typeof setting !== "boolean") {
+        setting = false;
+    }
+    res.json(setting);
+});
 
 // GET USER SESSION
 app.get('/userSession', function (req, res) {
-    if (typeof req.session.userId !== 'undefined') {
-        // TODO this could be a source of slowdown, if site is running too slow
-        // consider changing the session to hold the entire user. This will take
-        // more memory but will be faster
-
-        getUserByQuery({_id: req.session.userId}, function (user) {
-            //bcrypt.compare(user.verificationToken, req.session.hashedVerificationToken, function(err, tokenMatches) {
-            //    if (tokenMatches) {
-                    res.json(user);
-            //    } else {
-            //        console.log("verification tokens did not match when getting user from session");
-            //        res.json(undefined);
-            //    }
-            //});
+    if (typeof req.session.userId === 'string') {
+        const userId = sanitize(req.session.userId);
+        getUserByQuery({_id: userId}, function (user) {
+            res.json(removePassword(user));
         })
     }
     else {
@@ -185,18 +209,31 @@ const sanitizeOptions = {
     allowedAttributes: []
 }
 
+
+// update all users with a specific thing, used if something is changed about
+// the user model
+// Users.find({}, function(err, users) {
+//     console.log("err is: ", err);
+//     console.log("\n\nusers are: ", users);
+//
+//     for (let userIdx = 0; userIdx < users.length; userIdx++) {
+//         let user = users[userIdx];
+//         Users.count({name: user.name}, function(err, count) {
+//             console.log("count of users with name ", user.name, ": ", count);
+//             const randomNumber = crypto.randomBytes(32).toString('hex');
+//             user.verificationToken = randomNumber;
+//             user.save(function() {
+//                 console.log("user saved");
+//             });
+//         });
+//     }
+// })
+
 //----->> POST USER <<------
-app.post('/users', function (req, res) {
+app.post('/user', function (req, res) {
     var user = req.body[0];
 
-    // sanitize user info
-    for (var prop in user) {
-        // skip loop if the property is from prototype
-        if (!user.hasOwnProperty(prop)) continue;
-        if (typeof user[prop] === "string") {
-            user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
-        }
-    }
+    user = sanitize(user);
 
     // hash the user's password
     const saltRounds = 10;
@@ -216,13 +253,28 @@ app.post('/users', function (req, res) {
                     console.log(err);
                 }
                 if (foundUser === null) {
-                    // store the user in the db
-                    Users.create(user, function (err, user) {
-                        if (err) {
-                            console.log(err);
-                        }
-                        cleanUser(user, function(cleanedUser) {
-                            res.json(cleanedUser);
+                    // get count of users with that name to get the profile url
+                    Users.count({name: user.name}, function(err, count) {
+                        const randomNumber = crypto.randomBytes(8).toString('hex');
+                        user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+
+                        // store the user in the db
+                        Users.create(user, function (err, newUser) {
+                            if (err) {
+                                console.log(err);
+                            }
+
+                            req.session.unverifiedUserId = newUser._id;
+                            req.session.save(function(err) {
+                                if (err) {
+                                    console.log("error saving unverifiedUserId to session: ", err);
+                                }
+                            })
+
+                            // no reason to return the user with tokens because
+                            // they will have to verify themselves before they
+                            // can do anything anyway
+                            res.json(safeUser(newUser));
                         })
                     })
                 } else {
@@ -233,8 +285,104 @@ app.post('/users', function (req, res) {
     });
 });
 
+function sanitize(something) {
+    const somethingType = (typeof something);
+    switch (somethingType) {
+        case "object":
+            return sanitizeObject(something);
+            break;
+        case "boolean":
+        case "number":
+            return something;
+            break;
+        case "string":
+            return sanitizeHtml(something, sanitizeOptions);
+            break;
+        case "undefined":
+        case "symbol":
+        case "function":
+        default:
+            return undefined;
+    }
+}
+
+function sanitizeObject(obj) {
+    if (!obj) {
+        return undefined;
+    }
+
+    if (Array.isArray(obj)) {
+        return sanitizeArray(obj);
+    }
+
+    let newObj = {};
+
+    for (var prop in obj) {
+        // skip loop if the property is from prototype
+        if (!obj.hasOwnProperty(prop)) continue;
+        let value = obj[prop];
+        let propType = typeof value;
+
+        switch (propType) {
+            case "undefined":
+                break;
+            case "object":
+                if (Array.isArray(value)) {
+                    newObj[prop] = sanitizeArray(value);
+                } else {
+                    newObj[prop] = sanitizeObject(value);
+                }
+                break;
+            case "boolean":
+            case "number":
+                newObj[prop] = value;
+                break;
+            case "string":
+                newObj[prop] = sanitizeHtml(value, sanitizeOptions);
+                break;
+            default:
+                // don't give the object the property if it isn't one of these things
+        }
+    }
+
+    return newObj;
+}
+
+function sanitizeArray(arr) {
+    if (!arr) {
+        return undefined;
+    }
+
+    const sanitizedArr = arr.map(function(value) {
+        let valueType = (typeof value);
+
+        switch (valueType) {
+            case "object":
+                if (Array.isArray(value)) {
+                    return sanitizeArray(value);
+                } else {
+                    return sanitizeObject(value);
+                }
+                break;
+            case "boolean":
+            case "number":
+                return value;
+                break;
+            case "string":
+                return sanitizeHtml(value, sanitizeOptions);
+                break;
+            case "undefined":
+            default:
+                // don't give the object the property if it isn't one of these things
+                return undefined;
+        }
+    });
+
+    return sanitizedArr;
+}
+
 app.post('/verifyEmail', function (req, res) {
-    const token = req.body.token;
+    const token = sanitize(req.body.token);
 
     var query = {emailVerificationToken: token};
     Users.findOne(query, function (err, user) {
@@ -258,25 +406,35 @@ app.post('/verifyEmail', function (req, res) {
         // When true returns the updated document
         var options = {new: true};
 
-        Users.findOneAndUpdate(query, update, options, function (err, user) {
+        Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
             if (err) {
                 console.log(err);
             }
 
-            user.password = undefined;
-            res.json(user);
+            // if the session has the user's id, can immediately log them in
+            sessionUserId = sanitize(req.session.unverifiedUserId);
+            req.session.unverifiedUserId = undefined;
+            req.session.save(function(err) {
+                if (err) {
+                    console.log("error")
+                }
+            });
+            if (sessionUserId && sessionUserId == updatedUser._id) {
+                res.json(removePassword(updatedUser));
+            }
+            // otherwise, bring the user to the login page
+            else {
+                res.json("go to login");
+            }
+
         });
     });
 });
 
 // VERIFY CHANGE PASSWORD
-app.post('/users/changePasswordForgot', function (req, res) {
-    let token = req.body.token;
-    let password = req.body.password;
-
-    // sanitize token
-    token = sanitizeHtml(token, sanitizeOptions);
-    password = sanitizeHtml(password, sanitizeOptions);
+app.post('/user/changePasswordForgot', function (req, res) {
+    let token = sanitize(req.body.token);
+    let password = sanitize(req.body.password);
 
     var query = {passwordToken: token};
     Users.findOne(query, function (err, user) {
@@ -315,8 +473,7 @@ app.post('/users/changePasswordForgot', function (req, res) {
                         console.log(err);
                     }
 
-                    newUser.password = undefined;
-                    res.json(newUser);
+                    res.json(removePassword(newUser));
                 });
             })
         })
@@ -325,23 +482,23 @@ app.post('/users/changePasswordForgot', function (req, res) {
 
 // SEND EMAIL
 app.post('/sendVerificationEmail', function (req, res) {
-    let email = sanitizeHtml(req.body.email, sanitizeOptions);
+    let email = sanitize(req.body.email);
     let query = {email: email};
 
     Users.findOne(query, function (err, user) {
         let recipient = user.email;
         let subject = 'Verify email';
         let content =
-             '<div style="font-size:15px;text-align:center;font-family: Century Gothic, CenturyGothic, AppleGothic, sans-serif;">'
-            +   '<a href="https://www.moonshotlearning.org/"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
+             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+            +   '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
             +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways and learning new skills, please <a href="http://localhost:3000/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>. Once you verify your account, you can start building your profile. We hope you have a blast!</span><br/>'
-            +       '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.com">Support@MoonshotLearning.com</a>.</span><br/>'
+            +       '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways and learning new skills, please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>. Once you verify your account, you can start building your profile. We hope you have a blast!</span><br/>'
+            +       '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.com</a>.</span><br/>'
             +   '</div>'
-            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="http://localhost:3000/verifyEmail?'
+            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?'
             +   user.emailVerificationToken
             +   '">VERIFY ACCOUNT</a>'
-            +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
+            +   '<div style="text-align:left;width:80%;margin-left:10%;">'
             +       '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
             +   '</div>'
             +'</div>';
@@ -357,27 +514,31 @@ app.post('/sendVerificationEmail', function (req, res) {
 });
 
 // SEND EMAIL FOR REGISTERING FOR PATHWAYS
-app.post('/users/registerForPathway', function(req, res) {
-    let recipient1 = "kyle.treige@moonshotlearning.org";
-    let subject1 = "Student Registration for " + req.body.pathway;
+app.post('/user/registerForPathway', function(req, res) {
+    const pathwayName = sanitize(req.body.pathway);
+    const studentName = sanitize(req.body.name);
+    const studentEmail = sanitize(req.body.email);
+
+    let recipient1 = "kyle@moonshotlearning.org, justin@moonshotlearning.org, ameyer24@wisc.edu";
+    let subject1 = "Student Registration for " + pathwayName;
     let content1 = "<div>"
         + "<h3>Student Registration for Pathway:</h3>"
         + "<h4>Pathway: "
-        + req.body.pathway
+        + pathwayName
         + "</h4>"
         + "<h4>Student: "
-        + req.body.name
+        + studentName
         + "</h4>"
         + "<h4>Student Email: "
-        + req.body.email
+        + studentEmail
         + "</h4>"
         + "<p>If the student doesn't get back to you soon with an email, make sure to reach out to them.</p>"
         + "<p>-Moonshot</p>"
         +  "</div>";
 
-    let name = req.body.name.replace(/(([^\s]+\s\s*){1})(.*)/,"$1").trim();
-    let recipient2 = req.body.email;
-    let subject2 = "First steps for " + req.body.pathway + " Pathway - book a 15 min call";
+    let name = studentName.replace(/(([^\s]+\s\s*){1})(.*)/,"$1").trim();
+    let recipient2 = studentEmail;
+    let subject2 = "First steps for " + pathwayName + " Pathway - book a 15 min call";
     let content2 = "<div>"
         + "<p>Hi " + name + "," + "</p>"
         + "<p>My name is Kyle and I’m one of the founders at Moonshot. We are excited for you to get going on the pathway!</p>"
@@ -385,7 +546,7 @@ app.post('/users/registerForPathway', function(req, res) {
         + "- There are limited scholarships that the sponsor company offers.<br/>"
         + "- So … We need to learn a bit about you first!<br/>"
         + "- Step 1: " +"<b><u>Send a link to your LinkedIn profile</u></b>" + " (not required but you can also attach"
-        + " your resume, link to a project, something you are proud of, etc) to kyle.treige@moonshotlearning.org." + "</p>"
+        + " your resume, link to a project, something you are proud of, etc) to kyle@moonshotlearning.org." + "</p>"
         + "<p>If you have any questions, shoot me a message. I'll review everything and be back to you shortly!</p>"
         + "<p>Talk soon,<br/>"
         + "Kyle</p>"
@@ -411,36 +572,82 @@ app.post('/users/registerForPathway', function(req, res) {
 });
 
 // SEND EMAIL FOR FOR BUSINESS
-app.post('/users/forBusinessEmail', function (req, res) {
+app.post('/user/forBusinessEmail', function (req, res) {
 
     let message = "None";
     if (req.body.message) {
-        message = req.body.message;
+        message = sanitize(req.body.message);
     }
-    let recipient = "kyle.treige@moonshotlearning.org";
+    let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
     let subject = 'Moonshot Sales Lead - From For Business Page';
     let content = "<div>"
         + "<h3>Sales Lead from For Business Page:</h3>"
         + "<p>Name: "
-        + req.body.name
+        + sanitize(req.body.name)
         + "</p>"
         + "<p>Company: "
-        + req.body.company
+        + sanitize(req.body.company)
         + "</p>"
         + "<p>Title: "
-        + req.body.title
+        + sanitize(req.body.title)
         + "</p>"
         + "<p>Email: "
-        + req.body.email
+        + sanitize(req.body.email)
         + "</p>"
         + "<p>Phone Number: "
-        + req.body.phone
+        + sanitize(req.body.phone)
         + "</p>"
         + "<p>Positions they're hiring for: "
-        + req.body.positions
+        + sanitize(req.body.positions)
         + "</p>"
         + "<p>Message: "
         + message
+        + "</p>"
+        + "</div>";
+
+    sendEmail(recipients, subject, content, function (success, msg) {
+        if (success) {
+            res.json("Email sent successfully, our team will be in contact with you shortly!");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+});
+
+app.post('/user/unsubscribeEmail', function (req, res) {
+
+    let recipient = "kyle@moonshotlearning.org";
+    let subject = 'URGENT ACTION - User Unsubscribe from Moonshot';
+    let content = "<div>"
+        + "<h3>This email is Unsubscribing from Moonshot Emails:</h3>"
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "</div>";
+
+    sendEmail(recipient, subject, content, function (success, msg) {
+        if (success) {
+            res.json("You have successfully unsubscribed.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+});
+
+// SEND COMING SOON EMAIL
+app.post('/user/comingSoonEmail', function (req, res) {
+
+    let recipient = "kyle@moonshotlearning.org, justin@moonshotlearning.org, ameyer24@wisc.edu";
+    let subject = 'Moonshot Coming Soon Pathway';
+    let content = "<div>"
+        + "<h3>Pathway:</h3>"
+        + "<p>Name: "
+        + sanitize(req.body.name)
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "<p>Pathway: "
+        + sanitize(req.body.pathway)
         + "</p>"
         + "</div>";
 
@@ -454,28 +661,28 @@ app.post('/users/forBusinessEmail', function (req, res) {
 });
 
 // SEND EMAIL FOR CONTACT US
-app.post('/users/contactUsEmail', function (req, res) {
+app.post('/user/contactUsEmail', function (req, res) {
 
     let message = "None";
     if (req.body.message) {
-        message = req.body.message;
+        message = sanitize(req.body.message);
     }
-    let recipient = "kyle.treige@moonshotlearning.org";
+    let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
     let subject = 'Moonshot Pathway Question -- Contact Us Form';
     let content = "<div>"
         + "<h3>Questions from pathway:</h3>"
         + "<p>Name: "
-        + req.body.name
+        + sanitize(req.body.name)
         + "</p>"
         + "<p>Email: "
-        + req.body.email
+        + sanitize(req.body.email)
         + "</p>"
         + "<p>Message: "
         + message
         + "</p>"
         + "</div>";
 
-    sendEmail(recipient, subject, content, function (success, msg) {
+    sendEmail(recipients, subject, content, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
@@ -487,7 +694,7 @@ app.post('/users/contactUsEmail', function (req, res) {
 // SEND EMAIL FOR PASSWORD RESET
 app.post('/forgotPassword', function (req, res) {
 
-    let email = sanitizeHtml(req.body.email, sanitizeOptions);
+    let email = sanitize(req.body.email);
     let query = {email: email};
 
     const user = getUserByQuery(query, function (user) {
@@ -516,7 +723,7 @@ app.post('/forgotPassword', function (req, res) {
 
                 foundUser.password = undefined;
                 let content = 'Click this link to change your password: '
-                    + "<a href='http://localhost:3000/changePassword?"
+                    + "<a href='https://www.moonshotlearning.org/changePassword?"
                     + newPasswordToken
                     + "'>Click me</a>";
                 sendEmail(recipient, subject, content, function (success, msg) {
@@ -535,7 +742,7 @@ app.post('/forgotPassword', function (req, res) {
 function sendEmail(recipients, subject, content, callback) {
     // Generate test SMTP service account from ethereal.email
     // Only needed if you don't have a real mail account for testing
-    nodemailer.createTestAccount((err, account) => {
+    //nodemailer.createTestAccount((err, account) => {
 
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
@@ -571,49 +778,49 @@ function sendEmail(recipients, subject, content, callback) {
             callback(true, "Email sent! Check your email.");
             return;
         });
-    });
+    //});
 }
 
 app.post('/getUserById', function(req, res) {
-    const _id = sanitizeHtml(req.body._id, sanitizeOptions);
+    const _id = sanitize(req.body._id);
     const query = { _id };
     getUserByQuery(query, function (user) {
-        res.json(user);
+        res.json(removePassword(user));
     })
 });
 
-app.post('/getUserByQuery', function (req, res) {
-    const query = sanitizeHtml(req.body.query, sanitizeOptions);
-    const user = getUserByQuery(query, function (user) {
-        res.json(user);
-    });
+app.post('/getUserByProfileUrl', function(req, res) {
+    const profileUrl = sanitize(req.body.profileUrl);
+    const query = { profileUrl };
+    getUserByQuery(query, function (user) {
+        res.json(safeUser(user));
+    })
 });
 
 function getUserByQuery(query, callback) {
     Users.findOne(query, function (err, foundUser) {
         if (foundUser) {
-            foundUser.password = undefined;
-            callback(foundUser);
+            callback(removePassword(foundUser));
             return;
+        } else {
+            if (err) {
+                console.log(err);
+            }
+            callback(undefined);
         }
-        if (err) {
-            console.log(err);
-        }
-        callback(undefined);
-        return;
     });
 }
 
 // LOGIN USER
 app.post('/login', function (req, res) {
-    const reqUser = req.body.user;
-    let saveSession = req.body.saveSession;
+    const reqUser = sanitize(req.body.user);
+    let saveSession = sanitize(req.body.saveSession);
 
     if (typeof saveSession !== "boolean") {
         saveSession = false;
     }
-    var email = sanitizeHtml(reqUser.email, sanitizeOptions);
-    var password = sanitizeHtml(reqUser.password, sanitizeOptions);
+    var email = reqUser.email;
+    var password = reqUser.password;
 
     var query = {email: email};
     Users.findOne(query, function (err, user) {
@@ -638,24 +845,19 @@ app.post('/login', function (req, res) {
             else if (passwordsMatch) {
                 // check if user verified email address
                 if (user.verified) {
-
-                    cleanUser(user, function(newUser) {
-                        user = newUser;
-                        if (saveSession) {
-                            req.session.userId = user._id;
-                            req.session.hashedVerificationToken = user.hashedVerificationToken;
-                            req.session.save(function (err) {
-                                if (err) {
-                                    console.log("error saving user session", err);
-                                }
-                                res.json(user);
-                            });
-                        } else {
-                            res.json(user);
-                            return;
-                        }
-                    });
-
+                    user = removePassword(user);
+                    if (saveSession) {
+                        req.session.userId = user._id;
+                        req.session.save(function (err) {
+                            if (err) {
+                                console.log("error saving user session", err);
+                            }
+                            res.json(removePassword(user));
+                        });
+                    } else {
+                        res.json(removePassword(user));
+                        return;
+                    }
                 }
                 // if user has not yet verified email address, don't log in
                 else {
@@ -672,54 +874,44 @@ app.post('/login', function (req, res) {
     });
 });
 
-function cleanUser(user, callback) {
-    const saltRounds = 10;
-    bcrypt.hash(user.verificationToken, saltRounds, function(err, hash) {
-        let newUser = user;
-        newUser.password = undefined;
-        newUser.verificationToken = undefined;
-        newUser.hashedVerificationToken = hash;
-        callback(newUser);
-    });
+
+// this user object can now safely be seen by anyone
+function safeUser(user) {
+    let newUser = Object.assign({}, user);
+    newUser.password = undefined;
+    newUser._id = undefined;
+    newUser.verificationToken = undefined;
+    newUser.emailVerificationToken = undefined;
+    newUser.passwordToken = undefined;
 }
 
 
-//----->> GET USERS <<------
-app.get('/users', function (req, res) {
-    Users.find(function (err, users) {
-        if (err) {
-            console.log(err);
-        }
-        res.json(users);
-    })
-});
+// used when passing the user object back to the user, still contains sensitive
+// data such as the user id and verification token
+function removePassword(user) {
+    let newUser = user;
+    newUser.password = undefined;
+    return newUser;
+}
+
 
 //----->> DELETE USER <<------
-app.delete('/users/:_id', function (req, res) {
-    var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
+app.delete('/user/:_id', function (req, res) {
+    var query = {_id: sanitize(req.params._id)};
 
     Users.remove(query, function (err, user) {
         if (err) {
             console.log(err);
         }
-        res.json(user);
+        res.json(safeUser(user));
     })
 });
 
 //----->> UPDATE USER <<------
-app.put('/users/:_id', function (req, res) {
-    var user = req.body;
+app.put('/user/:_id', function (req, res) {
+    var user = sanitize(req.body);
 
-    // sanitize user info
-    for (var prop in user) {
-        // skip loop if the property is from prototype
-        if (!user.hasOwnProperty(prop)) continue;
-        if (typeof user[prop] === "string") {
-            user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
-        }
-    }
-
-    var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
+    var query = {_id: sanitize(req.params._id)};
 
     // if the field doesn't exist, $set will set a new field
     var update = {
@@ -747,13 +939,12 @@ app.put('/users/:_id', function (req, res) {
             }
         }
         if (bool) {
-            Users.findOneAndUpdate(query, update, options, function (err, users) {
+            Users.findOneAndUpdate(query, update, options, function (err, user) {
                 if (err) {
                     console.log(err);
                 }
 
-                users.password = undefined;
-                res.json(users);
+                res.json(removePassword(user));
             });
         }
 
@@ -761,9 +952,9 @@ app.put('/users/:_id', function (req, res) {
 });
 
 //----->> CHANGE PASSWORD <<------
-app.put('/users/changepassword/:_id', function (req, res) {
-    var user = req.body;
-    var query = {_id: sanitizeHtml(req.params._id, sanitizeOptions)};
+app.put('/user/changepassword/:_id', function (req, res) {
+    var user = sanitize(req.body);
+    var query = {_id: sanitize(req.params._id)};
 
     // sanitize user info
     for (var prop in user) {
@@ -806,12 +997,11 @@ app.put('/users/changepassword/:_id', function (req, res) {
                         var options = {new: true};
 
                         // i think it has to be {_id: req.params._id} for the query
-                        Users.findOneAndUpdate(query, update, options, function (err, users) {
+                        Users.findOneAndUpdate(query, update, options, function (err, user) {
                             if (err) {
                                 console.log(err);
                             }
-                            users.password = undefined;
-                            res.json(users);
+                            res.json(removePassword(user));
                         });
                     } else {
                         res.status(400).send("Old password is incorrect.");
@@ -825,27 +1015,19 @@ app.put('/users/changepassword/:_id', function (req, res) {
 
 //----->> GET TOP PATHWAYS <<------
 app.get('/topPathways', function (req, res) {
-    const numPathways = parseInt(req.query.numPathways);
+    const numPathways = parseInt(sanitize(req.query.numPathways));
 
     // gets the most popular pathways, the number of pathways is numPathways
     Pathways.find()
-        .sort({rating: 1})
+        .sort({avgRating: -1})
         .limit(numPathways)
-        .select("name previewImage sponsor estimatedCompletionTime deadline price")
+        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon")
         .exec(function (err, pathways) {
             if (err) {
                 res.status(500).send("Not able to get top pathways");
             } else if (pathways.length == 0) {
                 res.status(500).send("No pathways found");
             } else {
-                // // if there weren't enough pathways
-                // if (pathways.length < numPathways) {
-                //     for (let i = pathways.length; i < numPathways; i++) {
-                //         // extend the pathways with the last pathway until you have
-                //         // the number you wanted
-                //         pathways.push(pathways[i - 1]);
-                //     }
-                // }
                 res.json(pathways);
             }
         });
@@ -854,7 +1036,7 @@ app.get('/topPathways', function (req, res) {
 
 //----->> GET LINK BY ID <<-----
 app.get('/getLink', function (req, res) {
-    const _id = req.query._id;
+    const _id = sanitize(req.query._id);
     const query = {_id: _id};
 
     Links.findOne(query, function (err, link) {
@@ -869,7 +1051,7 @@ app.get('/getLink', function (req, res) {
 
 //----->> GET ARTICLE BY ID <<-----
 app.get('/getArticle', function (req, res) {
-    const _id = req.query._id;
+    const _id = sanitize(req.query._id);
     const query = {_id: _id};
 
     Articles.findOne(query, function (err, article) {
@@ -884,7 +1066,7 @@ app.get('/getArticle', function (req, res) {
 
 //----->> GET VIDEO BY ID <<-----
 app.get('/getVideo', function (req, res) {
-    const _id = req.query._id;
+    const _id = sanitize(req.query._id);
     const query = {_id: _id};
 
     Videos.findOne(query, function (err, link) {
@@ -898,55 +1080,142 @@ app.get('/getVideo', function (req, res) {
 });
 
 //----->> GET PATHWAY BY ID <<-----
-app.get('/getPathwayById', function (req, res) {
-    const _id = req.query._id;
+app.get('/pathwayByIdNoContent', function (req, res) {
+    const _id = sanitize(req.query._id);
     const query = {_id: _id};
 
     Pathways.findOne(query, function (err, pathway) {
         if (err) {
             console.log("error in get pathway by id")
         } else {
-            res.json(pathway);
+            if (pathway) {
+                res.json(removeContentFromPathway(pathway));
+            } else {
+                res.json(undefined);
+            }
         }
 
     })
 });
+
+//----->> GET PATHWAY BY URL <<-----
+app.get('/pathwayByPathwayUrlNoContent', function (req, res) {
+    const pathwayUrl = sanitize(req.query.pathwayUrl);
+    const query = {url: pathwayUrl};
+
+    Pathways.findOne(query, function (err, pathway) {
+        if (err) {
+            console.log("error in get pathway by url")
+        } else if (pathway) {
+            res.json(removeContentFromPathway(pathway));
+        } else {
+            res.status(404).send("No pathway found");
+        }
+
+    })
+});
+
+app.get('/pathwayByPathwayUrl', function (req, res) {
+    const pathwayUrl = sanitize(req.query.pathwayUrl);
+    const userId = sanitize(req.query.userId);
+//    const hashedVerificationToken = req.query.hashedVerificationToken;
+
+    const verificationToken = sanitize(req.query.verificationToken);
+    const query = {url: pathwayUrl};
+
+    Pathways.findOne(query, function (err, pathway) {
+        if (err) {
+            console.log("error in get pathway by url");
+            res.status(404).send("Error getting pathway by url");
+            return;
+        } else if (pathway) {
+            // get the user from the database, can't trust user from frontend
+            // because they can change their info there
+            Users.findOne({_id: userId}, function(err, user) {
+                if (err) {
+                    console.log("error getting user: ", err);
+                    res.status(500).send("Error getting pathway");
+                    return;
+                } else {
+                    // check that user is who they say they are
+                    if (verifyUser(user, verificationToken)) {
+                        // check that user has access to that pathway
+                        const hasAccessToPathway = user.pathways.some(function(path) {
+                            return pathway._id.toString() == path.pathwayId.toString();
+                        })
+                        if (hasAccessToPathway) {
+                            res.json(pathway);
+                            return;
+                        } else {
+                            res.status(403).send("User does not have access to this pathway.");
+                            return;
+                        }
+                    } else {
+                        console.log("verification token does not match")
+                        res.status(403).send("Incorrect user credentials");
+                        return;
+                    }
+                }
+            })
+        } else {
+            res.status(404).send("No pathway found");
+        }
+
+    })
+});
+
+function verifyUser(user, verificationToken) {
+    return user.verificationToken && user.verificationToken == verificationToken;
+}
+
+function removeContentFromPathway(pathway) {
+    if (pathway) {
+        steps = pathway.steps;
+        if (steps) {
+            for (let i = 0; i < steps.length; i++) {
+                steps[i].substeps = undefined;
+            }
+            pathway.steps = steps;
+        }
+    }
+
+    return pathway;
+}
 
 //----->> SEARCH PATHWAYS <<------
 app.get('/search', function (req, res) {
     const MAX_PATHWAYS_TO_RETURN = 1000;
     let query = {};
 
-    const term = req.query.searchTerm;
+    let term = sanitize(req.query.searchTerm);
     if (term && term !== "") {
         // if there is a search term, add it to the query
-        const termRegex = new RegExp(req.query.searchTerm);
+        const termRegex = new RegExp(term, "i");
         query["name"] = termRegex;
     }
 
-    const queryNOTYET = req.body.query;
-    let limit = parseInt(req.query.limit);
+    let limit = parseInt(sanitize(req.query.limit));
     if (limit === NaN) {
         limit = MAX_PATHWAYS_TO_RETURN;
     }
-    const sortNOTYET = req.body.sort;
-    const selectNOTYET = req.body.select;
+    const sortNOTYET = sanitize(req.body.sort);
 
     // add category to query if it exists
-    const category = req.query.category;
+    const category = sanitize(req.query.category);
     if (category && category !== "") {
         query["tags"] = category;
     }
 
     // add company to query if it exists
-    const company = req.query.company;
+    const company = sanitize(req.query.company);
     if (company && company !== "") {
         query["sponsor.name"] = company;
     }
 
     //const limit = 4;
     const sort = {avgRating: -1};
-    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags";
+    // only get these properties of the pathways
+    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon url";
 
     Pathways.find(query)
         .limit(limit)
@@ -963,12 +1232,18 @@ app.get('/search', function (req, res) {
 
 
 app.post("/userCurrentStep", function (req, res) {
-    const userId = req.body.params.userId;
-    const pathwayId = req.body.params.pathwayId;
-    const stepNumber = req.body.params.stepNumber;
-    const subStepNumber = req.body.params.subStepNumber;
+    const userId = sanitize(req.body.params.userId);
+    const pathwayId = sanitize(req.body.params.pathwayId);
+    const stepNumber = sanitize(req.body.params.stepNumber);
+    const subStepNumber = sanitize(req.body.params.subStepNumber);
+    const verificationToken = sanitize(req.body.params.verificationToken);
 
     Users.findById(userId, function(err, user) {
+        if (!verifyUser(user, verificationToken)) {
+            res.status(401).send("User does not have valid credentials to save step.");
+            return;
+        }
+
         let pathwayIndex = user.pathways.findIndex(function(path) {
             return path.pathwayId == pathwayId;
         });
@@ -986,8 +1261,8 @@ app.post("/userCurrentStep", function (req, res) {
 });
 
 app.get("/infoByUserId", function(req, res) {
-    infoType = req.query.infoType;
-    const userId = sanitizeHtml(req.query.userId, sanitizeOptions);
+    infoType = sanitize(req.query.infoType);
+    const userId = sanitize(req.query.userId);
 
     if (userId && infoType) {
         Users.findById(userId, function(err, user) {
@@ -1006,45 +1281,59 @@ app.get("/infoByUserId", function(req, res) {
     }
 });
 
-app.post("/addInterests", function(req, res) {
-    const interests = req.body.params.interests;
-    const userId = req.body.params.userId;
-
-    if (interests && userId) {
-        // When true returns the updated document
-        Users.findById(userId, function(err, user) {
-            if (err) {
-                console.log(err);
-            }
-
-            for (let i = 0; i < interests.length; i++) {
-                // only add the interest if the user didn't already have it
-                if (user.info.interests.indexOf(interests[i]) === -1) {
-                    user.info.interests.push(interests[i]);
-                }
-            }
-
-            user.save(function (err, updatedUser) {
-                if (err) {
-                    res.send(false);
-                }
-                res.send(updatedUser);
-            });
-        })
-    } else {
-        res.send(undefined);
-    }
-});
+// app.post("/addInterests", function(req, res) {
+//     const interests = sanitize(req.body.params.interests);
+//     const userId = sanitize(req.body.params.userId);
+//     const verificationToken = sanitize(req.body.params.verificationToken);
+//
+//     if (interests && userId) {
+//         // When true returns the updated document
+//         Users.findById(userId, function(err, user) {
+//             if (err) {
+//                 console.log(err);
+//             }
+//
+//             if (!verifyUser(user, verificationToken)) {
+//                 res.status(401).send("User does not have valid credentials to add interests.");
+//                 return;
+//             }
+//
+//             for (let i = 0; i < interests.length; i++) {
+//                 // only add the interest if the user didn't already have it
+//                 if (user.info.interests.indexOf(interests[i]) === -1) {
+//                     user.info.interests.push(interests[i]);
+//                 }
+//             }
+//
+//             user.save(function (err, updatedUser) {
+//                 if (err) {
+//                     res.send(false);
+//                 }
+//                 res.send(updatedUser);
+//             });
+//         })
+//     } else {
+//         res.send(undefined);
+//     }
+// });
 
 app.post("/updateInterests", function(req, res) {
-    const interests = req.body.params.interests;
-    const userId = req.body.params.userId;
+    const interests = sanitize(req.body.params.interests);
+    const userId = sanitize(req.body.params.userId);
+    const verificationToken = sanitize(req.body.params.verificationToken);
 
     if (interests && userId) {
         // When true returns the updated document
         Users.findById(userId, function(err, user) {
+            //console.log('found user: ', user);
             if (err) {
                 console.log(err);
+            }
+
+            if (!verifyUser(user, verificationToken)) {
+                console.log("can't verify user");
+                res.status(401).send("User does not have valid credentials to update interests.");
+                return;
             }
 
             user.info.interests = interests;
@@ -1062,14 +1351,21 @@ app.post("/updateInterests", function(req, res) {
 });
 
 app.post("/updateGoals", function(req, res) {
-    const goals = req.body.params.goals;
-    const userId = req.body.params.userId;
+    const goals = sanitize(req.body.params.goals);
+    const userId = sanitize(req.body.params.userId);
+    const verificationToken = sanitize(req.body.params.verificationToken);
 
     if (userId && goals) {
         // When true returns the updated document
         Users.findById(userId, function(err, user) {
             if (err) {
                 console.log(err);
+            }
+
+            if (!verifyUser(user, verificationToken)) {
+                console.log("can't verify user");
+                res.status(401).send("User does not have valid credentials to update goals.");
+                return;
             }
 
             user.info.goals = goals;
@@ -1089,14 +1385,21 @@ app.post("/updateGoals", function(req, res) {
 });
 
 app.post("/updateInfo", function(req, res) {
-    const info = req.body.params.info;
-    const userId = req.body.params.userId;
+    const info = sanitize(req.body.params.info);
+    const userId = sanitize(req.body.params.userId);
+    const verificationToken = sanitize(req.body.params.verificationToken);
 
     if (info && userId) {
         // When true returns the updated document
         Users.findById(userId, function(err, user) {
             if (err) {
                 console.log(err);
+            }
+
+            if (!verifyUser(user, verificationToken)) {
+                console.log("can't verify user");
+                res.status(401).send("User does not have valid credentials to update info.");
+                return;
             }
 
             for (const prop in info) {
@@ -1116,28 +1419,6 @@ app.post("/updateInfo", function(req, res) {
         res.send(undefined);
     }
 });
-
-
-//----->> GET IMAGES <<------
-// app.get('/images', function (req, res) {
-//     const imgFolder = __dirname + '/public/images/';
-//     // REQUIRE FILE SYSTEM
-//     const fs = require('fs');
-//     // READ ALL FILES IN THE DIRECTORY
-//     fs.readdir(imgFolder, function (err, files) {
-//         if (err) {
-//             return console.error(err);
-//         }
-//         //CREATE AN EMPTY ARRAY
-//         const filesArr = [];
-//         // ITERATE ALL IMAGES IN THE DIRECTORY AND ADD TO THE ARRAY
-//         files.forEach(function (file) {
-//             filesArr.push({name: file});
-//         });
-//         // SEND THE JSON RESPONSE WITH THE ARRAY
-//         res.json(filesArr);
-//     })
-// })
 
 // END APIs
 

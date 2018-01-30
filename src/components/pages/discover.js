@@ -1,12 +1,12 @@
 "use strict"
 import React, {Component} from 'react';
-import {Paper, RaisedButton, TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup} from 'material-ui';
+import {TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup, Dialog, FlatButton, CircularProgress} from 'material-ui';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
-import Category from '../childComponents/category'
-import {closeNotification} from "../../actions/usersActions";
+import ComingSoonForm from '../childComponents/comingSoonForm';
+import {closeNotification, comingSoon} from "../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
 import styles from '../../../public/styles';
@@ -29,7 +29,9 @@ class Discover extends Component {
             category: "",
             company: "",
             explorePathways: [],
-            featuredPathways: []
+            featuredPathways: [],
+            open: false,
+            dialogPathway: null,
         }
     }
 
@@ -95,6 +97,29 @@ class Discover extends Component {
         }).catch(function (err) {
         })
     }
+
+    handleOpen = (pathway) => {
+        // tell the user they are preregistered if logged in
+        const currentUser = this.props.currentUser;
+        if (currentUser && currentUser != "no user") {
+            const user = {
+                name: currentUser.name,
+                email: currentUser.email,
+                pathway: pathway,
+            }
+            const signedIn = true;
+            this.props.comingSoon(user, signedIn);
+            this.setState({open: true});
+        }
+        // if not logged in, prompt for user info
+        else {
+            this.setState({open: true, dialogPathway: pathway});
+        }
+    };
+
+    handleClose = () => {
+        this.setState({open: false, dialogPathway: null});
+    };
 
     render() {
         const style = {
@@ -163,22 +188,46 @@ class Discover extends Component {
             key++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
-            return (
-                <li className="pathwayPreviewLi explorePathwayPreview"
-                    key={key}
-                    onClick={() => self.goTo('/pathway?' + pathway._id)}>
-                    <PathwayPreview
-                        name={pathway.name}
-                        image={pathway.previewImage}
-                        logo={pathway.sponsor.logo}
-                        sponsorName={pathway.sponsor.name}
-                        completionTime={pathway.estimatedCompletionTime}
-                        deadline={formattedDeadline}
-                        price={pathway.price}
-                        _id={pathway._id}
-                    />
-                </li>
-            );
+            if (!pathway.comingSoon && self.props.currentUser && self.props.currentUser != "no user") {
+                return (
+                    <li className="pathwayPreviewLi explorePathwayPreview"
+                        key={key}
+                        onClick={() => self.goTo('/pathway?' + pathway.url)}
+                    >
+                        <PathwayPreview
+                            name={pathway.name}
+                            image={pathway.previewImage}
+                            logo = {pathway.sponsor.logo}
+                            sponsorName = {pathway.sponsor.name}
+                            completionTime={pathway.estimatedCompletionTime}
+                            deadline={formattedDeadline}
+                            price={pathway.price}
+                            _id={pathway._id}
+                            comingSoon = {pathway.comingSoon}
+                        />
+                    </li>
+                );
+            } else if (pathway.comingSoon) {
+                return (
+                    <li className="pathwayPreviewLi explorePathwayPreview"
+                        key={key}
+                        //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                        onClick={() => self.handleOpen(pathway.name)}
+                    >
+                        <PathwayPreview
+                            name={pathway.name}
+                            image={pathway.previewImage}
+                            //<!-- logo = {pathway.sponsor.logo} -->
+                            //<!-- sponsorName = {pathway.sponsor.name} -->
+                            completionTime={pathway.estimatedCompletionTime}
+                            deadline={formattedDeadline}
+                            price={pathway.price}
+                            _id={pathway._id}
+                            comingSoon = {pathway.comingSoon}
+                        />
+                    </li>
+                );
+            }
         });
 
         // create the pathway previews
@@ -190,16 +239,19 @@ class Discover extends Component {
             return (
                 <li className="pathwayPreviewLi featuredPathwayPreview"
                     key={key}
-                    onClick={() => self.goTo('/pathway?' + pathway._id)}>
+                    //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                    onClick={() => self.handleOpen(pathway.name)}
+                >
                     <PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
-                        logo={pathway.sponsor.logo}
-                        sponsorName={pathway.sponsor.name}
+                        //<!-- logo = {pathway.sponsor.logo} -->
+                        //<!-- sponsorName = {pathway.sponsor.name} -->
                         completionTime={pathway.estimatedCompletionTime}
                         deadline={formattedDeadline}
                         price={pathway.price}
                         _id={pathway._id}
+                        comingSoon = {pathway.comingSoon}
                     />
                 </li>
             );
@@ -212,16 +264,54 @@ class Discover extends Component {
         })
 
         // TODO get companies from DB
-        const companies = ["Epic", "Google", "Tesla", "Holos", "Blizzard"];
+        const companies = ["Moonshot"];
         const companyItems = companies.map(function (company) {
             return <MenuItem value={company} primaryText={company} key={company}/>
         })
 
+        let blurredClass = "";
+        if (this.state.open) {
+            blurredClass = " dialogForBizOverlay";
+        }
+        const actions = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onClick={this.handleClose}
+            />,
+        ];
 
         return (
-            <div className='jsxWrapper' ref='discover'>
+            <div className={"jsxWrapper" + blurredClass} ref='discover'>
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    paperClassName="dialogForBiz"
+                    contentClassName="center"
+                    overlayClassName="dialogOverlay"
+                >
+                    {this.props.currentUser && this.props.currentUser != "no user" ?
+                        <div>
+                            {this.props.loadingEmailSend ?
+                                <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
+                                :
+                                <div style={{color:"#00c3ff"}}>Your spot has been reserved!</div>
+                            }
+                        </div>
+                        :
+                        <ComingSoonForm
+                            pathway={this.state.dialogPathway}
+                            onSubmit={this.handleClose}
+                        />
+                    }
+
+                </Dialog>
+
                 <div className="greenToBlue headerDiv"/>
-                <div className="center mediumText" style={{marginTop:'15px', marginBottom:'10px'}}>
+                <div className="center font40px font24pxUnder500" style={{marginTop:'15px', marginBottom:'10px'}}>
                     Discover Pathways
                 </div>
 
@@ -234,7 +324,7 @@ class Discover extends Component {
                     </div>
 
                     <div className="pathwayPrevListContainer" style={style.pathwayPreviewFeaturedContainer}>
-                        <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
+                        <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList" style={style.pathwayPreviewUl}>
                             {featuredPathwayPreviews}
                         </ul>
                     </div>
@@ -332,7 +422,8 @@ class Discover extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        closeNotification
+        closeNotification,
+        comingSoon
     }, dispatch);
 }
 
@@ -340,6 +431,8 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         notification: state.users.notification,
+        currentUser: state.users.currentUser,
+        loadingEmailSend: state.users.loadingSomething
     };
 }
 

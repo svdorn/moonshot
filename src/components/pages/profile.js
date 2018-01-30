@@ -1,6 +1,6 @@
 "use strict"
 import React, {Component} from 'react';
-import {AppBar, Paper, Tabs, Tab, CircularProgress, Chip} from 'material-ui';
+import {Tabs, Tab, CircularProgress, Chip} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, setHeaderBlue} from "../../actions/usersActions";
@@ -23,10 +23,10 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        const userId = this.props.location.search.substr(1);
+        const profileUrl = this.props.location.search.substr(1);
         const currentUser = this.props.currentUser;
         // looking at your own profile
-        if ((userId == "") || (currentUser && currentUser._id == userId)) {
+        if ((profileUrl == "") || (currentUser && currentUser.profileUrl == profileUrl)) {
             this.setState({
                 ...this.state,
                 onOwnProfile: true,
@@ -38,7 +38,7 @@ class Profile extends Component {
 
         // looking at someone else's profile
         else {
-            axios.post("/api/getUserById", { _id: userId }
+            axios.post("/api/getUserByProfileUrl", {profileUrl}
             ).then(res => {
                 const user = res.data;
 
@@ -75,7 +75,7 @@ class Profile extends Component {
 
                 for (let i = 0; i < user.pathways.length; i++) {
                     let id = user.pathways[i].pathwayId;
-                    axios.get("/api/getPathwayById", {
+                    axios.get("/api/pathwayByIdNoContent", {
                         params: {
                             _id: id
                         }
@@ -119,7 +119,7 @@ class Profile extends Component {
             if (user.completedPathways) {
                 for (let i = 0; i < user.completedPathways.length; i++) {
                     let id = user.completedPathways[i].pathwayId;
-                    axios.get("/api/getPathwayById", {
+                    axios.get("/api/pathwayByIdNoContent", {
                         params: {
                             _id: id
                         }
@@ -182,15 +182,13 @@ class Profile extends Component {
             pathwayPreviewUl: {
                 marginTop: "20px",
             },
-            tabs: {
-            },
+            tabs: {},
             tab: {
                 backgroundColor: "white",
                 color: 'black',
-                fontSize: '18px'
             },
             img: {
-                height: "120px",
+                height: "100px",
                 borderRadius: '50%',
                 border: "3px solid #00d2ff",
             },
@@ -200,24 +198,6 @@ class Profile extends Component {
                 marginBottom: '5px',
                 marginRight: '5px'
             },
-            pictureInfoSkills: {
-                everything: {
-                    paddingTop:'40px',
-                    textAlign: 'center'
-                },
-                leftSide: {
-                    width: "20%",
-                    display: "inline-block",
-                    verticalAlign: "top",
-                    marginRight: "5%",
-                },
-                rightSide: {
-                    width: "60%",
-                    display: "inline-block",
-                    verticalAlign: "top",
-                    justifyContent: "center",
-                },
-            }
         };
 
         let profileSkills = null;
@@ -231,14 +211,13 @@ class Profile extends Component {
         if (skills) {
             profileSkills = skills.map(function (skill) {
                 return (
-                    <div style={{display: 'inline-block', marginTop: '15px'}}>
-                        <Chip key={skill}
-                              backgroundColor='#white'
-                              labelColor="#00d2ff"
-                              labelStyle={{fontSize: '20px'}}
-                              style={{marginLeft: '20px', border: "1px solid #00d2ff"}}>
+                    <div key={skill + "div"}
+                         style={{display: 'inline-block', marginTop: '15px'}}
+                         className="lightBlueChip"
+                    >
+                        <div key={skill} className="blueText">
                             {skill}
-                        </Chip>
+                        </div>
                     </div>
                 );
             });
@@ -257,7 +236,7 @@ class Profile extends Component {
 
             let index = -1;
             if (education && education.length > 0) {
-                const schools = education.map(function(edu) {
+                const schools = education.map(function (edu) {
                     // how to show the dates if the date is stored as a Date
                     //const dates = edu.startDate.substring(0,4) + "-" + edu.endDate.substring(0,4);
                     // how to show the dates if the dates are stored as Strings
@@ -273,7 +252,8 @@ class Profile extends Component {
                     return (
                         <div>
                             <div className="profileSchoolName">{edu.school}</div>
-                            <div className="profileSchoolDate">{date}</div><div className="above700only"><br/></div>
+                            <div className="profileSchoolDate">{date}</div>
+                            <div className="above700only"><br/></div>
                             {majorsAndMinors.length > 0 ?
                                 <div className="profileSchoolMajorsAndMinors"><i>{majorsAndMinors}</i></div>
                                 : null
@@ -305,14 +285,14 @@ class Profile extends Component {
                 // }
                 index = -1;
                 links = links.filter(link => (link && link.url && link.url != ""));
-                const linkOuts = links.map(function(link) {
+                const linkOuts = links.map(function (link) {
                     // so that index is at the current place
                     index++;
                     return (
                         <span>
                             <a href={link.url} target="_blank">{link.displayString}</a>
                             {index < links.length - 1 ?
-                                <div className="linkSeparator" style={{backgroundColor:"black"}}/>
+                                <div className="linkSeparator" style={{backgroundColor: "black"}}/>
                                 : null
                             }
                         </span>
@@ -328,7 +308,7 @@ class Profile extends Component {
             }
             if (interests && interests.length > 0) {
                 index = -1;
-                const interestsSpans = interests.map(function(interest) {
+                const interestsSpans = interests.map(function (interest) {
                     index++;
                     const comma = (index < interests.length - 1) ? ", " : "";
                     return (
@@ -343,7 +323,7 @@ class Profile extends Component {
             }
             if (goals && goals.length > 0) {
                 index = -1;
-                const goalsSpans = goals.map(function(goal) {
+                const goalsSpans = goals.map(function (goal) {
                     index++;
                     const comma = (index < goals.length - 1) ? ", " : "";
                     return (
@@ -367,7 +347,7 @@ class Profile extends Component {
             }
             if (languages && languages.length > 0) {
                 index = -1;
-                const languagesSpans = languages.map(function(language) {
+                const languagesSpans = languages.map(function (language) {
                     index++;
                     const comma = (index < languages.length - 1) ? ", " : "";
                     return (
@@ -383,7 +363,7 @@ class Profile extends Component {
 
             // every other li is a right one, starting with the first not being one
             let rightLi = false;
-            aboutMeLis = aboutMeItems.map(function(item) {
+            aboutMeLis = aboutMeItems.map(function (item) {
                 let additionalClass = "";
                 if (rightLi) {
                     additionalClass = " aboutMeLiRight"
@@ -392,7 +372,7 @@ class Profile extends Component {
 
                 return (
                     <li className={"aboutMeLi" + additionalClass} key={item.title}>
-                        <img src={"/icons/" + item.icon} />
+                        <img src={"/icons/" + item.icon}/>
                         <div>{item.title}</div>
                         {item.content}
                     </li>
@@ -408,33 +388,42 @@ class Profile extends Component {
 
                         {this.state.userPathwayPreviews ?
                             <div>
-                                <div style={style.pictureInfoSkills.everything}>
-                                    <div style={style.pictureInfoSkills.leftSide}>
+                                <div className="profileInfoSkills">
+                                    <div className="profileInfoSkillsLeft">
                                         <img
-                                            src="/icons/stephenProfile.jpg"
+                                            src="/icons/Portfolio.png"
                                             alt="Profile picture"
                                             style={style.img}
                                         />
                                         <div>
                                             <div
-                                                className="blueText smallText2">{user.name.toUpperCase()}</div>
-                                            <b className="smallText">{user.info.title}</b><br/>
-                                            <div>
-                                                <img
-                                                    src="/icons/Location.png"
-                                                    alt="Portfolio"
-                                                    style={style.locationImg}
-                                                />
-                                                <div className="smallText" style={{display: 'inline-block'}}>
-                                                    {user.info.location}
-                                                </div>
+                                                className="blueText font20px font14pxUnder700 font10pxUnder400">{user.name.toUpperCase()}
                                             </div>
-                                            <a className="smallText blueText" href={mailtoEmail}>Contact</a>
+                                            {user.info.title ?
+                                                <div>
+                                                    <b className="font14px font12pxUnder500">{user.info.title}</b> <br/>
+                                                </div>
+                                                : null}
+                                            {user.info.location ?
+                                                <div>
+                                                    <img
+                                                        src="/icons/Location.png"
+                                                        alt="Portfolio"
+                                                        style={style.locationImg}
+                                                    />
+                                                    <div className="font14px font12pxUnder500"
+                                                         style={{display: 'inline-block'}}>
+                                                        {user.info.location}
+                                                    </div>
+                                                </div>
+                                                : null}
+                                            <a className="font14px font12pxUnder500 blueText"
+                                               href={mailtoEmail}>Contact</a>
                                         </div>
                                     </div>
-                                    <div style={style.pictureInfoSkills.rightSide}>
+                                    <div className="profileInfoSkillsRight">
                                         {user.skills ?
-                                            <div className="center">
+                                            <div>
                                                 {profileSkills}
                                             </div>
                                             : null}
@@ -450,7 +439,7 @@ class Profile extends Component {
                                     <div style={{clear: "both"}}/>
                                 </div>
 
-                                { this.state.userPathwayPreviews.length > 0 ?
+                                {this.state.userPathwayPreviews.length > 0 ?
                                     <div className="center">
                                         <Tabs
                                             style={style.tabs}
@@ -458,25 +447,27 @@ class Profile extends Component {
                                             tabItemContainerStyle={{width: '40%'}}
                                             className="myPathwaysTabs"
                                         >
-                                            <Tab label="Ongoing" style={style.tab}>
+                                            <Tab label="Ongoing" style={style.tab}
+                                                 className="font20px font10pxUnder700">
                                                 {this.state.userPathwayPreviews ?
                                                     <ul className="horizCenteredList pathwayPrevList"
                                                         style={style.pathwayPreviewUl}>
                                                         {this.state.userPathwayPreviews}
                                                     </ul>
-                                                    : <h1 className="center mediumText">None</h1>}
+                                                    : <h1 className="center font40px font24pxUnder500">None</h1>}
                                             </Tab>
-                                            <Tab label="Completed" style={style.tab}>
+                                            <Tab label="Completed" style={style.tab}
+                                                 className="font20px font10pxUnder700">
                                                 {this.state.userCompletedPathwayPreviews ?
                                                     <ul className="horizCenteredList pathwayPrevList"
                                                         style={style.pathwayPreviewUl}>
                                                         {this.state.userCompletedPathwayPreviews}
                                                     </ul>
-                                                    : <h1 className="center mediumText">None</h1>}
+                                                    : <h1 className="center font40px font24pxUnder500">None</h1>}
                                             </Tab>
                                         </Tabs>
                                     </div>
-                                :
+                                    :
                                     <div className="center">
                                         <ul className="horizCenteredList pathwayPrevList"
                                             style={style.pathwayPreviewUl}>
@@ -497,15 +488,20 @@ class Profile extends Component {
                                     <div style={{clear: "both"}}/>
                                 </div>
 
-                                <div className="textWithMargin">{user.info.description}</div>
+                                {user.info.description ?
+                                    <div className="textWithMargin">{user.info.description}</div>
+                                    : null}
 
                                 <ul className="horizCenteredList" id="aboutMeAreas">
-                                    { aboutMeLis }
+                                    {aboutMeLis}
                                 </ul>
 
                             </div>
-                            : <div className="center"><CircularProgress
-                                style={{marginTop: "20px", marginBottom: "20px"}}/></div>}
+                            :
+                            <div>
+                                <div className="fullHeight"/>
+                                <div className="fullHeight"/>
+                            </div>}
                     </div>
                     : null}
             </div>
@@ -528,7 +524,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        setHeaderBlue
+        setHeaderBlue,
     }, dispatch);
 }
 

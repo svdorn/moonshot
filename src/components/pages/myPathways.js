@@ -42,7 +42,7 @@ class MyPathways extends Component {
                 else {
                     for (let i = 0; i < this.props.currentUser.pathways.length; i++) {
                         let id = this.props.currentUser.pathways[i].pathwayId;
-                        axios.get("/api/getPathwayById", {
+                        axios.get("/api/pathwayByIdNoContent", {
                             params: {
                                 _id: id
                             }
@@ -60,7 +60,7 @@ class MyPathways extends Component {
                                 const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                                 return (
                                     <li key={key} style={{verticalAlign: "top"}}
-                                        onClick={() => self.goTo('/pathwayContent?' + pathway._id)}>
+                                        onClick={() => self.goTo('/pathwayContent?' + pathway.url)}>
                                         <PathwayPreview
                                             name={pathway.name}
                                             image={pathway.previewImage}
@@ -87,7 +87,7 @@ class MyPathways extends Component {
             if (this.props.currentUser.completedPathways) {
                 for (let i = 0; i < this.props.currentUser.completedPathways.length; i++) {
                     let id = this.props.currentUser.completedPathways[i].pathwayId;
-                    axios.get("/api/getPathwayById", {
+                    axios.get("/api/pathwayByIdNoContent", {
                         params: {
                             _id: id
                         }
@@ -105,7 +105,7 @@ class MyPathways extends Component {
                             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathway?' + pathway._id)}>
+                                    onClick={() => self.goTo('/pathway?' + pathway.url)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
@@ -165,7 +165,7 @@ class MyPathways extends Component {
                         <div className="greenToBlue headerDiv"/>
                         {this.state.userPathwayPreviews ?
                             <div className="center">
-                                <h1 className="center mediumText">My Pathways</h1>
+                                <h1 className="center font40px font24pxUnder500">My Pathways</h1>
                                 <Tabs
                                     style={style.tabs}
                                     inkBarStyle={{background: 'black'}}
@@ -178,7 +178,9 @@ class MyPathways extends Component {
                                                 style={style.pathwayPreviewUl}>
                                                 {this.state.userPathwayPreviews}
                                             </ul>
-                                            : <h1 className="center mediumText">None</h1>}
+                                            : <div className="fullHeight">
+                                                <h1 className="center font40px font24pxUnder500">None</h1>
+                                            </div>}
                                     </Tab>
                                     <Tab label="Completed" style={style.tab}>
                                         {this.state.userCompletedPathwayPreviews ?
@@ -186,12 +188,17 @@ class MyPathways extends Component {
                                                 style={style.pathwayPreviewUl}>
                                                 {this.state.userCompletedPathwayPreviews}
                                             </ul>
-                                            : <h1 className="center mediumText">None</h1>}
+                                            : <div className="fullHeight">
+                                                <h1 className="center font40px font24pxUnder500">None</h1>
+                                            </div>}
                                     </Tab>
                                 </Tabs>
                             </div>
-                            : <div className="center"><CircularProgress
-                                style={{marginTop: "20px", marginBottom: "20px"}}/></div>}
+                            :
+                            <div>
+                                <div className="fullHeight"/>
+                                <div className="fullHeight"/>
+                            </div>}
                     </div>
                     : null}
             </div>
@@ -213,7 +220,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        closeNotification
+        closeNotification,
     }, dispatch);
 }
 

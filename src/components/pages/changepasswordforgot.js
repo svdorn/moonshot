@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {changePasswordForgot} from '../../actions/usersActions';
-import {TextField, RaisedButton} from 'material-ui';
+import {TextField} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 
@@ -49,10 +49,21 @@ class PasswordChange extends Component {
 
         // Check if valid
         const vals = this.props.formData.forgotPassChange.values;
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'password',
+            'password2',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
+        if (vals.password != vals.password2) return;
 
-        if (vals.password != vals.password2) {
-            return;
-        }
         const token = this.props.location.search.substr(1);
         const user = {
             token: token,
@@ -87,7 +98,7 @@ class PasswordChange extends Component {
                         </div>
                         <button
                             type="submit"
-                            className="formSubmitButton"
+                            className="formSubmitButton font24px font16pxUnder600"
                         >
                             Change Password
                         </button>

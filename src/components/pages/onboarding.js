@@ -1,11 +1,9 @@
 "use strict"
 import React, { Component}  from 'react';
 import { connect } from 'react-redux';
-import { updateInfo, updateGoals, updateInterests, startOnboarding, endOnboarding } from "../../actions/usersActions";
+import { updateInfo, updateGoals, updateInterests, startOnboarding, endOnboarding, closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
-import { Tabs, Tab } from 'material-ui/Tabs';
-
 
 class Onboarding extends Component {
     constructor(props) {
@@ -230,7 +228,7 @@ class Onboarding extends Component {
         this.state = {
             tabValue: "interests",
             ...interestObjects,
-            currInterestArea: undefined,
+            currInterestArea: interestObjects.designAndDevInterests,
             goals,
             location, birthDate, desiredJobs, bio, gitHub, title,
             linkedIn, personal, willRelocateTo, eduInfo, inSchool
@@ -239,7 +237,15 @@ class Onboarding extends Component {
 
     componentDidMount() {
         this.props.startOnboarding();
+    }
 
+    goTo(route) {
+        // closes any notification
+        this.props.closeNotification();
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
     handleIconClick(index) {
@@ -508,9 +514,6 @@ class Onboarding extends Component {
                     marginBottom: '30px',
                 }
             },
-            iconLi: {
-                marginRight: '90px',
-            }
         };
 
         // INTERESTS
@@ -525,14 +528,14 @@ class Onboarding extends Component {
                         {interest.selected ?
                             <div className="onboardingPage1Text2Background clickableNoUnderline noselect"
                                 onClick={() => self.handleInterestClick(interest)}>
-                                <div className="smallText onboardingPage1Text2">
+                                <div className="font14px font12pxUnder500 onboardingPage1Text2">
                                     {interest.title}
                                 </div>
                             </div>
                             :
-                            <div className="gradientBorderBlue center clickableNoUnderline noselect" style={{marginRight: '20px', marginTop: '20px'}}
+                            <div className="gradientBorderBlue center clickableNoUnderline noselect onboardingPage1Margin"
                                 onClick={() => self.handleInterestClick(interest)}>
-                                <div className="onboardingPage1Text3 smallText">
+                                <div className="onboardingPage1Text3 font14px font12pxUnder500">
                                     {interest.title}
                                 </div>
                             </div>
@@ -553,13 +556,13 @@ class Onboarding extends Component {
                     <li key={key} className="noselect">
                         {goal.selected ?
                             <div className="clickableNoUnderline onboardingPage2Text2Background center" onClick={() => self.handleGoalClick(goal)}>
-                                <div className="smallText onboardingPage1Text2">
+                                <div className="font14px font12pxUnder500 onboardingPage1Text2">
                                     {goal.title}
                                 </div>
                             </div>
                             :
-                            <div className="clickableNoUnderline gradientBorderPurple center" style={{marginTop: '20px'}} onClick={() => self.handleGoalClick(goal)}>
-                                <div className="onboardingPage2Text3 smallText">
+                            <div className="clickableNoUnderline gradientBorderPurple center onboardingPage2Margin" onClick={() => self.handleGoalClick(goal)}>
+                                <div className="onboardingPage2Text3 font14px font12pxUnder500">
                                     {goal.title}
                                 </div>
                             </div>
@@ -641,25 +644,25 @@ class Onboarding extends Component {
         if (!tabValue || tabValue == "interests") {
             onBoardingHtml =
                 <div style={{marginBottom: '20px', minWidth: '100%'}}>
-                    <div className="onboardingPage1Text mediumText center" style={style.title.topTitle}>Select Your
+                    <div className="onboardingPage1Text font40px font24pxUnder500 center" style={style.title.topTitle}>Select Your
                         Interests
                     </div>
                     <div style={style.title.divider}>
                         <div className="onboardingDividerLeft" style={{bottom: "0"}}/>
                         <div className="onboardingDividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="smallText center" style={style.title.text}>What skills do you want to learn or
+                    <div className="font14px font12pxUnder500 center" style={style.title.text}>What skills do you want to learn or
                         improve?
                     </div>
                     <div>
                         <ul className="horizCenteredList onboardingListContainer">
-                            <li style={style.iconLi} className="clickableNoUnderline"
+                            <li className="clickableNoUnderline onboardingIconLi"
                                 onClick={() => this.handleIconClick(1)}>
                                 {this.state.currInterestArea === this.state.designAndDevInterests ?
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Cube.png" className="onboardingIcons"/>
-                                            <div className="onboardingIconsText center"><b>Product Design<br/>and
+                                            <div className="font16px font12pxUnder500 center"><b>Product Design<br/>and
                                                 Development</b>
                                             </div>
                                         </div>
@@ -667,25 +670,25 @@ class Onboarding extends Component {
                                     :
                                     <div>
                                         <img src="/icons/Cube.png" className="onboardingIcons"/>
-                                        <div className="onboardingIconsText center"><b>Product Design<br/>and
+                                        <div className="font16px font12pxUnder500 center"><b>Product Design<br/>and
                                             Development</b>
                                         </div>
                                     </div>
                                 }
                             </li>
-                            <li style={style.iconLi} className="clickableNoUnderline"
+                            <li className="clickableNoUnderline onboardingIconLi"
                                 onClick={() => this.handleIconClick(2)}>
                                 {this.state.currInterestArea === this.state.dataInterests ?
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Data.png" className="onboardingIcons"/>
-                                            <div className="onboardingIconsText center"><b>Data</b></div>
+                                            <div className="font16px font12pxUnder500 center"><b>Data</b></div>
                                         </div>
                                     </div>
                                     :
                                     <div>
                                         <img src="/icons/Data.png" className="onboardingIcons"/>
-                                        <div className="onboardingIconsText center"><b>Data</b></div>
+                                        <div className="font16px font12pxUnder500 center"><b>Data</b></div>
                                     </div>
                                 }
                             </li>
@@ -694,33 +697,33 @@ class Onboarding extends Component {
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Computer.png" className="onboardingIcons"/>
-                                            <div className="onboardingIconsText center"><b>Software<br/> Development</b>
+                                            <div className="font16px font12pxUnder500 center"><b>Software<br/> Development</b>
                                             </div>
                                         </div>
                                     </div>
                                     :
                                     <div>
                                         <img src="/icons/Computer.png" className="onboardingIcons"/>
-                                        <div className="onboardingIconsText center"><b>Software<br/> Development</b></div>
+                                        <div className="font16px font12pxUnder500 center"><b>Software<br/> Development</b></div>
                                     </div>
                                 }
                             </li>
                         </ul>
                         <ul className="horizCenteredList onboardingListContainer">
-                            <li style={style.iconLi} className="clickableNoUnderline"
+                            <li className="clickableNoUnderline onboardingIconLi"
                                 onClick={() => this.handleIconClick(4)}>
                                 {this.state.currInterestArea === this.state.creationAndMarketingInterests ?
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Creation.png" className="onboardingIcons"/>
-                                            <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b>
+                                            <div className="font16px font12pxUnder500 center"><b>Creation and<br/> Marketing</b>
                                             </div>
                                         </div>
                                     </div>
                                     :
                                     <div>
                                         <img src="/icons/Creation.png" className="onboardingIcons"/>
-                                        <div className="onboardingIconsText center"><b>Creation and<br/> Marketing</b></div>
+                                        <div className="font16px font12pxUnder500 center"><b>Creation and<br/> Marketing</b></div>
                                     </div>
                                 }
                             </li>
@@ -729,13 +732,13 @@ class Onboarding extends Component {
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Business.png" className="onboardingIcons"/>
-                                            <div className="onboardingIconsText center"><b>Business</b></div>
+                                            <div className="font16px font12pxUnder500 center"><b>Business</b></div>
                                         </div>
                                     </div>
                                     :
                                     <div>
                                         <img src="/icons/Business.png" className="onboardingIcons"/>
-                                        <div className="onboardingIconsText center"><b>Business</b></div>
+                                        <div className="font16px font12pxUnder500 center"><b>Business</b></div>
                                     </div>
                                 }
                             </li>
@@ -750,7 +753,7 @@ class Onboarding extends Component {
                     </div>
                     <div className="center">
                         <button className="onboardingPage1Button" onClick={this.handleStep1ButtonClick.bind(this)}>
-                            <div className="smallText2 onboardingPage1Text2">
+                            <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
                                 Next
                             </div>
                         </button>
@@ -761,14 +764,14 @@ class Onboarding extends Component {
         else if (tabValue == "goals") {
             onBoardingHtml =
                 <div style={{marginBottom: '20px'}}>
-                    <div className="onboardingPage2Text mediumText center" style={style.title.topTitle}>
+                    <div className="onboardingPage2Text font40px font24pxUnder500 center" style={style.title.topTitle}>
                         What Are Your Goals?
                     </div>
                     <div style={style.title.divider}>
                         <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="smallText center" style={{marginBottom: "20px"}}>
+                    <div className="font14px font10pxUnder500 center" style={{marginBottom: "20px"}}>
                         Select All That Apply.
                     </div>
                     <div>
@@ -780,7 +783,7 @@ class Onboarding extends Component {
                     </div>
                     <div className="center">
                         <button className="onboardingPage2Button" onClick={this.handleGoalsButtonClick.bind(this)}>
-                            <div className="smallText2 onboardingPage1Text2">
+                            <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
                                 Next
                             </div>
                         </button>
@@ -791,19 +794,19 @@ class Onboarding extends Component {
         else if (tabValue == "info") {
             onBoardingHtml =
                 <div style={{marginBottom: '20px'}}>
-                    <div className="onboardingPage3TextTitle mediumText center" style={style.title.topTitle}>
+                    <div className="onboardingPage3TextTitle font40px font24pxUnder500 center" style={style.title.topTitle}>
                         Start Building Your Profile
                     </div>
                     <div style={style.title.divider}>
                         <div className="onboarding3DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding3DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="smallText2 center" style={style.title.text}>
+                    <div className="font20px font14pxUnder700 font12pxUnder400 center" style={style.title.text}>
                         The more complete your profile, the more appealing you look to employers.<br/>
                     </div>
                     <div className="center">
                         <img src="/icons/Portfolio.png" className="onboardingIcons" style={style.icons}/>
-                        <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Personal</b></div>
+                        <div className="onboardingPage3Text font20px" style={{display: 'inline-block'}}><b>Personal</b></div>
                     </div>
 
                     <div className="horizCenteredList">
@@ -877,7 +880,7 @@ class Onboarding extends Component {
                     </div>
 
                     <div className="center">
-                        <span id="onboardingBioTextareaSpan">Bio</span><br/>
+                        <span id="onboardingBioTextareaSpan" className="font20px">Bio</span><br/>
                         <textarea
                             className="greenInput"
                             id="onboardingBioTextarea"
@@ -889,21 +892,19 @@ class Onboarding extends Component {
 
                     <div className="center">
                         <img src="/icons/GraduationHat.png" className="onboardingIcons" style={style.icons}/>
-                        <div className="onboardingPage3Text smallText2" style={{display: 'inline-block'}}><b>Education</b></div>
+                        <div className="onboardingPage3Text font20px" style={{display: 'inline-block'}}><b>Education</b></div>
                     </div>
 
                     {educationUls}
 
-                    <div className="center onboardingPage3">
+                    <div className="center onboardingPage3 font18px font14pxUnder700 font12pxUnder400">
                         <button className="greenButton" onClick={this.addEducationArea.bind(this)}>
                             Add another school
                         </button><br/>
-                        <div className="greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                        <div className="checkbox mediumCheckbox greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
                                 className={"checkMark"  + this.state.inSchool}
                                 src="/icons/CheckMarkGreen.png"
-                                height={15}
-                                width={15}
                             />
                         </div>
                         I am currently in school<br/>
@@ -912,7 +913,7 @@ class Onboarding extends Component {
 
                     <div className="center">
                         <button className="onboardingPage3Button" onClick={this.handleFinishButtonClick.bind(this)}>
-                            <div className="smallText2 onboardingPage1Text2">
+                            <div className="font20px font14pxUnder700 onboardingPage1Text2">
                                 Finish
                             </div>
                         </button>
@@ -957,7 +958,8 @@ function mapDispatchToProps(dispatch) {
         updateGoals,
         updateInterests,
         startOnboarding,
-        endOnboarding
+        endOnboarding,
+        closeNotification
     }, dispatch);
 }
 
