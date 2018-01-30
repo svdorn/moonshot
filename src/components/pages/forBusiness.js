@@ -531,7 +531,7 @@ class ForBusiness extends Component {
                                     Full access to students, student data from<br/>
                                     quantitative assessments, skills scoring and projects,
                                     existing pathways and curated pathways for your company.<br/>
-                                    Free user data.
+                                    Free access to students.
                                     </div>
                                 </div>
                             </div>
@@ -554,6 +554,11 @@ class ForBusiness extends Component {
                         </Paper>
                     </div>
 
+                    <div className="center" style={{marginBottom: '20px'}}>
+                        <div className="font20px font16pxUnder700 font font14pxUnder400">
+                            No upfront costs, no risk, pay only on success.
+                        </div>
+                    </div>
                     <div className="center" style={{marginBottom: '20px'}}>
                         <button className="blueToPurpleButtonExterior bigButton"
                                 onClick={this.handleOpen}
