@@ -378,10 +378,3 @@ export function formError() {
 
     }
 }
-
-// RESET BUTTON
-export function resetButton() {
-  return {
-    type: "RESET_BUTTON",
-  }
-}

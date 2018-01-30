@@ -75,14 +75,6 @@ export function usersReducers(state = initialState, action) {
                 loadingSomething: false
             };
             break;
-        case "RESET_BUTTON":
-            return {
-                ...state,
-                msg: null,
-                style: 'primary',
-                validation: null
-            };
-            break;
         case "DELETE_USER":
             // TODO
             break;
