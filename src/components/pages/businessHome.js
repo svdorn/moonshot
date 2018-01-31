@@ -107,7 +107,14 @@ class BusinessHome extends Component {
             userType: "employer",
         };
 
-        this.props.postBusinessUser(newUser, currentUser);
+        const currentUser = this.props.currentUser;
+        const currentUserInfo = {
+            _id: currentUser._id,
+            verificationToken: currentUser.verificationToken
+        }
+
+
+        this.props.postBusinessUser(newUser, currentUserInfo);
 
         this.setState({
             ...this.state,

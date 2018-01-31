@@ -309,16 +309,16 @@ app.post('/businessUser', function (req, res) {
     }
 
     let query = {_id: currentUser._id};
-    Users.findOne(query, function (err, currentUserFromDB) {
+    BusinessUsers.findOne(query, function (err, currentUserFromDB) {
         if (err) {
             console.log("error getting current user on business user creation: ", err);
-            res.status(500).send("No user with your id was found.");
+            res.status(500).send("Error, try again later.");
             return;
         }
 
         // current user not found in db
         if (!currentUserFromDB || currentUserFromDB == null) {
-            res.status(500).send("No user with your id was found.");
+            res.status(500).send("Your account was not found.");
             return;
         }
 
