@@ -925,55 +925,83 @@ app.post('/login', function (req, res) {
     var email = reqUser.email;
     var password = reqUser.password;
 
+    let user = {};
+
     var query = {email: email};
-    Users.findOne(query, function (err, user) {
+    Users.findOne(query, function (err, foundUser) {
         if (err) {
             res.status(500).send("Error performing query to find user in db. ", err);
             return;
         }
 
-        // CHECK IF A USER WAS FOUND
-        if (!user) {
-            res.status(404).send("No user with that email was found.");
-            return;
-        }
-
-        bcrypt.compare(password, user.password, function (passwordError, passwordsMatch) {
-            // if hashing password fails
-            if (passwordError) {
-                res.status(500).send("Error logging in, try again later.");
-                return;
-            }
-            // passwords match
-            else if (passwordsMatch) {
-                // check if user verified email address
-                if (user.verified) {
-                    user = removePassword(user);
-                    if (saveSession) {
-                        req.session.userId = user._id;
-                        req.session.save(function (err) {
-                            if (err) {
-                                console.log("error saving user session", err);
-                            }
+        // the code that executes once a user is found in the db
+        let tryLoggingIn = function() {
+            bcrypt.compare(password, user.password, function (passwordError, passwordsMatch) {
+                // if hashing password fails
+                if (passwordError) {
+                    res.status(500).send("Error logging in, try again later.");
+                    return;
+                }
+                // passwords match
+                else if (passwordsMatch) {
+                    // check if user verified email address
+                    if (user.verified) {
+                        user = removePassword(user);
+                        if (saveSession) {
+                            req.session.userId = user._id;
+                            req.session.save(function (err) {
+                                if (err) {
+                                    console.log("error saving user session", err);
+                                }
+                                res.json(removePassword(user));
+                            });
+                        } else {
                             res.json(removePassword(user));
-                        });
-                    } else {
-                        res.json(removePassword(user));
+                            return;
+                        }
+                    }
+                    // if user has not yet verified email address, don't log in
+                    else {
+                        res.status(401).send("Email not yet verified");
                         return;
                     }
                 }
-                // if user has not yet verified email address, don't log in
+                // wrong password
                 else {
-                    res.status(401).send("Email not yet verified");
+                    res.status(400).send("Password is incorrect.");
                     return;
                 }
-            }
-            // wrong password
-            else {
-                res.status(400).send("Password is incorrect.");
+            });
+        }
+
+        // CHECK IF A USER WAS FOUND
+        if (!foundUser || foundUser == null) {
+            // CHECK IF THE USER IS IN THE BUSINESS USER DB
+            BusinessUsers.findOne(query, function(err2, foundBusinessUser) {
+                if (err2) {
+                    res.status(500).send("Error performing query to find user in business user db. ", err);
+                    return;
+                }
+
+                if (!foundBusinessUser || foundBusinessUser == null) {
+                    console.log('looked in business db, none found')
+                    res.status(404).send("No user with that email was found.");
+                    return;
+                }
+
+                user = foundBusinessUser;
+                tryLoggingIn();
                 return;
-            }
-        });
+            });
+        }
+        // USER FOUND IN USER DB
+        else {
+            user = foundUser;
+            tryLoggingIn();
+            return;
+        }
+
+
     });
 });
 
