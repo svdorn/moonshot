@@ -104,9 +104,9 @@ export function postBusinessUser(newUser, currentUser) {
         // post user to database
         axios.post("/api/businessUser", {newUser, currentUser})
             // user successfully posted
-            .then(function(response) {
+            .then(function(company) {
                 // send verification email
-                axios.post("/api/sendVerificationEmail", {email: newUser.email})
+                axios.post("/api/sendBusinessUserVerificationEmail", {email: newUser.email, company})
                     // successfully sent verification email
                     .then(function(emailResponse) {
                         dispatch({type:"POST_USER"});
