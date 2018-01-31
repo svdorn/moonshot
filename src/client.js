@@ -17,7 +17,7 @@ import { hydrate } from 'react-dom';
 import { Provider } from 'react-redux';
 
 import { applyMiddleware, createStore } from 'redux';
-//import logger from 'redux-logger';
+import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 
 
@@ -28,7 +28,7 @@ import routes from './routes'
 
 if (!shouldRedirectToHttps) {
     // STEP 1 create the store
-    const middleware = applyMiddleware(thunk);
+    const middleware = applyMiddleware(thunk, logger);
     // WE WILL PASS INITIAL STATE FROM SERVER STORE
     const initialState = window.INITIAL_STATE;
     const store = createStore(reducers, initialState, middleware);

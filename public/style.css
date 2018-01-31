@@ -1769,6 +1769,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 @media only screen and (min-width: 1001px) {
     .under1000only { display: none; }
+    .overviewAndCommentBox {
+        float: right;
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
 }
 
 @media only screen and (max-width: 1000px) {
@@ -2512,6 +2517,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .overviewAndCommentBoxInfo {
         width: 100px;
+    }
+    .drawerContent {
+        max-width:240px;
+        word-wrap:break-word;
     }
 
     .font40pxUnder500 { font-size: 40px; }

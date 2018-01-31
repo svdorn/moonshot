@@ -23,6 +23,10 @@ class PathwayContent extends Component {
         }
     }
 
+    componentWillReceiveProps() {
+        console.log("cwrprops");
+    }
+
     componentDidMount() {
         // this.props.setHeaderBlue(true);
         const user = this.props.currentUser;
@@ -196,6 +200,7 @@ class PathwayContent extends Component {
                                 className="stepScrollerContainerInDrawer"
                                 steps={pathway.steps}
                                 pathwayId={pathway._id}
+                                currentSubStep={this.props.step}
                             />
                         </Drawer>
 
@@ -205,7 +210,9 @@ class PathwayContent extends Component {
                                 <PathwayStepList
                                     className="stepScrollerContainer"
                                     steps={pathway.steps}
-                                    pathwayId={pathway._id}/>
+                                    pathwayId={pathway._id}
+                                    currentSubStep={this.props.step}
+                                />
 
                                 <Paper className="questionsContactUs">
                                     <img
