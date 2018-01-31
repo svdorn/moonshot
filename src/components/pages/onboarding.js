@@ -2,6 +2,7 @@
 import React, { Component}  from 'react';
 import { connect } from 'react-redux';
 import { updateInfo, updateGoals, updateInterests, startOnboarding, endOnboarding, closeNotification } from "../../actions/usersActions";
+import { DatePicker } from 'material-ui';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 
@@ -211,7 +212,7 @@ class Onboarding extends Component {
                         school: edu.school ? edu.school : "",
                         majors: edu.majors ? edu.majors : "",
                         minors: edu.minors ? edu.minors : "",
-                        endDate: edu.endDate ? edu.endDate : "",
+                        endDate: edu.endDate ? edu.endDate : {},
                     };
                 });
             } else {
@@ -220,7 +221,7 @@ class Onboarding extends Component {
                     school: "",
                     majors: "",
                     minors: "",
-                    endDate: "",
+                    endDate: {},
                 });
             }
         }
@@ -401,7 +402,7 @@ class Onboarding extends Component {
         let education = state.eduInfo;
 
         education = education.filter(function(edu) {
-            return (edu.school != "" || edu.endDate != "" || edu.majors != "" || edu.minors != "");
+            return (edu.school != "" || edu.endDate != {} || edu.majors != "" || edu.minors != "");
         });
 
         const bDayString = state.birthDate;
@@ -431,7 +432,7 @@ class Onboarding extends Component {
             school: "",
             majors: "",
             minors: "",
-            endDate: "",
+            endDate: {},
         })
 
         this.setState({
@@ -464,6 +465,7 @@ class Onboarding extends Component {
     }
 
     handleEduInputChange(e, field) {
+        console.log(e);
         const eduIdx = parseInt(e.target.attributes.eduidx.value);
         let eduInfo = this.state.eduInfo.slice();
         eduInfo[eduIdx][field] = e.target.value;
@@ -595,15 +597,15 @@ class Onboarding extends Component {
                                 onChange={(e) => self.handleEduInputChange(e, "school")}
                             /> <br/>
                             <span>Graduation Date</span><br/>
-                            <input
-                                type="text"
-                                eduidx={eduIdx}
-                                key={eduIdx + "date"}
-                                className="greenInput"
-                                placeholder="e.g. May 2020"
-                                value={self.state.eduInfo[eduIdx].endDate}
-                                onChange={(e) => self.handleEduInputChange(e, "endDate")}
-                            /> <br/>
+                            <DatePicker openToYearSelection={true}
+                                        eduidx={eduIdx}
+                                        key={eduIdx + "date"}
+                                        className="greenInput"
+                                        placeholder="e.g. May 2020"
+                                        value={self.state.eduInfo[eduIdx].endDate}
+                                        onChange={(e) => self.handleEduInputChange(e, "endDate")}
+
+                            /> <br />
                         </li>
                         <li className="inputSeparator" />
                         <li className="onboardingRightInput" key={eduIdx + "right"}>
