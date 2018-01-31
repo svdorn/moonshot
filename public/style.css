@@ -1812,7 +1812,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         left: 0;
     }
     .overviewAndCommentBox, .pathwayContent {
-        width: 100%;
+        display: block;
+        text-align: center;
+        margin: auto;
+        width: 90%;
     }
 
     .font40pxUnder1000 { font-size: 40px; }
