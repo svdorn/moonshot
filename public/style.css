@@ -1172,6 +1172,17 @@ button.link {
 .overviewAndCommentBox {
     margin-top: 10px;
 }
+.overviewAndCommentBoxImg {
+    height: 35px;
+}
+.overviewAndCommentBoxTab {
+    background-color: white !important;
+    color: var(--moonshotLightBlue) !important;
+}
+.overviewAndCommentBoxInfo {
+    display: inline-block;
+    width: 200px;
+}
 
 .raisedButtonWhiteText > button > div > div > span {
     color: white !important;
@@ -1809,17 +1820,17 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         margin: auto;
         padding-top: 10px;
         padding-bottom: 10px;
-        width: 90%;
+        width: 95%;
     }
     .overviewAndCommentBox {
         display: block;
-        width: 90%;
+        width: 95%;
         margin: auto;
         margin-bottom: 20px
     }
     .videoContainer {
         display: block;
-        width: 90%;
+        width: 95%;
         margin: auto;
         padding-top: 56.25%
     }
@@ -2140,6 +2151,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .onboardingIconLi {
         margin-right: 70px;
+    }
+    .overviewAndCommentBoxImg {
+        height: 25px;
+    }
+    .overviewAndCommentBoxInfo {
+        width: 150px;
     }
 
     .font40pxUnder700 { font-size: 40px; }
@@ -2493,6 +2510,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .drawerWidth {
         width: 250px !important;
     }
+    .overviewAndCommentBoxInfo {
+        width: 100px;
+    }
 
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }
@@ -2550,6 +2570,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 38px;
         margin: auto -140px auto;
     }
+    .overviewAndCommentBoxImg {
+        height: 20px;
+    }
+    .overviewAndCommentBoxInfo {
+        width: 90px;
+    }
 
     .font40pxUnder400 { font-size: 40px; }
     .font38pxUnder400 { font-size: 38px; }
@@ -2569,6 +2595,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .font10pxUnder400 { font-size: 10px; }
     .font8pxUnder400 { font-size: 8px; }
     .font6pxUnder400 { font-size: 6px; }
+
+    .font10pxUnder400Important { font-size: 10px !important; }
+
 }
 
 @media only screen and (max-width: 375px) {
