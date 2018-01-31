@@ -1808,14 +1808,21 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         position: relative;
         width: 150px;
         display: block !important;
-        margin: 10px auto;
+        margin: 20px auto 20px auto;
         left: 0;
     }
-    .overviewAndCommentBox, .pathwayContent {
+    .pathwayContent {
         display: block;
-        text-align: center;
         margin: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
         width: 90%;
+    }
+    .overviewAndCommentBox {
+        display: block;
+        width: 90%;
+        margin: auto;
+        margin-bottom: 20px
     }
 
     .font40pxUnder1000 { font-size: 40px; }
