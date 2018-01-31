@@ -604,7 +604,6 @@ class Onboarding extends Component {
                                         placeholder="e.g. May 2020"
                                         value={self.state.eduInfo[eduIdx].endDate}
                                         onChange={(e) => self.handleEduInputChange(e, "endDate")}
-
                             /> <br />
                         </li>
                         <li className="inputSeparator" />
