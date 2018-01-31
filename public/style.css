@@ -1796,13 +1796,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .forBusiness > h2 > b {
         font-size: 25px;
     }
-
-    .videoContainer {
-        width: 90%;
-        margin-left: 5%;
-        min-width: 800px;
-        padding-top: 56.25%
-    }
     .drawerOpener {
         visibility: visible;
         position: relative;
@@ -1823,6 +1816,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 90%;
         margin: auto;
         margin-bottom: 20px
+    }
+    .videoContainer {
+        display: block;
+        width: 90%;
+        margin: auto;
+        padding-top: 56.25%
     }
 
     .font40pxUnder1000 { font-size: 40px; }
