@@ -123,16 +123,16 @@ export function usersReducers(state = initialState, action) {
                 ...state, notification: undefined
             }
             break;
-        // case "START_ONBOARDING":
-        //     return {
-        //         ...state, isOnboarding: true
-        //     }
-        //     break;
-        // case "END_ONBOARDING":
-        //     return {
-        //         ...state, isOnboarding: false
-        //     }
-        //     break;
+        case "START_ONBOARDING":
+            return {
+                ...state, isOnboarding: true
+            }
+            break;
+        case "END_ONBOARDING":
+            return {
+                ...state, isOnboarding: false
+            }
+            break;
         case "UPDATE_USER_ONBOARDING":
             return {
                 ...state, currentUser: action.payload
