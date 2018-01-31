@@ -2481,6 +2481,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .onboardingIconLi {
         margin-right: 40px;
     }
+    .drawerWidth {
+        width: 250px !important;
+    }
 
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }
@@ -2500,6 +2503,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .font10pxUnder500 { font-size: 10px; }
     .font8pxUnder500 { font-size: 8px; }
     .font6pxUnder500 { font-size: 6px; }
+
+    .font12pxUnder500Important { font-size: 12px !important; }
 }
 
 @media only screen and (max-width: 480px) {

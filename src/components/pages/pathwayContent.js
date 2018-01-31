@@ -190,10 +190,11 @@ class PathwayContent extends Component {
 
                         <Drawer
                             docked={false}
-                            width={400}
                             open={this.state.drawerOpen}
                             onRequestChange={(drawerOpen) => this.setState({drawerOpen})}
+                            width={400}
                             className="under1000only"
+                            containerClassName="drawerWidth"
                         >
                             <PathwayStepList
                                 className="stepScrollerContainerInDrawer"
@@ -215,7 +216,7 @@ class PathwayContent extends Component {
                                         src="/icons/SpeechBubble.png"
                                         style={{height: "50px", width: "50px", position: "absolute"}}
                                     />
-                                    <span style={{fontSize: "20px", marginLeft: "75px"}}>
+                                    <span style={{marginLeft: "75px"}} className="font20px font16pxUnder700 font font12pxUnder400">
                                         Questions?
                                     </span><br/>
                                     <p className="clickable blueText"
