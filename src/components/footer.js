@@ -27,7 +27,7 @@ class Footer extends Component {
                                 alt="Moonshot Logo"
                                 title="Moonshot Logo"
                                 src="/images/OfficialLogoWhite.png"/>
-                            <div className="whiteText font12px">
+                            <div className="whiteText font12px font10pxUnder400">
                                 &copy; 2018 Moonshot Learning Inc. All rights reserved.
                             </div>
                             <div style={{marginTop: "10px"}}>

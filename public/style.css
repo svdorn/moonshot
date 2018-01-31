@@ -2585,6 +2585,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .overviewAndCommentBoxInfo {
         width: 90px;
     }
+    .footerMoonshotLogo {
+        width: 180px;
+        height: 60px;
+    }
 
     .font40pxUnder400 { font-size: 40px; }
     .font38pxUnder400 { font-size: 38px; }
@@ -2615,10 +2619,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .moonshotMenuLogo {
         margin-left: 0px;
-    }
-    .footerMoonshotLogo {
-        width: 240px;
-        height: 80px;
     }
 }
 
