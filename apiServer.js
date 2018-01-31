@@ -637,6 +637,7 @@ app.post('/sendVerificationEmail', function (req, res) {
 // SEND BUSINESS USER VERIFICATION EMAIL
 app.post('/sendBusinessUserVerificationEmail', function (req, res) {
     let email = sanitize(req.body.email);
+    let companyName = sanitize(req.body.companyName);
     let query = {email: email};
 
     Users.findOne(query, function (err, user) {
@@ -646,7 +647,7 @@ app.post('/sendBusinessUserVerificationEmail', function (req, res) {
              '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
             +   '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
             +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">You have been signed up for Moonshot! Please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a> to start finding your next great hire.</span><br/>'
+            +       '<span style="margin-bottom:20px;display:inline-block;">You have been signed up for Moonshot through ' + companyName + '! Please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a> to start finding your next great hire.</span><br/>'
             +       '<span style="display:inline-block;">If you have any questions or concerns, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.com</a>.</span><br/>'
             +   '</div>'
             +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?'
