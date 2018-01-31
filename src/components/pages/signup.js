@@ -109,10 +109,10 @@ class Signup extends Component {
         const name = this.props.formData.signup.values.name;
         const password = this.props.formData.signup.values.password;
         const email = this.props.formData.signup.values.email;
-        const user = [{
+        const user = {
             name, password, email,
             userType: "student",
-        }];
+        };
 
         this.props.postUser(user);
 

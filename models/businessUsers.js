@@ -5,6 +5,7 @@ var businessUsersSchema = mongoose.Schema({
     name: String,
     email: String,
     password: String,
+    userType: String,
     company: {
         name: String,
         companyId: mongoose.Schema.Types.ObjectId

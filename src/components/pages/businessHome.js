@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postUser, onSignUpPage} from '../../actions/usersActions';
+import {postBusinessUser, onSignUpPage} from '../../actions/usersActions';
 import {TextField, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
@@ -59,19 +59,12 @@ const validate = values => {
     return errors
 };
 
-class Signup extends Component {
+class BusinessHome extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
             email: ""
-        }
-    }
-
-    componentWillMount() {
-        // shouldn't be able to be on sign up page if logged in
-        if (this.props.currentUser && this.props.currentUser != "no user") {
-           this.goTo("/discover");
         }
     }
 
@@ -109,12 +102,12 @@ class Signup extends Component {
         const name = this.props.formData.signup.values.name;
         const password = this.props.formData.signup.values.password;
         const email = this.props.formData.signup.values.email;
-        const user = [{
+        const newUser = {
             name, password, email,
-            userType: "student",
-        }];
+            userType: "employer",
+        };
 
-        this.props.postUser(user);
+        this.props.postBusinessUser(newUser, currentUser);
 
         this.setState({
             ...this.state,
@@ -133,17 +126,16 @@ class Signup extends Component {
     render() {
         return (
             <div className="fullHeight greenToBlue formContainer">
-                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     {this.state.email != "" && this.props.userPosted ?
                         <div className="center">
-                            <h1>Verify your email address</h1>
-                            <p>We sent {this.state.email} a verification link. Check your junk folder if you can{"'"}t find our email.</p>
+                            <h1>New user must verify email address</h1>
+                            <p>We sent {this.state.email} a verification link. Tell them to check their junk folder if they can{"'"}t find our email.</p>
                         </div>
                         :
                         <div>
                             <form onSubmit={this.handleSubmit.bind(this)}>
-                                <h1 style={{marginTop:"15px"}}>Sign Up</h1>
+                                <h1 style={{marginTop:"15px"}}>Add user</h1>
                                 <div className="inputContainer">
                                     <div className="fieldWhiteSpace"/>
                                     <Field
@@ -165,7 +157,7 @@ class Signup extends Component {
                                     <Field
                                         name="password"
                                         component={renderPasswordField}
-                                        label="Password"
+                                        label="Temporary password"
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
@@ -173,14 +165,14 @@ class Signup extends Component {
                                     <Field
                                         name="password2"
                                         component={renderPasswordField}
-                                        label="Confirm Password"
+                                        label="Confirm temporary password"
                                     /><br/>
                                 </div>
                                 <button
                                     type="submit"
                                     className="formSubmitButton font24px font16pxUnder600"
                                 >
-                                    Sign Up
+                                    Add user
                                 </button>
                             </form>
                             { this.props.loadingCreateUser ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
@@ -194,7 +186,7 @@ class Signup extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        postUser,
+        postBusinessUser,
         onSignUpPage
     }, dispatch);
 }
@@ -208,9 +200,9 @@ function mapStateToProps(state) {
     };
 }
 
-Signup = reduxForm({
+BusinessHome = reduxForm({
     form: 'signup',
     validate,
-})(Signup);
+})(BusinessHome);
 
-export default connect(mapStateToProps, mapDispatchToProps)(Signup);
+export default connect(mapStateToProps, mapDispatchToProps)(BusinessHome);

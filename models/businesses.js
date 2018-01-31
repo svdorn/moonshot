@@ -3,7 +3,8 @@ var mongoose = require('mongoose');
 
 var businessesSchema = mongoose.Schema({
     name: String,
-    pathwayIds: [ mongoose.Schema.Types.ObjectId ]
+    pathwayIds: [ mongoose.Schema.Types.ObjectId ],
+    businessUserIds: [ mongoose.Schema.Types.ObjectId ]
 });
 
 // 'Users' means we will use the 'users' collection. if 'Books' was in there

@@ -30,11 +30,16 @@ class AuthenticatedComponent extends Component {
 
 
     checkLoggedIn() {
-        if (!this.props.currentUser || this.props.currentUser == "no user") {
+        // if there is no user, redirect to home
+        if (   !this.props.currentUser ||  this.props.currentUser == "no user") {
             const location = this.props.location;
             const redirect = location.pathname + location.search;
 
             this.props.router.push('/login?redirect=' + redirect);
+        }
+        // if there is a user but they don't have the right user type
+        else if (this.props.route.userType && this.props.currentUser.userType !== this.props.route.userType) {
+            this.props.router.push('/');
         }
 
         // else {
@@ -46,8 +51,6 @@ class AuthenticatedComponent extends Component {
     render() {
         // clone the element so that we can put props into the element, such as location
         const childElement = React.cloneElement(this.props.route.page, { location: this.props.location });
-
-        console.log("rendering");
 
         return (
             <div>

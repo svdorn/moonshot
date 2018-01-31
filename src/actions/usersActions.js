@@ -66,7 +66,7 @@ export function onSignUpPage() {
     }
 }
 
-// POST USERS
+// POST USER
 export function postUser(user) {
     return function(dispatch) {
 
@@ -77,7 +77,7 @@ export function postUser(user) {
             // user successfully posted
             .then(function(response) {
                 // send verification email
-                axios.post("/api/sendVerificationEmail", {email: user[0].email})
+                axios.post("/api/sendVerificationEmail", {email: user.email})
                     // successfully sent verification email
                     .then(function(emailResponse) {
                         dispatch({type:"POST_USER"});
@@ -92,6 +92,35 @@ export function postUser(user) {
             // error posting user
             .catch(function(err) {
                 dispatch({type: "POST_USER_REJECTED", notification:{message: err.response.data, type: "errorHeader"}});
+            });
+    }
+}
+
+// POST BUSINESS USER
+export function postBusinessUser(newUser, currentUser) {
+    return function(dispatch) {
+        dispatch({type: "POST_USER_REQUESTED"});
+
+        // post user to database
+        axios.post("/api/businessUser", {newUser, currentUser})
+            // user successfully posted
+            .then(function(response) {
+                // send verification email
+                axios.post("/api/sendVerificationEmail", {email: newUser.email})
+                    // successfully sent verification email
+                    .then(function(emailResponse) {
+                        dispatch({type:"POST_USER"});
+                        window.scrollTo(0,0);
+                    })
+                    // error sending verification email
+                    .catch(function(emailError) {
+                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: response.data, type: "errorHeader"}});
+                        window.scrollTo(0,0);
+                    });
+            })
+            // error posting user
+            .catch(function(err) {
+                dispatch({type: "POST_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
     }
 }

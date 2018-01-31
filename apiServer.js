@@ -106,6 +106,8 @@ app.get('/userSession', function (req, res) {
 // --->>> END SESSION SET UP <<<---
 
 var Users = require('./models/users.js');
+var BusinessUsers = require('./models/businessUsers.js');
+var Businesses = require('./models/businesses.js');
 var Pathways = require('./models/pathways.js');
 var Articles = require('./models/articles.js');
 var Videos = require('./models/videos.js');
@@ -231,7 +233,9 @@ const sanitizeOptions = {
 
 //----->> POST USER <<------
 app.post('/user', function (req, res) {
-    var user = req.body[0];
+    var user = req.body;
+
+    console.log("user is: ", user);
 
     user = sanitize(user);
 
@@ -284,6 +288,105 @@ app.post('/user', function (req, res) {
         });
     });
 });
+
+
+//----->> POST BUSINESS USER <<------
+// creates a new user at the same company the current user works for
+app.post('/businessUser', function (req, res) {
+    let newUser = sanitize(req.body.newUser);
+    let currentUser = sanitize(req.body.currentUser);
+
+    // if no user posted
+    if (!newUser) {
+        res.status(400).send("No user to create was sent.");
+        return;
+    }
+
+    // if no current user
+    if (!currentUser) {
+        res.status(403).send("Must be logged in to create a business user.");
+        return;
+    }
+
+    let query = {_id: currentUser._id};
+    Users.findOne(query, function (err, currentUserFromDB) {
+        if (err) {
+            console.log("error getting current user on business user creation: ", err);
+            res.status(500).send("No user with your id was found.");
+            return;
+        }
+
+        // current user not found in db
+        if (!currentUserFromDB || currentUserFromDB == null) {
+            res.status(500).send("No user with your id was found.");
+            return;
+        }
+
+        // if current user does not have the right verification token
+        if (!currentUser.verificationToken || currentUser.verificationToken !== currentUserFromDB.verificationToken) {
+            res.status(403).send("Current user has incorrect credentials.");
+            return;
+        }
+
+        // if current user does not have correct permissions
+        if (currentUserFromDB.userType !== "employer") {
+            res.status(403).send("User does not have the correct permissions to create a new business user.");
+            return;
+        }
+
+        console.log("CURRENT USER HAS PERMISSION TO POST NEW USER, POSTING");
+
+        // // hash the user's password
+        // const saltRounds = 10;
+        // bcrypt.genSalt(saltRounds, function (err, salt) {
+        //     bcrypt.hash(user.password, salt, function (err, hash) {
+        //         // change the stored password to be the hash
+        //         user.password = hash;
+        //         user.verified = false;
+        //
+        //         // create user's verification strings
+        //         user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
+        //         user.verificationToken = crypto.randomBytes(64).toString('hex');
+        //         const query = {email: user.email};
+        //
+        //         Users.findOne(query, function (err, foundUser) {
+        //             if (err) {
+        //                 console.log(err);
+        //             }
+        //             if (foundUser === null) {
+        //                 // get count of users with that name to get the profile url
+        //                 Users.count({name: user.name}, function(err, count) {
+        //                     const randomNumber = crypto.randomBytes(8).toString('hex');
+        //                     user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+        //
+        //                     // store the user in the db
+        //                     Users.create(user, function (err, newUser) {
+        //                         if (err) {
+        //                             console.log(err);
+        //                         }
+        //
+        //                         req.session.unverifiedUserId = newUser._id;
+        //                         req.session.save(function(err) {
+        //                             if (err) {
+        //                                 console.log("error saving unverifiedUserId to session: ", err);
+        //                             }
+        //                         })
+        //
+        //                         // no reason to return the user with tokens because
+        //                         // they will have to verify themselves before they
+        //                         // can do anything anyway
+        //                         res.json(safeUser(newUser));
+        //                     })
+        //                 })
+        //             } else {
+        //                 res.status(401).send("An account with that email address already exists.");
+        //             }
+        //         });
+        //     });
+        // });
+    });
+});
+
 
 function sanitize(something) {
     const somethingType = (typeof something);
@@ -1419,6 +1522,13 @@ app.post("/updateInfo", function(req, res) {
         res.send(undefined);
     }
 });
+
+
+// --->> BUSINESS APIS <<--- //
+
+
+
+// --->> END BUSINESS APIS <<--- //
 
 // END APIs
 

@@ -9,7 +9,7 @@ import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-route
 
 import Login from './components/pages/login';
 import Signup from './components/pages/signup';
-import BusinessSignup from './components/pages/businessSignup'
+import BusinessHome from './components/pages/businessHome';
 import Main from './main';
 import AuthenticatedComponent from './components/AuthenticatedComponent';
 import Home from './components/pages/home';
@@ -41,7 +41,7 @@ const routes = (
         <IndexRoute component={Home} />
         <Route path='login' component={Login} />
         <Route path="signup" component={Signup} />
-        <Route path="businessSignup" component={BusinessSignup} />
+        <Route path="businessHome" component={AuthenticatedComponent} page={<BusinessHome/>} userType={""/*"employer"*/} />
         <Route path='forBusiness' component={ForBusiness} />
         <Route path="profile" component={Profile} />
         <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
