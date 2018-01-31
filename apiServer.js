@@ -94,7 +94,7 @@ app.get("/keepMeLoggedIn", function(req, res) {
 app.get('/userSession', function (req, res) {
     if (typeof req.session.userId === 'string') {
         const userId = sanitize(req.session.userId);
-        getUserByQuery({_id: userId}, function (user) {
+        getAnyUserByQuery({_id: userId}, function (user) {
             res.json(removePassword(user));
         })
     }
@@ -296,7 +296,7 @@ app.post('/businessUser', function (req, res) {
     let newUser = sanitize(req.body.newUser);
     let currentUser = sanitize(req.body.currentUser);
 
-    // if no user posted
+    // if no user given
     if (!newUser) {
         res.status(400).send("No user to create was sent.");
         return;
@@ -900,6 +900,7 @@ app.post('/getUserByProfileUrl', function(req, res) {
     })
 });
 
+// dangerous, returns user with verification token
 function getUserByQuery(query, callback) {
     Users.findOne(query, function (err, foundUser) {
         if (foundUser) {
@@ -910,6 +911,33 @@ function getUserByQuery(query, callback) {
                 console.log(err);
             }
             callback(undefined);
+        }
+    });
+}
+
+function getAnyUserByQuery(query, callback) {
+    Users.findOne(query, function (err, foundUser) {
+        if (foundUser && foundUser != null) {
+            callback(removePassword(foundUser));
+            return;
+        } else {
+            if (err) {
+                console.log(err);
+            }
+
+            console.log("looking for business user");
+            BusinessUsers.findOne(query, function(err2, foundBusinessUser) {
+                if (foundBusinessUser && foundBusinessUser != null) {
+                    callback(removePassword(foundBusinessUser));
+                    return;
+                } else {
+                    if (err2) {
+                        console.log(err);
+                    }
+
+                    callback(undefined);
+                }
+            });
         }
     });
 }
