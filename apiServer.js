@@ -126,8 +126,6 @@ app.get('/userSession', function (req, res) {
 });
 
 app.post('/userSession', function(req, res) {
-    console.log("here");
-
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
 
@@ -139,15 +137,13 @@ app.post('/userSession', function(req, res) {
     // get the user from the id, check the verification token to ensure they
     // have the right credentials to stay logged in
     // TODO switch to being able to be a normal user or a business user
-    BusinessUsers.findOne({_id: userId}, function (err, foundUser) {
-
-        // console.log("found the user: ", foundUser);
+    getUserByQuery({_id: userId}, function(foundUser) {
         if (foundUser.verificationToken == verificationToken) {
             req.session.userId = userId;
 
             // save user id to session
-            req.session.save(function(err2) {
-                if (err2) {
+            req.session.save(function(err) {
+                if (err) {
                     console.log("error saving user id to session: ", err2);
                 } else {
                     res.json(true);
@@ -159,7 +155,13 @@ app.post('/userSession', function(req, res) {
             return;
         }
     });
+    // BusinessUsers.findOne({_id: userId}, function (foundUser) {
+    //
+    // });
 })
+
+
+
 
 // --->>> END SESSION SET UP <<<---
 
@@ -870,16 +872,31 @@ app.post('/getUserByProfileUrl', function(req, res) {
 
 // dangerous, returns user with verification token
 function getUserByQuery(query, callback) {
-    Users.findOne(query, function (err, foundUser) {
-        if (foundUser) {
+    let finishedOneCall = false;
+
+    // if user found in one of the DBs, performs the callback
+    // if user not found, check if the other DB is already done
+    //     if so, callback with no user, otherwise, wait for the other DB call
+    let doCallbackOrWaitForOtherDBCall = function(foundUser) {
+        if (foundUser && foundUser != null) {
             callback(removePassword(foundUser));
             return;
         } else {
-            if (err) {
-                console.log(err);
+            if (finishedOneCall) {
+                callback(undefined);
+            } else {
+                finishedOneCall = true;
             }
-            callback(undefined);
         }
+    }
+
+    Users.findOne(query, function (err, foundUser) {
+        if (err) console.log(err);
+        doCallbackOrWaitForOtherDBCall(foundUser);
+    });
+    BusinessUsers.findOne(query, function(err, foundUser) {
+        if (err) console.log(err);
+        doCallbackOrWaitForOtherDBCall(foundUser);
     });
 }
 
