@@ -183,7 +183,7 @@ export function verifyEmail(userType, token) {
                     let msg = "Account verified!";
                     let nextLocation = "/login";
                     if (userType == "businessUser") {
-                        msg = "Account verified! Please reset your password using the temporary password the account admin set up for you.";
+                        msg = "Account verified!";
                         const email = response.data;
                         nextLocation = "/changeTempPassword?email=" + email;
                     }

@@ -127,6 +127,7 @@ class ChangeTempPassword extends Component {
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Change Password</h1>
+                        <p style={{padding:"0px 20px"}}>Please reset your password using the temporary password the account admin set up for you.</p>
                         <div className="inputContainer">
                             <div className="fieldWhiteSpace"/>
                             <Field
