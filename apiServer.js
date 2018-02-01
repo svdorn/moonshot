@@ -32,6 +32,18 @@ mongoose.connect(dbConnectLink);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
+
+
+var Users = require('./models/users.js');
+var BusinessUsers = require('./models/businessUsers.js');
+var Businesses = require('./models/businesses.js');
+var Pathways = require('./models/pathways.js');
+var Articles = require('./models/articles.js');
+var Videos = require('./models/videos.js');
+var Quizzes = require('./models/quizzes.js');
+var Links = require('./models/links.js');
+
+
 // --->>> SET UP SESSIONS <<<---
 app.use(session({
     secret: credentials.secretString,
@@ -95,7 +107,17 @@ app.get('/userSession', function (req, res) {
     if (typeof req.session.userId === 'string') {
         const userId = sanitize(req.session.userId);
         getAnyUserByQuery({_id: userId}, function (user) {
-            res.json(removePassword(user));
+            // if no user found, the user was probably deleted. remove the
+            // user from the session and don't log in
+            if (!user || user == null) {
+                req.session.userId = undefined;
+                req.session.save(function(err) {
+                    res.json(undefined);
+                })
+                return;
+            } else {
+                res.json(removePassword(user));
+            }
         })
     }
     else {
@@ -103,16 +125,45 @@ app.get('/userSession', function (req, res) {
     }
 });
 
+app.post('/userSession', function(req, res) {
+    console.log("here");
+
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+
+    if (!userId || !verificationToken) {
+        res.json("either no userId or no verification token");
+        return;
+    }
+
+    // get the user from the id, check the verification token to ensure they
+    // have the right credentials to stay logged in
+    // TODO switch to being able to be a normal user or a business user
+    BusinessUsers.findOne({_id: userId}, function (err, foundUser) {
+
+        // console.log("found the user: ", foundUser);
+        if (foundUser.verificationToken == verificationToken) {
+            req.session.userId = userId;
+
+            // save user id to session
+            req.session.save(function(err2) {
+                if (err2) {
+                    console.log("error saving user id to session: ", err2);
+                } else {
+                    res.json(true);
+                    return;
+                }
+            });
+        } else {
+            res.json("incorrect user credentials");
+            return;
+        }
+    });
+})
+
 // --->>> END SESSION SET UP <<<---
 
-var Users = require('./models/users.js');
-var BusinessUsers = require('./models/businessUsers.js');
-var Businesses = require('./models/businesses.js');
-var Pathways = require('./models/pathways.js');
-var Articles = require('./models/articles.js');
-var Videos = require('./models/videos.js');
-var Quizzes = require('./models/quizzes.js');
-var Links = require('./models/links.js');
+
 
 
 // --->>> EXAMPLE PATHWAY CREATION <<<---
@@ -426,7 +477,7 @@ app.post('/verifyEmail', function (req, res) {
             // we don't save the user session if logging in as business user
             // because it is likely the account was created on a different computer
             if (userType === "businessUser") {
-                res.json(true);
+                res.json(updatedUser.email);
                 return;
             }
 
@@ -1400,7 +1451,6 @@ app.post("/updateInterests", function(req, res) {
     if (interests && userId) {
         // When true returns the updated document
         Users.findById(userId, function(err, user) {
-            //console.log('found user: ', user);
             if (err) {
                 console.log(err);
             }
@@ -1645,6 +1695,76 @@ app.post('/sendBusinessUserVerificationEmail', function (req, res) {
                 res.status(500).send(msg);
             }
         })
+    });
+});
+
+
+// VERIFY CHANGE PASSWORD
+app.post('/changeTempPassword', function (req, res) {
+    const userInfo = sanitize(req.body);
+
+    const email = userInfo.email;
+    const oldPassword = userInfo.oldPassword;
+    const password = userInfo.password;
+
+    var query = {email};
+    BusinessUsers.findOne(query, function (err, user) {
+        if (err || user == undefined || user == null) {
+            res.status(404).send("User not found.");
+            return;
+        }
+
+        if (!user.verified) {
+            res.status(403).send("Must verify email before changing password.")
+            return;
+        }
+
+        bcrypt.compare(oldPassword, user.password, function (passwordError, passwordsMatch) {
+            if (!passwordsMatch || passwordError) {
+                console.log("if there was an error, it was: ", passwordError);
+                console.log("passwords match: ", passwordsMatch)
+                res.status(403).send("Old password is incorrect.");
+                return;
+            }
+
+            query = {_id: user._id};
+            const saltRounds = 10;
+            bcrypt.genSalt(saltRounds, function (err2, salt) {
+                bcrypt.hash(password, salt, function (err3, hash) {
+                    if (err2 || err3) {
+                        console.log("errors in hashing: ", err2, err3);
+                        res.status(500).send("Error saving new password.");
+                        return;
+                    }
+
+                    // change the stored password to be the hash
+                    const newPassword = hash;
+                    // if the field doesn't exist, $set will set a new field
+                    var update = {
+                        '$set': {
+                            password: newPassword
+                        },
+                        '$unset': {
+                            passwordToken: "",
+                            time: '',
+                        }
+                    };
+
+                    // When true returns the updated document
+                    var options = {new: true};
+
+                    BusinessUsers.findOneAndUpdate(query, update, options, function (err4, newUser) {
+                        if (err4) {
+                            console.log(err4);
+                            res.status(500).send("Error saving new password.");
+                            return;
+                        }
+
+                        res.json(removePassword(newUser));
+                    });
+                });
+            });
+        });
     });
 });
 

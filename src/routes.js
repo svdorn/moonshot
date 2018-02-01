@@ -19,6 +19,7 @@ import Settings from './components/pages/settings';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
+import ChangeTempPassword from './components/pages/changeTempPassword';
 import Discover from './components/pages/discover';
 import Pathway from './components/pages/pathway';
 import PathwayContent from './components/pages/pathwayContent';
@@ -46,8 +47,9 @@ const routes = (
         <Route path="profile" component={Profile} />
         <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
         <Route path="verifyEmail" component={VerifyEmail} />
-        <Route path="forgotPassword" component={ForgotPassword}/>
+        <Route path="forgotPassword" component={ForgotPassword} />
         <Route path="changePassword" component={ChangePassword} />
+        <Route path="changeTempPassword" component={ChangeTempPassword} />
         <Route path="discover" component={Discover} />
         <Route path="contactUs" component={ContactUs} />
         <Route path="myPathways" component={AuthenticatedComponent} page={<MyPathways/>} />

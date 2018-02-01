@@ -184,7 +184,8 @@ export function verifyEmail(userType, token) {
                     let nextLocation = "/login";
                     if (userType == "businessUser") {
                         msg = "Account verified! Please reset your password using the temporary password the account admin set up for you.";
-                        nextLocation = "/changeTempPassword";
+                        const email = response.data;
+                        nextLocation = "/changeTempPassword?email=" + email;
                     }
 
                     dispatch({type: "NOTIFICATION", notification:{message: msg, type: "infoHeader"}});
@@ -210,6 +211,28 @@ export function changePasswordForgot(user) {
             .catch(function(err) {
                 dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: "Error changing password", type: "errorHeader"}})
             })
+    }
+}
+
+export function changeTempPassword(user, saveSession) {
+    return function(dispatch) {
+        axios.post("/api/changeTempPassword", user)
+        .then(function(response) {
+            const returnedUser = response.data;
+
+            dispatch({type: "LOGIN", payload: returnedUser, notification: {message: "Your password was changed, you are now logged in!", type: "infoHeader"}});
+            browserHistory.push('/businessHome');
+
+            if (saveSession) {
+                axios.post("/api/userSession", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
+                .catch(function(err) {
+                    // what to do if session couldn't be saved for some reason
+                });
+            }
+        })
+        .catch(function(err) {
+            dispatch({type:"CHANGE_TEMP_PASS_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
+        })
     }
 }
 
