@@ -205,16 +205,20 @@ export function changePasswordForgot(user) {
     return function(dispatch) {
         axios.post("api/user/changePasswordForgot", user)
             .then(function(response) {
-                dispatch({type:"LOGIN", notification:{message:response.data, type:"infoHeader"}});
-                browserHistory.push('/login');
+                const foundUser = response.data;
+                axios.post("/api/userSession", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
+                .catch(function(err2) { console.log(err2) });
+
+                dispatch({type:"LOGIN", payload:foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
+                browserHistory.push('/');
             })
-            .catch(function(err) {
+            .catch(function(err1) {
                 dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: "Error changing password", type: "errorHeader"}})
             })
     }
 }
 
-export function changeTempPassword(user, saveSession) {
+export function changeTempPassword(user) {
     return function(dispatch) {
         axios.post("/api/changeTempPassword", user)
         .then(function(response) {
@@ -223,12 +227,10 @@ export function changeTempPassword(user, saveSession) {
             dispatch({type: "LOGIN", payload: returnedUser, notification: {message: "Your password was changed, you are now logged in!", type: "infoHeader"}});
             browserHistory.push('/businessHome');
 
-            if (saveSession) {
-                axios.post("/api/userSession", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
-                .catch(function(err) {
-                    // what to do if session couldn't be saved for some reason
-                });
-            }
+            axios.post("/api/userSession", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
+            .catch(function(err) {
+                // what to do if session couldn't be saved for some reason
+            });
         })
         .catch(function(err) {
             dispatch({type:"CHANGE_TEMP_PASS_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})

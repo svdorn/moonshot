@@ -117,7 +117,7 @@ class ChangeTempPassword extends Component {
             password: vals.password,
         };
 
-        this.props.changeTempPassword(user, this.state.keepMeLoggedIn);
+        this.props.changeTempPassword(user);
     }
 
     render() {

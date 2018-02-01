@@ -125,9 +125,16 @@ app.get('/userSession', function (req, res) {
     }
 });
 
+
 app.post('/userSession', function(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
+
+    // check if option to stay logged in is true
+    const saveSession = sanitize(req.session.stayLoggedIn);
+    if (!saveSession) {
+        return;
+    }
 
     if (!userId || !verificationToken) {
         res.json("either no userId or no verification token");
@@ -136,7 +143,6 @@ app.post('/userSession', function(req, res) {
 
     // get the user from the id, check the verification token to ensure they
     // have the right credentials to stay logged in
-    // TODO switch to being able to be a normal user or a business user
     getUserByQuery({_id: userId}, function(foundUser) {
         if (foundUser.verificationToken == verificationToken) {
             req.session.userId = userId;
@@ -155,12 +161,7 @@ app.post('/userSession', function(req, res) {
             return;
         }
     });
-    // BusinessUsers.findOne({_id: userId}, function (foundUser) {
-    //
-    // });
 })
-
-
 
 
 // --->>> END SESSION SET UP <<<---
@@ -511,7 +512,7 @@ app.post('/user/changePasswordForgot', function (req, res) {
     var query = {passwordToken: token};
     Users.findOne(query, function (err, user) {
         if (err || user == undefined) {
-            res.status(404).send("User not found from token");
+            res.status(404).send("Invalid change password link.");
             return;
         }
 
