@@ -168,7 +168,7 @@ class Onboarding extends Component {
 
         // INFO
         let location = "";
-        let birthDate = "";
+        let birthDate = null;
         let desiredJobs = "";
         let bio = "";
         let title = "";
@@ -190,9 +190,10 @@ class Onboarding extends Component {
             willRelocateTo = info.willRelocateTo ? info.willRelocateTo : "";
             inSchool = info.inSchool ? info.inSchool : false;
             birthDate = info.birthDate ?
-                info.birthDate.substring(5, 7) + "/" + info.birthDate.substring(8, 10) + "/" + info.birthDate.substring(0, 4)
-                : "";
-
+                new Date(parseInt(info.birthDate.substring(0,4)),
+                    parseInt(info.birthDate.substring(5,7)) - 1,
+                    parseInt(info.birthDate.substring(8,10)))
+                : null;
             let links = info.links;
             if (links) {
                 links.forEach(function(link, linkIdx) {
@@ -212,7 +213,9 @@ class Onboarding extends Component {
                     console.log("hey");
                     let endDate = {};
                     if (edu.endDate) {
-                        endDate = new Date(parseInt(edu.endDate.substring(0,4)), parseInt(edu.endDate.substring(5,7)) - 1, parseInt(edu.endDate.substring(8,10)));
+                        endDate = new Date(parseInt(edu.endDate.substring(0,4)),
+                            parseInt(edu.endDate.substring(5,7)) - 1,
+                            parseInt(edu.endDate.substring(8,10)));
                     }
                     return {
                         school: edu.school ? edu.school : "",
@@ -411,22 +414,7 @@ class Onboarding extends Component {
             return (edu.school != "" || edu.endDate != {} || edu.majors != "" || edu.minors != "");
         });
 
-        console.log(education);
-
-        const bDayString = state.birthDate;
-        let birthDate = undefined;
-        let indexes = [];
-        for (let i = 0; i < bDayString.length; i++) {
-            if (bDayString[i] == "/") {
-                indexes.push(i);
-            }
-        }
-        if (indexes.length == 2 && indexes[1] < bDayString.length - 1) {
-            const month = parseInt(bDayString.substring(0, indexes[0]));
-            const day = parseInt(bDayString.substring(indexes[0]+1, indexes[1]));
-            const year = parseInt(bDayString.substring(indexes[1] + 1));
-            birthDate = new Date(year, month - 1, day);
-        }
+        const birthDate = this.state.birthDate;
 
         this.props.updateInfo(this.props.currentUser, {
             location, birthDate, desiredJobs, title,
@@ -490,6 +478,13 @@ class Onboarding extends Component {
         this.setState({
             ...this.state,
             ...eduInfo
+        });
+    };
+
+    handleBirthDateChange(event, date) {
+        this.setState({
+            ...this.state,
+            birthDate: date
         });
     };
 
@@ -837,12 +832,11 @@ class Onboarding extends Component {
                     <div className="horizCenteredList">
                         <li className="onboardingLeftInput">
                             <span>Date of Birth</span><br/>
-                            <input
-                                type="text"
-                                className="greenInput"
-                                placeholder="mm/dd/yyyy"
-                                value={this.state.birthDate}
-                                onChange={(e) => this.handleInfoInputChange(e, "birthDate")}
+                            <DatePicker
+                                openToYearSelection={true}
+                                hintText="11/19/1996"
+                                value={self.state.birthDate}
+                                onChange={(e, date) => self.handleBirthDateChange(e, date)}
                             /> <br/>
                             <span>Location</span><br/>
                             <input
