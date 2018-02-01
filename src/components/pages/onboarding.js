@@ -107,7 +107,7 @@ class Onboarding extends Component {
                                 "Web Design",
                                 "Photoshop",
                                 "Graphic Design",
-                                 "SEO",
+                                "SEO",
                                 "Content Marketing",
                             ]
                         }
@@ -177,6 +177,7 @@ class Onboarding extends Component {
         let personal = "";
         let willRelocateTo = "";
         let eduInfo = [];
+        let eduDates = [];
 
         let inSchool = false;
 
@@ -208,11 +209,16 @@ class Onboarding extends Component {
             let eduArray = info.education;
             if (eduArray && eduArray.length > 0) {
                 eduInfo = eduArray.map(function(edu) {
+                    console.log("hey");
+                    let endDate = {};
+                    if (edu.endDate) {
+                        endDate = new Date(parseInt(edu.endDate.substring(0,4)), parseInt(edu.endDate.substring(5,7)) - 1, parseInt(edu.endDate.substring(8,10)));
+                    }
                     return {
                         school: edu.school ? edu.school : "",
                         majors: edu.majors ? edu.majors : "",
                         minors: edu.minors ? edu.minors : "",
-                        endDate: edu.endDate ? edu.endDate : {},
+                        endDate: endDate,
                     };
                 });
             } else {
@@ -221,7 +227,7 @@ class Onboarding extends Component {
                     school: "",
                     majors: "",
                     minors: "",
-                    endDate: {},
+                    endDate: null,
                 });
             }
         }
@@ -405,6 +411,8 @@ class Onboarding extends Component {
             return (edu.school != "" || edu.endDate != {} || edu.majors != "" || edu.minors != "");
         });
 
+        console.log(education);
+
         const bDayString = state.birthDate;
         let birthDate = undefined;
         let indexes = [];
@@ -465,7 +473,6 @@ class Onboarding extends Component {
     }
 
     handleEduInputChange(e, field) {
-        console.log(e);
         const eduIdx = parseInt(e.target.attributes.eduidx.value);
         let eduInfo = this.state.eduInfo.slice();
         eduInfo[eduIdx][field] = e.target.value;
@@ -475,6 +482,17 @@ class Onboarding extends Component {
             ...eduInfo
         })
     }
+
+    handleEduDateChange(event, date, eduIdx) {
+        let eduInfo = this.state.eduInfo.slice();
+        eduInfo[eduIdx].endDate = date;
+
+        this.setState({
+            ...this.state,
+            ...eduInfo
+        });
+    };
+
 
     handleCheckMarkClick() {
         this.setState({
@@ -529,14 +547,14 @@ class Onboarding extends Component {
                     <li style={{verticalAlign: "top"}} key={key}>
                         {interest.selected ?
                             <div className="onboardingPage1Text2Background clickableNoUnderline noselect"
-                                onClick={() => self.handleInterestClick(interest)}>
+                                 onClick={() => self.handleInterestClick(interest)}>
                                 <div className="font14px font12pxUnder500 onboardingPage1Text2">
                                     {interest.title}
                                 </div>
                             </div>
                             :
                             <div className="gradientBorderBlue center clickableNoUnderline noselect onboardingPage1Margin"
-                                onClick={() => self.handleInterestClick(interest)}>
+                                 onClick={() => self.handleInterestClick(interest)}>
                                 <div className="onboardingPage1Text3 font14px font12pxUnder500">
                                     {interest.title}
                                 </div>
@@ -597,14 +615,20 @@ class Onboarding extends Component {
                                 onChange={(e) => self.handleEduInputChange(e, "school")}
                             /> <br/>
                             <span>Graduation Date</span><br/>
-                            <DatePicker openToYearSelection={true}
-                                        eduidx={eduIdx}
-                                        key={eduIdx + "date"}
-                                        className="greenInput"
-                                        placeholder="e.g. May 2020"
-                                        value={self.state.eduInfo[eduIdx].endDate}
-                                        onChange={(e) => self.handleEduInputChange(e, "endDate")}
-                            /> <br />
+
+
+                            <DatePicker
+                                openToYearSelection={true}
+                                eduidx={eduIdx}
+                                key={eduIdx + "date"}
+                                hintText="05/12/2017"
+                                value={self.state.eduInfo[eduIdx].endDate}
+                                onChange={(e, date) => self.handleEduDateChange(e, date, eduIdx)}
+                            />
+
+
+
+                            <br />
                         </li>
                         <li className="inputSeparator" />
                         <li className="onboardingRightInput" key={eduIdx + "right"}>
@@ -835,7 +859,7 @@ class Onboarding extends Component {
                                 placeholder="e.g. San Francisco, East Coast..."
                                 value={this.state.willRelocateTo}
                                 onChange={(e) => this.handleInfoInputChange(e, "willRelocateTo")}
-                                /> <br/>
+                            /> <br/>
                             <span>{"Desired Job(s)"}</span><br/>
                             <input
                                 type="text"
