@@ -175,13 +175,20 @@ export function changePassword(user) {
 }
 
 // VERIFY EMAIL
-export function verifyEmail(token) {
+export function verifyEmail(userType, token) {
     return function(dispatch) {
-        axios.post("/api/verifyEmail", {token})
+        axios.post("/api/verifyEmail", {userType, token})
             .then(function(response) {
-                if (!response.data || response.data === "go to login") {
-                    dispatch({type: "NOTIFICATION", notification:{message: "Account verified!", type: "infoHeader"}});
-                    browserHistory.push('/login');
+                if (!response.data || response.data === "go to login" || userType == "businessUser") {
+                    let msg = "Account verified!";
+                    let nextLocation = "/login";
+                    if (userType == "businessUser") {
+                        msg = "Account verified! Please reset your password using the temporary password the account admin set up for you.";
+                        nextLocation = "/changeTempPassword";
+                    }
+
+                    dispatch({type: "NOTIFICATION", notification:{message: msg, type: "infoHeader"}});
+                    browserHistory.push(nextLocation);
                 } else {
                     dispatch({type: "LOGIN", payload:response.data, notification:{message: "Account verified!", type: "infoHeader"}});
                     browserHistory.push('/onboarding');

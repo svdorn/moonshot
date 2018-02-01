@@ -8,8 +8,9 @@ import HomepageTriangles from '../miscComponents/HomepageTriangles';
 class VerifyEmail extends Component {
 
     onVerifyClick() {
-        const token = this.props.location.search.substr(1);
-        this.props.verifyEmail(token);
+        const token = this.props.location.query.token;
+        const userType = this.props.location.query.userType;
+        this.props.verifyEmail(userType, token);
     }
 
     render() {

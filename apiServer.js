@@ -290,120 +290,7 @@ app.post('/user', function (req, res) {
 });
 
 
-//----->> POST BUSINESS USER <<------
-// creates a new user at the same company the current user works for
-app.post('/businessUser', function (req, res) {
-    let newUser = sanitize(req.body.newUser);
-    let currentUser = sanitize(req.body.currentUser);
 
-    // if no user given
-    if (!newUser) {
-        res.status(400).send("No user to create was sent.");
-        return;
-    }
-
-    // if no current user
-    if (!currentUser) {
-        res.status(403).send("Must be logged in to create a business user.");
-        return;
-    }
-
-    let query = {_id: currentUser._id};
-    BusinessUsers.findOne(query, function (err, currentUserFromDB) {
-        if (err) {
-            console.log("error getting current user on business user creation: ", err);
-            res.status(500).send("Error, try again later.");
-            return;
-        }
-
-        // current user not found in db
-        if (!currentUserFromDB || currentUserFromDB == null) {
-            res.status(500).send("Your account was not found.");
-            return;
-        }
-
-        // if current user does not have the right verification token
-        if (!currentUser.verificationToken || currentUser.verificationToken !== currentUserFromDB.verificationToken) {
-            res.status(403).send("Current user has incorrect credentials.");
-            return;
-        }
-
-        // if current user does not have correct permissions
-        if (currentUserFromDB.userType !== "employer") {
-            res.status(403).send("User does not have the correct permissions to create a new business user.");
-            return;
-        }
-
-        if (!currentUserFromDB.company || !currentUserFromDB.company.companyId) {
-            res.status(403).send("User does not have an attached business.");
-        }
-
-        // hash the user's temporary password
-        const saltRounds = 10;
-        bcrypt.genSalt(saltRounds, function (err, salt) {
-            bcrypt.hash(newUser.password, salt, function (err2, hash) {
-                // change the stored password to be the hash
-                newUser.password = hash;
-                newUser.verified = false;
-                newUser.company = currentUserFromDB.company;
-
-                // create user's verification strings
-                newUser.emailVerificationToken = crypto.randomBytes(64).toString('hex');
-                newUser.verificationToken = crypto.randomBytes(64).toString('hex');
-                const query = {email: newUser.email};
-
-
-
-                BusinessUsers.findOne(query, function (err3, foundUser) {
-                    if (err3) {
-                        console.log(err3);
-                        res.status(500).send("Error, please try again later.");
-                        return;
-                    }
-
-                    // if found user is null, that means no user with that email already exists,
-                    // which is what we want
-                    if (foundUser === null) {
-                        // store the user in the db
-                        BusinessUsers.create(newUser, function (err4, newUserFromDB) {
-                            if (err4) {
-                                console.log(err4);
-                                res.status(500).send("Error, please try again later.");
-                                return;
-                            }
-
-                            // add the user to the company
-                            const companyQuery = {_id: currentUserFromDB.company.companyId};
-                            console.log("companyId is: ", currentUserFromDB.company.companyId);
-                            Businesses.findOne(companyQuery, function(err5, company) {
-                                if (err5) {
-                                    console.log(err5);
-                                    res.status(500).send("Error adding user to company record.");
-                                    return;
-                                }
-
-                                company.businessUserIds.push(newUserFromDB._id);
-                                // save the new company info with the new user's id
-                                company.save(function(err6) {
-                                    if (err6) {
-                                        console.log(err56);
-                                        res.status(500).send("Error adding user to company record.");
-                                        return;
-                                    }
-
-                                    // success, send back the name of the company they work for
-                                    res.json(company.name);
-                                });
-                            });
-                        })
-                    } else {
-                        res.status(401).send("An account with that email address already exists.");
-                    }
-                });
-            });
-        });
-    });
-});
 
 
 function sanitize(something) {
@@ -504,9 +391,13 @@ function sanitizeArray(arr) {
 
 app.post('/verifyEmail', function (req, res) {
     const token = sanitize(req.body.token);
+    const userType = sanitize(req.body.userType);
+
+    // query form business user database if the user is a business user
+    const DB = (userType === "businessUser") ? BusinessUsers : Users;
 
     var query = {emailVerificationToken: token};
-    Users.findOne(query, function (err, user) {
+    DB.findOne(query, function (err, user) {
         if (err || user == undefined) {
             res.status(404).send("User not found from token");
             return;
@@ -527,9 +418,16 @@ app.post('/verifyEmail', function (req, res) {
         // When true returns the updated document
         var options = {new: true};
 
-        Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
+        DB.findOneAndUpdate(query, update, options, function (err, updatedUser) {
             if (err) {
                 console.log(err);
+            }
+
+            // we don't save the user session if logging in as business user
+            // because it is likely the account was created on a different computer
+            if (userType === "businessUser") {
+                res.json(true);
+                return;
             }
 
             // if the session has the user's id, can immediately log them in
@@ -613,10 +511,10 @@ app.post('/sendVerificationEmail', function (req, res) {
              '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
             +   '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
             +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways and learning new skills, please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>. Once you verify your account, you can start building your profile. We hope you have a blast!</span><br/>'
+            +       '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways and learning new skills, please <a href="https://www.moonshotlearning.org/verifyEmail?userType=user&token=' + user.emailVerificationToken + '">verify your account</a>. Once you verify your account, you can start building your profile. We hope you have a blast!</span><br/>'
             +       '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.com</a>.</span><br/>'
             +   '</div>'
-            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?'
+            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?userType=user&token='
             +   user.emailVerificationToken
             +   '">VERIFY ACCOUNT</a>'
             +   '<div style="text-align:left;width:80%;margin-left:10%;">'
@@ -634,39 +532,6 @@ app.post('/sendVerificationEmail', function (req, res) {
     });
 });
 
-// SEND BUSINESS USER VERIFICATION EMAIL
-app.post('/sendBusinessUserVerificationEmail', function (req, res) {
-    let email = sanitize(req.body.email);
-    let companyName = sanitize(req.body.companyName);
-    let query = {email: email};
-
-    Users.findOne(query, function (err, user) {
-        let recipient = user.email;
-        let subject = 'Verify email';
-        let content =
-             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-            +   '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
-            +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">You have been signed up for Moonshot through ' + companyName + '! Please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a> to start finding your next great hire.</span><br/>'
-            +       '<span style="display:inline-block;">If you have any questions or concerns, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.com</a>.</span><br/>'
-            +   '</div>'
-            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?'
-            +   user.emailVerificationToken
-            +   '">VERIFY ACCOUNT</a>'
-            +   '<div style="text-align:left;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
-            +   '</div>'
-            +'</div>';
-
-        sendEmail(recipient, subject, content, function (success, msg) {
-            if (success) {
-                res.json(msg);
-            } else {
-                res.status(500).send(msg);
-            }
-        })
-    });
-});
 
 // SEND EMAIL FOR REGISTERING FOR PATHWAYS
 app.post('/user/registerForPathway', function(req, res) {
@@ -977,7 +842,6 @@ function getAnyUserByQuery(query, callback) {
                 console.log(err);
             }
 
-            console.log("looking for business user");
             BusinessUsers.findOne(query, function(err2, foundBusinessUser) {
                 if (foundBusinessUser && foundBusinessUser != null) {
                     callback(removePassword(foundBusinessUser));
@@ -1634,6 +1498,155 @@ app.post("/updateInfo", function(req, res) {
 
 // --->> BUSINESS APIS <<--- //
 
+//----->> POST BUSINESS USER <<------
+// creates a new user at the same company the current user works for
+app.post('/businessUser', function (req, res) {
+    let newUser = sanitize(req.body.newUser);
+    let currentUser = sanitize(req.body.currentUser);
+
+    // if no user given
+    if (!newUser) {
+        res.status(400).send("No user to create was sent.");
+        return;
+    }
+
+    // if no current user
+    if (!currentUser) {
+        res.status(403).send("Must be logged in to create a business user.");
+        return;
+    }
+
+    let query = {_id: currentUser._id};
+    BusinessUsers.findOne(query, function (err, currentUserFromDB) {
+        if (err) {
+            console.log("error getting current user on business user creation: ", err);
+            res.status(500).send("Error, try again later.");
+            return;
+        }
+
+        // current user not found in db
+        if (!currentUserFromDB || currentUserFromDB == null) {
+            res.status(500).send("Your account was not found.");
+            return;
+        }
+
+        // if current user does not have the right verification token
+        if (!currentUser.verificationToken || currentUser.verificationToken !== currentUserFromDB.verificationToken) {
+            res.status(403).send("Current user has incorrect credentials.");
+            return;
+        }
+
+        // if current user does not have correct permissions
+        if (currentUserFromDB.userType !== "employer") {
+            res.status(403).send("User does not have the correct permissions to create a new business user.");
+            return;
+        }
+
+        if (!currentUserFromDB.company || !currentUserFromDB.company.companyId) {
+            res.status(403).send("User does not have an attached business.");
+        }
+
+        // hash the user's temporary password
+        const saltRounds = 10;
+        bcrypt.genSalt(saltRounds, function (err, salt) {
+            bcrypt.hash(newUser.password, salt, function (err2, hash) {
+                // change the stored password to be the hash
+                newUser.password = hash;
+                newUser.verified = false;
+                newUser.company = currentUserFromDB.company;
+
+                // create user's verification strings
+                newUser.emailVerificationToken = crypto.randomBytes(64).toString('hex');
+                newUser.verificationToken = crypto.randomBytes(64).toString('hex');
+                const query = {email: newUser.email};
+
+
+
+                BusinessUsers.findOne(query, function (err3, foundUser) {
+                    if (err3) {
+                        console.log(err3);
+                        res.status(500).send("Error, please try again later.");
+                        return;
+                    }
+
+                    // if found user is null, that means no user with that email already exists,
+                    // which is what we want
+                    if (foundUser === null) {
+                        // store the user in the db
+                        BusinessUsers.create(newUser, function (err4, newUserFromDB) {
+                            if (err4) {
+                                console.log(err4);
+                                res.status(500).send("Error, please try again later.");
+                                return;
+                            }
+
+                            // add the user to the company
+                            const companyQuery = {_id: currentUserFromDB.company.companyId};
+                            console.log("companyId is: ", currentUserFromDB.company.companyId);
+                            Businesses.findOne(companyQuery, function(err5, company) {
+                                if (err5) {
+                                    console.log(err5);
+                                    res.status(500).send("Error adding user to company record.");
+                                    return;
+                                }
+
+                                company.businessUserIds.push(newUserFromDB._id);
+                                // save the new company info with the new user's id
+                                company.save(function(err6) {
+                                    if (err6) {
+                                        console.log(err56);
+                                        res.status(500).send("Error adding user to company record.");
+                                        return;
+                                    }
+
+                                    // success, send back the name of the company they work for
+                                    res.json(company.name);
+                                });
+                            });
+                        })
+                    } else {
+                        res.status(401).send("An account with that email address already exists.");
+                    }
+                });
+            });
+        });
+    });
+});
+
+
+// SEND BUSINESS USER VERIFICATION EMAIL
+app.post('/sendBusinessUserVerificationEmail', function (req, res) {
+    let email = sanitize(req.body.email);
+    let companyName = sanitize(req.body.companyName);
+    let query = {email: email};
+
+    BusinessUsers.findOne(query, function (err, user) {
+        let recipient = user.email;
+        let subject = 'Verify email';
+        let content =
+             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+            +   '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
+            +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
+            +       '<span style="margin-bottom:20px;display:inline-block;">You have been signed up for Moonshot through ' + companyName + '! Please <a href="https://www.moonshotlearning.org/verifyEmail?userType=businessUser&token=' + user.emailVerificationToken + '">verify your account</a> to start finding your next great hire.</span><br/>'
+            +       '<span style="display:inline-block;">If you have any questions or concerns, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.com</a>.</span><br/>'
+            +   '</div>'
+            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?userType=businessUser&token='
+            +   user.emailVerificationToken
+            +   '">VERIFY ACCOUNT</a>'
+            +   '<div style="text-align:left;width:80%;margin-left:10%;">'
+            +       '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
+            +   '</div>'
+            +'</div>';
+
+        sendEmail(recipient, subject, content, function (success, msg) {
+            if (success) {
+                res.json(msg);
+            } else {
+                res.status(500).send(msg);
+            }
+        })
+    });
+});
 
 
 // --->> END BUSINESS APIS <<--- //

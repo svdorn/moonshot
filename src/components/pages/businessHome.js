@@ -129,11 +129,25 @@ class BusinessHome extends Component {
         window.scrollTo(0, 0);
     }
 
+    testThing() {
+        console.log("here");
+        browserHistory.push({ pathname: "/businessHome", query: {
+            checkin : "jangus",
+            checkout : "never",
+            managed_by : ['Owner','Manager']
+        } });
+    }
+
     //name, email, password, confirm password, signup button
     render() {
         return (
             <div className="fullHeight greenToBlue formContainer">
                 <div className="form lightWhiteForm">
+
+
+                    <button onClick={() => this.testThing()}>Test</button>
+
+
                     {this.state.email != "" && this.props.userPosted ?
                         <div className="center">
                             <h1>New user must verify email address</h1>
