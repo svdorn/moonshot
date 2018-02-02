@@ -393,12 +393,12 @@ class Profile extends Component {
                                     <div>
                                         <div className="profileInfoSkills">
                                             <div className="profileInfoSkillsLeft">
-                                                <div className="clickable blueText font20px font14pxUnder700"
+                                                {/*<div className="clickable blueText font20px font14pxUnder700"
                                                      style={{marginTop: '-20px', marginBottom: '10px'}}
                                                      onClick={this.editProfile.bind(this)}
                                                 >
                                                     Edit Profile
-                                                </div>
+                                                </div>*/}
                                                 <img
                                                     src="/icons/Portfolio.png"
                                                     alt="Profile picture"
