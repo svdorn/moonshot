@@ -237,7 +237,7 @@ class Profile extends Component {
             let index = -1;
             if (education && education.length > 0) {
                 const schools = education.map(function (edu) {
-                    const date = edu.endDate.substring(5, 7) + "/" + edu.endDate.substring(8, 10) + "/" + edu.endDate.substring(0, 4);
+                    const date = edu.endDate ? edu.endDate.substring(5, 7) + "/" + edu.endDate.substring(8, 10) + "/" + edu.endDate.substring(0, 4) : null;
                     let majorsAndMinors = edu.majors ? edu.majors : "";
                     if (edu.minors && edu.minors.length > 0) {
                         let comma = "";
