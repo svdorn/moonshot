@@ -527,6 +527,7 @@ class Onboarding extends Component {
             title: {
                 topTitle: {
                     margin: '20px 0 10px 0',
+                    display: 'inline-block'
                 },
                 divider: {
                     position: 'relative',
@@ -673,7 +674,7 @@ class Onboarding extends Component {
 
         if (!tabValue || tabValue == "interests") {
             onBoardingHtml =
-                <div style={{marginBottom: '20px', minWidth: '100%'}}>
+                <div style={{marginBottom: '20px', minWidth: '100%', textAlign: 'center'}}>
                     <div className="onboardingPage1Text font40px font24pxUnder500 center" style={style.title.topTitle}>
                         Select Your
                         Interests
@@ -799,7 +800,7 @@ class Onboarding extends Component {
 
         else if (tabValue == "goals") {
             onBoardingHtml =
-                <div style={{marginBottom: '20px'}}>
+                <div style={{marginBottom: '20px', textAlign: 'center'}}>
                     <div className="onboardingPage2Text font40px font24pxUnder500 center" style={style.title.topTitle}>
                         What Are Your Goals?
                     </div>
@@ -829,7 +830,7 @@ class Onboarding extends Component {
 
         else if (tabValue == "info") {
             onBoardingHtml =
-                <div style={{marginBottom: '20px'}}>
+                <div style={{marginBottom: '20px', textAlign: 'center'}}>
                     <div className="onboardingPage3TextTitle font40px font24pxUnder500 center"
                          style={style.title.topTitle}>
                         Start Building Your Profile
