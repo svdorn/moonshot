@@ -771,7 +771,7 @@ class Onboarding extends Component {
                         <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="font14px font12pxUnder500 center" style={{marginBottom: "20px"}}>
+                    <div className="font14px font12pxUnder500 center">
                         <b>Select All That Apply.</b>
                     </div>
                     <div>
