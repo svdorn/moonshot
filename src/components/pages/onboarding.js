@@ -846,12 +846,15 @@ class Onboarding extends Component {
                     <div className="horizCenteredList">
                         <li className="onboardingLeftInput">
                             <span>Date of Birth</span><br/>
-                            <DatePicker
-                                openToYearSelection={true}
-                                hintText="11/19/1996"
-                                value={self.state.birthDate}
-                                onChange={(e, date) => self.handleBirthDateChange(e, date)}
-                            /> <br/>
+                            <div className="dp greenInput">
+                                <DatePicker
+                                    openToYearSelection={true}
+                                    hintText="11/19/1996"
+                                    value={self.state.birthDate}
+                                    onChange={(e, date) => self.handleBirthDateChange(e, date)}
+                                />
+                            </div>
+                            <br/>
                             <span>Location</span><br/>
                             <input
                                 type="text"
