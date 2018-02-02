@@ -980,7 +980,7 @@ button.link {
 .onboardingPage1Button{
     background: linear-gradient(to right, #5deaff, #3dabff);
     border: #3dabff;
-    padding: 7px;
+    padding: 3px 7px;
     margin-top: 20px;
 }
 .onboardingPage2Text {
