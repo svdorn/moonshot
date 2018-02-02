@@ -37,7 +37,7 @@ export function login(user, saveSession, navigateBackUrl) {
                 dispatch({type:"LOGIN", payload: returnedUser});
                 dispatch({type: "CLOSE_NOTIFICATION"});
                 let nextUrl = '/discover';
-                if (!returnedUser.hasFinishedOnboarding) {
+                if (returnedUser.userType === "user" && !returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";
                 } else if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
