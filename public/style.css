@@ -991,7 +991,7 @@ button.link {
 .onboardingPage2Button{
     background: linear-gradient(to right, #be6aff, #7f0eff);
     border: #9727ff;
-    padding: 7px;
+    padding: 3px 7px;
     margin-top: 30px;
 }
 .onboardingPage2Text3 {
@@ -1015,7 +1015,7 @@ button.link {
 .onboardingPage3Button{
     background: linear-gradient(to right, #3dffef, #3affd2);
     border: #01f3c8;
-    padding: 7px;
+    padding: 3px 7px;
     margin-top: 20px;
 }
 .onboardingPage3 {
