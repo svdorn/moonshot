@@ -515,7 +515,19 @@ class Profile extends Component {
                                         <div className="fullHeight"/>
                                     </div>}
                             </div>
-                            : <div>here</div>}
+                            : <div>
+                                <div className="profileInfoSkills">
+                                    <div className="profileInfoSkillsLeft">
+                                        <div className="clickable blueText font20px font14pxUnder700"
+                                             style={{marginTop: '-20px', marginBottom: '10px'}}
+                                             onClick={this.editProfile.bind(this)}
+                                        >
+                                            Edit Profile
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
                     </div>
                     : null}
             </div>
