@@ -837,28 +837,28 @@ button.link {
 }
 .onboardingDots { margin-bottom: 40px; }
 .onboardingDots > div {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     display: inline-block;
     border-radius: 10px;
     cursor: pointer;
 }
-.onboardingDots > div:first-child {
-    margin-right: 80px
+.onboardingDots > div {
+    margin-right: 60px
 }
 .onboardingDots > div:last-child {
-    margin-left: 80px
+    margin-right: 0px;
 }
 .onboardingDotsinterests > div {
-    background-color: var(--moonshotLightBlue);
+    background: linear-gradient(to right, #5deaff, #3dabff);
     opacity: .3;
 }
 .onboardingDotsgoals > div {
-    background-color: var(--moonshotPurple);
+    background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotDarkPurple));
     opacity: .3;
 }
 .onboardingDotsinfo > div {
-    background-color: var(--moonshotGreen);
+    background: linear-gradient(to right, var(--moonshotGreen), var(--moonshotGreenText));
     opacity: .3;
 }
 .onboardingDotsinterests > div:first-child,
