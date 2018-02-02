@@ -732,9 +732,8 @@ class Onboarding extends Component {
                         <div className="onboardingDividerLeft" style={{bottom: "0"}}/>
                         <div className="onboardingDividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="font14px font12pxUnder500 center" style={style.title.text}>What skills do you want
-                        to learn or
-                        improve?
+                    <div className="font14px font12pxUnder500 center" style={style.title.text}>
+                        <b>What skills do you want to learn or improve?</b>
                     </div>
                     <div>
                         <ul className="horizCenteredList onboardingListContainer">
@@ -772,8 +771,8 @@ class Onboarding extends Component {
                         <div className="onboarding2DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding2DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="font14px font10pxUnder500 center" style={{marginBottom: "20px"}}>
-                        Select All That Apply.
+                    <div className="font14px font12pxUnder500 center" style={{marginBottom: "20px"}}>
+                        <b>Select All That Apply.</b>
                     </div>
                     <div>
                         {goals ?
@@ -803,8 +802,8 @@ class Onboarding extends Component {
                         <div className="onboarding3DividerLeft" style={{bottom: "0"}}/>
                         <div className="onboarding3DividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="font20px font14pxUnder700 font12pxUnder400 center" style={style.title.text}>
-                        The more complete your profile, the more appealing you look to employers.<br/>
+                    <div className="font14px font12pxUnder500 center" style={style.title.text}>
+                        <b>The more complete your profile, the more appealing you look to employers.</b>
                     </div>
                     <div className="center">
                         <img src="/icons/Portfolio.png" className="onboardingIcons" style={style.icons}/>
