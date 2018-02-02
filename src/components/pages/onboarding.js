@@ -368,12 +368,16 @@ class Onboarding extends Component {
         }
     }
 
-    handleGoalsButtonClick() {
+    handleGoalsButtonClick(nextOrPrev) {
         this.saveGoals();
 
+        let nextTab= "info";
+        if (nextOrPrev === "previous") {
+            nextTab = "interests";
+        }
         this.setState({
             ...this.state,
-            tabValue: "info"
+            tabValue: nextTab
         })
         window.scrollTo(0, 0);
     }
@@ -391,6 +395,15 @@ class Onboarding extends Component {
 
 
     // INFO
+    handleInfoBackButtonClick() {
+        this.saveInfo();
+        this.setState({
+            ...this.state,
+            tabValue: "goals"
+        })
+        window.scrollTo(0, 0);
+    }
+
     handleFinishButtonClick() {
         this.saveInfo();
         const markOnboardingComplete = true;
@@ -782,7 +795,12 @@ class Onboarding extends Component {
                             : null}
                     </div>
                     <div className="center">
-                        <button className="onboardingPage2Button" onClick={this.handleGoalsButtonClick.bind(this)}>
+                        <button className="onboardingPage2Button" style={{marginRight:"30px"}} onClick={() => this.handleGoalsButtonClick("previous")}>
+                            <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
+                                Back
+                            </div>
+                        </button>
+                        <button className="onboardingPage2Button" onClick={() => this.handleGoalsButtonClick("next")}>
                             <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
                                 Next
                             </div>
@@ -917,8 +935,12 @@ class Onboarding extends Component {
                         I am currently in school<br/>
                     </div>
 
-
                     <div className="center">
+                        <button className="onboardingPage3Button" style={{marginRight:"30px"}} onClick={this.handleInfoBackButtonClick.bind(this)}>
+                            <div className="font20px font14pxUnder700 onboardingPage1Text2">
+                                Back
+                            </div>
+                        </button>
                         <button className="onboardingPage3Button" onClick={this.handleFinishButtonClick.bind(this)}>
                             <div className="font20px font14pxUnder700 onboardingPage1Text2">
                                 Finish

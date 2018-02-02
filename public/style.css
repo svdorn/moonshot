@@ -994,6 +994,9 @@ button.link {
     padding: 3px 7px;
     margin-top: 30px;
 }
+.onboardingPage2Button:first-child {
+    padding: 3px 5px;
+}
 .onboardingPage2Text3 {
     color: #9727ff;
 }
