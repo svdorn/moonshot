@@ -18,7 +18,8 @@ class Profile extends Component {
             completedPathways: [],
             userPathwayPreviews: undefined,
             userCompletedPathwayPreviews: undefined,
-            user: undefined
+            user: undefined,
+            editProfile: false,
         }
     }
 
@@ -175,6 +176,10 @@ class Profile extends Component {
         browserHistory.push(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
+    }
+
+    editProfile() {
+        this.setState({editProfile: !this.state.editProfile})
     }
 
     render() {
@@ -387,6 +392,12 @@ class Profile extends Component {
                             <div>
                                 <div className="profileInfoSkills">
                                     <div className="profileInfoSkillsLeft">
+                                        <div className="clickable blueText font20px font14pxUnder700"
+                                             style={{marginTop: '-20px', marginBottom: '10px'}}
+                                             onClick={this.editProfile.bind(this)}
+                                        >
+                                            Edit Profile
+                                        </div>
                                         <img
                                             src="/icons/Portfolio.png"
                                             alt="Profile picture"
