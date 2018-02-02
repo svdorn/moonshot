@@ -349,7 +349,7 @@ export function startOnboarding(){
     }
 }
 
-export function endOnboarding(){
+export function endOnboarding(user){
     return function(dispatch) {
         axios.post("endOnboarding", {userId: user._id, verificationToken: user.verificationToken})
         .then(function(updatedUser) {

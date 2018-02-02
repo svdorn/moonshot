@@ -394,7 +394,7 @@ class Onboarding extends Component {
     // INFO
     handleFinishButtonClick() {
         this.saveInfo();
-        this.props.endOnboarding();
+        this.props.endOnboarding(this.props.currentUser);
         browserHistory.push('/discover');
         window.scrollTo(0, 0);
     }
