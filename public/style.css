@@ -1201,6 +1201,7 @@ button.link {
 }
 .dp > div > div > input{
     text-align: center;
+    height: 90% !important;
 }
 .dp > div {
     height: inherit;
@@ -1216,7 +1217,7 @@ button.link {
     cursor: inherit !important;
 }
 .dp > div > div > div {
-    top: 6px;
+    top: 3px;
     left: 50%;
     transform: translateX(-50%);
 }
