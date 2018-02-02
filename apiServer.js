@@ -218,13 +218,9 @@ const sanitizeOptions = {
 //
 //     for (let userIdx = 0; userIdx < users.length; userIdx++) {
 //         let user = users[userIdx];
-//         Users.count({name: user.name}, function(err, count) {
-//             console.log("count of users with name ", user.name, ": ", count);
-//             const randomNumber = crypto.randomBytes(32).toString('hex');
-//             user.verificationToken = randomNumber;
-//             user.save(function() {
-//                 console.log("user saved");
-//             });
+//         user.hasFinishedOnboarding = true;
+//         user.save(function() {
+//             console.log("user saved");
 //         });
 //     }
 // })
@@ -242,6 +238,7 @@ app.post('/user', function (req, res) {
             // change the stored password to be the hash
             user.password = hash;
             user.verified = false;
+            user.hasFinishedOnboarding = false;
 
             // create user's verification strings
             user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
@@ -380,6 +377,29 @@ function sanitizeArray(arr) {
 
     return sanitizedArr;
 }
+
+
+app.post("/endOnboarding", function (req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+
+    const query = {_id: userId, verificationToken};
+    const update = {
+        '$set': {
+            hasFinishedOnboarding: true
+        }
+    };
+
+    // When true returns the updated document
+    const options = {new: true};
+
+    Users.findOneAndUpdate(query, update, options, function(err, updatedUser) {
+        if (!err && updatedUser) {
+            res.json(updatedUser);
+        }
+    });
+});
+
 
 app.post('/verifyEmail', function (req, res) {
     const token = sanitize(req.body.token);
