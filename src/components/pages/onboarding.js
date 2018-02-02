@@ -551,7 +551,7 @@ class Onboarding extends Component {
                         {interest.selected ?
                             <div className="onboardingPage1Text2Background clickableNoUnderline noselect"
                                  onClick={() => self.handleInterestClick(interest)}>
-                                <div className="font14px font12pxUnder500 onboardingPage1Text2">
+                                <div className="font16px font12pxUnder500 onboardingPage1Text2">
                                     {interest.title}
                                 </div>
                             </div>
@@ -559,7 +559,7 @@ class Onboarding extends Component {
                             <div
                                 className="gradientBorderBlue center clickableNoUnderline noselect onboardingPage1Margin"
                                 onClick={() => self.handleInterestClick(interest)}>
-                                <div className="onboardingPage1Text3 font14px font12pxUnder500">
+                                <div className="onboardingPage1Text3 font16px font12pxUnder500">
                                     {interest.title}
                                 </div>
                             </div>
