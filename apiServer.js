@@ -160,7 +160,7 @@ var Links = require('./models/links.js');
 //
 //         const examplePathway = {
 //             name: "Create Video Game AI",
-//             previewImage: "/images/Mortal_Kombat.png",
+//             previewImage: "/images/BigData.jpg",
 //             sponsor: { name: "Blizzard", logo: "/Logos/Blizzard.png" },
 //             estimatedCompletionTime: "16 Hours",
 //             deadline: new Date(2018, 7, 6, 0, 0, 0, 0),
