@@ -37,7 +37,9 @@ export function login(user, saveSession, navigateBackUrl) {
                 dispatch({type:"LOGIN", payload: returnedUser});
                 dispatch({type: "CLOSE_NOTIFICATION"});
                 let nextUrl = '/discover';
-                if (navigateBackUrl) {
+                if (!returnedUser.hasFinishedOnboarding) {
+                    nextUrl = "/onboarding";
+                } else if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
                 }
                 browserHistory.push(nextUrl);
@@ -169,7 +171,11 @@ export function changePasswordForgot(user) {
         axios.post("api/user/changePasswordForgot", user)
             .then(function(response) {
                 dispatch({type:"LOGIN", notification:{message:response.data, type:"infoHeader"}});
-                browserHistory.push('/login');
+                let nextUrl = "/";
+                if (!returnedUser.hasFinishedOnboarding) {
+                    nextUrl = "/onboarding";
+                }
+                browserHistory.push(nextUrl);
             })
             .catch(function(err) {
                 dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: "Error changing password", type: "errorHeader"}})
@@ -345,6 +351,13 @@ export function startOnboarding(){
 
 export function endOnboarding(){
     return function(dispatch) {
+        axios.post("endOnboarding", {userId: user._id, verificationToken: user.verificationToken})
+        .then(function(updatedUser) {
+            dispatch({type:"UPDATE_USER", payload: response.data});
+        })
+        .catch(function(err) {
+            // onboarding setting not able to be turned off for some reason
+        })
         dispatch({type: "END_ONBOARDING"});
     }
 }

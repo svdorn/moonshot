@@ -480,6 +480,8 @@ class Onboarding extends Component {
         let eduInfo = this.state.eduInfo.slice();
         eduInfo[eduIdx].endDate = date;
 
+        console.log("things");
+
         this.setState({
             ...this.state,
             ...eduInfo
@@ -603,6 +605,7 @@ class Onboarding extends Component {
         let self = this;
         let educationUls = eduInfo.map(function (edu) {
             eduIdx++;
+            const index = eduIdx;
             return (
                 <div key={eduIdx + "div"}>
                     <ul className="horizCenteredList" key={eduIdx + "ul"}>
@@ -623,9 +626,10 @@ class Onboarding extends Component {
                                     openToYearSelection={true}
                                     eduidx={eduIdx}
                                     key={eduIdx + "date"}
+                                    id={eduIdx + "date"}
                                     hintText="05/12/2017"
                                     value={self.state.eduInfo[eduIdx].endDate}
-                                    onChange={(e, date) => self.handleEduDateChange(e, date, eduIdx)}
+                                    onChange={(e, date) => self.handleEduDateChange(e, date, index)}
                                 />
                             </div>
 
