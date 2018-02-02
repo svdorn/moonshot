@@ -49,7 +49,7 @@ class AuthenticatedComponent extends Component {
         return (
             <div>
                 { this.state.userChecked ?
-                    { childElement }
+                    childElement
                     : null
                 }
             </div>

@@ -197,8 +197,6 @@ class Menu extends Component {
             );
         }
 
-        console.log('ya');
-
         return (
             <header style={{zIndex: "100"}}>
                 {this.props.currentUser ?
