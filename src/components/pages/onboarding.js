@@ -215,7 +215,6 @@ class Onboarding extends Component {
             let eduArray = info.education;
             if (eduArray && eduArray.length > 0) {
                 eduInfo = eduArray.map(function (edu) {
-                    console.log("hey");
                     let endDate = {};
                     if (edu.endDate) {
                         endDate = new Date(parseInt(edu.endDate.substring(0, 4)),
@@ -394,7 +393,8 @@ class Onboarding extends Component {
     // INFO
     handleFinishButtonClick() {
         this.saveInfo();
-        this.props.endOnboarding(this.props.currentUser);
+        const markOnboardingComplete = true;
+        this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
         browserHistory.push('/discover');
         window.scrollTo(0, 0);
     }

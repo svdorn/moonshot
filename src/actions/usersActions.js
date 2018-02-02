@@ -349,15 +349,17 @@ export function startOnboarding(){
     }
 }
 
-export function endOnboarding(user){
+export function endOnboarding(user, markOnboardingComplete){
     return function(dispatch) {
-        axios.post("endOnboarding", {userId: user._id, verificationToken: user.verificationToken})
-        .then(function(updatedUser) {
-            dispatch({type:"UPDATE_USER", payload: response.data});
-        })
-        .catch(function(err) {
-            // onboarding setting not able to be turned off for some reason
-        })
+        if (markOnboardingComplete) {
+            axios.post("endOnboarding", {userId: user._id, verificationToken: user.verificationToken})
+            .then(function(updatedUser) {
+                dispatch({type:"UPDATE_USER", payload: response.data});
+            })
+            .catch(function(err) {
+                // onboarding setting not able to be turned off for some reason
+            })
+        }
         dispatch({type: "END_ONBOARDING"});
     }
 }

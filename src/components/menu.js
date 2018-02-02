@@ -5,7 +5,7 @@ import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import {connect} from 'react-redux';
 import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
-import {signout, closeNotification, setHeaderBlue} from "../actions/usersActions";
+import {signout, closeNotification, setHeaderBlue, endOnboarding} from "../actions/usersActions";
 import {axios} from 'axios';
 
 const styles = {
@@ -27,6 +27,8 @@ class Menu extends Component {
         let value = 1;
         if (this.props.location.pathname === '/settings') {
             value = 2;
+        } else if (this.props.location.pathname === '/onboarding') {
+            value = 4;
         }
         this.state = {value};
     }
@@ -36,8 +38,12 @@ class Menu extends Component {
             if (this.state.value !== 2) {
                 this.setState({value:2});
             }
+        } else if (this.props.location.pathname === '/onboarding') {
+            if (this.state.value !== 4) {
+                this.setState({value: 4});
+            }
         } else {
-            // set dropdown to be on Profile if not on settings page
+            // set dropdown to be on Profile if not on settings or onboarding pages
             if (this.state.value !== 1) {
                 this.setState({value:1});
             }
@@ -49,7 +55,14 @@ class Menu extends Component {
             this.goTo('/profile');
         } else if (value === 2) {
             this.goTo('/settings');
+        } else if (value === 4) {
+            // do nothing
         } else {
+            if (this.props.location.pathname === '/onboarding') {
+                const markOnboardingComplete = false;
+                this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
+            }
+
             value = 1;
             this.props.signout();
             this.goTo('/');
@@ -80,12 +93,8 @@ class Menu extends Component {
     }
 
     render() {
-        if (this.props.isOnboarding) {
-            return null;
-        }
-
-        let moonshotLogo = "/images/OfficialLogoWhite.png";
-        let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
+        let moonshotLogo = this.props.isOnboarding ? "/images/OfficialLogoBlue.png" : "/images/OfficialLogoWhite.png";
+        let dropdownClass = this.props.isOnboarding ? "headerDropdownBlue wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
         let menuItemClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem"
         if (this.props.blueHeader) {
             moonshotLogo = "/images/OfficialLogoBlue.png";
@@ -142,6 +151,53 @@ class Menu extends Component {
                 </header>
             );
         }
+
+        if (this.props.isOnboarding && this.props.currentUser) {
+            return (
+                <Toolbar id="menu" style={{marginTop: "10px"}}>
+                    <ToolbarGroup className="logoToolbarGroup">
+                        <img
+                            width={187.5}
+                            height={60}
+                            alt="Moonshot Logo"
+                            title="Moonshot Logo"
+                            className="moonshotMenuLogo"
+                            id="moonshotLogo"
+                            src={moonshotLogo}
+                        />
+                    </ToolbarGroup>
+                    <ToolbarGroup>
+
+
+                        <DropDownMenu value={this.state.value}
+                                      onChange={this.handleChange}
+                                      underlineStyle={styles.underlineStyle}
+                                      anchorOrigin={styles.anchorOrigin}
+                                      style={{fontSize: "20px", marginTop: "21px"}}
+                                      className={dropdownClass}
+                                      id="menuDropdown"
+                        >
+                            <MenuItem value={4} primaryText={this.props.currentUser.name}/>
+                            <Divider/>
+                            <MenuItem value={3} primaryText="Sign Out"/>
+                        </DropDownMenu>
+
+
+                        <IconMenu
+                            iconButtonElement={<IconButton><MoreHorizIcon/></IconButton>}
+                            anchorOrigin={{horizontal: 'right', vertical: 'top'}}
+                            targetOrigin={{horizontal: 'right', vertical: 'top'}}
+                            className="smallScreenMenu"
+                            iconStyle={{fill: "white"}}
+                        >
+                            <MenuItem primaryText="Sign out" onClick={() => this.signOut()}/>
+                        </IconMenu>
+                    </ToolbarGroup>
+                </Toolbar>
+            );
+        }
+
+        console.log('ya');
 
         return (
             <header style={{zIndex: "100"}}>
@@ -239,6 +295,7 @@ function mapDispatchToProps(dispatch) {
         signout,
         closeNotification,
         setHeaderBlue,
+        endOnboarding
     }, dispatch);
 }
 
@@ -247,7 +304,7 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
         isOnboarding: state.users.isOnboarding,
-        blueHeader: state.users.blueHeader,
+        blueHeader: state.users.blueHeader
     };
 }
 
