@@ -879,9 +879,11 @@ button.link {
     border-left: 200px solid #00c3ff;
     left: 50%;
 }
-.onboardingDividerRight, .onboardingDividerLeft {
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
+.onboardingDividerRight, .onboardingDividerLeft,
+.onboarding2DividerRight, .onboarding2DividerLeft,
+.onboarding3DividerRight, .onboarding3DividerLeft {
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
     height: 0px;
     width: 0px;
     position: absolute;
@@ -897,14 +899,6 @@ button.link {
     border-left: 200px solid #9727ff;
     left: 50%;
 }
-.onboarding2DividerRight, .onboarding2DividerLeft {
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
-    height: 0px;
-    width: 0px;
-    position: absolute;
-    bottom: 0;
-}
 .onboarding3DividerLeft {
     background: linear-gradient(to right, #3dffef, #3affd2);
     border-right: 200px solid #01f3c8;
@@ -914,14 +908,6 @@ button.link {
     background: linear-gradient(to right, #3dffef, #3affd2);
     border-left: 200px solid #01f3c8;
     left: 50%;
-}
-.onboarding3DividerRight, .onboarding3DividerLeft {
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
-    height: 0px;
-    width: 0px;
-    position: absolute;
-    bottom: 0;
 }
 
 .onboardingIcons {
