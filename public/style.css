@@ -2137,6 +2137,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
     .homePathwaysTitle { font-size: 45px; }
 
+    .profileSeparatorRect {
+        width: 200px;
+        padding-left: 45px;
+    }
+
     .aboutMeLi {
         width: 100%;
         text-align: center;
@@ -2631,6 +2636,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .onboardingIconLi {
         margin: 0px 10px;
+    }
+
+    .profileSeparatorRect {
+        width: 150px;
+        padding-left: 22px;
     }
 
     .font40pxUnder400 { font-size: 40px; }
