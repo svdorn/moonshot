@@ -1345,7 +1345,6 @@ app.post("/updateInterests", function(req, res) {
     if (interests && userId) {
         // When true returns the updated document
         Users.findById(userId, function(err, user) {
-            //console.log('found user: ', user);
             if (err) {
                 console.log(err);
             }

@@ -405,7 +405,7 @@ class Onboarding extends Component {
     }
 
     handleFinishButtonClick() {
-        this.saveInfo();
+        this.saveAllInfo();
         const markOnboardingComplete = true;
         this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
         browserHistory.push('/discover');
@@ -492,8 +492,6 @@ class Onboarding extends Component {
     handleEduDateChange(event, date, eduIdx) {
         let eduInfo = this.state.eduInfo.slice();
         eduInfo[eduIdx].endDate = date;
-
-        console.log("things");
 
         this.setState({
             ...this.state,
@@ -950,6 +948,12 @@ class Onboarding extends Component {
                 </div>
         }
 
+        let skipClass = "blueText";
+        if (this.state.tabValue === "goals") {
+            skipClass = "purpleText";
+        } else if (this.state.tabValue === "info") {
+            skipClass = "greenText";
+        }
 
         return (
             <div>
@@ -968,6 +972,10 @@ class Onboarding extends Component {
                         className="onboardingDot"
                         onClick={() => this.setTabAndSave("info")}
                     />
+                </div>
+
+                <div className={"font14px center " + skipClass} style={{marginBottom:"30px"}}>
+                    <i className="clickable" onClick={this.handleFinishButtonClick.bind(this)}>Skip</i>
                 </div>
             </div>
         );
