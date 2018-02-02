@@ -7,6 +7,7 @@ var usersSchema = mongoose.Schema({
     userType: String,
     profileUrl: String,
     password: String,
+    hasFinishedOnboarding: Boolean,
     verificationToken: String,
     emailVerificationToken: String,
     passwordToken: String,

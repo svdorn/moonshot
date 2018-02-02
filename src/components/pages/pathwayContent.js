@@ -23,6 +23,10 @@ class PathwayContent extends Component {
         }
     }
 
+    componentWillReceiveProps() {
+        console.log("cwrprops");
+    }
+
     componentDidMount() {
         // this.props.setHeaderBlue(true);
         const user = this.props.currentUser;
@@ -144,10 +148,6 @@ class PathwayContent extends Component {
                 overflow: "auto",
                 marginTop: '5px',
             },
-            tab: {
-                backgroundColor: "white",
-                color: '#B869FF',
-            },
             insideTab: {
                 marginTop: "10px",
                 marginLeft: "5%",
@@ -190,15 +190,17 @@ class PathwayContent extends Component {
 
                         <Drawer
                             docked={false}
-                            width={400}
                             open={this.state.drawerOpen}
                             onRequestChange={(drawerOpen) => this.setState({drawerOpen})}
+                            width={400}
                             className="under1000only"
+                            containerClassName="drawerWidth"
                         >
                             <PathwayStepList
                                 className="stepScrollerContainerInDrawer"
                                 steps={pathway.steps}
                                 pathwayId={pathway._id}
+                                currentSubStep={this.props.step}
                             />
                         </Drawer>
 
@@ -208,14 +210,16 @@ class PathwayContent extends Component {
                                 <PathwayStepList
                                     className="stepScrollerContainer"
                                     steps={pathway.steps}
-                                    pathwayId={pathway._id}/>
+                                    pathwayId={pathway._id}
+                                    currentSubStep={this.props.step}
+                                />
 
                                 <Paper className="questionsContactUs">
                                     <img
                                         src="/icons/SpeechBubble.png"
                                         style={{height: "50px", width: "50px", position: "absolute"}}
                                     />
-                                    <span style={{fontSize: "20px", marginLeft: "75px"}}>
+                                    <span style={{marginLeft: "75px"}} className="font20px font16pxUnder700 font font12pxUnder400">
                                         Questions?
                                     </span><br/>
                                     <p className="clickable blueText"
@@ -238,23 +242,23 @@ class PathwayContent extends Component {
 
                             <Paper className="overviewAndCommentBox">
                                 <Paper style={{width: "100%"}}>
-                                    <ul className="horizCenteredList darkPurpleText font20px font14pxUnder700 font10pxUnder400">
+                                    <ul className="horizCenteredList blueText font20px font14pxUnder700 font10pxUnder400">
                                         <li>
-                                            <div style={style.threeInfo}>
+                                            <div className="overviewAndCommentBoxInfo">
                                                 <i>Sponsor</i><br/>
                                                 <img src={pathway.sponsor.logo}
                                                      alt={pathway.sponsor.name}
-                                                     height={35}/>
+                                                     className="overviewAndCommentBoxImg"/>
                                             </div>
                                         </li>
                                         <li>
-                                            <div style={style.threeInfo}>
+                                            <div className="overviewAndCommentBoxInfo">
                                                 <i>Completion Time</i><br/>
                                                 {pathway.estimatedCompletionTime}
                                             </div>
                                         </li>
                                         <li>
-                                            <div style={style.threeInfo}>
+                                            <div className="overviewAndCommentBoxInfo">
                                                 <i>Complete By</i><br/>
                                                 {formattedDeadline}
                                             </div>
@@ -263,19 +267,19 @@ class PathwayContent extends Component {
                                 </Paper>
                                 <div style={{textAlign: "center"}}>
                                     <Tabs
-                                        inkBarStyle={{background: '#B869FF'}}
+                                        inkBarStyle={{background: '#00c3ff'}}
                                         tabItemContainerStyle={{width: '60%'}}
                                         className="overviewExercisesComments"
                                     >
-                                        <Tab label="Overview" style={style.tab}>
+                                        <Tab label="Overview" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
                                             <p className="font20px font14pxUnder700 font10pxUnder400 center"
                                                style={style.insideTab}>{pathway.overview}</p>
                                         </Tab>
-                                        <Tab label="Exercise Files" style={style.tab}>
+                                        <Tab label="Exercise Files" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
                                             <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
                                                 yet.</h1>
                                         </Tab>
-                                        <Tab label="Comments" style={style.tab}>
+                                        <Tab label="Comments" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
                                             <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
                                                 yet.</h1>
                                         </Tab>

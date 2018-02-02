@@ -4,7 +4,7 @@ html {
 }
 
 body {
-    font-family: 'Didact Gothic', sans-serif;
+    font-family: 'Questrial', sans-serif;
     min-width: 200px;
 }
 
@@ -508,8 +508,11 @@ button.link {
     transform: translate(-50%, -50%);
 }
 
+.transparentBorder {
+    padding: 2px;
+}
 .gradientBorderBlue {
-    background: linear-gradient(to bottom right, #5deaff, #3dabff);
+    background: linear-gradient(to right, #5deaff, #3dabff);
     padding: 2px;
 }
 .gradientBorderBlue > div {
@@ -611,7 +614,7 @@ button.link {
 }
 
 .gradientBorderPurple {
-    background: linear-gradient(to bottom right, #be6aff, #7f0eff);
+    background: linear-gradient(to right, #be6aff, #7f0eff);
     padding: 2px;
     display: inline-block;
 }
@@ -832,30 +835,30 @@ button.link {
     text-align: initial;
     padding: 5px 10px;
 }
-.onboardingDots { margin-bottom: 40px; }
+.onboardingDots { margin-bottom: 10px; }
 .onboardingDots > div {
-    width: 20px;
-    height: 20px;
+    width: 16px;
+    height: 16px;
     display: inline-block;
     border-radius: 10px;
     cursor: pointer;
 }
-.onboardingDots > div:first-child {
-    margin-right: 80px
+.onboardingDots > div {
+    margin-right: 60px
 }
 .onboardingDots > div:last-child {
-    margin-left: 80px
+    margin-right: 0px;
 }
 .onboardingDotsinterests > div {
-    background-color: var(--moonshotLightBlue);
+    background: linear-gradient(to right, #5deaff, #3dabff);
     opacity: .3;
 }
 .onboardingDotsgoals > div {
-    background-color: var(--moonshotPurple);
+    background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotDarkPurple));
     opacity: .3;
 }
 .onboardingDotsinfo > div {
-    background-color: var(--moonshotGreen);
+    background: linear-gradient(to right, var(--moonshotGreen), var(--moonshotGreenText));
     opacity: .3;
 }
 .onboardingDotsinterests > div:first-child,
@@ -879,9 +882,11 @@ button.link {
     border-left: 200px solid #00c3ff;
     left: 50%;
 }
-.onboardingDividerRight, .onboardingDividerLeft {
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
+.onboardingDividerRight, .onboardingDividerLeft,
+.onboarding2DividerRight, .onboarding2DividerLeft,
+.onboarding3DividerRight, .onboarding3DividerLeft {
+    border-top: 1px solid transparent;
+    border-bottom: 1px solid transparent;
     height: 0px;
     width: 0px;
     position: absolute;
@@ -897,14 +902,6 @@ button.link {
     border-left: 200px solid #9727ff;
     left: 50%;
 }
-.onboarding2DividerRight, .onboarding2DividerLeft {
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
-    height: 0px;
-    width: 0px;
-    position: absolute;
-    bottom: 0;
-}
 .onboarding3DividerLeft {
     background: linear-gradient(to right, #3dffef, #3affd2);
     border-right: 200px solid #01f3c8;
@@ -914,14 +911,6 @@ button.link {
     background: linear-gradient(to right, #3dffef, #3affd2);
     border-left: 200px solid #01f3c8;
     left: 50%;
-}
-.onboarding3DividerRight, .onboarding3DividerLeft {
-    border-top: 2px solid transparent;
-    border-bottom: 2px solid transparent;
-    height: 0px;
-    width: 0px;
-    position: absolute;
-    bottom: 0;
 }
 
 .onboardingIcons {
@@ -933,7 +922,8 @@ button.link {
     margin-top: 30px;
 }
 .onboardingIconLi {
-    margin-right: 90px;
+    margin: 0px 45px;
+    vertical-align: top;
 }
 .onboardingInterestsListContainer {
     margin: 30px auto 0;
@@ -978,7 +968,7 @@ button.link {
     padding: 2px 15px;
 }
 .onboardingPage1Text2Background{
-    background: linear-gradient(to right, #5deaff, #3dabff);
+    background: linear-gradient(to bottom right, #5deaff, #3dabff);
     padding: 2px;
     margin-right: 20px;
     margin-top: 20px;
@@ -990,7 +980,7 @@ button.link {
 .onboardingPage1Button{
     background: linear-gradient(to right, #5deaff, #3dabff);
     border: #3dabff;
-    padding: 7px;
+    padding: 3px 7px;
     margin-top: 20px;
 }
 .onboardingPage2Text {
@@ -1001,8 +991,11 @@ button.link {
 .onboardingPage2Button{
     background: linear-gradient(to right, #be6aff, #7f0eff);
     border: #9727ff;
-    padding: 7px;
+    padding: 3px 7px;
     margin-top: 30px;
+}
+.onboardingPage2Button:first-child {
+    padding: 3px 5px;
 }
 .onboardingPage2Text3 {
     color: #9727ff;
@@ -1011,7 +1004,7 @@ button.link {
     margin-top: 20px;
 }
 .onboardingPage2Text2Background{
-    background: linear-gradient(to right, #be6aff, #7f0eff);
+    background: linear-gradient(to bottom right, #be6aff, #7f0eff);
     padding: 2px;
     margin-top: 20px;
     display: inline-block;
@@ -1025,7 +1018,7 @@ button.link {
 .onboardingPage3Button{
     background: linear-gradient(to right, #3dffef, #3affd2);
     border: #01f3c8;
-    padding: 7px;
+    padding: 3px 7px;
     margin-top: 20px;
 }
 .onboardingPage3 {
@@ -1103,6 +1096,18 @@ button.link {
 .greenInput:-moz-placeholder { color: #B6B6B6; }
 .greenInput::-moz-placeholder { color: #B6B6B6; }
 .greenInput:-ms-input-placeholder { color: #B6B6B6; }
+.greenInputImportant {
+    border-top: 2px solid var(--moonshotGreenText) !important;
+    border-bottom: 2px solid var(--moonshotGreenText) !important;
+    border-left: 3px solid var(--moonshotGreenText) !important;
+    border-right: 3px solid var(--moonshotGreenText) !important;
+    font-size: 20px !important;
+    text-align: center !important;
+    height: 40px !important;
+    width: 350px !important;
+    color: black !important;
+    margin-bottom: 15px !important;
+}
 
 .horizListSpacer {
     height: 100%;
@@ -1172,9 +1177,45 @@ button.link {
 .overviewAndCommentBox {
     margin-top: 10px;
 }
+.overviewAndCommentBoxImg {
+    height: 35px;
+}
+.overviewAndCommentBoxTab {
+    background-color: white !important;
+    color: var(--moonshotLightBlue) !important;
+}
+.overviewAndCommentBoxInfo {
+    display: inline-block;
+    width: 200px;
+}
 
 .raisedButtonWhiteText > button > div > div > span {
     color: white !important;
+}
+.dp > div > div > input{
+    text-align: center;
+    height: 90% !important;
+}
+.dp > div {
+    height: inherit;
+    width: inherit !important;
+}
+.dp > div > div {
+    width: inherit !important;
+    line-height: inherit !important;
+    height: inherit !important;
+    display: inherit !important;
+    background-color: inherit !important;
+    font-family: inherit !important;
+    cursor: inherit !important;
+}
+.dp > div > div > div {
+    top: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.dp > div > div > div > hr {
+    border-bottom: 0px !important;
 }
 
 #aboutMeAreas {
@@ -1758,6 +1799,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 @media only screen and (min-width: 1001px) {
     .under1000only { display: none; }
+    .overviewAndCommentBox {
+        float: right;
+        margin-bottom: 10px;
+        margin-right: 10px;
+    }
 }
 
 @media only screen and (max-width: 1000px) {
@@ -1796,23 +1842,32 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .forBusiness > h2 > b {
         font-size: 25px;
     }
-
-    .videoContainer {
-        width: 90%;
-        margin-left: 5%;
-        min-width: 800px;
-        padding-top: 56.25%
-    }
     .drawerOpener {
         visibility: visible;
         position: relative;
         width: 150px;
         display: block !important;
-        margin: 10px auto;
+        margin: 20px auto 20px auto;
         left: 0;
     }
-    .overviewAndCommentBox, .pathwayContent {
-        width: 100%;
+    .pathwayContent {
+        display: block;
+        margin: auto;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        width: 95%;
+    }
+    .overviewAndCommentBox {
+        display: block;
+        width: 95%;
+        margin: auto;
+        margin-bottom: 20px
+    }
+    .videoContainer {
+        display: block;
+        width: 95%;
+        margin: auto;
+        padding-top: 56.25%
     }
 
     .font40pxUnder1000 { font-size: 40px; }
@@ -2039,7 +2094,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .font8pxUnder800 { font-size: 8px; }
     .font6pxUnder800 { font-size: 6px; }
 }
-
+@media only screen and (min-width: 751px) {
+    .dp > div > div {
+        font-size: 20px !important;
+    }
+}
 @media only screen and (max-width: 750px) {
     .greenInput {
         border-top: 1px solid var(--moonshotGreenText);
@@ -2052,6 +2111,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 218.75px;
         color: black;
         margin-bottom: 15px;
+    }
+    .dp > div > div{
+        font-size: 12px !important;
     }
     #onboardingBioTextarea {
         width: calc(400px + 8%);
@@ -2074,6 +2136,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 
     .homePathwaysTitle { font-size: 45px; }
+
+    .profileSeparatorRect {
+        width: 200px;
+        padding-left: 45px;
+    }
 
     .aboutMeLi {
         width: 100%;
@@ -2130,7 +2197,13 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 65px;
     }
     .onboardingIconLi {
-        margin-right: 70px;
+        margin: 0px 40px;
+    }
+    .overviewAndCommentBoxImg {
+        height: 25px;
+    }
+    .overviewAndCommentBoxInfo {
+        width: 150px;
     }
 
     .font40pxUnder700 { font-size: 40px; }
@@ -2195,6 +2268,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     #pathwayHatIcon { height: 38px; }
     .pathwayLandingQuoteRight {
         width: 400px;
+    }
+    .onboardingIconLi {
+        margin: 0px 30px;
     }
 
     .font40pxUnder600 { font-size: 40px; }
@@ -2479,7 +2555,17 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 15px;
     }
     .onboardingIconLi {
-        margin-right: 40px;
+        margin: 0px 25px;
+    }
+    .drawerWidth {
+        width: 250px !important;
+    }
+    .overviewAndCommentBoxInfo {
+        width: 100px;
+    }
+    .drawerContent {
+        max-width:240px;
+        word-wrap:break-word;
     }
 
     .font40pxUnder500 { font-size: 40px; }
@@ -2500,6 +2586,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .font10pxUnder500 { font-size: 10px; }
     .font8pxUnder500 { font-size: 8px; }
     .font6pxUnder500 { font-size: 6px; }
+
+    .font12pxUnder500Important { font-size: 12px !important; }
 }
 
 @media only screen and (max-width: 480px) {
@@ -2536,6 +2624,24 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 38px;
         margin: auto -140px auto;
     }
+    .overviewAndCommentBoxImg {
+        height: 20px;
+    }
+    .overviewAndCommentBoxInfo {
+        width: 90px;
+    }
+    .footerMoonshotLogo {
+        width: 180px;
+        height: 60px;
+    }
+    .onboardingIconLi {
+        margin: 0px 10px;
+    }
+
+    .profileSeparatorRect {
+        width: 150px;
+        padding-left: 22px;
+    }
 
     .font40pxUnder400 { font-size: 40px; }
     .font38pxUnder400 { font-size: 38px; }
@@ -2555,6 +2661,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .font10pxUnder400 { font-size: 10px; }
     .font8pxUnder400 { font-size: 8px; }
     .font6pxUnder400 { font-size: 6px; }
+
+    .font10pxUnder400Important { font-size: 10px !important; }
+
 }
 
 @media only screen and (max-width: 375px) {
@@ -2563,10 +2672,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .moonshotMenuLogo {
         margin-left: 0px;
-    }
-    .footerMoonshotLogo {
-        width: 240px;
-        height: 80px;
     }
 }
 

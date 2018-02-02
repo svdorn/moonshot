@@ -175,7 +175,7 @@ class PathwayStepList extends Component {
 
 
         return (
-            <Paper className={this.props.className} style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
+            <Paper className={"drawerContent" + this.props.className} style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
                 <div style={{maxWidth: 380, margin: 'auto'}}>
                     <Stepper
                       activeStep={stepIndex}
@@ -199,7 +199,6 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        currentSubStep: state.users.currentSubStep
     };
 }
 
