@@ -920,6 +920,7 @@ button.link {
 }
 .onboardingIconLi {
     margin-right: 90px;
+    vertical-align: top;
 }
 .onboardingInterestsListContainer {
     margin: 30px auto 0;
