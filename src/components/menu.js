@@ -95,39 +95,39 @@ class Menu extends Component {
     render() {
         let moonshotLogo = this.props.isOnboarding ? "/images/OfficialLogoBlue.png" : "/images/OfficialLogoWhite.png";
         let dropdownClass = this.props.isOnboarding ? "headerDropdownBlue wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
-        let menuItemClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem"
+        let menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem"
         if (this.props.blueHeader) {
             moonshotLogo = "/images/OfficialLogoBlue.png";
             dropdownClass = "headerDropdownBlue wideScreenMenuItem";
-            menuItemClass = "menuItem font20px borderBottomClickable noWrap blueText wideScreenMenuItem"
+            menuItemClass = "menuItem font18px borderBottomClickable noWrap blueText wideScreenMenuItem"
         }
         let discoverClass = menuItemClass;
         if (this.props.location.pathname === '/discover') {
-            discoverClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
+            discoverClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let homeClass = menuItemClass;
         if (this.props.location.pathname === '/') {
-            homeClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
+            homeClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let forBusClass = menuItemClass;
         if (this.props.location.pathname === '/forBusiness') {
-            forBusClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
+            forBusClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let loginClass = menuItemClass;
         if (this.props.location.pathname === '/login') {
-            loginClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
+            loginClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let myPathwaysClass = menuItemClass;
-        let hoverWidth = "52px";
+        let hoverWidth = "47px";
         if (this.props.location.pathname === '/myPathways') {
-            myPathwaysClass = "menuItem font20px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
+            myPathwaysClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         if (this.props.location.pathname === '/profile') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
         }
         if (this.props.location.pathname === '/settings') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-            hoverWidth = "68px";
+            hoverWidth = "62px";
         }
 
 
@@ -173,7 +173,7 @@ class Menu extends Component {
                                       onChange={this.handleChange}
                                       underlineStyle={styles.underlineStyle}
                                       anchorOrigin={styles.anchorOrigin}
-                                      style={{fontSize: "20px", marginTop: "21px"}}
+                                      style={{fontSize: "18px", marginTop: "21px"}}
                                       className={dropdownClass}
                                       id="menuDropdown"
                         >
@@ -220,7 +220,7 @@ class Menu extends Component {
                                           onChange={this.handleChange}
                                           underlineStyle={styles.underlineStyle}
                                           anchorOrigin={styles.anchorOrigin}
-                                          style={{fontSize: "20px", marginTop: "21px"}}
+                                          style={{fontSize: "18px", marginTop: "21px"}}
                                           className={dropdownClass}
                                           id="menuDropdown"
                             >
