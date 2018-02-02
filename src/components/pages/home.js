@@ -353,8 +353,8 @@ class Home extends Component {
                     <div className="topMarginOnSmallScreen" style={{textAlign: "center"}}>
                         <div className="center font40px font24pxUnder500 blueText homePathwaysTitle">Pathways</div>
                         <div className="homePathwaysDesc font20px font18pxUnder600">
-                            Moonshot courses are organized in pathways and
-                            sponsored<br/>by employers hiring for those skills.
+                            Pathways are a series of courses and assessments that are<br/>
+                            sponsored by employers hiring for those skills, so you can learn for free.
                         </div>
                         <div className="pathwayPrevListContainer">
                             <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">

@@ -1,10 +1,17 @@
 "use strict"
-import React, { Component}  from 'react';
-import { connect } from 'react-redux';
-import { updateInfo, updateGoals, updateInterests, startOnboarding, endOnboarding, closeNotification } from "../../actions/usersActions";
-import { DatePicker } from 'material-ui';
-import { bindActionCreators } from 'redux';
-import { browserHistory } from 'react-router';
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {
+    updateInfo,
+    updateGoals,
+    updateInterests,
+    startOnboarding,
+    endOnboarding,
+    closeNotification
+} from "../../actions/usersActions";
+import {DatePicker, RaisedButton} from 'material-ui';
+import {bindActionCreators} from 'redux';
+import {browserHistory} from 'react-router';
 
 class Onboarding extends Component {
     constructor(props) {
@@ -114,13 +121,12 @@ class Onboarding extends Component {
                     ];
 
 
-
                     // go over each type of interest (each of which is an object which contains a list of interests)
-                    interestTypes.forEach(function(interestsObj, listIndex) {
+                    interestTypes.forEach(function (interestsObj, listIndex) {
                         // for each type of interest, set the interests object to a list of interest objects
-                        interestObjects[interestsObj.name] = interestsObj.interests.map(function(interest) {
+                        interestObjects[interestsObj.name] = interestsObj.interests.map(function (interest) {
                             // if the user already has that interest, mark it as selected
-                            let alreadyHasInterest = userInterests.some(function(userInterest) {
+                            let alreadyHasInterest = userInterests.some(function (userInterest) {
                                 return userInterest == interest;
                             })
                             return {
@@ -130,7 +136,6 @@ class Onboarding extends Component {
                         });
                     })
                 }
-
 
 
                 // GOALS
@@ -151,8 +156,8 @@ class Onboarding extends Component {
 
                 let goalsObjects = [];
 
-                potentialGoals.forEach(function(goal, goalIndex) {
-                    let alreadyHasGoal = userGoals.some(function(userGoal) {
+                potentialGoals.forEach(function (goal, goalIndex) {
+                    let alreadyHasGoal = userGoals.some(function (userGoal) {
                         return userGoal == goal;
                     });
                     goalsObjects.push({
@@ -190,13 +195,13 @@ class Onboarding extends Component {
             willRelocateTo = info.willRelocateTo ? info.willRelocateTo : "";
             inSchool = info.inSchool ? info.inSchool : false;
             birthDate = info.birthDate ?
-                new Date(parseInt(info.birthDate.substring(0,4)),
-                    parseInt(info.birthDate.substring(5,7)) - 1,
-                    parseInt(info.birthDate.substring(8,10)))
+                new Date(parseInt(info.birthDate.substring(0, 4)),
+                    parseInt(info.birthDate.substring(5, 7)) - 1,
+                    parseInt(info.birthDate.substring(8, 10)))
                 : null;
             let links = info.links;
             if (links) {
-                links.forEach(function(link, linkIdx) {
+                links.forEach(function (link, linkIdx) {
                     if (link.displayString == "GitHub") {
                         gitHub = link.url;
                     } else if (link.displayString == "LinkedIn") {
@@ -209,13 +214,13 @@ class Onboarding extends Component {
 
             let eduArray = info.education;
             if (eduArray && eduArray.length > 0) {
-                eduInfo = eduArray.map(function(edu) {
+                eduInfo = eduArray.map(function (edu) {
                     console.log("hey");
                     let endDate = {};
                     if (edu.endDate) {
-                        endDate = new Date(parseInt(edu.endDate.substring(0,4)),
-                            parseInt(edu.endDate.substring(5,7)) - 1,
-                            parseInt(edu.endDate.substring(8,10)));
+                        endDate = new Date(parseInt(edu.endDate.substring(0, 4)),
+                            parseInt(edu.endDate.substring(5, 7)) - 1,
+                            parseInt(edu.endDate.substring(8, 10)));
                     }
                     return {
                         school: edu.school ? edu.school : "",
@@ -391,7 +396,7 @@ class Onboarding extends Component {
         this.saveInfo();
         this.props.endOnboarding();
         browserHistory.push('/discover');
-        window.scrollTo(0,0);
+        window.scrollTo(0, 0);
     }
 
     saveInfo() {
@@ -410,7 +415,7 @@ class Onboarding extends Component {
         ];
         let education = state.eduInfo;
 
-        education = education.filter(function(edu) {
+        education = education.filter(function (edu) {
             return (edu.school != "" || edu.endDate != {} || edu.majors != "" || edu.minors != "");
         });
 
@@ -446,7 +451,7 @@ class Onboarding extends Component {
         this.setState({
             ...this.state,
             eduInfo
-        }, function() {
+        }, function () {
         });
     }
 
@@ -548,8 +553,9 @@ class Onboarding extends Component {
                                 </div>
                             </div>
                             :
-                            <div className="gradientBorderBlue center clickableNoUnderline noselect onboardingPage1Margin"
-                                 onClick={() => self.handleInterestClick(interest)}>
+                            <div
+                                className="gradientBorderBlue center clickableNoUnderline noselect onboardingPage1Margin"
+                                onClick={() => self.handleInterestClick(interest)}>
                                 <div className="onboardingPage1Text3 font14px font12pxUnder500">
                                     {interest.title}
                                 </div>
@@ -570,13 +576,15 @@ class Onboarding extends Component {
                 return (
                     <li key={key} className="noselect">
                         {goal.selected ?
-                            <div className="clickableNoUnderline onboardingPage2Text2Background center" onClick={() => self.handleGoalClick(goal)}>
+                            <div className="clickableNoUnderline onboardingPage2Text2Background center"
+                                 onClick={() => self.handleGoalClick(goal)}>
                                 <div className="font14px font12pxUnder500 onboardingPage1Text2">
                                     {goal.title}
                                 </div>
                             </div>
                             :
-                            <div className="clickableNoUnderline gradientBorderPurple center onboardingPage2Margin" onClick={() => self.handleGoalClick(goal)}>
+                            <div className="clickableNoUnderline gradientBorderPurple center onboardingPage2Margin"
+                                 onClick={() => self.handleGoalClick(goal)}>
                                 <div className="onboardingPage2Text3 font14px font12pxUnder500">
                                     {goal.title}
                                 </div>
@@ -593,7 +601,7 @@ class Onboarding extends Component {
         let eduInfo = this.state.eduInfo;
         let eduIdx = -1;
         let self = this;
-        let educationUls = eduInfo.map(function(edu) {
+        let educationUls = eduInfo.map(function (edu) {
             eduIdx++;
             return (
                 <div key={eduIdx + "div"}>
@@ -610,22 +618,20 @@ class Onboarding extends Component {
                                 onChange={(e) => self.handleEduInputChange(e, "school")}
                             /> <br/>
                             <span>Graduation Date</span><br/>
+                            <div className="dp greenInput">
+                                <DatePicker
+                                    openToYearSelection={true}
+                                    eduidx={eduIdx}
+                                    key={eduIdx + "date"}
+                                    hintText="05/12/2017"
+                                    value={self.state.eduInfo[eduIdx].endDate}
+                                    onChange={(e, date) => self.handleEduDateChange(e, date, eduIdx)}
+                                />
+                            </div>
 
-
-                            <DatePicker
-                                openToYearSelection={true}
-                                eduidx={eduIdx}
-                                key={eduIdx + "date"}
-                                hintText="05/12/2017"
-                                value={self.state.eduInfo[eduIdx].endDate}
-                                onChange={(e, date) => self.handleEduDateChange(e, date, eduIdx)}
-                            />
-
-
-
-                            <br />
+                            <br/>
                         </li>
-                        <li className="inputSeparator" />
+                        <li className="inputSeparator"/>
                         <li className="onboardingRightInput" key={eduIdx + "right"}>
                             <span>{"Major(s)"}</span><br/>
                             <input
@@ -664,14 +670,16 @@ class Onboarding extends Component {
         if (!tabValue || tabValue == "interests") {
             onBoardingHtml =
                 <div style={{marginBottom: '20px', minWidth: '100%'}}>
-                    <div className="onboardingPage1Text font40px font24pxUnder500 center" style={style.title.topTitle}>Select Your
+                    <div className="onboardingPage1Text font40px font24pxUnder500 center" style={style.title.topTitle}>
+                        Select Your
                         Interests
                     </div>
                     <div style={style.title.divider}>
                         <div className="onboardingDividerLeft" style={{bottom: "0"}}/>
                         <div className="onboardingDividerRight" style={{bottom: "0"}}/>
                     </div>
-                    <div className="font14px font12pxUnder500 center" style={style.title.text}>What skills do you want to learn or
+                    <div className="font14px font12pxUnder500 center" style={style.title.text}>What skills do you want
+                        to learn or
                         improve?
                     </div>
                     <div>
@@ -717,14 +725,16 @@ class Onboarding extends Component {
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Computer.png" className="onboardingIcons"/>
-                                            <div className="font16px font12pxUnder500 center"><b>Software<br/> Development</b>
+                                            <div className="font16px font12pxUnder500 center"><b>Software<br/>
+                                                Development</b>
                                             </div>
                                         </div>
                                     </div>
                                     :
                                     <div>
                                         <img src="/icons/Computer.png" className="onboardingIcons"/>
-                                        <div className="font16px font12pxUnder500 center"><b>Software<br/> Development</b></div>
+                                        <div className="font16px font12pxUnder500 center"><b>Software<br/>
+                                            Development</b></div>
                                     </div>
                                 }
                             </li>
@@ -736,14 +746,16 @@ class Onboarding extends Component {
                                     <div className="gradientBorderBlue center">
                                         <div style={{padding: '5px'}}>
                                             <img src="/icons/Creation.png" className="onboardingIcons"/>
-                                            <div className="font16px font12pxUnder500 center"><b>Creation and<br/> Marketing</b>
+                                            <div className="font16px font12pxUnder500 center"><b>Creation and<br/>
+                                                Marketing</b>
                                             </div>
                                         </div>
                                     </div>
                                     :
                                     <div>
                                         <img src="/icons/Creation.png" className="onboardingIcons"/>
-                                        <div className="font16px font12pxUnder500 center"><b>Creation and<br/> Marketing</b></div>
+                                        <div className="font16px font12pxUnder500 center"><b>Creation and<br/> Marketing</b>
+                                        </div>
                                     </div>
                                 }
                             </li>
@@ -814,7 +826,8 @@ class Onboarding extends Component {
         else if (tabValue == "info") {
             onBoardingHtml =
                 <div style={{marginBottom: '20px'}}>
-                    <div className="onboardingPage3TextTitle font40px font24pxUnder500 center" style={style.title.topTitle}>
+                    <div className="onboardingPage3TextTitle font40px font24pxUnder500 center"
+                         style={style.title.topTitle}>
                         Start Building Your Profile
                     </div>
                     <div style={style.title.divider}>
@@ -826,7 +839,8 @@ class Onboarding extends Component {
                     </div>
                     <div className="center">
                         <img src="/icons/Portfolio.png" className="onboardingIcons" style={style.icons}/>
-                        <div className="onboardingPage3Text font20px" style={{display: 'inline-block'}}><b>Personal</b></div>
+                        <div className="onboardingPage3Text font20px" style={{display: 'inline-block'}}><b>Personal</b>
+                        </div>
                     </div>
 
                     <div className="horizCenteredList">
@@ -863,7 +877,7 @@ class Onboarding extends Component {
                                 onChange={(e) => this.handleInfoInputChange(e, "desiredJobs")}
                             /> <br/>
                         </li>
-                        <li className="inputSeparator" />
+                        <li className="inputSeparator"/>
                         <li className="onboardingRightInput">
                             <span>Title</span><br/>
                             <input
@@ -911,7 +925,8 @@ class Onboarding extends Component {
 
                     <div className="center">
                         <img src="/icons/GraduationHat.png" className="onboardingIcons" style={style.icons}/>
-                        <div className="onboardingPage3Text font20px" style={{display: 'inline-block'}}><b>Education</b></div>
+                        <div className="onboardingPage3Text font20px" style={{display: 'inline-block'}}><b>Education</b>
+                        </div>
                     </div>
 
                     {educationUls}
@@ -919,10 +934,12 @@ class Onboarding extends Component {
                     <div className="center onboardingPage3 font18px font14pxUnder700 font12pxUnder400">
                         <button className="greenButton" onClick={this.addEducationArea.bind(this)}>
                             Add another school
-                        </button><br/>
-                        <div className="checkbox mediumCheckbox greenCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                        </button>
+                        <br/>
+                        <div className="checkbox mediumCheckbox greenCheckbox"
+                             onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
-                                className={"checkMark"  + this.state.inSchool}
+                                className={"checkMark" + this.state.inSchool}
                                 src="/icons/CheckMarkGreen.png"
                             />
                         </div>
@@ -939,7 +956,6 @@ class Onboarding extends Component {
                     </div>
                 </div>
         }
-
 
 
         return (

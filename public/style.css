@@ -1103,6 +1103,18 @@ button.link {
 .greenInput:-moz-placeholder { color: #B6B6B6; }
 .greenInput::-moz-placeholder { color: #B6B6B6; }
 .greenInput:-ms-input-placeholder { color: #B6B6B6; }
+.greenInputImportant {
+    border-top: 2px solid var(--moonshotGreenText) !important;
+    border-bottom: 2px solid var(--moonshotGreenText) !important;
+    border-left: 3px solid var(--moonshotGreenText) !important;
+    border-right: 3px solid var(--moonshotGreenText) !important;
+    font-size: 20px !important;
+    text-align: center !important;
+    height: 40px !important;
+    width: 350px !important;
+    color: black !important;
+    margin-bottom: 15px !important;
+}
 
 .horizListSpacer {
     height: 100%;
@@ -1186,6 +1198,26 @@ button.link {
 
 .raisedButtonWhiteText > button > div > div > span {
     color: white !important;
+}
+.dp > div > div > input{
+    text-align: center;
+}
+.dp > div {
+    height: inherit;
+    width: inherit !important;
+}
+.dp > div > div {
+    width: inherit !important;
+    line-height: inherit !important;
+    height: inherit !important;
+    display: inherit !important;
+    position: inherit !important;
+    background-color: inherit !important;
+    font-family: inherit !important;
+    cursor: inherit !important;
+}
+.dp > div > div > div {
+    display: none;
 }
 
 #aboutMeAreas {
@@ -2064,7 +2096,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .font8pxUnder800 { font-size: 8px; }
     .font6pxUnder800 { font-size: 6px; }
 }
-
+@media only screen and (min-width: 751px) {
+    .dp > div > div {
+        font-size: 20px !important;
+    }
+}
 @media only screen and (max-width: 750px) {
     .greenInput {
         border-top: 1px solid var(--moonshotGreenText);
@@ -2077,6 +2113,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 218.75px;
         color: black;
         margin-bottom: 15px;
+    }
+    .dp > div > div{
+        font-size: 12px !important;
     }
     #onboardingBioTextarea {
         width: calc(400px + 8%);
