@@ -673,7 +673,7 @@ class Onboarding extends Component {
         let tabValue = this.state.tabValue;
 
         if (!tabValue || tabValue == "interests") {
-            const interestTypes = [
+            const interestTypes1 = [
                 {interestArea: this.state.designAndDevInterests,
                  pictureSrc: "/icons/Cube.png",
                  iconNumber: 1,
@@ -685,7 +685,10 @@ class Onboarding extends Component {
                 {interestArea: this.state.softwareDevInterests,
                  pictureSrc: "/icons/Computer.png",
                  iconNumber: 3,
-                 title: <b>Software<br/>Development</b> },
+                 title: <b>Software<br/>Development</b> }
+            ]
+
+            const interestTypes2 = [
                 {interestArea: this.state.creationAndMarketingInterests,
                  pictureSrc: "/icons/Creation.png",
                  iconNumber: 4,
@@ -696,23 +699,28 @@ class Onboarding extends Component {
                  title: <b>Business</b> }
             ]
 
+
             let self = this;
-            const iconLis = interestTypes.map(function(interest) {
-                return (
-                    <li className="clickableNoUnderline onboardingIconLi"
-                        key={"onboardingIcon" + interest.iconNumber}
-                        onClick={() => self.handleIconClick(interest.iconNumber)}>
-                        <div className={self.state.currInterestArea === interest.interestArea ? "gradientBorderBlue center" : "transparentBorder center"}>
-                            <div style={{padding: '5px'}}>
-                                <img src={interest.pictureSrc} className="onboardingIcons"/>
-                                <div className="font16px font12pxUnder500 center">
-                                    {interest.title}
+            let makeLis = function(interestArrays) {
+                return interestArrays.map(function(interest) {
+                    return (
+                        <li className="clickableNoUnderline onboardingIconLi"
+                            key={"onboardingIcon" + interest.iconNumber}
+                            onClick={() => self.handleIconClick(interest.iconNumber)}>
+                            <div className={self.state.currInterestArea === interest.interestArea ? "gradientBorderBlue center" : "transparentBorder center"}>
+                                <div style={{padding: '5px'}}>
+                                    <img src={interest.pictureSrc} className="onboardingIcons"/>
+                                    <div className="font16px font12pxUnder500 center">
+                                        {interest.title}
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </li>
-                );
-            });
+                        </li>
+                    );
+                });
+            }
+            const iconLis1 = makeLis(interestTypes1);
+            const iconLis2 = makeLis(interestTypes2);
 
             onBoardingHtml =
                 <div style={{marginBottom: '20px', minWidth: '100%', textAlign: 'center'}}>
@@ -730,7 +738,11 @@ class Onboarding extends Component {
                     </div>
                     <div>
                         <ul className="horizCenteredList onboardingListContainer">
-                            {iconLis}
+                            {iconLis1}
+                        </ul>
+                        <br/>
+                        <ul className="horizCenteredList onboardingListContainer" style={{marginTop:"0px"}}>
+                            {iconLis2}
                         </ul>
                     </div>
                     <div className="center">
