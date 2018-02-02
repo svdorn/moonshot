@@ -353,9 +353,6 @@ export function endOnboarding(user, markOnboardingComplete){
     return function(dispatch) {
         if (markOnboardingComplete) {
             axios.post("endOnboarding", {userId: user._id, verificationToken: user.verificationToken})
-            .then(function(updatedUser) {
-                dispatch({type:"UPDATE_USER", payload: response.data});
-            })
             .catch(function(err) {
                 // onboarding setting not able to be turned off for some reason
             })
