@@ -508,6 +508,9 @@ button.link {
     transform: translate(-50%, -50%);
 }
 
+.transparentBorder {
+    padding: 2px;
+}
 .gradientBorderBlue {
     background: linear-gradient(to bottom right, #5deaff, #3dabff);
     padding: 2px;
@@ -919,7 +922,7 @@ button.link {
     margin-top: 30px;
 }
 .onboardingIconLi {
-    margin-right: 90px;
+    margin: 0px 45px;
     vertical-align: top;
 }
 .onboardingInterestsListContainer {
@@ -2186,7 +2189,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 65px;
     }
     .onboardingIconLi {
-        margin-right: 70px;
+        margin: 0px 40px;
     }
     .overviewAndCommentBoxImg {
         height: 25px;
@@ -2257,6 +2260,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     #pathwayHatIcon { height: 38px; }
     .pathwayLandingQuoteRight {
         width: 400px;
+    }
+    .onboardingIconLi {
+        margin: 0px 30px;
     }
 
     .font40pxUnder600 { font-size: 40px; }
@@ -2541,7 +2547,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         height: 15px;
     }
     .onboardingIconLi {
-        margin-right: 40px;
+        margin: 0px 25px;
     }
     .drawerWidth {
         width: 250px !important;
@@ -2619,6 +2625,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .footerMoonshotLogo {
         width: 180px;
         height: 60px;
+    }
+    .onboardingIconLi {
+        margin: 0px 12px;
     }
 
     .font40pxUnder400 { font-size: 40px; }
