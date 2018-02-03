@@ -53,7 +53,7 @@ const routes = (
         <Route path="discover" component={Discover} />
         <Route path="contactUs" component={ContactUs} />
         <Route path="myPathways" component={AuthenticatedComponent} page={<MyPathways/>} />
-        <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding/>}/>
+        <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding/>} userType="user" />
         <Route path="pathway" component={Pathway} />
         <Route path="pathwayContent" component={AuthenticatedComponent} page={<PathwayContent/>} />
         <Route path="email" component={Email}/>

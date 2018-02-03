@@ -1670,7 +1670,6 @@ app.post('/businessUser', function (req, res) {
 
                             // add the user to the company
                             const companyQuery = {_id: currentUserFromDB.company.companyId};
-                            console.log("companyId is: ", currentUserFromDB.company.companyId);
                             Businesses.findOne(companyQuery, function(err5, company) {
                                 if (err5) {
                                     console.log(err5);
