@@ -1207,9 +1207,6 @@ button.link {
     line-height: inherit !important;
     height: inherit !important;
     display: inherit !important;
-    background-color: inherit !important;
-    font-family: inherit !important;
-    cursor: inherit !important;
 }
 .dp > div > div > div {
     top: 3px;
@@ -1218,6 +1215,10 @@ button.link {
 }
 .dp > div > div > div > hr {
     border-bottom: 0px !important;
+}
+
+.clickableGrandChildrenInputImportant > div > input{
+    cursor: pointer !important;
 }
 
 #aboutMeAreas {

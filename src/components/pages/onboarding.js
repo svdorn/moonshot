@@ -649,6 +649,7 @@ class Onboarding extends Component {
                                     hintText="05/12/2017"
                                     value={self.state.eduInfo[eduIdx].endDate}
                                     onChange={(e, date) => self.handleEduDateChange(e, date, index)}
+                                    className="clickableGrandChildrenInputImportant"
                                 />
                             </div>
 
@@ -843,6 +844,7 @@ class Onboarding extends Component {
                                     hintText="11/19/1996"
                                     value={self.state.birthDate}
                                     onChange={(e, date) => self.handleBirthDateChange(e, date)}
+                                    className="clickableGrandChildrenInputImportant"
                                 />
                             </div>
                             <br/>
