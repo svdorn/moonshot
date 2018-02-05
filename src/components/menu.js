@@ -76,6 +76,10 @@ class Menu extends Component {
     }
 
     signOut() {
+        if (this.props.location.pathname === '/onboarding') {
+            const markOnboardingComplete = false;
+            this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
+        }
         this.props.signout();
         this.goTo('/');
         this.setState({value: 1});
@@ -93,6 +97,7 @@ class Menu extends Component {
     }
 
     render() {
+        let iconMenuColor = this.props.isOnboarding ? "#00c3ff" : "white";
         let moonshotLogo = this.props.isOnboarding ? "/images/OfficialLogoBlue.png" : "/images/OfficialLogoWhite.png";
         let dropdownClass = this.props.isOnboarding ? "headerDropdownBlue wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
         let menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem"
@@ -167,8 +172,6 @@ class Menu extends Component {
                         />
                     </ToolbarGroup>
                     <ToolbarGroup>
-
-
                         <DropDownMenu value={this.state.value}
                                       onChange={this.handleChange}
                                       underlineStyle={styles.underlineStyle}
@@ -188,8 +191,10 @@ class Menu extends Component {
                             anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                             targetOrigin={{horizontal: 'right', vertical: 'top'}}
                             className="smallScreenMenu"
-                            iconStyle={{fill: "white"}}
+                            iconStyle={{fill: iconMenuColor}}
                         >
+                            <MenuItem style={{color: "#00c3ff"}} primaryText={this.props.currentUser.name}/>
+                            <Divider/>
                             <MenuItem primaryText="Sign out" onClick={() => this.signOut()}/>
                         </IconMenu>
                     </ToolbarGroup>
