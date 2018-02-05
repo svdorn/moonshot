@@ -34,13 +34,16 @@ class PathwayPreview extends Component {
             <div className="pathwayPreview" style={{position:"relative"}}>
                 {this.props.comingSoon ?
                     <div className="comingSoonPathwayPreview">
-                        <div className="comingSoonBanner">
+                        <div/> {/* remove this when coming soon banner added back in */}
+
+                        {/*<div className="comingSoonBanner">
                             <div>
                                 <div>
                                     Coming Soon
                                 </div>
                             </div>
-                        </div>
+                        </div>*/}
+
                         <div className="reserveYourSpotOnHover">
                             <div className="font36px whiteText">
                                 <b>Reserve Your Spot Now</b>
