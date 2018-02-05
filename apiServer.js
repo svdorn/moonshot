@@ -1035,7 +1035,7 @@ app.put('/user/changepassword/:_id', function (req, res) {
 
 //----->> GET TOP PATHWAYS <<------
 app.get('/topPathways', function (req, res) {
-    const numPathways = parseInt(sanitize(req.query.numPathways));
+    const numPathways = parseInt(sanitize(req.query.numPathways), 10);
 
     // gets the most popular pathways, the number of pathways is numPathways
     Pathways.find()
@@ -1214,7 +1214,7 @@ app.get('/search', function (req, res) {
         query["name"] = termRegex;
     }
 
-    let limit = parseInt(sanitize(req.query.limit));
+    let limit = parseInt(sanitize(req.query.limit), 10);
     if (limit === NaN) {
         limit = MAX_PATHWAYS_TO_RETURN;
     }

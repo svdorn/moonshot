@@ -195,9 +195,9 @@ class Onboarding extends Component {
             willRelocateTo = info.willRelocateTo ? info.willRelocateTo : "";
             inSchool = info.inSchool ? info.inSchool : false;
             birthDate = info.birthDate ?
-                new Date(parseInt(info.birthDate.substring(0, 4)),
-                    parseInt(info.birthDate.substring(5, 7)) - 1,
-                    parseInt(info.birthDate.substring(8, 10)))
+                new Date(parseInt(info.birthDate.substring(0, 4), 10),
+                    parseInt(info.birthDate.substring(5, 7), 10) - 1,
+                    parseInt(info.birthDate.substring(8, 10), 10))
                 : null;
             let links = info.links;
             if (links) {
@@ -217,9 +217,9 @@ class Onboarding extends Component {
                 eduInfo = eduArray.map(function (edu) {
                     let endDate = {};
                     if (edu.endDate) {
-                        endDate = new Date(parseInt(edu.endDate.substring(0, 4)),
-                            parseInt(edu.endDate.substring(5, 7)) - 1,
-                            parseInt(edu.endDate.substring(8, 10)));
+                        endDate = new Date(parseInt(edu.endDate.substring(0, 4), 10),
+                            parseInt(edu.endDate.substring(5, 7), 10) - 1,
+                            parseInt(edu.endDate.substring(8, 10), 10));
                     }
                     return {
                         school: edu.school ? edu.school : "",
@@ -456,7 +456,7 @@ class Onboarding extends Component {
     }
 
     removeEducationArea(e) {
-        const eduIdx = parseInt(e.target.attributes.eduidx.value);
+        const eduIdx = parseInt(e.target.attributes.eduidx.value, 10);
         const oldEduInfo = this.state.eduInfo;
 
         let eduInfo = oldEduInfo.slice(0, eduIdx).concat(oldEduInfo.slice(eduIdx + 1));
@@ -479,7 +479,7 @@ class Onboarding extends Component {
     }
 
     handleEduInputChange(e, field) {
-        const eduIdx = parseInt(e.target.attributes.eduidx.value);
+        const eduIdx = parseInt(e.target.attributes.eduidx.value, 10);
         let eduInfo = this.state.eduInfo.slice();
         eduInfo[eduIdx][field] = e.target.value;
 
