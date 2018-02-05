@@ -935,7 +935,7 @@ class Onboarding extends Component {
                         <div className="checkbox mediumCheckbox greenCheckbox"
                              onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
-                                className={"checkMark" + this.state.inSchool}
+                                className={"checkMark" + this.state.inSchool.toString()}
                                 src="/icons/CheckMarkGreen.png"
                             />
                         </div>

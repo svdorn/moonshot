@@ -1035,6 +1035,7 @@ button.link {
     display: inline-block;
     cursor: pointer;
     vertical-align: middle;
+    position: relative;
 }
 .smallCheckbox {
     height: 12px;
@@ -1060,9 +1061,9 @@ button.link {
     bottom: 2px;
 }
 .smallCheckbox > img {
-    height: 10px;
-    width: 10px;
-    margin-top: -19px;
+    height: 11px;
+    width: 11px;
+    margin-top: -24px;
     margin-left: 1px;
 }
 .checkbox > .checkMarkfalse { visibility: hidden; }
