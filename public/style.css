@@ -604,6 +604,7 @@ button.link {
 .bigButton {
     font-size: 25px;
     line-height: 120%;
+    cursor: pointer;
 }
 .bigButton > div { padding: 4px 15px 5px; }
 .paperBox {
