@@ -157,6 +157,7 @@ form > h1 {
 .blueWhiteButton {
     background: rgba(255,255,255,.2);
     border: 2px solid white;
+    color: white;
 }
 .blueWhiteButton:hover { background: linear-gradient(to top right, #3dffef, #3de1ff); }
 .darkBlueButton {
