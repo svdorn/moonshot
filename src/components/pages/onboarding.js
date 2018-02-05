@@ -170,6 +170,18 @@ class Onboarding extends Component {
             }
         }
 
+        let makeDateObjectFromDateString = function(dateString) {
+            const BASE10 = 10;
+            if (dateString && dateString != null && dateString != "" && dateString.length > 10) {
+                return new Date(parseInt(dateString.substring(0, 4), BASE10),
+                                parseInt(dateString.substring(5, 7), BASE10) - 1,
+                                parseInt(dateString.substring(8, 10), BASE10));
+            } else {
+                return null;
+            }
+        }
+
+
 
         // INFO
         let location = "";
@@ -194,11 +206,7 @@ class Onboarding extends Component {
             bio = info.bio ? info.bio : "";
             willRelocateTo = info.willRelocateTo ? info.willRelocateTo : "";
             inSchool = info.inSchool ? info.inSchool : false;
-            birthDate = info.birthDate ?
-                new Date(parseInt(info.birthDate.substring(0, 4), 10),
-                    parseInt(info.birthDate.substring(5, 7), 10) - 1,
-                    parseInt(info.birthDate.substring(8, 10), 10))
-                : null;
+            birthDate = makeDateObjectFromDateString(info.birthDate);
             let links = info.links;
             if (links) {
                 links.forEach(function (link, linkIdx) {
@@ -217,9 +225,7 @@ class Onboarding extends Component {
                 eduInfo = eduArray.map(function (edu) {
                     let endDate = {};
                     if (edu.endDate) {
-                        endDate = new Date(parseInt(edu.endDate.substring(0, 4), 10),
-                            parseInt(edu.endDate.substring(5, 7), 10) - 1,
-                            parseInt(edu.endDate.substring(8, 10), 10));
+                        endDate = makeDateObjectFromDateString(edu.endDate);
                     }
                     return {
                         school: edu.school ? edu.school : "",
@@ -248,6 +254,7 @@ class Onboarding extends Component {
             linkedIn, personal, willRelocateTo, eduInfo, inSchool
         }
     }
+
 
     componentDidMount() {
         this.props.startOnboarding();
