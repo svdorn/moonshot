@@ -101,6 +101,7 @@ footer {
     background-color: rgba(255,255,255,.4);
     color: var(--moonshotLightBlue);
     margin: 10px auto;
+    cursor: pointer;
 }
 .formContainer {
     text-align: center;
@@ -2261,9 +2262,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
     .formSubmitButton {
         padding: 0px 25px 1px;
-        border: 2px solid var(--moonshotLightBlue);
-        background-color: rgba(255,255,255,.4);
-        color: var(--moonshotLightBlue);
     }
     .pathwayDescriptionAndSalaryText {
         font-size: 15px;

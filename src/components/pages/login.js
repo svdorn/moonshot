@@ -194,8 +194,10 @@ class Login extends Component {
                         >
                             Sign In
                         </button>
-                        <div className="clickable blueText" onClick={() => this.goTo('/signup')}>Create Account</div>
-                        <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
+                        <br/>
+                        <div className="clickable blueText" onClick={() => this.goTo('/signup')} style={{display:"inline-block"}}>Create Account</div>
+                        <br/>
+                        <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')} style={{display:"inline-block"}}>Forgot Password?</div>
                     </form>
                 </div>
 
