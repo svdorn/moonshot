@@ -162,7 +162,7 @@ class Login extends Component {
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1 style={{marginTop:"15px"}}>Sign in</h1>
+                        <h1 style={{marginTop:"15px"}}>Sign In</h1>
                         <div className="inputContainer">
                             <div className="fieldWhiteSpace"/>
                             <Field
@@ -194,7 +194,7 @@ class Login extends Component {
                         >
                             Sign In
                         </button>
-                        <div className="clickable blueText" onClick={() => this.goTo('/signup')}>Create account</div>
+                        <div className="clickable blueText" onClick={() => this.goTo('/signup')}>Create Account</div>
                         <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
                     </form>
                 </div>

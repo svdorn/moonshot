@@ -267,7 +267,7 @@ class Menu extends Component {
                             <p className={discoverClass} onClick={() => this.goTo('/discover')}>Discover</p>
                             <p className={forBusClass} onClick={() => this.goTo('/forBusiness')}>For Business</p>
                             <div className="menuDivider loggedOut wideScreenMenuItem"/>
-                            <p className={loginClass} onClick={() => this.goTo('/login')}>Sign in</p>
+                            <p className={loginClass} onClick={() => this.goTo('/login')}>Sign In</p>
 
                             <IconMenu
                                 iconButtonElement={<IconButton><MoreHorizIcon/></IconButton>}
