@@ -96,7 +96,7 @@ class HomepageTriangles extends Component {
         })
 
         return (
-            <div className="jsxWrapper" style={{position:"relative", width:"100%", zIndex:zIndex, pointerEvents:"none"}}>
+            <div className={"jsxWrapper " + this.props.className} style={{position:"relative", width:"100%", zIndex:zIndex, pointerEvents:"none"}}>
                 <div style={{position:"absolute", width:"100%", pointerEvents:"none"}}>
                     <div className="fullHeight" style={{position:"relative", pointerEvents:"none"}}>
                         <div className="above800fade">

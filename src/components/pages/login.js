@@ -159,8 +159,8 @@ class Login extends Component {
     render() {
         return (
             <div className="fullHeight greenToBlue formContainer">
-                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
-                <div className="form lightWhiteForm">
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightWhiteForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1 style={{marginTop:"15px"}}>Sign In</h1>
                         <div className="inputContainer">
