@@ -275,7 +275,7 @@ class ForBusiness extends Component {
                             Data-driven hiring.<br/>
                             Skills training and assessments<br/>
                             curated to your needs.<br/>
-                            <button className="outlineButton font30px font20pxUnder500 darkBlueButton"
+                            <button className="outlineButton whiteText font30px font20pxUnder500 darkBlueButton"
                                     onClick={() => this.scrollDown()}>
                                 {"Let's Begin"}
                             </button><br/>

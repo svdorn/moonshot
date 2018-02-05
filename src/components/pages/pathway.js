@@ -237,7 +237,7 @@ class Pathway extends Component {
 
                             <div className="infoBox whiteText font40px font24pxUnder500" style={{zIndex: "20"}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
-                                <button className="outlineButton font30px font20pxUnder500 purpleGradientButton"
+                                <button className="outlineButton whiteText font30px font20pxUnder500 purpleGradientButton"
                                         style={{backgroundColor: "#9B6BFB", border: "2px solid white"}}
                                         onClick={this.handleClick.bind(this)}>
                                     {"Sign Up"}
