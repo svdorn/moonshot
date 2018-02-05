@@ -106,7 +106,7 @@ app.get("/keepMeLoggedIn", function(req, res) {
 app.get('/userSession', function (req, res) {
     if (typeof req.session.userId === 'string') {
         const userId = sanitize(req.session.userId);
-        getAnyUserByQuery({_id: userId}, function (user) {
+        getUserByQuery({_id: userId}, function (err, user) {
             // if no user found, the user was probably deleted. remove the
             // user from the session and don't log in
             if (!user || user == null) {
@@ -926,31 +926,6 @@ function getUserByQuery(query, callback) {
     });
 }
 
-function getAnyUserByQuery(query, callback) {
-    Users.findOne(query, function (err, foundUser) {
-        if (foundUser && foundUser != null) {
-            callback(removePassword(foundUser));
-            return;
-        } else {
-            if (err) {
-                console.log(err);
-            }
-
-            BusinessUsers.findOne(query, function(err2, foundBusinessUser) {
-                if (foundBusinessUser && foundBusinessUser != null) {
-                    callback(removePassword(foundBusinessUser));
-                    return;
-                } else {
-                    if (err2) {
-                        console.log(err);
-                    }
-
-                    callback(undefined);
-                }
-            });
-        }
-    });
-}
 
 // LOGIN USER
 app.post('/login', function (req, res) {
