@@ -143,7 +143,7 @@ app.post('/userSession', function(req, res) {
 
     // get the user from the id, check the verification token to ensure they
     // have the right credentials to stay logged in
-    getUserByQuery({_id: userId}, function(foundUser) {
+    getUserByQuery({_id: userId}, function(error, foundUser) {
         if (foundUser.verificationToken == verificationToken) {
             req.session.userId = userId;
 
@@ -285,8 +285,6 @@ const sanitizeOptions = {
 app.post('/user', function (req, res) {
     var user = req.body;
 
-    console.log("user is: ", user);
-
     user = sanitize(user);
 
     // hash the user's password
@@ -303,11 +301,13 @@ app.post('/user', function (req, res) {
             user.verificationToken = crypto.randomBytes(64).toString('hex');
             const query = {email: user.email};
 
-            Users.findOne(query, function (err, foundUser) {
+            getUserByQuery(query, function(err, foundUser) {
                 if (err) {
                     console.log(err);
+                    res.status(500).send("Error creating account, try with a different email or try again later.");
+                    return;
                 }
-                if (foundUser === null) {
+                if (foundUser == null || foundUser == undefined) {
                     // get count of users with that name to get the profile url
                     Users.count({name: user.name}, function(err, count) {
                         const randomNumber = crypto.randomBytes(8).toString('hex');
@@ -791,7 +791,7 @@ app.post('/forgotPassword', function (req, res) {
     let email = sanitize(req.body.email);
     let query = {email: email};
 
-    const user = getUserByQuery(query, function (user) {
+    const user = getUserByQuery(query, function (err, user) {
         if (user == undefined) {
             res.status(401).send("Cannot find user");
         } else {
@@ -878,7 +878,7 @@ function sendEmail(recipients, subject, content, callback) {
 app.post('/getUserById', function(req, res) {
     const _id = sanitize(req.body._id);
     const query = { _id };
-    getUserByQuery(query, function (user) {
+    getUserByQuery(query, function (err, user) {
         res.json(removePassword(user));
     })
 });
@@ -886,7 +886,7 @@ app.post('/getUserById', function(req, res) {
 app.post('/getUserByProfileUrl', function(req, res) {
     const profileUrl = sanitize(req.body.profileUrl);
     const query = { profileUrl };
-    getUserByQuery(query, function (user) {
+    getUserByQuery(query, function (err, user) {
         res.json(safeUser(user));
     })
 });
@@ -898,26 +898,31 @@ function getUserByQuery(query, callback) {
     // if user found in one of the DBs, performs the callback
     // if user not found, check if the other DB is already done
     //     if so, callback with no user, otherwise, wait for the other DB call
-    let doCallbackOrWaitForOtherDBCall = function(foundUser) {
+    let doCallbackOrWaitForOtherDBCall = function(err, foundUser) {
+        // if a user was found, return it
         if (foundUser && foundUser != null) {
-            callback(removePassword(foundUser));
+            callback(undefined, removePassword(foundUser));
             return;
-        } else {
+        }
+        // no user found in one of the dbs
+        else {
+            // if this is the second db we've checked, no user was found in
+            // either db, so return undefined and an error if one exists
             if (finishedOneCall) {
-                callback(undefined);
-            } else {
+                callback(err, undefined);
+            }
+            // if this is the first db we've checkd, mark that a db was checked
+            else {
                 finishedOneCall = true;
             }
         }
     }
 
     Users.findOne(query, function (err, foundUser) {
-        if (err) console.log(err);
-        doCallbackOrWaitForOtherDBCall(foundUser);
+        doCallbackOrWaitForOtherDBCall(err, foundUser);
     });
     BusinessUsers.findOne(query, function(err, foundUser) {
-        if (err) console.log(err);
-        doCallbackOrWaitForOtherDBCall(foundUser);
+        doCallbackOrWaitForOtherDBCall(err, foundUser);
     });
 }
 
@@ -1648,18 +1653,17 @@ app.post('/businessUser', function (req, res) {
                 newUser.verificationToken = crypto.randomBytes(64).toString('hex');
                 const query = {email: newUser.email};
 
-
-
-                BusinessUsers.findOne(query, function (err3, foundUser) {
-                    if (err3) {
-                        console.log(err3);
-                        res.status(500).send("Error, please try again later.");
+                // check if there's already a user with that email
+                getUserByQuery(query, function(error, foundUser) {
+                    if (error && error !== null) {
+                        console.log(error);
+                        res.status(500).send("Error creating new user, try again later or contact support.");
                         return;
                     }
 
                     // if found user is null, that means no user with that email already exists,
                     // which is what we want
-                    if (foundUser === null) {
+                    if (foundUser == null || foundUser == undefined) {
                         // store the user in the db
                         BusinessUsers.create(newUser, function (err4, newUserFromDB) {
                             if (err4) {
