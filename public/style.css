@@ -1065,9 +1065,9 @@ button.link {
     bottom: 2px;
 }
 .smallCheckbox > img {
-    height: 11px;
-    width: 11px;
-    margin-top: -24px;
+    height: 12px;
+    width: 12px;
+    margin-top: -25px;
     margin-left: 1px;
 }
 .checkbox > .checkMarkfalse { visibility: hidden; }
