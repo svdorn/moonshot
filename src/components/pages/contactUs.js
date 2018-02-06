@@ -69,7 +69,7 @@ class ContactUs extends Component {
 
     render() {
         return (
-            <div className="fullHeight greenToBlue center">
+            <div className="fillScreen greenToBlue center">
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
 
                 <div className="form lightWhiteForm">

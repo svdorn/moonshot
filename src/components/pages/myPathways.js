@@ -164,7 +164,7 @@ class MyPathways extends Component {
                     <div>
                         <div className="greenToBlue headerDiv"/>
                         {this.state.userPathwayPreviews ?
-                            <div className="center">
+                            <div className="center fillScreenWithHeader">
                                 <h1 className="center font40px font24pxUnder500">My Pathways</h1>
                                 <Tabs
                                     style={style.tabs}
@@ -200,7 +200,9 @@ class MyPathways extends Component {
                                 <div className="fullHeight"/>
                             </div>}
                     </div>
-                    : null}
+                    :
+                    <div className="fillScreen" />
+                }
             </div>
 
         );

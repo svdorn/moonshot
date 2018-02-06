@@ -75,7 +75,7 @@ class PasswordChange extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <div className="fullHeight greenToBlue formContainer">
+            <div className="fillScreen greenToBlue formContainer">
                 <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>

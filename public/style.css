@@ -267,6 +267,17 @@ form > h1 {
     pointer-events: none;
 }
 
+.fillScreen, .fillScreenWithHeader {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    min-height: 710px;
+}
+.fillScreenWithHeader {
+    margin-top: -100px;
+    padding-top: 100px;
+}
+
 .fullHeight {
     width: 100%;
     height: 710px;
@@ -2425,6 +2436,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homePathwaysTitle {
         font-size: 40px;
         margin-bottom: 20px
+    }
+    .fillScreen, .fillScreenWithHeader {
+        min-height: 550px;
     }
     .fullHeight {
         height: 550px;

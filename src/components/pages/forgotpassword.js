@@ -69,7 +69,7 @@ class ForgotPassword extends Component {
 
     render() {
         return (
-            <div className="fullHeight greenToBlue formContainer">
+            <div className="fillScreen greenToBlue formContainer">
                 <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
