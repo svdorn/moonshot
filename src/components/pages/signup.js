@@ -132,7 +132,7 @@ class Signup extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <div className="fullHeight greenToBlue formContainer">
+            <div className="fillScreen greenToBlue formContainer">
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     {this.state.email != "" && this.props.userPosted ?
