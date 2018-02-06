@@ -1380,6 +1380,10 @@ button.link {
     clear: both;
     height: 320px;
 }
+.homepageTrajectoryContainer {
+    max-width: 1400px;
+    margin: auto;
+}
 .homepageTrajectoryTextLeft {
     float: left;
 }
