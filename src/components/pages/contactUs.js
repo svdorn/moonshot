@@ -80,6 +80,7 @@ class ContactUs extends Component {
                                 name="message"
                                 component={renderTextField}
                                 label="Message"
+                                className="lightBlueInputText"
                             /><br/>
                         </div>
                         <button

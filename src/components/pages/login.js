@@ -169,6 +169,7 @@ class Login extends Component {
                                 name="email"
                                 component={renderTextField}
                                 label="Email"
+                                className="lightBlueInputText"
                             /><br/>
                         </div>
                         <div className="inputContainer">
@@ -177,6 +178,7 @@ class Login extends Component {
                                 name="password"
                                 component={renderPasswordField}
                                 label="Password"
+                                className="lightBlueInputText"
                             /><br/><br/>
                         </div>
                         <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>

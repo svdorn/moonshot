@@ -95,6 +95,9 @@ footer {
     background-color: rgba(255,255,255,.6);
     color: var(--moonshotBlue);
 }
+.lightBlueInputText > label {
+    color: rgba(0, 195, 255, .7) !important;
+}
 .formSubmitButton {
     padding: 0px 25px 3px;
     border: 2px solid var(--moonshotLightBlue);

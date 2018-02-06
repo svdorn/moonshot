@@ -80,6 +80,7 @@ class ForgotPassword extends Component {
                                 name="email"
                                 component={renderTextField}
                                 label="Email"
+                                className="lightBlueInputText"
                             /><br/>
                         </div>
                         <button

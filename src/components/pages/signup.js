@@ -150,6 +150,7 @@ class Signup extends Component {
                                         name="name"
                                         component={renderTextField}
                                         label="Full Name"
+                                        className="lightBlueInputText"
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
@@ -158,6 +159,7 @@ class Signup extends Component {
                                         name="email"
                                         component={renderTextField}
                                         label="Email"
+                                        className="lightBlueInputText"
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
@@ -166,6 +168,7 @@ class Signup extends Component {
                                         name="password"
                                         component={renderPasswordField}
                                         label="Password"
+                                        className="lightBlueInputText"
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
@@ -174,6 +177,7 @@ class Signup extends Component {
                                         name="password2"
                                         component={renderPasswordField}
                                         label="Confirm Password"
+                                        className="lightBlueInputText"
                                     /><br/>
                                 </div>
                                 <button
