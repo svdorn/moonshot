@@ -133,7 +133,7 @@ class Signup extends Component {
     render() {
         return (
             <div className="fullHeight greenToBlue formContainer">
-                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     {this.state.email != "" && this.props.userPosted ?
                         <div className="center">

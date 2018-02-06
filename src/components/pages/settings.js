@@ -22,7 +22,7 @@ class Settings extends Component {
     render() {
         return (
             <div className="fullHeight greenToBlue">
-                <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
+                <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="1"/>
                 {this.props.notification !== undefined ?
                     <Paper className={"messageHeader " + this.props.notification.type}>
                         {this.props.notification.message}
