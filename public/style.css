@@ -528,7 +528,7 @@ button.link {
 }
 .gradientBorderBlue {
     background: linear-gradient(to right, #5deaff, #3dabff);
-    padding: 2px;
+    padding: 1px;
 }
 .gradientBorderBlue > div {
     background: white;
@@ -982,7 +982,7 @@ button.link {
 }
 .onboardingPage1Text2 {
     color: white;
-    padding: 2px 15px;
+    padding: 1px 14px;
 }
 .onboardingPage1Text3 {
     color: #00c3ff;
