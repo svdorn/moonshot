@@ -773,7 +773,7 @@ class Onboarding extends Component {
                     <div className="center">
                         <button className="onboardingPage1Button" onClick={this.handleStep1ButtonClick.bind(this)}>
                             <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
-                                Next
+                                NEXT
                             </div>
                         </button>
                     </div>
@@ -801,14 +801,14 @@ class Onboarding extends Component {
                             : null}
                     </div>
                     <div className="center">
-                        <button className="onboardingPage2Button" style={{marginRight:"30px"}} onClick={() => this.handleGoalsButtonClick("previous")}>
+                        <button className="onboardingPage2Button" onClick={() => this.handleGoalsButtonClick("previous")}>
                             <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
-                                Back
+                                BACK
                             </div>
                         </button>
                         <button className="onboardingPage2Button" onClick={() => this.handleGoalsButtonClick("next")}>
                             <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
-                                Next
+                                NEXT
                             </div>
                         </button>
                     </div>
@@ -943,14 +943,14 @@ class Onboarding extends Component {
                     </div>
 
                     <div className="center">
-                        <button className="onboardingPage3Button" style={{marginRight:"30px"}} onClick={this.handleInfoBackButtonClick.bind(this)}>
+                        <button className="onboardingPage3Button" onClick={this.handleInfoBackButtonClick.bind(this)}>
                             <div className="font20px font14pxUnder700 onboardingPage1Text2">
-                                Back
+                                BACK
                             </div>
                         </button>
                         <button className="onboardingPage3Button" onClick={this.handleFinishButtonClick.bind(this)}>
                             <div className="font20px font14pxUnder700 onboardingPage1Text2">
-                                Finish
+                                FINISH
                             </div>
                         </button>
                     </div>

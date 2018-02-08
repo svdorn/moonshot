@@ -1000,7 +1000,7 @@ button.link {
     background: linear-gradient(to right, #5deaff, #3dabff);
     border: #3dabff;
     padding: 3px 7px;
-    margin-top: 20px;
+    margin-top: 15px;
 }
 .onboardingPage2Text {
     background: linear-gradient(to right, #be6aff, #7f0eff);
@@ -1011,7 +1011,7 @@ button.link {
     background: linear-gradient(to right, #be6aff, #7f0eff);
     border: #9727ff;
     padding: 3px 7px;
-    margin-top: 30px;
+    margin: 20px 10px 0;
 }
 .onboardingPage2Button:first-child {
     padding: 3px 5px;
@@ -1038,7 +1038,7 @@ button.link {
     background: linear-gradient(to right, #3dffef, #3affd2);
     border: #01f3c8;
     padding: 3px 7px;
-    margin-top: 20px;
+    margin: 20px 10px 0;
 }
 .onboardingPage3 {
     color: var(--moonshotGreenText);
