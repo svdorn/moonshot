@@ -991,12 +991,10 @@ button.link {
 .onboardingPage1Text2Background{
     background: linear-gradient(to bottom right, #5deaff, #3dabff);
     padding: 2px;
-    margin-right: 20px;
-    margin-top: 20px;
+    margin: 20px 10px 0;
 }
 .onboardingPage1Margin {
-    margin-top: 20px;
-    margin-right: 20px;
+    margin: 20px 10px 0;
 }
 .onboardingPage1Button{
     background: linear-gradient(to right, #5deaff, #3dabff);
