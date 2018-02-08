@@ -524,7 +524,7 @@ button.link {
 }
 
 .transparentBorder {
-    padding: 2px;
+    padding: 1px;
 }
 .gradientBorderBlue {
     background: linear-gradient(to right, #5deaff, #3dabff);
