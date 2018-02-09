@@ -348,87 +348,90 @@ class ForBusiness extends Component {
                             A scholarship for potential hires<div className="under500only br"><br/></div> to learn the skills you need.<br/>
                         </div>
 
-                        <div className="forBusinessLineWithCirclesContainer">
-                            <div className="forBusinessLineWithCircles">
-                                <div className="forBusinessLine"/>
-                                <div className="forBusinessCircle"/>
-                                <div className="forBusinessCircle"/>
-                                <div className="forBusinessCircle"/>
-                                <div className="forBusinessCircle"/>
-                            </div>
-                        </div>
 
-
-                        <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
-                            <div className="homepageTrajectoryTextLeft forBusiness">
-                                <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextLeftDiv forBusiness">
-                                    <h2 className="blueText font18pxUnder500"><b>What Skills Are You <div className="above800only br"><br/></div>Hiring For?</b></h2>
-                                    UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe, SQL, Google Analytics, DevOps, Agile...
-                                </div>
-                            </div>
-                            <div className="homepageTrajectoryImagesRight">
-                                <div className="homepageImgBackgroundRight blueGradient"/>
-                                <img
-                                    src="/images/HappySmallerBeardGuy.jpeg"
-                                />
-                            </div>
-                        </div>
-
-                        <br/>
-
-                        <div className="homepageTrajectory forBusiness">
-                            <div className="homepageTrajectoryTextRight forBusiness">
-                                <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextRightDiv forBusiness">
-                                    <h2 className="greenText font18pxUnder500"><b>Course Pathways Curated <div className="above500only br"><br/></div>to the Skills You Need.</b>
-                                    </h2>
-                                    Expert-led, interactive learning
-                                    through videos, articles, skill
-                                    assessments and real-world projects.
-                                </div>
-                            </div>
-                            <div className="homepageTrajectoryImagesLeft">
-                                <div className="homepageImgBackgroundLeft greenGradient"/>
-                                <img
-                                    src="/images/WomanAtComputer.jpg"
-                                />
-                            </div>
-                        </div>
-
-                        <br/>
-
-                        <div className="homepageTrajectory forBusiness" id="sponsorStudentsForBusiness">
-                            <div className="homepageTrajectoryTextLeft forBusiness">
-                                <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextLeftDiv forBusiness">
-                                    <h2 className="purpleText font18pxUnder500"><b>Sponsor Students</b></h2>
-                                    Provide sponsorships for students to learn
-                                    the skills you need. We can find the talent or you
-                                    can sponsor your own candidates.
+                        <div className="homepageTrajectoryContainer">
+                            <div className="forBusinessLineWithCirclesContainer">
+                                <div className="forBusinessLineWithCircles">
+                                    <div className="forBusinessLine"/>
+                                    <div className="forBusinessCircle"/>
+                                    <div className="forBusinessCircle"/>
+                                    <div className="forBusinessCircle"/>
+                                    <div className="forBusinessCircle"/>
                                 </div>
                             </div>
 
-                            <div className="homepageTrajectoryImagesRight">
-                                <div className="homepageImgBackgroundRight purpleToRed"/>
-                                <img
-                                    src="/images/WhiteboardWork.jpg"
-                                />
-                            </div>
-                        </div>
 
-                        <div className="homepageTrajectory forBusiness">
-                            <div className="homepageTrajectoryTextRight forBusiness">
-                                <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextRightDiv forBusiness">
-                                    <h2 className="blueText font18pxUnder500"><b>Evaluate for Hire</b></h2>
-                                    Comprehensive data on each candidate
-                                    from skill assessments, qualitative
-                                    responses, quantitative scoring
-                                    and real-world projects.
+                            <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
+                                <div className="homepageTrajectoryTextLeft forBusiness">
+                                    <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextLeftDiv forBusiness">
+                                        <h2 className="blueText font18pxUnder500"><b>What Skills Are You <div className="above800only br"><br/></div>Hiring For?</b></h2>
+                                        UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe, SQL, Google Analytics, DevOps, Agile...
+                                    </div>
+                                </div>
+                                <div className="homepageTrajectoryImagesRight">
+                                    <div className="homepageImgBackgroundRight blueGradient"/>
+                                    <img
+                                        src="/images/HappySmallerBeardGuy.jpeg"
+                                    />
                                 </div>
                             </div>
-                            <div className="homepageTrajectoryImagesLeft">
-                                <div className="homepageImgBackgroundLeft blueGradient"/>
-                                <img
-                                    src="/images/TalkingBeardGuy.jpeg"
-                                />
+
+                            <br/>
+
+                            <div className="homepageTrajectory forBusiness">
+                                <div className="homepageTrajectoryTextRight forBusiness">
+                                    <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextRightDiv forBusiness">
+                                        <h2 className="greenText font18pxUnder500"><b>Course Pathways Curated <div className="above500only br"><br/></div>to the Skills You Need.</b>
+                                        </h2>
+                                        Expert-led, interactive learning
+                                        through videos, articles, skill
+                                        assessments and real-world projects.
+                                    </div>
+                                </div>
+                                <div className="homepageTrajectoryImagesLeft">
+                                    <div className="homepageImgBackgroundLeft greenGradient"/>
+                                    <img
+                                        src="/images/WomanAtComputer.jpg"
+                                    />
+                                </div>
+                            </div>
+
+                            <br/>
+
+                            <div className="homepageTrajectory forBusiness" id="sponsorStudentsForBusiness">
+                                <div className="homepageTrajectoryTextLeft forBusiness">
+                                    <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextLeftDiv forBusiness">
+                                        <h2 className="purpleText font18pxUnder500"><b>Sponsor Students</b></h2>
+                                        Provide sponsorships for students to learn
+                                        the skills you need. We can find the talent or you
+                                        can sponsor your own candidates.
+                                    </div>
+                                </div>
+
+                                <div className="homepageTrajectoryImagesRight">
+                                    <div className="homepageImgBackgroundRight purpleToRed"/>
+                                    <img
+                                        src="/images/WhiteboardWork.jpg"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="homepageTrajectory forBusiness">
+                                <div className="homepageTrajectoryTextRight forBusiness">
+                                    <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextRightDiv forBusiness">
+                                        <h2 className="blueText font18pxUnder500"><b>Evaluate for Hire</b></h2>
+                                        Comprehensive data on each candidate
+                                        from skill assessments, qualitative
+                                        responses, quantitative scoring
+                                        and real-world projects.
+                                    </div>
+                                </div>
+                                <div className="homepageTrajectoryImagesLeft">
+                                    <div className="homepageImgBackgroundLeft blueGradient"/>
+                                    <img
+                                        src="/images/TalkingBeardGuy.jpeg"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
