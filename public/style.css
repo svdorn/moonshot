@@ -1468,32 +1468,32 @@ button.link {
 .homepageTrajectoryImagesLeft > img,
 .homepageTrajectoryImagesRight > img {
     transition: all 0.2s ease-in;
-    height: 270px;
+    height: 216px;
     z-index: 10;
-    width: 400px;
+    width: 320px;
     position: absolute;
 }
 .homepageTrajectoryImagesRight > img {
-    right: 2%;
+    right: 4%;
     margin: 30px 30px 0 0;
 }
 .homepageTrajectoryImagesLeft > img {
     margin: 30px 0 0 30px;
-    left: 2%;
+    left: 4%;
 }
 .homepageImgBackgroundLeft,
 .homepageImgBackgroundRight {
     transition: all 0.2s ease-in;
-    height: 270px;
+    height: 216px;
     position: absolute;
-    width: 400px;
+    width: 320px;
     z-index: 5;
 }
 .homepageImgBackgroundLeft {
-    left: 2%;
+    left: 4%;
 }
 .homepageImgBackgroundRight {
-    right: 2%;
+    right: 4%;
 }
 .greenGradient {
     background: linear-gradient(to top right, #28EBC3, #6EFEE4);
@@ -1836,16 +1836,28 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         margin-right: 0px;
     }
     .homepageImgBackgroundLeft {
-        left: 0;
+        left: 2%;
     }
     .homepageImgBackgroundRight {
-        right: 0;
+        right: 2%;
     }
     .homepageTrajectoryImagesRight > img {
-        right: 0;
+        right: 2%;
     }
     .homepageTrajectoryImagesLeft > img {
-        left: 0;
+        left: 2%;
+    }
+    .homepageImgBackgroundLeft.forBusiness {
+        left: 0%;
+    }
+    .homepageImgBackgroundRight.forBusiness {
+        right: 0%;
+    }
+    .homepageTrajectoryImagesRight.forBusiness > img {
+        right: 0%;
+    }
+    .homepageTrajectoryImagesLeft.forBusiness > img {
+        left: 0%;
     }
     .boxStyle {
         margin: 200px auto 320px 10px;

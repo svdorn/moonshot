@@ -368,8 +368,8 @@ class ForBusiness extends Component {
                                         UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe, SQL, Google Analytics, DevOps, Agile...
                                     </div>
                                 </div>
-                                <div className="homepageTrajectoryImagesRight">
-                                    <div className="homepageImgBackgroundRight blueGradient"/>
+                                <div className="homepageTrajectoryImagesRight forBusiness">
+                                    <div className="homepageImgBackgroundRight blueGradient forBusiness"/>
                                     <img
                                         src="/images/HappySmallerBeardGuy.jpeg"
                                     />
@@ -388,8 +388,8 @@ class ForBusiness extends Component {
                                         assessments and real-world projects.
                                     </div>
                                 </div>
-                                <div className="homepageTrajectoryImagesLeft">
-                                    <div className="homepageImgBackgroundLeft greenGradient"/>
+                                <div className="homepageTrajectoryImagesLeft forBusiness">
+                                    <div className="homepageImgBackgroundLeft greenGradient forBusiness"/>
                                     <img
                                         src="/images/WomanAtComputer.jpg"
                                     />
@@ -408,8 +408,8 @@ class ForBusiness extends Component {
                                     </div>
                                 </div>
 
-                                <div className="homepageTrajectoryImagesRight">
-                                    <div className="homepageImgBackgroundRight purpleToRed"/>
+                                <div className="homepageTrajectoryImagesRight forBusiness">
+                                    <div className="homepageImgBackgroundRight purpleToRed forBusiness"/>
                                     <img
                                         src="/images/WhiteboardWork.jpg"
                                     />
@@ -426,8 +426,8 @@ class ForBusiness extends Component {
                                         and real-world projects.
                                     </div>
                                 </div>
-                                <div className="homepageTrajectoryImagesLeft">
-                                    <div className="homepageImgBackgroundLeft blueGradient"/>
+                                <div className="homepageTrajectoryImagesLeft forBusiness">
+                                    <div className="homepageImgBackgroundLeft blueGradient forBusiness"/>
                                     <img
                                         src="/images/TalkingBeardGuy.jpeg"
                                     />
