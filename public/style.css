@@ -1906,10 +1906,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 320px;
         transition: all 0.2s ease-out;
     }
-    .homepageTrajectoryImagesLeft,
+    /* .homepageTrajectoryImagesLeft,
     .homepageTrajectoryImagesRight {
         margin-top: 30px;
-    }
+    } */
 
     .forBusiness > h2 > b {
         font-size: 25px;
@@ -2002,6 +2002,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 @media only screen and (min-width: 801px) {
     .under800only { display: none; }
+    .pushDownAbove800 { margin-top: 40px; }
 }
 
 @media only screen and (max-width: 800px) {

@@ -275,7 +275,7 @@ class Home extends Component {
 
                             <div className="homepageTrajectoryContainer" style={{marginTop:"30px"}}>
                             <div className="homepageTrajectory">
-                            <div className="homepageTrajectoryTextLeft onHome">
+                            <div className="homepageTrajectoryTextLeft onHome pushDownAbove800">
                                 <img
                                     src="/icons/Lightbulb.png"
                                     alt="Lightbulb"
@@ -300,7 +300,7 @@ class Home extends Component {
                         <br/>
 
                         <div className="homepageTrajectory">
-                            <div className="homepageTrajectoryTextRight onHome">
+                            <div className="homepageTrajectoryTextRight onHome pushDownAbove800">
                                 <img
                                     src="/icons/Person.png"
                                     alt="Person icon"
