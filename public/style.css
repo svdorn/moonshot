@@ -1720,14 +1720,14 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     left: 0;
     right: 0;
     margin: auto;
-    margin-top: 100px;
+    margin-top: 58px;
 }
 .forBusinessLineWithCircles {
     position: relative;
 }
 .forBusinessLine {
     width: 2px;
-    height: 973px;
+    height: 797px;
     z-index: 5;
     background-color: #ADADAD;
     margin-left: 9px;
@@ -1742,8 +1742,8 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     border-radius: 10px;
 }
 .forBusinessCircle:nth-child(2) { top: 0px; }
-.forBusinessCircle:nth-child(3) { top: 300px; }
-.forBusinessCircle:nth-child(4) { top: 665px; }
+.forBusinessCircle:nth-child(3) { top: 270px; }
+.forBusinessCircle:nth-child(4) { top: 531px; }
 .forBusinessCircle:nth-child(5) { bottom: 0px; }
 
 .forBusinessBox { padding-top: 30px; }
@@ -1815,7 +1815,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 @media only screen and (max-width: 1050px) {
     .homepageTrajectoryTextLeft {
-        width: 40%;
+        width: 50%;
     }
     .homepageTrajectoryTextLeftIcon,
     .homepageTrajectoryTextRightIcon {
@@ -2002,7 +2002,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 @media only screen and (min-width: 801px) {
     .under800only { display: none; }
-    .pushDownAbove800 { margin-top: 40px; }
+    .pushDownAbove800 { margin-top: 50px; }
+    .pushDownSlightlyAbove800 { margin-top: 40px; }
+    .homepageTrajectory { margin-bottom: -70px; }
 }
 
 @media only screen and (max-width: 800px) {
@@ -2105,11 +2107,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .forBusinessLineWithCirclesContainer {
         left: 12%;
         right: initial;
-        margin: 25px 0 0;
+        margin: 6px 0 0;
     }
     .forBusinessCircle:nth-child(3) { top: 155px; }
-    .forBusinessCircle:nth-child(4) { top: 340px; }
-    .forBusinessLine { height: 539px; }
+    .forBusinessCircle:nth-child(4) { top: 347px; }
+    .forBusinessLine { height: 546px; }
 
     .homepageTrajectory.forBusiness {
         height: 180px;
@@ -2451,7 +2453,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .homepageTrajectory.forBusiness {
         margin: 0px;
     }
-    .forBusinessLineWithCirclesContainer { margin-top: 8px; }
+    .forBusinessLineWithCirclesContainer { margin-top: 22px; }
     .homepageTrajectoryTextLeft.forBusiness,
     .homepageTrajectoryTextRight.forBusiness {
         transform: none;

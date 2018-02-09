@@ -325,7 +325,7 @@ class Home extends Component {
                         <br/>
 
                         <div className="homepageTrajectory">
-                            <div className="homepageTrajectoryTextLeft onHome">
+                            <div className="homepageTrajectoryTextLeft onHome pushDownSlightlyAbove800">
                                 <img
                                     src="/icons/Badge.png"
                                     alt="Badge icon"

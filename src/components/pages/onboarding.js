@@ -956,13 +956,11 @@ class Onboarding extends Component {
                     {educationUls}
 
                     <div className="center onboardingPage3 font18px font14pxUnder700 font12pxUnder400">
-                        <button className="purpleToRedButtonExterior mediumButton"
+                        <span className="removeSchool clickable underline"
                                 onClick={this.addEducationArea.bind(this)}
                         >
-                            <div className="gradientBorderButtonInterior">
-                                Add Another School
-                            </div>
-                        </button>
+                            Add Another School
+                        </span>
 
                         <br/>
                         <div className="checkbox mediumCheckbox purpleCheckbox"
