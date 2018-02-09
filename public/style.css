@@ -174,6 +174,11 @@ form > h1 {
     border: 2px solid white;
 }
 .purpleGradientButton:hover { background: linear-gradient(to bottom right, #CE9EFC, #a048fb); }
+.purpleToRedGradientButton {
+    background: rgba(255,255,255, 0.15);
+    border: 2px solid white;
+}
+.purpleToRedGradientButton:hover { background: linear-gradient(to bottom right, #d85e7e, #b130d3); }
 
 
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
@@ -294,6 +299,7 @@ form > h1 {
 .greenToBlue { background: linear-gradient(to top right, var(--moonshotGreen), var(--moonshotLightBlue)); }
 .purpleToBlue { background: linear-gradient(to top right, var(--moonshotPurple), var(--moonshotBlue)); }
 .purpleGradient { background: linear-gradient(to top right, #CE9EFC, #a048fb); }
+.purpleToRedGradient { background: linear-gradient(to bottom right, #721ae9, #e45c67); }
 
 .messageHeader {
     margin-top: 90px;

@@ -232,13 +232,13 @@ class Pathway extends Component {
             <div className="jsxWrapper noOverflowX">
                 {pathway.sponsor !== undefined ?
                     <div style={{minWidth:"250px"}}>
-                        <div className="fullHeight purpleGradient">
+                        <div className="fullHeight purpleToRedGradient">
+                            <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
 
 
                             <div className="infoBox whiteText font40px font24pxUnder500" style={{zIndex: "20"}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
-                                <button className="outlineButton whiteText font30px font20pxUnder500 purpleGradientButton"
-                                        style={{backgroundColor: "#9B6BFB", border: "2px solid white"}}
+                                <button className="outlineButton whiteText font30px font20pxUnder500 purpleToRedGradientButton"
                                         onClick={this.handleClick.bind(this)}>
                                     {"Sign Up"}
                                 </button>
@@ -274,7 +274,7 @@ class Pathway extends Component {
                                     </div>
                                 </li>
                                 <li>
-                                    <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons"/>
+                                    <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons" style={{width: '33px'}}/>
                                     <div className="under500only br"><br/></div>
                                     <div style={{display: 'inline-block'}}>
                                         <i>Cost</i><br/>

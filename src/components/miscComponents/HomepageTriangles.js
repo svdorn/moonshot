@@ -79,6 +79,17 @@ class HomepageTriangles extends Component {
                 </div>
             )
             zIndex = "-10";
+        } else if (this.props.variation == "4") {
+            transformations = [
+                {top: "30%", right: "0%", rotate: -30, scale: .4, className: " whiteTriangle"},
+                {top: "42%", right: "9%", rotate: -60, scale: .6, className: " whiteTriangle"},
+                {top: "50%", right: "4%", rotate: -11, scale: .7, className: " whiteTriangle"},
+                {top: "54%", right: "23%", rotate: -134, scale: .3, className: " whiteTriangle"},
+                {top: "60%", right: "16%", rotate: -19, scale: .5, className: " whiteTriangle"},
+                {top: "68%", right: "3%", rotate: -72, scale: .4, className: " whiteTriangle"},
+                {top: "69%", right: "28%", rotate: -111, scale: .7, className: " whiteTriangle"},
+                {top: "74%", right: "19%", rotate: -98, scale: .6, className: " whiteTriangle"},
+            ];
         }
 
         let counter = 0;
