@@ -1055,7 +1055,7 @@ button.link {
     margin: 20px 10px 0;
 }
 .onboardingPage3 {
-    color: var(--moonshotGreenText);
+    color: #b130d3;
 }
 .onboardingPage3Link {
     color: var(--moonshotGreenText);
@@ -1080,6 +1080,9 @@ button.link {
 }
 .greenCheckbox {
     border: 2px solid var(--moonshotGreenText);
+}
+.purpleCheckbox {
+    border: 2px solid #b130d3;
 }
 .blueCheckbox {
     border: 2px solid var(--moonshotLightBlue);

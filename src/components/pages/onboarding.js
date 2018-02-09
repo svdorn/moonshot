@@ -965,11 +965,11 @@ class Onboarding extends Component {
                         </button>
 
                         <br/>
-                        <div className="checkbox mediumCheckbox greenCheckbox"
+                        <div className="checkbox mediumCheckbox purpleCheckbox"
                              onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
                                 className={"checkMark" + this.state.inSchool.toString()}
-                                src="/icons/CheckMarkGreen.png"
+                                src="/icons/CheckMark.png"
                             />
                         </div>
                         I am currently in school<br/>
