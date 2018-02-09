@@ -956,7 +956,7 @@ class Onboarding extends Component {
                     {educationUls}
 
                     <div className="center onboardingPage3 font18px font14pxUnder700 font12pxUnder400">
-                        <span className="removeSchool clickable underline"
+                        <span className="removeSchool font18px clickable underline"
                                 onClick={this.addEducationArea.bind(this)}
                         >
                             Add Another School
