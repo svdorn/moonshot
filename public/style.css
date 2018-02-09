@@ -1430,7 +1430,7 @@ button.link {
 .homepageTrajectoryTextRightIcon {
     height: 90px;
     position: absolute;
-    margin-top: 45px;
+    margin-top: 18px;
     font-size: 23px;
 }
 .homepageTrajectoryTextRightIcon.onHome {
@@ -1657,8 +1657,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin-right: 14%;
 }
 
-.homePathwaysTitle { font-size: 55px; }
-
 .blurred {
     filter: blur(10px);
 }
@@ -1752,7 +1750,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin-top: -34px;
 }
 
-
+.font48px { font-size: 48px; }
+.font46px { font-size: 46px; }
+.font44px { font-size: 44px; }
+.font42px { font-size: 42px; }
 .font40px { font-size: 40px; }
 .font38px { font-size: 38px; }
 .font36px { font-size: 36px; }
@@ -2204,8 +2205,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         padding: 0px;
     }
 
-    .homePathwaysTitle { font-size: 45px; }
-
     .profileSeparatorRect {
         width: 200px;
         padding-left: 45px;
@@ -2367,9 +2366,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 @media only screen and (min-width: 501px) {
     .under500only { display: none; }
-    .homePathwaysTitle {
-        /* margin-top: -20px; */
-    }
     .homePathwaysDesc {
         max-width: 700px;
     }
@@ -2394,12 +2390,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
     .scrollDownButton { transform: scale(.6); }
 
-    .homepageTrajectory { margin-bottom: -65px; }
-    .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
+    .homepageTrajectory { margin-bottom: -20px; }
+    /* .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
         transform: scale(.7);
         width: 120%;
         margin-left: -10%;
-    }
+    } */
     .homepageTrajectoryTextLeft.onHome, .homepageTrajectoryTextRight.onHome {
         overflow: hidden;
         min-height: 130px;
@@ -2407,11 +2403,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     /* move icons over to the left */
     .homepageTrajectoryContainer > div:nth-child(1) > div > img,
     .homepageTrajectoryContainer > div:nth-child(3) > div > img {
-        margin-left: -50%;
+        margin-left: -48%;
     }
     /* move the third icon less to the left since it is smaller */
     .homepageTrajectoryContainer > div:nth-child(5) > div > img {
-        margin-left: -48%;
+        margin-left: -45%;
     }
     .homepageTrajectoryTextLeftDiv.forBusiness,
     .homepageTrajectoryTextRightDiv.forBusiness {
@@ -2460,36 +2456,38 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         display: none;
     } */
 
-    .homepageTrajectory.forBusiness {
-        height: 160px;
+    .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
+        padding-left: 80px;
     }
+    .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
+        width: 90%;
+    }
+    .homepageTrajectoryTextRightIcon.onHome,
+    .homepageTrajectoryTextLeftIcon.onHome {
+        height: 70px;
+        margin-top: 20px;
+    }
+    .homepageTrajectoryTextRightIcon.personIcon.onHome { height: 60px; }
+    /* .homepageTrajectoryContainer > div:nth-child(1) > div > img, .homepageTrajectoryContainer > div:nth-child(3) > div > img {
+        height: 70px;
+        margin-top: 20px;
+    } */
+    .homepageTrajectory.forBusiness { height: 160px; }
     .homepageTrajectory.forBusiness#whatSkillsAreYouHiringFor,
     .homepageTrajectoryTextLeft.forBusiness {
         height: 120px;
     }
-    .homepageTrajectory.forBusiness#sponsorStudentsForBusiness {
-        height: 160px;
-    }
+    .homepageTrajectory.forBusiness#sponsorStudentsForBusiness { height: 160px; }
     .homepageTrajectoryTextRight.forBusiness { height: 160px; }
     .homepageTrajectoryTextLeft.forBusiness { margin-top: 0; }
     .forBusinessCircle:nth-child(4) { top: 336px; }
 
 
     .homePathwaysDesc { display: none; }
-    .homePathwaysTitle {
-        font-size: 40px;
-        margin-bottom: 20px
-    }
-    .fullHeight {
-        height: 550px;
-    }
-    .infoBox {
-        padding-top: 190px;
-    }
+    .fullHeight { height: 550px; }
+    .infoBox { padding-top: 190px; }
 
-    .gradientBorderPurpleToPinkChip {
-        height: 30px;
-    }
+    .gradientBorderPurpleToPinkChip { height: 30px; }
     .gradientBorderPurpleToPinkChip > div {
         font-size: 15px;
         padding-top: 2px;

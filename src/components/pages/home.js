@@ -282,8 +282,8 @@ class Home extends Component {
                                     title="Lightbulb icon"
                                     className="homepageTrajectoryTextLeftIcon onHome"
                                 />
-                                <div className="homepageTrajectoryTextLeftDiv onHome font20px font18pxUnder600 font20pxUnder500">
-                                    <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
+                                <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
+                                    <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Complete Pathways<br/>And Learn Skills</h2>
                                     Pathways are a series of courses
                                     designed to teach you skills
                                     demanded by employers.
@@ -305,10 +305,10 @@ class Home extends Component {
                                     src="/icons/Person.png"
                                     alt="Person icon"
                                     title="Person icon"
-                                    className="homepageTrajectoryTextRightIcon onHome"
+                                    className="homepageTrajectoryTextRightIcon personIcon onHome"
                                 />
-                                <div className="homepageTrajectoryTextRightDiv onHome font20px font18pxUnder600 font20pxUnder500">
-                                    <h2 className="blueText">Build Your Profile</h2>
+                                <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
+                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Build Your Profile</h2>
                                     Add your skills, completed projects and
                                     finished pathways. Prove yourself to employers through
                                     your profile.
@@ -330,10 +330,10 @@ class Home extends Component {
                                     src="/icons/Badge.png"
                                     alt="Badge icon"
                                     title="Badge icon"
-                                    className="homepageTrajectoryTextLeftIcon smallerWidthIcon"
+                                    className="homepageTrajectoryTextLeftIcon onHome smallerWidthIcon"
                                 />
-                                <div className="homepageTrajectoryTextLeftDiv onHome font20px font18pxUnder600 font20pxUnder500">
-                                    <h2 className="purpleText">Get Hired By Companies<br/>Leading The Future</h2>
+                                <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
+                                    <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Hired By Companies<br/>Leading The Future</h2>
                                     Compete for open positions with
                                     sponsor companies by excelling in
                                     pathways and strengthening your profile.
@@ -351,8 +351,8 @@ class Home extends Component {
                     <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
 
                     <div className="topMarginOnSmallScreen" style={{textAlign: "center"}}>
-                        <div className="center font40px font24pxUnder500 blueText homePathwaysTitle">Pathways</div>
-                        <div className="homePathwaysDesc font20px font18pxUnder600">
+                        <div className="center font28px font24pxUnder800 font22pxUnder500 blueText">Pathways</div>
+                        <div className="homePathwaysDesc font18px font16pxUnder800">
                             Moonshot courses are organized in pathways and
                             sponsored<br/>by employers hiring for those skills.
                         </div>
