@@ -98,7 +98,7 @@ class Menu extends Component {
 
     render() {
         let iconMenuColor = this.props.isOnboarding ? "#00c3ff" : "white";
-        let moonshotLogo = this.props.isOnboarding ? "/images/OfficialLogoBlue.png" : "/images/OfficialLogoWhite.png";
+        let moonshotLogo = this.props.isOnboarding ? "/images/OfficialLogoBlack.png" : "/images/OfficialLogoWhite.png";
         let dropdownClass = this.props.isOnboarding ? "headerDropdownBlue wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
         let menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem"
         if (this.props.blueHeader) {

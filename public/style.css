@@ -851,7 +851,7 @@ button.link {
 
 
 #onboardingBioTextarea {
-    width: calc(700px + 8%);
+    width: 774px;
     height: initial;
     text-align: initial;
     padding: 5px 10px;
@@ -1029,11 +1029,11 @@ button.link {
     display: inline-block;
 }
 .onboardingPage3TextTitle {
-    background: linear-gradient(to right, #3dffef, #3affd2);
+    background: linear-gradient(to right, #b130d3, #e35d67);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
-.onboardingPage3Text { color: #01f3c8; }
+.onboardingPage3Text { color: #b130d3; }
 .onboardingPage3Button{
     background: linear-gradient(to right, #3dffef, #3affd2);
     border: #01f3c8;
@@ -1089,7 +1089,7 @@ button.link {
 .onboardingLeftInput, .onboardingRightInput,
 #onboardingBioTextareaSpan {
     vertical-align: top;
-    color: var(--moonshotGreenText);
+    color: #b130d3;
 }
 .onboardingLeftInput > span, .onboardingRightInput > span {
     display: inline-block;
@@ -1099,6 +1099,23 @@ button.link {
     width: 7%;
     min-width: 20px;
 }
+
+
+
+.onboardingInputWithGradientBorder {
+    border: none;
+    font-size: 20px;
+    text-align: center;
+    height: 40px;
+    width: 350px;
+    color: black;
+    background-color: white;
+}
+.onboardingGradientBorder {
+    padding: 2px 3px;
+    background: linear-gradient(to bottom right, #b130d3, #e35d67);
+}
+
 .greenInput {
     border-top: 2px solid var(--moonshotGreenText);
     border-bottom: 2px solid var(--moonshotGreenText);
@@ -1116,18 +1133,6 @@ button.link {
 .greenInput:-moz-placeholder { color: #B6B6B6; }
 .greenInput::-moz-placeholder { color: #B6B6B6; }
 .greenInput:-ms-input-placeholder { color: #B6B6B6; }
-.greenInputImportant {
-    border-top: 2px solid var(--moonshotGreenText) !important;
-    border-bottom: 2px solid var(--moonshotGreenText) !important;
-    border-left: 3px solid var(--moonshotGreenText) !important;
-    border-right: 3px solid var(--moonshotGreenText) !important;
-    font-size: 20px !important;
-    text-align: center !important;
-    height: 40px !important;
-    width: 350px !important;
-    color: black !important;
-    margin-bottom: 15px !important;
-}
 
 .horizListSpacer {
     height: 100%;
@@ -2132,6 +2137,20 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 }
 @media only screen and (max-width: 750px) {
+    .onboardingGradientBorder {
+        padding: 0px 2px 1px;
+    }
+    .onboardingGradientBorder#onboardingBirthDate,
+    .onboardingGradientBorder#onboardingBio {
+        padding-top: 1px;
+    }
+    .onboardingInputWithGradientBorder {
+        font-size: 12px;
+        text-align: center;
+        height: 25px;
+        width: 218.75px;
+        color: black;
+    }
     .greenInput {
         border-top: 1px solid var(--moonshotGreenText);
         border-bottom: 1px solid var(--moonshotGreenText);

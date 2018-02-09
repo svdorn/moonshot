@@ -838,85 +838,103 @@ class Onboarding extends Component {
                     <div className="horizCenteredList">
                         <li className="onboardingLeftInput">
                             <span>Date of Birth</span><br/>
-                            <div className="dp greenInput">
-                                <DatePicker
-                                    openToYearSelection={true}
-                                    hintText="11/19/1996"
-                                    value={self.state.birthDate}
-                                    onChange={(e, date) => self.handleBirthDateChange(e, date)}
-                                    className="clickableGrandChildrenInputImportant"
-                                />
-                            </div>
-                            <br/>
+                            <div className="onboardingGradientBorder" id="onboardingBirthDate">
+                                <div className="dp onboardingInputWithGradientBorder">
+                                    <DatePicker
+                                        openToYearSelection={true}
+                                        hintText="11/19/1996"
+                                        value={self.state.birthDate}
+                                        onChange={(e, date) => self.handleBirthDateChange(e, date)}
+                                        className="clickableGrandChildrenInputImportant"
+                                    />
+                                </div>
+                            </div> <br/>
                             <span>Location</span><br/>
-                            <input
-                                type="text"
-                                className="greenInput"
-                                placeholder="City, State"
-                                value={this.state.location}
-                                onChange={(e) => this.handleInfoInputChange(e, "location")}
-                            /> <br/>
+                            <div className="onboardingGradientBorder">
+                                <input
+                                    type="text"
+                                    className="onboardingInputWithGradientBorder"
+                                    placeholder="City, State"
+                                    value={this.state.location}
+                                    onChange={(e) => this.handleInfoInputChange(e, "location")}
+                                />
+                                </div>
+                            <br/>
                             <span>Willing to relocate to</span><br/>
-                            <input
-                                type="text"
-                                className="greenInput"
-                                placeholder="e.g. San Francisco, East Coast..."
-                                value={this.state.willRelocateTo}
-                                onChange={(e) => this.handleInfoInputChange(e, "willRelocateTo")}
-                            /> <br/>
+                            <div className="onboardingGradientBorder">
+                                <input
+                                    type="text"
+                                    className="onboardingInputWithGradientBorder"
+                                    placeholder="e.g. San Francisco, East Coast..."
+                                    value={this.state.willRelocateTo}
+                                    onChange={(e) => this.handleInfoInputChange(e, "willRelocateTo")}
+                                />
+                            </div> <br/>
                             <span>{"Desired Job(s)"}</span><br/>
-                            <input
-                                type="text"
-                                className="greenInput"
-                                placeholder="e.g. VR/AR Developer..."
-                                value={this.state.desiredJobs}
-                                onChange={(e) => this.handleInfoInputChange(e, "desiredJobs")}
-                            /> <br/>
+                            <div className="onboardingGradientBorder">
+                                <input
+                                    type="text"
+                                    className="onboardingInputWithGradientBorder"
+                                    placeholder="e.g. VR/AR Developer..."
+                                    value={this.state.desiredJobs}
+                                    onChange={(e) => this.handleInfoInputChange(e, "desiredJobs")}
+                                />
+                            </div> <br/>
                         </li>
                         <li className="inputSeparator"/>
                         <li className="onboardingRightInput">
                             <span>Title</span><br/>
-                            <input
-                                type="text"
-                                className="greenInput"
-                                placeholder="e.g. Front End Developer passionate about UX"
-                                value={this.state.title}
-                                onChange={(e) => this.handleInfoInputChange(e, "title")}
-                            /> <br/>
+                            <div className="onboardingGradientBorder">
+                                <input
+                                    type="text"
+                                    className="onboardingInputWithGradientBorder"
+                                    placeholder="e.g. Front End Developer"
+                                    value={this.state.title}
+                                    onChange={(e) => this.handleInfoInputChange(e, "title")}
+                                />
+                            </div> <br/>
                             <span>Links</span><br/>
-                            <input
-                                type="text"
-                                className="greenInput"
-                                placeholder="LinkedIn Profile"
-                                value={this.state.linkedIn}
-                                onChange={(e) => this.handleInfoInputChange(e, "linkedIn")}
-                            /> <br/>
-                            <input
-                                type="text"
-                                className="greenInput"
-                                placeholder="GitHub Profile"
-                                value={this.state.gitHub}
-                                onChange={(e) => this.handleInfoInputChange(e, "gitHub")}
-                            /> <br/>
-                            <input
-                                type="text"
-                                className="greenInput"
-                                placeholder="Personal Site"
-                                value={this.state.personal}
-                                onChange={(e) => this.handleInfoInputChange(e, "personal")}
-                            /> <br/>
+                            <div className="onboardingGradientBorder">
+                                <input
+                                    type="text"
+                                    className="onboardingInputWithGradientBorder"
+                                    placeholder="LinkedIn Profile"
+                                    value={this.state.linkedIn}
+                                    onChange={(e) => this.handleInfoInputChange(e, "linkedIn")}
+                                />
+                            </div> <br/>
+                            <div className="onboardingGradientBorder">
+                                <input
+                                    type="text"
+                                    className="onboardingInputWithGradientBorder"
+                                    placeholder="GitHub Profile"
+                                    value={this.state.gitHub}
+                                    onChange={(e) => this.handleInfoInputChange(e, "gitHub")}
+                                />
+                            </div> <br/>
+                            <div className="onboardingGradientBorder">
+                                <input
+                                    type="text"
+                                    className="onboardingInputWithGradientBorder"
+                                    placeholder="Personal Site"
+                                    value={this.state.personal}
+                                    onChange={(e) => this.handleInfoInputChange(e, "personal")}
+                                />
+                            </div> <br/>
                         </li>
                     </div>
 
                     <div className="center">
                         <span id="onboardingBioTextareaSpan" className="font20px">Bio</span><br/>
-                        <textarea
-                            className="greenInput"
-                            id="onboardingBioTextarea"
-                            placeholder="e.g. I have been creating virtual reality..."
-                            value={this.state.bio}
-                            onChange={(e) => this.handleInfoInputChange(e, "bio")}
-                        /> <br/>
+                        <div className="onboardingGradientBorder" id="onboardingBio" style={{display:"inline-flex"}}>
+                            <textarea
+                                className="onboardingInputWithGradientBorder"
+                                id="onboardingBioTextarea"
+                                placeholder="e.g. I have been creating virtual reality..."
+                                value={this.state.bio}
+                                onChange={(e) => this.handleInfoInputChange(e, "bio")}
+                            />
+                        </div> <br/>
                     </div>
 
                     <div className="center">
