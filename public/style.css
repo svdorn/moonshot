@@ -1055,10 +1055,11 @@ button.link {
 }
 .onboardingPage3Text { color: #b130d3; }
 .onboardingPage3Button{
-    background: linear-gradient(to right, #3dffef, #3affd2);
+    background: linear-gradient(to right, #b130d3, #e35d67);
     border: #01f3c8;
     padding: 3px 7px;
     margin: 20px 10px 0;
+    cursor: pointer;
 }
 .onboardingPage3 {
     color: #b130d3;
