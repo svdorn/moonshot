@@ -232,13 +232,13 @@ class Pathway extends Component {
             <div className="jsxWrapper noOverflowX">
                 {pathway.sponsor !== undefined ?
                     <div style={{minWidth:"250px"}}>
-                        <div className="fullHeight purpleGradient">
+                        <div className="fullHeight purpleToRedGradient">
+                            <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
 
 
                             <div className="infoBox whiteText font40px font24pxUnder500" style={{zIndex: "20"}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
-                                <button className="outlineButton whiteText font30px font20pxUnder500 purpleGradientButton"
-                                        style={{backgroundColor: "#9B6BFB", border: "2px solid white"}}
+                                <button className="outlineButton whiteText font30px font20pxUnder500 purpleToRedGradientButton"
                                         onClick={this.handleClick.bind(this)}>
                                     {"Sign Up"}
                                 </button>
@@ -274,7 +274,7 @@ class Pathway extends Component {
                                     </div>
                                 </li>
                                 <li>
-                                    <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons"/>
+                                    <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons" style={{width: '33px'}}/>
                                     <div className="under500only br"><br/></div>
                                     <div style={{display: 'inline-block'}}>
                                         <i>Cost</i><br/>
@@ -361,7 +361,7 @@ class Pathway extends Component {
                         </div>
 
                         <div className="pathwayLandingQuote">
-                            <h1 style={{marginBottom:'30px'}} className="font40px font32pxUnder700 font30pxUnder500">Sponsored by <img
+                            <h1 style={{marginBottom:'30px'}} className="font36px font32pxUnder700 font26pxUnder500">Sponsored by <img
                                 src={pathway.sponsor.logo}
                                 alt={pathway.sponsor.name}
                                 className="pathwayLandingSponsoredBy"
@@ -372,7 +372,7 @@ class Pathway extends Component {
                                         src="/icons/Information.png"
                                         className="pathwayLandingIconsLeft"
                                     />
-                                    <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">ABOUT</b>
+                                    <b style={{color: '#B869FF'}} className="font28px font24pxUnder700 font22pxUnder500">About</b>
                                 </div>
                                 <div className="font20px font16pxUnder700 font14pxUnder400">
                                     {pathway.sponsor.description}
@@ -383,7 +383,7 @@ class Pathway extends Component {
                                             src="/icons/Badge.png"
                                             className="pathwayLandingIconsLeft"
                                         />
-                                        <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">OPEN POSITIONS</b><br/>
+                                        <b style={{color: '#B869FF'}} className="font28px font24pxUnder700 font22pxUnder500">Open Positions</b><br/>
                                         <div className="font20px font16pxUnder700 font14pxUnder400">- {pathway.sponsor.hiring}</div>
                                     </div>
                                     : null}
@@ -393,7 +393,7 @@ class Pathway extends Component {
                                         className="pathwayLandingIconsLeft"
                                     />
                                     <b style={{color: '#B869FF'}}
-                                       className="font40px font24pxUnder500">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
+                                       className="font28px font24pxUnder700 font22pxUnder500">{pathway.sponsor.name} Links</b><br/>
                                     <a href={pathway.sponsor.homepage} target="_blank" style={style.infoLinks}
                                        className="font20px font16pxUnder700 font14pxUnder400">Website</a>
                                     {pathway.sponsor.blog ?
@@ -407,7 +407,7 @@ class Pathway extends Component {
                             {pathway.sponsor.quote ?
                                 <div className="pathwayLandingQuoteRight">
                                     <div style={style.quote.container}>
-                                        <div style={style.quote.content} className="font28px font20pxUnder700 font16pxUnder400">
+                                        <div style={style.quote.content} className="font22px font18pxUnder700 font16pxUnder400">
                                             {"\""}{pathway.sponsor.quote.body}{"\""}<br/>
                                         </div>
 
