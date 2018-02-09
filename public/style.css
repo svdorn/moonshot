@@ -1614,7 +1614,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     width: 100%;
 }
 .pathwayLandingSponsoredBy {
-    height: 70px;
+    height: 50px;
     margin-top: -15px;
 }
 .pathwayLandingIconsLeft {
@@ -2510,7 +2510,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
         width: 30px;
     }
     .pathwayLandingSponsoredBy {
-        height: 50px;
+        height: 40px;
     }
     .pathwayLandingIconsLeft {
         height: 24px;
