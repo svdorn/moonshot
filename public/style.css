@@ -1703,7 +1703,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 .horizListText {
     width: 100%;
-    font-size: 20px;
     text-align: center;
 }
 
@@ -2017,10 +2016,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     }
 
     .homepageSeparator { transform: scale(4, .025); }
-
-    .horizListText {
-        font-size: 15px;
-    }
 
     #exampleSkillsContainer { width: 85%; }
 
@@ -2495,7 +2490,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .forBusinessCircle:nth-child(4) { top: 336px; }
 
 
-    .homePathwaysDesc { display: none; }
     .fullHeight { height: 550px; }
     .infoBox { padding-top: 190px; }
 
