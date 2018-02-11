@@ -24,6 +24,7 @@
     "debug": "~2.6.9",
     "ejs": "^2.5.7",
     "express": "^4.16.2",
+    "express-seo": "0.0.1",
     "express-session": "^1.15.6",
     "http-proxy": "^1.16.2",
     "jade": "~1.11.0",
