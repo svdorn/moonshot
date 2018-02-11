@@ -446,68 +446,11 @@ class Pathway extends Component {
                             }
                         </div>
 
-                        <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                            <div className="homepageSeparator purpleGreenSeparator"/>
-                        </div>
-
-                        <div>
-                            {pathway.sponsor ?
-                                <div style={{marginBottom: "30px"}}>
-                                    <HomepageTriangles variation="3"/>
-                                    <ul className="horizCenteredList homepageBenefitsList list500pxStack">
-                                        <li className="pathwayLandingLiMargin">
-                                            <div style={{position: "relative"}}>
-                                                <img
-                                                    src="/icons/NoMoney.png"
-                                                    alt="Free"
-                                                    className="infoBoxImage"
-                                                />
-                                                <div className="font20px font16pxUnder700 font14pxUnder400">
-                                                    It{"'"}s free.<br/>
-                                                    {pathway.sponsor.name} provides scholarships<br/>
-                                                    to pay for your pathway.
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div style={{position: "relative"}}>
-                                                <img
-                                                    src="/icons/Portfolio.png"
-                                                    alt="Portfolio"
-                                                    className="infoBoxPortfolioImage"
-                                                />
-                                                <div className="font20px font16pxUnder700 font14pxUnder400">
-                                                    Learn {pathway.sponsor.learn}<br/>
-                                                    and build<br/>
-                                                    your {pathway.sponsor.type} portfolio.
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <ul className="horizCenteredList homepageBenefitsList listBottom500pxStack">
-                                        <li>
-                                            <div style={{position: "relative"}}>
-                                                <img
-                                                    src="/icons/DataPurple.png"
-                                                    alt="Data"
-                                                    className="infoBoxImage"
-                                                />
-                                                <div className="font20px font16pxUnder700 font14pxUnder400">
-                                                    Get evaluated by {pathway.sponsor.name}<br/>
-                                                    and other {pathway.sponsor.type} employers<br/>
-                                                    based on your performance.
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-
-
-                                : null}
-                        </div>
-
                         {pathway.steps && pathway.sponsor.displaySteps === "true" ?
                             <div>
+                                <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
+                                    <div className="homepageSeparator purpleGreenSeparator"/>
+                                </div>
                                 <div className="center" style={{margin: "100px 0 40px 0"}}>
                                     < b style={{color: '#B869FF'}}
                                         className="font40px font32pxUnder700 font24pxUnder500">Pathway Overview</ b>
@@ -562,8 +505,8 @@ class Pathway extends Component {
                     </div>
                     :
                     <div>
-                        <div className="fullHeight purpleGradient"/>
-                        <div className="fullHeight purpleGradient"/>
+                        <div className="fullHeight"/>
+                        <div className="fullHeight"/>
                     </div>
                 }
 
