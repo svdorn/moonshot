@@ -992,7 +992,7 @@ class Onboarding extends Component {
         if (this.state.tabValue === "goals") {
             skipClass = "purpleText";
         } else if (this.state.tabValue === "info") {
-            skipClass = "greenText";
+            skipClass = "onboarding3PurpleText";
         }
 
         return (

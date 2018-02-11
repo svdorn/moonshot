@@ -97,15 +97,15 @@ class Menu extends Component {
     }
 
     render() {
-        let iconMenuColor = this.props.isOnboarding ? "#00c3ff" : "white";
+        let iconMenuColor = this.props.isOnboarding ? "black" : "white";
         let moonshotLogo = this.props.isOnboarding ? "/images/OfficialLogoBlack.png" : "/images/OfficialLogoWhite.png";
-        let dropdownClass = this.props.isOnboarding ? "headerDropdownBlue wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
+        let dropdownClass = this.props.isOnboarding ? "headerDropdownBlack wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
         let menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem"
-        if (this.props.blueHeader) {
-            moonshotLogo = "/images/OfficialLogoBlue.png";
-            dropdownClass = "headerDropdownBlue wideScreenMenuItem";
-            menuItemClass = "menuItem font18px borderBottomClickable noWrap blueText wideScreenMenuItem"
-        }
+        // if (this.props.blueHeader) {
+        //     moonshotLogo = "/images/OfficialLogoBlue.png";
+        //     dropdownClass = "headerDropdownBlue wideScreenMenuItem";
+        //     menuItemClass = "menuItem font18px borderBottomClickable noWrap blueText wideScreenMenuItem"
+        // }
         let discoverClass = menuItemClass;
         if (this.props.location.pathname === '/discover') {
             discoverClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";

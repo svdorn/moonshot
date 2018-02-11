@@ -16,6 +16,7 @@ body {
     --moonshotGreenText: #00e2ba;
     --moonshotPurple: #cf9bff;
     --moonshotDarkPurple: #B869FF;
+    --onboarding3Purple: #b130d3;
 }
 
 .container {
@@ -240,6 +241,9 @@ form > h1 {
 }
 .headerDropdownBlue > div:first-child > div:nth-child(2) {
     color: var(--moonshotLightBlue) !important;
+}
+.headerDropdownBlack > div:first-child > div:nth-child(2) {
+    color: black !important;
 }
 
 .clickable, .clickableNoUnderline, .borderBottomClickable { cursor: pointer; }
@@ -871,11 +875,12 @@ button.link {
 
 
 #onboardingBioTextarea {
-    width: 774px;
+    width: 100%;
     height: initial;
     text-align: initial;
     padding: 5px 10px;
 }
+#onboardingBio { width: calc(700px + 8%); }
 .onboardingDots { margin-bottom: 10px; }
 .onboardingDots > div {
     width: 16px;
@@ -899,7 +904,7 @@ button.link {
     opacity: .3;
 }
 .onboardingDotsinfo > div {
-    background: linear-gradient(to right, var(--moonshotGreen), var(--moonshotGreenText));
+    background: linear-gradient(to right, #b130d3, #e35d67);
     opacity: .3;
 }
 .onboardingDotsinterests > div:first-child,
@@ -995,6 +1000,7 @@ button.link {
 .darkBlueText { color: var(--moonshotMidBlue); }
 .purpleText { color: var(--moonshotPurple) }
 .darkPurpleText { color: var(--moonshotDarkPurple) }
+.onboarding3PurpleText { color: var(--onboarding3Purple); }
 .onboardingPage1Text {
     background: linear-gradient(to right, #5deaff, #3dabff);
     -webkit-background-clip: text;
@@ -2202,7 +2208,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .dp > div > div{
         font-size: 12px !important;
     }
-    #onboardingBioTextarea {
+    #onboardingBio {
         width: calc(400px + 8%);
     }
 }
@@ -2609,7 +2615,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .onboardingPage2Text2Background{
         margin-top: 15px;
     }
-    #onboardingBioTextarea {
+    #onboardingBio {
         width: calc(275px + 8%);
     }
     .onboarding3DividerLeft {
