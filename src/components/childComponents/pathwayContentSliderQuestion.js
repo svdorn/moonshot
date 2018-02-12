@@ -8,8 +8,26 @@ import Slider from 'material-ui/Slider';
 class PathwayContentSliderQuestion extends Component {
     constructor(props) {
         super(props);
+
+        const minValue = typeof props.minValue === "number" ? props.minValue : 1;
+        const maxValue = typeof props.maxValue === "number" ? props.maxValue : 10;
+        const step = typeof props.step === "number" ? props.step : 1;
+        let sliderValue = minValue;
+        // try to assign the value to the value that the user already had from the db
+        try {
+            const userValue = props.currentUser.answers[props.quizId].value;
+            if (typeof userValue !== "number" || userValue < minValue || userValue > maxValue) {
+                throw "value from db out of range or doesn't exist";
+            } else {
+                sliderValue = userValue;
+            }
+        } catch(e) {
+            // if user didn't have something saved, assign the initial value to
+            // be whatever the props told it to be, if specified
+            sliderValue = minValue;
+        }
         this.state = {
-            sliderValue: props.initialValue ? props.initialValue : 1,
+            minValue, maxValue, step, sliderValue
         }
     }
 
@@ -37,9 +55,9 @@ class PathwayContentSliderQuestion extends Component {
                     <div className="font20px font16pxUnder600" style={{marginBottom:"20px"}}>{this.props.question}</div>
                     <div className="font20px font16pxUnder600">{this.state.sliderValue}</div>
                     <Slider
-                        min={this.props.minValue}
-                        max={this.props.maxValue}
-                        step={this.props.step}
+                        min={this.state.minValue}
+                        max={this.state.maxValue}
+                        step={this.state.step}
                         value={this.state.sliderValue}
                         onChange={this.handleSlider}
                         onDragStop={this.saveSliderValue}
