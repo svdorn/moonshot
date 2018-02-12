@@ -53,6 +53,30 @@ var usersSchema = mongoose.Schema({
             subStep: Number
         },
     }],
+    /*
+        // --->> IMPORTANT: <<--- //
+        // IN ORDER FOR MONGOOSE TO SAVE answers, MUST CALL   //
+        // .markModified('answers') ON THE USER, FOR EXAMPLE: //
+        //      user.answers["8uijhyuj"] = {...};             //
+        //      user.markModified('answers');                 //
+        //      user.save();                                  //
+        to eliminate the need to search when getting answers, answers are all
+        stored outside of the pathways that contain them
+        answers object will look like:
+        "answers": {
+            "67890k3i339ik3i": {
+                "type": "sliderValue",
+                "value": "8"
+                "correct": undefined //should be undefined if there is objectively correct answer
+            },
+            "[another quiz id]": {
+                "type": "multipleChoice",
+                "value": "3" //the answerValue of the chosen answer,
+                "correct": true
+            }
+        }
+    */
+    answers: mongoose.Schema.Types.Mixed
 });
 
 // 'Users' means we will use the 'users' collection. if 'Books' was in there

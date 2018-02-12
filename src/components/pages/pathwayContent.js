@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import PathwayContentLink from '../childComponents/pathwayContentLink';
 import PathwayContentVideo from '../childComponents/pathwayContentVideo';
 import PathwayContentArticle from '../childComponents/pathwayContentArticle';
+import PathwayContentQuiz from '../childComponents/pathwayContentQuiz';
 import {Tabs, Tab, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
@@ -23,9 +24,6 @@ class PathwayContent extends Component {
         }
     }
 
-    componentWillReceiveProps() {
-        console.log("cwrprops");
-    }
 
     componentDidMount() {
         // this.props.setHeaderBlue(true);
@@ -167,6 +165,8 @@ class PathwayContent extends Component {
                 content = <PathwayContentVideo className="videoContainer"/>;
             } else if (contentType == "article") {
                 content = <PathwayContentArticle className="pathwayContent"/>
+            } else if (contentType == "quiz") {
+                content = <PathwayContentQuiz className="quizContent"/>
             } else {
                 content = <div style={style.div}>Not Video or Link</div>;
             }
@@ -231,6 +231,7 @@ class PathwayContent extends Component {
                             </div>
 
                             <div style={{height: "10px"}}/>
+
                             {content}
 
                             <RaisedButton

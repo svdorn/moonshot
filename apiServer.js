@@ -1084,6 +1084,23 @@ app.get('/getArticle', function (req, res) {
     })
 });
 
+//----->> GET QUIZ BY ID <<-----
+app.get('/getQuiz', function (req, res) {
+    const _id = sanitize(req.query._id);
+    const query = {_id: _id};
+
+    Quizzes.findOne(query, function (err, quiz) {
+        if (err) {
+            console.log("error in get quiz by id")
+            res.status(404).send("Quiz not found");
+        } else {
+            quiz.correctAnswerNumber = undefined;
+            res.json(quiz);
+        }
+
+    })
+});
+
 //----->> GET VIDEO BY ID <<-----
 app.get('/getVideo', function (req, res) {
     const _id = sanitize(req.query._id);
