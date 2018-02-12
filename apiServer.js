@@ -903,6 +903,8 @@ function safeUser(user) {
     newUser.verificationToken = undefined;
     newUser.emailVerificationToken = undefined;
     newUser.passwordToken = undefined;
+    newUser.answers = undefined;
+    return newUser;
 }
 
 
