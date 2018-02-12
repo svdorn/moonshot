@@ -59,14 +59,17 @@ class PathwayContentQuiz extends Component {
 
         const sliderOptions = quiz.sliderOptions ? quiz.sliderOptions : {};
         const questionType = quiz.questionType;
+        let questionJsx = null;
         switch (questionType) {
             case "slider":
-                return <PathwayContentSliderQuestion
+                questionJsx = <PathwayContentSliderQuestion
                             question={quiz.question}
                             minValue={quiz.sliderOptions.minValue}
                             maxValue={quiz.sliderOptions.maxValue}
                             initialValue={quiz.sliderOptions.initialValue}
-                            step={quiz.sliderOptions.step} />
+                            step={quiz.sliderOptions.step}
+                            quizId={quiz._id}
+                        />
                 break;
             default:
                 return null;
@@ -75,10 +78,8 @@ class PathwayContentQuiz extends Component {
         return (
             <Paper className={this.props.className} style={{...this.props.style}} zDepth={1}>
                 {this.state.quiz !== undefined ?
-                    <div className="center" style={{marginBottom: "10px"}}>
-                        <h4>Question {currStep.subStepNumber}</h4>
-                        <div>{quiz.question}</div>
-
+                    <div className="center" style={{margin: "10px 0"}}>
+                        { questionJsx }
                     </div>
                     : null}
             </Paper>

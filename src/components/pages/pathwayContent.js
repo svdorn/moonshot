@@ -166,7 +166,7 @@ class PathwayContent extends Component {
             } else if (contentType == "article") {
                 content = <PathwayContentArticle className="pathwayContent"/>
             } else if (contentType == "quiz") {
-                content = <PathwayContentQuiz className="quizContent"/>
+                content = <PathwayContentQuiz className="pathwayContent"/>
             } else {
                 content = <div style={style.div}>Not Video or Link</div>;
             }

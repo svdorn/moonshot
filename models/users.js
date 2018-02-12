@@ -65,12 +65,12 @@ var usersSchema = mongoose.Schema({
         answers object will look like:
         "answers": {
             "67890k3i339ik3i": {
-                "type": "sliderValue",
+                "answerType": "sliderValue",
                 "value": "8"
                 "correct": undefined //should be undefined if there is objectively correct answer
             },
             "[another quiz id]": {
-                "type": "multipleChoice",
+                "answerType": "multipleChoice",
                 "value": "3" //the answerValue of the chosen answer,
                 "correct": true
             }

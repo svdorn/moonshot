@@ -81,6 +81,12 @@ export function usersReducers(state = initialState, action) {
                 ...state, currentUser: action.payload, notification: action.notification
             };
             break;
+        case "UPDATE_ANSWER":
+            return {
+                ...state,
+                currentUser: action.currentUser
+            };
+            break;
         case "FOR_BUSINESS_REQUESTED":
         case "CONTACT_US_REQUESTED":
             return {
