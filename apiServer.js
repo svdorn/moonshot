@@ -903,6 +903,8 @@ function safeUser(user) {
     newUser.verificationToken = undefined;
     newUser.emailVerificationToken = undefined;
     newUser.passwordToken = undefined;
+    newUser.answers = undefined;
+    return newUser;
 }
 
 
@@ -1079,6 +1081,23 @@ app.get('/getArticle', function (req, res) {
             console.log("error in get article by id")
         } else {
             res.json(article);
+        }
+
+    })
+});
+
+//----->> GET QUIZ BY ID <<-----
+app.get('/getQuiz', function (req, res) {
+    const _id = sanitize(req.query._id);
+    const query = {_id: _id};
+
+    Quizzes.findOne(query, function (err, quiz) {
+        if (err) {
+            console.log("error in get quiz by id")
+            res.status(404).send("Quiz not found");
+        } else {
+            quiz.correctAnswerNumber = undefined;
+            res.json(quiz);
         }
 
     })
@@ -1361,7 +1380,7 @@ app.post("/updateInterests", function(req, res) {
                 if (err) {
                     res.send(false);
                 }
-                res.send(updatedUser);
+                res.send(removePassword(updatedUser));
             });
         })
     } else {
@@ -1393,7 +1412,7 @@ app.post("/updateGoals", function(req, res) {
                 if (err) {
                     res.send(false);
                 }
-                res.send(updatedUser);
+                res.send(removePassword(updatedUser));
             });
         })
     } else {
@@ -1402,6 +1421,55 @@ app.post("/updateGoals", function(req, res) {
 
 
 });
+
+
+app.post("/updateAnswer", function(req, res) {
+    let params, userId, verificationToken, quizId, answer;
+    try {
+        // get all the parameters
+        params = sanitize(req.body.params);
+        userId = params.userId;
+        verificationToken = params.verificationToken;
+        quizId = params.quizId;
+        answer = params.answer;
+    } catch (e) {
+        res.status(400).send("Wrong request format.");
+        return;
+    }
+
+    Users.findById(userId, function(err, user) {
+        if (err) {
+            console.log(err);
+            res.status(404).send("Current user not found.");
+            return;
+        }
+
+        if (!verifyUser(user, verificationToken)) {
+            console.log("can't verify user");
+            res.status(401).send("User does not have valid credentials to update answers.");
+            return;
+        }
+
+        // create answers object for user if it doesn't exist or is the wrong format
+        if (!user.answers || typeof user.answers !== "object" || Array.isArray(user.answers)) {
+            user.answers = {};
+        }
+
+        // update the user's answer to the given question
+        user.answers[quizId.toString()] = answer;
+        // so that Mongoose knows to update the answers object in the db
+        user.markModified('answers');
+
+        user.save(function (err, updatedUser) {
+            if (err) {
+                res.send(false);
+            }
+            res.send(removePassword(updatedUser));
+        });
+    })
+
+});
+
 
 app.post("/updateInfo", function(req, res) {
     const info = sanitize(req.body.params.info);
@@ -1431,7 +1499,7 @@ app.post("/updateInfo", function(req, res) {
                 if (err) {
                     res.send(false);
                 }
-                res.send(updatedUser);
+                res.send(removePassword(updatedUser));
             });
         })
     } else {

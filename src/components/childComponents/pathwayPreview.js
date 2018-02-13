@@ -19,14 +19,14 @@ class PathwayPreview extends Component {
 
         const titleDivStyle = {
             width: "100%",
-            height: "71.2px",
+            height: "71px",
             display: "grid",
-            marginTop: "5.6px",
+            marginTop: "5px",
             overflow: "hidden"
         };
 
         const titleSpanStyle = {
-            margin: "auto",
+            margin: "auto 2px",
             fontSize: "24px"
         };
 

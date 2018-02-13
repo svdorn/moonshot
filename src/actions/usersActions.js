@@ -292,6 +292,20 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
     }
 }
 
+export function updateAnswer(userId, verificationToken, quizId, answer) {
+    return function(dispatch) {
+        axios.post("/api/updateAnswer", {
+            params: { userId, verificationToken, quizId, answer }
+        })
+        .then(function(response) {
+            dispatch({type: "UPDATE_ANSWER", currentUser: response.data});
+        })
+        .catch(function(error) {
+            console.log("ERROR: ", error);
+        });
+    }
+}
+
 export function updateInterests(user, interests) {
     return function(dispatch) {
         axios.post("/api/updateInterests", {
