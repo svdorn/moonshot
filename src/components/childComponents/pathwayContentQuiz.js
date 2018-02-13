@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import axios from 'axios';
 import PathwayContentSliderQuestion from './pathwayContentSliderQuestion';
 //import PathwayContentMultipleChoiceQuestion from './pathwayContentMultipleChoiceQuestion';
-//import PathwayContentTwoOptionsQuestion from './pathwayContentTwoOptionsQuestion';
+import PathwayContentTwoOptionsQuestion from './pathwayContentTwoOptionsQuestion';
 
 class PathwayContentQuiz extends Component {
     constructor(props) {
@@ -62,14 +62,23 @@ class PathwayContentQuiz extends Component {
         let questionJsx = null;
         switch (questionType) {
             case "slider":
-                questionJsx = <PathwayContentSliderQuestion
-                            question={quiz.question}
-                            minValue={quiz.sliderOptions.minValue}
-                            maxValue={quiz.sliderOptions.maxValue}
-                            initialValue={quiz.sliderOptions.initialValue}
-                            step={quiz.sliderOptions.step}
-                            quizId={quiz._id}
-                        />
+                questionJsx =
+                    <PathwayContentSliderQuestion
+                        question={quiz.question}
+                        minValue={quiz.sliderOptions.minValue}
+                        maxValue={quiz.sliderOptions.maxValue}
+                        initialValue={quiz.sliderOptions.initialValue}
+                        step={quiz.sliderOptions.step}
+                        quizId={quiz._id}
+                    />
+                break;
+            case "twoOptions":
+                questionJsx =
+                    <PathwayContentTwoOptionsQuestion
+                        question={quiz.question}
+                        choices={quiz.twoOptionsChoices}
+                        quizId={quiz._id}
+                    />
                 break;
             default:
                 return null;
