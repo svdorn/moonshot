@@ -1689,6 +1689,14 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 .sliderContainer { margin: 0 20%; }
 
+.twoOptionsBox {
+    width: 200px;
+    height: 200px;
+    display: inline-block;
+    vertical-align: top;
+}
+.twoOptionsBox.selected { background-color: var(--moonshotLightBlue) !important; }
+.twoOptionsBox.notSelected { background-color: gray !important; }
 
 /* decorative triangles */
 

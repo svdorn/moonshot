@@ -13,12 +13,13 @@ class TwoOptionsChoice extends Component {
 
 
     render() {
-        const selectedClass = this.props.selected ? " selected" : "";
+        const selectedClass = this.props.selected ? "selected" : "notSelected";
         return (
-            <Paper className={"clickableNoUnderline twoOptionsBox" + selectedClass}
+            <Paper className={"clickableNoUnderline twoOptionsBox " + selectedClass}
                    onMouseOver={this.onMouseOver}
                    onMouseOut={this.onMouseOut}
                    zDepth={this.state.shadow}
+                   onClick={() => this.props.onClick(this.props.choice)}
             >
                 {this.props.text}
             </Paper>

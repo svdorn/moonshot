@@ -32,7 +32,8 @@ class PathwayContentTwoOptionsQuestion extends Component {
 
 
     // set the current choice to the one that was clicked, save in db
-    handleClick(choice) {
+    handleClick = (choice) => {
+        console.log("here");
         // save if choice is valid
         if (choice === 1 || choice === 2) {
             this.setState({choice});
@@ -51,9 +52,20 @@ class PathwayContentTwoOptionsQuestion extends Component {
         return (
             <div className="center">
                 <div className="font20px font16pxUnder600" style={{marginBottom:"20px"}}>{this.props.question}</div>
-                <TwoOptionsChoice selected={this.state.choice === 1} text={this.state.option1} />
+
+                <TwoOptionsChoice
+                    selected={this.state.choice === 1}
+                    text={this.state.option1}
+                    choice={1}
+                    onClick={this.handleClick}
+                />
                 or
-                <TwoOptionsChoice selected={this.state.choice === 2} text={this.state.option2} />
+                <TwoOptionsChoice
+                    selected={this.state.choice === 2}
+                    text={this.state.option2}
+                    choice={2}
+                    onClick={this.handleClick}
+                />
             </div>
         );
     }
