@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Paper} from 'material-ui';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updateAnswer} from '../../actions/usersActions';
+import {updateAnswer} from '../../../actions/usersActions';
 import Slider from 'material-ui/Slider';
 
 class PathwayContentSliderQuestion extends Component {

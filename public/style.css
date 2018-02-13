@@ -1696,7 +1696,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     vertical-align: top;
 }
 .twoOptionsBox.selected { background-color: var(--moonshotLightBlue) !important; }
-.twoOptionsBox.notSelected { background-color: gray !important; }
+.twoOptionsBox.notSelected { background-color: #dcdcdc !important; }
 
 /* decorative triangles */
 
