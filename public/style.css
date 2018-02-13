@@ -1180,10 +1180,6 @@ button.link {
     background: rgba(0,0,0,0);
 }
 
-
-
-
-
 .videoContainer {
     position: relative;
     display: inline-block;
@@ -1192,6 +1188,20 @@ button.link {
     padding-top: 40%;
 }
 .videoContainer > span {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+.pathwayVideoContainer {
+    position: relative;
+    margin: auto;
+    text-align:center;
+    width: 50%;
+    padding-top: 30%;
+}
+.pathwayVideoContainer > span {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -2298,6 +2308,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .overviewAndCommentBoxInfo {
         width: 150px;
     }
+    .pathwayVideoContainer {
+        width: 70%;
+        padding-top: 40%;
+    }
 
     .font40pxUnder700 { font-size: 40px; }
     .font38pxUnder700 { font-size: 38px; }
@@ -2725,6 +2739,10 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     .profileSeparatorRect {
         width: 150px;
         padding-left: 22px;
+    }
+    .pathwayVideoContainer {
+        width: 80%;
+        padding-top: 60%;
     }
 
     .font40pxUnder400 { font-size: 40px; }

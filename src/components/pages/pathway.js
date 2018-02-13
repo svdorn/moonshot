@@ -6,6 +6,7 @@ import {registerForPathway, closeNotification} from '../../actions/usersActions'
 import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
+import YouTube from 'react-youtube';
 //import './pathway.css';
 import axios from 'axios';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
@@ -144,7 +145,15 @@ class Pathway extends Component {
                 // right: "80%",
                 // margin: "auto"
             },
-        }
+        };
+
+        const opts = {
+            height: '100%',
+            width: '100%',
+            playerVars: { // https://developers.google.com/youtube/player_parameters
+                autoplay: 0
+            }
+        };
 
         const pathway = this.state.pathway;
         const deadline = this.state.pathway.deadline;
@@ -571,6 +580,22 @@ class Pathway extends Component {
                             </div>
                             : null
                         }
+
+                        {pathway.sponsor.video ?
+                            <div>
+                                <div
+                                    className="font28px font24pxUnder700 font22pxUnder500 center" style={{marginBottom:"20px"}}>{pathway.sponsor.video.title}
+                                </div>
+                                <div className="pathwayVideoContainer">
+                                    <YouTube
+                                        videoId={pathway.sponsor.video.link}
+                                        opts={opts}
+                                        onReady={this._onReady}
+                                        onEnd={this._onEnd}
+                                    />
+                                </div>
+                            </div>
+                            : null}
 
                         {pathway.extraInfo ?
 
