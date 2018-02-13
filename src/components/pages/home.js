@@ -252,7 +252,7 @@ class Home extends Component {
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
                         <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500" style={{zIndex: "20", width: "100%"}}>
-                            Skip the resum&eacute;.<br/> Learn skills that employers <div className="br under350only"><br/></div>need <div className="br above350only"><br/></div><i>for free, forever.</i><br/>
+                            Skip the resum&eacute;.<br/>Learn skills that employers need<br/><i>and get paid to do it.</i><br/>
                             <button className="outlineButton font30px font20pxUnder500 blueWhiteButton"
                                     onClick={() => this.scrollDown()}>
                                 Get Started
@@ -284,9 +284,9 @@ class Home extends Component {
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
                                     <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Complete Pathways<br/>And Learn Skills</h2>
-                                    Pathways are a series of courses
-                                    designed to teach you skills
-                                    demanded by employers.
+                                      Pathways are a series of free courses
+                                      designed to teach you skills that employers actually want.
+                                      Who cares if you know how photosynthesis works?
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight onHome">
@@ -310,8 +310,9 @@ class Home extends Component {
                                 <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
                                     <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Build Your Profile</h2>
                                     Add your skills, completed projects and
-                                    finished pathways. Prove yourself to employers through
-                                    your profile.
+                                    finished pathways. The modern resumé – the
+                                    B you got in history shouldn’t affect your
+                                    chances of getting a tech job.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesLeft">
@@ -333,10 +334,11 @@ class Home extends Component {
                                     className="homepageTrajectoryTextLeftIcon onHome smallerWidthIcon"
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
-                                    <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Hired By Companies<br/>Leading The Future</h2>
-                                    Compete for open positions with
-                                    sponsor companies by excelling in
-                                    pathways and strengthening your profile.
+                                    <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Paid and Get Hired by<br/>Innovative Companies</h2>
+                                    Compete for open positions with sponsor
+                                    companies by excelling in pathways and
+                                    demonstrating your skills. Score an
+                                    interview with them and we’ll pay you $100.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight">
