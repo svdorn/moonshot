@@ -3,7 +3,7 @@ import {Paper} from 'material-ui';
 import {connect} from 'react-redux';
 import axios from 'axios';
 import PathwayContentSliderQuestion from './pathwayContentSliderQuestion';
-//import PathwayContentMultipleChoiceQuestion from './pathwayContentMultipleChoiceQuestion';
+import PathwayContentMultipleChoiceQuestion from './pathwayContentMultipleChoiceQuestion';
 import PathwayContentTwoOptionsQuestion from './pathwayContentTwoOptionsQuestion';
 
 class PathwayContentQuiz extends Component {
@@ -77,6 +77,15 @@ class PathwayContentQuiz extends Component {
                     <PathwayContentTwoOptionsQuestion
                         question={quiz.question}
                         choices={quiz.twoOptionsChoices}
+                        quizId={quiz._id}
+                    />
+                break;
+            case "multipleChoice":
+                questionJsx =
+                    <PathwayContentMultipleChoiceQuestion
+                        question={quiz.question}
+                        answers={quiz.multipleChoiceAnswers}
+                        allowCustomAnswer={quiz.allowCustomAnswer}
                         quizId={quiz._id}
                     />
                 break;
