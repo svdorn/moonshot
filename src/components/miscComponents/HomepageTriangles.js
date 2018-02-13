@@ -87,7 +87,7 @@ class HomepageTriangles extends Component {
                 {top: "54%", right: "23%", rotate: -134, scale: .3, className: " whiteTriangle"},
                 {top: "60%", right: "16%", rotate: -19, scale: .5, className: " whiteTriangle"},
                 {top: "68%", right: "3%", rotate: -72, scale: .4, className: " whiteTriangle"},
-                {top: "69%", right: "28%", rotate: -111, scale: .7, className: " whiteTriangle"},
+                {top: "70%", right: "26%", rotate: -111, scale: .7, className: " whiteTriangle"},
                 {top: "74%", right: "19%", rotate: -98, scale: .6, className: " whiteTriangle"},
             ];
         }
