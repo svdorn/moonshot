@@ -72,7 +72,8 @@ var usersSchema = mongoose.Schema({
             "[another quiz id]": {
                 "answerType": "multipleChoice",
                 "value": "3" //the answerValue of the chosen answer,
-                "correct": true
+                "correct": true,
+                "isCustomAnswer": false
             }
         }
     */

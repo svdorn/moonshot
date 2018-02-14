@@ -26,7 +26,7 @@ var quizzesSchema = mongoose.Schema({
         // the content of the answer, e.g. "Rainbow Dash"
         body: String,
         // the number of the answer, not necessarily the order
-        answerNumber: Number
+        answerNumber: Number,
     }],
 
     // IF WE WANT MULTIPLE QUESTIONS PER QUIZ

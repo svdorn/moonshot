@@ -1698,6 +1698,27 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .twoOptionsBox.selected { background-color: var(--moonshotLightBlue) !important; }
 .twoOptionsBox.notSelected { background-color: #dcdcdc !important; }
 
+.multipleChoiceOption {
+    position: relative;
+    margin-bottom: 10px;
+}
+.multipleChoiceAnswer {
+    /* text-align: left;
+    margin-left: calc(50% - 40px); */
+}
+.multipleChoiceCircle {
+    width: 24px;
+    height: 24px;
+    background-color: white;
+    border-radius: 15px;
+    border: 3px solid var(--moonshotLightBlue);
+    position: absolute;
+    left: calc(50% - 80px);
+}
+.multipleChoiceCircle.selected {
+    background-color: var(--moonshotLightBlue);
+}
+
 /* decorative triangles */
 
 .triangle{
