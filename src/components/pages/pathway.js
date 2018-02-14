@@ -43,7 +43,15 @@ class Pathway extends Component {
     }
 
     handleClick() {
-        if (this.props.currentUser) {
+        // Check if it is a specialized pathway
+        if (this.state.pathway.name === "NWM Sales") {
+            if (this.props.currentUser) {
+
+            } else {
+                this.props.router.push('/signup?pathway=' + this.state.pathway.url);
+            }
+        }
+        else if (this.props.currentUser) {
             const user = {
                 pathway: this.state.pathway.name,
                 name: this.props.currentUser.name,
@@ -326,7 +334,7 @@ class Pathway extends Component {
                         </div>
 
                         {pathway.sponsor.info ?
-                            <div style={{marginTop: '30px', marginBottom: '60px', overflow: 'auto'}}>
+                            <div style={{marginTop: '40px', marginBottom: '70px', overflow: 'auto'}}>
                                 <div style={style.horizList}>
                                     <div className="horizListFull">
                                         <div className="horizListSpacer" style={{marginLeft: "20%"}}
@@ -519,6 +527,9 @@ class Pathway extends Component {
 
                         {pathway.sponsor.info2 ?
                             <div style={{marginTop: '60px', marginBottom: '60px', overflow: 'auto'}}>
+                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom: '30px'}}>
+                                    Awards
+                                </div>
                                 <div style={style.horizList}>
                                     <div className="horizListFull">
                                         <div className="horizListSpacer" style={{marginLeft: "20%"}}
@@ -583,7 +594,8 @@ class Pathway extends Component {
 
                         {pathway.sponsor.video ?
                             <div>
-                                <div className="font28px font24pxUnder700 font22pxUnder500 center" style={{marginBottom:"20px"}}>
+                                <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom:"20px"}}>
                                     {pathway.sponsor.video.title}
                                 </div>
                                 <div className="pathwayVideoContainer">

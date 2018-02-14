@@ -973,6 +973,39 @@ app.put('/user/:_id', function (req, res) {
     });
 });
 
+//----->> ADD PATHWAY <<------
+app.post("/addPathway", function(req, res) {
+    const interests = sanitize(req.body.params.interests);
+    const userId = sanitize(req.body.params.userId);
+    const verificationToken = sanitize(req.body.params.verificationToken);
+
+    if (interests && userId) {
+        // When true returns the updated document
+        Users.findById(userId, function(err, user) {
+            if (err) {
+                console.log(err);
+            }
+
+            if (!verifyUser(user, verificationToken)) {
+                console.log("can't verify user");
+                res.status(401).send("User does not have valid credentials to update interests.");
+                return;
+            }
+
+            user.info.interests = interests;
+
+            user.save(function (err, updatedUser) {
+                if (err) {
+                    res.send(false);
+                }
+                res.send(removePassword(updatedUser));
+            });
+        })
+    } else {
+        res.send(undefined);
+    }
+});
+
 //----->> CHANGE PASSWORD <<------
 app.put('/user/changepassword/:_id', function (req, res) {
     var user = sanitize(req.body);
