@@ -79,7 +79,7 @@ class Pathway extends Component {
 
             quote: {
                 container: {
-                    border: "2px solid #B869FF",
+                    border: "2px solid #da5f7b",
                     fontSize: "30px",
                     padding: "20px",
                     textAlign: "center",
@@ -471,7 +471,7 @@ class Pathway extends Component {
                                             src="/icons/Badge.png"
                                             className="pathwayLandingIconsLeft"
                                         />
-                                        <b style={{color: '#B869FF'}}
+                                        <b style={{color: '#da5f7b'}}
                                            className="font28px font24pxUnder700 font22pxUnder500">Open
                                             Positions</b><br/>
                                         <div className="font20px font16pxUnder700 font14pxUnder400">
@@ -483,7 +483,7 @@ class Pathway extends Component {
                                         src="/icons/www.png"
                                         className="pathwayLandingIconsLeft"
                                     />
-                                    <b style={{color: '#B869FF'}}
+                                    <b style={{color: '#da5f7b'}}
                                        className="font28px font24pxUnder700 font22pxUnder500">{pathway.sponsor.name} Links</b><br/>
                                     <a href={pathway.sponsor.homepage} target="_blank" style={style.infoLinks}
                                        className="font20px font16pxUnder700 font14pxUnder400">Website</a>
@@ -637,7 +637,7 @@ class Pathway extends Component {
                             : null
                         }
                         <div className="center" style={{marginBottom: "40px", clear: "both"}}>
-                            <button className="purpleToPinkButtonExterior bigButton"
+                            <button className="purpleToRedButtonExterior bigButton"
                                     onClick={this.handleClick.bind(this)}
                                     style={{marginTop: "40px"}}
                             >
