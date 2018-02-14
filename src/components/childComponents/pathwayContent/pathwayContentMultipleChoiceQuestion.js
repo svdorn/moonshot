@@ -4,6 +4,7 @@ import {bindActionCreators} from 'redux';
 import {updateAnswer} from '../../../actions/usersActions';
 import TwoOptionsChoice from './twoOptionsChoice';
 import _ from 'lodash';
+import Question from './question';
 
 
 class PathwayContentMultipleChoiceQuestion extends Component {
@@ -137,8 +138,9 @@ class PathwayContentMultipleChoiceQuestion extends Component {
                 >
                     <div className={"multipleChoiceCircle " + customAreaClass} />
                     {isCustomAnswer ?
-                        <input
+                        <textarea
                             type="text"
+                            className="multipleChoiceCustomAnswer"
                             value={self.state.savedCustomAnswer}
                             onChange={(e) => self.handleInputChange(e)}
                         />
@@ -152,7 +154,7 @@ class PathwayContentMultipleChoiceQuestion extends Component {
 
         return (
             <div className="center">
-                <div className="font20px font16pxUnder600" style={{marginBottom:"20px"}}>{this.props.question}</div>
+                <div className="font20px font16pxUnder600" style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
                 {options}
             </div>
         );

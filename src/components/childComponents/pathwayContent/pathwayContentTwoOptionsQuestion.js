@@ -3,6 +3,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateAnswer} from '../../../actions/usersActions';
 import TwoOptionsChoice from './twoOptionsChoice';
+import Question from './question';
 
 
 class PathwayContentTwoOptionsQuestion extends Component {
@@ -51,7 +52,7 @@ class PathwayContentTwoOptionsQuestion extends Component {
     render() {
         return (
             <div className="center">
-                <div className="font20px font16pxUnder600" style={{marginBottom:"20px"}}>{this.props.question}</div>
+                <div className="font20px font16pxUnder600" style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
 
                 <TwoOptionsChoice
                     selected={this.state.choice === 1}

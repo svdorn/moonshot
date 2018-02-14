@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateAnswer} from '../../../actions/usersActions';
 import Slider from 'material-ui/Slider';
+import Question from './question';
 
 class PathwayContentSliderQuestion extends Component {
     constructor(props) {
@@ -52,7 +53,7 @@ class PathwayContentSliderQuestion extends Component {
         return (
             <div className="center">
                 <div className="sliderContainer">
-                    <div className="font20px font16pxUnder600" style={{marginBottom:"20px"}}>{this.props.question}</div>
+                    <div className="font20px font16pxUnder600" style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
                     <div className="font20px font16pxUnder600">{this.state.sliderValue}</div>
                     <Slider
                         min={this.state.minValue}
