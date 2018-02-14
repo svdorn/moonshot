@@ -271,9 +271,9 @@ class ForBusiness extends Component {
                     <div className="fullHeight purpleToBlue">
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
-                        <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500" style={{zIndex: "20"}}>
+                        <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500 font20pxUnder400 font18pxUnder350">
                             Data-driven hiring.<br/>
-                            Skills training and assessments<br/>
+                            Your pipeline to specialized talent<br/>
                             curated to your needs.<br/>
                             <button className="outlineButton whiteText font30px font20pxUnder500 darkBlueButton"
                                     onClick={() => this.scrollDown()}>
