@@ -294,18 +294,16 @@ class Pathway extends Component {
                                 id="pathwayLandingTopInfoList">
                                 <li>
                                     <img src="/icons/ClockWhite.png" className="pathwayLandingIcons"/>
-                                    <div className="under500only br"><br/></div>
-                                    <div style={{display: 'inline-block'}}>
-                                        <i>Time</i><br/>
+                                    <br/>
+                                    <div>
                                         {pathway.estimatedCompletionTime}
                                     </div>
                                 </li>
                                 {deadline ?
                                     <li>
                                         <img src="/icons/CalendarWhite.png" className="pathwayLandingIcons"/>
-                                        <div className="under500only br"><br/></div>
-                                        <div style={{display: 'inline-block'}}>
-                                            <i>Complete By</i><br/>
+                                        <br/>
+                                        <div>
                                             {formattedDeadline}
                                         </div>
                                     </li>
@@ -313,9 +311,8 @@ class Pathway extends Component {
                                 <li>
                                     <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons"
                                          style={{width: '33px'}}/>
-                                    <div className="under500only br"><br/></div>
-                                    <div style={{display: 'inline-block'}}>
-                                        <i>Cost</i><br/>
+                                    <br />
+                                    <div>
                                         {pathway.price}
                                     </div>
                                 </li>
@@ -493,6 +490,9 @@ class Pathway extends Component {
                                     {pathway.sponsor.demo ?
                                         <a href={pathway.sponsor.demo} target="_blank" style={style.infoLinks}
                                            className="font20px font16pxUnder700 font14pxUnder400">Demo</a> : null}
+                                    {pathway.sponsor.careerPage ?
+                                        <a href={pathway.sponsor.careerPage} target="_blank" style={style.infoLinks}
+                                           className="font20px font16pxUnder700 font14pxUnder400">Career Page</a> : null}
                                 </div>
                             </div>
                             {pathway.sponsor.quote ?
