@@ -268,7 +268,7 @@ class Pathway extends Component {
                             <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
 
 
-                            <div className="infoBox whiteText font40px font24pxUnder500" style={{zIndex: "20"}}>
+                            <div className="infoBox whiteText font40px font24pxUnder500" style={{zIndex: "20", marginTop:'-10px'}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
                                 <button
                                     className="outlineButton whiteText font30px font20pxUnder500 purpleToRedGradientButton"
@@ -281,7 +281,7 @@ class Pathway extends Component {
                                                                                             style={{marginTop: "20px"}}/><br/>
                             </div> : ""}
                             <div className="whiteText font20px font14pxUnder700 font12pxUnder500 noWrap"
-                                 style={{textAlign: 'center'}}>
+                                 style={{textAlign: 'center', marginTop:'10px'}}>
                                 Sponsored by
                                 <img
                                     src={pathway.sponsor.logo}
@@ -526,8 +526,8 @@ class Pathway extends Component {
                         </div>
 
                         {pathway.sponsor.info2 ?
-                            <div style={{marginTop: '60px', marginBottom: '60px', overflow: 'auto'}}>
-                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom: '30px'}}>
+                            <div style={{marginTop: '80px', marginBottom: '60px', overflow: 'auto'}}>
+                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom: '40px'}}>
                                     Awards
                                 </div>
                                 <div style={style.horizList}>
@@ -595,7 +595,7 @@ class Pathway extends Component {
                         {pathway.sponsor.video ?
                             <div>
                                 <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
-                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom:"40px"}}>
+                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom:"40px", marginTop:'40px'}}>
                                     {pathway.sponsor.video.title}
                                 </div>
                                 <div className="pathwayVideoContainer">
@@ -636,10 +636,10 @@ class Pathway extends Component {
                             </div>
                             : null
                         }
-                        <div className="center" style={{marginBottom: "40px", clear: "both"}}>
+                        <div className="center" style={{marginBottom: "50px", clear: "both"}}>
                             <button className="purpleToRedButtonExterior bigButton"
                                     onClick={this.handleClick.bind(this)}
-                                    style={{marginTop: "40px"}}
+                                    style={{marginTop: "40px", color:'#da5f7b'}}
                             >
                                 <div className="invertColorOnHover gradientBorderButtonInterior">
                                     {pathway.sponsor.buttonText}
