@@ -334,7 +334,7 @@ class Pathway extends Component {
                         </div>
 
                         {pathway.sponsor.info ?
-                            <div style={{marginTop: '40px', marginBottom: '70px', overflow: 'auto'}}>
+                            <div style={{marginTop: '50px', marginBottom: '80px', overflow: 'auto'}}>
                                 <div style={style.horizList}>
                                     <div className="horizListFull">
                                         <div className="horizListSpacer" style={{marginLeft: "20%"}}
