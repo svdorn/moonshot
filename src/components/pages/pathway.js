@@ -341,7 +341,7 @@ class Pathway extends Component {
                                         >
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 <img
-                                                    src="/icons/Key.png"
+                                                    src="/icons/Psychology.png"
                                                     style={style.horizListIcon}
                                                 /><br/>
                                                 <b>{pathway.sponsor.info[0].title}</b><br/>
@@ -354,7 +354,7 @@ class Pathway extends Component {
                                         <div className="horizListSpacer" style={{marginLeft: "5%", marginRight: '5%'}}>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 <img
-                                                    src="/icons/Evaluate.png"
+                                                    src="/icons/Money.png"
                                                     style={style.horizListIcon}
                                                 /><br/>
                                                 <b>{pathway.sponsor.info[1].title}</b><br/>
@@ -366,7 +366,7 @@ class Pathway extends Component {
                                         <div className="horizListSpacer" style={{marginRight: "20%"}}>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 <img
-                                                    src="/icons/Badge.png"
+                                                    src="/icons/Career.png"
                                                     style={style.horizListIcon}
                                                 /><br/>
                                                 <b>{pathway.sponsor.info[2].title}</b><br/>
