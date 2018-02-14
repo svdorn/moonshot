@@ -344,8 +344,8 @@ class ForBusiness extends Component {
                     <div style={{marginTop: '60px', minWidth: "215px", maxWidth: "1500px", margin: "auto"}}>
                         <div className="center font18px font16pxUnder800"
                              style={{marginBottom: '40px', width: '90%', marginLeft: "5%"}}>
-                            <h1 className="purpleText font28px font24pxUnder800 font22pxUnder500"><b>Our Scholarships to Hire Program</b></h1>
-                            A scholarship for potential hires<div className="under500only br"><br/></div> to learn the skills you need.<br/>
+                            <h1 className="purpleText font28px font24pxUnder800 font22pxUnder500"><b>How it Works</b></h1>
+                            No upfront cost or risk. <div className="under400only"><br/></div>Pay only if you hire.<br/>
                         </div>
 
 
@@ -401,10 +401,10 @@ class ForBusiness extends Component {
                             <div className="homepageTrajectory forBusiness" id="sponsorStudentsForBusiness">
                                 <div className="homepageTrajectoryTextLeft forBusiness">
                                     <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forBusiness">
-                                        <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500"><b>Sponsor Students</b></h2>
-                                        Provide sponsorships for students to learn
-                                        the skills you need. We can find the talent or you
-                                        can sponsor your own candidates.
+                                        <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500"><b>Candidate Training</b></h2>
+                                        College students and recent graduates
+                                        complete the pathway to learn the skills
+                                        you need. We find the talent.
                                     </div>
                                 </div>
 
@@ -548,8 +548,7 @@ class ForBusiness extends Component {
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
                                     3% to 5% for full and part time hires.<br/>
                                     8% to 10% for interns or co-ops.<br/>
-                                    Pay only after he or she meets all of your<br/>
-                                    pre-employment requirements and accepts your offer.
+                                    Pay only after he or she accepts your offer.
                                     </div>
                                 </div>
                             </div>
@@ -558,7 +557,7 @@ class ForBusiness extends Component {
 
                     <div className="center" style={{marginBottom: '20px'}}>
                         <div className="font18px font16pxUnder800">
-                            No upfront costs, no risk, pay only on success.
+                            No upfront costs. No risk. Pay only on success.
                         </div>
                     </div>
                     <div className="center" style={{marginBottom: '20px'}}>
