@@ -537,7 +537,7 @@ class Pathway extends Component {
                                             <div
                                                 className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 <img
-                                                    src="/icons/Key.png"
+                                                    src="/icons/Atom.png"
                                                     style={style.horizListIcon}
                                                 /><br/>
                                                 <b>{pathway.sponsor.info2[0].title}</b><br/>
@@ -552,7 +552,7 @@ class Pathway extends Component {
                                             <div
                                                 className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 <img
-                                                    src="/icons/Evaluate.png"
+                                                    src="/icons/Star.png"
                                                     style={style.horizListIcon}
                                                 /><br/>
                                                 <b>{pathway.sponsor.info2[1].title}</b><br/>
@@ -565,7 +565,7 @@ class Pathway extends Component {
                                             <div
                                                 className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 <img
-                                                    src="/icons/Badge.png"
+                                                    src="/icons/LightbulbPathwayLanding.png"
                                                     style={style.horizListIcon}
                                                 /><br/>
                                                 <b>{pathway.sponsor.info2[2].title}</b><br/>
