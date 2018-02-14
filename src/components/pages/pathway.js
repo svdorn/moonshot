@@ -443,7 +443,7 @@ class Pathway extends Component {
                             : null}
 
                         <div className="homepageSeparatorContainer">
-                            <div className="homepageSeparator purpleGreenSeparator"/>
+                            <div className="homepageSeparator purpleRedSeparator"/>
                         </div>
 
                         <div className="pathwayLandingQuote">
@@ -459,7 +459,7 @@ class Pathway extends Component {
                                         src="/icons/Information.png"
                                         className="pathwayLandingIconsLeft"
                                     />
-                                    <b style={{color: '#B869FF'}}
+                                    <b style={{color: '#da5f7b'}}
                                        className="font28px font24pxUnder700 font22pxUnder500">Company</b>
                                 </div>
                                 <div className="font20px font16pxUnder700 font14pxUnder400">
@@ -522,7 +522,7 @@ class Pathway extends Component {
                             }
                         </div>
                         <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                            <div className="homepageSeparator purpleGreenSeparator"/>
+                            <div className="homepageSeparator purpleRedSeparator"/>
                         </div>
 
                         {pathway.sponsor.info2 ?
@@ -580,7 +580,7 @@ class Pathway extends Component {
                         {pathway.steps && pathway.sponsor.displaySteps === "true" ?
                             <div>
                                 <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                                    <div className="homepageSeparator purpleGreenSeparator"/>
+                                    <div className="homepageSeparator purpleRedSeparator"/>
                                 </div>
                                 <div className="center" style={{margin: "100px 0 40px 0"}}>
                                     < b style={{color: '#B869FF'}}
@@ -594,8 +594,8 @@ class Pathway extends Component {
 
                         {pathway.sponsor.video ?
                             <div>
-                                <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
-                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom:"20px"}}>
+                                <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom:"40px"}}>
                                     {pathway.sponsor.video.title}
                                 </div>
                                 <div className="pathwayVideoContainer">
@@ -636,18 +636,16 @@ class Pathway extends Component {
                             </div>
                             : null
                         }
-                        <div className="center" style={{marginBottom: "20px", clear: "both"}}>
-                            <button className="outlineButton font30px font20pxUnder500"
-                                    style={{
-                                        backgroundColor: "transparent",
-                                        border: "2px solid #B869FF",
-                                        color: "#B869FF",
-                                        marginBottom: '20px'
-                                    }}
-                                    onClick={this.handleClick.bind(this)}>
-                                {pathway.sponsor.buttonText}
+                        <div className="center" style={{marginBottom: "40px", clear: "both"}}>
+                            <button className="purpleToPinkButtonExterior bigButton"
+                                    onClick={this.handleClick.bind(this)}
+                                    style={{marginTop: "40px"}}
+                            >
+                                <div className="invertColorOnHover gradientBorderButtonInterior">
+                                    {pathway.sponsor.buttonText}
+                                </div>
                             </button>
-                            <div className="font16px font14pxUnder700 font12pxUnder500" style={{marginTop: '-5px'}}>
+                            <div className="font16px font14pxUnder700 font12pxUnder500" style={{marginTop: '10px'}}>
                                 {pathway.sponsor.infoUnderButton}
                             </div>
                             {this.props.loading ?
