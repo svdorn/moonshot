@@ -161,7 +161,7 @@ class MyPathways extends Component {
         return (
             <div className='jsxWrapper' ref='discover'>
                 {this.props.currentUser ?
-                    <div>
+                    <div style={{marginBottom: '40px'}}>
                         <div className="greenToBlue headerDiv"/>
                         {this.state.userPathwayPreviews ?
                             <div className="center fillScreenWithHeader">
