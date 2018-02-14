@@ -527,7 +527,7 @@ class Pathway extends Component {
 
                         {pathway.sponsor.info2 ?
                             <div style={{marginTop: '80px', marginBottom: '60px', overflow: 'auto'}}>
-                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom: '40px'}}>
+                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom: '50px'}}>
                                     Awards
                                 </div>
                                 <div style={style.horizList}>
@@ -595,7 +595,7 @@ class Pathway extends Component {
                         {pathway.sponsor.video ?
                             <div>
                                 <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
-                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom:"40px", marginTop:'40px'}}>
+                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom:"40px", marginTop:'30px'}}>
                                     {pathway.sponsor.video.title}
                                 </div>
                                 <div className="pathwayVideoContainer">
