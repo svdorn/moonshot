@@ -68,12 +68,15 @@ class PathwayPreview extends Component {
                         :
                             <div>
                                 <div className="pathwayImgContainer imgBorder">
-                                    <img
+                                    {this.props.image ?
+                                        <img
                                         width={216}
                                         height={160}
                                         alt="VR Image"
                                         src={this.props.image}
-                                    />
+                                        />
+                                        : null
+                                    }
                                 </div>
                                 <div style={titleDivStyle}>
                                     <span style={titleSpanStyle}>{this.props.name}</span>
