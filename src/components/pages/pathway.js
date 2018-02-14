@@ -583,8 +583,8 @@ class Pathway extends Component {
 
                         {pathway.sponsor.video ?
                             <div>
-                                <div
-                                    className="font28px font24pxUnder700 font22pxUnder500 center" style={{marginBottom:"20px"}}>{pathway.sponsor.video.title}
+                                <div className="font28px font24pxUnder700 font22pxUnder500 center" style={{marginBottom:"20px"}}>
+                                    {pathway.sponsor.video.title}
                                 </div>
                                 <div className="pathwayVideoContainer">
                                     <YouTube
@@ -633,8 +633,11 @@ class Pathway extends Component {
                                         marginBottom: '20px'
                                     }}
                                     onClick={this.handleClick.bind(this)}>
-                                {"Get Started"}
+                                {pathway.sponsor.buttonText}
                             </button>
+                            <div className="font16px font14pxUnder700 font12pxUnder500" style={{marginTop: '-5px'}}>
+                                {pathway.sponsor.infoUnderButton}
+                            </div>
                             {this.props.loading ?
                                 <div><br/><CircularProgress color="#B869FF" style={{marginTop: "20px"}}/></div> : ""}
                         </div>
