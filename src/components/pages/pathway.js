@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {registerForPathway, closeNotification} from '../../actions/usersActions';
+import {registerForPathway, closeNotification, addPathway} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
@@ -46,7 +46,15 @@ class Pathway extends Component {
         // Check if it is a specialized pathway
         if (this.state.pathway.name === "NWM Sales") {
             if (this.props.currentUser) {
-
+                console.log(this.state.pathway);
+                console.log(this.props.currentUser);
+                const user = {
+                    _id: this.props.currentUser._id,
+                    pathwayId: this.state.pathway._id,
+                    pathwayUrl: this.state.pathway.url,
+                };
+                console.log(user);
+                this.props.addPathway(user);
             } else {
                 this.props.router.push('/signup?pathway=' + this.state.pathway.url);
             }
@@ -677,6 +685,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         registerForPathway,
         closeNotification,
+        addPathway,
     }, dispatch);
 }
 

@@ -974,25 +974,39 @@ app.put('/user/:_id', function (req, res) {
 });
 
 //----->> ADD PATHWAY <<------
-app.post("/addPathway", function(req, res) {
-    const interests = sanitize(req.body.params.interests);
-    const userId = sanitize(req.body.params.userId);
-    const verificationToken = sanitize(req.body.params.verificationToken);
+app.post("/user/addPathway", function(req, res) {
+    const _id = sanitize(req.body._id);
+    const pathwayId = sanitize(req.body.pathwayId);
+    console.log("pathway: ", pathwayId);
+    console.log("_id: ", _id);
 
-    if (interests && userId) {
+
+    if (_id && pathwayId) {
         // When true returns the updated document
-        Users.findById(userId, function(err, user) {
+        Users.findById(_id, function(err, user) {
             if (err) {
                 console.log(err);
             }
 
-            if (!verifyUser(user, verificationToken)) {
-                console.log("can't verify user");
-                res.status(401).send("User does not have valid credentials to update interests.");
-                return;
+//            for (let i = 0; i < interests.length; i++) {
+//                 // only add the interest if the user didn't already have it
+//                 if (user.info.interests.indexOf(interests[i]) === -1) {
+//                     user.info.interests.push(interests[i]);
+//                 }
+//             }
+            let addCourse = true;
+            for (let i = 0; i < user.pathways.length; i++) {
+                if (user.pathways[i].pathwayId === pathwayId) {
+                    addCourse = false;
+                    break;
+                }
             }
-
-            user.info.interests = interests;
+            if (addCourse) {
+                const pathway = {
+                    pathwayId: pathwayId
+                };
+                user.pathways.push(pathway);
+            }
 
             user.save(function (err, updatedUser) {
                 if (err) {

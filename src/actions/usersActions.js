@@ -259,11 +259,10 @@ export function addPathway(user) {
     return function(dispatch) {
         axios.post("/api/user/addPathway", user)
             .then(function(response) {
-                window.scrollTo(0, 0);
-                dispatch({type:"REGISTER_FOR_PATHWAY", notification: {message:response.data, type:"infoHeader"}});
+                dispatch({type:"ADD_PATHWAY", notification: {message: "Enjoy the pathway.", type:"infoHeader"}});
             })
             .catch(function(err) {
-                dispatch({type:"REGISTER_FOR_PATHWAY", notification: {message: "Error sending email and registering, please try again.", type: "errorHeader"}})
+                dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Error adding pathway.", type: "errorHeader"}})
             })
     }
 }
