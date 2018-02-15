@@ -344,7 +344,7 @@ class ForBusiness extends Component {
                     <div style={{marginTop: '60px', minWidth: "215px", maxWidth: "1500px", margin: "auto"}}>
                         <div className="center font18px font16pxUnder800"
                              style={{marginBottom: '40px', width: '90%', marginLeft: "5%"}}>
-                            <h1 className="purpleText font28px font24pxUnder800 font22pxUnder500"><b>How it Works</b></h1>
+                            <h1 className="purpleText font28px font24pxUnder800 font22pxUnder500"><b>How It Works</b></h1>
                             No upfront cost or risk. <div className="under400only"><br/></div>Pay only if you hire.<br/>
                         </div>
 
@@ -527,7 +527,7 @@ class ForBusiness extends Component {
                             <div className="gradientBorderBlueBox">
                                 <div className="forBusinessBox">
                                     <div className="font28px font24pxUnder800 font22pxUnder500">Full Access</div>
-                                    <div className="font28px font24pxUnder800 font22pxUnder500 blueText">FREE</div>
+                                    <div className="font32px font28pxUnder800 font26pxUnder500 blueText">FREE</div>
                                     <div>COMPANY LICENSE</div>
                                     <div className="br"><br/></div>
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
@@ -542,7 +542,7 @@ class ForBusiness extends Component {
                             <div className="gradientBorderPurpleToRedBox">
                                 <div className="forBusinessBox">
                                     <div className="font28px font24pxUnder800 font22pxUnder500">Successful Hire</div>
-                                    <div className="font28px font24pxUnder800 font22pxUnder500 purpleText">3-5%</div>
+                                    <div className="font32px font28pxUnder800 font26pxUnder500 purpleText">3-5%</div>
                                     <div>GROSS ANNUAL SALARY</div>
                                     <div className="br"><br/></div>
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
