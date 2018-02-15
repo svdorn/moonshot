@@ -10,8 +10,6 @@ class PathwayContentTwoOptionsQuestion extends Component {
     constructor(props) {
         super(props);
 
-        console.log(props);
-
         let option1 = "";
         let option2 = "";
         if (typeof props.choices === "object") {
@@ -51,7 +49,7 @@ class PathwayContentTwoOptionsQuestion extends Component {
     render() {
         return (
             <div className="center font20px font16pxUnder600 font12pxUnder400">
-                <div style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
+                <div style={{margin:"20px 0"}}><Question question={this.props.question} /></div>
 
                 <TwoOptionsChoice
                     selected={this.state.choice === 1}
@@ -59,7 +57,7 @@ class PathwayContentTwoOptionsQuestion extends Component {
                     choice={1}
                     onClick={this.handleClick}
                 />
-                or
+                <div className="twoOptionsOr">or</div>
                 <TwoOptionsChoice
                     selected={this.state.choice === 2}
                     text={this.state.option2}

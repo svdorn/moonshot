@@ -1709,12 +1709,16 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 
 .twoOptionsBox {
     width: 200px;
-    height: 200px;
+    height: 150px;
     display: inline-block;
     vertical-align: top;
 }
 .twoOptionsBox.selected { background-color: var(--moonshotLightBlue) !important; }
 .twoOptionsBox.notSelected { background-color: #dcdcdc !important; }
+.twoOptionsOr {
+    display: inline-block;
+    margin: 55px 20px 0;
+}
 
 .flex-center {
   display: flex;

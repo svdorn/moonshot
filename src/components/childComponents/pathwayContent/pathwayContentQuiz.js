@@ -48,7 +48,6 @@ class PathwayContentQuiz extends Component {
     }
 
     render() {
-        console.log("redering quiz");
         const quiz = this.state.quiz;
         // if the quiz hasn't yet been received from back end, don't show anything
         if (!quiz || !quiz.questionType) {
