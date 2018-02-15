@@ -2841,6 +2841,9 @@ textarea.multipleChoiceCustomAnswer {
     .multipleChoiceCircle {
         left: calc(50% - 120px);
     }
+    .pathwayLandingSponsoredBy {
+        height: 30px;
+    }
 
     .sideMargins40pxUnder700 { margin-right: 20px; margin-left: 20px; }
 
@@ -2894,6 +2897,9 @@ textarea.multipleChoiceCustomAnswer {
     }
     .pathwayLandingQuoteRight {
         width: 240px;
+    }
+    .pathwayLandingSponsoredBy {
+        height: 23px;
     }
 
     textarea.multipleChoiceCustomAnswer {
