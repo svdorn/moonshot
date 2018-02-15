@@ -780,6 +780,10 @@ button.link {
     width: 45px;
     margin-bottom: 5px;
 }
+.pathwayLandingQuoteReplacementImg {
+    width: 100%;
+    margin-top: 50px;
+}
 
 .homepageBenefitsList {
     margin-top: 100px;
@@ -1694,6 +1698,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     vertical-align: top;
     justify-content: center;
 }
+.pathwayLandingQuoteAltRight {
+    width: 35%;
+    display: inline-block;
+    vertical-align: top;
+    justify-content: center;
+}
 .pathwayLandingLiMargin {
     margin-right: 14%;
 }
@@ -2237,6 +2247,9 @@ textarea.multipleChoiceCustomAnswer {
         display: block;
         margin: 30px auto;
         text-align: center;
+    }
+    .pathwayLandingQuoteAltRight {
+        display: none;
     }
 
     .font40pxUnder800 { font-size: 40px; }
