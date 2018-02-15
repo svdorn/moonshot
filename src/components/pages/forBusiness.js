@@ -341,10 +341,10 @@ class ForBusiness extends Component {
 
                     <div className="purpleToGreenSpacer"/>
 
-                    <div style={{marginTop: '60px', minWidth: "215px", maxWidth: "1500px", margin: "auto"}}>
+                    <div style={{marginTop: '40px', minWidth: "215px", maxWidth: "1500px", margin: "auto"}}>
                         <div className="center font18px font16pxUnder800"
                              style={{marginBottom: '40px', width: '90%', marginLeft: "5%"}}>
-                            <h1 className="purpleText font28px font24pxUnder800 font22pxUnder500"><b>How It Works</b></h1>
+                            <h1 className="purpleText font30px font26pxUnder800 font24pxUnder500"><b>How It Works</b></h1>
                             No upfront cost or risk. <div className="under400only"><br/></div>Pay only if you hire.<br/>
                         </div>
 
