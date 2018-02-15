@@ -52,7 +52,7 @@ app.use(session({
 
 app.post('/signOut', function (req, res) {
     req.session.userId = undefined;
-    req.session.save(function(err) {
+    req.session.save(function (err) {
         if (err) {
             console.log("error removing user session: ", err);
             res.json("failure removing user session");
@@ -64,13 +64,13 @@ app.post('/signOut', function (req, res) {
 
 // change session to store whether user wants default of "Keep Me Logged In"
 // to be checked or unchecked
-app.post("/keepMeLoggedIn", function(req, res) {
+app.post("/keepMeLoggedIn", function (req, res) {
     if (typeof req.body.stayLoggedIn === "boolean") {
         req.session.stayLoggedIn = req.body.stayLoggedIn;
     } else {
         req.session.stayLoggedIn = false;
     }
-    req.session.save(function(err) {
+    req.session.save(function (err) {
         if (err) {
             console.log("error saving 'keep me logged in' setting: ", err);
             res.json("error saving 'keep me logged in' setting");
@@ -82,7 +82,7 @@ app.post("/keepMeLoggedIn", function(req, res) {
 
 
 // get the setting to stay logged in or out
-app.get("/keepMeLoggedIn", function(req, res) {
+app.get("/keepMeLoggedIn", function (req, res) {
     let setting = sanitize(req.session.stayLoggedIn);
     if (typeof setting !== "boolean") {
         setting = false;
@@ -251,7 +251,7 @@ app.post('/user', function (req, res) {
                 }
                 if (foundUser === null) {
                     // get count of users with that name to get the profile url
-                    Users.count({name: user.name}, function(err, count) {
+                    Users.count({name: user.name}, function (err, count) {
                         const randomNumber = crypto.randomBytes(8).toString('hex');
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
 
@@ -262,7 +262,7 @@ app.post('/user', function (req, res) {
                             }
 
                             req.session.unverifiedUserId = newUser._id;
-                            req.session.save(function(err) {
+                            req.session.save(function (err) {
                                 if (err) {
                                     console.log("error saving unverifiedUserId to session: ", err);
                                 }
@@ -338,7 +338,7 @@ function sanitizeObject(obj) {
                 newObj[prop] = sanitizeHtml(value, sanitizeOptions);
                 break;
             default:
-                // don't give the object the property if it isn't one of these things
+            // don't give the object the property if it isn't one of these things
         }
     }
 
@@ -350,7 +350,7 @@ function sanitizeArray(arr) {
         return undefined;
     }
 
-    const sanitizedArr = arr.map(function(value) {
+    const sanitizedArr = arr.map(function (value) {
         let valueType = (typeof value);
 
         switch (valueType) {
@@ -393,7 +393,7 @@ app.post("/endOnboarding", function (req, res) {
     // When true returns the updated document
     const options = {new: true};
 
-    Users.findOneAndUpdate(query, update, options, function(err, updatedUser) {
+    Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
         if (!err && updatedUser) {
             res.json(true);
         }
@@ -434,7 +434,7 @@ app.post('/verifyEmail', function (req, res) {
             // if the session has the user's id, can immediately log them in
             sessionUserId = sanitize(req.session.unverifiedUserId);
             req.session.unverifiedUserId = undefined;
-            req.session.save(function(err) {
+            req.session.save(function (err) {
                 if (err) {
                     console.log("error")
                 }
@@ -509,19 +509,19 @@ app.post('/sendVerificationEmail', function (req, res) {
         let recipient = user.email;
         let subject = 'Verify email';
         let content =
-             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-            +   '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
-            +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways and learning new skills, please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>. Once you verify your account, you can start building your profile. We hope you have a blast!</span><br/>'
-            +       '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.com</a>.</span><br/>'
-            +   '</div>'
-            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?'
-            +   user.emailVerificationToken
-            +   '">VERIFY ACCOUNT</a>'
-            +   '<div style="text-align:left;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
-            +   '</div>'
-            +'</div>';
+            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+            + '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
+            + '<div style="text-align:justify;width:80%;margin-left:10%;">'
+            + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways and learning new skills, please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>. Once you verify your account, you can start building your profile. We hope you have a blast!</span><br/>'
+            + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.com</a>.</span><br/>'
+            + '</div>'
+            + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?'
+            + user.emailVerificationToken
+            + '">VERIFY ACCOUNT</a>'
+            + '<div style="text-align:left;width:80%;margin-left:10%;">'
+            + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
+            + '</div>'
+            + '</div>';
 
         sendEmail(recipient, subject, content, function (success, msg) {
             if (success) {
@@ -534,7 +534,7 @@ app.post('/sendVerificationEmail', function (req, res) {
 });
 
 // SEND EMAIL FOR REGISTERING FOR PATHWAYS
-app.post('/user/registerForPathway', function(req, res) {
+app.post('/user/registerForPathway', function (req, res) {
     const pathwayName = sanitize(req.body.pathway);
     const studentName = sanitize(req.body.name);
     const studentEmail = sanitize(req.body.email);
@@ -554,9 +554,9 @@ app.post('/user/registerForPathway', function(req, res) {
         + "</h4>"
         + "<p>If the student doesn't get back to you soon with an email, make sure to reach out to them.</p>"
         + "<p>-Moonshot</p>"
-        +  "</div>";
+        + "</div>";
 
-    let name = studentName.replace(/(([^\s]+\s\s*){1})(.*)/,"$1").trim();
+    let name = studentName.replace(/(([^\s]+\s\s*){1})(.*)/, "$1").trim();
     let recipient2 = studentEmail;
     let subject2 = "First steps for " + pathwayName + " Pathway - book a 15 min call";
     let content2 = "<div>"
@@ -565,7 +565,7 @@ app.post('/user/registerForPathway', function(req, res) {
         + "<p>Before you do we've got a few things to cover:<br/>"
         + "- There are limited scholarships that the sponsor company offers.<br/>"
         + "- So … We need to learn a bit about you first!<br/>"
-        + "- Step 1: " +"<b><u>Send a link to your LinkedIn profile</u></b>" + " (not required but you can also attach"
+        + "- Step 1: " + "<b><u>Send a link to your LinkedIn profile</u></b>" + " (not required but you can also attach"
         + " your resume, link to a project, something you are proud of, etc) to kyle@moonshotlearning.org." + "</p>"
         + "<p>If you have any questions, shoot me a message. I'll review everything and be back to you shortly!</p>"
         + "<p>Talk soon,<br/>"
@@ -764,54 +764,54 @@ function sendEmail(recipients, subject, content, callback) {
     // Only needed if you don't have a real mail account for testing
     //nodemailer.createTestAccount((err, account) => {
 
-        // create reusable transporter object using the default SMTP transport
-        let transporter = nodemailer.createTransport({
-            // host: 'smtp.ethereal.email',
-            // port: 587,
-            // secure: false, // true for 465, false for other ports
-            // auth: {
-            //     user: 'snabxjzqe3nmg2p7@ethereal.email',
-            //     pass: '5cbJWjTh7YYmz7e2Ce'
-            // }
-            service: 'gmail',
-            auth: {
-                user: credentials.emailUsername,
-                pass: credentials.emailPassword
-            }
-        });
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+        // host: 'smtp.ethereal.email',
+        // port: 587,
+        // secure: false, // true for 465, false for other ports
+        // auth: {
+        //     user: 'snabxjzqe3nmg2p7@ethereal.email',
+        //     pass: '5cbJWjTh7YYmz7e2Ce'
+        // }
+        service: 'gmail',
+        auth: {
+            user: credentials.emailUsername,
+            pass: credentials.emailPassword
+        }
+    });
 
-        // setup email data with unicode symbols
-        let mailOptions = {
-            from: '"Moonshot Learning" <do-not-reply@moonshot.com>', // sender address
-            to: recipients, // list of receivers
-            subject: subject, // Subject line
-            html: content // html body
-        };
+    // setup email data with unicode symbols
+    let mailOptions = {
+        from: '"Moonshot Learning" <do-not-reply@moonshot.com>', // sender address
+        to: recipients, // list of receivers
+        subject: subject, // Subject line
+        html: content // html body
+    };
 
-        // send mail with defined transport object
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log(error);
-                callback(false, "Error sending email to user");
-                return;
-            }
-            callback(true, "Email sent! Check your email.");
+    // send mail with defined transport object
+    transporter.sendMail(mailOptions, (error, info) => {
+        if (error) {
+            console.log(error);
+            callback(false, "Error sending email to user");
             return;
-        });
+        }
+        callback(true, "Email sent! Check your email.");
+        return;
+    });
     //});
 }
 
-app.post('/getUserById', function(req, res) {
+app.post('/getUserById', function (req, res) {
     const _id = sanitize(req.body._id);
-    const query = { _id };
+    const query = {_id};
     getUserByQuery(query, function (user) {
         res.json(removePassword(user));
     })
 });
 
-app.post('/getUserByProfileUrl', function(req, res) {
+app.post('/getUserByProfileUrl', function (req, res) {
     const profileUrl = sanitize(req.body.profileUrl);
-    const query = { profileUrl };
+    const query = {profileUrl};
     getUserByQuery(query, function (user) {
         res.json(safeUser(user));
     })
@@ -974,13 +974,13 @@ app.put('/user/:_id', function (req, res) {
 });
 
 //----->> ADD PATHWAY <<------
-app.post("/user/addPathway", function(req, res) {
+app.post("/user/addPathway", function (req, res) {
     const _id = sanitize(req.body._id);
     const pathwayId = sanitize(req.body.pathwayId);
 
     if (_id && pathwayId) {
         // When true returns the updated document
-        Users.findById(_id, function(err, user) {
+        Users.findById(_id, function (err, user) {
             if (err) {
                 console.log(err);
             }
@@ -991,33 +991,31 @@ app.post("/user/addPathway", function(req, res) {
 //                     user.info.interests.push(interests[i]);
 //                 }
 //             }
-            let addCourse = true;
             for (let i = 0; i < user.pathways.length; i++) {
-                if (user.pathways[i].pathwayId === pathwayId) {
-                    addCourse = false;
-                    break;
+                if (user.pathways[i].pathwayId == req.body.pathwayId) {
+                    res.status(401).send("cannot sign up for pathway more than once");
+                    return;
                 }
             }
-            if (addCourse) {
-                const pathway = {
-                    pathwayId: pathwayId,
-                    currentStep: {
-                        subStep: 1,
-                        step: 1
-                    }
-                };
-                user.pathways.push(pathway);
-            }
+            const pathway = {
+                pathwayId: pathwayId,
+                currentStep: {
+                    subStep: 1,
+                    step: 1
+                }
+            };
+            user.pathways.push(pathway);
 
             user.save(function (err, updatedUser) {
                 if (err) {
                     res.send(false);
+                    return;
                 }
                 res.send(removePassword(updatedUser));
             });
         })
     } else {
-        res.send(undefined);
+        res.send(false);
     }
 });
 
@@ -1218,7 +1216,7 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
         } else if (pathway) {
             // get the user from the database, can't trust user from frontend
             // because they can change their info there
-            Users.findOne({_id: userId}, function(err, user) {
+            Users.findOne({_id: userId}, function (err, user) {
                 if (err) {
                     console.log("error getting user: ", err);
                     res.status(500).send("Error getting pathway");
@@ -1227,7 +1225,7 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
                     // check that user is who they say they are
                     if (verifyUser(user, verificationToken)) {
                         // check that user has access to that pathway
-                        const hasAccessToPathway = user.pathways.some(function(path) {
+                        const hasAccessToPathway = user.pathways.some(function (path) {
                             return pathway._id.toString() == path.pathwayId.toString();
                         })
                         if (hasAccessToPathway) {
@@ -1325,34 +1323,34 @@ app.post("/userCurrentStep", function (req, res) {
     const subStepNumber = sanitize(req.body.params.subStepNumber);
     const verificationToken = sanitize(req.body.params.verificationToken);
 
-    Users.findById(userId, function(err, user) {
+    Users.findById(userId, function (err, user) {
         if (!verifyUser(user, verificationToken)) {
             res.status(401).send("User does not have valid credentials to save step.");
             return;
         }
 
-        let pathwayIndex = user.pathways.findIndex(function(path) {
+        let pathwayIndex = user.pathways.findIndex(function (path) {
             return path.pathwayId == pathwayId;
         });
         user.pathways[pathwayIndex].currentStep = {
             subStep: subStepNumber,
             step: stepNumber
         }
-        user.save(function() {
+        user.save(function () {
             res.json(true);
         });
     })
-    .catch(function(err) {
-        console.log("error saving the current step, ", err);
-    })
+        .catch(function (err) {
+            console.log("error saving the current step, ", err);
+        })
 });
 
-app.get("/infoByUserId", function(req, res) {
+app.get("/infoByUserId", function (req, res) {
     infoType = sanitize(req.query.infoType);
     const userId = sanitize(req.query.userId);
 
     if (userId && infoType) {
-        Users.findById(userId, function(err, user) {
+        Users.findById(userId, function (err, user) {
             if (err) {
                 res.status(500).send("Could not get user");
             } else {
@@ -1404,14 +1402,14 @@ app.get("/infoByUserId", function(req, res) {
 //     }
 // });
 
-app.post("/updateInterests", function(req, res) {
+app.post("/updateInterests", function (req, res) {
     const interests = sanitize(req.body.params.interests);
     const userId = sanitize(req.body.params.userId);
     const verificationToken = sanitize(req.body.params.verificationToken);
 
     if (interests && userId) {
         // When true returns the updated document
-        Users.findById(userId, function(err, user) {
+        Users.findById(userId, function (err, user) {
             if (err) {
                 console.log(err);
             }
@@ -1436,14 +1434,14 @@ app.post("/updateInterests", function(req, res) {
     }
 });
 
-app.post("/updateGoals", function(req, res) {
+app.post("/updateGoals", function (req, res) {
     const goals = sanitize(req.body.params.goals);
     const userId = sanitize(req.body.params.userId);
     const verificationToken = sanitize(req.body.params.verificationToken);
 
     if (userId && goals) {
         // When true returns the updated document
-        Users.findById(userId, function(err, user) {
+        Users.findById(userId, function (err, user) {
             if (err) {
                 console.log(err);
             }
@@ -1471,7 +1469,7 @@ app.post("/updateGoals", function(req, res) {
 });
 
 
-app.post("/updateAnswer", function(req, res) {
+app.post("/updateAnswer", function (req, res) {
     let params, userId, verificationToken, quizId, answer;
     try {
         // get all the parameters
@@ -1485,7 +1483,7 @@ app.post("/updateAnswer", function(req, res) {
         return;
     }
 
-    Users.findById(userId, function(err, user) {
+    Users.findById(userId, function (err, user) {
         if (err) {
             console.log(err);
             res.status(404).send("Current user not found.");
@@ -1519,14 +1517,14 @@ app.post("/updateAnswer", function(req, res) {
 });
 
 
-app.post("/updateInfo", function(req, res) {
+app.post("/updateInfo", function (req, res) {
     const info = sanitize(req.body.params.info);
     const userId = sanitize(req.body.params.userId);
     const verificationToken = sanitize(req.body.params.verificationToken);
 
     if (info && userId) {
         // When true returns the updated document
-        Users.findById(userId, function(err, user) {
+        Users.findById(userId, function (err, user) {
             if (err) {
                 console.log(err);
             }

@@ -264,7 +264,8 @@ export function addPathway(user) {
                 browserHistory.push("/pathwayContent?" + user.pathwayUrl);
             })
             .catch(function(err) {
-                dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Error adding pathway.", type: "errorHeader"}})
+                console.log(err);
+                dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Cannot sign up for pathway more than once. Sign up for pathway failed.", type: "errorHeader"}})
             })
     }
 }
