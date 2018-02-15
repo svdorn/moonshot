@@ -34,7 +34,6 @@ class PathwayContentTwoOptionsQuestion extends Component {
 
     // set the current choice to the one that was clicked, save in db
     handleClick = (choice) => {
-        console.log("here");
         // save if choice is valid
         if (choice === 1 || choice === 2) {
             this.setState({choice});

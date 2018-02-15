@@ -16,41 +16,39 @@ class PathwayContentQuiz extends Component {
     }
 
     componentDidMount() {
-        // load content if it isn't already loaded
+        const id = this.props.step.contentID;
+
+        axios.get("/api/getQuiz", {
+            params: {
+                _id: id
+            }
+        }).then(res => {
+            this.setState({quiz: res.data, currStep: this.props.step});
+        })
+        .catch(function (err) {
+            console.log("error getting searched-for quiz");
+        });
+    }
+
+    componentDidUpdate() {
+            // load content if it isn't already loaded
         if (this.props.step !== this.state.currStep) {
             const id = this.props.step.contentID;
 
             axios.get("/api/getQuiz", {
                 params: {
-                    _id: id
+                _id: id
                 }
             }).then(res => {
                 this.setState({quiz: res.data, currStep: this.props.step});
-            })
-
-            // .catch(function (err) {
-            //     console.log("error getting searched-for quiz");
-            // })
+            }).catch(function (err) {
+                console.log("error getting searched-for quiz");
+            });
         }
     }
 
-    // componentDidUpdate() {
-    //     if (this.props.step !== this.state.currStep) {
-    //         const id = this.props.step.contentID;
-    //
-    //         axios.get("/api/getArticle", {
-    //             params: {
-    //                 _id: id
-    //             }
-    //         }).then(res => {
-    //             this.setState({content: res.data, currStep: this.props.step});
-    //         }).catch(function (err) {
-    //             console.log("error getting searched for article");
-    //         })
-    //     }
-    // }
-
     render() {
+        console.log("redering quiz");
         const quiz = this.state.quiz;
         // if the quiz hasn't yet been received from back end, don't show anything
         if (!quiz || !quiz.questionType) {
