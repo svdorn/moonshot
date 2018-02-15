@@ -977,9 +977,6 @@ app.put('/user/:_id', function (req, res) {
 app.post("/user/addPathway", function(req, res) {
     const _id = sanitize(req.body._id);
     const pathwayId = sanitize(req.body.pathwayId);
-    console.log("pathway: ", pathwayId);
-    console.log("_id: ", _id);
-
 
     if (_id && pathwayId) {
         // When true returns the updated document
@@ -1003,7 +1000,11 @@ app.post("/user/addPathway", function(req, res) {
             }
             if (addCourse) {
                 const pathway = {
-                    pathwayId: pathwayId
+                    pathwayId: pathwayId,
+                    currentStep: {
+                        subStep: 1,
+                        step: 1
+                    }
                 };
                 user.pathways.push(pathway);
             }

@@ -259,7 +259,9 @@ export function addPathway(user) {
     return function(dispatch) {
         axios.post("/api/user/addPathway", user)
             .then(function(response) {
-                dispatch({type:"ADD_PATHWAY", notification: {message: "Enjoy the pathway.", type:"infoHeader"}});
+                dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to my pathways. Thanks for signing up!", type:"infoHeader"}});
+                window.scrollTo(0, 0);
+                browserHistory.push("/pathwayContent?" + user.pathwayUrl);
             })
             .catch(function(err) {
                 dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Error adding pathway.", type: "errorHeader"}})

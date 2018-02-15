@@ -46,14 +46,11 @@ class Pathway extends Component {
         // Check if it is a specialized pathway
         if (this.state.pathway.name === "NWM Sales") {
             if (this.props.currentUser) {
-                console.log(this.state.pathway);
-                console.log(this.props.currentUser);
                 const user = {
                     _id: this.props.currentUser._id,
                     pathwayId: this.state.pathway._id,
                     pathwayUrl: this.state.pathway.url,
                 };
-                console.log(user);
                 this.props.addPathway(user);
             } else {
                 this.props.router.push('/signup?pathway=' + this.state.pathway.url);

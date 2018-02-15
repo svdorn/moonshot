@@ -41,7 +41,6 @@ export function usersReducers(state = initialState, action) {
         case "UPDATE_USER_REJECTED":
         case "CHANGE_PASSWORD":
         case "CHANGE_PASSWORD_REJECTED":
-        case "ADD_PATHWAY":
         case "ADD_PATHWAY_REJECTED":
             return {...state, notification: action.notification};
             break;
@@ -144,6 +143,11 @@ export function usersReducers(state = initialState, action) {
         case "UPDATE_USER_ONBOARDING":
             return {
                 ...state, currentUser: action.payload
+            };
+            break;
+        case "ADD_PATHWAY":
+            return {
+                ...state, currentUser: action.payload, notification: action.notification
             };
             break;
         case "TURN_HEADER_BLUE":
