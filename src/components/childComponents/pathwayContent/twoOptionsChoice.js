@@ -40,7 +40,9 @@ class TwoOptionsChoice extends Component {
                    style={{color}}
                    onClick={() => this.props.onClick(this.props.choice)}
             >
-                {this.props.text}
+                <div className="flex-center">
+                    <p>{this.props.text}</p>
+                </div>
             </Paper>
         );
     }

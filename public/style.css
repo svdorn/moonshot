@@ -1247,6 +1247,9 @@ button.link {
     margin-left: 20px;
     width: calc(100% - 470px);
 }
+.pathwayContent {
+    min-height: 400px;
+}
 
 .overviewAndCommentBox {
     margin-top: 10px;
@@ -1712,6 +1715,19 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 .twoOptionsBox.selected { background-color: var(--moonshotLightBlue) !important; }
 .twoOptionsBox.notSelected { background-color: #dcdcdc !important; }
+
+.flex-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  resize: none;
+  overflow: auto;
+}
+.flex-center p {
+  margin: 0;
+  padding: 20px;
+}
 
 .multipleChoiceOption {
     position: relative;
