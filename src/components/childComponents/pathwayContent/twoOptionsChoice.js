@@ -4,13 +4,30 @@ import {Paper} from 'material-ui';
 class TwoOptionsChoice extends Component {
     constructor(props){
         super(props);
-        this.state = { shadow: 2 }
+        if (props.selected) {
+            this.state = { shadow: 4, hovering: false }
+        } else {
+            this.state = { shadow: 2, hovering: false }
+        }
     }
 
 
-    onMouseOver = () => this.setState({ shadow: 4 });
-    onMouseOut = () => this.setState({ shadow: 2 });
+    onMouseOver = () => {
+        this.setState({ shadow: 4, hovering: true });
+    }
+    onMouseOut = () => {
+        if (!this.props.selected) {
+            this.setState({ shadow: 2, hovering: false });
+        } else {
+            this.setState({ ...this.state, hovering: false })
+        }
+    }
 
+    componentDidUpdate() {
+        if (!this.props.selected && !this.state.hovering && this.state.shadow === 4) {
+            this.setState({ ...this.state, shadow: 2 });
+        }
+    }
 
     render() {
         const selectedClass = this.props.selected ? "selected" : "notSelected";
@@ -19,6 +36,7 @@ class TwoOptionsChoice extends Component {
                    onMouseOver={this.onMouseOver}
                    onMouseOut={this.onMouseOut}
                    zDepth={this.state.shadow}
+                   style={{color: "white"}}
                    onClick={() => this.props.onClick(this.props.choice)}
             >
                 {this.props.text}
