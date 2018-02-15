@@ -251,7 +251,7 @@ class Home extends Component {
                     <div className="fullHeight greenToBlue">
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
-                        <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500" style={{zIndex: "20", width: "100%"}}>
+                        <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500 font20pxUnder400 font18pxUnder350">
                             Skip the resum&eacute;.<br/>Learn skills that employers need<br/><i>and get paid to do it.</i><br/>
                             <button className="outlineButton font30px font20pxUnder500 blueWhiteButton"
                                     onClick={() => this.scrollDown()}>

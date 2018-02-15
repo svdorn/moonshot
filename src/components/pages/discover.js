@@ -24,12 +24,22 @@ class Discover extends Component {
     constructor(props) {
         super(props);
 
+        const emptyPathway = {
+            name: "Loading...",
+            previewImage: "",
+            sponsor: {name: "", logo: ""},
+            estimatedCompletionTime: "",
+            deadline: "",
+            price: "",
+            _id: undefined
+        }
+
         this.state = {
             searchTerm: "",
             category: "",
             company: "",
             explorePathways: [],
-            featuredPathways: [],
+            featuredPathways: [emptyPathway, emptyPathway, emptyPathway],
             open: false,
             dialogPathway: null,
         }

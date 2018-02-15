@@ -1,15 +1,15 @@
 "use strict"
 import React, {Component} from 'react';
-import PathwayContentLink from '../childComponents/pathwayContentLink';
-import PathwayContentVideo from '../childComponents/pathwayContentVideo';
-import PathwayContentArticle from '../childComponents/pathwayContentArticle';
-import PathwayContentQuiz from '../childComponents/pathwayContentQuiz';
+import PathwayContentLink from '../childComponents/pathwayContent/pathwayContentLink';
+import PathwayContentVideo from '../childComponents/pathwayContent/pathwayContentVideo';
+import PathwayContentArticle from '../childComponents/pathwayContent/pathwayContentArticle';
+import PathwayContentQuiz from '../childComponents/pathwayContent/pathwayContentQuiz';
 import {Tabs, Tab, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, updateCurrentSubStep, setHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
-import PathwayStepList from '../childComponents/pathwayStepList';
+import PathwayStepList from '../childComponents/pathwayContent/pathwayStepList';
 import axios from 'axios';
 
 class PathwayContent extends Component {
