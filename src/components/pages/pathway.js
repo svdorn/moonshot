@@ -577,21 +577,6 @@ class Pathway extends Component {
                             </div>
                             : null}
 
-                        {pathway.steps && pathway.sponsor.displaySteps === "true" ?
-                            <div>
-                                <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                                    <div className="homepageSeparator purpleRedSeparator"/>
-                                </div>
-                                <div className="center" style={{margin: "100px 0 40px 0"}}>
-                                    < b style={{color: '#B869FF'}}
-                                        className="font40px font32pxUnder700 font24pxUnder500">Pathway Overview</ b>
-                                </ div>
-
-                                {pathwaySteps}
-                            </div>
-                            : null
-                        }
-
                         {pathway.sponsor.video ?
                             <div>
                                 <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
@@ -608,6 +593,21 @@ class Pathway extends Component {
                                 </div>
                             </div>
                             : null}
+
+                        {pathway.steps && pathway.sponsor.displaySteps === "true" ?
+                            <div>
+                                <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
+                                    <div className="homepageSeparator purpleRedSeparator"/>
+                                </div>
+                                <div className="center" style={{margin: "100px 0 40px 0"}}>
+                                    < b style={{color: '#B869FF'}}
+                                        className="font40px font32pxUnder700 font24pxUnder500">Pathway Overview</ b>
+                                </ div>
+
+                                {pathwaySteps}
+                            </div>
+                            : null
+                        }
 
                         {pathway.extraInfo ?
 
