@@ -26,7 +26,35 @@ class PathwayContentTwoOptionsQuestion extends Component {
                 choice = userChoice;
             }
         } catch(e) { /* do nothing if value invalid */ }
-        this.state = { choice, option1, option2 }
+
+        const quizId = props.quizId;
+        this.state = { quizId, choice, option1, option2 }
+    }
+
+
+    componentDidUpdate() {
+        if (this.props.quizId !== this.state.quizId) {
+            let option1 = "";
+            let option2 = "";
+            if (typeof this.props.choices === "object") {
+                option1 = this.props.choices.choice1;
+                option2 = this.props.choices.choice2;
+            }
+
+            let choice = undefined;
+            // try to assign the value to the value that the user already had from the db
+            try {
+                const userChoice = props.currentUser.answers[props.quizId].value;
+                //
+                if (userChoice === 1 || userChoice === 2) {
+                    choice = userChoice;
+                }
+            } catch(e) { /* do nothing if value invalid */ }
+
+            const quizId = this.props.quizId;
+
+            this.setState({ quizId, choice, option1, option2 });
+        }
     }
 
 
