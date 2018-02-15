@@ -453,7 +453,7 @@ class Pathway extends Component {
                             <div className="pathwayLandingQuoteLeft">
                                 <div>
                                     <img
-                                        src="/icons/Information.png"
+                                        src="/icons/About.png"
                                         className="pathwayLandingIconsLeft"
                                     />
                                     <b style={{color: '#da5f7b'}}
@@ -465,7 +465,7 @@ class Pathway extends Component {
                                 {pathway.sponsor.hiring ?
                                     <div style={style.spaceTop}>
                                         <img
-                                            src="/icons/Badge.png"
+                                            src="/icons/OpenPositions.png"
                                             className="pathwayLandingIconsLeft"
                                         />
                                         <b style={{color: '#da5f7b'}}
@@ -477,7 +477,7 @@ class Pathway extends Component {
                                     : null}
                                 <div style={style.spaceTop}>
                                     <img
-                                        src="/icons/www.png"
+                                        src="/icons/Links2.png"
                                         className="pathwayLandingIconsLeft"
                                     />
                                     <b style={{color: '#da5f7b'}}
