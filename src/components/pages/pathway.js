@@ -543,7 +543,7 @@ class Pathway extends Component {
 
                         {pathway.sponsor.info2 ?
                             <div style={{marginTop: '80px', marginBottom: '60px', overflow: 'auto'}}>
-                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom: '50px'}}>
+                                <div className="font36px font32pxUnder700 font26pxUnder500 center" style={{marginBottom: '30px'}}>
                                     Awards
                                 </div>
                                 <div style={style.horizList}>
