@@ -2726,6 +2726,11 @@ textarea.multipleChoiceCustomAnswer {
         word-wrap:break-word;
     }
 
+    textarea.multipleChoiceCustomAnswer {
+        margin-left: 60px;
+        width: 240px;
+    }
+
     .font40pxUnder500 { font-size: 40px; }
     .font38pxUnder500 { font-size: 38px; }
     .font36pxUnder500 { font-size: 36px; }
@@ -2800,6 +2805,9 @@ textarea.multipleChoiceCustomAnswer {
         width: 80%;
         padding-top: 60%;
     }
+    .multipleChoiceCircle {
+        left: calc(50% - 120px);
+    }
 
     .sideMargins40pxUnder700 { margin-right: 20px; margin-left: 20px; }
 
@@ -2853,6 +2861,11 @@ textarea.multipleChoiceCustomAnswer {
     }
     .pathwayLandingQuoteRight {
         width: 240px;
+    }
+
+    textarea.multipleChoiceCustomAnswer {
+        margin-left: 30px;
+        width: 180px;
     }
 
     .font40pxUnder350 { font-size: 40px; }

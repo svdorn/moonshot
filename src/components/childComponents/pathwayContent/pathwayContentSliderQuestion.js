@@ -52,9 +52,9 @@ class PathwayContentSliderQuestion extends Component {
     render() {
         return (
             <div className="center">
-                <div className="sliderContainer">
-                    <div className="font20px font16pxUnder600" style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
-                    <div className="font20px font16pxUnder600">{this.state.sliderValue}</div>
+                <div className="sliderContainer font20px font16pxUnder600 font12pxUnder400">
+                    <div style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
+                    <div>{this.state.sliderValue}</div>
                     <Slider
                         min={this.state.minValue}
                         max={this.state.maxValue}

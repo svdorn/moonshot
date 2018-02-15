@@ -153,8 +153,8 @@ class PathwayContentMultipleChoiceQuestion extends Component {
         }
 
         return (
-            <div className="center">
-                <div className="font20px font16pxUnder600" style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
+            <div className="center font20px font16pxUnder600 font12pxUnder400">
+                <div style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
                 {options}
             </div>
         );
