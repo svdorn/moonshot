@@ -1222,12 +1222,13 @@ button.link {
     left: 0;
 }
 .questionsContactUs {
-    width: 400px;
+    width: 300px;
     height: 100px;
     padding: 25px;
+    margin-top: 20px;
 }
 .scrollBarAndContactUs {
-    width: 400px;
+    width: 300px;
     display: inline-block;
     float: left;
     margin: 10px 30px 20px 10px;
@@ -1248,8 +1249,7 @@ button.link {
 }
 .overviewAndCommentBox, .pathwayContentContainer {
     display: inline-block;
-    margin-left: 20px;
-    width: calc(100% - 470px);
+    width: calc(100% - 370px);
     text-align: center;
 }
 .pathwayContent {
@@ -1979,7 +1979,7 @@ textarea.multipleChoiceCustomAnswer {
     .overviewAndCommentBox {
         float: right;
         margin-bottom: 10px;
-        margin-right: 10px;
+        margin-right: 30px;
     }
 }
 
@@ -2033,6 +2033,9 @@ textarea.multipleChoiceCustomAnswer {
         padding-top: 10px;
         padding-bottom: 10px;
         width: 95%;
+    }
+    .pathwayContentContainer {
+        width: 100%;
     }
     .overviewAndCommentBox {
         display: block;
