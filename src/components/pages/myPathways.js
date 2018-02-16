@@ -181,7 +181,7 @@ class MyPathways extends Component {
                                                 {this.state.userPathwayPreviews}
                                             </ul>
                                             : <div className="fullHeight">
-                                                <h1 className="center font40px font24pxUnder500 whiteText">None</h1>
+                                                <h1 className="center font40px font24pxUnder500 whiteText">None.</h1>
                                             </div>}
                                     </Tab>
                                     <Tab label="Completed" style={style.tab}>
