@@ -193,7 +193,11 @@ class PathwayContent extends Component {
                     <div>
                         <div className="greenToBlue headerDiv"/>
                         <Paper style={style.pathwayHeader}>
-                            {pathway.name}
+                            {pathway.pathwayContentDisplayName ?
+                                pathway.pathwayContentDisplayName
+                            :
+                                pathway.name
+                            }
                         </Paper>
 
 
