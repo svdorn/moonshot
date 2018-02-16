@@ -92,7 +92,7 @@ class PathwayContentQuiz extends Component {
 
         return (
             <div className={this.props.className} style={{...this.props.style}}>
-                <div className="center" style={{margin: "10px 0"}}>
+                <div className="center" style={{padding: "10px 0"}}>
                     { questionJsx }
                 </div>
             </div>

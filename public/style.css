@@ -1750,14 +1750,13 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin-bottom: 10px;
 }
 .multipleChoiceAnswer {
-    max-width: 200px;
+    max-width: 160px;
     margin: auto;
-    /* text-align: left;
-    margin-left: calc(50% - 40px); */
+    overflow-x: hidden;
 }
 textarea.multipleChoiceCustomAnswer {
-    margin-left: 110px;
-    width: 300px;
+    margin-left: 140px;
+    width: 260px;
 }
 .multipleChoiceCircle {
     width: 20px;
@@ -1766,7 +1765,8 @@ textarea.multipleChoiceCustomAnswer {
     border-radius: 15px;
     border: 2px solid var(--moonshotLightBlue);
     position: absolute;
-    left: calc(50% - 140px);
+    left: calc(50% - 110px);
+    top: 5px;
 }
 .multipleChoiceCircle.selected {
     background-color: var(--moonshotLightBlue);
@@ -2775,7 +2775,7 @@ textarea.multipleChoiceCustomAnswer {
     }
 
     textarea.multipleChoiceCustomAnswer {
-        margin-left: 60px;
+        margin-left: 80px;
         width: 240px;
     }
 
