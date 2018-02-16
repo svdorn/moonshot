@@ -262,35 +262,35 @@ class PathwayContent extends Component {
                             />
 
                             <Paper className="overviewAndCommentBox">
-                                <Paper style={{width: "100%"}}>
-                                    <ul className="horizCenteredList blueText font20px font14pxUnder700 font10pxUnder400">
+                                <ul className="horizCenteredList blueText font20px font14pxUnder700 font10pxUnder400" style={{marginBottom:"0"}}>
+                                    <li>
+                                        <div className="overviewAndCommentBoxInfo">
+                                            <i>Sponsor</i><br/>
+                                            <img src={pathway.sponsor.logo}
+                                                 alt={pathway.sponsor.name}
+                                                 className="overviewAndCommentBoxImg"/>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="overviewAndCommentBoxInfo">
+                                            <i>Completion Time</i><br/>
+                                            {pathway.estimatedCompletionTime}
+                                        </div>
+                                    </li>
+                                    {formattedDeadline ?
                                         <li>
                                             <div className="overviewAndCommentBoxInfo">
-                                                <i>Sponsor</i><br/>
-                                                <img src={pathway.sponsor.logo}
-                                                     alt={pathway.sponsor.name}
-                                                     className="overviewAndCommentBoxImg"/>
+                                                <i>Complete By</i><br/>
+                                                {formattedDeadline}
                                             </div>
                                         </li>
-                                        <li>
-                                            <div className="overviewAndCommentBoxInfo">
-                                                <i>Completion Time</i><br/>
-                                                {pathway.estimatedCompletionTime}
-                                            </div>
-                                        </li>
-                                        {formattedDeadline ?
-                                            <li>
-                                                <div className="overviewAndCommentBoxInfo">
-                                                    <i>Complete By</i><br/>
-                                                    {formattedDeadline}
-                                                </div>
-                                            </li>
-                                        : null
-                                        }
-                                    </ul>
-                                </Paper>
+                                    : null
+                                    }
+                                </ul>
+                            </Paper>
 
-                                {pathway.showOverviewAndCommentBox ?
+                            {pathway.showOverviewAndCommentBox ?
+                                <Paper className="overviewAndCommentBox">
                                     <div style={{textAlign: "center"}}>
                                     <Tabs
                                     inkBarStyle={{background: '#00c3ff'}}
@@ -311,9 +311,9 @@ class PathwayContent extends Component {
                                     </Tab>
                                     </Tabs>
                                     </div>
-                                : null
-                                }
-                            </Paper>
+                                </Paper>
+                            : null
+                            }
                         </div>
                     </div>
                     :
