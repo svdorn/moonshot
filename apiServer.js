@@ -228,6 +228,8 @@ const sanitizeOptions = {
 //----->> POST USER <<------
 app.post('/user', function (req, res) {
     var user = req.body[0];
+    const pathwayName = req.body[1];
+    console.log(pathwayName);
 
     user = sanitize(user);
 
