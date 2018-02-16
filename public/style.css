@@ -1195,10 +1195,10 @@ button.link {
 
 .videoContainer {
     position: relative;
-    display: inline-block;
-    margin-left: 20px;
-    width: calc(100% - 470px);
-    padding-top: 40%;
+    display: block;
+    width: 100%;
+    margin: auto;
+    padding-top: 56.25%
 }
 .videoContainer > span {
     position: absolute;
@@ -1883,6 +1883,7 @@ textarea.multipleChoiceCustomAnswer {
 
 .inline { display: inline; }
 .inline-block { display: inline-block; }
+.noPadding { padding: 0 0 0 0 }
 
 @media only screen and (max-width: 1643px) {
     .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(6) {
@@ -2040,10 +2041,11 @@ textarea.multipleChoiceCustomAnswer {
     }
     .videoContainer {
         display: block;
-        width: 95%;
+        width: 100%;
         margin: auto;
         padding-top: 56.25%
     }
+    .noPadding { padding: 0 0 0 0 }
 
     .font40pxUnder1000 { font-size: 40px; }
     .font38pxUnder1000 { font-size: 38px; }

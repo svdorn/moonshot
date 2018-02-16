@@ -165,6 +165,7 @@ class PathwayContent extends Component {
                 content = <PathwayContentLink/>;
             } else if (contentType == "video") {
                 content = <PathwayContentVideo className="videoContainer"/>;
+                contentClass += " noPadding";
             } else if (contentType == "article") {
                 content = <PathwayContentArticle/>
             } else if (contentType == "quiz") {
