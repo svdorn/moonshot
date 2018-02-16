@@ -279,26 +279,30 @@ class PathwayContent extends Component {
                                         </li>
                                     </ul>
                                 </Paper>
-                                <div style={{textAlign: "center"}}>
+
+                                {pathway.showOverviewAndCommentBox ?
+                                    <div style={{textAlign: "center"}}>
                                     <Tabs
-                                        inkBarStyle={{background: '#00c3ff'}}
-                                        tabItemContainerStyle={{width: '60%'}}
-                                        className="overviewExercisesComments"
+                                    inkBarStyle={{background: '#00c3ff'}}
+                                    tabItemContainerStyle={{width: '60%'}}
+                                    className="overviewExercisesComments"
                                     >
-                                        <Tab label="Overview" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                            <p className="font20px font14pxUnder700 font10pxUnder400 center"
-                                               style={style.insideTab}>{pathway.overview}</p>
-                                        </Tab>
-                                        <Tab label="Exercise Files" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                            <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
-                                                yet.</h1>
-                                        </Tab>
-                                        <Tab label="Comments" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                            <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
-                                                yet.</h1>
-                                        </Tab>
+                                    <Tab label="Overview" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                    <p className="font20px font14pxUnder700 font10pxUnder400 center"
+                                    style={style.insideTab}>{pathway.overview}</p>
+                                    </Tab>
+                                    <Tab label="Exercise Files" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                    <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
+                                    yet.</h1>
+                                    </Tab>
+                                    <Tab label="Comments" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                    <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
+                                    yet.</h1>
+                                    </Tab>
                                     </Tabs>
-                                </div>
+                                    </div>
+                                : null
+                                }
                             </Paper>
                         </div>
                     </div>
