@@ -751,7 +751,7 @@ button.link {
     text-align: center;
     padding-left: 0px;
 }
-.horizCenteredList li { display: inline-block; }
+.horizCenteredList li { display: inline-block; vertical-align: top; }
 /* .horizCenteredList li:first-child { margin-left: 0px; } */
 /* .horizCenteredList li:last-child { margin-right: 0px; } */
 
