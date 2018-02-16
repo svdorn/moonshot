@@ -289,7 +289,7 @@ class PathwayContent extends Component {
                                 </ul>
                             </Paper>
 
-                            {pathway.showOverviewAndCommentBox ?
+                            {true ?
                                 <Paper className="overviewAndCommentBox">
                                     <div style={{textAlign: "center"}}>
                                     <Tabs

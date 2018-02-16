@@ -218,7 +218,7 @@ const sanitizeOptions = {
 //
 //     for (let userIdx = 0; userIdx < users.length; userIdx++) {
 //         let user = users[userIdx];
-//         user.hasFinishedOnboarding = true;
+//         user.linkText = "Go to Step";
 //         user.save(function() {
 //             console.log("user saved");
 //         });

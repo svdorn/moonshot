@@ -1011,6 +1011,8 @@ button.link {
     margin-right: 5%;
 }
 
+.blueTextOnHover:hover { color: var(--moonshotLightBlue); }
+
 .greenText { color: var(--moonshotGreenText); }
 .whiteText { color: white; }
 .blueText { color: var(--moonshotLightBlue); }

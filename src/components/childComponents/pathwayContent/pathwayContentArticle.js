@@ -53,8 +53,8 @@ class PathwayContentArticle extends Component {
                         <h4>{content.name}</h4>
                         <div style={{marginRight:"20px", marginLeft:"20px"}}>{content.description}</div>
                         <button className="outlineButton font30px font20pxUnder500 whiteBlueButton">
-                            <a href={content.link} target="_blank" className="blueText" style={{textDecoration: 'none'}}>
-                                Go to Step
+                            <a href={content.link} target="_blank" className="blueText blueTextOnHover" style={{textDecoration: 'none'}}>
+                                {content.linkText}
                             </a>
                         </button>
                     </div>
