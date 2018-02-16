@@ -674,6 +674,14 @@ button.link {
     height: 100%;
     width: 100%;
 }
+.whiteBorder {
+    border: 3px solid white;
+}
+.whiteBorder > div {
+    background: transparent;
+    height: 100%;
+    width: 100%;
+}
 .imgBorder {
     padding: 3px;
 }
@@ -1348,8 +1356,8 @@ button.link {
     margin-bottom: 10px;
 }
 
-
 .myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
+    background-color: transparent !important;
     display: inline-block !important;
 }
 .myPathwaysTabs > div:nth-of-type(2) {
