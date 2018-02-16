@@ -962,13 +962,13 @@ button.link {
     left: 50%;
 }
 .onboarding3DividerLeft {
-    background: linear-gradient(to right, #3dffef, #3affd2);
-    border-right: 200px solid #01f3c8;
+    background: linear-gradient(to right, #b130d3, #e35d67);
+    border-right: 200px solid #b130d3;
     right: 50%;
 }
 .onboarding3DividerRight {
-    background: linear-gradient(to right, #3dffef, #3affd2);
-    border-left: 200px solid #01f3c8;
+    background: linear-gradient(to right, #e35d67, #b130d3);
+    border-left: 200px solid #b130d3;
     left: 50%;
 }
 
@@ -2727,10 +2727,10 @@ textarea.multipleChoiceCustomAnswer {
         width: calc(275px + 8%);
     }
     .onboarding3DividerLeft {
-        border-right: 120px solid #01f3c8;
+        border-right: 120px solid #b130d3;
     }
     .onboarding3DividerRight {
-        border-left: 120px solid #01f3c8;
+        border-left: 120px solid #b130d3;
     }
     .onboarding2DividerLeft {
         border-right: 120px solid #9727ff;
