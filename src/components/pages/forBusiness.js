@@ -293,9 +293,9 @@ class ForBusiness extends Component {
 
                     <div style={{marginTop: '60px', overflow: 'auto'}}>
                         <div className="center font28px font24pxUnder800 font22pxUnder500" style={{marginBottom: "50px"}}>
-                            <b>Top College Students and
+                            Top College Students and
                                 <div className="under600only br"><br/></div> Recent Graduates<br/>
-                                Competing to Work for You.</b>
+                                Competing to Work for You.
                         </div>
                         <div style={styles.horizList}>
                             <div className="horizListFull">
@@ -344,7 +344,7 @@ class ForBusiness extends Component {
                     <div style={{marginTop: '40px', minWidth: "215px", maxWidth: "1500px", margin: "auto"}}>
                         <div className="center font18px font16pxUnder800"
                              style={{marginBottom: '40px', width: '90%', marginLeft: "5%"}}>
-                            <h1 className="purpleText font30px font26pxUnder800 font24pxUnder500"><b>How It Works</b></h1>
+                            <h1 className="purpleText font30px font26pxUnder800 font24pxUnder500">How It Works</h1>
                             No upfront cost or risk. <div className="under400only"><br/></div>Pay only if you hire.<br/>
                         </div>
 
@@ -364,7 +364,7 @@ class ForBusiness extends Component {
                             <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
                                 <div className="homepageTrajectoryTextLeft forBusiness">
                                     <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forBusiness">
-                                        <h2 className="blueText font28px font24pxUnder800 font22pxUnder500"><b>What Skills Are You <div className="above800only br"><br/></div>Hiring For?</b></h2>
+                                        <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">What Skills Are You <div className="above800only br"><br/></div>Hiring For?</h2>
                                         UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe, SQL, Google Analytics, DevOps, Agile...
                                     </div>
                                 </div>
@@ -381,7 +381,7 @@ class ForBusiness extends Component {
                             <div className="homepageTrajectory forBusiness">
                                 <div className="homepageTrajectoryTextRight forBusiness">
                                     <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forBusiness">
-                                        <h2 className="greenText font28px font24pxUnder800 font22pxUnder500"><b>Course Pathways Curated <div className="above500only br"><br/></div>to the Skills You Need.</b>
+                                        <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Course Pathways Curated <div className="above500only br"><br/></div>to the Skills You Need.
                                         </h2>
                                         Expert-led, interactive learning
                                         through videos, articles, skill
@@ -401,7 +401,7 @@ class ForBusiness extends Component {
                             <div className="homepageTrajectory forBusiness" id="sponsorStudentsForBusiness">
                                 <div className="homepageTrajectoryTextLeft forBusiness">
                                     <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forBusiness">
-                                        <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500"><b>Candidate Training</b></h2>
+                                        <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Candidate Training</h2>
                                         College students and recent graduates
                                         complete the pathway to learn the skills
                                         you need. We find the talent.
@@ -419,7 +419,7 @@ class ForBusiness extends Component {
                             <div className="homepageTrajectory forBusiness">
                                 <div className="homepageTrajectoryTextRight forBusiness">
                                     <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forBusiness">
-                                        <h2 className="blueText font28px font24pxUnder800 font22pxUnder500"><b>Evaluate for Hire</b></h2>
+                                        <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Evaluate for Hire</h2>
                                         Comprehensive data on each candidate
                                         from skill assessments, qualitative
                                         responses, quantitative scoring
@@ -442,7 +442,7 @@ class ForBusiness extends Component {
 
                     <div className="center" style={{marginBottom: "50px"}}>
                         <h1 className="isolatedHeader purpleText font28px font24pxUnder800 font22pxUnder500">
-                            <b>What Positions Are You Hiring For?</b>
+                            What Positions Are You Hiring For?
                         </h1>
                         <div id="exampleSkillsContainer">
                             {exampleRoles}
@@ -464,7 +464,7 @@ class ForBusiness extends Component {
 
                     <div className="aResumeCantDoThis">
                         <div id="aResumeCantDoThisContent">
-                            <div className="font28px font24pxUnder800 font22pxUnder500" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do This.</b>
+                            <div className="font28px font24pxUnder800 font22pxUnder500" id="aResumeCantDoThisTitle">A Resum&eacute; Can{"'"}t Do This.
                             </div>
                             <div>
                                 <div style={styles.bottomListItem}>
@@ -520,7 +520,7 @@ class ForBusiness extends Component {
 
                     <div className="center font28px font24pxUnder800 font22pxUnder500"
                          style={{marginBottom: '40px', marginTop: "120px", minWidth: "250px"}}>
-                        <b>Your Pipeline to<div className="under400only br"><br/></div> Fully-Vetted Talent</b>
+                        Your Pipeline to<div className="under400only br"><br/></div> Fully-Vetted Talent
                     </div>
                     <div className="forBusinessBoxesContainer">
                         <Paper zDepth={3} className="paperBox">
