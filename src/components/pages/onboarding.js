@@ -988,11 +988,11 @@ class Onboarding extends Component {
                 </div>
         }
 
-        let skipClass = "blueText";
+        let skipClass = "blueText underline";
         if (this.state.tabValue === "goals") {
-            skipClass = "purpleText";
+            skipClass = "purpleText underline";
         } else if (this.state.tabValue === "info") {
-            skipClass = "onboarding3PurpleText";
+            skipClass = "onboarding3PurpleText underline";
         }
 
         return (
