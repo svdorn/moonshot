@@ -102,23 +102,19 @@ class PathwayStepList extends Component {
         // make a next and previous button
         return (
             <div style={{margin: '12px 0'}}>
-            <RaisedButton
-                label="Next"
-                labelStyle={{color:"white"}}
-                disableTouchRipple={true}
-                disableFocusRipple={true}
-                primary={true}
-                onClick={this.handleNextSub}
-                style={{marginRight: 12}}
-            />
-            {!(subStep == 0 && step == 0) && (
-                <FlatButton
-                    label="Back"
-                    disableTouchRipple={true}
-                    disableFocusRipple={true}
-                    onClick={this.handlePrevSub}
+                {!(subStep == 0 && step == 0) && (
+                    <FlatButton
+                        label="Back"
+                        onClick={this.handlePrevSub}
+                        style={{marginRight: 12}}
+                    />
+                )}
+                <RaisedButton
+                    label="Next"
+                    labelStyle={{color:"white"}}
+                    primary={true}
+                    onClick={this.handleNextSub}
                 />
-            )}
             </div>
         );
     }
