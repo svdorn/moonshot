@@ -1193,6 +1193,12 @@ button.link {
     background: rgba(0,0,0,0);
 }
 
+.pathwayContentNextBackButtons {
+    display: inline-block;
+    margin-left: 20px;
+    width: calc(100% - 470px);
+    text-align: center;
+}
 .videoContainer {
     position: relative;
     display: block;

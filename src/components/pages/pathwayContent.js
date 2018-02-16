@@ -239,7 +239,12 @@ class PathwayContent extends Component {
                             <Paper className={contentClass} zDepth={1}>
                                 {content}
                             </Paper>
-                            <NavigateStepButtons steps={pathway.steps} pathwayId={pathway._id} />
+
+                            <NavigateStepButtons
+                                className="pathwayContentNextBackButtons"
+                                steps={pathway.steps}
+                                pathwayId={pathway._id}
+                            />
 
                             <RaisedButton
                                 label="Open Step List"
