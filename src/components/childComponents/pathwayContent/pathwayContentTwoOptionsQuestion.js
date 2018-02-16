@@ -33,6 +33,7 @@ class PathwayContentTwoOptionsQuestion extends Component {
 
 
     componentDidUpdate() {
+        console.log("eh")
         if (this.props.quizId !== this.state.quizId) {
             let option1 = "";
             let option2 = "";
@@ -44,7 +45,7 @@ class PathwayContentTwoOptionsQuestion extends Component {
             let choice = undefined;
             // try to assign the value to the value that the user already had from the db
             try {
-                const userChoice = props.currentUser.answers[props.quizId].value;
+                const userChoice = this.props.currentUser.answers[this.props.quizId].value;
                 //
                 if (userChoice === 1 || userChoice === 2) {
                     choice = userChoice;
