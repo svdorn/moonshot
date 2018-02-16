@@ -28,6 +28,18 @@ class PathwayStepList extends Component {
         this.state = { stepIndex, subStepIndex };
     }
 
+
+    componentDidUpdate() {
+        const currentSubStep = this.props.currentSubStep;
+        if (this.state.subStepIndex !== currentSubStep.order - 1 || this.state.stepIndex !== currentSubStep.superStepOrder - 1) {
+            this.setState({
+                stepIndex: currentSubStep.superStepOrder - 1,
+                subStepIndex: currentSubStep.order - 1
+            })
+        }
+    }
+
+
     updateStepInReduxState() {
         const user = this.props.currentUser;
         const pathwayId = this.props.pathwayId;
@@ -198,6 +210,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
+        currentSubStep: state.users.currentSubStep,
         currentUser: state.users.currentUser,
     };
 }
