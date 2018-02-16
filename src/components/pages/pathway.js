@@ -272,7 +272,7 @@ class Pathway extends Component {
             <div className="jsxWrapper noOverflowX">
                 {pathway.sponsor !== undefined ?
                     <div style={{minWidth: "250px"}}>
-                        <div className="landingPage purpleToRedGradient">
+                        <div className="fullHeight purpleToRedGradient">
                             <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
 
 

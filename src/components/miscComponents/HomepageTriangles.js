@@ -8,16 +8,16 @@ class HomepageTriangles extends Component {
 
         if (this.props.variation == "1") {
             transformations = [
-                {top: "30vh", right: "0%", rotate: -30, scale: .4, className: " whiteTriangle"},
-                {top: "42vh", right: "9%", rotate: -60, scale: .6, className: " whiteTriangle"},
-                {top: "50vh", right: "4%", rotate: -11, scale: .7, className: " whiteTriangle"},
-                {top: "54vh", right: "23%", rotate: -134, scale: .3, className: " whiteTriangle"},
-                {top: "60vh", right: "16%", rotate: -19, scale: .5, className: " whiteTriangle"},
-                {top: "68vh", right: "3%", rotate: -72, scale: .4, className: " whiteTriangle"},
-                {top: "71vh", right: "32%", rotate: -111, scale: .7, className: " whiteTriangle"},
-                {top: "74vh", right: "19%", rotate: -98, scale: .6, className: " whiteTriangle"},
-                {top: "77vh", right: "52%", rotate: -2, scale: .3, className: " whiteTriangle"},
-                {top: "80vh", right: "27%", rotate: -58, scale: .4, className: " whiteTriangle"}
+                {top: "30%", right: "0%", rotate: -30, scale: .4, className: " whiteTriangle"},
+                {top: "42%", right: "9%", rotate: -60, scale: .6, className: " whiteTriangle"},
+                {top: "50%", right: "4%", rotate: -11, scale: .7, className: " whiteTriangle"},
+                {top: "54%", right: "23%", rotate: -134, scale: .3, className: " whiteTriangle"},
+                {top: "60%", right: "16%", rotate: -19, scale: .5, className: " whiteTriangle"},
+                {top: "68%", right: "3%", rotate: -72, scale: .4, className: " whiteTriangle"},
+                {top: "71%", right: "32%", rotate: -111, scale: .7, className: " whiteTriangle"},
+                {top: "74%", right: "19%", rotate: -98, scale: .6, className: " whiteTriangle"},
+                {top: "77%", right: "52%", rotate: -2, scale: .3, className: " whiteTriangle"},
+                {top: "80%", right: "27%", rotate: -58, scale: .4, className: " whiteTriangle"}
             ];
         } else if (this.props.variation == "2"){
             transformations = [
@@ -56,15 +56,15 @@ class HomepageTriangles extends Component {
             zIndex = "-10";
         } else if (this.props.variation == "3") {
             transformations = [
-                {top: "10vh", right: "0%", rotate: -30, scale: .4, className: " darkPurpleTriangle"},
-                {top: "14vh", right: "14%", rotate: -60, scale: .8, className: " darkPurpleTriangle"},
-                {top: "20vh", right: "4%", rotate: -11, scale: .7, className: " darkPurpleTriangle"},
-                {top: "24vh", right: "23%", rotate: -134, scale: .3, className: " darkPurpleTriangle"},
-                {top: "30vh", right: "16%", rotate: -19, scale: .5, className: " darkPurpleTriangle"},
+                {top: "10%", right: "0%", rotate: -30, scale: .4, className: " darkPurpleTriangle"},
+                {top: "14%", right: "14%", rotate: -60, scale: .8, className: " darkPurpleTriangle"},
+                {top: "20%", right: "4%", rotate: -11, scale: .7, className: " darkPurpleTriangle"},
+                {top: "24%", right: "23%", rotate: -134, scale: .3, className: " darkPurpleTriangle"},
+                {top: "30%", right: "16%", rotate: -19, scale: .5, className: " darkPurpleTriangle"},
 
-                {top: "7vh", left: "0%", rotate: -15, scale: .9, className: " darkPurpleTriangle"},
-                {top: "20vh", left: "8%", rotate: -35, scale: .7, className: " darkPurpleTriangle"},
-                {top: "32vh", left: "0%", rotate: -110, scale: 1.2, className: " darkPurpleTriangle"},
+                {top: "7%", left: "0%", rotate: -15, scale: .9, className: " darkPurpleTriangle"},
+                {top: "20%", left: "8%", rotate: -35, scale: .7, className: " darkPurpleTriangle"},
+                {top: "32%", left: "0%", rotate: -110, scale: 1.2, className: " darkPurpleTriangle"},
 
             ];
             whiteSpace = (
@@ -81,14 +81,14 @@ class HomepageTriangles extends Component {
             zIndex = "-10";
         } else if (this.props.variation == "4") {
             transformations = [
-                {top: "30vh", right: "0%", rotate: -30, scale: .4, className: " whiteTriangle"},
-                {top: "42vh", right: "9%", rotate: -60, scale: .6, className: " whiteTriangle"},
-                {top: "50vh", right: "4%", rotate: -11, scale: .7, className: " whiteTriangle"},
-                {top: "54vh", right: "23%", rotate: -134, scale: .3, className: " whiteTriangle"},
-                {top: "60vh", right: "16%", rotate: -19, scale: .5, className: " whiteTriangle"},
-                {top: "68vh", right: "3%", rotate: -72, scale: .4, className: " whiteTriangle"},
-                {top: "70vh", right: "26%", rotate: -111, scale: .7, className: " whiteTriangle"},
-                {top: "74vh", right: "19%", rotate: -98, scale: .6, className: " whiteTriangle"},
+                {top: "30%", right: "0%", rotate: -30, scale: .4, className: " whiteTriangle"},
+                {top: "42%", right: "9%", rotate: -60, scale: .6, className: " whiteTriangle"},
+                {top: "50%", right: "4%", rotate: -11, scale: .7, className: " whiteTriangle"},
+                {top: "54%", right: "23%", rotate: -134, scale: .3, className: " whiteTriangle"},
+                {top: "60%", right: "16%", rotate: -19, scale: .5, className: " whiteTriangle"},
+                {top: "68%", right: "3%", rotate: -72, scale: .4, className: " whiteTriangle"},
+                {top: "70%", right: "26%", rotate: -111, scale: .7, className: " whiteTriangle"},
+                {top: "74%", right: "19%", rotate: -98, scale: .6, className: " whiteTriangle"},
             ];
         }
 

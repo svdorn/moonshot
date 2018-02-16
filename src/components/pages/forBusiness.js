@@ -268,7 +268,7 @@ class ForBusiness extends Component {
                             </form>
                         }
                     </Dialog>
-                    <div className="landingPage purpleToBlue">
+                    <div className="fullHeight purpleToBlue">
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
                         <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500 font20pxUnder400 font18pxUnder350">
