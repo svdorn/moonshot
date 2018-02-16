@@ -1267,6 +1267,7 @@ button.link {
 .overviewAndCommentBoxImg {
     height: 35px;
     margin-bottom: 10px;
+    max-width: 200px;
 }
 .overviewAndCommentBoxTab {
     background-color: white !important;
@@ -2406,6 +2407,7 @@ textarea.multipleChoiceCustomAnswer {
     }
     .overviewAndCommentBoxImg {
         height: 25px;
+        max-width: 150px;
     }
     .overviewAndCommentBoxInfo {
         width: 150px;
@@ -2772,7 +2774,10 @@ textarea.multipleChoiceCustomAnswer {
         width: 250px !important;
     }
     .overviewAndCommentBoxInfo {
-        width: 100px;
+        width: 140px;
+    }
+    .overviewAndCommentBoxImg {
+        max-width: 140px;
     }
     .drawerContent {
         max-width:240px;
@@ -2844,6 +2849,7 @@ textarea.multipleChoiceCustomAnswer {
     }
     .overviewAndCommentBoxImg {
         height: 20px;
+        max-width: 90px;
     }
     .overviewAndCommentBoxInfo {
         width: 90px;
