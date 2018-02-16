@@ -11,7 +11,6 @@ class PathwayInfo extends Component {
             contentArray: undefined,
             currStep: {},
         }
-        console.log("hey");
     }
 
     componentDidMount() {
@@ -48,7 +47,6 @@ class PathwayInfo extends Component {
     }
 
     render() {
-        console.log("rendering");
         return (
             <StyledContent contentArray={this.state.contentArray} />
         );

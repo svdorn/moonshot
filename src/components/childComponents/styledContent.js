@@ -2,7 +2,6 @@ import React, {Component} from 'react';
 
 class StyledContent extends Component {
     render() {
-        console.log("HEY");
         const contentArray = this.props.contentArray;
         if (!Array.isArray(contentArray)) { return null; }
 
@@ -29,7 +28,7 @@ class StyledContent extends Component {
                             </div>
                         );
                         // add a break if there's supposed to be one
-                        if (part.shouldBreak) { contentHtml.push(<br/>); }
+                        if (part.shouldBreak) { contentHtml.push(<br key={"br" + keyCounter}/>); }
                     }
                     break;
                 case "ol":
@@ -55,7 +54,7 @@ class StyledContent extends Component {
                             </ol>
                         );
                         // add a break if there's supposed to be one
-                        if (part.shouldBreak) { contentHtml.push(<br/>); }
+                        if (part.shouldBreak) { contentHtml.push(<br key={"br" + keyCounter}/>); }
                     } else {
                         contentHtml.push(
                             <ul className={className} key={"contentPart" + keyCounter}>
@@ -63,7 +62,7 @@ class StyledContent extends Component {
                             </ul>
                         );
                         // add a break if there's supposed to be one
-                        if (part.shouldBreak) { contentHtml.push(<br/>); }
+                        if (part.shouldBreak) { contentHtml.push(<br key={"br" + keyCounter}/>); }
                     }
                     break;
                 default:

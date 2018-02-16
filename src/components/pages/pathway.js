@@ -266,7 +266,6 @@ class Pathway extends Component {
             }
         }
 
-
         return (
             //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
             <div className="jsxWrapper noOverflowX">

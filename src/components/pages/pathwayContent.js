@@ -266,7 +266,7 @@ class PathwayContent extends Component {
                                     <li>
                                         <div className="overviewAndCommentBoxInfo">
                                             <i>Sponsor</i><br/>
-                                            <img src={pathway.sponsor.logo}
+                                            <img src={pathway.sponsor.logoForLightBackground ? pathway.sponsor.logoForLightBackground : pathway.sponsor.logo}
                                                  alt={pathway.sponsor.name}
                                                  className="overviewAndCommentBoxImg"/>
                                         </div>

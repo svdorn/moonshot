@@ -10,6 +10,7 @@ var pathwaysSchema = mongoose.Schema({
   sponsor: {
       name: String,
       logo: String,
+      logoForLightBackground: String,
       description: String,
       hiring: String,
       homepage: String,
