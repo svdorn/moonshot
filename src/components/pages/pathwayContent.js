@@ -178,10 +178,13 @@ class PathwayContent extends Component {
             }
         }
 
-        let formattedDeadline = '';
+        let formattedDeadline = undefined;
         if (this.state.pathway) {
             const deadline = new Date(this.state.pathway.deadline);
             formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            if (formattedDeadline.includes("NaN")) {
+                formattedDeadline = undefined;
+            }
         }
 
         return (
@@ -271,12 +274,15 @@ class PathwayContent extends Component {
                                                 {pathway.estimatedCompletionTime}
                                             </div>
                                         </li>
-                                        <li>
-                                            <div className="overviewAndCommentBoxInfo">
-                                                <i>Complete By</i><br/>
-                                                {formattedDeadline}
-                                            </div>
-                                        </li>
+                                        {formattedDeadline ?
+                                            <li>
+                                                <div className="overviewAndCommentBoxInfo">
+                                                    <i>Complete By</i><br/>
+                                                    {formattedDeadline}
+                                                </div>
+                                            </li>
+                                        : null
+                                        }
                                     </ul>
                                 </Paper>
 
