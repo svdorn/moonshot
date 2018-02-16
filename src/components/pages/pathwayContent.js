@@ -236,15 +236,16 @@ class PathwayContent extends Component {
 
                             <div style={{height: "10px"}}/>
 
-                            <Paper className={contentClass} zDepth={1}>
-                                {content}
-                            </Paper>
+                            <div className="pathwayContentContainer">
+                                <Paper className={contentClass} zDepth={1}>
+                                    {content}
+                                </Paper>
 
-                            <NavigateStepButtons
-                                className="pathwayContentNextBackButtons"
-                                steps={pathway.steps}
-                                pathwayId={pathway._id}
-                            />
+                                <NavigateStepButtons
+                                    steps={pathway.steps}
+                                    pathwayId={pathway._id}
+                                />
+                            </div>
 
                             <RaisedButton
                                 label="Open Step List"

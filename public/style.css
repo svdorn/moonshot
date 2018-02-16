@@ -1193,12 +1193,6 @@ button.link {
     background: rgba(0,0,0,0);
 }
 
-.pathwayContentNextBackButtons {
-    display: inline-block;
-    margin-left: 20px;
-    width: calc(100% - 470px);
-    text-align: center;
-}
 .videoContainer {
     position: relative;
     display: block;
@@ -1252,10 +1246,11 @@ button.link {
     visibility: hidden;
     position: absolute;
 }
-.overviewAndCommentBox, .pathwayContent {
+.overviewAndCommentBox, .pathwayContentContainer {
     display: inline-block;
     margin-left: 20px;
     width: calc(100% - 470px);
+    text-align: center;
 }
 .pathwayContent {
     min-height: 400px;
