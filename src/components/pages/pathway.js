@@ -272,7 +272,7 @@ class Pathway extends Component {
             <div className="jsxWrapper noOverflowX">
                 {pathway.sponsor !== undefined ?
                     <div style={{minWidth: "250px"}}>
-                        <div className="fullHeight purpleToRedGradient">
+                        <div className="landingPage purpleToRedGradient">
                             <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
 
 
@@ -326,14 +326,16 @@ class Pathway extends Component {
                                 </li>
                             </ul>
 
-                            <div className="scrollDownButton lowerOnSmallScreen" onClick={() => this.scrollDown()}>
-                                <div>
-                                    <div/>
-                                    <div/>
-                                </div>
-                                <div>
-                                    <div/>
-                                    <div/>
+                            <div className="center">
+                                <div className="scrollDownButton lowerOnSmallScreen" onClick={() => this.scrollDown()}>
+                                    <div>
+                                        <div/>
+                                        <div/>
+                                    </div>
+                                    <div>
+                                        <div/>
+                                        <div/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -670,8 +672,7 @@ class Pathway extends Component {
                     </div>
                     :
                     <div>
-                        <div className="fullHeight"/>
-                        <div className="fullHeight"/>
+                        <div className="fillScreen"/>
                     </div>
                 }
 

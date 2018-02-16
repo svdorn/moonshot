@@ -277,7 +277,7 @@ form > h1 {
     pointer-events: none;
 }
 
-.fillScreen, .fillScreenWithHeader {
+.fillScreen, .fillScreenWithHeader, .landingPage {
     width: 100%;
     min-height: 100vh;
     position: relative;
@@ -716,6 +716,7 @@ button.link {
     margin-top: 10px;
 }
 .scrollDownButton {
+    display: inline-block;
     height: 28px;
     width: 52px;
     left: 0;
@@ -727,12 +728,15 @@ button.link {
 @keyframes MoveUpDown {
     0% {
         margin-top: 24px;
+        margin-bottom: 6px;
     }
     50% {
         margin-top: 30px;
+        margin-bottom: 0px;
     }
     100% {
         margin-top: 24px;
+        margin-bottom: 6px;
     }
 }
 
@@ -2626,7 +2630,7 @@ textarea.multipleChoiceCustomAnswer {
     .forBusinessCircle:nth-child(4) { top: 336px; }
 
 
-    .fullHeight { height: 550px; }
+    .fullHeight, .landingPage { height: 550px; min-height: 550px; }
     .infoBox { padding-top: 190px; }
 
     .gradientBorderPurpleToPinkChip { height: 30px; }
