@@ -400,7 +400,7 @@ class Profile extends Component {
                                                     Edit Profile
                                                 </div>*/}
                                                 <img
-                                                    src="/icons/Portfolio.png"
+                                                    src="/icons/PortfolioBlue.png"
                                                     alt="Profile picture"
                                                     style={style.img}
                                                 />
