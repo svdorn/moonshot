@@ -108,6 +108,7 @@ app.get('/userSession', function (req, res) {
 var Users = require('./models/users.js');
 var Pathways = require('./models/pathways.js');
 var Articles = require('./models/articles.js');
+var Info = require('./models/info.js');
 var Videos = require('./models/videos.js');
 var Quizzes = require('./models/quizzes.js');
 var Links = require('./models/links.js');
@@ -115,11 +116,10 @@ var Links = require('./models/links.js');
 
 // --->>> EXAMPLE PATHWAY CREATION <<<---
 
-// const exampleLink = {
-//     url: "https://www.youtube.com/watch?v=J3hH-JckQ-U",
-//     company: "Treehouse"
+// const exampleInfo = {
+//     contentArray: []
 // }
-// Links.create(exampleLink, function(err, link) {
+// Info.create(exampleInfo, function(err, link) {
 //     console.log(err);
 //     console.log(link);
 // })
@@ -1131,6 +1131,23 @@ app.get('/getArticle', function (req, res) {
 
     })
 });
+
+
+//----->> GET ARTICLE BY ID <<-----
+app.get('/getPathwayInfo', function (req, res) {
+    const _id = sanitize(req.query._id);
+    const query = {_id: _id};
+
+    Info.findOne(query, function (err, info) {
+        if (err) {
+            console.log("error in get article by id")
+        } else {
+            res.json(info);
+        }
+
+    })
+});
+
 
 //----->> GET QUIZ BY ID <<-----
 app.get('/getQuiz', function (req, res) {

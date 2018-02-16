@@ -1724,7 +1724,7 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     vertical-align: top;
 }
 .twoOptionsBox.selected { background-color: var(--moonshotLightBlue) !important; }
-.twoOptionsBox.notSelected { background-color: #dcdcdc !important; }
+.twoOptionsBox.notSelected { background-color: #f7f7f7 !important; }
 .twoOptionsOr {
     display: inline-block;
     margin: 55px 20px 0;
@@ -1758,11 +1758,11 @@ textarea.multipleChoiceCustomAnswer {
     width: 300px;
 }
 .multipleChoiceCircle {
-    width: 24px;
-    height: 24px;
+    width: 20px;
+    height: 20px;
     background-color: white;
     border-radius: 15px;
-    border: 3px solid var(--moonshotLightBlue);
+    border: 2px solid var(--moonshotLightBlue);
     position: absolute;
     left: calc(50% - 140px);
 }

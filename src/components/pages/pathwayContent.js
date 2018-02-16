@@ -4,6 +4,7 @@ import PathwayContentLink from '../childComponents/pathwayContent/pathwayContent
 import PathwayContentVideo from '../childComponents/pathwayContent/pathwayContentVideo';
 import PathwayContentArticle from '../childComponents/pathwayContent/pathwayContentArticle';
 import PathwayContentQuiz from '../childComponents/pathwayContent/pathwayContentQuiz';
+import PathwayInfo from '../childComponents/pathwayContent/pathwayInfo';
 import {Tabs, Tab, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
@@ -167,6 +168,8 @@ class PathwayContent extends Component {
                 content = <PathwayContentArticle className="pathwayContent"/>
             } else if (contentType == "quiz") {
                 content = <PathwayContentQuiz className="pathwayContent"/>
+            } else if (contentType == "info") {
+                content = <PathwayInfo className="pathwayContent"/>
             } else {
                 content = <div style={style.div}>Not Video or Link</div>;
             }

@@ -28,21 +28,21 @@ class PathwayContentArticle extends Component {
         }
     }
 
-    // componentDidUpdate() {
-    //     if (this.props.step !== this.state.currStep) {
-    //         const id = this.props.step.contentID;
-    //
-    //         axios.get("/api/getArticle", {
-    //             params: {
-    //                 _id: id
-    //             }
-    //         }).then(res => {
-    //             this.setState({content: res.data, currStep: this.props.step});
-    //         }).catch(function (err) {
-    //             console.log("error getting searched for article");
-    //         })
-    //     }
-    // }
+    componentDidUpdate() {
+        if (this.props.step !== this.state.currStep) {
+            const id = this.props.step.contentID;
+
+            axios.get("/api/getArticle", {
+                params: {
+                    _id: id
+                }
+            }).then(res => {
+                this.setState({content: res.data, currStep: this.props.step});
+            }).catch(function (err) {
+                console.log("error getting searched for article");
+            })
+        }
+    }
 
     render() {
         const content = this.state.content;

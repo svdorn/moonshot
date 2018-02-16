@@ -27,22 +27,22 @@ class PathwayContentLink extends Component {
             })
         }
     }
-    //
-    // componentDidUpdate() {
-    //     if (this.props.step !== this.state.currStep) {
-    //         const id = this.props.step.contentID;
-    //
-    //         axios.get("/api/getLink", {
-    //             params: {
-    //                 _id: id
-    //             }
-    //         }).then(res => {
-    //             this.setState({content: res.data, currStep: this.props.step});
-    //         }).catch(function (err) {
-    //             console.log("error getting searched for link");
-    //         })
-    //     }
-    // }
+
+    componentDidUpdate() {
+        if (this.props.step !== this.state.currStep) {
+            const id = this.props.step.contentID;
+    
+            axios.get("/api/getLink", {
+                params: {
+                    _id: id
+                }
+            }).then(res => {
+                this.setState({content: res.data, currStep: this.props.step});
+            }).catch(function (err) {
+                console.log("error getting searched for link");
+            })
+        }
+    }
 
     render() {
         const content = this.state.content;
