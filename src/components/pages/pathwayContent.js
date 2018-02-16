@@ -178,10 +178,13 @@ class PathwayContent extends Component {
             }
         }
 
-        let formattedDeadline = '';
+        let formattedDeadline = undefined;
         if (this.state.pathway) {
             const deadline = new Date(this.state.pathway.deadline);
             formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            if (formattedDeadline.includes("NaN")) {
+                formattedDeadline = undefined;
+            }
         }
 
         return (
@@ -190,7 +193,11 @@ class PathwayContent extends Component {
                     <div>
                         <div className="greenToBlue headerDiv"/>
                         <Paper style={style.pathwayHeader}>
-                            {pathway.name}
+                            {pathway.pathwayContentDisplayName ?
+                                pathway.pathwayContentDisplayName
+                            :
+                                pathway.name
+                            }
                         </Paper>
 
 
@@ -255,51 +262,58 @@ class PathwayContent extends Component {
                             />
 
                             <Paper className="overviewAndCommentBox">
-                                <Paper style={{width: "100%"}}>
-                                    <ul className="horizCenteredList blueText font20px font14pxUnder700 font10pxUnder400">
-                                        <li>
-                                            <div className="overviewAndCommentBoxInfo">
-                                                <i>Sponsor</i><br/>
-                                                <img src={pathway.sponsor.logo}
-                                                     alt={pathway.sponsor.name}
-                                                     className="overviewAndCommentBoxImg"/>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="overviewAndCommentBoxInfo">
-                                                <i>Completion Time</i><br/>
-                                                {pathway.estimatedCompletionTime}
-                                            </div>
-                                        </li>
+                                <ul className="horizCenteredList blueText font20px font14pxUnder700 font10pxUnder400" style={{marginBottom:"0"}}>
+                                    <li>
+                                        <div className="overviewAndCommentBoxInfo">
+                                            <i>Sponsor</i><br/>
+                                            <img src={pathway.sponsor.logo}
+                                                 alt={pathway.sponsor.name}
+                                                 className="overviewAndCommentBoxImg"/>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="overviewAndCommentBoxInfo">
+                                            <i>Completion Time</i><br/>
+                                            {pathway.estimatedCompletionTime}
+                                        </div>
+                                    </li>
+                                    {formattedDeadline ?
                                         <li>
                                             <div className="overviewAndCommentBoxInfo">
                                                 <i>Complete By</i><br/>
                                                 {formattedDeadline}
                                             </div>
                                         </li>
-                                    </ul>
-                                </Paper>
-                                <div style={{textAlign: "center"}}>
-                                    <Tabs
-                                        inkBarStyle={{background: '#00c3ff'}}
-                                        tabItemContainerStyle={{width: '60%'}}
-                                        className="overviewExercisesComments"
-                                    >
-                                        <Tab label="Overview" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                            <p className="font20px font14pxUnder700 font10pxUnder400 center"
-                                               style={style.insideTab}>{pathway.overview}</p>
-                                        </Tab>
-                                        <Tab label="Exercise Files" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                            <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
-                                                yet.</h1>
-                                        </Tab>
-                                        <Tab label="Comments" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                            <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
-                                                yet.</h1>
-                                        </Tab>
-                                    </Tabs>
-                                </div>
+                                    : null
+                                    }
+                                </ul>
                             </Paper>
+
+                            {pathway.showOverviewAndCommentBox ?
+                                <Paper className="overviewAndCommentBox">
+                                    <div style={{textAlign: "center"}}>
+                                    <Tabs
+                                    inkBarStyle={{background: '#00c3ff'}}
+                                    tabItemContainerStyle={{width: '60%'}}
+                                    className="overviewExercisesComments"
+                                    >
+                                    <Tab label="Overview" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                    <p className="font20px font14pxUnder700 font10pxUnder400 center"
+                                    style={style.insideTab}>{pathway.overview}</p>
+                                    </Tab>
+                                    <Tab label="Exercise Files" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                    <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
+                                    yet.</h1>
+                                    </Tab>
+                                    <Tab label="Comments" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                    <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
+                                    yet.</h1>
+                                    </Tab>
+                                    </Tabs>
+                                    </div>
+                                </Paper>
+                            : null
+                            }
                         </div>
                     </div>
                     :

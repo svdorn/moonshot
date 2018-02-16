@@ -941,7 +941,7 @@ class Onboarding extends Component {
                             <textarea
                                 className="onboardingInputWithGradientBorder"
                                 id="onboardingBioTextarea"
-                                placeholder="e.g. I have been creating virtual reality..."
+                                placeholder="e.g. I am a software engineer dedicated to making the world a better place through the improvement of renewable energy technology..."
                                 value={this.state.bio}
                                 onChange={(e) => this.handleInfoInputChange(e, "bio")}
                             />
@@ -988,11 +988,11 @@ class Onboarding extends Component {
                 </div>
         }
 
-        let skipClass = "blueText";
+        let skipClass = "blueText underline";
         if (this.state.tabValue === "goals") {
-            skipClass = "purpleText";
+            skipClass = "purpleText underline";
         } else if (this.state.tabValue === "info") {
-            skipClass = "onboarding3PurpleText";
+            skipClass = "onboarding3PurpleText underline";
         }
 
         return (

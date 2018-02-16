@@ -10,7 +10,7 @@ class Question extends Component {
             // add a break if the question part needs a break after it
             const breakArea = part.shouldBreak ? <br/> : null;
             // default classNames; if className provided, give the part that className instead
-            const defaultClassNames = "inlineBlock sideMargins80px sideMargins40pxUnder700 sideMargins20pxUnder400";
+            const defaultClassNames = "inlineBlock marginSides80px marginSides40pxUnder700 marginSides20pxUnder400";
             let className = part.className ? part.className : defaultClassNames;
             // if className isn't default but we want to include default classes, add them
             if (part.className && part.includeDefaultClasses) {

@@ -7,11 +7,10 @@ class StyledContent extends Component {
         if (!Array.isArray(contentArray)) { return null; }
 
         let keyCounter = 0;
-        const contentHtml = contentArray.map(function(part) {
-            // add a break if the content part needs a break after it
-            const breakArea = part.shouldBreak ? <br/> : null;
+        let contentHtml = [];
+        contentArray.forEach(function(part) {
             // default classNames; if className provided, give the part that className instead
-            const defaultClassNames = "inlineBlock sideMargins80px sideMargins40pxUnder700 sideMargins20pxUnder400";
+            const defaultClassNames = "inlineBlock marginSides80px marginSides40pxUnder700 marginSides20pxUnder400";
             let className = part.className ? part.className : defaultClassNames;
             // if className isn't default but we want to include default classes, add them
             if (part.className && part.includeDefaultClasses) {
@@ -24,21 +23,20 @@ class StyledContent extends Component {
             switch (part.partType) {
                 case "text":
                     if (content.length > 0) {
-                        return (
+                        contentHtml.push(
                             <div className={className} key={"contentPart" + keyCounter}>
                                 {content[0]}
-                                {breakArea}
                             </div>
                         );
-                    } else {
-                        return null;
+                        // add a break if there's supposed to be one
+                        if (part.shouldBreak) { contentHtml.push(<br/>); }
                     }
                     break;
                 case "ol":
                 case "ul":
                     // if no items given for the lists, return nothing
                     if (!Array.isArray(content) || content.length < 1) {
-                        return null;
+                        break;
                     }
                     // make the items inside the list
                     let liKeyCounter = 0;
@@ -46,33 +44,33 @@ class StyledContent extends Component {
                         // return nothing if the item content is not a string
                         if (typeof itemContent !== "string") { return null; }
                         liKeyCounter++;
-                        return (
+                        contentHtml.push(
                             <li key={"contentPart" + keyCounter + "li" + liKeyCounter}>{itemContent}</li>
                         );
                     });
                     if (part.partType === "ol") {
-                        return (
+                        contentHtml.push(
                             <ol className={className} key={"contentPart" + keyCounter}>
                                 {lis}
-                                {breakArea}
                             </ol>
                         );
+                        // add a break if there's supposed to be one
+                        if (part.shouldBreak) { contentHtml.push(<br/>); }
                     } else {
-                        return (
+                        contentHtml.push(
                             <ul className={className} key={"contentPart" + keyCounter}>
                                 {lis}
-                                {breakArea}
                             </ul>
                         );
+                        // add a break if there's supposed to be one
+                        if (part.shouldBreak) { contentHtml.push(<br/>); }
                     }
                     break;
                 default:
                     console.log("content part type unnaccounted for");
-                    return null;
+                    break;
             }
         });
-
-        console.log("rendering formatted")
 
         return (
             <div className="center">

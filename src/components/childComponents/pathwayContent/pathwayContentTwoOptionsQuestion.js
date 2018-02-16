@@ -77,7 +77,7 @@ class PathwayContentTwoOptionsQuestion extends Component {
     render() {
         return (
             <div className="center font20px font16pxUnder600 font12pxUnder400">
-                <div style={{margin:"20px 0"}}><Question question={this.props.question} /></div>
+                <div style={{padding:"20px 0"}}><Question question={this.props.question} /></div>
 
                 <TwoOptionsChoice
                     selected={this.state.choice === 1}
