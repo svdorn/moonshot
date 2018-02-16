@@ -1266,6 +1266,7 @@ button.link {
 }
 .overviewAndCommentBoxImg {
     height: 35px;
+    margin-bottom: 10px;
 }
 .overviewAndCommentBoxTab {
     background-color: white !important;
