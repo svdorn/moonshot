@@ -91,13 +91,13 @@ class PathwayContentQuiz extends Component {
         }
 
         return (
-            <Paper className={this.props.className} style={{...this.props.style}} zDepth={1}>
+            <div className={this.props.className} style={{...this.props.style}}>
                 {this.state.quiz !== undefined ?
                     <div className="center" style={{margin: "10px 0"}}>
                         { questionJsx }
                     </div>
                     : null}
-            </Paper>
+            </div>
         );
     }
 }

@@ -31,7 +31,7 @@ class PathwayContentLink extends Component {
     componentDidUpdate() {
         if (this.props.step !== this.state.currStep) {
             const id = this.props.step.contentID;
-    
+
             axios.get("/api/getLink", {
                 params: {
                     _id: id
@@ -47,7 +47,7 @@ class PathwayContentLink extends Component {
     render() {
         const content = this.state.content;
         return (
-            <Paper className={this.props.className} style={{...this.props.style}} zDepth={1}>
+            <div className={this.props.className} style={{...this.props.style}}>
                 {this.state.content !== undefined ?
                     <div className="center" style={{marginBottom: "10px"}}>
                         <img src="/images/OfficialLogoBlue.png" key="moonshot" style={{
@@ -78,7 +78,7 @@ class PathwayContentLink extends Component {
                         </button>
                     </div>
                     : null}
-            </Paper>
+            </div>
         );
     }
 }

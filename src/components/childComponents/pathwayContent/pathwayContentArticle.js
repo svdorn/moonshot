@@ -47,7 +47,7 @@ class PathwayContentArticle extends Component {
     render() {
         const content = this.state.content;
         return (
-            <Paper className={this.props.className} style={{...this.props.style}} zDepth={1}>
+            <div className={this.props.className} style={{...this.props.style}}>
                 {this.state.content !== undefined ?
                     <div className="center" style={{marginBottom: "10px"}}>
                         <h4>{content.name}</h4>
@@ -59,7 +59,7 @@ class PathwayContentArticle extends Component {
                         </button>
                     </div>
                     : null}
-            </Paper>
+            </div>
         );
     }
 }

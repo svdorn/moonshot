@@ -157,19 +157,20 @@ class PathwayContent extends Component {
         const pathway = this.state.pathway;
 
         let content = <div>"loading"</div>;
+        let contentClass = "pathwayContent";
         // if the user is on a step, show that content
         if (this.props.step) {
             const contentType = this.props.step.contentType;
             if (contentType == "link") {
-                content = <PathwayContentLink className="pathwayContent"/>;
+                content = <PathwayContentLink/>;
             } else if (contentType == "video") {
                 content = <PathwayContentVideo className="videoContainer"/>;
             } else if (contentType == "article") {
-                content = <PathwayContentArticle className="pathwayContent"/>
+                content = <PathwayContentArticle/>
             } else if (contentType == "quiz") {
-                content = <PathwayContentQuiz className="pathwayContent"/>
+                content = <PathwayContentQuiz/>
             } else if (contentType == "info") {
-                content = <PathwayInfo className="pathwayContent"/>
+                content = <PathwayInfo/>
             } else {
                 content = <div style={style.div}>Not Video or Link</div>;
             }
@@ -235,7 +236,9 @@ class PathwayContent extends Component {
 
                             <div style={{height: "10px"}}/>
 
-                            {content}
+                            <Paper className={contentClass} zDepth={1}>
+                                {content}
+                            </Paper>
 
                             <RaisedButton
                                 label="Open Step List"
