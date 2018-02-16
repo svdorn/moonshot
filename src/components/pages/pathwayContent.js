@@ -11,6 +11,7 @@ import {browserHistory} from 'react-router';
 import {closeNotification, updateCurrentSubStep, setHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayStepList from '../childComponents/pathwayContent/pathwayStepList';
+import NavigateStepButtons from '../childComponents/pathwayContent/navigateStepsButtons';
 import axios from 'axios';
 
 class PathwayContent extends Component {
@@ -238,6 +239,7 @@ class PathwayContent extends Component {
                             <Paper className={contentClass} zDepth={1}>
                                 {content}
                             </Paper>
+                            <NavigateStepButtons steps={pathway.steps} pathwayId={pathway._id} />
 
                             <RaisedButton
                                 label="Open Step List"
