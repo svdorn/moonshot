@@ -105,6 +105,12 @@ class Signup extends Component {
         if (vals.password != vals.password2) {
             return;
         }
+        // See if was redirected from pathway
+        let location = this.props.location;
+        let pathwayName = "";
+        if (location.query && location.query.pathway) {
+            pathwayName = location.query.pathway;
+        }
 
         const name = this.props.formData.signup.values.name;
         const password = this.props.formData.signup.values.password;

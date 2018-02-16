@@ -69,13 +69,13 @@ export function onSignUpPage() {
 }
 
 // POST USERS
-export function postUser(user) {
+export function postUser(user, pathwayName) {
     return function(dispatch) {
 
         dispatch({type: "POST_USER_REQUESTED"});
 
         // post user to database
-        axios.post("/api/user", user)
+        axios.post("/api/user", user, pathwayName)
             // user successfully posted
             .then(function(response) {
                 // send verification email
