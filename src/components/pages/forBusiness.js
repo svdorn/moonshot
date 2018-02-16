@@ -332,7 +332,7 @@ class ForBusiness extends Component {
                                             style={styles.horizListIcon}
                                         /><br/>
                                         <b>Real<div className="under500only br"><br/></div> Projects</b><br/>
-                                        See their quality of work and application of skills<div className="above500only inline"> before you hire</div>.
+                                        See their quality of work and <div className="above1000only br"><br/></div>application of skills<div className="above500only inline"> before you hire</div>.
                                     </div>
                                 </div>
                             </div>
