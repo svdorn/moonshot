@@ -192,10 +192,17 @@ class Profile extends Component {
                 backgroundColor: "white",
                 color: 'black',
             },
-            img: {
+            imgContainer: {
                 height: "100px",
+                width: "100px",
                 borderRadius: '50%',
                 border: "3px solid #00d2ff",
+                display: "inline-block",
+                overflow: "hidden"
+            },
+            img: {
+                height: "85px",
+                marginTop: "13px"
             },
             locationImg: {
                 display: 'inline-block',
@@ -399,11 +406,13 @@ class Profile extends Component {
                                                 >
                                                     Edit Profile
                                                 </div>*/}
-                                                <img
-                                                    src="/icons/PortfolioBlue.png"
-                                                    alt="Profile picture"
-                                                    style={style.img}
-                                                />
+                                                <div style={style.imgContainer}>
+                                                    <img
+                                                        src="/icons/PortfolioBlue.png"
+                                                        alt="Profile picture"
+                                                        style={style.img}
+                                                    />
+                                                </div>
                                                 <div>
                                                     <div
                                                         className="blueText font20px font14pxUnder700">{user.name.toUpperCase()}
