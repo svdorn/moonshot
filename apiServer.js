@@ -282,6 +282,81 @@ app.post('/user', function (req, res) {
     });
 });
 
+
+// remove any empty pieces from an object or array all the way down
+function removeEmptyFields(something) {
+    if (typeof something !== "object") {
+        return something;
+    } else {
+        if (Array.isArray(something)) {
+            return removeEmptyArrayFields(something);
+        } else {
+            return removeEmptyObjectFields(something);
+        }
+    }
+}
+
+// remove any empty pieces from an object
+function removeEmptyObjectFields(obj) {
+    let newObj = {};
+
+    for (var prop in obj) {
+        // skip loop if the property is from prototype
+        if (!obj.hasOwnProperty(prop)) continue;
+        let value = obj[prop];
+
+        // don't add the value if it is some sort of empty
+        if (!valueIsEmpty(value)) {
+            // go down through the levels of the object if it is an object, then add it
+            if (typeof value === "object") {
+                // remove empty fields from the value
+                valueWithEmptyFieldsRemoved = removeEmptyFields(value);
+                // only add the value if it is still non-empty
+                if (!valueIsEmpty(valueWithEmptyFieldsRemoved)) {
+                    newObj[prop] = valueWithEmptyFieldsRemoved;
+                }
+            } else {
+                // value is not empty, add it to the new object
+                newObj[prop] = value;
+            }
+        }
+    }
+
+    return newObj;
+}
+
+// remove any empty pieces from an array
+function removeEmptyArrayFields(arr) {
+    let newArr = [];
+
+    newArr = arr.filter(function(item) {
+        return !valueIsEmpty(item);
+    });
+
+    return newArr;
+}
+
+// returns true if the thing is equal to some non-emptyish thing
+function valueIsEmpty(thing) {
+    if (typeof thing === "object") {
+        if (Array.isArray(thing)) {
+            return thing.length === 0;
+        } else {
+            return objectIsEmpty(thing);
+        }
+    } else {
+        return (thing === undefined || thing === null || thing === "");
+    }
+}
+
+// returns true if the object is {}
+function objectIsEmpty(obj) {
+    if (obj === null || obj === undefined) { return true; }
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+
+// remove html tags from a variable (any type) to prevent code injection
 function sanitize(something) {
     const somethingType = (typeof something);
     switch (somethingType) {
@@ -911,9 +986,13 @@ function safeUser(user) {
 // used when passing the user object back to the user, still contains sensitive
 // data such as the user id and verification token
 function removePassword(user) {
-    let newUser = user;
-    newUser.password = undefined;
-    return newUser;
+    if (typeof user === "object" && user != null) {
+        let newUser = user;
+        newUser.password = undefined;
+        return newUser;
+    } else {
+        return undefined;
+    }
 }
 
 
@@ -1543,8 +1622,10 @@ app.post("/updateInfo", function (req, res) {
         // When true returns the updated document
         Users.findById(userId, function (err, user) {
             if (err) {
+                console.log("couldn't find user");
                 console.log(err);
             }
+            console.log("user is:", user);
 
             if (!verifyUser(user, verificationToken)) {
                 console.log("can't verify user");
@@ -1552,13 +1633,18 @@ app.post("/updateInfo", function (req, res) {
                 return;
             }
 
-            for (const prop in info) {
+            const fullInfo = removeEmptyFields(info);
+
+            for (const prop in fullInfo) {
+                // only use properties that are not inherent to all objects
                 if (info.hasOwnProperty(prop)) {
-                    user.info[prop] = info[prop];
+                    user.info[prop] = fullInfo[prop];
                 }
             }
 
             user.save(function (err, updatedUser) {
+                console.log("err:", err);
+                console.log("updatedUser:", updatedUser);
                 if (err) {
                     res.send(false);
                 }

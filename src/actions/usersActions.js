@@ -369,6 +369,7 @@ export function updateInfo(user, info) {
                 dispatch({type:"UPDATE_USER_ONBOARDING", payload: response.data});
             })
             .catch(function(err) {
+                console.log(err);
             });
     }
 }
@@ -382,9 +383,10 @@ export function startOnboarding(){
 export function endOnboarding(user, markOnboardingComplete){
     return function(dispatch) {
         if (markOnboardingComplete) {
-            axios.post("endOnboarding", {userId: user._id, verificationToken: user.verificationToken})
+            axios.post("/api/endOnboarding", {userId: user._id, verificationToken: user.verificationToken})
             .catch(function(err) {
                 // onboarding setting not able to be turned off for some reason
+                console.log("onboarding mark complete error: ", err)
             })
         }
         dispatch({type: "END_ONBOARDING"});
@@ -417,6 +419,5 @@ export function contactUs(user){
 export function formError() {
     return function(dispatch) {
         dispatch({type:"FORM_ERROR", notification: {message: "Fields must all be filled in to submit form.", type: "errorHeader"}})
-
     }
 }

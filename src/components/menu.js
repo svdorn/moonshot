@@ -59,6 +59,7 @@ class Menu extends Component {
             // do nothing
         } else {
             if (this.props.location.pathname === '/onboarding') {
+                // user is signing out while on onboarding, don't mark onboarding complete yet
                 const markOnboardingComplete = false;
                 this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
             }
