@@ -1053,11 +1053,21 @@ app.put('/user/:_id', function (req, res) {
 });
 
 //----->> ADD PATHWAY <<------
+// CURRENTLY ONLY ALLOWS NWM PATHWAY TO BE ADDED
 app.post("/user/addPathway", function (req, res) {
     const _id = sanitize(req.body._id);
     const pathwayId = sanitize(req.body.pathwayId);
 
+
     if (_id && pathwayId) {
+        // TODO: REMOVE THIS, CHANGE HOW THIS FUNCTION WORKS ONCE WE START
+        // ADDING PATHWAYS BESIDES NWM
+        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad") {
+            res.status(403).send("You cannot currently sign up for that pathway.");
+            return;
+        }
+
+
         // When true returns the updated document
         Users.findById(_id, function (err, user) {
             if (err) {
