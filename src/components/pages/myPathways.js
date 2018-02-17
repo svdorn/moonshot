@@ -201,7 +201,7 @@ class MyPathways extends Component {
                             <div>
                                 <div className="center">
                                     <CircularProgress color="white"
-                                                      style={{marginTop: "20px"}}/>
+                                                      style={{marginTop: "200px"}}/>
                                 </div>
                             </div>}
                     </div>
