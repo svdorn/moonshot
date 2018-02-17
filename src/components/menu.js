@@ -124,7 +124,7 @@ class Menu extends Component {
             loginClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let myPathwaysClass = menuItemClass;
-        let hoverWidth = "47px";
+        let hoverWidth = "52px";
         if (this.props.location.pathname === '/myPathways') {
             myPathwaysClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
@@ -133,7 +133,7 @@ class Menu extends Component {
         }
         if (this.props.location.pathname === '/settings') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-            hoverWidth = "62px";
+            hoverWidth = "67px";
         }
 
 
