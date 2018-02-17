@@ -167,7 +167,8 @@ class MyPathways extends Component {
                         <div className="headerDiv"/>
                         {this.state.userPathwayPreviews ?
                             <div className="center fillScreenWithHeader">
-                                <h1 className="center font40px font24pxUnder500 whiteText" style={{marginTop:"30px"}}>My Pathways</h1>
+                                <h1 className="center font40px font24pxUnder500 whiteText" style={{marginTop: "30px"}}>
+                                    My Pathways</h1>
                                 <Tabs
                                     style={style.tabs}
                                     inkBarStyle={{background: 'white'}}
@@ -198,11 +199,14 @@ class MyPathways extends Component {
                             </div>
                             :
                             <div>
-                                <div className="fillScreen"/>
+                                <div className="center">
+                                    <CircularProgress color="white"
+                                                      style={{marginTop: "20px"}}/>
+                                </div>
                             </div>}
                     </div>
                     :
-                    <div className="fillScreen" />
+                    <div className="fillScreen"/>
                 }
             </div>
 
