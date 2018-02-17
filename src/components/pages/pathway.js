@@ -369,7 +369,7 @@ class Pathway extends Component {
                                         </div>
                                     </div>
                                     <div className="horizListFull">
-                                        <div className="horizListSpacer" style={{marginRight: "20%", width:'70%'}}>
+                                        <div className="horizListSpacer" style={{marginRight: "20%"}}>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 <img
                                                     src="/icons/Career.png"
