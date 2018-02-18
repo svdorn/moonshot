@@ -167,7 +167,8 @@ class Pathway extends Component {
             height: '100%',
             width: '100%',
             playerVars: { // https://developers.google.com/youtube/player_parameters
-                autoplay: 0
+                autoplay: 0,
+                rel: 0
             }
         };
 
@@ -487,12 +488,6 @@ class Pathway extends Component {
                                         <br/>
                                         <div className="font20px font16pxUnder700 font14pxUnder400">
                                             - {pathway.sponsor.hiring}</div>
-                                    </div>
-                                    : null}
-                                {pathway.sponsor.hiringInfo ?
-                                    <div style={style.spaceTop}>
-                                        <div className="font20px font16pxUnder700 font14pxUnder400">
-                                            {pathway.sponsor.hiringInfo}</div>
                                     </div>
                                     : null}
                                 <div style={style.spaceTop}>
