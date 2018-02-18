@@ -166,6 +166,18 @@ class Login extends Component {
     }
 
     render() {
+        // the query that will be passed to "sign up" if that is clicked
+        let location = this.props.location;
+        const pathway = location.query.pathway;
+        const redirect = location.query.redirect;
+        let signUpQuery = {};
+        if (pathway) {
+            signUpQuery.pathway = pathway;
+        }
+        if (redirect) {
+            signUpQuery.redirect = redirect;
+        }
+
         return (
             <div className="fillScreen greenToBlue formContainer">
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
@@ -206,7 +218,7 @@ class Login extends Component {
                             Sign In
                         </button>
                         <br/>
-                        <div className="clickable blueText" onClick={() => this.goTo('/signup')} style={{display:"inline-block"}}>Create Account</div>
+                        <div className="clickable blueText" onClick={() => this.goTo({pathname: '/signup', query: signUpQuery})} style={{display:"inline-block"}}>Create Account</div>
                         <br/>
                         <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')} style={{display:"inline-block", marginLeft:"7px"}}>Forgot Password?</div>
                     </form>
