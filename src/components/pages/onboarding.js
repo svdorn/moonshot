@@ -549,6 +549,11 @@ class Onboarding extends Component {
     }
 
     render() {
+        let skipOnboarding3 = false;
+        if (this.props.currentUser.redirect) {
+            skipOnboarding3 = true;
+        }
+
         const style = {
             title: {
                 topTitle: {
@@ -826,11 +831,19 @@ class Onboarding extends Component {
                                 BACK
                             </div>
                         </button>
-                        <button className="onboardingPage2Button" onClick={() => this.handleGoalsButtonClick("next")}>
-                            <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
-                                NEXT
-                            </div>
-                        </button>
+                        {skipOnboarding3 ?
+                            <button className="onboardingPage2Button" onClick={this.handleFinishButtonClick.bind(this)}>
+                                <div className="font20px font14pxUnder700 onboardingPage1Text2">
+                                    FINISH
+                                </div>
+                            </button>
+                            :
+                            <button className="onboardingPage2Button" onClick={() => this.handleGoalsButtonClick("next")}>
+                                <div className="font20px font14pxUnder700 font12pxUnder400 onboardingPage1Text2">
+                                    NEXT
+                                </div>
+                            </button>
+                        }
                     </div>
                 </div>
         }
@@ -1016,10 +1029,14 @@ class Onboarding extends Component {
                         className="onboardingDot"
                         onClick={() => this.setTabAndSave("goals")}
                     />
-                    <div
-                        className="onboardingDot"
-                        onClick={() => this.setTabAndSave("info")}
-                    />
+                    {skipOnboarding3 ?
+                        null
+                        :
+                        <div
+                            className="onboardingDot"
+                            onClick={() => this.setTabAndSave("info")}
+                        />
+                    }
                 </div>
 
                 <div className={"font14px center " + skipClass} style={{marginBottom:"30px"}}>
