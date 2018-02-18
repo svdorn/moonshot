@@ -457,7 +457,7 @@ class Pathway extends Component {
 
                         <div className="pathwayLandingQuote">
                             <h1 style={{marginBottom: '30px'}} className="font36px font32pxUnder700 font26pxUnder500">
-                                Sponsored by <img
+                                Our hiring partner <img
                                 src={pathway.sponsor.logoForLightBackground}
                                 alt={pathway.sponsor.name}
                                 className="pathwayLandingSponsoredBy"
@@ -638,7 +638,7 @@ class Pathway extends Component {
                             </div>
                             : null}
 
-                        {pathway.sponsor.info ?
+                        {pathway.sponsor.benefits ?
                             <div>
                                 <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
                                 <div className="font36px font32pxUnder700 font26pxUnder500 center"
