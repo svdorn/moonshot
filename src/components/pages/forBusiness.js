@@ -531,9 +531,9 @@ class ForBusiness extends Component {
                                     <div>COMPANY LICENSE</div>
                                     <div className="br"><br/></div>
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
-                                    Full access to students, student data from<br/>
-                                    quantitative assessments, skills scoring and projects,
-                                    existing pathways and curated pathways for your company. Free access to students.
+                                    Pathway curated to your company, accesss<br/>
+                                    to existing pathways and talent pipeling.<br/>
+                                    Candidate data, skills scoring and projects.
                                     </div>
                                 </div>
                             </div>
@@ -542,11 +542,11 @@ class ForBusiness extends Component {
                             <div className="gradientBorderPurpleToRedBox">
                                 <div className="forBusinessBox">
                                     <div className="font28px font24pxUnder800 font22pxUnder500">Successful Hire</div>
-                                    <div className="font32px font28pxUnder800 font26pxUnder500 purpleText">3-5%</div>
+                                    <div className="font32px font28pxUnder800 font26pxUnder500 purpleText">2-4%</div>
                                     <div>GROSS ANNUAL SALARY</div>
                                     <div className="br"><br/></div>
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
-                                    3% to 5% for full and part time hires.<br/>
+                                    2% to 4% for full and part time hires.<br/>
                                     8% to 10% for interns or co-ops.<br/>
                                     Pay only after he or she accepts your offer.
                                     </div>
@@ -560,7 +560,7 @@ class ForBusiness extends Component {
                             No upfront costs. No risk. Pay only on success.
                         </div>
                     </div>
-                    <div className="center" style={{marginBottom: '20px'}}>
+                    <div className="center" style={{marginBottom: '40px'}}>
                         <button className="blueToPurpleButtonExterior bigButton"
                                 onClick={this.handleOpen}
                         >
