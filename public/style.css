@@ -183,7 +183,7 @@ form > h1 {
 .purpleToRedGradientButton:hover { background: linear-gradient(to bottom right, #d85e7e, #b130d3); }
 
 .stepNumber {
-    background: -webkit-linear-gradient(#b130d3, #d85e7e);
+    background: -webkit-linear-gradient(right,#da5f7b, #b130d3);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     float: left;
