@@ -1276,7 +1276,9 @@ button.link {
     text-align: center;
 }
 .pathwayContent {
-    min-height: 400px;
+    height: 50vw;
+    max-height: 450px;
+    min-height: 300px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
