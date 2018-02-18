@@ -39,7 +39,7 @@ class PathwayInfo extends Component {
                 }
             }).then(res => {
                 console.log("info is: ", res.data);
-                this.setState({contentArray: res.data, currStep: this.props.step});
+                this.setState({contentArray: res.data.contentParts, currStep: this.props.step});
             }).catch(function (err) {
                 console.log("error getting searched for info");
             })
