@@ -344,7 +344,11 @@ function removeEmptyObjectFields(obj) {
 function removeEmptyArrayFields(arr) {
     let newArr = [];
 
-    newArr = arr.filter(function(item) {
+    newArr = arr.map(function(item){
+        return removeEmptyFields(item);
+    });
+
+    newArr = newArr.filter(function(item) {
         return !valueIsEmpty(item);
     });
 
@@ -1668,13 +1672,13 @@ app.post("/updateInfo", function (req, res) {
             for (const prop in fullInfo) {
                 // only use properties that are not inherent to all objects
                 if (info.hasOwnProperty(prop)) {
+                    console.log("updating " + prop + " to ", fullInfo[prop]);
                     user.info[prop] = fullInfo[prop];
                 }
             }
 
             user.save(function (err, updatedUser) {
                 console.log("err:", err);
-                console.log("updatedUser:", updatedUser);
                 if (err) {
                     res.send(false);
                 }
