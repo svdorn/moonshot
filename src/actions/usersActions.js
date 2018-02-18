@@ -29,7 +29,7 @@ export function getUserFromSession(callback) {
     };
 }
 
-export function login(user, saveSession, navigateBackUrl) {
+export function login(user, saveSession, navigateBackUrl, pathwayId) {
     return function(dispatch) {
         axios.post("/api/login", {user, saveSession})
             .then(function(response) {
@@ -42,13 +42,59 @@ export function login(user, saveSession, navigateBackUrl) {
                 } else if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
                 }
-                browserHistory.push(nextUrl);
+
+                // add pathway if user came here from trying to sign up for a pathway
+                if (pathwayId) {
+                    axios.post("/api/user/addPathway", {_id: returnedUser._id, pathwayId: pathwayId})
+                    .then(function(response) {
+                        dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
+                        // navigateBackUrl should be equal to the url for the pathway
+                        if (!navigateBackUrl) {
+                            navigateBackUrl = "/discover";
+                        }
+                        browserHistory.push("/pathwayContent?" + navigateBackUrl);
+                        window.scrollTo(0, 0);
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                        dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Cannot sign up for pathway more than once. Sign up for pathway failed.", type: "errorHeader"}})
+                        browserHistory.push(nextUrl);
+                        window.scrollTo(0, 0);
+                    })
+                } else {
+                    // otherwise go to the next screen
+                    browserHistory.push(nextUrl);
+                    window.scrollTo(0, 0);
+                }
             })
             .catch(function(err) {
                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
     }
 }
+
+//
+// export function addPathwayAndLogin(user, saveSession, pathwayName) {
+//     return function(dispatch) {
+//         axios.post("/api/login", {user, saveSession})
+//             .then(function(response) {
+//                 const returnedUser = response.data;
+//                 dispatch({type:"LOGIN", payload: returnedUser});
+//                 dispatch({type: "CLOSE_NOTIFICATION"});
+//                 let nextUrl = '/discover';
+//                 if (!returnedUser.hasFinishedOnboarding) {
+//                     nextUrl = "/onboarding";
+//                 } else if (navigateBackUrl) {
+//                     nextUrl = navigateBackUrl;
+//                 }
+//                 browserHistory.push(nextUrl);
+//             })
+//             .catch(function(err) {
+//                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
+//             });
+//     }
+// }
+
 
 // LOG USER OUT
 export function signout() {

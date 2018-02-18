@@ -255,6 +255,21 @@ app.post('/user', function (req, res) {
                         const randomNumber = crypto.randomBytes(8).toString('hex');
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
 
+                        // add pathway to user's My Pathways if they went from
+                        // a landing page.
+                        // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY
+                        if (user.pathwayName === "Northwestern-Mutual-Sales") {
+                            user.pathways.push({
+                                pathwayId: "5a80b3cf734d1d0d42e9fcad",
+                                currentStep: {
+                                    subStep: 1,
+                                    step: 1
+                                }
+                            })
+                        } else {
+                            user.pathwayName = undefined;
+                        }
+
                         // store the user in the db
                         Users.create(user, function (err, newUser) {
                             if (err) {

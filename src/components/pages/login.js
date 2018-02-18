@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { TextField } from 'material-ui';
-import { login, closeNotification } from '../../actions/usersActions';
+import { login, closeNotification, addPathwayAndLogin } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -126,11 +126,20 @@ class Login extends Component {
 
         let navigateBackUrl = undefined;
         let location = this.props.location;
-        if (location.query && location.query.redirect) {
-            navigateBackUrl = location.query.redirect;
+        let pathwayId = undefined;
+
+        if (location.query) {
+            if (location.query.pathway) {
+                pathwayId = location.query.pathway;
+            }
+            if (location.query.redirect) {
+                // brings a user to wherever they were trying to go before
+                navigateBackUrl = location.query.redirect;
+            }
         }
 
-        this.props.login(user, saveSession, navigateBackUrl);
+        this.props.login(user, saveSession, navigateBackUrl, pathwayId)
+
     }
 
     goTo (route)  {
@@ -211,6 +220,7 @@ class Login extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         login,
+        addPathwayAndLogin,
         closeNotification,
     }, dispatch);
 }

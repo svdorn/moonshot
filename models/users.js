@@ -39,6 +39,10 @@ var usersSchema = mongoose.Schema({
         goals: [ String ],
         languages: [ String ]
     },
+    // the pathway that the user will be redirected to after onboarding
+    // only exists if the user tries to sign up for a pathway before having
+    // an account
+    pathwayName: String,
     pathways: [{
         pathwayId: mongoose.Schema.Types.ObjectId,
         currentStep: {
