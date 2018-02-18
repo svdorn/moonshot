@@ -265,7 +265,7 @@ class PathwayContent extends Component {
                                 <ul className="horizCenteredList blueText font20px font14pxUnder700 font10pxUnder400" style={{marginBottom:"0"}}>
                                     <li>
                                         <div className="overviewAndCommentBoxInfo">
-                                            <i>Sponsor</i><br/>
+                                            Hiring Partner<br/>
                                             <img src={pathway.sponsor.logoForLightBackground ? pathway.sponsor.logoForLightBackground : pathway.sponsor.logo}
                                                  alt={pathway.sponsor.name}
                                                  className="overviewAndCommentBoxImg"/>
@@ -273,14 +273,14 @@ class PathwayContent extends Component {
                                     </li>
                                     <li>
                                         <div className="overviewAndCommentBoxInfo">
-                                            <i>Completion Time</i><br/>
+                                            Completion Time<br/>
                                             {pathway.estimatedCompletionTime}
                                         </div>
                                     </li>
                                     {formattedDeadline ?
                                         <li>
                                             <div className="overviewAndCommentBoxInfo">
-                                                <i>Complete By</i><br/>
+                                                Complete By<br/>
                                                 {formattedDeadline}
                                             </div>
                                         </li>
@@ -289,27 +289,27 @@ class PathwayContent extends Component {
                                 </ul>
                             </Paper>
 
-                            {true ?
+                            {pathway.showOverviewAndCommentBox ?
                                 <Paper className="overviewAndCommentBox">
                                     <div style={{textAlign: "center"}}>
-                                    <Tabs
-                                    inkBarStyle={{background: '#00c3ff'}}
-                                    tabItemContainerStyle={{width: '60%'}}
-                                    className="overviewExercisesComments"
-                                    >
-                                    <Tab label="Overview" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                    <p className="font20px font14pxUnder700 font10pxUnder400 center"
-                                    style={style.insideTab}>{pathway.overview}</p>
-                                    </Tab>
-                                    <Tab label="Exercise Files" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                    <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
-                                    yet.</h1>
-                                    </Tab>
-                                    <Tab label="Comments" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                    <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
-                                    yet.</h1>
-                                    </Tab>
-                                    </Tabs>
+                                        <Tabs
+                                            inkBarStyle={{background: '#00c3ff'}}
+                                            tabItemContainerStyle={{width: '60%'}}
+                                            className="overviewExercisesComments"
+                                        >
+                                            <Tab label="Overview" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                                <p className="font20px font14pxUnder700 font10pxUnder400 center"
+                                                style={style.insideTab}>{pathway.overview}</p>
+                                            </Tab>
+                                            <Tab label="Exercise Files" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                                <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
+                                                yet.</h1>
+                                            </Tab>
+                                            <Tab label="Comments" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                                <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
+                                                yet.</h1>
+                                            </Tab>
+                                        </Tabs>
                                     </div>
                                 </Paper>
                             : null
