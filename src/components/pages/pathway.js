@@ -209,10 +209,10 @@ class Pathway extends Component {
 
                     <div className={"halfWidthStep" + side} key={step.order}>
                         {topSeparators}
-                        <img
-                            src={"/icons/" + step.order + ".png"}
-                            alt={step.order}
-                        />
+                        <div className="stepNumber font60px font48pxUnder700 font40pxUnder500"
+                             style={{display: 'inline-block'}}>
+                            {step.order}
+                        </div>
                         <div className="halfWidthStepText">
 
                             <div className="halfWidthStepNumber font16pxUnder700 font14pxUnder500">
@@ -489,13 +489,20 @@ class Pathway extends Component {
                                             - {pathway.sponsor.hiring}</div>
                                     </div>
                                     : null}
+                                {pathway.sponsor.hiringInfo ?
+                                    <div style={style.spaceTop}>
+                                        <div className="font20px font16pxUnder700 font14pxUnder400">
+                                            {pathway.sponsor.hiringInfo}</div>
+                                    </div>
+                                    : null}
                                 <div style={style.spaceTop}>
                                     <img
                                         src="/icons/Links2.png"
                                         className="pathwayLandingIconsLeft"
                                     />
                                     <div style={{color: '#da5f7b', display: 'inline-block'}}
-                                         className="font28px font24pxUnder700 font22pxUnder500">{pathway.sponsor.name} Links
+                                         className="font28px font24pxUnder700 font22pxUnder500">
+                                        {pathway.sponsor.name} Links
                                     </div>
                                     <br/>
                                     <a href={pathway.sponsor.homepage} target="_blank" style={style.infoLinks}
@@ -605,7 +612,9 @@ class Pathway extends Component {
 
                         {pathway.sponsor.video ?
                             <div>
-                                <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                {pathway.sponsor.video.spacer ?
+                                    <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                    : <div style={{marginTop: '80px'}} />}
                                 {pathway.sponsor.video.header ?
                                     <div>
                                         <div className="font36px font32pxUnder700 font26pxUnder500 center"
@@ -636,12 +645,10 @@ class Pathway extends Component {
 
                         {pathway.steps && pathway.sponsor.displaySteps === "true" ?
                             <div>
-                                <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                                    <div className="homepageSeparator purpleRedSeparator"/>
-                                </div>
-                                <div className="center" style={{margin: "100px 0 40px 0"}}>
-                                    < b style={{color: '#B869FF'}}
-                                        className="font40px font32pxUnder700 font24pxUnder500">Pathway Overview</ b>
+                                <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                <div className="center" style={{marginBottom: '40px'}}>
+                                    < b style={{color: '#da5f7b'}}
+                                        className="font36px font32pxUnder700 font26pxUnder500">Pathway Overview</ b>
                                 </ div>
 
                                 {pathwaySteps}

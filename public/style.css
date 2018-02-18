@@ -182,6 +182,14 @@ form > h1 {
 }
 .purpleToRedGradientButton:hover { background: linear-gradient(to bottom right, #d85e7e, #b130d3); }
 
+.stepNumber {
+    background: -webkit-linear-gradient(#b130d3, #d85e7e);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    float: left;
+    margin: 0 20px 0 40px;
+}
+
 
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
     padding-top: 5px;
@@ -860,11 +868,11 @@ button.link {
 }
 
 .stepSeparatorLeft {
-    border-right: 200px solid #B869FF;
+    border-right: 200px solid #da5f7b;
     right: 50%;
 }
 .stepSeparatorRight {
-    border-left: 200px solid #B869FF;
+    border-left: 200px solid #da5f7b;
     left: 50%;
 }
 .stepSeparatorRight, .stepSeparatorLeft {
@@ -1384,12 +1392,13 @@ button.link {
     margin: 10px 20px 10px 20px;
 }
 .halfWidthStepText {
-     float: left;
-     margin-left: 10px;
-     width: calc(100% - 130px);
+    display: inline-block;
+    float: left;
+    margin-left: 10px;
+    width: calc(100% - 130px);
 }
 .halfWidthStepNumber {
-    color: #B869FF;
+    color: #da5f7b;
     font-size: 18px;
     margin-bottom: 3px;
 }
@@ -1398,7 +1407,7 @@ button.link {
     overflow-y: hidden;
 }
 .halfWidthStepTitle {
-    color: #B869FF;
+    color: #da5f7b;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -1878,6 +1887,7 @@ textarea.multipleChoiceCustomAnswer {
     margin-top: -34px;
 }
 
+.font60px { font-size: 60px; }
 .font48px { font-size: 48px; }
 .font46px { font-size: 46px; }
 .font44px { font-size: 44px; }
@@ -2428,6 +2438,7 @@ textarea.multipleChoiceCustomAnswer {
 
     .marginSides40pxUnder700 { margin-right: 40px; margin-left: 40px; }
 
+    .font48pxUnder700 { font-size: 48px; }
     .font40pxUnder700 { font-size: 40px; }
     .font38pxUnder700 { font-size: 38px; }
     .font36pxUnder700 { font-size: 36px; }
