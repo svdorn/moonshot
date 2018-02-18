@@ -473,7 +473,8 @@ button.link {
 .boxStyle{
     position: absolute;
     top:0;bottom:0; /* Aligns Vertically - Remove for Horizontal Only */
-    margin: 200px auto 320px 100px;
+    margin: 200px auto 0 100px;
+    height: 200px;
     padding: 0px 20px 0px 20px;
 }
 
@@ -671,6 +672,14 @@ button.link {
 }
 .gradientBorder > div {
     background: white;
+    height: 100%;
+    width: 100%;
+}
+.whiteBorder {
+    border: 3px solid white;
+}
+.whiteBorder > div {
+    background: transparent;
     height: 100%;
     width: 100%;
 }
@@ -1352,8 +1361,8 @@ button.link {
     margin-bottom: 10px;
 }
 
-
 .myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
+    background-color: transparent !important;
     display: inline-block !important;
 }
 .myPathwaysTabs > div:nth-of-type(2) {
@@ -1913,7 +1922,7 @@ textarea.multipleChoiceCustomAnswer {
 }
 @media only screen and (max-width: 1175px) {
     .boxStyle {
-        margin: 200px auto 320px 50px;
+        margin: 200px auto 0 50px;
     }
 }
 
@@ -1922,7 +1931,7 @@ textarea.multipleChoiceCustomAnswer {
         display: none;
     }
     .boxStyle {
-        margin: 200px auto 320px 25px;
+        margin: 200px auto 0 25px;
     }
 }
 
@@ -1984,7 +1993,7 @@ textarea.multipleChoiceCustomAnswer {
         left: 0%;
     }
     .boxStyle {
-        margin: 200px auto 320px 10px;
+        margin: 200px auto 0 10px;
     }
 }
 
