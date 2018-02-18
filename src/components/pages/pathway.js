@@ -57,7 +57,7 @@ class Pathway extends Component {
                     pathname: "/login",
                     query: {
                         pathway: this.state.pathway._id,
-                        redirect: this.state.pathway.url
+                        redirect: "/pathwayContent?" + this.state.pathway.url
                     }
                 });
             }

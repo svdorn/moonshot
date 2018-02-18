@@ -43,8 +43,16 @@ export function login(user, saveSession, navigateBackUrl, pathwayId) {
                     nextUrl = navigateBackUrl;
                 }
 
+                // should add pathway to user if pathway id exists and user
+                // doesn't already have that pathway
+                const shouldAddPathwayToUser = pathwayId !== undefined && !returnedUser.pathways.some(function(path) {
+                    return path.pathwayId === pathwayId;
+                });
+
                 // add pathway if user came here from trying to sign up for a pathway
-                if (pathwayId) {
+                if (shouldAddPathwayToUser) {
+                    // if the user doesn't already have this pathway, give it
+                    // to them, then redirect to the pathway content page
                     axios.post("/api/user/addPathway", {_id: returnedUser._id, pathwayId: pathwayId})
                     .then(function(response) {
                         dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
@@ -52,7 +60,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId) {
                         if (!navigateBackUrl) {
                             navigateBackUrl = "/discover";
                         }
-                        browserHistory.push("/pathwayContent?" + navigateBackUrl);
+                        browserHistory.push(nextUrl);
                         window.scrollTo(0, 0);
                     })
                     .catch(function(err) {
