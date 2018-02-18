@@ -1282,6 +1282,7 @@ button.link {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+.pathwayContentTimeText { margin-top: 7px; }
 
 .overviewAndCommentBox {
     margin-top: 10px;
@@ -2440,6 +2441,8 @@ textarea.multipleChoiceCustomAnswer {
         padding-top: 40%;
     }
 
+    .pathwayContentTimeText { margin-top: 5px; }
+
     .marginSides40pxUnder700 { margin-right: 40px; margin-left: 40px; }
 
     .font48pxUnder700 { font-size: 48px; }
@@ -2902,6 +2905,8 @@ textarea.multipleChoiceCustomAnswer {
         width: 128px;
         height: 96px;
     }
+
+    .pathwayContentTimeText { margin-top: 4px; }
 
     .marginSides40pxUnder700 { margin-right: 20px; margin-left: 20px; }
 

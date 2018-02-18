@@ -274,7 +274,7 @@ class PathwayContent extends Component {
                                     <li>
                                         <div className="overviewAndCommentBoxInfo">
                                             Completion Time<br/>
-                                            {pathway.estimatedCompletionTime}
+                                            <div className="inlineBlock pathwayContentTimeText">{pathway.estimatedCompletionTime}</div>
                                         </div>
                                     </li>
                                     {formattedDeadline ?
