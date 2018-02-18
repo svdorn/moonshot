@@ -1028,6 +1028,8 @@ button.link {
     margin-right: 5%;
 }
 
+.blueTextOnHover:hover { color: var(--moonshotLightBlue); }
+
 .greenText { color: var(--moonshotGreenText); }
 .whiteText { color: white; }
 .blueText { color: var(--moonshotLightBlue); }
@@ -1275,6 +1277,8 @@ button.link {
 }
 .pathwayContent {
     min-height: 400px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 
 .overviewAndCommentBox {
@@ -2059,8 +2063,6 @@ textarea.multipleChoiceCustomAnswer {
     .pathwayContent {
         display: block;
         margin: auto;
-        padding-top: 10px;
-        padding-bottom: 10px;
         width: 95%;
     }
     .pathwayContentContainer {

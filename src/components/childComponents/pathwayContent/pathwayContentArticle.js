@@ -51,10 +51,10 @@ class PathwayContentArticle extends Component {
                 {this.state.content !== undefined ?
                     <div className="center" style={{marginBottom: "10px"}}>
                         <h4>{content.name}</h4>
-                        <div>{content.description}</div>
+                        <div style={{marginRight:"20px", marginLeft:"20px"}}>{content.description}</div>
                         <button className="outlineButton font30px font20pxUnder500 whiteBlueButton">
-                            <a href={content.link} target="_blank" style={{textDecoration: 'none', color: '#70cbff'}}>
-                                Go to Step
+                            <a href={content.link} target="_blank" className="blueText blueTextOnHover" style={{textDecoration: 'none'}}>
+                                {content.linkText}
                             </a>
                         </button>
                     </div>

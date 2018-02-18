@@ -67,7 +67,7 @@ class PathwayPreview extends Component {
                         <div style={{textAlign: "center", position: "relative"}}>
                             {this.props.type == "addOne" ?
                                 <img style={{width: "80px", marginTop: "120px"}}
-                                     src="/icons/PlusSign.png"
+                                     src="/icons/PlusSignWithCircle.png"
                                 />
                                 :
                                 <div>
@@ -130,7 +130,7 @@ class PathwayPreview extends Component {
                         <div style={{textAlign: "center", position: "relative"}}>
                             {this.props.type == "addOne" ?
                                 <img style={{width: "80px", marginTop: "120px"}}
-                                     src="/icons/PlusSign.png"
+                                     src="/icons/PlusSignWithCircle.png"
                                 />
                                 :
                                 <div>

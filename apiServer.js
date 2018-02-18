@@ -218,7 +218,7 @@ const sanitizeOptions = {
 //
 //     for (let userIdx = 0; userIdx < users.length; userIdx++) {
 //         let user = users[userIdx];
-//         user.hasFinishedOnboarding = true;
+//         user.linkText = "Go to Step";
 //         user.save(function() {
 //             console.log("user saved");
 //         });
@@ -255,6 +255,21 @@ app.post('/user', function (req, res) {
                         const randomNumber = crypto.randomBytes(8).toString('hex');
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
 
+                        // add pathway to user's My Pathways if they went from
+                        // a landing page.
+                        // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY
+                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
+                            user.pathways = [{
+                                pathwayId: "5a80b3cf734d1d0d42e9fcad",
+                                currentStep: {
+                                    subStep: 1,
+                                    step: 1
+                                }
+                            }];
+                        } else {
+                            user.pathwayId = undefined;
+                        }
+
                         // store the user in the db
                         Users.create(user, function (err, newUser) {
                             if (err) {
@@ -282,6 +297,85 @@ app.post('/user', function (req, res) {
     });
 });
 
+
+// remove any empty pieces from an object or array all the way down
+function removeEmptyFields(something) {
+    if (typeof something !== "object") {
+        return something;
+    } else {
+        if (Array.isArray(something)) {
+            return removeEmptyArrayFields(something);
+        } else {
+            return removeEmptyObjectFields(something);
+        }
+    }
+}
+
+// remove any empty pieces from an object
+function removeEmptyObjectFields(obj) {
+    let newObj = {};
+
+    for (var prop in obj) {
+        // skip loop if the property is from prototype
+        if (!obj.hasOwnProperty(prop)) continue;
+        let value = obj[prop];
+
+        // don't add the value if it is some sort of empty
+        if (!valueIsEmpty(value)) {
+            // go down through the levels of the object if it is an object, then add it
+            if (typeof value === "object") {
+                // remove empty fields from the value
+                valueWithEmptyFieldsRemoved = removeEmptyFields(value);
+                // only add the value if it is still non-empty
+                if (!valueIsEmpty(valueWithEmptyFieldsRemoved)) {
+                    newObj[prop] = valueWithEmptyFieldsRemoved;
+                }
+            } else {
+                // value is not empty, add it to the new object
+                newObj[prop] = value;
+            }
+        }
+    }
+
+    return newObj;
+}
+
+// remove any empty pieces from an array
+function removeEmptyArrayFields(arr) {
+    let newArr = [];
+
+    newArr = arr.map(function(item){
+        return removeEmptyFields(item);
+    });
+
+    newArr = newArr.filter(function(item) {
+        return !valueIsEmpty(item);
+    });
+
+    return newArr;
+}
+
+// returns true if the thing is equal to some non-emptyish thing
+function valueIsEmpty(thing) {
+    if (typeof thing === "object") {
+        if (Array.isArray(thing)) {
+            return thing.length === 0;
+        } else {
+            return objectIsEmpty(thing);
+        }
+    } else {
+        return (thing === undefined || thing === null || thing === "");
+    }
+}
+
+// returns true if the object is {}
+function objectIsEmpty(obj) {
+    if (obj === null || obj === undefined) { return true; }
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+
+// remove html tags from a variable (any type) to prevent code injection
 function sanitize(something) {
     const somethingType = (typeof something);
     switch (somethingType) {
@@ -382,13 +476,18 @@ function sanitizeArray(arr) {
 app.post("/endOnboarding", function (req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
+    const removeRedirectField = sanitize(req.body.removeRedirectField);
 
     const query = {_id: userId, verificationToken};
-    const update = {
+    let update = {
         '$set': {
             hasFinishedOnboarding: true
         }
     };
+
+    if (removeRedirectField) {
+        update['$unset'] = { redirect: "" }
+    }
 
     // When true returns the updated document
     const options = {new: true};
@@ -911,9 +1010,13 @@ function safeUser(user) {
 // used when passing the user object back to the user, still contains sensitive
 // data such as the user id and verification token
 function removePassword(user) {
-    let newUser = user;
-    newUser.password = undefined;
-    return newUser;
+    if (typeof user === "object" && user != null) {
+        let newUser = user;
+        newUser.password = undefined;
+        return newUser;
+    } else {
+        return undefined;
+    }
 }
 
 
@@ -974,11 +1077,21 @@ app.put('/user/:_id', function (req, res) {
 });
 
 //----->> ADD PATHWAY <<------
+// CURRENTLY ONLY ALLOWS NWM PATHWAY TO BE ADDED
 app.post("/user/addPathway", function (req, res) {
     const _id = sanitize(req.body._id);
     const pathwayId = sanitize(req.body.pathwayId);
 
+
     if (_id && pathwayId) {
+        // TODO: REMOVE THIS, CHANGE HOW THIS FUNCTION WORKS ONCE WE START
+        // ADDING PATHWAYS BESIDES NWM
+        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad") {
+            res.status(403).send("You cannot currently sign up for that pathway.");
+            return;
+        }
+
+
         // When true returns the updated document
         Users.findById(_id, function (err, user) {
             if (err) {
@@ -1543,8 +1656,10 @@ app.post("/updateInfo", function (req, res) {
         // When true returns the updated document
         Users.findById(userId, function (err, user) {
             if (err) {
+                console.log("couldn't find user");
                 console.log(err);
             }
+            console.log("user is:", user);
 
             if (!verifyUser(user, verificationToken)) {
                 console.log("can't verify user");
@@ -1552,13 +1667,18 @@ app.post("/updateInfo", function (req, res) {
                 return;
             }
 
-            for (const prop in info) {
+            const fullInfo = removeEmptyFields(info);
+
+            for (const prop in fullInfo) {
+                // only use properties that are not inherent to all objects
                 if (info.hasOwnProperty(prop)) {
-                    user.info[prop] = info[prop];
+                    console.log("updating " + prop + " to ", fullInfo[prop]);
+                    user.info[prop] = fullInfo[prop];
                 }
             }
 
             user.save(function (err, updatedUser) {
+                console.log("err:", err);
                 if (err) {
                     res.send(false);
                 }

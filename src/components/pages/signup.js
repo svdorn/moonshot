@@ -105,20 +105,26 @@ class Signup extends Component {
         if (vals.password != vals.password2) {
             return;
         }
-        // See if was redirected from pathway
-        let location = this.props.location;
-        let pathwayName = "";
-        if (location.query && location.query.pathway) {
-            pathwayName = location.query.pathway;
-        }
 
         const name = this.props.formData.signup.values.name;
         const password = this.props.formData.signup.values.password;
         const email = this.props.formData.signup.values.email;
-        const user = [{
+        let user = [{
             name, password, email,
             userType: "student",
         }];
+
+        // if the user got here from a pathway landing page, add the pathway id
+        // and url for redirect after onboarding completion
+        let location = this.props.location;
+        if (location.query) {
+            if (location.query.pathway) {
+                user[0].pathwayId = location.query.pathway;
+                if (location.query.redirect) {
+                    user[0].redirect = location.query.redirect;
+                }
+            }
+        }
 
         this.props.postUser(user);
 

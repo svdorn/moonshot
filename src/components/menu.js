@@ -59,6 +59,7 @@ class Menu extends Component {
             // do nothing
         } else {
             if (this.props.location.pathname === '/onboarding') {
+                // user is signing out while on onboarding, don't mark onboarding complete yet
                 const markOnboardingComplete = false;
                 this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
             }
@@ -123,7 +124,7 @@ class Menu extends Component {
             loginClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let myPathwaysClass = menuItemClass;
-        let hoverWidth = "47px";
+        let hoverWidth = "52px";
         if (this.props.location.pathname === '/myPathways') {
             myPathwaysClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
@@ -132,7 +133,7 @@ class Menu extends Component {
         }
         if (this.props.location.pathname === '/settings') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-            hoverWidth = "62px";
+            hoverWidth = "67px";
         }
 
 

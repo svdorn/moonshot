@@ -53,7 +53,13 @@ class Pathway extends Component {
                 };
                 this.props.addPathway(user);
             } else {
-                this.props.router.push('/signup?pathway=' + this.state.pathway.url);
+                browserHistory.push({
+                    pathname: "/login",
+                    query: {
+                        pathway: this.state.pathway._id,
+                        redirect: "/pathwayContent?" + this.state.pathway.url
+                    }
+                });
             }
         }
         else if (this.props.currentUser) {
