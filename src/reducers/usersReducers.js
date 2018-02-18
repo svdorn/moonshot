@@ -90,11 +90,14 @@ export function usersReducers(state = initialState, action) {
             break;
         case "FOR_BUSINESS_REQUESTED":
         case "CONTACT_US_REQUESTED":
+        case "COMPLETE_PATHWAY_REQUESTED":
             return {
                 ...state, loadingSomething: true
             };
             break;
         case "FOR_BUSINESS":
+        case "COMPLETE_PATHWAY":
+        case "COMPLETE_PATHWAY_REJECTED":
             let newState = {...state, loadingSomething: false};
             if (action.notification) {
                 newState.notification = action.notification;

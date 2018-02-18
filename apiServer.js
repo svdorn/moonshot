@@ -733,6 +733,30 @@ app.post('/user/forBusinessEmail', function (req, res) {
     })
 });
 
+// SEND EMAIL FOR SOMEBODY COMPLETING PATHWAY
+app.post('/user/completePathway', function (req, res) {
+
+    let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org, stevedorn9@gmail.com";
+    let subject = 'ACTION REQUIRED: Somebody completed pathway';
+    let content = "<div>"
+        + "<h3>A User has just completed this pathway:</h3>"
+        + "<p>User: "
+        + sanitize(req.body.userName)
+        + "</p>"
+        + "<p>Pathway: "
+        + sanitize(req.body.pathway)
+        + "</p>"
+        + "</div>";
+
+    sendEmail(recipients, subject, content, function (success, msg) {
+        if (success) {
+            res.json("Email sent successfully, our team will be in contact with you shortly!");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+});
+
 app.post('/user/unsubscribeEmail', function (req, res) {
 
     let recipient = "kyle@moonshotlearning.org";
