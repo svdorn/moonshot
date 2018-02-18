@@ -43,6 +43,9 @@ var usersSchema = mongoose.Schema({
     // only exists if the user tries to sign up for a pathway before having
     // an account
     pathwayName: String,
+    // location to redirect to after signing up
+    redirect: String,
+    // pathways the user is signed up for
     pathways: [{
         pathwayId: mongoose.Schema.Types.ObjectId,
         currentStep: {
@@ -50,6 +53,7 @@ var usersSchema = mongoose.Schema({
             subStep: Number
         },
     }],
+    // pathways the user has finished
     completedPathways: [{
         pathwayId: mongoose.Schema.Types.ObjectId,
         currentStep: {

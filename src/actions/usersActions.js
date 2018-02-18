@@ -123,13 +123,13 @@ export function onSignUpPage() {
 }
 
 // POST USERS
-export function postUser(user, pathwayName) {
+export function postUser(user) {
     return function(dispatch) {
 
         dispatch({type: "POST_USER_REQUESTED"});
 
         // post user to database
-        axios.post("/api/user", user, pathwayName)
+        axios.post("/api/user", user)
             // user successfully posted
             .then(function(response) {
                 // send verification email
@@ -434,10 +434,10 @@ export function startOnboarding(){
     }
 }
 
-export function endOnboarding(user, markOnboardingComplete){
+export function endOnboarding(user, markOnboardingComplete, removeRedirectField){
     return function(dispatch) {
         if (markOnboardingComplete) {
-            axios.post("/api/endOnboarding", {userId: user._id, verificationToken: user.verificationToken})
+            axios.post("/api/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
             .catch(function(err) {
                 // onboarding setting not able to be turned off for some reason
                 console.log("onboarding mark complete error: ", err)

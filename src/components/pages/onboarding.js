@@ -414,8 +414,16 @@ class Onboarding extends Component {
     handleFinishButtonClick() {
         this.saveAllInfo();
         const markOnboardingComplete = true;
-        this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
-        browserHistory.push('/discover');
+        // defaults to going to discover after finishing onboarding
+        let nextUrl = "/discover";
+        let removeRedirectField = false;
+        // if the user had somewhere else to redirect to after onboarding, go there
+        if (this.props.currentUser.redirect) {
+            nextUrl = this.props.currentUser.redirect;
+            removeRedirectField = true;
+        }
+        this.props.endOnboarding(this.props.currentUser, markOnboardingComplete, removeRedirectField);
+        browserHistory.push(nextUrl);
         window.scrollTo(0, 0);
     }
 

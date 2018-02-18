@@ -258,16 +258,16 @@ app.post('/user', function (req, res) {
                         // add pathway to user's My Pathways if they went from
                         // a landing page.
                         // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY
-                        if (user.pathwayName === "Northwestern-Mutual-Sales") {
-                            user.pathways.push({
+                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
+                            user.pathways = [{
                                 pathwayId: "5a80b3cf734d1d0d42e9fcad",
                                 currentStep: {
                                     subStep: 1,
                                     step: 1
                                 }
-                            })
+                            }];
                         } else {
-                            user.pathwayName = undefined;
+                            user.pathwayId = undefined;
                         }
 
                         // store the user in the db
@@ -472,13 +472,18 @@ function sanitizeArray(arr) {
 app.post("/endOnboarding", function (req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
+    const removeRedirectField = sanitize(req.body.removeRedirectField);
 
     const query = {_id: userId, verificationToken};
-    const update = {
+    let update = {
         '$set': {
             hasFinishedOnboarding: true
         }
     };
+
+    if (removeRedirectField) {
+        update['$unset'] = { redirect: "" }
+    }
 
     // When true returns the updated document
     const options = {new: true};
