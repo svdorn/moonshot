@@ -117,7 +117,6 @@ class Signup extends Component {
         // if the user got here from a pathway landing page, add the pathway id
         // and url for redirect after onboarding completion
         let location = this.props.location;
-        console.log("location.query: ", location.query);
         if (location.query) {
             if (location.query.pathway) {
                 user[0].pathwayId = location.query.pathway;
