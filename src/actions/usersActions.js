@@ -254,6 +254,23 @@ export function forBusiness(user){
     }
 }
 
+// Send an email when somebody completes a pathway
+export function completePathway(user){
+    return function(dispatch) {
+        dispatch({type: "COMPLETE_PATHWAY_REQUESTED"});
+
+        axios.post("api/user/completePathway", user)
+            .then(function(response) {
+                dispatch({type:"COMPLETE_PATHWAY", notification: {message:response.data, type:"infoHeader"}});
+                browserHistory.push('/discover');
+                window.scrollTo(0, 0);
+            })
+            .catch(function(err) {
+                dispatch({type:"COMPLETE_PATHWAY_REJECTED", notification: {message: "Error completing pathway", type: "errorHeader"}})
+            })
+    }
+}
+
 // Send an email when form filled out on unsubscribe page
 export function unsubscribe(user){
     return function(dispatch) {

@@ -152,7 +152,6 @@ class MyPathways extends Component {
             },
             tabs: {
                 marginTop: '20px',
-                marginBottom: '40px',
             },
             tab: {
                 color: 'white',
@@ -163,12 +162,12 @@ class MyPathways extends Component {
         return (
             <div className='jsxWrapper' ref='discover'>
                 {this.props.currentUser ?
-                    <div className="fullHeight purpleToRedGradient">
+                    <div className="fillScreen purpleToRedLightGradient" style={{paddingBottom:"60px"}}>
                         <div className="headerDiv"/>
                         {this.state.userPathwayPreviews ?
                             <div className="center fillScreenWithHeader">
-                                <h1 className="center font40px font24pxUnder500 whiteText" style={{marginTop: "30px"}}>
-                                    My Pathways</h1>
+                                <div className="center font40px font24pxUnder500 whiteText" style={{marginTop: "30px"}}>
+                                    My Pathways</div>
                                 <Tabs
                                     style={style.tabs}
                                     inkBarStyle={{background: 'white'}}
