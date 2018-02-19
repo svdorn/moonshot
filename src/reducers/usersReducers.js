@@ -67,6 +67,13 @@ export function usersReducers(state = initialState, action) {
                 loadingSomething: false
             };
             break;
+        case "POST_USER_SUCCESS_EMAIL_FAIL":
+            return {
+                ...state,
+                loadingSomething: false,
+                notification: action.notification
+            };
+            break;
         case "POST_USER_REJECTED":
             return {
                 ...state,

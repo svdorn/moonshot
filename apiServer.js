@@ -112,6 +112,7 @@ var Info = require('./models/info.js');
 var Videos = require('./models/videos.js');
 var Quizzes = require('./models/quizzes.js');
 var Links = require('./models/links.js');
+var Emailaddresses = require('./models/emailaddresses.js');
 
 
 // --->>> EXAMPLE PATHWAY CREATION <<<---
@@ -605,7 +606,7 @@ app.post('/sendVerificationEmail', function (req, res) {
     let query = {email: email};
 
     Users.findOne(query, function (err, user) {
-        let recipient = user.email;
+        let recipient = [user.email];
         let subject = 'Verify email';
         let content =
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
@@ -638,7 +639,7 @@ app.post('/user/registerForPathway', function (req, res) {
     const studentName = sanitize(req.body.name);
     const studentEmail = sanitize(req.body.email);
 
-    let recipient1 = "kyle@moonshotlearning.org, justin@moonshotlearning.org, ameyer24@wisc.edu";
+    let recipient1 = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "ameyer24@wisc.edu"];
     let subject1 = "Student Registration for " + pathwayName;
     let content1 = "<div>"
         + "<h3>Student Registration for Pathway:</h3>"
@@ -656,7 +657,7 @@ app.post('/user/registerForPathway', function (req, res) {
         + "</div>";
 
     let name = studentName.replace(/(([^\s]+\s\s*){1})(.*)/, "$1").trim();
-    let recipient2 = studentEmail;
+    let recipient2 = [studentEmail];
     let subject2 = "First steps for " + pathwayName + " Pathway - book a 15 min call";
     let content2 = "<div>"
         + "<p>Hi " + name + "," + "</p>"
@@ -736,7 +737,7 @@ app.post('/user/forBusinessEmail', function (req, res) {
 // SEND EMAIL FOR SOMEBODY COMPLETING PATHWAY
 app.post('/user/completePathway', function (req, res) {
 
-    let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org, stevedorn9@gmail.com";
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
     let subject = 'ACTION REQUIRED: Somebody completed pathway';
     let content = "<div>"
         + "<h3>A User has just completed this pathway:</h3>"
@@ -759,7 +760,7 @@ app.post('/user/completePathway', function (req, res) {
 
 app.post('/user/unsubscribeEmail', function (req, res) {
 
-    let recipient = "kyle@moonshotlearning.org";
+    let recipient = ["kyle@moonshotlearning.org"];
     let subject = 'URGENT ACTION - User Unsubscribe from Moonshot';
     let content = "<div>"
         + "<h3>This email is Unsubscribing from Moonshot Emails:</h3>"
@@ -780,7 +781,7 @@ app.post('/user/unsubscribeEmail', function (req, res) {
 // SEND COMING SOON EMAIL
 app.post('/user/comingSoonEmail', function (req, res) {
 
-    let recipient = "kyle@moonshotlearning.org, justin@moonshotlearning.org, ameyer24@wisc.edu";
+    let recipient = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "ameyer24@wisc.edu"];
     let subject = 'Moonshot Coming Soon Pathway';
     let content = "<div>"
         + "<h3>Pathway:</h3>"
@@ -810,7 +811,7 @@ app.post('/user/contactUsEmail', function (req, res) {
     if (req.body.message) {
         message = sanitize(req.body.message);
     }
-    let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
     let subject = 'Moonshot Pathway Question -- Contact Us Form';
     let content = "<div>"
         + "<h3>Questions from pathway:</h3>"
@@ -844,7 +845,7 @@ app.post('/forgotPassword', function (req, res) {
         if (user == undefined) {
             res.status(401).send("Cannot find user");
         } else {
-            let recipient = user.email;
+            let recipient = [user.email];
             let subject = 'Change Password';
             const newPasswordToken = crypto.randomBytes(64).toString('hex');
             const newTime = Date.now();
@@ -881,47 +882,76 @@ app.post('/forgotPassword', function (req, res) {
     })
 });
 
-// callback needs to be a function of a success boolean and string to return
+// callback needs to be a function of a success boolean and string to return;
+// takes an ARRAY of recipient emails
 function sendEmail(recipients, subject, content, callback) {
-    // Generate test SMTP service account from ethereal.email
-    // Only needed if you don't have a real mail account for testing
-    //nodemailer.createTestAccount((err, account) => {
+    if (recipients.length === 0) {
+        callback(false, "Couldn't send email. No recipient.")
+        return;
+    }
 
-    // create reusable transporter object using the default SMTP transport
-    let transporter = nodemailer.createTransport({
-        // host: 'smtp.ethereal.email',
-        // port: 587,
-        // secure: false, // true for 465, false for other ports
-        // auth: {
-        //     user: 'snabxjzqe3nmg2p7@ethereal.email',
-        //     pass: '5cbJWjTh7YYmz7e2Ce'
-        // }
-        service: 'gmail',
-        auth: {
-            user: credentials.emailUsername,
-            pass: credentials.emailPassword
-        }
-    });
+    // get the list of email addresses that have been opted out
+    let recipientList = "";
+    Emailaddresses.findOne({name: "optedOut"}, function(err, optedOut) {
+        const optedOutStudents = optedOut.emails;
+        recipients.forEach(function(recipient) {
+            emailOptedOut = optedOutStudents.some(function(optedOutEmail) {
+                return optedOutEmail.toLowerCase() === recipient.toLowerCase();
+            });
+            // add the email to the list of recipients to email if the recipient
+            // has not opted out
+            if (!emailOptedOut) {
+                if (recipientList === "") {
+                    recipientList = recipient;
+                } else {
+                    recipientList = recipientList + ", " + recipient;
+                }
+            }
+        });
 
-    // setup email data with unicode symbols
-    let mailOptions = {
-        from: '"Moonshot Learning" <do-not-reply@moonshot.com>', // sender address
-        to: recipients, // list of receivers
-        subject: subject, // Subject line
-        html: content // html body
-    };
-
-    // send mail with defined transport object
-    transporter.sendMail(mailOptions, (error, info) => {
-        if (error) {
-            console.log(error);
-            callback(false, "Error sending email to user");
+        // don't send an email if it's not going to be sent to anyone
+        if (recipientList === "") {
+            callback(false, "Couldn't send email. Recipients are on the opt-out list.")
             return;
         }
-        callback(true, "Email sent! Check your email.");
-        return;
-    });
-    //});
+
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            // host: 'smtp.ethereal.email',
+            // port: 587,
+            // secure: false, // true for 465, false for other ports
+            // auth: {
+            //     user: 'snabxjzqe3nmg2p7@ethereal.email',
+            //     pass: '5cbJWjTh7YYmz7e2Ce'
+            // }
+            service: 'gmail',
+            auth: {
+                user: credentials.emailUsername,
+                pass: credentials.emailPassword
+            }
+        });
+
+        // setup email data with unicode symbols
+        let mailOptions = {
+            from: '"Moonshot Learning" <do-not-reply@moonshot.com>', // sender address
+            to: recipientList, // list of receivers
+            subject: subject, // Subject line
+            html: content // html body
+        };
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+                callback(false, "Error sending email to user");
+                return;
+            }
+            callback(true, "Email sent! Check your email.");
+            return;
+        });
+    })
+
+
 }
 
 app.post('/getUserById', function (req, res) {
