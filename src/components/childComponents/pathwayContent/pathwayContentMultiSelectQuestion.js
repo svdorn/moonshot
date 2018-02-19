@@ -174,13 +174,13 @@ class PathwayContentMultiSelectQuestion extends Component {
             const selectedClass = isSelected ? "selected" : "notSelected";
             // return a list item-looking thing for each answer
             return (
-                <div className="multipleChoiceOption clickableNoUnderline"
+                <div className="multiSelectOption clickableNoUnderline"
                     answernumber={answer.answerNumber}
                     key={answer.answerNumber}
                     onClick={()=>self.handleClick(answer.answerNumber, false)}
                 >
-                    <div className={"multipleChoiceCircle " + selectedClass} />
-                    <div className="multipleChoiceAnswer">{answer.body}</div>
+                    <div className={"multiSelectCircle " + selectedClass} />
+                    <div className="multiSelectAnswer">{answer.body}</div>
                 </div>
             );
         });
@@ -189,21 +189,21 @@ class PathwayContentMultiSelectQuestion extends Component {
         const customAnswerSelectedClass = this.state.customAnswer.selected ? "selected" : "notSelected";
         if (this.props.allowCustomAnswer) {
             options.push(
-                <div className="multipleChoiceOption clickableNoUnderline"
+                <div className="multiSelectOption clickableNoUnderline"
                     answernumber="custom"
                     key="customArea"
                     onClick={()=>{if (!this.state.customAnswer.selected){self.handleClick(undefined, true)}}}
                 >
-                    <div className={"multipleChoiceCircle " + customAnswerSelectedClass} onClick={()=>{if (this.state.customAnswer.selected){self.handleClick(undefined, true)}}} />
+                    <div className={"multiSelectCircle " + customAnswerSelectedClass} onClick={()=>{if (this.state.customAnswer.selected){self.handleClick(undefined, true)}}} />
                     {this.state.customAnswer.selected ?
                         <textarea
                             type="text"
-                            className="multipleChoiceCustomAnswer"
+                            className="multiSelectCustomAnswer"
                             value={self.state.customAnswer.value}
                             onChange={(e) => self.handleInputChange(e)}
                         />
                     :
-                        <div className="multipleChoiceAnswer">{self.state.customAnswer.value}</div>
+                        <div className="multiSelectAnswer">{self.state.customAnswer.value}</div>
                     }
 
                 </div>
@@ -220,164 +220,6 @@ class PathwayContentMultiSelectQuestion extends Component {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-// class PathwayContentMultiSelectQuestion extends Component {
-//     constructor(props) {
-//         super(props);
-//
-//         let answerSelection = {};
-// //        let isCustomAnswer = false;
-// //        let savedCustomAnswer = "Other_____";
-//         // try to assign the value to the value that the user already had from the db
-//         try {
-//             const userAnswers = props.currentUser.answers[props.quizId];
-//             const userValues = userAnswer.value;
-// //            isCustomAnswer = userAnswer.isCustomAnswer;
-//             // ensure user choice is a valid number
-//             if (Array.isArray(userValues) {
-//                 selectedAnswers = userValues;
-// //                if (isCustomAnswer) {
-// //                    savedCustomAnswer = userValue;
-// //                }
-//             }
-//         } catch(e) { console.log("invalid saved answer") }
-//
-//         this.state = { selectedAnswers, /*isCustomAnswer, savedCustomAnswer*/ }
-//     }
-//
-//
-//     // set the current choice to the one that was clicked, save in db
-//     handleClick = (answerNumber, isCustomAnswer) => {
-//         // don't do anything if they aren't changing anything
-//         if (answerNumber === this.state.answerNumber) {
-//             return;
-//         }
-//         // save if choice is valid
-//         if ((typeof answerNumber === "number" && answerNumber >= 1) || typeof answerNumber === "string") {
-//             if ((this.props.allowCustomAnswer && answerNumber <= this.props.answers.length) ||
-//                 (!this.props.allowCustomAnswer && userChoice < this.props.answers.length) ||
-//                 isCustomAnswer) {
-//
-//                 let savedCustomAnswer = this.state.savedCustomAnswer;
-//                 // if leaving custom answer and it's blank, switch it back to "Other_____"
-//                 if (savedCustomAnswer === "" && !isCustomAnswer) {
-//                     savedCustomAnswer = "Other_____";
-//                 }
-//                 // if entering custom answer and it says "Other_____", switch it to be blank
-//                 if (isCustomAnswer && answerNumber === "Other_____") {
-//                     answerNumber = "";
-//                     savedCustomAnswer = "";
-//                 }
-//                 this.setState({answerNumber, isCustomAnswer, savedCustomAnswer}, this.saveAnswer);
-//             }
-//         }
-//     }
-//     //
-//     //
-//     // // saveAnswerAndEndTimer = () => {
-//     // //     console.log("saving and ending timer");
-//     // //     this.saveAnswer();
-//     // //     this.setState({timerOn: false});
-//     // // }
-//     // //
-//     // // setSaveTimer() {
-//     // //     let self = this;
-//     // //     if (!this.state.timerOn) {
-//     // //         this.setState({...this.state, timerOn: true}, function() {
-//     // //             console.log("state set");
-//     // //             console.log(self);
-//     // //             setTimeout(self.saveAnswerAndEndTimer().bind(self), 300);
-//     // //         })
-//     // //     }
-//     // // }
-//     //
-//     // handleInputChange(e, saveFunction) {
-//     //     this.setState({
-//     //         ...this.state,
-//     //         answerNumber: e.target.value,
-//     //         savedCustomAnswer: e.target.value,
-//     //     }, this.saveAnswer)
-//     // }
-//     //
-//     //
-//     // saveAnswer() {
-//     //     const answer = {
-//     //         answerType: "multipleChoice",
-//     //         value: this.state.answerNumber,
-//     //         isCustomAnswer: this.state.isCustomAnswer
-//     //     };
-//     //     const user = this.props.currentUser;
-//     //     this.props.updateAnswer(user._id, user.verificationToken, this.props.quizId, answer);
-//     // }
-//
-//
-//     render() {
-//         let self = this;
-//         let options=[];
-//         if (Array.isArray(self.props.answers)) {
-//             options = self.props.answers.map(function(answer) {
-//                 const isSelected = this.state.selectedAnswers.some(function(selectedAnswer) {
-//                     return selectedAnswer.answerNumber === answer.answerNumber;
-//                 })
-//                 let selectedClass = isSelected ? "selected" : "notSelected";
-//                 return (
-//                     <div className="multipleChoiceOption clickableNoUnderline"
-//                         answernumber={answer.answerNumber}
-//                         key={answer.answerNumber}
-//                         onClick={()=>self.handleClick(answer.answerNumber, false)}
-//                     >
-//                         <div className={"multipleChoiceCircle " + selectedClass} />
-//                         <div className="multipleChoiceAnswer">{answer.body}</div>
-//                     </div>
-//                 );
-//             });
-//         }
-//
-//         // answerNumber can be a string if it is the custom answer
-//         const isCustomAnswer = this.state.isCustomAnswer;
-//         const customAreaClass = isCustomAnswer ? "selected" : "notSelected"
-//         if (this.props.allowCustomAnswer) {
-//             console.log("here");
-//             options.push(
-//                 <div className="multipleChoiceOption clickableNoUnderline"
-//                     answernumber="custom"
-//                     key="customArea"
-//                     onClick={()=>self.handleClick(self.state.savedCustomAnswer, true)}
-//                 >
-//                     <div className={"multipleChoiceCircle " + customAreaClass} />
-//                     {isCustomAnswer ?
-//                         <textarea
-//                             type="text"
-//                             className="multipleChoiceCustomAnswer"
-//                             value={self.state.savedCustomAnswer}
-//                             onChange={(e) => self.handleInputChange(e)}
-//                         />
-//                     :
-//                         <div className="multipleChoiceAnswer">{self.state.savedCustomAnswer}</div>
-//                     }
-//
-//                 </div>
-//             );
-//         }
-//
-//         return (
-//             <div className="center font20px font16pxUnder600 font12pxUnder400">
-//                 <div style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
-//                 {options}
-//             </div>
-//         );
-//     }
-// }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
