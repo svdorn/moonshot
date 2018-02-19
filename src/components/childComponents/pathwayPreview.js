@@ -33,6 +33,17 @@ class PathwayPreview extends Component {
             fontSize: "24px"
         };
 
+        let borderClassName = "whiteBorder";
+        if (this.props.variation === "2") {
+            borderClassName = "discoverPageBorder";
+        }
+        let whiteBorderClassName = "gradientBorder";
+        let textColor = "";
+        if (this.props.variation === "3") {
+            whiteBorderClassName = "gradientBorderPurpleBlue";
+            textColor = "lightPurpleText";
+        }
+
         return (
             <div className="pathwayPreview" style={{position: "relative"}}>
                 {this.props.comingSoon ?
@@ -59,8 +70,9 @@ class PathwayPreview extends Component {
                     </div>
                     : null
                 }
-                {this.props.variation == "1" ?
-                    <Paper className="clickableNoUnderline whiteBorder" style={{height: "352px", width: "248px", backgroundColor: 'transparent'}}
+                {this.props.variation == "1" || this.props.variation == "2" ?
+                    <Paper className={"clickableNoUnderline " + borderClassName}
+                           style={{height: "352px", width: "248px", backgroundColor: 'transparent'}}
                            onMouseOver={this.onMouseOverVariation1}
                            onMouseOut={this.onMouseOutVariation1}
                            zDepth={this.state.shadowVariation1}>
@@ -123,7 +135,8 @@ class PathwayPreview extends Component {
                         </div>
                     </Paper>
                     :
-                    <Paper className="clickableNoUnderline gradientBorder" style={{height: "352px", width: "248px"}}
+                    <Paper className={"clickableNoUnderline " + whiteBorderClassName}
+                           style={{height: "352px", width: "248px"}}
                            onMouseOver={this.onMouseOver}
                            onMouseOut={this.onMouseOut}
                            zDepth={this.state.shadow}>
@@ -146,7 +159,7 @@ class PathwayPreview extends Component {
                                         }
                                     </div>
                                     <div style={titleDivStyle}>
-                                        <span style={titleSpanStyle}>{this.props.name}</span>
+                                        <span style={titleSpanStyle} className={textColor}>{this.props.name}</span>
                                     </div>
                                     <div style={{position: "absolute", width: "100%", bottom: "26.4px"}}>
                                         <ul className="horizCenteredList pathwayPrevIconList">
@@ -159,14 +172,16 @@ class PathwayPreview extends Component {
                                             </li>
                                             <li>
                                                 <div>
-                                                    <img src="/icons/CalandarBlueGradient.png" style={iconStyle}/><br/>
+                                                    <img src="/icons/CalandarBlueGradient.png"
+                                                         style={iconStyle}/><br/>
                                                     <span className="font8px">Deadline</span><br/>
                                                     TBA
                                                 </div>
                                             </li>
                                             <li>
                                                 <div>
-                                                    <img src="/icons/DollarSignBlue.png" style={priceIconStyle}/><br/>
+                                                    <img src="/icons/DollarSignBlue.png"
+                                                         style={priceIconStyle}/><br/>
                                                     <span className="font8px">Price</span><br/>
                                                     {this.props.price}
                                                 </div>
@@ -184,7 +199,8 @@ class PathwayPreview extends Component {
                                 </div>
                             }
                         </div>
-                    </Paper>}
+                    </Paper>
+                }
             </div>
         )
     }
