@@ -166,8 +166,8 @@ class MyPathways extends Component {
                         <div className="headerDiv"/>
                         {this.state.userPathwayPreviews ?
                             <div className="center fillScreenWithHeader">
-                                <h1 className="center font40px font24pxUnder500 whiteText" style={{marginTop: "30px"}}>
-                                    My Pathways</h1>
+                                <div className="center font40px font24pxUnder500 whiteText" style={{marginTop: "30px"}}>
+                                    My Pathways</div>
                                 <Tabs
                                     style={style.tabs}
                                     inkBarStyle={{background: 'white'}}
