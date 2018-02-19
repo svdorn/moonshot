@@ -5,6 +5,7 @@ import axios from 'axios';
 import PathwayContentSliderQuestion from './pathwayContentSliderQuestion';
 import PathwayContentMultipleChoiceQuestion from './pathwayContentMultipleChoiceQuestion';
 import PathwayContentTwoOptionsQuestion from './pathwayContentTwoOptionsQuestion';
+import PathwayContentMultiSelectQuestion from './PathwayContentMultiSelectQuestion';
 
 class PathwayContentQuiz extends Component {
     constructor(props) {
@@ -85,6 +86,15 @@ class PathwayContentQuiz extends Component {
                             quizId={quiz._id}
                         />
                     break;
+                    case "multiSelect":
+                        questionJsx =
+                            <PathwayContentMultiSelectQuestion
+                                question={quiz.question}
+                                answers={quiz.multiSelectAnswers}
+                                allowCustomAnswer={quiz.allowCustomAnswer}
+                                quizId={quiz._id}
+                            />
+                        break;
                 default:
                     break;
             }

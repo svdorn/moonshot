@@ -33,7 +33,6 @@ class PathwayContentTwoOptionsQuestion extends Component {
 
 
     componentDidUpdate() {
-        console.log("eh")
         if (this.props.quizId !== this.state.quizId) {
             let option1 = "";
             let option2 = "";

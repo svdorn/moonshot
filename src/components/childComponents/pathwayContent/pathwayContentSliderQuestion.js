@@ -13,6 +13,7 @@ class PathwayContentSliderQuestion extends Component {
         const minValue = typeof props.minValue === "number" ? props.minValue : 1;
         const maxValue = typeof props.maxValue === "number" ? props.maxValue : 10;
         const step = typeof props.step === "number" ? props.step : 1;
+        const quizId = props.quizId;
         let sliderValue = minValue;
         // try to assign the value to the value that the user already had from the db
         try {
@@ -28,7 +29,34 @@ class PathwayContentSliderQuestion extends Component {
             sliderValue = minValue;
         }
         this.state = {
-            minValue, maxValue, step, sliderValue
+            minValue, maxValue, step, sliderValue, quizId
+        }
+    }
+
+
+    componentDidUpdate() {
+        if (this.props.quizId !== this.state.quizId) {
+            const minValue = typeof this.props.minValue === "number" ? this.props.minValue : 1;
+            const maxValue = typeof this.props.maxValue === "number" ? this.props.maxValue : 10;
+            const step = typeof this.props.step === "number" ? this.props.step : 1;
+            const quizId = this.props.quizId
+            let sliderValue = minValue;
+            // try to assign the value to the value that the user already had from the db
+            try {
+                const userValue = this.props.currentUser.answers[this.props.quizId].value;
+                if (typeof userValue !== "number" || userValue < minValue || userValue > maxValue) {
+                    throw "value from db out of range or doesn't exist";
+                } else {
+                    sliderValue = userValue;
+                }
+            } catch(e) {
+                // if user didn't have something saved, assign the initial value to
+                // be whatever the props told it to be, if specified
+                sliderValue = minValue;
+            }
+            this.setState ({
+                minValue, maxValue, step, sliderValue, quizId
+            })
         }
     }
 
