@@ -1409,6 +1409,17 @@ button.link {
 }
 
 
+.separatorLineLeft, .separatorLineRight {
+    width: calc(50% - 90px);
+    height: 3px;
+    background-color: white;
+    position: absolute;
+    top: 12px;
+}
+.separatorLineLeft { left: 0px; }
+.separatorLineRight { right: 0px; }
+
+
 .halfWidthStepRight, .halfWidthStepLeft {
     text-align: left;
     width: 50%;

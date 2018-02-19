@@ -150,8 +150,17 @@ class Discover extends Component {
                 height: "40px",
                 textAlign: "center"
             },
-            separatorLine1: {
-                width: "100%",
+            separatorLineLeft: {
+                left: 0,
+                width: "calc(50% - 85px);",
+                height: "3px",
+                backgroundColor: "white",
+                position: "absolute",
+                top: "12px"
+            },
+            separatorLineRight: {
+                right: 0,
+                width: "calc(50% - 85px);",
                 height: "3px",
                 backgroundColor: "white",
                 position: "absolute",
@@ -356,7 +365,8 @@ class Discover extends Component {
 
                     <div>
                         <div style={style.separator1}>
-                            <div style={style.separatorLine1}/>
+                            <div className="separatorLineLeft"/>
+                            <div className="separatorLineRight"/>
                             <div style={style.separatorText1}>
                                 Featured
                             </div>
