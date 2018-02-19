@@ -16,8 +16,8 @@ class PathwayContentDatePickerQuestion extends Component {
         let date = null;
 
         // mark things the user had saved as answers if the user has anything saved
-        if (props.currentUser && props.currentUser.answers && props.currentUser.answers[quizId] && props.currentUser.answers[quizId].dateValue) {
-            date = props.currentUser.answer[quizId].dateValue;
+        if (props.currentUser && props.currentUser.answers && props.currentUser.answers[quizId] && props.currentUser.answers[quizId].value) {
+            date = this.makeDateObjectFromDateString(props.currentUser.answers[quizId].value);
         }
 
         this.state = { quizId, date };
@@ -31,8 +31,8 @@ class PathwayContentDatePickerQuestion extends Component {
             let date = undefined;
 
             // mark things the user had saved as answers if the user has anything saved
-            if (props.currentUser && props.currentUser.answers && props.currentUser.answers[quizId] && props.currentUser.answers[quizId].dateValue) {
-                date = props.currentUser.answer[quizId].dateValue;
+            if (props.currentUser && props.currentUser.answers && props.currentUser.answers[quizId] && props.currentUser.answers[quizId].value) {
+                date = this.makeDateObjectFromDateString(props.currentUser.answers[quizId].value);
             }
 
             this.setState({ quizId, date });
@@ -54,6 +54,18 @@ class PathwayContentDatePickerQuestion extends Component {
         const user = this.props.currentUser;
         this.props.updateAnswer(user._id, user.verificationToken, this.props.quizId, answer);
     };
+
+
+    makeDateObjectFromDateString = function(dateString) {
+        const BASE10 = 10;
+        if (dateString && dateString != null && dateString != "" && dateString.length > 10) {
+            return new Date(parseInt(dateString.substring(0, 4), BASE10),
+                            parseInt(dateString.substring(5, 7), BASE10) - 1,
+                            parseInt(dateString.substring(8, 10), BASE10));
+        } else {
+            return null;
+        }
+    }
 
 
     render() {
