@@ -532,7 +532,7 @@ class ForBusiness extends Component {
                                     <div className="br"><br/></div>
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
                                     Pathway curated to your company, accesss<br/>
-                                    to existing pathways and talent pipeling.<br/>
+                                    to existing pathways and talent pipeline.<br/>
                                     Candidate data, skills scoring and projects.
                                     </div>
                                 </div>
