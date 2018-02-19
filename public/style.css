@@ -330,7 +330,7 @@ form > h1 {
 }
 
 .errorHeader {
-    background-color: rgb(255, 181, 181) !important;
+    background-color: rgba(255, 181, 181, .85) !important;
 }
 
 .infoHeader {

@@ -141,7 +141,8 @@ export function postUser(user) {
                     })
                     // error sending verification email
                     .catch(function(emailError) {
-                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: response.data, type: "errorHeader"}});
+                        console.log("emailSend fail: ", emailError);
+                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: emailError.response.data, type: "errorHeader"}});
                         window.scrollTo(0,0);
                     });
             })
