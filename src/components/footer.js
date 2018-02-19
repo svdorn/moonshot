@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
+import {browserHistory, withRouter} from 'react-router';
 import { connect } from 'react-redux';
 
 class Footer extends Component {
@@ -16,10 +16,13 @@ class Footer extends Component {
         if (this.props.isOnboarding) {
             return null;
         }
-
+        let footerColor = "purpleToBlue";
+        if (this.props.location.pathname === '/myPathways') {
+            footerColor = "purpleToRedLightGradientOpacity";
+        }
         return (
             <div className="jsxWrapper">
-                <footer className="footer purpleToBlue">
+                <footer className={"footer " + footerColor}>
                     <ul className="horizCenteredList">
                         <li className="center">
                             <img
@@ -65,5 +68,7 @@ function mapStateToProps(state) {
         isOnboarding: state.users.isOnboarding
     };
 }
+
+Footer = withRouter(Footer);
 
 export default connect(mapStateToProps)(Footer);
