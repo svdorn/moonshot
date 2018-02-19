@@ -86,7 +86,7 @@ class PathwayContentMultipleChoiceQuestion extends Component {
     //     }
     // }
 
-    handleInputChange(e, saveFunction) {
+    handleInputChange(e) {
         this.setState({
             ...this.state,
             answerNumber: e.target.value,
@@ -129,7 +129,6 @@ class PathwayContentMultipleChoiceQuestion extends Component {
         const isCustomAnswer = this.state.isCustomAnswer;
         const customAreaClass = isCustomAnswer ? "selected" : "notSelected"
         if (this.props.allowCustomAnswer) {
-            console.log("here");
             options.push(
                 <div className="multipleChoiceOption clickableNoUnderline"
                     answernumber="custom"

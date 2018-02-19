@@ -82,6 +82,11 @@ var usersSchema = mongoose.Schema({
                 "value": "3" //the answerValue of the chosen answer,
                 "correct": true,
                 "isCustomAnswer": false
+            },
+            "[another quiz id]": {
+                "answerType": "multiSelect",
+                "value": ["3", "5", "6"] //the answerValues of the chosen answers,
+                "optionalCustomAnswer": "gymnastics"
             }
         }
     */
