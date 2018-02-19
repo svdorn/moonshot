@@ -1687,6 +1687,10 @@ button.link {
     filter: blur(10px);
 }
 
+.blurOnHover:hover {
+    filter: blur(5px);
+}
+
 .pathwayPreviewLi { vertical-align: top; }
 li.pathwayPreviewLi.explorePathwayPreview { margin-bottom: 40px; }
 li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }

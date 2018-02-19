@@ -5,14 +5,14 @@ import {Paper} from 'material-ui';
 class PathwayPreview extends Component {
     constructor(props) {
         super(props);
-        this.state = {shadow: 2, shadowVariation1: 4}
+        this.state = {shadow: 2, shadowVariation1: 3}
 
     }
 
     onMouseOver = () => this.setState({shadow: 4});
     onMouseOut = () => this.setState({shadow: 2});
-    onMouseOverVariation1 = () => this.setState({shadowVariation1: 8});
-    onMouseOutVariation1 = () => this.setState({shadowVariation1: 4});
+    onMouseOverVariation1 = () => this.setState({shadowVariation1: 5});
+    onMouseOutVariation1 = () => this.setState({shadowVariation1: 3});
 
 
     render() {
@@ -42,6 +42,11 @@ class PathwayPreview extends Component {
         if (this.props.variation === "3") {
             whiteBorderClassName = "gradientBorderPurpleBlue";
             textColor = "lightPurpleText";
+        }
+
+        let blurClass = ""
+        if (this.props.comingSoon) {
+            blurClass = "blurOnHover"
         }
 
         return (
@@ -76,7 +81,7 @@ class PathwayPreview extends Component {
                            onMouseOver={this.onMouseOverVariation1}
                            onMouseOut={this.onMouseOutVariation1}
                            zDepth={this.state.shadowVariation1}>
-                        <div style={{textAlign: "center", position: "relative"}}>
+                        <div style={{textAlign: "center", position: "relative"}} className={blurClass}>
                             {this.props.type == "addOne" ?
                                 <img style={{width: "80px", marginTop: "120px"}}
                                      src="/icons/PlusSignWithCircle.png"
@@ -140,7 +145,7 @@ class PathwayPreview extends Component {
                            onMouseOver={this.onMouseOver}
                            onMouseOut={this.onMouseOut}
                            zDepth={this.state.shadow}>
-                        <div style={{textAlign: "center", position: "relative"}}>
+                        <div style={{textAlign: "center", position: "relative"}} className={blurClass}>
                             {this.props.type == "addOne" ?
                                 <img style={{width: "80px", marginTop: "120px"}}
                                      src="/icons/PlusSignWithCircle.png"
