@@ -1851,6 +1851,7 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     display: inline-block;
     margin: 0 20px 10px;
     vertical-align: top;
+    min-height: 50px
 }
 .multiSelectAnswer {
     max-width: 160px;
@@ -2966,6 +2967,10 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         width: 128px;
         height: 96px;
     }
+
+    .multiSelectOption { min-height: 30px; }
+    .multiSelectCircle { margin-top: 0px; }
+    .multiSelectAnswer { margin-top: 2px; }
 
     .pathwayContentTimeText { margin-top: 4px; }
 

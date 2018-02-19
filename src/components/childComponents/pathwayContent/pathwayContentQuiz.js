@@ -6,6 +6,7 @@ import PathwayContentSliderQuestion from './pathwayContentSliderQuestion';
 import PathwayContentMultipleChoiceQuestion from './pathwayContentMultipleChoiceQuestion';
 import PathwayContentTwoOptionsQuestion from './pathwayContentTwoOptionsQuestion';
 import PathwayContentMultiSelectQuestion from './PathwayContentMultiSelectQuestion';
+import PathwayContentDatePickerQuestion from './PathwayContentDatePickerQuestion';
 
 class PathwayContentQuiz extends Component {
     constructor(props) {
@@ -92,6 +93,13 @@ class PathwayContentQuiz extends Component {
                                 question={quiz.question}
                                 answers={quiz.multiSelectAnswers}
                                 allowCustomAnswer={quiz.allowCustomAnswer}
+                                quizId={quiz._id}
+                            />
+                        break;
+                    case "datePicker":
+                        questionJsx =
+                            <PathwayContentDatePickerQuestion
+                                question={quiz.question}
                                 quizId={quiz._id}
                             />
                         break;

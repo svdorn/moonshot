@@ -87,6 +87,10 @@ var usersSchema = mongoose.Schema({
                 "answerType": "multiSelect",
                 "value": ["3", "5", "6"] //the answerValues of the chosen answers,
                 "optionalCustomAnswer": "gymnastics"
+            },
+            "---another quiz id---": {
+                "answerType": "datePicker",
+                "dateValue": "1996-11-19T06:00:00.000Z"
             }
         }
     */

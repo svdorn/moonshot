@@ -45,34 +45,8 @@ var quizzesSchema = mongoose.Schema({
         // the number of the answer, not necessarily the order
         answerNumber: Number,
     }],
-
-    // IF WE WANT MULTIPLE QUESTIONS PER QUIZ
-    // numQuestions: Number,
-    // questions: [{
-    //     order: Number,
-    //     body: String,
-    //     answers: [{
-    //         // the number of the answer, not necessarily the order
-    //         answerNumber: Number,
-    //         body: String
-    //     }]
-    // }]
-
-    // IF WE WANT QUIZZES WITH CORRECT ANSWERS
-    // questions: [{
-    //     order: Number,
-    //     // quiz should be different each time, so there are multiple
-    //     // questions at each question number
-    //     options: [{
-    //       body: String,
-    //       answers: [{
-    //           body: String,
-    //           correct: Boolean
-    //       }],
-    //       multipleCorrect: Boolean,
-    //       needAllCorrect: Boolean
-    //     }]
-    // }]
+    // the value for a date question
+    dateValue: Date
 });
 
 var Quizzes = mongoose.model('Quizzes', quizzesSchema);
