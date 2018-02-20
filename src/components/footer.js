@@ -36,19 +36,19 @@ class Footer extends Component {
                             <div style={{marginTop: "10px"}}>
                                 <a href="https://www.facebook.com/MoonshotLearning/" target="_blank">
                                     <img
-                                        width={20}
+                                        width={13}
                                         height={20}
                                         src="/logos/Facebook.png"/>
                                 </a>
                                 <a href="https://twitter.com/moonshotteched" target="_blank"
-                                   style={{marginLeft: "10px"}}>
+                                   style={{marginLeft: "20px"}}>
                                     <img
                                         width={20}
                                         height={20}
                                         src="/logos/Twitter.png"/>
                                 </a>
                                 <a href="https://www.linkedin.com/company/18233111/" target="_blank"
-                                   style={{marginLeft: "10px"}}>
+                                   style={{marginLeft: "20px"}}>
                                     <img
                                         width={20}
                                         height={20}
