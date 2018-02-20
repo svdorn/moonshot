@@ -273,13 +273,20 @@ export function completePathway(user){
 }
 
 // Send an email when form filled out on unsubscribe page
-export function unsubscribe(user){
+export function unsubscribe(user, showNotification){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
         axios.post("api/user/unsubscribeEmail", user)
             .then(function(response) {
-                dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
+                let action = { type:"FOR_BUSINESS" };
+                // only show the notification if the user unsubscribed by typing
+                // in their email address
+                if (showNotification) {
+                    action.notification = { message:response.data, type:"infoHeader" }
+                }
+
+                dispatch(action);
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
