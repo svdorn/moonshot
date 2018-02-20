@@ -623,7 +623,7 @@ app.post('/sendVerificationEmail', function (req, res) {
                     + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
                     + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
                     + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#C8C8C8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8;" href="https://www.moonshotlearning.org/unsubscribe?' + user.email + '">Opt-out of future messages.</a></i>'
+                    + '<a style="color:#C8C8C8;" href="https://www.moonshotlearning.org/unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
                     + '</div>'
                 + '</div>'
             + '</div>';
@@ -780,7 +780,37 @@ app.post('/user/unsubscribeEmail', function (req, res) {
         } else {
             res.status(500).send(msg);
         }
-    })
+    });
+
+    const optOutError = function(error) {
+        console.log("ERROR ADDING EMAIL TO OPT OUT LIST: " + req.body.email);
+        console.log("The error was: ", error);
+        let recipient = ["ameyer24@wisc.edu"];
+        let subject = "MOONSHOT - URGENT ACTION - User was not unsubscribed"
+        let content = "<div>"
+            + "<h3>This email could not be added to the optOut list:</h3>"
+            + "<p>Email: "
+            + sanitize(req.body.email)
+            + "</p>"
+            + "</div>";
+        sendEmail(recipient, subject, content);
+    }
+
+    // add email to list of unsubscribed emails
+    Emailaddresses.findOne({name: "optedOut"}, function(err, optedOut) {
+        if (err) {
+            optOutError(err);
+        }
+        else {
+            console.log("adding to opted-out list: ", req.body.email)
+            optedOut.emails.push(req.body.email);
+            optedOut.save(function(err2, newOptedOut) {
+                if (err2) {
+                    optOutError(err2);
+                }
+            });
+        }
+    });
 });
 
 // SEND COMING SOON EMAIL
