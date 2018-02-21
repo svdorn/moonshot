@@ -623,10 +623,20 @@ class Pathway extends Component {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="center">
+                                    <button className="purpleToRedButtonExterior bigButton"
+                                            onClick={this.handleClick.bind(this)}
+                                            style={{marginTop: "35px", color: '#da5f7b'}}
+                                    >
+                                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                                            {"Sign Up"}
+                                        </div>
+                                    </button>
+                                </div>
                             </div>
                             : null}
 
-                        {pathway.sponsor.positionDescription ?
+                        {pathway.sponsor.positionDescription && pathway.sponsor.positionDescription.displayBefore ?
                             <div style={{marginTop: '80px'}}>
                                 {pathway.sponsor.positionDescription.spacer ?
                                     <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
@@ -712,6 +722,54 @@ class Pathway extends Component {
                                         onReady={this._onReady}
                                         onEnd={this._onEnd}
                                     />
+                                </div>
+                            </div>
+                            : null}
+
+                        {pathway.sponsor.positionDescription && pathway.sponsor.positionDescription.displayAfter ?
+                            <div style={{marginTop: '80px', marginBottom: "20px"}}>
+                                {pathway.sponsor.positionDescription.spacer ?
+                                    <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                    : <div style={{marginTop: '80px'}}/>}
+                                <div className="center">
+                                    <div className="font36px font32pxUnder700 font26pxUnder500 center"
+                                         style={{marginBottom: '30px'}}>
+                                        {pathway.sponsor.positionDescription.title}
+                                    </div>
+                                    <div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[0].icon}
+                                                 className="forBusinessIcon"
+                                                 style={{marginRight: '10px'}}/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[0].description}
+                                            </div>
+                                        </div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[1].icon}
+                                                 className="forBusinessIcon"
+                                                 style={{marginLeft: '10px'}}/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[1].description}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{marginTop: '40px'}}>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[2].icon}
+                                                 className="forBusinessIcon"/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[2].description}
+                                            </div>
+                                        </div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[3].icon}
+                                                 className="forBusinessIcon"/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[3].description}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             : null}
@@ -816,7 +874,7 @@ class Pathway extends Component {
                             <div>
                                 <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
                                 <div className="center font36px font32pxUnder700 font26pxUnder500"
-                                     style={{color: '#da5f7b', marginBottom: "5px"}}>
+                                     style={{marginBottom: "5px"}}>
                                     Pathway Overview
                                 </ div>
 
