@@ -408,22 +408,22 @@ class Pathway extends Component {
                             </div>
                             : null}
 
-                        <div>
-                            {pathway.skills ?
-                                <div>
-                                    <div className="center" style={{marginTop: '20px'}}>
-                                        < b style={{color: '#B869FF'}} className="font40px font24pxUnder500">Skills</ b>
-                                    </ div>
-                                    <div className="center font20px font14pxUnder700 font10pxUnder400"
-                                         style={{marginBottom: "20px"}}>
-                                        Earn these skills upon pathway completion.
-                                    </div>
-                                    <div className="center skillChips">
-                                        {pathwaySkills}
-                                    </div>
-                                </div>
-                                : null}
-                        </div>
+                        {/*<div>*/}
+                        {/*{pathway.skills ?*/}
+                        {/*<div>*/}
+                        {/*<div className="center" style={{marginTop: '20px'}}>*/}
+                        {/*< b style={{color: '#B869FF'}} className="font40px font24pxUnder500">Skills</ b>*/}
+                        {/*</ div>*/}
+                        {/*<div className="center font20px font14pxUnder700 font10pxUnder400"*/}
+                        {/*style={{marginBottom: "20px"}}>*/}
+                        {/*Earn these skills upon pathway completion.*/}
+                        {/*</div>*/}
+                        {/*<div className="center skillChips">*/}
+                        {/*{pathwaySkills}*/}
+                        {/*</div>*/}
+                        {/*</div>*/}
+                        {/*: null}*/}
+                        {/*</div>*/}
 
                         {pathway.description || pathway.industry ?
                             <div id="pathwayDescriptionAndSalary">
@@ -638,14 +638,16 @@ class Pathway extends Component {
                                     </div>
                                     <div>
                                         <div style={style.bottomListItem}>
-                                            <img src={pathway.sponsor.positionDescription.frames[0].icon} className="forBusinessIcon"
+                                            <img src={pathway.sponsor.positionDescription.frames[0].icon}
+                                                 className="forBusinessIcon"
                                                  style={{marginRight: '10px'}}/>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 {pathway.sponsor.positionDescription.frames[0].description}
                                             </div>
                                         </div>
                                         <div style={style.bottomListItem}>
-                                            <img src={pathway.sponsor.positionDescription.frames[1].icon} className="forBusinessIcon"
+                                            <img src={pathway.sponsor.positionDescription.frames[1].icon}
+                                                 className="forBusinessIcon"
                                                  style={{marginLeft: '10px'}}/>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 {pathway.sponsor.positionDescription.frames[1].description}
@@ -654,13 +656,15 @@ class Pathway extends Component {
                                     </div>
                                     <div style={{marginTop: '40px'}}>
                                         <div style={style.bottomListItem}>
-                                            <img src={pathway.sponsor.positionDescription.frames[2].icon} className="forBusinessIcon"/>
+                                            <img src={pathway.sponsor.positionDescription.frames[2].icon}
+                                                 className="forBusinessIcon"/>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 {pathway.sponsor.positionDescription.frames[2].description}
                                             </div>
                                         </div>
                                         <div style={style.bottomListItem}>
-                                            <img src={pathway.sponsor.positionDescription.frames[3].icon} className="forBusinessIcon"/>
+                                            <img src={pathway.sponsor.positionDescription.frames[3].icon}
+                                                 className="forBusinessIcon"/>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 {pathway.sponsor.positionDescription.frames[3].description}
                                             </div>
@@ -812,9 +816,21 @@ class Pathway extends Component {
                             <div>
                                 <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
                                 <div className="center font36px font32pxUnder700 font26pxUnder500"
-                                     style={{marginBottom: '40px', color: '#da5f7b'}}>
+                                     style={{color: '#da5f7b', marginBottom: "5px"}}>
                                     Pathway Overview
                                 </ div>
+
+                                {pathway.skills ?
+                                    <div style={{marginBottom: "40px"}}>
+                                        <div className="center font20px font14pxUnder700 font10pxUnder400"
+                                             style={{marginBottom: "15px"}}>
+                                            Earn these skills upon pathway completion.
+                                        </div>
+                                        <div className="center skillChips">
+                                            {pathwaySkills}
+                                        </div>
+                                    </div>
+                                    : <div style={{marginBottom: '40px'}}/>}
 
                                 {pathwaySteps}
                             </div>
