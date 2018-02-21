@@ -54,14 +54,16 @@ class Pathway extends Component {
                 this.props.addPathway(user);
             } else {
                 browserHistory.push({
-                    pathname: "/login",
+                    pathname: "/signup",
                     query: {
                         pathway: this.state.pathway._id,
                         redirect: "/pathwayContent?" + this.state.pathway.url
                     }
                 });
+                window.scrollTo(0, 0);
             }
         }
+
         else if (this.props.currentUser) {
             const user = {
                 pathway: this.state.pathway.name,
@@ -71,7 +73,13 @@ class Pathway extends Component {
             this.props.registerForPathway(user);
         } else {
             // Not logged in
-            browserHistory.push('/login');
+            browserHistory.push({
+                pathname: "/signup",
+                query: {
+                    pathway: this.state.pathway._id,
+                    redirect: "/pathwayContent?" + this.state.pathway.url
+                }
+            });
         }
     }
 

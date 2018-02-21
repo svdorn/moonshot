@@ -143,6 +143,11 @@ class Signup extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
+        let urlQuery = {};
+        try {
+            urlQuery = this.props.location.query;
+        } catch(e) { /* no query */ }
+
         return (
             <div className="fillScreen greenToBlue formContainer">
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
@@ -198,6 +203,8 @@ class Signup extends Component {
                                 >
                                     Sign Up
                                 </button>
+                                <br/>
+                                <div className="clickable blueText" onClick={() => this.goTo({pathname: '/login', query: urlQuery})} style={{display:"inline-block"}}>Already have an account?</div>
                             </form>
                             { this.props.loadingCreateUser ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
                         </div>
