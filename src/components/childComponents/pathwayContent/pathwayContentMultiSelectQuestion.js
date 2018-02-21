@@ -74,13 +74,23 @@ class PathwayContentMultiSelectQuestion extends Component {
     handleClick(answerNumber, isCustomAnswer) {
         let newOptions = {...this.state.options};
         let customAnswerSelected = this.state.customAnswer.selected;
-        const customAnswerValue = this.state.customAnswer.value;
+        let customAnswerValue = this.state.customAnswer.value;
         // flip this value if the custom answer is the one that was clicked
         if (isCustomAnswer) {
             customAnswerSelected = !customAnswerSelected;
         }
 
         if (isCustomAnswer) {
+            // if nothing has been typed into the custom area and it is clicked,
+            // set its value to an empty string
+            if (customAnswerSelected && customAnswerValue == "Other_____") {
+                customAnswerValue = "";
+            }
+            // if the user left the custom value empty then de-selected it,
+            // fill it in with the default custom answer
+            if (!customAnswerSelected && customAnswerValue == "") {
+                customAnswerValue = "Other_____";
+            }
             this.setState({
                 ...this.state,
                 customAnswer: {
