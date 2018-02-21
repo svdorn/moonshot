@@ -2,8 +2,6 @@ import React, {Component} from 'react';
 
 class StyledContent extends Component {
     render() {
-        console.log('rendering styledcontent')
-
         const contentArray = this.props.contentArray;
         if (!Array.isArray(contentArray)) { return null; }
 

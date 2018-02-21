@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Paper} from 'material-ui';
 import {connect} from 'react-redux';
 import axios from 'axios';
+import StyledContent from '../styledContent';
 
 class PathwayContentArticle extends Component {
     constructor(props) {
@@ -51,7 +52,7 @@ class PathwayContentArticle extends Component {
                 {this.state.content !== undefined ?
                     <div className="center" style={{marginBottom: "10px"}}>
                         <h4>{content.name}</h4>
-                        <div style={{marginRight:"20px", marginLeft:"20px"}}>{content.description}</div>
+                        <StyledContent contentArray={content.description} />
                         <button className="outlineButton font30px font20pxUnder500 whiteBlueButton">
                             <a href={content.link} target="_blank" className="blueText blueTextOnHover" style={{textDecoration: 'none'}}>
                                 {content.linkText}
