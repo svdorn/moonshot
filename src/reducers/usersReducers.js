@@ -41,6 +41,7 @@ export function usersReducers(state = initialState, action) {
         case "UPDATE_USER_REJECTED":
         case "CHANGE_PASSWORD":
         case "CHANGE_PASSWORD_REJECTED":
+        case "ADD_PATHWAY_REJECTED":
             return {...state, notification: action.notification};
             break;
         case "SIGNOUT":
@@ -66,6 +67,13 @@ export function usersReducers(state = initialState, action) {
                 loadingSomething: false
             };
             break;
+        case "POST_USER_SUCCESS_EMAIL_FAIL":
+            return {
+                ...state,
+                loadingSomething: false,
+                notification: action.notification
+            };
+            break;
         case "POST_USER_REJECTED":
             return {
                 ...state,
@@ -81,13 +89,22 @@ export function usersReducers(state = initialState, action) {
                 ...state, currentUser: action.payload, notification: action.notification
             };
             break;
+        case "UPDATE_ANSWER":
+            return {
+                ...state,
+                currentUser: action.currentUser
+            };
+            break;
         case "FOR_BUSINESS_REQUESTED":
         case "CONTACT_US_REQUESTED":
+        case "COMPLETE_PATHWAY_REQUESTED":
             return {
                 ...state, loadingSomething: true
             };
             break;
         case "FOR_BUSINESS":
+        case "COMPLETE_PATHWAY":
+        case "COMPLETE_PATHWAY_REJECTED":
             let newState = {...state, loadingSomething: false};
             if (action.notification) {
                 newState.notification = action.notification;
@@ -123,19 +140,24 @@ export function usersReducers(state = initialState, action) {
                 ...state, notification: undefined
             }
             break;
-        // case "START_ONBOARDING":
-        //     return {
-        //         ...state, isOnboarding: true
-        //     }
-        //     break;
-        // case "END_ONBOARDING":
-        //     return {
-        //         ...state, isOnboarding: false
-        //     }
-        //     break;
+        case "START_ONBOARDING":
+            return {
+                ...state, isOnboarding: true
+            }
+            break;
+        case "END_ONBOARDING":
+            return {
+                ...state, isOnboarding: false
+            }
+            break;
         case "UPDATE_USER_ONBOARDING":
             return {
                 ...state, currentUser: action.payload
+            };
+            break;
+        case "ADD_PATHWAY":
+            return {
+                ...state, currentUser: action.payload, notification: action.notification
             };
             break;
         case "TURN_HEADER_BLUE":

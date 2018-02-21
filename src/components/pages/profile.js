@@ -18,7 +18,8 @@ class Profile extends Component {
             completedPathways: [],
             userPathwayPreviews: undefined,
             userCompletedPathwayPreviews: undefined,
-            user: undefined
+            user: undefined,
+            editProfile: false,
         }
     }
 
@@ -93,7 +94,7 @@ class Profile extends Component {
                             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathwayContent?' + pathway._id)}>
+                                    onClick={() => self.goTo('/pathwayContent?' + pathway.url)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
@@ -137,7 +138,7 @@ class Profile extends Component {
                             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathway?' + pathway._id)}>
+                                    onClick={() => self.goTo('/pathway?' + pathway.url)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
@@ -177,6 +178,10 @@ class Profile extends Component {
         window.scrollTo(0, 0);
     }
 
+    editProfile() {
+        this.setState({editProfile: !this.state.editProfile})
+    }
+
     render() {
         const style = {
             pathwayPreviewUl: {
@@ -187,10 +192,17 @@ class Profile extends Component {
                 backgroundColor: "white",
                 color: 'black',
             },
-            img: {
+            imgContainer: {
                 height: "100px",
+                width: "100px",
                 borderRadius: '50%',
                 border: "3px solid #00d2ff",
+                display: "inline-block",
+                overflow: "hidden"
+            },
+            img: {
+                height: "85px",
+                marginTop: "13px"
             },
             locationImg: {
                 display: 'inline-block',
@@ -237,10 +249,7 @@ class Profile extends Component {
             let index = -1;
             if (education && education.length > 0) {
                 const schools = education.map(function (edu) {
-                    // how to show the dates if the date is stored as a Date
-                    //const dates = edu.startDate.substring(0,4) + "-" + edu.endDate.substring(0,4);
-                    // how to show the dates if the dates are stored as Strings
-                    const date = edu.endDate;
+                    const date = edu.endDate ? edu.endDate.substring(5, 7) + "/" + edu.endDate.substring(8, 10) + "/" + edu.endDate.substring(0, 4) : null;
                     let majorsAndMinors = edu.majors ? edu.majors : "";
                     if (edu.minors && edu.minors.length > 0) {
                         let comma = "";
@@ -385,123 +394,264 @@ class Profile extends Component {
                 {user ?
                     <div>
                         <div className="greenToBlue headerDiv"/>
-
-                        {this.state.userPathwayPreviews ?
+                        {(!this.state.editProfile) ?
                             <div>
-                                <div className="profileInfoSkills">
-                                    <div className="profileInfoSkillsLeft">
-                                        <img
-                                            src="/icons/Portfolio.png"
-                                            alt="Profile picture"
-                                            style={style.img}
-                                        />
-                                        <div>
-                                            <div
-                                                className="blueText font20px font14pxUnder700 font10pxUnder400">{user.name.toUpperCase()}
-                                            </div>
-                                            {user.info.title ?
-                                                <div>
-                                                    <b className="font14px font12pxUnder500">{user.info.title}</b> <br/>
-                                                </div>
-                                                : null}
-                                            {user.info.location ?
-                                                <div>
+                                {this.state.userPathwayPreviews ?
+                                    <div>
+                                        <div className="profileInfoSkills">
+                                            <div className="profileInfoSkillsLeft">
+                                                {/*<div className="clickable blueText font20px font14pxUnder700"
+                                                     style={{marginTop: '-20px', marginBottom: '10px'}}
+                                                     onClick={this.editProfile.bind(this)}
+                                                >
+                                                    Edit Profile
+                                                </div>*/}
+                                                <div style={style.imgContainer}>
                                                     <img
-                                                        src="/icons/Location.png"
-                                                        alt="Portfolio"
-                                                        style={style.locationImg}
+                                                        src="/icons/PortfolioBlue.png"
+                                                        alt="Profile picture"
+                                                        style={style.img}
                                                     />
-                                                    <div className="font14px font12pxUnder500"
-                                                         style={{display: 'inline-block'}}>
-                                                        {user.info.location}
-                                                    </div>
                                                 </div>
-                                                : null}
-                                            <a className="font14px font12pxUnder500 blueText"
-                                               href={mailtoEmail}>Contact</a>
-                                        </div>
-                                    </div>
-                                    <div className="profileInfoSkillsRight">
-                                        {user.skills ?
-                                            <div>
-                                                {profileSkills}
+                                                <div>
+                                                    <div
+                                                        className="blueText font20px font14pxUnder700">{user.name.toUpperCase()}
+                                                    </div>
+                                                    {user.info.title ?
+                                                        <div>
+                                                            <b className="font14px font12pxUnder500">{user.info.title}</b>
+                                                            <br/>
+                                                        </div>
+                                                        : null}
+                                                    {user.info.location ?
+                                                        <div>
+                                                            <img
+                                                                src="/icons/Location.png"
+                                                                alt="Portfolio"
+                                                                style={style.locationImg}
+                                                            />
+                                                            <div className="font14px font12pxUnder500"
+                                                                 style={{display: 'inline-block'}}>
+                                                                {user.info.location}
+                                                            </div>
+                                                        </div>
+                                                        : null}
+                                                    <a className="font14px font12pxUnder500 blueText"
+                                                       href={mailtoEmail}>Contact</a>
+                                                </div>
                                             </div>
+                                            <div className="profileInfoSkillsRight">
+                                                {user.skills ?
+                                                    <div>
+                                                        {profileSkills}
+                                                    </div>
+                                                    : null}
+                                            </div>
+                                        </div>
+
+                                        <div className="profileSeparator">
+                                            <div className="profileSeparatorRect">
+                                                <b>PATHWAYS</b>
+                                            </div>
+                                            <div className="profileSeparatorTri">
+                                            </div>
+                                            <div style={{clear: "both"}}/>
+                                        </div>
+
+                                        {this.state.userPathwayPreviews.length > 0 ?
+                                            <div className="center">
+                                                <Tabs
+                                                    style={style.tabs}
+                                                    inkBarStyle={{background: 'black'}}
+                                                    tabItemContainerStyle={{width: '40%'}}
+                                                    className="myPathwaysTabs"
+                                                >
+                                                    <Tab label="Ongoing" style={style.tab}
+                                                         className="font20px font10pxUnder700">
+                                                        {this.state.userPathwayPreviews ?
+                                                            <ul className="horizCenteredList pathwayPrevList"
+                                                                style={style.pathwayPreviewUl}>
+                                                                {this.state.userPathwayPreviews}
+                                                            </ul>
+                                                            :
+                                                            <h1 className="center font40px font24pxUnder500">None</h1>}
+                                                    </Tab>
+                                                    <Tab label="Completed" style={style.tab}
+                                                         className="font20px font10pxUnder700">
+                                                        {this.state.userCompletedPathwayPreviews ?
+                                                            <ul className="horizCenteredList pathwayPrevList"
+                                                                style={style.pathwayPreviewUl}>
+                                                                {this.state.userCompletedPathwayPreviews}
+                                                            </ul>
+                                                            :
+                                                            <h1 className="center font40px font24pxUnder500">None</h1>}
+                                                    </Tab>
+                                                </Tabs>
+                                            </div>
+                                            :
+                                            <div className="center">
+                                                <ul className="horizCenteredList pathwayPrevList"
+                                                    style={style.pathwayPreviewUl}>
+                                                    <li onClick={() => this.goTo('/discover')}>
+                                                        <PathwayPreview type="addOne"/>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        }
+
+
+                                        <div className="profileSeparator">
+                                            <div className="profileSeparatorRect">
+                                                <b>ABOUT ME</b>
+                                            </div>
+                                            <div className="profileSeparatorTri">
+                                            </div>
+                                            <div style={{clear: "both"}}/>
+                                        </div>
+
+                                        {user.info.description ?
+                                            <div className="textWithMargin">{user.info.description}</div>
                                             : null}
-                                    </div>
-                                </div>
 
-                                <div className="profileSeparator">
-                                    <div className="profileSeparatorRect">
-                                        <b>PATHWAYS</b>
-                                    </div>
-                                    <div className="profileSeparatorTri">
-                                    </div>
-                                    <div style={{clear: "both"}}/>
-                                </div>
+                                        <ul className="horizCenteredList" id="aboutMeAreas">
+                                            {aboutMeLis}
+                                        </ul>
 
-                                {this.state.userPathwayPreviews.length > 0 ?
-                                    <div className="center">
-                                        <Tabs
-                                            style={style.tabs}
-                                            inkBarStyle={{background: 'black'}}
-                                            tabItemContainerStyle={{width: '40%'}}
-                                            className="myPathwaysTabs"
-                                        >
-                                            <Tab label="Ongoing" style={style.tab}
-                                                 className="font20px font10pxUnder700">
-                                                {this.state.userPathwayPreviews ?
-                                                    <ul className="horizCenteredList pathwayPrevList"
-                                                        style={style.pathwayPreviewUl}>
-                                                        {this.state.userPathwayPreviews}
-                                                    </ul>
-                                                    : <h1 className="center font40px font24pxUnder500">None</h1>}
-                                            </Tab>
-                                            <Tab label="Completed" style={style.tab}
-                                                 className="font20px font10pxUnder700">
-                                                {this.state.userCompletedPathwayPreviews ?
-                                                    <ul className="horizCenteredList pathwayPrevList"
-                                                        style={style.pathwayPreviewUl}>
-                                                        {this.state.userCompletedPathwayPreviews}
-                                                    </ul>
-                                                    : <h1 className="center font40px font24pxUnder500">None</h1>}
-                                            </Tab>
-                                        </Tabs>
                                     </div>
                                     :
-                                    <div className="center">
-                                        <ul className="horizCenteredList pathwayPrevList"
-                                            style={style.pathwayPreviewUl}>
-                                            <li onClick={() => this.goTo('/discover')}>
-                                                <PathwayPreview type="addOne"/>
-                                            </li>
-                                        </ul>
-                                    </div>
-                                }
-
-
-                                <div className="profileSeparator">
-                                    <div className="profileSeparatorRect">
-                                        <b>ABOUT ME</b>
-                                    </div>
-                                    <div className="profileSeparatorTri">
-                                    </div>
-                                    <div style={{clear: "both"}}/>
-                                </div>
-
-                                {user.info.description ?
-                                    <div className="textWithMargin">{user.info.description}</div>
-                                    : null}
-
-                                <ul className="horizCenteredList" id="aboutMeAreas">
-                                    {aboutMeLis}
-                                </ul>
-
+                                    <div>
+                                        <div className="fullHeight"/>
+                                        <div className="fullHeight"/>
+                                    </div>}
                             </div>
-                            :
-                            <div>
-                                <div className="fullHeight"/>
-                                <div className="fullHeight"/>
-                            </div>}
+                            : <div>
+                                {this.state.userPathwayPreviews ?
+                                    <div>
+                                        <div className="profileInfoSkills">
+                                            <div className="profileInfoSkillsLeft">
+                                                <div className="clickable blueText font20px font14pxUnder700"
+                                                     style={{marginTop: '-20px', marginBottom: '10px'}}
+                                                     onClick={this.editProfile.bind(this)}
+                                                >
+                                                    Edit Profile
+                                                </div>
+                                                <img
+                                                    src="/icons/Portfolio.png"
+                                                    alt="Profile picture"
+                                                    style={style.img}
+                                                />
+                                                <div>
+                                                    <div
+                                                        className="blueText font20px font14pxUnder700">{user.name.toUpperCase()}
+                                                    </div>
+                                                    {user.info.title ?
+                                                        <div>
+                                                            <b className="font14px font12pxUnder500">{user.info.title}</b>
+                                                            <br/>
+                                                        </div>
+                                                        : null}
+                                                    {user.info.location ?
+                                                        <div>
+                                                            <img
+                                                                src="/icons/Location.png"
+                                                                alt="Portfolio"
+                                                                style={style.locationImg}
+                                                            />
+                                                            <div className="font14px font12pxUnder500"
+                                                                 style={{display: 'inline-block'}}>
+                                                                {user.info.location}
+                                                            </div>
+                                                        </div>
+                                                        : null}
+                                                    <a className="font14px font12pxUnder500 blueText"
+                                                       href={mailtoEmail}>Contact</a>
+                                                </div>
+                                            </div>
+                                            <div className="profileInfoSkillsRight">
+                                                {user.skills ?
+                                                    <div>
+                                                        {profileSkills}
+                                                    </div>
+                                                    : null}
+                                            </div>
+                                        </div>
+
+                                        <div className="profileSeparator">
+                                            <div className="profileSeparatorRect">
+                                                <b>PATHWAYS</b>
+                                            </div>
+                                            <div className="profileSeparatorTri">
+                                            </div>
+                                            <div style={{clear: "both"}}/>
+                                        </div>
+
+                                        {this.state.userPathwayPreviews.length > 0 ?
+                                            <div className="center">
+                                                <Tabs
+                                                    style={style.tabs}
+                                                    inkBarStyle={{background: 'black'}}
+                                                    tabItemContainerStyle={{width: '40%'}}
+                                                    className="myPathwaysTabs"
+                                                >
+                                                    <Tab label="Ongoing" style={style.tab}
+                                                         className="font20px font10pxUnder700">
+                                                        {this.state.userPathwayPreviews ?
+                                                            <ul className="horizCenteredList pathwayPrevList"
+                                                                style={style.pathwayPreviewUl}>
+                                                                {this.state.userPathwayPreviews}
+                                                            </ul>
+                                                            :
+                                                            <h1 className="center font40px font24pxUnder500">None</h1>}
+                                                    </Tab>
+                                                    <Tab label="Completed" style={style.tab}
+                                                         className="font20px font10pxUnder700">
+                                                        {this.state.userCompletedPathwayPreviews ?
+                                                            <ul className="horizCenteredList pathwayPrevList"
+                                                                style={style.pathwayPreviewUl}>
+                                                                {this.state.userCompletedPathwayPreviews}
+                                                            </ul>
+                                                            :
+                                                            <h1 className="center font40px font24pxUnder500">None</h1>}
+                                                    </Tab>
+                                                </Tabs>
+                                            </div>
+                                            :
+                                            <div className="center">
+                                                <ul className="horizCenteredList pathwayPrevList"
+                                                    style={style.pathwayPreviewUl}>
+                                                    <li onClick={() => this.goTo('/discover')}>
+                                                        <PathwayPreview type="addOne"/>
+                                                    </li>
+                                                </ul>
+                                            </div>
+                                        }
+
+
+                                        <div className="profileSeparator">
+                                            <div className="profileSeparatorRect">
+                                                <b>ABOUT ME</b>
+                                            </div>
+                                            <div className="profileSeparatorTri">
+                                            </div>
+                                            <div style={{clear: "both"}}/>
+                                        </div>
+
+                                        {user.info.description ?
+                                            <div className="textWithMargin">{user.info.description}</div>
+                                            : null}
+
+                                        <ul className="horizCenteredList" id="aboutMeAreas">
+                                            {aboutMeLis}
+                                        </ul>
+
+                                    </div>
+                                    :
+                                    <div>
+                                        <div className="fullHeight"/>
+                                        <div className="fullHeight"/>
+                                    </div>}
+                            </div>
+                        }
                     </div>
                     : null}
             </div>

@@ -271,11 +271,11 @@ class ForBusiness extends Component {
                     <div className="fullHeight purpleToBlue">
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
-                        <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500" style={{zIndex: "20"}}>
+                        <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500 font20pxUnder400 font18pxUnder350">
                             Data-driven hiring.<br/>
-                            Skills training and assessments<br/>
+                            Your pipeline to specialized talent<br/>
                             curated to your needs.<br/>
-                            <button className="outlineButton font30px font20pxUnder500 darkBlueButton"
+                            <button className="outlineButton whiteText font30px font20pxUnder500 darkBlueButton"
                                     onClick={() => this.scrollDown()}>
                                 {"Let's Begin"}
                             </button><br/>
@@ -292,16 +292,16 @@ class ForBusiness extends Component {
                     </div>
 
                     <div style={{marginTop: '60px', overflow: 'auto'}}>
-                        <div className="center font36px font30pxUnder700 font26pxUnder500 font22pxUnder400" style={{marginBottom: "50px"}}>
-                            <b>Top College Students and
+                        <div className="center font28px font24pxUnder800 font22pxUnder500" style={{marginBottom: "50px"}}>
+                            Top College Students and
                                 <div className="under600only br"><br/></div> Recent Graduates<br/>
-                                Competing to Work for You.</b>
+                                Competing to Work for You.
                         </div>
                         <div style={styles.horizList}>
                             <div className="horizListFull">
                                 <div className="horizListSpacer" style={{marginLeft: "20%"}}
                                 >
-                                    <div className="horizListText">
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                         <img
                                             src="/icons/Key.png"
                                             style={styles.horizListIcon}
@@ -314,7 +314,7 @@ class ForBusiness extends Component {
 
                             <div className="horizListFull">
                                 <div className="horizListSpacer" style={{marginLeft: "5%", marginRight: '5%'}}>
-                                    <div className="horizListText">
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                         <img
                                             src="/icons/Evaluate.png"
                                             style={styles.horizListIcon}
@@ -326,13 +326,13 @@ class ForBusiness extends Component {
                             </div>
                             <div className="horizListFull">
                                 <div className="horizListSpacer" style={{marginRight: "20%"}}>
-                                    <div className="horizListText">
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                         <img
                                             src="/icons/Badge.png"
                                             style={styles.horizListIcon}
                                         /><br/>
                                         <b>Real<div className="under500only br"><br/></div> Projects</b><br/>
-                                        See their quality of work and application of skills<div className="above500only inline"> before you hire</div>.
+                                        See their quality of work and <div className="above1000only br"><br/></div>application of skills<div className="above500only inline"> before you hire</div>.
                                     </div>
                                 </div>
                             </div>
@@ -341,94 +341,97 @@ class ForBusiness extends Component {
 
                     <div className="purpleToGreenSpacer"/>
 
-                    <div style={{marginTop: '60px', minWidth: "215px"}}>
-                        <div className="center font24px font16pxUnder500"
+                    <div style={{marginTop: '40px', minWidth: "215px", maxWidth: "1500px", margin: "auto"}}>
+                        <div className="center font18px font16pxUnder800"
                              style={{marginBottom: '40px', width: '90%', marginLeft: "5%"}}>
-                            <h1 className="purpleText font36px font30pxUnder700 font26pxUnder500 font22pxUnder400"><b>Our Scholarships to Hire Program</b></h1>
-                            A scholarship for potential hires<div className="under500only br"><br/></div> to learn the skills you need.<br/>
-                        </div>
-
-                        <div className="forBusinessLineWithCirclesContainer">
-                            <div className="forBusinessLineWithCircles">
-                                <div className="forBusinessLine"/>
-                                <div className="forBusinessCircle"/>
-                                <div className="forBusinessCircle"/>
-                                <div className="forBusinessCircle"/>
-                                <div className="forBusinessCircle"/>
-                            </div>
+                            <h1 className="purpleText font30px font26pxUnder800 font24pxUnder500">How It Works</h1>
+                            No upfront cost or risk. <div className="under400only"><br/></div>Pay only if you hire.<br/>
                         </div>
 
 
-                        <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
-                            <div className="homepageTrajectoryTextLeft forBusiness">
-                                <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextLeftDiv forBusiness">
-                                    <h2 className="blueText font18pxUnder500"><b>What Skills Are You <div className="above800only br"><br/></div>Hiring For?</b></h2>
-                                    UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe, SQL, Google Analytics, DevOps, Agile...
-                                </div>
-                            </div>
-                            <div className="homepageTrajectoryImagesRight">
-                                <div className="homepageImgBackgroundRight blueGradient"/>
-                                <img
-                                    src="/images/HappySmallerBeardGuy.jpeg"
-                                />
-                            </div>
-                        </div>
-
-                        <br/>
-
-                        <div className="homepageTrajectory forBusiness">
-                            <div className="homepageTrajectoryTextRight forBusiness">
-                                <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextRightDiv forBusiness">
-                                    <h2 className="greenText font18pxUnder500"><b>Course Pathways Curated <div className="above500only br"><br/></div>to the Skills You Need.</b>
-                                    </h2>
-                                    Expert-led, interactive learning
-                                    through videos, articles, skill
-                                    assessments and real-world projects.
-                                </div>
-                            </div>
-                            <div className="homepageTrajectoryImagesLeft">
-                                <div className="homepageImgBackgroundLeft greenGradient"/>
-                                <img
-                                    src="/images/WomanAtComputer.jpg"
-                                />
-                            </div>
-                        </div>
-
-                        <br/>
-
-                        <div className="homepageTrajectory forBusiness" id="sponsorStudentsForBusiness">
-                            <div className="homepageTrajectoryTextLeft forBusiness">
-                                <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextLeftDiv forBusiness">
-                                    <h2 className="purpleText font18pxUnder500"><b>Sponsor Students</b></h2>
-                                    Provide sponsorships for students to learn
-                                    the skills you need. We can find the talent or you
-                                    can sponsor your own candidates.
+                        <div className="homepageTrajectoryContainer">
+                            <div className="forBusinessLineWithCirclesContainer">
+                                <div className="forBusinessLineWithCircles">
+                                    <div className="forBusinessLine"/>
+                                    <div className="forBusinessCircle"/>
+                                    <div className="forBusinessCircle"/>
+                                    <div className="forBusinessCircle"/>
+                                    <div className="forBusinessCircle"/>
                                 </div>
                             </div>
 
-                            <div className="homepageTrajectoryImagesRight">
-                                <div className="homepageImgBackgroundRight purpleToRed"/>
-                                <img
-                                    src="/images/WhiteboardWork.jpg"
-                                />
-                            </div>
-                        </div>
 
-                        <div className="homepageTrajectory forBusiness">
-                            <div className="homepageTrajectoryTextRight forBusiness">
-                                <div className="font24px font20pxUnder800 font16pxUnder500 homepageTrajectoryTextRightDiv forBusiness">
-                                    <h2 className="blueText font18pxUnder500"><b>Evaluate for Hire</b></h2>
-                                    Comprehensive data on each candidate
-                                    from skill assessments, qualitative
-                                    responses, quantitative scoring
-                                    and real-world projects.
+                            <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
+                                <div className="homepageTrajectoryTextLeft forBusiness">
+                                    <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forBusiness">
+                                        <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">What Skills Are You <div className="above800only br"><br/></div>Hiring For?</h2>
+                                        UI/UX, Data Science, Game Design, SEO, Javascript, C++, Adobe, SQL, Google Analytics, DevOps, Agile...
+                                    </div>
+                                </div>
+                                <div className="homepageTrajectoryImagesRight forBusiness">
+                                    <div className="homepageImgBackgroundRight blueGradient forBusiness"/>
+                                    <img
+                                        src="/images/HappySmallerBeardGuy.jpeg"
+                                    />
                                 </div>
                             </div>
-                            <div className="homepageTrajectoryImagesLeft">
-                                <div className="homepageImgBackgroundLeft blueGradient"/>
-                                <img
-                                    src="/images/TalkingBeardGuy.jpeg"
-                                />
+
+                            <br/>
+
+                            <div className="homepageTrajectory forBusiness">
+                                <div className="homepageTrajectoryTextRight forBusiness">
+                                    <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forBusiness">
+                                        <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Course Pathways Curated <div className="above500only br"><br/></div>to the Skills You Need
+                                        </h2>
+                                        Expert-led, interactive learning
+                                        through videos, articles, skill
+                                        assessments and real-world projects.
+                                    </div>
+                                </div>
+                                <div className="homepageTrajectoryImagesLeft forBusiness">
+                                    <div className="homepageImgBackgroundLeft greenGradient forBusiness"/>
+                                    <img
+                                        src="/images/WomanAtComputer.jpg"
+                                    />
+                                </div>
+                            </div>
+
+                            <br/>
+
+                            <div className="homepageTrajectory forBusiness" id="sponsorStudentsForBusiness">
+                                <div className="homepageTrajectoryTextLeft forBusiness">
+                                    <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forBusiness">
+                                        <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Candidate Training</h2>
+                                        College students and recent graduates
+                                        complete the pathway to learn the skills
+                                        you need. We find the talent.
+                                    </div>
+                                </div>
+
+                                <div className="homepageTrajectoryImagesRight forBusiness">
+                                    <div className="homepageImgBackgroundRight purpleToRed forBusiness"/>
+                                    <img
+                                        src="/images/WhiteboardWork.jpg"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="homepageTrajectory forBusiness">
+                                <div className="homepageTrajectoryTextRight forBusiness">
+                                    <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forBusiness">
+                                        <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Evaluate for Hire</h2>
+                                        Comprehensive data on each candidate
+                                        from skill assessments, qualitative
+                                        responses, quantitative scoring
+                                        and real-world projects.
+                                    </div>
+                                </div>
+                                <div className="homepageTrajectoryImagesLeft forBusiness">
+                                    <div className="homepageImgBackgroundLeft blueGradient forBusiness"/>
+                                    <img
+                                        src="/images/TalkingBeardGuy.jpeg"
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -438,8 +441,8 @@ class ForBusiness extends Component {
                     </div>
 
                     <div className="center" style={{marginBottom: "50px"}}>
-                        <h1 className="isolatedHeader purpleText font36px font30pxUnder700 font26pxUnder500 font22pxUnder400">
-                            <b>What Positions Are You Hiring For?</b>
+                        <h1 className="isolatedHeader purpleText font28px font24pxUnder800 font22pxUnder500">
+                            What Positions Are You Hiring For?
                         </h1>
                         <div id="exampleSkillsContainer">
                             {exampleRoles}
@@ -461,20 +464,20 @@ class ForBusiness extends Component {
 
                     <div className="aResumeCantDoThis">
                         <div id="aResumeCantDoThisContent">
-                            <div className="font36px font30pxUnder700 font26pxUnder500 font22pxUnder400" id="aResumeCantDoThisTitle"><b>A Resum&eacute; Can{"'"}t Do This.</b>
+                            <div className="font28px font24pxUnder800 font22pxUnder500" id="aResumeCantDoThisTitle">A Resum&eacute; Can{"'"}t Do This.
                             </div>
                             <div>
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon"
                                          style={{marginRight: '10px'}}/>
-                                    <div className="font20px font16pxUnder800 font14pxUnder800 aResumeCantDoThisText">See their quality of work under
+                                    <div className="font18px font16pxUnder800 aResumeCantDoThisText">See their quality of work under
                                         pressure.
                                     </div>
                                 </div>
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/BarGraph.png" className="forBusinessIcon"
                                          style={{marginLeft: '10px'}}/>
-                                    <div className="font20px font16pxUnder800 font14pxUnder800 aResumeCantDoThisText">
+                                    <div className="font18px font16pxUnder800 aResumeCantDoThisText">
                                         Quantitatively score and break down their skills.
                                     </div>
                                 </div>
@@ -482,13 +485,13 @@ class ForBusiness extends Component {
                             <div style={{marginTop: '20px'}}>
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/EvaluatePurple.png" className="forBusinessIcon"/>
-                                    <div className="font20px font16pxUnder800 font14pxUnder800 aResumeCantDoThisText">
+                                    <div className="font18px font16pxUnder800 aResumeCantDoThisText">
                                         Compare candidates against their peers.
                                     </div>
                                 </div>
                                 <div style={styles.bottomListItem}>
                                     <img src="/icons/Filter.png" className="forBusinessIcon"/>
-                                    <div className="font20px font16pxUnder800 font14pxUnder800 aResumeCantDoThisText">
+                                    <div className="font18px font16pxUnder800 aResumeCantDoThisText">
                                         Filter out the unqualified<div className="above800only br"><br/></div> and uncommitted.
                                     </div>
                                 </div>
@@ -515,23 +518,22 @@ class ForBusiness extends Component {
                         <div className="homepageSeparator blueLightBlueSeparator"/>
                     </div>
 
-                    <div className="center font36px font30pxUnder700 font26pxUnder500 font22pxUnder400"
+                    <div className="center font28px font24pxUnder800 font22pxUnder500"
                          style={{marginBottom: '40px', marginTop: "120px", minWidth: "250px"}}>
-                        <b>Your Pipeline to<div className="under400only br"><br/></div> Fully-Vetted Talent</b>
+                        Your Pipeline to<div className="under400only br"><br/></div> Fully-Vetted Talent
                     </div>
                     <div className="forBusinessBoxesContainer">
                         <Paper zDepth={3} className="paperBox">
                             <div className="gradientBorderBlueBox">
                                 <div className="forBusinessBox">
-                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Full Access</div>
-                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 blueText">FREE</div>
+                                    <div className="font28px font24pxUnder800 font22pxUnder500">Full Access</div>
+                                    <div className="font32px font28pxUnder800 font26pxUnder500 blueText">FREE</div>
                                     <div>COMPANY LICENSE</div>
                                     <div className="br"><br/></div>
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
-                                    Full access to students, student data from<br/>
-                                    quantitative assessments, skills scoring and projects,
-                                    existing pathways and curated pathways for your company.<br/>
-                                    Free access to students.
+                                    Pathway curated to your company, accesss<br/>
+                                    to existing pathways and talent pipeline.<br/>
+                                    Candidate data, skills scoring and projects.
                                     </div>
                                 </div>
                             </div>
@@ -539,15 +541,14 @@ class ForBusiness extends Component {
                         <Paper zDepth={3} className="paperBox">
                             <div className="gradientBorderPurpleToRedBox">
                                 <div className="forBusinessBox">
-                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350">Successful Hire</div>
-                                    <div className="font40px font24pxUnder900 font24pxUnder500 font16pxUnder350 purpleText">1-3%</div>
+                                    <div className="font28px font24pxUnder800 font22pxUnder500">Successful Hire</div>
+                                    <div className="font32px font28pxUnder800 font26pxUnder500 purpleText">2-4%</div>
                                     <div>GROSS ANNUAL SALARY</div>
                                     <div className="br"><br/></div>
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
-                                    1% to 3% for full and part time hires.<br/>
-                                    4% to 6% for interns or co-ops.<br/>
-                                    Pay only after he or she meets all of your<br/>
-                                    pre-employment requirements and accepts your offer.
+                                    2% to 4% for full and part time hires.<br/>
+                                    8% to 10% for interns or co-ops.<br/>
+                                    Pay only after he or she accepts your offer.
                                     </div>
                                 </div>
                             </div>
@@ -555,11 +556,11 @@ class ForBusiness extends Component {
                     </div>
 
                     <div className="center" style={{marginBottom: '20px'}}>
-                        <div className="font20px font16pxUnder700 font font14pxUnder400">
-                            No upfront costs, no risk, pay only on success.
+                        <div className="font18px font16pxUnder800">
+                            No upfront costs. No risk. Pay only on success.
                         </div>
                     </div>
-                    <div className="center" style={{marginBottom: '20px'}}>
+                    <div className="center" style={{marginBottom: '40px'}}>
                         <button className="blueToPurpleButtonExterior bigButton"
                                 onClick={this.handleOpen}
                         >

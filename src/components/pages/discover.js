@@ -1,6 +1,16 @@
 "use strict"
 import React, {Component} from 'react';
-import {TextField, DropDownMenu, MenuItem, Divider, Toolbar, ToolbarGroup, Dialog, FlatButton, CircularProgress} from 'material-ui';
+import {
+    TextField,
+    DropDownMenu,
+    MenuItem,
+    Divider,
+    Toolbar,
+    ToolbarGroup,
+    Dialog,
+    FlatButton,
+    CircularProgress
+} from 'material-ui';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
@@ -24,12 +34,22 @@ class Discover extends Component {
     constructor(props) {
         super(props);
 
+        const emptyPathway = {
+            name: "Loading...",
+            previewImage: "",
+            sponsor: {name: "", logo: ""},
+            estimatedCompletionTime: "",
+            deadline: "",
+            price: "",
+            _id: undefined
+        }
+
         this.state = {
             searchTerm: "",
             category: "",
             company: "",
             explorePathways: [],
-            featuredPathways: [],
+            featuredPathways: [emptyPathway, emptyPathway, emptyPathway],
             open: false,
             dialogPathway: null,
         }
@@ -128,7 +148,32 @@ class Discover extends Component {
                 margin: "12px auto 0px",
                 position: "relative",
                 height: "40px",
-                textAlign: "center"},
+                textAlign: "center"
+            },
+            separatorLineLeft: {
+                left: 0,
+                width: "calc(50% - 85px);",
+                height: "3px",
+                backgroundColor: "white",
+                position: "absolute",
+                top: "12px"
+            },
+            separatorLineRight: {
+                right: 0,
+                width: "calc(50% - 85px);",
+                height: "3px",
+                backgroundColor: "white",
+                position: "absolute",
+                top: "12px"
+            },
+            separatorText1: {
+                padding: "0px 40px",
+                backgroundColor: "transparent",
+                display: "inline-block",
+                position: "relative",
+                fontSize: "23px",
+                color: "white"
+            },
             separator: {
                 width: "70%",
                 margin: "25px auto 0px",
@@ -142,12 +187,12 @@ class Discover extends Component {
                 display: "inline-block",
                 position: "relative",
                 fontSize: "23px",
-                color: styles.colors.moonshotLightBlue
+                color: "#b37bfe"
             },
             separatorLine: {
                 width: "100%",
                 height: "3px",
-                backgroundColor: styles.colors.moonshotLightBlue,
+                backgroundColor: "#b37bfe",
                 position: "absolute",
                 top: "12px"
             },
@@ -157,9 +202,7 @@ class Discover extends Component {
                 marginTop: "0px",
                 marginBottom: "30px"
             },
-            pathwayPreviewUl: {
-
-            },
+            pathwayPreviewUl: {},
             pathwayPreviewContainer: {
                 height: "352px"
             },
@@ -188,25 +231,26 @@ class Discover extends Component {
             key++;
             const deadline = new Date(pathway.deadline);
             const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
-            if (!pathway.comingSoon && self.props.currentUser && self.props.currentUser != "no user") {
-                return (
-                    <li className="pathwayPreviewLi explorePathwayPreview"
-                        key={key}
-                        onClick={() => self.goTo('/pathway?' + pathway.url)}
-                    >
-                        <PathwayPreview
-                            name={pathway.name}
-                            image={pathway.previewImage}
-                            logo = {pathway.sponsor.logo}
-                            sponsorName = {pathway.sponsor.name}
-                            completionTime={pathway.estimatedCompletionTime}
-                            deadline={formattedDeadline}
-                            price={pathway.price}
-                            _id={pathway._id}
-                            comingSoon = {pathway.comingSoon}
-                        />
-                    </li>
-                );
+            if (!pathway.comingSoon) {
+                return;
+                // return (
+                //     <li className="pathwayPreviewLi explorePathwayPreview"
+                //         key={key}
+                //         onClick={() => self.goTo('/pathway?' + pathway.url)}
+                //     >
+                //         <PathwayPreview
+                //             name={pathway.name}
+                //             image={pathway.previewImage}
+                //             logo = {pathway.sponsor.logo}
+                //             sponsorName = {pathway.sponsor.name}
+                //             completionTime={pathway.estimatedCompletionTime}
+                //             deadline={formattedDeadline}
+                //             price={pathway.price}
+                //             _id={pathway._id}
+                //             comingSoon = {pathway.comingSoon}
+                //         />
+                //     </li>
+                // );
             } else if (pathway.comingSoon) {
                 return (
                     <li className="pathwayPreviewLi explorePathwayPreview"
@@ -223,7 +267,8 @@ class Discover extends Component {
                             deadline={formattedDeadline}
                             price={pathway.price}
                             _id={pathway._id}
-                            comingSoon = {pathway.comingSoon}
+                            comingSoon={pathway.comingSoon}
+                            variation="3"
                         />
                     </li>
                 );
@@ -251,7 +296,8 @@ class Discover extends Component {
                         deadline={formattedDeadline}
                         price={pathway.price}
                         _id={pathway._id}
-                        comingSoon = {pathway.comingSoon}
+                        comingSoon={pathway.comingSoon}
+                        variation="2"
                     />
                 </li>
             );
@@ -298,7 +344,7 @@ class Discover extends Component {
                             {this.props.loadingEmailSend ?
                                 <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
                                 :
-                                <div style={{color:"#00c3ff"}}>Your spot has been reserved!</div>
+                                <div style={{color: "#00c3ff"}}>Your spot has been reserved!</div>
                             }
                         </div>
                         :
@@ -310,70 +356,41 @@ class Discover extends Component {
 
                 </Dialog>
 
-                <div className="greenToBlue headerDiv"/>
-                <div className="center font40px font24pxUnder500" style={{marginTop:'15px', marginBottom:'10px'}}>
-                    Discover Pathways
+                <div className="lightBlueToLightPurpleGradient">
+                    <div className="headerDiv"/>
+                    <div className="center font40px font24pxUnder500 whiteText"
+                         style={{marginTop: '15px', marginBottom: '10px'}}>
+                        Discover Pathways
+                    </div>
+
+                    <div>
+                        <div style={style.separator1}>
+                            <div className="separatorLineLeft"/>
+                            <div className="separatorLineRight"/>
+                            <div style={style.separatorText1}>
+                                Featured
+                            </div>
+                        </div>
+
+                        <div className="pathwayPrevListContainer" style={style.pathwayPreviewFeaturedContainer}>
+                            <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList"
+                                style={style.pathwayPreviewUl}>
+                                {featuredPathwayPreviews}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
-                <div>
-                    <div style={style.separator1}>
-                        <div style={style.separatorLine}/>
-                        <div style={style.separatorText}>
-                            Featured
-                        </div>
+
+                <div style={style.separator}>
+                    <div style={style.separatorLine}/>
+                    <div style={style.separatorText}>
+                        Explore
                     </div>
+                </div>
 
-                    <div className="pathwayPrevListContainer" style={style.pathwayPreviewFeaturedContainer}>
-                        <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList" style={style.pathwayPreviewUl}>
-                            {featuredPathwayPreviews}
-                        </ul>
-                    </div>
-
-
-                    <div style={style.separator}>
-                        <div style={style.separatorLine}/>
-                        <div style={style.separatorText}>
-                            Explore
-                        </div>
-                    </div>
-
-                    <Toolbar style={style.searchBar} id="discoverSearchBarWideScreen">
-                        <ToolbarGroup>
-                            <Field
-                                name="search"
-                                component={renderTextField}
-                                label="Search"
-                                onChange={event => this.onSearchChange(event.target.value)}
-                                value={this.state.searchTerm}
-                            />
-                        </ToolbarGroup>
-
-                        <ToolbarGroup>
-                            <DropDownMenu value={this.state.category}
-                                          onChange={this.handleCategoryChange}
-                                          underlineStyle={styles.underlineStyle}
-                                          anchorOrigin={styles.anchorOrigin}
-                                          style={{fontSize: "20px", marginTop: "11px"}}
-                            >
-                                <MenuItem value={""} primaryText="Category"/>
-                                <Divider/>
-                                {categoryItems}
-                            </DropDownMenu>
-                            <DropDownMenu value={this.state.company}
-                                          onChange={this.handleCompanyChange}
-                                          underlineStyle={styles.underlineStyle}
-                                          anchorOrigin={styles.anchorOrigin}
-                                          style={{fontSize: "20px", marginTop: "11px"}}
-                            >
-                                <MenuItem value={""} primaryText="Company"/>
-                                <Divider/>
-                                {companyItems}
-                            </DropDownMenu>
-                        </ToolbarGroup>
-                    </Toolbar>
-
-
-                    <div id="discoverSearchBarMedScreen">
+                <Toolbar style={style.searchBar} id="discoverSearchBarWideScreen">
+                    <ToolbarGroup>
                         <Field
                             name="search"
                             component={renderTextField}
@@ -381,9 +398,9 @@ class Discover extends Component {
                             onChange={event => this.onSearchChange(event.target.value)}
                             value={this.state.searchTerm}
                         />
+                    </ToolbarGroup>
 
-                        <br/>
-
+                    <ToolbarGroup>
                         <DropDownMenu value={this.state.category}
                                       onChange={this.handleCategoryChange}
                                       underlineStyle={styles.underlineStyle}
@@ -394,7 +411,6 @@ class Discover extends Component {
                             <Divider/>
                             {categoryItems}
                         </DropDownMenu>
-                        <div><br/></div>
                         <DropDownMenu value={this.state.company}
                                       onChange={this.handleCompanyChange}
                                       underlineStyle={styles.underlineStyle}
@@ -405,15 +421,49 @@ class Discover extends Component {
                             <Divider/>
                             {companyItems}
                         </DropDownMenu>
-                    </div>
+                    </ToolbarGroup>
+                </Toolbar>
 
 
+                <div id="discoverSearchBarMedScreen">
+                    <Field
+                        name="search"
+                        component={renderTextField}
+                        label="Search"
+                        onChange={event => this.onSearchChange(event.target.value)}
+                        value={this.state.searchTerm}
+                    />
 
-                    <div>
-                        <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
-                            {explorePathwayPreviews}
-                        </ul>
-                    </div>
+                    <br/>
+
+                    <DropDownMenu value={this.state.category}
+                                  onChange={this.handleCategoryChange}
+                                  underlineStyle={styles.underlineStyle}
+                                  anchorOrigin={styles.anchorOrigin}
+                                  style={{fontSize: "20px", marginTop: "11px"}}
+                    >
+                        <MenuItem value={""} primaryText="Category"/>
+                        <Divider/>
+                        {categoryItems}
+                    </DropDownMenu>
+                    <div><br/></div>
+                    <DropDownMenu value={this.state.company}
+                                  onChange={this.handleCompanyChange}
+                                  underlineStyle={styles.underlineStyle}
+                                  anchorOrigin={styles.anchorOrigin}
+                                  style={{fontSize: "20px", marginTop: "11px"}}
+                    >
+                        <MenuItem value={""} primaryText="Company"/>
+                        <Divider/>
+                        {companyItems}
+                    </DropDownMenu>
+                </div>
+
+
+                <div>
+                    <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
+                        {explorePathwayPreviews}
+                    </ul>
                 </div>
             </div>
         );

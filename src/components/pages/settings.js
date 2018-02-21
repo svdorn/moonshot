@@ -21,8 +21,8 @@ class Settings extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <div className="fullHeight greenToBlue">
-                <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
+            <div className="fillScreen greenToBlue">
+                <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="1"/>
                 {this.props.notification !== undefined ?
                     <Paper className={"messageHeader " + this.props.notification.type}>
                         {this.props.notification.message}

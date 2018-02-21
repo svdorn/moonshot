@@ -2,10 +2,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {registerForPathway, closeNotification} from '../../actions/usersActions';
+import {registerForPathway, closeNotification, addPathway} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
+import YouTube from 'react-youtube';
 //import './pathway.css';
 import axios from 'axios';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
@@ -19,7 +20,7 @@ class Pathway extends Component {
         }
     }
 
-    goTo (route)  {
+    goTo(route) {
         // closes any notification
         this.props.closeNotification();
         // goes to the wanted page
@@ -42,7 +43,28 @@ class Pathway extends Component {
     }
 
     handleClick() {
-        if (this.props.currentUser) {
+        // Check if it is a specialized pathway
+        if (this.state.pathway.name === "NWM Sales") {
+            if (this.props.currentUser) {
+                const user = {
+                    _id: this.props.currentUser._id,
+                    pathwayId: this.state.pathway._id,
+                    pathwayUrl: this.state.pathway.url,
+                };
+                this.props.addPathway(user);
+            } else {
+                browserHistory.push({
+                    pathname: "/signup",
+                    query: {
+                        pathway: this.state.pathway._id,
+                        redirect: "/pathwayContent?" + this.state.pathway.url
+                    }
+                });
+                window.scrollTo(0, 0);
+            }
+        }
+
+        else if (this.props.currentUser) {
             const user = {
                 pathway: this.state.pathway.name,
                 name: this.props.currentUser.name,
@@ -51,7 +73,13 @@ class Pathway extends Component {
             this.props.registerForPathway(user);
         } else {
             // Not logged in
-            browserHistory.push('/login');
+            browserHistory.push({
+                pathname: "/signup",
+                query: {
+                    pathway: this.state.pathway._id,
+                    redirect: "/pathwayContent?" + this.state.pathway.url
+                }
+            });
         }
     }
 
@@ -70,7 +98,7 @@ class Pathway extends Component {
 
             quote: {
                 container: {
-                    border: "2px solid #B869FF",
+                    border: "2px solid #da5f7b",
                     fontSize: "30px",
                     padding: "20px",
                     textAlign: "center",
@@ -130,7 +158,40 @@ class Pathway extends Component {
                 fontSize: "20px",
                 textAlign: 'center',
             },
-        }
+            horizList: {
+                position: "relative",
+                marginTop: "15px",
+                marginBottom: "25px"
+            },
+            horizListIcon: {
+                height: "50px",
+                marginBottom: "10px"
+                // position: "absolute",
+                // top: "0",
+                // bottom: "0",
+                // right: "80%",
+                // margin: "auto"
+            },
+            quoteReplacementImg: {
+                width: '450px',
+            },
+            bottomListItem: {
+                width: '40%',
+                margin: 'auto',
+                display: 'inline-block',
+                top: '0',
+                verticalAlign: 'top',
+            },
+        };
+
+        const opts = {
+            height: '100%',
+            width: '100%',
+            playerVars: { // https://developers.google.com/youtube/player_parameters
+                autoplay: 0,
+                rel: 0
+            }
+        };
 
         const pathway = this.state.pathway;
         const deadline = this.state.pathway.deadline;
@@ -143,7 +204,7 @@ class Pathway extends Component {
         const steps = pathway.steps;
         if (steps) {
 
-            pathwaySteps = steps.map(function(step) {
+            pathwaySteps = steps.map(function (step) {
                 let topSeparators = null;
                 if (step.order < 2) {
                     topSeparators = (
@@ -169,11 +230,11 @@ class Pathway extends Component {
                 return (
 
                     <div className={"halfWidthStep" + side} key={step.order}>
-                        { topSeparators }
-                        <img
-                            src={"/icons/" + step.order + ".png"}
-                            alt={step.order}
-                        />
+                        {topSeparators}
+                        <div className="stepNumber font60px font48pxUnder700 font40pxUnder500"
+                             style={{display: 'inline-block'}}>
+                            {step.order}
+                        </div>
                         <div className="halfWidthStepText">
 
                             <div className="halfWidthStepNumber font16pxUnder700 font14pxUnder500">
@@ -231,23 +292,26 @@ class Pathway extends Component {
             //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
             <div className="jsxWrapper noOverflowX">
                 {pathway.sponsor !== undefined ?
-                    <div style={{minWidth:"250px"}}>
-                        <div className="fullHeight purpleGradient">
+                    <div style={{minWidth: "250px"}}>
+                        <div className="fullHeight purpleToRedGradient">
+                            <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
 
 
-                            <div className="infoBox whiteText font40px font24pxUnder500" style={{zIndex: "20"}}>
+                            <div className="infoBox whiteText font40px font24pxUnder500"
+                                 style={{zIndex: "20", marginTop: '-10px'}}>
                                 {pathway.sponsor.pathwayHomepage}<br/>
-                                <button className="outlineButton font30px font20pxUnder500 purpleGradientButton"
-                                        style={{backgroundColor: "#9B6BFB", border: "2px solid white"}}
-                                        onClick={this.handleClick.bind(this)}>
-                                    {"Sign Up"}
+                                <button
+                                    className="outlineButton whiteText font30px font20pxUnder500 purpleToRedGradientButton"
+                                    onClick={() => this.scrollDown()}>
+                                    {"Get Started"}
                                 </button>
                             </div>
                             <br/>
                             {this.props.loading ? <div className="center"><CircularProgress color="white"
                                                                                             style={{marginTop: "20px"}}/><br/>
                             </div> : ""}
-                            <div className="whiteText font20px font14pxUnder700 font12pxUnder500 noWrap" style={{textAlign: 'center'}}>
+                            <div className="whiteText font20px font14pxUnder700 font12pxUnder500 noWrap"
+                                 style={{textAlign: 'center', marginTop: '10px'}}>
                                 Sponsored by
                                 <img
                                     src={pathway.sponsor.logo}
@@ -256,58 +320,110 @@ class Pathway extends Component {
                                     style={{paddingLeft: '10px'}}
                                 />
                             </div>
-                            <ul className="horizCenteredList whiteText font20px font14pxUnder700 font10pxUnder500" id="pathwayLandingTopInfoList">
+                            <ul className="horizCenteredList whiteText font20px font14pxUnder700 font10pxUnder500"
+                                id="pathwayLandingTopInfoList">
                                 <li>
                                     <img src="/icons/ClockWhite.png" className="pathwayLandingIcons"/>
-                                    <div className="under500only br"><br/></div>
-                                    <div style={{display: 'inline-block'}}>
-                                        <i>Time</i><br/>
+                                    <br/>
+                                    <div>
                                         {pathway.estimatedCompletionTime}
                                     </div>
                                 </li>
+                                {deadline ?
+                                    <li>
+                                        <img src="/icons/CalendarWhite.png" className="pathwayLandingIcons"/>
+                                        <br/>
+                                        <div>
+                                            {formattedDeadline}
+                                        </div>
+                                    </li>
+                                    : null}
                                 <li>
-                                    <img src="/icons/CalendarWhite.png" className="pathwayLandingIcons"/>
-                                    <div className="under500only br"><br/></div>
-                                    <div style={{display: 'inline-block'}}>
-                                        <i>Complete By</i><br/>
-                                        {formattedDeadline}
-                                    </div>
-                                </li>
-                                <li>
-                                    <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons"/>
-                                    <div className="under500only br"><br/></div>
-                                    <div style={{display: 'inline-block'}}>
-                                        <i>Cost</i><br/>
+                                    <img src="/icons/DollarSignWhite.png" className="pathwayLandingIcons"
+                                         style={{width: '33px'}}/>
+                                    <br/>
+                                    <div>
                                         {pathway.price}
                                     </div>
                                 </li>
                             </ul>
 
-                            <div className="scrollDownButton lowerOnSmallScreen" onClick={() => this.scrollDown()}>
-                                <div>
-                                    <div/><div/>
-                                </div>
-                                <div>
-                                    <div/><div/>
+                            <div className="center">
+                                <div className="scrollDownButton lowerOnSmallScreen" onClick={() => this.scrollDown()}>
+                                    <div>
+                                        <div/>
+                                        <div/>
+                                    </div>
+                                    <div>
+                                        <div/>
+                                        <div/>
+                                    </div>
                                 </div>
                             </div>
                         </div>
 
-                        <div>
-                            {pathway.skills ?
-                                <div>
-                                    <div className="center" style={{marginTop: '20px'}}>
-                                        < b style={{color: '#B869FF'}} className="font40px font24pxUnder500">Skills</ b>
-                                    </ div>
-                                    <div className="center font20px font14pxUnder700 font10pxUnder400" style={{marginBottom:"20px"}}>
-                                        Earn these skills upon pathway completion.
+                        {pathway.sponsor.info ?
+                            <div style={{marginTop: '50px', marginBottom: '80px', overflow: 'auto'}}>
+                                <div style={style.horizList}>
+                                    <div className="horizListFull">
+                                        <div className="horizListSpacer" style={{marginLeft: "20%"}}
+                                        >
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                <img
+                                                    src={pathway.sponsor.info[0].icon}
+                                                    style={style.horizListIcon}
+                                                /><br/>
+                                                <b>{pathway.sponsor.info[0].title}</b><br/>
+                                                {pathway.sponsor.info[0].description}
+                                            </div>
+                                        </div>
                                     </div>
-                                    <div className="center skillChips">
-                                        {pathwaySkills}
+
+                                    <div className="horizListFull">
+                                        <div className="horizListSpacer"
+                                             style={{marginLeft: "10%", marginRight: '10%'}}>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                <img
+                                                    src={pathway.sponsor.info[1].icon}
+                                                    style={style.horizListIcon}
+                                                /><br/>
+                                                <b>{pathway.sponsor.info[1].title}</b><br/>
+                                                {pathway.sponsor.info[1].description}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="horizListFull">
+                                        <div className="horizListSpacer" style={{marginRight: "20%"}}>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                <img
+                                                    src={pathway.sponsor.info[2].icon}
+                                                    style={style.horizListIcon}
+                                                /><br/>
+                                                <b>{pathway.sponsor.info[2].title}</b><br/>
+                                                {pathway.sponsor.info[2].description}
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                : null}
-                        </div>
+                            </div>
+                            : null}
+
+                        {/*<div>*/}
+                        {/*{pathway.skills ?*/}
+                        {/*<div>*/}
+                        {/*<div className="center" style={{marginTop: '20px'}}>*/}
+                        {/*< b style={{color: '#B869FF'}} className="font40px font24pxUnder500">Skills</ b>*/}
+                        {/*</ div>*/}
+                        {/*<div className="center font20px font14pxUnder700 font10pxUnder400"*/}
+                        {/*style={{marginBottom: "20px"}}>*/}
+                        {/*Earn these skills upon pathway completion.*/}
+                        {/*</div>*/}
+                        {/*<div className="center skillChips">*/}
+                        {/*{pathwaySkills}*/}
+                        {/*</div>*/}
+                        {/*</div>*/}
+                        {/*: null}*/}
+                        {/*</div>*/}
 
                         {pathway.description || pathway.industry ?
                             <div id="pathwayDescriptionAndSalary">
@@ -317,18 +433,18 @@ class Pathway extends Component {
                                         :
                                         "pathwayDescriptionAndSalaryFull"
                                     }>
-                                            <div className={pathway.industry ? "pathwayDescriptionAndSalarySpacer" : ""}
-                                                 id={pathway.industry ? "pathwayShortDescription" : ""}
-                                            >
-                                                <img
-                                                    src="/icons/GraduationHatPurple.png"
-                                                    className="pathwayDescriptionAndSalaryIcon"
-                                                    id="pathwayHatIcon"
-                                                />
-                                                <div className="pathwayDescriptionAndSalaryText">
-                                                    {pathway.description}
-                                                </div>
+                                        <div className={pathway.industry ? "pathwayDescriptionAndSalarySpacer" : ""}
+                                             id={pathway.industry ? "pathwayShortDescription" : ""}
+                                        >
+                                            <img
+                                                src="/icons/GraduationHatPurple.png"
+                                                className="pathwayDescriptionAndSalaryIcon"
+                                                id="pathwayHatIcon"
+                                            />
+                                            <div className="pathwayDescriptionAndSalaryText">
+                                                {pathway.description}
                                             </div>
+                                        </div>
                                     </div>
                                     : null}
 
@@ -357,22 +473,25 @@ class Pathway extends Component {
                             : null}
 
                         <div className="homepageSeparatorContainer">
-                            <div className="homepageSeparator purpleGreenSeparator"/>
+                            <div className="homepageSeparator purpleRedSeparator"/>
                         </div>
 
                         <div className="pathwayLandingQuote">
-                            <h1 style={{marginBottom:'30px'}} className="font40px font32pxUnder700 font30pxUnder500">Sponsored by <img
-                                src={pathway.sponsor.logo}
+                            <h1 style={{marginBottom: '30px'}} className="font36px font32pxUnder700 font26pxUnder500">
+                                Our hiring partner <img
+                                src={pathway.sponsor.logoForLightBackground}
                                 alt={pathway.sponsor.name}
                                 className="pathwayLandingSponsoredBy"
                             /></h1>
                             <div className="pathwayLandingQuoteLeft">
                                 <div>
                                     <img
-                                        src="/icons/Information.png"
+                                        src="/icons/About.png"
                                         className="pathwayLandingIconsLeft"
                                     />
-                                    <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">ABOUT</b>
+                                    <div style={{color: '#da5f7b', display: 'inline-block'}}
+                                         className="font28px font24pxUnder700 font22pxUnder500">Company
+                                    </div>
                                 </div>
                                 <div className="font20px font16pxUnder700 font14pxUnder400">
                                     {pathway.sponsor.description}
@@ -380,20 +499,28 @@ class Pathway extends Component {
                                 {pathway.sponsor.hiring ?
                                     <div style={style.spaceTop}>
                                         <img
-                                            src="/icons/Badge.png"
+                                            src="/icons/OpenPositions.png"
                                             className="pathwayLandingIconsLeft"
                                         />
-                                        <b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">OPEN POSITIONS</b><br/>
-                                        <div className="font20px font16pxUnder700 font14pxUnder400">- {pathway.sponsor.hiring}</div>
+                                        <div style={{color: '#da5f7b', display: 'inline-block'}}
+                                             className="font28px font24pxUnder700 font22pxUnder500">Open
+                                            Positions
+                                        </div>
+                                        <br/>
+                                        <div className="font20px font16pxUnder700 font14pxUnder400">
+                                            - {pathway.sponsor.hiring}</div>
                                     </div>
                                     : null}
                                 <div style={style.spaceTop}>
                                     <img
-                                        src="/icons/www.png"
+                                        src="/icons/Links2.png"
                                         className="pathwayLandingIconsLeft"
                                     />
-                                    <b style={{color: '#B869FF'}}
-                                       className="font40px font24pxUnder500">{pathway.sponsor.name.toUpperCase()} LINKS</b><br/>
+                                    <div style={{color: '#da5f7b', display: 'inline-block'}}
+                                         className="font28px font24pxUnder700 font22pxUnder500">
+                                        {pathway.sponsor.name} Links
+                                    </div>
+                                    <br/>
                                     <a href={pathway.sponsor.homepage} target="_blank" style={style.infoLinks}
                                        className="font20px font16pxUnder700 font14pxUnder400">Website</a>
                                     {pathway.sponsor.blog ?
@@ -402,12 +529,17 @@ class Pathway extends Component {
                                     {pathway.sponsor.demo ?
                                         <a href={pathway.sponsor.demo} target="_blank" style={style.infoLinks}
                                            className="font20px font16pxUnder700 font14pxUnder400">Demo</a> : null}
+                                    {pathway.sponsor.careerPage ?
+                                        <a href={pathway.sponsor.careerPage} target="_blank" style={style.infoLinks}
+                                           className="font20px font16pxUnder700 font14pxUnder400">Career
+                                            Page</a> : null}
                                 </div>
                             </div>
                             {pathway.sponsor.quote ?
                                 <div className="pathwayLandingQuoteRight">
                                     <div style={style.quote.container}>
-                                        <div style={style.quote.content} className="font28px font20pxUnder700 font16pxUnder400">
+                                        <div style={style.quote.content}
+                                             className="font22px font18pxUnder700 font16pxUnder400">
                                             {"\""}{pathway.sponsor.quote.body}{"\""}<br/>
                                         </div>
 
@@ -418,7 +550,8 @@ class Pathway extends Component {
                                                 id="speakerImage"
                                                 alt={""}
                                             />
-                                            <div style={style.quote.speakerInfo} className="font20px font16pxUnder700 font14pxUnder400">
+                                            <div style={style.quote.speakerInfo}
+                                                 className="font20px font16pxUnder700 font14pxUnder400">
                                                 {pathway.sponsor.quote.speakerName}<br/>
                                                 {pathway.sponsor.quote.speakerTitle}
                                             </div>
@@ -427,73 +560,335 @@ class Pathway extends Component {
                                 </div>
                                 : null
                             }
-                        </div>
-
-                        <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
-                            <div className="homepageSeparator purpleGreenSeparator"/>
-                        </div>
-
-                        <div>
-                            {pathway.sponsor ?
-                                <div style={{marginBottom: "30px"}}>
-                                    <HomepageTriangles variation="3"/>
-                                    <ul className="horizCenteredList homepageBenefitsList list500pxStack">
-                                        <li className="pathwayLandingLiMargin">
-                                            <div style={{position: "relative"}}>
-                                                <img
-                                                    src="/icons/NoMoney.png"
-                                                    alt="Free"
-                                                    className="infoBoxImage"
-                                                />
-                                                <div className="font20px font16pxUnder700 font14pxUnder400">
-                                                    It{"'"}s free.<br/>
-                                                    {pathway.sponsor.name} provides scholarships<br/>
-                                                    to pay for your pathway.
-                                                </div>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div style={{position: "relative"}}>
-                                                <img
-                                                    src="/icons/Portfolio.png"
-                                                    alt="Portfolio"
-                                                    className="infoBoxPortfolioImage"
-                                                />
-                                                <div className="font20px font16pxUnder700 font14pxUnder400">
-                                                    Learn {pathway.sponsor.learn}<br/>
-                                                    and build<br/>
-                                                    your {pathway.sponsor.type} portfolio.
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
-                                    <ul className="horizCenteredList homepageBenefitsList listBottom500pxStack">
-                                        <li>
-                                            <div style={{position: "relative"}}>
-                                                <img
-                                                    src="/icons/DataPurple.png"
-                                                    alt="Data"
-                                                    className="infoBoxImage"
-                                                />
-                                                <div className="font20px font16pxUnder700 font14pxUnder400">
-                                                    Get evaluated by {pathway.sponsor.name}<br/>
-                                                    and other {pathway.sponsor.type} employers<br/>
-                                                    based on your performance.
-                                                </div>
-                                            </div>
-                                        </li>
-                                    </ul>
+                            {pathway.sponsor.quoteReplacement ?
+                                <div className="pathwayLandingQuoteAltRight">
+                                    <img
+                                        src={pathway.sponsor.quoteReplacement}
+                                        className="pathwayLandingQuoteReplacementImg"
+                                    />
                                 </div>
-
-
                                 : null}
                         </div>
+                        <div className="homepageSeparatorContainer" style={{marginTop: "30px"}}>
+                            <div className="homepageSeparator purpleRedSeparator"/>
+                        </div>
 
-                        {pathway.steps ?
+                        {pathway.sponsor.info2 ?
+                            <div style={{marginTop: '80px', marginBottom: '60px', overflow: 'auto'}}>
+                                <div className="font36px font32pxUnder700 font26pxUnder500 center"
+                                     style={{marginBottom: '30px'}}>
+                                    Awards
+                                </div>
+                                <div style={style.horizList}>
+                                    <div className="horizListFull">
+                                        <div className="horizListSpacer" style={{marginLeft: "20%"}}
+                                        >
+                                            <div
+                                                className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                <img
+                                                    src={pathway.sponsor.info2[0].icon}
+                                                    style={style.horizListIcon}
+                                                /><br/>
+                                                <b>{pathway.sponsor.info2[0].title}</b><br/>
+                                                {pathway.sponsor.info2[0].description}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div className="horizListFull">
+                                        <div className="horizListSpacer"
+                                             style={{marginLeft: "20%", marginRight: '20%'}}>
+                                            <div
+                                                className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                <img
+                                                    src={pathway.sponsor.info2[1].icon}
+                                                    style={style.horizListIcon}
+                                                /><br/>
+                                                <b>{pathway.sponsor.info2[1].title}</b><br/>
+                                                {pathway.sponsor.info2[1].description}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className="horizListFull">
+                                        <div className="horizListSpacer" style={{marginRight: "20%"}}>
+                                            <div
+                                                className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                <img
+                                                    src={pathway.sponsor.info2[2].icon}
+                                                    style={style.horizListIcon}
+                                                /><br/>
+                                                <b>{pathway.sponsor.info2[2].title}</b><br/>
+                                                {pathway.sponsor.info2[2].description}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div className="center">
+                                    <button className="purpleToRedButtonExterior bigButton"
+                                            onClick={this.handleClick.bind(this)}
+                                            style={{marginTop: "35px", color: '#da5f7b'}}
+                                    >
+                                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                                            {"Sign Up"}
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                            : null}
+
+                        {pathway.sponsor.positionDescription && pathway.sponsor.positionDescription.displayBefore ?
+                            <div style={{marginTop: '80px'}}>
+                                {pathway.sponsor.positionDescription.spacer ?
+                                    <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                    : <div style={{marginTop: '80px'}}/>}
+                                <div className="center">
+                                    <div className="font36px font32pxUnder700 font26pxUnder500 center"
+                                         style={{marginBottom: '30px'}}>
+                                        {pathway.sponsor.positionDescription.title}
+                                    </div>
+                                    <div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[0].icon}
+                                                 className="forBusinessIcon"
+                                                 style={{marginRight: '10px'}}/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[0].description}
+                                            </div>
+                                        </div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[1].icon}
+                                                 className="forBusinessIcon"
+                                                 style={{marginLeft: '10px'}}/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[1].description}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{marginTop: '40px'}}>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[2].icon}
+                                                 className="forBusinessIcon"/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[2].description}
+                                            </div>
+                                        </div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[3].icon}
+                                                 className="forBusinessIcon"/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[3].description}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button className="purpleToRedButtonExterior bigButton"
+                                            onClick={this.handleClick.bind(this)}
+                                            style={{marginTop: "35px", color: '#da5f7b'}}
+                                    >
+                                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                                            {pathway.sponsor.positionDescription.buttonText}
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                            : null}
+
+                        {pathway.sponsor.video ?
                             <div>
-                                <div className="center" style={{margin: "100px 0 40px 0"}}>
-                                    < b style={{color: '#B869FF'}} className="font40px font32pxUnder700 font24pxUnder500">Pathway Overview</ b>
+                                {pathway.sponsor.video.spacer ?
+                                    <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                    : <div style={{marginTop: '80px'}}/>}
+                                {pathway.sponsor.video.header ?
+                                    <div>
+                                        <div className="font36px font32pxUnder700 font26pxUnder500 center"
+                                             style={{marginBottom: "10px", marginTop: '30px'}}>
+                                            {pathway.sponsor.video.title}
+                                        </div>
+                                        <div className="font22px font18pxUnder700 font16pxUnder500 center"
+                                             style={{marginBottom: "40px"}}>
+                                            {pathway.sponsor.video.header}
+                                        </div>
+                                    </div>
+                                    :
+                                    <div className="font36px font32pxUnder700 font26pxUnder500 center"
+                                         style={{marginBottom: "40px", marginTop: '30px'}}>
+                                        {pathway.sponsor.video.title}
+                                    </div>
+                                }
+                                <div className="pathwayVideoContainer">
+                                    <YouTube
+                                        videoId={pathway.sponsor.video.link}
+                                        opts={opts}
+                                        onReady={this._onReady}
+                                        onEnd={this._onEnd}
+                                    />
+                                </div>
+                            </div>
+                            : null}
+
+                        {pathway.sponsor.positionDescription && pathway.sponsor.positionDescription.displayAfter ?
+                            <div style={{marginTop: '80px', marginBottom: "20px"}}>
+                                {pathway.sponsor.positionDescription.spacer ?
+                                    <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                    : <div style={{marginTop: '80px'}}/>}
+                                <div className="center">
+                                    <div className="font36px font32pxUnder700 font26pxUnder500 center"
+                                         style={{marginBottom: '30px'}}>
+                                        {pathway.sponsor.positionDescription.title}
+                                    </div>
+                                    <div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[0].icon}
+                                                 className="forBusinessIcon"
+                                                 style={{marginRight: '10px'}}/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[0].description}
+                                            </div>
+                                        </div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[1].icon}
+                                                 className="forBusinessIcon"
+                                                 style={{marginLeft: '10px'}}/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[1].description}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{marginTop: '40px'}}>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[2].icon}
+                                                 className="forBusinessIcon"/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[2].description}
+                                            </div>
+                                        </div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[3].icon}
+                                                 className="forBusinessIcon"/>
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                {pathway.sponsor.positionDescription.frames[3].description}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            : null}
+
+                        {pathway.sponsor.benefits ?
+                            <div>
+                                <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                <div className="font36px font32pxUnder700 font26pxUnder500 center"
+                                     style={{marginBottom: "10px", marginTop: '30px'}}>
+                                    Benefits
+                                </div>
+                                <div style={{marginTop: '30px', marginBottom: '30px', overflow: 'auto'}}>
+                                    <div style={style.horizList}>
+                                        <div className="horizListFull">
+                                            <div className="horizListSpacer" style={{marginLeft: "20%"}}
+                                            >
+                                                <div
+                                                    className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                    <img
+                                                        src={pathway.sponsor.benefits[0].icon}
+                                                        style={style.horizListIcon}
+                                                    /><br/>
+                                                    {pathway.sponsor.benefits[0].description}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="horizListFull">
+                                            <div className="horizListSpacer"
+                                                 style={{marginLeft: "10%", marginRight: '10%'}}>
+                                                <div
+                                                    className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                    <img
+                                                        src={pathway.sponsor.benefits[1].icon}
+                                                        style={style.horizListIcon}
+                                                    /><br/>
+                                                    {pathway.sponsor.benefits[1].description}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="horizListFull">
+                                            <div className="horizListSpacer" style={{marginRight: "20%"}}>
+                                                <div
+                                                    className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                    <img
+                                                        src={pathway.sponsor.benefits[2].icon}
+                                                        style={style.horizListIcon}
+                                                    /><br/>
+                                                    {pathway.sponsor.benefits[2].description}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style={{marginTop: '40px', marginBottom: '80px', overflow: 'auto'}}>
+                                    <div style={style.horizList}>
+                                        <div className="horizListFull">
+                                            <div className="horizListSpacer" style={{marginLeft: "20%"}}
+                                            >
+                                                <div
+                                                    className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                    <img
+                                                        src={pathway.sponsor.benefits[3].icon}
+                                                        style={style.horizListIcon}
+                                                    /><br/>
+                                                    {pathway.sponsor.benefits[3].description}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div className="horizListFull">
+                                            <div className="horizListSpacer"
+                                                 style={{marginLeft: "10%", marginRight: '10%'}}>
+                                                <div
+                                                    className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                    <img
+                                                        src={pathway.sponsor.benefits[4].icon}
+                                                        style={style.horizListIcon}
+                                                    /><br/>
+                                                    {pathway.sponsor.benefits[4].description}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div className="horizListFull">
+                                            <div className="horizListSpacer" style={{marginRight: "20%"}}>
+                                                <div
+                                                    className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                                    <img
+                                                        src={pathway.sponsor.benefits[5].icon}
+                                                        style={style.horizListIcon}
+                                                    /><br/>
+                                                    {pathway.sponsor.benefits[5].description}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            : null}
+
+                        {pathway.steps && pathway.sponsor.displaySteps === "true" ?
+                            <div>
+                                <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                <div className="center font36px font32pxUnder700 font26pxUnder500"
+                                     style={{marginBottom: "5px"}}>
+                                    Pathway Overview
                                 </ div>
+
+                                {pathway.skills ?
+                                    <div style={{marginBottom: "40px"}}>
+                                        <div className="center font20px font14pxUnder700 font10pxUnder400"
+                                             style={{marginBottom: "15px"}}>
+                                            Earn these skills upon pathway completion.
+                                        </div>
+                                        <div className="center skillChips">
+                                            {pathwaySkills}
+                                        </div>
+                                    </div>
+                                    : <div style={{marginBottom: '40px'}}/>}
 
                                 {pathwaySteps}
                             </div>
@@ -502,7 +897,8 @@ class Pathway extends Component {
 
                         {pathway.extraInfo ?
 
-                            <div key="extraInfo" className="center font20px font14pxUnder700 font10pxUnder400" style={{marginBottom:"30px", clear:"both", paddingTop:"50px"}}>
+                            <div key="extraInfo" className="center font20px font14pxUnder700 font10pxUnder400"
+                                 style={{marginBottom: "30px", clear: "both", paddingTop: "50px"}}>
                                 <img
                                     src="/icons/ToolPurple.png"
                                     id="toolIconExtraInfo"
@@ -511,10 +907,10 @@ class Pathway extends Component {
                                     {contactUsExists ?
                                         <div key="hasContactUs">
                                             {beforeContact}
-                                            <span   key="hasContactUsSpan"
-                                                    className="clickable underline"
-                                                    style={{marginTop:"10px"}}
-                                                    onClick={() => this.goTo('/contactUs')}>
+                                            <span key="hasContactUsSpan"
+                                                  className="clickable underline"
+                                                  style={{marginTop: "10px"}}
+                                                  onClick={() => this.goTo('/contactUs')}>
                                                 {contactUsPart}
                                             </span>
                                             {afterContact}
@@ -526,25 +922,25 @@ class Pathway extends Component {
                             </div>
                             : null
                         }
-                        <div className="center" style={{marginBottom: "20px", clear: "both"}}>
-                            <button className="outlineButton font30px font20pxUnder500"
-                                    style={{
-                                        backgroundColor: "transparent",
-                                        border: "2px solid #B869FF",
-                                        color: "#B869FF",
-                                        marginBottom: '20px'
-                                    }}
-                                    onClick={this.handleClick.bind(this)}>
-                                {"Get Started"}
+                        <div className="center" style={{marginBottom: "50px", clear: "both"}}>
+                            <button className="purpleToRedButtonExterior bigButton"
+                                    onClick={this.handleClick.bind(this)}
+                                    style={{marginTop: "35px", color: '#da5f7b'}}
+                            >
+                                <div className="invertColorOnHover gradientBorderButtonInterior">
+                                    {pathway.sponsor.buttonText}
+                                </div>
                             </button>
+                            <div className="font16px font14pxUnder700 font12pxUnder500" style={{marginTop: '10px'}}>
+                                {pathway.sponsor.infoUnderButton}
+                            </div>
                             {this.props.loading ?
                                 <div><br/><CircularProgress color="#B869FF" style={{marginTop: "20px"}}/></div> : ""}
                         </div>
                     </div>
                     :
                     <div>
-                        <div className="fullHeight purpleGradient"/>
-                        <div className="fullHeight purpleGradient"/>
+                        <div className="fillScreen"/>
                     </div>
                 }
 
@@ -566,6 +962,7 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         registerForPathway,
         closeNotification,
+        addPathway,
     }, dispatch);
 }
 

@@ -109,10 +109,22 @@ class Signup extends Component {
         const name = this.props.formData.signup.values.name;
         const password = this.props.formData.signup.values.password;
         const email = this.props.formData.signup.values.email;
-        const user = [{
+        let user = [{
             name, password, email,
             userType: "student",
         }];
+
+        // if the user got here from a pathway landing page, add the pathway id
+        // and url for redirect after onboarding completion
+        let location = this.props.location;
+        if (location.query) {
+            if (location.query.pathway) {
+                user[0].pathwayId = location.query.pathway;
+                if (location.query.redirect) {
+                    user[0].redirect = location.query.redirect;
+                }
+            }
+        }
 
         this.props.postUser(user);
 
@@ -131,9 +143,14 @@ class Signup extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
+        let urlQuery = {};
+        try {
+            urlQuery = this.props.location.query;
+        } catch(e) { /* no query */ }
+
         return (
-            <div className="fullHeight greenToBlue formContainer">
-                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
+            <div className="fillScreen greenToBlue formContainer">
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     {this.state.email != "" && this.props.userPosted ?
                         <div className="center">
@@ -150,6 +167,7 @@ class Signup extends Component {
                                         name="name"
                                         component={renderTextField}
                                         label="Full Name"
+                                        className="lightBlueInputText"
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
@@ -158,6 +176,7 @@ class Signup extends Component {
                                         name="email"
                                         component={renderTextField}
                                         label="Email"
+                                        className="lightBlueInputText"
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
@@ -166,6 +185,7 @@ class Signup extends Component {
                                         name="password"
                                         component={renderPasswordField}
                                         label="Password"
+                                        className="lightBlueInputText"
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
@@ -174,6 +194,7 @@ class Signup extends Component {
                                         name="password2"
                                         component={renderPasswordField}
                                         label="Confirm Password"
+                                        className="lightBlueInputText"
                                     /><br/>
                                 </div>
                                 <button
@@ -182,6 +203,8 @@ class Signup extends Component {
                                 >
                                     Sign Up
                                 </button>
+                                <br/>
+                                <div className="clickable blueText" onClick={() => this.goTo({pathname: '/login', query: urlQuery})} style={{display:"inline-block"}}>Already have an account?</div>
                             </form>
                             { this.props.loadingCreateUser ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
                         </div>

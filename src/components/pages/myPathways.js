@@ -29,7 +29,7 @@ class MyPathways extends Component {
                     const pathways = [];
                     const userPathwayPreviews = (
                         <li onClick={() => this.goTo('/discover')}>
-                            <PathwayPreview type="addOne"/>
+                            <PathwayPreview type="addOne" variation="1"/>
                         </li>
                     );
 
@@ -70,6 +70,7 @@ class MyPathways extends Component {
                                             deadline={formattedDeadline}
                                             price={pathway.price}
                                             _id={pathway._id}
+                                            variation="1"
                                         />
                                     </li>
                                 );
@@ -115,6 +116,7 @@ class MyPathways extends Component {
                                         deadline={formattedDeadline}
                                         price={pathway.price}
                                         _id={pathway._id}
+                                        variation="1"
                                     />
                                 </li>
                             );
@@ -152,8 +154,7 @@ class MyPathways extends Component {
                 marginTop: '20px',
             },
             tab: {
-                backgroundColor: "white",
-                color: 'black',
+                color: 'white',
             },
         };
 
@@ -161,14 +162,15 @@ class MyPathways extends Component {
         return (
             <div className='jsxWrapper' ref='discover'>
                 {this.props.currentUser ?
-                    <div>
-                        <div className="greenToBlue headerDiv"/>
+                    <div className="fillScreen purpleToRedLightGradient" style={{paddingBottom:"60px"}}>
+                        <div className="headerDiv"/>
                         {this.state.userPathwayPreviews ?
-                            <div className="center">
-                                <h1 className="center font40px font24pxUnder500">My Pathways</h1>
+                            <div className="center fillScreenWithHeader">
+                                <div className="center font40px font24pxUnder500 whiteText" style={{marginTop: "30px"}}>
+                                    My Pathways</div>
                                 <Tabs
                                     style={style.tabs}
-                                    inkBarStyle={{background: 'black'}}
+                                    inkBarStyle={{background: 'white'}}
                                     tabItemContainerStyle={{width: '40%'}}
                                     className="myPathwaysTabs"
                                 >
@@ -179,7 +181,7 @@ class MyPathways extends Component {
                                                 {this.state.userPathwayPreviews}
                                             </ul>
                                             : <div className="fullHeight">
-                                                <h1 className="center font40px font24pxUnder500">None</h1>
+                                                <h1 className="center font40px font24pxUnder500 whiteText">None.</h1>
                                             </div>}
                                     </Tab>
                                     <Tab label="Completed" style={style.tab}>
@@ -189,18 +191,22 @@ class MyPathways extends Component {
                                                 {this.state.userCompletedPathwayPreviews}
                                             </ul>
                                             : <div className="fullHeight">
-                                                <h1 className="center font40px font24pxUnder500">None</h1>
+                                                <h1 className="center font40px font24pxUnder500 whiteText">None</h1>
                                             </div>}
                                     </Tab>
                                 </Tabs>
                             </div>
                             :
                             <div>
-                                <div className="fullHeight"/>
-                                <div className="fullHeight"/>
+                                <div className="center">
+                                    <CircularProgress color="white"
+                                                      style={{marginTop: "200px"}}/>
+                                </div>
                             </div>}
                     </div>
-                    : null}
+                    :
+                    <div className="fillScreen"/>
+                }
             </div>
 
         );
