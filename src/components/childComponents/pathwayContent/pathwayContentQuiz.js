@@ -5,8 +5,8 @@ import axios from 'axios';
 import PathwayContentSliderQuestion from './pathwayContentSliderQuestion';
 import PathwayContentMultipleChoiceQuestion from './pathwayContentMultipleChoiceQuestion';
 import PathwayContentTwoOptionsQuestion from './pathwayContentTwoOptionsQuestion';
-import PathwayContentMultiSelectQuestion from './PathwayContentMultiSelectQuestion';
-import PathwayContentDatePickerQuestion from './PathwayContentDatePickerQuestion';
+import PathwayContentMultiSelectQuestion from './pathwayContentMultiSelectQuestion';
+import PathwayContentDatePickerQuestion from './pathwayContentDatePickerQuestion';
 
 class PathwayContentQuiz extends Component {
     constructor(props) {
