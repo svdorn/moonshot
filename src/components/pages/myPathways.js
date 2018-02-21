@@ -29,7 +29,7 @@ class MyPathways extends Component {
                     const pathways = [];
                     const userPathwayPreviews = (
                         <li onClick={() => this.goTo('/discover')}>
-                            <PathwayPreview type="addOne"/>
+                            <PathwayPreview type="addOne" variation="1"/>
                         </li>
                     );
 
