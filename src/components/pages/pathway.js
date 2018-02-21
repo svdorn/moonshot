@@ -167,6 +167,13 @@ class Pathway extends Component {
             quoteReplacementImg: {
                 width: '450px',
             },
+            bottomListItem: {
+                width: '40%',
+                margin: 'auto',
+                display: 'inline-block',
+                top: '0',
+                verticalAlign: 'top',
+            },
         };
 
         const opts = {
@@ -611,6 +618,55 @@ class Pathway extends Component {
                             </div>
                             : null}
 
+                        {pathway.sponsor.positionDescription ?
+                            <div style={{marginTop: '80px'}}>
+                                <div className="center">
+                                    <div className="font28px font24pxUnder800 font22pxUnder500 center" style={{marginBottom:'30px'}}>
+                                        {pathway.sponsor.positionDescription.title}
+                                    </div>
+                                    <div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[0].icon} className="forBusinessIcon"
+                                                 style={{marginRight: '10px'}}/>
+                                            <div className="font18px font16pxUnder800 aResumeCantDoThisText">
+                                                {pathway.sponsor.positionDescription.frames[0].description}
+                                            </div>
+                                        </div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[1].icon} className="forBusinessIcon"
+                                                 style={{marginLeft: '10px'}}/>
+                                            <div className="font18px font16pxUnder800 aResumeCantDoThisText">
+                                                {pathway.sponsor.positionDescription.frames[1].description}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div style={{marginTop: '20px'}}>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[2].icon} className="forBusinessIcon"/>
+                                            <div className="font18px font16pxUnder800 aResumeCantDoThisText">
+                                                {pathway.sponsor.positionDescription.frames[2].description}
+                                            </div>
+                                        </div>
+                                        <div style={style.bottomListItem}>
+                                            <img src={pathway.sponsor.positionDescription.frames[3].icon} className="forBusinessIcon"/>
+                                            <div className="font18px font16pxUnder800 aResumeCantDoThisText">
+                                                {pathway.sponsor.positionDescription.frames[3].description}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button className="purpleToRedButtonExterior bigButton"
+                                            onClick={this.handleClick.bind(this)}
+                                            style={{marginTop: "35px", color: '#da5f7b'}}
+                                    >
+                                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                                            {pathway.sponsor.positionDescription.buttonText}
+                                        </div>
+                                    </button>
+                                </div>
+                            </div>
+                            : null}
+
                         {pathway.sponsor.video ?
                             <div>
                                 {pathway.sponsor.video.spacer ?
@@ -743,7 +799,8 @@ class Pathway extends Component {
                         {pathway.steps && pathway.sponsor.displaySteps === "true" ?
                             <div>
                                 <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
-                                <div className="center font36px font32pxUnder700 font26pxUnder500" style={{marginBottom: '40px', color: '#da5f7b'}}>
+                                <div className="center font36px font32pxUnder700 font26pxUnder500"
+                                     style={{marginBottom: '40px', color: '#da5f7b'}}>
                                     Pathway Overview
                                 </ div>
 

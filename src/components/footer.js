@@ -17,7 +17,7 @@ class Footer extends Component {
             return null;
         }
         let footerColor = "purpleToBlue";
-        if (this.props.location.pathname === '/myPathways') {
+        if (this.props.location.pathname === '/myPathways' || this.props.location.pathname === '/pathway') {
             footerColor = "purpleToRedLightGradientOpacity";
         }
         return (
