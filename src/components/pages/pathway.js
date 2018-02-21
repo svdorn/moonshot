@@ -294,8 +294,8 @@ class Pathway extends Component {
                                 {pathway.sponsor.pathwayHomepage}<br/>
                                 <button
                                     className="outlineButton whiteText font30px font20pxUnder500 purpleToRedGradientButton"
-                                    onClick={this.handleClick.bind(this)}>
-                                    {"Sign Up"}
+                                    onClick={() => this.scrollDown()}>
+                                    {"Get Started"}
                                 </button>
                             </div>
                             <br/>
@@ -620,36 +620,40 @@ class Pathway extends Component {
 
                         {pathway.sponsor.positionDescription ?
                             <div style={{marginTop: '80px'}}>
+                                {pathway.sponsor.positionDescription.spacer ?
+                                    <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                    : <div style={{marginTop: '80px'}}/>}
                                 <div className="center">
-                                    <div className="font28px font24pxUnder800 font22pxUnder500 center" style={{marginBottom:'30px'}}>
+                                    <div className="font36px font32pxUnder700 font26pxUnder500 center"
+                                         style={{marginBottom: '30px'}}>
                                         {pathway.sponsor.positionDescription.title}
                                     </div>
                                     <div>
                                         <div style={style.bottomListItem}>
                                             <img src={pathway.sponsor.positionDescription.frames[0].icon} className="forBusinessIcon"
                                                  style={{marginRight: '10px'}}/>
-                                            <div className="font18px font16pxUnder800 aResumeCantDoThisText">
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 {pathway.sponsor.positionDescription.frames[0].description}
                                             </div>
                                         </div>
                                         <div style={style.bottomListItem}>
                                             <img src={pathway.sponsor.positionDescription.frames[1].icon} className="forBusinessIcon"
                                                  style={{marginLeft: '10px'}}/>
-                                            <div className="font18px font16pxUnder800 aResumeCantDoThisText">
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 {pathway.sponsor.positionDescription.frames[1].description}
                                             </div>
                                         </div>
                                     </div>
-                                    <div style={{marginTop: '20px'}}>
+                                    <div style={{marginTop: '40px'}}>
                                         <div style={style.bottomListItem}>
                                             <img src={pathway.sponsor.positionDescription.frames[2].icon} className="forBusinessIcon"/>
-                                            <div className="font18px font16pxUnder800 aResumeCantDoThisText">
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 {pathway.sponsor.positionDescription.frames[2].description}
                                             </div>
                                         </div>
                                         <div style={style.bottomListItem}>
                                             <img src={pathway.sponsor.positionDescription.frames[3].icon} className="forBusinessIcon"/>
-                                            <div className="font18px font16pxUnder800 aResumeCantDoThisText">
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                 {pathway.sponsor.positionDescription.frames[3].description}
                                             </div>
                                         </div>
