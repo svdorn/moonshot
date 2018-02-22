@@ -320,6 +320,11 @@ form > h1 {
 }
 .lightBlueToLightPurpleGradient { background: linear-gradient(to top right, #74e2ff, #b37bfe); }
 .orangeToYellowGradient { background: linear-gradient(to top right, #f24c49, #ebbb8a); }
+.orangeToYellowGradientOpacity {
+    background: linear-gradient(to top right, #f24c49, #ebbb8a);
+    opacity: 0.7;
+}
+
 
 .messageHeader {
     margin-top: 90px;
