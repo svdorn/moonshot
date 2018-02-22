@@ -784,7 +784,9 @@ app.post('/user/completePathway', function (req, res) {
                 return path.pathwayId.toString() == pathwayId.toString();
             });
             if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
-                user.pathways[pathwayIndex].complete = true;
+                // Put pathway into completed pathways and remove it from current pathways
+                user.completedPathways.push(user.pathways[pathwayIndex]);
+                user.pathways.splice(pathwayIndex, 1);
             }
 
             // save the user's new info in the db
