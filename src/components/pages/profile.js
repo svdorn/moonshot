@@ -104,6 +104,7 @@ class Profile extends Component {
                                         deadline={formattedDeadline}
                                         price={pathway.price}
                                         _id={pathway._id}
+                                        variation="4"
                                     />
                                 </li>
                             );
@@ -148,6 +149,7 @@ class Profile extends Component {
                                         deadline={formattedDeadline}
                                         price={pathway.price}
                                         _id={pathway._id}
+                                        variation="4"
                                     />
                                 </li>
                             );
@@ -209,7 +211,7 @@ class Profile extends Component {
                 marginTop: '20px',
             },
             tab: {
-                color: 'black',
+                color: '#f24c49',
             },
             topTabs: {
                 marginTop: '20px',
@@ -471,7 +473,7 @@ class Profile extends Component {
                                                         <div className="center" style={style.tabContent}>
                                                             <Tabs
                                                                 style={style.tabs}
-                                                                inkBarStyle={{background: 'black'}}
+                                                                inkBarStyle={{background: '#f24c49'}}
                                                                 tabItemContainerStyle={{width: '40%'}}
                                                                 className="myPathwaysTabs"
                                                             >

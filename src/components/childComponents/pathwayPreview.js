@@ -42,6 +42,9 @@ class PathwayPreview extends Component {
         if (this.props.variation === "3") {
             whiteBorderClassName = "gradientBorderPurpleBlue";
             textColor = "lightPurpleText";
+        } else if (this.props.variation === "4") {
+            whiteBorderClassName = "gradientBorderOrangeYellow";
+            textColor = "orangeText";
         }
 
         let blurClass = ""
