@@ -744,6 +744,17 @@ button.link {
     padding: 3px;
 }
 
+.profileAboutPaper {
+    width: 90%;
+    height: 300px;
+    margin: auto;
+}
+.profileAboutPaper > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
+
 .semiOpaqueHoverable {
     opacity: 0.5;
     filter: alpha(opacity=50); /* For IE8 and earlier */

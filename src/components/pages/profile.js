@@ -1,6 +1,6 @@
 "use strict"
 import React, {Component} from 'react';
-import {Tabs, Tab, CircularProgress, Chip} from 'material-ui';
+import {Tabs, Tab, CircularProgress, Paper} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, setHeaderBlue} from "../../actions/usersActions";
@@ -518,6 +518,9 @@ class Profile extends Component {
                                                             <div
                                                                 className="textWithMargin">{user.info.description}</div>
                                                             : null}
+                                                        <Paper className="profileAboutPaper" zDepth={3}>
+                                                            Here
+                                                        </Paper>
 
                                                         <ul className="horizCenteredList" id="aboutMeAreas">
                                                             {aboutMeLis}
