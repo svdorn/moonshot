@@ -319,6 +319,7 @@ form > h1 {
     opacity: 0.7;
 }
 .lightBlueToLightPurpleGradient { background: linear-gradient(to top right, #74e2ff, #b37bfe); }
+.orangeToYellowGradient { background: linear-gradient(to top right, #f24c49, #ebbb8a); }
 
 .messageHeader {
     margin-top: 90px;
@@ -599,6 +600,17 @@ button.link {
     font-size: 20px;
     padding: 2px 10px;
     border-radius: 25px;
+}
+.whiteBorderChip {
+    border: solid 2px white;
+    display: inline-block;
+    margin-left: 15px;
+}
+.whiteBorderChip > div {
+    background: transparent;
+    height: 100%;
+    width: 100%;
+    padding: 2px 13px;
 }
 .lightBlueChip {
     height: 36px;
@@ -915,7 +927,7 @@ button.link {
 }
 
 .profileInfoSkills {
-    padding-top: 40px;
+    margin-top: 5px;
     text-align: center;
 }
 .profileInfoSkillsLeft {

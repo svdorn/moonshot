@@ -196,7 +196,7 @@ class Profile extends Component {
                 height: "100px",
                 width: "100px",
                 borderRadius: '50%',
-                border: "3px solid #00d2ff",
+                border: "3px solid white",
                 display: "inline-block",
                 overflow: "hidden"
             },
@@ -224,10 +224,10 @@ class Profile extends Component {
             profileSkills = skills.map(function (skill) {
                 return (
                     <div key={skill + "div"}
-                         style={{display: 'inline-block', marginTop: '15px'}}
-                         className="lightBlueChip"
+                         style={{marginTop: '15px'}}
+                         className="whiteBorderChip"
                     >
-                        <div key={skill} className="blueText">
+                        <div key={skill} className="whiteText">
                             {skill}
                         </div>
                     </div>
@@ -393,59 +393,61 @@ class Profile extends Component {
             <div className='jsxWrapper' ref='discover'>
                 {user ?
                     <div>
-                        <div className="greenToBlue headerDiv"/>
                         {(!this.state.editProfile) ?
                             <div>
                                 {this.state.userPathwayPreviews ?
                                     <div>
-                                        <div className="profileInfoSkills">
-                                            <div className="profileInfoSkillsLeft">
-                                                {/*<div className="clickable blueText font20px font14pxUnder700"
+                                        <div className="orangeToYellowGradient" style={{paddingBottom:'20px'}}>
+                                            <div className="headerDiv"/>
+                                            <div className="profileInfoSkills">
+                                                <div className="center">
+                                                    {/*<div className="clickable blueText font20px font14pxUnder700"
                                                      style={{marginTop: '-20px', marginBottom: '10px'}}
                                                      onClick={this.editProfile.bind(this)}
                                                 >
                                                     Edit Profile
                                                 </div>*/}
-                                                <div style={style.imgContainer}>
-                                                    <img
-                                                        src="/icons/PortfolioBlue.png"
-                                                        alt="Profile picture"
-                                                        style={style.img}
-                                                    />
-                                                </div>
-                                                <div>
-                                                    <div
-                                                        className="blueText font20px font14pxUnder700">{user.name.toUpperCase()}
+                                                    <div style={style.imgContainer}>
+                                                        <img
+                                                            src="/icons/PortfolioBlue.png"
+                                                            alt="Profile picture"
+                                                            style={style.img}
+                                                        />
                                                     </div>
-                                                    {user.info.title ?
-                                                        <div>
-                                                            <b className="font14px font12pxUnder500">{user.info.title}</b>
-                                                            <br/>
-                                                        </div>
-                                                        : null}
-                                                    {user.info.location ?
-                                                        <div>
-                                                            <img
-                                                                src="/icons/Location.png"
-                                                                alt="Portfolio"
-                                                                style={style.locationImg}
-                                                            />
-                                                            <div className="font14px font12pxUnder500"
-                                                                 style={{display: 'inline-block'}}>
-                                                                {user.info.location}
-                                                            </div>
-                                                        </div>
-                                                        : null}
-                                                    <a className="font14px font12pxUnder500 blueText"
-                                                       href={mailtoEmail}>Contact</a>
-                                                </div>
-                                            </div>
-                                            <div className="profileInfoSkillsRight">
-                                                {user.skills ?
                                                     <div>
-                                                        {profileSkills}
+                                                        <div
+                                                            className="whiteText font20px font14pxUnder700">{user.name.toUpperCase()}
+                                                        </div>
+                                                        {user.info.title ?
+                                                            <div>
+                                                                <b className="whiteText font14px font12pxUnder500">{user.info.title}</b>
+                                                                <br/>
+                                                            </div>
+                                                            : null}
+                                                        {user.info.location ?
+                                                            <div>
+                                                                <img
+                                                                    src="/icons/Location.png"
+                                                                    alt="Portfolio"
+                                                                    style={style.locationImg}
+                                                                />
+                                                                <div className="font14px font12pxUnder500 whiteText"
+                                                                     style={{display: 'inline-block'}}>
+                                                                    {user.info.location}
+                                                                </div>
+                                                            </div>
+                                                            : null}
+                                                        <a className="font14px font12pxUnder500 whiteText underline"
+                                                           href={mailtoEmail}>Contact</a>
                                                     </div>
-                                                    : null}
+                                                </div>
+                                                <div className="center">
+                                                    {user.skills ?
+                                                        <div style={{width: '70%', maxWidth: '1000px', margin:'auto'}}>
+                                                            {profileSkills}
+                                                        </div>
+                                                        : null}
+                                                </div>
                                             </div>
                                         </div>
 
