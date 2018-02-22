@@ -34,6 +34,9 @@ class PathwayPreview extends Component {
         };
 
         let borderClassName = "whiteBorder";
+        let clockImg = "/icons/ClockBlue.png";
+        let calendarImg = "/icons/CalandarBlueGradient.png";
+        let dollarSignImg = "/icons/DollarSignBlue.png";
         if (this.props.variation === "2") {
             borderClassName = "discoverPageBorder";
         }
@@ -45,6 +48,9 @@ class PathwayPreview extends Component {
         } else if (this.props.variation === "4") {
             whiteBorderClassName = "gradientBorderOrangeYellow";
             textColor = "orangeText";
+            clockImg = "icons/ProfilePageClock.png";
+            calendarImg = "icons/ProfilePageCalendar.png";
+            dollarSignImg = "icons/ProfilePageDollarSign.png";
         }
 
         let blurClass = ""
@@ -173,14 +179,14 @@ class PathwayPreview extends Component {
                                         <ul className="horizCenteredList pathwayPrevIconList">
                                             <li>
                                                 <div>
-                                                    <img src="/icons/ClockBlue.png" style={iconStyle}/><br/>
+                                                    <img src={clockImg} style={iconStyle}/><br/>
                                                     <span className="font8px">Completion Time</span><br/>
                                                     {this.props.completionTime}
                                                 </div>
                                             </li>
                                             <li>
                                                 <div>
-                                                    <img src="/icons/CalandarBlueGradient.png"
+                                                    <img src={calendarImg}
                                                          style={iconStyle}/><br/>
                                                     <span className="font8px">Deadline</span><br/>
                                                     TBA
@@ -188,7 +194,7 @@ class PathwayPreview extends Component {
                                             </li>
                                             <li>
                                                 <div>
-                                                    <img src="/icons/DollarSignBlue.png"
+                                                    <img src={dollarSignImg}
                                                          style={priceIconStyle}/><br/>
                                                     <span className="font8px">Price</span><br/>
                                                     {this.props.price}
