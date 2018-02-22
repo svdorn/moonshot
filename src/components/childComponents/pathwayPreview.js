@@ -45,6 +45,9 @@ class PathwayPreview extends Component {
         if (this.props.variation === "3") {
             whiteBorderClassName = "gradientBorderPurpleBlue";
             textColor = "lightPurpleText";
+            clockImg = "icons/DiscoverPageClock.png";
+            calendarImg = "icons/DiscoverPageCalendar.png";
+            dollarSignImg = "icons/DiscoverPageDollarSign.png";
         } else if (this.props.variation === "4") {
             whiteBorderClassName = "gradientBorderOrangeYellow";
             textColor = "orangeText";
