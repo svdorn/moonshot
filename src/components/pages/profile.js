@@ -470,7 +470,7 @@ class Profile extends Component {
                                             >
                                                 <Tab label="Pathways" style={style.topTab}>
                                                     {this.state.userPathwayPreviews.length > 0 ?
-                                                        <div className="center" style={style.tabContent}>
+                                                        <div className="center fullHeight" style={style.tabContent}>
                                                             <Tabs
                                                                 style={style.tabs}
                                                                 inkBarStyle={{background: '#f24c49'}}
@@ -502,7 +502,7 @@ class Profile extends Component {
                                                             </Tabs>
                                                         </div>
                                                         :
-                                                        <div className="center">
+                                                        <div className="center fullHeight">
                                                             <ul className="horizCenteredList pathwayPrevList"
                                                                 style={style.pathwayPreviewUl}>
                                                                 <li onClick={() => this.goTo('/discover')}>
@@ -513,7 +513,7 @@ class Profile extends Component {
                                                     }
                                                 </Tab>
                                                 <Tab label="About" style={style.topTab}>
-                                                    <div style={style.tabContent}>
+                                                    <div style={style.tabContent} className="fullHeight">
                                                         {user.info.description ?
                                                             <div
                                                                 className="textWithMargin">{user.info.description}</div>
@@ -525,7 +525,7 @@ class Profile extends Component {
                                                     </div>
                                                 </Tab>
                                                 <Tab label="Projects" style={style.topTab}>
-                                                    <div style={style.tabContent}>
+                                                    <div style={style.tabContent} className="fullHeight">
                                                         None
                                                     </div>
                                                 </Tab>
