@@ -423,7 +423,7 @@ class Profile extends Component {
                                                 </div>*/}
                                                 <div style={style.imgContainer}>
                                                     <img
-                                                        src="/icons/PortfolioBlue.png"
+                                                        src="/icons/ProfilePicture.png"
                                                         alt="Profile picture"
                                                         style={style.img}
                                                     />
