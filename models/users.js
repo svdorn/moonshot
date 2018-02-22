@@ -4,6 +4,8 @@ var mongoose = require('mongoose');
 var usersSchema = mongoose.Schema({
     name: String,
     email: String,
+    emailToContact: String,
+    phoneNumber: String,
     userType: String,
     profileUrl: String,
     password: String,
@@ -52,6 +54,7 @@ var usersSchema = mongoose.Schema({
             step: Number,
             subStep: Number
         },
+        complete: Boolean
     }],
     // pathways the user has finished
     completedPathways: [{

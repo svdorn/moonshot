@@ -262,12 +262,12 @@ export function completePathway(user){
 
         axios.post("api/user/completePathway", user)
             .then(function(response) {
-                dispatch({type:"COMPLETE_PATHWAY", notification: {message:response.data, type:"infoHeader"}});
+                dispatch({type:"COMPLETE_PATHWAY", user: response.data.user, notification: {message:response.data.message, type:"infoHeader"}});
                 browserHistory.push('/discover');
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
-                dispatch({type:"COMPLETE_PATHWAY_REJECTED", notification: {message: "Error completing pathway", type: "errorHeader"}})
+                dispatch({type:"COMPLETE_PATHWAY_REJECTED", user: response.data.user, notification: {message: response.data.message, type: "errorHeader"}})
             })
     }
 }

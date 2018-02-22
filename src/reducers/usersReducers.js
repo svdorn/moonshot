@@ -109,6 +109,9 @@ export function usersReducers(state = initialState, action) {
             if (action.notification) {
                 newState.notification = action.notification;
             }
+            if (action.user) {
+                newState.currentUser = action.user;
+            }
             return newState;
             break;
         case "CONTACT_US":

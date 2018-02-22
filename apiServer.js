@@ -741,6 +741,8 @@ app.post('/user/forBusinessEmail', function (req, res) {
 
 // SEND EMAIL FOR SOMEBODY COMPLETING PATHWAY
 app.post('/user/completePathway', function (req, res) {
+    const successMessage = "Pathway marked complete, our team will be in contact with you shortly!";
+    const errorMessage = "Error marking pathway complete, try again or contact us.";
 
     let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
     let subject = 'ACTION REQUIRED: Somebody completed pathway';
@@ -749,18 +751,63 @@ app.post('/user/completePathway', function (req, res) {
         + "<p>User: "
         + sanitize(req.body.userName)
         + "</p>"
+        + "<p>User id: "
+        + sanitize(req.body._id)
+        + "</p>"
         + "<p>Pathway: "
-        + sanitize(req.body.pathway)
+        + sanitize(req.body.pathwayName)
+        + "</p>"
+        + "<p>Contact them with this email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "<p>or this phone number: "
+        + sanitize(req.body.phoneNumber)
         + "</p>"
         + "</div>";
 
-    sendEmail(recipients, subject, content, function (success, msg) {
-        if (success) {
-            res.json("Email sent successfully, our team will be in contact with you shortly!");
-        } else {
-            res.status(500).send(msg);
+
+
+    // mark pathway complete and change emailTo
+    const _id = sanitize(req.body._id);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const pathwayId = sanitize(req.body.pathwayId);
+    const query = {_id, verificationToken}
+    Users.findOne(query, function (err, user) {
+        if (err) {
+            console.log("error marking pathway complete: ", err);
+        } else if (user && user != null) {
+            user.emailToContact = sanitize(req.body.email);
+            user.phoneNumber = sanitize(req.body.phoneNumber);
+            // find the user's pathway object corresponding to the pathway that was
+            // marked complete
+            const pathwayIndex = user.pathways.findIndex(function(path) {
+                return path.pathwayId.toString() == pathwayId.toString();
+            });
+            if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
+                user.pathways[pathwayIndex].complete = true;
+            }
+
+            // save the user's new info in the db
+            user.save(function(err, updatedUser) {
+                let userToReturn = updatedUser;
+                if (err || updatedUser == null || updatedUser == undefined) {
+                    console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
+                    userToReturn = user;
+                    content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
+                }
+
+                // send an email to us saying that the user completed a pathway
+                sendEmail(recipients, subject, content, function (success, msg) {
+                    if (success) {
+                        res.json({message: successMessage, user: userToReturn});
+                    } else {
+                        res.status(500).send({message: errorMessage, user: userToReturn});
+                    }
+                });
+            });
         }
-    })
+    });
+
 });
 
 app.post('/user/unsubscribeEmail', function (req, res) {
@@ -993,7 +1040,7 @@ app.post('/getUserById', function (req, res) {
     const _id = sanitize(req.body._id);
     const query = {_id};
     getUserByQuery(query, function (user) {
-        res.json(removePassword(user));
+        res.json(safeUser(user));
     })
 });
 

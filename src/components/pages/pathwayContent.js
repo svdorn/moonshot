@@ -177,7 +177,7 @@ class PathwayContent extends Component {
             } else if (contentType == "completedPathway") {
                 content = <PathwayContentCompletePathway pathway={this.state.pathway} />
             } else {
-                content = <div style={style.div}>Not Video or Link</div>;
+                content = <div style={style.div}>Error retrieving step.</div>;
             }
         }
 
