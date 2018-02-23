@@ -1405,7 +1405,7 @@ button.link {
 .aboutMeLi > img:first-of-type {
     height: 40px;
     float: left;
-    display: block;
+    display: inline-block;
 }
 .aboutMeLi {
     text-align: left;

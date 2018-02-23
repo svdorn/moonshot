@@ -445,7 +445,6 @@ class Profile extends Component {
                                                     {user.info.title ?
                                                         <div>
                                                             <b className="whiteText font14px font12pxUnder500">{user.info.title}</b>
-                                                            <br/>
                                                         </div>
                                                         : null}
                                                     {user.info.location ?
