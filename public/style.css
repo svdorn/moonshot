@@ -1457,7 +1457,7 @@ button.link {
     height: calc(100% - 40px)
 }
 .profileProjects {
-    margin-top: 20px;
+    margin: 30px auto;
 }
 
 .footerMoonshotLogo {
@@ -1475,6 +1475,13 @@ button.link {
 }
 .myPathwaysTabs > div > button {
     font-size: 14px !important;
+}
+.addToProfile {
+    float: right;
+    margin-right: 60px;
+}
+.aboutMeSection {
+    min-height: 550px;
 }
 .overviewExercisesComments > div:nth-of-type(2) {
     margin-left: 20% !important;
@@ -2705,6 +2712,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     .pathwayPrevMobileThird {
         display: block;
         margin-top: 20px;
+    }
+    .aboutMeSection {
+        min-height: 450px;
     }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }

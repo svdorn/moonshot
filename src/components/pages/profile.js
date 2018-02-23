@@ -251,6 +251,7 @@ class Profile extends Component {
         }
 
         let aboutMeLis = [];
+        let info = true;
 
         if (user) {
             const education = user.info.education;
@@ -258,7 +259,6 @@ class Profile extends Component {
             const interests = user.info.interests;
             const goals = user.info.goals;
             const birthDate = user.info.birthDate;
-            const info = user.info;
             //const languages = user.info.languages;
             let aboutMeItems = [];
 
@@ -279,7 +279,8 @@ class Profile extends Component {
                 // ADD THIS {(birthDate.getMonth() + 1) + "/" + birthDate.getDate() + "/" + birthDate.getYear()}
                 date = birthDate.substring(5, 7) + "/" + birthDate.substring(8, 10) + "/" + birthDate.substring(0, 4);
             }
-            if (user.info.bio || user.info.willRelocateTo || goalsSpans !== null || date !== null) {
+            info = (user.info.bio || user.info.willRelocateTo || goalsSpans !== null || date !== null);
+            if (info) {
                 let content =
                     <div>
                         {user.info.bio ?
@@ -402,10 +403,11 @@ class Profile extends Component {
             aboutMeLis = aboutMeItems.map(function (item) {
                 return (
                     <li style={{marginTop: '30px'}}>
-                        <Paper className="profileAboutPaper aboutMeLi font20px font font16pxUnder700 font14pxUnder400" zDepth={3}>
+                        <Paper className="profileAboutPaper aboutMeLi font20px font font16pxUnder700 font14pxUnder400"
+                               zDepth={3}>
                             <div className="aboutMeLiIconContainer"><img src={"/icons/" + item.icon}/></div>
 
-                            <div className="verticalDivider" />
+                            <div className="verticalDivider"/>
 
                             <div className="aboutMeLiInfo" style={{display: 'inline-block'}}>
                                 <div>{item.title}</div>
@@ -513,22 +515,43 @@ class Profile extends Component {
                                                             </Tabs>
                                                         </div>
                                                         :
-                                                        <div className="center fullHeight">
+                                                        <div className="center fullHeight" style={style.tabContent}>
                                                             <ul className="horizCenteredList pathwayPrevList"
                                                                 style={style.pathwayPreviewUl}>
                                                                 <li onClick={() => this.goTo('/discover')}>
-                                                                    <PathwayPreview type="addOne"/>
+                                                                    <PathwayPreview type="addOne" variation="4"/>
                                                                 </li>
                                                             </ul>
                                                         </div>
                                                     }
                                                 </Tab>
                                                 <Tab label="About" style={style.topTab}>
-                                                    <div style={style.tabContent}>
-                                                        <ul className="center" id="aboutMeAreas">
-                                                            {aboutMeLis}
-                                                        </ul>
-                                                    </div>
+                                                    {info ?
+                                                        <div className="aboutMeSection" style={style.tabContent}>
+                                                            <div
+                                                                className="orangeText font16px font16pxUnder700 font12pxUnder400 underline clickable addToProfile"
+                                                                onClick={() => this.goTo('/onboarding')}>
+                                                                +Add Profile Section
+                                                            </div>
+                                                            <ul className="center" id="aboutMeAreas">
+                                                                {aboutMeLis}
+                                                            </ul>
+                                                        </div>
+                                                        :
+                                                        <div className="fullHeight font24px font18pxUnder500"
+                                                             style={style.tabContent}>
+                                                            <div
+                                                                className="orangeText font16px font16pxUnder700 font12pxUnder400 underline clickable addToProfile"
+                                                                onClick={() => this.goTo('/onboarding')}>
+                                                                +Add Profile Section
+                                                            </div>
+                                                            <div className="center">
+                                                                <div className="profileProjects">
+                                                                    No information to display
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
                                                 </Tab>
                                                 <Tab label="Projects" style={style.topTab}>
                                                     <div style={style.tabContent}

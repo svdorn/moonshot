@@ -96,7 +96,7 @@ class PathwayPreview extends Component {
                         <div style={{textAlign: "center", position: "relative"}} className={blurClass}>
                             {this.props.type == "addOne" ?
                                 <img style={{width: "80px", marginTop: "120px"}}
-                                     src="/icons/PlusSignWithCircle.png"
+                                     src="/icons/PlusSignWhite.png"
                                 />
                                 :
                                 <div>
@@ -160,7 +160,7 @@ class PathwayPreview extends Component {
                         <div style={{textAlign: "center", position: "relative"}} className={blurClass}>
                             {this.props.type == "addOne" ?
                                 <img style={{width: "80px", marginTop: "120px"}}
-                                     src="/icons/PlusSignWithCircle.png"
+                                     src="/icons/PlusSignOrange.png"
                                 />
                                 :
                                 <div>
