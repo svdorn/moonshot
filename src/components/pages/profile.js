@@ -489,8 +489,7 @@ class Profile extends Component {
                                                                 tabItemContainerStyle={{width: '40%'}}
                                                                 className="myPathwaysTabs"
                                                             >
-                                                                <Tab label="Ongoing" style={style.tab}
-                                                                     className="font20px font10pxUnder700">
+                                                                <Tab label="Ongoing" style={style.tab}>
                                                                     {this.state.userPathwayPreviews ?
                                                                         <ul className="horizCenteredList pathwayPrevList"
                                                                             style={style.pathwayPreviewUl}>

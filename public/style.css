@@ -1473,6 +1473,9 @@ button.link {
 .myPathwaysTabs > div:nth-of-type(2) {
     margin-left: 30% !important;
 }
+.myPathwaysTabs > div > button {
+    font-size: 14px !important;
+}
 .overviewExercisesComments > div:nth-of-type(2) {
     margin-left: 20% !important;
 }
@@ -2531,6 +2534,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         float: inherit;
         margin-left: 50px;
     }
+    .myPathwaysTabs > div > button {
+        font-size: 10px !important;
+    }
     .aboutMeLi > div:nth-child(3) {
         width: 100%;
     }
@@ -3011,6 +3017,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     .infoBoxImage {
         height: 38px;
         margin: auto -140px auto;
+    }
+    .myPathwaysTabs > div > button {
+        font-size: 8px !important;
     }
     .infoBoxPortfolioImage {
         height: 38px;
