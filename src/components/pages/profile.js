@@ -402,14 +402,13 @@ class Profile extends Component {
             aboutMeLis = aboutMeItems.map(function (item) {
                 return (
                     <li style={{marginTop: '30px'}}>
-                        <Paper className="profileAboutPaper aboutMeLi" zDepth={3}>
+                        <Paper className="profileAboutPaper aboutMeLi font20px font font16pxUnder700 font14pxUnder400" zDepth={3}>
                             <div className="aboutMeLiIconContainer"><img src={"/icons/" + item.icon}/></div>
 
                             <div className="verticalDivider" />
 
                             <div className="aboutMeLiInfo" style={{display: 'inline-block'}}>
                                 <div>{item.title}</div>
-                                asdf
                                 {item.content}
                             </div>
                         </Paper>

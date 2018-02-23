@@ -1434,7 +1434,6 @@ button.link {
 .aboutMeLi {
     text-align: left;
     padding-left: 3%;
-    font-size: 20px;
     margin: auto;
     position: relative;
 }
@@ -2496,7 +2495,7 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 
 @media only screen and (max-width: 700px) {
     .homePathwaysDesc {
-        padding: 0px;
+        padding: 0;
     }
 
     .profileSeparatorRect {
@@ -2505,24 +2504,35 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     }
 
     .aboutMeLi {
-        width: 100%;
-        text-align: center;
-        padding-left: 40px;
-        padding-right: 40px;
-        margin-left: 0px;
+        width: calc(100% - 100px);
     }
-    .aboutMeLi > img {
+    .aboutMeLiInfo {
+        margin-left: 0;
+    }
+    .aboutMeLiIconContainer {
+        display: none;
+    }
+    .aboutMeLiIconContainer > img:first-of-type {
+        display: none;
+    }
+    .verticalDivider {
+        display: none;
+    }
+    .aboutMeLi >div:nth-child(2) {
         display: none;
     }
     .profileSchoolName {
         float: inherit;
     }
     .profileSchoolDate {
-        float: inherit;
+        float: right;
     }
     .profileSchoolMajorsAndMinors {
         float: inherit;
-        margin-left: 0px;
+        margin-left: 50px;
+    }
+    .aboutMeLi > div:nth-child(3) {
+        width: 100%;
     }
     .above700only {
         display: none;
