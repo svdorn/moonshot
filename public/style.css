@@ -745,9 +745,11 @@ button.link {
 }
 
 .profileAboutPaper {
-    width: 90%;
-    height: 300px;
+    width: 70%;
+    max-width: 1000px;
+    height: 100%;
     margin: auto;
+    padding: 20px;
 }
 .profileAboutPaper > div {
     background: white;
@@ -1398,25 +1400,26 @@ button.link {
 #aboutMeAreas {
     text-align: inherit;
     margin-bottom: 60px;
+    list-style: none;
 }
 .aboutMeLi > img:first-of-type {
     height: 40px;
-    position: absolute;
+    display: inline-block;
 }
 .aboutMeLi {
-    width: 50%;
-    vertical-align: top;
     text-align: left;
     padding-left: 5%;
     font-size: 20px;
-    margin-bottom: 30px;
+    margin: auto;
 }
 .aboutMeLi > div:first-of-type {
-    margin: 5px 70px 15px;
-    color: #00d2ff;
+    display: inline-block;
+}
+.aboutMeLi > div >div:first-of-type {
+    color: #f24c49;
     font-size: 26px;
 }
-.aboutMeLi > span > a {
+.aboutMeLi > div > span > a {
     color: black;
     text-decoration: underline;
 }
@@ -1700,7 +1703,7 @@ button.link {
 }
 
 .profileSchoolName { float: left; }
-.profileSchoolDate { float: right; }
+.profileSchoolDate { float:right; }
 .profileSchoolMajorsAndMinors {
     clear: both;
     margin-left: 60px;

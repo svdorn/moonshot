@@ -258,11 +258,63 @@ class Profile extends Component {
             const interests = user.info.interests;
             const goals = user.info.goals;
             const birthDate = user.info.birthDate;
-            const languages = user.info.languages;
+            const info = user.info;
+            //const languages = user.info.languages;
             let aboutMeItems = [];
 
             let index = -1;
+            let goalsSpans = null;
+            if (goals && goals.length > 0) {
+                index = -1;
+                goalsSpans = goals.map(function (goal) {
+                    index++;
+                    const comma = (index < goals.length - 1) ? ", " : "";
+                    return (
+                        <span>{goal + comma}</span>
+                    );
+                });
+            }
+            let date = null;
+            if (birthDate) {
+                // ADD THIS {(birthDate.getMonth() + 1) + "/" + birthDate.getDate() + "/" + birthDate.getYear()}
+                date = birthDate.substring(5, 7) + "/" + birthDate.substring(8, 10) + "/" + birthDate.substring(0, 4);
+            }
+            if (user.info.bio || user.info.willRelocateTo || goalsSpans !== null || date !== null) {
+                let content =
+                    <div>
+                        {user.info.bio ?
+                            <div style={{marginBottom: '5px'}}>
+                                {user.info.bio}
+                            </div>
+                            : null}
+                        {date !== null ?
+                            <div>
+                                <b className="orangeText">D.O.B: </b>
+                                {date}
+                            </div>
+                            : null}
+                        {user.info.willRelocateTo ?
+                            <div>
+                                <b className="orangeText">Willing to Relocate to: </b>
+                                {user.info.willRelocateTo}
+                            </div>
+                            : null}
+                        {goalsSpans !== null ?
+                            <div>
+                                <b className="orangeText">Goals: </b>
+                                {goalsSpans}
+                            </div>
+                            : null}
+                    </div>;
+                aboutMeItems.push({
+                    icon: "SpeechBubble2.png",
+                    title: "Biography",
+                    content: content
+                });
+            }
+
             if (education && education.length > 0) {
+                index = -1;
                 const schools = education.map(function (edu) {
                     const date = edu.endDate ? edu.endDate.substring(5, 7) + "/" + edu.endDate.substring(8, 10) + "/" + edu.endDate.substring(0, 4) : null;
                     let majorsAndMinors = edu.majors ? edu.majors : "";
@@ -286,27 +338,27 @@ class Profile extends Component {
                     );
                 });
                 aboutMeItems.push({
-                    icon: "BookBlue.png",
+                    icon: "Education2.png",
                     title: "Education",
                     content: schools
                 });
             }
+            if (interests && interests.length > 0) {
+                index = -1;
+                const interestsSpans = interests.map(function (interest) {
+                    index++;
+                    const comma = (index < interests.length - 1) ? ", " : "";
+                    return (
+                        <span>{interest + comma}</span>
+                    );
+                });
+                aboutMeItems.push({
+                    icon: "Star2.png",
+                    title: "Interests",
+                    content: <div>{interestsSpans}</div>
+                });
+            }
             if (links) {
-                // index = -1;
-                // for (const link in links) {
-                //     if (links.hasOwnProperty(link)) {
-                //         index++;
-                //         linkOuts.push(
-                //             <span>
-                //                 <a href={link.url} target="_blank">{link.displayString}</a>
-                //                 {index < links.length - 1 ?
-                //                     <div className="linkSeparator" style={{backgroundColor:"black"}}/>
-                //                     : null
-                //                 }
-                //             </span>
-                //         );
-                //     }
-                // }
                 index = -1;
                 links = links.filter(link => (link && link.url && link.url != ""));
                 const linkOuts = links.map(function (link) {
@@ -324,81 +376,39 @@ class Profile extends Component {
                 });
                 if (links.length > 0) {
                     aboutMeItems.push({
-                        icon: "Links.png",
+                        icon: "Links3.png",
                         title: "Links",
                         content: linkOuts
                     });
                 }
             }
-            if (interests && interests.length > 0) {
-                index = -1;
-                const interestsSpans = interests.map(function (interest) {
-                    index++;
-                    const comma = (index < interests.length - 1) ? ", " : "";
-                    return (
-                        <span>{interest + comma}</span>
-                    );
-                });
-                aboutMeItems.push({
-                    icon: "StarBlue.png",
-                    title: "Interests",
-                    content: <div>{interestsSpans}</div>
-                });
-            }
-            if (goals && goals.length > 0) {
-                index = -1;
-                const goalsSpans = goals.map(function (goal) {
-                    index++;
-                    const comma = (index < goals.length - 1) ? ", " : "";
-                    return (
-                        <span>{goal + comma}</span>
-                    );
-                });
-                aboutMeItems.push({
-                    icon: "StarBlue.png",
-                    title: "Goals",
-                    content: <div>{goalsSpans}</div>
-                });
-            }
-            if (birthDate) {
-                // ADD THIS {(birthDate.getMonth() + 1) + "/" + birthDate.getDate() + "/" + birthDate.getYear()}
-                const date = birthDate.substring(5, 7) + "/" + birthDate.substring(8, 10) + "/" + birthDate.substring(0, 4);
-                aboutMeItems.push({
-                    icon: "CalendarBlue.png",
-                    title: "D.O.B.",
-                    content: date
-                });
-            }
-            if (languages && languages.length > 0) {
-                index = -1;
-                const languagesSpans = languages.map(function (language) {
-                    index++;
-                    const comma = (index < languages.length - 1) ? ", " : "";
-                    return (
-                        <span>{language + comma}</span>
-                    );
-                });
-                aboutMeItems.push({
-                    icon: "SingleSpeechBubbleBlue.png",
-                    title: "Languages",
-                    content: <div>{languagesSpans}</div>
-                });
-            }
+            // if (languages && languages.length > 0) {
+            //     index = -1;
+            //     const languagesSpans = languages.map(function (language) {
+            //         index++;
+            //         const comma = (index < languages.length - 1) ? ", " : "";
+            //         return (
+            //             <span>{language + comma}</span>
+            //         );
+            //     });
+            //     aboutMeItems.push({
+            //         icon: "SingleSpeechBubbleBlue.png",
+            //         title: "Languages",
+            //         content: <div>{languagesSpans}</div>
+            //     });
+            // }
 
             // every other li is a right one, starting with the first not being one
-            let rightLi = false;
             aboutMeLis = aboutMeItems.map(function (item) {
-                let additionalClass = "";
-                if (rightLi) {
-                    additionalClass = " aboutMeLiRight"
-                }
-                rightLi = !rightLi;
-
                 return (
-                    <li className={"aboutMeLi" + additionalClass} key={item.title}>
-                        <img src={"/icons/" + item.icon}/>
-                        <div>{item.title}</div>
-                        {item.content}
+                    <li style={{marginTop: '30px'}}>
+                        <Paper className="profileAboutPaper aboutMeLi" zDepth={3}>
+                            <img src={"/icons/" + item.icon}/>
+                            <div style={{display: 'inline-block'}}>
+                                <div>{item.title}</div>
+                                {item.content}
+                            </div>
+                        </Paper>
                     </li>
                 );
             });
@@ -514,15 +524,7 @@ class Profile extends Component {
                                                 </Tab>
                                                 <Tab label="About" style={style.topTab}>
                                                     <div style={style.tabContent} className="fullHeight">
-                                                        {user.info.description ?
-                                                            <div
-                                                                className="textWithMargin">{user.info.description}</div>
-                                                            : null}
-                                                        <Paper className="profileAboutPaper" zDepth={3}>
-                                                            Here
-                                                        </Paper>
-
-                                                        <ul className="horizCenteredList" id="aboutMeAreas">
+                                                        <ul className="center" id="aboutMeAreas">
                                                             {aboutMeLis}
                                                         </ul>
                                                     </div>
