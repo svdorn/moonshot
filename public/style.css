@@ -1424,6 +1424,9 @@ button.link {
     color: black;
     text-decoration: underline;
 }
+.profileProjects {
+    margin-top: 20px;
+}
 
 .footerMoonshotLogo {
     width: 150px;

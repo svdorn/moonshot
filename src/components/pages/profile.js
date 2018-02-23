@@ -523,15 +523,18 @@ class Profile extends Component {
                                                     }
                                                 </Tab>
                                                 <Tab label="About" style={style.topTab}>
-                                                    <div style={style.tabContent} className="fullHeight">
+                                                    <div style={style.tabContent}>
                                                         <ul className="center" id="aboutMeAreas">
                                                             {aboutMeLis}
                                                         </ul>
                                                     </div>
                                                 </Tab>
                                                 <Tab label="Projects" style={style.topTab}>
-                                                    <div style={style.tabContent} className="fullHeight">
-                                                        None
+                                                    <div style={style.tabContent}
+                                                         className="fullHeight font28px font font24pxUnder700 font20pxUnder500 center">
+                                                        <div className="profileProjects">
+                                                            None
+                                                        </div>
                                                     </div>
                                                 </Tab>
                                             </Tabs>
