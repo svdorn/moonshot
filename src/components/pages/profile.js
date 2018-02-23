@@ -567,6 +567,7 @@ class Profile extends Component {
                                 </div>
                                 :
                                 <div>
+                                    <div className="orangeToYellowGradient halfHeight"/>
                                     <div className="fullHeight"/>
                                     <div className="fullHeight"/>
                                 </div>}
