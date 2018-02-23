@@ -403,9 +403,13 @@ class Profile extends Component {
                 return (
                     <li style={{marginTop: '30px'}}>
                         <Paper className="profileAboutPaper aboutMeLi" zDepth={3}>
-                            <img src={"/icons/" + item.icon}/>
-                            <div style={{display: 'inline-block'}}>
+                            <div className="aboutMeLiIconContainer"><img src={"/icons/" + item.icon}/></div>
+
+                            <div className="verticalDivider" />
+
+                            <div className="aboutMeLiInfo" style={{display: 'inline-block'}}>
                                 <div>{item.title}</div>
+                                asdf
                                 {item.content}
                             </div>
                         </Paper>

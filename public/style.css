@@ -212,6 +212,15 @@ form > h1 {
     margin: 30px 10px 10px 10px;
 }
 
+.verticalDivider {
+    background-color: #d2d2d2;
+    height: calc(100% - 40px);
+    width: 2px;
+    display: inline-block;
+    margin-left: 100px;
+    position: absolute;
+}
+
 .menuDivider {
     width: 2px;
     height: 21px;
@@ -752,9 +761,9 @@ button.link {
     padding: 20px;
 }
 .profileAboutPaper > div {
-    background: white;
-    height: 100%;
-    width: 100%;
+    /* background: white; */
+    /* height: 100%; */
+    /* width: 100%; */
 }
 
 .semiOpaqueHoverable {
@@ -1401,20 +1410,39 @@ button.link {
     text-align: inherit;
     margin-bottom: 60px;
     list-style: none;
+    padding-left: 0px;
 }
-.aboutMeLi > img:first-of-type {
-    height: 40px;
+
+
+.aboutMeLiIconContainer {
+    height: calc(100% - 40px);
+    width: 70px;
+    position: relative;
+    float: left;
+}
+.aboutMeLiInfo {
+    margin-left: 145px;
+}
+.aboutMeLiIconContainer > img:first-of-type {
+    width: 70px;
     float: left;
     display: inline-block;
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 .aboutMeLi {
     text-align: left;
-    padding-left: 5%;
+    padding-left: 3%;
     font-size: 20px;
     margin: auto;
+    position: relative;
 }
 .aboutMeLi > div {
     display: inline-block;
+}
+.aboutMeLi > div:nth-child(3) {
+    width: calc(100% - 160px);
 }
 .aboutMeLi > div >div:first-of-type {
     color: #f24c49;
@@ -1423,6 +1451,11 @@ button.link {
 .aboutMeLi > div > span > a {
     color: black;
     text-decoration: underline;
+}
+.aboutMeLiIconContainer {
+    vertical-align: top;
+    position: absolute;
+    height: calc(100% - 40px)
 }
 .profileProjects {
     margin-top: 20px;
