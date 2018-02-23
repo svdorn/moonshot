@@ -446,8 +446,8 @@ class Profile extends Component {
                                                         className="whiteText font20px font14pxUnder700">{user.name.toUpperCase()}
                                                     </div>
                                                     {user.info.title ?
-                                                        <div>
-                                                            <b className="whiteText font14px font12pxUnder500">{user.info.title}</b>
+                                                        <div className="whiteText font14px font12pxUnder500">
+                                                            {user.info.title}
                                                         </div>
                                                         : null}
                                                     {user.info.location ?
