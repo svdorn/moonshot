@@ -53,7 +53,7 @@ class PathwayContentArticle extends Component {
                     <div className="center" style={{marginBottom: "10px"}}>
                         <h4 className="marginTop20px blueText font30px">{content.name}</h4>
                         <StyledContent contentArray={content.description} />
-                        <button className="outlineButton font30px font20pxUnder500 whiteBlueButton">
+                        <button className="outlineButton font24px font20pxUnder500 whiteBlueButton">
                             <a href={content.link} target="_blank" className="blueText blueTextOnHover" style={{textDecoration: 'none'}}>
                                 {content.linkText}
                             </a>

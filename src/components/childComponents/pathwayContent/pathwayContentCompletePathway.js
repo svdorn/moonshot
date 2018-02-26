@@ -88,7 +88,7 @@ class PathwayContentCompletePathway extends Component {
                     <div style={{marginRight: "20px", marginLeft: "20px"}}>
                         {"Click this button to complete the pathway and we'll be in contact with you within 48 hours."}
                     </div>
-                    <button className="outlineButton font30px font20pxUnder500 whiteBlueButton"
+                    <button className="outlineButton font24px font20pxUnder500 whiteBlueButton"
                             onClick={this.handleClick.bind(this)}>
                         <div className="blueText">
                             Complete Pathway
