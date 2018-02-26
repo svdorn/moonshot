@@ -137,7 +137,6 @@ class PathwayContent extends Component {
             },
             pathwayHeader: {
                 width: "100%",
-                height: "50px",
                 backgroundColor: "white",
                 padding: "10px 30px",
                 fontSize: "20px"
