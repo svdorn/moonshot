@@ -257,7 +257,7 @@ class Onboarding extends Component {
 
 
     componentDidMount() {
-        this.props.startOnboarding();
+        //this.props.startOnboarding();
     }
 
     goTo(route) {
