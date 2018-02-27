@@ -703,7 +703,7 @@ app.post('/user/forBusinessEmail', function (req, res) {
     if (req.body.message) {
         message = sanitize(req.body.message);
     }
-    let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
     let subject = 'Moonshot Sales Lead - From For Business Page';
     let content = "<div>"
         + "<h3>Sales Lead from For Business Page:</h3>"
@@ -738,6 +738,38 @@ app.post('/user/forBusinessEmail', function (req, res) {
         }
     })
 });
+
+
+app.post("/alertLinkClicked", function(req, res) {
+    const name = sanitize(req.body.params.name);
+    const id = sanitize(req.body.params.userId);
+    const link = sanitize(req.body.params.link);
+
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
+    let subject = 'Someone just clicked the NWM Culture Index Link';
+    let content = "<div>"
+        + "<h3>Send an email to Northwestern Mutual (Preston) telling him NOT to interview this person until we give him the go-ahead. Make sure this is the right link, it's possible that this email hasn't been updated in the codebase yet but there are other links that you'll need to be notified of.</h3>"
+        + "<p>User's Name: "
+        + name
+        + "</p>"
+        + "<p>User's id: "
+        + id
+        + "</p>"
+        + "<p>Link that was clicked: "
+        + link
+        + "</p>"
+        + "</div>";
+
+    sendEmail(recipients, subject, content, function (success, msg) {
+        if (success) {
+            res.json(true);
+        } else {
+            console.log("ERROR SENDING EMAIL SAYING THAT THE NWM LINK WAS CLICKED");
+            res.json(false);
+        }
+    });
+});
+
 
 // SEND EMAIL FOR SOMEBODY COMPLETING PATHWAY
 app.post('/user/completePathway', function (req, res) {
