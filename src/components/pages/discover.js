@@ -249,7 +249,7 @@ class Discover extends Component {
                         <PathwayPreview
                             name={pathway.name}
                             image={pathway.previewImage}
-                            logo = {pathway.sponsor.logo}
+                            logo = {pathway.sponsor.logoForLightBackground}
                             sponsorName = {pathway.sponsor.name}
                             completionTime={pathway.estimatedCompletionTime}
                             deadline={formattedDeadline}
@@ -292,26 +292,48 @@ class Discover extends Component {
                 const deadline = new Date(pathway.deadline);
                 formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             }
-            return (
-                <li className="pathwayPreviewLi featuredPathwayPreview"
-                    key={key}
-                    //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                    onClick={() => self.handleOpen(pathway, pathway.comingSoon)}
-                >
-                    <PathwayPreview
-                        name={pathway.name}
-                        image={pathway.previewImage}
-                        //<!-- logo = {pathway.sponsor.logo} -->
-                        //<!-- sponsorName = {pathway.sponsor.name} -->
-                        completionTime={pathway.estimatedCompletionTime}
-                        deadline={formattedDeadline}
-                        price={pathway.price}
-                        _id={pathway._id}
-                        comingSoon={pathway.comingSoon}
-                        variation="2"
-                    />
-                </li>
-            );
+            if (!pathway.comingSoon) {
+                return (
+                    <li className="pathwayPreviewLi featuredPathwayPreview"
+                        key={key}
+                        onClick={() => self.goTo('/pathway?' + pathway.url)}
+                    >
+                        <PathwayPreview
+                            name={pathway.name}
+                            image={pathway.previewImage}
+                            logo = {pathway.sponsor.logo}
+                            sponsorName = {pathway.sponsor.name}
+                            completionTime={pathway.estimatedCompletionTime}
+                            deadline={formattedDeadline}
+                            price={pathway.price}
+                            _id={pathway._id}
+                            comingSoon = {pathway.comingSoon}
+                            variation="2"
+                        />
+                    </li>
+                );
+            } else if (pathway.comingSoon) {
+                return (
+                    <li className="pathwayPreviewLi featuredPathwayPreview"
+                        key={key}
+                        //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
+                        onClick={() => self.handleOpen(pathway, pathway.comingSoon)}
+                    >
+                        <PathwayPreview
+                            name={pathway.name}
+                            image={pathway.previewImage}
+                            //<!-- logo = {pathway.sponsor.logo} -->
+                            //<!-- sponsorName = {pathway.sponsor.name} -->
+                            completionTime={pathway.estimatedCompletionTime}
+                            deadline={formattedDeadline}
+                            price={pathway.price}
+                            _id={pathway._id}
+                            comingSoon={pathway.comingSoon}
+                            variation="2"
+                        />
+                    </li>
+                );
+            }
         });
 
         // TODO get tags from DB

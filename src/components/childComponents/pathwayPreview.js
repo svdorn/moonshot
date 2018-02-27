@@ -60,6 +60,7 @@ class PathwayPreview extends Component {
         if (this.props.comingSoon) {
             blurClass = "blurOnHover"
         }
+        console.log(this.props);
 
         return (
             <div className="pathwayPreview" style={{position: "relative"}}>
@@ -140,7 +141,7 @@ class PathwayPreview extends Component {
                                     </div>
                                     {this.props.comingSoon ?
                                         null :
-                                        <div style={{position:"absolute", bottom:"4px", right:"16px"}}>
+                                        <div style={{position:"absolute", bottom:"4px", right:"16px"}} className="whiteText">
                                             Hiring Partner
                                             <img
                                                 src={this.props.logo}
