@@ -98,9 +98,13 @@ class Menu extends Component {
     }
 
     render() {
-        let iconMenuColor = this.props.isOnboarding ? "black" : "white";
-        let moonshotLogo = this.props.isOnboarding ? "/images/OfficialLogoBlack.png" : "/images/OfficialLogoWhite.png";
-        let dropdownClass = this.props.isOnboarding ? "headerDropdownBlack wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
+        let isOnboarding = false;
+        if (this.props.location.pathname === '/onboarding') {
+            isOnboarding = true;
+        }
+        let iconMenuColor = isOnboarding ? "black" : "white";
+        let moonshotLogo = isOnboarding ? "/images/OfficialLogoBlack.png" : "/images/OfficialLogoWhite.png";
+        let dropdownClass = isOnboarding ? "headerDropdownBlack wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
         let menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem"
         // if (this.props.blueHeader) {
         //     moonshotLogo = "/images/OfficialLogoBlue.png";
@@ -158,7 +162,7 @@ class Menu extends Component {
             );
         }
 
-        if (this.props.isOnboarding && this.props.currentUser) {
+        if (isOnboarding && this.props.currentUser) {
             return (
                 <Toolbar id="menu" style={{marginTop: "10px"}}>
                     <ToolbarGroup className="logoToolbarGroup">

@@ -221,6 +221,15 @@ form > h1 {
     margin: 30px 10px 10px 10px;
 }
 
+.verticalDivider {
+    background-color: #d2d2d2;
+    height: calc(100% - 40px);
+    width: 2px;
+    display: inline-block;
+    margin-left: 100px;
+    position: absolute;
+}
+
 .menuDivider {
     width: 2px;
     height: 21px;
@@ -328,6 +337,12 @@ form > h1 {
     opacity: 0.7;
 }
 .lightBlueToLightPurpleGradient { background: linear-gradient(to top right, #74e2ff, #b37bfe); }
+.orangeToYellowGradient { background: linear-gradient(to top right, #f24c49, #ebbb8a); }
+.orangeToYellowGradientOpacity {
+    background: linear-gradient(to top right, #f24c49, #ebbb8a);
+    opacity: 0.7;
+}
+
 
 .messageHeader {
     margin-top: 90px;
@@ -609,6 +624,17 @@ button.link {
     padding: 2px 10px;
     border-radius: 25px;
 }
+.whiteBorderChip {
+    border: solid 1px white;
+    display: inline-block;
+    margin-left: 15px;
+}
+.whiteBorderChip > div {
+    background: transparent;
+    height: 100%;
+    width: 100%;
+    padding: 2px 13px;
+}
 .lightBlueChip {
     height: 36px;
     background: var(--moonshotLightBlue);
@@ -707,6 +733,15 @@ button.link {
     height: 100%;
     width: 100%;
 }
+.gradientBorderOrangeYellow {
+    padding: 3px;
+    background: linear-gradient(to top left, #f24c49, #ebbb8a);
+}
+.gradientBorderOrangeYellow > div {
+    background: white;
+    height: 100%;
+    width: 100%;
+}
 .whiteBorder {
     border: 3px solid white;
 }
@@ -725,6 +760,19 @@ button.link {
 }
 .imgBorder {
     padding: 3px;
+}
+
+.profileAboutPaper {
+    width: 70%;
+    max-width: 1000px;
+    height: 100%;
+    margin: auto;
+    padding: 20px;
+}
+.profileAboutPaper > div {
+    /* background: white; */
+    /* height: 100%; */
+    /* width: 100%; */
 }
 
 .semiOpaqueHoverable {
@@ -924,7 +972,7 @@ button.link {
 }
 
 .profileInfoSkills {
-    padding-top: 40px;
+    margin-top: 5px;
     text-align: center;
 }
 .profileInfoSkillsLeft {
@@ -1069,6 +1117,7 @@ button.link {
 .purpleText { color: var(--moonshotPurple) }
 .darkPurpleText { color: var(--moonshotDarkPurple) }
 .lightPurpleText { color: #b37bfe; }
+.orangeText { color: #f24c49; }
 .onboarding3PurpleText { color: var(--onboarding3Purple); }
 .onboardingPage1Text {
     background: linear-gradient(to right, #5deaff, #3dabff);
@@ -1369,35 +1418,55 @@ button.link {
 #aboutMeAreas {
     text-align: inherit;
     margin-bottom: 60px;
+    list-style: none;
+    padding-left: 0px;
 }
-.aboutMeLi > img:first-of-type {
-    height: 40px;
+
+
+.aboutMeLiIconContainer {
+    height: calc(100% - 40px);
+    width: 70px;
+    position: relative;
+    float: left;
+}
+.aboutMeLiInfo {
+    margin-left: 145px;
+}
+.aboutMeLiIconContainer > img:first-of-type {
+    width: 70px;
+    float: left;
+    display: inline-block;
     position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
 }
 .aboutMeLi {
-    width: 50%;
-    vertical-align: top;
     text-align: left;
-    padding-left: 5%;
-    font-size: 20px;
-    margin-bottom: 30px;
+    padding-left: 3%;
+    margin: auto;
+    position: relative;
 }
-.aboutMeLi > div:first-of-type {
-    margin: 5px 70px 15px;
-    color: #00d2ff;
+.aboutMeLi > div {
+    display: inline-block;
+}
+.aboutMeLi > div:nth-child(3) {
+    width: calc(100% - 160px);
+}
+.aboutMeLi > div >div:first-of-type {
+    color: #f24c49;
     font-size: 26px;
 }
-.aboutMeLi > span > a {
+.aboutMeLi > div > span > a {
     color: black;
     text-decoration: underline;
 }
-.aboutMeLiRight {
-    padding-right: 5%;
+.aboutMeLiIconContainer {
+    vertical-align: top;
+    position: absolute;
+    height: calc(100% - 40px)
 }
-.textWithMargin {
-    font-size: 20px;
-    padding-top: 10px;
-    margin: 0px 80px 50px 55px;
+.profileProjects {
+    margin: 30px auto;
 }
 
 .footerMoonshotLogo {
@@ -1412,6 +1481,16 @@ button.link {
 }
 .myPathwaysTabs > div:nth-of-type(2) {
     margin-left: 30% !important;
+}
+.myPathwaysTabs > div > button {
+    font-size: 14px !important;
+}
+.addToProfile {
+    float: right;
+    margin-right: 60px;
+}
+.aboutMeSection {
+    min-height: 550px;
 }
 .overviewExercisesComments > div:nth-of-type(2) {
     margin-left: 20% !important;
@@ -1671,7 +1750,7 @@ button.link {
 }
 
 .profileSchoolName { float: left; }
-.profileSchoolDate { float: right; }
+.profileSchoolDate { float:right; }
 .profileSchoolMajorsAndMinors {
     clear: both;
     margin-left: 60px;
@@ -2435,7 +2514,7 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 
 @media only screen and (max-width: 700px) {
     .homePathwaysDesc {
-        padding: 0px;
+        padding: 0;
     }
 
     .profileSeparatorRect {
@@ -2444,24 +2523,38 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     }
 
     .aboutMeLi {
-        width: 100%;
-        text-align: center;
-        padding-left: 40px;
-        padding-right: 40px;
-        margin-left: 0px;
+        width: calc(100% - 100px);
     }
-    .aboutMeLi > img {
+    .aboutMeLiInfo {
+        margin-left: 0;
+    }
+    .aboutMeLiIconContainer {
+        display: none;
+    }
+    .aboutMeLiIconContainer > img:first-of-type {
+        display: none;
+    }
+    .verticalDivider {
+        display: none;
+    }
+    .aboutMeLi >div:nth-child(2) {
         display: none;
     }
     .profileSchoolName {
         float: inherit;
     }
     .profileSchoolDate {
-        float: inherit;
+        float: right;
     }
     .profileSchoolMajorsAndMinors {
         float: inherit;
-        margin-left: 0px;
+        margin-left: 50px;
+    }
+    .myPathwaysTabs > div > button {
+        font-size: 10px !important;
+    }
+    .aboutMeLi > div:nth-child(3) {
+        width: 100%;
     }
     .above700only {
         display: none;
@@ -2628,6 +2721,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     .pathwayPrevMobileThird {
         display: block;
         margin-top: 20px;
+    }
+    .aboutMeSection {
+        min-height: 450px;
     }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
@@ -2940,6 +3036,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     .infoBoxImage {
         height: 38px;
         margin: auto -140px auto;
+    }
+    .myPathwaysTabs > div > button {
+        font-size: 8px !important;
     }
     .infoBoxPortfolioImage {
         height: 38px;

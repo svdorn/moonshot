@@ -19,6 +19,8 @@ class Footer extends Component {
         let footerColor = "purpleToBlue";
         if (this.props.location.pathname === '/myPathways' || this.props.location.pathname === '/pathway') {
             footerColor = "purpleToRedLightGradientOpacity";
+        } else if (this.props.location.pathname === '/profile') {
+            footerColor = "orangeToYellowGradientOpacity";
         }
         return (
             <div className="jsxWrapper">
