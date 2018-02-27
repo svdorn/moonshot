@@ -1276,13 +1276,13 @@ app.post("/user/addPathway", function (req, res) {
 //             }
             for (let i = 0; i < user.pathways.length; i++) {
                 if (user.pathways[i].pathwayId == req.body.pathwayId) {
-                    res.status(401).send("cannot sign up for pathway more than once");
+                    res.status(401).send("You can't sign up for pathway more than once");
                     return;
                 }
             }
             for (let i = 0; i < user.completedPathways.length; i++) {
                 if (user.completedPathways[i].pathwayId == req.body.pathwayId) {
-                    res.status(401).send("cannot sign up for a completed pathway");
+                    res.status(401).send("You can't sign up for a completed pathway");
                     return;
                 }
             }
