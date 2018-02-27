@@ -60,8 +60,6 @@ class PathwayPreview extends Component {
         if (this.props.comingSoon) {
             blurClass = "blurOnHover"
         }
-        console.log(this.props);
-
         return (
             <div className="pathwayPreview" style={{position: "relative"}}>
                 {this.props.comingSoon ?

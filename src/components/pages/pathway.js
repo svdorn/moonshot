@@ -161,7 +161,8 @@ class Pathway extends Component {
             horizList: {
                 position: "relative",
                 marginTop: "15px",
-                marginBottom: "25px"
+                marginBottom: "25px",
+                overflow: "auto"
             },
             horizListIcon: {
                 height: "50px",
@@ -408,7 +409,7 @@ class Pathway extends Component {
                                 <div className="center">
                                     <button className="purpleToRedButtonExterior bigButton"
                                             onClick={this.handleClick.bind(this)}
-                                            style={{marginTop: "35px", color: '#da5f7b'}}
+                                            style={{marginTop: "15px", color: '#da5f7b'}}
                                     >
                                         <div className="invertColorOnHover gradientBorderButtonInterior">
                                             {"Sign Up"}
