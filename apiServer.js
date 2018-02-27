@@ -1372,7 +1372,7 @@ app.get('/topPathways', function (req, res) {
     Pathways.find()
         .sort({avgRating: 1})
         .limit(numPathways)
-        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon")
+        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon url")
         .exec(function (err, pathways) {
             if (err) {
                 res.status(500).send("Not able to get top pathways");
@@ -1382,7 +1382,6 @@ app.get('/topPathways', function (req, res) {
                 res.json(pathways);
             }
         });
-
 });
 
 //----->> GET LINK BY ID <<-----

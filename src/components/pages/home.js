@@ -45,21 +45,26 @@ class Home extends Component {
     }
 
     handleOpen = (pathway) => {
-        // tell the user they are preregistered if logged in
-        const currentUser = this.props.currentUser;
-        if (currentUser && currentUser != "no user") {
-            const user = {
-                name: currentUser.name,
-                email: currentUser.email,
-                pathway: pathway,
+        console.log("pathway: ", pathway);
+        if (!pathway.comingSoon) {
+            this.goTo('/pathway?' + pathway.url);
+        } else {
+            // tell the user they are preregistered if logged in
+            const currentUser = this.props.currentUser;
+            if (currentUser && currentUser != "no user") {
+                const user = {
+                    name: currentUser.name,
+                    email: currentUser.email,
+                    pathway: pathway.name,
+                }
+                const signedIn = true;
+                this.props.comingSoon(user, signedIn);
+                this.setState({open: true});
             }
-            const signedIn = true;
-            this.props.comingSoon(user, signedIn);
-            this.setState({open: true});
-        }
-        // if not logged in, prompt for user info
-        else {
-            this.setState({open: true, dialogPathway: pathway});
+            // if not logged in, prompt for user info
+            else {
+                this.setState({open: true, dialogPathway: pathway.name});
+            }
         }
     };
 
@@ -112,8 +117,7 @@ class Home extends Component {
 
             return (
                 <li style={{verticalAlign: "top"}} key={pathwayKey}
-                    //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                    onClick={() => self.handleOpen(pathway.name)}
+                    onClick={() => self.handleOpen(pathway)}
                 ><PathwayPreview
                     name={pathway.name}
                     image={pathway.previewImage}
@@ -142,7 +146,7 @@ class Home extends Component {
                 return (
                     <li style={{verticalAlign: "top"}} key={pathwayKey}
                         //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                        onClick={() => self.handleOpen(pathway.name)}
+                        onClick={() => self.handleOpen(pathway)}
                     ><PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
