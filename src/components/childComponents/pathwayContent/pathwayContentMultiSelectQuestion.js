@@ -57,7 +57,7 @@ class PathwayContentMultiSelectQuestion extends Component {
                 // add the custom answer, if a user had one
                 if (dbAnswer.optionalCustomAnswer) {
                     customAnswer.selected = true;
-                    customAnswerl.value = dbAnswer.optionalCustomAnswer;
+                    customAnswer.value = dbAnswer.optionalCustomAnswer;
                 }
             }
             // mark everything not selected if user doesn't have answers saved
