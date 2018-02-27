@@ -9,7 +9,7 @@ import ContentClear from 'material-ui/svg-icons/content/clear';
 class Notification extends Component {
     componentDidUpdate() {
         // close after 5 seconds
-        // setTimeout(function() {this.props.closeNotification()}.bind(this), 5000)
+        setTimeout(function() {this.props.closeNotification()}.bind(this), 5000)
     }
 
     onCloseClick() {
