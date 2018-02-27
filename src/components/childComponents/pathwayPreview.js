@@ -142,7 +142,7 @@ class PathwayPreview extends Component {
                                     {this.props.comingSoon ?
                                         null :
                                         <div style={{position:"absolute", bottom:"4px", right:"16px"}} className="whiteText">
-                                            Hiring Partner
+                                            <div style={{display:"inline-block", marginRight:"4px"}}>Hiring Partner</div>
                                             <img
                                                 src={this.props.logo}
                                                 alt={this.props.sponsorName}
@@ -213,7 +213,7 @@ class PathwayPreview extends Component {
                                     {this.props.comingSoon ?
                                         null :
                                         <div style={{position:"absolute", bottom:"4px", right:"16px"}}>
-                                            Hiring Partner
+                                            <div style={{display:"inline-block", marginRight:"4px"}}>Hiring Partner</div>
                                             <img
                                                 src={this.props.logo}
                                                 alt={this.props.sponsorName}

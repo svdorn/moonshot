@@ -104,8 +104,12 @@ class Home extends Component {
         let self = this;
         const pathwayPreviews1 = this.state.pathways1.map(function (pathway) {
             pathwayKey++;
-            const deadline = new Date(pathway.deadline);
-            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            let formattedDeadline = "";
+            if (pathway.deadline) {
+                const deadline = new Date(pathway.deadline);
+                formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            }
+
             return (
                 <li style={{verticalAlign: "top"}} key={pathwayKey}
                     //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
@@ -113,8 +117,8 @@ class Home extends Component {
                 ><PathwayPreview
                     name={pathway.name}
                     image={pathway.previewImage}
-                    //<!-- logo = {pathway.sponsor.logo} -->
-                    //<!-- sponsorName = {pathway.sponsor.name} -->
+                    logo = {pathway.sponsor.logoForLightBackground}
+                    sponsorName = {pathway.sponsor.name}
                     completionTime = {pathway.estimatedCompletionTime}
                     deadline = {formattedDeadline}
                     price = {pathway.price}
@@ -129,8 +133,12 @@ class Home extends Component {
             pathwayKey = 100;
             pathwayPreviews2 = this.state.pathways2.map(function (pathway) {
                 pathwayKey++;
-                const deadline = new Date(pathway.deadline);
-                const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                let formattedDeadline = "";
+                if (pathway.deadline) {
+                    const deadline = new Date(pathway.deadline);
+                    formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                }
+
                 return (
                     <li style={{verticalAlign: "top"}} key={pathwayKey}
                         //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
@@ -138,8 +146,8 @@ class Home extends Component {
                     ><PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
-                        //<!-- logo = {pathway.sponsor.logo} -->
-                        //<!-- sponsorName = {pathway.sponsor.name} -->
+                        logo = {pathway.sponsor.logoForLightBackground}
+                        sponsorName = {pathway.sponsor.name}
                         completionTime = {pathway.estimatedCompletionTime}
                         deadline = {formattedDeadline}
                         price = {pathway.price}
