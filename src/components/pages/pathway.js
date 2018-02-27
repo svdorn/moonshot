@@ -44,7 +44,7 @@ class Pathway extends Component {
 
     handleClick() {
         // Check if it is a specialized pathway
-        if (this.state.pathway.name === "NWM Sales") {
+        if (this.state.pathway.url === "Northwestern-Mutual-Sales") {
             if (this.props.currentUser) {
                 const user = {
                     _id: this.props.currentUser._id,

@@ -344,7 +344,8 @@ export function addPathway(user) {
             })
             .catch(function(err) {
                 console.log(err);
-                dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Cannot sign up for pathway more than once. Sign up for pathway failed.", type: "errorHeader"}})
+                dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Cannot sign up for pathway more than once.", type: "errorHeader"}})
+                window.scrollTo(0, 0);
             })
     }
 }

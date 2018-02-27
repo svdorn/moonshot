@@ -1280,6 +1280,12 @@ app.post("/user/addPathway", function (req, res) {
                     return;
                 }
             }
+            for (let i = 0; i < user.completedPathways.length; i++) {
+                if (user.completedPathways[i].pathwayId == req.body.pathwayId) {
+                    res.status(401).send("cannot sign up for a completed pathway");
+                    return;
+                }
+            }
             const pathway = {
                 pathwayId: pathwayId,
                 currentStep: {
