@@ -1598,7 +1598,7 @@ app.get('/search', function (req, res) {
     }
 
     //const limit = 4;
-    const sort = {avgRating: -1};
+    const sort = {avgRating: 1};
     // only get these properties of the pathways
     const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon url";
 

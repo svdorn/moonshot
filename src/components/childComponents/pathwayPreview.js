@@ -179,7 +179,9 @@ class PathwayPreview extends Component {
                                                     <img src="/icons/CalandarBlueGradient.png"
                                                          style={iconStyle}/><br/>
                                                     <span className="font8px">Deadline</span><br/>
-                                                    TBA
+                                                    {this.props.deadline && !this.props.comingSoon ? this.props.deadline : null}
+                                                    {!this.props.deadline && !this.props.comingSoon ? "None" : null}
+                                                    {this.props.comingSoon ? "TBA" : null }
                                                 </div>
                                             </li>
                                             <li>

@@ -56,8 +56,12 @@ class MyPathways extends Component {
                             // use the received pathways to make pathway previews
                             const userPathwayPreviews = pathways.map(function (pathway) {
                                 key++;
-                                const deadline = new Date(pathway.deadline);
-                                const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                                let formattedDeadline = "";
+                                if (pathway.deadline) {
+                                    const deadline = new Date(pathway.deadline);
+                                    formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                                }
+
                                 return (
                                     <li key={key} style={{verticalAlign: "top"}}
                                         onClick={() => self.goTo('/pathwayContent?' + pathway.url)}>
