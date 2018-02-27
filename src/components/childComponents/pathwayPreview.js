@@ -61,7 +61,6 @@ class PathwayPreview extends Component {
                             </div>
                         </div>
 
-
                         <div className="reserveYourSpotOnHover">
                             <div className="font36px whiteText">
                                 <b>Reserve Your Spot Now</b>
