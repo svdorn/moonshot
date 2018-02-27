@@ -53,16 +53,14 @@ class PathwayPreview extends Component {
             <div className="pathwayPreview" style={{position: "relative"}}>
                 {this.props.comingSoon ?
                     <div className="comingSoonPathwayPreview">
-                        <div/>
-                        {/* remove this when coming soon banner added back in */}
-
-                        {/*<div className="comingSoonBanner">
+                        <div className="comingSoonBanner">
                             <div>
                                 <div>
                                     Coming Soon
                                 </div>
                             </div>
-                        </div>*/}
+                        </div>
+
 
                         <div className="reserveYourSpotOnHover">
                             <div className="font36px whiteText">
@@ -115,7 +113,9 @@ class PathwayPreview extends Component {
                                                 <div className="whiteText">
                                                     <img src="/icons/CalendarWhite.png" style={iconStyle}/><br/>
                                                     <span className="font8px">Deadline</span><br/>
-                                                    TBA
+                                                    {this.props.deadline && !this.props.comingSoon ? this.props.deadline : null}
+                                                    {!this.props.deadline && !this.props.comingSoon ? "None" : null}
+                                                    {this.props.comingSoon ? "TBA" : null }
                                                 </div>
                                             </li>
                                             <li>
