@@ -50,7 +50,7 @@ class PathwayContentMultiSelectQuestion extends Component {
             if (props.currentUser && props.currentUser.answers && props.currentUser.answers[quizId]) {
                 const dbAnswer = props.currentUser.answers[quizId];
                 props.answers.forEach(function(answer) {
-                    options[answer.answerNumber] = props.currentUser.answers[quizId].some(function(userAnswer) {
+                    options[answer.answerNumber] = props.currentUser.answers[quizId].value.some(function(userAnswer) {
                         return userAnswer === answer.answerNumber.toString();
                     });
                 });
