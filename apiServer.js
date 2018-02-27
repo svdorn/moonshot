@@ -732,7 +732,7 @@ app.post('/user/forBusinessEmail', function (req, res) {
 
     sendEmail(recipients, subject, content, function (success, msg) {
         if (success) {
-            res.json("Email sent successfully, our team will be in contact with you shortly!");
+            res.json("Email sent successfully, our team will notify you of your results shortly.");
         } else {
             res.status(500).send(msg);
         }

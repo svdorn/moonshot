@@ -99,6 +99,15 @@ footer {
 .lightBlueInputText > label {
     color: rgba(0, 195, 255, .7) !important;
 }
+
+.lightBlueBoxInput {
+    color: var(--moonshotLightBlue);
+    border: 2px solid;
+    display: inline-block;
+    margin: 20px;
+    padding-left: 5px;
+}
+
 .formSubmitButton {
     padding: 0px 25px 3px;
     border: 2px solid var(--moonshotLightBlue);

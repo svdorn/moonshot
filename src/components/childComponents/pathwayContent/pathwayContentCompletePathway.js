@@ -67,26 +67,29 @@ class PathwayContentCompletePathway extends Component {
         return (
             <div className={this.props.className} style={{...this.props.style}}>
                 <div className="center" style={{marginBottom: "10px"}}>
-                    <h4>Finish</h4>
+                    <h4 className="marginTop20px blueText font30px">Be Ready</h4>
 
-                    {"Tell us where to contact you if you make it to the next round:"}
+                    {"We will review your results and let you know in the next 48 hours if you meet this position's requirements."}
+                    <br/>
+                    {"Verify your contact info so we can reach out to you if you advance to the next round."}
                     <br/>
                     <input
                         placeholder="Email address"
                         value={this.state.email}
                         type="text"
                         onChange={this.onEmailChange}
+                        className="lightBlueBoxInput"
                     />
-                    <br/>
                     <input
                         placeholder="Phone number"
                         value={this.state.phoneNumber}
                         type="text"
                         onChange={this.onPhoneChange}
+                        className="lightBlueBoxInput"
                     />
 
                     <div style={{marginRight: "20px", marginLeft: "20px"}}>
-                        {"Click this button to complete the pathway and we'll be in contact with you within 48 hours."}
+                        {"Click this button to complete the pathway."}
                     </div>
                     <button className="outlineButton font24px font20pxUnder500 whiteBlueButton"
                             onClick={this.handleClick.bind(this)}>
