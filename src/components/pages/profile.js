@@ -90,8 +90,12 @@ class Profile extends Component {
                         // use the received pathways to make pathway previews
                         userPathwayPreviews = pathways.map(function (pathway) {
                             key++;
-                            const deadline = new Date(pathway.deadline);
-                            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                            let formattedDeadline = "";
+                            if (pathway.deadline) {
+                                const deadline = new Date(pathway.deadline);
+                                formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                            }
+
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
                                     onClick={() => self.goTo('/pathwayContent?' + pathway.url)}>
@@ -135,15 +139,19 @@ class Profile extends Component {
                         // use the received pathways to make pathway previews
                         const userCompletedPathwayPreviews = completedPathways.map(function (pathway) {
                             key++;
-                            const deadline = new Date(pathway.deadline);
-                            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                            let formattedDeadline = "";
+                            if (pathway.deadline) {
+                                const deadline = new Date(pathway.deadline);
+                                formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                            }
+
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
                                     onClick={() => self.goTo('/pathway?' + pathway.url)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
-                                        logo={pathway.sponsor.logo}
+                                        logo={pathway.sponsor.logoForLightBackground}
                                         sponsorName={pathway.sponsor.name}
                                         completionTime={pathway.estimatedCompletionTime}
                                         deadline={formattedDeadline}
