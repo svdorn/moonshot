@@ -92,24 +92,38 @@ class AdminUserView extends Component {
                             let questionType = question.questionType;
                             // could take various forms depending on the question type
                             let answerValue = answers[subStep.contentID];
-                            console.log("type: ", questionType, " and answer: ");
-                            console.log(answerValue)
 
-                            switch (questionType) {
-                                case "twoOptions":
-                                    const choices = question.twoOptionsChoices;
-                                    if (answerValue.value == 1) {
-                                        answer = choices.choice1;
-                                    } else {
-                                        answer = choices.choice2;
-                                    }
-                                    // take out a question mark if that's the last character
-                                    if (answer.charAt(answer.length - 1) === '?') {
-                                        answer = answer.substring(0, answer.length - 1);
-                                    }
-                                    break;
-                                default:
-                                    break;
+                            if (answerValue) {
+                                switch (questionType) {
+                                    case "twoOptions":
+                                        const choices = question.twoOptionsChoices;
+                                        if (answerValue.value == 1) {
+                                            answer = choices.choice1;
+                                        } else {
+                                            answer = choices.choice2;
+                                        }
+                                        // take out a question mark if that's the last character
+                                        if (answer.charAt(answer.length - 1) === '?') {
+                                            answer = answer.substring(0, answer.length - 1);
+                                        }
+                                        break;
+                                    case "multiSelect":
+                                        console.log("STOP")
+                                        answerValue.value.forEach(function(subAnswer) {
+                                            const multiSelectAnswers = question.multiSelectAnswers;
+                                            answer = answer + multiSelectAnswers.find(function(option) {
+                                                return option.answerNumber.toString() === subAnswer.toString();
+                                            }).body + ", ";
+                                        });
+                                        break;
+                                    case "slider":
+                                        answer = answerValue.value;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            } else {
+                                answer = "(not answered)"
                             }
 
                             let questionName = "";
