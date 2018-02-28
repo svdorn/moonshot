@@ -44,10 +44,6 @@ class AdminUserView extends Component {
             const pathways = response.data.pathways;
             const completedPathways = response.data.completedPathways;
             const quizzes = response.data.quizzes;
-            console.log("user is: ", user);
-            console.log("pathways: ", pathways);
-            console.log("completedPathways: ", completedPathways);
-            console.log("quizzes: ", quizzes);
             self.setState({
                 ...self.state,
                 user, pathways, completedPathways, quizzes
@@ -75,7 +71,6 @@ class AdminUserView extends Component {
 
         if (pathways && Array.isArray(pathways) && pathways.length > 0) {
             pathwayLis = pathways.map(function(pathway) {
-                console.log(pathway);
                 if (!pathway) {
                     return null;
                 }
@@ -108,10 +103,8 @@ class AdminUserView extends Component {
                                         }
                                         break;
                                     case "multiSelect":
-                                        console.log("STOP")
                                         answerValue.value.forEach(function(subAnswer) {
-                                            const multiSelectAnswers = question.multiSelectAnswers;
-                                            answer = answer + multiSelectAnswers.find(function(option) {
+                                            answer = answer + question.multiSelectAnswers.find(function(option) {
                                                 return option.answerNumber.toString() === subAnswer.toString();
                                             }).body + ", ";
                                         });
@@ -119,16 +112,26 @@ class AdminUserView extends Component {
                                             answer = answer + answerValue.optionalCustomAnswer;
                                         }
                                         break;
-                                    // case "multipleChoice":
-                                    //     answerValue.value.forEach(function(subAnswer) {
-                                    //         const multiSelectAnswers = question.multiSelectAnswers;
-                                    //         answer = answer + multiSelectAnswers.find(function(option) {
-                                    //             return option.answerNumber.toString() === subAnswer.toString();
-                                    //         }).body + ", ";
-                                    //     });
-                                    //     break;
+                                    case "multipleChoice":
+                                        // if it's a custom value, the text of the answer will be within answerValue.value
+                                        if (answerValue.isCustomAnswer) {
+                                            answer = answerValue.value;
+                                        }
+                                        // otherwise find the answer corresponding to the value they picked
+                                        else {
+                                            answer = question.multipleChoiceAnswers.find(function(option) {
+                                                return option.answerNumber.toString() === answerValue.value.toString();
+                                            }).body;
+                                        }
+                                        break;
                                     case "slider":
                                         answer = answerValue.value;
+                                        break;
+                                    case "datePicker":
+                                        const dateString = answerValue.value;
+                                        answer = dateString.substring(5, 7) + "/" +
+                                                dateString.substring(8, 10) + "/" +
+                                                dateString.substring(0, 4);
                                         break;
                                     default:
                                         break;
@@ -154,12 +157,12 @@ class AdminUserView extends Component {
                         }
 
                         return (
-                            <li>{content}</li>
+                            <li key={"subStep" + subStep.order}>{content}</li>
                         );
                     });
 
                     return (
-                        <li>
+                        <li key={"step" + step.order}>
                             Step {step.order}
                             <br/>
                             <ol>{subSteps}</ol>
