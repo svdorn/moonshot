@@ -491,47 +491,41 @@ class Profile extends Component {
                                                 className="myPathwaysTabs"
                                             >
                                                 <Tab label="Pathways" style={style.topTab}>
-                                                    {this.state.userPathwayPreviews.length > 0 ?
-                                                        <div className="center fullHeight" style={style.tabContent}>
-                                                            <Tabs
-                                                                style={style.tabs}
-                                                                inkBarStyle={{background: '#f24c49'}}
-                                                                tabItemContainerStyle={{width: '40%'}}
-                                                                className="myPathwaysTabs"
-                                                            >
-                                                                <Tab label="Ongoing" style={style.tab}>
-                                                                    {this.state.userPathwayPreviews ?
-                                                                        <ul className="horizCenteredList pathwayPrevList"
-                                                                            style={style.pathwayPreviewUl}>
-                                                                            {this.state.userPathwayPreviews}
-                                                                        </ul>
-                                                                        :
-                                                                        <h1 className="center font40px font24pxUnder500">
-                                                                            None</h1>}
-                                                                </Tab>
-                                                                <Tab label="Completed" style={style.tab}
-                                                                     className="font20px font10pxUnder700">
-                                                                    {this.state.userCompletedPathwayPreviews ?
-                                                                        <ul className="horizCenteredList pathwayPrevList"
-                                                                            style={style.pathwayPreviewUl}>
-                                                                            {this.state.userCompletedPathwayPreviews}
-                                                                        </ul>
-                                                                        :
-                                                                        <h1 className="center font40px font24pxUnder500">
-                                                                            None</h1>}
-                                                                </Tab>
-                                                            </Tabs>
-                                                        </div>
-                                                        :
-                                                        <div className="center fullHeight" style={style.tabContent}>
-                                                            <ul className="horizCenteredList pathwayPrevList"
-                                                                style={style.pathwayPreviewUl}>
-                                                                <li onClick={() => this.goTo('/discover')}>
-                                                                    <PathwayPreview type="addOne" variation="4"/>
-                                                                </li>
-                                                            </ul>
-                                                        </div>
-                                                    }
+                                                    <div className="center fullHeight" style={style.tabContent}>
+                                                        <Tabs
+                                                            style={style.tabs}
+                                                            inkBarStyle={{background: '#f24c49'}}
+                                                            tabItemContainerStyle={{width: '40%'}}
+                                                            className="myPathwaysTabs"
+                                                        >
+                                                            <Tab label="Ongoing" style={style.tab}>
+                                                                {this.state.userPathwayPreviews && this.state.userPathwayPreviews.length > 0 ?
+                                                                    <ul className="horizCenteredList pathwayPrevList"
+                                                                        style={style.pathwayPreviewUl}>
+                                                                        {this.state.userPathwayPreviews}
+                                                                    </ul>
+                                                                    :
+                                                                    <ul className="horizCenteredList pathwayPrevList"
+                                                                        style={style.pathwayPreviewUl}>
+                                                                        <li onClick={() => this.goTo('/discover')}>
+                                                                            <PathwayPreview type="addOne" variation="4"/>
+                                                                        </li>
+                                                                    </ul>
+                                                                }
+                                                            </Tab>
+                                                            <Tab label="Completed" style={style.tab}
+                                                                 className="font20px font10pxUnder700">
+                                                                {this.state.userCompletedPathwayPreviews && this.state.userCompletedPathwayPreviews.length > 0 ?
+                                                                    <ul className="horizCenteredList pathwayPrevList"
+                                                                        style={style.pathwayPreviewUl}>
+                                                                        {this.state.userCompletedPathwayPreviews}
+                                                                    </ul>
+                                                                    :
+                                                                    <h1 className="center font40px font24pxUnder500">None</h1>
+                                                                }
+                                                            </Tab>
+                                                        </Tabs>
+                                                    </div>
                                                 </Tab>
                                                 <Tab label="About" style={style.topTab}>
                                                     {info ?
