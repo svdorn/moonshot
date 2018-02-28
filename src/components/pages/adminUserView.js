@@ -6,18 +6,24 @@ import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import axios from 'axios';
 
-class Admin extends Component {
+class AdminUserView extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            users: []
+            user: undefined
         };
     }
 
 
     componentDidMount() {
         const user = this.props.currentUser;
+        let profileUrl = "";
+        try {
+            profileUrl = this.props.location.query.user;
+        } catch(e) {
+            this.goTo("/admin");
+        }
 
         if (user.admin !== true) {
             this.goTo("/");
@@ -26,16 +32,18 @@ class Admin extends Component {
 
         let self = this;
 
-        axios.get("/api/infoForAdmin", {params: {
-            userId: user._id,
-            verificationToken: user.verificationToken
+        axios.get("/api/userForAdmin", {params: {
+            adminUserId: user._id,
+            verificationToken: user.verificationToken,
+            profileUrl
         }})
         .then(function(response) {
-            const usersArray = response.data;
+            const user = response.data;
+            console.log("user is: ", user);
             self.setState({
                 ...self.state,
-                users: usersArray
-            })
+                user: user
+            });
         })
         .catch(function(err) {
             console.log("error with getting info for admin");
@@ -54,23 +62,16 @@ class Admin extends Component {
 
 
     render() {
-        const users = this.state.users;
-        let userLis = !users || users.length === 0 ? null : users.map(function(user) {
-            return (
-                <li>
-                    <a href={"/adminUserView?user=" + user.profileUrl}>{user.name}</a> with email: {user.email}
-                </li>
-            );
-        });
-
-        const userList = <ul>{userLis}</ul>;
+        const user = this.state.user;
 
         return (
             <div>
                 {this.props.currentUser.admin === true ?
                     <div>
                         <div className="headerDiv greenToBlue" />
-                        {userList}
+                        {user ?
+                            user.name : null
+                        }
                     </div>
 
                     : null
@@ -93,4 +94,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Admin);
+export default connect(mapStateToProps, mapDispatchToProps)(AdminUserView);

@@ -1177,6 +1177,17 @@ function safeUser(user) {
     return newUser;
 }
 
+// same as safe user except it has the user's answers to questions
+function userForAdmin(user) {
+    let newUser = Object.assign({}, user)._doc;
+    newUser.password = undefined;
+    newUser._id = undefined;
+    newUser.verificationToken = undefined;
+    newUser.emailVerificationToken = undefined;
+    newUser.passwordToken = undefined;
+    return newUser;
+}
+
 
 // used when passing the user object back to the user, still contains sensitive
 // data such as the user id and verification token
@@ -1647,15 +1658,66 @@ app.get("/infoForAdmin", function(req, res) {
             Users.find()
                 .sort({name: 1})
                 .select("name email profileUrl")
-                .exec(function (err, users) {
-                    if (err) {
+                .exec(function (err2, users) {
+                    if (err2) {
                         res.status(500).send("Not able to get users for admin.");
+                        return;
                     } else if (users.length == 0) {
                         res.status(500).send("No users found for admin.");
+                        return;
                     } else {
                         res.json(users);
+                        return;
                     }
                 });
+        }
+    });
+});
+
+
+app.get("/userForAdmin", function(req, res) {
+    const query = sanitize(req.query);
+    const _id = query.adminUserId;
+    const verificationToken = query.verificationToken;
+    const profileUrl = query.profileUrl;
+
+    if (!_id || !verificationToken) {
+        console.log("No user id or verification token for user trying to get admin info.");
+        res.status(403).send("User does not have valid credentials.");
+        return;
+    }
+
+    if (!profileUrl) {
+        console.log("No user info requested.");
+        res.status(400).send("No user info requested.");
+        return;
+    }
+
+    const adminQuery = { _id, verificationToken };
+
+    Users.findOne(adminQuery, function(err, adminUser) {
+        if (err) {
+            console.log("Error finding admin user: ", err);
+            res.status(500).send("Error finding current user in db.");
+            return;
+        } else if (!adminUser || !adminUser.admin || !(adminUser.admin === "true" || adminUser.admin === true) ) {
+            res.status(403).send("User does not have valid credentials.");
+            return;
+        } else {
+            Users.findOne({profileUrl}, function(error, user) {
+                if (error) {
+                    console.log("Error getting user for admin: ", error);
+                    res.status(500).send("Error getting user for admin.");
+                    return;
+                } else if (!user) {
+                    console.log("User not found when trying to find user for admin.");
+                    res.status(404).send("User not found.");
+                    return;
+                } else {
+                    res.json(userForAdmin(user));
+                    return;
+                }
+            });
         }
     });
 });
@@ -1874,7 +1936,6 @@ app.post("/updateInfo", function (req, res) {
                 console.log("couldn't find user");
                 console.log(err);
             }
-            console.log("user is:", user);
 
             if (!verifyUser(user, verificationToken)) {
                 console.log("can't verify user");
