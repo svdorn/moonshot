@@ -1714,8 +1714,120 @@ app.get("/userForAdmin", function(req, res) {
                     res.status(404).send("User not found.");
                     return;
                 } else {
-                    res.json(userForAdmin(user));
-                    return;
+                    // have the user, now have to get their pathways to return
+
+                    let pathways = [];
+                    let completedPathways = [];
+                    let foundPathways = 0;
+                    let foundCompletedPathways = 0;
+
+                    // quizzes will look like
+                    // { <subStepId>: quizObject, ... }
+                    let quizzes = {};
+                    let requiredNumQuizzes = 0;
+                    let foundQuizzes = 0;
+
+                    let returnIfFoundEverything = function() {
+                        // if we have found all of the pathways, return all the info to the front end
+                        if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
+                            res.json({
+                                user: userForAdmin(user),
+                                pathways,
+                                completedPathways,
+                                quizzes
+                            });
+                            return;
+                        }
+                    }
+
+                    let getQuizzesFromPathway = function(path) {
+                        if (path && path.steps) {
+                            // find quizzes that go with this pathway
+                            for (let stepIndex = 0; stepIndex < path.steps.length; stepIndex++) {
+                                let step = path.steps[stepIndex];
+                                for (let subStepIndex = 0; subStepIndex < step.subSteps.length; subStepIndex++) {
+                                    let subStep = step.subSteps[subStepIndex];
+                                    if (subStep.contentType === "quiz") {
+                                        // new quiz found, have to retrieve it before returning
+                                        requiredNumQuizzes++;
+
+                                        Quizzes.findOne({_id: subStep.contentID}, function(quizErr, quiz) {
+                                            foundQuizzes++;
+                                            if (quizErr) {
+                                                console.log("Error getting question: ", quizErr);
+                                            } else {
+                                                quizzes[subStep.contentID] = quiz;
+                                            }
+
+                                            returnIfFoundEverything();
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // if the user has no pathways or completed pathways, return simply their info
+                    if (user.pathways.length === 0 && user.completedPathways.lengh === 0) {
+                        res.json({
+                            user: userForAdmin(user),
+                            pathways,
+                            completedPathways
+                        });
+                        return;
+                    }
+
+                    for (let pathwaysIndex = 0; pathwaysIndex < user.pathways.length; pathwaysIndex++) {
+                        Pathways.findOne({_id: user.pathways[pathwaysIndex].pathwayId}, function(pathErr, path) {
+                            if (pathErr) {
+                                console.log(pathErr);
+                            }
+                            pathways.push(path);
+                            // mark that we have found another pathway
+                            foundPathways++;
+
+                            getQuizzesFromPathway(path);
+
+
+
+
+
+                            // if we have found all of the pathways, return all the info to the front end
+                            // if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
+                            //     res.json({
+                            //         user: userForAdmin(user),
+                            //         pathways,
+                            //         completedPathways
+                            //     });
+                            //     return;
+                            // }
+                            returnIfFoundEverything();
+                        })
+                    }
+
+                    for (let completedPathwaysIndex = 0; completedPathwaysIndex < user.completedPathways.length; completedPathwaysIndex++) {
+                        Pathways.findOne({_id: user.completedPathways[completedPathwaysIndex].pathwayId}, function(pathErr, path) {
+                            if (pathErr) {
+                                console.log(pathErr);
+                            }
+                            completedPathways.push(path);
+                            // mark that we have found another pathway
+                            foundCompletedPathways++;
+
+                            getQuizzesFromPathway(path);
+
+                            returnIfFoundEverything();
+                            // if we have found all of the pathways, return all the info to the front end
+                            // if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
+                            //     res.json({
+                            //         user: userForAdmin(user),
+                            //         pathways,
+                            //         completedPathways
+                            //     });
+                            //     return;
+                            // }
+                        })
+                    }
                 }
             });
         }
