@@ -115,7 +115,18 @@ class AdminUserView extends Component {
                                                 return option.answerNumber.toString() === subAnswer.toString();
                                             }).body + ", ";
                                         });
+                                        if (answerValue.optionalCustomAnswer) {
+                                            answer = answer + answerValue.optionalCustomAnswer;
+                                        }
                                         break;
+                                    // case "multipleChoice":
+                                    //     answerValue.value.forEach(function(subAnswer) {
+                                    //         const multiSelectAnswers = question.multiSelectAnswers;
+                                    //         answer = answer + multiSelectAnswers.find(function(option) {
+                                    //             return option.answerNumber.toString() === subAnswer.toString();
+                                    //         }).body + ", ";
+                                    //     });
+                                    //     break;
                                     case "slider":
                                         answer = answerValue.value;
                                         break;
