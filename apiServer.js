@@ -255,6 +255,7 @@ app.post('/user', function (req, res) {
                     Users.count({name: user.name}, function (err, count) {
                         const randomNumber = crypto.randomBytes(8).toString('hex');
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+                        user.admin = false;
 
                         // add pathway to user's My Pathways if they went from
                         // a landing page.
@@ -1618,6 +1619,45 @@ app.get('/search', function (req, res) {
                 res.json(pathways);
             }
         })
+});
+
+
+app.get("/infoForAdmin", function(req, res) {
+    const query = sanitize(req.query);
+    const _id = query.userId;
+    const verificationToken = query.verificationToken;
+
+    if (!_id || !verificationToken) {
+        console.log("No user id or verification token for user trying to get admin info.");
+        res.status(403).send("User does not have valid credentials.");
+        return;
+    }
+
+    const adminQuery = { _id, verificationToken };
+
+    Users.findOne(adminQuery, function(err, user) {
+        if (err) {
+            console.log("Error finding admin user: ", err);
+            res.status(500).send("Error finding current user in db.");
+            return;
+        } else if (!user || !user.admin || !(user.admin === "true" || user.admin === true) ) {
+            res.status(403).send("User does not have valid credentials.");
+            return;
+        } else {
+            Users.find()
+                .sort({name: 1})
+                .select("name email profileUrl")
+                .exec(function (err, users) {
+                    if (err) {
+                        res.status(500).send("Not able to get users for admin.");
+                    } else if (users.length == 0) {
+                        res.status(500).send("No users found for admin.");
+                    } else {
+                        res.json(users);
+                    }
+                });
+        }
+    });
 });
 
 
