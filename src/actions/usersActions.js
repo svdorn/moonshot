@@ -153,6 +153,18 @@ export function postUser(user) {
     }
 }
 
+
+export function addNotification(message, notificationType) {
+    return function(dispatch) {
+        let noteType = "infoHeader";
+        if (notificationType === "error") {
+            noteType = "errorHeader";
+        }
+        dispatch({type: "ADD_NOTIFICATION", notification:{message, type: noteType}});
+    }
+}
+
+
 export function closeNotification() {
     return function(dispatch) {
         dispatch({type: "CLOSE_NOTIFICATION"});

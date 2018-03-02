@@ -1800,9 +1800,15 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin-bottom: 15px;
 }
 
-.blueTextImportant {
-    color: var(--moonshotLightBlue) !important;
+.termsPage {
+    text-align: left;
+    color: white;
+    padding: 100px 40px 40px;
 }
+
+.blueTextImportant { color: var(--moonshotLightBlue) !important; }
+.blackTextImportant { color: black !important; }
+.whiteTextImportant { color: white !important; }
 
 .aResumeCantDoThis {
     position: relative;

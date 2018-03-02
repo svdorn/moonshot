@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postUser, onSignUpPage} from '../../actions/usersActions';
+import {postUser, onSignUpPage, closeNotification, addNotification} from '../../actions/usersActions';
 import {TextField, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
@@ -64,7 +64,8 @@ class Signup extends Component {
         super(props);
 
         this.state = {
-            email: ""
+            email: "",
+            agreeingToTerms: false
         }
     }
 
@@ -81,6 +82,12 @@ class Signup extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
+
+        if (!this.state.agreeingToTerms) {
+            this.props.addNotification("Must agree to terms of use and privacy policy.", "error");
+            return;
+        }
+
         const vals = this.props.formData.signup.values;
 
         // Form validation before submit
@@ -135,11 +142,22 @@ class Signup extends Component {
     }
 
     goTo(route) {
+        // closes any notification
+        this.props.closeNotification();
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
+
+
+    handleCheckMarkClick() {
+        this.setState({
+            ...this.state,
+            agreeingToTerms: !this.state.agreeingToTerms
+        })
+    }
+
 
     //name, email, password, confirm password, signup button
     render() {
@@ -197,6 +215,17 @@ class Signup extends Component {
                                         className="lightBlueInputText"
                                     /><br/>
                                 </div>
+
+                                <div style={{marginTop:"20px"}}>
+                                    <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                                        <img
+                                            className={"checkMark" + this.state.agreeingToTerms}
+                                            src="/icons/CheckMarkBlue.png"
+                                        />
+                                    </div>
+                                    I understand and agree to the <a href="https://moonshotlearning.org/privacyPolicy" target="_blank">Privacy Policy</a> and <a href="https://moonshotlearning.org/termsOfUse" target="_blank">Terms of Use</a>.
+                                </div>
+
                                 <button
                                     type="submit"
                                     className="formSubmitButton font24px font16pxUnder600"
@@ -218,7 +247,9 @@ class Signup extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         postUser,
-        onSignUpPage
+        onSignUpPage,
+        addNotification,
+        closeNotification
     }, dispatch);
 }
 

@@ -42,6 +42,7 @@ export function usersReducers(state = initialState, action) {
         case "CHANGE_PASSWORD":
         case "CHANGE_PASSWORD_REJECTED":
         case "ADD_PATHWAY_REJECTED":
+        case "ADD_NOTIFICATION":
             return {...state, notification: action.notification};
             break;
         case "SIGNOUT":

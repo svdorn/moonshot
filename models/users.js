@@ -8,6 +8,7 @@ var usersSchema = mongoose.Schema({
     phoneNumber: String,
     userType: String,
     admin: Boolean,
+    agreedToTerms: Boolean,
     profileUrl: String,
     password: String,
     hasFinishedOnboarding: Boolean,
