@@ -1774,6 +1774,11 @@ button.link {
 .dialogForBizOverlay {
     filter: blur(10px);
 }
+.dialogForSignup {
+    background-color: rgba(255, 255, 255, .9) !important;
+}
+.dialogForSignup > div:first-child { min-height: 300px; }
+
 
 .blurOnHover:hover {
     filter: blur(5px);

@@ -3,10 +3,12 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {postUser, onSignUpPage, closeNotification, addNotification} from '../../actions/usersActions';
-import {TextField, CircularProgress } from 'material-ui';
+import {TextField, CircularProgress, FlatButton, Dialog} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
-import { browserHistory } from 'react-router';
+import {browserHistory} from 'react-router';
+import TermsOfUse from './termsOfUse';
+import PrivacyPolicy from './privacyPolicy';
 
 const styles = {
     floatingLabelStyle: {
@@ -65,14 +67,16 @@ class Signup extends Component {
 
         this.state = {
             email: "",
-            agreeingToTerms: false
+            agreeingToTerms: false,
+            openPP: false,
+            openTOU:false,
         }
     }
 
     componentWillMount() {
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser && this.props.currentUser != "no user") {
-           this.goTo("/discover");
+            this.goTo("/discover");
         }
     }
 
@@ -158,87 +162,152 @@ class Signup extends Component {
         })
     }
 
+    handleOpenPP = () => {
+        this.setState({openPP: true});
+    };
+
+    handleClosePP = () => {
+        this.setState({openPP: false});
+    };
+    handleOpenTOU = () => {
+        this.setState({openTOU: true});
+    };
+
+    handleCloseTOU = () => {
+        this.setState({openTOU: false});
+    };
+
 
     //name, email, password, confirm password, signup button
     render() {
         let urlQuery = {};
         try {
             urlQuery = this.props.location.query;
-        } catch(e) { /* no query */ }
+        } catch (e) { /* no query */
+        }
+
+        const actionsPP = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onClick={this.handleClosePP}
+            />,
+        ];
+        const actionsTOU = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onClick={this.handleCloseTOU}
+            />,
+        ];
+        let blurredClass = '';
+        if (this.state.openTOU || this.state.openPP) {
+            blurredClass = 'dialogForBizOverlay';
+        }
 
         return (
             <div className="fillScreen greenToBlue formContainer">
-                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="5" />
-                <div className="form lightWhiteForm">
-                    {this.state.email != "" && this.props.userPosted ?
-                        <div className="center">
-                            <h1>Verify your email address</h1>
-                            <p>We sent {this.state.email} a verification link. Check your junk folder if you can{"'"}t find our email.</p>
-                        </div>
-                        :
-                        <div>
-                            <form onSubmit={this.handleSubmit.bind(this)}>
-                                <h1 style={{marginTop:"15px"}}>Sign Up</h1>
-                                <div><i>{"Don't panic, it's free."}</i></div>
-                                <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
-                                    <Field
-                                        name="name"
-                                        component={renderTextField}
-                                        label="Full Name"
-                                        className="lightBlueInputText"
-                                    /><br/>
-                                </div>
-                                <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
-                                    <Field
-                                        name="email"
-                                        component={renderTextField}
-                                        label="Email"
-                                        className="lightBlueInputText"
-                                    /><br/>
-                                </div>
-                                <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
-                                    <Field
-                                        name="password"
-                                        component={renderPasswordField}
-                                        label="Password"
-                                        className="lightBlueInputText"
-                                    /><br/>
-                                </div>
-                                <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
-                                    <Field
-                                        name="password2"
-                                        component={renderPasswordField}
-                                        label="Confirm Password"
-                                        className="lightBlueInputText"
-                                    /><br/>
-                                </div>
-
-                                <div style={{margin:"20px 20px 10px"}}>
-                                    <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
-                                        <img
-                                            className={"checkMark" + this.state.agreeingToTerms}
-                                            src="/icons/CheckMarkBlue.png"
-                                        />
+                <div className={blurredClass}>
+                    <Dialog
+                        actions={actionsPP}
+                        modal={false}
+                        open={this.state.openPP}
+                        onRequestClose={this.handleClosePP}
+                        autoScrollBodyContent={true}
+                        paperClassName="dialogForSignup"
+                        overlayClassName="dialogOverlay"
+                    >
+                        <PrivacyPolicy/>
+                    </Dialog>
+                    <Dialog
+                        actions={actionsTOU}
+                        modal={false}
+                        open={this.state.openTOU}
+                        onRequestClose={this.handleCloseTOU}
+                        autoScrollBodyContent={true}
+                        paperClassName="dialogForSignup"
+                        overlayClassName="dialogOverlay"
+                    >
+                        <TermsOfUse/>
+                    </Dialog>
+                    <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>
+                    <div className="form lightWhiteForm">
+                        {this.state.email != "" && this.props.userPosted ?
+                            <div className="center">
+                                <h1>Verify your email address</h1>
+                                <p>We sent {this.state.email} a verification link. Check your junk folder if you
+                                    can{"'"}t find our email.</p>
+                            </div>
+                            :
+                            <div>
+                                <form onSubmit={this.handleSubmit.bind(this)}>
+                                    <h1 style={{marginTop: "15px"}}>Sign Up</h1>
+                                    <div><i>{"Don't panic, it's free."}</i></div>
+                                    <div className="inputContainer">
+                                        <div className="fieldWhiteSpace"/>
+                                        <Field
+                                            name="name"
+                                            component={renderTextField}
+                                            label="Full Name"
+                                            className="lightBlueInputText"
+                                        /><br/>
                                     </div>
-                                    I understand and agree to the <a href="https://moonshotlearning.org/privacyPolicy" target="_blank">Privacy Policy</a> and <a href="https://moonshotlearning.org/termsOfUse" target="_blank">Terms of Use</a>.
-                                </div>
+                                    <div className="inputContainer">
+                                        <div className="fieldWhiteSpace"/>
+                                        <Field
+                                            name="email"
+                                            component={renderTextField}
+                                            label="Email"
+                                            className="lightBlueInputText"
+                                        /><br/>
+                                    </div>
+                                    <div className="inputContainer">
+                                        <div className="fieldWhiteSpace"/>
+                                        <Field
+                                            name="password"
+                                            component={renderPasswordField}
+                                            label="Password"
+                                            className="lightBlueInputText"
+                                        /><br/>
+                                    </div>
+                                    <div className="inputContainer">
+                                        <div className="fieldWhiteSpace"/>
+                                        <Field
+                                            name="password2"
+                                            component={renderPasswordField}
+                                            label="Confirm Password"
+                                            className="lightBlueInputText"
+                                        /><br/>
+                                    </div>
 
-                                <button
-                                    type="submit"
-                                    className="formSubmitButton font24px font16pxUnder600"
-                                >
-                                    Sign Up
-                                </button>
-                                <br/>
-                                <div className="clickable blueText" onClick={() => this.goTo({pathname: '/login', query: urlQuery})} style={{display:"inline-block"}}>Already have an account?</div>
-                            </form>
-                            { this.props.loadingCreateUser ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
-                        </div>
-                    }
+                                    <div style={{margin: "20px 20px 10px"}} className="darkBlueText">
+                                        <div className="checkbox smallCheckbox blueCheckbox"
+                                             onClick={this.handleCheckMarkClick.bind(this)}>
+                                            <img
+                                                className={"checkMark" + this.state.agreeingToTerms}
+                                                src="/icons/CheckMarkBlue.png"
+                                            />
+                                        </div>
+                                        I understand and agree to the <bdi className="clickable blueText" onClick={this.handleOpenPP}>Privacy
+                                        Policy</bdi> and <bdi className="clickable blueText" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
+                                    </div>
+
+                                    <button
+                                        type="submit"
+                                        className="formSubmitButton font24px font16pxUnder600"
+                                    >
+                                        Sign Up
+                                    </button>
+                                    <br/>
+                                    <div className="clickable blueText"
+                                         onClick={() => this.goTo({pathname: '/login', query: urlQuery})}
+                                         style={{display: "inline-block"}}>Already have an account?
+                                    </div>
+                                </form>
+                                {this.props.loadingCreateUser ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
+                            </div>
+                        }
+                    </div>
                 </div>
             </div>
         );

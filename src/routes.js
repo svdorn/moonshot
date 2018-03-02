@@ -27,8 +27,6 @@ import Onboarding from './components/pages/onboarding';
 import Error404 from './components/pages/error404';
 import Email from './components/pages/email';
 import Unsubscribe from './components/pages/unsubscribe';
-import PrivacyPolicy from './components/pages/privacyPolicy';
-import TermsOfUse from './components/pages/termsOfUse';
 import Admin from './components/pages/admin';
 import AdminUserView from './components/pages/adminUserView';
 import ReactGA from 'react-ga';
@@ -60,8 +58,6 @@ const routes = (
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} />
         <Route path="adminUserView" component={AuthenticatedComponent} page={<AdminUserView/>} />
         <Route path="unsubscribe" component={Unsubscribe} />
-        <Route path="privacyPolicy" component={PrivacyPolicy} />
-        <Route path="termsOfUse" component={TermsOfUse} />
         <Route path='*' component={Error404} />
     </Route>
   </Router>
