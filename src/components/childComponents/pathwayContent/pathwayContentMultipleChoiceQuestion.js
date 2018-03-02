@@ -3,9 +3,9 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateAnswer} from '../../../actions/usersActions';
 import TwoOptionsChoice from './twoOptionsChoice';
-import _ from 'lodash';
 import Question from './question';
 
+let savedRecently = false;
 
 class PathwayContentMultipleChoiceQuestion extends Component {
     constructor(props) {
@@ -69,29 +69,31 @@ class PathwayContentMultipleChoiceQuestion extends Component {
     }
 
 
-    // saveAnswerAndEndTimer = () => {
-    //     console.log("saving and ending timer");
-    //     this.saveAnswer();
-    //     this.setState({timerOn: false});
-    // }
-    //
-    // setSaveTimer() {
-    //     let self = this;
-    //     if (!this.state.timerOn) {
-    //         this.setState({...this.state, timerOn: true}, function() {
-    //             console.log("state set");
-    //             console.log(self);
-    //             setTimeout(self.saveAnswerAndEndTimer().bind(self), 300);
-    //         })
-    //     }
-    // }
-
     handleInputChange(e) {
-        this.setState({
-            ...this.state,
+        const self = this;
+        let shouldSave = false;
+
+        // should only save if haven't saved in the last couple seconds
+        if (!savedRecently) {
+            shouldSave = true;
+            savedRecently = true;
+        }
+
+        // tell it that it has saved recently if it will save this one
+        self.setState({
+            ...self.state,
             answerNumber: e.target.value,
-            savedCustomAnswer: e.target.value,
-        }, this.saveAnswer)
+            savedCustomAnswer: e.target.value
+        }, function() {
+            if (shouldSave) {
+                // saves AFTER the timeout so that any information saved in the
+                // last couple seconds is also saved
+                setTimeout(function() {
+                    self.saveAnswer();
+                    savedRecently = false;
+                }, 1500);
+            }
+        })
     }
 
 

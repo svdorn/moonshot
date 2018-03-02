@@ -6,6 +6,7 @@ import _ from 'lodash';
 import Question from './question';
 
 
+let savedRecently = false;
 
 class PathwayContentMultiSelectQuestion extends Component {
     constructor(props) {
@@ -37,10 +38,29 @@ class PathwayContentMultiSelectQuestion extends Component {
 
 
     handleInputChange(e) {
-        this.setState({
-            ...this.state,
+        const self = this;
+        let shouldSave = false;
+
+        // should only save if haven't saved in the last couple seconds
+        if (!savedRecently) {
+            shouldSave = true;
+            savedRecently = true;
+        }
+
+        // tell it that it has saved recently if it will save this one
+        self.setState({
+            ...self.state,
             answer: e.target.value
-        }, this.saveAnswer)
+        }, function() {
+            if (shouldSave) {
+                // saves AFTER the timeout so that any information saved in the
+                // last couple seconds is also saved
+                setTimeout(function() {
+                    self.saveAnswer();
+                    savedRecently = false;
+                }, 1500);
+            }
+        })
     }
 
 
