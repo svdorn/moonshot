@@ -1113,7 +1113,9 @@ app.post('/login', function (req, res) {
     var email = reqUser.email;
     var password = reqUser.password;
 
-    var query = {email: email};
+    // searches for user by case-insensitive email
+    const emailRegex = new RegExp(email, "i");
+    var query = {email: emailRegex};
     Users.findOne(query, function (err, user) {
         if (err) {
             res.status(500).send("Error performing query to find user in db. ", err);
