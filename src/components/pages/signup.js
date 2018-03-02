@@ -168,7 +168,7 @@ class Signup extends Component {
 
         return (
             <div className="fillScreen greenToBlue formContainer">
-                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="5" />
                 <div className="form lightWhiteForm">
                     {this.state.email != "" && this.props.userPosted ?
                         <div className="center">
@@ -216,7 +216,7 @@ class Signup extends Component {
                                     /><br/>
                                 </div>
 
-                                <div style={{marginTop:"20px"}}>
+                                <div style={{margin:"20px 20px 10px"}}>
                                     <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                                         <img
                                             className={"checkMark" + this.state.agreeingToTerms}

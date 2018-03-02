@@ -256,6 +256,7 @@ app.post('/user', function (req, res) {
                         const randomNumber = crypto.randomBytes(8).toString('hex');
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
                         user.admin = false;
+                        user.agreedToTerms = true;
 
                         // add pathway to user's My Pathways if they went from
                         // a landing page.
