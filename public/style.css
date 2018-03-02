@@ -1920,6 +1920,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin: auto;
     overflow-x: hidden;
 }
+textarea.freeResponseTextArea {
+    width: 90%;
+    resize: none;
+    height: 300px;
+}
 textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     width: 260px;
 }

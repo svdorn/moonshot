@@ -219,7 +219,7 @@ const sanitizeOptions = {
 //
 //     for (let userIdx = 0; userIdx < users.length; userIdx++) {
 //         let user = users[userIdx];
-//         user.linkText = "Go to Step";
+//         user.showToUsers = true;
 //         user.save(function() {
 //             console.log("user saved");
 //         });
@@ -1389,8 +1389,9 @@ app.put('/user/changepassword/:_id', function (req, res) {
 app.get('/topPathways', function (req, res) {
     const numPathways = parseInt(sanitize(req.query.numPathways), 10);
 
-    // gets the most popular pathways, the number of pathways is numPathways
-    Pathways.find()
+    // gets the most popular pathways, the number of pathways is numPathways;
+    // only show the ones that are ready for users to see
+    Pathways.find({showToUsers: true})
         .sort({avgRating: 1})
         .limit(numPathways)
         .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon url")
@@ -1590,7 +1591,7 @@ function removeContentFromPathway(pathway) {
 //----->> SEARCH PATHWAYS <<------
 app.get('/search', function (req, res) {
     const MAX_PATHWAYS_TO_RETURN = 1000;
-    let query = {};
+    let query = {showToUsers: true};
 
     let term = sanitize(req.query.searchTerm);
     if (term && term !== "") {

@@ -6,6 +6,7 @@ var pathwaysSchema = mongoose.Schema({
   pathwayContentDisplayName: String,
   previewImage: String,
   comingSoon: Boolean,
+  showToUsers: Boolean,
   url: String,
   sponsor: {
       name: String,
