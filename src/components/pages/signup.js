@@ -179,6 +179,7 @@ class Signup extends Component {
                         <div>
                             <form onSubmit={this.handleSubmit.bind(this)}>
                                 <h1 style={{marginTop:"15px"}}>Sign Up</h1>
+                                <div><i>{"Don't panic, it's free."}</i></div>
                                 <div className="inputContainer">
                                     <div className="fieldWhiteSpace"/>
                                     <Field
