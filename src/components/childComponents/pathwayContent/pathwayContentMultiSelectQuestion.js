@@ -6,7 +6,7 @@ import TwoOptionsChoice from './twoOptionsChoice';
 import _ from 'lodash';
 import Question from './question';
 
-
+let savedRecently = false;
 
 class PathwayContentMultiSelectQuestion extends Component {
     constructor(props) {
@@ -50,14 +50,14 @@ class PathwayContentMultiSelectQuestion extends Component {
             if (props.currentUser && props.currentUser.answers && props.currentUser.answers[quizId]) {
                 const dbAnswer = props.currentUser.answers[quizId];
                 props.answers.forEach(function(answer) {
-                    options[answer.answerNumber] = props.currentUser.answers[quizId].some(function(userAnswer) {
+                    options[answer.answerNumber] = props.currentUser.answers[quizId].value.some(function(userAnswer) {
                         return userAnswer === answer.answerNumber.toString();
                     });
                 });
                 // add the custom answer, if a user had one
                 if (dbAnswer.optionalCustomAnswer) {
                     customAnswer.selected = true;
-                    customAnswerl.value = dbAnswer.optionalCustomAnswer;
+                    customAnswer.value = dbAnswer.optionalCustomAnswer;
                 }
             }
             // mark everything not selected if user doesn't have answers saved
@@ -142,13 +142,32 @@ class PathwayContentMultiSelectQuestion extends Component {
 
 
     handleInputChange(e) {
-        this.setState({
-            ...this.state,
+        const self = this;
+        let shouldSave = false;
+
+        // should only save if haven't saved in the last couple seconds
+        if (!savedRecently) {
+            shouldSave = true;
+            savedRecently = true;
+        }
+
+        // tell it that it has saved recently if it will save this one
+        self.setState({
+            ...self.state,
             customAnswer: {
                 value: e.target.value,
                 selected: true
             }
-        }, this.saveAnswer)
+        }, function() {
+            if (shouldSave) {
+                // saves AFTER the timeout so that any information saved in the
+                // last couple seconds is also saved
+                setTimeout(function() {
+                    self.saveAnswer();
+                    savedRecently = false;
+                }, 1500);
+            }
+        })
     }
 
 

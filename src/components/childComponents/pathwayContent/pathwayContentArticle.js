@@ -45,16 +45,36 @@ class PathwayContentArticle extends Component {
         }
     }
 
+
+    handleClick() {
+        const linkFunction = this.state.content.linkFunction;
+        if (linkFunction) {
+            if (linkFunction === "clickedAlert") {
+                axios.post("/api/alertLinkClicked", {
+                    params: {
+                        name: this.props.currentUser.name,
+                        userId: this.props.currentUser._id,
+                        link: this.state.content.link
+                    }
+                })
+                .catch(function(err) {
+                    /* error alerting */
+                });
+            }
+        }
+    }
+
+
     render() {
         const content = this.state.content;
         return (
             <div className={this.props.className} style={{...this.props.style}}>
                 {this.state.content !== undefined ?
                     <div className="center" style={{marginBottom: "10px"}}>
-                        <h4>{content.name}</h4>
+                        <h4 className="marginTop20px blueText font30px">{content.name}</h4>
                         <StyledContent contentArray={content.description} />
-                        <button className="outlineButton font30px font20pxUnder500 whiteBlueButton">
-                            <a href={content.link} target="_blank" className="blueText blueTextOnHover" style={{textDecoration: 'none'}}>
+                        <button className="outlineButton font24px font20pxUnder500 whiteBlueButton">
+                            <a href={content.link} onClick={this.handleClick.bind(this)} target="_blank" className="blueText blueTextOnHover" style={{textDecoration: 'none'}}>
                                 {content.linkText}
                             </a>
                         </button>
@@ -67,7 +87,8 @@ class PathwayContentArticle extends Component {
 
 function mapStateToProps(state) {
     return {
-        step: state.users.currentSubStep
+        step: state.users.currentSubStep,
+        currentUser: state.users.currentUser
     };
 }
 

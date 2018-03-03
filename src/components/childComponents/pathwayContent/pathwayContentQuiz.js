@@ -7,6 +7,7 @@ import PathwayContentMultipleChoiceQuestion from './pathwayContentMultipleChoice
 import PathwayContentTwoOptionsQuestion from './pathwayContentTwoOptionsQuestion';
 import PathwayContentMultiSelectQuestion from './pathwayContentMultiSelectQuestion';
 import PathwayContentDatePickerQuestion from './pathwayContentDatePickerQuestion';
+import PathwayContentFreeResponseQuestion from './pathwayContentFreeResponseQuestion';
 
 class PathwayContentQuiz extends Component {
     constructor(props) {
@@ -87,22 +88,29 @@ class PathwayContentQuiz extends Component {
                             quizId={quiz._id}
                         />
                     break;
-                    case "multiSelect":
-                        questionJsx =
-                            <PathwayContentMultiSelectQuestion
-                                question={quiz.question}
-                                answers={quiz.multiSelectAnswers}
-                                allowCustomAnswer={quiz.allowCustomAnswer}
-                                quizId={quiz._id}
-                            />
-                        break;
-                    case "datePicker":
-                        questionJsx =
-                            <PathwayContentDatePickerQuestion
-                                question={quiz.question}
-                                quizId={quiz._id}
-                            />
-                        break;
+                case "multiSelect":
+                    questionJsx =
+                        <PathwayContentMultiSelectQuestion
+                            question={quiz.question}
+                            answers={quiz.multiSelectAnswers}
+                            allowCustomAnswer={quiz.allowCustomAnswer}
+                            quizId={quiz._id}
+                        />
+                    break;
+                case "freeResponse":
+                    questionJsx =
+                        <PathwayContentFreeResponseQuestion
+                            question={quiz.question}
+                            quizId={quiz._id}
+                        />
+                    break;
+                case "datePicker":
+                    questionJsx =
+                        <PathwayContentDatePickerQuestion
+                            question={quiz.question}
+                            quizId={quiz._id}
+                        />
+                    break;
                 default:
                     break;
             }

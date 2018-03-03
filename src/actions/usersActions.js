@@ -153,6 +153,18 @@ export function postUser(user) {
     }
 }
 
+
+export function addNotification(message, notificationType) {
+    return function(dispatch) {
+        let noteType = "infoHeader";
+        if (notificationType === "error") {
+            noteType = "errorHeader";
+        }
+        dispatch({type: "ADD_NOTIFICATION", notification:{message, type: noteType}});
+    }
+}
+
+
 export function closeNotification() {
     return function(dispatch) {
         dispatch({type: "CLOSE_NOTIFICATION"});
@@ -262,12 +274,12 @@ export function completePathway(user){
 
         axios.post("api/user/completePathway", user)
             .then(function(response) {
-                dispatch({type:"COMPLETE_PATHWAY", notification: {message:response.data, type:"infoHeader"}});
+                dispatch({type:"COMPLETE_PATHWAY", user: response.data.user, notification: {message:response.data.message, type:"infoHeader"}});
                 browserHistory.push('/discover');
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
-                dispatch({type:"COMPLETE_PATHWAY_REJECTED", notification: {message: "Error completing pathway", type: "errorHeader"}})
+                dispatch({type:"COMPLETE_PATHWAY_REJECTED", user: response.data.user, notification: {message: response.data.message, type: "errorHeader"}})
             })
     }
 }
@@ -344,7 +356,8 @@ export function addPathway(user) {
             })
             .catch(function(err) {
                 console.log(err);
-                dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Cannot sign up for pathway more than once. Sign up for pathway failed.", type: "errorHeader"}})
+                dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "You can't sign up for a pathway more than once.", type: "errorHeader"}})
+                window.scrollTo(0, 0);
             })
     }
 }

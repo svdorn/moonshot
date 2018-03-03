@@ -45,21 +45,26 @@ class Home extends Component {
     }
 
     handleOpen = (pathway) => {
-        // tell the user they are preregistered if logged in
-        const currentUser = this.props.currentUser;
-        if (currentUser && currentUser != "no user") {
-            const user = {
-                name: currentUser.name,
-                email: currentUser.email,
-                pathway: pathway,
+        console.log("pathway: ", pathway);
+        if (!pathway.comingSoon) {
+            this.goTo('/pathway?' + pathway.url);
+        } else {
+            // tell the user they are preregistered if logged in
+            const currentUser = this.props.currentUser;
+            if (currentUser && currentUser != "no user") {
+                const user = {
+                    name: currentUser.name,
+                    email: currentUser.email,
+                    pathway: pathway.name,
+                }
+                const signedIn = true;
+                this.props.comingSoon(user, signedIn);
+                this.setState({open: true});
             }
-            const signedIn = true;
-            this.props.comingSoon(user, signedIn);
-            this.setState({open: true});
-        }
-        // if not logged in, prompt for user info
-        else {
-            this.setState({open: true, dialogPathway: pathway});
+            // if not logged in, prompt for user info
+            else {
+                this.setState({open: true, dialogPathway: pathway.name});
+            }
         }
     };
 
@@ -104,17 +109,20 @@ class Home extends Component {
         let self = this;
         const pathwayPreviews1 = this.state.pathways1.map(function (pathway) {
             pathwayKey++;
-            const deadline = new Date(pathway.deadline);
-            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            let formattedDeadline = "";
+            if (pathway.deadline) {
+                const deadline = new Date(pathway.deadline);
+                formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            }
+
             return (
                 <li style={{verticalAlign: "top"}} key={pathwayKey}
-                    //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                    onClick={() => self.handleOpen(pathway.name)}
+                    onClick={() => self.handleOpen(pathway)}
                 ><PathwayPreview
                     name={pathway.name}
                     image={pathway.previewImage}
-                    //<!-- logo = {pathway.sponsor.logo} -->
-                    //<!-- sponsorName = {pathway.sponsor.name} -->
+                    logo = {pathway.sponsor.logoForLightBackground}
+                    sponsorName = {pathway.sponsor.name}
                     completionTime = {pathway.estimatedCompletionTime}
                     deadline = {formattedDeadline}
                     price = {pathway.price}
@@ -129,17 +137,21 @@ class Home extends Component {
             pathwayKey = 100;
             pathwayPreviews2 = this.state.pathways2.map(function (pathway) {
                 pathwayKey++;
-                const deadline = new Date(pathway.deadline);
-                const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                let formattedDeadline = "";
+                if (pathway.deadline) {
+                    const deadline = new Date(pathway.deadline);
+                    formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                }
+
                 return (
                     <li style={{verticalAlign: "top"}} key={pathwayKey}
                         //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                        onClick={() => self.handleOpen(pathway.name)}
+                        onClick={() => self.handleOpen(pathway)}
                     ><PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
-                        //<!-- logo = {pathway.sponsor.logo} -->
-                        //<!-- sponsorName = {pathway.sponsor.name} -->
+                        logo = {pathway.sponsor.logoForLightBackground}
+                        sponsorName = {pathway.sponsor.name}
                         completionTime = {pathway.estimatedCompletionTime}
                         deadline = {formattedDeadline}
                         price = {pathway.price}

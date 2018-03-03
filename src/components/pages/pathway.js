@@ -44,7 +44,7 @@ class Pathway extends Component {
 
     handleClick() {
         // Check if it is a specialized pathway
-        if (this.state.pathway.name === "NWM Sales") {
+        if (this.state.pathway.url === "Northwestern-Mutual-Sales") {
             if (this.props.currentUser) {
                 const user = {
                     _id: this.props.currentUser._id,
@@ -161,7 +161,8 @@ class Pathway extends Component {
             horizList: {
                 position: "relative",
                 marginTop: "15px",
-                marginBottom: "25px"
+                marginBottom: "25px",
+                overflow: "auto"
             },
             horizListIcon: {
                 height: "50px",
@@ -405,6 +406,16 @@ class Pathway extends Component {
                                         </div>
                                     </div>
                                 </div>
+                                <div className="center">
+                                    <button className="purpleToRedButtonExterior bigButton"
+                                            onClick={this.handleClick.bind(this)}
+                                            style={{marginTop: "15px", color: '#da5f7b'}}
+                                    >
+                                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                                            {"Sign Up"}
+                                        </div>
+                                    </button>
+                                </div>
                             </div>
                             : null}
 
@@ -623,16 +634,6 @@ class Pathway extends Component {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="center">
-                                    <button className="purpleToRedButtonExterior bigButton"
-                                            onClick={this.handleClick.bind(this)}
-                                            style={{marginTop: "35px", color: '#da5f7b'}}
-                                    >
-                                        <div className="invertColorOnHover gradientBorderButtonInterior">
-                                            {"Sign Up"}
-                                        </div>
-                                    </button>
-                                </div>
                             </div>
                             : null}
 
@@ -701,7 +702,7 @@ class Pathway extends Component {
                                 {pathway.sponsor.video.header ?
                                     <div>
                                         <div className="font36px font32pxUnder700 font26pxUnder500 center"
-                                             style={{marginBottom: "10px", marginTop: '30px'}}>
+                                             style={{marginBottom: "10px", marginTop: '60px'}}>
                                             {pathway.sponsor.video.title}
                                         </div>
                                         <div className="font22px font18pxUnder700 font16pxUnder500 center"
@@ -723,11 +724,21 @@ class Pathway extends Component {
                                         onEnd={this._onEnd}
                                     />
                                 </div>
+                                <div className="center">
+                                    <button className="purpleToRedButtonExterior bigButton"
+                                            onClick={this.handleClick.bind(this)}
+                                            style={{marginTop: "35px", color: '#da5f7b'}}
+                                    >
+                                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                                            {"Sign Up"}
+                                        </div>
+                                    </button>
+                                </div>
                             </div>
                             : null}
 
                         {pathway.sponsor.positionDescription && pathway.sponsor.positionDescription.displayAfter ?
-                            <div style={{marginTop: '80px', marginBottom: "20px"}}>
+                            <div style={{marginTop: '60px', marginBottom: "20px"}}>
                                 {pathway.sponsor.positionDescription.spacer ?
                                     <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
                                     : <div style={{marginTop: '80px'}}/>}
@@ -741,7 +752,7 @@ class Pathway extends Component {
                                             <img src={pathway.sponsor.positionDescription.frames[0].icon}
                                                  className="forBusinessIcon"
                                                  style={{marginRight: '10px'}}/>
-                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700" style={{width:"90%", marginLeft:"5%"}}>
                                                 {pathway.sponsor.positionDescription.frames[0].description}
                                             </div>
                                         </div>
@@ -749,7 +760,7 @@ class Pathway extends Component {
                                             <img src={pathway.sponsor.positionDescription.frames[1].icon}
                                                  className="forBusinessIcon"
                                                  style={{marginLeft: '10px'}}/>
-                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700" style={{width:"90%", marginLeft:"5%"}}>
                                                 {pathway.sponsor.positionDescription.frames[1].description}
                                             </div>
                                         </div>
@@ -758,14 +769,14 @@ class Pathway extends Component {
                                         <div style={style.bottomListItem}>
                                             <img src={pathway.sponsor.positionDescription.frames[2].icon}
                                                  className="forBusinessIcon"/>
-                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700" style={{width:"90%", marginLeft:"5%"}}>
                                                 {pathway.sponsor.positionDescription.frames[2].description}
                                             </div>
                                         </div>
                                         <div style={style.bottomListItem}>
                                             <img src={pathway.sponsor.positionDescription.frames[3].icon}
                                                  className="forBusinessIcon"/>
-                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                            <div className="horizListText font18px font16pxUnder800 font12pxUnder700" style={{width:"90%", marginLeft:"5%"}}>
                                                 {pathway.sponsor.positionDescription.frames[3].description}
                                             </div>
                                         </div>

@@ -99,6 +99,15 @@ footer {
 .lightBlueInputText > label {
     color: rgba(0, 195, 255, .7) !important;
 }
+
+.lightBlueBoxInput {
+    color: var(--moonshotLightBlue);
+    border: 2px solid;
+    display: inline-block;
+    margin: 20px;
+    padding-left: 5px;
+}
+
 .formSubmitButton {
     padding: 0px 25px 3px;
     border: 2px solid var(--moonshotLightBlue);
@@ -1765,6 +1774,11 @@ button.link {
 .dialogForBizOverlay {
     filter: blur(10px);
 }
+.dialogForSignup {
+    background-color: rgba(255, 255, 255, .9) !important;
+}
+.dialogForSignup > div:first-child { min-height: 300px; }
+
 
 .blurOnHover:hover {
     filter: blur(5px);
@@ -1791,9 +1805,15 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin-bottom: 15px;
 }
 
-.blueTextImportant {
-    color: var(--moonshotLightBlue) !important;
+.termsPage {
+    text-align: left;
+    color: white;
+    padding: 100px 40px 40px;
 }
+
+.blueTextImportant { color: var(--moonshotLightBlue) !important; }
+.blackTextImportant { color: black !important; }
+.whiteTextImportant { color: white !important; }
 
 .aResumeCantDoThis {
     position: relative;
@@ -1904,6 +1924,11 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     max-width: 160px;
     margin: auto;
     overflow-x: hidden;
+}
+textarea.freeResponseTextArea {
+    width: 90%;
+    resize: none;
+    height: 300px;
 }
 textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     width: 260px;

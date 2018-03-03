@@ -219,7 +219,7 @@ const sanitizeOptions = {
 //
 //     for (let userIdx = 0; userIdx < users.length; userIdx++) {
 //         let user = users[userIdx];
-//         user.linkText = "Go to Step";
+//         user.showToUsers = true;
 //         user.save(function() {
 //             console.log("user saved");
 //         });
@@ -255,6 +255,8 @@ app.post('/user', function (req, res) {
                     Users.count({name: user.name}, function (err, count) {
                         const randomNumber = crypto.randomBytes(8).toString('hex');
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+                        user.admin = false;
+                        user.agreedToTerms = true;
 
                         // add pathway to user's My Pathways if they went from
                         // a landing page.
@@ -613,8 +615,8 @@ app.post('/sendVerificationEmail', function (req, res) {
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
                 + '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
                     + '<div style="text-align:justify;width:80%;margin-left:10%;">'
-                    + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>. Once you verify your account, you can start building your profile. We hope you have a blast!</span><br/>'
-                    + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.com</a>.</span><br/>'
+                    + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
+                    + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.org</a>.</span><br/>'
                     + '</div>'
                 + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?'
                 + user.emailVerificationToken
@@ -622,8 +624,8 @@ app.post('/sendVerificationEmail', function (req, res) {
                 + '<div style="text-align:left;width:80%;margin-left:10%;">'
                     + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
                     + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#C8C8C8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8;" href="https://www.moonshotlearning.org/unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
+                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                    + '<a style="color:#C8C8C8; margin-top:20px;" href="https://www.moonshotlearning.org/unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
                     + '</div>'
                 + '</div>'
             + '</div>';
@@ -703,7 +705,7 @@ app.post('/user/forBusinessEmail', function (req, res) {
     if (req.body.message) {
         message = sanitize(req.body.message);
     }
-    let recipients = "kyle@moonshotlearning.org, justin@moonshotlearning.org";
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
     let subject = 'Moonshot Sales Lead - From For Business Page';
     let content = "<div>"
         + "<h3>Sales Lead from For Business Page:</h3>"
@@ -732,15 +734,49 @@ app.post('/user/forBusinessEmail', function (req, res) {
 
     sendEmail(recipients, subject, content, function (success, msg) {
         if (success) {
-            res.json("Email sent successfully, our team will be in contact with you shortly!");
+            res.json("Email sent successfully, our team will notify you of your results shortly.");
         } else {
             res.status(500).send(msg);
         }
     })
 });
 
+
+app.post("/alertLinkClicked", function(req, res) {
+    const name = sanitize(req.body.params.name);
+    const id = sanitize(req.body.params.userId);
+    const link = sanitize(req.body.params.link);
+
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
+    let subject = 'Someone just clicked the NWM Culture Index Link';
+    let content = "<div>"
+        + "<h3>Send an email to Northwestern Mutual (Preston) telling him NOT to interview this person until we give him the go-ahead. Make sure this is the right link, it's possible that this email hasn't been updated in the codebase yet but there are other links that you'll need to be notified of.</h3>"
+        + "<p>User's Name: "
+        + name
+        + "</p>"
+        + "<p>User's id: "
+        + id
+        + "</p>"
+        + "<p>Link that was clicked: "
+        + link
+        + "</p>"
+        + "</div>";
+
+    sendEmail(recipients, subject, content, function (success, msg) {
+        if (success) {
+            res.json(true);
+        } else {
+            console.log("ERROR SENDING EMAIL SAYING THAT THE NWM LINK WAS CLICKED");
+            res.json(false);
+        }
+    });
+});
+
+
 // SEND EMAIL FOR SOMEBODY COMPLETING PATHWAY
 app.post('/user/completePathway', function (req, res) {
+    const successMessage = "Pathway marked complete, our team will be in contact with you shortly!";
+    const errorMessage = "Error marking pathway complete, try again or contact us.";
 
     let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
     let subject = 'ACTION REQUIRED: Somebody completed pathway';
@@ -749,18 +785,65 @@ app.post('/user/completePathway', function (req, res) {
         + "<p>User: "
         + sanitize(req.body.userName)
         + "</p>"
+        + "<p>User id: "
+        + sanitize(req.body._id)
+        + "</p>"
         + "<p>Pathway: "
-        + sanitize(req.body.pathway)
+        + sanitize(req.body.pathwayName)
+        + "</p>"
+        + "<p>Contact them with this email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "<p>or this phone number: "
+        + sanitize(req.body.phoneNumber)
         + "</p>"
         + "</div>";
 
-    sendEmail(recipients, subject, content, function (success, msg) {
-        if (success) {
-            res.json("Email sent successfully, our team will be in contact with you shortly!");
-        } else {
-            res.status(500).send(msg);
+
+
+    // mark pathway complete and change emailTo
+    const _id = sanitize(req.body._id);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const pathwayId = sanitize(req.body.pathwayId);
+    const query = {_id, verificationToken}
+    Users.findOne(query, function (err, user) {
+        if (err) {
+            console.log("error marking pathway complete: ", err);
+        } else if (user && user != null) {
+            user.emailToContact = sanitize(req.body.email);
+            user.phoneNumber = sanitize(req.body.phoneNumber);
+            // find the user's pathway object corresponding to the pathway that was
+            // marked complete
+            const pathwayIndex = user.pathways.findIndex(function(path) {
+                return path.pathwayId.toString() == pathwayId.toString();
+            });
+            if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
+                // Put pathway into completed pathways and remove it from current pathways
+                user.completedPathways.push(user.pathways[pathwayIndex]);
+                user.pathways.splice(pathwayIndex, 1);
+            }
+
+            // save the user's new info in the db
+            user.save(function(err, updatedUser) {
+                let userToReturn = updatedUser;
+                if (err || updatedUser == null || updatedUser == undefined) {
+                    console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
+                    userToReturn = user;
+                    content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
+                }
+
+                // send an email to us saying that the user completed a pathway
+                sendEmail(recipients, subject, content, function (success, msg) {
+                    if (success) {
+                        res.json({message: successMessage, user: userToReturn});
+                    } else {
+                        res.status(500).send({message: errorMessage, user: userToReturn});
+                    }
+                });
+            });
         }
-    })
+    });
+
 });
 
 app.post('/user/unsubscribeEmail', function (req, res) {
@@ -993,7 +1076,7 @@ app.post('/getUserById', function (req, res) {
     const _id = sanitize(req.body._id);
     const query = {_id};
     getUserByQuery(query, function (user) {
-        res.json(removePassword(user));
+        res.json(safeUser(user));
     })
 });
 
@@ -1030,7 +1113,9 @@ app.post('/login', function (req, res) {
     var email = reqUser.email;
     var password = reqUser.password;
 
-    var query = {email: email};
+    // searches for user by case-insensitive email
+    const emailRegex = new RegExp(email, "i");
+    var query = {email: emailRegex};
     Users.findOne(query, function (err, user) {
         if (err) {
             res.status(500).send("Error performing query to find user in db. ", err);
@@ -1092,6 +1177,17 @@ function safeUser(user) {
     newUser.emailVerificationToken = undefined;
     newUser.passwordToken = undefined;
     newUser.answers = undefined;
+    return newUser;
+}
+
+// same as safe user except it has the user's answers to questions
+function userForAdmin(user) {
+    let newUser = Object.assign({}, user)._doc;
+    newUser.password = undefined;
+    newUser._id = undefined;
+    newUser.verificationToken = undefined;
+    newUser.emailVerificationToken = undefined;
+    newUser.passwordToken = undefined;
     return newUser;
 }
 
@@ -1195,7 +1291,13 @@ app.post("/user/addPathway", function (req, res) {
 //             }
             for (let i = 0; i < user.pathways.length; i++) {
                 if (user.pathways[i].pathwayId == req.body.pathwayId) {
-                    res.status(401).send("cannot sign up for pathway more than once");
+                    res.status(401).send("You can't sign up for pathway more than once");
+                    return;
+                }
+            }
+            for (let i = 0; i < user.completedPathways.length; i++) {
+                if (user.completedPathways[i].pathwayId == req.body.pathwayId) {
+                    res.status(401).send("You can't sign up for a completed pathway");
                     return;
                 }
             }
@@ -1287,11 +1389,12 @@ app.put('/user/changepassword/:_id', function (req, res) {
 app.get('/topPathways', function (req, res) {
     const numPathways = parseInt(sanitize(req.query.numPathways), 10);
 
-    // gets the most popular pathways, the number of pathways is numPathways
-    Pathways.find()
-        .sort({avgRating: -1})
+    // gets the most popular pathways, the number of pathways is numPathways;
+    // only show the ones that are ready for users to see
+    Pathways.find({showToUsers: true})
+        .sort({avgRating: 1})
         .limit(numPathways)
-        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon")
+        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon url")
         .exec(function (err, pathways) {
             if (err) {
                 res.status(500).send("Not able to get top pathways");
@@ -1301,7 +1404,6 @@ app.get('/topPathways', function (req, res) {
                 res.json(pathways);
             }
         });
-
 });
 
 //----->> GET LINK BY ID <<-----
@@ -1489,7 +1591,7 @@ function removeContentFromPathway(pathway) {
 //----->> SEARCH PATHWAYS <<------
 app.get('/search', function (req, res) {
     const MAX_PATHWAYS_TO_RETURN = 1000;
-    let query = {};
+    let query = {showToUsers: true};
 
     let term = sanitize(req.query.searchTerm);
     if (term && term !== "") {
@@ -1517,7 +1619,7 @@ app.get('/search', function (req, res) {
     }
 
     //const limit = 4;
-    const sort = {avgRating: -1};
+    const sort = {avgRating: 1};
     // only get these properties of the pathways
     const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon url";
 
@@ -1532,6 +1634,208 @@ app.get('/search', function (req, res) {
                 res.json(pathways);
             }
         })
+});
+
+
+app.get("/infoForAdmin", function(req, res) {
+    const query = sanitize(req.query);
+    const _id = query.userId;
+    const verificationToken = query.verificationToken;
+
+    if (!_id || !verificationToken) {
+        console.log("No user id or verification token for user trying to get admin info.");
+        res.status(403).send("User does not have valid credentials.");
+        return;
+    }
+
+    const adminQuery = { _id, verificationToken };
+
+    Users.findOne(adminQuery, function(err, user) {
+        if (err) {
+            console.log("Error finding admin user: ", err);
+            res.status(500).send("Error finding current user in db.");
+            return;
+        } else if (!user || !user.admin || !(user.admin === "true" || user.admin === true) ) {
+            res.status(403).send("User does not have valid credentials.");
+            return;
+        } else {
+            Users.find()
+                .sort({name: 1})
+                .select("name email profileUrl")
+                .exec(function (err2, users) {
+                    if (err2) {
+                        res.status(500).send("Not able to get users for admin.");
+                        return;
+                    } else if (users.length == 0) {
+                        res.status(500).send("No users found for admin.");
+                        return;
+                    } else {
+                        res.json(users);
+                        return;
+                    }
+                });
+        }
+    });
+});
+
+
+app.get("/userForAdmin", function(req, res) {
+    const query = sanitize(req.query);
+    const _id = query.adminUserId;
+    const verificationToken = query.verificationToken;
+    const profileUrl = query.profileUrl;
+
+    if (!_id || !verificationToken) {
+        console.log("No user id or verification token for user trying to get admin info.");
+        res.status(403).send("User does not have valid credentials.");
+        return;
+    }
+
+    if (!profileUrl) {
+        console.log("No user info requested.");
+        res.status(400).send("No user info requested.");
+        return;
+    }
+
+    const adminQuery = { _id, verificationToken };
+
+    Users.findOne(adminQuery, function(err, adminUser) {
+        if (err) {
+            console.log("Error finding admin user: ", err);
+            res.status(500).send("Error finding current user in db.");
+            return;
+        } else if (!adminUser || !adminUser.admin || !(adminUser.admin === "true" || adminUser.admin === true) ) {
+            res.status(403).send("User does not have valid credentials.");
+            return;
+        } else {
+            Users.findOne({profileUrl}, function(error, user) {
+                if (error) {
+                    console.log("Error getting user for admin: ", error);
+                    res.status(500).send("Error getting user for admin.");
+                    return;
+                } else if (!user) {
+                    console.log("User not found when trying to find user for admin.");
+                    res.status(404).send("User not found.");
+                    return;
+                } else {
+                    // have the user, now have to get their pathways to return
+
+                    let pathways = [];
+                    let completedPathways = [];
+                    let foundPathways = 0;
+                    let foundCompletedPathways = 0;
+
+                    // quizzes will look like
+                    // { <subStepId>: quizObject, ... }
+                    let quizzes = {};
+                    let requiredNumQuizzes = 0;
+                    let foundQuizzes = 0;
+
+                    let returnIfFoundEverything = function() {
+                        // if we have found all of the pathways, return all the info to the front end
+                        if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
+                            res.json({
+                                user: userForAdmin(user),
+                                pathways,
+                                completedPathways,
+                                quizzes
+                            });
+                            return;
+                        }
+                    }
+
+                    let getQuizzesFromPathway = function(path) {
+                        if (path && path.steps) {
+                            // find quizzes that go with this pathway
+                            for (let stepIndex = 0; stepIndex < path.steps.length; stepIndex++) {
+                                let step = path.steps[stepIndex];
+                                for (let subStepIndex = 0; subStepIndex < step.subSteps.length; subStepIndex++) {
+                                    let subStep = step.subSteps[subStepIndex];
+                                    if (subStep.contentType === "quiz") {
+                                        // new quiz found, have to retrieve it before returning
+                                        requiredNumQuizzes++;
+
+                                        Quizzes.findOne({_id: subStep.contentID}, function(quizErr, quiz) {
+                                            foundQuizzes++;
+                                            if (quizErr) {
+                                                console.log("Error getting question: ", quizErr);
+                                            } else {
+                                                quizzes[subStep.contentID] = quiz;
+                                            }
+
+                                            returnIfFoundEverything();
+                                        })
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // if the user has no pathways or completed pathways, return simply their info
+                    if (user.pathways.length === 0 && user.completedPathways.lengh === 0) {
+                        res.json({
+                            user: userForAdmin(user),
+                            pathways,
+                            completedPathways
+                        });
+                        return;
+                    }
+
+                    for (let pathwaysIndex = 0; pathwaysIndex < user.pathways.length; pathwaysIndex++) {
+                        Pathways.findOne({_id: user.pathways[pathwaysIndex].pathwayId}, function(pathErr, path) {
+                            if (pathErr) {
+                                console.log(pathErr);
+                            }
+                            pathways.push(path);
+                            // mark that we have found another pathway
+                            foundPathways++;
+
+                            getQuizzesFromPathway(path);
+
+
+
+
+
+                            // if we have found all of the pathways, return all the info to the front end
+                            // if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
+                            //     res.json({
+                            //         user: userForAdmin(user),
+                            //         pathways,
+                            //         completedPathways
+                            //     });
+                            //     return;
+                            // }
+                            returnIfFoundEverything();
+                        })
+                    }
+
+                    for (let completedPathwaysIndex = 0; completedPathwaysIndex < user.completedPathways.length; completedPathwaysIndex++) {
+                        Pathways.findOne({_id: user.completedPathways[completedPathwaysIndex].pathwayId}, function(pathErr, path) {
+                            if (pathErr) {
+                                console.log(pathErr);
+                            }
+                            completedPathways.push(path);
+                            // mark that we have found another pathway
+                            foundCompletedPathways++;
+
+                            getQuizzesFromPathway(path);
+
+                            returnIfFoundEverything();
+                            // if we have found all of the pathways, return all the info to the front end
+                            // if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
+                            //     res.json({
+                            //         user: userForAdmin(user),
+                            //         pathways,
+                            //         completedPathways
+                            //     });
+                            //     return;
+                            // }
+                        })
+                    }
+                }
+            });
+        }
+    });
 });
 
 
@@ -1748,7 +2052,6 @@ app.post("/updateInfo", function (req, res) {
                 console.log("couldn't find user");
                 console.log(err);
             }
-            console.log("user is:", user);
 
             if (!verifyUser(user, verificationToken)) {
                 console.log("can't verify user");

@@ -60,21 +60,17 @@ class PathwayPreview extends Component {
         if (this.props.comingSoon) {
             blurClass = "blurOnHover"
         }
-
         return (
             <div className="pathwayPreview" style={{position: "relative"}}>
                 {this.props.comingSoon ?
                     <div className="comingSoonPathwayPreview">
-                        <div/>
-                        {/* remove this when coming soon banner added back in */}
-
-                        {/*<div className="comingSoonBanner">
+                        <div className="comingSoonBanner">
                             <div>
                                 <div>
                                     Coming Soon
                                 </div>
                             </div>
-                        </div>*/}
+                        </div>
 
                         <div className="reserveYourSpotOnHover">
                             <div className="font36px whiteText">
@@ -127,7 +123,9 @@ class PathwayPreview extends Component {
                                                 <div className="whiteText">
                                                     <img src="/icons/CalendarWhite.png" style={iconStyle}/><br/>
                                                     <span className="font8px">Deadline</span><br/>
-                                                    TBA
+                                                    {this.props.deadline && !this.props.comingSoon ? this.props.deadline : null}
+                                                    {!this.props.deadline && !this.props.comingSoon ? "None" : null}
+                                                    {this.props.comingSoon ? "TBA" : null }
                                                 </div>
                                             </li>
                                             <li>
@@ -139,14 +137,17 @@ class PathwayPreview extends Component {
                                             </li>
                                         </ul>
                                     </div>
-                                    {/*<div style={{position:"absolute", bottom:"4px", right:"16px"}}>*/}
-                                    {/*Sponsored by*/}
-                                    {/*<img*/}
-                                    {/*src={this.props.logo}*/}
-                                    {/*alt={this.props.sponsorName}*/}
-                                    {/*height={20}*/}
-                                    {/*/>*/}
-                                    {/*</div>*/}
+                                    {this.props.comingSoon ?
+                                        null :
+                                        <div style={{position:"absolute", bottom:"4px", /*right:"16px"*/ width: "100%"}}>
+                                            <div style={{display:"inline-block", /*marginRight:"4px"*/}}>{/*Hiring Partner*/}</div>
+                                            <img
+                                                src={this.props.logo}
+                                                alt={this.props.sponsorName}
+                                                height={20}
+                                            />
+                                        </div>
+                                    }
                                 </div>
                             }
                         </div>
@@ -192,7 +193,9 @@ class PathwayPreview extends Component {
                                                     <img src={calendarImg}
                                                          style={iconStyle}/><br/>
                                                     <span className="font8px">Deadline</span><br/>
-                                                    TBA
+                                                    {this.props.deadline && !this.props.comingSoon ? this.props.deadline : null}
+                                                    {!this.props.deadline && !this.props.comingSoon ? "None" : null}
+                                                    {this.props.comingSoon ? "TBA" : null }
                                                 </div>
                                             </li>
                                             <li>
@@ -205,14 +208,17 @@ class PathwayPreview extends Component {
                                             </li>
                                         </ul>
                                     </div>
-                                    {/*<div style={{position:"absolute", bottom:"4px", right:"16px"}}>*/}
-                                    {/*Sponsored by*/}
-                                    {/*<img*/}
-                                    {/*src={this.props.logo}*/}
-                                    {/*alt={this.props.sponsorName}*/}
-                                    {/*height={20}*/}
-                                    {/*/>*/}
-                                    {/*</div>*/}
+                                    {this.props.comingSoon ?
+                                        null :
+                                        <div style={{position:"absolute", bottom:"4px", /*right:"16px"*/ width: "100%"}}>
+                                            <div style={{display:"inline-block", /*marginRight:"4px"*/}}>{/*Hiring Partner*/}</div>
+                                            <img
+                                                src={this.props.logo}
+                                                alt={this.props.sponsorName}
+                                                height={20}
+                                            />
+                                        </div>
+                                    }
                                 </div>
                             }
                         </div>

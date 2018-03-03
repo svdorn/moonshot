@@ -16,7 +16,8 @@ var articlesSchema = mongoose.Schema({
         // if you should put a break after the part
         shouldBreak: Boolean
     }],
-    linkText: String
+    linkText: String,
+    linkFunction: String
 });
 
 var Articles = mongoose.model('Articles', articlesSchema);
