@@ -31,6 +31,17 @@ class StyledContent extends Component {
                         if (part.shouldBreak) { contentHtml.push(<br key={"br" + keyCounter}/>); }
                     }
                     break;
+                case "img":
+                    if (content.length > 0) {
+                        contentHtml.push(
+                            <img src={"/images/" + content[0]}
+                                 className={className}
+                                 key={"contentPart" + keyCounter} />
+                        );
+                        // add a break if there's supposed to be one
+                        if (part.shouldBreak) { contentHtml.push(<br key={"br" + keyCounter}/>); }
+                    }
+                    break;
                 case "ol":
                 case "ul":
                     // if no items given for the lists, return nothing

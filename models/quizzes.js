@@ -10,7 +10,7 @@ var quizzesSchema = mongoose.Schema({
     needAllCorrect: Boolean,
     // if you want to allow a custom, user-inputted answer or not
     allowCustomAnswer: Boolean,
-    // "slider", "multipleChoice", "freeResponse", "twoOptions"
+    // "slider", "multipleChoice", "freeResponse", "twoOptions", "multiSelect"
     questionType: String,
     // an array of parts of the question, e.g. first part is blue text, second part is a list, etc...
     question: [{
