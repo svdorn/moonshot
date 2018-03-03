@@ -33,6 +33,18 @@ class Question extends Component {
                         return null;
                     }
                     break;
+                case "img":
+                    if (content.length > 0) {
+                        return (
+                            <div>
+                                <img src={"/images/" + content[0]}
+                                     className={className}
+                                     key={"contentPart" + keyCounter} />
+                                     {breakArea}
+                            </div>
+                        );
+                    }
+                    break;
                 case "ol":
                 case "ul":
                     // if no items given for the lists, return nothing
