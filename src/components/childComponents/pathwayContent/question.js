@@ -10,7 +10,10 @@ class Question extends Component {
             // add a break if the question part needs a break after it
             const breakArea = part.shouldBreak ? <br/> : null;
             // default classNames; if className provided, give the part that className instead
-            const defaultClassNames = "inlineBlock font20px font14pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400";
+            let defaultClassNames = "inlineBlock font20px font14pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400";
+            if (part.partType === "code") {
+                defaultClassNames = "inlineBlock font16px font12pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400";
+            }
             let className = part.className ? part.className : defaultClassNames;
             // if className isn't default but we want to include default classes, add them
             if (part.className && part.includeDefaultClasses) {
@@ -75,6 +78,31 @@ class Question extends Component {
                                 {breakArea}
                             </ul>
                         );
+                    }
+                    break;
+                case "code":
+                    if (content.length > 0) {
+                        let code = [];
+                        content.forEach(function(codeLine) {
+                            let codeCopy = codeLine;
+                            // "^" is the symbol to use for indenting by one tab
+                            while (codeCopy.length > 0 && codeCopy.charAt(0) === "^") {
+                                // add a tab to the beginning of the line
+                                code.push(<div className="inlineBlock width40px"/>);
+                                // remove the indent symbol
+                                codeCopy = codeCopy.substring(1);
+                            }
+                            code.push(<div className="inlineBlock">{codeCopy}</div>);
+                            code.push(<br/>)
+                        });
+                        return (
+                            <div className={className + " code"} style={{textAlign:"left"}} key={"questionPart" + keyCounter}>
+                                {code}
+                                {breakArea}
+                            </div>
+                        );
+                    } else {
+                        return null;
                     }
                     break;
                 default:
