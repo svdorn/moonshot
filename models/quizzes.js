@@ -22,6 +22,10 @@ var quizzesSchema = mongoose.Schema({
         includeDefaultClasses: Boolean,
         // the content of the part; if content is just text, array will be length 1
         content: [String],
+        // text that will show up if this question part is a link (optional)
+        linkText: String,
+        // if the question part is a link, should the link open a new tab? (optional, defaults to true)
+        newTab: Boolean,
         // if you should put a break after the part
         shouldBreak: Boolean
     }],

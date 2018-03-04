@@ -48,6 +48,15 @@ class Question extends Component {
                         );
                     }
                     break;
+                case "link":
+                    if (content.length > 0) {
+                        const linkText = content.linkText ? content.linkText : content[0];
+                        const target = content.newTab === false ? "_self" : "_blank";
+                        return (
+                            <a target={target} href={content[0]}>{linkText}</a>
+                        );
+                    }
+                    break;
                 case "ol":
                 case "ul":
                     // if no items given for the lists, return nothing
