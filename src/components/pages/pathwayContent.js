@@ -215,6 +215,7 @@ class PathwayContent extends Component {
                                 className="stepScrollerContainerInDrawer"
                                 steps={pathway.steps}
                                 pathwayId={pathway._id}
+                                inDrawer={true}
                             />
                         </Drawer>
 
@@ -225,6 +226,7 @@ class PathwayContent extends Component {
                                     className="stepScrollerContainer"
                                     steps={pathway.steps}
                                     pathwayId={pathway._id}
+                                    inDrawer={false}
                                 />
 
                                 <Paper className="questionsContactUs">

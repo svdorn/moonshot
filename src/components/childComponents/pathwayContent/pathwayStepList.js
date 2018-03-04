@@ -133,7 +133,7 @@ class PathwayStepList extends Component {
         const stepItems = this.props.steps.map(function(step) {
             const subStepItems = step.subSteps.map(function(subStep) {
                 return (
-                    <Step key={"" + step.order + ", " + subStep.order}>
+                    <Step key={"" + step.order + ", " + subStep.contentID + ", inDrawer" + self.props.inDrawer}>
                         <StepButton onClick={() => self.setState({
                             subStepIndex: (subStep.order - 1),
                             stepIndex: (step.order - 1)
@@ -165,7 +165,7 @@ class PathwayStepList extends Component {
             const bottomMargin = (step.order == self.props.steps.length) ? {marginBottom: "20px"} : {};
 
             return (
-                <Step key={step.order + ", " + step.name} style={bottomMargin}>
+                <Step key={step.order + "-" + step._id + ", inDrawer" + self.props.inDrawer} style={bottomMargin}>
                     <StepButton onClick={() => self.setState({
                         stepIndex: (step.order - 1),
                         subStepIndex: 0
@@ -183,7 +183,7 @@ class PathwayStepList extends Component {
 
 
         return (
-            <Paper className={"drawerContent" + this.props.className} style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
+            <Paper key={"stepperInDrawer" + this.props.inDrawer} className={"drawerContent" + this.props.className} style={{...this.props.style, ...style.enclosingBox}} zDepth={1}>
                 <div style={{maxWidth: 380, margin: 'auto'}}>
                     <Stepper
                       activeStep={stepIndex}
