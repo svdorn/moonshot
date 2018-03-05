@@ -67,21 +67,47 @@ class PathwayContentArticle extends Component {
 
     render() {
         const content = this.state.content;
-        return (
-            <div className={this.props.className} style={{...this.props.style}}>
-                {this.state.content !== undefined ?
+
+        if (this.state.content !== undefined) {
+            console.log("hyello");
+            // set the description equal to the article's description
+            let description = content.description;
+            // if there is no description, check if default description is not allowed
+            if (content.description.length === 0) {
+                if (content.defaultDescription !== false) {
+                    // if default description setting isn't set or is set to true,
+                    // include the default description
+                    description = [
+                        {
+                            partType: "text",
+                            content: [
+                                "Read this article, then come back and advance to the next step."
+                            ],
+                            shouldBreak: true,
+                            includeDefaultClasses: true
+                        }
+                    ];
+                }
+            }
+
+            return (
+                <div className={this.props.className} style={{...this.props.style}}>
                     <div className="center" style={{marginBottom: "10px"}}>
                         <h4 className="marginTop20px blueText font30px">{content.name}</h4>
-                        <StyledContent contentArray={content.description} />
+                        <StyledContent contentArray={description} />
                         <button className="outlineButton font24px font20pxUnder500 whiteBlueButton">
                             <a href={content.link} onClick={this.handleClick.bind(this)} target="_blank" className="blueText blueTextOnHover" style={{textDecoration: 'none'}}>
                                 {content.linkText}
                             </a>
                         </button>
                     </div>
-                    : null}
-            </div>
-        );
+                </div>
+            );
+        } else {
+            return (
+                <div className={this.props.className} style={{...this.props.style}} />
+            );
+        }
     }
 }
 
