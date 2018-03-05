@@ -256,6 +256,7 @@ class Discover extends Component {
                             price={pathway.price}
                             _id={pathway._id}
                             comingSoon = {pathway.comingSoon}
+                            variation="3"
                         />
                     </li>
                 );

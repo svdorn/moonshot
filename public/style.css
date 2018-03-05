@@ -2060,6 +2060,17 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     margin-top: -34px;
 }
 
+.code {
+    text-align: left;
+    background-color: #eaeaea;
+    font-family: monospace;
+}
+
+.width90Percent { width: 90%; }
+.maxWidth350px { max-width: 350px; }
+
+.width40px { width: 40px; }
+
 .font60px { font-size: 60px; }
 .font48px { font-size: 48px; }
 .font46px { font-size: 46px; }

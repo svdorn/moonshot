@@ -778,7 +778,7 @@ app.post('/user/completePathway', function (req, res) {
     const successMessage = "Pathway marked complete, our team will be in contact with you shortly!";
     const errorMessage = "Error marking pathway complete, try again or contact us.";
 
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
     let subject = 'ACTION REQUIRED: Somebody completed pathway';
     let content = "<div>"
         + "<h3>A User has just completed this pathway:</h3>"
@@ -818,8 +818,18 @@ app.post('/user/completePathway', function (req, res) {
                 return path.pathwayId.toString() == pathwayId.toString();
             });
             if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
+                let completedPathway = user.pathways[pathwayIndex];
+                const newPathwayObject = {
+                    pathwayId: completedPathway.pathwayId,
+                    dateAdded: completedPathway.dateAdded,
+                    dateCompleted: new Date()
+                }
+                console.log(completedPathway);
+                console.log("new pathway:");
+                console.log(newPathwayObject)
+
                 // Put pathway into completed pathways and remove it from current pathways
-                user.completedPathways.push(user.pathways[pathwayIndex]);
+                user.completedPathways.push(newPathwayObject);
                 user.pathways.splice(pathwayIndex, 1);
             }
 
@@ -1302,6 +1312,7 @@ app.post("/user/addPathway", function (req, res) {
                 }
             }
             const pathway = {
+                dateAdded: new Date(),
                 pathwayId: pathwayId,
                 currentStep: {
                     subStep: 1,
@@ -1463,7 +1474,9 @@ app.get('/getQuiz', function (req, res) {
             console.log("error in get quiz by id")
             res.status(404).send("Quiz not found");
         } else {
-            quiz.correctAnswerNumber = undefined;
+            if (quiz != null) {
+                quiz.correctAnswerNumber = undefined;
+            }
             res.json(quiz);
         }
 

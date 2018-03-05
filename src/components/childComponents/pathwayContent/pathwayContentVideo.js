@@ -29,39 +29,51 @@ class PathwayContentVideo extends Component {
         }
     }
 
-    // componentDidUpdate() {
-    //     if (this.props.step !== this.state.currStep) {
-    //         const id = this.props.step.contentID;
-    //
-    //         axios.get("/api/getVideo", {
-    //             params: {
-    //                 _id: id
-    //             }
-    //         }).then(res => {
-    //             this.setState({content: res.data, currStep: this.props.step});
-    //         }).catch(function (err) {
-    //             console.log("error getting searched for video");
-    //         })
-    //     }
-    // }
+    componentDidUpdate() {
+        if (this.props.step !== this.state.currStep) {
+            const id = this.props.step.contentID;
+
+            axios.get("/api/getVideo", {
+                params: {
+                    _id: id
+                }
+            }).then(res => {
+                this.setState({content: res.data, currStep: this.props.step});
+            }).catch(function (err) {
+                console.log("error getting searched for video");
+            })
+        }
+    }
 
     render() {
+        const content = this.state.content;
+        if (!content) {
+            return null;
+        }
 
+        const startTime = content.start ? content.start : undefined;
+        const endTime = content.end ? content.end : undefined;
+        // setting this to 1 means annotations will show. default is 3, meaning
+        // annotations are turned off
+        const showAnnotations = content.showAnnotations === true ? "1" : "3";
         const opts = {
             height: '100%',
             width: '100%',
             playerVars: { // https://developers.google.com/youtube/player_parameters
                 autoplay: 0,
-                rel: 0
+                rel: 0,
+                start: startTime,
+                end: endTime,
+                iv_load_policy: showAnnotations
             }
         };
 
         return (
             <div>
-                {this.state.content !== undefined ?
+                {content !== undefined ?
                     <div style={this.props.style} className={this.props.className}>
                         <YouTube
-                            videoId={this.state.content.link}
+                            videoId={content.link}
                             opts={opts}
                             onReady={this._onReady}
                             onEnd={this._onEnd}

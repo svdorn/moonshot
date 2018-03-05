@@ -51,6 +51,7 @@ var usersSchema = mongoose.Schema({
     redirect: String,
     // pathways the user is signed up for
     pathways: [{
+        dateAdded: Date,
         pathwayId: mongoose.Schema.Types.ObjectId,
         currentStep: {
             step: Number,
@@ -60,6 +61,8 @@ var usersSchema = mongoose.Schema({
     }],
     // pathways the user has finished
     completedPathways: [{
+        dateAdded: Date,
+        dateCompleted: Date,
         pathwayId: mongoose.Schema.Types.ObjectId,
         currentStep: {
             step: Number,

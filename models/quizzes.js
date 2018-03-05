@@ -10,7 +10,7 @@ var quizzesSchema = mongoose.Schema({
     needAllCorrect: Boolean,
     // if you want to allow a custom, user-inputted answer or not
     allowCustomAnswer: Boolean,
-    // "slider", "multipleChoice", "freeResponse", "twoOptions"
+    // "slider", "multipleChoice", "freeResponse", "twoOptions", "multiSelect"
     questionType: String,
     // an array of parts of the question, e.g. first part is blue text, second part is a list, etc...
     question: [{
@@ -22,6 +22,10 @@ var quizzesSchema = mongoose.Schema({
         includeDefaultClasses: Boolean,
         // the content of the part; if content is just text, array will be length 1
         content: [String],
+        // text that will show up if this question part is a link (optional)
+        linkText: String,
+        // if the question part is a link, should the link open a new tab? (optional, defaults to true)
+        newTab: Boolean,
         // if you should put a break after the part
         shouldBreak: Boolean
     }],

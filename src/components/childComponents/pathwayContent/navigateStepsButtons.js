@@ -39,6 +39,15 @@ class PathwayStepList extends Component {
         const stepNumber = this.state.stepIndex + 1;
         const substep = this.props.steps[this.state.stepIndex].subSteps[this.state.subStepIndex];
         this.props.updateCurrentSubStep(user, pathwayId, stepNumber, substep);
+
+        // scroll up to content if the user is scrolled far down
+        if (window.pageYOffset > 100) {
+            window.scroll({
+                top: 100,
+                left: 0,
+                behavior: 'smooth'
+            });
+        }
     }
 
     handleNextSub = () => {

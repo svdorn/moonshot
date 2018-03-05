@@ -383,7 +383,7 @@ class ForBusiness extends Component {
                                     <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forBusiness">
                                         <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Course Pathways Curated <div className="above500only br"><br/></div>to the Skills You Need
                                         </h2>
-                                        Expert-led, interactive learning
+                                        Interactive learning
                                         through videos, articles, skill
                                         assessments and real-world projects.
                                     </div>
@@ -542,11 +542,11 @@ class ForBusiness extends Component {
                             <div className="gradientBorderPurpleToRedBox">
                                 <div className="forBusinessBox">
                                     <div className="font28px font24pxUnder800 font22pxUnder500">Successful Hire</div>
-                                    <div className="font32px font28pxUnder800 font26pxUnder500 purpleText">2-4%</div>
+                                    <div className="font32px font28pxUnder800 font26pxUnder500 purpleText">3-5%</div>
                                     <div>GROSS ANNUAL SALARY</div>
                                     <div className="br"><br/></div>
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
-                                    2% to 4% for full and part time hires.<br/>
+                                    3% to 5% for full and part-time hires.<br/>
                                     8% to 10% for interns or co-ops.<br/>
                                     Pay only after he or she accepts your offer.
                                     </div>
