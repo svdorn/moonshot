@@ -245,8 +245,11 @@ class Pathway extends Component {
                                 {step.name}
                             </div>
                             <div className="font14px font12pxUnder700 font10pxUnder500 halfWidthStepDesc">
-                                {step.description}
-                                This is the description of the step. It will eventually describe the step.
+                                {step.description ?
+                                    step.description
+                                    :
+                                    "This is the description of the step. It will eventually describe the step."
+                                }
                             </div>
                         </div>
                         <div className="stepSeparatorLeft"/>
