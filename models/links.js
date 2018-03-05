@@ -6,7 +6,8 @@ var linksSchema = mongoose.Schema({
     company: String,
     logo: String,
     instructions: String,
-    name: String
+    name: String,
+    linkText: String
 });
 
 var Links = mongoose.model('Links', linksSchema);

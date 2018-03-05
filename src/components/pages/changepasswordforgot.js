@@ -75,7 +75,7 @@ class PasswordChange extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <div className="fullHeight greenToBlue formContainer">
+            <div className="fillScreen greenToBlue formContainer">
                 <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
@@ -86,6 +86,7 @@ class PasswordChange extends Component {
                                 name="password"
                                 component={renderPasswordField}
                                 label="New Password"
+                                className="lightBlueInputText"
                             /><br/>
                         </div>
                         <div className="inputContainer">
@@ -94,6 +95,7 @@ class PasswordChange extends Component {
                                 name="password2"
                                 component={renderPasswordField}
                                 label="Confirm New Password"
+                                className="lightBlueInputText"
                             /><br/>
                         </div>
                         <button

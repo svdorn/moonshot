@@ -84,6 +84,7 @@ class Account extends Component {
                                 name="name"
                                 component={renderTextField}
                                 label="Full Name"
+                                className="lightBlueInputText"
                             /></div>
                         <br/>
                         <div className="inputContainer">
@@ -92,6 +93,7 @@ class Account extends Component {
                                 name="email"
                                 component={renderTextField}
                                 label="Email"
+                                className="lightBlueInputText"
                             /></div>
                         <br/>
                         <button

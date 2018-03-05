@@ -18,9 +18,11 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 
 let theme = {
-    userAgent: 'all',
+    // this messes with the slider colors
+    // userAgent: 'all',
+    userAgent: false,
     spacing: spacing,
-    fontFamily: 'Didact Gothic, sans-serif',
+    fontFamily: 'Muli, sans-serif',
     palette: {
         primary1Color: '#00c3ff',
         primary2Color: lightBlue500,

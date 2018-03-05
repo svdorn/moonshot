@@ -45,21 +45,26 @@ class Home extends Component {
     }
 
     handleOpen = (pathway) => {
-        // tell the user they are preregistered if logged in
-        const currentUser = this.props.currentUser;
-        if (currentUser && currentUser != "no user") {
-            const user = {
-                name: currentUser.name,
-                email: currentUser.email,
-                pathway: pathway,
+        console.log("pathway: ", pathway);
+        if (!pathway.comingSoon) {
+            this.goTo('/pathway?' + pathway.url);
+        } else {
+            // tell the user they are preregistered if logged in
+            const currentUser = this.props.currentUser;
+            if (currentUser && currentUser != "no user") {
+                const user = {
+                    name: currentUser.name,
+                    email: currentUser.email,
+                    pathway: pathway.name,
+                }
+                const signedIn = true;
+                this.props.comingSoon(user, signedIn);
+                this.setState({open: true});
             }
-            const signedIn = true;
-            this.props.comingSoon(user, signedIn);
-            this.setState({open: true});
-        }
-        // if not logged in, prompt for user info
-        else {
-            this.setState({open: true, dialogPathway: pathway});
+            // if not logged in, prompt for user info
+            else {
+                this.setState({open: true, dialogPathway: pathway.name});
+            }
         }
     };
 
@@ -104,17 +109,20 @@ class Home extends Component {
         let self = this;
         const pathwayPreviews1 = this.state.pathways1.map(function (pathway) {
             pathwayKey++;
-            const deadline = new Date(pathway.deadline);
-            const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            let formattedDeadline = "";
+            if (pathway.deadline) {
+                const deadline = new Date(pathway.deadline);
+                formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            }
+
             return (
                 <li style={{verticalAlign: "top"}} key={pathwayKey}
-                    //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                    onClick={() => self.handleOpen(pathway.name)}
+                    onClick={() => self.handleOpen(pathway)}
                 ><PathwayPreview
                     name={pathway.name}
                     image={pathway.previewImage}
-                    //<!-- logo = {pathway.sponsor.logo} -->
-                    //<!-- sponsorName = {pathway.sponsor.name} -->
+                    logo = {pathway.sponsor.logoForLightBackground}
+                    sponsorName = {pathway.sponsor.name}
                     completionTime = {pathway.estimatedCompletionTime}
                     deadline = {formattedDeadline}
                     price = {pathway.price}
@@ -129,17 +137,21 @@ class Home extends Component {
             pathwayKey = 100;
             pathwayPreviews2 = this.state.pathways2.map(function (pathway) {
                 pathwayKey++;
-                const deadline = new Date(pathway.deadline);
-                const formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                let formattedDeadline = "";
+                if (pathway.deadline) {
+                    const deadline = new Date(pathway.deadline);
+                    formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+                }
+
                 return (
                     <li style={{verticalAlign: "top"}} key={pathwayKey}
                         //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                        onClick={() => self.handleOpen(pathway.name)}
+                        onClick={() => self.handleOpen(pathway)}
                     ><PathwayPreview
                         name={pathway.name}
                         image={pathway.previewImage}
-                        //<!-- logo = {pathway.sponsor.logo} -->
-                        //<!-- sponsorName = {pathway.sponsor.name} -->
+                        logo = {pathway.sponsor.logoForLightBackground}
+                        sponsorName = {pathway.sponsor.name}
                         completionTime = {pathway.estimatedCompletionTime}
                         deadline = {formattedDeadline}
                         price = {pathway.price}
@@ -251,8 +263,8 @@ class Home extends Component {
                     <div className="fullHeight greenToBlue">
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
-                        <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500" style={{zIndex: "20", width: "100%"}}>
-                            Skip the resum&eacute;.<br/> Learn skills that employers <div className="br under350only"><br/></div>need <div className="br above350only"><br/></div><i>for free, forever.</i><br/>
+                        <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500 font20pxUnder400 font18pxUnder350">
+                            Skip the resum&eacute;.<br/>Learn skills that employers need<br/><i>and get paid to do it.</i><br/>
                             <button className="outlineButton font30px font20pxUnder500 blueWhiteButton"
                                     onClick={() => this.scrollDown()}>
                                 Get Started
@@ -275,18 +287,18 @@ class Home extends Component {
 
                             <div className="homepageTrajectoryContainer" style={{marginTop:"30px"}}>
                             <div className="homepageTrajectory">
-                            <div className="homepageTrajectoryTextLeft onHome">
+                            <div className="homepageTrajectoryTextLeft onHome pushDownAbove800">
                                 <img
                                     src="/icons/Lightbulb.png"
                                     alt="Lightbulb"
                                     title="Lightbulb icon"
                                     className="homepageTrajectoryTextLeftIcon onHome"
                                 />
-                                <div className="homepageTrajectoryTextLeftDiv onHome font20px font18pxUnder600 font20pxUnder500">
-                                    <h2 className="greenText">Complete Pathways<br/>And Learn Skills</h2>
-                                    Pathways are a series of courses
-                                    designed to teach you skills
-                                    demanded by employers.
+                                <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
+                                    <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Complete Pathways<br/>And Learn Skills</h2>
+                                      Pathways are a series of free courses
+                                      designed to teach you skills that employers actually want.
+                                      Who cares if you know how photosynthesis works?
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight onHome">
@@ -300,18 +312,19 @@ class Home extends Component {
                         <br/>
 
                         <div className="homepageTrajectory">
-                            <div className="homepageTrajectoryTextRight onHome">
+                            <div className="homepageTrajectoryTextRight onHome pushDownAbove800">
                                 <img
                                     src="/icons/Person.png"
                                     alt="Person icon"
                                     title="Person icon"
-                                    className="homepageTrajectoryTextRightIcon onHome"
+                                    className="homepageTrajectoryTextRightIcon personIcon onHome"
                                 />
-                                <div className="homepageTrajectoryTextRightDiv onHome font20px font18pxUnder600 font20pxUnder500">
-                                    <h2 className="blueText">Build Your Profile</h2>
+                                <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
+                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Build Your Profile</h2>
                                     Add your skills, completed projects and
-                                    finished pathways. Prove yourself to employers through
-                                    your profile.
+                                    finished pathways. The modern resumé – the
+                                    B you got in history shouldn’t affect your
+                                    chances of getting a tech job.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesLeft">
@@ -325,18 +338,19 @@ class Home extends Component {
                         <br/>
 
                         <div className="homepageTrajectory">
-                            <div className="homepageTrajectoryTextLeft onHome">
+                            <div className="homepageTrajectoryTextLeft onHome pushDownSlightlyAbove800">
                                 <img
                                     src="/icons/Badge.png"
                                     alt="Badge icon"
                                     title="Badge icon"
-                                    className="homepageTrajectoryTextLeftIcon smallerWidthIcon"
+                                    className="homepageTrajectoryTextLeftIcon onHome smallerWidthIcon"
                                 />
-                                <div className="homepageTrajectoryTextLeftDiv onHome font20px font18pxUnder600 font20pxUnder500">
-                                    <h2 className="purpleText">Get Hired By Companies<br/>Leading The Future</h2>
-                                    Compete for open positions with
-                                    sponsor companies by excelling in
-                                    pathways and strengthening your profile.
+                                <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
+                                    <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Paid and Get Hired by<br/>Innovative Companies</h2>
+                                    Compete for open positions with sponsor
+                                    companies by excelling in pathways and
+                                    demonstrating your skills. Score an
+                                    interview with them and we’ll pay you $100.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight">
@@ -351,10 +365,10 @@ class Home extends Component {
                     <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
 
                     <div className="topMarginOnSmallScreen" style={{textAlign: "center"}}>
-                        <div className="center font40px font24pxUnder500 blueText homePathwaysTitle">Pathways</div>
-                        <div className="homePathwaysDesc font20px font18pxUnder600">
-                            Pathways are a series of courses and assessments that are<br/>
-                            sponsored by employers hiring for those skills, so you can learn for free.
+                        <div className="center font34px font32pxUnder800 font26pxUnder500 blueText">Pathways</div>
+                        <div className="homePathwaysDesc font18px font16pxUnder800">
+                            Moonshot courses are organized in<div className="br under500only"><br/></div> pathways and
+                            sponsored<br/>by employers hiring for those skills.
                         </div>
                         <div className="pathwayPrevListContainer">
                             <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">
@@ -389,7 +403,7 @@ class Home extends Component {
                     <div className="purpleToGreenSpacer"/>
 
                     <div className="center" style={{marginBottom: "50px"}}>
-                        <div className="font40px font24pxUnder500 purpleText homePathwaysTitle">Build Your Skillset</div>
+                        <div className="font28px font24pxUnder800 font22pxUnder500 purpleText homePathwaysTitle">Build Your Skillset</div>
 
                         <div id="exampleSkillsContainer">
                             {exampleSkills}
@@ -403,7 +417,7 @@ class Home extends Component {
                                 Start Profile
                             </div>
                         </button>
-                        <div className="clickable underline purpleText" style={{marginTop: '10px'}} onClick={() => this.goTo('/forBusiness')}><i>Are you an employer?</i></div>
+                        <div className="clickable purpleText underline" style={{marginTop: '10px'}} onClick={() => this.goTo('/forBusiness')}><i>Are you an employer?</i></div>
                     </div>
                 </div>
             </div>

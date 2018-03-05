@@ -1,14 +1,18 @@
 "use strict"
 import React, {Component} from 'react';
-import PathwayContentLink from '../childComponents/pathwayContentLink';
-import PathwayContentVideo from '../childComponents/pathwayContentVideo';
-import PathwayContentArticle from '../childComponents/pathwayContentArticle';
+import PathwayContentLink from '../childComponents/pathwayContent/pathwayContentLink';
+import PathwayContentVideo from '../childComponents/pathwayContent/pathwayContentVideo';
+import PathwayContentArticle from '../childComponents/pathwayContent/pathwayContentArticle';
+import PathwayContentQuiz from '../childComponents/pathwayContent/pathwayContentQuiz';
+import PathwayContentCompletePathway from '../childComponents/pathwayContent/pathwayContentCompletePathway';
+import PathwayInfo from '../childComponents/pathwayContent/pathwayInfo';
 import {Tabs, Tab, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, updateCurrentSubStep, setHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
-import PathwayStepList from '../childComponents/pathwayStepList';
+import PathwayStepList from '../childComponents/pathwayContent/pathwayStepList';
+import NavigateStepButtons from '../childComponents/pathwayContent/navigateStepsButtons';
 import axios from 'axios';
 
 class PathwayContent extends Component {
@@ -23,9 +27,6 @@ class PathwayContent extends Component {
         }
     }
 
-    componentWillReceiveProps() {
-        console.log("cwrprops");
-    }
 
     componentDidMount() {
         // this.props.setHeaderBlue(true);
@@ -136,7 +137,6 @@ class PathwayContent extends Component {
             },
             pathwayHeader: {
                 width: "100%",
-                height: "50px",
                 backgroundColor: "white",
                 padding: "10px 30px",
                 fontSize: "20px"
@@ -158,24 +158,35 @@ class PathwayContent extends Component {
         const pathway = this.state.pathway;
 
         let content = <div>"loading"</div>;
+        let contentClass = "pathwayContent";
         // if the user is on a step, show that content
         if (this.props.step) {
             const contentType = this.props.step.contentType;
             if (contentType == "link") {
-                content = <PathwayContentLink className="pathwayContent"/>;
+                content = <PathwayContentLink/>;
             } else if (contentType == "video") {
                 content = <PathwayContentVideo className="videoContainer"/>;
+                contentClass += " noPadding";
             } else if (contentType == "article") {
-                content = <PathwayContentArticle className="pathwayContent"/>
+                content = <PathwayContentArticle/>
+            } else if (contentType == "quiz") {
+                content = <PathwayContentQuiz/>
+            } else if (contentType == "info") {
+                content = <PathwayInfo/>
+            } else if (contentType == "completedPathway") {
+                content = <PathwayContentCompletePathway pathway={this.state.pathway} />
             } else {
-                content = <div style={style.div}>Not Video or Link</div>;
+                content = <div style={style.div}>Error retrieving step.</div>;
             }
         }
 
-        let formattedDeadline = '';
+        let formattedDeadline = undefined;
         if (this.state.pathway) {
             const deadline = new Date(this.state.pathway.deadline);
             formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
+            if (formattedDeadline.includes("NaN")) {
+                formattedDeadline = undefined;
+            }
         }
 
         return (
@@ -184,7 +195,11 @@ class PathwayContent extends Component {
                     <div>
                         <div className="greenToBlue headerDiv"/>
                         <Paper style={style.pathwayHeader}>
-                            {pathway.name}
+                            {pathway.pathwayContentDisplayName ?
+                                pathway.pathwayContentDisplayName
+                            :
+                                pathway.name
+                            }
                         </Paper>
 
 
@@ -200,7 +215,7 @@ class PathwayContent extends Component {
                                 className="stepScrollerContainerInDrawer"
                                 steps={pathway.steps}
                                 pathwayId={pathway._id}
-                                currentSubStep={this.props.step}
+                                inDrawer={true}
                             />
                         </Drawer>
 
@@ -211,7 +226,7 @@ class PathwayContent extends Component {
                                     className="stepScrollerContainer"
                                     steps={pathway.steps}
                                     pathwayId={pathway._id}
-                                    currentSubStep={this.props.step}
+                                    inDrawer={false}
                                 />
 
                                 <Paper className="questionsContactUs">
@@ -231,7 +246,17 @@ class PathwayContent extends Component {
                             </div>
 
                             <div style={{height: "10px"}}/>
-                            {content}
+
+                            <div className="pathwayContentContainer">
+                                <Paper className={contentClass} zDepth={1}>
+                                    {content}
+                                </Paper>
+
+                                <NavigateStepButtons
+                                    steps={pathway.steps}
+                                    pathwayId={pathway._id}
+                                />
+                            </div>
 
                             <RaisedButton
                                 label="Open Step List"
@@ -241,51 +266,58 @@ class PathwayContent extends Component {
                             />
 
                             <Paper className="overviewAndCommentBox">
-                                <Paper style={{width: "100%"}}>
-                                    <ul className="horizCenteredList blueText font20px font14pxUnder700 font10pxUnder400">
+                                <ul className="horizCenteredList blueText font20px font14pxUnder700 font10pxUnder400" style={{marginBottom:"0"}}>
+                                    <li>
+                                        <div className="overviewAndCommentBoxInfo">
+                                            Hiring Partner<br/>
+                                            <img src={pathway.sponsor.logoForLightBackground ? pathway.sponsor.logoForLightBackground : pathway.sponsor.logo}
+                                                 alt={pathway.sponsor.name}
+                                                 className="overviewAndCommentBoxImg"/>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        <div className="overviewAndCommentBoxInfo">
+                                            Completion Time<br/>
+                                            <div className="inlineBlock pathwayContentTimeText">{pathway.estimatedCompletionTime}</div>
+                                        </div>
+                                    </li>
+                                    {formattedDeadline ?
                                         <li>
                                             <div className="overviewAndCommentBoxInfo">
-                                                <i>Sponsor</i><br/>
-                                                <img src={pathway.sponsor.logo}
-                                                     alt={pathway.sponsor.name}
-                                                     className="overviewAndCommentBoxImg"/>
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="overviewAndCommentBoxInfo">
-                                                <i>Completion Time</i><br/>
-                                                {pathway.estimatedCompletionTime}
-                                            </div>
-                                        </li>
-                                        <li>
-                                            <div className="overviewAndCommentBoxInfo">
-                                                <i>Complete By</i><br/>
+                                                Complete By<br/>
                                                 {formattedDeadline}
                                             </div>
                                         </li>
-                                    </ul>
-                                </Paper>
-                                <div style={{textAlign: "center"}}>
-                                    <Tabs
-                                        inkBarStyle={{background: '#00c3ff'}}
-                                        tabItemContainerStyle={{width: '60%'}}
-                                        className="overviewExercisesComments"
-                                    >
-                                        <Tab label="Overview" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                            <p className="font20px font14pxUnder700 font10pxUnder400 center"
-                                               style={style.insideTab}>{pathway.overview}</p>
-                                        </Tab>
-                                        <Tab label="Exercise Files" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                            <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
-                                                yet.</h1>
-                                        </Tab>
-                                        <Tab label="Comments" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
-                                            <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
-                                                yet.</h1>
-                                        </Tab>
-                                    </Tabs>
-                                </div>
+                                    : null
+                                    }
+                                </ul>
                             </Paper>
+
+                            {pathway.showOverviewAndCommentBox ?
+                                <Paper className="overviewAndCommentBox">
+                                    <div style={{textAlign: "center"}}>
+                                        <Tabs
+                                            inkBarStyle={{background: '#00c3ff'}}
+                                            tabItemContainerStyle={{width: '60%'}}
+                                            className="overviewExercisesComments"
+                                        >
+                                            <Tab label="Overview" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                                <p className="font20px font14pxUnder700 font10pxUnder400 center"
+                                                style={style.insideTab}>{pathway.overview}</p>
+                                            </Tab>
+                                            <Tab label="Exercise Files" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                                <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No exercise files
+                                                yet.</h1>
+                                            </Tab>
+                                            <Tab label="Comments" className="overviewAndCommentBoxTab font12pxUnder500Important font10pxUnder400Important">
+                                                <h1 className="center font20px font14pxUnder700 font10pxUnder400" style={style.insideTab}>No comments
+                                                yet.</h1>
+                                            </Tab>
+                                        </Tabs>
+                                    </div>
+                                </Paper>
+                            : null
+                            }
                         </div>
                     </div>
                     :

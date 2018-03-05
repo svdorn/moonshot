@@ -29,7 +29,7 @@ export function getUserFromSession(callback) {
     };
 }
 
-export function login(user, saveSession, navigateBackUrl) {
+export function login(user, saveSession, navigateBackUrl, pathwayId) {
     return function(dispatch) {
         axios.post("/api/login", {user, saveSession})
             .then(function(response) {
@@ -42,13 +42,67 @@ export function login(user, saveSession, navigateBackUrl) {
                 } else if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
                 }
-                browserHistory.push(nextUrl);
+
+                // should add pathway to user if pathway id exists and user
+                // doesn't already have that pathway
+                const shouldAddPathwayToUser = pathwayId !== undefined && !returnedUser.pathways.some(function(path) {
+                    return path.pathwayId === pathwayId;
+                });
+
+                // add pathway if user came here from trying to sign up for a pathway
+                if (shouldAddPathwayToUser) {
+                    // if the user doesn't already have this pathway, give it
+                    // to them, then redirect to the pathway content page
+                    axios.post("/api/user/addPathway", {_id: returnedUser._id, pathwayId: pathwayId})
+                    .then(function(response) {
+                        dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
+                        // navigateBackUrl should be equal to the url for the pathway
+                        if (!navigateBackUrl) {
+                            navigateBackUrl = "/discover";
+                        }
+                        browserHistory.push(nextUrl);
+                        window.scrollTo(0, 0);
+                    })
+                    .catch(function(err) {
+                        console.log(err);
+                        dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Cannot sign up for pathway more than once. Sign up for pathway failed.", type: "errorHeader"}})
+                        browserHistory.push(nextUrl);
+                        window.scrollTo(0, 0);
+                    })
+                } else {
+                    // otherwise go to the next screen
+                    browserHistory.push(nextUrl);
+                    window.scrollTo(0, 0);
+                }
             })
             .catch(function(err) {
                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
     }
 }
+
+//
+// export function addPathwayAndLogin(user, saveSession, pathwayName) {
+//     return function(dispatch) {
+//         axios.post("/api/login", {user, saveSession})
+//             .then(function(response) {
+//                 const returnedUser = response.data;
+//                 dispatch({type:"LOGIN", payload: returnedUser});
+//                 dispatch({type: "CLOSE_NOTIFICATION"});
+//                 let nextUrl = '/discover';
+//                 if (!returnedUser.hasFinishedOnboarding) {
+//                     nextUrl = "/onboarding";
+//                 } else if (navigateBackUrl) {
+//                     nextUrl = navigateBackUrl;
+//                 }
+//                 browserHistory.push(nextUrl);
+//             })
+//             .catch(function(err) {
+//                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
+//             });
+//     }
+// }
+
 
 // LOG USER OUT
 export function signout() {
@@ -87,7 +141,8 @@ export function postUser(user) {
                     })
                     // error sending verification email
                     .catch(function(emailError) {
-                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: response.data, type: "errorHeader"}});
+                        console.log("emailSend fail: ", emailError);
+                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: emailError.response.data, type: "errorHeader"}});
                         window.scrollTo(0,0);
                     });
             })
@@ -126,6 +181,18 @@ export function postBusinessUser(newUser, currentUser) {
             });
     }
 }
+
+
+export function addNotification(message, notificationType) {
+    return function(dispatch) {
+        let noteType = "infoHeader";
+        if (notificationType === "error") {
+            noteType = "errorHeader";
+        }
+        dispatch({type: "ADD_NOTIFICATION", notification:{message, type: noteType}});
+    }
+}
+
 
 export function closeNotification() {
     return function(dispatch) {
@@ -261,14 +328,38 @@ export function forBusiness(user){
     }
 }
 
+// Send an email when somebody completes a pathway
+export function completePathway(user){
+    return function(dispatch) {
+        dispatch({type: "COMPLETE_PATHWAY_REQUESTED"});
+
+        axios.post("api/user/completePathway", user)
+            .then(function(response) {
+                dispatch({type:"COMPLETE_PATHWAY", user: response.data.user, notification: {message:response.data.message, type:"infoHeader"}});
+                browserHistory.push('/discover');
+                window.scrollTo(0, 0);
+            })
+            .catch(function(err) {
+                dispatch({type:"COMPLETE_PATHWAY_REJECTED", user: response.data.user, notification: {message: response.data.message, type: "errorHeader"}})
+            })
+    }
+}
+
 // Send an email when form filled out on unsubscribe page
-export function unsubscribe(user){
+export function unsubscribe(user, showNotification){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
         axios.post("api/user/unsubscribeEmail", user)
             .then(function(response) {
-                dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
+                let action = { type:"FOR_BUSINESS" };
+                // only show the notification if the user unsubscribed by typing
+                // in their email address
+                if (showNotification) {
+                    action.notification = { message:response.data, type:"infoHeader" }
+                }
+
+                dispatch(action);
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
@@ -315,6 +406,23 @@ export function registerForPathway(user) {
     }
 }
 
+// ADD a pathway to a user
+export function addPathway(user) {
+    return function(dispatch) {
+        axios.post("/api/user/addPathway", user)
+            .then(function(response) {
+                dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
+                window.scrollTo(0, 0);
+                browserHistory.push("/pathwayContent?" + user.pathwayUrl);
+            })
+            .catch(function(err) {
+                console.log(err);
+                dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "You can't sign up for a pathway more than once.", type: "errorHeader"}})
+                window.scrollTo(0, 0);
+            })
+    }
+}
+
 // DELETE A USER
 export function deleteUser(id) {
   return function(dispatch) {
@@ -349,6 +457,20 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
         .then(function(response) {
         })
         .catch(function(err) {
+        });
+    }
+}
+
+export function updateAnswer(userId, verificationToken, quizId, answer) {
+    return function(dispatch) {
+        axios.post("/api/updateAnswer", {
+            params: { userId, verificationToken, quizId, answer }
+        })
+        .then(function(response) {
+            dispatch({type: "UPDATE_ANSWER", currentUser: response.data});
+        })
+        .catch(function(error) {
+            console.log("ERROR: ", error);
         });
     }
 }
@@ -400,6 +522,7 @@ export function updateInfo(user, info) {
                 dispatch({type:"UPDATE_USER_ONBOARDING", payload: response.data});
             })
             .catch(function(err) {
+                console.log(err);
             });
     }
 }
@@ -410,12 +533,13 @@ export function startOnboarding(){
     }
 }
 
-export function endOnboarding(user, markOnboardingComplete){
+export function endOnboarding(user, markOnboardingComplete, removeRedirectField){
     return function(dispatch) {
         if (markOnboardingComplete) {
-            axios.post("endOnboarding", {userId: user._id, verificationToken: user.verificationToken})
+            axios.post("/api/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
             .catch(function(err) {
                 // onboarding setting not able to be turned off for some reason
+                console.log("onboarding mark complete error: ", err)
             })
         }
         dispatch({type: "END_ONBOARDING"});
@@ -448,6 +572,5 @@ export function contactUs(user){
 export function formError() {
     return function(dispatch) {
         dispatch({type:"FORM_ERROR", notification: {message: "Fields must all be filled in to submit form.", type: "errorHeader"}})
-
     }
 }

@@ -29,6 +29,8 @@ import Onboarding from './components/pages/onboarding';
 import Error404 from './components/pages/error404';
 import Email from './components/pages/email';
 import Unsubscribe from './components/pages/unsubscribe';
+import Admin from './components/pages/admin';
+import AdminUserView from './components/pages/adminUserView';
 import ReactGA from 'react-ga';
 ReactGA.initialize(credentials.googleAnalyticsTrackingNumber);
 
@@ -57,6 +59,8 @@ const routes = (
         <Route path="pathway" component={Pathway} />
         <Route path="pathwayContent" component={AuthenticatedComponent} page={<PathwayContent/>} />
         <Route path="email" component={Email}/>
+        <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} />
+        <Route path="adminUserView" component={AuthenticatedComponent} page={<AdminUserView/>} />
         <Route path="unsubscribe" component={Unsubscribe} />
         <Route path='*' component={Error404} />
     </Route>

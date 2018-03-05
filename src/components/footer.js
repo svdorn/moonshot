@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { browserHistory } from 'react-router';
+import {browserHistory, withRouter} from 'react-router';
 import { connect } from 'react-redux';
 
 class Footer extends Component {
@@ -16,10 +16,15 @@ class Footer extends Component {
         if (this.props.isOnboarding) {
             return null;
         }
-
+        let footerColor = "purpleToBlue";
+        if (this.props.location.pathname === '/myPathways' || this.props.location.pathname === '/pathway') {
+            footerColor = "purpleToRedLightGradientOpacity";
+        } else if (this.props.location.pathname === '/profile') {
+            footerColor = "orangeToYellowGradientOpacity";
+        }
         return (
             <div className="jsxWrapper">
-                <footer className="footer purpleToBlue">
+                <footer className={"footer " + footerColor}>
                     <ul className="horizCenteredList">
                         <li className="center">
                             <img
@@ -33,19 +38,19 @@ class Footer extends Component {
                             <div style={{marginTop: "10px"}}>
                                 <a href="https://www.facebook.com/MoonshotLearning/" target="_blank">
                                     <img
-                                        width={20}
+                                        width={13}
                                         height={20}
                                         src="/logos/Facebook.png"/>
                                 </a>
                                 <a href="https://twitter.com/moonshotteched" target="_blank"
-                                   style={{marginLeft: "10px"}}>
+                                   style={{marginLeft: "20px"}}>
                                     <img
                                         width={20}
                                         height={20}
                                         src="/logos/Twitter.png"/>
                                 </a>
                                 <a href="https://www.linkedin.com/company/18233111/" target="_blank"
-                                   style={{marginLeft: "10px"}}>
+                                   style={{marginLeft: "20px"}}>
                                     <img
                                         width={20}
                                         height={20}
@@ -65,5 +70,7 @@ function mapStateToProps(state) {
         isOnboarding: state.users.isOnboarding
     };
 }
+
+Footer = withRouter(Footer);
 
 export default connect(mapStateToProps)(Footer);

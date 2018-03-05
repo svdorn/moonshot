@@ -6,7 +6,7 @@ class HomepageTriangles extends Component {
         let whiteSpace = null;
         let zIndex = "10";
 
-        if (this.props.variation == "1") {
+        if (this.props.variation == "1" || this.props.variation == "5") {
             transformations = [
                 {top: "30%", right: "0%", rotate: -30, scale: .4, className: " whiteTriangle"},
                 {top: "42%", right: "9%", rotate: -60, scale: .6, className: " whiteTriangle"},
@@ -14,11 +14,13 @@ class HomepageTriangles extends Component {
                 {top: "54%", right: "23%", rotate: -134, scale: .3, className: " whiteTriangle"},
                 {top: "60%", right: "16%", rotate: -19, scale: .5, className: " whiteTriangle"},
                 {top: "68%", right: "3%", rotate: -72, scale: .4, className: " whiteTriangle"},
-                {top: "71%", right: "32%", rotate: -111, scale: .7, className: " whiteTriangle"},
                 {top: "74%", right: "19%", rotate: -98, scale: .6, className: " whiteTriangle"},
                 {top: "77%", right: "52%", rotate: -2, scale: .3, className: " whiteTriangle"},
                 {top: "80%", right: "27%", rotate: -58, scale: .4, className: " whiteTriangle"}
             ];
+            if (this.props.variation == "1") {
+                transformations.push({top: "71%", right: "32%", rotate: -111, scale: .7, className: " whiteTriangle"});
+            }
         } else if (this.props.variation == "2"){
             transformations = [
                 {top: "10%", right: "0%", rotate: -30, scale: .4, className: " purpleTriangle"},
@@ -79,6 +81,17 @@ class HomepageTriangles extends Component {
                 </div>
             )
             zIndex = "-10";
+        } else if (this.props.variation == "4") {
+            transformations = [
+                {top: "30%", right: "0%", rotate: -30, scale: .4, className: " whiteTriangle"},
+                {top: "42%", right: "9%", rotate: -60, scale: .6, className: " whiteTriangle"},
+                {top: "50%", right: "4%", rotate: -11, scale: .7, className: " whiteTriangle"},
+                {top: "54%", right: "23%", rotate: -134, scale: .3, className: " whiteTriangle"},
+                {top: "60%", right: "16%", rotate: -19, scale: .5, className: " whiteTriangle"},
+                {top: "68%", right: "3%", rotate: -72, scale: .4, className: " whiteTriangle"},
+                {top: "70%", right: "26%", rotate: -111, scale: .7, className: " whiteTriangle"},
+                {top: "74%", right: "19%", rotate: -98, scale: .6, className: " whiteTriangle"},
+            ];
         }
 
         let counter = 0;
@@ -96,7 +109,7 @@ class HomepageTriangles extends Component {
         })
 
         return (
-            <div className="jsxWrapper" style={{position:"relative", width:"100%", zIndex:zIndex, pointerEvents:"none"}}>
+            <div className={"jsxWrapper " + this.props.className} style={{position:"relative", width:"100%", zIndex:zIndex, pointerEvents:"none"}}>
                 <div style={{position:"absolute", width:"100%", pointerEvents:"none"}}>
                     <div className="fullHeight" style={{position:"relative", pointerEvents:"none"}}>
                         <div className="above800fade">

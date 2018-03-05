@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 import { TextField } from 'material-ui';
-import { login, closeNotification } from '../../actions/usersActions';
+import { login, closeNotification, addPathwayAndLogin } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -126,11 +126,20 @@ class Login extends Component {
 
         let navigateBackUrl = undefined;
         let location = this.props.location;
-        if (location.query && location.query.redirect) {
-            navigateBackUrl = location.query.redirect;
+        let pathwayId = undefined;
+
+        if (location.query) {
+            if (location.query.pathway) {
+                pathwayId = location.query.pathway;
+            }
+            if (location.query.redirect) {
+                // brings a user to wherever they were trying to go before
+                navigateBackUrl = location.query.redirect;
+            }
         }
 
-        this.props.login(user, saveSession, navigateBackUrl);
+        this.props.login(user, saveSession, navigateBackUrl, pathwayId)
+
     }
 
     goTo (route)  {
@@ -157,18 +166,31 @@ class Login extends Component {
     }
 
     render() {
+        // the query that will be passed to "sign up" if that is clicked
+        let location = this.props.location;
+        const pathway = location.query.pathway;
+        const redirect = location.query.redirect;
+        let signUpQuery = {};
+        if (pathway) {
+            signUpQuery.pathway = pathway;
+        }
+        if (redirect) {
+            signUpQuery.redirect = redirect;
+        }
+
         return (
-            <div className="fullHeight greenToBlue formContainer">
-                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
-                <div className="form lightWhiteForm">
+            <div className="fillScreen greenToBlue formContainer">
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightWhiteForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1 style={{marginTop:"15px"}}>Sign in</h1>
+                        <h1 style={{marginTop:"15px"}}>Sign In</h1>
                         <div className="inputContainer">
                             <div className="fieldWhiteSpace"/>
                             <Field
                                 name="email"
                                 component={renderTextField}
                                 label="Email"
+                                className="lightBlueInputText"
                             /><br/>
                         </div>
                         <div className="inputContainer">
@@ -177,12 +199,13 @@ class Login extends Component {
                                 name="password"
                                 component={renderPasswordField}
                                 label="Password"
+                                className="lightBlueInputText"
                             /><br/><br/>
                         </div>
                         <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
                                 className={"checkMark" + this.state.keepMeLoggedIn}
-                                src="/icons/CheckMark.png"
+                                src="/icons/CheckMarkBlue.png"
                             />
                         </div>
                         <div className="blueText" style={{display:"inline-block"}}>
@@ -194,8 +217,10 @@ class Login extends Component {
                         >
                             Sign In
                         </button>
-                        <div className="clickable blueText" onClick={() => this.goTo('/signup')}>Create account</div>
-                        <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')}>Forgot Password?</div>
+                        <br/>
+                        <div className="clickable blueText" onClick={() => this.goTo({pathname: '/signup', query: signUpQuery})} style={{display:"inline-block"}}>Create Account</div>
+                        <br/>
+                        <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')} style={{display:"inline-block", marginLeft:"7px"}}>Forgot Password?</div>
                     </form>
                 </div>
 
@@ -207,6 +232,7 @@ class Login extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         login,
+        addPathwayAndLogin,
         closeNotification,
     }, dispatch);
 }

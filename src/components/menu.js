@@ -59,6 +59,7 @@ class Menu extends Component {
             // do nothing
         } else {
             if (this.props.location.pathname === '/onboarding') {
+                // user is signing out while on onboarding, don't mark onboarding complete yet
                 const markOnboardingComplete = false;
                 this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
             }
@@ -76,6 +77,10 @@ class Menu extends Component {
     }
 
     signOut() {
+        if (this.props.location.pathname === '/onboarding') {
+            const markOnboardingComplete = false;
+            this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
+        }
         this.props.signout();
         this.goTo('/');
         this.setState({value: 1});
@@ -93,14 +98,19 @@ class Menu extends Component {
     }
 
     render() {
-        let moonshotLogo = this.props.isOnboarding ? "/images/OfficialLogoBlue.png" : "/images/OfficialLogoWhite.png";
-        let dropdownClass = this.props.isOnboarding ? "headerDropdownBlue wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
-        let menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem"
-        if (this.props.blueHeader) {
-            moonshotLogo = "/images/OfficialLogoBlue.png";
-            dropdownClass = "headerDropdownBlue wideScreenMenuItem";
-            menuItemClass = "menuItem font18px borderBottomClickable noWrap blueText wideScreenMenuItem"
+        let isOnboarding = false;
+        if (this.props.location.pathname === '/onboarding') {
+            isOnboarding = true;
         }
+        let iconMenuColor = isOnboarding ? "black" : "white";
+        let moonshotLogo = isOnboarding ? "/images/OfficialLogoBlack.png" : "/images/OfficialLogoWhite.png";
+        let dropdownClass = isOnboarding ? "headerDropdownBlack wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
+        let menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem"
+        // if (this.props.blueHeader) {
+        //     moonshotLogo = "/images/OfficialLogoBlue.png";
+        //     dropdownClass = "headerDropdownBlue wideScreenMenuItem";
+        //     menuItemClass = "menuItem font18px borderBottomClickable noWrap blueText wideScreenMenuItem"
+        // }
         let discoverClass = menuItemClass;
         if (this.props.location.pathname === '/discover') {
             discoverClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
@@ -118,7 +128,7 @@ class Menu extends Component {
             loginClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
         let myPathwaysClass = menuItemClass;
-        let hoverWidth = "47px";
+        let hoverWidth = "52px";
         if (this.props.location.pathname === '/myPathways') {
             myPathwaysClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
         }
@@ -127,7 +137,7 @@ class Menu extends Component {
         }
         if (this.props.location.pathname === '/settings') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-            hoverWidth = "62px";
+            hoverWidth = "67px";
         }
 
 
@@ -137,8 +147,8 @@ class Menu extends Component {
                     <Toolbar id="menu" style={{marginTop: "10px"}}>
                         <ToolbarGroup>
                             <img
-                                width={187.5}
-                                height={60}
+                                width={180}
+                                height={56}
                                 alt="Moonshot Logo"
                                 title="Moonshot Logo"
                                 className="clickable moonshotMenuLogo"
@@ -152,7 +162,7 @@ class Menu extends Component {
             );
         }
 
-        if (this.props.isOnboarding && this.props.currentUser) {
+        if (isOnboarding && this.props.currentUser) {
             return (
                 <Toolbar id="menu" style={{marginTop: "10px"}}>
                     <ToolbarGroup className="logoToolbarGroup">
@@ -167,8 +177,6 @@ class Menu extends Component {
                         />
                     </ToolbarGroup>
                     <ToolbarGroup>
-
-
                         <DropDownMenu value={this.state.value}
                                       onChange={this.handleChange}
                                       underlineStyle={styles.underlineStyle}
@@ -188,8 +196,10 @@ class Menu extends Component {
                             anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                             targetOrigin={{horizontal: 'right', vertical: 'top'}}
                             className="smallScreenMenu"
-                            iconStyle={{fill: "white"}}
+                            iconStyle={{fill: iconMenuColor}}
                         >
+                            <MenuItem style={{color: "#00c3ff"}} primaryText={this.props.currentUser.name}/>
+                            <Divider/>
                             <MenuItem primaryText="Sign out" onClick={() => this.signOut()}/>
                         </IconMenu>
                     </ToolbarGroup>
@@ -267,7 +277,7 @@ class Menu extends Component {
                             <p className={discoverClass} onClick={() => this.goTo('/discover')}>Discover</p>
                             <p className={forBusClass} onClick={() => this.goTo('/forBusiness')}>For Business</p>
                             <div className="menuDivider loggedOut wideScreenMenuItem"/>
-                            <p className={loginClass} onClick={() => this.goTo('/login')}>Sign in</p>
+                            <p className={loginClass} onClick={() => this.goTo('/login')}>Sign In</p>
 
                             <IconMenu
                                 iconButtonElement={<IconButton><MoreHorizIcon/></IconButton>}

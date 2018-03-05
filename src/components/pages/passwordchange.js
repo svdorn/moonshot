@@ -95,6 +95,7 @@ class PasswordChange extends Component {
                             name="oldpass"
                             component={renderTextField}
                             label="Old Password"
+                            className="lightBlueInputText"
                         /></div><br/>
                         <div className="inputContainer">
                             <div className="fieldWhiteSpace"/>
@@ -102,6 +103,7 @@ class PasswordChange extends Component {
                             name="password"
                             component={renderPasswordField}
                             label="New Password"
+                            className="lightBlueInputText"
                         /></div><br/>
                         <div className="inputContainer">
                             <div className="fieldWhiteSpace"/>
@@ -109,6 +111,7 @@ class PasswordChange extends Component {
                             name="password2"
                             component={renderPasswordField}
                             label="Confirm New Password"
+                            className="lightBlueInputText"
                         /></div><br/>
                         <button
                             type="submit"

@@ -47,8 +47,30 @@ const validate = values => {
 class Unsubscribe extends Component {
     constructor(props) {
         super(props);
-        this.state = {showErrors: true};
+
+        let email = "";
+        let unsubscribedViaUrl = false;
+        try {
+            email = props.location.query.email;
+        } catch(e) { /* no email provided, ask them to submit one */ }
+
+        if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+            unsubscribedViaUrl = true;
+
+        }
+
+        this.state = {showErrors: true, unsubscribedViaUrl};
     }
+
+
+    componentDidMount() {
+        if (this.state.unsubscribedViaUrl) {
+            const user = { email: this.props.location.query.email };
+            const showNotification = false;
+            this.props.unsubscribe(user, showNotification);
+        }
+    }
+
 
     handleSubmit(e) {
         e.preventDefault();
@@ -74,7 +96,8 @@ class Unsubscribe extends Component {
             email: this.props.formData.unsubscribe.values.email,
         };
 
-        this.props.unsubscribe(user);
+        const showNotification = true;
+        this.props.unsubscribe(user, showNotification);
     }
 
     goTo (route)  {
@@ -90,28 +113,33 @@ class Unsubscribe extends Component {
 
     render() {
         return (
-            <div className="fullHeight greenToBlue formContainer">
+            <div className="fillScreen greenToBlue formContainer">
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
-                    <form onSubmit={this.handleSubmit.bind(this)}>
+                    {this.state.unsubscribedViaUrl ?
+                        <div>{this.props.location.query.email} was successfully unsubscribed.</div>
+                    :
+                        <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Unsubscribe</h1>
                         <div className="font20px font14pxUnder700 font10pxUnder400 font20pxUnder500 blueText">Enter your email to unsubscribe.</div>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
-                            <Field
-                                name="email"
-                                component={renderTextField}
-                                label="Email"
-                            /><br/>
+                        <div className="fieldWhiteSpace"/>
+                        <Field
+                        name="email"
+                        component={renderTextField}
+                        label="Email"
+                        className="lightBlueInputText"
+                        /><br/>
                         </div>
                         <button
-                            type="submit"
-                            className="formSubmitButton font24px font16pxUnder600"
+                        type="submit"
+                        className="formSubmitButton font24px font16pxUnder600"
                         >
-                            Submit
+                        Submit
                         </button>
                         { this.props.loadingSomething ? <div className="center"><CircularProgress style={{marginTop:"20px"}}/></div> : "" }
-                    </form>
+                        </form>
+                    }
                 </div>
 
             </div>
