@@ -1094,7 +1094,7 @@ app.post('/getUserByProfileUrl', function (req, res) {
     const profileUrl = sanitize(req.body.profileUrl);
     const query = {profileUrl};
     getUserByQuery(query, function (user) {
-        res.json(safeUser(user));
+        res.json(safeUser(user._doc));
     })
 });
 
