@@ -818,6 +818,10 @@ app.post('/user/completePathway', function (req, res) {
                 return path.pathwayId.toString() == pathwayId.toString();
             });
             if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
+                let completedPathway = user.pathways[pathwayIndex];
+                // mark the date completed as right now
+                completedPathway.dateCompleted = new Date();
+
                 // Put pathway into completed pathways and remove it from current pathways
                 user.completedPathways.push(user.pathways[pathwayIndex]);
                 user.pathways.splice(pathwayIndex, 1);
@@ -1302,6 +1306,7 @@ app.post("/user/addPathway", function (req, res) {
                 }
             }
             const pathway = {
+                dateAdded: new Date(),
                 pathwayId: pathwayId,
                 currentStep: {
                     subStep: 1,
