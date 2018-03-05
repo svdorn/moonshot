@@ -823,7 +823,7 @@ app.post('/user/completePathway', function (req, res) {
                 completedPathway.dateCompleted = new Date();
 
                 // Put pathway into completed pathways and remove it from current pathways
-                user.completedPathways.push(user.pathways[pathwayIndex]);
+                user.completedPathways.push(completedPathway);
                 user.pathways.splice(pathwayIndex, 1);
             }
 
