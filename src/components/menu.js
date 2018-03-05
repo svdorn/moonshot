@@ -98,6 +98,13 @@ class Menu extends Component {
     }
 
     render() {
+        let isEmployer = false;
+        let currentUser = this.props.currentUser;
+
+        if (currentUser && currentUser.userType === "employer") {
+            isEmployer = true;
+        }
+
         let isOnboarding = false;
         if (this.props.location.pathname === '/onboarding') {
             isOnboarding = true;
@@ -207,6 +214,20 @@ class Menu extends Component {
             );
         }
 
+        // let menuItems = null;
+        // // there is a user signed in
+        // if (currentUser) {
+        //     // user is an employer
+        //     if (isEmployer) {
+        //
+        //     }
+        //
+        //     // user is a student
+        //     else {
+        //
+        //     }
+        // }
+
         return (
             <header style={{zIndex: "100"}}>
                 {this.props.currentUser ?
@@ -258,7 +279,6 @@ class Menu extends Component {
                         </ToolbarGroup>
                     </Toolbar>
                     :
-
                     <Toolbar style={{marginTop: "10px"}} id="menu">
                         <ToolbarGroup>
                             <img
