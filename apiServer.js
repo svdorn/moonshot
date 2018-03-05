@@ -819,11 +819,17 @@ app.post('/user/completePathway', function (req, res) {
             });
             if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
                 let completedPathway = user.pathways[pathwayIndex];
-                // mark the date completed as right now
-                completedPathway.dateCompleted = new Date();
+                const newPathwayObject = {
+                    pathwayId: completedPathway.pathwayId,
+                    dateAdded: completedPathway.dateAdded,
+                    dateCompleted: new Date()
+                }
+                console.log(completedPathway);
+                console.log("new pathway:");
+                console.log(newPathwayObject)
 
                 // Put pathway into completed pathways and remove it from current pathways
-                user.completedPathways.push(completedPathway);
+                user.completedPathways.push(newPathwayObject);
                 user.pathways.splice(pathwayIndex, 1);
             }
 
@@ -837,13 +843,13 @@ app.post('/user/completePathway', function (req, res) {
                 }
 
                 // send an email to us saying that the user completed a pathway
-                sendEmail(recipients, subject, content, function (success, msg) {
-                    if (success) {
-                        res.json({message: successMessage, user: userToReturn});
-                    } else {
-                        res.status(500).send({message: errorMessage, user: userToReturn});
-                    }
-                });
+                // sendEmail(recipients, subject, content, function (success, msg) {
+                //     if (success) {
+                //         res.json({message: successMessage, user: userToReturn});
+                //     } else {
+                //         res.status(500).send({message: errorMessage, user: userToReturn});
+                //     }
+                // });
             });
         }
     });
