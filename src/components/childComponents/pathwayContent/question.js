@@ -48,6 +48,25 @@ class Question extends Component {
                         );
                     }
                     break;
+                case "skillChips":
+                    const exampleSkills = content.map(function (skill) {
+                        return (
+                            <div key={skill + "div"}
+                                 style={{display: 'inline-block', marginTop: '15px'}}
+                                 className="gradientBorderPurpleToPinkChip"
+                            >
+                                <div key={skill} className="purpleText">
+                                    {skill}
+                                </div>
+                            </div>
+                        );
+                    });
+                    return (
+                        <div id="exampleSkillsContainer">
+                            {exampleSkills}
+                        </div>
+                    );
+                    break;
                 case "link":
                     if (content.length > 0) {
                         const linkText = content.linkText ? content.linkText : content[0];
