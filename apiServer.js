@@ -1280,8 +1280,8 @@ app.post("/user/addPathway", function (req, res) {
 
     if (_id && pathwayId) {
         // TODO: REMOVE THIS, CHANGE HOW THIS FUNCTION WORKS ONCE WE START
-        // ADDING PATHWAYS BESIDES NWM
-        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad") {
+        // ADDING PATHWAYS BESIDES NWM AND SINGLEWIRE
+        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad" && pathwayId !== "5a88b4b8734d1d041bb6b386") {
             res.status(403).send("You cannot currently sign up for that pathway.");
             return;
         }
