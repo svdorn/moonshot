@@ -56,7 +56,8 @@ class PathwayContentCompletePathway extends Component {
             _id: this.props.currentUser._id,
             verificationToken: this.props.currentUser.verificationToken,
             email: this.state.email,
-            phoneNumber: this.state.phoneNumber
+            phoneNumber: this.state.phoneNumber,
+            skills: this.props.pathway.skills
         };
 
         this.props.completePathway(user);

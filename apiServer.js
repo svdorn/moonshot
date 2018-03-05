@@ -805,7 +805,9 @@ app.post('/user/completePathway', function (req, res) {
     const _id = sanitize(req.body._id);
     const verificationToken = sanitize(req.body.verificationToken);
     const pathwayId = sanitize(req.body.pathwayId);
+    const skills = sanitize(req.body.skills);
     const query = {_id, verificationToken}
+
     Users.findOne(query, function (err, user) {
         if (err) {
             console.log("error marking pathway complete: ", err);
@@ -817,6 +819,8 @@ app.post('/user/completePathway', function (req, res) {
             const pathwayIndex = user.pathways.findIndex(function(path) {
                 return path.pathwayId.toString() == pathwayId.toString();
             });
+            // if the pathway was found in their current pathways, remove it
+            // from current pathways and add it to completed pathways
             if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
                 let completedPathway = user.pathways[pathwayIndex];
                 const newPathwayObject = {
@@ -824,13 +828,23 @@ app.post('/user/completePathway', function (req, res) {
                     dateAdded: completedPathway.dateAdded,
                     dateCompleted: new Date()
                 }
-                console.log(completedPathway);
-                console.log("new pathway:");
-                console.log(newPathwayObject)
 
                 // Put pathway into completed pathways and remove it from current pathways
                 user.completedPathways.push(newPathwayObject);
                 user.pathways.splice(pathwayIndex, 1);
+            }
+
+            // add the user's new skills that they gained from this
+            if (Array.isArray(skills)) {
+                skills.forEach(function(skill) {
+                    // only add the skill if the user does not already have it
+                    const notFound = -1;
+                    if (user.skills.findIndex(function(userSkill) {
+                        return userSkill === skill;
+                    }) === notFound) {
+                        user.skills.push(skill);
+                    }
+                });
             }
 
             // save the user's new info in the db
@@ -843,6 +857,7 @@ app.post('/user/completePathway', function (req, res) {
                 }
 
                 // send an email to us saying that the user completed a pathway
+
                 sendEmail(recipients, subject, content, function (success, msg) {
                     if (success) {
                         res.json({message: successMessage, user: userToReturn});
