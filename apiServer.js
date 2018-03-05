@@ -778,7 +778,7 @@ app.post('/user/completePathway', function (req, res) {
     const successMessage = "Pathway marked complete, our team will be in contact with you shortly!";
     const errorMessage = "Error marking pathway complete, try again or contact us.";
 
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
     let subject = 'ACTION REQUIRED: Somebody completed pathway';
     let content = "<div>"
         + "<h3>A User has just completed this pathway:</h3>"
