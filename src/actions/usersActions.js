@@ -352,7 +352,7 @@ export function addPathway(user) {
             .then(function(response) {
                 dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                 window.scrollTo(0, 0);
-                browserHistory.push("/pathwayContent?" + user.pathwayUrl);
+                browserHistory.push("/pathwayContent?pathway=" + user.pathwayUrl);
             })
             .catch(function(err) {
                 console.log(err);

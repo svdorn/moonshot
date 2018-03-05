@@ -33,7 +33,12 @@ class PathwayContent extends Component {
         const user = this.props.currentUser;
 
         if (user && user != "no user") {
-            const pathwayUrl = this.props.location.search.substr(1);
+            // if no pathway url given, return
+            if (!this.props.location || !this.props.location.query || !this.props.location.query.pathway) {
+                return;
+            }
+            // set the pathway url to the one in the url's query
+            const pathwayUrl = this.props.location.query.pathway;
             axios.get("/api/pathwayByPathwayUrl", {
                 params: {
                     pathwayUrl,

@@ -30,7 +30,12 @@ class Pathway extends Component {
     }
 
     componentDidMount() {
-        const pathwayUrl = this.props.location.search.substr(1);
+        // if no pathway url given, return
+        if (!this.props.location || !this.props.location.query || !this.props.location.query.pathway) {
+            return;
+        }
+        // set the pathway url to the one in the url's query
+        const pathwayUrl = this.props.location.query.pathway;
 
         axios.get("/api/pathwayByPathwayUrlNoContent", {
             params: {
@@ -58,7 +63,7 @@ class Pathway extends Component {
                     pathname: "/signup",
                     query: {
                         pathway: this.state.pathway._id,
-                        redirect: "/pathwayContent?" + this.state.pathway.url
+                        redirect: "/pathwayContent?pathway=" + this.state.pathway.url
                     }
                 });
                 window.scrollTo(0, 0);
@@ -78,7 +83,7 @@ class Pathway extends Component {
                 pathname: "/signup",
                 query: {
                     pathway: this.state.pathway._id,
-                    redirect: "/pathwayContent?" + this.state.pathway.url
+                    redirect: "/pathwayContent?pathway=" + this.state.pathway.url
                 }
             });
         }
