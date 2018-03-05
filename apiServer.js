@@ -842,7 +842,7 @@ app.post('/user/completePathway', function (req, res) {
                     content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
                 }
 
-                send an email to us saying that the user completed a pathway
+                // send an email to us saying that the user completed a pathway
                 sendEmail(recipients, subject, content, function (success, msg) {
                     if (success) {
                         res.json({message: successMessage, user: userToReturn});
