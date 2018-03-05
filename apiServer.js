@@ -1463,7 +1463,9 @@ app.get('/getQuiz', function (req, res) {
             console.log("error in get quiz by id")
             res.status(404).send("Quiz not found");
         } else {
-            quiz.correctAnswerNumber = undefined;
+            if (quiz != null) {
+                quiz.correctAnswerNumber = undefined;
+            }
             res.json(quiz);
         }
 
