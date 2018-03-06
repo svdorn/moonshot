@@ -150,8 +150,18 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         case "END_ONBOARDING":
-            return {
-                ...state, isOnboarding: false
+            // update the user if an update was sent
+            if (action.user) {
+                return {
+                    ...state,
+                    isOnboarding: false,
+                    currentUser: action.user
+                }
+            } else {
+                return {
+                    ...state,
+                    isOnboarding: false
+                }
             }
             break;
         case "UPDATE_USER_ONBOARDING":

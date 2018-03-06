@@ -498,7 +498,9 @@ app.post("/endOnboarding", function (req, res) {
 
     Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
         if (!err && updatedUser) {
-            res.json(true);
+            res.json(removePassword(updatedUser));
+        } else {
+            res.status(500).send("Error ending onboarding.");
         }
     });
 });

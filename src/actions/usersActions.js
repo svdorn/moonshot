@@ -476,12 +476,18 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
     return function(dispatch) {
         if (markOnboardingComplete) {
             axios.post("/api/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
+            .then(function(response) {
+                dispatch({type: "END_ONBOARDING", user: response.data});
+            })
             .catch(function(err) {
                 // onboarding setting not able to be turned off for some reason
-                console.log("onboarding mark complete error: ", err)
+                console.log("onboarding mark complete error: ", err);
+                dispatch({type: "END_ONBOARDING_REJECTED"});
             })
+        } else {
+            dispatch({type: "END_ONBOARDING"});
         }
-        dispatch({type: "END_ONBOARDING"});
+
     }
 }
 
