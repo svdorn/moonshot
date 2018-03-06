@@ -903,7 +903,9 @@ app.post('/createReferralCode', function(req, res) {
         else if (user == null) {
             // create the referral code randomly
             const referralCode = crypto.randomBytes(4).toString('hex');
-            const userBeingCreated = {name, email, referralCode}
+            // the amount we said we'd pay the user for their friend using this code
+            const incentive = "$300";
+            const userBeingCreated = {name, email, referralCode, incentive}
 
             // TODO: check if the referral code was already created, make a new
             // one if so
