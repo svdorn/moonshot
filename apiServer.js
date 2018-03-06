@@ -44,6 +44,7 @@ var Quizzes = require('./models/quizzes.js');
 var Links = require('./models/links.js');
 var Info = require('./models/info.js');
 var Emailaddresses = require('./models/emailaddresses.js');
+var Referrals = require('./models/referrals.js');
 
 
 // --->>> SET UP SESSIONS <<<---
@@ -63,6 +64,7 @@ app.use(session({
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
+
 
 app.post('/signOut', function (req, res) {
     req.session.userId = undefined;
@@ -946,6 +948,50 @@ app.post('/user/completePathway', function (req, res) {
     });
 
 });
+
+
+app.post('/createReferralCode', function(req, res) {
+    const name = sanitize(req.body.name);
+    // make it to lower case so that it's case insensitive
+    const email = sanitize(req.body.email).toLowerCase();
+
+    const query = {email};
+
+    Referrals.findOne(query, function(err, user) {
+        // if there was an error somewhere along the way getting the user
+        if (err) {
+            res.status(500).send("Server error, try again later.");
+            return;
+        }
+        // if this user has not already asked for a referral code
+        else if (user == null) {
+            // create the referral code randomly
+            const referralCode = crypto.randomBytes(4).toString('hex');
+            const userBeingCreated = {name, email, referralCode}
+
+            // TODO: check if the referral code was already created, make a new
+            // one if so
+
+            Referrals.create(userBeingCreated, function(error, newUser) {
+                // if there was an error creating the user
+                if (error) {
+                    res.status(500).send("Server error, try again later.");
+                    return;
+                } else {
+                    res.json(newUser.referralCode);
+                    return;
+                }
+            });
+        }
+        // if the user has asked for a referral code in the past
+        else {
+            // if the user already has a referral code, give them that
+            res.json(user.referralCode);
+            return;
+        }
+    });
+});
+
 
 app.post('/user/unsubscribeEmail', function (req, res) {
 

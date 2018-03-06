@@ -345,6 +345,7 @@ export function completePathway(user){
     }
 }
 
+
 // Send an email when form filled out on unsubscribe page
 export function unsubscribe(user, showNotification){
     return function(dispatch) {
