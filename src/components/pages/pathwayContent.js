@@ -33,12 +33,36 @@ class PathwayContent extends Component {
         const user = this.props.currentUser;
 
         if (user && user != "no user") {
-            // if no pathway url given, return
-            if (!this.props.location || !this.props.location.query || !this.props.location.query.pathway) {
-                return;
+
+            let pathwayUrl = "";
+            // try to get the pathwayUrl from the location query
+            try {
+                pathwayUrl = this.props.location.query.pathway;
+                if (!pathwayUrl) {
+                    throw "pathway url isn't in query form";
+                }
+            } catch (e) {
+                // temporary fix, try to get the pathwayUrl from the location url without a query
+                try {
+                    let urlSearch = this.props.location.search;
+                    let nextQueryIndex = urlSearch.indexOf("&");
+                    if (nextQueryIndex > 1) {
+                        pathwayUrl = urlSearch.substr(1, nextQueryIndex - 1);
+                    } else {
+                        pathwayUrl = urlSearch.substr(1);
+                    }
+                } catch (e2) {
+                    return;
+                }
             }
+
+            // if no pathway url given, return
+            // if (!this.props.location || !this.props.location.query || !this.props.location.query.pathway) {
+            //     return;
+            // }
             // set the pathway url to the one in the url's query
-            const pathwayUrl = this.props.location.query.pathway;
+            //const pathwayUrl = this.props.location.query.pathway;
+
             axios.get("/api/pathwayByPathwayUrl", {
                 params: {
                     pathwayUrl,
