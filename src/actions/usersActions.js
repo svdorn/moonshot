@@ -413,7 +413,7 @@ export function addPathway(user) {
             .then(function(response) {
                 dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                 window.scrollTo(0, 0);
-                browserHistory.push("/pathwayContent?" + user.pathwayUrl);
+                browserHistory.push("/pathwayContent?pathway=" + user.pathwayUrl);
             })
             .catch(function(err) {
                 console.log(err);
@@ -537,12 +537,18 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
     return function(dispatch) {
         if (markOnboardingComplete) {
             axios.post("/api/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
+            .then(function(response) {
+                dispatch({type: "END_ONBOARDING", user: response.data});
+            })
             .catch(function(err) {
                 // onboarding setting not able to be turned off for some reason
-                console.log("onboarding mark complete error: ", err)
+                console.log("onboarding mark complete error: ", err);
+                dispatch({type: "END_ONBOARDING_REJECTED"});
             })
+        } else {
+            dispatch({type: "END_ONBOARDING"});
         }
-        dispatch({type: "END_ONBOARDING"});
+
     }
 }
 

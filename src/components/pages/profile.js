@@ -98,7 +98,7 @@ class Profile extends Component {
 
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathwayContent?' + pathway.url)}>
+                                    onClick={() => self.goTo('/pathwayContent?pathway=' + pathway.url)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
@@ -147,7 +147,7 @@ class Profile extends Component {
 
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathway?' + pathway.url)}>
+                                    onClick={() => self.goTo('/pathway?pathway=' + pathway.url)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
@@ -434,7 +434,7 @@ class Profile extends Component {
                         <div>
                             {this.state.userPathwayPreviews ?
                                 <div>
-                                    <div className="orangeToYellowGradient">
+                                    <div className="orangeToYellowGradient" zDepth={3}>
                                         <div className="headerDiv"/>
                                         <div className="profileInfoSkills">
                                             <div className="center">
@@ -508,7 +508,8 @@ class Profile extends Component {
                                                                     <ul className="horizCenteredList pathwayPrevList"
                                                                         style={style.pathwayPreviewUl}>
                                                                         <li onClick={() => this.goTo('/discover')}>
-                                                                            <PathwayPreview type="addOne" variation="4"/>
+                                                                            <PathwayPreview type="addOne"
+                                                                                            variation="4"/>
                                                                         </li>
                                                                     </ul>
                                                                 }
@@ -521,7 +522,8 @@ class Profile extends Component {
                                                                         {this.state.userCompletedPathwayPreviews}
                                                                     </ul>
                                                                     :
-                                                                    <h1 className="center font40px font24pxUnder500">None</h1>
+                                                                    <h1 className="center font40px font24pxUnder500">
+                                                                        None</h1>
                                                                 }
                                                             </Tab>
                                                         </Tabs>
@@ -566,6 +568,7 @@ class Profile extends Component {
                                             </Tabs>
                                         </div>
                                     </div>
+
                                 </div>
                                 :
                                 <div>

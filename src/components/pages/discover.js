@@ -120,7 +120,7 @@ class Discover extends Component {
 
     handleOpen = (pathway, reserveSpot) => {
         if (!reserveSpot) {
-            this.goTo('/pathway?' + pathway.url);
+            this.goTo('/pathway?pathway=' + pathway.url);
         }
         else {
             const pathwayName = pathway.name;
@@ -244,7 +244,7 @@ class Discover extends Component {
                 return (
                     <li className="pathwayPreviewLi explorePathwayPreview"
                         key={key}
-                        onClick={() => self.goTo('/pathway?' + pathway.url)}
+                        onClick={() => self.goTo('/pathway?pathway=' + pathway.url)}
                     >
                         <PathwayPreview
                             name={pathway.name}
@@ -297,7 +297,7 @@ class Discover extends Component {
                 return (
                     <li className="pathwayPreviewLi featuredPathwayPreview"
                         key={key}
-                        onClick={() => self.goTo('/pathway?' + pathway.url)}
+                        onClick={() => self.goTo('/pathway?pathway=' + pathway.url)}
                     >
                         <PathwayPreview
                             name={pathway.name}

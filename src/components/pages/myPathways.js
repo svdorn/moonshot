@@ -64,7 +64,7 @@ class MyPathways extends Component {
 
                                 return (
                                     <li key={key} style={{verticalAlign: "top"}}
-                                        onClick={() => self.goTo('/pathwayContent?' + pathway.url)}>
+                                        onClick={() => self.goTo('/pathwayContent?pathway=' + pathway.url)}>
                                         <PathwayPreview
                                             name={pathway.name}
                                             image={pathway.previewImage}
@@ -114,7 +114,7 @@ class MyPathways extends Component {
 
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathway?' + pathway.url)}>
+                                    onClick={() => self.goTo('/pathway?pathway=' + pathway.url)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
