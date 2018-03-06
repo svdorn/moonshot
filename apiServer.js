@@ -539,6 +539,9 @@ app.post('/verifyEmail', function (req, res) {
             // if the session has the user's id, can immediately log them in
             sessionUserId = sanitize(req.session.unverifiedUserId);
             req.session.unverifiedUserId = undefined;
+
+            req.session.userId = sessionUserId;
+
             req.session.save(function (err) {
                 if (err) {
                     console.log("error")
