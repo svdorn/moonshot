@@ -47,7 +47,7 @@ class Home extends Component {
     handleOpen = (pathway) => {
         console.log("pathway: ", pathway);
         if (!pathway.comingSoon) {
-            this.goTo('/pathway?' + pathway.url);
+            this.goTo('/pathway?pathway=' + pathway.url);
         } else {
             // tell the user they are preregistered if logged in
             const currentUser = this.props.currentUser;
