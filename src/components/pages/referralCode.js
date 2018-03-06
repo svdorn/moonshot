@@ -143,8 +143,9 @@ class ReferralCode extends Component {
                             <button
                                 type="submit"
                                 className="formSubmitButton font24px font16pxUnder600"
+                                style={{marginTop: "20px"}}
                             >
-                                Submit
+                                Get Referral Code
                             </button>
                             { this.state.loading ? <div className="center"><CircularProgress style={{marginTop:"20px"}}/></div> : "" }
                             { this.state.error ? <div>{this.state.error}</div> : null }

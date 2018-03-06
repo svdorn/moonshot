@@ -59,7 +59,7 @@ const routes = (
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} />
         <Route path="adminUserView" component={AuthenticatedComponent} page={<AdminUserView/>} />
         <Route path="unsubscribe" component={Unsubscribe} />
-        <Route path="referralCode" component={ReferralCode} />
+        <Route path="referral" component={ReferralCode} />
         <Route path='*' component={Error404} />
     </Route>
   </Router>
