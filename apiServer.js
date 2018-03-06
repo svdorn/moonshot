@@ -260,16 +260,17 @@ app.post('/user', function (req, res) {
 
                         // add pathway to user's My Pathways if they went from
                         // a landing page.
-                        // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY
-                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
+                        // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY OR SINGLEWIRE PATHWAY
+                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386") {
                             user.pathways = [{
-                                pathwayId: "5a80b3cf734d1d0d42e9fcad",
+                                pathwayId: user.pathwayId,
                                 currentStep: {
                                     subStep: 1,
                                     step: 1
                                 }
                             }];
-                        } else {
+                        }
+                        else {
                             user.pathwayId = undefined;
                         }
 
