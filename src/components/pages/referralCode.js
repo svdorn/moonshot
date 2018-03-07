@@ -112,16 +112,19 @@ class ReferralCode extends Component {
         return (
             <div className="fillScreen greenToBlue formContainer">
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
-                <div className="form lightWhiteForm">
+                <div className="form lightWhiteForm" style={{padding: "10px 20px"}}>
                     {this.state.referralCode ?
                         <div>
                             <span className="font20px">Your referral code is:</span>
                             <br/>
                             <span className="font32px">{this.state.referralCode}</span>
+                            <br/>
+                            <span className="font16px">Have your friend enter this code when they finish a pathway. If they get the job, we{"'"}ll send you $300 through PayPal.</span>
                         </div>
                         :
                         <form onSubmit={this.handleSubmit.bind(this)}>
-                            <h1>Earn $300 for every friend hired through Moonshot.</h1>
+                            <span className="font24px">Earn $300 for every friend that gets a job through Moonshot.</span>
+                            <br/>
                             <div className="inputContainer">
                                 <div className="fieldWhiteSpace"/>
                                 <Field
@@ -136,7 +139,7 @@ class ReferralCode extends Component {
                                 <Field
                                     name="email"
                                     component={renderTextField}
-                                    label="PayPal Email"
+                                    label="Email"
                                     className="lightBlueInputText"
                                 /><br/>
                             </div>
