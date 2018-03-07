@@ -49,6 +49,8 @@ var usersSchema = mongoose.Schema({
     pathwayName: String,
     // location to redirect to after signing up
     redirect: String,
+    // ids of businesses that show the user as one of their candidates
+    candidateFor: [mongoose.Schema.Types.ObjectId],
     // pathways the user is signed up for
     pathways: [{
         dateAdded: Date,

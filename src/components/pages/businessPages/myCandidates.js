@@ -52,7 +52,8 @@ class MyCandidates extends Component {
         // populate candidates with initial people
         axios.get("/api/candidateSearch", {
             params: {
-                limit: 3
+                limit: 3,
+
             }
         }).then(res => {
             // make sure component is mounted before changing state
