@@ -1,6 +1,7 @@
 "use strict"
 import axios from 'axios';
 import { browserHistory } from 'react-router'
+import { reset } from 'redux-form';
 
 // GET USER FROM SESSION
 export function getUserFromSession(callback) {
@@ -207,6 +208,8 @@ export function changePassword(user) {
         axios.post('/api/user/changepassword', user)
             .then(function(response) {
                 dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
+                // reset the form
+                dispatch(reset("settings"));
             })
             .catch(function(err){
                 dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: err.response.data, type: "errorHeader"}})

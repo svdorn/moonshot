@@ -46,32 +46,41 @@ class PasswordChange extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
+        // values that were entered in the form
         const vals = this.props.formData.settings.values;
         // Form validation before submit
         let notValid = false;
+        // user required to enter all three fields
         const requiredFields = [
             'oldpass',
             'password',
             'password2',
         ];
+        // if nothing is entered in one of the required fields, touch it to
+        // bring up the warning that says you have to enter something
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
                 this.props.touch(field);
                 notValid = true;
             }
         });
+        // if a required field is empty, do not save password
         if (notValid) return;
+        // first and second new password have to match
         if (vals.password != vals.password2) return;
 
+        // info the server needs to change the password
         const user = {
             _id: this.props.currentUser._id,
             oldpass: this.props.formData.settings.values.oldpass,
             password: this.props.formData.settings.values.password
         };
+
+        // change the password in the backend
         this.props.changePassword(user);
     }
 
-    //name, email, password, confirm password, signup button
+
     render() {
         return (
             <div className="formContainer" style={{display:'inline-block'}}>
