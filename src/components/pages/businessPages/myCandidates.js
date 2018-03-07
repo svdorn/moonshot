@@ -33,12 +33,8 @@ class MyCandidates extends Component {
 
         const emptyCandidate = {
             name: "Loading...",
-            previewImage: "",
-            sponsor: {name: "", logo: ""},
-            estimatedCompletionTime: "",
-            deadline: "",
-            price: "",
-            _id: undefined
+            stage: "",
+            email: "",
         }
 
         this.state = {
@@ -46,8 +42,6 @@ class MyCandidates extends Component {
             stage: "",
             pathway: "",
             candidates: [emptyCandidate],
-            open: false,
-            dialogPathway: null,
         }
     }
 
@@ -114,34 +108,6 @@ class MyCandidates extends Component {
         })
     }
 
-    handleOpen = (pathway, reserveSpot) => {
-        if (!reserveSpot) {
-            this.goTo('/pathway?pathway=' + pathway.url);
-        }
-        else {
-            const pathwayName = pathway.name;
-            // tell the user they are preregistered if logged in
-            const currentUser = this.props.currentUser;
-            if (currentUser && currentUser != "no user") {
-                const user = {
-                    name: currentUser.name,
-                    email: currentUser.email,
-                    pathway: pathwayName,
-                }
-                const signedIn = true;
-                this.props.comingSoon(user, signedIn);
-                this.setState({open: true});
-            }
-            // if not logged in, prompt for user info
-            else {
-                this.setState({open: true, dialogPathway: pathwayName});
-            }
-        }
-    };
-
-    handleClose = () => {
-        this.setState({open: false, dialogPathway: null});
-    };
 
     render() {
         const style = {
@@ -209,61 +175,37 @@ class MyCandidates extends Component {
         // create the pathway previews
         let key = 0;
         let self = this;
-        const candidatePreviews = this.state.candidates.map(function (pathway) {
+        const candidatePreviews = this.state.candidates.map(function (candidate) {
             key++;
-            let formattedDeadline = "";
-            if (pathway.deadline) {
-                const deadline = new Date(pathway.deadline);
-                formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
-            }
 
             return (
                 <li className="pathwayPreviewLi explorePathwayPreview"
                     key={key}
-                    onClick={() => self.goTo('/pathway?pathway=' + pathway.url)}
                 >
-                    <PathwayPreview
-                        name={pathway.name}
-                        image={pathway.previewImage}
-                        logo = {pathway.sponsor.logoForLightBackground}
-                        sponsorName = {pathway.sponsor.name}
-                        completionTime={pathway.estimatedCompletionTime}
-                        deadline={formattedDeadline}
-                        price={pathway.price}
-                        _id={pathway._id}
-                        comingSoon = {pathway.comingSoon}
-                        variation="3"
+                    <CandidatePreview
+                        editStage={true}
+                        name={candidate.name}
+                        email={candidate.email}
                     />
                 </li>
             );
         });
 
         // TODO get tags from DB
-        const tags = ["Not Contacted", "Contacted", "Interviewing", "Hired", "Dismissed"];
-        const stageItems = tags.map(function (tag) {
-            return <MenuItem value={tag} primaryText={tag} key={tag}/>
+        const stages = ["Not Contacted", "Contacted", "Interviewing", "Hired", "Dismissed"];
+        const stageItems = tags.map(function (stage) {
+            return <MenuItem value={stage} primaryText={stage} key={stage}/>
         })
 
         // TODO get companies from DB
-        const companies = ["Moonshot"];
+        const companies = ["PathwayName1", "PathwayName2"];
         const pathwayItems = companies.map(function (pathway) {
             return <MenuItem value={pathway} primaryText={pathway} key={pathway}/>
         })
 
-        let blurredClass = "";
-        if (this.state.open) {
-            blurredClass = " dialogForBizOverlay";
-        }
-        const actions = [
-            <FlatButton
-                label="Close"
-                primary={true}
-                onClick={this.handleClose}
-            />,
-        ];
 
         return (
-            <div className={"jsxWrapper" + blurredClass} ref='myCandidates'>
+            <div className={"jsxWrapper"} ref='myCandidates'>
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>
