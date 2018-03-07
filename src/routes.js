@@ -10,7 +10,7 @@ import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-route
 import Login from './components/pages/login';
 import Signup from './components/pages/signup';
 import BusinessHome from './components/pages/businessHome';
-import MyCandidates from './components/pages/businessPages/businessHome';
+import MyCandidates from './components/pages/businessPages/myCandidates';
 import Main from './main';
 import AuthenticatedComponent from './components/AuthenticatedComponent';
 import Home from './components/pages/home';

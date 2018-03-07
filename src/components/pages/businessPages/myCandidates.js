@@ -14,7 +14,7 @@ import {
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
-import {closeNotification} from "../../actions/usersActions";
+import {closeNotification} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
 

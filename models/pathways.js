@@ -10,6 +10,7 @@ var pathwaysSchema = mongoose.Schema({
   url: String,
   sponsor: {
       name: String,
+      businessId: mongoose.Schema.Types.ObjectId,
       logo: String,
       logoForLightBackground: String,
       description: String,
