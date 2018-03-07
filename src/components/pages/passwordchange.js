@@ -47,7 +47,7 @@ class PasswordChange extends Component {
     handleSubmit(e) {
         e.preventDefault();
         // values that were entered in the form
-        const vals = this.props.formData.settings.values;
+        const vals = this.props.formData.changePassword.values;
         // Form validation before submit
         let notValid = false;
         // user required to enter all three fields
@@ -72,8 +72,8 @@ class PasswordChange extends Component {
         // info the server needs to change the password
         const user = {
             _id: this.props.currentUser._id,
-            oldpass: this.props.formData.settings.values.oldpass,
-            password: this.props.formData.settings.values.password
+            oldpass: this.props.formData.changePassword.values.oldpass,
+            password: this.props.formData.changePassword.values.password
         };
 
         // change the password in the backend
@@ -138,7 +138,7 @@ function mapStateToProps(state) {
 }
 
 PasswordChange = reduxForm({
-    form: 'settings',
+    form: 'changePassword',
     validate,
 })(PasswordChange);
 

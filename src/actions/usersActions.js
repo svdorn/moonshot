@@ -209,7 +209,7 @@ export function changePassword(user) {
             .then(function(response) {
                 dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
                 // reset the form
-                dispatch(reset("settings"));
+                dispatch(reset("changePassword"));
             })
             .catch(function(err){
                 dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: err.response.data, type: "errorHeader"}})
