@@ -792,97 +792,126 @@ app.post('/user/completePathway', function (req, res) {
     const successMessage = "Pathway marked complete, our team will be in contact with you shortly!";
     const errorMessage = "Error marking pathway complete, try again or contact us.";
 
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-    let subject = 'ACTION REQUIRED: Somebody completed pathway';
-    let content = "<div>"
-        + "<h3>A User has just completed this pathway:</h3>"
-        + "<p>User: "
-        + sanitize(req.body.userName)
-        + "</p>"
-        + "<p>User id: "
-        + sanitize(req.body._id)
-        + "</p>"
-        + "<p>Pathway: "
-        + sanitize(req.body.pathwayName)
-        + "</p>"
-        + "<p>Contact them with this email: "
-        + sanitize(req.body.email)
-        + "</p>"
-        + "<p>or this phone number: "
-        + sanitize(req.body.phoneNumber)
-        + "</p>"
-        + "</div>";
+    const userName = sanitize(req.body.userName);
+    const userId = sanitize(req.body._id);
+    const pathwayName = sanitize(req.body.pathwayName);
+    const email = sanitize(req.body.email);
+    const phoneNumber = sanitize(req.body.phoneNumber);
+    let referralCode = sanitize(req.body.referralCode);
+
+    // remove punctuation and spaces from referral code
+    referralCode = referralCode.replace(/&amp;|&quot;|&apos;/g,"").replace(/[.,\/#!$%\^&\*;:{}'"=\-_`~()]/g,"").replace(/\s/g,"").toLowerCase();
+
+    let referralInfo = "";
+
+    let finishPathway = function() {
+        //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+        let recipients = ["ameyer24@wisc.edu"];
+        let subject = 'ACTION REQUIRED: Somebody completed pathway';
+        let content = "<div>"
+            + "<h3>A User has just completed this pathway:</h3>"
+            + "<p>User: "
+            + userName
+            + "</p>"
+            + "<p>User id: "
+            + userId
+            + "</p>"
+            + "<p>Pathway: "
+            + pathwayName
+            + "</p>"
+            + "<p>Contact them with this email: "
+            + email
+            + "</p>"
+            + "<p>or this phone number: "
+            + phoneNumber
+            + "</p>"
+            + referralInfo
+            + "</div>";
 
 
+        // mark pathway complete and change emailTo
+        const _id = sanitize(req.body._id);
+        const verificationToken = sanitize(req.body.verificationToken);
+        const pathwayId = sanitize(req.body.pathwayId);
+        const skills = sanitize(req.body.skills);
+        const query = {_id, verificationToken}
 
-    // mark pathway complete and change emailTo
-    const _id = sanitize(req.body._id);
-    const verificationToken = sanitize(req.body.verificationToken);
-    const pathwayId = sanitize(req.body.pathwayId);
-    const skills = sanitize(req.body.skills);
-    const query = {_id, verificationToken}
+        Users.findOne(query, function (err, user) {
+            if (err) {
+                console.log("error marking pathway complete: ", err);
+            } else if (user && user != null) {
+                user.emailToContact = sanitize(req.body.email);
+                user.phoneNumber = sanitize(req.body.phoneNumber);
+                // find the user's pathway object corresponding to the pathway that was
+                // marked complete
+                const pathwayIndex = user.pathways.findIndex(function(path) {
+                    return path.pathwayId.toString() == pathwayId.toString();
+                });
+                // if the pathway was found in their current pathways, remove it
+                // from current pathways and add it to completed pathways
+                if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
+                    let completedPathway = user.pathways[pathwayIndex];
+                    const newPathwayObject = {
+                        pathwayId: completedPathway.pathwayId,
+                        dateAdded: completedPathway.dateAdded,
+                        dateCompleted: new Date()
+                    }
 
-    Users.findOne(query, function (err, user) {
-        if (err) {
-            console.log("error marking pathway complete: ", err);
-        } else if (user && user != null) {
-            user.emailToContact = sanitize(req.body.email);
-            user.phoneNumber = sanitize(req.body.phoneNumber);
-            // find the user's pathway object corresponding to the pathway that was
-            // marked complete
-            const pathwayIndex = user.pathways.findIndex(function(path) {
-                return path.pathwayId.toString() == pathwayId.toString();
-            });
-            // if the pathway was found in their current pathways, remove it
-            // from current pathways and add it to completed pathways
-            if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
-                let completedPathway = user.pathways[pathwayIndex];
-                const newPathwayObject = {
-                    pathwayId: completedPathway.pathwayId,
-                    dateAdded: completedPathway.dateAdded,
-                    dateCompleted: new Date()
+                    // Put pathway into completed pathways and remove it from current pathways
+                    user.completedPathways.push(newPathwayObject);
+                    user.pathways.splice(pathwayIndex, 1);
                 }
 
-                // Put pathway into completed pathways and remove it from current pathways
-                user.completedPathways.push(newPathwayObject);
-                user.pathways.splice(pathwayIndex, 1);
-            }
-
-            // add the user's new skills that they gained from this
-            if (Array.isArray(skills)) {
-                skills.forEach(function(skill) {
-                    // only add the skill if the user does not already have it
-                    const notFound = -1;
-                    if (user.skills.findIndex(function(userSkill) {
-                        return userSkill === skill;
-                    }) === notFound) {
-                        user.skills.push(skill);
-                    }
-                });
-            }
-
-            // save the user's new info in the db
-            user.save(function(err, updatedUser) {
-                let userToReturn = updatedUser;
-                if (err || updatedUser == null || updatedUser == undefined) {
-                    console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
-                    userToReturn = user;
-                    content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
+                // add the user's new skills that they gained from this
+                if (Array.isArray(skills)) {
+                    skills.forEach(function(skill) {
+                        // only add the skill if the user does not already have it
+                        const notFound = -1;
+                        if (user.skills.findIndex(function(userSkill) {
+                            return userSkill === skill;
+                        }) === notFound) {
+                            user.skills.push(skill);
+                        }
+                    });
                 }
 
-                // send an email to us saying that the user completed a pathway
-
-                sendEmail(recipients, subject, content, function (success, msg) {
-                    if (success) {
-                        res.json({message: successMessage, user: userToReturn});
-                    } else {
-                        res.status(500).send({message: errorMessage, user: userToReturn});
+                // save the user's new info in the db
+                user.save(function(err, updatedUser) {
+                    let userToReturn = updatedUser;
+                    if (err || updatedUser == null || updatedUser == undefined) {
+                        console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
+                        userToReturn = user;
+                        content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
                     }
-                });
-            });
-        }
-    });
 
+                    // send an email to us saying that the user completed a pathway
+                    sendEmail(recipients, subject, content, function (success, msg) {
+                        if (success) {
+                            res.json({message: successMessage, user: userToReturn});
+                        } else {
+                            res.status(500).send({message: errorMessage, user: userToReturn});
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    // this gets executed before the code above, it excutes all that when it's ready
+    if (referralCode) {
+        referralInfo = "<p>Referral Code: " + referralCode + "</p>";
+
+        Referrals.findOne({referralCode}, function(error, referrer) {
+            if (error || referrer == null || (referrer.email == undefined && referrer.name == undefined)) {
+                referralInfo = referralInfo + "<p>However, no user is associated with that referral code.</p>";
+            } else {
+                referralInfo = referralInfo + "<p>Referrer's email: " + referrer.email + "</p><p>Referrer's Name: " + referrer.name + ". Make sure this isn't the same as the user who completed the pathway.</p>";
+            }
+            finishPathway();
+        });
+    } else {
+        finishPathway();
+    }
 });
 
 
