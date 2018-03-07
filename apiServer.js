@@ -1438,56 +1438,61 @@ app.post("/user/addPathway", function (req, res) {
 });
 
 //----->> CHANGE PASSWORD <<------
-app.put('/user/changepassword/:_id', function (req, res) {
+app.post('/user/changepassword', function (req, res) {
     var user = sanitize(req.body);
-    var query = {_id: sanitize(req.params._id)};
-
-    // sanitize user info
-    for (var prop in user) {
-        // skip loop if the property is from prototype
-        if (!user.hasOwnProperty(prop)) continue;
-        if (typeof user[prop] === "string") {
-            user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
-        }
-    }
+    var query = {_id: user._id};
 
     // if the field doesn't exist, $set will set a new field
     const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(user.password, salt, function (err, hash) {
-            // change the stored password to be the hash
-            var update = {
-                $set: {
-                    password: hash
-                }
+    bcrypt.genSalt(saltRounds, function (saltErr, salt) {
+        if (saltErr) {
+            console.log("Error generating salt for resetting password: ", saltErr);
+            res.status(500).send("Server error. Could not change password.");
+            return;
+        }
+        bcrypt.hash(user.password, salt, function (hashErr, hash) {
+            // error encrypting the new password
+            if (hashErr) {
+                console.log("Error hashing user's new password when trying to reset password: ", hashErr);
+                res.status(500).send("Server error. Couldn't change password.");
+                return;
             }
-            // i think it has to be {_id: req.params._id} for the query
-            Users.findOne(query, function (err, users) {
-                if (err) {
-                    res.status(500).send("Error performing query to find user in db. ", err);
+
+            Users.findOne(query, function (dbFindErr, userFromDB) {
+                if (dbFindErr) {
+                    console.log("Error finding the user that is trying to reset their password: ", dbFindErr);
+                    res.status(500).send("Server error. Couldn't change password.");
                     return;
                 }
 
                 // CHECK IF A USER WAS FOUND
-                if (!users) {
-                    res.status(404).send("No user with that email was found.");
+                if (!userFromDB) {
+                    res.status(404).send("Server error. Couldn't change password.");
                     return;
                 }
 
-                bcrypt.compare(user.oldpass, users.password, function (passwordError, passwordsMatch) {
+                bcrypt.compare(user.oldpass, userFromDB.password, function (passwordError, passwordsMatch) {
+                    // error comparing passwords, not necessarily that the passwords don't match
                     if (passwordError) {
-                        res.status(500).send("Error logging in, try again later.");
+                        console.log("Error comparing passwords when trying to reset password: ", passwordError);
+                        res.status(500).send("Server error. Couldn't change password.");
                         return;
-                    } else if (passwordsMatch) {
-                        // When true returns the updated document
-                        var options = {new: true};
-
-                        // i think it has to be {_id: req.params._id} for the query
-                        Users.findOneAndUpdate(query, update, options, function (err, user) {
-                            if (err) {
-                                console.log(err);
+                    }
+                    // user gave the correct old password
+                    else if (passwordsMatch) {
+                        // update the user's password
+                        userFromDB.password = hash;
+                        // save the user in the db
+                        userFromDB.save(function(saveErr, newUser) {
+                            if (saveErr) {
+                                console.log("Error saving user's new password when resetting: ", saveErr);
+                                res.status(500).send("Server error. Couldn't change password.");
+                                return;
+                            } else {
+                                //successfully changed user's password
+                                res.json(removePassword(newUser));
+                                return;
                             }
-                            res.json(removePassword(user));
                         });
                     } else {
                         res.status(400).send("Old password is incorrect.");

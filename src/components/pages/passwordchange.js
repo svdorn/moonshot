@@ -66,7 +66,7 @@ class PasswordChange extends Component {
         const user = {
             _id: this.props.currentUser._id,
             oldpass: this.props.formData.settings.values.oldpass,
-            password: this.props.formData.settings.values.password,
+            password: this.props.formData.settings.values.password
         };
         this.props.changePassword(user);
     }
