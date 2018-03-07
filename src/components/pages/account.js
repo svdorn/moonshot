@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateUser} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper} from 'material-ui';
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, change} from 'redux-form';
 
 const styles = {
     floatingLabelStyle: {
@@ -84,6 +84,10 @@ class Account extends Component {
         };
 
         this.props.updateUser(user);
+
+        // reset password field
+        this.props.change("password", "");
+        this.props.untouch("password");
     }
 
     //name, email, password, confirm password, signup button
@@ -137,6 +141,7 @@ class Account extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateUser,
+        change
     }, dispatch);
 }
 
