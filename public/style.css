@@ -2205,7 +2205,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         transition: visibility 0s .5s, opacity .5s linear;
     }
     .boxStyle {
-        display: none !important;
+        display: inline-block;
+        position: relative;
+        margin: -80px 0 50px;
     }
     .dropDownSettings {
         display: block !important;
@@ -2751,6 +2753,10 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     }
     .aboutMeSection {
         min-height: 450px;
+    }
+
+    .boxStyle {
+        margin: 0px 0 50px;
     }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }

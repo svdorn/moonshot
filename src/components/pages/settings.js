@@ -31,6 +31,12 @@ class Settings extends Component {
                     null
                 }
                 <div className="center">
+                    {this.state.value === 1 ?
+                        <Account/>
+                        :
+                        <PasswordChange/>
+                    }
+                    <br/>
                     <div className="lightWhiteForm boxStyle">
                         <Menu value={this.state.value} onChange={this.handleChange} style={{}}>
                             <MenuItem primaryText="Account" disabled={true}/>
@@ -50,11 +56,6 @@ class Settings extends Component {
                             {/*<MenuItem value={2} primaryText="Change Password"/>*/}
                         {/*</DropDownMenu>*/}
                     {/*</div>*/}
-                    {this.state.value === 1 ?
-                        <Account/>
-                        :
-                        <PasswordChange/>
-                    }
                 </div>
             </div>
         );
