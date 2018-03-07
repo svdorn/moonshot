@@ -12,6 +12,18 @@ const styles = {
     },
 };
 
+const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        floatingLabelStyle={styles.floatingLabelStyle}
+        {...input}
+        {...custom}
+        type="password"
+    />
+);
+
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
@@ -28,6 +40,7 @@ const validate = values => {
     const requiredFields = [
         'name',
         'email',
+        'password'
     ];
     requiredFields.forEach(field => {
         if (!values[field]) {
@@ -51,6 +64,7 @@ class Account extends Component {
         const requiredFields = [
             'name',
             'email',
+            'password'
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -65,7 +79,8 @@ class Account extends Component {
         const user = {
             name: this.props.formData.settings.values.name,
             email: this.props.formData.settings.values.email,
-            _id: this.props.currentUser._id,
+            password: this.props.formData.settings.values.password,
+            _id: this.props.currentUser._id
         };
 
         this.props.updateUser(user);
@@ -96,11 +111,21 @@ class Account extends Component {
                                 className="lightBlueInputText"
                             /></div>
                         <br/>
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
+                            <Field
+                                name="password"
+                                component={renderPasswordField}
+                                label="Password"
+                                className="lightBlueInputText"
+                                autoComplete="new-password"
+                            /></div>
+                        <br/>
                         <button
                             type="submit"
                             className="formSubmitButton font24px font16pxUnder600"
                         >
-                            Update User
+                            Update Settings
                         </button>
                     </form>
                 </div>

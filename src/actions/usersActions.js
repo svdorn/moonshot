@@ -190,14 +190,13 @@ export function forgotPassword(user) {
 // UPDATE A USER
 export function updateUser(user) {
     return function(dispatch) {
-
         // update user on the database
-        axios.put("/api/user/" + user._id, user)
+        axios.post("/api/user/changeSettings", user)
             .then(function(response) {
                 dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}})
             })
             .catch(function(err) {
-                dispatch({type:"UPDATE_USER_REJECTED", notification: {message: "Error updating settings", type: "errorHeader"}})
+                dispatch({type:"UPDATE_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
             });
     }
 }

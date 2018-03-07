@@ -1331,47 +1331,86 @@ app.delete('/user/:_id', function (req, res) {
 });
 
 //----->> UPDATE USER <<------
-app.put('/user/:_id', function (req, res) {
-    var user = sanitize(req.body);
+app.post('/user/changeSettings', function (req, res) {
+    const user = sanitize(req.body);
+    const password = user.password;
 
-    var query = {_id: sanitize(req.params._id)};
+    if (!user.password || !user.name || !user.email) {
+        console.log("Not all arguments provided for settings change.");
+        res.status(400).send("No fields can be empty.");
+        return;
+    }
 
-    // if the field doesn't exist, $set will set a new field
-    var update = {
-        '$set': {
-            name: user.name,
-            email: user.email
+    const userQuery = {_id: user._id}
+
+    Users.findOne(userQuery, function(findUserErr, foundUser) {
+        // if error while trying to find current user
+        if (findUserErr) {
+            console.log("Error finding user in db when trying to update settings: ", findUserErr);
+            res.status(500).send("Settings couldn't be updated. Try again later.");
+            return;
         }
-    };
 
-    // When true returns the updated document
-    var options = {new: true};
-    const findQuery = {email: user.email};
-    Users.findOne(findQuery, function (err, foundUser) {
-        if (err) {
-            console.log(err);
+        if (!foundUser) {
+            console.log("Didn't find a user with given id when trying to update settings.");
+            res.status(500).send("Settings couldn't be updated. Try again later.");
+            return;
         }
-        let bool = false;
-        if (foundUser === null) {
-            bool = true;
-        } else {
-            if (foundUser._id == user._id) {
-                bool = true;
-            } else {
-                res.status(401).send("Email is taken. Choose a different email.");
+
+        bcrypt.compare(password, foundUser.password, function (passwordError, passwordsMatch) {
+            // error comparing password to user's password, doesn't necessarily
+            // mean that the password is wrong
+            if (passwordError) {
+                console.log("Error comparing passwords when trying to update settings: ", passwordError);
+                res.status(500).send("Settings couldn't be updated. Try again later.");
+                return;
             }
-        }
-        if (bool) {
-            Users.findOneAndUpdate(query, update, options, function (err, user) {
-                if (err) {
-                    console.log(err);
+
+            // user entered wrong password
+            if (!passwordsMatch) {
+                res.status(400).send("Incorrect password");
+                return;
+            }
+
+            // see if there's another user with the new email
+            const emailQuery = {email: user.email};
+            Users.findOne(emailQuery, function(emailQueryErr, userWithEmail) {
+                // don't want two users with the same email, so in case of db search
+                // failure, return unsuccessfully
+                if (emailQueryErr) {
+                    console.log("Error trying to find a user with the same email address as the one provided by user trying to change settings: ", emailQueryErr);
+                    res.status(500).send("Settings couldn't be updated. Try again later.");
+                    return;
                 }
 
-                res.json(removePassword(user));
-            });
-        }
+                // someone else already has that email
+                if (userWithEmail && userWithEmail._id.toString() != foundUser._id.toString()) {
+                    res.status(400).send("That email address is already taken.");
+                    return;
+                }
 
-    });
+                // all is good, update the user (as long as email and name are not blank)
+                if (user.email) {
+                    foundUser.email = user.email;
+                }
+                if (user.name) {
+                    foundUser.name = user.name;
+                }
+
+                foundUser.save(function(saveErr, newUser) {
+                    // if there is an error saving the user's info
+                    if (saveErr) {
+                        console.log("Error when saving user's changed info: ", saveErr);
+                        res.status(500).send("Settings couldn't be updated. Try again later.");
+                        return;
+                    }
+
+                    // settings change successful
+                    res.json(newUser);
+                })
+            });
+        });
+    })
 });
 
 //----->> ADD PATHWAY <<------
