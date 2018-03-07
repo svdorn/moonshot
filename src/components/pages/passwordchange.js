@@ -12,17 +12,6 @@ const styles = {
     },
 };
 
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
-        {...input}
-        {...custom}
-    />
-);
-
 const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
@@ -93,7 +82,7 @@ class PasswordChange extends Component {
                             <div className="fieldWhiteSpace"/>
                         <Field
                             name="oldpass"
-                            component={renderTextField}
+                            component={renderPasswordField}
                             label="Old Password"
                             className="lightBlueInputText"
                         /></div><br/>
