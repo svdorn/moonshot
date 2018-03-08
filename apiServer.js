@@ -1103,8 +1103,13 @@ app.post('/forgotPassword', function (req, res) {
                 }
 
                 foundUser.password = undefined;
+                // if we're in development (on localhost) navigate to localhost
+                let moonshotUrl = "https://www.moonshotlearning.org/";
+                if (!process.env.NODE_ENV) {
+                    moonshotUrl = "http://localhost:8081/";
+                }
                 let content = 'Click this link to change your password: '
-                    + "<a href='https://www.moonshotlearning.org/changePassword?"
+                    + "<a href='" + moonshotUrl + "changePassword?token="
                     + newPasswordToken
                     + "'>Click me</a>";
                 sendEmail(recipient, subject, content, function (success, msg) {
