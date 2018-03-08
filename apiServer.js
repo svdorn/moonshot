@@ -55,10 +55,8 @@ app.use(session({
     resave: false, // session only saved back to the session store if session was modified,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
-        // TODO uncomment this when pushing to aws less frequently.
-        // secure being true makes cookies only save when on https so it'll screw up localhost stuff
-        //secure: true // only make the cookie if accessing via https
-        secure: false // save the cookie even if not on https
+        // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
+        secure: !!process.env.NODE_ENV // only make the cookie if accessing via https
     },
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
