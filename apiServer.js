@@ -1413,6 +1413,10 @@ app.post('/user/changeSettings', function (req, res) {
     })
 });
 
+
+console.log("process.env.NODE_ENV is: ", process.env.NODE_ENV),
+
+
 //----->> ADD PATHWAY <<------
 // CURRENTLY ONLY ALLOWS NWM PATHWAY TO BE ADDED
 app.post("/user/addPathway", function (req, res) {
