@@ -84,6 +84,7 @@ class ForgotPassword extends Component {
                             /><br/>
                         </div>
                         <button
+                            style={{marginTop:"20px"}}
                             type="submit"
                             className="formSubmitButton font24px font16pxUnder600"
                         >
