@@ -2681,6 +2681,60 @@ app.post('/changeTempPassword', function (req, res) {
 });
 
 
+// SEARCH FOR CANDIDATES
+app.get("/business/candidateSearch", function(req, res) {
+    const MAX_CANDIDATES_TO_RETURN = 1000;
+    let query = {showToUsers: true};
+
+    let term = sanitize(req.query.searchTerm);
+    if (term && term !== "") {
+        // if there is a search term, add it to the query
+        const termRegex = new RegExp(term, "i");
+        query["name"] = termRegex;
+    }
+
+    let limit = parseInt(sanitize(req.query.limit), 10);
+    if (limit === NaN) {
+        limit = MAX_CANDIDATES_TO_RETURN;
+    }
+
+    // how the candidates will be sorted once sorting is implemented on front-end
+    const sortNOTYET = sanitize(req.body.sort);
+
+    // add stage to query if it exists
+    const stage = sanitize(req.query.stage);
+    if (stage && stage !== "") {
+        query["tags"] = stage;
+    }
+
+    // add pathway name to query if it exists
+    const pathway = sanitize(req.query.pathway);
+    if (pathway && pathway !== "") {
+        query["sponsor.name"] = pathway;
+    }
+
+    const sort = {avgRating: 1};
+    // only get these properties of the candidates
+    const select = "name emailToContact profileUrl pathways";
+
+    Users
+        .find()
+        //.find(query)
+        .limit(limit)
+        .sort(sort)
+        .select(select)
+        .exec(function (err, candidates) {
+            if (err) {
+                res.status(500).send("Error getting searched-for candidates");
+                return;
+            } else {
+                res.json(candidates);
+                return;
+            }
+        });
+});
+
+
 // --->> END BUSINESS APIS <<--- //
 
 // END APIs

@@ -47,7 +47,7 @@ const routes = (
         <Route path='login' component={Login} />
         <Route path="signup" component={Signup} />
         <Route path="businessHome" component={AuthenticatedComponent} page={<BusinessHome/>} userType="employer" />
-        <Route path="businessHome" component={AuthenticatedComponent} page={<MyCandidates/>} userType="employer" />
+        <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType="employer" />
         <Route path='forBusiness' component={ForBusiness} />
         <Route path="profile" component={Profile} />
         <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>

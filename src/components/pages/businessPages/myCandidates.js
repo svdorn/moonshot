@@ -17,6 +17,8 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
+import CandidatePreview from '../../childComponents/candidatePreview';
+import styles from '../../../../public/styles';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -50,10 +52,9 @@ class MyCandidates extends Component {
         this.search();
 
         // populate candidates with initial people
-        axios.get("/api/candidateSearch", {
+        axios.get("/api/business/candidateSearch", {
             params: {
-                limit: 3,
-
+                limit: 10,
             }
         }).then(res => {
             // make sure component is mounted before changing state
@@ -61,6 +62,7 @@ class MyCandidates extends Component {
                 this.setState({candidates: res.data});
             }
         }).catch(function (err) {
+            console.log("ERROR: ", err);
         })
     }
 
@@ -94,18 +96,22 @@ class MyCandidates extends Component {
     };
 
     search() {
-        axios.get("/api/candidateSearch", {
+        axios.get("/api/business/candidateSearch", {
             params: {
                 searchTerm: this.state.term,
                 stage: this.state.stage,
-                pathway: this.state.pathway
+                pathway: this.state.pathway,
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken
             }
         }).then(res => {
+            console.log("res.data is: ", res.data);
             // make sure component is mounted before changing state
             if (this.refs.myCandidates) {
                 this.setState({candidates: res.data});
             }
         }).catch(function (err) {
+            console.log("ERROR: ", err);
         })
     }
 
@@ -192,15 +198,14 @@ class MyCandidates extends Component {
             );
         });
 
-        // TODO get tags from DB
         const stages = ["Not Contacted", "Contacted", "Interviewing", "Hired", "Dismissed"];
-        const stageItems = tags.map(function (stage) {
+        const stageItems = stages.map(function (stage) {
             return <MenuItem value={stage} primaryText={stage} key={stage}/>
         })
 
         // TODO get companies from DB
-        const companies = ["PathwayName1", "PathwayName2"];
-        const pathwayItems = companies.map(function (pathway) {
+        const pathways = ["PathwayName1", "PathwayName2"];
+        const pathwayItems = pathways.map(function (pathway) {
             return <MenuItem value={pathway} primaryText={pathway} key={pathway}/>
         })
 
