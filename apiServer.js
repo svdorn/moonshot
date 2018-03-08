@@ -56,10 +56,8 @@ app.use(session({
     resave: false, // session only saved back to the session store if session was modified,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
-        // TODO uncomment this when pushing to aws less frequently.
-        // secure being true makes cookies only save when on https so it'll screw up localhost stuff
-        //secure: true // only make the cookie if accessing via https
-        secure: false // save the cookie even if not on https
+        // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
+        secure: !!process.env.NODE_ENV // only make the cookie if accessing via https
     },
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
@@ -573,31 +571,32 @@ app.post('/verifyEmail', function (req, res) {
     // query form business user database if the user is a business user
     const DB = (userType === "businessUser") ? BusinessUsers : Users;
 
+    if (!token) {
+        res.status(400).send("Url not in the right format");
+        return;
+    }
+
     var query = {emailVerificationToken: token};
     DB.findOne(query, function (err, user) {
-        if (err || user == undefined) {
-            res.status(404).send("User not found from token");
+        if (err) {
+            console.log("Error trying to find user from verification token");
+            res.status(500).send("Server error, try again later");
             return;
         }
 
-        let query = {_id: user._id}
+        if (!user) {
+            res.status(404).send("User not found from url");
+            return;
+        }
 
-        // if the field doesn't exist, $set will set a new field
-        var update = {
-            '$set': {
-                verified: true
-            },
-            '$unset': {
-                emailVerificationToken: ""
-            }
-        };
+        user.verified = true;
+        user.emailVerificationToken = undefined;
 
-        // When true returns the updated document
-        var options = {new: true};
-
-        DB.findOneAndUpdate(query, update, options, function (err, updatedUser) {
-            if (err) {
-                console.log(err);
+        user.save(function(updateErr, updatedUser) {
+            if (updateErr) {
+                console.log("Error saving user's verified status to true: ", updateErr);
+                res.status(500).send("Server error, try again later");
+                return;
             }
 
             // we don't save the user session if logging in as business user
@@ -615,36 +614,45 @@ app.post('/verifyEmail', function (req, res) {
 
             req.session.save(function (err) {
                 if (err) {
-                    console.log("error")
+                    console.log("Error saving session after verifying user: ", err);
                 }
             });
+
             if (sessionUserId && sessionUserId == updatedUser._id) {
                 res.json(removePassword(updatedUser));
+                return;
             }
             // otherwise, bring the user to the login page
             else {
                 res.json("go to login");
+                return;
             }
-
         });
     });
 });
 
 // VERIFY CHANGE PASSWORD
 app.post('/user/changePasswordForgot', function (req, res) {
-    let token = sanitize(req.body.token);
+    let token = sanitize(req.body.token).toString();
     let password = sanitize(req.body.password);
 
     var query = {passwordToken: token};
     Users.findOne(query, function (err, user) {
-        if (err || user == undefined) {
-            res.status(404).send("Invalid change password link.");
+        if (err) {
+            console.log("Error trying to find user from password token: ", err);
+            res.status(500).send("Server error, try again later");
             return;
         }
 
-        const time = Date.now() - user.time;
-        if (time > (1 * 60 * 60 * 1000)) {
+        if (!user) {
+            res.status(404).send("User not found from link");
+            return;
+        }
+
+        const currentTime = Date.now();
+        if (currentTime > user.passwordTokenExpirationTime) {
             res.status(401).send("Time ran out, try sending email again");
+            return;
         }
 
         let query = {_id: user._id};
@@ -654,13 +662,16 @@ app.post('/user/changePasswordForgot', function (req, res) {
                 // change the stored password to be the hash
                 const newPassword = hash;
                 // if the field doesn't exist, $set will set a new field
+                // can be verified because the user had to go to their email
+                // to get to this page
                 var update = {
                     '$set': {
-                        password: newPassword
+                        password: newPassword,
+                        verified: true
                     },
                     '$unset': {
                         passwordToken: "",
-                        time: '',
+                        passwordTokenExpirationTime: "",
                     }
                 };
 
@@ -670,8 +681,11 @@ app.post('/user/changePasswordForgot', function (req, res) {
                 Users.findOneAndUpdate(query, update, options, function (err, newUser) {
                     if (err) {
                         console.log(err);
+                        res.status(500).send("Error saving new password");
+                        return;
                     }
 
+                    // successfully created new password
                     res.json(removePassword(newUser));
                 });
             })
@@ -685,24 +699,30 @@ app.post('/sendVerificationEmail', function (req, res) {
     let email = sanitize(req.body.email);
     let query = {email: email};
 
+    let moonshotUrl = 'https://www.moonshotlearning.org/';
+    // if we are in development, links are to localhost
+    if (!process.env.NODE_ENV) {
+        moonshotUrl = 'http://localhost:8081/';
+    }
+
     Users.findOne(query, function (err, user) {
         let recipient = [user.email];
         let subject = 'Verify email';
         let content =
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                + '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
                     + '<div style="text-align:justify;width:80%;margin-left:10%;">'
-                    + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
+                    + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="' + moonshotUrl + 'verifyEmail?token=' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
                     + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.org</a>.</span><br/>'
                     + '</div>'
-                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?'
+                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'verifyEmail?token='
                 + user.emailVerificationToken
                 + '">VERIFY ACCOUNT</a>'
                 + '<div style="text-align:left;width:80%;margin-left:10%;">'
                     + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
                     + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
                     + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8; margin-top:20px;" href="https://www.moonshotlearning.org/unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
+                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
                     + '</div>'
                 + '</div>'
             + '</div>';
@@ -1137,34 +1157,58 @@ app.post('/forgotPassword', function (req, res) {
     let query = {email: email};
 
     const user = getUserByQuery(query, function (err, user) {
-        if (user == undefined) {
+        if (!user) {
+            console.log("Couldn't find user to set their password change token.");
             res.status(401).send("Cannot find user");
+            return;
         } else {
-            let recipient = [user.email];
-            let subject = 'Change Password';
+            // token that will go in the url
             const newPasswordToken = crypto.randomBytes(64).toString('hex');
-            const newTime = Date.now();
+            // password token expires in one hour (minutes * seconds * milliseconds)
+            const newTime = Date.now() + (60 * 60 * 1000);
 
-            let query2 = {_id: user._id};
-            var update = {
+            const query2 = {_id: user._id};
+            const update = {
                 '$set': {
                     passwordToken: newPasswordToken,
-                    time: newTime,
+                    passwordTokenExpirationTime: newTime,
                 }
             };
 
-            var options = {new: true};
+            const options = {new: true};
 
             Users.findOneAndUpdate(query2, update, options, function (err, foundUser) {
                 if (err) {
-                    console.log(err);
+                    console.log("Error giving user reset-password token: ", err);
+                    res.status(500).send("Server error, try again later.");
+                    return;
                 }
 
-                foundUser.password = undefined;
-                let content = 'Click this link to change your password: '
-                    + "<a href='https://www.moonshotlearning.org/changePassword?"
-                    + newPasswordToken
-                    + "'>Click me</a>";
+                // if we're in development (on localhost) navigate to localhost
+                let moonshotUrl = "https://www.moonshotlearning.org/";
+                if (!process.env.NODE_ENV) {
+                    moonshotUrl = "http://localhost:8081/";
+                }
+                const recipient = [user.email];
+                const subject = 'Change Password';
+
+                const content =
+                    '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+                        + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                            + '<div style="text-align:justify;width:80%;margin-left:10%;">'
+                            + "<span style='margin-bottom:20px;display:inline-block;'>Hello! We got a request to change your password. If that wasn't from you, you can ignore this email and your password will stay the same. Otherwise click here:</span><br/>"
+                            + '</div>'
+                        + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:5px 20px 20px;" href="' + moonshotUrl + 'changePassword?token='
+                        + newPasswordToken
+                        + '">Change Password</a>'
+                        + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                            + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                            + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                            + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
+                            + '</div>'
+                        + '</div>'
+                    + '</div>';
+
                 sendEmail(recipient, subject, content, function (success, msg) {
                     if (success) {
                         res.json(msg);
@@ -1449,48 +1493,88 @@ app.delete('/user/:_id', function (req, res) {
 });
 
 //----->> UPDATE USER <<------
-app.put('/user/:_id', function (req, res) {
-    var user = sanitize(req.body);
+app.post('/user/changeSettings', function (req, res) {
+    const user = sanitize(req.body);
+    const password = user.password;
 
-    var query = {_id: sanitize(req.params._id)};
+    if (!user.password || !user.name || !user.email) {
+        console.log("Not all arguments provided for settings change.");
+        res.status(400).send("No fields can be empty.");
+        return;
+    }
 
-    // if the field doesn't exist, $set will set a new field
-    var update = {
-        '$set': {
-            name: user.name,
-            email: user.email
+    const userQuery = {_id: user._id}
+
+    Users.findOne(userQuery, function(findUserErr, foundUser) {
+        // if error while trying to find current user
+        if (findUserErr) {
+            console.log("Error finding user in db when trying to update settings: ", findUserErr);
+            res.status(500).send("Settings couldn't be updated. Try again later.");
+            return;
         }
-    };
 
-    // When true returns the updated document
-    var options = {new: true};
-    const findQuery = {email: user.email};
-    Users.findOne(findQuery, function (err, foundUser) {
-        if (err) {
-            console.log(err);
+        if (!foundUser) {
+            console.log("Didn't find a user with given id when trying to update settings.");
+            res.status(500).send("Settings couldn't be updated. Try again later.");
+            return;
         }
-        let bool = false;
-        if (foundUser === null) {
-            bool = true;
-        } else {
-            if (foundUser._id == user._id) {
-                bool = true;
-            } else {
-                res.status(401).send("Email is taken. Choose a different email.");
+
+        bcrypt.compare(password, foundUser.password, function (passwordError, passwordsMatch) {
+            // error comparing password to user's password, doesn't necessarily
+            // mean that the password is wrong
+            if (passwordError) {
+                console.log("Error comparing passwords when trying to update settings: ", passwordError);
+                res.status(500).send("Settings couldn't be updated. Try again later.");
+                return;
             }
-        }
-        if (bool) {
-            Users.findOneAndUpdate(query, update, options, function (err, user) {
-                if (err) {
-                    console.log(err);
+
+            // user entered wrong password
+            if (!passwordsMatch) {
+                res.status(400).send("Incorrect password");
+                return;
+            }
+
+            // see if there's another user with the new email
+            const emailQuery = {email: user.email};
+            Users.findOne(emailQuery, function(emailQueryErr, userWithEmail) {
+                // don't want two users with the same email, so in case of db search
+                // failure, return unsuccessfully
+                if (emailQueryErr) {
+                    console.log("Error trying to find a user with the same email address as the one provided by user trying to change settings: ", emailQueryErr);
+                    res.status(500).send("Settings couldn't be updated. Try again later.");
+                    return;
                 }
 
-                res.json(removePassword(user));
-            });
-        }
+                // someone else already has that email
+                if (userWithEmail && userWithEmail._id.toString() != foundUser._id.toString()) {
+                    res.status(400).send("That email address is already taken.");
+                    return;
+                }
 
-    });
+                // all is good, update the user (as long as email and name are not blank)
+                if (user.email) {
+                    foundUser.email = user.email;
+                }
+                if (user.name) {
+                    foundUser.name = user.name;
+                }
+
+                foundUser.save(function(saveErr, newUser) {
+                    // if there is an error saving the user's info
+                    if (saveErr) {
+                        console.log("Error when saving user's changed info: ", saveErr);
+                        res.status(500).send("Settings couldn't be updated. Try again later.");
+                        return;
+                    }
+
+                    // settings change successful
+                    res.json(newUser);
+                })
+            });
+        });
+    })
 });
+
 
 //----->> ADD PATHWAY <<------
 // CURRENTLY ONLY ALLOWS NWM PATHWAY TO BE ADDED
@@ -1556,56 +1640,61 @@ app.post("/user/addPathway", function (req, res) {
 });
 
 //----->> CHANGE PASSWORD <<------
-app.put('/user/changepassword/:_id', function (req, res) {
+app.post('/user/changepassword', function (req, res) {
     var user = sanitize(req.body);
-    var query = {_id: sanitize(req.params._id)};
-
-    // sanitize user info
-    for (var prop in user) {
-        // skip loop if the property is from prototype
-        if (!user.hasOwnProperty(prop)) continue;
-        if (typeof user[prop] === "string") {
-            user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
-        }
-    }
+    var query = {_id: user._id};
 
     // if the field doesn't exist, $set will set a new field
     const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(user.password, salt, function (err, hash) {
-            // change the stored password to be the hash
-            var update = {
-                $set: {
-                    password: hash
-                }
+    bcrypt.genSalt(saltRounds, function (saltErr, salt) {
+        if (saltErr) {
+            console.log("Error generating salt for resetting password: ", saltErr);
+            res.status(500).send("Server error. Could not change password.");
+            return;
+        }
+        bcrypt.hash(user.password, salt, function (hashErr, hash) {
+            // error encrypting the new password
+            if (hashErr) {
+                console.log("Error hashing user's new password when trying to reset password: ", hashErr);
+                res.status(500).send("Server error. Couldn't change password.");
+                return;
             }
-            // i think it has to be {_id: req.params._id} for the query
-            Users.findOne(query, function (err, users) {
-                if (err) {
-                    res.status(500).send("Error performing query to find user in db. ", err);
+
+            Users.findOne(query, function (dbFindErr, userFromDB) {
+                if (dbFindErr) {
+                    console.log("Error finding the user that is trying to reset their password: ", dbFindErr);
+                    res.status(500).send("Server error. Couldn't change password.");
                     return;
                 }
 
                 // CHECK IF A USER WAS FOUND
-                if (!users) {
-                    res.status(404).send("No user with that email was found.");
+                if (!userFromDB) {
+                    res.status(404).send("Server error. Couldn't change password.");
                     return;
                 }
 
-                bcrypt.compare(user.oldpass, users.password, function (passwordError, passwordsMatch) {
+                bcrypt.compare(user.oldpass, userFromDB.password, function (passwordError, passwordsMatch) {
+                    // error comparing passwords, not necessarily that the passwords don't match
                     if (passwordError) {
-                        res.status(500).send("Error logging in, try again later.");
+                        console.log("Error comparing passwords when trying to reset password: ", passwordError);
+                        res.status(500).send("Server error. Couldn't change password.");
                         return;
-                    } else if (passwordsMatch) {
-                        // When true returns the updated document
-                        var options = {new: true};
-
-                        // i think it has to be {_id: req.params._id} for the query
-                        Users.findOneAndUpdate(query, update, options, function (err, user) {
-                            if (err) {
-                                console.log(err);
+                    }
+                    // user gave the correct old password
+                    else if (passwordsMatch) {
+                        // update the user's password
+                        userFromDB.password = hash;
+                        // save the user in the db
+                        userFromDB.save(function(saveErr, newUser) {
+                            if (saveErr) {
+                                console.log("Error saving user's new password when resetting: ", saveErr);
+                                res.status(500).send("Server error. Couldn't change password.");
+                                return;
+                            } else {
+                                //successfully changed user's password
+                                res.json(removePassword(newUser));
+                                return;
                             }
-                            res.json(removePassword(user));
                         });
                     } else {
                         res.status(400).send("Old password is incorrect.");
@@ -1823,7 +1912,7 @@ function removeContentFromPathway(pathway) {
 }
 
 //----->> SEARCH PATHWAYS <<------
-app.get('/search', function (req, res) {
+app.get('/pathways/search', function (req, res) {
     const MAX_PATHWAYS_TO_RETURN = 1000;
     let query = {showToUsers: true};
 
@@ -1867,8 +1956,62 @@ app.get('/search', function (req, res) {
             } else {
                 res.json(pathways);
             }
-        })
+        });
 });
+
+
+app.get("/pathways/getAllCompaniesAndCategories", function(req, res) {
+    Pathways.find()
+    .select("sponsor.name tags")
+    .exec(function(err, pathways) {
+        if (err) {
+            console.log("Error finding pathways when getting all companies and categories.");
+            res.json({companies: [], categories: []});
+        } else if (!pathways) {
+            res.json({companies: [], categories: []});
+        } else {
+            let companies = [];
+            let categories = [];
+
+            // go through each pathway, add the sponsor name and tags to the lists
+            pathways.forEach(function(pathway) {
+                companies.push(pathway.sponsor.name);
+                categories = categories.concat(pathway.tags);
+            })
+
+            companies = removeDuplicates(companies);
+            categories = removeDuplicates(categories);
+            res.json({companies, categories})
+        }
+    });
+});
+
+
+// DOES NOT WORK FOR REMOVING DUPLICATE OBJECTS, ONLY STRINGS/INTS
+function removeDuplicates(a) {
+    // the hash object
+    let seen = {};
+    // array to be returned
+    let out = [];
+    // length of array to be checked
+    const len = a.length;
+    // position in array to be returned
+    let j = 0;
+    // go through each element in the given array
+    for(let i = 0; i < len; i++) {
+        // the item in the given array
+        const item = a[i];
+        // if seen[item] === 1, we have seen it before
+        if(seen[item] !== 1) {
+            // we haven't seen the item before, so mark it seen...
+            seen[item] = 1;
+            // ...and add it to the list to be returned
+            out[j++] = item;
+        }
+    }
+    // return the new duplicate-free array
+    return out;
+}
 
 
 app.get("/infoForAdmin", function(req, res) {

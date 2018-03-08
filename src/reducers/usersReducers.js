@@ -120,6 +120,7 @@ export function usersReducers(state = initialState, action) {
         case "CONTACT_US":
         case "FORGOT_PASSWORD":
         case "FORGOT_PASSWORD_REJECTED":
+        case "CHANGE_PASS_FORGOT_REJECTED":
         case "FORM_ERROR":
             return {
                 ...state, notification: action.notification, loadingSomething: false

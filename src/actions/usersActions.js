@@ -1,6 +1,7 @@
 "use strict"
 import axios from 'axios';
 import { browserHistory } from 'react-router'
+import { reset } from 'redux-form';
 
 // GET USER FROM SESSION
 export function getUserFromSession(callback) {
@@ -218,14 +219,13 @@ export function forgotPassword(user) {
 // UPDATE A USER
 export function updateUser(user) {
     return function(dispatch) {
-
         // update user on the database
-        axios.put("/api/user/" + user._id, user)
+        axios.post("/api/user/changeSettings", user)
             .then(function(response) {
                 dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}})
             })
             .catch(function(err) {
-                dispatch({type:"UPDATE_USER_REJECTED", notification: {message: "Error updating settings", type: "errorHeader"}})
+                dispatch({type:"UPDATE_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
             });
     }
 }
@@ -233,12 +233,14 @@ export function updateUser(user) {
 export function changePassword(user) {
     return function(dispatch) {
 
-        axios.put('/api/user/changepassword/' +user._id, user)
+        axios.post('/api/user/changepassword', user)
             .then(function(response) {
                 dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
+                // reset the form
+                dispatch(reset("changePassword"));
             })
             .catch(function(err){
-                dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: "Error changing password", type: "errorHeader"}})
+                dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: err.response.data, type: "errorHeader"}})
             });
     }
 }
@@ -265,7 +267,7 @@ export function verifyEmail(userType, token) {
                 }
             })
             .catch(function(err) {
-                dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: "Error verifying email", type: "errorHeader"}});
+                dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
     }
 }
@@ -280,13 +282,14 @@ export function changePasswordForgot(user) {
 
                 dispatch({type:"LOGIN", payload:foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
                 let nextUrl = "/";
+                let returnedUser = response.data;
                 if (!returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";
                 }
                 browserHistory.push(nextUrl);
             })
-            .catch(function(err1) {
-                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: "Error changing password", type: "errorHeader"}})
+            .catch(function(err) {
+                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
             })
     }
 }

@@ -24,10 +24,15 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        const profileUrl = this.props.location.search.substr(1);
+        // if trying to look at someone else's profile, there will be a query
+        let profileUrl = undefined;
+        if (this.props.location.query) {
+            profileUrl = this.props.location.query.user;
+        }
+
         const currentUser = this.props.currentUser;
         // looking at your own profile
-        if ((profileUrl == "") || (currentUser && currentUser.profileUrl == profileUrl)) {
+        if ((!profileUrl) || (currentUser && currentUser.profileUrl == profileUrl)) {
             this.setState({
                 ...this.state,
                 onOwnProfile: true,
