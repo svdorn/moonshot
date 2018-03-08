@@ -15,7 +15,7 @@ var usersSchema = mongoose.Schema({
     verificationToken: String,
     emailVerificationToken: String,
     passwordToken: String,
-    time: Number,
+    passwordTokenExpirationTime: Number,
     verified: Boolean,
     images: String,
     skills: [ String ],

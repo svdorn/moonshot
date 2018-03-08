@@ -569,19 +569,26 @@ app.post('/verifyEmail', function (req, res) {
 
 // VERIFY CHANGE PASSWORD
 app.post('/user/changePasswordForgot', function (req, res) {
-    let token = sanitize(req.body.token);
+    let token = sanitize(req.body.token).toString();
     let password = sanitize(req.body.password);
 
     var query = {passwordToken: token};
     Users.findOne(query, function (err, user) {
-        if (err || user == undefined) {
-            res.status(404).send("User not found from token");
+        if (err) {
+            console.log("Error trying to find user from password token: ", err);
+            res.status(500).send("Server error, try again later");
             return;
         }
 
-        const time = Date.now() - user.time;
-        if (time > (1 * 60 * 60 * 1000)) {
+        if (!user) {
+            res.status(404).send("User not found from link");
+            return;
+        }
+
+        const currentTime = Date.now();
+        if (currentTime > user.passwordTokenExpirationTime) {
             res.status(401).send("Time ran out, try sending email again");
+            return;
         }
 
         let query = {_id: user._id};
@@ -591,13 +598,16 @@ app.post('/user/changePasswordForgot', function (req, res) {
                 // change the stored password to be the hash
                 const newPassword = hash;
                 // if the field doesn't exist, $set will set a new field
+                // can be verified because the user had to go to their email
+                // to get to this page
                 var update = {
                     '$set': {
-                        password: newPassword
+                        password: newPassword,
+                        verified: true
                     },
                     '$unset': {
                         passwordToken: "",
-                        time: '',
+                        passwordTokenExpirationTime: "",
                     }
                 };
 
@@ -607,8 +617,11 @@ app.post('/user/changePasswordForgot', function (req, res) {
                 Users.findOneAndUpdate(query, update, options, function (err, newUser) {
                     if (err) {
                         console.log(err);
+                        res.status(500).send("Error saving new password");
+                        return;
                     }
 
+                    // successfully created new password
                     res.json(removePassword(newUser));
                 });
             })
@@ -1079,36 +1092,45 @@ app.post('/forgotPassword', function (req, res) {
     let query = {email: email};
 
     const user = getUserByQuery(query, function (user) {
-        if (user == undefined) {
+        if (!user) {
+            console.log("Couldn't find user to set their password change token.");
             res.status(401).send("Cannot find user");
+            return;
         } else {
-            let recipient = [user.email];
-            let subject = 'Change Password';
+            // token that will go in the url
             const newPasswordToken = crypto.randomBytes(64).toString('hex');
-            const newTime = Date.now();
+            // password token expires in one hour (minutes * seconds * milliseconds)
+            const newTime = Date.now() + (60 * 60 * 1000);
 
-            let query2 = {_id: user._id};
-            var update = {
+            const query2 = {_id: user._id};
+            const update = {
                 '$set': {
                     passwordToken: newPasswordToken,
-                    time: newTime,
+                    passwordTokenExpirationTime: newTime,
                 }
             };
 
-            var options = {new: true};
+            console.log("password token is: ", newPasswordToken);
+
+            const options = {new: true};
 
             Users.findOneAndUpdate(query2, update, options, function (err, foundUser) {
                 if (err) {
-                    console.log(err);
+                    console.log("Error giving user reset-password token: ", err);
+                    res.status(500).send("Server error, try again later.");
+                    return;
                 }
 
-                foundUser.password = undefined;
+                console.log("foundUser is: ", foundUser);
+
                 // if we're in development (on localhost) navigate to localhost
                 let moonshotUrl = "https://www.moonshotlearning.org/";
                 if (!process.env.NODE_ENV) {
                     moonshotUrl = "http://localhost:8081/";
                 }
-                let content = 'Click this link to change your password: '
+                const recipient = [user.email];
+                const subject = 'Change Password';
+                const content = 'Click this link to change your password: '
                     + "<a href='" + moonshotUrl + "changePassword?token="
                     + newPasswordToken
                     + "'>Click me</a>";

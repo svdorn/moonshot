@@ -241,13 +241,14 @@ export function changePasswordForgot(user) {
             .then(function(response) {
                 dispatch({type:"LOGIN", notification:{message:response.data, type:"infoHeader"}});
                 let nextUrl = "/";
+                let returnedUser = response.data;
                 if (!returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";
                 }
                 browserHistory.push(nextUrl);
             })
             .catch(function(err) {
-                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: "Error changing password", type: "errorHeader"}})
+                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
             })
     }
 }
