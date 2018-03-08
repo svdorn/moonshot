@@ -138,8 +138,6 @@ class Login extends Component {
             }
         }
 
-        console.log("saveSession is:  ", saveSession);
-
         this.props.login(user, saveSession, navigateBackUrl, pathwayId)
 
     }

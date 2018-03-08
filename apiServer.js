@@ -517,7 +517,6 @@ app.post("/endOnboarding", function (req, res) {
 app.post('/verifyEmail', function (req, res) {
     const token = sanitize(req.body.token);
 
-    console.log("token is: ", token);
     if (!token) {
         res.status(400).send("Url not in the right format");
         return;
@@ -535,18 +534,6 @@ app.post('/verifyEmail', function (req, res) {
             res.status(404).send("User not found from url");
             return;
         }
-
-        let query = {_id: user._id}
-
-        // if the field doesn't exist, $set will set a new field
-        var update = {
-            '$set': {
-                verified: true
-            },
-            '$unset': {
-                emailVerificationToken: ""
-            }
-        };
 
         user.verified = true;
         user.emailVerificationToken = undefined;
