@@ -50,24 +50,39 @@ class Discover extends Component {
             company: "",
             explorePathways: [],
             featuredPathways: [emptyPathway, emptyPathway, emptyPathway],
+            companies: [],
+            categories: [],
             open: false,
             dialogPathway: null,
         }
     }
 
     componentDidMount() {
+        let self = this;
+
         // populate explorePathways with initial pathways
-        this.search();
+        self.search();
+
+        axios.get("/api/pathways/getAllCompaniesAndCategories")
+        .then(function(res) {
+            // make sure component is mounted before changing state
+            if (self.refs.discover) {
+                self.setState({
+                    companies: res.data.companies,
+                    categories: res.data.categories
+                });
+            }
+        })
 
         // populate featuredPathways with initial pathways
-        axios.get("/api/search", {
+        axios.get("/api/pathways/search", {
             params: {
                 limit: 3
             }
         }).then(res => {
             // make sure component is mounted before changing state
-            if (this.refs.discover) {
-                this.setState({featuredPathways: res.data});
+            if (self.refs.discover) {
+                self.setState({featuredPathways: res.data});
             }
         }).catch(function (err) {
         })
@@ -103,7 +118,7 @@ class Discover extends Component {
     };
 
     search() {
-        axios.get("/api/search", {
+        axios.get("/api/pathways/search", {
             params: {
                 searchTerm: this.state.term,
                 category: this.state.category,
@@ -337,15 +352,11 @@ class Discover extends Component {
             }
         });
 
-        // TODO get tags from DB
-        const tags = ["Artificial Intelligence", "UI/UX", "Game Development", "Virtual Reality"];
-        const categoryItems = tags.map(function (tag) {
+        const categoryItems = this.state.categories.map(function (tag) {
             return <MenuItem value={tag} primaryText={tag} key={tag}/>
         })
 
-        // TODO get companies from DB
-        const companies = ["Moonshot"];
-        const companyItems = companies.map(function (company) {
+        const companyItems = this.state.companies.map(function (company) {
             return <MenuItem value={company} primaryText={company} key={company}/>
         })
 
@@ -495,7 +506,7 @@ class Discover extends Component {
 
 
                 <div>
-                    <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
+                    <ul className="horizCenteredList pathwayPrevList" style={{...style.pathwayPreviewUl, minHeight: "400px"}}>
                         {explorePathwayPreviews}
                     </ul>
                 </div>

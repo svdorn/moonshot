@@ -1794,7 +1794,7 @@ function removeContentFromPathway(pathway) {
 }
 
 //----->> SEARCH PATHWAYS <<------
-app.get('/search', function (req, res) {
+app.get('/pathways/search', function (req, res) {
     const MAX_PATHWAYS_TO_RETURN = 1000;
     let query = {showToUsers: true};
 
@@ -1838,8 +1838,62 @@ app.get('/search', function (req, res) {
             } else {
                 res.json(pathways);
             }
-        })
+        });
 });
+
+
+app.get("/pathways/getAllCompaniesAndCategories", function(req, res) {
+    Pathways.find()
+    .select("sponsor.name tags")
+    .exec(function(err, pathways) {
+        if (err) {
+            console.log("Error finding pathways when getting all companies and categories.");
+            res.json({companies: [], categories: []});
+        } else if (!pathways) {
+            res.json({companies: [], categories: []});
+        } else {
+            let companies = [];
+            let categories = [];
+
+            // go through each pathway, add the sponsor name and tags to the lists
+            pathways.forEach(function(pathway) {
+                companies.push(pathway.sponsor.name);
+                categories = categories.concat(pathway.tags);
+            })
+
+            companies = removeDuplicates(companies);
+            categories = removeDuplicates(categories);
+            res.json({companies, categories})
+        }
+    });
+});
+
+
+// DOES NOT WORK FOR REMOVING DUPLICATE OBJECTS, ONLY STRINGS/INTS
+function removeDuplicates(a) {
+    // the hash object
+    let seen = {};
+    // array to be returned
+    let out = [];
+    // length of array to be checked
+    const len = a.length;
+    // position in array to be returned
+    let j = 0;
+    // go through each element in the given array
+    for(let i = 0; i < len; i++) {
+        // the item in the given array
+        const item = a[i];
+        // if seen[item] === 1, we have seen it before
+        if(seen[item] !== 1) {
+            // we haven't seen the item before, so mark it seen...
+            seen[item] = 1;
+            // ...and add it to the list to be returned
+            out[j++] = item;
+        }
+    }
+    // return the new duplicate-free array
+    return out;
+}
 
 
 app.get("/infoForAdmin", function(req, res) {
