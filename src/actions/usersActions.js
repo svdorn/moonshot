@@ -230,7 +230,7 @@ export function verifyEmail(token) {
                 }
             })
             .catch(function(err) {
-                dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: "Error verifying email", type: "errorHeader"}});
+                dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
     }
 }

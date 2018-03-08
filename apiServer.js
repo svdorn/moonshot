@@ -517,10 +517,22 @@ app.post("/endOnboarding", function (req, res) {
 app.post('/verifyEmail', function (req, res) {
     const token = sanitize(req.body.token);
 
+    console.log("token is: ", token);
+    if (!token) {
+        res.status(400).send("Url not in the right format");
+        return;
+    }
+
     var query = {emailVerificationToken: token};
     Users.findOne(query, function (err, user) {
-        if (err || user == undefined) {
-            res.status(404).send("User not found from token");
+        if (err) {
+            console.log("Error trying to find user from verification token");
+            res.status(500).send("Server error, try again later");
+            return;
+        }
+
+        if (!user) {
+            res.status(404).send("User not found from url");
             return;
         }
 
@@ -536,12 +548,14 @@ app.post('/verifyEmail', function (req, res) {
             }
         };
 
-        // When true returns the updated document
-        var options = {new: true};
+        user.verified = true;
+        user.emailVerificationToken = undefined;
 
-        Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
-            if (err) {
-                console.log(err);
+        user.save(function(updateErr, updatedUser) {
+            if (updateErr) {
+                console.log("Error saving user's verified status to true: ", updateErr);
+                res.status(500).send("Server error, try again later");
+                return;
             }
 
             // if the session has the user's id, can immediately log them in
@@ -552,17 +566,19 @@ app.post('/verifyEmail', function (req, res) {
 
             req.session.save(function (err) {
                 if (err) {
-                    console.log("error")
+                    console.log("Error saving session after verifying user: ", err);
                 }
             });
+
             if (sessionUserId && sessionUserId == updatedUser._id) {
                 res.json(removePassword(updatedUser));
+                return;
             }
             // otherwise, bring the user to the login page
             else {
                 res.json("go to login");
+                return;
             }
-
         });
     });
 });
@@ -648,10 +664,10 @@ app.post('/sendVerificationEmail', function (req, res) {
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
                 + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
                     + '<div style="text-align:justify;width:80%;margin-left:10%;">'
-                    + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="' + moonshotUrl + 'verifyEmail?' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
+                    + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="' + moonshotUrl + 'verifyEmail?token=' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
                     + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.org</a>.</span><br/>'
                     + '</div>'
-                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'verifyEmail?'
+                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'verifyEmail?token='
                 + user.emailVerificationToken
                 + '">VERIFY ACCOUNT</a>'
                 + '<div style="text-align:left;width:80%;margin-left:10%;">'

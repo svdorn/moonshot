@@ -64,7 +64,6 @@ class PasswordChange extends Component {
         if (notValid) return;
         if (vals.password != vals.password2) return;
 
-        // const token = this.props.location.search.substr(1);
         const token = this.props.location.query.token;
         const user = {
             token: token,
