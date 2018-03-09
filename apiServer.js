@@ -2721,6 +2721,8 @@ app.get("/business/candidateSearch", function(req, res) {
                 return;
             }
 
+            // if we got to this point it means the user is allowed to see candidates
+
             const MAX_CANDIDATES_TO_RETURN = 1000;
             let query = {showToUsers: true};
 
@@ -2739,6 +2741,18 @@ app.get("/business/candidateSearch", function(req, res) {
             // how the candidates will be sorted once sorting is implemented on front-end
             const sortNOTYET = sanitize(req.body.sort);
 
+            const sortReq = sanitize(req.body.sort);
+            let sort = {};
+            switch (sortReq) {
+                case "alphabetical":
+                    sort = { name: 1 };
+                    break;
+                default:
+                    // by default sort in alphabetical order
+                    sort = { name: 1 };
+                    break;
+            }
+
             // add stage to query if it exists
             const stage = sanitize(req.query.stage);
             if (stage && stage !== "") {
@@ -2751,7 +2765,7 @@ app.get("/business/candidateSearch", function(req, res) {
                 query["sponsor.name"] = pathway;
             }
 
-            const sort = {avgRating: 1};
+            // const sort = {avgRating: 1};
             // only get these properties of the candidates
             const select = "name emailToContact profileUrl pathways";
 
