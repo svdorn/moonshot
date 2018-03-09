@@ -11,6 +11,7 @@ var usersSchema = mongoose.Schema({
     agreedToTerms: Boolean,
     profileUrl: String,
     password: String,
+    dateSignedUp: Date,
     hasFinishedOnboarding: Boolean,
     verificationToken: String,
     emailVerificationToken: String,

@@ -282,6 +282,8 @@ app.post('/user', function (req, res) {
                             user.pathwayId = undefined;
                         }
 
+                        user.dateSignedUp = new Date();
+
                         // store the user in the db
                         Users.create(user, function (err, newUser) {
                             if (err) {
