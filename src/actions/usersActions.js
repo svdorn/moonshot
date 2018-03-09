@@ -30,7 +30,7 @@ export function getUserFromSession(callback) {
     };
 }
 
-export function login(user, saveSession, navigateBackUrl, pathwayId) {
+export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
     return function(dispatch) {
         axios.post("/api/login", {user, saveSession})
             .then(function(response) {
@@ -54,7 +54,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId) {
                 if (shouldAddPathwayToUser) {
                     // if the user doesn't already have this pathway, give it
                     // to them, then redirect to the pathway content page
-                    axios.post("/api/user/addPathway", {_id: returnedUser._id, pathwayId: pathwayId})
+                    axios.post("/api/user/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayName})
                     .then(function(response) {
                         dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                         // navigateBackUrl should be equal to the url for the pathway
@@ -251,18 +251,17 @@ export function verifyEmail(userType, token) {
         axios.post("/api/verifyEmail", {userType, token})
             .then(function(response) {
                 if (!response.data || response.data === "go to login" || userType == "businessUser") {
-                    let msg = "Account verified!";
                     let nextLocation = "/login";
                     if (userType == "businessUser") {
-                        msg = "Account verified!";
                         const email = response.data;
                         nextLocation = "/changeTempPassword?email=" + email;
                     }
 
-                    dispatch({type: "NOTIFICATION", notification:{message: msg, type: "infoHeader"}});
+                    dispatch({type: "NOTIFICATION", notification:{message: "Account verified!", type: "infoHeader"}});
                     browserHistory.push(nextLocation);
                 } else {
-                    dispatch({type: "LOGIN", payload:response.data, notification:{message: "Account verified!", type: "infoHeader"}});
+                    // don't show verification notification if going straight to onboarding because it's implied
+                    dispatch({type: "LOGIN", payload:response.data});
                     browserHistory.push('/onboarding');
                 }
             })
@@ -475,61 +474,26 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
         })
         .catch(function(error) {
             console.log("ERROR: ", error);
+            console.log(error.response.data)
         });
     }
 }
 
-export function updateInterests(user, interests) {
+
+export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
     return function(dispatch) {
-        axios.post("/api/updateInterests", {
-            params: {
-                userId: user._id,
-                verificationToken: user.verificationToken,
-                interests: interests
-            }
+        axios.post("/api/updateAllOnboarding", {
+            params: { userId, verificationToken, interests, goals, info }
         })
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
-            })
-            .catch(function(err) {
-            });
+        .then(function(response) {
+            dispatch({type: "UPDATE_USER_ONBOARDING", payload: response.data});
+        })
+        .catch(function(err) {
+            console.log("Error updating onboarding info: ", err);
+        })
     }
 }
 
-export function updateGoals(user, goals) {
-    return function(dispatch) {
-        axios.post("/api/updateGoals", {
-            params: {
-                userId: user._id,
-                verificationToken: user.verificationToken,
-                goals
-            }
-        })
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
-            })
-            .catch(function(err) {
-            });
-    }
-}
-
-export function updateInfo(user, info) {
-    return function(dispatch) {
-        axios.post("/api/updateInfo", {
-            params: {
-                userId: user._id,
-                verificationToken: user.verificationToken,
-                info
-            }
-        })
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER_ONBOARDING", payload: response.data});
-            })
-            .catch(function(err) {
-                console.log(err);
-            });
-    }
-}
 
 export function startOnboarding(){
     return function(dispatch) {

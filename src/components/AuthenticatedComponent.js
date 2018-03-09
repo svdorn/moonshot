@@ -10,6 +10,8 @@ class AuthenticatedComponent extends Component {
     constructor(props) {
         super(props);
 
+        console.log("props: ", props);
+
         // if userChecked is true, render the child component
         this.state = {userChecked: false};
     }
