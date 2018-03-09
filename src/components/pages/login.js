@@ -127,10 +127,12 @@ class Login extends Component {
         let navigateBackUrl = undefined;
         let location = this.props.location;
         let pathwayId = undefined;
+        let pathwayName = undefined;
 
         if (location.query) {
             if (location.query.pathway) {
                 pathwayId = location.query.pathway;
+                pathwayName = location.query.redirect;
             }
             if (location.query.redirect) {
                 // brings a user to wherever they were trying to go before
@@ -138,7 +140,7 @@ class Login extends Component {
             }
         }
 
-        this.props.login(user, saveSession, navigateBackUrl, pathwayId)
+        this.props.login(user, saveSession, navigateBackUrl, pathwayId, pathwayName)
 
     }
 

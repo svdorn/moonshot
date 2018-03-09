@@ -263,6 +263,7 @@ app.post('/user', function (req, res) {
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
                         user.admin = false;
                         user.agreedToTerms = true;
+                        let addedPathway = false;
 
                         // add pathway to user's My Pathways if they went from
                         // a landing page.
@@ -275,6 +276,7 @@ app.post('/user', function (req, res) {
                                     step: 1
                                 }
                             }];
+                            addedPathway = true;
                         }
                         else {
                             user.pathwayId = undefined;
@@ -298,11 +300,20 @@ app.post('/user', function (req, res) {
                                 if (process.env.NODE_ENV) {
                                     let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
                                     let subject = 'New Sign Up';
+                                    let additionalText = '';
+                                    if (addedPathway) {
+                                        let pathName = "Singlewire QA";
+                                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
+                                            pathName = "Northwestern Mutual";
+                                        }
+                                        additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
+                                    }
                                     let content =
                                         '<div>'
                                         +   '<p>New user signed up.</p>'
                                         +   '<p>Name: ' + newUser.name + '</p>'
                                         +   '<p>email: ' + newUser.email + '</p>'
+                                        +   additionalText
                                         + '</div>';
 
                                     sendEmail(recipients, subject, content, function (success, msg) {
@@ -1481,7 +1492,7 @@ app.post('/user/changeSettings', function (req, res) {
 
 
 //----->> ADD PATHWAY <<------
-// CURRENTLY ONLY ALLOWS NWM AND SINGLEWIRE PATHWAY TO BE ADDED
+// CURRENTLY ONLY ALLOWS NWM AND SINGLEWIRE PATHWAYS TO BE ADDED
 app.post("/user/addPathway", function (req, res) {
     const _id = sanitize(req.body._id);
     const verificationToken = sanitize(req.body.verificationToken);
@@ -1542,9 +1553,8 @@ app.post("/user/addPathway", function (req, res) {
 
                 try {
                     // send email to everyone to alert them of the added pathway (if in production mode)
-                    //if (process.env.NODE_ENV) {
-                        //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-                        let recipients = ["ameyer24@wisc.edu"];
+                    if (process.env.NODE_ENV) {
+                        let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
                         let subject = 'New Pathway Sign Up';
                         let content =
                             '<div>'
@@ -1561,7 +1571,7 @@ app.post("/user/addPathway", function (req, res) {
                                 console.log("Error sending sign up alert email");
                             }
                         })
-                    //}
+                    }
                 } catch (e) {
                     console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
                 }
@@ -2238,71 +2248,71 @@ app.get("/infoByUserId", function (req, res) {
 //     }
 // });
 
-app.post("/updateInterests", function (req, res) {
-    const interests = sanitize(req.body.params.interests);
-    const userId = sanitize(req.body.params.userId);
-    const verificationToken = sanitize(req.body.params.verificationToken);
-
-    if (interests && userId) {
-        // When true returns the updated document
-        Users.findById(userId, function (err, user) {
-            if (err) {
-                console.log(err);
-            }
-
-            if (!verifyUser(user, verificationToken)) {
-                console.log("can't verify user");
-                res.status(401).send("User does not have valid credentials to update interests.");
-                return;
-            }
-
-            user.info.interests = interests;
-
-            user.save(function (err, updatedUser) {
-                if (err) {
-                    res.send(false);
-                }
-                res.send(removePassword(updatedUser));
-            });
-        })
-    } else {
-        res.send(undefined);
-    }
-});
-
-app.post("/updateGoals", function (req, res) {
-    const goals = sanitize(req.body.params.goals);
-    const userId = sanitize(req.body.params.userId);
-    const verificationToken = sanitize(req.body.params.verificationToken);
-
-    if (userId && goals) {
-        // When true returns the updated document
-        Users.findById(userId, function (err, user) {
-            if (err) {
-                console.log(err);
-            }
-
-            if (!verifyUser(user, verificationToken)) {
-                console.log("can't verify user");
-                res.status(401).send("User does not have valid credentials to update goals.");
-                return;
-            }
-
-            user.info.goals = goals;
-
-            user.save(function (err, updatedUser) {
-                if (err) {
-                    res.send(false);
-                }
-                res.send(removePassword(updatedUser));
-            });
-        })
-    } else {
-        res.send(undefined)
-    }
-
-
-});
+// app.post("/updateInterests", function (req, res) {
+//     const interests = sanitize(req.body.params.interests);
+//     const userId = sanitize(req.body.params.userId);
+//     const verificationToken = sanitize(req.body.params.verificationToken);
+//
+//     if (interests && userId) {
+//         // When true returns the updated document
+//         Users.findById(userId, function (err, user) {
+//             if (err) {
+//                 console.log(err);
+//             }
+//
+//             if (!verifyUser(user, verificationToken)) {
+//                 console.log("can't verify user");
+//                 res.status(401).send("User does not have valid credentials to update interests.");
+//                 return;
+//             }
+//
+//             user.info.interests = interests;
+//
+//             user.save(function (err, updatedUser) {
+//                 if (err) {
+//                     res.send(false);
+//                 }
+//                 res.send(removePassword(updatedUser));
+//             });
+//         })
+//     } else {
+//         res.send(undefined);
+//     }
+// });
+//
+// app.post("/updateGoals", function (req, res) {
+//     const goals = sanitize(req.body.params.goals);
+//     const userId = sanitize(req.body.params.userId);
+//     const verificationToken = sanitize(req.body.params.verificationToken);
+//
+//     if (userId && goals) {
+//         // When true returns the updated document
+//         Users.findById(userId, function (err, user) {
+//             if (err) {
+//                 console.log(err);
+//             }
+//
+//             if (!verifyUser(user, verificationToken)) {
+//                 console.log("can't verify user");
+//                 res.status(401).send("User does not have valid credentials to update goals.");
+//                 return;
+//             }
+//
+//             user.info.goals = goals;
+//
+//             user.save(function (err, updatedUser) {
+//                 if (err) {
+//                     res.send(false);
+//                 }
+//                 res.send(removePassword(updatedUser));
+//             });
+//         })
+//     } else {
+//         res.send(undefined)
+//     }
+//
+//
+// });
 
 
 app.post("/updateAnswer", function (req, res) {
@@ -2319,9 +2329,9 @@ app.post("/updateAnswer", function (req, res) {
         return;
     }
 
-    Users.findById(userId, function (err, user) {
-        if (err) {
-            console.log(err);
+    Users.findById(userId, function (findErr, user) {
+        if (findErr) {
+            console.log("Error finding user by id when trying to update answer: ", findErr);
             res.status(404).send("Current user not found.");
             return;
         }
@@ -2342,23 +2352,72 @@ app.post("/updateAnswer", function (req, res) {
         // so that Mongoose knows to update the answers object in the db
         user.markModified('answers');
 
-        user.save(function (err, updatedUser) {
-            if (err) {
-                res.send(false);
+        user.save(function (saveErr, updatedUser) {
+            if (saveErr) {
+                console.log("Error updating answer to a question: ", saveErr)
+                res.status(500).send("Server error, try again later.");
+                return;
             }
             res.send(removePassword(updatedUser));
         });
     })
-
 });
 
 
-app.post("/updateInfo", function (req, res) {
+// app.post("/updateInfo", function (req, res) {
+//     const info = sanitize(req.body.params.info);
+//     const userId = sanitize(req.body.params.userId);
+//     const verificationToken = sanitize(req.body.params.verificationToken);
+//
+//     if (info && userId && verificationToken) {
+//         // When true returns the updated document
+//         Users.findById(userId, function (findErr, user) {
+//             if (findErr) {
+//                 console.log("Error finding user when updating info during onboarding: ", findErr);
+//                 res.status(500).send("Server error");
+//                 return;
+//             }
+//
+//             if (!verifyUser(user, verificationToken)) {
+//                 console.log("Couldn't verify user when trying to update info.");
+//                 res.status(401).send("User does not have valid credentials to update info.");
+//                 return;
+//             }
+//
+//             const fullInfo = removeEmptyFields(info);
+//
+//             for (const prop in fullInfo) {
+//                 // only use properties that are not inherent to all objects
+//                 if (info.hasOwnProperty(prop)) {
+//                     console.log("updating " + prop + " to ", fullInfo[prop]);
+//                     user.info[prop] = fullInfo[prop];
+//                 }
+//             }
+//
+//             user.save(function (saveErr, updatedUser) {
+//                 console.log("Error saving user information when updating info from onboarding: ", saveErr);
+//                 if (saveErr) {
+//                     res.status(500).send("Server error, couldn't save information.");
+//                     return;
+//                 }
+//                 res.send(removePassword(updatedUser));
+//             });
+//         })
+//     } else {
+//         console.log("Didn't have info or a user id or both.")
+//         res.status(403).send("Bad request.");
+//     }
+// });
+
+
+app.post("/updateAllOnboarding", function (req, res) {
     const info = sanitize(req.body.params.info);
+    const goals = sanitize(req.body.params.goals);
+    const interests = sanitize(req.body.params.interests);
     const userId = sanitize(req.body.params.userId);
     const verificationToken = sanitize(req.body.params.verificationToken);
 
-    if (info && userId && verificationToken) {
+    if (userId && verificationToken) {
         // When true returns the updated document
         Users.findById(userId, function (findErr, user) {
             if (findErr) {
@@ -2368,24 +2427,37 @@ app.post("/updateInfo", function (req, res) {
             }
 
             if (!verifyUser(user, verificationToken)) {
-                console.log("Couldn't verify user when trying to update info.");
+                console.log("Couldn't verify user when trying to update onboarding info.");
                 res.status(401).send("User does not have valid credentials to update info.");
                 return;
             }
 
-            const fullInfo = removeEmptyFields(info);
+            if (info) {
+                // if info exists, try to save it
+                const fullInfo = removeEmptyFields(info);
 
-            for (const prop in fullInfo) {
-                // only use properties that are not inherent to all objects
-                if (info.hasOwnProperty(prop)) {
-                    console.log("updating " + prop + " to ", fullInfo[prop]);
-                    user.info[prop] = fullInfo[prop];
+                for (const prop in fullInfo) {
+                    // only use properties that are not inherent to all objects
+                    if (info.hasOwnProperty(prop)) {
+                        console.log("updating " + prop + " to ", fullInfo[prop]);
+                        user.info[prop] = fullInfo[prop];
+                    }
                 }
             }
 
+            // if goals exist, save them
+            if (goals) {
+                user.info.goals = goals
+            }
+
+            // if interests exist, save them
+            if (interests) {
+                user.info.interests = interests;
+            }
+
             user.save(function (saveErr, updatedUser) {
-                console.log("Error saving user information when updating info from onboarding: ", saveErr);
-                if (err) {
+                if (saveErr) {
+                    console.log("Error saving user information when updating info from onboarding: ", saveErr);
                     res.status(500).send("Server error, couldn't save information.");
                     return;
                 }
@@ -2397,6 +2469,7 @@ app.post("/updateInfo", function (req, res) {
         res.status(403).send("Bad request.");
     }
 });
+
 
 // END APIs
 

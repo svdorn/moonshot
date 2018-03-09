@@ -54,7 +54,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 if (shouldAddPathwayToUser) {
                     // if the user doesn't already have this pathway, give it
                     // to them, then redirect to the pathway content page
-                    axios.post("/api/user/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayId})
+                    axios.post("/api/user/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayName})
                     .then(function(response) {
                         dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                         // navigateBackUrl should be equal to the url for the pathway
@@ -414,61 +414,78 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
         })
         .catch(function(error) {
             console.log("ERROR: ", error);
+            console.log(error.response.data)
         });
     }
 }
 
-export function updateInterests(user, interests) {
+// export function updateInterests(user, interests) {
+//     return function(dispatch) {
+//         axios.post("/api/updateInterests", {
+//             params: {
+//                 userId: user._id,
+//                 verificationToken: user.verificationToken,
+//                 interests: interests
+//             }
+//         })
+//             .then(function(response) {
+//                 dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
+//             })
+//             .catch(function(err) {
+//             });
+//     }
+// }
+//
+// export function updateGoals(user, goals) {
+//     return function(dispatch) {
+//         axios.post("/api/updateGoals", {
+//             params: {
+//                 userId: user._id,
+//                 verificationToken: user.verificationToken,
+//                 goals
+//             }
+//         })
+//             .then(function(response) {
+//                 dispatch({type: "UPDATE_USER_ONBOARDING", payload: response.data});
+//             })
+//             .catch(function(err) {
+//                 console.log("Error updating goals: ", err);
+//             });
+//     }
+// }
+
+export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
     return function(dispatch) {
-        axios.post("/api/updateInterests", {
-            params: {
-                userId: user._id,
-                verificationToken: user.verificationToken,
-                interests: interests
-            }
+        axios.post("/api/updateAllOnboarding", {
+            params: { userId, verificationToken, interests, goals, info }
         })
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
-            })
-            .catch(function(err) {
-            });
+        .then(function(response) {
+            dispatch({type: "UPDATE_USER_ONBOARDING", payload: response.data});
+        })
+        .catch(function(err) {
+            console.log("Error updating onboarding info: ", err);
+        })
     }
 }
 
-export function updateGoals(user, goals) {
-    return function(dispatch) {
-        axios.post("/api/updateGoals", {
-            params: {
-                userId: user._id,
-                verificationToken: user.verificationToken,
-                goals
-            }
-        })
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
-            })
-            .catch(function(err) {
-            });
-    }
-}
-
-export function updateInfo(user, info) {
-    return function(dispatch) {
-        axios.post("/api/updateInfo", {
-            params: {
-                userId: user._id,
-                verificationToken: user.verificationToken,
-                info
-            }
-        })
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER_ONBOARDING", payload: response.data});
-            })
-            .catch(function(err) {
-                console.log(err);
-            });
-    }
-}
+// export function updateInfo(user, info) {
+//     return function(dispatch) {
+//         axios.post("/api/updateInfo", {
+//             params: {
+//                 userId: user._id,
+//                 verificationToken: user.verificationToken,
+//                 info
+//             }
+//         })
+//             .then(function(response) {
+//                 dispatch({type:"UPDATE_USER_ONBOARDING", payload: response.data});
+//             })
+//             .catch(function(err) {
+//                 console.log(err);
+//                 console.log(err.response.data);
+//             });
+//     }
+// }
 
 export function startOnboarding(){
     return function(dispatch) {
