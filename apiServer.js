@@ -2712,8 +2712,9 @@ app.get("/business/candidateSearch", function(req, res) {
 
             // if the business doesn't have an associated user with the given
             // user id, don't let them see this business' candidates
+            const userIdString = userId.toString();
             if (!company.businessUserIds.some(function(bizUserId) {
-                return bizUserId === userId;
+                return bizUserId.toString() === userIdString;
             })) {
                 console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
                 res.status(403).send("You do not have access to this business' candidates.");
