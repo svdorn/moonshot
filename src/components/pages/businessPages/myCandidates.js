@@ -55,6 +55,8 @@ class MyCandidates extends Component {
         axios.get("/api/business/candidateSearch", {
             params: {
                 limit: 10,
+                userId: this.props.currentUser.userId,
+                verificationToken: this.props.currentUser.verificationToken
             }
         }).then(res => {
             // make sure component is mounted before changing state

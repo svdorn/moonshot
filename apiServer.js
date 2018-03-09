@@ -2666,55 +2666,111 @@ app.post('/changeTempPassword', function (req, res) {
 
 // SEARCH FOR CANDIDATES
 app.get("/business/candidateSearch", function(req, res) {
-    const MAX_CANDIDATES_TO_RETURN = 1000;
-    let query = {showToUsers: true};
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
 
-    let term = sanitize(req.query.searchTerm);
-    if (term && term !== "") {
-        // if there is a search term, add it to the query
-        const termRegex = new RegExp(term, "i");
-        query["name"] = termRegex;
+    if (!userId || !verificationToken) {
+        res.status(400).send("Bad request.");
+        return;
     }
 
-    let limit = parseInt(sanitize(req.query.limit), 10);
-    if (limit === NaN) {
-        limit = MAX_CANDIDATES_TO_RETURN;
-    }
+    BusinessUsers.findById(userId, function(findBUserErr, user) {
+        // error finding user in db
+        if (findBUserErr) {
+            console.log("Error finding business user who was trying to see their candidates: ", findBUserErr);
+            res.status(500).send("Server error, try again later.");
+            return;
+        }
 
-    // how the candidates will be sorted once sorting is implemented on front-end
-    const sortNOTYET = sanitize(req.body.sort);
+        // couldn't find user in business user db, either they have the wrong
+        // type of account or are trying to pull some dubious shenanigans
+        if (!user) {
+            res.status(403).send("You do not have permission to access candidate info.");
+            return;
+        }
 
-    // add stage to query if it exists
-    const stage = sanitize(req.query.stage);
-    if (stage && stage !== "") {
-        query["tags"] = stage;
-    }
+        // user does not have the right verification token, probably trying to
+        // pull a fast one on us
+        if (user.verificationToken !== verificationToken) {
+            res.status(403).send("You do not have permission to access candidate info.");
+            return;
+        }
 
-    // add pathway name to query if it exists
-    const pathway = sanitize(req.query.pathway);
-    if (pathway && pathway !== "") {
-        query["sponsor.name"] = pathway;
-    }
-
-    const sort = {avgRating: 1};
-    // only get these properties of the candidates
-    const select = "name emailToContact profileUrl pathways";
-
-    Users
-        .find()
-        //.find(query)
-        .limit(limit)
-        .sort(sort)
-        .select(select)
-        .exec(function (err, candidates) {
-            if (err) {
-                res.status(500).send("Error getting searched-for candidates");
-                return;
-            } else {
-                res.json(candidates);
+        const companyId = user.company.companyId;
+        Businesses.findById(companyId, function(findBizErr, company) {
+            if (findBizErr) {
+                console.log("Error finding business when trying to search for candidates: ", findBizErr);
+                res.status(500).send("Server error, try again later.");
                 return;
             }
+
+            if (!company) {
+                console.log("Business not found when trying to search for candidates.");
+                res.status(500).send("Server error, try again later.");
+                return;
+            }
+
+            // if the business doesn't have an associated user with the given
+            // user id, don't let them see this business' candidates
+            if (!company.businessUserIds.some(function(bizUserId) {
+                return bizUserId === userId;
+            })) {
+                console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
+                res.status(403).send("You do not have access to this business' candidates.");
+                return;
+            }
+
+            const MAX_CANDIDATES_TO_RETURN = 1000;
+            let query = {showToUsers: true};
+
+            let term = sanitize(req.query.searchTerm);
+            if (term && term !== "") {
+                // if there is a search term, add it to the query
+                const termRegex = new RegExp(term, "i");
+                query["name"] = termRegex;
+            }
+
+            let limit = parseInt(sanitize(req.query.limit), 10);
+            if (limit === NaN) {
+                limit = MAX_CANDIDATES_TO_RETURN;
+            }
+
+            // how the candidates will be sorted once sorting is implemented on front-end
+            const sortNOTYET = sanitize(req.body.sort);
+
+            // add stage to query if it exists
+            const stage = sanitize(req.query.stage);
+            if (stage && stage !== "") {
+                query["tags"] = stage;
+            }
+
+            // add pathway name to query if it exists
+            const pathway = sanitize(req.query.pathway);
+            if (pathway && pathway !== "") {
+                query["sponsor.name"] = pathway;
+            }
+
+            const sort = {avgRating: 1};
+            // only get these properties of the candidates
+            const select = "name emailToContact profileUrl pathways";
+
+            Users
+                .find()
+                //.find(query)
+                .limit(limit)
+                .sort(sort)
+                .select(select)
+                .exec(function (err, candidates) {
+                    if (err) {
+                        res.status(500).send("Error getting searched-for candidates");
+                        return;
+                    } else {
+                        res.json(candidates);
+                        return;
+                    }
+                });
         });
+    })
 });
 
 
