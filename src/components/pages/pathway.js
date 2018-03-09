@@ -73,7 +73,9 @@ class Pathway extends Component {
                 const user = {
                     _id: this.props.currentUser._id,
                     pathwayId: this.state.pathway._id,
+                    verificationToken: this.props.currentUser.verificationToken,
                     pathwayUrl: this.state.pathway.url,
+                    pathwayName: this.state.pathway.name
                 };
                 this.props.addPathway(user);
             } else {

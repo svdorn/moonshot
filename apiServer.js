@@ -293,6 +293,28 @@ app.post('/user', function (req, res) {
                                 }
                             })
 
+                            try {
+                                // send email to everyone if there's a new sign up (if in production mode)
+                                if (process.env.NODE_ENV) {
+                                    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+                                    let subject = 'New Sign Up';
+                                    let content =
+                                        '<div>'
+                                        +   '<p>New user signed up.</p>'
+                                        +   '<p>Name: ' + newUser.name + '</p>'
+                                        +   '<p>email: ' + newUser.email + '</p>'
+                                        + '</div>';
+
+                                    sendEmail(recipients, subject, content, function (success, msg) {
+                                        if (!success) {
+                                            console.log("Error sending sign up alert email");
+                                        }
+                                    })
+                                }
+                            } catch (e) {
+                                console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
+                            }
+
                             // no reason to return the user with tokens because
                             // they will have to verify themselves before they
                             // can do anything anyway
@@ -1459,13 +1481,15 @@ app.post('/user/changeSettings', function (req, res) {
 
 
 //----->> ADD PATHWAY <<------
-// CURRENTLY ONLY ALLOWS NWM PATHWAY TO BE ADDED
+// CURRENTLY ONLY ALLOWS NWM AND SINGLEWIRE PATHWAY TO BE ADDED
 app.post("/user/addPathway", function (req, res) {
     const _id = sanitize(req.body._id);
+    const verificationToken = sanitize(req.body.verificationToken);
     const pathwayId = sanitize(req.body.pathwayId);
+    const pathwayName = sanitize(req.body.pathwayName);
 
 
-    if (_id && pathwayId) {
+    if (_id && pathwayId && verificationToken) {
         // TODO: REMOVE THIS, CHANGE HOW THIS FUNCTION WORKS ONCE WE START
         // ADDING PATHWAYS BESIDES NWM AND SINGLEWIRE
         if (pathwayId !== "5a80b3cf734d1d0d42e9fcad" && pathwayId !== "5a88b4b8734d1d041bb6b386") {
@@ -1477,15 +1501,16 @@ app.post("/user/addPathway", function (req, res) {
         // When true returns the updated document
         Users.findById(_id, function (err, user) {
             if (err) {
-                console.log(err);
+                console.log("Error finding user by id when trying to add a pathway: ", err);
+                res.status(500).send("Server error, try again later.");
+                return;
             }
 
-//            for (let i = 0; i < interests.length; i++) {
-//                 // only add the interest if the user didn't already have it
-//                 if (user.info.interests.indexOf(interests[i]) === -1) {
-//                     user.info.interests.push(interests[i]);
-//                 }
-//             }
+            if (user.verificationToken !== verificationToken) {
+                res.status(403).send("You do not have permission to add a pathway.");
+                return;
+            }
+
             for (let i = 0; i < user.pathways.length; i++) {
                 if (user.pathways[i].pathwayId == req.body.pathwayId) {
                     res.status(401).send("You can't sign up for pathway more than once");
@@ -1508,16 +1533,45 @@ app.post("/user/addPathway", function (req, res) {
             };
             user.pathways.push(pathway);
 
-            user.save(function (err, updatedUser) {
-                if (err) {
-                    res.send(false);
+            user.save(function (saveErr, updatedUser) {
+                if (saveErr) {
+                    console.log("Error saving user with new pathway: ", saveErr);
+                    res.status(500).send("Server error, try again later.");
                     return;
                 }
+
+                try {
+                    // send email to everyone to alert them of the added pathway (if in production mode)
+                    //if (process.env.NODE_ENV) {
+                        //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+                        let recipients = ["ameyer24@wisc.edu"];
+                        let subject = 'New Pathway Sign Up';
+                        let content =
+                            '<div>'
+                            +   '<p>A user signed up for a pathway.</p>'
+                            +   '<p>Name: ' + updatedUser.name + '</p>'
+                            +   '<p>email: ' + updatedUser.email + '</p>'
+                            +   '<p>Pathway: ' + pathwayName + '</p>'
+                            + '</div>';
+
+                        console.log("Sending email to alert us about new user sign up.");
+
+                        sendEmail(recipients, subject, content, function (success, msg) {
+                            if (!success) {
+                                console.log("Error sending sign up alert email");
+                            }
+                        })
+                    //}
+                } catch (e) {
+                    console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
+                }
+
                 res.send(removePassword(updatedUser));
             });
         })
     } else {
-        res.send(false);
+        res.status(400).send("Bad request.");
+        return;
     }
 });
 
@@ -2304,16 +2358,17 @@ app.post("/updateInfo", function (req, res) {
     const userId = sanitize(req.body.params.userId);
     const verificationToken = sanitize(req.body.params.verificationToken);
 
-    if (info && userId) {
+    if (info && userId && verificationToken) {
         // When true returns the updated document
-        Users.findById(userId, function (err, user) {
-            if (err) {
-                console.log("couldn't find user");
-                console.log(err);
+        Users.findById(userId, function (findErr, user) {
+            if (findErr) {
+                console.log("Error finding user when updating info during onboarding: ", findErr);
+                res.status(500).send("Server error");
+                return;
             }
 
             if (!verifyUser(user, verificationToken)) {
-                console.log("can't verify user");
+                console.log("Couldn't verify user when trying to update info.");
                 res.status(401).send("User does not have valid credentials to update info.");
                 return;
             }
@@ -2328,16 +2383,18 @@ app.post("/updateInfo", function (req, res) {
                 }
             }
 
-            user.save(function (err, updatedUser) {
-                console.log("err:", err);
+            user.save(function (saveErr, updatedUser) {
+                console.log("Error saving user information when updating info from onboarding: ", saveErr);
                 if (err) {
-                    res.send(false);
+                    res.status(500).send("Server error, couldn't save information.");
+                    return;
                 }
                 res.send(removePassword(updatedUser));
             });
         })
     } else {
-        res.send(undefined);
+        console.log("Didn't have info or a user id or both.")
+        res.status(403).send("Bad request.");
     }
 });
 

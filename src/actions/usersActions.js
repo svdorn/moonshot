@@ -30,7 +30,7 @@ export function getUserFromSession(callback) {
     };
 }
 
-export function login(user, saveSession, navigateBackUrl, pathwayId) {
+export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
     return function(dispatch) {
         axios.post("/api/login", {user, saveSession})
             .then(function(response) {
@@ -54,7 +54,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId) {
                 if (shouldAddPathwayToUser) {
                     // if the user doesn't already have this pathway, give it
                     // to them, then redirect to the pathway content page
-                    axios.post("/api/user/addPathway", {_id: returnedUser._id, pathwayId: pathwayId})
+                    axios.post("/api/user/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayId})
                     .then(function(response) {
                         dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                         // navigateBackUrl should be equal to the url for the pathway
