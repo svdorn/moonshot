@@ -419,40 +419,6 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
     }
 }
 
-// export function updateInterests(user, interests) {
-//     return function(dispatch) {
-//         axios.post("/api/updateInterests", {
-//             params: {
-//                 userId: user._id,
-//                 verificationToken: user.verificationToken,
-//                 interests: interests
-//             }
-//         })
-//             .then(function(response) {
-//                 dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
-//             })
-//             .catch(function(err) {
-//             });
-//     }
-// }
-//
-// export function updateGoals(user, goals) {
-//     return function(dispatch) {
-//         axios.post("/api/updateGoals", {
-//             params: {
-//                 userId: user._id,
-//                 verificationToken: user.verificationToken,
-//                 goals
-//             }
-//         })
-//             .then(function(response) {
-//                 dispatch({type: "UPDATE_USER_ONBOARDING", payload: response.data});
-//             })
-//             .catch(function(err) {
-//                 console.log("Error updating goals: ", err);
-//             });
-//     }
-// }
 
 export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
     return function(dispatch) {
@@ -468,24 +434,6 @@ export function updateAllOnboarding(userId, verificationToken, interests, goals,
     }
 }
 
-// export function updateInfo(user, info) {
-//     return function(dispatch) {
-//         axios.post("/api/updateInfo", {
-//             params: {
-//                 userId: user._id,
-//                 verificationToken: user.verificationToken,
-//                 info
-//             }
-//         })
-//             .then(function(response) {
-//                 dispatch({type:"UPDATE_USER_ONBOARDING", payload: response.data});
-//             })
-//             .catch(function(err) {
-//                 console.log(err);
-//                 console.log(err.response.data);
-//             });
-//     }
-// }
 
 export function startOnboarding(){
     return function(dispatch) {
