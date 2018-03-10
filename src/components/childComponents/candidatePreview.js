@@ -20,12 +20,29 @@ class PathwayPreview extends Component {
     }
 
     render() {
+        const style = {
+            imgContainer: {
+                height: "40px",
+                width: "40px",
+                borderRadius: '50%',
+                border: "3px solid #00c3ff",
+                display: "inline-block",
+                overflow: "hidden"
+            },
+            img: {
+                height: "34px",
+                marginTop: "5px"
+            },
+        };
+
         return (
             <div className="candidatePreview">
                 <Paper
                     className="candidatePreviewPaper candidatePreviewLi font16px font font14pxUnder700 font12pxUnder400"
                     zDepth={2}>
-                    <div className="candidatePreviewLiLeftContainer">{this.props.name}</div>
+                    <div className="candidatePreviewLiLeftContainer">
+                        {this.props.name}
+                    </div>
 
                     <div className="verticalDividerCandidatePreview"/>
 
