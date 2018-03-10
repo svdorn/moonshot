@@ -33,6 +33,7 @@ import Email from './components/pages/email';
 import Unsubscribe from './components/pages/unsubscribe';
 import ReferralCode from './components/pages/referralCode';
 import Admin from './components/pages/admin';
+import CreateBusinessAccount from './components/pages/adminPages/createBusinessAccount';
 import AdminUserView from './components/pages/adminUserView';
 import ReactGA from 'react-ga';
 ReactGA.initialize(credentials.googleAnalyticsTrackingNumber);
@@ -65,6 +66,7 @@ const routes = (
         <Route path="pathwayContent" component={AuthenticatedComponent} page={<PathwayContent/>} />
         <Route path="email" component={Email}/>
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} />
+        <Route path="createBusinessAccount" component={AuthenticatedComponent} page={<CreateBusinessAccount/>} />
         <Route path="adminUserView" component={AuthenticatedComponent} page={<AdminUserView/>} />
         <Route path="unsubscribe" component={Unsubscribe} />
         <Route path="referral" component={ReferralCode} />

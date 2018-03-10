@@ -108,6 +108,7 @@ class MyCandidates extends Component {
                 verificationToken: this.props.currentUser.verificationToken
             }
         }).then(res => {
+            console.log(res.data);
             // make sure component is mounted before changing state
             if (this.refs.myCandidates) {
                 this.setState({candidates: res.data});
