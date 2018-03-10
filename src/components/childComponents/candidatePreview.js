@@ -13,7 +13,11 @@ class PathwayPreview extends Component {
     }
 
     handleClick() {
-        this.setState({dismissed: !this.state.dismissed});
+        if (this.state.dismissed) {
+            this.setState({dismissed: false, step: this.state.step - 1});
+        } else {
+            this.setState({dismissed: true, step: this.state.step + 1});
+        }
     }
 
     render() {
