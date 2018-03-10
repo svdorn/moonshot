@@ -38,6 +38,10 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 dispatch({type:"LOGIN", payload: returnedUser});
                 dispatch({type: "CLOSE_NOTIFICATION"});
                 let nextUrl = '/discover';
+                console.log(returnedUser.userType);
+                if (returnedUser.userType === "employer") {
+                    nextUrl = 'businessHome';
+                }
                 if (returnedUser.userType === "user" && !returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";
                 } else if (navigateBackUrl) {
