@@ -855,7 +855,9 @@ app.post('/user/completePathway', function (req, res) {
     let referralCode = sanitize(req.body.referralCode);
 
     // remove punctuation and spaces from referral code
-    referralCode = referralCode.replace(/&amp;|&quot;|&apos;/g,"").replace(/[.,\/#!$%\^&\*;:{}'"=\-_`~()]/g,"").replace(/\s/g,"").toLowerCase();
+    if (referralCode) {
+        referralCode = referralCode.replace(/&amp;|&quot;|&apos;/g,"").replace(/[.,\/#!$%\^&\*;:{}'"=\-_`~()]/g,"").replace(/\s/g,"").toLowerCase();
+    }
 
     let referralInfo = "";
 
