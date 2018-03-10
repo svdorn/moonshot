@@ -956,10 +956,6 @@ app.post('/user/completePathway', function (req, res) {
         const skills = sanitize(req.body.skills);
         const query = {_id, verificationToken}
 
-        Businesses.find({name: "Moonshot Learning"}, function(err, biz) {
-            biz.pathways.push(mongoose.Types.ObjectId(pathwayId));
-        });
-
         Users.findOne(query, function (err, user) {
             if (err) {
                 console.log("error marking pathway complete: ", err);
