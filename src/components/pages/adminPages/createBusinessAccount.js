@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification} from "../../actions/usersActions";
+import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import axios from 'axios';
 
