@@ -213,6 +213,7 @@ class MyCandidates extends Component {
 
         return (
             <div className={"jsxWrapper"} ref='myCandidates'>
+                <div className="headerDiv purpleGradient"/>
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>

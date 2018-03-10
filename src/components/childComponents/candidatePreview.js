@@ -42,7 +42,7 @@ class PathwayPreview extends Component {
                                 <StepButton onClick={() => this.setState({step: 2})}>Interviewing</StepButton>
                             </Step>
                             <Step disabled={((3 - this.state.step) > 1) || this.state.dismissed}>
-                                <StepButton onClick={() => this.setState({step: 3})}>Hired</StepButton>
+                                <StepButton onClick={() => this.setState({step: 4})}>Hired</StepButton>
                             </Step>
                         </Stepper>
                         <div className="center">
