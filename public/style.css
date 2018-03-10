@@ -229,6 +229,14 @@ form > h1 {
     margin-left: 100px;
     position: absolute;
 }
+.verticalDividerCandidatePreview {
+    background-color: #d2d2d2;
+    height: calc(100% - 40px);
+    width: 2px;
+    display: inline-block;
+    margin-left: 200px;
+    position: absolute;
+}
 
 .menuDivider {
     width: 2px;
@@ -773,6 +781,13 @@ button.link {
     /* background: white; */
     /* height: 100%; */
     /* width: 100%; */
+}
+.candidatePreviewPaper {
+    width: 70%;
+    max-width: 1000px;
+    height: 150px;
+    margin: auto;
+    padding: 20px;
 }
 
 .semiOpaqueHoverable {
@@ -1422,6 +1437,12 @@ button.link {
     padding-left: 0px;
 }
 
+.candidatePreviewLiLeftContainer {
+    width: 160px;
+    position: relative;
+    float: left;
+    text-align: center;
+}
 
 .aboutMeLiIconContainer {
     height: calc(100% - 40px);
@@ -1431,6 +1452,9 @@ button.link {
 }
 .aboutMeLiInfo {
     margin-left: 145px;
+}
+.candidatePreviewLiInfo {
+    margin-left: 215px;
 }
 .aboutMeLiIconContainer > img:first-of-type {
     width: 70px;
@@ -2557,6 +2581,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     .aboutMeLiInfo {
         margin-left: 0;
     }
+    .candidatePreviewLiInfo {
+        margin-left: 0;
+    }
     .aboutMeLiIconContainer {
         display: none;
     }
@@ -2564,6 +2591,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         display: none;
     }
     .verticalDivider {
+        display: none;
+    }
+    .verticalDividerCandidatePreview {
         display: none;
     }
     .aboutMeLi >div:nth-child(2) {

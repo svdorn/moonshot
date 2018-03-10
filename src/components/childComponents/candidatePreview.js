@@ -10,7 +10,16 @@ class PathwayPreview extends Component {
     render() {
         return (
             <div className="candidatePreview">
-                Name: { this.props.name }
+                <Paper className="candidatePreviewPaper aboutMeLi font20px font font16pxUnder700 font14pxUnder400" zDepth={2}>
+                    <div className="candidatePreviewLiLeftContainer">{this.props.name}</div>
+
+                    <div className="verticalDividerCandidatePreview"/>
+
+                    <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
+                        Here
+                    </div>
+                </Paper>
+
             </div>
         )
     }
