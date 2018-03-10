@@ -11,6 +11,7 @@ import Login from './components/pages/login';
 import Signup from './components/pages/signup';
 import BusinessHome from './components/pages/businessHome';
 import MyCandidates from './components/pages/businessPages/myCandidates';
+import BusinessProfile from './components/pages/businessPages/businessProfile';
 import Main from './main';
 import AuthenticatedComponent from './components/AuthenticatedComponent';
 import Home from './components/pages/home';
@@ -48,6 +49,7 @@ const routes = (
         <Route path="signup" component={Signup} />
         <Route path="businessHome" component={AuthenticatedComponent} page={<BusinessHome/>} userType="employer" />
         <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType="employer" />
+        <Route path="businessProfile" component={AuthenticatedComponent} page={<BusinessProfile/>} userType="employer" />
         <Route path='forBusiness' component={ForBusiness} />
         <Route path="profile" component={Profile} />
         <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>

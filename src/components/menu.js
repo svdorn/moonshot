@@ -52,7 +52,11 @@ class Menu extends Component {
 
     handleChange = (event, index, value) => {
         if (value === 1) {
-            this.goTo('/profile');
+            if (this.props.currentUser.userType === "employer") {
+                this.goTo('/businessProfile');
+            } else {
+                this.goTo('/profile');
+            }
         } else if (value === 2) {
             this.goTo('/settings');
         } else if (value === 4) {
@@ -276,7 +280,7 @@ class Menu extends Component {
                                     >
                                         <MenuItem primaryText="Home" onClick={() => this.goTo('/businessHome')}/>
                                         <MenuItem primaryText="My Candidates" onClick={() => this.goTo('/myCandidates')}/>
-                                        <MenuItem primaryText="Profile" onClick={() => this.selectItem('/profile', 1)}/>
+                                        <MenuItem primaryText="Profile" onClick={() => this.selectItem('/businessProfile', 1)}/>
                                         <MenuItem primaryText="Settings"
                                                   onClick={() => this.selectItem('/settings', 2)}/>
                                         <MenuItem primaryText="Sign out" onClick={() => this.signOut()}/>
