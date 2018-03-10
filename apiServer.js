@@ -1005,27 +1005,6 @@ app.post('/user/completePathway', function (req, res) {
                         content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
                     }
 
-                    // function to send an email to us if the associated businesses were not updated
-                    let sendBizUpdateErrorEmail = function() {
-                        try {
-                            console.log("ERROR ADDING STUDENT AS A BUSINESS' CANDIDATE: ", findBizErr);
-                            // const errorEmailRecipients = ["ameyer24@wisc.edu", "stevedorn9@gmail.com"];
-                            const errorEmailRecipients = ["ameyer24@wisc.edu"];
-                            const errorEmailSubject = "Error Adding User Into Business Candidates Array";
-                            const errorEmailContent =
-                                "<p>User email: " + user.email + "</p>"
-                                + "<p>PathwayId: " + pathwayId + "</p>";
-                            // send an email to us saying that the user wasn't added to the business' candidates list
-                            sendEmail(errorEmailRecipients, errorEmailSubject, errorEmailContent, function(errorEmailSucces, errorEmailMsg) {
-                                if (errorEmailMsg) {
-                                    throw "error";
-                                }
-                            })
-                        } catch (e) {
-                            console.log("ERROR SENDING EMAIL ALERTING US THAT A STUDENT WAS NOT ADDED AS A BUSINESS CANDIDATE AFTER PATHWAY COMPLETION. STUDENT EMAIL: ", user.email, ". PATHWAY: ", pathwayId);
-                        }
-                    }
-
                     // get the associated businesses (the ones that have
                     // this pathway's id in their associated pathway ids array)
                     // TODO: when refactoring for db speed/minimal data sent,
@@ -1035,7 +1014,7 @@ app.post('/user/completePathway', function (req, res) {
                         .select("pathwayIds candidates")
                         .exec(function (findBizErr, businesses) {
                             if (findBizErr) {
-                                sendBizUpdateErrorEmail();
+                                sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "completing");
                             } else {
                                 // iterate through each business that has this pathway
                                 businesses.forEach(function(business) {
@@ -1053,7 +1032,7 @@ app.post('/user/completePathway', function (req, res) {
                                             _id: user._id,
                                             name: user.name,
                                             // give the business the email that the candidate wants to be contacted at, not their login email
-                                            email: userToReturn.emailToContact,
+                                            email: userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email,
                                             // will only have this pathway if the candidate didn't exist before
                                             pathways: [{
                                                 _id: pathwayId,
@@ -1068,6 +1047,9 @@ app.post('/user/completePathway', function (req, res) {
                                     // candidate did previously exist
                                     else {
                                         let candidate = candidates[userIndex];
+
+                                        // change their email to contact just in case they changed it
+                                        business.candidates[userIndex].email = userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email
 
                                         // check if they have the current pathway (will be -1 if they don't)
                                         const pathwayIndex = candidate.pathways.findIndex(function(path) {
@@ -1089,16 +1071,13 @@ app.post('/user/completePathway', function (req, res) {
                                             })
                                         }
                                     }
-                                    // may have to save the businesses in db here
+                                    // save the businesses in db
                                     business.save(function(updateBizErr, updatedBiz) {
                                         if (updateBizErr || updatedBiz == null) {
-                                            sendBizUpdateErrorEmail();
+                                            sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "completing");
                                         }
                                     });
                                 });
-
-                                // save the businesses in db
-
                             }
                         });
 
@@ -1137,6 +1116,28 @@ app.post('/user/completePathway', function (req, res) {
         finishPathway();
     }
 });
+
+
+// function to send an email to us if the associated businesses were not updated
+function sendBizUpdateCandidateErrorEmail(email, pathwayId, pathwayStatus) {
+    try {
+        console.log("ERROR " + pathwayStatus + " STUDENT AS A BUSINESS' CANDIDATE");
+        // const errorEmailRecipients = ["ameyer24@wisc.edu", "stevedorn9@gmail.com"];
+        const errorEmailRecipients = ["ameyer24@wisc.edu"];
+        const errorEmailSubject = "Error " + pathwayStatus + " User Into Business Candidates Array";
+        const errorEmailContent =
+            "<p>User email: " + email + "</p>"
+            + "<p>PathwayId: " + pathwayId + "</p>";
+        // send an email to us saying that the user wasn't added to the business' candidates list
+        sendEmail(errorEmailRecipients, errorEmailSubject, errorEmailContent, function(errorEmailSucces, errorEmailMsg) {
+            if (errorEmailMsg) {
+                throw "error";
+            }
+        })
+    } catch (e) {
+        console.log("ERROR SENDING EMAIL ALERTING US THAT A STUDENT WAS NOT ADDED AS A BUSINESS CANDIDATE AFTER PATHWAY " + pathwayStatus + ". STUDENT EMAIL: ", email, ". PATHWAY: ", pathwayId);
+    }
+}
 
 
 app.post('/createReferralCode', function(req, res) {
@@ -1801,6 +1802,76 @@ app.post("/user/addPathway", function (req, res) {
                 } catch (e) {
                     console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
                 }
+
+                // add this user to the candidates list for all businesses associated with this pathway
+                Businesses.find({pathwayIds: pathwayId})
+                    .select("pathwayIds candidates")
+                    .exec(function (findBizErr, businesses) {
+                        if (findBizErr) {
+                            // error finding business
+                            sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "adding");
+                        } else {
+                            // iterate through each business that has this pathway
+                            businesses.forEach(function(business) {
+                                let candidates = business.candidates;
+
+                                // find the candidate index within the business' candidate array
+                                const userIdString = user._id.toString();
+                                const userIndex = candidates.findIndex(function(candidate) {
+                                    return candidate._id.toString() == userIdString;
+                                });
+
+                                // if candidate doesn't exist, add them along with the pathway
+                                if (userIndex == -1) {
+                                    let candidateToAdd = {
+                                        _id: user._id,
+                                        name: user.name,
+                                        // give the business the email that the candidate wants to be contacted at, not their login email
+                                        email: user.emailToContact ? user.emailToContact : user.email,
+                                        // will only have this pathway if the candidate didn't exist before
+                                        pathways: [{
+                                            _id: pathwayId,
+                                            name: pathwayName,
+                                            hiringStage: "Not Contacted",
+                                            completionStatus: "In Progress"
+                                        }]
+                                    }
+                                    business.candidates.push(candidateToAdd);
+                                }
+
+                                // candidate did previously exist
+                                else {
+                                    let candidate = candidates[userIndex];
+
+                                    // check if they have the current pathway (will be -1 if they don't)
+                                    const pathwayIndex = candidate.pathways.findIndex(function(path) {
+                                        return path._id == pathwayId;
+                                    });
+
+                                    // if the have the current pathway, mark them as having it in progress
+                                    if (pathwayIndex > -1) {
+                                        business.candidates[userIndex].pathways[pathwayIndex].completionStatus = "In Progress";
+                                    }
+
+                                    // if they don't have the current pathway, add the pathway and mark it in progress
+                                    else {
+                                        business.candidates[userIndex].pathways.push({
+                                            _id: pathwayId,
+                                            name: pathwayName,
+                                            hiringStage: "Not Contacted",
+                                            completionStatus: "In Progress"
+                                        })
+                                    }
+                                }
+                                // save the businesses in db
+                                business.save(function(updateBizErr, updatedBiz) {
+                                    if (updateBizErr || updatedBiz == null) {
+                                        sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "adding");
+                                    }
+                                });
+                            });
+                        }
+                    });
 
                 res.send(removePassword(updatedUser));
             });
