@@ -1027,6 +1027,8 @@ app.post('/user/completePathway', function (req, res) {
                                 res.status(500).send({message: errorMessage, user: userToReturn});
                             }
                         });
+                    } else {
+                        res.json({message: successMessage, user: userToReturn});
                     }
                 });
             }
