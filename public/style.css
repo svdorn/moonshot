@@ -1453,6 +1453,9 @@ button.link {
 .aboutMeLiInfo {
     margin-left: 145px;
 }
+.candidatePreviewLiInfo {
+    margin-left: 215px;
+}
 .aboutMeLiIconContainer > img:first-of-type {
     width: 70px;
     float: left;
@@ -2576,6 +2579,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         width: calc(100% - 100px);
     }
     .aboutMeLiInfo {
+        margin-left: 0;
+    }
+    .candidatePreviewLiInfo {
         margin-left: 0;
     }
     .aboutMeLiIconContainer {

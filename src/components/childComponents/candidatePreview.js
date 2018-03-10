@@ -15,8 +15,8 @@ class PathwayPreview extends Component {
 
                     <div className="verticalDividerCandidatePreview"/>
 
-                    <div className="aboutMeLiInfo" style={{display: 'inline-block'}}>
-                        {this.props.email}
+                    <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
+                        Here
                     </div>
                 </Paper>
 
