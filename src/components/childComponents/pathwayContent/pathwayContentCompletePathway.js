@@ -51,8 +51,6 @@ class PathwayContentCompletePathway extends Component {
     handleClick() {
         const pathway = this.props.pathway;
         const currentUser = this.props.currentUser;
-        console.log(currentUser);
-        console.log(pathway);
         const user = {
             userName: currentUser.name,
             pathwayName: pathway.name,

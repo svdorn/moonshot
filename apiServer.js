@@ -919,7 +919,9 @@ app.post('/user/completePathway', function (req, res) {
     let referralCode = sanitize(req.body.referralCode);
 
     // remove punctuation and spaces from referral code
-    referralCode = referralCode.replace(/&amp;|&quot;|&apos;/g,"").replace(/[.,\/#!$%\^&\*;:{}'"=\-_`~()]/g,"").replace(/\s/g,"").toLowerCase();
+    if (referralCode) {
+        referralCode = referralCode.replace(/&amp;|&quot;|&apos;/g,"").replace(/[.,\/#!$%\^&\*;:{}'"=\-_`~()]/g,"").replace(/\s/g,"").toLowerCase();
+    }
 
     let referralInfo = "";
 
@@ -953,6 +955,10 @@ app.post('/user/completePathway', function (req, res) {
         const pathwayId = sanitize(req.body.pathwayId);
         const skills = sanitize(req.body.skills);
         const query = {_id, verificationToken}
+
+        Businesses.find({name: "Moonshot Learning"}, function(err, biz) {
+            biz.pathways.push(mongoose.Types.ObjectId(pathwayId));
+        });
 
         Users.findOne(query, function (err, user) {
             if (err) {
@@ -1000,16 +1006,32 @@ app.post('/user/completePathway', function (req, res) {
                         console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
                         userToReturn = user;
                         content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
+
+                        // get the associated businesses (the ones that have
+                        // this pathway's id in their associated pathway ids array)
+                        Businesses.find({pathwayIds: pathwayId})
+                            .select("pathwayIds candidates")
+                            .exec(function (findBizErr, business) {
+                                if (findBizErr) {
+                                    console.log("ERROR ADDING STUDENT AS A BUSINESS' CANDIDATE: ", findBizErr);
+                                }
+                                // add the student to the business' list of candidates
+                                if (business) {
+                                    console.log("business is: ", business);
+                                }
+                            });
                     }
 
-                    // send an email to us saying that the user completed a pathway
-                    sendEmail(recipients, subject, content, function (success, msg) {
-                        if (success) {
-                            res.json({message: successMessage, user: userToReturn});
-                        } else {
-                            res.status(500).send({message: errorMessage, user: userToReturn});
-                        }
-                    });
+                    if (process.env.NODE_ENV) {
+                        // send an email to us saying that the user completed a pathway
+                        sendEmail(recipients, subject, content, function (success, msg) {
+                            if (success) {
+                                res.json({message: successMessage, user: userToReturn});
+                            } else {
+                                res.status(500).send({message: errorMessage, user: userToReturn});
+                            }
+                        });
+                    }
                 });
             }
         });
