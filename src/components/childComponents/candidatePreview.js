@@ -1,13 +1,13 @@
 import React, {Component} from 'react';
 import {browserHistory} from 'react-router';
-import {Paper, Stepper, Step, StepLabel} from 'material-ui';
+import {Paper, Stepper, Step, StepLabel, StepButton} from 'material-ui';
 
 class PathwayPreview extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            step: 1,
+            step: 0,
         }
     }
 
@@ -21,17 +21,17 @@ class PathwayPreview extends Component {
 
                     <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
                         <Stepper activeStep={this.state.step}>
-                            <Step>
-                                <StepLabel>Not Yet Contacted</StepLabel>
+                            <Step disabled={(0-this.state.step) > 1}>
+                                <StepButton onClick={() => this.setState({step: 0})}>Not Yet Contacted</StepButton>
                             </Step>
-                            <Step>
-                                <StepLabel>Contacted</StepLabel>
+                            <Step disabled={(1-this.state.step) > 1}>
+                                <StepButton onClick={() => this.setState({step: 1})}>Contacted</StepButton>
                             </Step>
-                            <Step>
-                                <StepLabel>Interviewing</StepLabel>
+                            <Step disabled={(2-this.state.step) > 1}>
+                                <StepButton onClick={() => this.setState({step: 2})}>Interviewing</StepButton>
                             </Step>
-                            <Step>
-                                <StepLabel>Done</StepLabel>
+                            <Step disabled={(3-this.state.step) > 1}>
+                                <StepButton onClick={() => this.setState({step: 3})}>Done</StepButton>
                             </Step>
                         </Stepper>
                     </div>
