@@ -44,28 +44,29 @@ class MyCandidates extends Component {
             hiringStage: "",
             pathway: "",
             candidates: [emptyCandidate],
+            pathways: []
         }
     }
 
     componentDidMount() {
-        // populate candidates with initial pathways
-        this.search();
+        let self = this;
+        axios.get("/api/business/pathways", {
+            params: {
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken
+            }
+        })
+            .then(function(res) {
+                self.setState({
+                    pathways: res.data
+                });
+            })
+            .catch(function(err) {
+                console.log("error getting pathways: ", err);
+            });
 
-        // // populate candidates with initial people
-        // axios.get("/api/business/candidateSearch", {
-        //     params: {
-        //         limit: 10,
-        //         userId: this.props.currentUser.userId,
-        //         verificationToken: this.props.currentUser.verificationToken
-        //     }
-        // }).then(res => {
-        //     // make sure component is mounted before changing state
-        //     if (this.refs.myCandidates) {
-        //         this.setState({candidates: res.data});
-        //     }
-        // }).catch(function (err) {
-        //     console.log("ERROR: ", err);
-        // })
+        // populate initial candidates
+        this.search();
     }
 
     goTo(route) {
@@ -98,7 +99,6 @@ class MyCandidates extends Component {
     };
 
     search() {
-        console.log("searching");
         axios.get("/api/business/candidateSearch", {
             params: {
                 searchTerm: this.state.term,
@@ -206,7 +206,7 @@ class MyCandidates extends Component {
         })
 
         // TODO get companies from DB
-        const pathways = ["PathwayName1", "PathwayName2"];
+        const pathways = this.state.pathways;
         const pathwayItems = pathways.map(function (pathway) {
             return <MenuItem value={pathway} primaryText={pathway} key={pathway}/>
         })
