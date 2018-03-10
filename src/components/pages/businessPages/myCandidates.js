@@ -187,7 +187,7 @@ class MyCandidates extends Component {
             key++;
 
             return (
-                <li className="pathwayPreviewLi explorePathwayPreview"
+                <li style={{marginTop: '15px'}}
                     key={key}
                 >
                     <CandidatePreview
@@ -292,8 +292,8 @@ class MyCandidates extends Component {
 
 
                 <div>
-                    <ul className="horizCenteredList pathwayPrevList" style={style.pathwayPreviewUl}>
-                        {candidatePreviews}
+                    <ul className="center" id="aboutMeAreas">
+                    {candidatePreviews}
                     </ul>
                 </div>
             </div>
