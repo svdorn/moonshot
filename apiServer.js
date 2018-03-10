@@ -997,27 +997,54 @@ app.post('/user/completePathway', function (req, res) {
 
                 // save the user's new info in the db
                 user.save(function(err, updatedUser) {
+                    // safe-guard against us getting a null updatedUser
                     let userToReturn = updatedUser;
                     if (err || updatedUser == null || updatedUser == undefined) {
                         console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
                         userToReturn = user;
                         content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
-
-                        // get the associated businesses (the ones that have
-                        // this pathway's id in their associated pathway ids array)
-                        Businesses.find({pathwayIds: pathwayId})
-                            .select("pathwayIds candidates")
-                            .exec(function (findBizErr, business) {
-                                if (findBizErr) {
-                                    console.log("ERROR ADDING STUDENT AS A BUSINESS' CANDIDATE: ", findBizErr);
-                                }
-                                // add the student to the business' list of candidates
-                                if (business) {
-                                    console.log("business is: ", business);
-                                }
-                            });
                     }
 
+                    // get the associated businesses (the ones that have
+                    // this pathway's id in their associated pathway ids array)
+                    // TODO: when refactoring for db speed/minimal data sent,
+                    // this would be a good query to work with. try to return
+                    // only the right candidate
+                    Businesses.find({pathwayIds: pathwayId})
+                        .select("pathwayIds candidates")
+                        .exec(function (findBizErr, businesses) {
+                            console.log("looked for businesses, found: ", businesses);
+                            if (findBizErr) {
+                                console.log("ERROR ADDING STUDENT AS A BUSINESS' CANDIDATE: ", findBizErr);
+                                // const errorEmailRecipients = ["ameyer24@wisc.edu", "stevedorn9@gmail.com"];
+                                const errorEmailRecipients = ["ameyer24@wisc.edu"];
+                                const errorEmailSubject = "Error Adding User Into Business Candidates Array";
+                                const errorEmailContent =
+                                    "<p>User email: " + user.email + "</p>"
+                                    + "<p>PathwayId: " + pathwayId + "</p>";
+                                // send an email to us saying that the user wasn't added to the business' candidates list
+                                sendEmail(errorEmailRecipients, errorEmailSubject, errorEmailContent, function(errorEmailSucces, errorEmailMsg) {
+                                    if (errorEmailMsg) {
+                                        console.log("ERROR SENDING EMAIL ALERTING US THAT A STUDENT WAS NOT ADDED AS A BUSINESS CANDIDATE AFTER PATHWAY COMPLETION. STUDENT EMAIL: ", user.email, ". PATHWAY: ", pathwayId);
+                                    }
+                                })
+                            } else {
+                                console.log("businesses are: ", businesses);
+                                // TODO: add this candidate to thsee business's pathway list
+                                businesses.forEach(function(business) {
+                                    // find the candidate within the business' candidate array
+
+                                    // if the candidate exists, check if they have the current pathway
+
+                                    // if the have the current pathway, mark them as having completed it
+
+                                    // if they don't have the current pathway, add the pathway and mark it complete
+                                    
+                                });
+                            }
+                        });
+
+                    // only send email if in production
                     if (process.env.NODE_ENV) {
                         // send an email to us saying that the user completed a pathway
                         sendEmail(recipients, subject, content, function (success, msg) {
@@ -1028,6 +1055,7 @@ app.post('/user/completePathway', function (req, res) {
                             }
                         });
                     } else {
+                        // if not in production, just send success message to user
                         res.json({message: successMessage, user: userToReturn});
                     }
                 });

@@ -13,7 +13,8 @@ var businessesSchema = mongoose.Schema({
         pathways: [{
             _id: mongoose.Schema.Types.ObjectId,
             name: String,
-            hiringStage: String
+            hiringStage: String,
+            completionStatus: String
         }]
     }]
 });
