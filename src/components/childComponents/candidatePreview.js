@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {browserHistory} from 'react-router';
-import {Paper, Stepper, Step, StepLabel, StepButton, FlatButton, RaisedButton} from 'material-ui';
+import {Paper, Stepper, Step, StepButton, FlatButton, RaisedButton} from 'material-ui';
 
 class PathwayPreview extends Component {
     constructor(props) {
