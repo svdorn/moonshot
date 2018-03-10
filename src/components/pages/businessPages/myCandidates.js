@@ -35,37 +35,38 @@ class MyCandidates extends Component {
 
         const emptyCandidate = {
             name: "Loading...",
-            stage: "",
+            hiringStage: "",
             email: "",
         }
 
         this.state = {
             searchTerm: "",
-            stage: "",
+            hiringStage: "",
             pathway: "",
             candidates: [emptyCandidate],
+            pathways: []
         }
     }
 
     componentDidMount() {
-        // populate candidates with initial pathways
-        this.search();
-
-        // populate candidates with initial people
-        axios.get("/api/business/candidateSearch", {
+        let self = this;
+        axios.get("/api/business/pathways", {
             params: {
-                limit: 10,
-                userId: this.props.currentUser.userId,
+                userId: this.props.currentUser._id,
                 verificationToken: this.props.currentUser.verificationToken
             }
-        }).then(res => {
-            // make sure component is mounted before changing state
-            if (this.refs.myCandidates) {
-                this.setState({candidates: res.data});
-            }
-        }).catch(function (err) {
-            console.log("ERROR: ", err);
         })
+            .then(function(res) {
+                self.setState({
+                    pathways: res.data
+                });
+            })
+            .catch(function(err) {
+                console.log("error getting pathways: ", err);
+            });
+
+        // populate initial candidates
+        this.search();
     }
 
     goTo(route) {
@@ -85,8 +86,8 @@ class MyCandidates extends Component {
         });
     }
 
-    handleStageChange = (event, index, stage) => {
-        this.setState({stage}, () => {
+    handleHiringStageChange = (event, index, hiringStage) => {
+        this.setState({hiringStage}, () => {
             this.search();
         })
     };
@@ -101,7 +102,7 @@ class MyCandidates extends Component {
         axios.get("/api/business/candidateSearch", {
             params: {
                 searchTerm: this.state.term,
-                stage: this.state.stage,
+                hiringStage: this.state.hiringStage,
                 pathway: this.state.pathway,
                 userId: this.props.currentUser._id,
                 verificationToken: this.props.currentUser.verificationToken
@@ -191,7 +192,7 @@ class MyCandidates extends Component {
                     key={key}
                 >
                     <CandidatePreview
-                        editStage={true}
+                        editHiringStage={true}
                         name={candidate.name}
                         email={candidate.email}
                     />
@@ -199,13 +200,13 @@ class MyCandidates extends Component {
             );
         });
 
-        const stages = ["Not Contacted", "Contacted", "Interviewing", "Hired", "Dismissed"];
-        const stageItems = stages.map(function (stage) {
-            return <MenuItem value={stage} primaryText={stage} key={stage}/>
+        const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired", "Dismissed"];
+        const hiringStageItems = hiringStages.map(function (hiringStage) {
+            return <MenuItem value={hiringStage} primaryText={hiringStage} key={hiringStage}/>
         })
 
         // TODO get companies from DB
-        const pathways = ["PathwayName1", "PathwayName2"];
+        const pathways = this.state.pathways;
         const pathwayItems = pathways.map(function (pathway) {
             return <MenuItem value={pathway} primaryText={pathway} key={pathway}/>
         })
@@ -233,15 +234,15 @@ class MyCandidates extends Component {
                     </ToolbarGroup>
 
                     <ToolbarGroup>
-                        <DropDownMenu value={this.state.stage}
-                                      onChange={this.handleStageChange}
+                        <DropDownMenu value={this.state.hiringStage}
+                                      onChange={this.handleHiringStageChange}
                                       underlineStyle={styles.underlineStyle}
                                       anchorOrigin={styles.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px"}}
                         >
-                            <MenuItem value={""} primaryText="Stage"/>
+                            <MenuItem value={""} primaryText="Hiring Stage"/>
                             <Divider/>
-                            {stageItems}
+                            {hiringStageItems}
                         </DropDownMenu>
                         <DropDownMenu value={this.state.pathway}
                                       onChange={this.handlePathwayChange}
@@ -268,15 +269,15 @@ class MyCandidates extends Component {
 
                     <br/>
 
-                    <DropDownMenu value={this.state.stage}
-                                  onChange={this.handleStageChange}
+                    <DropDownMenu value={this.state.hiringStage}
+                                  onChange={this.handleHiringStageChange}
                                   underlineStyle={styles.underlineStyle}
                                   anchorOrigin={styles.anchorOrigin}
                                   style={{fontSize: "20px", marginTop: "11px"}}
                     >
-                        <MenuItem value={""} primaryText="Stage"/>
+                        <MenuItem value={""} primaryText="Hiring Stage"/>
                         <Divider/>
-                        {stageItems}
+                        {hiringStageItems}
                     </DropDownMenu>
                     <div><br/></div>
                     <DropDownMenu value={this.state.pathway}

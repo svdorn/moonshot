@@ -2841,6 +2841,85 @@ app.post('/changeTempPassword', function (req, res) {
 });
 
 
+// GET A COMPANY'S PATHWAY NAMES
+app.get("/business/pathways", function(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    if (!userId || !verificationToken) {
+        res.status(400).send("Bad request.");
+        return;
+    }
+
+    BusinessUsers.findById(userId, function(findBUserErr, user) {
+        // error finding user in db
+        if (findBUserErr) {
+            console.log("Error finding business user who was trying to see their pathways: ", findBUserErr);
+            res.status(500).send("Server error, try again later.");
+            return;
+        }
+
+        // couldn't find user in business user db, either they have the wrong
+        // type of account or are trying to pull some dubious shenanigans
+        if (!user) {
+            res.status(403).send("You do not have permission to access pathway info.");
+            return;
+        }
+
+        // user does not have the right verification token, probably trying to
+        // pull a fast one on us
+        if (user.verificationToken !== verificationToken) {
+            res.status(403).send("You do not have permission to access pathway info.");
+            return;
+        }
+
+        const companyId = user.company.companyId;
+        Businesses.findById(companyId, function(findBizErr, company) {
+            if (findBizErr) {
+                console.log("Error finding business when trying to search for pathways: ", findBizErr);
+                res.status(500).send("Server error, try again later.");
+                return;
+            }
+
+            if (!company) {
+                console.log("Business not found when trying to search for pathways.");
+                res.status(500).send("Server error, try again later.");
+                return;
+            }
+
+            // if the business doesn't have an associated user with the given
+            // user id, don't let them see this business' candidates
+            const userIdString = userId.toString();
+            if (!company.businessUserIds.some(function(bizUserId) {
+                return bizUserId.toString() === userIdString;
+            })) {
+                console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
+                res.status(403).send("You do not have access to this business' pathways.");
+                return;
+            }
+
+            // if we got to this point it means the user is allowed to see pathways
+
+            let pathwayQuery = { '_id': { $in: company.pathwayIds } }
+
+            // find names of all the pathways associated with the business
+            Pathways.find(pathwayQuery)
+                .select("name")
+                .exec(function(findPathwaysErr, pathways) {
+                    if (findPathwaysErr) {
+                        res.status(500).send("Server error, couldn't get pathways to search by.");
+                    } else {
+                        const pathwaysToReturn = pathways.map(function(path) {
+                            return path.name;
+                        })
+                        res.json(pathwaysToReturn);
+                    }
+                });
+        });
+    })
+});
+
+
 // SEARCH FOR CANDIDATES
 app.get("/business/candidateSearch", function(req, res) {
     const userId = sanitize(req.query.userId);
@@ -2900,67 +2979,53 @@ app.get("/business/candidateSearch", function(req, res) {
 
             // if we got to this point it means the user is allowed to see candidates
 
-            const MAX_CANDIDATES_TO_RETURN = 1000;
-            let query = {showToUsers: true};
+            // all of a company's candidates
+            const allCandidates = company.candidates;
 
-            let term = sanitize(req.query.searchTerm);
-            if (term && term !== "") {
-                // if there is a search term, add it to the query
-                const termRegex = new RegExp(term, "i");
-                query["name"] = termRegex;
-            }
-
-            let limit = parseInt(sanitize(req.query.limit), 10);
-            if (limit === NaN) {
-                limit = MAX_CANDIDATES_TO_RETURN;
-            }
-
-            // how the candidates will be sorted once sorting is implemented on front-end
-            const sortNOTYET = sanitize(req.body.sort);
-
-            const sortReq = sanitize(req.body.sort);
-            let sort = {};
-            switch (sortReq) {
-                case "alphabetical":
-                    sort = { name: 1 };
-                    break;
-                default:
-                    // by default sort in alphabetical order
-                    sort = { name: 1 };
-                    break;
-            }
-
-            // add stage to query if it exists
-            const stage = sanitize(req.query.stage);
-            if (stage && stage !== "") {
-                query["tags"] = stage;
-            }
-
-            // add pathway name to query if it exists
+            const searchTerm = sanitize(req.query.searchTerm);
+            const hiringStage = sanitize(req.query.hiringStage);
             const pathway = sanitize(req.query.pathway);
-            if (pathway && pathway !== "") {
-                query["sponsor.name"] = pathway;
-            }
 
-            // const sort = {avgRating: 1};
-            // only get these properties of the candidates
-            const select = "name emailToContact profileUrl pathways";
+            let candidatesToReturn = [];
 
-            Users
-                .find()
-                //.find(query)
-                .limit(limit)
-                .sort(sort)
-                .select(select)
-                .exec(function (err, candidates) {
-                    if (err) {
-                        res.status(500).send("Error getting searched-for candidates");
-                        return;
-                    } else {
-                        res.json(candidates);
+            // go through each candidate, only add them if they match all
+            // the search factors
+            allCandidates.forEach(function(candidate) {
+                if (searchTerm) {
+                    // case insensitive search term regex
+                    const termRegex = new RegExp(searchTerm, "i");
+                    // if neither name nor email match search term, don't add
+                    if (!(termRegex.test(candidate.email) || termRegex.test(candidate.name))) {
                         return;
                     }
-                });
+                }
+                if (hiringStage || pathway) {
+                    // go through each of the candidates pathways, if they aren't
+                    // at this hiring stage for any, return
+                    const hasStageAndPathway = candidate.pathways.some(function(path) {
+                        // if only looking for a certain pathway, just look for matching pathway
+                        if (!hiringStage) {
+                            return path.name == pathway;
+                        }
+                        // if only looking for certain hiring stage, just look for matching hiring stage
+                        else if (!pathway) {
+                            return path.hiringStage == hiringStage;
+                        }
+                        // otherwise look for a matching pathway name AND hiring stage on the same pathway
+                        else {
+                            return path.hiringStage == hiringStage && path.name == pathway;
+                        }
+                    });
+                    if (!hasStageAndPathway) {
+                        return;
+                    }
+                }
+
+                // if the candidate made it past all the search terms, add them
+                candidatesToReturn.push(candidate);
+            });
+
+            res.json(candidatesToReturn);
         });
     })
 });
