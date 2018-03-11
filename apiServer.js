@@ -976,6 +976,38 @@ app.post('/createReferralCode', function(req, res) {
     // make it to lower case so that it's case insensitive
     const email = sanitize(req.body.email).toLowerCase();
 
+    let sendReferralEmail = function(theCode) {
+        // if we're in development (on localhost) navigate to localhost
+        let moonshotUrl = "https://www.moonshotlearning.org/";
+        if (!process.env.NODE_ENV) {
+            moonshotUrl = "http://localhost:8081/";
+        }
+        const recipient = [email];
+        const subject = "Moonshot Referral Code";
+        const emailContent =
+            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                + '<div style="text-align:center;width:80%;margin-left:10%;">'
+                    + '<span style="margin-bottom:20px;display:inline-block;">Your referral code is:</span><br/>'
+                    + '<span style="display:inline-block;font-size:30px;margin-bottom:20px">' + theCode +'</span><br/>'
+                + '</div>'
+                + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                    + '<span style="margin-bottom:20px;display:inline-block;">Have your friend enter this code when they finish a pathway. If they get the job, we\'ll send you $300 through PayPal.</span><br/>'
+                    + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + email + '">Opt-out of future messages.</a></i>'
+                    + '</div>'
+                + '</div>'
+            + '</div>';
+
+        // send email to user who asked for a referral code with the info about the code
+        sendEmail(recipient, subject, emailContent, function (success, msg) {
+            if (!success) {
+                console.log("Email not sent to user about referral code. Message: ", msg);
+            }
+        })
+    }
+
     const query = {email};
 
     Referrals.findOne(query, function(err, user) {
@@ -1002,6 +1034,7 @@ app.post('/createReferralCode', function(req, res) {
                     return;
                 } else {
                     res.json(newUser.referralCode);
+                    sendReferralEmail(newUser.referralCode);
                     return;
                 }
             });
@@ -1010,6 +1043,7 @@ app.post('/createReferralCode', function(req, res) {
         else {
             // if the user already has a referral code, give them that
             res.json(user.referralCode);
+            sendReferralEmail(user.referralCode);
             return;
         }
     });

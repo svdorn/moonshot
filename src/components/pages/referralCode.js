@@ -119,7 +119,12 @@ class ReferralCode extends Component {
                             <br/>
                             <span className="font32px">{this.state.referralCode}</span>
                             <br/>
-                            <span className="font16px">Have your friend enter this code when they finish a pathway. If they get the job, we{"'"}ll send you $300 through PayPal.</span>
+                            <span className="font16px">
+                                Have your friend enter this code when they
+                                finish a pathway. If they get the job, we{"'"}ll
+                                send you $300 through PayPal. We sent you an
+                                email with your code and some extra info.
+                            </span>
                         </div>
                         :
                         <form onSubmit={this.handleSubmit.bind(this)}>

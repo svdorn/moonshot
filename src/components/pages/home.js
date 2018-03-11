@@ -264,7 +264,7 @@ class Home extends Component {
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
                         <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500 font20pxUnder400 font18pxUnder350">
-                            Skip the resum&eacute;.<br/>Learn skills that employers need<br/><i>and get paid to do it.</i><br/>
+                            Skip the resum&eacute;.<br/>Prove your skills and<br/><i>we{"'"}ll help you get hired</i>.<br/>
                             <button className="outlineButton font30px font20pxUnder500 blueWhiteButton"
                                     onClick={() => this.scrollDown()}>
                                 Get Started
@@ -295,10 +295,9 @@ class Home extends Component {
                                     className="homepageTrajectoryTextLeftIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
-                                    <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Complete Pathways<br/>And Learn Skills</h2>
-                                      Pathways are a series of free courses
-                                      designed to teach you skills that employers actually want.
-                                      Who cares if you know how photosynthesis works?
+                                    <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Complete Pathways To Get Evaluated For Open Positions</h2>
+                                      Pathways are employer-sponsored courses
+                                      evaluating you for in-demand positions.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight onHome">
@@ -320,11 +319,9 @@ class Home extends Component {
                                     className="homepageTrajectoryTextRightIcon personIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
-                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Build Your Profile</h2>
-                                    Add your skills, completed projects and
-                                    finished pathways. The modern resumé – the
-                                    B you got in history shouldn’t affect your
-                                    chances of getting a tech job.
+                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">$100 If You Interview</h2>
+                                    Score an interview through one of our
+                                    technical pathways and we will pay you $100.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesLeft">
@@ -346,11 +343,9 @@ class Home extends Component {
                                     className="homepageTrajectoryTextLeftIcon onHome smallerWidthIcon"
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
-                                    <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Paid and Get Hired by<br/>Innovative Companies</h2>
-                                    Compete for open positions with sponsor
-                                    companies by excelling in pathways and
-                                    demonstrating your skills. Score an
-                                    interview with them and we’ll pay you $100.
+                                    <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Hired by<br/>Innovative Companies</h2>
+                                    Compete for open positions by excelling in 
+                                    pathways and proving your skills.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight">
