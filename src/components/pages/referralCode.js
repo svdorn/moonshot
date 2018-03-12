@@ -8,8 +8,9 @@ import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import axios from 'axios';
-import TermsOfUse from './termsOfUse';
-import PrivacyPolicy from './privacyPolicy';
+import TermsOfUse from '../policies/termsOfUse';
+import PrivacyPolicy from '../policies/privacyPolicy';
+import AffiliateAgreement from '../policies/affiliateAgreement';
 
 
 const styles = {
@@ -59,7 +60,8 @@ class ReferralCode extends Component {
             referralCode: undefined,
             agreeingToTerms: false,
             openPP: false,
-            openTOU: false
+            openTOU: false,
+            openAA: false
         };
     }
 
@@ -75,16 +77,22 @@ class ReferralCode extends Component {
     handleOpenPP = () => {
         this.setState({openPP: true});
     };
-
     handleClosePP = () => {
         this.setState({openPP: false});
     };
+
     handleOpenTOU = () => {
         this.setState({openTOU: true});
     };
-
     handleCloseTOU = () => {
         this.setState({openTOU: false});
+    };
+
+    handleOpenAA = () => {
+        this.setState({openAA: true});
+    };
+    handleCloseAA = () => {
+        this.setState({openAA: false});
     };
 
 
@@ -92,7 +100,7 @@ class ReferralCode extends Component {
         e.preventDefault();
 
         if (!this.state.agreeingToTerms) {
-            this.props.addNotification("Must agree to terms of use and privacy policy.", "error");
+            this.props.addNotification("Must agree to Affiliate Agreement, Terms of Use, and Privacy Policy.", "error");
             return;
         }
 
@@ -157,6 +165,13 @@ class ReferralCode extends Component {
                 onClick={this.handleCloseTOU}
             />,
         ];
+        const actionsAA = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onClick={this.handleCloseAA}
+            />,
+        ];
         let blurredClass = '';
         if (this.state.openTOU || this.state.openPP) {
             blurredClass = 'dialogForBizOverlay';
@@ -186,6 +201,17 @@ class ReferralCode extends Component {
                         overlayClassName="dialogOverlay"
                     >
                         <TermsOfUse/>
+                    </Dialog>
+                    <Dialog
+                        actions={actionsAA}
+                        modal={false}
+                        open={this.state.openAA}
+                        onRequestClose={this.handleCloseAA}
+                        autoScrollBodyContent={true}
+                        paperClassName="dialogForSignup"
+                        overlayClassName="dialogOverlay"
+                    >
+                        <AffiliateAgreement/>
                     </Dialog>
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                     <div className="form lightWhiteForm" style={{padding: "10px 20px"}}>
@@ -232,8 +258,10 @@ class ReferralCode extends Component {
                                             src="/icons/CheckMarkBlue.png"
                                         />
                                     </div>
-                                    I understand and agree to the <bdi className="clickable blueText" onClick={this.handleOpenPP}>Privacy
-                                    Policy</bdi> and <bdi className="clickable blueText" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
+                                    I understand and agree to
+                                    the <bdi className="clickable blueText" onClick={this.handleOpenAA}>Affiliate Agreement</bdi>
+                                    , <bdi className="clickable blueText" onClick={this.handleOpenPP}>Privacy Policy</bdi>
+                                    , and <bdi className="clickable blueText" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
                                 </div>
                                 <button
                                     type="submit"

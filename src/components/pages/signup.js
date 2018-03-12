@@ -7,8 +7,8 @@ import {TextField, CircularProgress, FlatButton, Dialog} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {browserHistory} from 'react-router';
-import TermsOfUse from './termsOfUse';
-import PrivacyPolicy from './privacyPolicy';
+import TermsOfUse from '../policies/termsOfUse';
+import PrivacyPolicy from '../policies/privacyPolicy';
 
 const styles = {
     floatingLabelStyle: {

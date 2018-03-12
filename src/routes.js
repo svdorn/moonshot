@@ -30,6 +30,9 @@ import Unsubscribe from './components/pages/unsubscribe';
 import ReferralCode from './components/pages/referralCode';
 import Admin from './components/pages/admin';
 import AdminUserView from './components/pages/adminUserView';
+import PrivacyPolicy from './components/policies/privacyPolicy';
+import TermsOfUse from './components/policies/termsOfUse';
+import AffiliateAgreement from './components/policies/affiliateAgreement';
 import ReactGA from 'react-ga';
 ReactGA.initialize(credentials.googleAnalyticsTrackingNumber);
 
