@@ -1009,20 +1009,41 @@ app.post('/createReferralCode', function(req, res) {
         const recipient = [email];
         const subject = "Moonshot Referral Code";
         const emailContent =
-            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
-                + '<div style="text-align:center;width:80%;margin-left:10%;">'
-                    + '<span style="margin-bottom:20px;display:inline-block;">Your referral code is:</span><br/>'
-                    + '<span style="display:inline-block;font-size:30px;margin-bottom:20px">' + theCode +'</span><br/>'
-                + '</div>'
-                + '<div style="text-align:left;width:80%;margin-left:10%;">'
-                    + '<span style="margin-bottom:20px;display:inline-block;">Have your friend enter this code when they finish a pathway. If they get the job, we\'ll send you $300 through PayPal.</span><br/>'
-                    + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + email + '">Opt-out of future messages.</a></i>'
-                    + '</div>'
-                + '</div>'
-            + '</div>';
+            "<div style='color:black'>"
+            +   "<p>Hello " + name + ",</p>"
+
+            +   "<p>Thank you for signing up as a Moonshot referrer! With us, you can shape the future of the workforce and get paid to do it. Moonshot trains and evaluates college students and recent graduates in skills and positions needed by employers. We do this by creating course pathways that evaluate candidates in positions that our employer partners are hiring for. <a href='https://moonshotlearning.org/discover'>Check out all of our live Pathways</a>.</p>"
+
+            +   "<p>You will earn $300 for everyone you send our way that gets a job through the Moonshot site.</p>"
+
+            +   "<p>For you to receive credit for a Moonshot user, the user must do one of the following:</p>"
+            +   "<p>1. Input your referral code (this is your code: " + theCode + ") at the end of the Pathway when asked how he or she heard about Moonshot.</p>"
+            +   "<p>2. Sign up by coming through your unique referrer link: <br/><a href='" + moonshotUrl + "?referralCode=" + theCode + "'>" + moonshotUrl + "?referralCode=" + theCode + "</a></p>"
+
+            +   "<p>A lot of people start by sharing with friends in person and on social media. The people really on their game carry around cards to be ready for any situation. (Let me know if you want card designs to print off.)</p>"
+
+            +   "<p>I'm always excited to strategize tactics and techniques to attract candidates. Shoot me a message if you would like to brainstorm. Remember, all of your outreach must be in accordance with the Moonshot Affiliate Agreement you accepted.</p>"
+
+            +   "<p>Happy referring!</p>"
+            +   "<p>Kyle</p>"
+
+            +   "<p>-----------------------------</p>"
+            +   "<div style='font-size:12px'>Kyle Treige, Co-Founder & CEO<br/>"
+            +   "<a href='" + moonshotUrl + "'>Moonshot<br/>"
+            +   "608-438-4478</div>"
+
+            +   '<div style="font-size:10px; color:#C8C8C8; margin-top:30px; margin-bottom:30px;">'
+            +       '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+            +       '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + email + '">Opt-out of future messages.</a></i>'
+            +   '</div>'
+
+            + "</div>";
+
+
+
+            // '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+            //     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+            // + '</div>';
 
         // send email to user who asked for a referral code with the info about the code
         sendEmail(recipient, subject, emailContent, function (success, msg) {
@@ -1057,8 +1078,8 @@ app.post('/createReferralCode', function(req, res) {
                     res.status(500).send("Server error, try again later.");
                     return;
                 } else {
-                    res.json(newUser.referralCode);
                     sendReferralEmail(newUser.referralCode);
+                    res.json(newUser.referralCode);
                     return;
                 }
             });
@@ -1066,8 +1087,8 @@ app.post('/createReferralCode', function(req, res) {
         // if the user has asked for a referral code in the past
         else {
             // if the user already has a referral code, give them that
-            res.json(user.referralCode);
             sendReferralEmail(user.referralCode);
+            res.json(user.referralCode);
             return;
         }
     });
@@ -1234,8 +1255,8 @@ app.post('/forgotPassword', function (req, res) {
                         + '">Change Password</a>'
                         + '<div style="text-align:left;width:80%;margin-left:10%;">'
                             + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                            + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                            + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
+                                + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                                + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
                             + '</div>'
                         + '</div>'
                     + '</div>';
