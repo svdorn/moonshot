@@ -342,7 +342,8 @@ app.post('/user', function (req, res) {
                                         +   additionalText
                                         + '</div>';
 
-                                    sendEmail(recipients, subject, content, function (success, msg) {
+                                    const sendFrom = "Moonshot Learning";
+                                    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
                                         if (!success) {
                                             console.log("Error sending sign up alert email");
                                         }
@@ -723,7 +724,8 @@ app.post('/sendVerificationEmail', function (req, res) {
                 + '</div>'
             + '</div>';
 
-        sendEmail(recipient, subject, content, function (success, msg) {
+        const sendFrom = "Moonshot Learning";
+        sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
             if (success) {
                 res.json(msg);
             } else {
@@ -776,9 +778,10 @@ app.post('/user/registerForPathway', function (req, res) {
         + "608-438-4478</p>"
         + "</div>";
 
-    sendEmail(recipient1, subject1, content1, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipient1, subject1, content1, sendFrom, function (success, msg) {
         if (success) {
-            sendEmail(recipient2, subject2, content2, function (success, msg) {
+            sendEmail(recipient2, subject2, content2, sendFrom, function (success, msg) {
                 if (success) {
                     res.json("Check your email for instructions on how to get started.");
                 } else {
@@ -825,7 +828,8 @@ app.post('/user/forBusinessEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipients, subject, content, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will notify you of your results shortly.");
         } else {
@@ -855,7 +859,8 @@ app.post("/alertLinkClicked", function(req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipients, subject, content, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json(true);
         } else {
@@ -965,7 +970,8 @@ app.post('/user/completePathway', function (req, res) {
                     }
 
                     // send an email to us saying that the user completed a pathway
-                    sendEmail(recipients, subject, content, function (success, msg) {
+                    const sendFrom = "Moonshot Learning";
+                    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
                         if (success) {
                             res.json({message: successMessage, user: userToReturn});
                         } else {
@@ -1030,6 +1036,7 @@ app.post('/createReferralCode', function(req, res) {
             +   "<p>-----------------------------</p>"
             +   "<div style='font-size:12px'>Kyle Treige, Co-Founder & CEO<br/>"
             +   "<a href='" + moonshotUrl + "'>Moonshot<br/>"
+            +   "kyle@moonshotlearning.org<br/>"
             +   "608-438-4478</div>"
 
             +   '<div style="font-size:10px; color:#C8C8C8; margin-top:30px; margin-bottom:30px;">'
@@ -1046,7 +1053,8 @@ app.post('/createReferralCode', function(req, res) {
             // + '</div>';
 
         // send email to user who asked for a referral code with the info about the code
-        sendEmail(recipient, subject, emailContent, function (success, msg) {
+        const sendFrom = "Kyle Treige";
+        sendEmail(recipient, subject, emailContent, sendFrom, function (success, msg) {
             if (!success) {
                 console.log("Email not sent to user about referral code. Message: ", msg);
             }
@@ -1106,7 +1114,8 @@ app.post('/user/unsubscribeEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipient, subject, content, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("You have successfully unsubscribed.");
         } else {
@@ -1125,7 +1134,7 @@ app.post('/user/unsubscribeEmail', function (req, res) {
             + sanitize(req.body.email)
             + "</p>"
             + "</div>";
-        sendEmail(recipient, subject, content);
+        sendEmail(recipient, subject, content, sendFrom, function(){});
     }
 
     // add email to list of unsubscribed emails
@@ -1162,7 +1171,8 @@ app.post('/user/comingSoonEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipient, subject, content, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
@@ -1193,7 +1203,8 @@ app.post('/user/contactUsEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipients, subject, content, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
@@ -1261,7 +1272,8 @@ app.post('/forgotPassword', function (req, res) {
                         + '</div>'
                     + '</div>';
 
-                sendEmail(recipient, subject, content, function (success, msg) {
+                const sendFrom = "Moonshot Learning";
+                sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
                     if (success) {
                         res.json(msg);
                     } else {
@@ -1275,7 +1287,7 @@ app.post('/forgotPassword', function (req, res) {
 
 // callback needs to be a function of a success boolean and string to return;
 // takes an ARRAY of recipient emails
-function sendEmail(recipients, subject, content, callback) {
+function sendEmail(recipients, subject, content, sendFrom, callback) {
     if (recipients.length === 0) {
         callback(false, "Couldn't send email. No recipient.")
         return;
@@ -1306,6 +1318,20 @@ function sendEmail(recipients, subject, content, callback) {
             return;
         }
 
+        // the default email account to send emails from
+        let from = '"Moonshot Learning" <do-not-reply@moonshotlearning.org>';
+        let authUser = credentials.emailUsername;
+        let authPass = credentials.emailPassword;
+        if (sendFrom) {
+            if (sendFrom === "Kyle Treige") {
+                from = '"Kyle Treige" <kyle@moonshotlearning.org>';
+                authUser = credentials.kyleEmailUsername;
+                authPass = credentials.kyleEmailPassword;
+            } else {
+                from = '"' + sendFrom + '" <do-not-reply@moonshotlearning.org>';
+            }
+        }
+
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
             // host: 'smtp.ethereal.email',
@@ -1317,14 +1343,14 @@ function sendEmail(recipients, subject, content, callback) {
             // }
             service: 'gmail',
             auth: {
-                user: credentials.emailUsername,
-                pass: credentials.emailPassword
+                user: authUser,
+                pass: authPass
             }
         });
 
         // setup email data with unicode symbols
         let mailOptions = {
-            from: '"Moonshot Learning" <do-not-reply@moonshot.com>', // sender address
+            from: from, // sender address
             to: recipientList, // list of receivers
             subject: subject, // Subject line
             html: content // html body
@@ -1649,7 +1675,8 @@ app.post("/user/addPathway", function (req, res) {
 
                         console.log("Sending email to alert us about new user sign up.");
 
-                        sendEmail(recipients, subject, content, function (success, msg) {
+                        const sendFrom = "Moonshot Learning";
+                        sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
                             if (!success) {
                                 console.log("Error sending sign up alert email");
                             }
