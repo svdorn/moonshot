@@ -340,7 +340,7 @@ class Home extends Component {
                             sponsored<br/>by employers hiring for those skills.
                         </div>
 
-                        <ul className="horizCenteredList pathwayPrevList" style={{minHeight:"400px", maxHeight:"779px", overflow:"hidden"}}>
+                        <ul className="horizCenteredList pathwayPrevList" style={{minHeight:"400px", maxHeight:"779px", overflow:"hidden", maxWidth:"1000px"}}>
                             {pathwayPreviews}
                         </ul>
 
