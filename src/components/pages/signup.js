@@ -7,8 +7,8 @@ import {TextField, CircularProgress, FlatButton, Dialog} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {browserHistory} from 'react-router';
-import TermsOfUse from './termsOfUse';
-import PrivacyPolicy from './privacyPolicy';
+import TermsOfUse from '../policies/termsOfUse';
+import PrivacyPolicy from '../policies/privacyPolicy';
 
 const styles = {
     floatingLabelStyle: {
@@ -88,7 +88,7 @@ class Signup extends Component {
         e.preventDefault();
 
         if (!this.state.agreeingToTerms) {
-            this.props.addNotification("Must agree to terms of use and privacy policy.", "error");
+            this.props.addNotification("Must agree to Terms of Use and Privacy Policy.", "error");
             return;
         }
 
@@ -117,13 +117,15 @@ class Signup extends Component {
             return;
         }
 
+        // get referral code from cookie, if it exists
+        const signUpReferralCode = this.getCode();
         const name = this.props.formData.signup.values.name;
         const password = this.props.formData.signup.values.password;
         const email = this.props.formData.signup.values.email;
-        let user = {
-            name, password, email,
-            userType: "user",
-        };
+        let user = [{
+            name, password, email, signUpReferralCode,
+            userType: "user"
+        }];
 
         // if the user got here from a pathway landing page, add the pathway id
         // and url for redirect after onboarding completion
@@ -311,6 +313,35 @@ class Signup extends Component {
                 </div>
             </div>
         );
+    }
+
+
+    /************************ REFERRAL COOKIE FUNCTIONS *******************************/
+    //this is the name of the cookie on the users machine
+    cookieName = "ReferralCodeCookie";
+    //the name of the url paramater you are expecting that holds the code you wish to capture
+    //for example, http://www.test.com?couponCode=BIGDISCOUNT your URL Parameter would be
+    //couponCode and the cookie value that will be stored is BIGDISCOUNT
+    URLParameterName = "referralCode";
+
+    // This will return the stored cookie value
+    getCode() {
+        return this.readCookie(this.cookieName);
+    }
+
+    readCookie(name) {
+        let nameEQ = name + "=";
+        let ca = document.cookie.split(';');
+        for (var i = 0; i < ca.length; i++) {
+            let c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1, c.length);
+            }
+            if (c.indexOf(nameEQ) == 0) {
+                return c.substring(nameEQ.length, c.length);
+            }
+        }
+        return null;
     }
 }
 
