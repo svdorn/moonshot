@@ -309,7 +309,7 @@ class Home extends Component {
                                     <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Complete Pathways To Get Evaluated For Open Positions</h2>
                                       Pathways are employer-sponsored courses
                                       evaluating you for in-demand positions.
-                                      Get hired for your skills, not your volunteer hours.
+
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight onHome">
@@ -333,7 +333,8 @@ class Home extends Component {
                                 <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
                                     <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">$100 If You Interview</h2>
                                     Score an interview through one of our
-                                    technical pathways and we will pay you $100.
+                                    technical pathways and we{"'"}ll pay you $100.
+                                    That{"'"}s like a year{"'"}s worth of ramen.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesLeft">
@@ -357,7 +358,8 @@ class Home extends Component {
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
                                     <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Hired by<br/>Innovative Companies</h2>
                                     Compete for open positions by excelling in
-                                    pathways and proving your skills.
+                                    pathways and proving your skills. Get 
+                                    hired for your skills, not your volunteer hours.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight">
