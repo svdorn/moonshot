@@ -22,6 +22,8 @@ var usersSchema = mongoose.Schema({
     password: String,
     // the exact time the user created their account
     dateSignedUp: Date,
+    // code given to a user that was used on sign up, was in the url the user initially got to the site through
+    signUpReferralCode: String,
     // if false, should route user to onboarding on login
     hasFinishedOnboarding: Boolean,
     // used to verify identity

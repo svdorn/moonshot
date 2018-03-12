@@ -234,9 +234,7 @@ const sanitizeOptions = {
 
 //----->> POST USER <<------
 app.post('/user', function (req, res) {
-    var user = req.body[0];
-
-    user = sanitize(user);
+    let user = sanitize(req.body[0]);
 
     // hash the user's password
     const saltRounds = 10;
@@ -283,6 +281,11 @@ app.post('/user', function (req, res) {
                         }
 
                         user.dateSignedUp = new Date();
+                        // make sure referral code is a string, if not set it
+                        // to undefined (will happen if there is no referral code as well)
+                        if (typeof user.signUpReferralCode !== "string") {
+                            user.signUpReferralCode = undefined;
+                        }
 
                         // store the user in the db
                         Users.create(user, function (err, newUser) {

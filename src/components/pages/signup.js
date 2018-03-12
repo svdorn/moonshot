@@ -82,11 +82,6 @@ class Signup extends Component {
 
     componentDidMount() {
         this.props.onSignUpPage();
-
-        // check if the referral code cookie exists
-        let referralCode = this.getCode();
-        console.log("referralCode is: ");
-        console.log(referralCode);
     }
 
     handleSubmit(e) {
@@ -122,12 +117,14 @@ class Signup extends Component {
             return;
         }
 
+        // get referral code from cookie, if it exists
+        const signUpReferralCode = this.getCode();
         const name = this.props.formData.signup.values.name;
         const password = this.props.formData.signup.values.password;
         const email = this.props.formData.signup.values.email;
         let user = [{
-            name, password, email,
-            userType: "student",
+            name, password, email, signUpReferralCode,
+            userType: "student"
         }];
 
         // if the user got here from a pathway landing page, add the pathway id
