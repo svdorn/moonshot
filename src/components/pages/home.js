@@ -33,7 +33,18 @@ class Home extends Component {
             open: false,
             dialogPathway: null,
         }
+
+        // capture referral code in cookie, if it exists
+        if (props.location && props.location.query && props.location.query.referralCode) {
+            this.captureCode();
+        }
     }
+
+
+
+
+
+
 
     goTo(route) {
         // closes any notification
@@ -417,6 +428,51 @@ class Home extends Component {
                 </div>
             </div>
         );
+    }
+
+
+    /************************ REFERRAL COOKIE FUNCTIONS *******************************/
+    //this is the name of the cookie on the users machine
+    cookieName = "ReferralCodeCookie";
+    //the name of the url paramater you are expecting that holds the code you wish to capture
+    //for example, http://www.test.com?couponCode=BIGDISCOUNT your URL Parameter would be
+    //couponCode and the cookie value that will be stored is BIGDISCOUNT
+    URLParameterName = "referralCode";
+    //how many days you want the cookie to be valid for on the users machine
+    cookiePersistDays = 7;
+
+    // Extract the code from the URL based on the defined parameter name
+    captureCode() {
+        var q = this.getParameterByName(this.URLParameterName);
+        if (q != null && q != "") {
+            this.eraseCookie(this.cookieName);
+            this.createCookie(this.cookieName, q, this.cookiePersistDays);
+        }
+    }
+
+    createCookie(name, value, days) {
+        let expires = ""
+        if (days) {
+            let date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            let expires = "; expires=" + date.toGMTString();
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+
+    eraseCookie(name) {
+        this.createCookie(name, "", -1);
+    }
+
+    //Retrieve a query string parameter
+    getParameterByName(name) {
+        let value = undefined;
+        try {
+            value = this.props.location.query[name];
+        } catch (e) {
+            // don't need to do anything if the query doesn't exist
+        }
+        return value;
     }
 }
 
