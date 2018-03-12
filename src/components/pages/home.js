@@ -28,8 +28,7 @@ class Home extends Component {
         this.state = {
             // three empty pathways until we get the top three pathways from
             // the backend
-            pathways1: [emptyPathway, emptyPathway, emptyPathway, emptyPathway],
-            pathways2: undefined,
+            pathways: [emptyPathway, emptyPathway, emptyPathway, emptyPathway, emptyPathway, emptyPathway],
             open: false,
             dialogPathway: null,
         }
@@ -56,7 +55,6 @@ class Home extends Component {
     }
 
     handleOpen = (pathway) => {
-        console.log("pathway: ", pathway);
         if (!pathway.comingSoon) {
             this.goTo('/pathway?pathway=' + pathway.url);
         } else {
@@ -89,17 +87,7 @@ class Home extends Component {
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.home) {
-                const returnedPathways = res.data;
-                let pathways2 = undefined;
-                let pathways1 = [];
-                if (returnedPathways.length >= 4) {
-                    const halfwayPoint = returnedPathways.length / 2;
-                    pathways2 = returnedPathways.slice(halfwayPoint);
-                    pathways1 = returnedPathways.slice(0, halfwayPoint);
-                } else {
-                    pathways1 = returnedPathways;
-                }
-                this.setState({pathways1, pathways2});
+                this.setState({pathways: res.data})
             }
         }).catch(function (err) {
         })
@@ -118,7 +106,7 @@ class Home extends Component {
         // create the pathway previews
         let pathwayKey = 0;
         let self = this;
-        const pathwayPreviews1 = this.state.pathways1.map(function (pathway) {
+        const pathwayPreviews = this.state.pathways.map(function (pathway) {
             pathwayKey++;
             let formattedDeadline = "";
             if (pathway.deadline) {
@@ -127,7 +115,9 @@ class Home extends Component {
             }
 
             return (
-                <li style={{verticalAlign: "top"}} key={pathwayKey}
+                <li style={{verticalAlign: "top"}}
+                    className="pathwayPreviewLi explorePathwayPreview"
+                    key={pathwayKey}
                     onClick={() => self.handleOpen(pathway)}
                 ><PathwayPreview
                     name={pathway.name}
@@ -142,36 +132,6 @@ class Home extends Component {
                 /></li>
             );
         });
-
-        let pathwayPreviews2 = undefined;
-        if (this.state.pathways2) {
-            pathwayKey = 100;
-            pathwayPreviews2 = this.state.pathways2.map(function (pathway) {
-                pathwayKey++;
-                let formattedDeadline = "";
-                if (pathway.deadline) {
-                    const deadline = new Date(pathway.deadline);
-                    formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
-                }
-
-                return (
-                    <li style={{verticalAlign: "top"}} key={pathwayKey}
-                        //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                        onClick={() => self.handleOpen(pathway)}
-                    ><PathwayPreview
-                        name={pathway.name}
-                        image={pathway.previewImage}
-                        logo = {pathway.sponsor.logoForLightBackground}
-                        sponsorName = {pathway.sponsor.name}
-                        completionTime = {pathway.estimatedCompletionTime}
-                        deadline = {formattedDeadline}
-                        price = {pathway.price}
-                        _id = {pathway._id}
-                        comingSoon = {pathway.comingSoon}
-                    /></li>
-                );
-            });
-        }
 
 
         // const logosInfo = [
@@ -358,7 +318,7 @@ class Home extends Component {
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
                                     <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Hired by<br/>Innovative Companies</h2>
                                     Compete for open positions by excelling in
-                                    pathways and proving your skills. Get 
+                                    pathways and proving your skills. Get
                                     hired for your skills, not your volunteer hours.
                                 </div>
                             </div>
@@ -379,24 +339,11 @@ class Home extends Component {
                             Moonshot courses are organized in<div className="br under500only"><br/></div> pathways and
                             sponsored<br/>by employers hiring for those skills.
                         </div>
-                        <div className="pathwayPrevListContainer">
-                            <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">
-                                {pathwayPreviews1}
-                            </ul>
-                        </div>
-                        {pathwayPreviews2 ?
-                            <div className="pathwayPrevListContainer" style={{marginTop: '20px'}}>
-                                <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">
-                                    {pathwayPreviews2}
-                                </ul>
-                            </div>
-                            : null
-                        }
-                        <div className="pathwayPrevListContainer pathwayPrevMobileThird">
-                            <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">
-                                {pathwayPreviews1[2]}
-                            </ul>
-                        </div>
+
+                        <ul className="horizCenteredList pathwayPrevList" style={{minHeight:"400px", maxHeight:"779px", overflow:"hidden"}}>
+                            {pathwayPreviews}
+                        </ul>
+
                         <button className="blueGradientButtonExterior bigButton"
                                 onClick={() => this.goTo('/signup')}
                                 style={{marginTop: "40px"}}
