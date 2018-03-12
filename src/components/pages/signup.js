@@ -88,7 +88,7 @@ class Signup extends Component {
         e.preventDefault();
 
         if (!this.state.agreeingToTerms) {
-            this.props.addNotification("Must agree to terms of use and privacy policy.", "error");
+            this.props.addNotification("Must agree to Terms of Use and Privacy Policy.", "error");
             return;
         }
 

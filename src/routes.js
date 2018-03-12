@@ -63,6 +63,9 @@ const routes = (
         <Route path="adminUserView" component={AuthenticatedComponent} page={<AdminUserView/>} />
         <Route path="unsubscribe" component={Unsubscribe} />
         <Route path="referral" component={ReferralCode} />
+        <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
+        <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
+        <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
         <Route path='*' component={Error404} />
     </Route>
   </Router>
