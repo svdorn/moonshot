@@ -264,7 +264,7 @@ class Home extends Component {
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
                         <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500 font20pxUnder400 font18pxUnder350">
-                            Skip the resum&eacute;.<br/>Prove your skills and<br/><i>we{"'"}ll help you get hired</i>.<br/>
+                            Skip the resum&eacute;.<br/>Prove your skills and<br/>we{"'"}ll help you get hired.<br/>
                             <button className="outlineButton font30px font20pxUnder500 blueWhiteButton"
                                     onClick={() => this.scrollDown()}>
                                 Get Started
@@ -344,7 +344,7 @@ class Home extends Component {
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
                                     <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Hired by<br/>Innovative Companies</h2>
-                                    Compete for open positions by excelling in 
+                                    Compete for open positions by excelling in
                                     pathways and proving your skills.
                                 </div>
                             </div>
