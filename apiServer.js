@@ -300,6 +300,27 @@ app.post('/user', function (req, res) {
                                 }
                             })
 
+                            if (user.signUpReferralCode) {
+                                Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
+                                    if (referralErr) {
+                                        console.log("Error finding referrer for new sign up: ", referralErr);
+                                    } else if (!referrer) {
+                                        console.log("Invalid referral code used: ", user.signUpReferralCode);
+                                    } else {
+                                        referrer.referredUsers.push({
+                                            name: newUser.name,
+                                            email: newUser.email,
+                                            _id: newUser._id
+                                        });
+                                        referrer.save(function(referrerSaveErr, newReferrer) {
+                                            if (referrerSaveErr) {
+                                                console.log("Error saving referrer: ", referrerSaveErr);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
                             try {
                                 // send email to everyone if there's a new sign up (if in production mode)
                                 if (process.env.NODE_ENV) {

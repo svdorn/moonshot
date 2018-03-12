@@ -6,7 +6,11 @@ var referralsSchema = mongoose.Schema({
     email: String,
     referralCode: String,
     incentive: String,
-    referredUserIds: [mongoose.Schema.Types.ObjectId]
+    referredUsers: [{
+        name: String,
+        email: String,
+        _id: mongoose.Schema.Types.ObjectId
+    }]
 });
 
 var Referrals = mongoose.model('Referrals', referralsSchema);
