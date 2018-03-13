@@ -6,6 +6,7 @@ import {closeNotification, addNotification} from "../../../actions/usersActions"
 import {bindActionCreators} from 'redux';
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
+import {TextField, CircularProgress} from 'material-ui';
 
 
 const styles = {
@@ -85,11 +86,6 @@ class CreateBusinessAccount extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        if (!this.state.agreeingToTerms) {
-            this.props.addNotification("Must agree to terms of use and privacy policy.", "error");
-            return;
-        }
-
         const vals = this.props.formData.createBusinessAccount.values;
 
         // Form validation before submit
@@ -109,10 +105,10 @@ class CreateBusinessAccount extends Component {
         });
         if (notValid) return;
 
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.initialUserEmail)) {
             return;
         }
-        if (vals.password != vals.password2) {
+        if (vals.initialUserPassword != vals.initialUserPassword2) {
             return;
         }
 
@@ -132,102 +128,77 @@ class CreateBusinessAccount extends Component {
         .catch(function(err) {
             console.log("error: ", err);
         })
-        //this.props.postBusiness(business);
-
-        // this.setState({
-        //     ...this.state
-        // })
     }
 
 
     render() {
+        if (!this.props.currentUser.admin === true) {
+            return null;
+        }
+
         return (
-            <div>
-                {this.props.currentUser.admin === true ?
+            <div className="fillScreen greenToBlue formContainer">
+                <div className="form lightWhiteForm">
                     <div>
-                        <div className="headerDiv greenToBlue" />
+                        <form onSubmit={this.handleSubmit.bind(this)}>
+                            <h1 style={{marginTop: "15px"}}>Create Business Account</h1>
+                            <div className="inputContainer">
+                                <div className="fieldWhiteSpace"/>
+                                <Field
+                                    name="businessName"
+                                    component={renderTextField}
+                                    label="Business Name"
+                                    className="lightBlueInputText"
+                                /><br/>
+                            </div>
+                            <div className="inputContainer">
+                                <div className="fieldWhiteSpace"/>
+                                <Field
+                                    name="initialUserName"
+                                    component={renderTextField}
+                                    label="Initial User's Name"
+                                    className="lightBlueInputText"
+                                /><br/>
+                            </div>
+                            <div className="inputContainer">
+                                <div className="fieldWhiteSpace"/>
+                                <Field
+                                    name="initialUserEmail"
+                                    component={renderTextField}
+                                    label="Initial User's Email"
+                                    className="lightBlueInputText"
+                                /><br/>
+                            </div>
+                            <div className="inputContainer">
+                                <div className="fieldWhiteSpace"/>
+                                <Field
+                                    name="initialUserPassword"
+                                    component={renderPasswordField}
+                                    label="Initial User's Password"
+                                    className="lightBlueInputText"
+                                /><br/>
+                            </div>
+                            <div className="inputContainer">
+                                <div className="fieldWhiteSpace"/>
+                                <Field
+                                    name="initialUserPassword2"
+                                    component={renderPasswordField}
+                                    label="Confirm Password"
+                                    className="lightBlueInputText"
+                                /><br/>
+                            </div>
 
-                        <div className="form lightWhiteForm">
-                            {this.state.email != "" && this.props.userPosted ?
-                                <div className="center">
-                                    <h1>Verify your email address</h1>
-                                    <p>We sent {this.state.email} a verification link. Check your junk folder if you
-                                        can{"'"}t find our email.</p>
-                                </div>
-                                :
-                                <div>
-                                    <form onSubmit={this.handleSubmit.bind(this)}>
-                                        <h1 style={{marginTop: "15px"}}>Sign Up</h1>
-                                        <div><i>{"Don't panic, it's free."}</i></div>
-                                        <div className="inputContainer">
-                                            <div className="fieldWhiteSpace"/>
-                                            <Field
-                                                name="name"
-                                                component={renderTextField}
-                                                label="Full Name"
-                                                className="lightBlueInputText"
-                                            /><br/>
-                                        </div>
-                                        <div className="inputContainer">
-                                            <div className="fieldWhiteSpace"/>
-                                            <Field
-                                                name="email"
-                                                component={renderTextField}
-                                                label="Email"
-                                                className="lightBlueInputText"
-                                            /><br/>
-                                        </div>
-                                        <div className="inputContainer">
-                                            <div className="fieldWhiteSpace"/>
-                                            <Field
-                                                name="password"
-                                                component={renderPasswordField}
-                                                label="Password"
-                                                className="lightBlueInputText"
-                                            /><br/>
-                                        </div>
-                                        <div className="inputContainer">
-                                            <div className="fieldWhiteSpace"/>
-                                            <Field
-                                                name="password2"
-                                                component={renderPasswordField}
-                                                label="Confirm Password"
-                                                className="lightBlueInputText"
-                                            /><br/>
-                                        </div>
-
-                                        <div style={{margin: "20px 20px 10px"}} className="darkBlueText">
-                                            <div className="checkbox smallCheckbox blueCheckbox"
-                                                 onClick={this.handleCheckMarkClick.bind(this)}>
-                                                <img
-                                                    className={"checkMark" + this.state.agreeingToTerms}
-                                                    src="/icons/CheckMarkBlue.png"
-                                                />
-                                            </div>
-                                            I understand and agree to the <bdi className="clickable blueText" onClick={this.handleOpenPP}>Privacy
-                                            Policy</bdi> and <bdi className="clickable blueText" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
-                                        </div>
-
-                                        <button
-                                            type="submit"
-                                            className="formSubmitButton font24px font16pxUnder600"
-                                        >
-                                            Sign Up
-                                        </button>
-                                        <br/>
-                                        <div className="clickable blueText"
-                                             onClick={() => this.goTo({pathname: '/login', query: urlQuery})}
-                                             style={{display: "inline-block"}}>Already have an account?
-                                        </div>
-                                    </form>
-                                    {this.props.loadingCreateUser ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
-                                </div>
-                            }
-                        </div>
+                            <button
+                                type="submit"
+                                className="formSubmitButton font24px font16pxUnder600"
+                            >
+                                Sign Up
+                            </button>
+                            <br/>
+                        </form>
+                        {this.props.loadingCreateUser ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
                     </div>
-
-                    : null
-                }
+                </div>
             </div>
         );
     }

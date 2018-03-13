@@ -3138,7 +3138,7 @@ app.get("/business/candidateSearch", function(req, res) {
 
 
 app.post("/business", function(req, res) {
-    console.log("req.body is: ", req.body)
+    console.log("req.body is: ", req.body);
 });
 
 
