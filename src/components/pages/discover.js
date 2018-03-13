@@ -97,6 +97,26 @@ class Discover extends Component {
         window.scrollTo(0, 0);
     }
 
+
+    pathwayClicked(pathwayUrl, pathwayId) {
+        let currentUser = this.props.currentUser;
+        if (!currentUser || currentUser === "no user") {
+            this.goTo('/pathway?pathway=' + pathwayUrl);
+        } else {
+            // if the user has the pathway, go straight to the content page
+            if (currentUser.pathways.some(function(path) {
+                return path.pathwayId == pathwayId;
+            })) {
+                this.goTo('/pathwayContent?pathway=' + pathwayUrl)
+            }
+            // otherwise go to the pathway landing page
+            else {
+                this.goTo('/pathway?pathway=' + pathwayUrl);
+            }
+        }
+    }
+
+
     onSearchChange(term) {
         this.setState({...this.state, term: term}, () => {
             if (term !== undefined) {
@@ -259,7 +279,7 @@ class Discover extends Component {
                 return (
                     <li className="pathwayPreviewLi explorePathwayPreview"
                         key={key}
-                        onClick={() => self.goTo('/pathway?pathway=' + pathway.url)}
+                        onClick={() => self.pathwayClicked(pathway.url, pathway._id)}
                     >
                         <PathwayPreview
                             name={pathway.name}
@@ -312,7 +332,7 @@ class Discover extends Component {
                 return (
                     <li className="pathwayPreviewLi featuredPathwayPreview"
                         key={key}
-                        onClick={() => self.goTo('/pathway?pathway=' + pathway.url)}
+                        onClick={() => self.pathwayClicked(pathway.url, pathway._id)}
                     >
                         <PathwayPreview
                             name={pathway.name}

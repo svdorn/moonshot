@@ -56,7 +56,21 @@ class Home extends Component {
 
     handleOpen = (pathway) => {
         if (!pathway.comingSoon) {
-            this.goTo('/pathway?pathway=' + pathway.url);
+            let currentUser = this.props.currentUser;
+            if (!currentUser || currentUser === "no user") {
+                this.goTo('/pathway?pathway=' + pathway.url);
+            } else {
+                // if the user has the pathway, go straight to the content page
+                if (currentUser.pathways.some(function(path) {
+                    return path.pathwayId == pathway._id;
+                })) {
+                    this.goTo('/pathwayContent?pathway=' + pathway.url)
+                }
+                // otherwise go to the pathway landing page
+                else {
+                    this.goTo('/pathway?pathway=' + pathway.url);
+                }
+            }
         } else {
             // tell the user they are preregistered if logged in
             const currentUser = this.props.currentUser;
