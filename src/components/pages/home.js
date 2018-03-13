@@ -235,7 +235,7 @@ class Home extends Component {
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
                         <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500 font20pxUnder400 font18pxUnder350">
-                            Skip the resum&eacute;.<br/>We{"'"}ll help get you hired for<br/>your skills, not your GPA.<br/>
+                            Skip the resum&eacute;.<br/>We{"'"}ll help you get hired for<br/>your skills, not your GPA.<br/>
                             <button className="outlineButton font30px font20pxUnder500 blueWhiteButton"
                                     onClick={() => this.scrollDown()}>
                                 Get Started
