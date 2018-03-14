@@ -2,11 +2,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification} from "../../actions/usersActions";
+import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import axios from 'axios';
 
-class AdminUserView extends Component {
+class ViewUser extends Component {
     constructor(props) {
         super(props);
 
@@ -209,19 +209,12 @@ class AdminUserView extends Component {
 
         return (
             <div>
-                {this.props.currentUser.admin === true ?
+                {user ?
                     <div>
-                        <div className="headerDiv greenToBlue" />
-                        {user ?
-                            <div>
-                                {user.name}
-                                <br/>
-                                {pathwaysHtml}
-                            </div>
-                            : null
-                        }
+                        {user.name}
+                        <br/>
+                        {pathwaysHtml}
                     </div>
-
                     : null
                 }
             </div>
@@ -242,4 +235,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(AdminUserView);
+export default connect(mapStateToProps, mapDispatchToProps)(ViewUser);

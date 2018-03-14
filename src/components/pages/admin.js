@@ -24,22 +24,22 @@ class Admin extends Component {
             return;
         }
 
-        let self = this;
-
-        axios.get("/api/infoForAdmin", {params: {
-            userId: user._id,
-            verificationToken: user.verificationToken
-        }})
-        .then(function(response) {
-            const usersArray = response.data;
-            self.setState({
-                ...self.state,
-                users: usersArray
-            })
-        })
-        .catch(function(err) {
-            console.log("error with getting info for admin");
-        })
+        // let self = this;
+        //
+        // axios.get("/api/infoForAdmin", {params: {
+        //     userId: user._id,
+        //     verificationToken: user.verificationToken
+        // }})
+        // .then(function(response) {
+        //     const usersArray = response.data;
+        //     self.setState({
+        //         ...self.state,
+        //         users: usersArray
+        //     })
+        // })
+        // .catch(function(err) {
+        //     console.log("error with getting info for admin");
+        // })
     }
 
 
@@ -54,28 +54,13 @@ class Admin extends Component {
 
 
     render() {
-        const users = this.state.users;
-        let userLis = !users || users.length === 0 ? null : users.map(function(user) {
-            return (
-                <li>
-                    <a href={"/adminUserView?user=" + user.profileUrl}>{user.name}</a> with email: {user.email}
-                </li>
-            );
-        });
-
-        const userList = <ul>{userLis}</ul>;
-
         return (
             <div>
                 {this.props.currentUser.admin === true ?
                     <div>
                         <div className="headerDiv greenToBlue" />
-                        <span className="blueText underline clickable"
-                            style={{marginBottom:"20px"}}
-                            onClick={() => this.goTo("/createBusinessAccount")}>
-                            Create Business Account
-                        </span>
-                        {userList}
+
+                        {this.props.children}
                     </div>
 
                     : null
