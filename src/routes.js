@@ -78,7 +78,7 @@ const routes = (
         <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
         <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
 
-        <Route path="admin" component={Admin}>
+        <Route path="admin" component={AuthenticatedComponent} page={<Admin/>}>
             <IndexRoute component={AdminPages} />
             <Route path="createBusinessAccount" component={CreateBusinessAccount} />
             <Route path="userResponses" component={UserResponses} />
