@@ -72,21 +72,19 @@ const routes = (
         <Route path="pathway" component={Pathway} />
         <Route path="pathwayContent" component={AuthenticatedComponent} page={<PathwayContent/>} />
         <Route path="email" component={Email}/>
+        <Route path="unsubscribe" component={Unsubscribe} />
+        <Route path="referral" component={ReferralCode} />
+        <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
+        <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
+        <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
 
-
-        <Route path="admin/" component={Admin}>
+        <Route path="admin" component={Admin}>
             <IndexRoute component={AdminPages} />
             <Route path="createBusinessAccount" component={CreateBusinessAccount} />
             <Route path="userResponses" component={UserResponses} />
             <Route path="viewUser" component={ViewUser} />
         </Route>
 
-
-        <Route path="unsubscribe" component={Unsubscribe} />
-        <Route path="referral" component={ReferralCode} />
-        <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
-        <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
-        <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
         <Route path='*' component={Error404} />
     </Route>
   </Router>
