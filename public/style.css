@@ -2071,6 +2071,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 
 .width40px { width: 40px; }
 
+.leftAlign { text-align: left; }
+.rightAlign { text-align: right; }
+
 .font60px { font-size: 60px; }
 .font48px { font-size: 48px; }
 .font46px { font-size: 46px; }
