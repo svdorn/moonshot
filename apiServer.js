@@ -3139,6 +3139,24 @@ app.get("/business/candidateSearch", function(req, res) {
 
 app.post("/business", function(req, res) {
     console.log("req.body is: ", req.body);
+
+    // validate admin is admin user (have to do this already in other steps,
+    // should probably just make that a function)
+
+    // check if another business with that name already exists
+
+    // if so, return error message
+
+    // if not, add the business
+
+    // check if a user (business- or non-business-) with the email provided
+    // already exists
+
+    // if so, return successfully but tell the user to add a different initial
+    // user on the edit business page
+
+    // otherwise, return successfully
+
 });
 
 
