@@ -357,6 +357,57 @@ app.post('/user', function (req, res) {
                             // they will have to verify themselves before they
                             // can do anything anyway
                             res.json(safeUser(newUser));
+
+                            // send an email to the user one day after signup
+                            try {
+                                const ONE_DAY = 1000 * 60 * 60 * 24;
+
+                                let moonshotUrl = 'https://www.moonshotlearning.org/';
+                                // if we are in development, links are to localhost
+                                if (!process.env.NODE_ENV) {
+                                    moonshotUrl = 'http://localhost:8081/';
+                                }
+
+                                let firstName = getFirstName(newUser.name);
+                                // add in a space before the name, if the user has a name
+                                if (firstName != "") {
+                                    firstName = " " + firstName;
+                                }
+
+                                setTimeout(function() {
+                                    let dayAfterRecipient = [newUser.email];
+                                    let dayAfterSubject = 'Moonshot Fights For You';
+                                    let dayAfterContent =
+                                        "<div style='font-size:15px;text-align:left;font-family: Arial, sans-serif;color:#000000'>"
+                                            + "<p>Hi" + firstName + ",</p>"
+                                            + "<p>My name is Kyle. I'm the co-founder and CEO at Moonshot. I'm honored that you trusted us in your career journey. If you need anything at all, please let me know.</p>"
+                                            + "<p>I individually fight for every Moonshot candidate — Mock interviews, inside tips that our employers are looking for, anything to help you start the career of your dreams.</p>"
+                                            + "<p>Shoot me a message. I'm all ears.</p>"
+                                            + "<p>Yours truly,<br/>Kyle</p>"
+                                            + "<div style='font-size:10px; text-align:left; color:#000000; margin-bottom:50px;'>"
+                                                + "----------------------------------<br/>"
+                                                + "Kyle Treige, Co-Founder & CEO<br/>"
+                                                + "<a href='https://moonshotlearning.org/'>Moonshot</a><br/>"
+                                                + "608-438-4478<br/>"
+                                            + "</div>"
+                                            + "<div style='font-size:10px; text-align:left; color:#C8C8C8; margin-bottom:30px;'>"
+                                                + "<i>Moonshot Learning, Inc.<br/><a href='' style='text-decoration:none;color:#D8D8D8;cursor:default'>1261 Meadow Sweet Dr, Madison, WI 53719</a>.<br/>"
+                                                + '<a style="color:#C8C8C8;" href="' + moonshotUrl + 'unsubscribe?email=' + newUser.email + '">Opt-out of future messages.</a></i>'
+                                            + "</div>"
+                                        + "</div>";
+
+                                    const dayAfterSendFrom = "Kyle Treige";
+                                    sendEmail(dayAfterRecipient, dayAfterSubject, dayAfterContent, dayAfterSendFrom, function (success, msg) {
+                                        if (success) {
+                                            console.log("sent day-after email");
+                                        } else {
+                                            console.log("error sending day-after email");
+                                        }
+                                    })
+                                }, ONE_DAY);
+                            } catch (e) {
+                                console.log("Not able to send day-after email to ", newUser.name, "with id: ", newUser._id);
+                            }
                         })
                     })
                 } else {
@@ -366,6 +417,18 @@ app.post('/user', function (req, res) {
         });
     });
 });
+
+
+function getFirstName(name) {
+    // split by spaces, get array of non-spaced names, return the first one
+    let firstName = "";
+    try {
+        firstName = name.split(' ')[0];
+    } catch (e) {
+        firstName = "";
+    }
+    return firstName;
+}
 
 
 // remove any empty pieces from an object or array all the way down
