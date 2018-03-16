@@ -133,6 +133,8 @@ class AdminUserView extends Component {
                                                 dateString.substring(8, 10) + "/" +
                                                 dateString.substring(0, 4);
                                         break;
+                                    case "freeResponse":
+                                        answer = answerValue.value;
                                     default:
                                         break;
                                 }
