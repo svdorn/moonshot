@@ -2,6 +2,8 @@
 var mongoose = require('mongoose');
 
 var infoSchema = mongoose.Schema({
+    // name of the class of the surrounding div
+    className: String,
     // an array of parts of the info, e.g. first part is blue text, second part is a list, etc...
     contentParts: [{
         // the type of this part of the info, e.g. "ul" or "ol" or "text" or "image"

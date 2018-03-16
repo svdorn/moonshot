@@ -5,7 +5,7 @@ class StyledContent extends Component {
         const contentArray = this.props.contentArray;
         if (!Array.isArray(contentArray)) { return null; }
 
-        let keyCounter = 0;
+        let keyCounter = -1;
         let contentHtml = [];
         contentArray.forEach(function(part) {
             // default classNames; if className provided, give the part that className instead
@@ -122,7 +122,7 @@ class StyledContent extends Component {
                             code.push(<div className="inlineBlock">{codeCopy}</div>);
                             code.push(<br/>)
                         });
-                        return (
+                        contentHtml.push (
                             <div className={className + " code"} style={{textAlign:"left"}} key={"questionPart" + keyCounter}>
                                 {code}
                                 {breakArea}
@@ -138,8 +138,10 @@ class StyledContent extends Component {
             }
         });
 
+        const className = this.props.className ? this.props.className : "noStyle";
+
         return (
-            <div className="center">
+            <div className={className}>
                 {contentHtml}
             </div>
         );

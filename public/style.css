@@ -1967,6 +1967,11 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     margin: 4px 10px 0 0;
 }
 
+.centeredElement {
+    width: 100%;
+    text-align: center;
+}
+
 
 
 .inlineBlock { display: inline-block; }
@@ -3231,3 +3236,5 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 
     .homepageSeparator { transform: scale(2.5, .02); }
 }
+
+.noStyle {}

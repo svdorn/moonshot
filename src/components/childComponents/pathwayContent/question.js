@@ -140,8 +140,10 @@ class Question extends Component {
 
         });
 
+        let overallClassName = this.props.className ? this.props.className : "noStyle";
+
         return (
-            <div className="center">
+            <div className={overallClassName}>
                 {questionHtml}
             </div>
         );

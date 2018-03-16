@@ -12,6 +12,8 @@ var quizzesSchema = mongoose.Schema({
     allowCustomAnswer: Boolean,
     // "slider", "multipleChoice", "freeResponse", "twoOptions", "multiSelect"
     questionType: String,
+    // className of the div with the question
+    questionClassName: String,
     // an array of parts of the question, e.g. first part is blue text, second part is a list, etc...
     question: [{
         // the type of this part of the question, e.g. "ul" or "ol" or "text" or "image"
