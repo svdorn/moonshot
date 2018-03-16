@@ -104,6 +104,10 @@ class PathwayContentQuiz extends Component {
                             question={quiz.question}
                             answers={quiz.multiSelectAnswers}
                             quizId={quiz._id}
+                            minSliderValue={quiz.minSliderValue}
+                            maxSliderValue={quiz.maxSliderValue}
+                            minSliderText={quiz.minSliderText}
+                            maxSliderText={quiz.maxSliderText}
                         />
                     break;
                 case "freeResponse":
@@ -127,7 +131,7 @@ class PathwayContentQuiz extends Component {
 
         return (
             <div className={this.props.className} style={{...this.props.style}}>
-                <div className="center" style={{padding: "10px 0"}}>
+                <div style={{padding: "10px 0"}}>
                     { questionJsx }
                 </div>
             </div>

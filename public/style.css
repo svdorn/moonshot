@@ -2060,6 +2060,17 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     margin-top: -34px;
 }
 
+.sliderOnSelect {
+    width: 200px;
+    display: inline-block;
+    float: right;
+    margin: -30px 8% 0px 0px;
+}
+.textAreaOnSelect {
+    width: 90%;
+    margin: 0px 5%;
+}
+
 .code {
     text-align: left;
     background-color: #eaeaea;
@@ -3057,6 +3068,13 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     #pathwayMoneyIcon { height: 40px; }
     #pathwayHatIcon { height: 32px; }
     .pathwayDescriptionAndSalaryIcon { padding-right: 10px; }
+
+    .sliderOnSelect {
+        width: 60%;
+        display: inline-block;
+        float: right;
+        margin: -30px 20% 0px;
+    }
 }
 
 @media only screen and (min-width: 401px) {

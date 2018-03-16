@@ -3,8 +3,8 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateAnswer} from '../../../actions/usersActions';
 import TwoOptionsChoice from './twoOptionsChoice';
-import _ from 'lodash';
 import Question from './question';
+import Slider from 'material-ui/Slider';
 
 let savedRecently = false;
 
@@ -35,7 +35,11 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
             });
         }
 
-        this.state = { quizId, options, savedValues: {} };
+        const minSliderValue = this.props.minSliderValue ? this.props.minSliderValue : 1;
+        const maxSliderValue = this.props.maxSliderValue ? this.props.maxSliderValue : 10;
+        const sliderStep = this.props.sliderStep ? this.props.sliderStep : 1;
+
+        this.state = { quizId, options, minSliderValue, maxSliderValue, sliderStep, savedValues: {} };
     }
 
     componentDidUpdate() {
@@ -64,7 +68,11 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
                 });
             }
 
-            this.setState({ quizId, options, savedValues: {} });
+            const minSliderValue = this.props.minSliderValue ? this.props.minSliderValue : 1;
+            const maxSliderValue = this.props.maxSliderValue ? this.props.maxSliderValue : 10;
+            const sliderStep = this.props.sliderStep ? this.props.sliderStep : 1;
+
+            this.setState({ quizId, options, minSliderValue, maxSliderValue, sliderStep, savedValues: {} });
         }
     }
 
@@ -156,9 +164,20 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
     }
 
 
+    handleSlider(event, value, answerNumber) {
+        let newOptions = {...this.state.options};
+        newOptions[answerNumber].value.skill = value;
+        this.setState({options: newOptions});
+    };
+
+
     render() {
         let self = this;
         let options = this.state.options;
+
+        const minSliderText = this.props.minSliderText ? this.props.minSliderText : this.state.minSliderValue;
+        const maxSliderText = this.props.maxSliderText ? this.props.maxSliderText : this.state.maxSliderValue;
+
         // go through every option
         let optionsHtml = [];
         for (let answerNumber in options) {
@@ -170,16 +189,35 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
             const selectedClass = isSelected ? "selected" : "notSelected";
 
             optionsHtml.push(
-                <div key={"option" + answerNumber}
-                    className="multiSelectOption clickableNoUnderline"
-                    onClick={()=>{if (!isSelected){self.handleClick(answerNumber)}}}
-                >
-                    <div className={"multiSelectCircle " + selectedClass} onClick={()=>{if (isSelected){self.handleClick(answerNumber)}}} />
-                    {options[answerNumber].body}<br/>
+                <div key={"option" + answerNumber}>
+                    <div className="multiSelectOption clickableNoUnderline"
+                         onClick={()=>{if (!isSelected){self.handleClick(answerNumber)}}}
+                    >
+                        <div className={"multiSelectCircle " + selectedClass} onClick={()=>{if (isSelected){self.handleClick(answerNumber)}}} />
+                        {options[answerNumber].body}
+
+                    </div>
+                    {isSelected ?
+                        <div className="sliderOnSelect">
+                            <Slider
+                                min={this.state.minSliderValue}
+                                max={this.state.maxSliderValue}
+                                step={this.state.sliderStep}
+                                value={options[answerNumber].value.skill}
+                                onChange={(e, value) => this.handleSlider(e, value, answerNumber)}
+                                onDragStop={this.saveAnswer.bind(this)}
+                            />
+                            <div style={{float:"left", margin:"-40px 0 0 -6px"}}>{this.props.minSliderText}</div>
+                            <span style={{float:"right", margin:"-40px -10px 0 0"}}>{this.props.maxSliderText}</span>
+                        </div>
+                    :
+                        null
+                    }
+                    <br/>
                     {isSelected ?
                         <textarea
                             type="text"
-                            className="multiSelectCustomAnswer"
+                            className="textAreaOnSelect"
                             value={options[answerNumber].value.answerText}
                             onChange={(e) => self.handleInputChange(e, answerNumber)}
                         />
@@ -188,11 +226,12 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
                     }
                 </div>
             );
+            optionsHtml.push(<br key={"br" + answerNumber}/>)
         }
 
         return (
-            <div className="center font20px font16pxUnder600 font12pxUnder400">
-                <div style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
+            <div className="font20px font16pxUnder600 font12pxUnder400 leftAlign">
+                <div style={{margin:"0 20px 20px"}}><Question question={this.props.question} /></div>
                 {optionsHtml}
             </div>
         );

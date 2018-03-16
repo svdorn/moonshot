@@ -37,6 +37,9 @@ var quizzesSchema = mongoose.Schema({
         // smallest amount the slider can advance by; if undefined, no limit to step smallness
         step: Number
     },
+    // the text shown underneath the slider on freeResponseAndSliderOnSelect questions (optional)
+    minSliderText: String,
+    maxSliderText: String,
     multipleChoiceAnswers: [{
         // the content of the answer, e.g. "Rainbow Dash"
         body: String,
