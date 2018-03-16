@@ -94,7 +94,7 @@ class PathwayContentArticle extends Component {
                 <div className={this.props.className} style={{...this.props.style}}>
                     <div className="center" style={{marginBottom: "10px"}}>
                         <h4 className="marginTop20px blueText font30px">{content.name}</h4>
-                        <StyledContent contentArray={description} className={desciptionClassName} />
+                        <StyledContent contentArray={description} className={descriptionClassName} />
                         <button className="outlineButton font24px font20pxUnder500 whiteBlueButton">
                             <a href={content.link} onClick={this.handleClick.bind(this)} target="_blank" className="blueText blueTextOnHover" style={{textDecoration: 'none'}}>
                                 {content.linkText}
