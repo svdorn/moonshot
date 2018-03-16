@@ -192,16 +192,20 @@ class AdminUserView extends Component {
         const pathways = this.state.pathways;
         const completedPathways = this.state.completedPathways;
         const quizzes = this.state.quizzes;
+        let noAnswers = null;
 
         let completedPathwayLis = null;
         let pathwayLis = null;
-        if (user) {
+        if (user && user.answers) {
             completedPathwayLis = this.makePathwayLis(completedPathways, user.answers);
             pathwayLis = this.makePathwayLis(pathways, user.answers);
+        } else {
+            noAnswers = <div>User has not answered any questions</div>
         }
 
         const pathwaysHtml = (
             <ul>
+                {noAnswers}
                 <li key={"completedPathways"}>COMPLETED PATHWAYS:</li>
                 {completedPathwayLis}
                 <li key={"incompletePathways"}>INCOMPLETE PATHWAYS:</li>
