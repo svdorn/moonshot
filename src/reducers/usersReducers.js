@@ -136,6 +136,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "UPDATE_CURRENT_SUBSTEP":
             const subStep = {...action.payload, pathwayId: action.pathwayId}
+            console.log("updating current substep to: ", subStep);
             return {
                 ...state, currentSubStep: subStep, currentUser: action.currentUser
             }
