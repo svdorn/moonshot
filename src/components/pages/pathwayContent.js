@@ -94,8 +94,6 @@ class PathwayContent extends Component {
                     }
                     // otherwise save the step that was saved in the db to redux state
                     else {
-                        console.log("HERE");
-
                         let stepNumber = userPath.currentStep.step;
                         // make sure we're on an actual step
                         if (!stepNumber || stepNumber < 1) {
@@ -138,8 +136,6 @@ class PathwayContent extends Component {
 
                 // we do know what step we're currently on
                 else {
-                    console.log("NOT THERE, HERE")
-
                     // if the currently saved step is not for the right pathway
                     if (this.props.step.pathwayId != pathwayId) {
                         const user = this.props.currentUser;
