@@ -24,7 +24,7 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
         });
 
         // mark things the user had saved as answers if the user has anything saved
-        if (props.currentUser && props.currentUser.answers && props.currentUser.answers[quizId]) {
+        if (props.currentUser && props.currentUser.answers && props.currentUser.answers[quizId] && props.currentUser.answers[quizId].value) {
             let dbAnswer = props.currentUser.answers[quizId];
 
             // go through every value given by the question as an answer to click
