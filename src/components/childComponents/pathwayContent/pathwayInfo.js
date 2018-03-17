@@ -22,7 +22,7 @@ class PathwayInfo extends Component {
                     _id: id
                 }
             }).then(res => {
-                this.setState({contentArray: res.data.contentParts, currStep: this.props.step});
+                this.setState({contentArray: res.data.contentParts, currStep: this.props.step, className: res.data.className});
             }).catch(function (err) {
                 console.log("error getting searched for info");
             })
@@ -38,7 +38,7 @@ class PathwayInfo extends Component {
                     _id: id
                 }
             }).then(res => {
-                this.setState({contentArray: res.data.contentParts, currStep: this.props.step});
+                this.setState({contentArray: res.data.contentParts, currStep: this.props.step, className: res.data.className});
             }).catch(function (err) {
                 console.log("error getting searched for info");
             })
@@ -47,7 +47,7 @@ class PathwayInfo extends Component {
 
     render() {
         return (
-            <StyledContent contentArray={this.state.contentArray} />
+            <StyledContent contentArray={this.state.contentArray} className={this.state.className} />
         );
     }
 }

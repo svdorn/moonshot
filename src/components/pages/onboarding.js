@@ -2,9 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {
-    updateInfo,
-    updateGoals,
-    updateInterests,
+    updateAllOnboarding,
     startOnboarding,
     endOnboarding,
     closeNotification
@@ -315,7 +313,8 @@ class Onboarding extends Component {
     }
 
     handleStep1ButtonClick() {
-        this.saveInterests();
+        const saveNow = true;
+        this.saveInterests(saveNow);
         this.setState({
             ...this.state,
             tabValue: "goals"
@@ -323,7 +322,7 @@ class Onboarding extends Component {
         window.scrollTo(0, 0);
     }
 
-    saveInterests() {
+    saveInterests(shouldSaveImmediately) {
         let interests = [];
         for (let i = 0; i < this.state.designAndDevInterests.length; i++) {
             if (this.state.designAndDevInterests[i].selected) {
@@ -351,7 +350,16 @@ class Onboarding extends Component {
             }
         }
         if (interests.length > 0) {
-            this.props.updateInterests(this.props.currentUser, interests);
+            // if it is saving just interests, save it here
+            if (shouldSaveImmediately) {
+                this.props.updateAllOnboarding(this.props.currentUser._id, this.props.currentUser.verificationToken, interests, undefined, undefined);
+            }
+            // otherwise return it to be saved by the caller
+            else {
+                return interests;
+            }
+        } else {
+            return [];
         }
     }
 
@@ -376,7 +384,8 @@ class Onboarding extends Component {
     }
 
     handleGoalsButtonClick(nextOrPrev) {
-        this.saveGoals();
+        const saveNow = true;
+        this.saveGoals(saveNow);
 
         let nextTab= "info";
         if (nextOrPrev === "previous") {
@@ -389,7 +398,7 @@ class Onboarding extends Component {
         window.scrollTo(0, 0);
     }
 
-    saveGoals() {
+    saveGoals(shouldSaveImmediately) {
         let goals = [];
         for (let i = 0; i < this.state.goals.length; i++) {
             if (this.state.goals[i].selected) {
@@ -397,13 +406,18 @@ class Onboarding extends Component {
             }
         }
 
-        this.props.updateGoals(this.props.currentUser, goals);
+        if (shouldSaveImmediately) {
+            this.props.updateAllOnboarding(this.props.currentUser._id, this.props.currentUser.verificationToken, undefined, goals, undefined);
+        } else {
+            return goals;
+        }
     }
 
 
     // INFO
     handleInfoBackButtonClick() {
-        this.saveInfo();
+        const saveNow = true;
+        this.saveInfo(saveNow);
         this.setState({
             ...this.state,
             tabValue: "goals"
@@ -427,7 +441,7 @@ class Onboarding extends Component {
         window.scrollTo(0, 0);
     }
 
-    saveInfo() {
+    saveInfo(shouldSaveImmediately) {
         const state = this.state;
 
         const inSchool = state.inSchool;
@@ -449,10 +463,16 @@ class Onboarding extends Component {
 
         const birthDate = this.state.birthDate;
 
-        this.props.updateInfo(this.props.currentUser, {
+        const updatedInfo = {
             location, birthDate, desiredJobs, title,
             bio, links, willRelocateTo, education, inSchool
-        });
+        };
+
+        if (shouldSaveImmediately) {
+            this.props.updateAllOnboarding(this.props.currentUser._id, this.props.currentUser.verificationToken, undefined, undefined, updatedInfo);
+        } else {
+            return updatedInfo;
+        }
     }
 
     addEducationArea() {
@@ -543,9 +563,13 @@ class Onboarding extends Component {
 
     // save everything from all onboarding pages
     saveAllInfo() {
-        this.saveInterests();
-        this.saveGoals();
-        this.saveInfo();
+        // we want to save later
+        const saveLater = false;
+        const interests = this.saveInterests(saveLater);
+        const goals = this.saveGoals(saveLater);
+        const info = this.saveInfo(saveLater);
+
+        this.props.updateAllOnboarding(this.props.currentUser._id, this.props.currentUser.verificationToken, interests, goals, info);
     }
 
     render() {
@@ -1055,9 +1079,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        updateInfo,
-        updateGoals,
-        updateInterests,
+        updateAllOnboarding,
         startOnboarding,
         endOnboarding,
         closeNotification

@@ -27,8 +27,12 @@ import Onboarding from './components/pages/onboarding';
 import Error404 from './components/pages/error404';
 import Email from './components/pages/email';
 import Unsubscribe from './components/pages/unsubscribe';
+import ReferralCode from './components/pages/referralCode';
 import Admin from './components/pages/admin';
 import AdminUserView from './components/pages/adminUserView';
+import PrivacyPolicy from './components/policies/privacyPolicy';
+import TermsOfUse from './components/policies/termsOfUse';
+import AffiliateAgreement from './components/policies/affiliateAgreement';
 import ReactGA from 'react-ga';
 ReactGA.initialize(credentials.googleAnalyticsTrackingNumber);
 
@@ -58,6 +62,10 @@ const routes = (
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} />
         <Route path="adminUserView" component={AuthenticatedComponent} page={<AdminUserView/>} />
         <Route path="unsubscribe" component={Unsubscribe} />
+        <Route path="referral" component={ReferralCode} />
+        <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
+        <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
+        <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
         <Route path='*' component={Error404} />
     </Route>
   </Router>

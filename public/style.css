@@ -1967,6 +1967,11 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     margin: 4px 10px 0 0;
 }
 
+.centeredElement {
+    width: 100%;
+    text-align: center;
+}
+
 
 
 .inlineBlock { display: inline-block; }
@@ -2060,6 +2065,17 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     margin-top: -34px;
 }
 
+.sliderOnSelect {
+    width: 200px;
+    display: inline-block;
+    float: right;
+    margin: -30px 8% 0px 0px;
+}
+.textAreaOnSelect {
+    width: 90%;
+    margin: 0px 5%;
+}
+
 .code {
     text-align: left;
     background-color: #eaeaea;
@@ -2070,6 +2086,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 .maxWidth350px { max-width: 350px; }
 
 .width40px { width: 40px; }
+
+.leftAlign { text-align: left; }
+.rightAlign { text-align: right; }
 
 .font60px { font-size: 60px; }
 .font48px { font-size: 48px; }
@@ -2205,7 +2224,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         transition: visibility 0s .5s, opacity .5s linear;
     }
     .boxStyle {
-        display: none !important;
+        display: inline-block;
+        position: relative;
+        margin: -80px 0 50px;
     }
     .dropDownSettings {
         display: block !important;
@@ -2753,6 +2774,10 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         min-height: 450px;
     }
 
+    .boxStyle {
+        margin: 0px 0 50px;
+    }
+
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
     .forBusinessLine {
         height: 516px;
@@ -3048,6 +3073,13 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     #pathwayMoneyIcon { height: 40px; }
     #pathwayHatIcon { height: 32px; }
     .pathwayDescriptionAndSalaryIcon { padding-right: 10px; }
+
+    .sliderOnSelect {
+        width: 60%;
+        display: inline-block;
+        float: right;
+        margin: -30px 20% 0px;
+    }
 }
 
 @media only screen and (min-width: 401px) {
@@ -3204,3 +3236,5 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 
     .homepageSeparator { transform: scale(2.5, .02); }
 }
+
+.noStyle {}

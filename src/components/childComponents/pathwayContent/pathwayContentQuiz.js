@@ -8,6 +8,7 @@ import PathwayContentTwoOptionsQuestion from './pathwayContentTwoOptionsQuestion
 import PathwayContentMultiSelectQuestion from './pathwayContentMultiSelectQuestion';
 import PathwayContentDatePickerQuestion from './pathwayContentDatePickerQuestion';
 import PathwayContentFreeResponseQuestion from './pathwayContentFreeResponseQuestion';
+import FreeResponseAndSliderOnSelect from './freeResponseAndSliderOnSelectQuestion';
 
 class PathwayContentQuiz extends Component {
     constructor(props) {
@@ -97,6 +98,18 @@ class PathwayContentQuiz extends Component {
                             quizId={quiz._id}
                         />
                     break;
+                case "freeResponseAndSliderOnSelect":
+                    questionJsx =
+                        <FreeResponseAndSliderOnSelect
+                            question={quiz.question}
+                            answers={quiz.multiSelectAnswers}
+                            quizId={quiz._id}
+                            minSliderValue={quiz.minSliderValue}
+                            maxSliderValue={quiz.maxSliderValue}
+                            minSliderText={quiz.minSliderText}
+                            maxSliderText={quiz.maxSliderText}
+                        />
+                    break;
                 case "freeResponse":
                     questionJsx =
                         <PathwayContentFreeResponseQuestion
@@ -118,7 +131,7 @@ class PathwayContentQuiz extends Component {
 
         return (
             <div className={this.props.className} style={{...this.props.style}}>
-                <div className="center" style={{padding: "10px 0"}}>
+                <div style={{padding: "10px 0"}}>
                     { questionJsx }
                 </div>
             </div>

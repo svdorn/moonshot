@@ -4,13 +4,25 @@ import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateUser} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper} from 'material-ui';
-import {Field, reduxForm} from 'redux-form';
+import {Field, reduxForm, change} from 'redux-form';
 
 const styles = {
     floatingLabelStyle: {
         color: '#00c3ff',
     },
 };
+
+const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        floatingLabelStyle={styles.floatingLabelStyle}
+        {...input}
+        {...custom}
+        type="password"
+    />
+);
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
@@ -28,6 +40,7 @@ const validate = values => {
     const requiredFields = [
         'name',
         'email',
+        'password'
     ];
     requiredFields.forEach(field => {
         if (!values[field]) {
@@ -51,6 +64,7 @@ class Account extends Component {
         const requiredFields = [
             'name',
             'email',
+            'password'
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -65,10 +79,15 @@ class Account extends Component {
         const user = {
             name: this.props.formData.settings.values.name,
             email: this.props.formData.settings.values.email,
-            _id: this.props.currentUser._id,
+            password: this.props.formData.settings.values.password,
+            _id: this.props.currentUser._id
         };
 
         this.props.updateUser(user);
+
+        // reset password field
+        this.props.change("password", "");
+        this.props.untouch("password");
     }
 
     //name, email, password, confirm password, signup button
@@ -96,11 +115,21 @@ class Account extends Component {
                                 className="lightBlueInputText"
                             /></div>
                         <br/>
+                        <div className="inputContainer">
+                            <div className="fieldWhiteSpace"/>
+                            <Field
+                                name="password"
+                                component={renderPasswordField}
+                                label="Password"
+                                className="lightBlueInputText"
+                                autoComplete="new-password"
+                            /></div>
+                        <br/>
                         <button
                             type="submit"
                             className="formSubmitButton font24px font16pxUnder600"
                         >
-                            Update User
+                            Update Settings
                         </button>
                     </form>
                 </div>
@@ -112,6 +141,7 @@ class Account extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateUser,
+        change
     }, dispatch);
 }
 

@@ -30,7 +30,30 @@ class Pathway extends Component {
     }
 
     componentDidMount() {
-        const pathwayUrl = this.props.location.search.substr(1);
+        let pathwayUrl = "";
+        // try to get the pathwayUrl from the location query
+        try {
+            pathwayUrl = this.props.location.query.pathway;
+            if (!pathwayUrl) {
+                throw "pathway url isn't in query form";
+            }
+        } catch (e) {
+            // temporary fix, try to get the pathwayUrl from the location url without a query
+            try {
+                let urlSearch = this.props.location.search;
+                let nextQueryIndex = urlSearch.indexOf("&");
+                if (nextQueryIndex > 1) {
+                    pathwayUrl = urlSearch.substr(1, nextQueryIndex - 1);
+                } else {
+                    pathwayUrl = urlSearch.substr(1);
+                }
+            } catch (e2) {
+                return;
+            }
+        }
+
+        // set the pathway url to the one in the url's query
+        // let pathwayUrl = this.props.location.query.pathway;
 
         axios.get("/api/pathwayByPathwayUrlNoContent", {
             params: {
@@ -43,13 +66,16 @@ class Pathway extends Component {
     }
 
     handleClick() {
-        // Check if it is a specialized pathway
-        if (this.state.pathway.url === "Northwestern-Mutual-Sales") {
+        // TODO: CHANGE THIS SO THAT ANY PATHWAY CAN BE SIGNED UP FOR
+        // Check if it is a pathway that is currently available
+        if (this.state.pathway.url === "Northwestern-Mutual-Sales" || this.state.pathway.url === "Singlewire-QA-Analyst") {
             if (this.props.currentUser) {
                 const user = {
                     _id: this.props.currentUser._id,
                     pathwayId: this.state.pathway._id,
+                    verificationToken: this.props.currentUser.verificationToken,
                     pathwayUrl: this.state.pathway.url,
+                    pathwayName: this.state.pathway.name
                 };
                 this.props.addPathway(user);
             } else {
@@ -57,7 +83,7 @@ class Pathway extends Component {
                     pathname: "/signup",
                     query: {
                         pathway: this.state.pathway._id,
-                        redirect: "/pathwayContent?" + this.state.pathway.url
+                        redirect: "/pathwayContent?pathway=" + this.state.pathway.url
                     }
                 });
                 window.scrollTo(0, 0);
@@ -77,7 +103,7 @@ class Pathway extends Component {
                 pathname: "/signup",
                 query: {
                     pathway: this.state.pathway._id,
-                    redirect: "/pathwayContent?" + this.state.pathway.url
+                    redirect: "/pathwayContent?pathway=" + this.state.pathway.url
                 }
             });
         }
@@ -245,8 +271,11 @@ class Pathway extends Component {
                                 {step.name}
                             </div>
                             <div className="font14px font12pxUnder700 font10pxUnder500 halfWidthStepDesc">
-                                {step.description}
-                                This is the description of the step. It will eventually describe the step.
+                                {step.description ?
+                                    step.description
+                                    :
+                                    "This is the description of the step. It will eventually describe the step."
+                                }
                             </div>
                         </div>
                         <div className="stepSeparatorLeft"/>

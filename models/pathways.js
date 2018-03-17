@@ -41,6 +41,7 @@ var pathwaysSchema = mongoose.Schema({
   tags: [ String ],
   industry: { averageSalary: String, title: String },
   extraInfo: String,
+  referralQuestionId: mongoose.Schema.Types.ObjectId,
   projects: [{
       name: String,
       description: String,
@@ -50,6 +51,7 @@ var pathwaysSchema = mongoose.Schema({
   steps: [{
       name: String,
       order: Number,
+      description: String,
       subSteps: [{
           order: Number,
           superStepOrder: Number,

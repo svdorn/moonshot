@@ -49,14 +49,23 @@ class PathwayContentCompletePathway extends Component {
 
 
     handleClick() {
+        const pathway = this.props.pathway;
+        const currentUser = this.props.currentUser;
+        let referralCode = undefined;
+        if (currentUser.answers[pathway.referralQuestionId]) {
+            referralCode = currentUser.answers[pathway.referralQuestionId].value;
+        }
+
         const user = {
-            userName: this.props.currentUser.name,
-            pathwayName: this.props.pathway.name,
-            pathwayId: this.props.pathway._id,
-            _id: this.props.currentUser._id,
-            verificationToken: this.props.currentUser.verificationToken,
+            userName: currentUser.name,
+            pathwayName: pathway.name,
+            pathwayId: pathway._id,
+            _id: currentUser._id,
+            verificationToken: currentUser.verificationToken,
             email: this.state.email,
-            phoneNumber: this.state.phoneNumber
+            phoneNumber: this.state.phoneNumber,
+            skills: pathway.skills,
+            referralCode: referralCode
         };
 
         this.props.completePathway(user);

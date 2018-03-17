@@ -4,6 +4,9 @@ var mongoose = require('mongoose');
 var articlesSchema = mongoose.Schema({
     link: String,
     name: String,
+    defaultDescription: Boolean,
+    // class name for the description's div
+    descriptionClassName: String,
     description: [{
         // the type of this part of the description, e.g. "ul" or "ol" or "text" or "image"
         partType: String,

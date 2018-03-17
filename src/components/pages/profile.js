@@ -24,10 +24,15 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        const profileUrl = this.props.location.search.substr(1);
+        // if trying to look at someone else's profile, there will be a query
+        let profileUrl = undefined;
+        if (this.props.location.query) {
+            profileUrl = this.props.location.query.user;
+        }
+
         const currentUser = this.props.currentUser;
         // looking at your own profile
-        if ((profileUrl == "") || (currentUser && currentUser.profileUrl == profileUrl)) {
+        if ((!profileUrl) || (currentUser && currentUser.profileUrl == profileUrl)) {
             this.setState({
                 ...this.state,
                 onOwnProfile: true,
@@ -98,7 +103,7 @@ class Profile extends Component {
 
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathwayContent?' + pathway.url)}>
+                                    onClick={() => self.goTo('/pathwayContent?pathway=' + pathway.url)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
@@ -147,7 +152,7 @@ class Profile extends Component {
 
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
-                                    onClick={() => self.goTo('/pathway?' + pathway.url)}>
+                                    onClick={() => self.goTo('/pathway?pathway=' + pathway.url)}>
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
@@ -434,7 +439,7 @@ class Profile extends Component {
                         <div>
                             {this.state.userPathwayPreviews ?
                                 <div>
-                                    <div className="orangeToYellowGradient">
+                                    <div className="orangeToYellowGradient" zDepth={3}>
                                         <div className="headerDiv"/>
                                         <div className="profileInfoSkills">
                                             <div className="center">
@@ -508,7 +513,8 @@ class Profile extends Component {
                                                                     <ul className="horizCenteredList pathwayPrevList"
                                                                         style={style.pathwayPreviewUl}>
                                                                         <li onClick={() => this.goTo('/discover')}>
-                                                                            <PathwayPreview type="addOne" variation="4"/>
+                                                                            <PathwayPreview type="addOne"
+                                                                                            variation="4"/>
                                                                         </li>
                                                                     </ul>
                                                                 }
@@ -521,7 +527,8 @@ class Profile extends Component {
                                                                         {this.state.userCompletedPathwayPreviews}
                                                                     </ul>
                                                                     :
-                                                                    <h1 className="center font40px font24pxUnder500">None</h1>
+                                                                    <h1 className="center font40px font24pxUnder500">
+                                                                        None</h1>
                                                                 }
                                                             </Tab>
                                                         </Tabs>
@@ -566,6 +573,7 @@ class Profile extends Component {
                                             </Tabs>
                                         </div>
                                     </div>
+
                                 </div>
                                 :
                                 <div>

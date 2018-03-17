@@ -1,6 +1,7 @@
 "use strict"
 import axios from 'axios';
 import { browserHistory } from 'react-router'
+import { reset } from 'redux-form';
 
 // GET USER FROM SESSION
 export function getUserFromSession(callback) {
@@ -29,7 +30,7 @@ export function getUserFromSession(callback) {
     };
 }
 
-export function login(user, saveSession, navigateBackUrl, pathwayId) {
+export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
     return function(dispatch) {
         axios.post("/api/login", {user, saveSession})
             .then(function(response) {
@@ -53,7 +54,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId) {
                 if (shouldAddPathwayToUser) {
                     // if the user doesn't already have this pathway, give it
                     // to them, then redirect to the pathway content page
-                    axios.post("/api/user/addPathway", {_id: returnedUser._id, pathwayId: pathwayId})
+                    axios.post("/api/user/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayName})
                     .then(function(response) {
                         dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                         // navigateBackUrl should be equal to the url for the pathway
@@ -189,14 +190,13 @@ export function forgotPassword(user) {
 // UPDATE A USER
 export function updateUser(user) {
     return function(dispatch) {
-
         // update user on the database
-        axios.put("/api/user/" + user._id, user)
+        axios.post("/api/user/changeSettings", user)
             .then(function(response) {
                 dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}})
             })
             .catch(function(err) {
-                dispatch({type:"UPDATE_USER_REJECTED", notification: {message: "Error updating settings", type: "errorHeader"}})
+                dispatch({type:"UPDATE_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
             });
     }
 }
@@ -204,12 +204,14 @@ export function updateUser(user) {
 export function changePassword(user) {
     return function(dispatch) {
 
-        axios.put('/api/user/changepassword/' +user._id, user)
+        axios.post('/api/user/changepassword', user)
             .then(function(response) {
                 dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
+                // reset the form
+                dispatch(reset("changePassword"));
             })
             .catch(function(err){
-                dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: "Error changing password", type: "errorHeader"}})
+                dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: err.response.data, type: "errorHeader"}})
             });
     }
 }
@@ -228,7 +230,7 @@ export function verifyEmail(token) {
                 }
             })
             .catch(function(err) {
-                dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: "Error verifying email", type: "errorHeader"}});
+                dispatch({type: "VERIFY_EMAIL_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
     }
 }
@@ -239,13 +241,14 @@ export function changePasswordForgot(user) {
             .then(function(response) {
                 dispatch({type:"LOGIN", notification:{message:response.data, type:"infoHeader"}});
                 let nextUrl = "/";
+                let returnedUser = response.data;
                 if (!returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";
                 }
                 browserHistory.push(nextUrl);
             })
             .catch(function(err) {
-                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: "Error changing password", type: "errorHeader"}})
+                dispatch({type:"CHANGE_PASS_FORGOT_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
             })
     }
 }
@@ -283,6 +286,7 @@ export function completePathway(user){
             })
     }
 }
+
 
 // Send an email when form filled out on unsubscribe page
 export function unsubscribe(user, showNotification){
@@ -352,7 +356,7 @@ export function addPathway(user) {
             .then(function(response) {
                 dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                 window.scrollTo(0, 0);
-                browserHistory.push("/pathwayContent?" + user.pathwayUrl);
+                browserHistory.push("/pathwayContent?pathway=" + user.pathwayUrl);
             })
             .catch(function(err) {
                 console.log(err);
@@ -410,61 +414,26 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
         })
         .catch(function(error) {
             console.log("ERROR: ", error);
+            console.log(error.response.data)
         });
     }
 }
 
-export function updateInterests(user, interests) {
+
+export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
     return function(dispatch) {
-        axios.post("/api/updateInterests", {
-            params: {
-                userId: user._id,
-                verificationToken: user.verificationToken,
-                interests: interests
-            }
+        axios.post("/api/updateAllOnboarding", {
+            params: { userId, verificationToken, interests, goals, info }
         })
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
-            })
-            .catch(function(err) {
-            });
+        .then(function(response) {
+            dispatch({type: "UPDATE_USER_ONBOARDING", payload: response.data});
+        })
+        .catch(function(err) {
+            console.log("Error updating onboarding info: ", err);
+        })
     }
 }
 
-export function updateGoals(user, goals) {
-    return function(dispatch) {
-        axios.post("/api/updateGoals", {
-            params: {
-                userId: user._id,
-                verificationToken: user.verificationToken,
-                goals
-            }
-        })
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER_ONBOARDING", payload:response.data});
-            })
-            .catch(function(err) {
-            });
-    }
-}
-
-export function updateInfo(user, info) {
-    return function(dispatch) {
-        axios.post("/api/updateInfo", {
-            params: {
-                userId: user._id,
-                verificationToken: user.verificationToken,
-                info
-            }
-        })
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER_ONBOARDING", payload: response.data});
-            })
-            .catch(function(err) {
-                console.log(err);
-            });
-    }
-}
 
 export function startOnboarding(){
     return function(dispatch) {
@@ -476,12 +445,18 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
     return function(dispatch) {
         if (markOnboardingComplete) {
             axios.post("/api/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
+            .then(function(response) {
+                dispatch({type: "END_ONBOARDING", user: response.data});
+            })
             .catch(function(err) {
                 // onboarding setting not able to be turned off for some reason
-                console.log("onboarding mark complete error: ", err)
+                console.log("onboarding mark complete error: ", err);
+                dispatch({type: "END_ONBOARDING_REJECTED"});
             })
+        } else {
+            dispatch({type: "END_ONBOARDING"});
         }
-        dispatch({type: "END_ONBOARDING"});
+
     }
 }
 

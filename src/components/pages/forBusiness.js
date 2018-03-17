@@ -547,7 +547,7 @@ class ForBusiness extends Component {
                                     <div className="br"><br/></div>
                                     <div className="forBusinessBoxText font14px font12pxUnder900">
                                     3% to 5% for full and part-time hires.<br/>
-                                    8% to 10% for interns or co-ops.<br/>
+                                    13% to 15% for interns or co-ops.<br/>
                                     Pay only after he or she accepts your offer.
                                     </div>
                                 </div>

@@ -32,6 +32,20 @@ mongoose.connect(dbConnectLink);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
+
+
+// db models
+var Users = require('./models/users.js');
+var Pathways = require('./models/pathways.js');
+var Articles = require('./models/articles.js');
+var Info = require('./models/info.js');
+var Videos = require('./models/videos.js');
+var Quizzes = require('./models/quizzes.js');
+var Links = require('./models/links.js');
+var Emailaddresses = require('./models/emailaddresses.js');
+var Referrals = require('./models/referrals.js');
+
+
 // --->>> SET UP SESSIONS <<<---
 app.use(session({
     secret: credentials.secretString,
@@ -41,14 +55,13 @@ app.use(session({
     resave: false, // session only saved back to the session store if session was modified,
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
-        // TODO uncomment this when pushing to aws less frequently.
-        // secure being true makes cookies only save when on https so it'll screw up localhost stuff
-        //secure: true // only make the cookie if accessing via https
-        secure: false // save the cookie even if not on https
+        // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
+        secure: !!process.env.NODE_ENV // only make the cookie if accessing via https
     },
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
+
 
 app.post('/signOut', function (req, res) {
     req.session.userId = undefined;
@@ -105,14 +118,7 @@ app.get('/userSession', function (req, res) {
 
 // --->>> END SESSION SET UP <<<---
 
-var Users = require('./models/users.js');
-var Pathways = require('./models/pathways.js');
-var Articles = require('./models/articles.js');
-var Info = require('./models/info.js');
-var Videos = require('./models/videos.js');
-var Quizzes = require('./models/quizzes.js');
-var Links = require('./models/links.js');
-var Emailaddresses = require('./models/emailaddresses.js');
+
 
 
 // --->>> EXAMPLE PATHWAY CREATION <<<---
@@ -211,11 +217,53 @@ const sanitizeOptions = {
 }
 
 
+// print all users from a specific pathway
+// nwm: "5a80b3cf734d1d0d42e9fcad"
+// sw: "5a88b4b8734d1d041bb6b386"
+
+// printUsersFromPathway("5a88b4b8734d1d041bb6b386");
+
+function printUsersFromPathway(pathwayIdToCheck) {
+    const pathwayUsersQuery = {
+        $or: [
+            {
+                pathways: {
+                    $elemMatch: {
+                        pathwayId: pathwayIdToCheck
+                    }
+                }
+            },
+            {
+                completedPathways: {
+                    $elemMatch: {
+                        pathwayId: pathwayIdToCheck
+                    }
+                }
+            }
+        ]
+    };
+    Users.find(pathwayUsersQuery, function(err, users) {
+        console.log("err is: ", err);
+
+        users.forEach(function(user) {
+            let userPath = user.pathways.find(function(path) {
+                return path.pathwayId == pathwayIdToCheck;
+            });
+            let currentStep = userPath ? userPath.currentStep : "completed";
+
+            const ourEmails = ["ameyer24@wisc.edu", "austin.thomas.meyer@gmail.com", "frizzkitten@gmail.com", "svdorn@wisc.edu", "treige@wisc.edu", "jye39@wisc.edu", "stevedorn9@gmail.com", "kyle.treige@gmail.com"];
+            if (!ourEmails.includes(user.email)) {
+                console.log("\n\nname: ", user.name, "\nemail: ", user.email, "\ncurrent step: ", currentStep);
+            }
+        })
+    })
+}
+
+
 // update all users with a specific thing, used if something is changed about
 // the user model
 // Users.find({}, function(err, users) {
 //     console.log("err is: ", err);
-//     console.log("\n\nusers are: ", users);
 //
 //     for (let userIdx = 0; userIdx < users.length; userIdx++) {
 //         let user = users[userIdx];
@@ -226,11 +274,11 @@ const sanitizeOptions = {
 //     }
 // })
 
+
+
 //----->> POST USER <<------
 app.post('/user', function (req, res) {
-    var user = req.body[0];
-
-    user = sanitize(user);
+    let user = sanitize(req.body[0]);
 
     // hash the user's password
     const saltRounds = 10;
@@ -257,20 +305,30 @@ app.post('/user', function (req, res) {
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
                         user.admin = false;
                         user.agreedToTerms = true;
+                        let addedPathway = false;
 
                         // add pathway to user's My Pathways if they went from
                         // a landing page.
-                        // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY
-                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
+                        // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY OR SINGLEWIRE PATHWAY
+                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386") {
                             user.pathways = [{
-                                pathwayId: "5a80b3cf734d1d0d42e9fcad",
+                                pathwayId: user.pathwayId,
                                 currentStep: {
                                     subStep: 1,
                                     step: 1
                                 }
                             }];
-                        } else {
+                            addedPathway = true;
+                        }
+                        else {
                             user.pathwayId = undefined;
+                        }
+
+                        user.dateSignedUp = new Date();
+                        // make sure referral code is a string, if not set it
+                        // to undefined (will happen if there is no referral code as well)
+                        if (typeof user.signUpReferralCode !== "string") {
+                            user.signUpReferralCode = undefined;
                         }
 
                         // store the user in the db
@@ -286,10 +344,114 @@ app.post('/user', function (req, res) {
                                 }
                             })
 
+                            if (user.signUpReferralCode) {
+                                Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
+                                    if (referralErr) {
+                                        console.log("Error finding referrer for new sign up: ", referralErr);
+                                    } else if (!referrer) {
+                                        console.log("Invalid referral code used: ", user.signUpReferralCode);
+                                    } else {
+                                        referrer.referredUsers.push({
+                                            name: newUser.name,
+                                            email: newUser.email,
+                                            _id: newUser._id
+                                        });
+                                        referrer.save(function(referrerSaveErr, newReferrer) {
+                                            if (referrerSaveErr) {
+                                                console.log("Error saving referrer: ", referrerSaveErr);
+                                            }
+                                        });
+                                    }
+                                });
+                            }
+
+                            try {
+                                // send email to everyone if there's a new sign up (if in production mode)
+                                if (process.env.NODE_ENV) {
+                                    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+                                    let subject = 'New Sign Up';
+                                    let additionalText = '';
+                                    if (addedPathway) {
+                                        let pathName = "Singlewire QA";
+                                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
+                                            pathName = "Northwestern Mutual";
+                                        }
+                                        additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
+                                    }
+                                    let content =
+                                        '<div>'
+                                        +   '<p>New user signed up.</p>'
+                                        +   '<p>Name: ' + newUser.name + '</p>'
+                                        +   '<p>email: ' + newUser.email + '</p>'
+                                        +   additionalText
+                                        + '</div>';
+
+                                    const sendFrom = "Moonshot Learning";
+                                    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
+                                        if (!success) {
+                                            console.log("Error sending sign up alert email");
+                                        }
+                                    })
+                                }
+                            } catch (e) {
+                                console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
+                            }
+
                             // no reason to return the user with tokens because
                             // they will have to verify themselves before they
                             // can do anything anyway
                             res.json(safeUser(newUser));
+
+                            // send an email to the user one day after signup
+                            try {
+                                const ONE_DAY = 1000 * 60 * 60 * 24;
+
+                                let moonshotUrl = 'https://www.moonshotlearning.org/';
+                                // if we are in development, links are to localhost
+                                if (!process.env.NODE_ENV) {
+                                    moonshotUrl = 'http://localhost:8081/';
+                                }
+
+                                let firstName = getFirstName(newUser.name);
+                                // add in a space before the name, if the user has a name
+                                if (firstName != "") {
+                                    firstName = " " + firstName;
+                                }
+
+                                setTimeout(function() {
+                                    let dayAfterRecipient = [newUser.email];
+                                    let dayAfterSubject = 'Moonshot Fights For You';
+                                    let dayAfterContent =
+                                        "<div style='font-size:15px;text-align:left;font-family: Arial, sans-serif;color:#000000'>"
+                                            + "<p>Hi" + firstName + ",</p>"
+                                            + "<p>My name is Kyle. I'm the co-founder and CEO at Moonshot. I'm honored that you trusted us in your career journey. If you need anything at all, please let me know.</p>"
+                                            + "<p>I individually fight for every Moonshot candidate — Mock interviews, inside tips that our employers are looking for, anything to help you start the career of your dreams.</p>"
+                                            + "<p>Shoot me a message. I'm all ears.</p>"
+                                            + "<p>Yours truly,<br/>Kyle</p>"
+                                            + "<div style='font-size:10px; text-align:left; color:#000000; margin-bottom:50px;'>"
+                                                + "----------------------------------<br/>"
+                                                + "Kyle Treige, Co-Founder & CEO<br/>"
+                                                + "<a href='https://moonshotlearning.org/'>Moonshot</a><br/>"
+                                                + "608-438-4478<br/>"
+                                            + "</div>"
+                                            + "<div style='font-size:10px; text-align:left; color:#C8C8C8; margin-bottom:30px;'>"
+                                                + "<i>Moonshot Learning, Inc.<br/><a href='' style='text-decoration:none;color:#D8D8D8;cursor:default'>1261 Meadow Sweet Dr, Madison, WI 53719</a>.<br/>"
+                                                + '<a style="color:#C8C8C8;" href="' + moonshotUrl + 'unsubscribe?email=' + newUser.email + '">Opt-out of future messages.</a></i>'
+                                            + "</div>"
+                                        + "</div>";
+
+                                    const dayAfterSendFrom = "Kyle Treige";
+                                    sendEmail(dayAfterRecipient, dayAfterSubject, dayAfterContent, dayAfterSendFrom, function (success, msg) {
+                                        if (success) {
+                                            console.log("sent day-after email");
+                                        } else {
+                                            console.log("error sending day-after email");
+                                        }
+                                    })
+                                }, ONE_DAY);
+                            } catch (e) {
+                                console.log("Not able to send day-after email to ", newUser.name, "with id: ", newUser._id);
+                            }
                         })
                     })
                 } else {
@@ -299,6 +461,18 @@ app.post('/user', function (req, res) {
         });
     });
 });
+
+
+function getFirstName(name) {
+    // split by spaces, get array of non-spaced names, return the first one
+    let firstName = "";
+    try {
+        firstName = name.split(' ')[0];
+    } catch (e) {
+        firstName = "";
+    }
+    return firstName;
+}
 
 
 // remove any empty pieces from an object or array all the way down
@@ -497,7 +671,9 @@ app.post("/endOnboarding", function (req, res) {
 
     Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
         if (!err && updatedUser) {
-            res.json(true);
+            res.json(removePassword(updatedUser));
+        } else {
+            res.status(500).send("Error ending onboarding.");
         }
     });
 });
@@ -506,68 +682,81 @@ app.post("/endOnboarding", function (req, res) {
 app.post('/verifyEmail', function (req, res) {
     const token = sanitize(req.body.token);
 
+    if (!token) {
+        res.status(400).send("Url not in the right format");
+        return;
+    }
+
     var query = {emailVerificationToken: token};
     Users.findOne(query, function (err, user) {
-        if (err || user == undefined) {
-            res.status(404).send("User not found from token");
+        if (err) {
+            console.log("Error trying to find user from verification token");
+            res.status(500).send("Server error, try again later");
             return;
         }
 
-        let query = {_id: user._id}
+        if (!user) {
+            res.status(404).send("User not found from url");
+            return;
+        }
 
-        // if the field doesn't exist, $set will set a new field
-        var update = {
-            '$set': {
-                verified: true
-            },
-            '$unset': {
-                emailVerificationToken: ""
-            }
-        };
+        user.verified = true;
+        user.emailVerificationToken = undefined;
 
-        // When true returns the updated document
-        var options = {new: true};
-
-        Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
-            if (err) {
-                console.log(err);
+        user.save(function(updateErr, updatedUser) {
+            if (updateErr) {
+                console.log("Error saving user's verified status to true: ", updateErr);
+                res.status(500).send("Server error, try again later");
+                return;
             }
 
             // if the session has the user's id, can immediately log them in
             sessionUserId = sanitize(req.session.unverifiedUserId);
             req.session.unverifiedUserId = undefined;
+
+            req.session.userId = sessionUserId;
+
             req.session.save(function (err) {
                 if (err) {
-                    console.log("error")
+                    console.log("Error saving session after verifying user: ", err);
                 }
             });
+
             if (sessionUserId && sessionUserId == updatedUser._id) {
                 res.json(removePassword(updatedUser));
+                return;
             }
             // otherwise, bring the user to the login page
             else {
                 res.json("go to login");
+                return;
             }
-
         });
     });
 });
 
 // VERIFY CHANGE PASSWORD
 app.post('/user/changePasswordForgot', function (req, res) {
-    let token = sanitize(req.body.token);
+    let token = sanitize(req.body.token).toString();
     let password = sanitize(req.body.password);
 
     var query = {passwordToken: token};
     Users.findOne(query, function (err, user) {
-        if (err || user == undefined) {
-            res.status(404).send("User not found from token");
+        if (err) {
+            console.log("Error trying to find user from password token: ", err);
+            res.status(500).send("Server error, try again later");
             return;
         }
 
-        const time = Date.now() - user.time;
-        if (time > (1 * 60 * 60 * 1000)) {
+        if (!user) {
+            res.status(404).send("User not found from link");
+            return;
+        }
+
+        const currentTime = Date.now();
+        if (currentTime > user.passwordTokenExpirationTime) {
             res.status(401).send("Time ran out, try sending email again");
+            return;
         }
 
         let query = {_id: user._id};
@@ -577,13 +766,16 @@ app.post('/user/changePasswordForgot', function (req, res) {
                 // change the stored password to be the hash
                 const newPassword = hash;
                 // if the field doesn't exist, $set will set a new field
+                // can be verified because the user had to go to their email
+                // to get to this page
                 var update = {
                     '$set': {
-                        password: newPassword
+                        password: newPassword,
+                        verified: true
                     },
                     '$unset': {
                         passwordToken: "",
-                        time: '',
+                        passwordTokenExpirationTime: "",
                     }
                 };
 
@@ -593,8 +785,11 @@ app.post('/user/changePasswordForgot', function (req, res) {
                 Users.findOneAndUpdate(query, update, options, function (err, newUser) {
                     if (err) {
                         console.log(err);
+                        res.status(500).send("Error saving new password");
+                        return;
                     }
 
+                    // successfully created new password
                     res.json(removePassword(newUser));
                 });
             })
@@ -608,29 +803,36 @@ app.post('/sendVerificationEmail', function (req, res) {
     let email = sanitize(req.body.email);
     let query = {email: email};
 
+    let moonshotUrl = 'https://www.moonshotlearning.org/';
+    // if we are in development, links are to localhost
+    if (!process.env.NODE_ENV) {
+        moonshotUrl = 'http://localhost:8081/';
+    }
+
     Users.findOne(query, function (err, user) {
         let recipient = [user.email];
         let subject = 'Verify email';
         let content =
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                + '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
                     + '<div style="text-align:justify;width:80%;margin-left:10%;">'
-                    + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="https://www.moonshotlearning.org/verifyEmail?' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
+                    + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="' + moonshotUrl + 'verifyEmail?token=' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
                     + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.org</a>.</span><br/>'
                     + '</div>'
-                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?'
+                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'verifyEmail?token='
                 + user.emailVerificationToken
                 + '">VERIFY ACCOUNT</a>'
                 + '<div style="text-align:left;width:80%;margin-left:10%;">'
                     + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
                     + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
                     + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8; margin-top:20px;" href="https://www.moonshotlearning.org/unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
+                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
                     + '</div>'
                 + '</div>'
             + '</div>';
 
-        sendEmail(recipient, subject, content, function (success, msg) {
+        const sendFrom = "Moonshot Learning";
+        sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
             if (success) {
                 res.json(msg);
             } else {
@@ -683,9 +885,10 @@ app.post('/user/registerForPathway', function (req, res) {
         + "608-438-4478</p>"
         + "</div>";
 
-    sendEmail(recipient1, subject1, content1, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipient1, subject1, content1, sendFrom, function (success, msg) {
         if (success) {
-            sendEmail(recipient2, subject2, content2, function (success, msg) {
+            sendEmail(recipient2, subject2, content2, sendFrom, function (success, msg) {
                 if (success) {
                     res.json("Check your email for instructions on how to get started.");
                 } else {
@@ -732,7 +935,8 @@ app.post('/user/forBusinessEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipients, subject, content, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will notify you of your results shortly.");
         } else {
@@ -762,7 +966,8 @@ app.post("/alertLinkClicked", function(req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipients, subject, content, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json(true);
         } else {
@@ -778,83 +983,232 @@ app.post('/user/completePathway', function (req, res) {
     const successMessage = "Pathway marked complete, our team will be in contact with you shortly!";
     const errorMessage = "Error marking pathway complete, try again or contact us.";
 
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-    let subject = 'ACTION REQUIRED: Somebody completed pathway';
-    let content = "<div>"
-        + "<h3>A User has just completed this pathway:</h3>"
-        + "<p>User: "
-        + sanitize(req.body.userName)
-        + "</p>"
-        + "<p>User id: "
-        + sanitize(req.body._id)
-        + "</p>"
-        + "<p>Pathway: "
-        + sanitize(req.body.pathwayName)
-        + "</p>"
-        + "<p>Contact them with this email: "
-        + sanitize(req.body.email)
-        + "</p>"
-        + "<p>or this phone number: "
-        + sanitize(req.body.phoneNumber)
-        + "</p>"
-        + "</div>";
+    const userName = sanitize(req.body.userName);
+    const userId = sanitize(req.body._id);
+    const pathwayName = sanitize(req.body.pathwayName);
+    const email = sanitize(req.body.email);
+    const phoneNumber = sanitize(req.body.phoneNumber);
+    let referralCode = sanitize(req.body.referralCode);
+
+    // remove punctuation and spaces from referral code
+    if (referralCode) {
+        referralCode = referralCode.replace(/&amp;|&quot;|&apos;/g,"").replace(/[.,\/#!$%\^&\*;:{}'"=\-_`~()]/g,"").replace(/\s/g,"").toLowerCase();
+    }
+
+    let referralInfo = "";
+
+    let finishPathway = function() {
+        let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+        let subject = 'ACTION REQUIRED: Somebody completed pathway';
+        let content = "<div>"
+            + "<h3>A User has just completed this pathway:</h3>"
+            + "<p>User: "
+            + userName
+            + "</p>"
+            + "<p>User id: "
+            + userId
+            + "</p>"
+            + "<p>Pathway: "
+            + pathwayName
+            + "</p>"
+            + "<p>Contact them with this email: "
+            + email
+            + "</p>"
+            + "<p>or this phone number: "
+            + phoneNumber
+            + "</p>"
+            + referralInfo
+            + "</div>";
 
 
+        // mark pathway complete and change emailTo
+        const _id = sanitize(req.body._id);
+        const verificationToken = sanitize(req.body.verificationToken);
+        const pathwayId = sanitize(req.body.pathwayId);
+        const skills = sanitize(req.body.skills);
+        const query = {_id, verificationToken}
 
-    // mark pathway complete and change emailTo
-    const _id = sanitize(req.body._id);
-    const verificationToken = sanitize(req.body.verificationToken);
-    const pathwayId = sanitize(req.body.pathwayId);
-    const query = {_id, verificationToken}
-    Users.findOne(query, function (err, user) {
-        if (err) {
-            console.log("error marking pathway complete: ", err);
-        } else if (user && user != null) {
-            user.emailToContact = sanitize(req.body.email);
-            user.phoneNumber = sanitize(req.body.phoneNumber);
-            // find the user's pathway object corresponding to the pathway that was
-            // marked complete
-            const pathwayIndex = user.pathways.findIndex(function(path) {
-                return path.pathwayId.toString() == pathwayId.toString();
-            });
-            if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
-                let completedPathway = user.pathways[pathwayIndex];
-                const newPathwayObject = {
-                    pathwayId: completedPathway.pathwayId,
-                    dateAdded: completedPathway.dateAdded,
-                    dateCompleted: new Date()
-                }
-                console.log(completedPathway);
-                console.log("new pathway:");
-                console.log(newPathwayObject)
-
-                // Put pathway into completed pathways and remove it from current pathways
-                user.completedPathways.push(newPathwayObject);
-                user.pathways.splice(pathwayIndex, 1);
-            }
-
-            // save the user's new info in the db
-            user.save(function(err, updatedUser) {
-                let userToReturn = updatedUser;
-                if (err || updatedUser == null || updatedUser == undefined) {
-                    console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
-                    userToReturn = user;
-                    content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
-                }
-
-                // send an email to us saying that the user completed a pathway
-                sendEmail(recipients, subject, content, function (success, msg) {
-                    if (success) {
-                        res.json({message: successMessage, user: userToReturn});
-                    } else {
-                        res.status(500).send({message: errorMessage, user: userToReturn});
-                    }
+        Users.findOne(query, function (err, user) {
+            if (err) {
+                console.log("error marking pathway complete: ", err);
+            } else if (user && user != null) {
+                user.emailToContact = sanitize(req.body.email);
+                user.phoneNumber = sanitize(req.body.phoneNumber);
+                // find the user's pathway object corresponding to the pathway that was
+                // marked complete
+                const pathwayIndex = user.pathways.findIndex(function(path) {
+                    return path.pathwayId.toString() == pathwayId.toString();
                 });
+                // if the pathway was found in their current pathways, remove it
+                // from current pathways and add it to completed pathways
+                if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
+                    let completedPathway = user.pathways[pathwayIndex];
+                    const newPathwayObject = {
+                        pathwayId: completedPathway.pathwayId,
+                        dateAdded: completedPathway.dateAdded,
+                        dateCompleted: new Date()
+                    }
+
+                    // Put pathway into completed pathways and remove it from current pathways
+                    user.completedPathways.push(newPathwayObject);
+                    user.pathways.splice(pathwayIndex, 1);
+                }
+
+                // add the user's new skills that they gained from this
+                if (Array.isArray(skills)) {
+                    skills.forEach(function(skill) {
+                        // only add the skill if the user does not already have it
+                        const notFound = -1;
+                        if (user.skills.findIndex(function(userSkill) {
+                            return userSkill === skill;
+                        }) === notFound) {
+                            user.skills.push(skill);
+                        }
+                    });
+                }
+
+                // save the user's new info in the db
+                user.save(function(err, updatedUser) {
+                    let userToReturn = updatedUser;
+                    if (err || updatedUser == null || updatedUser == undefined) {
+                        console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
+                        userToReturn = user;
+                        content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
+                    }
+
+                    // send an email to us saying that the user completed a pathway
+                    const sendFrom = "Moonshot Learning";
+                    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
+                        if (success) {
+                            res.json({message: successMessage, user: userToReturn});
+                        } else {
+                            res.status(500).send({message: errorMessage, user: userToReturn});
+                        }
+                    });
+                });
+            }
+        });
+    }
+
+    // this gets executed before the code above, it excutes all that when it's ready
+    if (referralCode) {
+        referralInfo = "<p>Referral Code: " + referralCode + "</p>";
+
+        Referrals.findOne({referralCode}, function(error, referrer) {
+            if (error || referrer == null || (referrer.email == undefined && referrer.name == undefined)) {
+                referralInfo = referralInfo + "<p>However, no user is associated with that referral code.</p>";
+            } else {
+                referralInfo = referralInfo + "<p>Referrer's email: " + referrer.email + "</p><p>Referrer's Name: " + referrer.name + ". Make sure this isn't the same as the user who completed the pathway.</p>";
+            }
+            finishPathway();
+        });
+    } else {
+        finishPathway();
+    }
+});
+
+
+app.post('/createReferralCode', function(req, res) {
+    const name = sanitize(req.body.name);
+    // make it to lower case so that it's case insensitive
+    const email = sanitize(req.body.email).toLowerCase();
+
+    let sendReferralEmail = function(theCode) {
+        // if we're in development (on localhost) navigate to localhost
+        let moonshotUrl = "https://www.moonshotlearning.org/";
+        if (!process.env.NODE_ENV) {
+            moonshotUrl = "http://localhost:8081/";
+        }
+        const recipient = [email];
+        const subject = "Moonshot Referral Code";
+        const emailContent =
+            "<div style='color:black'>"
+            +   "<p>Hello " + name + ",</p>"
+
+            +   "<p>Thank you for signing up as a Moonshot referrer! With us, you can shape the future of the workforce and get paid to do it. Moonshot trains and evaluates college students and recent graduates in skills and positions needed by employers. We do this by creating course pathways that evaluate candidates in positions that our employer partners are hiring for. <a href='https://moonshotlearning.org/discover'>Check out all of our live Pathways</a>.</p>"
+
+            +   "<p>You will earn $300 for everyone you send our way that gets a job through the Moonshot site.</p>"
+
+            +   "<p>For you to receive credit for a Moonshot user, the user must do one of the following:</p>"
+            +   "<p>1. Input your referral code (this is your code: " + theCode + ") at the end of the Pathway when asked how he or she heard about Moonshot.</p>"
+            +   "<p>2. Sign up by coming through your unique referrer link: <br/><a href='" + moonshotUrl + "?referralCode=" + theCode + "'>" + moonshotUrl + "?referralCode=" + theCode + "</a></p>"
+
+            +   "<p>A lot of people start by sharing with friends in person and on social media. The people really on their game carry around cards to be ready for any situation. (Let me know if you want card designs to print off.)</p>"
+
+            +   "<p>I'm always excited to strategize tactics and techniques to attract candidates. Shoot me a message if you would like to brainstorm. Remember, all of your outreach must be in accordance with the Moonshot Affiliate Agreement you accepted.</p>"
+
+            +   "<p>Happy referring!</p>"
+            +   "<p>Kyle</p>"
+
+            +   "<p>-----------------------------</p>"
+            +   "<div style='font-size:12px'>Kyle Treige, Co-Founder & CEO<br/>"
+            +   "<a href='" + moonshotUrl + "'>Moonshot<br/>"
+            +   "kyle@moonshotlearning.org<br/>"
+            +   "608-438-4478</div>"
+
+            +   '<div style="font-size:10px; color:#C8C8C8; margin-top:30px; margin-bottom:30px;">'
+            +       '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+            +       '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + email + '">Opt-out of future messages.</a></i>'
+            +   '</div>'
+
+            + "</div>";
+
+
+
+            // '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+            //     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+            // + '</div>';
+
+        // send email to user who asked for a referral code with the info about the code
+        const sendFrom = "Kyle Treige";
+        sendEmail(recipient, subject, emailContent, sendFrom, function (success, msg) {
+            if (!success) {
+                console.log("Email not sent to user about referral code. Message: ", msg);
+            }
+        })
+    }
+
+    const query = {email};
+
+    Referrals.findOne(query, function(err, user) {
+        // if there was an error somewhere along the way getting the user
+        if (err) {
+            res.status(500).send("Server error, try again later.");
+            return;
+        }
+        // if this user has not already asked for a referral code
+        else if (user == null) {
+            // create the referral code randomly
+            const referralCode = crypto.randomBytes(4).toString('hex');
+            // the amount we said we'd pay the user for their friend using this code
+            const incentive = "$300";
+            const userBeingCreated = {name, email, referralCode, incentive}
+
+            // TODO: check if the referral code was already created, make a new
+            // one if so
+
+            Referrals.create(userBeingCreated, function(error, newUser) {
+                // if there was an error creating the user
+                if (error) {
+                    res.status(500).send("Server error, try again later.");
+                    return;
+                } else {
+                    sendReferralEmail(newUser.referralCode);
+                    res.json(newUser.referralCode);
+                    return;
+                }
             });
         }
+        // if the user has asked for a referral code in the past
+        else {
+            // if the user already has a referral code, give them that
+            sendReferralEmail(user.referralCode);
+            res.json(user.referralCode);
+            return;
+        }
     });
-
 });
+
 
 app.post('/user/unsubscribeEmail', function (req, res) {
 
@@ -867,7 +1221,8 @@ app.post('/user/unsubscribeEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipient, subject, content, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("You have successfully unsubscribed.");
         } else {
@@ -886,7 +1241,7 @@ app.post('/user/unsubscribeEmail', function (req, res) {
             + sanitize(req.body.email)
             + "</p>"
             + "</div>";
-        sendEmail(recipient, subject, content);
+        sendEmail(recipient, subject, content, sendFrom, function(){});
     }
 
     // add email to list of unsubscribed emails
@@ -923,7 +1278,8 @@ app.post('/user/comingSoonEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipient, subject, content, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
@@ -954,7 +1310,8 @@ app.post('/user/contactUsEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    sendEmail(recipients, subject, content, function (success, msg) {
+    const sendFrom = "Moonshot Learning";
+    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
@@ -970,35 +1327,60 @@ app.post('/forgotPassword', function (req, res) {
     let query = {email: email};
 
     const user = getUserByQuery(query, function (user) {
-        if (user == undefined) {
+        if (!user) {
+            console.log("Couldn't find user to set their password change token.");
             res.status(401).send("Cannot find user");
+            return;
         } else {
-            let recipient = [user.email];
-            let subject = 'Change Password';
+            // token that will go in the url
             const newPasswordToken = crypto.randomBytes(64).toString('hex');
-            const newTime = Date.now();
+            // password token expires in one hour (minutes * seconds * milliseconds)
+            const newTime = Date.now() + (60 * 60 * 1000);
 
-            let query2 = {_id: user._id};
-            var update = {
+            const query2 = {_id: user._id};
+            const update = {
                 '$set': {
                     passwordToken: newPasswordToken,
-                    time: newTime,
+                    passwordTokenExpirationTime: newTime,
                 }
             };
 
-            var options = {new: true};
+            const options = {new: true};
 
             Users.findOneAndUpdate(query2, update, options, function (err, foundUser) {
                 if (err) {
-                    console.log(err);
+                    console.log("Error giving user reset-password token: ", err);
+                    res.status(500).send("Server error, try again later.");
+                    return;
                 }
 
-                foundUser.password = undefined;
-                let content = 'Click this link to change your password: '
-                    + "<a href='https://www.moonshotlearning.org/changePassword?"
-                    + newPasswordToken
-                    + "'>Click me</a>";
-                sendEmail(recipient, subject, content, function (success, msg) {
+                // if we're in development (on localhost) navigate to localhost
+                let moonshotUrl = "https://www.moonshotlearning.org/";
+                if (!process.env.NODE_ENV) {
+                    moonshotUrl = "http://localhost:8081/";
+                }
+                const recipient = [user.email];
+                const subject = 'Change Password';
+
+                const content =
+                    '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+                        + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                            + '<div style="text-align:justify;width:80%;margin-left:10%;">'
+                            + "<span style='margin-bottom:20px;display:inline-block;'>Hello! We got a request to change your password. If that wasn't from you, you can ignore this email and your password will stay the same. Otherwise click here:</span><br/>"
+                            + '</div>'
+                        + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:5px 20px 20px;" href="' + moonshotUrl + 'changePassword?token='
+                        + newPasswordToken
+                        + '">Change Password</a>'
+                        + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                            + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                                + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                                + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
+                            + '</div>'
+                        + '</div>'
+                    + '</div>';
+
+                const sendFrom = "Moonshot Learning";
+                sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
                     if (success) {
                         res.json(msg);
                     } else {
@@ -1012,7 +1394,7 @@ app.post('/forgotPassword', function (req, res) {
 
 // callback needs to be a function of a success boolean and string to return;
 // takes an ARRAY of recipient emails
-function sendEmail(recipients, subject, content, callback) {
+function sendEmail(recipients, subject, content, sendFrom, callback) {
     if (recipients.length === 0) {
         callback(false, "Couldn't send email. No recipient.")
         return;
@@ -1043,6 +1425,20 @@ function sendEmail(recipients, subject, content, callback) {
             return;
         }
 
+        // the default email account to send emails from
+        let from = '"Moonshot Learning" <do-not-reply@moonshotlearning.org>';
+        let authUser = credentials.emailUsername;
+        let authPass = credentials.emailPassword;
+        if (sendFrom) {
+            if (sendFrom === "Kyle Treige") {
+                from = '"Kyle Treige" <kyle@moonshotlearning.org>';
+                authUser = credentials.kyleEmailUsername;
+                authPass = credentials.kyleEmailPassword;
+            } else {
+                from = '"' + sendFrom + '" <do-not-reply@moonshotlearning.org>';
+            }
+        }
+
         // create reusable transporter object using the default SMTP transport
         let transporter = nodemailer.createTransport({
             // host: 'smtp.ethereal.email',
@@ -1054,14 +1450,14 @@ function sendEmail(recipients, subject, content, callback) {
             // }
             service: 'gmail',
             auth: {
-                user: credentials.emailUsername,
-                pass: credentials.emailPassword
+                user: authUser,
+                pass: authPass
             }
         });
 
         // setup email data with unicode symbols
         let mailOptions = {
-            from: '"Moonshot Learning" <do-not-reply@moonshot.com>', // sender address
+            from: from, // sender address
             to: recipientList, // list of receivers
             subject: subject, // Subject line
             html: content // html body
@@ -1228,60 +1624,102 @@ app.delete('/user/:_id', function (req, res) {
 });
 
 //----->> UPDATE USER <<------
-app.put('/user/:_id', function (req, res) {
-    var user = sanitize(req.body);
+app.post('/user/changeSettings', function (req, res) {
+    const user = sanitize(req.body);
+    const password = user.password;
 
-    var query = {_id: sanitize(req.params._id)};
+    if (!user.password || !user.name || !user.email) {
+        console.log("Not all arguments provided for settings change.");
+        res.status(400).send("No fields can be empty.");
+        return;
+    }
 
-    // if the field doesn't exist, $set will set a new field
-    var update = {
-        '$set': {
-            name: user.name,
-            email: user.email
+    const userQuery = {_id: user._id}
+
+    Users.findOne(userQuery, function(findUserErr, foundUser) {
+        // if error while trying to find current user
+        if (findUserErr) {
+            console.log("Error finding user in db when trying to update settings: ", findUserErr);
+            res.status(500).send("Settings couldn't be updated. Try again later.");
+            return;
         }
-    };
 
-    // When true returns the updated document
-    var options = {new: true};
-    const findQuery = {email: user.email};
-    Users.findOne(findQuery, function (err, foundUser) {
-        if (err) {
-            console.log(err);
+        if (!foundUser) {
+            console.log("Didn't find a user with given id when trying to update settings.");
+            res.status(500).send("Settings couldn't be updated. Try again later.");
+            return;
         }
-        let bool = false;
-        if (foundUser === null) {
-            bool = true;
-        } else {
-            if (foundUser._id == user._id) {
-                bool = true;
-            } else {
-                res.status(401).send("Email is taken. Choose a different email.");
+
+        bcrypt.compare(password, foundUser.password, function (passwordError, passwordsMatch) {
+            // error comparing password to user's password, doesn't necessarily
+            // mean that the password is wrong
+            if (passwordError) {
+                console.log("Error comparing passwords when trying to update settings: ", passwordError);
+                res.status(500).send("Settings couldn't be updated. Try again later.");
+                return;
             }
-        }
-        if (bool) {
-            Users.findOneAndUpdate(query, update, options, function (err, user) {
-                if (err) {
-                    console.log(err);
+
+            // user entered wrong password
+            if (!passwordsMatch) {
+                res.status(400).send("Incorrect password");
+                return;
+            }
+
+            // see if there's another user with the new email
+            const emailQuery = {email: user.email};
+            Users.findOne(emailQuery, function(emailQueryErr, userWithEmail) {
+                // don't want two users with the same email, so in case of db search
+                // failure, return unsuccessfully
+                if (emailQueryErr) {
+                    console.log("Error trying to find a user with the same email address as the one provided by user trying to change settings: ", emailQueryErr);
+                    res.status(500).send("Settings couldn't be updated. Try again later.");
+                    return;
                 }
 
-                res.json(removePassword(user));
-            });
-        }
+                // someone else already has that email
+                if (userWithEmail && userWithEmail._id.toString() != foundUser._id.toString()) {
+                    res.status(400).send("That email address is already taken.");
+                    return;
+                }
 
-    });
+                // all is good, update the user (as long as email and name are not blank)
+                if (user.email) {
+                    foundUser.email = user.email;
+                }
+                if (user.name) {
+                    foundUser.name = user.name;
+                }
+
+                foundUser.save(function(saveErr, newUser) {
+                    // if there is an error saving the user's info
+                    if (saveErr) {
+                        console.log("Error when saving user's changed info: ", saveErr);
+                        res.status(500).send("Settings couldn't be updated. Try again later.");
+                        return;
+                    }
+
+                    // settings change successful
+                    res.json(newUser);
+                })
+            });
+        });
+    })
 });
 
+
 //----->> ADD PATHWAY <<------
-// CURRENTLY ONLY ALLOWS NWM PATHWAY TO BE ADDED
+// CURRENTLY ONLY ALLOWS NWM AND SINGLEWIRE PATHWAYS TO BE ADDED
 app.post("/user/addPathway", function (req, res) {
     const _id = sanitize(req.body._id);
+    const verificationToken = sanitize(req.body.verificationToken);
     const pathwayId = sanitize(req.body.pathwayId);
+    const pathwayName = sanitize(req.body.pathwayName);
 
 
-    if (_id && pathwayId) {
+    if (_id && pathwayId && verificationToken) {
         // TODO: REMOVE THIS, CHANGE HOW THIS FUNCTION WORKS ONCE WE START
-        // ADDING PATHWAYS BESIDES NWM
-        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad") {
+        // ADDING PATHWAYS BESIDES NWM AND SINGLEWIRE
+        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad" && pathwayId !== "5a88b4b8734d1d041bb6b386") {
             res.status(403).send("You cannot currently sign up for that pathway.");
             return;
         }
@@ -1290,15 +1728,16 @@ app.post("/user/addPathway", function (req, res) {
         // When true returns the updated document
         Users.findById(_id, function (err, user) {
             if (err) {
-                console.log(err);
+                console.log("Error finding user by id when trying to add a pathway: ", err);
+                res.status(500).send("Server error, try again later.");
+                return;
             }
 
-//            for (let i = 0; i < interests.length; i++) {
-//                 // only add the interest if the user didn't already have it
-//                 if (user.info.interests.indexOf(interests[i]) === -1) {
-//                     user.info.interests.push(interests[i]);
-//                 }
-//             }
+            if (user.verificationToken !== verificationToken) {
+                res.status(403).send("You do not have permission to add a pathway.");
+                return;
+            }
+
             for (let i = 0; i < user.pathways.length; i++) {
                 if (user.pathways[i].pathwayId == req.body.pathwayId) {
                     res.status(401).send("You can't sign up for pathway more than once");
@@ -1321,70 +1760,104 @@ app.post("/user/addPathway", function (req, res) {
             };
             user.pathways.push(pathway);
 
-            user.save(function (err, updatedUser) {
-                if (err) {
-                    res.send(false);
+            user.save(function (saveErr, updatedUser) {
+                if (saveErr) {
+                    console.log("Error saving user with new pathway: ", saveErr);
+                    res.status(500).send("Server error, try again later.");
                     return;
                 }
+
+                try {
+                    // send email to everyone to alert them of the added pathway (if in production mode)
+                    if (process.env.NODE_ENV) {
+                        let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+                        let subject = 'New Pathway Sign Up';
+                        let content =
+                            '<div>'
+                            +   '<p>A user signed up for a pathway.</p>'
+                            +   '<p>Name: ' + updatedUser.name + '</p>'
+                            +   '<p>email: ' + updatedUser.email + '</p>'
+                            +   '<p>Pathway: ' + pathwayName + '</p>'
+                            + '</div>';
+
+                        console.log("Sending email to alert us about new user sign up.");
+
+                        const sendFrom = "Moonshot Learning";
+                        sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
+                            if (!success) {
+                                console.log("Error sending sign up alert email");
+                            }
+                        })
+                    }
+                } catch (e) {
+                    console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
+                }
+
                 res.send(removePassword(updatedUser));
             });
         })
     } else {
-        res.send(false);
+        res.status(400).send("Bad request.");
+        return;
     }
 });
 
 //----->> CHANGE PASSWORD <<------
-app.put('/user/changepassword/:_id', function (req, res) {
+app.post('/user/changepassword', function (req, res) {
     var user = sanitize(req.body);
-    var query = {_id: sanitize(req.params._id)};
-
-    // sanitize user info
-    for (var prop in user) {
-        // skip loop if the property is from prototype
-        if (!user.hasOwnProperty(prop)) continue;
-        if (typeof user[prop] === "string") {
-            user[prop] = sanitizeHtml(user[prop], sanitizeOptions);
-        }
-    }
+    var query = {_id: user._id};
 
     // if the field doesn't exist, $set will set a new field
     const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(user.password, salt, function (err, hash) {
-            // change the stored password to be the hash
-            var update = {
-                $set: {
-                    password: hash
-                }
+    bcrypt.genSalt(saltRounds, function (saltErr, salt) {
+        if (saltErr) {
+            console.log("Error generating salt for resetting password: ", saltErr);
+            res.status(500).send("Server error. Could not change password.");
+            return;
+        }
+        bcrypt.hash(user.password, salt, function (hashErr, hash) {
+            // error encrypting the new password
+            if (hashErr) {
+                console.log("Error hashing user's new password when trying to reset password: ", hashErr);
+                res.status(500).send("Server error. Couldn't change password.");
+                return;
             }
-            // i think it has to be {_id: req.params._id} for the query
-            Users.findOne(query, function (err, users) {
-                if (err) {
-                    res.status(500).send("Error performing query to find user in db. ", err);
+
+            Users.findOne(query, function (dbFindErr, userFromDB) {
+                if (dbFindErr) {
+                    console.log("Error finding the user that is trying to reset their password: ", dbFindErr);
+                    res.status(500).send("Server error. Couldn't change password.");
                     return;
                 }
 
                 // CHECK IF A USER WAS FOUND
-                if (!users) {
-                    res.status(404).send("No user with that email was found.");
+                if (!userFromDB) {
+                    res.status(404).send("Server error. Couldn't change password.");
                     return;
                 }
 
-                bcrypt.compare(user.oldpass, users.password, function (passwordError, passwordsMatch) {
+                bcrypt.compare(user.oldpass, userFromDB.password, function (passwordError, passwordsMatch) {
+                    // error comparing passwords, not necessarily that the passwords don't match
                     if (passwordError) {
-                        res.status(500).send("Error logging in, try again later.");
+                        console.log("Error comparing passwords when trying to reset password: ", passwordError);
+                        res.status(500).send("Server error. Couldn't change password.");
                         return;
-                    } else if (passwordsMatch) {
-                        // When true returns the updated document
-                        var options = {new: true};
-
-                        // i think it has to be {_id: req.params._id} for the query
-                        Users.findOneAndUpdate(query, update, options, function (err, user) {
-                            if (err) {
-                                console.log(err);
+                    }
+                    // user gave the correct old password
+                    else if (passwordsMatch) {
+                        // update the user's password
+                        userFromDB.password = hash;
+                        // save the user in the db
+                        userFromDB.save(function(saveErr, newUser) {
+                            if (saveErr) {
+                                console.log("Error saving user's new password when resetting: ", saveErr);
+                                res.status(500).send("Server error. Couldn't change password.");
+                                return;
+                            } else {
+                                //successfully changed user's password
+                                res.json(removePassword(newUser));
+                                return;
                             }
-                            res.json(removePassword(user));
                         });
                     } else {
                         res.status(400).send("Old password is incorrect.");
@@ -1602,7 +2075,7 @@ function removeContentFromPathway(pathway) {
 }
 
 //----->> SEARCH PATHWAYS <<------
-app.get('/search', function (req, res) {
+app.get('/pathways/search', function (req, res) {
     const MAX_PATHWAYS_TO_RETURN = 1000;
     let query = {showToUsers: true};
 
@@ -1646,8 +2119,62 @@ app.get('/search', function (req, res) {
             } else {
                 res.json(pathways);
             }
-        })
+        });
 });
+
+
+app.get("/pathways/getAllCompaniesAndCategories", function(req, res) {
+    Pathways.find()
+    .select("sponsor.name tags")
+    .exec(function(err, pathways) {
+        if (err) {
+            console.log("Error finding pathways when getting all companies and categories.");
+            res.json({companies: [], categories: []});
+        } else if (!pathways) {
+            res.json({companies: [], categories: []});
+        } else {
+            let companies = [];
+            let categories = [];
+
+            // go through each pathway, add the sponsor name and tags to the lists
+            pathways.forEach(function(pathway) {
+                companies.push(pathway.sponsor.name);
+                categories = categories.concat(pathway.tags);
+            })
+
+            companies = removeDuplicates(companies);
+            categories = removeDuplicates(categories);
+            res.json({companies, categories})
+        }
+    });
+});
+
+
+// DOES NOT WORK FOR REMOVING DUPLICATE OBJECTS, ONLY STRINGS/INTS
+function removeDuplicates(a) {
+    // the hash object
+    let seen = {};
+    // array to be returned
+    let out = [];
+    // length of array to be checked
+    const len = a.length;
+    // position in array to be returned
+    let j = 0;
+    // go through each element in the given array
+    for(let i = 0; i < len; i++) {
+        // the item in the given array
+        const item = a[i];
+        // if seen[item] === 1, we have seen it before
+        if(seen[item] !== 1) {
+            // we haven't seen the item before, so mark it seen...
+            seen[item] = 1;
+            // ...and add it to the list to be returned
+            out[j++] = item;
+        }
+    }
+    // return the new duplicate-free array
+    return out;
+}
 
 
 app.get("/infoForAdmin", function(req, res) {
@@ -1902,108 +2429,6 @@ app.get("/infoByUserId", function (req, res) {
     }
 });
 
-// app.post("/addInterests", function(req, res) {
-//     const interests = sanitize(req.body.params.interests);
-//     const userId = sanitize(req.body.params.userId);
-//     const verificationToken = sanitize(req.body.params.verificationToken);
-//
-//     if (interests && userId) {
-//         // When true returns the updated document
-//         Users.findById(userId, function(err, user) {
-//             if (err) {
-//                 console.log(err);
-//             }
-//
-//             if (!verifyUser(user, verificationToken)) {
-//                 res.status(401).send("User does not have valid credentials to add interests.");
-//                 return;
-//             }
-//
-//             for (let i = 0; i < interests.length; i++) {
-//                 // only add the interest if the user didn't already have it
-//                 if (user.info.interests.indexOf(interests[i]) === -1) {
-//                     user.info.interests.push(interests[i]);
-//                 }
-//             }
-//
-//             user.save(function (err, updatedUser) {
-//                 if (err) {
-//                     res.send(false);
-//                 }
-//                 res.send(updatedUser);
-//             });
-//         })
-//     } else {
-//         res.send(undefined);
-//     }
-// });
-
-app.post("/updateInterests", function (req, res) {
-    const interests = sanitize(req.body.params.interests);
-    const userId = sanitize(req.body.params.userId);
-    const verificationToken = sanitize(req.body.params.verificationToken);
-
-    if (interests && userId) {
-        // When true returns the updated document
-        Users.findById(userId, function (err, user) {
-            if (err) {
-                console.log(err);
-            }
-
-            if (!verifyUser(user, verificationToken)) {
-                console.log("can't verify user");
-                res.status(401).send("User does not have valid credentials to update interests.");
-                return;
-            }
-
-            user.info.interests = interests;
-
-            user.save(function (err, updatedUser) {
-                if (err) {
-                    res.send(false);
-                }
-                res.send(removePassword(updatedUser));
-            });
-        })
-    } else {
-        res.send(undefined);
-    }
-});
-
-app.post("/updateGoals", function (req, res) {
-    const goals = sanitize(req.body.params.goals);
-    const userId = sanitize(req.body.params.userId);
-    const verificationToken = sanitize(req.body.params.verificationToken);
-
-    if (userId && goals) {
-        // When true returns the updated document
-        Users.findById(userId, function (err, user) {
-            if (err) {
-                console.log(err);
-            }
-
-            if (!verifyUser(user, verificationToken)) {
-                console.log("can't verify user");
-                res.status(401).send("User does not have valid credentials to update goals.");
-                return;
-            }
-
-            user.info.goals = goals;
-
-            user.save(function (err, updatedUser) {
-                if (err) {
-                    res.send(false);
-                }
-                res.send(removePassword(updatedUser));
-            });
-        })
-    } else {
-        res.send(undefined)
-    }
-
-
-});
-
 
 app.post("/updateAnswer", function (req, res) {
     let params, userId, verificationToken, quizId, answer;
@@ -2019,9 +2444,9 @@ app.post("/updateAnswer", function (req, res) {
         return;
     }
 
-    Users.findById(userId, function (err, user) {
-        if (err) {
-            console.log(err);
+    Users.findById(userId, function (findErr, user) {
+        if (findErr) {
+            console.log("Error finding user by id when trying to update answer: ", findErr);
             res.status(404).send("Current user not found.");
             return;
         }
@@ -2042,58 +2467,78 @@ app.post("/updateAnswer", function (req, res) {
         // so that Mongoose knows to update the answers object in the db
         user.markModified('answers');
 
-        user.save(function (err, updatedUser) {
-            if (err) {
-                res.send(false);
+        user.save(function (saveErr, updatedUser) {
+            if (saveErr) {
+                console.log("Error updating answer to a question: ", saveErr)
+                res.status(500).send("Server error, try again later.");
+                return;
             }
             res.send(removePassword(updatedUser));
         });
     })
-
 });
 
 
-app.post("/updateInfo", function (req, res) {
+app.post("/updateAllOnboarding", function (req, res) {
     const info = sanitize(req.body.params.info);
+    const goals = sanitize(req.body.params.goals);
+    const interests = sanitize(req.body.params.interests);
     const userId = sanitize(req.body.params.userId);
     const verificationToken = sanitize(req.body.params.verificationToken);
 
-    if (info && userId) {
+    if (userId && verificationToken) {
         // When true returns the updated document
-        Users.findById(userId, function (err, user) {
-            if (err) {
-                console.log("couldn't find user");
-                console.log(err);
+        Users.findById(userId, function (findErr, user) {
+            if (findErr) {
+                console.log("Error finding user when updating info during onboarding: ", findErr);
+                res.status(500).send("Server error");
+                return;
             }
 
             if (!verifyUser(user, verificationToken)) {
-                console.log("can't verify user");
+                console.log("Couldn't verify user when trying to update onboarding info.");
                 res.status(401).send("User does not have valid credentials to update info.");
                 return;
             }
 
-            const fullInfo = removeEmptyFields(info);
+            if (info) {
+                // if info exists, try to save it
+                const fullInfo = removeEmptyFields(info);
 
-            for (const prop in fullInfo) {
-                // only use properties that are not inherent to all objects
-                if (info.hasOwnProperty(prop)) {
-                    console.log("updating " + prop + " to ", fullInfo[prop]);
-                    user.info[prop] = fullInfo[prop];
+                for (const prop in fullInfo) {
+                    // only use properties that are not inherent to all objects
+                    if (info.hasOwnProperty(prop)) {
+                        console.log("updating " + prop + " to ", fullInfo[prop]);
+                        user.info[prop] = fullInfo[prop];
+                    }
                 }
             }
 
-            user.save(function (err, updatedUser) {
-                console.log("err:", err);
-                if (err) {
-                    res.send(false);
+            // if goals exist, save them
+            if (goals) {
+                user.info.goals = goals
+            }
+
+            // if interests exist, save them
+            if (interests) {
+                user.info.interests = interests;
+            }
+
+            user.save(function (saveErr, updatedUser) {
+                if (saveErr) {
+                    console.log("Error saving user information when updating info from onboarding: ", saveErr);
+                    res.status(500).send("Server error, couldn't save information.");
+                    return;
                 }
                 res.send(removePassword(updatedUser));
             });
         })
     } else {
-        res.send(undefined);
+        console.log("Didn't have info or a user id or both.")
+        res.status(403).send("Bad request.");
     }
 });
+
 
 // END APIs
 
