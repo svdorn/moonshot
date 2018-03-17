@@ -124,6 +124,27 @@ class AdminUserView extends Component {
                                             }).body;
                                         }
                                         break;
+                                    case "freeResponseAndSliderOnSelect":
+                                        let answerInterior = [<br key="initialBr" />];
+                                        let keyCounter = 0;
+                                        let selectables = question.multiSelectAnswers;
+                                        // go through each option in the question
+                                        selectables.forEach(function(selectable) {
+                                            // add the text of the selectable item
+                                            answerInterior.push(<div key={keyCounter++} style={{marginTop:"10px", display:"inline-block"}}>{selectable.body}:</div>);
+                                            // find if the item was selected
+                                            // if so, add the values of the answers
+                                            let userAnswer = answerValue.value[selectable.answerNumber]
+                                            if (userAnswer) {
+                                                answerInterior.push(<span key={keyCounter++}><br/><div style={{marginLeft:"20px"}}>Skill: {userAnswer.skill}<br/>Experience: {userAnswer.answerText}<br/></div></span>);
+                                            }
+                                            // if not, tell the user that this was not selected
+                                            else {
+                                                answerInterior.push(<span key={keyCounter++}> (not selected)<br/></span>);
+                                            }
+                                        })
+                                        answer = <span>{answerInterior}</span>
+                                        break;
                                     case "slider":
                                         answer = answerValue.value;
                                         break;
