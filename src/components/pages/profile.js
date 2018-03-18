@@ -20,7 +20,8 @@ class Profile extends Component {
             userCompletedPathwayPreviews: undefined,
             user: undefined,
             editProfile: false,
-            openImageUpload: false
+            openImageUpload: false,
+            newProfilePicture: undefined
         }
     }
 
@@ -199,11 +200,19 @@ class Profile extends Component {
     }
 
     handleOpenImageUpload = () => {
-        this.setState({openImageUpload: true});
+        if (this.state.onOwnProfile) {
+            this.setState({openImageUpload: true});
+        }
     };
     handleCloseImageUpload = () => {
         this.setState({openImageUpload: false});
     };
+
+
+    handleImageChange() {
+        console.log("input: ", this.refs.profilePictureFile.files[0]);
+    }
+
 
     render() {
         const style = {
@@ -469,7 +478,12 @@ class Profile extends Component {
                             paperClassName="dialogForSignup"
                             overlayClassName="dialogOverlay"
                         >
-                            HYELLO
+                            <input
+                                name="profilePicture"
+                                type="file"
+                                ref="profilePictureFile"
+                                onChange={this.handleImageChange.bind(this)}
+                            />
                         </Dialog>
                         <div>
                             <div>
