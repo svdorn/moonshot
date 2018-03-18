@@ -9,6 +9,9 @@ var bcrypt = require('bcrypt');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const sanitizeHtml = require('sanitize-html');
+const fileUpload = require('express-fileupload');
+const cors = require('cors');
+const fs = require('fs');
 
 
 var app = express();
@@ -18,9 +21,11 @@ var app = express();
 //app.set('view engine', 'jade');
 
 app.use(logger('dev'));
+app.use(cors());
 app.use(bodyParser.json({limit:'2mb'}));
 app.use(bodyParser.urlencoded({extended:true, limit:'2mb'}));
 app.use(cookieParser());
+app.use(fileUpload());
 // trust the first proxy encountered because we run through a proxy
 app.set('trust proxy', 1);
 
@@ -1110,10 +1115,42 @@ app.post('/user/completePathway', function (req, res) {
 
 // UPLOAD PROFILE PICTURE FOR USER
 app.post("/user/profilePicture", function(req, res) {
-    const params = sanitize(req.body);
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
 
-    console.log("params: ", params);
-    res.json("success");
+    const userQuery = { _id: userId, verificationToken };
+
+    // ran when permission verified; saves the image to the filesystem
+    const uploadFile = function() {
+        let imageFile = req.files.file;
+
+        imageFile.mv(`${__dirname}/public/images/profilePictures/${userId}.jpg`, function(err) {
+            if (err) {
+                console.log("error is: ", err);
+                res.status(500).send(err);
+                return;
+            }
+
+            res.json("success");
+        });
+    }
+
+    // when user found, check if they have permission to upload a profile picture
+    const onFoundUser = function(err, user) {
+        if (err) {
+            console.log("Error finding user when trying to upload profile picture: ", err);
+            res.status(500).send("Server error, try again later.");
+            return;
+        } else if (!user) {
+            res.status(403).send("You do not have permission to upload a profile picture.");
+            return;
+        } else {
+            uploadFile();
+        }
+    }
+
+    // find the user with the provided credentials
+    Users.find(userQuery, onFoundUser);
 });
 
 
