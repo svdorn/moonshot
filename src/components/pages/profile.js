@@ -454,8 +454,7 @@ class Profile extends Component {
             });
         }
 
-        let profilePicUploadDivClass = this.state.onOwnProfile ? "clickableNoUnderline" : "";
-        let uploadPicHoverTextClass = this.state.onOwnProfile ? "uploadPicShowOnHover" : "noDisplay";
+        let uploadPicOnHoverClass = this.state.onOwnProfile ? "secondChildDisplayBlockOnHover" : "hideSecondChild";
 
         return (
             <div className='jsxWrapper' ref='discover'>
@@ -488,14 +487,14 @@ class Profile extends Component {
                                                     </div>*/}
                                                     <div style={style.imgContainer}
                                                          onClick={this.handleOpenImageUpload}
-                                                         className={profilePicUploadDivClass}
+                                                         className={uploadPicOnHoverClass}
                                                     >
                                                         <img
                                                             src="/icons/ProfilePicture.png"
                                                             alt="Profile picture"
                                                             style={style.img}
                                                         />
-                                                        <div className={uploadPicHoverTextClass}>Upload</div>
+                                                        <div className="uploadProfilePic">Upload</div>
                                                     </div>
                                                     <div>
                                                         <div

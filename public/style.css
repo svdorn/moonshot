@@ -1973,7 +1973,8 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 }
 
 .noDisplay { display: none; }
-.uploadPicShowOnHover {
+.uploadProfilePic {
+    cursor: pointer;
     position: absolute;
     top: 0;
     width: 100%;
@@ -1981,11 +1982,11 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     background-color: rgba(100,100,100,.5);
     color: white;
     padding-top: 35px;
-    /* display: none; */
 }
-.uploadPicShowOnHover:hover {
-    display: block;
-}
+
+.secondChildDisplayBlockOnHover > div:nth-child(2) { display: none; }
+.secondChildDisplayBlockOnHover:hover > div:nth-child(2) { display: block; }
+.hideSecondChild { display: none; }
 
 
 
