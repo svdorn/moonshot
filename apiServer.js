@@ -1123,7 +1123,20 @@ app.post("/user/profilePicture", function(req, res) {
     // ran when permission verified; saves the image to the filesystem
     const uploadFile = function() {
         let imageFile = req.files.file;
+        let imageName = imageFile.name;
 
+        // only allow certain file types to be uploaded
+        let extension = imageName.split('.').pop();
+        console.log("extension: ", extension);
+        const allowedFileTypes = ['jpg', 'jpeg'];
+        if (!allowedFileTypes.some(function(fileType) {
+            return fileType === extension;
+        })) {
+            res.status(400).send("Wrong file type.");
+            return;
+        }
+
+        // move the file to the filesystem
         imageFile.mv(`${__dirname}/public/images/profilePictures/${userId}.jpg`, function(err) {
             if (err) {
                 console.log("error is: ", err);
