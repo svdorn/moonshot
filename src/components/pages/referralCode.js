@@ -216,21 +216,26 @@ class ReferralCode extends Component {
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                     <div className="form lightWhiteForm" style={{padding: "10px 20px"}}>
                         {this.state.referralCode ?
-                            <div>
+                            <div className="blueText">
                                 <span className="font20px">Your referral code is:</span>
                                 <br/>
                                 <span className="font32px">{this.state.referralCode}</span>
                                 <br/>
+                                <span className="font20px">Your referral url is:</span>
+                                <br/>
+                                <span className="font16px" style={{marginBottom: "20px", display:"inline-block"}}>{"https://moonshotlearning.org/?referralCode="}{this.state.referralCode}</span>
+                                <br/>
                                 <span className="font16px">
                                     Have your friend enter this code when they
-                                    finish a pathway. If they get the job, we{"'"}ll
+                                    finish a pathway or use that url when they sign up.
+                                    If they get the job, we{"'"}ll
                                     send you $300 through PayPal. We sent you an
                                     email with your code and some extra info.
                                 </span>
                             </div>
                             :
                             <form onSubmit={this.handleSubmit.bind(this)}>
-                                <span className="font24px">Earn $300 for every friend that gets a job through Moonshot.</span>
+                                <span className="font24px">Earn $300 for every friend that <br/>gets a job through Moonshot.</span>
                                 <br/>
                                 <div className="inputContainer">
                                     <div className="fieldWhiteSpace"/>
@@ -250,7 +255,7 @@ class ReferralCode extends Component {
                                         className="lightBlueInputText"
                                     /><br/>
                                 </div>
-                                <div style={{margin: "20px 20px 10px"}} className="darkBlueText">
+                                <div style={{margin: "20px 20px 10px"}} className="blueText">
                                     <div className="checkbox smallCheckbox blueCheckbox"
                                          onClick={this.handleCheckMarkClick.bind(this)}>
                                         <img
@@ -259,9 +264,9 @@ class ReferralCode extends Component {
                                         />
                                     </div>
                                     I understand and agree to
-                                    the <bdi className="clickable blueText" onClick={this.handleOpenAA}>Affiliate Agreement</bdi>
-                                    , <bdi className="clickable blueText" onClick={this.handleOpenPP}>Privacy Policy</bdi>
-                                    , and <bdi className="clickable blueText" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
+                                    the <bdi className="clickable blueText" onClick={this.handleOpenAA}><b>Affiliate Agreement</b></bdi>
+                                    , <bdi className="clickable blueText" onClick={this.handleOpenPP}><b>Privacy Policy</b></bdi>
+                                    , and <bdi className="clickable blueText" onClick={this.handleOpenTOU}><b>Terms of Use</b></bdi>.
                                 </div>
                                 <button
                                     type="submit"
