@@ -18,8 +18,8 @@ var app = express();
 //app.set('view engine', 'jade');
 
 app.use(logger('dev'));
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json({limit:'2mb'}));
+app.use(bodyParser.urlencoded({extended:true, limit:'2mb'}));
 app.use(cookieParser());
 // trust the first proxy encountered because we run through a proxy
 app.set('trust proxy', 1);
@@ -1105,6 +1105,15 @@ app.post('/user/completePathway', function (req, res) {
     } else {
         finishPathway();
     }
+});
+
+
+// UPLOAD PROFILE PICTURE FOR USER
+app.post("/user/profilePicture", function(req, res) {
+    const params = sanitize(req.body);
+
+    console.log("params: ", params);
+    res.json("success");
 });
 
 
