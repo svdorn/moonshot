@@ -5,6 +5,7 @@ var pathwaysSchema = mongoose.Schema({
   name: String,
   pathwayContentDisplayName: String,
   previewImage: String,
+  imageAltTag: String,
   comingSoon: Boolean,
   showToUsers: Boolean,
   url: String,

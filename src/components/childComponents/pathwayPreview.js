@@ -92,6 +92,7 @@ class PathwayPreview extends Component {
                         <div style={{textAlign: "center", position: "relative"}} className={blurClass}>
                             {this.props.type == "addOne" ?
                                 <img style={{width: "80px", marginTop: "120px"}}
+                                     alt="Plus Sign Icon"
                                      src="/icons/PlusSignWhite.png"
                                 />
                                 :
@@ -101,7 +102,7 @@ class PathwayPreview extends Component {
                                             <img
                                                 width={216}
                                                 height={160}
-                                                alt="VR Image"
+                                                alt={this.props.imageAltTag ? this.props.imageAltTag : this.props.name + " Preview Image"}
                                                 src={this.props.image}
                                             />
                                             : null
@@ -160,7 +161,8 @@ class PathwayPreview extends Component {
                            zDepth={this.state.shadow}>
                         <div style={{textAlign: "center", position: "relative"}} className={blurClass}>
                             {this.props.type == "addOne" ?
-                                <img style={{width: "80px", marginTop: "120px"}}
+                                <img alt="Plus Sign Icon"
+                                     style={{width: "80px", marginTop: "120px"}}
                                      src="/icons/PlusSignOrange.png"
                                 />
                                 :
@@ -170,7 +172,7 @@ class PathwayPreview extends Component {
                                             <img
                                                 width={216}
                                                 height={160}
-                                                alt="VR Image"
+                                                alt={this.props.imageAltTag ? this.props.imageAltTag : this.props.name + " Preview Image"}
                                                 src={this.props.image}
                                             />
                                             : null

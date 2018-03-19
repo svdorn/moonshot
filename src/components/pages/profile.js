@@ -107,6 +107,7 @@ class Profile extends Component {
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
+                                        imageAltTag={pathway.imageAltTag ? pathway.imageAltTag : pathway.name + " Preview Image"}
                                         logo={pathway.sponsor.logo}
                                         sponsorName={pathway.sponsor.name}
                                         completionTime={pathway.estimatedCompletionTime}
@@ -156,6 +157,7 @@ class Profile extends Component {
                                     <PathwayPreview
                                         name={pathway.name}
                                         image={pathway.previewImage}
+                                        imageAltTag={pathway.imageAltTag ? pathway.imageAltTag : pathway.name + " Preview Image"}
                                         logo={pathway.sponsor.logoForLightBackground}
                                         sponsorName={pathway.sponsor.name}
                                         completionTime={pathway.estimatedCompletionTime}
