@@ -1128,11 +1128,10 @@ app.post("/user/profilePicture", function(req, res) {
 
         // only allow certain file types to be uploaded
         let extension = imageName.split('.').pop().toLowerCase();
-        const allowedFileTypes = ['jpg', 'jpeg', 'png'];
+        const allowedFileTypes = ['jpg', 'jpeg'];
         if (!allowedFileTypes.some(function(fileType) {
             return fileType === extension;
         })) {
-            console.log(`User tried to upload a file of type .${extension}, which is not allowed.`);
             res.status(400).send("Wrong file type.");
             return;
         }
@@ -1140,7 +1139,7 @@ app.post("/user/profilePicture", function(req, res) {
         // move the file to the filesystem
         imageFile.mv(`${__dirname}/public/images/profilePictures/${userId}.jpg`, function(err) {
             if (err) {
-                console.log("Error moving the image to the filesystem: ", err);
+                console.log("error is: ", err);
                 res.status(500).send(err);
                 return;
             }
@@ -1162,13 +1161,12 @@ app.post("/user/profilePicture", function(req, res) {
     }
 
     // when user found, check if they have permission to upload a profile picture
-    const onFoundUser = function(findUserErr, foundUser) {
-        if (findUserErr) {
-            console.log("Error finding user when trying to upload profile picture: ", findUserErr);
+    const onFoundUser = function(err, foundUser) {
+        if (err) {
+            console.log("Error finding user when trying to upload profile picture: ", err);
             res.status(500).send("Server error, try again later.");
             return;
         } else if (!foundUser) {
-            console.log("No user found when trying to upload an image. (foundUser == null)")
             res.status(403).send("You do not have permission to upload a profile picture.");
             return;
         } else {
