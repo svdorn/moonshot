@@ -498,13 +498,13 @@ class Profile extends Component {
                             paperClassName="dialogForSignup"
                             overlayClassName="dialogOverlay"
                         >
-                            {"Accepts .jpg and .png files under 2mb"}
+                            {"Accepts .jpg files under 2mb"}
                             <br/>
                             <input
                                 name="profilePicture"
                                 type="file"
                                 ref="profilePictureFile"
-                                accept="image/jpg,image/png"
+                                accept="image/jpg"
                                 onChange={this.handleImageChange.bind(this)}
                                 style={{marginTop:"20px"}}
                             />
