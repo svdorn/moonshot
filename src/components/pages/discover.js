@@ -249,19 +249,6 @@ class Discover extends Component {
             },
             pathwayPreviewFeaturedContainer: {
                 height: "400px"
-            },
-            treeImg: {
-                height: "300px",
-                position: "absolute",
-                bottom: "-14px",
-                right: "0px"
-            },
-            treeText: {
-                color: "white",
-                position: "absolute",
-                top: "150px",
-                left: "65px",
-                fontSize: "20px"
             }
         }
 
