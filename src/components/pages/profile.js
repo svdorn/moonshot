@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Tabs, Tab, CircularProgress, Paper, Divider, FlatButton, Dialog} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, setHeaderBlue, postProfilePicture} from "../../actions/usersActions";
+import {closeNotification, setHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
@@ -221,17 +221,14 @@ class Profile extends Component {
             return;
         }
 
-        // post the image
-        this.props.postProfilePicture(data);
-
         // let file = this.refs.profilePictureFile.files[0];
-        // axios.post("/api/user/profilePicture", data)
-        //     .then(function(res) {
-        //         console.log("res: ", res);
-        //     })
-        //     .catch(function(err) {
-        //         console.log("err: ", err);
-        //     })
+        axios.post("/api/user/profilePicture", data)
+            .then(function(res) {
+                console.log("res: ", res);
+            })
+            .catch(function(err) {
+                console.log("err: ", err);
+            })
     }
 
 
@@ -474,11 +471,7 @@ class Profile extends Component {
         let profilePictureSrc = "/icons/ProfilePicture.png";
         let profilePictureStyle = style.img;
         if (user && user.hasProfilePicture) {
-            // have to add the ?${new Date() so that the image reloads whenever
-            // the user changes their picture
-            // TODO: make this image url only update the date query when a new
-            // image is posted, will reduce db calls
-            profilePictureSrc = `/images/profilePictures/${user._id}.jpg?${new Date()}`;
+            profilePictureSrc = `/images/profilePictures/${user._id}.jpg`;
             profilePictureStyle = {
                 height: "94px",
                 width: "94px"
@@ -682,7 +675,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
         setHeaderBlue,
-        postProfilePicture
     }, dispatch);
 }
 

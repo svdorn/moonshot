@@ -91,7 +91,6 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "UPDATE_ANSWER":
-        case "UPLOAD_PROFILE_PICTURE":
             return {
                 ...state,
                 currentUser: action.currentUser

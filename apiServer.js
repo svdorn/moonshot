@@ -1144,19 +1144,25 @@ app.post("/user/profilePicture", function(req, res) {
                 return;
             }
 
-            user.hasProfilePicture = true;
-            user.lastUpdatedProfilePicture = new Date();
-            user.save(function(saveUserErr, savedUser) {
-                if (saveUserErr) {
-                    console.log("Error saving fact that user has a profile picture: ", saveUserErr);
-                    res.status(500).send("File uploaded but user status not saved.");
-                    return;
-                } else {
-                    // success, return saved user with info that they now
-                    // have a profile picture
-                    res.json(savedUser);
-                }
-            })
+            if (!user.hasProfilePicture) {
+                user.hasProfilePicture = true;
+                console.log("user is: ", user);
+                user.save(function(saveUserErr, savedUser) {
+                    if (saveUserErr) {
+                        console.log("Error saving fact that user has a profile picture: ", saveUserErr);
+                        res.status(500).send("File uploaded but user status not saved.");
+                        return;
+                    } else {
+                        // success, return saved user with info that they now
+                        // have a profile picture
+                        res.json(savedUser);
+                    }
+                })
+            } else {
+                // success, user already had a profile picture so it is known
+                // that their profile picture should be shown
+                res.json(user);
+            }
         });
     }
 

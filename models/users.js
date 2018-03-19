@@ -40,8 +40,6 @@ var usersSchema = mongoose.Schema({
     verified: Boolean,
     // if the user has uploaded a profile picture
     hasProfilePicture: Boolean,
-    // last date the user updated their profile picture
-    lastUpdatedProfilePicture: Date,
     // not actually used right now
     images: String,
     // list of skills the user has received from completing pathways
