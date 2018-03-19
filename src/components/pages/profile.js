@@ -445,6 +445,21 @@ class Profile extends Component {
                     });
                 }
             }
+            // if (languages && languages.length > 0) {
+            //     index = -1;
+            //     const languagesSpans = languages.map(function (language) {
+            //         index++;
+            //         const comma = (index < languages.length - 1) ? ", " : "";
+            //         return (
+            //             <span>{language + comma}</span>
+            //         );
+            //     });
+            //     aboutMeItems.push({
+            //         icon: "SingleSpeechBubbleBlue.png",
+            //         title: "Languages",
+            //         content: <div>{languagesSpans}</div>
+            //     });
+            // }
 
             // every other li is a right one, starting with the first not being one
             aboutMeLis = aboutMeItems.map(function (item) {
@@ -467,12 +482,6 @@ class Profile extends Component {
         }
 
         let uploadPicOnHoverClass = this.state.onOwnProfile ? "secondChildDisplayBlockOnHover" : "hideSecondChild";
-
-        let profilePictureSrc = "/icons/ProfilePicture.png";
-        let profilePictureStyle = style.img;
-        if (user && user.hasProfilePicture) {
-            profilePictureSrc = `/images/profilePictures/${user._id}.jpg`;
-        }
 
         return (
             <div className='jsxWrapper' ref='discover'>
@@ -515,9 +524,9 @@ class Profile extends Component {
                                                          className={uploadPicOnHoverClass}
                                                     >
                                                         <img
-                                                            src={profilePictureSrc}
+                                                            src="/icons/ProfilePicture.png"
                                                             alt="Profile picture"
-                                                            style={profilePictureStyle}
+                                                            style={style.img}
                                                         />
                                                         <div className="uploadProfilePic">Upload</div>
                                                     </div>

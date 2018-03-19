@@ -1117,7 +1117,6 @@ app.post('/user/completePathway', function (req, res) {
 app.post("/user/profilePicture", function(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
-    let user = undefined;
 
     const userQuery = { _id: userId, verificationToken };
 
@@ -1127,7 +1126,8 @@ app.post("/user/profilePicture", function(req, res) {
         let imageName = imageFile.name;
 
         // only allow certain file types to be uploaded
-        let extension = imageName.split('.').pop().toLowerCase();
+        let extension = imageName.split('.').pop();
+        console.log("extension: ", extension);
         const allowedFileTypes = ['jpg', 'jpeg'];
         if (!allowedFileTypes.some(function(fileType) {
             return fileType === extension;
@@ -1144,45 +1144,26 @@ app.post("/user/profilePicture", function(req, res) {
                 return;
             }
 
-            if (!user.hasProfilePicture) {
-                user.hasProfilePicture = true;
-                console.log("user is: ", user);
-                user.save(function(saveUserErr, savedUser) {
-                    if (saveUserErr) {
-                        console.log("Error saving fact that user has a profile picture: ", saveUserErr);
-                        res.status(500).send("File uploaded but user status not saved.");
-                        return;
-                    } else {
-                        // success, return saved user with info that they now
-                        // have a profile picture
-                        res.json(savedUser);
-                    }
-                })
-            } else {
-                // success, user already had a profile picture so it is known
-                // that their profile picture should be shown
-                res.json(user);
-            }
+            res.json("success");
         });
     }
 
     // when user found, check if they have permission to upload a profile picture
-    const onFoundUser = function(err, foundUser) {
+    const onFoundUser = function(err, user) {
         if (err) {
             console.log("Error finding user when trying to upload profile picture: ", err);
             res.status(500).send("Server error, try again later.");
             return;
-        } else if (!foundUser) {
+        } else if (!user) {
             res.status(403).send("You do not have permission to upload a profile picture.");
             return;
         } else {
-            user = foundUser;
             uploadFile();
         }
     }
 
     // find the user with the provided credentials
-    Users.findOne(userQuery, onFoundUser);
+    Users.find(userQuery, onFoundUser);
 });
 
 
