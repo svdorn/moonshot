@@ -814,7 +814,7 @@ app.post('/sendVerificationEmail', function (req, res) {
         let subject = 'Verify email';
         let content =
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
                     + '<div style="text-align:justify;width:80%;margin-left:10%;">'
                     + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="' + moonshotUrl + 'verifyEmail?token=' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
                     + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.org</a>.</span><br/>'
@@ -1153,12 +1153,6 @@ app.post('/createReferralCode', function(req, res) {
 
             + "</div>";
 
-
-
-            // '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-            //     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
-            // + '</div>';
-
         // send email to user who asked for a referral code with the info about the code
         const sendFrom = "Kyle Treige";
         sendEmail(recipient, subject, emailContent, sendFrom, function (success, msg) {
@@ -1364,7 +1358,7 @@ app.post('/forgotPassword', function (req, res) {
 
                 const content =
                     '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                        + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                        + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
                             + '<div style="text-align:justify;width:80%;margin-left:10%;">'
                             + "<span style='margin-bottom:20px;display:inline-block;'>Hello! We got a request to change your password. If that wasn't from you, you can ignore this email and your password will stay the same. Otherwise click here:</span><br/>"
                             + '</div>'
