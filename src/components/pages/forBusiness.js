@@ -317,6 +317,7 @@ class ForBusiness extends Component {
                                 <div className="horizListSpacer" style={{marginLeft: "5%", marginRight: '5%'}}>
                                     <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                         <img
+                                            alt="Pencil And Paper With CheckmarksIcon"
                                             src="/icons/Evaluate.png"
                                             style={styles.horizListIcon}
                                         /><br/>
@@ -329,6 +330,7 @@ class ForBusiness extends Component {
                                 <div className="horizListSpacer" style={{marginRight: "20%"}}>
                                     <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                         <img
+                                            alt="Employee Badge Icon"
                                             src="/icons/Badge.png"
                                             style={styles.horizListIcon}
                                         /><br/>
@@ -372,6 +374,7 @@ class ForBusiness extends Component {
                                 <div className="homepageTrajectoryImagesRight forBusiness">
                                     <div className="homepageImgBackgroundRight blueGradient forBusiness"/>
                                     <img
+                                        alt="Happy Guy With Beard"
                                         src="/images/HappySmallerBeardGuy.jpeg"
                                     />
                                 </div>
@@ -392,6 +395,7 @@ class ForBusiness extends Component {
                                 <div className="homepageTrajectoryImagesLeft forBusiness">
                                     <div className="homepageImgBackgroundLeft greenGradient forBusiness"/>
                                     <img
+                                        alt="Woman At Computer"
                                         src="/images/WomanAtComputer.jpg"
                                     />
                                 </div>
@@ -412,6 +416,7 @@ class ForBusiness extends Component {
                                 <div className="homepageTrajectoryImagesRight forBusiness">
                                     <div className="homepageImgBackgroundRight purpleToRed forBusiness"/>
                                     <img
+                                        alt="Man Drawing On Whiteboard"
                                         src="/images/WhiteboardWork.jpg"
                                     />
                                 </div>
@@ -430,6 +435,7 @@ class ForBusiness extends Component {
                                 <div className="homepageTrajectoryImagesLeft forBusiness">
                                     <div className="homepageImgBackgroundLeft blueGradient forBusiness"/>
                                     <img
+                                        alt="Guy With Beard Talking on Phone"
                                         src="/images/TalkingBeardGuy.jpeg"
                                     />
                                 </div>
@@ -469,14 +475,18 @@ class ForBusiness extends Component {
                             </div>
                             <div>
                                 <div style={styles.bottomListItem}>
-                                    <img src="/icons/MagnifyingGlassPaperPurple.png" className="forBusinessIcon"
+                                    <img alt="Magnifying Glass And Paper Icon"
+                                         src="/icons/MagnifyingGlassPaperPurple.png"
+                                         className="forBusinessIcon"
                                          style={{marginRight: '10px'}}/>
                                     <div className="font18px font16pxUnder800 aResumeCantDoThisText">See their quality of work under
                                         pressure.
                                     </div>
                                 </div>
                                 <div style={styles.bottomListItem}>
-                                    <img src="/icons/BarGraph.png" className="forBusinessIcon"
+                                    <img alt="Bar Graph Icon"
+                                         src="/icons/BarGraph.png"
+                                         className="forBusinessIcon"
                                          style={{marginLeft: '10px'}}/>
                                     <div className="font18px font16pxUnder800 aResumeCantDoThisText">
                                         Quantitatively score and break down their skills.
@@ -485,13 +495,17 @@ class ForBusiness extends Component {
                             </div>
                             <div style={{marginTop: '20px'}}>
                                 <div style={styles.bottomListItem}>
-                                    <img src="/icons/EvaluatePurple.png" className="forBusinessIcon"/>
+                                    <img alt="Paper With Checkmark Icon"
+                                         src="/icons/EvaluatePurple.png"
+                                         className="forBusinessIcon"/>
                                     <div className="font18px font16pxUnder800 aResumeCantDoThisText">
                                         Compare candidates against their peers.
                                     </div>
                                 </div>
                                 <div style={styles.bottomListItem}>
-                                    <img src="/icons/Filter.png" className="forBusinessIcon"/>
+                                    <img alt="Filter Icon"
+                                         src="/icons/Filter.png"
+                                         className="forBusinessIcon"/>
                                     <div className="font18px font16pxUnder800 aResumeCantDoThisText">
                                         Filter out the unqualified<div className="above800only br"><br/></div> and uncommitted.
                                     </div>
@@ -510,6 +524,7 @@ class ForBusiness extends Component {
                         <div className="homepageTrajectoryImagesRight" style={{marginTop:"68px"}}>
                             <div className="homepageImgBackgroundRight purpleToRed"/>
                             <img
+                                alt="Open Laptop"
                                 src="/images/OpenLaptop.jpeg"
                             />
                         </div>
