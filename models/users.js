@@ -38,6 +38,8 @@ var usersSchema = mongoose.Schema({
     passwordTokenExpirationTime: Number,
     // if the use has verified their account via email
     verified: Boolean,
+    // if the user has uploaded a profile picture
+    hasProfilePicture: Boolean,
     // not actually used right now
     images: String,
     // list of skills the user has received from completing pathways
