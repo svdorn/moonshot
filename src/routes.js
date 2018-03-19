@@ -25,7 +25,6 @@ import ContactUs from './components/pages/contactUs';
 import MyPathways from './components/pages/myPathways';
 import Onboarding from './components/pages/onboarding';
 import Error404 from './components/pages/error404';
-import Email from './components/pages/email';
 import Unsubscribe from './components/pages/unsubscribe';
 import ReferralCode from './components/pages/referralCode';
 import Admin from './components/pages/admin';
@@ -58,7 +57,6 @@ const routes = (
         <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding/>}/>
         <Route path="pathway" component={Pathway} />
         <Route path="pathwayContent" component={AuthenticatedComponent} page={<PathwayContent/>} />
-        <Route path="email" component={Email}/>
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} />
         <Route path="adminUserView" component={AuthenticatedComponent} page={<AdminUserView/>} />
         <Route path="unsubscribe" component={Unsubscribe} />

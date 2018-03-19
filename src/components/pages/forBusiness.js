@@ -303,6 +303,7 @@ class ForBusiness extends Component {
                                 >
                                     <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                         <img
+                                            alt="Key Icon"
                                             src="/icons/Key.png"
                                             style={styles.horizListIcon}
                                         /><br/>

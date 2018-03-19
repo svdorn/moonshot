@@ -21,6 +21,7 @@ class error404 extends Component {
             <div className="fillScreen greenToBlue" style={{textAlign:"center"}}>
                 <Paper className="form bigForm semiOpaquePaper blueTextImportant font20px font14pxUnder700 font10pxUnder400" zDepth={2}>
                     <img
+                        alt="404 Image - Rocket Doing Loops"
                         src="/images/404.png"
                         id="image404"
                     /><br/>
