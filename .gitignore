@@ -3,7 +3,6 @@ credentials.js
 public/bundle.js
 .idea/*
 public/images/profilePictures/*
-!public/images/profilePictures/.ebgitkeep
 
 
 # Elastic Beanstalk Files
