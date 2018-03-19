@@ -210,19 +210,9 @@ class Profile extends Component {
 
 
     handleImageChange() {
-        const data = new FormData();
-
-        try {
-            data.append('file', this.refs.profilePictureFile.files[0]);
-            data.append('userId', this.props.currentUser._id);
-            data.append('verificationToken', this.props.currentUser.verificationToken);
-        } catch (e) {
-            console.log('You do not have permission to upload a profile picture.');
-            return;
-        }
-
-        // let file = this.refs.profilePictureFile.files[0];
-        axios.post("/api/user/profilePicture", data)
+        console.log("input: ", this.refs.profilePictureFile.files[0]);
+        let file = this.refs.profilePictureFile.files[0];
+        axios.post("/api/user/profilePicture", file)
             .then(function(res) {
                 console.log("res: ", res);
             })
@@ -496,12 +486,10 @@ class Profile extends Component {
                             paperClassName="dialogForSignup"
                             overlayClassName="dialogOverlay"
                         >
-                            "Accepts .jpg files under 2mb"
                             <input
                                 name="profilePicture"
                                 type="file"
                                 ref="profilePictureFile"
-                                accept="image/jpg"
                                 onChange={this.handleImageChange.bind(this)}
                             />
                         </Dialog>
