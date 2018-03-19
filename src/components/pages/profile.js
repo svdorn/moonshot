@@ -211,14 +211,6 @@ class Profile extends Component {
 
     handleImageChange() {
         console.log("input: ", this.refs.profilePictureFile.files[0]);
-        let file = this.refs.profilePictureFile.files[0];
-        axios.post("/api/user/profilePicture", file)
-            .then(function(res) {
-                console.log("res: ", res);
-            })
-            .catch(function(err) {
-                console.log("err: ", err);
-            })
     }
 
 
