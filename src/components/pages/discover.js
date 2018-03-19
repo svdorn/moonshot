@@ -263,27 +263,43 @@ class Discover extends Component {
                 formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             }
             if (!pathway.comingSoon) {
+                const pathwayName = pathway.name ? pathway.name : "";
+                const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
+                const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
+                const pathwayLogo = pathway.sponsor && pathway.sponsor.logoForLightBackground ? pathway.sponsor.logoForLightBackground : "";
+                const pathwaySponsorName = pathway.sponsor && pathway.sponsor.name ? pathway.sponsor.name : "";
+                const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
+                const pathwayPrice = pathway.price ? pathway.price : "";
+                const pathwayId = pathway._id ? pathway._id : undefined;
+                const pathwayComingSoon = pathway.comingSoon ? pathway.comingSoon : false;
                 return (
                     <li className="pathwayPreviewLi explorePathwayPreview"
                         key={key}
                         onClick={() => self.pathwayClicked(pathway.url, pathway._id)}
                     >
                         <PathwayPreview
-                            name={pathway.name}
-                            image={pathway.previewImage}
-                            imageAltTag={pathway.imageAltTag ? pathway.imageAltTag : pathway.name + " Preview Image"}
-                            logo = {pathway.sponsor.logoForLightBackground}
-                            sponsorName = {pathway.sponsor.name}
-                            completionTime={pathway.estimatedCompletionTime}
+                            name={pathwayName}
+                            image={pathwayImage}
+                            imageAltTag={pathwayAltTag}
+                            logo = {pathwayLogo}
+                            sponsorName = {pathwaySponsorName}
+                            completionTime={pathwayCompletionTime}
                             deadline={formattedDeadline}
-                            price={pathway.price}
-                            _id={pathway._id}
-                            comingSoon = {pathway.comingSoon}
+                            price={pathwayPrice}
+                            _id={pathwayId}
+                            comingSoon = {pathwayComingSoon}
                             variation="3"
                         />
                     </li>
                 );
             } else if (pathway.comingSoon) {
+                const pathwayName = pathway.name ? pathway.name : "";
+                const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
+                const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
+                const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
+                const pathwayPrice = pathway.price ? pathway.price : "";
+                const pathwayId = pathway._id ? pathway._id : undefined;
+                const pathwayComingSoon = pathway.comingSoon ? pathway.comingSoon : true;
                 return (
                     <li className="pathwayPreviewLi explorePathwayPreview"
                         key={key}
@@ -291,16 +307,14 @@ class Discover extends Component {
                         onClick={() => self.handleOpen(pathway, pathway.comingSoon)}
                     >
                         <PathwayPreview
-                            name={pathway.name}
-                            image={pathway.previewImage}
-                            imageAltTag={pathway.imageAltTag ? pathway.imageAltTag : pathway.name + " Preview Image"}
-                            //<!-- logo = {pathway.sponsor.logo} -->
-                            //<!-- sponsorName = {pathway.sponsor.name} -->
-                            completionTime={pathway.estimatedCompletionTime}
+                            name={pathwayName}
+                            image={pathwayImage}
+                            imageAltTag={pathwayAltTag}
+                            completionTime={pathwayCompletionTime}
                             deadline={formattedDeadline}
-                            price={pathway.price}
-                            _id={pathway._id}
-                            comingSoon={pathway.comingSoon}
+                            price={pathwayPrice}
+                            _id={pathwayId}
+                            comingSoon={pathwayComingSoon}
                             variation="3"
                         />
                     </li>
@@ -318,44 +332,58 @@ class Discover extends Component {
                 formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             }
             if (!pathway.comingSoon) {
+                const pathwayName = pathway.name ? pathway.name : "";
+                const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
+                const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
+                const pathwayLogo = (pathway.sponsor && pathway.sponsor.logo) ? pathway.sponsor.logo : "";
+                console.log("pathway: ", pathway);
+                const pathwaySponsorName = pathway.sponsor && pathway.sponsor.name ? pathway.sponsor.name : "";
+                const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
+                const pathwayPrice = pathway.price ? pathway.price : "";
+                const pathwayId = pathway._id ? pathway._id : undefined;
+                const pathwayComingSoon = pathway.comingSoon ? pathway.comingSoon : false;
                 return (
                     <li className="pathwayPreviewLi featuredPathwayPreview"
                         key={key}
                         onClick={() => self.pathwayClicked(pathway.url, pathway._id)}
                     >
                         <PathwayPreview
-                            name={pathway.name}
-                            image={pathway.previewImage}
-                            imageAltTag={pathway.imageAltTag ? pathway.imageAltTag : pathway.name + " Preview Image"}
-                            logo = {pathway.sponsor.logo}
-                            sponsorName = {pathway.sponsor.name}
-                            completionTime={pathway.estimatedCompletionTime}
+                            name={pathwayName}
+                            image={pathwayImage}
+                            imageAltTag={pathwayAltTag}
+                            logo = {pathwayLogo}
+                            sponsorName = {pathwaySponsorName}
+                            completionTime={pathwayCompletionTime}
                             deadline={formattedDeadline}
-                            price={pathway.price}
-                            _id={pathway._id}
-                            comingSoon = {pathway.comingSoon}
+                            price={pathwayPrice}
+                            _id={pathwayId}
+                            comingSoon = {pathwayComingSoon}
                             variation="2"
                         />
                     </li>
                 );
             } else if (pathway.comingSoon) {
+                const pathwayName = pathway.name ? pathway.name : "";
+                const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
+                const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
+                const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
+                const pathwayPrice = pathway.price ? pathway.price : "";
+                const pathwayId = pathway._id ? pathway._id : undefined;
+                const pathwayComingSoon = pathway.comingSoon ? pathway.comingSoon : true;
                 return (
                     <li className="pathwayPreviewLi featuredPathwayPreview"
                         key={key}
-                        //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
                         onClick={() => self.handleOpen(pathway, pathway.comingSoon)}
                     >
                         <PathwayPreview
-                            name={pathway.name}
-                            image={pathway.previewImage}
-                            imageAltTag={pathway.imageAltTag ? pathway.imageAltTag : pathway.name + " Preview Image"}
-                            //<!-- logo = {pathway.sponsor.logo} -->
-                            //<!-- sponsorName = {pathway.sponsor.name} -->
-                            completionTime={pathway.estimatedCompletionTime}
+                            name={pathwayName}
+                            image={pathwayImage}
+                            imageAltTag={pathwayAltTag}
+                            completionTime={pathwayCompletionTime}
                             deadline={formattedDeadline}
-                            price={pathway.price}
-                            _id={pathway._id}
-                            comingSoon={pathway.comingSoon}
+                            price={pathwayPrice}
+                            _id={pathwayId}
+                            comingSoon={pathwayComingSoon}
                             variation="2"
                         />
                     </li>

@@ -161,7 +161,8 @@ class Home extends Component {
         //
         // const backgroundLogos = logosInfo.map(function(logo) {
         //     return (
-        //         <img src={"/logos/" + logo.name} key={logo.name} style={{
+        //         <img alt="Partner Company Logo"
+        //             src={"/logos/" + logo.name} key={logo.name} style={{
         //             position: "absolute",
         //             height: logo.height,
         //             left: logo.left,
@@ -173,7 +174,7 @@ class Home extends Component {
         // const logos = [all the company images e.g. "Moonshot.png"];
         // const logoBar = logos.map(function(logo) {
         //     return (
-        //         <img key={logo} src={"/logos/" + logo} className="logoBarLogo"/>
+        //         <img alt="Partner Company Logo" key={logo} src={"/logos/" + logo} className="logoBarLogo"/>
         //     );
         // })
 
@@ -276,8 +277,8 @@ class Home extends Component {
                             <div className="homepageTrajectoryTextLeft onHome pushDownAbove800">
                                 <img
                                     src="/icons/Lightbulb.png"
-                                    alt="Lightbulb"
-                                    title="Lightbulb icon"
+                                    alt="Lightbulb Icon"
+                                    title="Lightbulb Icon"
                                     className="homepageTrajectoryTextLeftIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
@@ -290,6 +291,7 @@ class Home extends Component {
                             <div className="homepageTrajectoryImagesRight onHome">
                                 <div className="homepageImgBackgroundRight greenGradient" />
                                 <img
+                                    alt="Man Using Virtual Reality"
                                     src="/images/VRGuy.jpg"
                                 />
                             </div>
@@ -301,8 +303,8 @@ class Home extends Component {
                             <div className="homepageTrajectoryTextRight onHome pushDownAbove800">
                                 <img
                                     src="/icons/Person.png"
-                                    alt="Person icon"
-                                    title="Person icon"
+                                    alt="Person Icon"
+                                    title="Person Icon"
                                     className="homepageTrajectoryTextRightIcon personIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
@@ -315,6 +317,7 @@ class Home extends Component {
                             <div className="homepageTrajectoryImagesLeft">
                                 <div className="homepageImgBackgroundLeft blueGradient"/>
                                 <img
+                                    alt="Two People Collaborating In Office"
                                     src="/images/TwoPeopleInOffice.jpg"
                                 />
                             </div>
@@ -326,8 +329,8 @@ class Home extends Component {
                             <div className="homepageTrajectoryTextLeft onHome pushDownSlightlyAbove800">
                                 <img
                                     src="/icons/Badge.png"
-                                    alt="Badge icon"
-                                    title="Badge icon"
+                                    alt="Badge Icon"
+                                    title="Badge Icon"
                                     className="homepageTrajectoryTextLeftIcon onHome smallerWidthIcon"
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
@@ -340,6 +343,7 @@ class Home extends Component {
                             <div className="homepageTrajectoryImagesRight">
                                 <div className="homepageImgBackgroundRight purpleToRed"/>
                                 <img
+                                    alt="Happy Guy With Beard"
                                     src="/images/HappyBeardGuy.jpeg"
                                 />
                             </div>

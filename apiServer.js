@@ -2108,6 +2108,7 @@ app.get('/pathways/search', function (req, res) {
         .sort(sort)
         .select(select)
         .exec(function (err, pathways) {
+            console.log("pathways: ", pathways);
             if (err) {
                 res.status(500).send("Error getting searched-for pathways");
             } else {
@@ -2132,8 +2133,13 @@ app.get("/pathways/getAllCompaniesAndCategories", function(req, res) {
 
             // go through each pathway, add the sponsor name and tags to the lists
             pathways.forEach(function(pathway) {
-                companies.push(pathway.sponsor.name);
-                categories = categories.concat(pathway.tags);
+                // only add tags and company names if they exist
+                if (pathway && pathway.sponsor && pathway.sponsor.name) {
+                    companies.push(pathway.sponsor.name);
+                }
+                if (pathway && pathway.tags) {
+                    categories = categories.concat(pathway.tags);
+                }
             })
 
             companies = removeDuplicates(companies);
