@@ -472,10 +472,6 @@ class Profile extends Component {
         let profilePictureStyle = style.img;
         if (user && user.hasProfilePicture) {
             profilePictureSrc = `/images/profilePictures/${user._id}.jpg`;
-            profilePictureStyle = {
-                height: "94px",
-                width: "94px"
-            }
         }
 
         return (
