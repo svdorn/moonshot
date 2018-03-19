@@ -420,6 +420,19 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
 }
 
 
+export function postProfilePicture(data) {
+    return function(dispatch) {
+        axios.post("/api/user/profilePicture", data)
+            .then(function(response) {
+                dispatch({type: "UPLOAD_PROFILE_PICTURE", currentUser: response.data})
+            })
+            .catch(function(err) {
+                console.log("err: ", err);
+            })
+    }
+}
+
+
 export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
     return function(dispatch) {
         axios.post("/api/updateAllOnboarding", {
