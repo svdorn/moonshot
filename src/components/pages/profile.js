@@ -1,6 +1,6 @@
 "use strict"
 import React, {Component} from 'react';
-import {Tabs, Tab, CircularProgress, Paper, Divider, FlatButton, Dialog} from 'material-ui';
+import {Tabs, Tab, CircularProgress, Paper, Divider} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification, setHeaderBlue} from "../../actions/usersActions";
@@ -20,7 +20,6 @@ class Profile extends Component {
             userCompletedPathwayPreviews: undefined,
             user: undefined,
             editProfile: false,
-            openImageUpload: false
         }
     }
 
@@ -198,13 +197,6 @@ class Profile extends Component {
         this.setState({editProfile: !this.state.editProfile})
     }
 
-    handleOpenImageUpload = () => {
-        this.setState({openImageUpload: true});
-    };
-    handleCloseImageUpload = () => {
-        this.setState({openImageUpload: false});
-    };
-
     render() {
         const style = {
             pathwayPreviewUl: {
@@ -216,8 +208,7 @@ class Profile extends Component {
                 borderRadius: '50%',
                 border: "3px solid white",
                 display: "inline-block",
-                overflow: "hidden",
-                position: "relative"
+                overflow: "hidden"
             },
             img: {
                 height: "85px",
@@ -248,19 +239,6 @@ class Profile extends Component {
                 paddingBottom: '30px',
             }
         };
-
-        const actionsImageUpload = [
-            <FlatButton
-                label="Close"
-                primary={true}
-                onClick={this.handleCloseImageUpload}
-            />,
-        ];
-
-        let blurredClass = '';
-        if (this.state.openImageUpload) {
-            blurredClass = 'dialogForBizOverlay';
-        }
 
         let profileSkills = null;
         let skills = undefined;
@@ -454,175 +432,155 @@ class Profile extends Component {
             });
         }
 
-        let profilePicUploadDivClass = this.state.onOwnProfile ? "clickableNoUnderline" : "";
-        let uploadPicHoverTextClass = this.state.onOwnProfile ? "uploadPicShowOnHover" : "noDisplay";
-
         return (
             <div className='jsxWrapper' ref='discover'>
                 {user ?
-                    <div className={blurredClass}>
-                        <Dialog
-                            actions={actionsImageUpload}
-                            modal={false}
-                            open={this.state.openImageUpload}
-                            onRequestClose={this.handleCloseImageUpload}
-                            autoScrollBodyContent={true}
-                            paperClassName="dialogForSignup"
-                            overlayClassName="dialogOverlay"
-                        >
-                            HYELLO
-                        </Dialog>
+                    <div>
                         <div>
-                            <div>
-                                {this.state.userPathwayPreviews ?
-                                    <div>
-                                        <div className="orangeToYellowGradient" zDepth={3}>
-                                            <div className="headerDiv"/>
-                                            <div className="profileInfoSkills">
-                                                <div className="center">
-                                                    {/*<div className="clickable blueText font20px font14pxUnder700"
-                                                         style={{marginTop: '-20px', marginBottom: '10px'}}
-                                                         onClick={this.editProfile.bind(this)}
-                                                    >
-                                                        Edit Profile
-                                                    </div>*/}
-                                                    <div style={style.imgContainer}
-                                                         onClick={this.handleOpenImageUpload}
-                                                         className={profilePicUploadDivClass}
-                                                    >
-                                                        <img
-                                                            src="/icons/ProfilePicture.png"
-                                                            alt="Profile picture"
-                                                            style={style.img}
-                                                        />
-                                                        <div className={uploadPicHoverTextClass}>Upload</div>
-                                                    </div>
-                                                    <div>
-                                                        <div
-                                                            className="whiteText font20px font14pxUnder700">{user.name.toUpperCase()}
-                                                        </div>
-                                                        {user.info.title ?
-                                                            <div className="whiteText font14px font12pxUnder500">
-                                                                {user.info.title}
-                                                            </div>
-                                                            : null}
-                                                        {user.info.location ?
-                                                            <div>
-                                                                <img
-                                                                    src="/icons/Location.png"
-                                                                    alt="Portfolio"
-                                                                    style={style.locationImg}
-                                                                />
-                                                                <div className="font14px font12pxUnder500 whiteText"
-                                                                     style={{display: 'inline-block'}}>
-                                                                    {user.info.location}
-                                                                </div>
-                                                            </div>
-                                                            : null}
-                                                        <a className="font14px font12pxUnder500 whiteText underline"
-                                                           href={mailtoEmail}>Contact</a>
-                                                    </div>
+                            {this.state.userPathwayPreviews ?
+                                <div>
+                                    <div className="orangeToYellowGradient" zDepth={3}>
+                                        <div className="headerDiv"/>
+                                        <div className="profileInfoSkills">
+                                            <div className="center">
+                                                {/*<div className="clickable blueText font20px font14pxUnder700"
+                                                     style={{marginTop: '-20px', marginBottom: '10px'}}
+                                                     onClick={this.editProfile.bind(this)}
+                                                >
+                                                    Edit Profile
+                                                </div>*/}
+                                                <div style={style.imgContainer}>
+                                                    <img
+                                                        src="/icons/ProfilePicture.png"
+                                                        alt="Profile picture"
+                                                        style={style.img}
+                                                    />
                                                 </div>
-                                                <div className="center">
-                                                    {user.skills ?
-                                                        <div style={{width: '70%', maxWidth: '1000px', margin: 'auto'}}>
-                                                            {profileSkills}
+                                                <div>
+                                                    <div
+                                                        className="whiteText font20px font14pxUnder700">{user.name.toUpperCase()}
+                                                    </div>
+                                                    {user.info.title ?
+                                                        <div className="whiteText font14px font12pxUnder500">
+                                                            {user.info.title}
                                                         </div>
                                                         : null}
+                                                    {user.info.location ?
+                                                        <div>
+                                                            <img
+                                                                src="/icons/Location.png"
+                                                                alt="Portfolio"
+                                                                style={style.locationImg}
+                                                            />
+                                                            <div className="font14px font12pxUnder500 whiteText"
+                                                                 style={{display: 'inline-block'}}>
+                                                                {user.info.location}
+                                                            </div>
+                                                        </div>
+                                                        : null}
+                                                    <a className="font14px font12pxUnder500 whiteText underline"
+                                                       href={mailtoEmail}>Contact</a>
                                                 </div>
-                                                <Tabs
-                                                    style={style.topTabs}
-                                                    inkBarStyle={{background: 'white'}}
-                                                    tabItemContainerStyle={{width: '40%'}}
-                                                    className="myPathwaysTabs"
-                                                >
-                                                    <Tab label="Pathways" style={style.topTab}>
-                                                        <div className="center fullHeight" style={style.tabContent}>
-                                                            <Tabs
-                                                                style={style.tabs}
-                                                                inkBarStyle={{background: '#f24c49'}}
-                                                                tabItemContainerStyle={{width: '40%'}}
-                                                                className="myPathwaysTabs"
-                                                            >
-                                                                <Tab label="Ongoing" style={style.tab}>
-                                                                    {this.state.userPathwayPreviews && this.state.userPathwayPreviews.length > 0 ?
-                                                                        <ul className="horizCenteredList pathwayPrevList"
-                                                                            style={style.pathwayPreviewUl}>
-                                                                            {this.state.userPathwayPreviews}
-                                                                        </ul>
-                                                                        :
-                                                                        <ul className="horizCenteredList pathwayPrevList"
-                                                                            style={style.pathwayPreviewUl}>
-                                                                            <li onClick={() => this.goTo('/discover')}>
-                                                                                <PathwayPreview type="addOne"
-                                                                                                variation="4"/>
-                                                                            </li>
-                                                                        </ul>
-                                                                    }
-                                                                </Tab>
-                                                                <Tab label="Completed" style={style.tab}
-                                                                     className="font20px font10pxUnder700">
-                                                                    {this.state.userCompletedPathwayPreviews && this.state.userCompletedPathwayPreviews.length > 0 ?
-                                                                        <ul className="horizCenteredList pathwayPrevList"
-                                                                            style={style.pathwayPreviewUl}>
-                                                                            {this.state.userCompletedPathwayPreviews}
-                                                                        </ul>
-                                                                        :
-                                                                        <h1 className="center font40px font24pxUnder500">
-                                                                            None</h1>
-                                                                    }
-                                                                </Tab>
-                                                            </Tabs>
-                                                        </div>
-                                                    </Tab>
-                                                    <Tab label="About" style={style.topTab}>
-                                                        {info ?
-                                                            <div className="aboutMeSection" style={style.tabContent}>
-                                                                <div
-                                                                    className="orangeText font16px font16pxUnder700 font12pxUnder400 underline clickable addToProfile"
-                                                                    onClick={() => this.goTo('/onboarding')}>
-                                                                    +Add Profile Section
-                                                                </div>
-                                                                <ul className="center" id="aboutMeAreas">
-                                                                    {aboutMeLis}
-                                                                </ul>
-                                                            </div>
-                                                            :
-                                                            <div className="fullHeight font24px font18pxUnder500"
-                                                                 style={style.tabContent}>
-                                                                <div
-                                                                    className="orangeText font16px font16pxUnder700 font12pxUnder400 underline clickable addToProfile"
-                                                                    onClick={() => this.goTo('/onboarding')}>
-                                                                    +Add Profile Section
-                                                                </div>
-                                                                <div className="center">
-                                                                    <div className="profileProjects">
-                                                                        No information to display
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        }
-                                                    </Tab>
-                                                    <Tab label="Projects" style={style.topTab}>
-                                                        <div style={style.tabContent}
-                                                             className="fullHeight font28px font font24pxUnder700 font20pxUnder500 center">
-                                                            <div className="profileProjects">
-                                                                None
-                                                            </div>
-                                                        </div>
-                                                    </Tab>
-                                                </Tabs>
                                             </div>
+                                            <div className="center">
+                                                {user.skills ?
+                                                    <div style={{width: '70%', maxWidth: '1000px', margin: 'auto'}}>
+                                                        {profileSkills}
+                                                    </div>
+                                                    : null}
+                                            </div>
+                                            <Tabs
+                                                style={style.topTabs}
+                                                inkBarStyle={{background: 'white'}}
+                                                tabItemContainerStyle={{width: '40%'}}
+                                                className="myPathwaysTabs"
+                                            >
+                                                <Tab label="Pathways" style={style.topTab}>
+                                                    <div className="center fullHeight" style={style.tabContent}>
+                                                        <Tabs
+                                                            style={style.tabs}
+                                                            inkBarStyle={{background: '#f24c49'}}
+                                                            tabItemContainerStyle={{width: '40%'}}
+                                                            className="myPathwaysTabs"
+                                                        >
+                                                            <Tab label="Ongoing" style={style.tab}>
+                                                                {this.state.userPathwayPreviews && this.state.userPathwayPreviews.length > 0 ?
+                                                                    <ul className="horizCenteredList pathwayPrevList"
+                                                                        style={style.pathwayPreviewUl}>
+                                                                        {this.state.userPathwayPreviews}
+                                                                    </ul>
+                                                                    :
+                                                                    <ul className="horizCenteredList pathwayPrevList"
+                                                                        style={style.pathwayPreviewUl}>
+                                                                        <li onClick={() => this.goTo('/discover')}>
+                                                                            <PathwayPreview type="addOne"
+                                                                                            variation="4"/>
+                                                                        </li>
+                                                                    </ul>
+                                                                }
+                                                            </Tab>
+                                                            <Tab label="Completed" style={style.tab}
+                                                                 className="font20px font10pxUnder700">
+                                                                {this.state.userCompletedPathwayPreviews && this.state.userCompletedPathwayPreviews.length > 0 ?
+                                                                    <ul className="horizCenteredList pathwayPrevList"
+                                                                        style={style.pathwayPreviewUl}>
+                                                                        {this.state.userCompletedPathwayPreviews}
+                                                                    </ul>
+                                                                    :
+                                                                    <h1 className="center font40px font24pxUnder500">
+                                                                        None</h1>
+                                                                }
+                                                            </Tab>
+                                                        </Tabs>
+                                                    </div>
+                                                </Tab>
+                                                <Tab label="About" style={style.topTab}>
+                                                    {info ?
+                                                        <div className="aboutMeSection" style={style.tabContent}>
+                                                            <div
+                                                                className="orangeText font16px font16pxUnder700 font12pxUnder400 underline clickable addToProfile"
+                                                                onClick={() => this.goTo('/onboarding')}>
+                                                                +Add Profile Section
+                                                            </div>
+                                                            <ul className="center" id="aboutMeAreas">
+                                                                {aboutMeLis}
+                                                            </ul>
+                                                        </div>
+                                                        :
+                                                        <div className="fullHeight font24px font18pxUnder500"
+                                                             style={style.tabContent}>
+                                                            <div
+                                                                className="orangeText font16px font16pxUnder700 font12pxUnder400 underline clickable addToProfile"
+                                                                onClick={() => this.goTo('/onboarding')}>
+                                                                +Add Profile Section
+                                                            </div>
+                                                            <div className="center">
+                                                                <div className="profileProjects">
+                                                                    No information to display
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    }
+                                                </Tab>
+                                                <Tab label="Projects" style={style.topTab}>
+                                                    <div style={style.tabContent}
+                                                         className="fullHeight font28px font font24pxUnder700 font20pxUnder500 center">
+                                                        <div className="profileProjects">
+                                                            None
+                                                        </div>
+                                                    </div>
+                                                </Tab>
+                                            </Tabs>
                                         </div>
-
                                     </div>
-                                    :
-                                    <div>
-                                        <div className="orangeToYellowGradient halfHeight"/>
-                                        <div className="fullHeight"/>
-                                        <div className="fullHeight"/>
-                                    </div>}
-                            </div>
+
+                                </div>
+                                :
+                                <div>
+                                    <div className="orangeToYellowGradient halfHeight"/>
+                                    <div className="fullHeight"/>
+                                    <div className="fullHeight"/>
+                                </div>}
                         </div>
                     </div>
                     : null}

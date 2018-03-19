@@ -173,7 +173,7 @@ class ReferralCode extends Component {
             />,
         ];
         let blurredClass = '';
-        if (this.state.openTOU || this.state.openPP || this.state.openAA) {
+        if (this.state.openTOU || this.state.openPP) {
             blurredClass = 'dialogForBizOverlay';
         }
 

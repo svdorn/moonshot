@@ -1972,21 +1972,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     text-align: center;
 }
 
-.noDisplay { display: none; }
-.uploadPicShowOnHover {
-    position: absolute;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(100,100,100,.5);
-    color: white;
-    padding-top: 35px;
-    /* display: none; */
-}
-.uploadPicShowOnHover:hover {
-    display: block;
-}
-
 
 
 .inlineBlock { display: inline-block; }
