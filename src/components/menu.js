@@ -215,7 +215,7 @@ class Menu extends Component {
                             <img
                                 width={187.5}
                                 height={60}
-                                alt="Moonshot"
+                                alt="Moonshot Logo"
                                 className="clickable moonshotMenuLogo"
                                 id="moonshotLogo"
                                 src={moonshotLogo}

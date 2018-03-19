@@ -36,8 +36,10 @@ class StyledContent extends Component {
                     break;
                 case "img":
                     if (content.length > 0) {
+                        const altText = part.altText ? part.altText : "";
                         contentHtml.push(
-                            <img src={"/images/" + content[0]}
+                            <img alt={altText}
+                                 src={"/images/" + content[0]}
                                  className={className}
                                  key={"contentPart" + keyCounter} />
                         );

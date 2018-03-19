@@ -115,14 +115,14 @@ class PathwayPreview extends Component {
                                         <ul className="horizCenteredList pathwayPrevIconList">
                                             <li>
                                                 <div className="whiteText">
-                                                    <img src="/icons/ClockWhite.png" style={iconStyle}/><br/>
+                                                    <img alt="Clock Icon" src="/icons/ClockWhite.png" style={iconStyle}/><br/>
                                                     <span className="font8px">Completion Time</span><br/>
                                                     {this.props.completionTime}
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="whiteText">
-                                                    <img src="/icons/CalendarWhite.png" style={iconStyle}/><br/>
+                                                    <img alt="Calendar Icon" src="/icons/CalendarWhite.png" style={iconStyle}/><br/>
                                                     <span className="font8px">Deadline</span><br/>
                                                     {this.props.deadline && !this.props.comingSoon ? this.props.deadline : null}
                                                     {!this.props.deadline && !this.props.comingSoon ? "None" : null}
@@ -131,7 +131,7 @@ class PathwayPreview extends Component {
                                             </li>
                                             <li>
                                                 <div className="whiteText">
-                                                    <img src="/icons/DollarSignWhite.png" style={priceIconStyle}/><br/>
+                                                    <img alt="Dollar Sign Icon" src="/icons/DollarSignWhite.png" style={priceIconStyle}/><br/>
                                                     <span className="font8px">Price</span><br/>
                                                     {this.props.price}
                                                 </div>
@@ -144,7 +144,7 @@ class PathwayPreview extends Component {
                                             <div style={{display:"inline-block", /*marginRight:"4px"*/}}>{/*Hiring Partner*/}</div>
                                             <img
                                                 src={this.props.logo}
-                                                alt={this.props.sponsorName}
+                                                alt={this.props.sponsorName + " Logo"}
                                                 height={20}
                                             />
                                         </div>
@@ -185,14 +185,15 @@ class PathwayPreview extends Component {
                                         <ul className="horizCenteredList pathwayPrevIconList">
                                             <li>
                                                 <div>
-                                                    <img src={clockImg} style={iconStyle}/><br/>
+                                                    <img alt="Clock Icon" src={clockImg} style={iconStyle}/><br/>
                                                     <span className="font8px">Completion Time</span><br/>
                                                     {this.props.completionTime}
                                                 </div>
                                             </li>
                                             <li>
                                                 <div>
-                                                    <img src={calendarImg}
+                                                    <img alt="Calendar Icon"
+                                                         src={calendarImg}
                                                          style={iconStyle}/><br/>
                                                     <span className="font8px">Deadline</span><br/>
                                                     {this.props.deadline && !this.props.comingSoon ? this.props.deadline : null}
@@ -202,7 +203,8 @@ class PathwayPreview extends Component {
                                             </li>
                                             <li>
                                                 <div>
-                                                    <img src={dollarSignImg}
+                                                    <img alt="Dollar Sign Icon"
+                                                         src={dollarSignImg}
                                                          style={priceIconStyle}/><br/>
                                                     <span className="font8px">Price</span><br/>
                                                     {this.props.price}
@@ -216,7 +218,7 @@ class PathwayPreview extends Component {
                                             <div style={{display:"inline-block", /*marginRight:"4px"*/}}>{/*Hiring Partner*/}</div>
                                             <img
                                                 src={this.props.logo}
-                                                alt={this.props.sponsorName}
+                                                alt={this.props.sponsorName + " Logo"}
                                                 height={20}
                                             />
                                         </div>
