@@ -120,7 +120,7 @@ class Account extends Component {
                             <Field
                                 name="password"
                                 component={renderPasswordField}
-                                label="Password"
+                                label="Current Password"
                                 className="lightBlueInputText"
                                 autoComplete="new-password"
                             /></div>
