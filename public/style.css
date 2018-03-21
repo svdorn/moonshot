@@ -1128,6 +1128,10 @@ button.link {
     color: white;
     padding: 1px 14px;
 }
+.onboardingPage2Text2 {
+    color: white;
+    padding: 2px 14px;
+}
 .onboardingPage1Text3 {
     color: #00c3ff;
     padding: 2px 15px;
@@ -1145,6 +1149,7 @@ button.link {
     border: #3dabff;
     padding: 3px 7px;
     margin-top: 15px;
+    cursor: pointer;
 }
 .onboardingPage2Text {
     background: linear-gradient(to right, #be6aff, #7f0eff);
@@ -1156,6 +1161,7 @@ button.link {
     border: #9727ff;
     padding: 3px 7px;
     margin: 20px 10px 0;
+    cursor: pointer;
 }
 .onboardingPage2Button:first-child {
     padding: 3px 5px;
@@ -2967,11 +2973,14 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     .onboardingPage1Text2 {
         padding: 1px 5px;
     }
+    .onboardingPage2Text2 {
+        padding: 2px 13px;
+    }
     .onboardingPage1Text3 {
         padding: 1px 5px;
     }
     .onboardingPage1Text2Background{
-        padding: 2px;
+        padding: 1px;
         margin-right: 14px;
         margin-top: 14px;
     }
