@@ -636,7 +636,7 @@ class Onboarding extends Component {
                         {goal.selected ?
                             <div className="clickableNoUnderline onboardingPage2Text2Background center"
                                  onClick={() => self.handleGoalClick(goal)}>
-                                <div className="font16px font12pxUnder500 onboardingPage1Text2">
+                                <div className="font16px font12pxUnder500 onboardingPage2Text2">
                                     {goal.title}
                                 </div>
                             </div>
