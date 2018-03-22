@@ -851,6 +851,7 @@ class Pathway extends Component {
                                                 <div
                                                     className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                     <img
+                                                        alt={pathway.sponsor.benefits[0].iconAltTag ? pathway.sponsor.benefits[0].iconAltTag : "Benefit Icon"}
                                                         src={pathway.sponsor.benefits[0].icon}
                                                         style={style.horizListIcon}
                                                     /><br/>
@@ -866,6 +867,7 @@ class Pathway extends Component {
                                                     className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                     <img
                                                         src={pathway.sponsor.benefits[1].icon}
+                                                        alt={pathway.sponsor.benefits[1].iconAltTag ? pathway.sponsor.benefits[1].iconAltTag : "Benefit Icon"}
                                                         style={style.horizListIcon}
                                                     /><br/>
                                                     {pathway.sponsor.benefits[1].description}
@@ -878,6 +880,7 @@ class Pathway extends Component {
                                                     className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                     <img
                                                         src={pathway.sponsor.benefits[2].icon}
+                                                        alt={pathway.sponsor.benefits[2].iconAltTag ? pathway.sponsor.benefits[2].iconAltTag : "Benefit Icon"}
                                                         style={style.horizListIcon}
                                                     /><br/>
                                                     {pathway.sponsor.benefits[2].description}
@@ -895,6 +898,7 @@ class Pathway extends Component {
                                                     className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                     <img
                                                         src={pathway.sponsor.benefits[3].icon}
+                                                        alt={pathway.sponsor.benefits[3].iconAltTag ? pathway.sponsor.benefits[3].iconAltTag : "Benefit Icon"}
                                                         style={style.horizListIcon}
                                                     /><br/>
                                                     {pathway.sponsor.benefits[3].description}
@@ -909,6 +913,7 @@ class Pathway extends Component {
                                                     className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                     <img
                                                         src={pathway.sponsor.benefits[4].icon}
+                                                        alt={pathway.sponsor.benefits[4].iconAltTag ? pathway.sponsor.benefits[4].iconAltTag : "Benefit Icon"}
                                                         style={style.horizListIcon}
                                                     /><br/>
                                                     {pathway.sponsor.benefits[4].description}
@@ -921,6 +926,7 @@ class Pathway extends Component {
                                                     className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                                     <img
                                                         src={pathway.sponsor.benefits[5].icon}
+                                                        alt={pathway.sponsor.benefits[5].iconAltTag ? pathway.sponsor.benefits[5].iconAltTag : "Benefit Icon"}
                                                         style={style.horizListIcon}
                                                     /><br/>
                                                     {pathway.sponsor.benefits[5].description}
@@ -962,6 +968,7 @@ class Pathway extends Component {
                             <div key="extraInfo" className="center font20px font14pxUnder700 font10pxUnder400"
                                  style={{marginBottom: "30px", clear: "both", paddingTop: "50px"}}>
                                 <img
+                                    alt="Tool Icon"
                                     src="/icons/ToolPurple.png"
                                     id="toolIconExtraInfo"
                                 />

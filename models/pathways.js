@@ -101,7 +101,16 @@ var pathwaysSchema = mongoose.Schema({
           title: String,
           // if the video needs a spacer before it
           spacer: Boolean
-      }
+      },
+      // some benefits the user will get at the company
+      benefits: [{
+          // path to icon that corresponds to the benefit info
+          icon: String,
+          // alt tag for the icon
+          iconAltTag: String,
+          // the info about the benefit
+          description: String
+      }]
   },
   // how long we estimate it will take for the student to complete the pathway
   estimatedCompletionTime: String,
