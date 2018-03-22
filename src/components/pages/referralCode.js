@@ -259,6 +259,7 @@ class ReferralCode extends Component {
                                     <div className="checkbox smallCheckbox blueCheckbox"
                                          onClick={this.handleCheckMarkClick.bind(this)}>
                                         <img
+                                            alt=""
                                             className={"checkMark" + this.state.agreeingToTerms}
                                             src="/icons/CheckMarkBlue.png"
                                         />
