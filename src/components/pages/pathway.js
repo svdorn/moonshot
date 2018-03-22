@@ -797,6 +797,7 @@ class Pathway extends Component {
                                     <div>
                                         <div style={style.bottomListItem}>
                                             <img src={pathway.sponsor.positionDescription.frames[0].icon}
+                                                 alt={pathway.sponsor.positionDescription.frames[0].iconAltTag ? pathway.sponsor.positionDescription.frames[0].iconAltTag : ""}
                                                  className="forBusinessIcon"
                                                  style={{marginRight: '10px'}}/>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700" style={{width:"90%", marginLeft:"5%"}}>
@@ -805,6 +806,7 @@ class Pathway extends Component {
                                         </div>
                                         <div style={style.bottomListItem}>
                                             <img src={pathway.sponsor.positionDescription.frames[1].icon}
+                                                 alt={pathway.sponsor.positionDescription.frames[1].iconAltTag ? pathway.sponsor.positionDescription.frames[1].iconAltTag : ""}
                                                  className="forBusinessIcon"
                                                  style={{marginLeft: '10px'}}/>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700" style={{width:"90%", marginLeft:"5%"}}>
@@ -815,6 +817,7 @@ class Pathway extends Component {
                                     <div style={{marginTop: '40px'}}>
                                         <div style={style.bottomListItem}>
                                             <img src={pathway.sponsor.positionDescription.frames[2].icon}
+                                                 alt={pathway.sponsor.positionDescription.frames[2].iconAltTag ? pathway.sponsor.positionDescription.frames[2].iconAltTag : ""}
                                                  className="forBusinessIcon"/>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700" style={{width:"90%", marginLeft:"5%"}}>
                                                 {pathway.sponsor.positionDescription.frames[2].description}
@@ -822,6 +825,7 @@ class Pathway extends Component {
                                         </div>
                                         <div style={style.bottomListItem}>
                                             <img src={pathway.sponsor.positionDescription.frames[3].icon}
+                                                 alt={pathway.sponsor.positionDescription.frames[3].iconAltTag ? pathway.sponsor.positionDescription.frames[3].iconAltTag : ""}
                                                  className="forBusinessIcon"/>
                                             <div className="horizListText font18px font16pxUnder800 font12pxUnder700" style={{width:"90%", marginLeft:"5%"}}>
                                                 {pathway.sponsor.positionDescription.frames[3].description}
