@@ -144,7 +144,7 @@ class PathwayPreview extends Component {
                                             <div style={{display:"inline-block", /*marginRight:"4px"*/}}>{/*Hiring Partner*/}</div>
                                             <img
                                                 src={this.props.logo}
-                                                alt={this.props.sponsorName + " Logo"}
+                                                alt={this.props.sponsorName ? this.props.sponsorName + " Logo" : ""}
                                                 height={20}
                                             />
                                         </div>
@@ -218,7 +218,7 @@ class PathwayPreview extends Component {
                                             <div style={{display:"inline-block", /*marginRight:"4px"*/}}>{/*Hiring Partner*/}</div>
                                             <img
                                                 src={this.props.logo}
-                                                alt={this.props.sponsorName + " Logo"}
+                                                alt={this.props.sponsorName ? this.props.sponsorName + " Logo" : ""}
                                                 height={20}
                                             />
                                         </div>
