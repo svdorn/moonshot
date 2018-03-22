@@ -221,7 +221,7 @@ const sanitizeOptions = {
 // nwm: "5a80b3cf734d1d0d42e9fcad"
 // sw: "5a88b4b8734d1d041bb6b386"
 
-printUsersFromPathway("5a88b4b8734d1d041bb6b386");
+// printUsersFromPathway("5a88b4b8734d1d041bb6b386");
 
 function printUsersFromPathway(pathwayIdToCheck) {
     const pathwayUsersQuery = {
