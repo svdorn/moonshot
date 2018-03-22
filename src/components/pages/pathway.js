@@ -613,7 +613,7 @@ class Pathway extends Component {
                             {pathway.sponsor.quoteReplacement ?
                                 <div className="pathwayLandingQuoteAltRight">
                                     <img
-                                        alt={pathway.sponsor.quoteReplacementAltText ? pathway.sponsor.quoteReplacementAltText : ""}
+                                        alt={pathway.sponsor.quoteReplacementAltTag ? pathway.sponsor.quoteReplacementAltTag : ""}
                                         src={pathway.sponsor.quoteReplacement}
                                         className="pathwayLandingQuoteReplacementImg"
                                     />

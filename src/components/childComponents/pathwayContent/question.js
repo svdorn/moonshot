@@ -38,11 +38,11 @@ class Question extends Component {
                     break;
                 case "img":
                     if (content.length > 0) {
-                        const altText = part.altText ? part.altText : "";
+                        const altTag = part.altTag ? part.altTag : "";
                         return (
                             <div>
                                 <img src={"/images/" + content[0]}
-                                     alt={altText}
+                                     alt={altTag}
                                      className={className}
                                      key={"contentPart" + keyCounter} />
                                      {breakArea}
