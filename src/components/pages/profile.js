@@ -344,6 +344,7 @@ class Profile extends Component {
                     </div>;
                 aboutMeItems.push({
                     icon: "SpeechBubble2.png",
+                    iconAltTag: "Speech Bubble Icon",
                     title: "Biography",
                     content: content
                 });
@@ -375,6 +376,7 @@ class Profile extends Component {
                 });
                 aboutMeItems.push({
                     icon: "Education2.png",
+                    iconAltTag: "Book Icon",
                     title: "Education",
                     content: schools
                 });
@@ -390,6 +392,7 @@ class Profile extends Component {
                 });
                 aboutMeItems.push({
                     icon: "Star2.png",
+                    iconAltTag: "Star Icon",
                     title: "Interests",
                     content: <div>{interestsSpans}</div>
                 });
@@ -413,6 +416,7 @@ class Profile extends Component {
                 if (links.length > 0) {
                     aboutMeItems.push({
                         icon: "Links3.png",
+                        iconAltTag: "Links Icon",
                         title: "Links",
                         content: linkOuts
                     });
@@ -440,7 +444,9 @@ class Profile extends Component {
                     <li style={{marginTop: '30px'}}>
                         <Paper className="profileAboutPaper aboutMeLi font20px font font16pxUnder700 font14pxUnder400"
                                zDepth={3}>
-                            <div className="aboutMeLiIconContainer"><img src={"/icons/" + item.icon}/></div>
+                            <div className="aboutMeLiIconContainer">
+                                <img alt={item.iconAltTag} src={"/icons/" + item.icon}/>
+                            </div>
 
                             <div className="verticalDivider"/>
 

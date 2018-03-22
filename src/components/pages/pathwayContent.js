@@ -315,6 +315,7 @@ class PathwayContent extends Component {
 
                                 <Paper className="questionsContactUs">
                                     <img
+                                        alt="Speech Bubble Icon"
                                         src="/icons/SpeechBubble.png"
                                         style={{height: "50px", width: "50px", position: "absolute"}}
                                     />
