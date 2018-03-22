@@ -40,6 +40,8 @@ var pathwaysSchema = mongoose.Schema({
       demo: String,
       // path to image to show if no quote
       quoteReplacement: String,
+      // alt text for image that is potentially replacing quote
+      quoteReplacementAltText: String,
       // quote from someone at the company
       quote: {
           body: String,

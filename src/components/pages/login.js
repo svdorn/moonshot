@@ -206,7 +206,7 @@ class Login extends Component {
                         </div>
                         <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
-                                alt="Check Mark Icon"
+                                alt=""
                                 className={"checkMark" + this.state.keepMeLoggedIn}
                                 src="/icons/CheckMarkBlue.png"
                             />

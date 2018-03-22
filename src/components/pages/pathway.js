@@ -392,7 +392,7 @@ class Pathway extends Component {
                             </div>
                         </div>
 
-                        {pathway.sponsor.info ?
+                        {Array.isArray(pathway.sponsor.info) && pathway.sponsor.info.length > 2 ?
                             <div style={{marginTop: '50px', marginBottom: '80px', overflow: 'auto'}}>
                                 <div style={style.horizList}>
                                     <div className="horizListFull">
@@ -480,6 +480,7 @@ class Pathway extends Component {
                                              id={pathway.industry ? "pathwayShortDescription" : ""}
                                         >
                                             <img
+                                                alt="Graduation Hat Icon"
                                                 src="/icons/GraduationHatPurple.png"
                                                 className="pathwayDescriptionAndSalaryIcon"
                                                 id="pathwayHatIcon"
@@ -501,6 +502,7 @@ class Pathway extends Component {
                                              id={pathway.industry ? "pathwaySalaryInfo" : ""}
                                         >
                                             <img
+                                                alt="Dollar Sign Icon"
                                                 src="/icons/DollarSignPurple.jpg"
                                                 className="pathwayDescriptionAndSalaryIcon"
                                                 id="pathwayMoneyIcon"
@@ -521,14 +523,17 @@ class Pathway extends Component {
 
                         <div className="pathwayLandingQuote">
                             <h1 style={{marginBottom: '30px'}} className="font36px font32pxUnder700 font26pxUnder500">
-                                Our hiring partner <img
-                                src={pathway.sponsor.logoForLightBackground}
-                                alt={pathway.sponsor.name}
-                                className="pathwayLandingSponsoredBy"
-                            /></h1>
+                                Our hiring partner
+                                <img
+                                    src={pathway.sponsor.logoForLightBackground}
+                                    alt={pathway.sponsor.name + "Logo"}
+                                    className="pathwayLandingSponsoredBy"
+                                />
+                            </h1>
                             <div className="pathwayLandingQuoteLeft">
                                 <div>
                                     <img
+                                        alt="Info Icon"
                                         src="/icons/About.png"
                                         className="pathwayLandingIconsLeft"
                                     />
@@ -542,6 +547,7 @@ class Pathway extends Component {
                                 {pathway.sponsor.hiring ?
                                     <div style={style.spaceTop}>
                                         <img
+                                            alt="Badge Icon"
                                             src="/icons/OpenPositions.png"
                                             className="pathwayLandingIconsLeft"
                                         />
@@ -556,6 +562,7 @@ class Pathway extends Component {
                                     : null}
                                 <div style={style.spaceTop}>
                                     <img
+                                        alt="Link Icon"
                                         src="/icons/Links2.png"
                                         className="pathwayLandingIconsLeft"
                                     />
@@ -591,7 +598,7 @@ class Pathway extends Component {
                                                 src={pathway.sponsor.quote.speakerImage}
                                                 style={style.quote.speakerImage}
                                                 id="speakerImage"
-                                                alt={""}
+                                                alt={pathway.sponsor.quote.speakerName ? pathway.sponsor.quote.speakerName + " Photo" : "Speaker Photo" }
                                             />
                                             <div style={style.quote.speakerInfo}
                                                  className="font20px font16pxUnder700 font14pxUnder400">
@@ -606,6 +613,7 @@ class Pathway extends Component {
                             {pathway.sponsor.quoteReplacement ?
                                 <div className="pathwayLandingQuoteAltRight">
                                     <img
+                                        alt={pathway.sponsor.quoteReplacementAltText ? pathway.sponsor.quoteReplacementAltText : ""}
                                         src={pathway.sponsor.quoteReplacement}
                                         className="pathwayLandingQuoteReplacementImg"
                                     />
@@ -616,7 +624,7 @@ class Pathway extends Component {
                             <div className="homepageSeparator purpleRedSeparator"/>
                         </div>
 
-                        {pathway.sponsor.info2 ?
+                        {Array.isArray(pathway.sponsor.info2) && pathway.sponsor.info2.length > 2 ?
                             <div style={{marginTop: '80px', marginBottom: '60px', overflow: 'auto'}}>
                                 <div className="font36px font32pxUnder700 font26pxUnder500 center"
                                      style={{marginBottom: '30px'}}>
@@ -672,7 +680,7 @@ class Pathway extends Component {
                             </div>
                             : null}
 
-                        {pathway.sponsor.positionDescription && pathway.sponsor.positionDescription.displayBefore ?
+                        {pathway.sponsor.positionDescription && pathway.sponsor.positionDescription.displayBefore && Array.isArray(pathway.sponsor.positionDescription.frames) && pathway.sponsor.positionDescription.frames.length > 3 ?
                             <div style={{marginTop: '80px'}}>
                                 {pathway.sponsor.positionDescription.spacer ?
                                     <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
@@ -776,7 +784,7 @@ class Pathway extends Component {
                             </div>
                             : null}
 
-                        {pathway.sponsor.positionDescription && pathway.sponsor.positionDescription.displayAfter ?
+                        {pathway.sponsor.positionDescription && pathway.sponsor.positionDescription.displayAfter && Array.isArray(pathway.sponsor.positionDescription.frames) && pathway.sponsor.positionDescription.frames.length > 3 ?
                             <div style={{marginTop: '60px', marginBottom: "20px"}}>
                                 {pathway.sponsor.positionDescription.spacer ?
                                     <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
@@ -824,7 +832,7 @@ class Pathway extends Component {
                             </div>
                             : null}
 
-                        {pathway.sponsor.benefits ?
+                        {Array.isArray(pathway.sponsor.benefits) && pathway.sponsor.benefits.length > 5 ?
                             <div>
                                 <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
                                 <div className="font36px font32pxUnder700 font26pxUnder500 center"
