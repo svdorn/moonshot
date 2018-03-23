@@ -20,6 +20,7 @@ import {closeNotification, comingSoon} from "../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
 import styles from '../../../public/styles';
+import MetaTags from 'react-meta-tags';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -336,7 +337,6 @@ class Discover extends Component {
                 const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
                 const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
                 const pathwayLogo = (pathway.sponsor && pathway.sponsor.logo) ? pathway.sponsor.logo : "";
-                console.log("pathway: ", pathway);
                 const pathwaySponsorName = pathway.sponsor && pathway.sponsor.name ? pathway.sponsor.name : "";
                 const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
                 const pathwayPrice = pathway.price ? pathway.price : "";
@@ -413,6 +413,10 @@ class Discover extends Component {
 
         return (
             <div className={"jsxWrapper" + blurredClass} ref='discover'>
+                <MetaTags>
+                    <title>Discover - Moonshot</title>
+                    <meta name="description" content="Find the pathway to get the perfect job." />
+                </MetaTags>
                 <Dialog
                     actions={actions}
                     modal={false}

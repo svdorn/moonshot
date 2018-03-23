@@ -7,6 +7,7 @@ import {TextField, RaisedButton, Paper, CircularProgress, Dialog, FlatButton} fr
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import MetaTags from 'react-meta-tags';
 
 const styles = {
     hintStyle: {
@@ -202,6 +203,10 @@ class ForBusiness extends Component {
 
         return (
             <div className="jsxWrapper">
+                <MetaTags>
+                    <title>For Business - Moonshot</title>
+                    <meta name="description" content="Find your next great employees. You tell us what you're looking for, and we'll find and evaluate candidates for you." />
+                </MetaTags>
                 <div className={blurredClass}>
                     <Dialog
                         actions={actions}
