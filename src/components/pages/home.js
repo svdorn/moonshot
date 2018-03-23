@@ -9,6 +9,7 @@ import {closeNotification, comingSoon} from "../../actions/usersActions";
 import {TextField, RaisedButton, Paper, CircularProgress, Dialog, FlatButton} from 'material-ui';
 import ComingSoonForm from '../childComponents/comingSoonForm';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class Home extends Component {
 
@@ -231,6 +232,10 @@ class Home extends Component {
 
         return (
             <div className='jsxWrapper' ref='home'>
+                <MetaTags>
+                    <title>Moonshot</title>
+                    <meta name="description" content="Moonshot helps you get a job for your skills, not your GPA." />
+                </MetaTags>
                 <div className={blurredClass}>
                     <Dialog
                         actions={actions}
