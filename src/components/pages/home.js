@@ -234,7 +234,7 @@ class Home extends Component {
             <div className='jsxWrapper' ref='home'>
                 <MetaTags>
                     <title>Moonshot</title>
-                    <meta name="description" content="Moonshot helps you get a job for your skills, not your GPA." />
+                    <meta name="description" content="Moonshot helps you get a job for your skills, not your GPA. Find the perfect job for you." />
                 </MetaTags>
                 <div className={blurredClass}>
                     <Dialog

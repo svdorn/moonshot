@@ -7,6 +7,7 @@ import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class MyPathways extends Component {
     constructor(props) {
@@ -191,6 +192,10 @@ class MyPathways extends Component {
 
         return (
             <div className='jsxWrapper' ref='discover'>
+                <MetaTags>
+                    <title>My Pathways - Moonshot</title>
+                    <meta name="description" content="See your ongoing and completed pathways." />
+                </MetaTags>
                 {this.props.currentUser ?
                     <div className="fillScreen purpleToRedLightGradient" style={{paddingBottom:"60px"}}>
                         <div className="headerDiv"/>
