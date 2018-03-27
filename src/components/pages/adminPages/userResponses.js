@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification} from "../../actions/usersActions";
+import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import axios from 'axios';
 
@@ -19,27 +19,22 @@ class Admin extends Component {
     componentDidMount() {
         const user = this.props.currentUser;
 
-        if (user.admin !== true) {
-            this.goTo("/");
-            return;
-        }
+        let self = this;
 
-        // let self = this;
-        //
-        // axios.get("/api/infoForAdmin", {params: {
-        //     userId: user._id,
-        //     verificationToken: user.verificationToken
-        // }})
-        // .then(function(response) {
-        //     const usersArray = response.data;
-        //     self.setState({
-        //         ...self.state,
-        //         users: usersArray
-        //     })
-        // })
-        // .catch(function(err) {
-        //     console.log("error with getting info for admin");
-        // })
+        axios.get("/api/infoForAdmin", {params: {
+            userId: user._id,
+            verificationToken: user.verificationToken
+        }})
+        .then(function(response) {
+            const usersArray = response.data;
+            self.setState({
+                ...self.state,
+                users: usersArray
+            })
+        })
+        .catch(function(err) {
+            console.log("error with getting info for admin");
+        })
     }
 
 
@@ -54,17 +49,20 @@ class Admin extends Component {
 
 
     render() {
+        const users = this.state.users;
+        let userLis = !users || users.length === 0 ? null : users.map(function(user) {
+            return (
+                <li>
+                    <a href={"/admin/viewUser?user=" + user.profileUrl}>{user.name}</a> with email: {user.email}
+                </li>
+            );
+        });
+
+        const userList = <ul>{userLis}</ul>;
+
         return (
             <div>
-                {this.props.currentUser.admin === true ?
-                    <div>
-                        <div className="headerDiv greenToBlue" />
-
-                        {this.props.children}
-                    </div>
-
-                    : null
-                }
+                {userList}
             </div>
         );
     }

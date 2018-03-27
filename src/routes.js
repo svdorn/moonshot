@@ -33,7 +33,15 @@ import Email from './components/pages/email';
 import Unsubscribe from './components/pages/unsubscribe';
 import ReferralCode from './components/pages/referralCode';
 import Admin from './components/pages/admin';
-import AdminUserView from './components/pages/adminUserView';
+import PrivacyPolicy from './components/policies/privacyPolicy';
+import TermsOfUse from './components/policies/termsOfUse';
+import AffiliateAgreement from './components/policies/affiliateAgreement';
+
+import AdminPages from './components/pages/adminPages/adminPages'
+import ViewUser from './components/pages/adminPages/viewUser';
+import UserResponses from './components/pages/adminPages/UserResponses';
+import CreateBusinessAccount from './components/pages/adminPages/createBusinessAccount';
+
 import ReactGA from 'react-ga';
 ReactGA.initialize(credentials.googleAnalyticsTrackingNumber);
 
@@ -64,10 +72,19 @@ const routes = (
         <Route path="pathway" component={Pathway} />
         <Route path="pathwayContent" component={AuthenticatedComponent} page={<PathwayContent/>} />
         <Route path="email" component={Email}/>
-        <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} />
-        <Route path="adminUserView" component={AuthenticatedComponent} page={<AdminUserView/>} />
         <Route path="unsubscribe" component={Unsubscribe} />
         <Route path="referral" component={ReferralCode} />
+        <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
+        <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
+        <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
+
+        <Route path="admin" component={AuthenticatedComponent} page={<Admin/>}>
+            <IndexRoute component={AdminPages} />
+            <Route path="createBusinessAccount" component={CreateBusinessAccount} />
+            <Route path="userResponses" component={UserResponses} />
+            <Route path="viewUser" component={ViewUser} />
+        </Route>
+
         <Route path='*' component={Error404} />
     </Route>
   </Router>

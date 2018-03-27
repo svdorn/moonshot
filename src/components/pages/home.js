@@ -28,12 +28,22 @@ class Home extends Component {
         this.state = {
             // three empty pathways until we get the top three pathways from
             // the backend
-            pathways1: [emptyPathway, emptyPathway, emptyPathway, emptyPathway],
-            pathways2: undefined,
+            pathways: [emptyPathway, emptyPathway, emptyPathway, emptyPathway, emptyPathway, emptyPathway],
             open: false,
             dialogPathway: null,
         }
+
+        // capture referral code in cookie, if it exists
+        if (props.location && props.location.query && props.location.query.referralCode) {
+            this.captureCode();
+        }
     }
+
+
+
+
+
+
 
     goTo(route) {
         // closes any notification
@@ -45,7 +55,6 @@ class Home extends Component {
     }
 
     handleOpen = (pathway) => {
-        console.log("pathway: ", pathway);
         if (!pathway.comingSoon) {
             this.goTo('/pathway?pathway=' + pathway.url);
         } else {
@@ -78,17 +87,7 @@ class Home extends Component {
         }).then(res => {
             // make sure component is mounted before changing state
             if (this.refs.home) {
-                const returnedPathways = res.data;
-                let pathways2 = undefined;
-                let pathways1 = [];
-                if (returnedPathways.length >= 4) {
-                    const halfwayPoint = returnedPathways.length / 2;
-                    pathways2 = returnedPathways.slice(halfwayPoint);
-                    pathways1 = returnedPathways.slice(0, halfwayPoint);
-                } else {
-                    pathways1 = returnedPathways;
-                }
-                this.setState({pathways1, pathways2});
+                this.setState({pathways: res.data})
             }
         }).catch(function (err) {
         })
@@ -107,7 +106,7 @@ class Home extends Component {
         // create the pathway previews
         let pathwayKey = 0;
         let self = this;
-        const pathwayPreviews1 = this.state.pathways1.map(function (pathway) {
+        const pathwayPreviews = this.state.pathways.map(function (pathway) {
             pathwayKey++;
             let formattedDeadline = "";
             if (pathway.deadline) {
@@ -116,7 +115,9 @@ class Home extends Component {
             }
 
             return (
-                <li style={{verticalAlign: "top"}} key={pathwayKey}
+                <li style={{verticalAlign: "top"}}
+                    className="pathwayPreviewLi explorePathwayPreview"
+                    key={pathwayKey}
                     onClick={() => self.handleOpen(pathway)}
                 ><PathwayPreview
                     name={pathway.name}
@@ -131,36 +132,6 @@ class Home extends Component {
                 /></li>
             );
         });
-
-        let pathwayPreviews2 = undefined;
-        if (this.state.pathways2) {
-            pathwayKey = 100;
-            pathwayPreviews2 = this.state.pathways2.map(function (pathway) {
-                pathwayKey++;
-                let formattedDeadline = "";
-                if (pathway.deadline) {
-                    const deadline = new Date(pathway.deadline);
-                    formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
-                }
-
-                return (
-                    <li style={{verticalAlign: "top"}} key={pathwayKey}
-                        //<!-- onClick={() => self.goTo('/pathway?' + pathway._id)}-->
-                        onClick={() => self.handleOpen(pathway)}
-                    ><PathwayPreview
-                        name={pathway.name}
-                        image={pathway.previewImage}
-                        logo = {pathway.sponsor.logoForLightBackground}
-                        sponsorName = {pathway.sponsor.name}
-                        completionTime = {pathway.estimatedCompletionTime}
-                        deadline = {formattedDeadline}
-                        price = {pathway.price}
-                        _id = {pathway._id}
-                        comingSoon = {pathway.comingSoon}
-                    /></li>
-                );
-            });
-        }
 
 
         // const logosInfo = [
@@ -264,7 +235,7 @@ class Home extends Component {
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
                         <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500 font20pxUnder400 font18pxUnder350">
-                            Skip the resum&eacute;.<br/>Learn skills that employers need<br/><i>and get paid to do it.</i><br/>
+                            Skip the resum&eacute;.<br/>We{"'"}ll help you get hired for<br/>your skills, not your GPA.<br/>
                             <button className="outlineButton font30px font20pxUnder500 blueWhiteButton"
                                     onClick={() => this.scrollDown()}>
                                 Get Started
@@ -295,10 +266,10 @@ class Home extends Component {
                                     className="homepageTrajectoryTextLeftIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
-                                    <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Complete Pathways<br/>And Learn Skills</h2>
-                                      Pathways are a series of free courses
-                                      designed to teach you skills that employers actually want.
-                                      Who cares if you know how photosynthesis works?
+                                    <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Complete Pathways To Get Evaluated For Open Positions</h2>
+                                      Pathways are employer-sponsored courses
+                                      evaluating you for in-demand positions.
+
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight onHome">
@@ -320,11 +291,10 @@ class Home extends Component {
                                     className="homepageTrajectoryTextRightIcon personIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
-                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Build Your Profile</h2>
-                                    Add your skills, completed projects and
-                                    finished pathways. The modern resumé – the
-                                    B you got in history shouldn’t affect your
-                                    chances of getting a tech job.
+                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">$100 If You Interview</h2>
+                                    Score an interview through one of our
+                                    technical pathways and we{"'"}ll pay you $100.
+                                    That{"'"}s like a year{"'"}s worth of ramen.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesLeft">
@@ -346,11 +316,10 @@ class Home extends Component {
                                     className="homepageTrajectoryTextLeftIcon onHome smallerWidthIcon"
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
-                                    <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Paid and Get Hired by<br/>Innovative Companies</h2>
-                                    Compete for open positions with sponsor
-                                    companies by excelling in pathways and
-                                    demonstrating your skills. Score an
-                                    interview with them and we’ll pay you $100.
+                                    <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Hired by<br/>Innovative Companies</h2>
+                                    Compete for open positions by excelling in
+                                    pathways and proving your skills. Get
+                                    hired for your skills, not your volunteer hours.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight">
@@ -370,24 +339,11 @@ class Home extends Component {
                             Moonshot courses are organized in<div className="br under500only"><br/></div> pathways and
                             sponsored<br/>by employers hiring for those skills.
                         </div>
-                        <div className="pathwayPrevListContainer">
-                            <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">
-                                {pathwayPreviews1}
-                            </ul>
-                        </div>
-                        {pathwayPreviews2 ?
-                            <div className="pathwayPrevListContainer" style={{marginTop: '20px'}}>
-                                <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">
-                                    {pathwayPreviews2}
-                                </ul>
-                            </div>
-                            : null
-                        }
-                        <div className="pathwayPrevListContainer pathwayPrevMobileThird">
-                            <ul className="horizCenteredList pathwayPrevList oneLinePathwayPrevList">
-                                {pathwayPreviews1[2]}
-                            </ul>
-                        </div>
+
+                        <ul className="horizCenteredList pathwayPrevList" style={{minHeight:"400px", maxHeight:"779px", overflow:"hidden", maxWidth:"1000px"}}>
+                            {pathwayPreviews}
+                        </ul>
+
                         <button className="blueGradientButtonExterior bigButton"
                                 onClick={() => this.goTo('/signup')}
                                 style={{marginTop: "40px"}}
@@ -422,6 +378,51 @@ class Home extends Component {
                 </div>
             </div>
         );
+    }
+
+
+    /************************ REFERRAL COOKIE FUNCTIONS *******************************/
+    //this is the name of the cookie on the users machine
+    cookieName = "ReferralCodeCookie";
+    //the name of the url paramater you are expecting that holds the code you wish to capture
+    //for example, http://www.test.com?couponCode=BIGDISCOUNT your URL Parameter would be
+    //couponCode and the cookie value that will be stored is BIGDISCOUNT
+    URLParameterName = "referralCode";
+    //how many days you want the cookie to be valid for on the users machine
+    cookiePersistDays = 7;
+
+    // Extract the code from the URL based on the defined parameter name
+    captureCode() {
+        var q = this.getParameterByName(this.URLParameterName);
+        if (q != null && q != "") {
+            this.eraseCookie(this.cookieName);
+            this.createCookie(this.cookieName, q, this.cookiePersistDays);
+        }
+    }
+
+    createCookie(name, value, days) {
+        let expires = ""
+        if (days) {
+            let date = new Date();
+            date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+            let expires = "; expires=" + date.toGMTString();
+        }
+        document.cookie = name + "=" + value + expires + "; path=/";
+    }
+
+    eraseCookie(name) {
+        this.createCookie(name, "", -1);
+    }
+
+    //Retrieve a query string parameter
+    getParameterByName(name) {
+        let value = undefined;
+        try {
+            value = this.props.location.query[name];
+        } catch (e) {
+            // don't need to do anything if the query doesn't exist
+        }
+        return value;
     }
 }
 
