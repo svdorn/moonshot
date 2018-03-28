@@ -336,7 +336,6 @@ class Discover extends Component {
                 const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
                 const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
                 const pathwayLogo = (pathway.sponsor && pathway.sponsor.logo) ? pathway.sponsor.logo : "";
-                console.log("pathway: ", pathway);
                 const pathwaySponsorName = pathway.sponsor && pathway.sponsor.name ? pathway.sponsor.name : "";
                 const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
                 const pathwayPrice = pathway.price ? pathway.price : "";

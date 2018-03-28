@@ -250,7 +250,7 @@ class Pathway extends Component {
                 }
 
                 let side = "Left";
-                if (step.order % 2 == 0) {
+                if (step.order % 2 === 0) {
                     side = "Right";
                 }
 
@@ -938,7 +938,7 @@ class Pathway extends Component {
                             </div>
                             : null}
 
-                        {pathway.steps && pathway.sponsor.displaySteps === "true" ?
+                        {pathway.steps && pathway.sponsor.displaySteps === true ?
                             <div>
                                 <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
                                 <div className="center font36px font32pxUnder700 font26pxUnder500"
