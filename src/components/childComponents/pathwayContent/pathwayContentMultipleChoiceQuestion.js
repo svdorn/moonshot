@@ -50,7 +50,7 @@ class PathwayContentMultipleChoiceQuestion extends Component {
         // save if choice is valid
         if ((typeof answerNumber === "number" && answerNumber >= 1) || typeof answerNumber === "string") {
             if ((this.props.allowCustomAnswer && answerNumber <= this.props.answers.length) ||
-                (!this.props.allowCustomAnswer && userChoice < this.props.answers.length) ||
+                (!this.props.allowCustomAnswer && answerNumber < this.props.answers.length) ||
                 isCustomAnswer) {
 
                 let savedCustomAnswer = this.state.savedCustomAnswer;
