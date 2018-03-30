@@ -110,6 +110,8 @@ class PathwayContentMultipleChoiceQuestion extends Component {
 
     render() {
         let self = this;
+        console.log(self);
+        let medium = self.props.size === 'medium' ? "medium" : "";
         let options=[];
         if (Array.isArray(self.props.answers)) {
             options = self.props.answers.map(function(answer) {
@@ -120,8 +122,8 @@ class PathwayContentMultipleChoiceQuestion extends Component {
                         key={answer.answerNumber}
                         onClick={()=>self.handleClick(answer.answerNumber, false)}
                     >
-                        <div className={"multipleChoiceCircle " + selectedClass} />
-                        <div className="multipleChoiceAnswer">{answer.body}</div>
+                        <div className={"multipleChoiceCircle " + medium + " " + selectedClass} />
+                        <div className={"multipleChoiceAnswer " + medium}>{answer.body}</div>
                     </div>
                 );
             });

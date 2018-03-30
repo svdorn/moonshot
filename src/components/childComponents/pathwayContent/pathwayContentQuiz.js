@@ -87,6 +87,7 @@ class PathwayContentQuiz extends Component {
                             answers={quiz.multipleChoiceAnswers}
                             allowCustomAnswer={quiz.allowCustomAnswer}
                             quizId={quiz._id}
+                            size={quiz.size}
                         />
                     break;
                 case "multiSelect":

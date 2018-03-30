@@ -1931,6 +1931,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin: auto;
     overflow-x: hidden;
 }
+.multipleChoiceAnswer.medium {
+    max-width: 450px;
+}
 textarea.freeResponseTextArea {
     width: 90%;
     resize: none;
@@ -1954,6 +1957,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 }
 .multipleChoiceCircle.selected, .multiSelectCircle.selected {
     background-color: var(--moonshotLightBlue);
+}
+.multipleChoiceCircle.medium {
+    left: calc(35% - 110px);
 }
 
 
