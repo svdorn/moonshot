@@ -579,6 +579,12 @@ class Pathway extends Component {
                                     {pathway.sponsor.demo ?
                                         <a href={pathway.sponsor.demo} target="_blank" style={style.infoLinks}
                                            className="font20px font16pxUnder700 font14pxUnder400">Demo</a> : null}
+                                    {pathway.sponsor.press ?
+                                        <a href={pathway.sponsor.press} target="_blank" style={style.infoLinks}
+                                           className="font20px font16pxUnder700 font14pxUnder400">Press</a> : null}
+                                    {pathway.sponsor.jobDescription ?
+                                        <a href={pathway.sponsor.jobDescription} target="_blank" style={style.infoLinks}
+                                           className="font20px font16pxUnder700 font14pxUnder400">Job Description</a> : null}
                                     {pathway.sponsor.careerPage ?
                                         <a href={pathway.sponsor.careerPage} target="_blank" style={style.infoLinks}
                                            className="font20px font16pxUnder700 font14pxUnder400">Career
