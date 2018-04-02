@@ -317,6 +317,12 @@ class Pathway extends Component {
                 }
             }
         }
+        let logoSize = "";
+        let logoSizeSponsor = "";
+        if (pathway.sponsor && pathway.sponsor.logoSize === "small") {
+            logoSize = "smallLogoPLP";
+            logoSizeSponsor = "smallLogoPLPSponsor";
+        }
 
         return (
             //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
@@ -347,6 +353,7 @@ class Pathway extends Component {
                                     src={pathway.sponsor.logo}
                                     alt={pathway.sponsor.name + " Logo"}
                                     height={40}
+                                    className={logoSize}
                                     style={{paddingLeft: '10px'}}
                                 />
                             </div>
@@ -526,8 +533,8 @@ class Pathway extends Component {
                                 Our hiring partner
                                 <img
                                     src={pathway.sponsor.logoForLightBackground}
-                                    alt={pathway.sponsor.name + "Logo"}
-                                    className="pathwayLandingSponsoredBy"
+                                    alt={pathway.sponsor.name + " Logo"}
+                                    className={"pathwayLandingSponsoredBy " + logoSizeSponsor}
                                 />
                             </h1>
                             <div className="pathwayLandingQuoteLeft">
@@ -690,10 +697,10 @@ class Pathway extends Component {
                             <div style={{marginTop: '80px'}}>
                                 {pathway.sponsor.positionDescription.spacer ?
                                     <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
-                                    : <div style={{marginTop: '80px'}}/>}
+                                    : <div style={{marginTop: '90px'}}/>}
                                 <div className="center">
                                     <div className="font36px font32pxUnder700 font26pxUnder500 center"
-                                         style={{marginBottom: '30px'}}>
+                                         style={{marginBottom: '40px'}}>
                                         {pathway.sponsor.positionDescription.title}
                                     </div>
                                     <div>

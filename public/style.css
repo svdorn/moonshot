@@ -145,6 +145,13 @@ form > h1 {
   padding: 0 60px 15px 60px;
 }
 
+.smallLogoPLP {
+    height: 80px;
+}
+.smallLogoPLPSponsor {
+    height : 90px !important;
+}
+
 .dropDownSettings {
     display: none !important;
 }
