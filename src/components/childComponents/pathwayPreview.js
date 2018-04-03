@@ -63,6 +63,8 @@ class PathwayPreview extends Component {
 
         let shouldShowBannerClass = this.props.showComingSoonBanner === true ? "" : " noDisplay";
 
+        console.log(this.props);
+
         return (
             <div className="pathwayPreview" style={{position: "relative"}}>
                 {this.props.comingSoon ?
@@ -141,8 +143,7 @@ class PathwayPreview extends Component {
                                             </li>
                                         </ul>
                                     </div>
-                                    {this.props.comingSoon ?
-                                        null :
+                                    {this.props.logo ?
                                         <div style={{position:"absolute", bottom:"4px", /*right:"16px"*/ width: "100%"}}>
                                             <div style={{display:"inline-block", /*marginRight:"4px"*/}}>{/*Hiring Partner*/}</div>
                                             <img
@@ -151,6 +152,7 @@ class PathwayPreview extends Component {
                                                 height={20}
                                             />
                                         </div>
+                                        : null
                                     }
                                 </div>
                             }
@@ -215,8 +217,7 @@ class PathwayPreview extends Component {
                                             </li>
                                         </ul>
                                     </div>
-                                    {this.props.comingSoon ?
-                                        null :
+                                    {this.props.logo ?
                                         <div style={{position:"absolute", bottom:"4px", /*right:"16px"*/ width: "100%"}}>
                                             <div style={{display:"inline-block", /*marginRight:"4px"*/}}>{/*Hiring Partner*/}</div>
                                             <img
@@ -225,6 +226,7 @@ class PathwayPreview extends Component {
                                                 height={20}
                                             />
                                         </div>
+                                        : null
                                     }
                                 </div>
                             }

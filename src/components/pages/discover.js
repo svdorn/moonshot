@@ -299,6 +299,7 @@ class Discover extends Component {
                 const pathwayPrice = pathway.price ? pathway.price : "";
                 const pathwayId = pathway._id ? pathway._id : undefined;
                 const pathwayShowComingSoonBanner = pathway.showComingSoonBanner;
+                const pathwayLogo = pathway.sponsor && pathway.sponsor.logoForLightBackground ? pathway.sponsor.logoForLightBackground : "";
                 return (
                     <li className="pathwayPreviewLi explorePathwayPreview"
                         key={key}
@@ -312,6 +313,7 @@ class Discover extends Component {
                             completionTime={pathwayCompletionTime}
                             deadline={formattedDeadline}
                             price={pathwayPrice}
+                            logo={pathwayLogo}
                             _id={pathwayId}
                             comingSoon={true}
                             showComingSoonBanner={pathwayShowComingSoonBanner}
@@ -367,6 +369,7 @@ class Discover extends Component {
                 const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
                 const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
                 const pathwayPrice = pathway.price ? pathway.price : "";
+                const pathwayLogo = pathway.sponsor && pathway.sponsor.logoForLightBackground ? pathway.sponsor.logoForLightBackground : "";
                 const pathwayId = pathway._id ? pathway._id : undefined;
                 const pathwayShowComingSoonBanner = pathway.showComingSoonBanner;
                 return (
@@ -382,6 +385,7 @@ class Discover extends Component {
                             deadline={formattedDeadline}
                             price={pathwayPrice}
                             _id={pathwayId}
+                            logo={pathwayLogo}
                             comingSoon={true}
                             showComingSoonBanner={pathwayShowComingSoonBanner}
                             variation="2"

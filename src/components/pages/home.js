@@ -148,13 +148,13 @@ class Home extends Component {
                     name={pathwayName}
                     image={pathwayImage}
                     imageAltTag={pathwayAltTag}
-                    logo = {pathwayLogo}
-                    sponsorName = {pathwaySponsorName}
+                    logo={pathwayLogo}
+                    sponsorName={pathwaySponsorName}
                     completionTime={pathwayCompletionTime}
                     deadline={formattedDeadline}
                     price={pathwayPrice}
                     _id={pathwayId}
-                    comingSoon = {pathwayComingSoon}
+                    comingSoon={pathwayComingSoon}
                     showComingSoonBanner={pathwayShowComingSoonBanner}
                 /></li>
             );
