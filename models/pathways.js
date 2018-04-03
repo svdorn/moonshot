@@ -126,6 +126,8 @@ var pathwaysSchema = mongoose.Schema({
   ratings: [{ email: String, rating: Number }],
   // average of all the ratings, should be a number 1-5
   avgRating: Number,
+  // description to be shown in search engine results for this pathway
+  metaDescription: String,
   tags: [ String ],
   industry: { averageSalary: String, title: String },
   extraInfo: String,
