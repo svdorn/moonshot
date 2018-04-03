@@ -145,6 +145,13 @@ form > h1 {
   padding: 0 60px 15px 60px;
 }
 
+.smallLogoPLP {
+    height: 80px;
+}
+.smallLogoPLPSponsor {
+    height : 90px !important;
+}
+
 .dropDownSettings {
     display: none !important;
 }
@@ -1931,6 +1938,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin: auto;
     overflow-x: hidden;
 }
+.multipleChoiceAnswer.medium {
+    max-width: 450px;
+}
 textarea.freeResponseTextArea {
     width: 90%;
     resize: none;
@@ -1954,6 +1964,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 }
 .multipleChoiceCircle.selected, .multiSelectCircle.selected {
     background-color: var(--moonshotLightBlue);
+}
+.multipleChoiceCircle.medium {
+    left: calc(35% - 110px);
 }
 
 
@@ -1984,6 +1997,7 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 .marginSides80px { margin-right: 80px; margin-left: 80px; }
 .marginBottom40px { margin-bottom: 40px; }
 .marginBottom20px { margin-bottom: 20px; }
+.marginBottom10px { margin-bottom: 10px; }
 .marginTop40px { margin-top: 40px; }
 .marginTop20px { margin-top: 20px; }
 

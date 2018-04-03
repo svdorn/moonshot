@@ -12,6 +12,7 @@ class PathwayContentMultipleChoiceQuestion extends Component {
         super(props);
 
         let answerNumber = undefined;
+        const quizId = this.props.quizId;
         let isCustomAnswer = false;
         let savedCustomAnswer = "Other_____";
         // try to assign the value to the value that the user already had from the db
@@ -24,20 +25,57 @@ class PathwayContentMultipleChoiceQuestion extends Component {
                 if ((props.allowCustomAnswer && userValue <= props.answers.length) ||
                     (!props.allowCustomAnswer && userValue < props.answers.length)
                     || userAnswer.isCustomAnswer) {
-                        answerNumber = userValue;
-                        if (isCustomAnswer) {
-                            savedCustomAnswer = userValue;
-                        }
+                    answerNumber = userValue;
+                    if (isCustomAnswer) {
+                        savedCustomAnswer = userValue;
+                    }
                 }
             }
-        } catch(e) { /* do nothing if value invalid */ }
+        } catch (e) { /* do nothing if value invalid */
+        }
 
         // the last time the custom answer was saved
         const lastSave = new Date();
         // if there is a timer on to save the custom answer
         const timerOn = false;
 
-        this.state = { answerNumber, isCustomAnswer, savedCustomAnswer, lastSave }
+        this.state = {answerNumber, isCustomAnswer, savedCustomAnswer, lastSave, quizId}
+    }
+
+    componentDidUpdate() {
+        console.log("in component did update");
+        const props = this.props;
+        const quizId = props.quizId;
+        if (quizId !== this.state.quizId) {
+            let answerNumber = undefined;
+            let isCustomAnswer = false;
+            let savedCustomAnswer = "Other_____";
+            // try to assign the value to the value that the user already had from the db
+            try {
+                const userAnswer = props.currentUser.answers[props.quizId];
+                const userValue = userAnswer.value;
+                isCustomAnswer = userAnswer.isCustomAnswer;
+                // ensure user choice is a valid number
+                if ((typeof userValue === "number" && userValue >= 1) || userAnswer.isCustomAnswer) {
+                    if ((props.allowCustomAnswer && userValue <= props.answers.length) ||
+                        (!props.allowCustomAnswer && userValue < props.answers.length)
+                        || userAnswer.isCustomAnswer) {
+                        answerNumber = userValue;
+                        if (isCustomAnswer) {
+                            savedCustomAnswer = userValue;
+                        }
+                    }
+                }
+            } catch (e) { /* do nothing if value invalid */
+            }
+
+            // the last time the custom answer was saved
+            const lastSave = new Date();
+            // if there is a timer on to save the custom answer
+            const timerOn = false;
+            
+            this.state = {answerNumber, isCustomAnswer, savedCustomAnswer, lastSave, quizId}
+        }
     }
 
 
@@ -50,7 +88,7 @@ class PathwayContentMultipleChoiceQuestion extends Component {
         // save if choice is valid
         if ((typeof answerNumber === "number" && answerNumber >= 1) || typeof answerNumber === "string") {
             if ((this.props.allowCustomAnswer && answerNumber <= this.props.answers.length) ||
-                (!this.props.allowCustomAnswer && userChoice < this.props.answers.length) ||
+                (!this.props.allowCustomAnswer && answerNumber <= this.props.answers.length) ||
                 isCustomAnswer) {
 
                 let savedCustomAnswer = this.state.savedCustomAnswer;
@@ -84,11 +122,11 @@ class PathwayContentMultipleChoiceQuestion extends Component {
             ...self.state,
             answerNumber: e.target.value,
             savedCustomAnswer: e.target.value
-        }, function() {
+        }, function () {
             if (shouldSave) {
                 // saves AFTER the timeout so that any information saved in the
                 // last couple seconds is also saved
-                setTimeout(function() {
+                setTimeout(function () {
                     self.saveAnswer();
                     savedRecently = false;
                 }, 1500);
@@ -110,18 +148,20 @@ class PathwayContentMultipleChoiceQuestion extends Component {
 
     render() {
         let self = this;
-        let options=[];
+        console.log(self.state);
+        let medium = self.props.size === 'medium' ? "medium" : "";
+        let options = [];
         if (Array.isArray(self.props.answers)) {
-            options = self.props.answers.map(function(answer) {
+            options = self.props.answers.map(function (answer) {
                 let selectedClass = answer.answerNumber === self.state.answerNumber ? "selected" : "notSelected";
                 return (
                     <div className="multipleChoiceOption clickableNoUnderline"
-                        answernumber={answer.answerNumber}
-                        key={answer.answerNumber}
-                        onClick={()=>self.handleClick(answer.answerNumber, false)}
+                         answernumber={answer.answerNumber}
+                         key={answer.answerNumber}
+                         onClick={() => self.handleClick(answer.answerNumber, false)}
                     >
-                        <div className={"multipleChoiceCircle " + selectedClass} />
-                        <div className="multipleChoiceAnswer">{answer.body}</div>
+                        <div className={"multipleChoiceCircle " + medium + " " + selectedClass}/>
+                        <div className={"multipleChoiceAnswer " + medium}>{answer.body}</div>
                     </div>
                 );
             });
@@ -133,11 +173,11 @@ class PathwayContentMultipleChoiceQuestion extends Component {
         if (this.props.allowCustomAnswer) {
             options.push(
                 <div className="multipleChoiceOption clickableNoUnderline"
-                    answernumber="custom"
-                    key="customArea"
-                    onClick={()=>self.handleClick(self.state.savedCustomAnswer, true)}
+                     answernumber="custom"
+                     key="customArea"
+                     onClick={() => self.handleClick(self.state.savedCustomAnswer, true)}
                 >
-                    <div className={"multipleChoiceCircle " + customAreaClass} />
+                    <div className={"multipleChoiceCircle " + customAreaClass}/>
                     {isCustomAnswer ?
                         <textarea
                             type="text"
@@ -145,7 +185,7 @@ class PathwayContentMultipleChoiceQuestion extends Component {
                             value={self.state.savedCustomAnswer}
                             onChange={(e) => self.handleInputChange(e)}
                         />
-                    :
+                        :
                         <div className="multipleChoiceAnswer">{self.state.savedCustomAnswer}</div>
                     }
 
@@ -155,7 +195,7 @@ class PathwayContentMultipleChoiceQuestion extends Component {
 
         return (
             <div className="center font20px font16pxUnder600 font12pxUnder400">
-                <div style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
+                <div style={{marginBottom: "20px"}}><Question question={this.props.question}/></div>
                 {options}
             </div>
         );

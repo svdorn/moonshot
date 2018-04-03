@@ -396,7 +396,7 @@ class Home extends Component {
 
                         <button className="purpleToPinkButtonExterior bigButton"
                                 onClick={() => this.goTo('/signup')}
-                                style={{marginTop: "40px"}}
+                                style={{marginTop: "65px"}}
                         >
                             <div className="invertColorOnHover gradientBorderButtonInterior">
                                 Start Profile

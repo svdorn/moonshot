@@ -251,7 +251,7 @@ class Pathway extends Component {
                 }
 
                 let side = "Left";
-                if (step.order % 2 == 0) {
+                if (step.order % 2 === 0) {
                     side = "Right";
                 }
 
@@ -318,6 +318,12 @@ class Pathway extends Component {
                 }
             }
         }
+        let logoSize = "";
+        let logoSizeSponsor = "";
+        if (pathway.sponsor && pathway.sponsor.logoSize === "small") {
+            logoSize = "smallLogoPLP";
+            logoSizeSponsor = "smallLogoPLPSponsor";
+        }
 
         // the title is either a string set specifically for the title or the name of the pathway
         let pathwayTitle = pathway.tabTitle ? pathway.tabTitle : pathway.name;
@@ -362,6 +368,7 @@ class Pathway extends Component {
                                     src={pathway.sponsor.logo}
                                     alt={pathway.sponsor.name + " Logo"}
                                     height={40}
+                                    className={logoSize}
                                     style={{paddingLeft: '10px'}}
                                 />
                             </div>
@@ -541,8 +548,8 @@ class Pathway extends Component {
                                 Our hiring partner
                                 <img
                                     src={pathway.sponsor.logoForLightBackground}
-                                    alt={pathway.sponsor.name + "Logo"}
-                                    className="pathwayLandingSponsoredBy"
+                                    alt={pathway.sponsor.name + " Logo"}
+                                    className={"pathwayLandingSponsoredBy " + logoSizeSponsor}
                                 />
                             </h1>
                             <div className="pathwayLandingQuoteLeft">
@@ -594,6 +601,12 @@ class Pathway extends Component {
                                     {pathway.sponsor.demo ?
                                         <a href={pathway.sponsor.demo} target="_blank" style={style.infoLinks}
                                            className="font20px font16pxUnder700 font14pxUnder400">Demo</a> : null}
+                                    {pathway.sponsor.press ?
+                                        <a href={pathway.sponsor.press} target="_blank" style={style.infoLinks}
+                                           className="font20px font16pxUnder700 font14pxUnder400">Press</a> : null}
+                                    {pathway.sponsor.jobDescription ?
+                                        <a href={pathway.sponsor.jobDescription} target="_blank" style={style.infoLinks}
+                                           className="font20px font16pxUnder700 font14pxUnder400">Job Description</a> : null}
                                     {pathway.sponsor.careerPage ?
                                         <a href={pathway.sponsor.careerPage} target="_blank" style={style.infoLinks}
                                            className="font20px font16pxUnder700 font14pxUnder400">Career
@@ -699,10 +712,10 @@ class Pathway extends Component {
                             <div style={{marginTop: '80px'}}>
                                 {pathway.sponsor.positionDescription.spacer ?
                                     <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
-                                    : <div style={{marginTop: '80px'}}/>}
+                                    : <div style={{marginTop: '90px'}}/>}
                                 <div className="center">
                                     <div className="font36px font32pxUnder700 font26pxUnder500 center"
-                                         style={{marginBottom: '30px'}}>
+                                         style={{marginBottom: '40px'}}>
                                         {pathway.sponsor.positionDescription.title}
                                     </div>
                                     <div>
@@ -953,7 +966,7 @@ class Pathway extends Component {
                             </div>
                             : null}
 
-                        {pathway.steps && pathway.sponsor.displaySteps === "true" ?
+                        {pathway.steps && pathway.sponsor.displaySteps === true ?
                             <div>
                                 <div className="purpleToRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
                                 <div className="center font36px font32pxUnder700 font26pxUnder500"
