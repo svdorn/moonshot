@@ -131,7 +131,7 @@ class PathwayPreview extends Component {
                                                     <span className="font8px">Deadline</span><br/>
                                                     {this.props.deadline && !this.props.comingSoon ? this.props.deadline : null}
                                                     {!this.props.deadline && !this.props.comingSoon ? "None" : null}
-                                                    {this.props.comingSoon ? "TBA" : null }
+                                                    {this.props.comingSoon ? "None" : null }
                                                 </div>
                                             </li>
                                             <li>
@@ -203,7 +203,7 @@ class PathwayPreview extends Component {
                                                     <span className="font8px">Deadline</span><br/>
                                                     {this.props.deadline && !this.props.comingSoon ? this.props.deadline : null}
                                                     {!this.props.deadline && !this.props.comingSoon ? "None" : null}
-                                                    {this.props.comingSoon ? "TBA" : null }
+                                                    {this.props.comingSoon ? "None" : null }
                                                 </div>
                                             </li>
                                             <li>
