@@ -60,11 +60,14 @@ class PathwayPreview extends Component {
         if (this.props.comingSoon) {
             blurClass = "blurOnHover"
         }
+
+        let shouldShowBannerClass = this.props.showComingSoonBanner === true ? "" : " noDisplay";
+
         return (
             <div className="pathwayPreview" style={{position: "relative"}}>
                 {this.props.comingSoon ?
                     <div className="comingSoonPathwayPreview">
-                        <div className="comingSoonBanner">
+                        <div className={"comingSoonBanner" + shouldShowBannerClass}>
                             <div>
                                 <div>
                                     Coming Soon

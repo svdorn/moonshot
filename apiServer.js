@@ -1872,7 +1872,7 @@ app.get('/topPathways', function (req, res) {
     Pathways.find({showToUsers: true})
         .sort({avgRating: 1})
         .limit(numPathways)
-        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon url")
+        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon showComingSoonBanner url")
         .exec(function (err, pathways) {
             if (err) {
                 res.status(500).send("Not able to get top pathways");
@@ -2101,7 +2101,7 @@ app.get('/pathways/search', function (req, res) {
     //const limit = 4;
     const sort = {avgRating: 1};
     // only get these properties of the pathways
-    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon url";
+    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon showComingSoonBanner url";
 
     Pathways.find(query)
         .limit(limit)

@@ -6,7 +6,10 @@ var pathwaysSchema = mongoose.Schema({
   pathwayContentDisplayName: String,
   previewImage: String,
   imageAltTag: String,
+  // hovering shows "reserve your spot" and users can't get to pathway landing page
   comingSoon: Boolean,
+  // show the banner that says "coming soon," only applies if comingSoon is true
+  showComingSoonBanner: Boolean,
   showToUsers: Boolean,
   url: String,
   sponsor: {

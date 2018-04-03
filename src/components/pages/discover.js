@@ -271,7 +271,6 @@ class Discover extends Component {
                 const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
                 const pathwayPrice = pathway.price ? pathway.price : "";
                 const pathwayId = pathway._id ? pathway._id : undefined;
-                const pathwayComingSoon = pathway.comingSoon ? pathway.comingSoon : false;
                 return (
                     <li className="pathwayPreviewLi explorePathwayPreview"
                         key={key}
@@ -287,7 +286,7 @@ class Discover extends Component {
                             deadline={formattedDeadline}
                             price={pathwayPrice}
                             _id={pathwayId}
-                            comingSoon = {pathwayComingSoon}
+                            comingSoon={false}
                             variation="3"
                         />
                     </li>
@@ -299,7 +298,7 @@ class Discover extends Component {
                 const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
                 const pathwayPrice = pathway.price ? pathway.price : "";
                 const pathwayId = pathway._id ? pathway._id : undefined;
-                const pathwayComingSoon = pathway.comingSoon ? pathway.comingSoon : true;
+                const pathwayShowComingSoonBanner = pathway.showComingSoonBanner;
                 return (
                     <li className="pathwayPreviewLi explorePathwayPreview"
                         key={key}
@@ -314,7 +313,8 @@ class Discover extends Component {
                             deadline={formattedDeadline}
                             price={pathwayPrice}
                             _id={pathwayId}
-                            comingSoon={pathwayComingSoon}
+                            comingSoon={true}
+                            showComingSoonBanner={pathwayShowComingSoonBanner}
                             variation="3"
                         />
                     </li>
@@ -368,7 +368,7 @@ class Discover extends Component {
                 const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
                 const pathwayPrice = pathway.price ? pathway.price : "";
                 const pathwayId = pathway._id ? pathway._id : undefined;
-                const pathwayComingSoon = pathway.comingSoon ? pathway.comingSoon : true;
+                const pathwayShowComingSoonBanner = pathway.showComingSoonBanner;
                 return (
                     <li className="pathwayPreviewLi featuredPathwayPreview"
                         key={key}
@@ -382,7 +382,8 @@ class Discover extends Component {
                             deadline={formattedDeadline}
                             price={pathwayPrice}
                             _id={pathwayId}
-                            comingSoon={pathwayComingSoon}
+                            comingSoon={true}
+                            showComingSoonBanner={pathwayShowComingSoonBanner}
                             variation="2"
                         />
                     </li>

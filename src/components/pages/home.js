@@ -137,6 +137,7 @@ class Home extends Component {
             const pathwayPrice = pathway.price ? pathway.price : "";
             const pathwayId = pathway._id ? pathway._id : undefined;
             const pathwayComingSoon = pathway.comingSoon ? pathway.comingSoon : false;
+            const pathwayShowComingSoonBanner = pathway.showComingSoonBanner ? pathway.showComingSoonBanner : false;
 
             return (
                 <li style={{verticalAlign: "top"}}
@@ -154,6 +155,7 @@ class Home extends Component {
                     price={pathwayPrice}
                     _id={pathwayId}
                     comingSoon = {pathwayComingSoon}
+                    showComingSoonBanner={pathwayShowComingSoonBanner}
                 /></li>
             );
         });
