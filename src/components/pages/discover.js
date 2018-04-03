@@ -20,6 +20,7 @@ import {closeNotification, comingSoon} from "../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
 import styles from '../../../public/styles';
+import MetaTags from 'react-meta-tags';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -417,6 +418,10 @@ class Discover extends Component {
 
         return (
             <div className={"jsxWrapper" + blurredClass} ref='discover'>
+                <MetaTags>
+                    <title>Discover - Moonshot</title>
+                    <meta name="description" content="Find the pathway to get the perfect job." />
+                </MetaTags>
                 <Dialog
                     actions={actions}
                     modal={false}

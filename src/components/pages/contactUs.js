@@ -6,7 +6,7 @@ import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {Field, reduxForm} from 'redux-form';
-
+import MetaTags from 'react-meta-tags';
 
 const styles = {
     hintStyle: {
@@ -70,6 +70,10 @@ class ContactUs extends Component {
     render() {
         return (
             <div className="fillScreen greenToBlue center">
+                <MetaTags>
+                    <title>Contact Us - Moonshot</title>
+                    <meta name="description" content="Questions? Comments? New sushi restaurant we should try? Contact Moonshot here!" />
+                </MetaTags>
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
 
                 <div className="form lightWhiteForm">
