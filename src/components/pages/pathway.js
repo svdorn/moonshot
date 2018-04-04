@@ -339,7 +339,7 @@ class Pathway extends Component {
             //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
             <div className="jsxWrapper noOverflowX">
                 <MetaTags>
-                    <title>{pathwayTitle} - Moonshot</title>
+                    <title>{pathwayTitle} | Moonshot</title>
                     <meta name="description" content={pathwayMetaDescription} />
                 </MetaTags>
                 {pathway.sponsor !== undefined ?

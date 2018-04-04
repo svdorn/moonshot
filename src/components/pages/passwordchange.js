@@ -5,7 +5,6 @@ import {bindActionCreators} from 'redux';
 import {changePassword} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
-import MetaTags from 'react-meta-tags';
 
 const styles = {
     floatingLabelStyle: {

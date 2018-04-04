@@ -17,6 +17,10 @@ class VerifyEmail extends Component {
 
         return(
             <div className="fillScreen greenToBlue center">
+                <MetaTags>
+                    <title>Verify Email | Moonshot</title>
+                    <meta name="description" content="Verify your email to get started on your path to finding the perfect job." />
+                </MetaTags>
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     <h1>Verify Email</h1>

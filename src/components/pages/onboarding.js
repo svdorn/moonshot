@@ -1049,6 +1049,10 @@ class Onboarding extends Component {
 
         return (
             <div>
+                <MetaTags>
+                    <title>Onboarding | Moonshot</title>
+                    <meta name="description" content="Tell us a bit about yourself so we can help you find the perfect job." />
+                </MetaTags>
                 {onBoardingHtml}
 
                 <div className={"onboardingDots center onboardingDots" + this.state.tabValue}>

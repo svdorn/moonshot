@@ -71,6 +71,10 @@ class ForgotPassword extends Component {
     render() {
         return (
             <div className="fillScreen greenToBlue formContainer">
+                <MetaTags>
+                    <title>Forgot Password | Moonshot</title>
+                    <meta name="description" content="Reset your Moonshot password. It's okay - we all forget things sometimes." />
+                </MetaTags>
                 <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>

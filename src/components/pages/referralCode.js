@@ -179,6 +179,11 @@ class ReferralCode extends Component {
 
         return (
             <div className="fillScreen greenToBlue formContainer">
+                <MetaTags>
+                    <title>Referral Code | Moonshot</title>
+                    <meta name="description" content="Become a Moonshot referrer and get $300 for every friend that gets a job through us!" />
+                </MetaTags>
+
                 <div className={blurredClass}>
                     <Dialog
                         actions={actionsPP}

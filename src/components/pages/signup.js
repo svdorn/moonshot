@@ -211,7 +211,7 @@ class Signup extends Component {
         return (
             <div className="fillScreen greenToBlue formContainer">
                 <MetaTags>
-                    <title>Sign Up - Moonshot</title>
+                    <title>Sign Up | Moonshot</title>
                     <meta name="description" content="Log in or sign up. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
                 </MetaTags>
                 <div className={blurredClass}>

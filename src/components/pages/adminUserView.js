@@ -5,6 +5,7 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class AdminUserView extends Component {
     constructor(props) {
@@ -210,6 +211,7 @@ class AdminUserView extends Component {
 
     render() {
         const user = this.state.user;
+        const userName = user ? user.name : "Admin User View";
         const pathways = this.state.pathways;
         const completedPathways = this.state.completedPathways;
         const quizzes = this.state.quizzes;
@@ -236,6 +238,11 @@ class AdminUserView extends Component {
 
         return (
             <div>
+                <MetaTags>
+                    <title>{{userName}} | Moonshot</title>
+                    <meta name="description" content="Admin user view." />
+                </MetaTags>
+
                 {this.props.currentUser.admin === true ?
                     <div>
                         <div className="headerDiv greenToBlue" />
