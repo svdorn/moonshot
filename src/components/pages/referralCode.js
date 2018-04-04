@@ -11,7 +11,7 @@ import axios from 'axios';
 import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
 import AffiliateAgreement from '../policies/affiliateAgreement';
-
+import MetaTags from 'react-meta-tags';
 
 const styles = {
     floatingLabelStyle: {

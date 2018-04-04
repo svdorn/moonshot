@@ -5,6 +5,7 @@ import {Paper, Menu, MenuItem, Divider, DropDownMenu} from 'material-ui';
 import PasswordChange from './passwordchange';
 import Account from './account';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import MetaTags from 'react-meta-tags';
 
 class Settings extends Component {
     constructor(props) {

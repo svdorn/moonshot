@@ -7,6 +7,7 @@ import {closeNotification, setHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class Profile extends Component {
     constructor(props) {

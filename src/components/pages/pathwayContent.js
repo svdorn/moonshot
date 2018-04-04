@@ -14,6 +14,7 @@ import {bindActionCreators} from 'redux';
 import PathwayStepList from '../childComponents/pathwayContent/pathwayStepList';
 import NavigateStepButtons from '../childComponents/pathwayContent/navigateStepsButtons';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class PathwayContent extends Component {
 

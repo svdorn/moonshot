@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import MetaTags from 'react-meta-tags';
 
 
 const styles = {
