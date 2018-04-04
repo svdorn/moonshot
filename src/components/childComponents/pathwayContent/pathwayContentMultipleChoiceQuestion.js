@@ -5,6 +5,7 @@ import {updateAnswer} from '../../../actions/usersActions';
 import TwoOptionsChoice from './twoOptionsChoice';
 import Question from './question';
 
+// answer has been saved in the last 1.5 seconds
 let savedRecently = false;
 
 class PathwayContentMultipleChoiceQuestion extends Component {
@@ -18,32 +19,28 @@ class PathwayContentMultipleChoiceQuestion extends Component {
         // try to assign the value to the value that the user already had from the db
         try {
             const userAnswer = props.currentUser.answers[props.quizId];
-            const userValue = userAnswer.value;
-            isCustomAnswer = userAnswer.isCustomAnswer;
-            // ensure user choice is a valid number
-            if ((typeof userValue === "number" && userValue >= 1) || userAnswer.isCustomAnswer) {
-                if ((props.allowCustomAnswer && userValue <= props.answers.length) ||
-                    (!props.allowCustomAnswer && userValue < props.answers.length)
-                    || userAnswer.isCustomAnswer) {
+
+            if (userAnswer) {
+                const userValue = userAnswer.value;
+                isCustomAnswer = userAnswer.isCustomAnswer;
+                // ensure user choice is a valid number
+                if ((typeof userValue === "number" && userValue >= 1) || userAnswer.isCustomAnswer) {
                     answerNumber = userValue;
                     if (isCustomAnswer) {
                         savedCustomAnswer = userValue;
                     }
                 }
             }
-        } catch (e) { /* do nothing if value invalid */
+        } catch (e) {
+            if (props.currentUser.admin) {
+                console.log("Invalid answer saved.");
+            }
         }
 
-        // the last time the custom answer was saved
-        const lastSave = new Date();
-        // if there is a timer on to save the custom answer
-        const timerOn = false;
-
-        this.state = {answerNumber, isCustomAnswer, savedCustomAnswer, lastSave, quizId}
+        this.state = {answerNumber, isCustomAnswer, savedCustomAnswer, quizId}
     }
 
     componentDidUpdate() {
-        console.log("in component did update");
         const props = this.props;
         const quizId = props.quizId;
         if (quizId !== this.state.quizId) {
@@ -52,29 +49,28 @@ class PathwayContentMultipleChoiceQuestion extends Component {
             let savedCustomAnswer = "Other_____";
             // try to assign the value to the value that the user already had from the db
             try {
+                // try to get the user's saved answer
                 const userAnswer = props.currentUser.answers[props.quizId];
-                const userValue = userAnswer.value;
-                isCustomAnswer = userAnswer.isCustomAnswer;
-                // ensure user choice is a valid number
-                if ((typeof userValue === "number" && userValue >= 1) || userAnswer.isCustomAnswer) {
-                    if ((props.allowCustomAnswer && userValue <= props.answers.length) ||
-                        (!props.allowCustomAnswer && userValue < props.answers.length)
-                        || userAnswer.isCustomAnswer) {
+
+                // if the user has an answer to this question, display that
+                if (userAnswer) {
+                    const userValue = userAnswer.value;
+                    isCustomAnswer = userAnswer.isCustomAnswer;
+                    // ensure user choice is a valid number
+                    if ((typeof userValue === "number" && userValue >= 1) || userAnswer.isCustomAnswer) {
                         answerNumber = userValue;
                         if (isCustomAnswer) {
                             savedCustomAnswer = userValue;
                         }
                     }
                 }
-            } catch (e) { /* do nothing if value invalid */
+            } catch (e) {
+                if (props.currentUser.admin) {
+                    console.log("Invalid answer saved.");
+                }
             }
 
-            // the last time the custom answer was saved
-            const lastSave = new Date();
-            // if there is a timer on to save the custom answer
-            const timerOn = false;
-            
-            this.state = {answerNumber, isCustomAnswer, savedCustomAnswer, lastSave, quizId}
+            this.setState({answerNumber, isCustomAnswer, savedCustomAnswer, quizId});
         }
     }
 
@@ -148,7 +144,6 @@ class PathwayContentMultipleChoiceQuestion extends Component {
 
     render() {
         let self = this;
-        console.log(self.state);
         let medium = self.props.size === 'medium' ? "medium" : "";
         let options = [];
         if (Array.isArray(self.props.answers)) {

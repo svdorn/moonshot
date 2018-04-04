@@ -6,6 +6,7 @@ import TwoOptionsChoice from './twoOptionsChoice';
 import Question from './question';
 import Slider from 'material-ui/Slider';
 
+// answer has been saved in the last 1.5 seconds
 let savedRecently = false;
 
 class FreeResponseAndSliderOnSelectQuestion extends Component {
@@ -118,6 +119,7 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
         let shouldSave = false;
 
         // should only save if haven't saved in the last couple seconds
+        // savedRecently is a global value
         if (!savedRecently) {
             shouldSave = true;
             savedRecently = true;
