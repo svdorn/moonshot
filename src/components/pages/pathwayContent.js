@@ -258,7 +258,7 @@ class PathwayContent extends Component {
             } else if (contentType == "info") {
                 content = <PathwayInfo/>
             } else if (contentType == "completedPathway") {
-                content = <PathwayContentCompletePathway pathway={this.state.pathway} />
+                content = <PathwayContentCompletePathway pathway={pathway} />
             } else {
                 console.log("this.props.step: ", this.props.step)
                 content = <div style={style.div}>Error retrieving step.</div>;
@@ -266,27 +266,33 @@ class PathwayContent extends Component {
         }
 
         let formattedDeadline = undefined;
-        if (this.state.pathway) {
-            const deadline = new Date(this.state.pathway.deadline);
+        if (pathway) {
+            const deadline = new Date(pathway.deadline);
             formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             if (formattedDeadline.includes("NaN")) {
                 formattedDeadline = undefined;
             }
         }
 
-        // the title is either a string set specifically for the title or the name of the pathway
-        let pathwayTitle = pathway.tabTitle ? pathway.tabTitle : pathway.name;
+        console.log("blah")
+
+        // the title is either a string set specifically for the title or the name of the pathway (or empty)
+        let pathwayTitle = "";
         // the meta description is either a given meta description or the description shown on the page
         let pathwayMetaDescription = "Go through this pathway to be evaluated for a position.";
-        if (pathway.metaDescription) {
-            pathwayMetaDescription = pathway.metaDescription;
-        } else if (pathway.sponsor && pathway.sponsor.name) {
-             pathwayMetaDescription = "Go through this pathway to be evaluated for a position at " + pathway.sponsor.name + "."
+
+        if (pathway) {
+            pathwayTitle = pathway.tabTitle ? pathway.tabTitle : pathway.name;
+            if (pathway.metaDescription) {
+                pathwayMetaDescription = pathway.metaDescription;
+            } else if (pathway.sponsor && pathway.sponsor.name) {
+                pathwayMetaDescription = "Go through this pathway to be evaluated for a position at " + pathway.sponsor.name + "."
+            }
         }
 
         return (
             <div style={{marginBottom: "50px"}}>
-                {this.state.pathway ?
+                {pathway ?
                     <div>
                         <MetaTags>
                             <title>{pathwayTitle} | Moonshot</title>
