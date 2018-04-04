@@ -78,7 +78,7 @@ class PasswordChange extends Component {
         return (
             <div className="fillScreen greenToBlue formContainer">
                 <MetaTags>
-                    <title>New Password - Moonshot</title>
+                    <title>New Password | Moonshot</title>
                     <meta name="description" content="Reset your Moonshot password. It's okay - we all forget things sometimes." />
                 </MetaTags>
                 <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>

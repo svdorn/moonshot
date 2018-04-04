@@ -63,8 +63,6 @@ class PathwayPreview extends Component {
 
         let shouldShowBannerClass = this.props.showComingSoonBanner === true ? "" : " noDisplay";
 
-        console.log(this.props);
-
         return (
             <div className="pathwayPreview" style={{position: "relative"}}>
                 {this.props.comingSoon ?

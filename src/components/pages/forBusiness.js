@@ -204,7 +204,7 @@ class ForBusiness extends Component {
         return (
             <div className="jsxWrapper">
                 <MetaTags>
-                    <title>For Business - Moonshot</title>
+                    <title>For Business | Moonshot</title>
                     <meta name="description" content="Find your next great employees. You tell us what you're looking for, and we'll find and evaluate candidates for you." />
                 </MetaTags>
                 <div className={blurredClass}>

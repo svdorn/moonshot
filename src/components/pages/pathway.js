@@ -325,21 +325,25 @@ class Pathway extends Component {
             logoSizeSponsor = "smallLogoPLPSponsor";
         }
 
-        // the title is either a string set specifically for the title or the name of the pathway
-        let pathwayTitle = pathway.tabTitle ? pathway.tabTitle : pathway.name;
+        // the title is either a string set specifically for the title or the name of the pathway (or empty)
+        let pathwayTitle = "";
         // the meta description is either a given meta description or the description shown on the page
         let pathwayMetaDescription = "Go through this pathway to be evaluated for a position.";
-        if (pathway.metaDescription) {
-            pathwayMetaDescription = pathway.metaDescription;
-        } else if (pathway.sponsor && pathway.sponsor.name) {
-             pathwayMetaDescription = "Go through this pathway to be evaluated for a position at " + pathway.sponsor.name + "."
+
+        if (pathway) {
+            pathwayTitle = pathway.tabTitle ? pathway.tabTitle : pathway.name;
+            if (pathway.metaDescription) {
+                pathwayMetaDescription = pathway.metaDescription;
+            } else if (pathway.sponsor && pathway.sponsor.name) {
+                pathwayMetaDescription = "Go through this pathway to be evaluated for a position at " + pathway.sponsor.name + "."
+            }
         }
 
         return (
             //<HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
             <div className="jsxWrapper noOverflowX">
                 <MetaTags>
-                    <title>{pathwayTitle} - Moonshot</title>
+                    <title>{pathwayTitle} | Moonshot</title>
                     <meta name="description" content={pathwayMetaDescription} />
                 </MetaTags>
                 {pathway.sponsor !== undefined ?

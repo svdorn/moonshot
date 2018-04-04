@@ -5,6 +5,7 @@ import {Paper, Menu, MenuItem, Divider, DropDownMenu} from 'material-ui';
 import PasswordChange from './passwordchange';
 import Account from './account';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import MetaTags from 'react-meta-tags';
 
 class Settings extends Component {
     constructor(props) {
@@ -22,6 +23,10 @@ class Settings extends Component {
     render() {
         return (
             <div className="fillScreen greenToBlue">
+                <MetaTags>
+                    <title>Settings | Moonshot</title>
+                    <meta name="description" content="Change your Moonshot account settings." />
+                </MetaTags>
                 <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="1"/>
                 {this.props.notification !== undefined ?
                     <Paper className={"messageHeader " + this.props.notification.type}>

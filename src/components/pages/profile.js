@@ -7,6 +7,7 @@ import {closeNotification, setHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class Profile extends Component {
     constructor(props) {
@@ -460,8 +461,22 @@ class Profile extends Component {
             });
         }
 
+        let metaDescription = "See profile.";
+        // if (user) {
+            // TODO check for userType and set the metaDescription to be applicable
+            // if (user.userType === "candidate") {
+            //      metaDescription = "View and edit your profile."
+            // } else if (user.userType === "businessUser") {
+            //      metaDescription = "See a candidate's profile."
+            // }
+        // }
+
         return (
             <div className='jsxWrapper' ref='discover'>
+                <MetaTags>
+                    <title>Profile | Moonshot</title>
+                    <meta name="description" content={metaDescription} />
+                </MetaTags>
                 {user ?
                     <div>
                         <div>

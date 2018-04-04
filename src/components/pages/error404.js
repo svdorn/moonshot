@@ -21,7 +21,7 @@ class error404 extends Component {
         return (
             <div className="fillScreen greenToBlue" style={{textAlign:"center"}}>
                 <MetaTags>
-                    <title>404 - Moonshot</title>
+                    <title>404 | Moonshot</title>
                     <meta name="description" content="You are lost but we can show you the way." />
                 </MetaTags>
                 <Paper className="form bigForm semiOpaquePaper blueTextImportant font20px font14pxUnder700 font10pxUnder400" zDepth={2}>

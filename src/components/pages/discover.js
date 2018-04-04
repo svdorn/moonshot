@@ -419,7 +419,7 @@ class Discover extends Component {
         return (
             <div className={"jsxWrapper" + blurredClass} ref='discover'>
                 <MetaTags>
-                    <title>Discover - Moonshot</title>
+                    <title>Discover | Moonshot</title>
                     <meta name="description" content="Find the pathway to get the perfect job." />
                 </MetaTags>
                 <Dialog

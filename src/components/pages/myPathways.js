@@ -193,7 +193,7 @@ class MyPathways extends Component {
         return (
             <div className='jsxWrapper' ref='discover'>
                 <MetaTags>
-                    <title>My Pathways - Moonshot</title>
+                    <title>My Pathways | Moonshot</title>
                     <meta name="description" content="See your ongoing and completed pathways." />
                 </MetaTags>
                 {this.props.currentUser ?
