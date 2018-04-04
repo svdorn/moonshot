@@ -183,8 +183,8 @@ class Login extends Component {
         return (
             <div className="fillScreen greenToBlue formContainer">
                 <MetaTags>
-                    <title>Log In | Moonshot</title>
-                    <meta name="description" content="Log in or sign up. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
+                    <title>Sign In | Moonshot</title>
+                    <meta name="description" content="Sign in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
                 </MetaTags>
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm noBlur">
