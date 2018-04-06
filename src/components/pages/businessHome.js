@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postBusinessUser, onSignUpPage} from '../../actions/usersActions';
+import {postEmployer, onSignUpPage} from '../../actions/usersActions';
 import {TextField, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
@@ -114,7 +114,7 @@ class BusinessHome extends Component {
         }
 
 
-        this.props.postBusinessUser(newUser, currentUserInfo);
+        this.props.postEmployer(newUser, currentUserInfo);
 
         this.setState({
             ...this.state,
@@ -194,7 +194,7 @@ class BusinessHome extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        postBusinessUser,
+        postEmployer,
         onSignUpPage
     }, dispatch);
 }

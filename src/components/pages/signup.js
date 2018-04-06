@@ -123,10 +123,10 @@ class Signup extends Component {
         const name = this.props.formData.signup.values.name;
         const password = this.props.formData.signup.values.password;
         const email = this.props.formData.signup.values.email;
-        let user = [{
+        let user = {
             name, password, email, signUpReferralCode,
             userType: "candidate"
-        }];
+        };
 
         // if the user got here from a pathway landing page, add the pathway id
         // and url for redirect after onboarding completion

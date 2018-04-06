@@ -1,7 +1,7 @@
 "use strict"
 var mongoose = require('mongoose');
 
-var businessUsersSchema = mongoose.Schema({
+var employersSchema = mongoose.Schema({
     name: String,
     email: String,
     password: String,
@@ -20,5 +20,5 @@ var businessUsersSchema = mongoose.Schema({
 
 // 'Users' means we will use the 'users' collection. if 'Books' was in there
 // it would be using the books collection from the db
-var BusinessUsers = mongoose.model('BusinessUsers', businessUsersSchema);
-module.exports = BusinessUsers;
+var Employers = mongoose.model('Employers', employersSchema);
+module.exports = Employers;

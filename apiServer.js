@@ -35,7 +35,7 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 
 
 var Users = require('./models/users.js');
-var BusinessUsers = require('./models/businessUsers.js');
+var Employers = require('./models/employers.js');
 var Businesses = require('./models/businesses.js');
 var Pathways = require('./models/pathways.js');
 var Articles = require('./models/articles.js');
@@ -739,7 +739,7 @@ app.post('/verifyEmail', function (req, res) {
     const userType = sanitize(req.body.userType);
 
     // query form business user database if the user is a business user
-    const DB = (userType === "employer") ? BusinessUsers : Users;
+    const DB = (userType === "employer") ? Employers : Users;
 
     if (!token) {
         res.status(400).send("Url not in the right format");
@@ -1695,7 +1695,7 @@ function getUserByQuery(query, callback) {
     Users.findOne(query, function (err, foundUser) {
         doCallbackOrWaitForOtherDBCall(err, foundUser);
     });
-    BusinessUsers.findOne(query, function(err, foundUser) {
+    Employers.findOne(query, function(err, foundUser) {
         doCallbackOrWaitForOtherDBCall(err, foundUser);
     });
 }
@@ -1766,19 +1766,19 @@ app.post('/login', function (req, res) {
         // CHECK IF A USER WAS FOUND
         if (!foundUser || foundUser == null) {
             // CHECK IF THE USER IS IN THE BUSINESS USER DB
-            BusinessUsers.findOne(query, function(err2, foundBusinessUser) {
+            Employers.findOne(query, function(err2, foundEmployer) {
                 if (err2) {
                     res.status(500).send("Error performing query to find user in business user db. ", err);
                     return;
                 }
 
-                if (!foundBusinessUser || foundBusinessUser == null) {
+                if (!foundEmployer || foundEmployer == null) {
                     console.log('looked in business db, none found')
                     res.status(404).send("No user with that email was found.");
                     return;
                 }
 
-                user = foundBusinessUser;
+                user = foundEmployer;
                 tryLoggingIn();
                 return;
             });
@@ -2848,9 +2848,9 @@ app.post("/updateAllOnboarding", function (req, res) {
 
 // --->> BUSINESS APIS <<--- //
 
-//----->> POST BUSINESS USER <<------
+//----->> POST EMPLOYER <<------
 // creates a new user at the same company the current user works for
-app.post('/businessUser', function (req, res) {
+app.post('/employer', function (req, res) {
     let newUser = sanitize(req.body.newUser);
     let currentUser = sanitize(req.body.currentUser);
 
@@ -2867,7 +2867,7 @@ app.post('/businessUser', function (req, res) {
     }
 
     let query = {_id: currentUser._id};
-    BusinessUsers.findOne(query, function (err, currentUserFromDB) {
+    Employers.findOne(query, function (err, currentUserFromDB) {
         if (err) {
             console.log("error getting current user on business user creation: ", err);
             res.status(500).send("Error, try again later.");
@@ -2922,7 +2922,7 @@ app.post('/businessUser', function (req, res) {
                     // which is what we want
                     if (foundUser == null || foundUser == undefined) {
                         // store the user in the db
-                        BusinessUsers.create(newUser, function (err4, newUserFromDB) {
+                        Employers.create(newUser, function (err4, newUserFromDB) {
                             if (err4) {
                                 console.log(err4);
                                 res.status(500).send("Error, please try again later.");
@@ -2938,7 +2938,7 @@ app.post('/businessUser', function (req, res) {
                                     return;
                                 }
 
-                                company.businessUserIds.push(newUserFromDB._id);
+                                company.employerIds.push(newUserFromDB._id);
                                 // save the new company info with the new user's id
                                 company.save(function(err6) {
                                     if (err6) {
@@ -2963,22 +2963,22 @@ app.post('/businessUser', function (req, res) {
 
 
 // SEND BUSINESS USER VERIFICATION EMAIL
-app.post('/sendBusinessUserVerificationEmail', function (req, res) {
+app.post('/sendEmployerVerificationEmail', function (req, res) {
     let email = sanitize(req.body.email);
     let companyName = sanitize(req.body.companyName);
     let query = {email: email};
 
-    BusinessUsers.findOne(query, function (err, user) {
+    Employers.findOne(query, function (err, user) {
         let recipient = user.email;
         let subject = 'Verify email';
         let content =
              '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
             +   '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
             +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">You have been signed up for Moonshot through ' + companyName + '! Please <a href="https://www.moonshotlearning.org/verifyEmail?userType=businessUser&token=' + user.emailVerificationToken + '">verify your account</a> to start finding your next great hire.</span><br/>'
+            +       '<span style="margin-bottom:20px;display:inline-block;">You have been signed up for Moonshot through ' + companyName + '! Please <a href="https://www.moonshotlearning.org/verifyEmail?userType=employer&token=' + user.emailVerificationToken + '">verify your account</a> to start finding your next great hire.</span><br/>'
             +       '<span style="display:inline-block;">If you have any questions or concerns, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.com</a>.</span><br/>'
             +   '</div>'
-            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?userType=businessUser&token='
+            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?userType=employer&token='
             +   user.emailVerificationToken
             +   '">VERIFY ACCOUNT</a>'
             +   '<div style="text-align:left;width:80%;margin-left:10%;">'
@@ -3006,7 +3006,7 @@ app.post('/changeTempPassword', function (req, res) {
     const password = userInfo.password;
 
     var query = {email};
-    BusinessUsers.findOne(query, function (err, user) {
+    Employers.findOne(query, function (err, user) {
         if (err || user == undefined || user == null) {
             res.status(404).send("User not found.");
             return;
@@ -3051,7 +3051,7 @@ app.post('/changeTempPassword', function (req, res) {
                     // When true returns the updated document
                     var options = {new: true};
 
-                    BusinessUsers.findOneAndUpdate(query, update, options, function (err4, newUser) {
+                    Employers.findOneAndUpdate(query, update, options, function (err4, newUser) {
                         if (err4) {
                             console.log(err4);
                             res.status(500).send("Error saving new password.");
@@ -3077,7 +3077,7 @@ app.get("/business/pathways", function(req, res) {
         return;
     }
 
-    BusinessUsers.findById(userId, function(findBUserErr, user) {
+    Employers.findById(userId, function(findBUserErr, user) {
         // error finding user in db
         if (findBUserErr) {
             console.log("Error finding business user who was trying to see their pathways: ", findBUserErr);
@@ -3116,7 +3116,7 @@ app.get("/business/pathways", function(req, res) {
             // if the business doesn't have an associated user with the given
             // user id, don't let them see this business' candidates
             const userIdString = userId.toString();
-            if (!company.businessUserIds.some(function(bizUserId) {
+            if (!company.employerIds.some(function(bizUserId) {
                 return bizUserId.toString() === userIdString;
             })) {
                 console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
@@ -3156,7 +3156,7 @@ app.get("/business/candidateSearch", function(req, res) {
         return;
     }
 
-    BusinessUsers.findById(userId, function(findBUserErr, user) {
+    Employers.findById(userId, function(findBUserErr, user) {
         // error finding user in db
         if (findBUserErr) {
             console.log("Error finding business user who was trying to see their candidates: ", findBUserErr);
@@ -3195,7 +3195,7 @@ app.get("/business/candidateSearch", function(req, res) {
             // if the business doesn't have an associated user with the given
             // user id, don't let them see this business' candidates
             const userIdString = userId.toString();
-            if (!company.businessUserIds.some(function(bizUserId) {
+            if (!company.employerIds.some(function(bizUserId) {
                 return bizUserId.toString() === userIdString;
             })) {
                 console.log("User tried to log in to a business with an id that wasn't in the business' id array.");

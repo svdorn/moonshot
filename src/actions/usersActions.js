@@ -159,16 +159,16 @@ export function postUser(user) {
 }
 
 // POST BUSINESS USER
-export function postBusinessUser(newUser, currentUser) {
+export function postEmployer(newUser, currentUser) {
     return function(dispatch) {
         dispatch({type: "POST_USER_REQUESTED"});
 
         // post user to database
-        axios.post("/api/businessUser", {newUser, currentUser})
+        axios.post("/api/employer", {newUser, currentUser})
             // user successfully posted
             .then(function(companyName) {
                 // send verification email
-                axios.post("/api/sendBusinessUserVerificationEmail", {email: newUser.email, companyName})
+                axios.post("/api/sendEmployerVerificationEmail", {email: newUser.email, companyName})
                     // successfully sent verification email
                     .then(function(emailResponse) {
                         dispatch({type:"POST_USER"});
