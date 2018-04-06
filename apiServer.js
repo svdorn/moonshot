@@ -317,7 +317,7 @@ function printUsersFromPathway(pathwayIdToCheck) {
 //
 //     for (let userIdx = 0; userIdx < users.length; userIdx++) {
 //         let user = users[userIdx];
-//         user.showToUsers = true;
+//         user.userType = "candidate";
 //         user.save(function() {
 //             console.log("user saved");
 //         });
