@@ -32,8 +32,16 @@ class Profile extends Component {
         }
 
         const currentUser = this.props.currentUser;
+        console.log('yo')
+        // if there is no profile url and no user, there is nothing to look at here,
+        // since there is no profile, so navigate home
+        // also applies if there is no profile url and the user is an employer,
+        // so they would have no profile of their own to see
+        if (!profileUrl && (!currentUser || currentUser.userType === "employer")) {
+            this.goTo("/");
+        }
         // looking at your own profile
-        if ((!profileUrl) || (currentUser && currentUser.profileUrl == profileUrl)) {
+        if (!profileUrl || (currentUser && currentUser.profileUrl == profileUrl)) {
             this.setState({
                 ...this.state,
                 onOwnProfile: true,
