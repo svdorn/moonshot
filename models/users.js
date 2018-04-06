@@ -138,6 +138,16 @@ var usersSchema = mongoose.Schema({
                 "value": ["3", "5", "6"] //the answerValues of the chosen answers,
                 "optionalCustomAnswer": "gymnastics"
             },
+            "[another quiz id]": {
+                "answerType": "freeResponseAndSliderOnSelect",
+                "value": {
+                    "4(answerNumber)": {
+                        "skill": 6,
+                        "answerText": "this is my answer about this thing"
+                    }, ...
+                }
+
+            },
             "---another quiz id---": {
                 "answerType": "datePicker",
                 "dateValue": "1996-11-19T06:00:00.000Z"

@@ -8,6 +8,7 @@ import PathwayContentTwoOptionsQuestion from './pathwayContentTwoOptionsQuestion
 import PathwayContentMultiSelectQuestion from './pathwayContentMultiSelectQuestion';
 import PathwayContentDatePickerQuestion from './pathwayContentDatePickerQuestion';
 import PathwayContentFreeResponseQuestion from './pathwayContentFreeResponseQuestion';
+import FreeResponseAndSliderOnSelect from './freeResponseAndSliderOnSelectQuestion';
 
 class PathwayContentQuiz extends Component {
     constructor(props) {
@@ -86,6 +87,7 @@ class PathwayContentQuiz extends Component {
                             answers={quiz.multipleChoiceAnswers}
                             allowCustomAnswer={quiz.allowCustomAnswer}
                             quizId={quiz._id}
+                            size={quiz.size}
                         />
                     break;
                 case "multiSelect":
@@ -95,6 +97,18 @@ class PathwayContentQuiz extends Component {
                             answers={quiz.multiSelectAnswers}
                             allowCustomAnswer={quiz.allowCustomAnswer}
                             quizId={quiz._id}
+                        />
+                    break;
+                case "freeResponseAndSliderOnSelect":
+                    questionJsx =
+                        <FreeResponseAndSliderOnSelect
+                            question={quiz.question}
+                            answers={quiz.multiSelectAnswers}
+                            quizId={quiz._id}
+                            minSliderValue={quiz.minSliderValue}
+                            maxSliderValue={quiz.maxSliderValue}
+                            minSliderText={quiz.minSliderText}
+                            maxSliderText={quiz.maxSliderText}
                         />
                     break;
                 case "freeResponse":
@@ -118,7 +132,7 @@ class PathwayContentQuiz extends Component {
 
         return (
             <div className={this.props.className} style={{...this.props.style}}>
-                <div className="center" style={{padding: "10px 0"}}>
+                <div style={{padding: "10px 0"}}>
                     { questionJsx }
                 </div>
             </div>

@@ -236,8 +236,10 @@ class Menu extends Component {
         return (
             <header style={{zIndex: "100"}}>
                 {this.props.currentUser ?
+                    /* logged in */
                     <div>
                         {this.props.currentUser.userType === "employer" ?
+                            /* user is a business user */
                             <Toolbar id="menu" style={{marginTop: "10px"}}>
                                 <ToolbarGroup className="logoToolbarGroup">
                                     <img
@@ -270,7 +272,6 @@ class Menu extends Component {
                                     </DropDownMenu>
                                     <div className="menuUnderline" style={{width: hoverWidth}}/>
 
-
                                     <IconMenu
                                         iconButtonElement={<IconButton><MoreHorizIcon/></IconButton>}
                                         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
@@ -287,7 +288,8 @@ class Menu extends Component {
                                     </IconMenu>
                                 </ToolbarGroup>
                             </Toolbar>
-                            :
+                        :
+                            /* user is a candidate */
                             <Toolbar id="menu" style={{marginTop: "10px"}}>
                                 <ToolbarGroup className="logoToolbarGroup">
                                     <img
@@ -339,7 +341,8 @@ class Menu extends Component {
                             </Toolbar>
                         }
                     </div>
-                    :
+                :
+                    /* not logged in */
                     <Toolbar style={{marginTop: "10px"}} id="menu">
                         <ToolbarGroup>
                             <img
@@ -373,7 +376,8 @@ class Menu extends Component {
                                 <MenuItem primaryText="Sign In" onClick={() => this.goTo('/login')}/>
                             </IconMenu>
                         </ToolbarGroup>
-                    </Toolbar>}
+                    </Toolbar>
+                }
             </header>
         )
     }

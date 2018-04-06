@@ -50,21 +50,21 @@ class PathwayContentLink extends Component {
             <div className={this.props.className} style={{...this.props.style}}>
                 {this.state.content !== undefined ?
                     <div className="center" style={{marginBottom: "10px"}}>
-                        <img src="/images/OfficialLogoBlue.png" key="moonshot" style={{
+                        <img alt="Moonshot Logo" src="/images/OfficialLogoBlue.png" key="moonshot" style={{
                             height: "100px",
                             width: "320px",
                             display: "inline-block",
                             marginBottom: "30px",
                             marginLeft: "15px",
                         }}/>
-                        <img src="/icons/PlusSign.png" key="plusSign" style={{
+                        <img alt="Plus sign icon" src="/icons/PlusSign.png" key="plusSign" style={{
                             display: "inline-block",
                             height: "25px",
                             width: "25px",
                             marginTop: "5px",
                             marginLeft: "5px",
                         }}/>
-                        <img src={content.logo} key={content.company} style={{
+                        <img alt={content.company + " logo"} src={content.logo} key={content.company} style={{
                             height: "190px",
                             width: "360px",
                             display: "inline-block"

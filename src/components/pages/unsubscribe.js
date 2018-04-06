@@ -7,6 +7,7 @@ import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import MetaTags from 'react-meta-tags';
 
 
 const styles = {
@@ -114,6 +115,10 @@ class Unsubscribe extends Component {
     render() {
         return (
             <div className="fillScreen greenToBlue formContainer">
+                <MetaTags>
+                    <title>Unsubscribe | Moonshot</title>
+                    <meta name="description" content="Unsubscribe from all Moonshot emails. Sorry to see you go!" />
+                </MetaTags>
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     {this.state.unsubscribedViaUrl ?

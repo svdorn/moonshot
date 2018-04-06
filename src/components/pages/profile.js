@@ -7,6 +7,7 @@ import {closeNotification, setHeaderBlue} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class Profile extends Component {
     constructor(props) {
@@ -101,18 +102,29 @@ class Profile extends Component {
                                 formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                             }
 
+                            const pathwayName = pathway.name ? pathway.name : "";
+                            const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
+                            const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
+                            const pathwayLogo = pathway.sponsor && pathway.sponsor.logo ? pathway.sponsor.logo : "";
+                            const pathwaySponsorName = pathway.sponsor && pathway.sponsor.name ? pathway.sponsor.name : "";
+                            const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
+                            const pathwayPrice = pathway.price ? pathway.price : "";
+                            const pathwayId = pathway._id ? pathway._id : undefined;
+
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
                                     onClick={() => self.goTo('/pathwayContent?pathway=' + pathway.url)}>
                                     <PathwayPreview
-                                        name={pathway.name}
-                                        image={pathway.previewImage}
-                                        logo={pathway.sponsor.logo}
-                                        sponsorName={pathway.sponsor.name}
-                                        completionTime={pathway.estimatedCompletionTime}
+                                        name={pathwayName}
+                                        image={pathwayImage}
+                                        imageAltTag={pathwayAltTag}
+                                        logo = {pathwayLogo}
+                                        sponsorName = {pathwaySponsorName}
+                                        completionTime={pathwayCompletionTime}
                                         deadline={formattedDeadline}
-                                        price={pathway.price}
-                                        _id={pathway._id}
+                                        price={pathwayPrice}
+                                        _id={pathwayId}
+                                        comingSoon={false}
                                         variation="4"
                                     />
                                 </li>
@@ -150,18 +162,29 @@ class Profile extends Component {
                                 formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                             }
 
+                            const pathwayName = pathway.name ? pathway.name : "";
+                            const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
+                            const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
+                            const pathwayLogo = pathway.sponsor && pathway.sponsor.logo ? pathway.sponsor.logo : "";
+                            const pathwaySponsorName = pathway.sponsor && pathway.sponsor.name ? pathway.sponsor.name : "";
+                            const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
+                            const pathwayPrice = pathway.price ? pathway.price : "";
+                            const pathwayId = pathway._id ? pathway._id : undefined;
+
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
                                     onClick={() => self.goTo('/pathway?pathway=' + pathway.url)}>
                                     <PathwayPreview
-                                        name={pathway.name}
-                                        image={pathway.previewImage}
-                                        logo={pathway.sponsor.logoForLightBackground}
-                                        sponsorName={pathway.sponsor.name}
-                                        completionTime={pathway.estimatedCompletionTime}
+                                        name={pathwayName}
+                                        image={pathwayImage}
+                                        imageAltTag={pathwayAltTag}
+                                        logo = {pathwayLogo}
+                                        sponsorName = {pathwaySponsorName}
+                                        completionTime={pathwayCompletionTime}
                                         deadline={formattedDeadline}
-                                        price={pathway.price}
-                                        _id={pathway._id}
+                                        price={pathwayPrice}
+                                        _id={pathwayId}
+                                        comingSoon={false}
                                         variation="4"
                                     />
                                 </li>
@@ -322,6 +345,7 @@ class Profile extends Component {
                     </div>;
                 aboutMeItems.push({
                     icon: "SpeechBubble2.png",
+                    iconAltTag: "Speech Bubble Icon",
                     title: "Biography",
                     content: content
                 });
@@ -353,6 +377,7 @@ class Profile extends Component {
                 });
                 aboutMeItems.push({
                     icon: "Education2.png",
+                    iconAltTag: "Book Icon",
                     title: "Education",
                     content: schools
                 });
@@ -368,6 +393,7 @@ class Profile extends Component {
                 });
                 aboutMeItems.push({
                     icon: "Star2.png",
+                    iconAltTag: "Star Icon",
                     title: "Interests",
                     content: <div>{interestsSpans}</div>
                 });
@@ -391,6 +417,7 @@ class Profile extends Component {
                 if (links.length > 0) {
                     aboutMeItems.push({
                         icon: "Links3.png",
+                        iconAltTag: "Links Icon",
                         title: "Links",
                         content: linkOuts
                     });
@@ -418,7 +445,9 @@ class Profile extends Component {
                     <li style={{marginTop: '30px'}}>
                         <Paper className="profileAboutPaper aboutMeLi font20px font font16pxUnder700 font14pxUnder400"
                                zDepth={3}>
-                            <div className="aboutMeLiIconContainer"><img src={"/icons/" + item.icon}/></div>
+                            <div className="aboutMeLiIconContainer">
+                                <img alt={item.iconAltTag} src={"/icons/" + item.icon}/>
+                            </div>
 
                             <div className="verticalDivider"/>
 
@@ -432,8 +461,22 @@ class Profile extends Component {
             });
         }
 
+        let metaDescription = "See profile.";
+        // if (user) {
+            // TODO check for userType and set the metaDescription to be applicable
+            // if (user.userType === "candidate") {
+            //      metaDescription = "View and edit your profile."
+            // } else if (user.userType === "businessUser") {
+            //      metaDescription = "See a candidate's profile."
+            // }
+        // }
+
         return (
             <div className='jsxWrapper' ref='discover'>
+                <MetaTags>
+                    <title>Profile | Moonshot</title>
+                    <meta name="description" content={metaDescription} />
+                </MetaTags>
                 {user ?
                     <div>
                         <div>

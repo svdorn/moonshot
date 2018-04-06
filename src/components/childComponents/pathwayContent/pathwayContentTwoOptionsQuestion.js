@@ -8,6 +8,7 @@ import Question from './question';
 
 class PathwayContentTwoOptionsQuestion extends Component {
     constructor(props) {
+        console.log("here");
         super(props);
 
         let option1 = "";

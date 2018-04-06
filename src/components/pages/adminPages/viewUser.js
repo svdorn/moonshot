@@ -5,6 +5,7 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class ViewUser extends Component {
     constructor(props) {
@@ -124,6 +125,27 @@ class ViewUser extends Component {
                                             }).body;
                                         }
                                         break;
+                                    case "freeResponseAndSliderOnSelect":
+                                        let answerInterior = [<br key="initialBr" />];
+                                        let keyCounter = 0;
+                                        let selectables = question.multiSelectAnswers;
+                                        // go through each option in the question
+                                        selectables.forEach(function(selectable) {
+                                            // add the text of the selectable item
+                                            answerInterior.push(<div key={keyCounter++} style={{marginTop:"10px", display:"inline-block"}}>{selectable.body}:</div>);
+                                            // find if the item was selected
+                                            // if so, add the values of the answers
+                                            let userAnswer = answerValue.value[selectable.answerNumber]
+                                            if (userAnswer) {
+                                                answerInterior.push(<span key={keyCounter++}><br/><div style={{marginLeft:"20px"}}>Skill: {userAnswer.skill}<br/>Experience: {userAnswer.answerText}<br/></div></span>);
+                                            }
+                                            // if not, tell the user that this was not selected
+                                            else {
+                                                answerInterior.push(<span key={keyCounter++}> (not selected)<br/></span>);
+                                            }
+                                        })
+                                        answer = <span>{answerInterior}</span>
+                                        break;
                                     case "slider":
                                         answer = answerValue.value;
                                         break;
@@ -133,6 +155,8 @@ class ViewUser extends Component {
                                                 dateString.substring(8, 10) + "/" +
                                                 dateString.substring(0, 4);
                                         break;
+                                    case "freeResponse":
+                                        answer = answerValue.value;
                                     default:
                                         break;
                                 }
@@ -187,19 +211,24 @@ class ViewUser extends Component {
 
     render() {
         const user = this.state.user;
+        const userName = user ? user.name : "Admin User View";
         const pathways = this.state.pathways;
         const completedPathways = this.state.completedPathways;
         const quizzes = this.state.quizzes;
+        let noAnswers = null;
 
         let completedPathwayLis = null;
         let pathwayLis = null;
-        if (user) {
+        if (user && user.answers) {
             completedPathwayLis = this.makePathwayLis(completedPathways, user.answers);
             pathwayLis = this.makePathwayLis(pathways, user.answers);
+        } else {
+            noAnswers = <div>User has not answered any questions</div>
         }
 
         const pathwaysHtml = (
             <ul>
+                {noAnswers}
                 <li key={"completedPathways"}>COMPLETED PATHWAYS:</li>
                 {completedPathwayLis}
                 <li key={"incompletePathways"}>INCOMPLETE PATHWAYS:</li>
@@ -209,7 +238,12 @@ class ViewUser extends Component {
 
         return (
             <div>
-                {user ?
+                <MetaTags>
+                    <title>{{userName}} | Moonshot</title>
+                    <meta name="description" content="Admin user view." />
+                </MetaTags>
+
+                {this.props.currentUser && this.props.currentUser.admin === true && user ?
                     <div>
                         {user.name}
                         <br/>

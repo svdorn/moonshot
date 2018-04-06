@@ -12,6 +12,8 @@ var quizzesSchema = mongoose.Schema({
     allowCustomAnswer: Boolean,
     // "slider", "multipleChoice", "freeResponse", "twoOptions", "multiSelect"
     questionType: String,
+    // className of the div with the question
+    questionClassName: String,
     // an array of parts of the question, e.g. first part is blue text, second part is a list, etc...
     question: [{
         // the type of this part of the question, e.g. "ul" or "ol" or "text" or "image"
@@ -26,6 +28,8 @@ var quizzesSchema = mongoose.Schema({
         linkText: String,
         // if the question part is a link, should the link open a new tab? (optional, defaults to true)
         newTab: Boolean,
+        // alt text for the image if the part is an image
+        altTag: String,
         // if you should put a break after the part
         shouldBreak: Boolean
     }],
@@ -37,6 +41,9 @@ var quizzesSchema = mongoose.Schema({
         // smallest amount the slider can advance by; if undefined, no limit to step smallness
         step: Number
     },
+    // the text shown underneath the slider on freeResponseAndSliderOnSelect questions (optional)
+    minSliderText: String,
+    maxSliderText: String,
     multipleChoiceAnswers: [{
         // the content of the answer, e.g. "Rainbow Dash"
         body: String,

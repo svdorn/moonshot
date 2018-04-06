@@ -69,9 +69,9 @@ class PathwayContentArticle extends Component {
         const content = this.state.content;
 
         if (this.state.content !== undefined) {
-            console.log("hyello");
             // set the description equal to the article's description
             let description = content.description;
+            let descriptionClassName = content.descriptionClassName;
             // if there is no description, check if default description is not allowed
             if (content.description.length === 0) {
                 if (content.defaultDescription !== false) {
@@ -94,7 +94,7 @@ class PathwayContentArticle extends Component {
                 <div className={this.props.className} style={{...this.props.style}}>
                     <div className="center" style={{marginBottom: "10px"}}>
                         <h4 className="marginTop20px blueText font30px">{content.name}</h4>
-                        <StyledContent contentArray={description} />
+                        <StyledContent contentArray={description} className={descriptionClassName} />
                         <button className="outlineButton font24px font20pxUnder500 whiteBlueButton">
                             <a href={content.link} onClick={this.handleClick.bind(this)} target="_blank" className="blueText blueTextOnHover" style={{textDecoration: 'none'}}>
                                 {content.linkText}

@@ -9,6 +9,7 @@ import {closeNotification, comingSoon} from "../../actions/usersActions";
 import {TextField, RaisedButton, Paper, CircularProgress, Dialog, FlatButton} from 'material-ui';
 import ComingSoonForm from '../childComponents/comingSoonForm';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class Home extends Component {
 
@@ -56,7 +57,21 @@ class Home extends Component {
 
     handleOpen = (pathway) => {
         if (!pathway.comingSoon) {
-            this.goTo('/pathway?pathway=' + pathway.url);
+            let currentUser = this.props.currentUser;
+            if (!currentUser || currentUser === "no user") {
+                this.goTo('/pathway?pathway=' + pathway.url);
+            } else {
+                // if the user has the pathway, go straight to the content page
+                if (currentUser.pathways.some(function(path) {
+                    return path.pathwayId == pathway._id;
+                })) {
+                    this.goTo('/pathwayContent?pathway=' + pathway.url)
+                }
+                // otherwise go to the pathway landing page
+                else {
+                    this.goTo('/pathway?pathway=' + pathway.url);
+                }
+            }
         } else {
             // tell the user they are preregistered if logged in
             const currentUser = this.props.currentUser;
@@ -114,21 +129,34 @@ class Home extends Component {
                 formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             }
 
+            const pathwayName = pathway.name ? pathway.name : "";
+            const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
+            const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
+            const pathwayLogo = pathway.sponsor && pathway.sponsor.logoForLightBackground ? pathway.sponsor.logoForLightBackground : "";
+            const pathwaySponsorName = pathway.sponsor && pathway.sponsor.name ? pathway.sponsor.name : "";
+            const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
+            const pathwayPrice = pathway.price ? pathway.price : "";
+            const pathwayId = pathway._id ? pathway._id : undefined;
+            const pathwayComingSoon = pathway.comingSoon ? pathway.comingSoon : false;
+            const pathwayShowComingSoonBanner = pathway.showComingSoonBanner ? pathway.showComingSoonBanner : false;
+
             return (
                 <li style={{verticalAlign: "top"}}
                     className="pathwayPreviewLi explorePathwayPreview"
                     key={pathwayKey}
                     onClick={() => self.handleOpen(pathway)}
                 ><PathwayPreview
-                    name={pathway.name}
-                    image={pathway.previewImage}
-                    logo = {pathway.sponsor.logoForLightBackground}
-                    sponsorName = {pathway.sponsor.name}
-                    completionTime = {pathway.estimatedCompletionTime}
-                    deadline = {formattedDeadline}
-                    price = {pathway.price}
-                    _id = {pathway._id}
-                    comingSoon = {pathway.comingSoon}
+                    name={pathwayName}
+                    image={pathwayImage}
+                    imageAltTag={pathwayAltTag}
+                    logo={pathwayLogo}
+                    sponsorName={pathwaySponsorName}
+                    completionTime={pathwayCompletionTime}
+                    deadline={formattedDeadline}
+                    price={pathwayPrice}
+                    _id={pathwayId}
+                    comingSoon={pathwayComingSoon}
+                    showComingSoonBanner={pathwayShowComingSoonBanner}
                 /></li>
             );
         });
@@ -146,7 +174,8 @@ class Home extends Component {
         //
         // const backgroundLogos = logosInfo.map(function(logo) {
         //     return (
-        //         <img src={"/logos/" + logo.name} key={logo.name} style={{
+        //         <img alt="Partner Company Logo"
+        //             src={"/logos/" + logo.name} key={logo.name} style={{
         //             position: "absolute",
         //             height: logo.height,
         //             left: logo.left,
@@ -158,7 +187,7 @@ class Home extends Component {
         // const logos = [all the company images e.g. "Moonshot.png"];
         // const logoBar = logos.map(function(logo) {
         //     return (
-        //         <img key={logo} src={"/logos/" + logo} className="logoBarLogo"/>
+        //         <img alt="Partner Company Logo" key={logo} src={"/logos/" + logo} className="logoBarLogo"/>
         //     );
         // })
 
@@ -205,6 +234,10 @@ class Home extends Component {
 
         return (
             <div className='jsxWrapper' ref='home'>
+                <MetaTags>
+                    <title>Moonshot</title>
+                    <meta name="description" content="Moonshot helps you get a job for your skills, not your GPA. Find the perfect job for you." />
+                </MetaTags>
                 <div className={blurredClass}>
                     <Dialog
                         actions={actions}
@@ -261,8 +294,8 @@ class Home extends Component {
                             <div className="homepageTrajectoryTextLeft onHome pushDownAbove800">
                                 <img
                                     src="/icons/Lightbulb.png"
-                                    alt="Lightbulb"
-                                    title="Lightbulb icon"
+                                    alt="Lightbulb Icon"
+                                    title="Lightbulb Icon"
                                     className="homepageTrajectoryTextLeftIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
@@ -275,6 +308,7 @@ class Home extends Component {
                             <div className="homepageTrajectoryImagesRight onHome">
                                 <div className="homepageImgBackgroundRight greenGradient" />
                                 <img
+                                    alt="Man Using Virtual Reality"
                                     src="/images/VRGuy.jpg"
                                 />
                             </div>
@@ -286,8 +320,8 @@ class Home extends Component {
                             <div className="homepageTrajectoryTextRight onHome pushDownAbove800">
                                 <img
                                     src="/icons/Person.png"
-                                    alt="Person icon"
-                                    title="Person icon"
+                                    alt="Person Icon"
+                                    title="Person Icon"
                                     className="homepageTrajectoryTextRightIcon personIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
@@ -300,6 +334,7 @@ class Home extends Component {
                             <div className="homepageTrajectoryImagesLeft">
                                 <div className="homepageImgBackgroundLeft blueGradient"/>
                                 <img
+                                    alt="Two People Collaborating In Office"
                                     src="/images/TwoPeopleInOffice.jpg"
                                 />
                             </div>
@@ -311,8 +346,8 @@ class Home extends Component {
                             <div className="homepageTrajectoryTextLeft onHome pushDownSlightlyAbove800">
                                 <img
                                     src="/icons/Badge.png"
-                                    alt="Badge icon"
-                                    title="Badge icon"
+                                    alt="Badge Icon"
+                                    title="Badge Icon"
                                     className="homepageTrajectoryTextLeftIcon onHome smallerWidthIcon"
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
@@ -325,6 +360,7 @@ class Home extends Component {
                             <div className="homepageTrajectoryImagesRight">
                                 <div className="homepageImgBackgroundRight purpleToRed"/>
                                 <img
+                                    alt="Happy Guy With Beard"
                                     src="/images/HappyBeardGuy.jpeg"
                                 />
                             </div>
@@ -334,7 +370,7 @@ class Home extends Component {
                     <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
 
                     <div className="topMarginOnSmallScreen" style={{textAlign: "center"}}>
-                        <div className="center font34px font32pxUnder800 font26pxUnder500 blueText">Pathways</div>
+                        <div className="center font34px font32pxUnder800 font26pxUnder500 blueText clickableNoUnderline inlineBlock" onClick={() => this.goTo("/discover")}>Pathways</div>
                         <div className="homePathwaysDesc font18px font16pxUnder800">
                             Moonshot courses are organized in<div className="br under500only"><br/></div> pathways and
                             sponsored<br/>by employers hiring for those skills.
@@ -367,7 +403,7 @@ class Home extends Component {
 
                         <button className="purpleToPinkButtonExterior bigButton"
                                 onClick={() => this.goTo('/signup')}
-                                style={{marginTop: "40px"}}
+                                style={{marginTop: "65px"}}
                         >
                             <div className="invertColorOnHover gradientBorderButtonInterior">
                                 Start Profile

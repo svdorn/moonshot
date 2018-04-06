@@ -8,7 +8,7 @@ import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
-
+import MetaTags from 'react-meta-tags';
 
 const styles = {
     floatingLabelStyle: {
@@ -182,6 +182,10 @@ class Login extends Component {
 
         return (
             <div className="fillScreen greenToBlue formContainer">
+                <MetaTags>
+                    <title>Sign In | Moonshot</title>
+                    <meta name="description" content="Sign in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
+                </MetaTags>
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
@@ -206,6 +210,7 @@ class Login extends Component {
                         </div>
                         <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
+                                alt=""
                                 className={"checkMark" + this.state.keepMeLoggedIn}
                                 src="/icons/CheckMarkBlue.png"
                             />

@@ -14,6 +14,7 @@ import {bindActionCreators} from 'redux';
 import PathwayStepList from '../childComponents/pathwayContent/pathwayStepList';
 import NavigateStepButtons from '../childComponents/pathwayContent/navigateStepsButtons';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class PathwayContent extends Component {
 
@@ -94,26 +95,44 @@ class PathwayContent extends Component {
                     }
                     // otherwise save the step that was saved in the db to redux state
                     else {
-                        const stepNumber = userPath.currentStep.step;
+                        let stepNumber = userPath.currentStep.step;
+                        // make sure we're on an actual step
+                        if (!stepNumber || stepNumber < 1) {
+                            // if the step number is less than 1, set it to 1
+                            stepNumber = 1;
+                        } else if (stepNumber > pathway.steps.length) {
+                            // if the step number is bigger than possible, set
+                            // it to the last step
+                            stepNumber = pathway.steps.length;
+                        }
+
                         const step = pathway.steps.find(function (step) {
                             return step.order == stepNumber;
                         });
-                        let subStep = 1;
+
+                        let subStep = undefined;
+                        let savedSubStep = userPath.currentStep.subStep;
                         // if we found the step at that number, find the right substep
                         if (step) {
-                            subStep = step.subSteps.find(function (subStep) {
-                                return subStep.order == userPath.currentStep.subStep;
-                            });
-                            // if substep not found, set to 1
-                            if (!subStep) {
-                                subStep = 1;
+                            // if saved substep too small, set to first substep
+                            if (!savedSubStep || savedSubStep < 1) {
+                                savedSubStep = 1;
                             }
+
+                            // if saved substep too big, save to last possible substep
+                            else if (savedSubStep > step.subSteps.length) {
+                                savedSubStep = step.subSteps.length;
+                            }
+
+                            // find the actual substep, not just the number
+                            subStep = step.subSteps.find(function (subStep) {
+                                return subStep.order == savedSubStep;
+                            });
                         }
                         this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
                     }
 
-                    this.setState({pathway}, () => {
-                    });
+                    this.setState({pathway});
                 }
 
                 // we do know what step we're currently on
@@ -124,12 +143,48 @@ class PathwayContent extends Component {
                         let userPath = this.props.currentUser.pathways.find(function (path) {
                             return path.pathwayId == pathwayId;
                         });
-                        const stepNumber = userPath.currentStep.step;
-                        const subStep = pathway.steps.find(function (step) {
+
+                        let stepNumber = userPath.currentStep.step;
+
+                        // if the step number is less than one (invalid) set it to 1
+                        if (!stepNumber || stepNumber < 1) {
+                            stepNumber = 1;
+                        }
+
+                        // if the step number is greater than the number of steps,
+                        // set it to be the last step
+                        else if (stepNumber > pathway.steps.length) {
+                            stepNumber = pathway.steps.length;
+                        }
+
+                        // find the actual current step from the step number
+                        let currStep = pathway.steps.find(function (step) {
                             return step.order == stepNumber;
-                        }).subSteps.find(function (subStep) {
-                            return subStep.order == userPath.currentStep.subStep;
                         })
+
+                        // declare the current substep
+                        let subStep = undefined;
+                        // the sub step that has been recorded
+                        let userSubStep = userPath.currentStep.subStep;
+
+
+                        // if the recorded substep is too small, set to default (1)
+                        if (!userSubStep || userSubStep < 1) {
+                            userSubStep = 1;
+                        }
+                        // if the recorded substep is too large (invalid), set
+                        // it to be the last possible substep
+                        if (userSubStep >= currStep.subSteps.length) {
+                            userSubStep = currStep.subSteps.length;
+                        }
+
+                        // if the step was found find the right substep
+                        if (currStep) {
+                            subStep = currStep.subSteps.find(function (subStep) {
+                                return subStep.order == userSubStep;
+                            })
+                        }
+
                         this.props.updateCurrentSubStep(user, pathwayId, stepNumber, subStep);
                     }
                     this.setState({pathway})
@@ -203,25 +258,47 @@ class PathwayContent extends Component {
             } else if (contentType == "info") {
                 content = <PathwayInfo/>
             } else if (contentType == "completedPathway") {
-                content = <PathwayContentCompletePathway pathway={this.state.pathway} />
+                content = <PathwayContentCompletePathway pathway={pathway} />
             } else {
+                console.log("this.props.step: ", this.props.step)
                 content = <div style={style.div}>Error retrieving step.</div>;
             }
         }
 
         let formattedDeadline = undefined;
-        if (this.state.pathway) {
-            const deadline = new Date(this.state.pathway.deadline);
+        if (pathway) {
+            const deadline = new Date(pathway.deadline);
             formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
             if (formattedDeadline.includes("NaN")) {
                 formattedDeadline = undefined;
             }
         }
 
+        console.log("blah")
+
+        // the title is either a string set specifically for the title or the name of the pathway (or empty)
+        let pathwayTitle = "";
+        // the meta description is either a given meta description or the description shown on the page
+        let pathwayMetaDescription = "Go through this pathway to be evaluated for a position.";
+
+        if (pathway) {
+            pathwayTitle = pathway.tabTitle ? pathway.tabTitle : pathway.name;
+            if (pathway.metaDescription) {
+                pathwayMetaDescription = pathway.metaDescription;
+            } else if (pathway.sponsor && pathway.sponsor.name) {
+                pathwayMetaDescription = "Go through this pathway to be evaluated for a position at " + pathway.sponsor.name + "."
+            }
+        }
+
         return (
             <div style={{marginBottom: "50px"}}>
-                {this.state.pathway ?
+                {pathway ?
                     <div>
+                        <MetaTags>
+                            <title>{pathwayTitle} | Moonshot</title>
+                            <meta name="description" content={pathwayMetaDescription} />
+                        </MetaTags>
+
                         <div className="greenToBlue headerDiv"/>
                         <Paper style={style.pathwayHeader}>
                             {pathway.pathwayContentDisplayName ?
@@ -260,6 +337,7 @@ class PathwayContent extends Component {
 
                                 <Paper className="questionsContactUs">
                                     <img
+                                        alt="Speech Bubble Icon"
                                         src="/icons/SpeechBubble.png"
                                         style={{height: "50px", width: "50px", position: "absolute"}}
                                     />

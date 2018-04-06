@@ -10,9 +10,9 @@ class Question extends Component {
             // add a break if the question part needs a break after it
             const breakArea = part.shouldBreak ? <br/> : null;
             // default classNames; if className provided, give the part that className instead
-            let defaultClassNames = "inlineBlock font20px font14pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400";
+            let defaultClassNames = "inlineBlock font20px font14pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
             if (part.partType === "code") {
-                defaultClassNames = "inlineBlock font16px font12pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400";
+                defaultClassNames = "inlineBlock font16px font12pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
             }
             let className = part.className ? part.className : defaultClassNames;
             // if className isn't default but we want to include default classes, add them
@@ -38,9 +38,11 @@ class Question extends Component {
                     break;
                 case "img":
                     if (content.length > 0) {
+                        const altTag = part.altTag ? part.altTag : "";
                         return (
                             <div>
                                 <img src={"/images/" + content[0]}
+                                     alt={altTag}
                                      className={className}
                                      key={"contentPart" + keyCounter} />
                                      {breakArea}
@@ -140,8 +142,10 @@ class Question extends Component {
 
         });
 
+        let overallClassName = this.props.className ? this.props.className : "noStyle";
+
         return (
-            <div className="center">
+            <div className={overallClassName}>
                 {questionHtml}
             </div>
         );

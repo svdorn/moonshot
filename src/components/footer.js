@@ -38,6 +38,7 @@ class Footer extends Component {
                             <div style={{marginTop: "10px"}}>
                                 <a href="https://www.facebook.com/MoonshotLearning/" target="_blank">
                                     <img
+                                        alt="Facebook Logo"
                                         width={13}
                                         height={20}
                                         src="/logos/Facebook.png"/>
@@ -45,6 +46,7 @@ class Footer extends Component {
                                 <a href="https://twitter.com/moonshotteched" target="_blank"
                                    style={{marginLeft: "20px"}}>
                                     <img
+                                        alt="Twitter Logo"
                                         width={20}
                                         height={20}
                                         src="/logos/Twitter.png"/>
@@ -52,6 +54,7 @@ class Footer extends Component {
                                 <a href="https://www.linkedin.com/company/18233111/" target="_blank"
                                    style={{marginLeft: "20px"}}>
                                     <img
+                                        alt="LinkedIn Logo"
                                         width={20}
                                         height={20}
                                         src="/logos/LinkedIn.png"/>

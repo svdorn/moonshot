@@ -43,6 +43,8 @@ footer {
     padding: 10px;
 }
 
+.noDisplay { display: none; }
+
 .underline { text-decoration: underline; }
 
 #toolIconExtraInfo {
@@ -143,6 +145,13 @@ form > h1 {
   margin-top: 140px;
   display: inline-block;
   padding: 0 60px 15px 60px;
+}
+
+.smallLogoPLP {
+    height: 80px;
+}
+.smallLogoPLPSponsor {
+    height : 90px !important;
 }
 
 .dropDownSettings {
@@ -1143,6 +1152,10 @@ button.link {
     color: white;
     padding: 1px 14px;
 }
+.onboardingPage2Text2 {
+    color: white;
+    padding: 2px 14px;
+}
 .onboardingPage1Text3 {
     color: #00c3ff;
     padding: 2px 15px;
@@ -1160,6 +1173,7 @@ button.link {
     border: #3dabff;
     padding: 3px 7px;
     margin-top: 15px;
+    cursor: pointer;
 }
 .onboardingPage2Text {
     background: linear-gradient(to right, #be6aff, #7f0eff);
@@ -1171,6 +1185,7 @@ button.link {
     border: #9727ff;
     padding: 3px 7px;
     margin: 20px 10px 0;
+    cursor: pointer;
 }
 .onboardingPage2Button:first-child {
     padding: 3px 5px;
@@ -1962,6 +1977,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin: auto;
     overflow-x: hidden;
 }
+.multipleChoiceAnswer.medium {
+    max-width: 450px;
+}
 textarea.freeResponseTextArea {
     width: 90%;
     resize: none;
@@ -1986,6 +2004,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 .multipleChoiceCircle.selected, .multiSelectCircle.selected {
     background-color: var(--moonshotLightBlue);
 }
+.multipleChoiceCircle.medium {
+    left: calc(35% - 110px);
+}
 
 
 .multiSelectOption {
@@ -2004,12 +2025,18 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     margin: 4px 10px 0 0;
 }
 
+.centeredElement {
+    width: 100%;
+    text-align: center;
+}
+
 
 
 .inlineBlock { display: inline-block; }
 .marginSides80px { margin-right: 80px; margin-left: 80px; }
 .marginBottom40px { margin-bottom: 40px; }
 .marginBottom20px { margin-bottom: 20px; }
+.marginBottom10px { margin-bottom: 10px; }
 .marginTop40px { margin-top: 40px; }
 .marginTop20px { margin-top: 20px; }
 
@@ -2097,6 +2124,17 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     margin-top: -34px;
 }
 
+.sliderOnSelect {
+    width: 200px;
+    display: inline-block;
+    float: right;
+    margin: -30px 8% 0px 0px;
+}
+.textAreaOnSelect {
+    width: 90%;
+    margin: 0px 5%;
+}
+
 .code {
     text-align: left;
     background-color: #eaeaea;
@@ -2107,6 +2145,9 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 .maxWidth350px { max-width: 350px; }
 
 .width40px { width: 40px; }
+
+.leftAlign { text-align: left; }
+.rightAlign { text-align: right; }
 
 .font60px { font-size: 60px; }
 .font48px { font-size: 48px; }
@@ -2991,11 +3032,14 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     .onboardingPage1Text2 {
         padding: 1px 5px;
     }
+    .onboardingPage2Text2 {
+        padding: 2px 13px;
+    }
     .onboardingPage1Text3 {
         padding: 1px 5px;
     }
     .onboardingPage1Text2Background{
-        padding: 2px;
+        padding: 1px;
         margin-right: 14px;
         margin-top: 14px;
     }
@@ -3097,6 +3141,13 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     #pathwayMoneyIcon { height: 40px; }
     #pathwayHatIcon { height: 32px; }
     .pathwayDescriptionAndSalaryIcon { padding-right: 10px; }
+
+    .sliderOnSelect {
+        width: 60%;
+        display: inline-block;
+        float: right;
+        margin: -30px 20% 0px;
+    }
 }
 
 @media only screen and (min-width: 401px) {
@@ -3253,3 +3304,5 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 
     .homepageSeparator { transform: scale(2.5, .02); }
 }
+
+.noStyle {}

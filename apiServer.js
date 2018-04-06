@@ -267,11 +267,53 @@ const sanitizeOptions = {
 }
 
 
+// print all users from a specific pathway
+// nwm: "5a80b3cf734d1d0d42e9fcad"
+// sw: "5a88b4b8734d1d041bb6b386"
+
+// printUsersFromPathway("5a88b4b8734d1d041bb6b386");
+
+function printUsersFromPathway(pathwayIdToCheck) {
+    const pathwayUsersQuery = {
+        $or: [
+            {
+                pathways: {
+                    $elemMatch: {
+                        pathwayId: pathwayIdToCheck
+                    }
+                }
+            },
+            {
+                completedPathways: {
+                    $elemMatch: {
+                        pathwayId: pathwayIdToCheck
+                    }
+                }
+            }
+        ]
+    };
+    Users.find(pathwayUsersQuery, function(err, users) {
+        console.log("err is: ", err);
+
+        users.forEach(function(user) {
+            let userPath = user.pathways.find(function(path) {
+                return path.pathwayId == pathwayIdToCheck;
+            });
+            let currentStep = userPath ? userPath.currentStep : "completed";
+
+            const ourEmails = ["ameyer24@wisc.edu", "austin.thomas.meyer@gmail.com", "frizzkitten@gmail.com", "svdorn@wisc.edu", "treige@wisc.edu", "jye39@wisc.edu", "stevedorn9@gmail.com", "kyle.treige@gmail.com"];
+            if (!ourEmails.includes(user.email)) {
+                console.log("\n\nname: ", user.name, "\nemail: ", user.email, "\ncurrent step: ", currentStep);
+            }
+        })
+    })
+}
+
+
 // update all users with a specific thing, used if something is changed about
 // the user model
 // Users.find({}, function(err, users) {
 //     console.log("err is: ", err);
-//     console.log("\n\nusers are: ", users);
 //
 //     for (let userIdx = 0; userIdx < users.length; userIdx++) {
 //         let user = users[userIdx];
@@ -281,6 +323,8 @@ const sanitizeOptions = {
 //         });
 //     }
 // })
+
+
 
 //----->> POST USER <<------
 app.post('/user', function (req, res) {
@@ -318,7 +362,7 @@ app.post('/user', function (req, res) {
                         // add pathway to user's My Pathways if they went from
                         // a landing page.
                         // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY OR SINGLEWIRE PATHWAY
-                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386") {
+                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386" || user.pathwayId === "5abc12cff36d2805e28d27f3") {
                             user.pathways = [{
                                 pathwayId: user.pathwayId,
                                 currentStep: {
@@ -384,6 +428,9 @@ app.post('/user', function (req, res) {
                                         if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
                                             pathName = "Northwestern Mutual";
                                         }
+                                        else if (user.pathwayId === "5abc12cff36d2805e28d27f3") {
+                                            pathName = "Curate Full-Stack";
+                                        }
                                         additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
                                     }
                                     let content =
@@ -394,7 +441,7 @@ app.post('/user', function (req, res) {
                                         +   additionalText
                                         + '</div>';
 
-                                    const sendFrom = "Moonshot Learning";
+                                    const sendFrom = "Moonshot";
                                     sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
                                         if (!success) {
                                             console.log("Error sending sign up alert email");
@@ -409,6 +456,57 @@ app.post('/user', function (req, res) {
                             // they will have to verify themselves before they
                             // can do anything anyway
                             res.json(safeUser(newUser));
+
+                            // send an email to the user one day after signup
+                            try {
+                                const ONE_DAY = 1000 * 60 * 60 * 24;
+
+                                let moonshotUrl = 'https://www.moonshotlearning.org/';
+                                // if we are in development, links are to localhost
+                                if (!process.env.NODE_ENV) {
+                                    moonshotUrl = 'http://localhost:8081/';
+                                }
+
+                                let firstName = getFirstName(newUser.name);
+                                // add in a space before the name, if the user has a name
+                                if (firstName != "") {
+                                    firstName = " " + firstName;
+                                }
+
+                                setTimeout(function() {
+                                    let dayAfterRecipient = [newUser.email];
+                                    let dayAfterSubject = 'Moonshot Fights For You';
+                                    let dayAfterContent =
+                                        "<div style='font-size:15px;text-align:left;font-family: Arial, sans-serif;color:#000000'>"
+                                            + "<p>Hi" + firstName + ",</p>"
+                                            + "<p>My name is Kyle. I'm the co-founder and CEO at Moonshot. I'm honored that you trusted us in your career journey. If you need anything at all, please let me know.</p>"
+                                            + "<p>I individually fight for every Moonshot candidate — Mock interviews, inside tips that our employers are looking for, anything to help you start the career of your dreams.</p>"
+                                            + "<p>Shoot me a message. I'm all ears.</p>"
+                                            + "<p>Yours truly,<br/>Kyle</p>"
+                                            + "<div style='font-size:10px; text-align:left; color:#000000; margin-bottom:50px;'>"
+                                                + "----------------------------------<br/>"
+                                                + "Kyle Treige, Co-Founder & CEO<br/>"
+                                                + "<a href='https://moonshotlearning.org/'>Moonshot</a><br/>"
+                                                + "608-438-4478<br/>"
+                                            + "</div>"
+                                            + "<div style='font-size:10px; text-align:left; color:#C8C8C8; margin-bottom:30px;'>"
+                                                + "<i>Moonshot Learning, Inc.<br/><a href='' style='text-decoration:none;color:#D8D8D8;cursor:default'>1261 Meadow Sweet Dr, Madison, WI 53719</a>.<br/>"
+                                                + '<a style="color:#C8C8C8;" href="' + moonshotUrl + 'unsubscribe?email=' + newUser.email + '">Opt-out of future messages.</a></i>'
+                                            + "</div>"
+                                        + "</div>";
+
+                                    const dayAfterSendFrom = "Kyle Treige";
+                                    sendEmail(dayAfterRecipient, dayAfterSubject, dayAfterContent, dayAfterSendFrom, function (success, msg) {
+                                        if (success) {
+                                            console.log("sent day-after email");
+                                        } else {
+                                            console.log("error sending day-after email");
+                                        }
+                                    })
+                                }, ONE_DAY);
+                            } catch (e) {
+                                console.log("Not able to send day-after email to ", newUser.name, "with id: ", newUser._id);
+                            }
                         })
                     })
                 } else {
@@ -418,6 +516,18 @@ app.post('/user', function (req, res) {
         });
     });
 });
+
+
+function getFirstName(name) {
+    // split by spaces, get array of non-spaced names, return the first one
+    let firstName = "";
+    try {
+        firstName = name.split(' ')[0];
+    } catch (e) {
+        firstName = "";
+    }
+    return firstName;
+}
 
 
 // remove any empty pieces from an object or array all the way down
@@ -770,7 +880,7 @@ app.post('/sendVerificationEmail', function (req, res) {
         let subject = 'Verify email';
         let content =
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
                     + '<div style="text-align:justify;width:80%;margin-left:10%;">'
                     + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="' + moonshotUrl + 'verifyEmail?token=' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
                     + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.org</a>.</span><br/>'
@@ -787,7 +897,7 @@ app.post('/sendVerificationEmail', function (req, res) {
                 + '</div>'
             + '</div>';
 
-        const sendFrom = "Moonshot Learning";
+        const sendFrom = "Moonshot";
         sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
             if (success) {
                 res.json(msg);
@@ -838,11 +948,11 @@ app.post('/user/registerForPathway', function (req, res) {
         + "Kyle</p>"
         + "<p>-------------------------------------------<br/>"
         + "Kyle Treige, Co-Founder & CEO <br/>"
-        + "<a href='https://www.moonshotlearning.org/' target='_blank'>Moonshot Learning</a><br/>"
+        + "<a href='https://www.moonshotlearning.org/' target='_blank'>Moonshot</a><br/>"
         + "608-438-4478</p>"
         + "</div>";
 
-    const sendFrom = "Moonshot Learning";
+    const sendFrom = "Moonshot";
     sendEmail(recipient1, subject1, content1, sendFrom, function (success, msg) {
         if (success) {
             sendEmail(recipient2, subject2, content2, sendFrom, function (success, msg) {
@@ -892,7 +1002,7 @@ app.post('/user/forBusinessEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    const sendFrom = "Moonshot Learning";
+    const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will notify you of your results shortly.");
@@ -923,7 +1033,7 @@ app.post("/alertLinkClicked", function(req, res) {
         + "</p>"
         + "</div>";
 
-    const sendFrom = "Moonshot Learning";
+    const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json(true);
@@ -1113,7 +1223,7 @@ app.post('/user/completePathway', function (req, res) {
                     // only send email if in production
                     if (process.env.NODE_ENV) {
                         // send an email to us saying that the user completed a pathway
-                        const sendFrom = "Moonshot Learning";
+                        const sendFrom = "Moonshot";
                         sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
                             if (success) {
                                 res.json({message: successMessage, user: userToReturn});
@@ -1215,12 +1325,6 @@ app.post('/createReferralCode', function(req, res) {
 
             + "</div>";
 
-
-
-            // '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-            //     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
-            // + '</div>';
-
         // send email to user who asked for a referral code with the info about the code
         const sendFrom = "Kyle Treige";
         sendEmail(recipient, subject, emailContent, sendFrom, function (success, msg) {
@@ -1283,7 +1387,7 @@ app.post('/user/unsubscribeEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    const sendFrom = "Moonshot Learning";
+    const sendFrom = "Moonshot";
     sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("You have successfully unsubscribed.");
@@ -1340,7 +1444,7 @@ app.post('/user/comingSoonEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    const sendFrom = "Moonshot Learning";
+    const sendFrom = "Moonshot";
     sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
@@ -1372,7 +1476,7 @@ app.post('/user/contactUsEmail', function (req, res) {
         + "</p>"
         + "</div>";
 
-    const sendFrom = "Moonshot Learning";
+    const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
@@ -1426,7 +1530,7 @@ app.post('/forgotPassword', function (req, res) {
 
                 const content =
                     '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                        + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                        + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
                             + '<div style="text-align:justify;width:80%;margin-left:10%;">'
                             + "<span style='margin-bottom:20px;display:inline-block;'>Hello! We got a request to change your password. If that wasn't from you, you can ignore this email and your password will stay the same. Otherwise click here:</span><br/>"
                             + '</div>'
@@ -1441,7 +1545,7 @@ app.post('/forgotPassword', function (req, res) {
                         + '</div>'
                     + '</div>';
 
-                const sendFrom = "Moonshot Learning";
+                const sendFrom = "Moonshot";
                 sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
                     if (success) {
                         res.json(msg);
@@ -1488,7 +1592,7 @@ function sendEmail(recipients, subject, content, sendFrom, callback) {
         }
 
         // the default email account to send emails from
-        let from = '"Moonshot Learning" <do-not-reply@moonshotlearning.org>';
+        let from = '"Moonshot" <do-not-reply@moonshotlearning.org>';
         let authUser = credentials.emailUsername;
         let authPass = credentials.emailPassword;
         if (sendFrom) {
@@ -1556,6 +1660,7 @@ app.post('/getUserByProfileUrl', function (req, res) {
     const profileUrl = sanitize(req.body.profileUrl);
     const query = { profileUrl };
     getUserByQuery(query, function (err, user) {
+        console.log("safeUser is: ", safeUser);
         res.json(safeUser(user));
     })
 });
@@ -1699,6 +1804,13 @@ function safeUser(user) {
     newUser.emailVerificationToken = undefined;
     newUser.passwordToken = undefined;
     newUser.answers = undefined;
+    // doing Object.assign with a document from the db can lead to the new object
+    // having a bunch of properties we don't want with the actual object ending
+    // up in newObj._doc, so take the ._doc property if it exists and treat it
+    // as the actual object
+    if (newUser._doc) {
+        newUser = newUser._doc;
+    }
     return newUser;
 }
 
@@ -1824,7 +1936,7 @@ app.post('/user/changeSettings', function (req, res) {
 
 
 //----->> ADD PATHWAY <<------
-// CURRENTLY ONLY ALLOWS NWM AND SINGLEWIRE PATHWAYS TO BE ADDED
+// CURRENTLY ONLY ALLOWS NWM AND SINGLEWIRE AND CURATE PATHWAYS TO BE ADDED
 app.post("/user/addPathway", function (req, res) {
     const _id = sanitize(req.body._id);
     const verificationToken = sanitize(req.body.verificationToken);
@@ -1835,7 +1947,7 @@ app.post("/user/addPathway", function (req, res) {
     if (_id && pathwayId && verificationToken) {
         // TODO: REMOVE THIS, CHANGE HOW THIS FUNCTION WORKS ONCE WE START
         // ADDING PATHWAYS BESIDES NWM AND SINGLEWIRE
-        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad" && pathwayId !== "5a88b4b8734d1d041bb6b386") {
+        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad" && pathwayId !== "5a88b4b8734d1d041bb6b386" && pathwayId !== "5abc12cff36d2805e28d27f3") {
             res.status(403).send("You cannot currently sign up for that pathway.");
             return;
         }
@@ -1856,6 +1968,8 @@ app.post("/user/addPathway", function (req, res) {
 
             for (let i = 0; i < user.pathways.length; i++) {
                 if (user.pathways[i].pathwayId == req.body.pathwayId) {
+                    console.log(user.pathways[i].pathwayId);
+                    console.log(req.body.pathwayId);
                     res.status(401).send("You can't sign up for pathway more than once");
                     return;
                 }
@@ -1898,7 +2012,7 @@ app.post("/user/addPathway", function (req, res) {
 
                         console.log("Sending email to alert us about new user sign up.");
 
-                        const sendFrom = "Moonshot Learning";
+                        const sendFrom = "Moonshot";
                         sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
                             if (!success) {
                                 console.log("Error sending sign up alert email");
@@ -2064,7 +2178,7 @@ app.get('/topPathways', function (req, res) {
     Pathways.find({showToUsers: true})
         .sort({avgRating: 1})
         .limit(numPathways)
-        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon url")
+        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon showComingSoonBanner url")
         .exec(function (err, pathways) {
             if (err) {
                 res.status(500).send("Not able to get top pathways");
@@ -2293,13 +2407,14 @@ app.get('/pathways/search', function (req, res) {
     //const limit = 4;
     const sort = {avgRating: 1};
     // only get these properties of the pathways
-    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon url";
+    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon showComingSoonBanner url";
 
     Pathways.find(query)
         .limit(limit)
         .sort(sort)
         .select(select)
         .exec(function (err, pathways) {
+            console.log("pathways: ", pathways);
             if (err) {
                 res.status(500).send("Error getting searched-for pathways");
             } else {
@@ -2324,8 +2439,13 @@ app.get("/pathways/getAllCompaniesAndCategories", function(req, res) {
 
             // go through each pathway, add the sponsor name and tags to the lists
             pathways.forEach(function(pathway) {
-                companies.push(pathway.sponsor.name);
-                categories = categories.concat(pathway.tags);
+                // only add tags and company names if they exist
+                if (pathway && pathway.sponsor && pathway.sponsor.name) {
+                    companies.push(pathway.sponsor.name);
+                }
+                if (pathway && pathway.tags) {
+                    categories = categories.concat(pathway.tags);
+                }
             })
 
             companies = removeDuplicates(companies);

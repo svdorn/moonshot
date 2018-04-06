@@ -9,6 +9,7 @@ import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {browserHistory} from 'react-router';
 import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
+import MetaTags from 'react-meta-tags';
 
 const styles = {
     floatingLabelStyle: {
@@ -209,6 +210,10 @@ class Signup extends Component {
 
         return (
             <div className="fillScreen greenToBlue formContainer">
+                <MetaTags>
+                    <title>Sign Up | Moonshot</title>
+                    <meta name="description" content="Sign in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
+                </MetaTags>
                 <div className={blurredClass}>
                     <Dialog
                         actions={actionsPP}
@@ -286,6 +291,7 @@ class Signup extends Component {
                                         <div className="checkbox smallCheckbox blueCheckbox"
                                              onClick={this.handleCheckMarkClick.bind(this)}>
                                             <img
+                                                alt=""
                                                 className={"checkMark" + this.state.agreeingToTerms}
                                                 src="/icons/CheckMarkBlue.png"
                                             />

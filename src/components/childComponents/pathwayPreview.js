@@ -60,11 +60,14 @@ class PathwayPreview extends Component {
         if (this.props.comingSoon) {
             blurClass = "blurOnHover"
         }
+
+        let shouldShowBannerClass = this.props.showComingSoonBanner === true ? "" : " noDisplay";
+
         return (
             <div className="pathwayPreview" style={{position: "relative"}}>
                 {this.props.comingSoon ?
                     <div className="comingSoonPathwayPreview">
-                        <div className="comingSoonBanner">
+                        <div className={"comingSoonBanner" + shouldShowBannerClass}>
                             <div>
                                 <div>
                                     Coming Soon
@@ -92,6 +95,7 @@ class PathwayPreview extends Component {
                         <div style={{textAlign: "center", position: "relative"}} className={blurClass}>
                             {this.props.type == "addOne" ?
                                 <img style={{width: "80px", marginTop: "120px"}}
+                                     alt="Plus Sign Icon"
                                      src="/icons/PlusSignWhite.png"
                                 />
                                 :
@@ -101,7 +105,7 @@ class PathwayPreview extends Component {
                                             <img
                                                 width={216}
                                                 height={160}
-                                                alt="VR Image"
+                                                alt={this.props.imageAltTag ? this.props.imageAltTag : this.props.name + " Preview Image"}
                                                 src={this.props.image}
                                             />
                                             : null
@@ -114,39 +118,39 @@ class PathwayPreview extends Component {
                                         <ul className="horizCenteredList pathwayPrevIconList">
                                             <li>
                                                 <div className="whiteText">
-                                                    <img src="/icons/ClockWhite.png" style={iconStyle}/><br/>
+                                                    <img alt="Clock Icon" src="/icons/ClockWhite.png" style={iconStyle}/><br/>
                                                     <span className="font8px">Completion Time</span><br/>
                                                     {this.props.completionTime}
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="whiteText">
-                                                    <img src="/icons/CalendarWhite.png" style={iconStyle}/><br/>
+                                                    <img alt="Calendar Icon" src="/icons/CalendarWhite.png" style={iconStyle}/><br/>
                                                     <span className="font8px">Deadline</span><br/>
                                                     {this.props.deadline && !this.props.comingSoon ? this.props.deadline : null}
                                                     {!this.props.deadline && !this.props.comingSoon ? "None" : null}
-                                                    {this.props.comingSoon ? "TBA" : null }
+                                                    {this.props.comingSoon ? "None" : null }
                                                 </div>
                                             </li>
                                             <li>
                                                 <div className="whiteText">
-                                                    <img src="/icons/DollarSignWhite.png" style={priceIconStyle}/><br/>
+                                                    <img alt="Dollar Sign Icon" src="/icons/DollarSignWhite.png" style={priceIconStyle}/><br/>
                                                     <span className="font8px">Price</span><br/>
                                                     {this.props.price}
                                                 </div>
                                             </li>
                                         </ul>
                                     </div>
-                                    {this.props.comingSoon ?
-                                        null :
+                                    {this.props.logo ?
                                         <div style={{position:"absolute", bottom:"4px", /*right:"16px"*/ width: "100%"}}>
                                             <div style={{display:"inline-block", /*marginRight:"4px"*/}}>{/*Hiring Partner*/}</div>
                                             <img
                                                 src={this.props.logo}
-                                                alt={this.props.sponsorName}
+                                                alt={this.props.sponsorName ? this.props.sponsorName + " Logo" : ""}
                                                 height={20}
                                             />
                                         </div>
+                                        : null
                                     }
                                 </div>
                             }
@@ -160,7 +164,8 @@ class PathwayPreview extends Component {
                            zDepth={this.state.shadow}>
                         <div style={{textAlign: "center", position: "relative"}} className={blurClass}>
                             {this.props.type == "addOne" ?
-                                <img style={{width: "80px", marginTop: "120px"}}
+                                <img alt="Plus Sign Icon"
+                                     style={{width: "80px", marginTop: "120px"}}
                                      src="/icons/PlusSignOrange.png"
                                 />
                                 :
@@ -170,7 +175,7 @@ class PathwayPreview extends Component {
                                             <img
                                                 width={216}
                                                 height={160}
-                                                alt="VR Image"
+                                                alt={this.props.imageAltTag ? this.props.imageAltTag : this.props.name + " Preview Image"}
                                                 src={this.props.image}
                                             />
                                             : null
@@ -183,24 +188,26 @@ class PathwayPreview extends Component {
                                         <ul className="horizCenteredList pathwayPrevIconList">
                                             <li>
                                                 <div>
-                                                    <img src={clockImg} style={iconStyle}/><br/>
+                                                    <img alt="Clock Icon" src={clockImg} style={iconStyle}/><br/>
                                                     <span className="font8px">Completion Time</span><br/>
                                                     {this.props.completionTime}
                                                 </div>
                                             </li>
                                             <li>
                                                 <div>
-                                                    <img src={calendarImg}
+                                                    <img alt="Calendar Icon"
+                                                         src={calendarImg}
                                                          style={iconStyle}/><br/>
                                                     <span className="font8px">Deadline</span><br/>
                                                     {this.props.deadline && !this.props.comingSoon ? this.props.deadline : null}
                                                     {!this.props.deadline && !this.props.comingSoon ? "None" : null}
-                                                    {this.props.comingSoon ? "TBA" : null }
+                                                    {this.props.comingSoon ? "None" : null }
                                                 </div>
                                             </li>
                                             <li>
                                                 <div>
-                                                    <img src={dollarSignImg}
+                                                    <img alt="Dollar Sign Icon"
+                                                         src={dollarSignImg}
                                                          style={priceIconStyle}/><br/>
                                                     <span className="font8px">Price</span><br/>
                                                     {this.props.price}
@@ -208,16 +215,16 @@ class PathwayPreview extends Component {
                                             </li>
                                         </ul>
                                     </div>
-                                    {this.props.comingSoon ?
-                                        null :
+                                    {this.props.logo ?
                                         <div style={{position:"absolute", bottom:"4px", /*right:"16px"*/ width: "100%"}}>
                                             <div style={{display:"inline-block", /*marginRight:"4px"*/}}>{/*Hiring Partner*/}</div>
                                             <img
                                                 src={this.props.logo}
-                                                alt={this.props.sponsorName}
+                                                alt={this.props.sponsorName ? this.props.sponsorName + " Logo" : ""}
                                                 height={20}
                                             />
                                         </div>
+                                        : null
                                     }
                                 </div>
                             }

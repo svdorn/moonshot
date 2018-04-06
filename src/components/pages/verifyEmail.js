@@ -4,6 +4,7 @@ import { verifyEmail } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import MetaTags from 'react-meta-tags';
 
 class VerifyEmail extends Component {
 
@@ -17,6 +18,10 @@ class VerifyEmail extends Component {
 
         return(
             <div className="fillScreen greenToBlue center">
+                <MetaTags>
+                    <title>Verify Email | Moonshot</title>
+                    <meta name="description" content="Verify your email to get started on your path to finding the perfect job." />
+                </MetaTags>
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightWhiteForm">
                     <h1>Verify Email</h1>

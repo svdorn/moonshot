@@ -5,6 +5,7 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class Admin extends Component {
     constructor(props) {
@@ -56,6 +57,11 @@ class Admin extends Component {
     render() {
         return (
             <div>
+                <MetaTags>
+                    <title>Admin | Moonshot</title>
+                    <meta name="description" content="Moonshot admin page." />
+                </MetaTags>
+
                 {this.props.currentUser.admin === true ?
                     <div>
                         <div className="headerDiv greenToBlue" />
