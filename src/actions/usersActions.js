@@ -42,7 +42,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 if (returnedUser.userType === "employer") {
                     nextUrl = 'businessHome';
                 }
-                if (returnedUser.userType === "user" && !returnedUser.hasFinishedOnboarding) {
+                if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";
                 } else if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
@@ -254,9 +254,9 @@ export function verifyEmail(userType, token) {
     return function(dispatch) {
         axios.post("/api/verifyEmail", {userType, token})
             .then(function(response) {
-                if (!response.data || response.data === "go to login" || userType == "businessUser") {
+                if (!response.data || response.data === "go to login" || userType == "employer") {
                     let nextLocation = "/login";
-                    if (userType == "businessUser") {
+                    if (userType == "employer") {
                         const email = response.data;
                         nextLocation = "/changeTempPassword?email=" + email;
                     }

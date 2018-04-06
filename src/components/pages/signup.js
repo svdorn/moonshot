@@ -125,7 +125,7 @@ class Signup extends Component {
         const email = this.props.formData.signup.values.email;
         let user = [{
             name, password, email, signUpReferralCode,
-            userType: "user"
+            userType: "candidate"
         }];
 
         // if the user got here from a pathway landing page, add the pathway id

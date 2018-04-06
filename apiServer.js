@@ -739,7 +739,7 @@ app.post('/verifyEmail', function (req, res) {
     const userType = sanitize(req.body.userType);
 
     // query form business user database if the user is a business user
-    const DB = (userType === "businessUser") ? BusinessUsers : Users;
+    const DB = (userType === "employer") ? BusinessUsers : Users;
 
     if (!token) {
         res.status(400).send("Url not in the right format");
@@ -771,7 +771,7 @@ app.post('/verifyEmail', function (req, res) {
 
             // we don't save the user session if logging in as business user
             // because it is likely the account was created on a different computer
-            if (userType === "businessUser") {
+            if (userType === "employer") {
                 res.json(updatedUser.email);
                 return;
             }

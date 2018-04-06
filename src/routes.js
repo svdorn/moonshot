@@ -67,7 +67,7 @@ const routes = (
         <Route path="discover" component={Discover} />
         <Route path="contactUs" component={ContactUs} />
         <Route path="myPathways" component={AuthenticatedComponent} page={<MyPathways/>} />
-        <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding/>} userType="user" />
+        <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding/>} userType="candidate" />
         <Route path="pathway" component={Pathway} />
         <Route path="pathwayContent" component={AuthenticatedComponent} page={<PathwayContent/>} />
         <Route path="unsubscribe" component={Unsubscribe} />

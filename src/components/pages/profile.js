@@ -474,7 +474,7 @@ class Profile extends Component {
             // TODO check for userType and set the metaDescription to be applicable
             // if (user.userType === "candidate") {
             //      metaDescription = "View and edit your profile."
-            // } else if (user.userType === "businessUser") {
+            // } else if (user.userType === "employer") {
             //      metaDescription = "See a candidate's profile."
             // }
         // }

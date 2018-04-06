@@ -52,7 +52,7 @@ class AuthenticatedComponent extends Component {
 
     render() {
         // clone the element so that we can put props into the element, such as location and children
-        const childElement = React.cloneElement(this.props.route.page, { 
+        const childElement = React.cloneElement(this.props.route.page, {
             location: this.props.location,
             children: this.props.children
         });

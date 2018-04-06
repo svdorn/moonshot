@@ -10,7 +10,7 @@ var usersSchema = mongoose.Schema({
     emailToContact: String,
     // phone number for companies to contact this person with
     phoneNumber: String,
-    // should always be "user" (for businessUsers, this will be "businessUser")
+    // should always be "candidate" (for businessUsers, this will be "employer")
     userType: String,
     // has admin rights on the site, able to create business accounts and see all results
     admin: Boolean,
