@@ -147,8 +147,6 @@ class Menu extends Component {
     goTo(route) {
         // closes any notification
         this.props.closeNotification();
-        // sets header to white
-        // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
@@ -156,7 +154,6 @@ class Menu extends Component {
     }
 
     render() {
-
         let self = this;
 
         let isEmployer = false;
@@ -166,45 +163,42 @@ class Menu extends Component {
             isEmployer = true;
         }
 
+        // the url to be directed to by default
+        let homeUrl = "/";
+        if (isEmployer) {
+            homeUrl = "/businessHome";
+        }
+
         let isOnboarding = false;
         if (this.props.location.pathname === '/onboarding') {
             isOnboarding = true;
         }
+        // color of the dropDown menu icon
         let iconMenuColor = isOnboarding ? "black" : "white";
+        // source for the moonshot logo; will be black when onboarding
         let moonshotLogo = isOnboarding ? "/images/OfficialLogoBlack.png" : "/images/OfficialLogoWhite.png";
+        // class of any dropdown menu
         let dropdownClass = isOnboarding ? "headerDropdownBlack wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
-        let menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem"
+        // class of any menu item that is NOT currently selected
+        let menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem";
+        // class of any menu item that IS currently selected
+        const selectedMenuItemClass = menuItemClass + " currentRoute";
 
-        let discoverClass = menuItemClass;
-        if (this.props.location.pathname === '/discover') {
-            discoverClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
-        }
-        let homeClass = menuItemClass;
-        if (this.props.location.pathname === '/') {
-            homeClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
-        }
-        let forBusClass = menuItemClass;
-        if (this.props.location.pathname === '/forBusiness') {
-            forBusClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
-        }
-        let loginClass = menuItemClass;
-        if (this.props.location.pathname === '/login') {
-            loginClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
-        }
-        let myPathwaysClass = menuItemClass;
+        // width of the bar that is only shown under the dropDown menu when
+        // some element from the dropDown menu is selected
         let hoverWidth = "52px";
-        if (this.props.location.pathname === '/myPathways') {
-            myPathwaysClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem currentRoute";
-        }
         if (this.props.location.pathname === '/profile') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
         }
         if (this.props.location.pathname === '/settings') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+            // if settings is selected, the underline bar must be bigger
+            // because "settings" is a bigger word
             hoverWidth = "67px";
         }
 
 
+        // show only the Moonshot logo if currently loading
         if (this.props.isFetching) {
             return (
                 <header style={{zIndex: "100"}}>
@@ -218,7 +212,7 @@ class Menu extends Component {
                                 className="clickable moonshotMenuLogo"
                                 id="moonshotLogo"
                                 src={moonshotLogo}
-                                onClick={() => this.goTo('/')}
+                                onClick={() => this.goTo(homeUrl)}
                             />
                         </ToolbarGroup>
                     </Toolbar>
@@ -245,7 +239,7 @@ class Menu extends Component {
             ];
         }
         // if the current user is an employer
-        else if (currentUser.userType === "employer") {
+        else if (isEmployer) {
             menuOptions = [
                 {optionType: "url", title: "Home", url: "/businessHome"},
                 {optionType: "url", title: "My Candidates", url: "/myCandidates"},
@@ -288,8 +282,7 @@ class Menu extends Component {
         // construct the menu's tabs
         let desktopMenu = [];
         let mobileMenu = [];
-        //const menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem";
-        const selectedMenuItemClass = menuItemClass + " currentRoute";
+
         menuOptions.forEach(function(option) {
             switch (option.optionType) {
                 case "url":
@@ -403,7 +396,7 @@ class Menu extends Component {
             logoClassName = "clickable moonshotMenuLogo";
             logoClickAction = () => this.goTo("/");
         }
-        let moonshotLogoImg = (
+        let moonshotLogoHtml = (
             <img
                 width={187.5}
                 height={60}
@@ -420,7 +413,7 @@ class Menu extends Component {
                 <div>
                     <Toolbar id="menu" style={{marginTop: "10px"}}>
                         <ToolbarGroup className="logoToolbarGroup">
-                            {moonshotLogoImg}
+                            {moonshotLogoHtml}
                         </ToolbarGroup>
                         <ToolbarGroup>
                             {desktopMenu}
@@ -442,155 +435,6 @@ class Menu extends Component {
         );
 
         return menu;
-
-
-        // return (
-        //     <header style={{zIndex: "100"}}>
-        //         {this.props.currentUser ?
-        //             /* logged in */
-        //             <div>
-        //                 {this.props.currentUser.userType === "employer" ?
-        //                     /* user is a business user */
-        //                     <Toolbar id="menu" style={{marginTop: "10px"}}>
-        //                         <ToolbarGroup className="logoToolbarGroup">
-        //                             <img
-        //                                 width={187.5}
-        //                                 height={60}
-        //                                 alt="Moonshot"
-        //                                 className="clickable moonshotMenuLogo"
-        //                                 id="moonshotLogo"
-        //                                 src={moonshotLogo}
-        //                                 onClick={() => this.goTo('/businessHome')}
-        //                             />
-        //                         </ToolbarGroup>
-        //                         <ToolbarGroup>
-        //                             <p className={discoverClass} onClick={() => this.goTo('/businessHome')}>Home</p>
-        //                             <p className={myPathwaysClass} onClick={() => this.goTo('/myCandidates')}>My
-        //                                 Candidates</p>
-        //                             <div className="menuDivider loggedIn wideScreenMenuItem"/>
-        //                             <DropDownMenu value={this.state.value}
-        //                                           onChange={this.handleChange}
-        //                                           underlineStyle={styles.underlineStyle}
-        //                                           anchorOrigin={styles.anchorOrigin}
-        //                                           style={{fontSize: "18px", marginTop: "21px"}}
-        //                                           className={dropdownClass}
-        //                                           id="menuDropdown"
-        //                             >
-        //                                 <MenuItem value={1} primaryText="Profile"/>
-        //                                 <Divider/>
-        //                                 <MenuItem value={2} primaryText="Settings"/>
-        //                                 <MenuItem value={3} primaryText="Sign Out"/>
-        //                             </DropDownMenu>
-        //                             <div className="menuUnderline" style={{width: hoverWidth}}/>
-        //
-        //                             <IconMenu
-        //                                 iconButtonElement={<IconButton><MoreHorizIcon/></IconButton>}
-        //                                 anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-        //                                 targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        //                                 className="smallScreenMenu"
-        //                                 iconStyle={{fill: "white"}}
-        //                             >
-        //                                 <MenuItem primaryText="Home" onClick={() => this.goTo('/businessHome')}/>
-        //                                 <MenuItem primaryText="My Candidates" onClick={() => this.goTo('/myCandidates')}/>
-        //                                 <MenuItem primaryText="Profile" onClick={() => this.selectItem('/businessProfile', 1)}/>
-        //                                 <MenuItem primaryText="Settings"
-        //                                           onClick={() => this.selectItem('/settings', 2)}/>
-        //                                 <MenuItem primaryText="Sign out" onClick={() => this.signOut()}/>
-        //                             </IconMenu>
-        //                         </ToolbarGroup>
-        //                     </Toolbar>
-        //                 :
-        //                     /* user is a candidate */
-        //                     <Toolbar id="menu" style={{marginTop: "10px"}}>
-        //                         <ToolbarGroup className="logoToolbarGroup">
-        //                             <img
-        //                                 width={187.5}
-        //                                 height={60}
-        //                                 alt="Moonshot"
-        //                                 className="clickable moonshotMenuLogo"
-        //                                 id="moonshotLogo"
-        //                                 src={moonshotLogo}
-        //                                 onClick={() => this.goTo('/discover')}
-        //                             />
-        //                         </ToolbarGroup>
-        //                         <ToolbarGroup>
-        //                             <p className={discoverClass} onClick={() => this.goTo('/discover')}>Discover</p>
-        //                             <p className={myPathwaysClass} onClick={() => this.goTo('/myPathways')}>My
-        //                                 Pathways</p>
-        //                             <div className="menuDivider loggedIn wideScreenMenuItem"/>
-        //                             <DropDownMenu value={this.state.value}
-        //                                           onChange={this.handleChange}
-        //                                           underlineStyle={styles.underlineStyle}
-        //                                           anchorOrigin={styles.anchorOrigin}
-        //                                           style={{fontSize: "18px", marginTop: "21px"}}
-        //                                           className={dropdownClass}
-        //                                           id="menuDropdown"
-        //                             >
-        //                                 <MenuItem value={1} primaryText="Profile"/>
-        //                                 <Divider/>
-        //                                 <MenuItem value={2} primaryText="Settings"/>
-        //                                 <MenuItem value={3} primaryText="Sign Out"/>
-        //                             </DropDownMenu>
-        //                             <div className="menuUnderline" style={{width: hoverWidth}}/>
-        //
-        //
-        //                             <IconMenu
-        //                                 iconButtonElement={<IconButton><MoreHorizIcon/></IconButton>}
-        //                                 anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-        //                                 targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        //                                 className="smallScreenMenu"
-        //                                 iconStyle={{fill: "white"}}
-        //                             >
-        //                                 <MenuItem primaryText="Discover" onClick={() => this.goTo('/discover')}/>
-        //                                 <MenuItem primaryText="My Pathways" onClick={() => this.goTo('/myPathways')}/>
-        //                                 <MenuItem primaryText="Profile" onClick={() => this.selectItem('/profile', 1)}/>
-        //                                 <MenuItem primaryText="Settings"
-        //                                           onClick={() => this.selectItem('/settings', 2)}/>
-        //                                 <MenuItem primaryText="Sign out" onClick={() => this.signOut()}/>
-        //                             </IconMenu>
-        //                         </ToolbarGroup>
-        //                     </Toolbar>
-        //                 }
-        //             </div>
-        //         :
-        //             /* not logged in */
-        //             <Toolbar style={{marginTop: "10px"}} id="menu">
-        //                 <ToolbarGroup>
-        //                     <img
-        //                         width={187.5}
-        //                         height={60}
-        //                         alt="Moonshot Logo"
-        //                         title="Moonshot Logo"
-        //                         className="clickable moonshotMenuLogo"
-        //                         id="moonshotLogo"
-        //                         src={moonshotLogo}
-        //                         onClick={() => this.goTo('/')}
-        //                     />
-        //                 </ToolbarGroup>
-        //                 <ToolbarGroup>
-        //                     <p className={homeClass} onClick={() => this.goTo('/')}>Home</p>
-        //                     <p className={discoverClass} onClick={() => this.goTo('/discover')}>Discover</p>
-        //                     <p className={forBusClass} onClick={() => this.goTo('/forBusiness')}>For Business</p>
-        //                     <div className="menuDivider loggedOut wideScreenMenuItem"/>
-        //                     <p className={loginClass} onClick={() => this.goTo('/login')}>Sign In</p>
-        //
-        //                     <IconMenu
-        //                         iconButtonElement={<IconButton><MoreHorizIcon/></IconButton>}
-        //                         anchorOrigin={{horizontal: 'right', vertical: 'top'}}
-        //                         targetOrigin={{horizontal: 'right', vertical: 'top'}}
-        //                         className="smallScreenMenu"
-        //                         iconStyle={{fill: "white"}}
-        //                     >
-        //                         <MenuItem primaryText="Home" onClick={() => this.goTo('/')}/>
-        //                         <MenuItem primaryText="Discover" onClick={() => this.goTo('/discover')}/>
-        //                         <MenuItem primaryText="For Business" onClick={() => this.goTo('/forBusiness')}/>
-        //                         <MenuItem primaryText="Sign In" onClick={() => this.goTo('/login')}/>
-        //                     </IconMenu>
-        //                 </ToolbarGroup>
-        //             </Toolbar>
-        //         }
-        //     </header>
-        // )
     }
 }
 
