@@ -127,7 +127,7 @@ class Menu extends Component {
     }
 
     selectAndGoTo(route, value) {
-        this.setState(dropDownSelected: value);
+        this.setState({dropDownSelected: value});
         this.goTo(route);
     }
 
@@ -289,7 +289,6 @@ class Menu extends Component {
         }
         // if the current user is an employer
         else if (currentUser.userType === "employer") {
-            console.log("here");
             menuOptions = [
                 {optionType: "url", title: "Home", url: "/businessHome"},
                 {optionType: "url", title: "My Candidates", url: "/myCandidates"},
@@ -349,7 +348,7 @@ class Menu extends Component {
                         <p key={option.title + " desktop"} className={optionClass} onClick={() => self.goTo(option.url)}>{option.title}</p>
                     );
                     mobileMenu.push(
-                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => this.goTo(option.url)}/>
+                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.goTo(option.url)}/>
                     );
                     break;
                 case "separator":
@@ -370,7 +369,7 @@ class Menu extends Component {
                                 );
                                 // no dropDowns on mobile menu
                                 mobileMenu.push(
-                                    <MenuItem key={dropDownOption.title + " mobile"} primaryText={dropDownOption.title} onClick={() => this.selectAndGoTo(dropDownOption.url, dropDownOption.title)}/>
+                                    <MenuItem key={dropDownOption.title + " mobile"} primaryText={dropDownOption.title} onClick={() => self.selectAndGoTo(dropDownOption.url, dropDownOption.title)}/>
                                 );
                                 break;
                             case "divider":
@@ -386,7 +385,7 @@ class Menu extends Component {
                                 );
                                 // add sign out option to regular menu on mobile
                                 mobileMenu.push(
-                                    <MenuItem key={"signOut mobile"} primaryText="Sign out" onClick={() => this.signOut()}/>
+                                    <MenuItem key={"signOut mobile"} primaryText="Sign out" onClick={() => self.signOut()}/>
                                 );
                                 break;
                             default:
@@ -413,11 +412,11 @@ class Menu extends Component {
                 case "signOut":
                     // add sign out button to desktop menu
                     desktopMenu.push(
-                        <p key={"signOut desktop"} className={menuItemClass} onClick={() => this.signOut()}>"Sign Out"</p>
+                        <p key={"signOut desktop"} className={menuItemClass} onClick={() => self.signOut()}>"Sign Out"</p>
                     );
                     // add sign out button to mobile menu
                     mobileMenu.push(
-                        <MenuItem key={"signOut mobile"} primaryText="Sign out" onClick={() => this.signOut()}/>
+                        <MenuItem key={"signOut mobile"} primaryText="Sign out" onClick={() => self.signOut()}/>
                     );
                     break;
                 default:
