@@ -31,7 +31,7 @@ class Menu extends Component {
             dropDownSelected = "Settings";
         } else if (this.props.location.pathname === '/onboarding') {
             value = 4;
-            dropDownSelected = "";
+            dropDownSelected = "Name";
         }
         this.state = {value, dropDownSelected};
     }
@@ -43,7 +43,10 @@ class Menu extends Component {
             }
         } else if (this.props.location.pathname === '/onboarding') {
             if (this.state.value !== 4) {
-                this.setState({value: 4, dropDownSelected: ""});
+                this.setState({value: 4});
+            }
+            if (this.state.dropDownSelected !== "Name") {
+                this.setState({dropDownSelected: "Name"})
             }
         } else {
             // set dropdown to be on Profile if not on settings or onboarding pages
@@ -339,8 +342,6 @@ class Menu extends Component {
                     // default to not underlined
                     let optionClass = menuItemClass;
                     // if this option is the one that is currently selected, underline it
-                    console.log("self.props.location.pathname: ", self.props.location.pathname);
-                    console.log("option.url: ", option.url)
                     if (self.props.location.pathname === option.url) {
                         optionClass = selectedMenuItemClass;
                     }
@@ -387,6 +388,12 @@ class Menu extends Component {
                                 mobileMenu.push(
                                     <MenuItem key={"signOut mobile"} primaryText="Sign out" onClick={() => self.signOut()}/>
                                 );
+                                break;
+                            case "text":
+                                // add text to desktop menu
+                                dropDownItems.push(<MenuItem value="Name" primaryText={dropDownOption.title}/>);
+                                // add text to mobile menu
+                                mobileMenu.push(<MenuItem style={{color: "#00c3ff"}} primaryText={dropDownOption.title}/>);
                                 break;
                             default:
                                 break;
@@ -447,7 +454,7 @@ class Menu extends Component {
                 width={187.5}
                 height={60}
                 alt="Moonshot"
-                className="clickable moonshotMenuLogo"
+                className={logoClassName}
                 id="moonshotLogo"
                 src={moonshotLogo}
                 onClick={logoClickAction}
@@ -469,13 +476,14 @@ class Menu extends Component {
                                 anchorOrigin={{horizontal: 'right', vertical: 'top'}}
                                 targetOrigin={{horizontal: 'right', vertical: 'top'}}
                                 className="smallScreenMenu"
-                                iconStyle={{fill: "white"}}
+                                iconStyle={{fill: iconMenuColor}}
                             >
                                 {mobileMenu}
                             </IconMenu>
                         </ToolbarGroup>
                     </Toolbar>
                 </div>
+
             </header>
         );
 
