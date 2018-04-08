@@ -1675,7 +1675,8 @@ function getUserByQuery(query, callback) {
     let doCallbackOrWaitForOtherDBCall = function(err, foundUser) {
         // if a user was found, return it
         if (foundUser && foundUser != null) {
-            callback(undefined, removePassword(foundUser));
+            const NO_ERRORS = undefined;
+            callback(NO_ERRORS, removePassword(foundUser));
             return;
         }
         // no user found in one of the dbs
@@ -1683,7 +1684,8 @@ function getUserByQuery(query, callback) {
             // if this is the second db we've checked, no user was found in
             // either db, so return undefined and an error if one exists
             if (finishedOneCall) {
-                callback(err, undefined);
+                const NO_USER_FOUND = undefined;
+                callback(err, NO_USER_FOUND);
             }
             // if this is the first db we've checkd, mark that a db was checked
             else {
@@ -3305,46 +3307,103 @@ app.post("/business", async function(req, res) {
         return;
     }
 
-    // check if another business with that name already exists
-    const businessNameQuery = {name: businessName};
-    Businesses.findOne(businessNameQuery, function(findBizErr, foundBiz) {
-        // error when looking for a business with the given name
-        if (findBizErr) {
-            console.log("Error when looking for business with given name: ", findBizErr);
-            res.status(500).send("Server error, try again later.");
-            return;
-        }
+    try {
+        // check if another business with that name already exists
+        const businessNameQuery = {name: businessName};
+        const foundBiz = await Businesses.findOne(businessNameQuery);
+
         // business already exists with that name
-        else if (foundBiz) {
+        if (foundBiz) {
             res.status(400).send("A business already exists with that name. Try a different name.");
             return;
         }
+
         // no business exists with that name, can go ahead and make new business
-        else {
-            Businesses.create(newBusiness, function(createBizErr, createdBusiness) {
-                // db error when making new business
-                if (createBizErr) {
-                    console.log("DB error when creating new business: ", createBizErr);
-                    res.status(500).send("Server error, try again later.");
+        const newBusiness = {
+            name: businessName
+        };
+
+        // make the business in the db
+        let createdBusiness = await Businesses.create(newBusiness);
+
+        // check if a user (business- or non-business-) with the email provided
+        // already exists
+        const userEmailQuery = {email: initialUserEmail};
+        getUserByQuery(userEmailQuery, function(findUserErr, foundUser) {
+            // error looking for user by email
+            if (findUserErr) {
+                console.log("Error looking for a user by email: ", findUserErr);
+                res.json("Successful business creation, but couldn't create initial user.");
+                return;
+            }
+            // user found with that email so can't create it
+            else if (foundUser) {
+                res.json("Successful business creation, but user with that email already exists.");
+                return;
+            }
+
+            // can create the initial user
+
+            // function that will create employer and save them to the business
+            // once the business has been created
+            // executes right after creation once hash as been made
+            const createEmployerWithPassword = async (createHashErr, hash) => {
+                const newEmployer = {
+                    name: initialUserName,
+                    email: initialUserEmail,
+                    password: hash,
+                    userType: "employer",
+                    verificationToken: crypto.randomBytes(64).toString('hex'),
+                    verified: true,
+                    company: {
+                        name: createdBusiness.name,
+                        companyId: createdBusiness._id
+                    }
+                };
+                // create the employer
+                try {
+                    let createdEmployer = await Employers.create(newEmployer);
+
+                    // ensure the business has a list of business user ids
+                    if (!Array.isArray(createdBusiness.businessUserIds)) {
+                        createdBusiness.employerIds = [];
+                    }
+                    // add the employer to the business' list of recruiters
+                    createdBusiness.employerIds.push(createdEmployer._id);
+
+                    try {
+                        // save the business with the new user in it
+                        await createdBusiness.save();
+                        // everything succeeded
+                        res.json("Success!");
+                        return;
+                    }
+                    // error saving employer to business' array of business user ids
+                    catch (saveBizUserIdsErr) {
+                        console.log("error saving employer to business' array of business user ids: ", saveBizUserIdsErr);
+                        res.json("Successful business creation but error associating new business user with business.");
+                        return;
+                    }
+                }
+                // error creating the new user
+                catch (createEmployerErr) {
+                    console.log("Error creating new employer: ", createEmployerErr);
+                    res.json("Successful business creation, but could not create initial user.");
                     return;
                 }
-                // successful business creation
-                else {
-                    res.json("business created");
-                    return;
-                }
-            })
-        }
-    });
+            }
 
-    // check if a user (business- or non-business-) with the email provided
-    // already exists
-
-    // if so, return successfully but tell the user to add a different initial
-    // user on the edit business page
-
-    // otherwise, return successfully
-
+            // hash password and create the employer
+            const SALT_ROUNDS = 10;
+            bcrypt.hash(initialUserPassword, SALT_ROUNDS, createEmployerWithPassword);
+        });
+    }
+    // error at some point in business creation
+    catch (dbError) {
+        console.log("Database error during creation: ", dbError);
+        res.status(500).send("Server error, try again later.");
+        return;
+    }
 });
 
 
