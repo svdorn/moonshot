@@ -547,6 +547,36 @@ export function contactUs(user){
     }
 }
 
+
+// POST A NEW BUSINESS
+export function postBusiness(business) {
+    return function(dispatch) {
+        // show loading bar
+        dispatch({type:"START_LOADING"});
+
+        axios.post("/api/business", business)
+        .then(function(response) {
+            dispatch({type: "SUCCESS_FINISHED_LOADING", notification: {message: response.data, type: "infoHeader"}});
+            // redirect to edit business page
+            if (typeof business.businessName === "string") {
+                const editBusinessUrl = '/admin/editBusiness?' + business.businessName;
+                browserHistory.push(editBusinessUrl);
+                window.scrollTo(0,0);
+            }
+        })
+        .catch(function(err) {
+            console.log("error: ", err);
+            let msg = "Error creating new business. Try again later.";
+            if (err && err.response && typeof err.response.data === "string") {
+                msg = err.response.data;
+            }
+            dispatch({type: "ERROR_FINISHED_LOADING", notification: {message: msg, type: "errorHeader"}});
+            window.scrollTo(0,0);
+        })
+    }
+}
+
+
 export function formError() {
     return function(dispatch) {
         dispatch({type:"FORM_ERROR", notification: {message: "Fields must all be filled in to submit form.", type: "errorHeader"}})
