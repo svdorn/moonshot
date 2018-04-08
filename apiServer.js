@@ -2483,6 +2483,37 @@ function removeDuplicates(a) {
 }
 
 
+// VERIFY THAT THE GIVEN USER IS AN ADMIN FROM USER ID AND VERIFICATION TOKEN
+function verifyAdmin(userId, verificationToken) {
+    // async call, lets us use await
+    return new Promise((resolve, reject) => {
+        Users.findById(userId, function(findUserErr, foundUser) {
+            // db error finding the user
+            if (findUserErr) {
+                console.log("Error finding admin user by id: ", findUserErr);
+                resolve(false);
+            }
+            // no user found with that id, so can't be an admin user
+            else if (!foundUser) {
+                resolve(false);
+            }
+            // user found
+            else {
+                // wrong verification token, user does not have valid credentials
+                if (foundUser.verificationToken != verificationToken) {
+                    console.log("Someone tried to get verify an admin user with the wrong verification token. User is: ", foundUser);
+                    resolve(false);
+                }
+                // return whether the user is an admin
+                else {
+                    resolve(foundUser.admin);
+                }
+            }
+        });
+    });
+}
+
+
 app.get("/infoForAdmin", function(req, res) {
     const query = sanitize(req.query);
     const _id = query.userId;
@@ -3257,17 +3288,54 @@ app.get("/business/candidateSearch", function(req, res) {
 });
 
 
-app.post("/business", function(req, res) {
-    console.log("req.body is: ", req.body);
+// post a new business to the db
+app.post("/business", async function(req, res) {
+    const body = req.body;
+    const userId = sanitize(body.userId);
+    const verificationToken = sanitize(body.verificationToken);
+    const businessName = sanitize(body.businessName);
+    const initialUserName = sanitize(body.initialUserName);
+    const initialUserPassword = sanitize(body.initialUserPassword);
+    const initialUserEmail = sanitize(body.initialUserEmail);
 
-    // validate admin is admin user (have to do this already in other steps,
-    // should probably just make that a function)
+    // validate admin is admin user
+    const isAdmin = await verifyAdmin(userId, verificationToken);
+    if (!isAdmin) {
+        res.status(403).send("You do not have permission to add businesses.");
+        return;
+    }
 
     // check if another business with that name already exists
-
-    // if so, return error message
-
-    // if not, add the business
+    const businessNameQuery = {name: businessName};
+    Businesses.findOne(businessNameQuery, function(findBizErr, foundBiz) {
+        // error when looking for a business with the given name
+        if (findBizErr) {
+            console.log("Error when looking for business with given name: ", findBizErr);
+            res.status(500).send("Server error, try again later.");
+            return;
+        }
+        // business already exists with that name
+        else if (foundBiz) {
+            res.status(400).send("A business already exists with that name. Try a different name.");
+            return;
+        }
+        // no business exists with that name, can go ahead and make new business
+        else {
+            Businesses.create(newBusiness, function(createBizErr, createdBusiness) {
+                // db error when making new business
+                if (createBizErr) {
+                    console.log("DB error when creating new business: ", createBizErr);
+                    res.status(500).send("Server error, try again later.");
+                    return;
+                }
+                // successful business creation
+                else {
+                    res.json("business created");
+                    return;
+                }
+            })
+        }
+    });
 
     // check if a user (business- or non-business-) with the email provided
     // already exists

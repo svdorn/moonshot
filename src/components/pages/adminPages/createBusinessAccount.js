@@ -112,22 +112,32 @@ class CreateBusinessAccount extends Component {
             return;
         }
 
-        const businessName = vals.businessName;
-        const initialUserName = vals.initialUserName;
-        const initialUserPassword = vals.initialUserPassword;
-        const initialUserEmail = vals.initialUserEmail;
-        let business = {
-            businessName, initialUserName, initialUserPassword, initialUserEmail
-        };
+        const currentUser = this.props.currentUser;
+        if (currentUser && currentUser.admin) {
+            const userId = currentUser._id;
+            const verificationToken = currentUser.verificationToken;
+            const businessName = vals.businessName;
+            const initialUserName = vals.initialUserName;
+            const initialUserPassword = vals.initialUserPassword;
+            const initialUserEmail = vals.initialUserEmail;
+            let business = {
+                userId,
+                verificationToken,
+                businessName,
+                initialUserName,
+                initialUserPassword,
+                initialUserEmail
+            };
 
-        axios.post("/api/business", business)
-        .then(function(res) {
-            console.log("res is: ", res);
-            // TODO: redirect to edit business page
-        })
-        .catch(function(err) {
-            console.log("error: ", err);
-        })
+            axios.post("/api/business", business)
+            .then(function(res) {
+                console.log("res is: ", res);
+                // TODO: redirect to edit business page
+            })
+            .catch(function(err) {
+                console.log("error: ", err);
+            })
+        }
     }
 
 
