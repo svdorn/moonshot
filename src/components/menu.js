@@ -220,7 +220,6 @@ class Menu extends Component {
             );
         }
 
-
         // the options that will be shown in the menu
         let menuOptions = [];
         // if the Moonshot logo should redirect to the homepage
@@ -236,6 +235,21 @@ class Menu extends Component {
                 {optionType: "url", title: "For Business", url: "/forBusiness"},
                 {optionType: "separator"},
                 {optionType: "url", title: "Sign In", url: "/login"},
+            ];
+        }
+        // if the current user is an admin
+        else if (currentUser.admin) {
+            menuOptions = [
+                {optionType: "url", title: "Admin", url: "/admin"},
+                {optionType: "url", title: "Discover", url: "/discover"},
+                {optionType: "url", title: "My Pathways", url: "/myPathways"},
+                {optionType: "separator"},
+                {optionType: "dropDown", components: [
+                    {optionType: "url", title: "Profile", url: "/profile"},
+                    {optionType: "divider"},
+                    {optionType: "url", title: "Settings", url: "/settings"},
+                    {optionType: "signOut"}
+                ]}
             ];
         }
         // if the current user is an employer
