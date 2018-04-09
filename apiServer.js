@@ -27,7 +27,7 @@ app.set('trust proxy', 1);
 // APIs
 var mongoose = require('mongoose');
 // MONGO LAB
-const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds125146.mlab.com:25146/testmoonshot'
+const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
 mongoose.connect(dbConnectLink);
 
 var db = mongoose.connection;
