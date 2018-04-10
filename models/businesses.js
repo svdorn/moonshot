@@ -14,7 +14,8 @@ var businessesSchema = mongoose.Schema({
             _id: mongoose.Schema.Types.ObjectId,
             name: String,
             hiringStage: String,
-            completionStatus: String
+            completionStatus: String,
+            hiringStageEdited: Date
         }]
     }]
 });

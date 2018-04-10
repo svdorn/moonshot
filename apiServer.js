@@ -27,7 +27,7 @@ app.set('trust proxy', 1);
 // APIs
 var mongoose = require('mongoose');
 // MONGO LAB
-const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds125146.mlab.com:25146/testmoonshot'
+const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
 mongoose.connect(dbConnectLink);
 
 var db = mongoose.connection;
@@ -2516,6 +2516,104 @@ function verifyAdmin(userId, verificationToken) {
 }
 
 
+// VERIFY THAT THE GIVEN USER IS LEGIT AND PART OF THE GIVEN BUSINESS
+async function verifyEmployer(userId, verificationToken, businessId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // function to print the info that was given; for when errors occur
+            const printInfo = () => {
+                console.log("Given userId: ", userId);
+                console.log("Given verificationToken: ", verificationToken);
+                console.log("Given businessId: ", businessId);
+            }
+
+            // if the arguments provided are invalid, cannot validate user
+            if (typeof userId !== "string" || typeof verificationToken !== "string" || typeof businessId !== "string") {
+                console.log("Employer could not be verified.");
+                printInfo();
+                return false;
+            }
+
+            // set to true once we've verified the user is real and has the right
+            // verification token
+            let verifiedUser = false;
+            // set to true once we've verified the user is employed by the
+            // business they say they are
+            let verifiedPosition = false;
+
+            // find the employer by the given id
+            Employers.findById(userId)
+            .then(foundEmployer => {
+                // if employer couldn't be found from the given id
+                if (!foundEmployer) {
+                    console.log("Couldn't find employer in the database when trying to verify them.");
+                    printInfo();
+                    return false;
+                }
+                // make sure the employer has the right verification token
+                if (foundEmployer.verificationToken !== verificationToken) {
+                    console.log("Employer gave wrong verification token when trying to be verified.");
+                    printInfo();
+                    return false;
+                }
+                // employer is real, return successfully if position in company verified
+                verifiedUser = true;
+                if (verifiedPosition) {
+                    console.log("returning true");
+                    return true;
+                }
+            })
+            .catch(findEmployerErr => {
+                console.log("Error finding employer in db when trying to verify employer: ", findEmployerErr);
+                printInfo();
+                return false;
+            })
+
+
+            // make sure the employer is in the business' employer id array
+            Businesses.findById(businessId)
+            .then(foundBusiness => {
+                if (!foundBusiness) {
+                    console.log("Did not find business when trying to verify employer.");
+                    printInfo();
+                    return false;
+                }
+
+                // try to find employer in business' employer id array
+                const employerWorksForBusiness = foundBusiness.employerIds.some(employerId => {
+                    // userId is that of the user we are trying to verify
+                    return employerId.toString() === userId;
+                });
+
+                // employer did not exist within the business' employers array
+                if (!employerWorksForBusiness) {
+                    console.log("Employer did not exist within the business' employers array (they don't work for that company).");
+                    printInfo();
+                    return false;
+                }
+
+                // employer does work for this company, return successfully if they are verified
+                verifiedPosition = true;
+                if (verifiedUser) {
+                    console.log("returning true");
+                    return true;
+                }
+            })
+            .catch(findBusinessErr => {
+                console.log("Error finding business in db when trying to verify employer: ", findBusinessErr);
+                printInfo();
+                return false;
+            });
+        }
+        // some error, probably in the database, so employer can't be verified
+        catch (error) {
+            console.log("Error verifying employer: ", error);
+            return false;
+        }
+    });
+}
+
+
 app.get("/infoForAdmin", function(req, res) {
     const query = sanitize(req.query);
     const _id = query.userId;
@@ -3404,6 +3502,33 @@ app.post("/business", async function(req, res) {
         res.status(500).send("Server error, try again later.");
         return;
     }
+});
+
+
+// UPDATE HIRING STAGE OF A CANDIDATE (NOT YET CONTACTED, CONTACTED)
+app.post("/business/updateHiringStatus", async function(req, res) {
+    const body = req.body;
+    const userId = sanitize(body.userId);
+    const verificationToken = sanitize(body.verificationToken);
+    const businessId = sanitize(body.businessId);
+    const candidateId = sanitize(body.candidateId);
+    const hiringStage = sanitize(body.hiringStage);
+    const isDismissed = sanitize(body.isDismissed);
+
+    // verify the employer is actually a part of this organization
+    const userVerified = await verifyEmployer(userId, verificationToken, businessId);
+    console.log("userVerified is: ", userVerified);
+
+    res.json("userVerified: ", userVerified);
+
+    // get the user the employer wants to edit the hiring stage of
+
+    // make sure the timestamp of the last change is before the timestamp given
+    // if it isn't, don't change the user
+
+    // change the hiring stage of the user
+
+    // successful save, return
 });
 
 
