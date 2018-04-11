@@ -56,14 +56,14 @@ class MyCandidates extends Component {
                 verificationToken: this.props.currentUser.verificationToken
             }
         })
-            .then(function(res) {
-                self.setState({
-                    pathways: res.data
-                });
-            })
-            .catch(function(err) {
-                console.log("error getting pathways: ", err);
+        .then(function(res) {
+            self.setState({
+                pathways: res.data
             });
+        })
+        .catch(function(err) {
+            console.log("error getting pathways: ", err);
+        });
 
         // populate initial candidates
         this.search();
@@ -93,6 +93,7 @@ class MyCandidates extends Component {
     };
 
     handlePathwayChange = (event, index, pathway) => {
+
         this.setState({pathway}, () => {
             this.search();
         })
@@ -115,6 +116,27 @@ class MyCandidates extends Component {
             }
         }).catch(function (err) {
             console.log("ERROR: ", err);
+        })
+    }
+
+
+    updateHiringStage() {
+        const currentUser = this.props.currentUser;
+        const hiringStageInfo = {
+            userId: currentUser._id,
+            verificationToken: currentUser.verificationToken,
+            businessId: currentUser.company.companyId,
+            candidateId: "5aca7b4897824ce2a04a19b4",
+            hiringStage: "Contacted",
+            isDismissed: false,
+            pathwayId: "5a80b3cf734d1d0d42e9fcad"
+        }
+        axios.post("/api/business/updateHiringStage", hiringStageInfo)
+        .then(result => {
+            console.log("result is: ", result);
+        })
+        .catch(err => {
+            console.log("error updating hiring stage: ", err);
         })
     }
 
@@ -182,17 +204,37 @@ class MyCandidates extends Component {
             }
         }
 
-        // create the pathway previews
+        const currentUser = this.props.currentUser;
+        if (!currentUser) {
+            return null;
+        }
+
+        // create the candidate previews
         let key = 0;
         let self = this;
-        const candidatePreviews = this.state.candidates.map(function (candidate) {
+        const candidatePreviews = this.state.candidates.map(candidate => {
             key++;
+
+            // get the id of the current pathway whose candidates are being shown
+            let pathwayId = undefined;
+            const pathwayObj = self.state.pathways.find(currPathway => {
+                return currPathway.name === self.state.pathway;
+            });
+
+            if (pathwayObj) {
+                pathwayId = pathwayObj._id;
+            }
 
             return (
                 <li style={{marginTop: '15px'}}
                     key={key}
                 >
                     <CandidatePreview
+                        employerUserId={currentUser._id}
+                        employerVerificationToken={currentUser.verificationToken}
+                        companyId={currentUser.company.companyId}
+                        candidateId={candidate._id}
+                        pathwayId={pathwayId}
                         editHiringStage={true}
                         name={candidate.name}
                         email={candidate.email}
@@ -209,7 +251,7 @@ class MyCandidates extends Component {
         // TODO get companies from DB
         const pathways = this.state.pathways;
         const pathwayItems = pathways.map(function (pathway) {
-            return <MenuItem value={pathway} primaryText={pathway} key={pathway}/>
+            return <MenuItem value={pathway.name} primaryText={pathway.name} key={pathway.name}/>
         })
 
 
@@ -222,6 +264,8 @@ class MyCandidates extends Component {
                         My Candidates
                     </div>
                 </div>
+
+                <button onClick={this.updateHiringStage.bind(this)}>SUH</button>
 
                 <Toolbar style={style.searchBar} id="discoverSearchBarWideScreen">
                     <ToolbarGroup>

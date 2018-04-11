@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import {Paper, Stepper, Step, StepButton, FlatButton, RaisedButton} from 'material-ui';
+import axios from 'axios';
 
-class PathwayPreview extends Component {
+class CandidatePreview extends Component {
     constructor(props) {
         super(props);
 
@@ -13,11 +14,45 @@ class PathwayPreview extends Component {
 
     handleClick() {
         if (this.state.dismissed) {
+            this.updateHiringStageInDB(this.state.step - 1, false);
             this.setState({dismissed: false, step: this.state.step - 1});
         } else {
+            this.updateHiringStageInDB(this.state.step, true);
             this.setState({dismissed: true, step: this.state.step + 1});
         }
     }
+
+
+    handleHiringStageChange(step) {
+        this.setState({step});
+        this.updateHiringStageInDB(step, this.state.dismissed);
+    }
+
+
+    updateHiringStageInDB(step, dismissed) {
+        if (step <= 3 && step >= 0 && typeof dismissed === "boolean") {
+            const stages = ["Not Yet Contacted", "Contacted", "Interviewing", "Hired"];
+
+            const currentUser = this.props.currentUser;
+            const hiringStageInfo = {
+                userId: this.props.employerUserId,
+                verificationToken: this.props.employerVerificationToken,
+                companyId: this.props.companyId,
+                candidateId: this.props.candidateId,
+                hiringStage: stages[step],
+                isDismissed: dismissed,
+                pathwayId: this.props.pathwayId
+            }
+            axios.post("/api/business/updateHiringStage", hiringStageInfo)
+            .then(result => {
+                console.log("result is: ", result);
+            })
+            .catch(err => {
+                console.log("error updating hiring stage: ", err);
+            })
+        }
+    }
+
 
     render() {
         const style = {
@@ -49,16 +84,16 @@ class PathwayPreview extends Component {
                     <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
                         <Stepper activeStep={this.state.step}>
                             <Step disabled={((0 - this.state.step) > 1) || this.state.dismissed}>
-                                <StepButton onClick={() => this.setState({step: 0})}>Not Yet Contacted</StepButton>
+                                <StepButton onClick={() => this.handleHiringStageChange(0)}>Not Yet Contacted</StepButton>
                             </Step>
                             <Step disabled={((1 - this.state.step) > 1) || this.state.dismissed}>
-                                <StepButton onClick={() => this.setState({step: 1})}>Contacted</StepButton>
+                                <StepButton onClick={() => this.handleHiringStageChange(1)}>Contacted</StepButton>
                             </Step>
                             <Step disabled={((2 - this.state.step) > 1) || this.state.dismissed}>
-                                <StepButton onClick={() => this.setState({step: 2})}>Interviewing</StepButton>
+                                <StepButton onClick={() => this.handleHiringStageChange(2)}>Interviewing</StepButton>
                             </Step>
                             <Step disabled={((3 - this.state.step) > 1) || this.state.dismissed}>
-                                <StepButton onClick={() => this.setState({step: 4})}>Hired</StepButton>
+                                <StepButton onClick={() => this.handleHiringStageChange(3)}>Hired</StepButton>
                             </Step>
                         </Stepper>
                         <div className="center">
@@ -83,4 +118,4 @@ class PathwayPreview extends Component {
     }
 }
 
-export default PathwayPreview;
+export default CandidatePreview;
