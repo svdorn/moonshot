@@ -69,7 +69,7 @@ class Pathway extends Component {
     handleClick() {
         // TODO: CHANGE THIS SO THAT ANY PATHWAY CAN BE SIGNED UP FOR
         // Check if it is a pathway that is currently available
-        if (this.state.pathway.url === "Northwestern-Mutual-Sales" || this.state.pathway.url === "Singlewire-QA-Analyst" || this.state.pathway.url === "Curate-Full-Stack") {
+        if (this.state.pathway.url === "Northwestern-Mutual-Sales" || this.state.pathway.url === "Singlewire-QA-Analyst" || this.state.pathway.url === "Curate-Full-Stack" || this.state.pathway.url === "DreamHome-Startup-CEO") {
             if (this.props.currentUser) {
                 const user = {
                     _id: this.props.currentUser._id,

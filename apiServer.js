@@ -362,7 +362,7 @@ app.post('/user', function (req, res) {
                         // add pathway to user's My Pathways if they went from
                         // a landing page.
                         // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY OR SINGLEWIRE PATHWAY
-                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386" || user.pathwayId === "5abc12cff36d2805e28d27f3") {
+                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386" || user.pathwayId === "5abc12cff36d2805e28d27f3" || user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
                             user.pathways = [{
                                 pathwayId: user.pathwayId,
                                 currentStep: {
@@ -430,6 +430,9 @@ app.post('/user', function (req, res) {
                                         }
                                         else if (user.pathwayId === "5abc12cff36d2805e28d27f3") {
                                             pathName = "Curate Full-Stack";
+                                        }
+                                        else if (user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
+                                            pathName = "Dream Home CEO";
                                         }
                                         additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
                                     }
@@ -1936,7 +1939,7 @@ app.post('/user/changeSettings', function (req, res) {
 
 
 //----->> ADD PATHWAY <<------
-// CURRENTLY ONLY ALLOWS NWM AND SINGLEWIRE AND CURATE PATHWAYS TO BE ADDED
+// CURRENTLY ONLY ALLOWS NWM AND SINGLEWIRE AND CURATE AND DREAMHOME PATHWAYS TO BE ADDED
 app.post("/user/addPathway", function (req, res) {
     const _id = sanitize(req.body._id);
     const verificationToken = sanitize(req.body.verificationToken);
@@ -1947,7 +1950,7 @@ app.post("/user/addPathway", function (req, res) {
     if (_id && pathwayId && verificationToken) {
         // TODO: REMOVE THIS, CHANGE HOW THIS FUNCTION WORKS ONCE WE START
         // ADDING PATHWAYS BESIDES NWM AND SINGLEWIRE
-        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad" && pathwayId !== "5a88b4b8734d1d041bb6b386" && pathwayId !== "5abc12cff36d2805e28d27f3") {
+        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad" && pathwayId !== "5a88b4b8734d1d041bb6b386" && pathwayId !== "5abc12cff36d2805e28d27f3" && pathwayId !== "5ac3bc92734d1d4f8afa8ac4") {
             res.status(403).send("You cannot currently sign up for that pathway.");
             return;
         }
