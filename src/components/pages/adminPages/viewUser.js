@@ -24,7 +24,7 @@ class ViewUser extends Component {
         let profileUrl = "";
         try {
             profileUrl = this.props.location.query.user;
-        } catch(e) {
+        } catch (e) {
             this.goTo("/admin");
         }
 
@@ -35,24 +35,26 @@ class ViewUser extends Component {
 
         let self = this;
 
-        axios.get("/api/userForAdmin", {params: {
-            adminUserId: user._id,
-            verificationToken: user.verificationToken,
-            profileUrl
-        }})
-        .then(function(response) {
-            const user = response.data.user;
-            const pathways = response.data.pathways;
-            const completedPathways = response.data.completedPathways;
-            const quizzes = response.data.quizzes;
-            self.setState({
-                ...self.state,
-                user, pathways, completedPathways, quizzes
-            });
+        axios.get("/api/userForAdmin", {
+            params: {
+                adminUserId: user._id,
+                verificationToken: user.verificationToken,
+                profileUrl
+            }
         })
-        .catch(function(err) {
-            console.log("error with getting info for admin");
-        })
+            .then(function (response) {
+                const user = response.data.user;
+                const pathways = response.data.pathways;
+                const completedPathways = response.data.completedPathways;
+                const quizzes = response.data.quizzes;
+                self.setState({
+                    ...self.state,
+                    user, pathways, completedPathways, quizzes
+                });
+            })
+            .catch(function (err) {
+                console.log("error with getting info for admin");
+            })
     }
 
 
@@ -71,14 +73,14 @@ class ViewUser extends Component {
         let pathwayLis = null;
 
         if (pathways && Array.isArray(pathways) && pathways.length > 0) {
-            pathwayLis = pathways.map(function(pathway) {
+            pathwayLis = pathways.map(function (pathway) {
                 if (!pathway) {
                     return null;
                 }
 
                 // create the steps that will be displayed under the pathway
-                let steps = pathway.steps.map(function(step) {
-                    let subSteps = step.subSteps.map(function(subStep) {
+                let steps = pathway.steps.map(function (step) {
+                    let subSteps = step.subSteps.map(function (subStep) {
                         let content = "..."
 
                         if (subStep.contentType === "quiz") {
@@ -104,8 +106,8 @@ class ViewUser extends Component {
                                         }
                                         break;
                                     case "multiSelect":
-                                        answerValue.value.forEach(function(subAnswer) {
-                                            answer = answer + question.multiSelectAnswers.find(function(option) {
+                                        answerValue.value.forEach(function (subAnswer) {
+                                            answer = answer + question.multiSelectAnswers.find(function (option) {
                                                 return option.answerNumber.toString() === subAnswer.toString();
                                             }).body + ", ";
                                         });
@@ -120,28 +122,33 @@ class ViewUser extends Component {
                                         }
                                         // otherwise find the answer corresponding to the value they picked
                                         else {
-                                            answer = question.multipleChoiceAnswers.find(function(option) {
+                                            answer = question.multipleChoiceAnswers.find(function (option) {
                                                 return option.answerNumber.toString() === answerValue.value.toString();
                                             }).body;
                                         }
                                         break;
                                     case "freeResponseAndSliderOnSelect":
-                                        let answerInterior = [<br key="initialBr" />];
+                                        let answerInterior = [<br key="initialBr"/>];
                                         let keyCounter = 0;
                                         let selectables = question.multiSelectAnswers;
                                         // go through each option in the question
-                                        selectables.forEach(function(selectable) {
+                                        selectables.forEach(function (selectable) {
                                             // add the text of the selectable item
-                                            answerInterior.push(<div key={keyCounter++} style={{marginTop:"10px", display:"inline-block"}}>{selectable.body}:</div>);
+                                            answerInterior.push(<div key={keyCounter++} style={{
+                                                marginTop: "10px",
+                                                display: "inline-block"
+                                            }}>{selectable.body}:</div>);
                                             // find if the item was selected
                                             // if so, add the values of the answers
                                             let userAnswer = answerValue.value[selectable.answerNumber]
                                             if (userAnswer) {
-                                                answerInterior.push(<span key={keyCounter++}><br/><div style={{marginLeft:"20px"}}>Skill: {userAnswer.skill}<br/>Experience: {userAnswer.answerText}<br/></div></span>);
+                                                answerInterior.push(<span key={keyCounter++}><br/><div
+                                                    style={{marginLeft: "20px"}}>Skill: {userAnswer.skill}<br/>Experience: {userAnswer.answerText}<br/></div></span>);
                                             }
                                             // if not, tell the user that this was not selected
                                             else {
-                                                answerInterior.push(<span key={keyCounter++}> (not selected)<br/></span>);
+                                                answerInterior.push(<span
+                                                    key={keyCounter++}> (not selected)<br/></span>);
                                             }
                                         })
                                         answer = <span>{answerInterior}</span>
@@ -152,8 +159,8 @@ class ViewUser extends Component {
                                     case "datePicker":
                                         const dateString = answerValue.value;
                                         answer = dateString.substring(5, 7) + "/" +
-                                                dateString.substring(8, 10) + "/" +
-                                                dateString.substring(0, 4);
+                                            dateString.substring(8, 10) + "/" +
+                                            dateString.substring(0, 4);
                                         break;
                                     case "freeResponse":
                                         answer = answerValue.value;
@@ -165,8 +172,8 @@ class ViewUser extends Component {
                             }
 
                             let questionName = "";
-                            question.question.forEach(function(questionPart) {
-                                questionPart.content.forEach(function(miniPart) {
+                            question.question.forEach(function (questionPart) {
+                                questionPart.content.forEach(function (miniPart) {
                                     questionName = questionName + " " + miniPart;
                                 })
                             });
@@ -240,12 +247,26 @@ class ViewUser extends Component {
             <div>
                 <MetaTags>
                     <title>{{userName}} | Moonshot</title>
-                    <meta name="description" content="Admin user view." />
+                    <meta name="description" content="Admin user view."/>
                 </MetaTags>
 
                 {this.props.currentUser && this.props.currentUser.admin === true && user ?
                     <div>
-                        {user.name}
+                        Name - {user.name}
+                        <br/>
+                        {user.emailToContact ?
+                            <div>
+                                Email - {user.emailToContact}
+                            </div>
+                            : <div>Email - {user.email}
+                            </div>
+                        }
+                        {user.phoneNumber ?
+                            <div>
+                                Phone - {user.phoneNumber}
+                            </div>
+                            : null
+                        }
                         <br/>
                         {pathwaysHtml}
                     </div>
