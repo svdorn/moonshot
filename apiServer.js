@@ -3530,9 +3530,18 @@ app.post("/business/updateHiringStage", async function(req, res) {
     const isDismissed = sanitize(body.isDismissed);
     const pathwayId = sanitize(body.pathwayId);
 
+    console.log("updating hiring stage");
+
     // if one of the arguments doesn't exist, return with error code
     if (!userId || !verificationToken || !companyId || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !pathwayId) {
         console.log("Not all arguments provided to /business/updateHiringStage");
+        console.log("userId: ", userId);
+        console.log("verificationToken: ", verificationToken);
+        console.log("companyId: ", companyId);
+        console.log("candidateId: ", candidateId);
+        console.log("hiringStage: ", hiringStage);
+        console.log("isDismissed: ", isDismissed);
+        console.log("pathwayId: ", pathwayId);
         res.status(400).send("Bad request.");
         return;
     }

@@ -524,11 +524,29 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
     }
 }
 
-export function setHeaderBlue(shouldBeBlue) {
-    return function(dispatch) {
-        dispatch({type: "TURN_HEADER_BLUE", shouldBeBlue});
-    }
-}
+
+// // Set a candidate's hiring stage for a certain pathway at a certain company
+// export function updateHiringStage(employerUserId, employerVerificationToken, companyId, candidateId, hiringStage, isDismissed, pathwayId) {
+//     return function(dispatch) {
+//         const hiringStageInfo = {
+//             userId: employerUserId,
+//             verificationToken: employerVerificationToken,
+//             companyId: companyId,
+//             candidateId: candidateId,
+//             hiringStage: hiringStage,
+//             isDismissed: isDismissed,
+//             pathwayId: pathwayId
+//         }
+//         axios.post("/api/business/updateHiringStage", hiringStageInfo)
+//         .then(result => {
+//             console.log("result is: ", result);
+//         })
+//         .catch(err => {
+//             console.log("error updating hiring stage: ", err);
+//         })
+//     }
+// }
+
 
 // Send an email when form filled out on contactUs page
 export function contactUs(user){

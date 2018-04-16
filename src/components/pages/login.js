@@ -147,8 +147,6 @@ class Login extends Component {
     goTo (route)  {
         // closes any notification
         this.props.closeNotification();
-        // sets header to white
-        // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page

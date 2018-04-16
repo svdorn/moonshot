@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {Tabs, Tab, CircularProgress, Paper, Divider} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, setHeaderBlue} from "../../../actions/usersActions";
+import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayPreview from '../../childComponents/pathwayPreview';
 import axios from 'axios';
@@ -58,10 +58,6 @@ class BusinessProfile extends Component {
                 })
             })
         }
-
-        // this.props.setHeaderBlue(true);
-
-
     }
 
     makeCandidates() {
@@ -71,8 +67,6 @@ class BusinessProfile extends Component {
     goTo(route) {
         // closes any notification
         this.props.closeNotification();
-        // sets header back to normal
-        // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
@@ -203,8 +197,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        closeNotification,
-        setHeaderBlue,
+        closeNotification
     }, dispatch);
 }
 

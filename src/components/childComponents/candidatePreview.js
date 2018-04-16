@@ -4,11 +4,25 @@ import axios from 'axios';
 
 class CandidatePreview extends Component {
     constructor(props) {
+        //TODO ONLY SHOW THE CANDIDATE PREVIEW WHEN A PATHWAY HAS BEEN SELECTED
         super(props);
 
+        const hiringStageSteps = {
+            "Not Yet Contacted": 0,
+            "Contacted": 1,
+            "Interviewing": 2,
+            "Hired": 3
+        }
+
+        let step = hiringStageSteps[this.props.initialHiringStage];
+
+        if (this.props.initialIsDismissed) {
+            step = step + 1;
+        }
+
         this.state = {
-            step: 0,
-            dismissed: false,
+            step: step,
+            dismissed: this.props.initialIsDismissed,
         }
     }
 
@@ -34,6 +48,7 @@ class CandidatePreview extends Component {
             const stages = ["Not Yet Contacted", "Contacted", "Interviewing", "Hired"];
 
             const currentUser = this.props.currentUser;
+            console.log("pathwayId: ", this.props.pathwayId)
             const hiringStageInfo = {
                 userId: this.props.employerUserId,
                 verificationToken: this.props.employerVerificationToken,
@@ -83,16 +98,16 @@ class CandidatePreview extends Component {
 
                     <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
                         <Stepper activeStep={this.state.step}>
-                            <Step disabled={((0 - this.state.step) > 1) || this.state.dismissed}>
+                            <Step disabled={((0 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
                                 <StepButton onClick={() => this.handleHiringStageChange(0)}>Not Yet Contacted</StepButton>
                             </Step>
-                            <Step disabled={((1 - this.state.step) > 1) || this.state.dismissed}>
+                            <Step disabled={((1 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
                                 <StepButton onClick={() => this.handleHiringStageChange(1)}>Contacted</StepButton>
                             </Step>
-                            <Step disabled={((2 - this.state.step) > 1) || this.state.dismissed}>
+                            <Step disabled={((2 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
                                 <StepButton onClick={() => this.handleHiringStageChange(2)}>Interviewing</StepButton>
                             </Step>
-                            <Step disabled={((3 - this.state.step) > 1) || this.state.dismissed}>
+                            <Step disabled={((3 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
                                 <StepButton onClick={() => this.handleHiringStageChange(3)}>Hired</StepButton>
                             </Step>
                         </Stepper>
@@ -102,11 +117,13 @@ class CandidatePreview extends Component {
                                               primary={true}
                                               labelStyle={{color:"white"}}
                                               onClick={this.handleClick.bind(this)}
+                                              disabled={this.props.disabled}
                                 />
                                 :
                                 <FlatButton label="Dismiss"
                                             primary={true}
                                             onClick={this.handleClick.bind(this)}
+                                            disabled={this.props.disabled}
                                 />
                             }
                         </div>
@@ -117,5 +134,6 @@ class CandidatePreview extends Component {
         )
     }
 }
+
 
 export default CandidatePreview;
