@@ -325,7 +325,6 @@ function printUsersFromPathway(pathwayIdToCheck) {
 // })
 
 
-
 //----->> POST USER <<------
 app.post('/user', function (req, res) {
     var user = sanitize(req.body);
@@ -1429,6 +1428,7 @@ app.post('/user/unsubscribeEmail', function (req, res) {
         }
     });
 });
+
 
 // SEND COMING SOON EMAIL
 app.post('/user/comingSoonEmail', function (req, res) {
@@ -2580,14 +2580,56 @@ app.get("/userForAdmin", function(req, res) {
                     let requiredNumQuizzes = 0;
                     let foundQuizzes = 0;
 
+                    // scores will be an object with every question with an objective answer
+                    // scores[questionId] will be true if the answer is correct
+                    // false if the answer is incorrect
+                    let scores = {}
+
                     let returnIfFoundEverything = function() {
                         // if we have found all of the pathways, return all the info to the front end
                         if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
+                            // grade the user's answers
+                            // console.log("quizzes: ", quizzes);
+                            // console.log("user.answers: ", user.answers);
+                            for (let questionId in quizzes) {
+                                let quiz = quizzes[questionId];
+                                // skip anything that is not a quiz
+                                if (!quizzes.hasOwnProperty(questionId)) { continue; }
+
+                                // if the user answered the question and the question has a correct answer, grade it
+                                if (quiz.hasCorrectAnswers && user.answers[questionId]) {
+                                    // if it's a multiple choice question
+                                    if (quiz.questionType === "multipleChoice") {
+                                        // get the answer value the user put in
+                                        let userAnswerValue = user.answers[questionId].value;
+                                        // see if the answer value the user put in is one of the right answers
+                                        let isCorrect = quiz.correctAnswerNumber.some(function(answerNumber) {
+                                            // return true if the answer value is a correct one
+                                            return answerNumber === userAnswerValue;
+                                        })
+                                        // user had the right answer
+                                        if (isCorrect) {
+                                            console.log("user has correct answer");
+                                            scores[questionId] = true;
+                                        }
+                                        // user had the wrong answer
+                                        else {
+                                            console.log("user has incorrect answer");
+                                            scores[questionId] = false;
+                                        }
+                                    }
+                                    else if (quiz.questionType === "twoOptions") {
+                                        // TODO grade the two options questions
+                                    }
+                                }
+                            }
+
                             res.json({
                                 user: userForAdmin(user),
                                 pathways,
                                 completedPathways,
-                                quizzes
+                                quizzes,
+                                scores
                             });
                             return;
                         }

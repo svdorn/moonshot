@@ -14,7 +14,8 @@ class ViewUser extends Component {
         this.state = {
             user: undefined,
             pathways: [],
-            completedPathways: []
+            completedPathways: [],
+            scores: {}
         };
     }
 
@@ -47,9 +48,10 @@ class ViewUser extends Component {
                 const pathways = response.data.pathways;
                 const completedPathways = response.data.completedPathways;
                 const quizzes = response.data.quizzes;
+                const scores = response.data.scores
                 self.setState({
                     ...self.state,
-                    user, pathways, completedPathways, quizzes
+                    user, pathways, completedPathways, quizzes, scores
                 });
             })
             .catch(function (err) {
@@ -71,6 +73,7 @@ class ViewUser extends Component {
     makePathwayLis(pathways, answers) {
         let self = this;
         let pathwayLis = null;
+        let scores = this.state.scores;
 
         if (pathways && Array.isArray(pathways) && pathways.length > 0) {
             pathwayLis = pathways.map(function (pathway) {
@@ -82,14 +85,17 @@ class ViewUser extends Component {
                 let steps = pathway.steps.map(function (step) {
                     let subSteps = step.subSteps.map(function (subStep) {
                         let content = "..."
+                        let correctOrNot = null;
+                        let breakForCorrectness = null;
 
                         if (subStep.contentType === "quiz") {
+                            const questionId = subStep.contentID;
                             let answer = "";
                             // the current question
-                            let question = self.state.quizzes[subStep.contentID];
+                            let question = self.state.quizzes[questionId];
                             let questionType = question.questionType;
                             // could take various forms depending on the question type
-                            let answerValue = answers[subStep.contentID];
+                            let answerValue = answers[questionId];
 
                             if (answerValue) {
                                 switch (questionType) {
@@ -167,6 +173,21 @@ class ViewUser extends Component {
                                     default:
                                         break;
                                 }
+
+                                // if this question was graded automatically, show the admin if the user had the right answer
+                                if (typeof scores[questionId] === "boolean") {
+                                    // show "CORRECT" or "WRONG"
+                                    const isCorrect = scores[questionId];
+                                    breakForCorrectness = <br/>;
+                                    // if the user had the right answer
+                                    if (isCorrect) {
+                                        correctOrNot = <span className="greenText">Correct</span>;
+                                    }
+                                    // if the user had the wrong answer
+                                    else {
+                                        correctOrNot = <span className="redText">Incorrect</span>;
+                                    }
+                                }
                             } else {
                                 answer = "(not answered)"
                             }
@@ -183,6 +204,8 @@ class ViewUser extends Component {
                                     <span>{questionName}</span>
                                     <br/>
                                     <span className="blueText">Answer: {answer}</span>
+                                    {breakForCorrectness}
+                                    {correctOrNot}
                                 </div>
                             );
                         }
@@ -246,7 +269,7 @@ class ViewUser extends Component {
         return (
             <div>
                 <MetaTags>
-                    <title>{{userName}} | Moonshot</title>
+                    <title>{userName} | Moonshot</title>
                     <meta name="description" content="Admin user view."/>
                 </MetaTags>
 
