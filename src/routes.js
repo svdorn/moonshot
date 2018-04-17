@@ -38,7 +38,7 @@ import AffiliateAgreement from './components/policies/affiliateAgreement';
 
 import AdminPages from './components/pages/adminPages/adminPages'
 import ViewUser from './components/pages/adminPages/viewUser';
-import UserResponses from './components/pages/adminPages/UserResponses';
+import UserResponses from './components/pages/adminPages/userResponses';
 import CreateBusinessAccount from './components/pages/adminPages/createBusinessAccount';
 import EditBusiness from './components/pages/adminPages/editBusiness';
 
