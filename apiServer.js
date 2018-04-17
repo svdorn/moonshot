@@ -2599,27 +2599,24 @@ app.get("/userForAdmin", function(req, res) {
                                 // if the user answered the question and the question has a correct answer, grade it
                                 if (quiz.hasCorrectAnswers && user.answers[questionId]) {
                                     // if it's a multiple choice question
-                                    if (quiz.questionType === "multipleChoice") {
+                                    if (quiz.questionType === "multipleChoice" || quiz.questionType === "twoOptions") {
                                         // get the answer value the user put in
                                         let userAnswerValue = user.answers[questionId].value;
-                                        // see if the answer value the user put in is one of the right answers
-                                        let isCorrect = quiz.correctAnswerNumber.some(function(answerNumber) {
-                                            // return true if the answer value is a correct one
-                                            return answerNumber === userAnswerValue;
-                                        })
-                                        // user had the right answer
-                                        if (isCorrect) {
-                                            console.log("user has correct answer");
-                                            scores[questionId] = true;
+                                        let isCorrect = false;
+                                        // if there is an array of correct answers
+                                        if (Array.isArray(quiz.correctAnswerNumber)) {
+                                            // see if the answer value the user put in is one of the right answers
+                                            isCorrect = quiz.correctAnswerNumber.some(function(answerNumber) {
+                                                // return true if the answer value is a correct one
+                                                return answerNumber === userAnswerValue;
+                                            })
                                         }
-                                        // user had the wrong answer
+                                        // if there is a single correct answer
                                         else {
-                                            console.log("user has incorrect answer");
-                                            scores[questionId] = false;
+                                            isCorrect = quiz.correctAnswerNumber == userAnswerValue;
                                         }
-                                    }
-                                    else if (quiz.questionType === "twoOptions") {
-                                        // TODO grade the two options questions
+
+                                        scores[questionId] = isCorrect;
                                     }
                                 }
                             }

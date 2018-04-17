@@ -102,6 +102,12 @@ class ViewUser extends Component {
                             // could take various forms depending on the question type
                             let answerValue = answers[questionId];
 
+                            // this question has a correct answer, so should
+                            // be counted in total number of graded questions
+                            if (question.hasCorrectAnswers) {
+                                totalAnswers++;
+                            }
+
                             if (answerValue) {
                                 switch (questionType) {
                                     case "twoOptions":
@@ -179,12 +185,6 @@ class ViewUser extends Component {
                                         break;
                                 }
 
-                                // this question has a correct answer, so should
-                                // be counted in total number of graded questions
-                                if (question.hasCorrectAnswers) {
-                                    totalAnswers++;
-                                }
-
                                 // if this question was graded automatically, show the admin if the user had the right answer
                                 if (typeof scores[questionId] === "boolean") {
                                     // show "CORRECT" or "WRONG"
@@ -202,6 +202,12 @@ class ViewUser extends Component {
                                 }
                             } else {
                                 answer = "(not answered)"
+                                // if the question was not answered and it has
+                                // an objectively correct answer, mark it incorrect
+                                if (question.hasCorrectAnswers) {
+                                    breakForCorrectness = <br/>;
+                                    correctOrNot = <span className="redText">Incorrect</span>;
+                                }
                             }
 
                             let questionName = "";
@@ -231,8 +237,9 @@ class ViewUser extends Component {
                         <li key={"step" + step.order}>
                             Step {step.order}
                             <br/>
-                            <ol>{subSteps}</ol>
                             Score: {correctAnswers} / {totalAnswers}
+                            <br/>
+                            <ol>{subSteps}</ol>
                         </li>
                     );
                 });
