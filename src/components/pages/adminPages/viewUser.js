@@ -83,6 +83,11 @@ class ViewUser extends Component {
 
                 // create the steps that will be displayed under the pathway
                 let steps = pathway.steps.map(function (step) {
+                    // number of objective questions that are correct
+                    let correctAnswers = 0;
+                    // number of total objective answers in the step
+                    let totalAnswers = 0;
+
                     let subSteps = step.subSteps.map(function (subStep) {
                         let content = "..."
                         let correctOrNot = null;
@@ -174,6 +179,12 @@ class ViewUser extends Component {
                                         break;
                                 }
 
+                                // this question has a correct answer, so should
+                                // be counted in total number of graded questions
+                                if (question.hasCorrectAnswers) {
+                                    totalAnswers++;
+                                }
+
                                 // if this question was graded automatically, show the admin if the user had the right answer
                                 if (typeof scores[questionId] === "boolean") {
                                     // show "CORRECT" or "WRONG"
@@ -182,6 +193,7 @@ class ViewUser extends Component {
                                     // if the user had the right answer
                                     if (isCorrect) {
                                         correctOrNot = <span className="greenText">Correct</span>;
+                                        correctAnswers++;
                                     }
                                     // if the user had the wrong answer
                                     else {
@@ -220,6 +232,7 @@ class ViewUser extends Component {
                             Step {step.order}
                             <br/>
                             <ol>{subSteps}</ol>
+                            Score: {correctAnswers} / {totalAnswers}
                         </li>
                     );
                 });
