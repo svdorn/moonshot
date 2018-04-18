@@ -32,6 +32,29 @@ const styles = {
         // right: "80%",
         // margin: "auto"
     },
+    horizListQuotes: {
+        position: "relative",
+        marginTop: "40px",
+        marginBottom: "25px"
+    },
+    imgContainer: {
+        height: "78px",
+        width: "78px",
+        borderRadius: '50%',
+        display: "inline-block",
+        overflow: "hidden",
+        marginTop: '-20px',
+    },
+    imgMark: {
+        height: "88px",
+    },
+    imgJada: {
+        height: "80px",
+        marginRight: '4px'
+    },
+    imgCam: {
+        height: "80px",
+    }
 };
 
 class ResumeScorer extends Component {
@@ -147,6 +170,43 @@ class ResumeScorer extends Component {
                             Upload Your Resume
                         </div>
                     </button>
+                </div>
+                <div className="redToLightRedDownGradient fullHeight center" style={{marginTop: '60px', overflow: 'auto'}}>
+                    <ul className="horizListQuotes">
+                        <li className="horizListFull2">
+                            <Paper className="paperBorder" style={{height: "352px", width: "248px", margin:'auto'}} zDepth={3}>
+                                <Paper style={styles.imgContainer} zDepth={3}>
+                                    <img
+                                        src="/images/MarkSaari.png"
+                                        alt="Profile picture"
+                                        style={styles.imgMark}
+                                    />
+                                </Paper>
+                            </Paper>
+                        </li>
+                        <li className="horizListFull2">
+                            <Paper className="paperBorder" style={{height: "352px", width: "248px", margin:'auto'}} zDepth={3}>
+                                <Paper style={styles.imgContainer} zDepth={3}>
+                                    <img
+                                        src="/images/JadaFalzon.png"
+                                        alt="Profile picture"
+                                        style={styles.imgJada}
+                                    />
+                                </Paper>
+                            </Paper>
+                        </li>
+                        <li className="horizListFull2">
+                            <Paper className="paperBorder" style={{height: "352px", width: "248px", margin:'auto'}} zDepth={3}>
+                                <Paper style={styles.imgContainer} zDepth={3}>
+                                    <img
+                                        src="/images/CamRowe.png"
+                                        alt="Profile picture"
+                                        style={styles.imgCam}
+                                    />
+                                </Paper>
+                            </Paper>
+                        </li>
+                    </ul>
                 </div>
             </div>
         );

@@ -354,6 +354,7 @@ form > h1 {
 .purpleGradient { background: linear-gradient(to top right, #CE9EFC, #a048fb); }
 .purpleToRedGradient { background: linear-gradient(to bottom right, #721ae9, #e45c67); }
 .redToLightRedGradient { background: linear-gradient(to bottom right, #e24794, #f76740); }
+.redToLightRedDownGradient { background: linear-gradient(to bottom, #e24794, #f76740); }
 .purpleToRedLightGradient { background: linear-gradient(to bottom right, #983cc9, #e36273); }
 .purpleToRedLightGradientOpacity {
     background: linear-gradient(to top right, #983cc9, #e36273);
@@ -602,6 +603,14 @@ button.link {
 
 .transparentBorder {
     padding: 1px;
+}
+.paperBorder {
+    padding: 1px;
+}
+.paperBorder > div {
+    background: white;
+    height: 100%;
+    width: 100%;
 }
 .gradientBorderBlue {
     background: linear-gradient(to right, #5deaff, #3dabff);
@@ -1341,6 +1350,12 @@ button.link {
     float: left;
     position: relative;
 }
+.horizListFull2 {
+    width: 33%;
+    float: left;
+    position: relative;
+    display: inline-block;
+}
 
 .invertColorOnHover.gradientBorderButtonInterior:hover {
     color: white;
@@ -1865,6 +1880,13 @@ button.link {
 .pathwayPreviewLi { vertical-align: top; }
 li.pathwayPreviewLi.explorePathwayPreview { margin-bottom: 40px; }
 li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
+
+.horizListQuotes {
+    position: relative;
+    margin-top: 40px;
+    margin-bottom: 25px;
+    list-style-type: none;
+}
 
 .above600only {
     display: initial;
