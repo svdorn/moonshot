@@ -189,8 +189,8 @@ class ResumeScorer extends Component {
                                         </div>
                                         <br />
                                         <div className="font14px font12pxUnder500" style={{width: '200px', margin:'auto'}}>
-                                            Today, everyone has a competitive resume.
-                                            Moonshot helped me to differentiate myself and pointed out areas where I could improve.
+                                            "Today, everyone has a competitive resume.
+                                            Moonshot helped me to differentiate myself and pointed out areas where I could improve."
                                         </div>
                                     </div>
                             </Paper>
@@ -211,8 +211,8 @@ class ResumeScorer extends Component {
                                         </div>
                                         <br />
                                         <div className="font14px font12pxUnder500" style={{width: '200px', margin:'auto'}}>
-                                            I think a resume grader would be a good asset to have to evaluate my resume prior to applying for a job because I could get feedback.
-                                            That would help me make my resume better and be a “stand out” among others who didn’t use this great tool.
+                                            "I think a resume grader would be a good asset to have to evaluate my resume prior to applying for a job because I could get feedback.
+                                            That would help me make my resume better and be a “stand out” among others who didn’t use this great tool."
                                         </div>
                                     </div>
                             </Paper>
@@ -233,8 +233,8 @@ class ResumeScorer extends Component {
                                     </div>
                                     <br />
                                     <div className="font14px font12pxUnder500" style={{width: '200px', margin:'auto'}}>
-                                        Resumes are difficult to quantify and compare against other people.
-                                        It’s a game changer when you can translate it to actionable data.
+                                        "Resumes are difficult to quantify and compare against other people.
+                                        It’s a game changer when you can translate it to actionable data."
                                     </div>
                                 </div>
                             </Paper>
