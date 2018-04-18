@@ -700,10 +700,15 @@ button.link {
     background: linear-gradient(to right, #00fcff, #c383ff);
     color: #00deff;
 }
+.redToLightRedButtonExterior {
+    background: linear-gradient(to right, #e52f64, #f9493b);
+    color: #e52f64;
+}
 .purpleToPinkButtonExterior,
 .blueGradientButtonExterior,
 .blueToPurpleButtonExterior,
-.purpleToRedButtonExterior {
+.purpleToRedButtonExterior,
+.redToLightRedButtonExterior {
     padding: 2px;
     border: none;
     border-radius: 2px;
