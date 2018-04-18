@@ -171,10 +171,10 @@ class ResumeScorer extends Component {
                         </div>
                     </button>
                 </div>
-                <div className="redToLightRedDownGradient fullHeight center" style={{marginTop: '60px', overflow: 'auto'}}>
+                <div className="redToLightRedDownGradient center" style={{marginTop: '60px', overflow: 'auto', paddingBottom: '70px', paddingTop: '30px'}}>
                     <ul className="horizListQuotes">
                         <li className="horizListFull2">
-                            <Paper className="paperBorder" style={{height: "352px", width: "248px", margin:'auto'}} zDepth={3}>
+                            <Paper className="paperBorder" style={{minHeight: "352px", width: "270px", margin:'auto'}} zDepth={3}>
                                 <Paper style={styles.imgContainer} zDepth={3}>
                                     <img
                                         src="/images/MarkSaari.png"
@@ -182,10 +182,21 @@ class ResumeScorer extends Component {
                                         style={styles.imgMark}
                                     />
                                 </Paper>
+                                    <div className="center">
+                                        <b className="font20px font16pxUnder500">Mark Saari</b>
+                                        <div style={{color: '#7d97ad'}} className="font16px font12pxUnder500">
+                                            UW-MADISON
+                                        </div>
+                                        <br />
+                                        <div className="font14px font12pxUnder500" style={{width: '200px', margin:'auto'}}>
+                                            Today, everyone has a competitive resume.
+                                            Moonshot helped me to differentiate myself and pointed out areas where I could improve.
+                                        </div>
+                                    </div>
                             </Paper>
                         </li>
                         <li className="horizListFull2">
-                            <Paper className="paperBorder" style={{height: "352px", width: "248px", margin:'auto'}} zDepth={3}>
+                            <Paper className="paperBorder" style={{minHeight: "352px", width: "270px", margin:'auto'}} zDepth={3}>
                                 <Paper style={styles.imgContainer} zDepth={3}>
                                     <img
                                         src="/images/JadaFalzon.png"
@@ -193,10 +204,21 @@ class ResumeScorer extends Component {
                                         style={styles.imgJada}
                                     />
                                 </Paper>
+                                    <div className="center">
+                                        <b className="font20px font16pxUnder500">Jada Falzon</b>
+                                        <div style={{color: '#7d97ad'}} className="font16px font12pxUnder500">
+                                            ALVERNO COLLEGE
+                                        </div>
+                                        <br />
+                                        <div className="font14px font12pxUnder500" style={{width: '200px', margin:'auto'}}>
+                                            I think a resume grader would be a good asset to have to evaluate my resume prior to applying for a job because I could get feedback.
+                                            That would help me make my resume better and be a “stand out” among others who didn’t use this great tool.
+                                        </div>
+                                    </div>
                             </Paper>
                         </li>
                         <li className="horizListFull2">
-                            <Paper className="paperBorder" style={{height: "352px", width: "248px", margin:'auto'}} zDepth={3}>
+                            <Paper className="paperBorder" style={{minHeight: "352px", width: "270px", margin:'auto'}} zDepth={3}>
                                 <Paper style={styles.imgContainer} zDepth={3}>
                                     <img
                                         src="/images/CamRowe.png"
@@ -204,6 +226,17 @@ class ResumeScorer extends Component {
                                         style={styles.imgCam}
                                     />
                                 </Paper>
+                                <div className="center">
+                                    <b className="font20px font16pxUnder500">Cameron Rowe</b>
+                                    <div style={{color: '#7d97ad'}} className="font16px font12pxUnder500">
+                                        UW-MADISON
+                                    </div>
+                                    <br />
+                                    <div className="font14px font12pxUnder500" style={{width: '200px', margin:'auto'}}>
+                                        Resumes are difficult to quantify and compare against other people.
+                                        It’s a game changer when you can translate it to actionable data.
+                                    </div>
+                                </div>
                             </Paper>
                         </li>
                     </ul>
