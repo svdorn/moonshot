@@ -793,6 +793,10 @@ button.link {
 .imgBorder {
     padding: 3px;
 }
+.doubleArrowIcon {
+    height: 50px;
+    margin-bottom: 10px;
+}
 
 .profileAboutPaper {
     width: 70%;
@@ -1630,6 +1634,12 @@ button.link {
     height: 2px;
     margin: 70px 20%;
     background: linear-gradient(to right, #b130d3, #d85e7e);
+}
+.redToLightRedSpacer {
+    width: 60%;
+    height: 2px;
+    margin: 70px 20%;
+    background: linear-gradient(to right, #e52f64, #f9493b);
 }
 #picturesToPathwaysHomepageSpacer {
     margin-top: 60px;
@@ -2638,6 +2648,10 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 @media only screen and (max-width: 700px) {
     .homePathwaysDesc {
         padding: 0;
+    }
+    .doubleArrowIcon {
+        height: 30px;
+        margin-top: 10px;
     }
 
     .profileSeparatorRect {
