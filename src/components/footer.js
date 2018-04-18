@@ -21,6 +21,8 @@ class Footer extends Component {
             footerColor = "purpleToRedLightGradientOpacity";
         } else if (this.props.location.pathname === '/profile' || this.props.location.pathname === '/businessProfile') {
             footerColor = "orangeToYellowGradientOpacity";
+        } else if (this.props.location.pathname === '/resumeScorer') {
+            footerColor = "redToLightRedGradientOpacity";
         }
         return (
             <div className="jsxWrapper">

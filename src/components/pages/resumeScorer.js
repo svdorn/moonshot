@@ -14,7 +14,29 @@ import MetaTags from 'react-meta-tags';
 
 class ResumeScorer extends Component {
     render() {
-        return (<div>Resume</div>);
+        return (
+            <div className="jsxWrapper noOverflowX">
+                <MetaTags>
+                    <title>Resum&eacute; Scorer | Moonshot</title>
+                    <meta name="description" content="Get actionable data and skills reports by just uploading your Resume." />
+                </MetaTags>
+                <div className="fullHeight redToLightRedGradient">
+                    <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
+                    <div className="infoBox whiteText font40px font24pxUnder500"
+                         style={{zIndex: "20", marginTop: '-10px'}}>
+                        How does your resum&eacute; score?
+                        <div className="font24px font18pxUnder500">
+                            Free comparative analysis, skills breakdown and data-driven suggestions.
+                        </div>
+                        <button
+                            className="outlineButton whiteText font30px font20pxUnder500 redToLightRedGradientButton"
+                        >
+                            {"Get Started"}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
     }
 }
 

@@ -199,6 +199,11 @@ form > h1 {
     border: 2px solid white;
 }
 .purpleToRedGradientButton:hover { background: linear-gradient(to bottom right, #d85e7e, #b130d3); }
+.redToLightRedGradientButton {
+    background: rgba(255,255,255, 0.15);
+    border: 2px solid white;
+}
+.redToLightRedGradientButton:hover { background: linear-gradient(to bottom right, #f9493b, #e52f64); }
 
 .stepNumber {
     background: -webkit-linear-gradient(right,#da5f7b, #b130d3);
@@ -348,9 +353,14 @@ form > h1 {
 .purpleToBlue { background: linear-gradient(to top right, var(--moonshotPurple), var(--moonshotBlue)); }
 .purpleGradient { background: linear-gradient(to top right, #CE9EFC, #a048fb); }
 .purpleToRedGradient { background: linear-gradient(to bottom right, #721ae9, #e45c67); }
+.redToLightRedGradient { background: linear-gradient(to bottom right, #e52f64, #f9493b); }
 .purpleToRedLightGradient { background: linear-gradient(to bottom right, #983cc9, #e36273); }
 .purpleToRedLightGradientOpacity {
     background: linear-gradient(to top right, #983cc9, #e36273);
+    opacity: 0.7;
+}
+.redToLightRedGradientOpacity {
+    background: linear-gradient(to top right, #e52f64, #f9493b);
     opacity: 0.7;
 }
 .lightBlueToLightPurpleGradient { background: linear-gradient(to top right, #74e2ff, #b37bfe); }
