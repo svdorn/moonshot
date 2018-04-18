@@ -31,7 +31,7 @@ class ResumeScorer extends Component {
                         <button
                             className="outlineButton whiteText font30px font20pxUnder500 redToLightRedGradientButton"
                         >
-                            {"Get Started"}
+                            {"Upload Your Resume"}
                         </button>
                     </div>
                 </div>
