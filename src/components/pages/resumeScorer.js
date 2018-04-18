@@ -30,6 +30,17 @@ const styles = {
 };
 
 class ResumeScorer extends Component {
+    uploadResume() {
+        let skills = undefined;
+        let desiredCareers = undefined;
+        let email = undefined;
+        let resume = undefined;
+        console.log("uploading resume");
+        axios.post("/resumeScorer/uploadResume", {skills, desiredCareers, email, resume})
+        .then(result => {
+            console.log("result: ", result);
+        });
+    }
 
     render() {
         return (
@@ -48,6 +59,7 @@ class ResumeScorer extends Component {
                         </div>
                         <button
                             className="outlineButton whiteText font30px font20pxUnder500 redToLightRedGradientButton"
+                            onClick={this.uploadResume}
                         >
                             {"Upload Your Resume"}
                         </button>
@@ -98,7 +110,8 @@ class ResumeScorer extends Component {
                 <div className="center" style={{marginBottom: '40px'}}>
                     <button className="redToLightRedButtonExterior bigButton"
                     >
-                        <div className="invertColorOnHover gradientBorderButtonInterior">
+                        <div onClick={this.uploadResume}
+                             className="invertColorOnHover gradientBorderButtonInterior">
                             Upload Your Resume
                         </div>
                     </button>
@@ -120,4 +133,3 @@ function mapDispatchToProps(dispatch) {
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResumeScorer);
-
