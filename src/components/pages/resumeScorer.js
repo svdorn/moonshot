@@ -18,6 +18,11 @@ const styles = {
         marginTop: "15px",
         marginBottom: "25px"
     },
+    horizListArrow: {
+        position: "relative",
+        maxWidth: "600px",
+        margin: "15px auto 25px auto"
+    },
     horizListIcon: {
         height: "50px",
         marginBottom: "10px"
@@ -36,7 +41,8 @@ class ResumeScorer extends Component {
             <div className="jsxWrapper noOverflowX">
                 <MetaTags>
                     <title>Resum&eacute; Scorer | Moonshot</title>
-                    <meta name="description" content="Get actionable data and skills reports by just uploading your Resume." />
+                    <meta name="description"
+                          content="Get actionable data and skills reports by just uploading your Resume."/>
                 </MetaTags>
                 <div className="fullHeight redToLightRedGradient">
                     <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
@@ -53,6 +59,45 @@ class ResumeScorer extends Component {
                         </button>
                     </div>
                 </div>
+                <div style={{marginTop: '60px', marginBottom: '40px', overflow: 'auto'}} className="center">
+                    <div style={styles.horizListArrow}>
+                        <div className="horizListFull">
+                            <div className="horizListText">
+                                <img
+                                    alt="Puzzle Icon"
+                                    src="/icons/Key.png"
+                                    style={styles.horizListIcon}
+                                />
+                            </div>
+                        </div>
+                        <div className="horizListFull">
+                            <div className="horizListText">
+                                <img
+                                    alt="Double Arrow Icon"
+                                    src="/icons/DoubleArrow.png"
+                                    className="doubleArrowIcon"
+                                />
+                            </div>
+                        </div>
+                        <div className="horizListFull">
+                            <div className="horizListText">
+                                <img
+                                    alt="Puzzle Icon"
+                                    src="/icons/Key.png"
+                                    style={styles.horizListIcon}
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div className="center">
+                    <div className="font26px font20pxUnder700" style={{maxWidth: "1000px", margin: "20px auto"}}>
+                        From a single document to actionable insights and data.
+                    </div>
+                </div>
+
+                <div className="redToLightRedSpacer" id="picturesToPathwaysHomepageSpacer"/>
+
                 <div style={{marginTop: '60px', marginBottom: '40px', overflow: 'auto'}}>
                     <div style={styles.horizList}>
                         <div className="horizListFull">
@@ -115,8 +160,7 @@ function mapStateToProps(state) {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-    }, dispatch);
+    return bindActionCreators({}, dispatch);
 }
 
 export default connect(mapStateToProps, mapDispatchToProps)(ResumeScorer);
