@@ -116,22 +116,24 @@ class ResumeScorer extends Component {
         const skills = formValues.skills;
         const desiredCareers = formValues.desiredCareers;
         const email = formValues.email;
+        let resumeFile = undefined;
         try {
-            const resumeFile = this.refs.resumeFile.files[0];
+            resumeFile = this.refs.resumeFile.files[0];
         } catch (getFileError) {
             console.log("getFileError");
             console.log("Need a resume");
+            return;
         }
 
-        const data = new FormData();
-        data.append("name", name);
-        data.append("skills", skills);
-        data.append("desiredCareers", desiredCareers);
-        data.append("email", email);
-        data.append("resumeFile", resumeFile);
+        // let data = new FormData();
+        // data.append("name", name);
+        // data.append("skills", skills);
+        // data.append("desiredCareers", desiredCareers);
+        // data.append("email", email);
+        // data.append("resumeFile", resumeFile);
 
         this.setState({uploadingResume: true});
-        axios.post("/resumeScorer/uploadResume", data)
+        axios.post("/api/resumeScorer/uploadResume", {name, skills, desiredCareers, email, resumeFile})
         .then(result => {
             console.log("result: ", result);
             this.setState({uploadingResume: false, doneUploading: true});

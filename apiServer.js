@@ -3301,6 +3301,10 @@ app.get("/business/candidateSearch", function(req, res) {
 
 app.post("/resumeScorer/uploadResume", function(req, res) {
     console.log("scoring resume");
+    console.log(req.body);
+    const resumeFile = req.files.resumeFile;
+    const resumeFileName = resumeFile.name;
+    console.log("resumeFileName is: ", resumeFileName);
 });
 
 
