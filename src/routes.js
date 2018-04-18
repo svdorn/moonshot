@@ -25,6 +25,7 @@ import ChangeTempPassword from './components/pages/changeTempPassword';
 import Discover from './components/pages/discover';
 import Pathway from './components/pages/pathway';
 import PathwayContent from './components/pages/pathwayContent';
+import ResumeScorer from './components/pages/resumeScorer';
 import ContactUs from './components/pages/contactUs';
 import MyPathways from './components/pages/myPathways';
 import Onboarding from './components/pages/onboarding';
@@ -66,6 +67,7 @@ const routes = (
         <Route path="changeTempPassword" component={ChangeTempPassword} />
         <Route path="discover" component={Discover} />
         <Route path="contactUs" component={ContactUs} />
+        <Route path="resumeScorer" component={ResumeScorer} />
         <Route path="myPathways" component={AuthenticatedComponent} page={<MyPathways/>} />
         <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding/>} userType="candidate" />
         <Route path="pathway" component={Pathway} />
