@@ -9,6 +9,7 @@ var bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const sanitizeHtml = require('sanitize-html');
+const fileUpload = require('express-fileupload');
 
 
 var app = express();
@@ -3302,6 +3303,7 @@ app.get("/business/candidateSearch", function(req, res) {
 app.post("/resumeScorer/uploadResume", function(req, res) {
     console.log("scoring resume");
     console.log(req.body);
+    console.log("req.files: ", req.files);
     const resumeFile = req.files.resumeFile;
     const resumeFileName = resumeFile.name;
     console.log("resumeFileName is: ", resumeFileName);
