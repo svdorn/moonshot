@@ -110,15 +110,28 @@ class ResumeScorer extends Component {
 
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) return;
 
-        const params = {
-            name: this.props.formData.resumeUpload.values.fullName,
-            skills: this.props.formData.resumeUpload.values.skills,
-            desiredCareers: this.props.formData.resumeUpload.values.desiredCareers,
-            email: this.props.formData.resumeUpload.values.email
-        };
+        const formValues = this.props.formData.resumeUpload.values;
+
+        const name = formValues.fullName;
+        const skills = formValues.skills;
+        const desiredCareers = formValues.desiredCareers;
+        const email = formValues.email;
+        try {
+            const resumeFile = this.refs.resumeFile.files[0];
+        } catch (getFileError) {
+            console.log("getFileError");
+            console.log("Need a resume");
+        }
+
+        const data = new FormData();
+        data.append("name", name);
+        data.append("skills", skills);
+        data.append("desiredCareers", desiredCareers);
+        data.append("email", email);
+        data.append("resumeFile", resumeFile);
 
         this.setState({uploadingResume: true});
-        axios.post("/resumeScorer/uploadResume", params)
+        axios.post("/resumeScorer/uploadResume", data)
         .then(result => {
             console.log("result: ", result);
             this.setState({uploadingResume: false, doneUploading: true});
@@ -173,6 +186,13 @@ class ResumeScorer extends Component {
                                         component={renderTextField}
                                         label="Email"
                                     /><br/>
+                                    <input
+                                        name="resume"
+                                        type="file"
+                                        ref="resumeFile"
+                                        accept="image/jpg,image/png,application/pdf,application/msword"
+                                        style={{marginTop:"20px"}}
+                                    />
                                     <RaisedButton
                                         label="Submit"
                                         type="submit"
