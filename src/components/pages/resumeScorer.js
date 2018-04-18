@@ -96,7 +96,7 @@ class ResumeScorer extends Component {
                     </div>
                 </div>
                 <div className="center" style={{marginBottom: '40px'}}>
-                    <button className="redToLightRedButtonExterior bigButton"
+                    <button className="redToLightRedButtonExterior  font26px font20pxUnder500 bigButton"
                     >
                         <div className="invertColorOnHover gradientBorderButtonInterior">
                             Upload Your Resume
