@@ -1135,6 +1135,7 @@ button.link {
 .blueTextOnHover:hover { color: var(--moonshotLightBlue); }
 
 .greenText { color: var(--moonshotGreenText); }
+.redText { color: red }
 .whiteText { color: white; }
 .blueText { color: var(--moonshotLightBlue); }
 .darkBlueText { color: var(--moonshotMidBlue); }

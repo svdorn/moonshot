@@ -79,6 +79,10 @@ class PathwayContentMultiSelectQuestion extends Component {
 
         return (
             <div className="center font20px font16pxUnder600 font12pxUnder400">
+                {this.props.name ?
+                    <div style={{marginBottom:"20px"}}><h4 className="marginTop20px blueText font30px">{this.props.name}</h4></div>
+                    : null
+                }
                 <div style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
                 <textarea
                     type="text"

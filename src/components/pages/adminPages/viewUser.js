@@ -14,7 +14,8 @@ class ViewUser extends Component {
         this.state = {
             user: undefined,
             pathways: [],
-            completedPathways: []
+            completedPathways: [],
+            scores: {}
         };
     }
 
@@ -24,7 +25,7 @@ class ViewUser extends Component {
         let profileUrl = "";
         try {
             profileUrl = this.props.location.query.user;
-        } catch(e) {
+        } catch (e) {
             this.goTo("/admin");
         }
 
@@ -35,24 +36,27 @@ class ViewUser extends Component {
 
         let self = this;
 
-        axios.get("/api/userForAdmin", {params: {
-            adminUserId: user._id,
-            verificationToken: user.verificationToken,
-            profileUrl
-        }})
-        .then(function(response) {
-            const user = response.data.user;
-            const pathways = response.data.pathways;
-            const completedPathways = response.data.completedPathways;
-            const quizzes = response.data.quizzes;
-            self.setState({
-                ...self.state,
-                user, pathways, completedPathways, quizzes
-            });
+        axios.get("/api/userForAdmin", {
+            params: {
+                adminUserId: user._id,
+                verificationToken: user.verificationToken,
+                profileUrl
+            }
         })
-        .catch(function(err) {
-            console.log("error with getting info for admin");
-        })
+            .then(function (response) {
+                const user = response.data.user;
+                const pathways = response.data.pathways;
+                const completedPathways = response.data.completedPathways;
+                const quizzes = response.data.quizzes;
+                const scores = response.data.scores
+                self.setState({
+                    ...self.state,
+                    user, pathways, completedPathways, quizzes, scores
+                });
+            })
+            .catch(function (err) {
+                console.log("error with getting info for admin");
+            })
     }
 
 
@@ -69,25 +73,40 @@ class ViewUser extends Component {
     makePathwayLis(pathways, answers) {
         let self = this;
         let pathwayLis = null;
+        let scores = this.state.scores;
 
         if (pathways && Array.isArray(pathways) && pathways.length > 0) {
-            pathwayLis = pathways.map(function(pathway) {
+            pathwayLis = pathways.map(function (pathway) {
                 if (!pathway) {
                     return null;
                 }
 
                 // create the steps that will be displayed under the pathway
-                let steps = pathway.steps.map(function(step) {
-                    let subSteps = step.subSteps.map(function(subStep) {
+                let steps = pathway.steps.map(function (step) {
+                    // number of objective questions that are correct
+                    let correctAnswers = 0;
+                    // number of total objective answers in the step
+                    let totalAnswers = 0;
+
+                    let subSteps = step.subSteps.map(function (subStep) {
                         let content = "..."
+                        let correctOrNot = null;
+                        let breakForCorrectness = null;
 
                         if (subStep.contentType === "quiz") {
+                            const questionId = subStep.contentID;
                             let answer = "";
                             // the current question
-                            let question = self.state.quizzes[subStep.contentID];
+                            let question = self.state.quizzes[questionId];
                             let questionType = question.questionType;
                             // could take various forms depending on the question type
-                            let answerValue = answers[subStep.contentID];
+                            let answerValue = answers[questionId];
+
+                            // this question has a correct answer, so should
+                            // be counted in total number of graded questions
+                            if (question.hasCorrectAnswers) {
+                                totalAnswers++;
+                            }
 
                             if (answerValue) {
                                 switch (questionType) {
@@ -104,8 +123,8 @@ class ViewUser extends Component {
                                         }
                                         break;
                                     case "multiSelect":
-                                        answerValue.value.forEach(function(subAnswer) {
-                                            answer = answer + question.multiSelectAnswers.find(function(option) {
+                                        answerValue.value.forEach(function (subAnswer) {
+                                            answer = answer + question.multiSelectAnswers.find(function (option) {
                                                 return option.answerNumber.toString() === subAnswer.toString();
                                             }).body + ", ";
                                         });
@@ -120,28 +139,33 @@ class ViewUser extends Component {
                                         }
                                         // otherwise find the answer corresponding to the value they picked
                                         else {
-                                            answer = question.multipleChoiceAnswers.find(function(option) {
+                                            answer = question.multipleChoiceAnswers.find(function (option) {
                                                 return option.answerNumber.toString() === answerValue.value.toString();
                                             }).body;
                                         }
                                         break;
                                     case "freeResponseAndSliderOnSelect":
-                                        let answerInterior = [<br key="initialBr" />];
+                                        let answerInterior = [<br key="initialBr"/>];
                                         let keyCounter = 0;
                                         let selectables = question.multiSelectAnswers;
                                         // go through each option in the question
-                                        selectables.forEach(function(selectable) {
+                                        selectables.forEach(function (selectable) {
                                             // add the text of the selectable item
-                                            answerInterior.push(<div key={keyCounter++} style={{marginTop:"10px", display:"inline-block"}}>{selectable.body}:</div>);
+                                            answerInterior.push(<div key={keyCounter++} style={{
+                                                marginTop: "10px",
+                                                display: "inline-block"
+                                            }}>{selectable.body}:</div>);
                                             // find if the item was selected
                                             // if so, add the values of the answers
                                             let userAnswer = answerValue.value[selectable.answerNumber]
                                             if (userAnswer) {
-                                                answerInterior.push(<span key={keyCounter++}><br/><div style={{marginLeft:"20px"}}>Skill: {userAnswer.skill}<br/>Experience: {userAnswer.answerText}<br/></div></span>);
+                                                answerInterior.push(<span key={keyCounter++}><br/><div
+                                                    style={{marginLeft: "20px"}}>Skill: {userAnswer.skill}<br/>Experience: {userAnswer.answerText}<br/></div></span>);
                                             }
                                             // if not, tell the user that this was not selected
                                             else {
-                                                answerInterior.push(<span key={keyCounter++}> (not selected)<br/></span>);
+                                                answerInterior.push(<span
+                                                    key={keyCounter++}> (not selected)<br/></span>);
                                             }
                                         })
                                         answer = <span>{answerInterior}</span>
@@ -152,21 +176,43 @@ class ViewUser extends Component {
                                     case "datePicker":
                                         const dateString = answerValue.value;
                                         answer = dateString.substring(5, 7) + "/" +
-                                                dateString.substring(8, 10) + "/" +
-                                                dateString.substring(0, 4);
+                                            dateString.substring(8, 10) + "/" +
+                                            dateString.substring(0, 4);
                                         break;
                                     case "freeResponse":
                                         answer = answerValue.value;
                                     default:
                                         break;
                                 }
+
+                                // if this question was graded automatically, show the admin if the user had the right answer
+                                if (typeof scores[questionId] === "boolean") {
+                                    // show "CORRECT" or "WRONG"
+                                    const isCorrect = scores[questionId];
+                                    breakForCorrectness = <br/>;
+                                    // if the user had the right answer
+                                    if (isCorrect) {
+                                        correctOrNot = <span className="greenText">Correct</span>;
+                                        correctAnswers++;
+                                    }
+                                    // if the user had the wrong answer
+                                    else {
+                                        correctOrNot = <span className="redText">Incorrect</span>;
+                                    }
+                                }
                             } else {
                                 answer = "(not answered)"
+                                // if the question was not answered and it has
+                                // an objectively correct answer, mark it incorrect
+                                if (question.hasCorrectAnswers) {
+                                    breakForCorrectness = <br/>;
+                                    correctOrNot = <span className="redText">Incorrect</span>;
+                                }
                             }
 
                             let questionName = "";
-                            question.question.forEach(function(questionPart) {
-                                questionPart.content.forEach(function(miniPart) {
+                            question.question.forEach(function (questionPart) {
+                                questionPart.content.forEach(function (miniPart) {
                                     questionName = questionName + " " + miniPart;
                                 })
                             });
@@ -176,6 +222,8 @@ class ViewUser extends Component {
                                     <span>{questionName}</span>
                                     <br/>
                                     <span className="blueText">Answer: {answer}</span>
+                                    {breakForCorrectness}
+                                    {correctOrNot}
                                 </div>
                             );
                         }
@@ -188,6 +236,8 @@ class ViewUser extends Component {
                     return (
                         <li key={"step" + step.order}>
                             Step {step.order}
+                            <br/>
+                            Score: {correctAnswers} / {totalAnswers}
                             <br/>
                             <ol>{subSteps}</ol>
                         </li>
@@ -239,13 +289,27 @@ class ViewUser extends Component {
         return (
             <div>
                 <MetaTags>
-                    <title>{{userName}} | Moonshot</title>
-                    <meta name="description" content="Admin user view." />
+                    <title>{userName} | Moonshot</title>
+                    <meta name="description" content="Admin user view."/>
                 </MetaTags>
 
                 {this.props.currentUser && this.props.currentUser.admin === true && user ?
                     <div>
-                        {user.name}
+                        Name - {user.name}
+                        <br/>
+                        {user.emailToContact ?
+                            <div>
+                                Email - {user.emailToContact}
+                            </div>
+                            : <div>Email - {user.email}
+                            </div>
+                        }
+                        {user.phoneNumber ?
+                            <div>
+                                Phone - {user.phoneNumber}
+                            </div>
+                            : null
+                        }
                         <br/>
                         {pathwaysHtml}
                     </div>

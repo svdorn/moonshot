@@ -5,7 +5,7 @@ var logger = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const credentials = require('./credentials');
-var bcrypt = require('bcrypt');
+var bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const sanitizeHtml = require('sanitize-html');
@@ -325,7 +325,6 @@ function printUsersFromPathway(pathwayIdToCheck) {
 // })
 
 
-
 //----->> POST USER <<------
 app.post('/user', function (req, res) {
     var user = sanitize(req.body);
@@ -362,7 +361,7 @@ app.post('/user', function (req, res) {
                         // add pathway to user's My Pathways if they went from
                         // a landing page.
                         // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY OR SINGLEWIRE PATHWAY
-                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386" || user.pathwayId === "5abc12cff36d2805e28d27f3") {
+                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386" || user.pathwayId === "5abc12cff36d2805e28d27f3" || user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
                             user.pathways = [{
                                 pathwayId: user.pathwayId,
                                 currentStep: {
@@ -430,6 +429,9 @@ app.post('/user', function (req, res) {
                                         }
                                         else if (user.pathwayId === "5abc12cff36d2805e28d27f3") {
                                             pathName = "Curate Full-Stack";
+                                        }
+                                        else if (user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
+                                            pathName = "Dream Home CEO";
                                         }
                                         additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
                                     }
@@ -1427,6 +1429,7 @@ app.post('/user/unsubscribeEmail', function (req, res) {
     });
 });
 
+
 // SEND COMING SOON EMAIL
 app.post('/user/comingSoonEmail', function (req, res) {
 
@@ -1938,7 +1941,7 @@ app.post('/user/changeSettings', function (req, res) {
 
 
 //----->> ADD PATHWAY <<------
-// CURRENTLY ONLY ALLOWS NWM AND SINGLEWIRE AND CURATE PATHWAYS TO BE ADDED
+// CURRENTLY ONLY ALLOWS NWM AND SINGLEWIRE AND CURATE AND DREAMHOME PATHWAYS TO BE ADDED
 app.post("/user/addPathway", function (req, res) {
     const _id = sanitize(req.body._id);
     const verificationToken = sanitize(req.body.verificationToken);
@@ -1949,7 +1952,7 @@ app.post("/user/addPathway", function (req, res) {
     if (_id && pathwayId && verificationToken) {
         // TODO: REMOVE THIS, CHANGE HOW THIS FUNCTION WORKS ONCE WE START
         // ADDING PATHWAYS BESIDES NWM AND SINGLEWIRE
-        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad" && pathwayId !== "5a88b4b8734d1d041bb6b386" && pathwayId !== "5abc12cff36d2805e28d27f3") {
+        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad" && pathwayId !== "5a88b4b8734d1d041bb6b386" && pathwayId !== "5abc12cff36d2805e28d27f3" && pathwayId !== "5ac3bc92734d1d4f8afa8ac4") {
             res.status(403).send("You cannot currently sign up for that pathway.");
             return;
         }
@@ -2722,14 +2725,53 @@ app.get("/userForAdmin", function(req, res) {
                     let requiredNumQuizzes = 0;
                     let foundQuizzes = 0;
 
+                    // scores will be an object with every question with an objective answer
+                    // scores[questionId] will be true if the answer is correct
+                    // false if the answer is incorrect
+                    let scores = {}
+
                     let returnIfFoundEverything = function() {
                         // if we have found all of the pathways, return all the info to the front end
                         if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
+                            // grade the user's answers
+                            // console.log("quizzes: ", quizzes);
+                            // console.log("user.answers: ", user.answers);
+                            for (let questionId in quizzes) {
+                                let quiz = quizzes[questionId];
+                                // skip anything that is not a quiz
+                                if (!quizzes.hasOwnProperty(questionId)) { continue; }
+
+                                // if the user answered the question and the question has a correct answer, grade it
+                                if (quiz.hasCorrectAnswers && user.answers[questionId]) {
+                                    // if it's a multiple choice question
+                                    if (quiz.questionType === "multipleChoice" || quiz.questionType === "twoOptions") {
+                                        // get the answer value the user put in
+                                        let userAnswerValue = user.answers[questionId].value;
+                                        let isCorrect = false;
+                                        // if there is an array of correct answers
+                                        if (Array.isArray(quiz.correctAnswerNumber)) {
+                                            // see if the answer value the user put in is one of the right answers
+                                            isCorrect = quiz.correctAnswerNumber.some(function(answerNumber) {
+                                                // return true if the answer value is a correct one
+                                                return answerNumber === userAnswerValue;
+                                            })
+                                        }
+                                        // if there is a single correct answer
+                                        else {
+                                            isCorrect = quiz.correctAnswerNumber == userAnswerValue;
+                                        }
+
+                                        scores[questionId] = isCorrect;
+                                    }
+                                }
+                            }
+
                             res.json({
                                 user: userForAdmin(user),
                                 pathways,
                                 completedPathways,
-                                quizzes
+                                quizzes,
+                                scores
                             });
                             return;
                         }

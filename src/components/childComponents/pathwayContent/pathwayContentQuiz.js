@@ -116,6 +116,7 @@ class PathwayContentQuiz extends Component {
                         <PathwayContentFreeResponseQuestion
                             question={quiz.question}
                             quizId={quiz._id}
+                            name={quiz.name}
                         />
                     break;
                 case "datePicker":
