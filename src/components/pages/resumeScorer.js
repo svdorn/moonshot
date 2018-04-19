@@ -33,7 +33,6 @@ const styles = {
         // margin: "auto"
     },
     horizListQuotes: {
-        position: "relative",
         marginTop: "40px",
         marginBottom: "25px"
     },
@@ -183,8 +182,8 @@ class ResumeScorer extends Component {
                                     />
                                 </Paper>
                                     <div className="center">
-                                        <b className="font20px font16pxUnder500">Mark Saari</b>
-                                        <div style={{color: '#7d97ad'}} className="font16px font12pxUnder500">
+                                        <b className="font20px font18pxUnder500">Mark Saari</b>
+                                        <div style={{color: '#7d97ad'}} className="font16px font14pxUnder500">
                                             UW-MADISON
                                         </div>
                                         <br />
@@ -195,7 +194,7 @@ class ResumeScorer extends Component {
                                     </div>
                             </Paper>
                         </li>
-                        <li className="horizListFull2">
+                        <li className="horizListFull2 horizListMargin1">
                             <Paper className="paperBorder" style={{minHeight: "352px", width: "270px", margin:'auto'}} zDepth={3}>
                                 <Paper style={styles.imgContainer} zDepth={3}>
                                     <img
@@ -205,8 +204,8 @@ class ResumeScorer extends Component {
                                     />
                                 </Paper>
                                     <div className="center">
-                                        <b className="font20px font16pxUnder500">Jada Falzon</b>
-                                        <div style={{color: '#7d97ad'}} className="font16px font12pxUnder500">
+                                        <b className="font20px font18pxUnder500">Jada Falzon</b>
+                                        <div style={{color: '#7d97ad'}} className="font16px font14pxUnder500">
                                             ALVERNO COLLEGE
                                         </div>
                                         <br />
@@ -217,7 +216,7 @@ class ResumeScorer extends Component {
                                     </div>
                             </Paper>
                         </li>
-                        <li className="horizListFull2">
+                        <li className="horizListFull2 horizListMargin2">
                             <Paper className="paperBorder" style={{minHeight: "352px", width: "270px", margin:'auto'}} zDepth={3}>
                                 <Paper style={styles.imgContainer} zDepth={3}>
                                     <img
@@ -227,8 +226,8 @@ class ResumeScorer extends Component {
                                     />
                                 </Paper>
                                 <div className="center">
-                                    <b className="font20px font16pxUnder500">Cameron Rowe</b>
-                                    <div style={{color: '#7d97ad'}} className="font16px font12pxUnder500">
+                                    <b className="font20px font18pxUnder500">Cameron Rowe</b>
+                                    <div style={{color: '#7d97ad'}} className="font16px font14pxUnder500">
                                         UW-MADISON
                                     </div>
                                     <br />

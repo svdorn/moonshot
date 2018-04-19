@@ -1351,11 +1351,16 @@ button.link {
     position: relative;
 }
 .horizListFull2 {
-    width: 33%;
-    float: left;
-    position: relative;
     display: inline-block;
+    vertical-align: top;
+    margin: auto;
 }
+.horizListMargin1 {
+    margin-left: 80px;
+}
+.horizListMargin2 {
+     margin-left: 80px;
+ }
 
 .invertColorOnHover.gradientBorderButtonInterior:hover {
     color: white;
@@ -2240,6 +2245,12 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     .boxStyle {
         margin: 200px auto 0 50px;
     }
+    .horizListMargin1 {
+        margin-left: 40px;
+    }
+    .horizListMargin2 {
+        margin-left: 40px;
+    }
 }
 
 @media only screen and (max-width: 1095px) {
@@ -2440,6 +2451,12 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     .font10pxUnder900 { font-size: 10px; }
     .font8pxUnder900 { font-size: 8px; }
     .font6pxUnder900 { font-size: 6px; }
+}
+
+@media only screen and (max-width: 929px) {
+    .horizListMargin2 {
+        margin-top: 40px;
+    }
 }
 
 @media only screen and (max-width: 821px) {
@@ -2795,6 +2812,12 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     .font6pxUnder700 { font-size: 6px; }
 }
 
+@media only screen and (max-width: 619px) {
+    .horizListMargin1 {
+        margin-top: 40px;
+    }
+}
+
 @media only screen and (min-width: 601px) {
     .under600only { display: none; }
     .from500to600only { display: none; }
@@ -2867,6 +2890,12 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 @media only screen and (max-width: 547px) {
     .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(2) {
         display: none;
+    }
+    .horizListMargin1 {
+        margin-left: 0;
+    }
+    .horizListMargin2 {
+        margin-left: 0;
     }
 }
 
