@@ -254,8 +254,8 @@ class ResumeScorer extends Component {
                             <div className="horizListFull">
                                 <div className="horizListText">
                                     <img
-                                        alt="Puzzle Icon"
-                                        src="/icons/Key.png"
+                                        alt="Resume Icon"
+                                        src="/icons/Resume.png"
                                         style={styles.horizListIcon}
                                     />
                                 </div>
@@ -272,8 +272,8 @@ class ResumeScorer extends Component {
                             <div className="horizListFull">
                                 <div className="horizListText">
                                     <img
-                                        alt="Puzzle Icon"
-                                        src="/icons/Key.png"
+                                        alt="Data Icon"
+                                        src="/icons/Data2.png"
                                         style={styles.horizListIcon}
                                     />
                                 </div>
@@ -296,7 +296,7 @@ class ResumeScorer extends Component {
                                     <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                         <img
                                             alt="Puzzle Icon"
-                                            src="/icons/Key.png"
+                                            src="/icons/Puzzle2.png"
                                             style={styles.horizListIcon}
                                         /><br/>
                                         Position and Industry <div className="above600only"><br/></div>Recommendations
@@ -309,7 +309,7 @@ class ResumeScorer extends Component {
                                     <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                         <img
                                             alt="Lightbulb Icon"
-                                            src="/icons/Evaluate.png"
+                                            src="/icons/Lightbulb3.png"
                                             style={styles.horizListIcon}
                                         /><br/>
                                         Courses for Skills <div className="above600only"><br/></div>Training
@@ -321,7 +321,7 @@ class ResumeScorer extends Component {
                                     <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
                                         <img
                                             alt="Trophy Icon"
-                                            src="/icons/Badge.png"
+                                            src="/icons/Trophy2.png"
                                             style={styles.horizListIcon}
                                         /><br/>
                                         Comparative Analysis <div className="above600only br"><br/></div>and Scoring
