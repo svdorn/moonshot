@@ -271,8 +271,6 @@ class PathwayContent extends Component {
             }
         }
 
-        console.log("blah")
-
         // the title is either a string set specifically for the title or the name of the pathway (or empty)
         let pathwayTitle = "";
         // the meta description is either a given meta description or the description shown on the page
