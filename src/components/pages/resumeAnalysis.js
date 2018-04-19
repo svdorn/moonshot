@@ -452,7 +452,7 @@ class ResumeScorer extends Component {
         return (
             <div className="jsxWrapper noOverflowX">
                 <MetaTags>
-                    <title>Resume Scorer | Moonshot</title>
+                    <title>Resume Analysis | Moonshot</title>
                     <meta name="description"
                           content="Get actionable data and skills reports by just uploading your Resume."/>
                 </MetaTags>
