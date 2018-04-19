@@ -73,7 +73,7 @@ class ResumeScorer extends Component {
                          style={{zIndex: "20", marginTop: '-10px'}}>
                         How does your resum&eacute; score?
                         <div className="font24px font18pxUnder500">
-                            Free comparative analysis, skills breakdown and data-driven suggestions.
+                            Free comparative analysis, skills breakdown and <div className="above600only br"><br/></div>data-driven suggestions.
                         </div>
                         <button
                             className="outlineButton whiteText font30px font20pxUnder500 redToLightRedGradientButton"
