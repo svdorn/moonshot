@@ -211,8 +211,8 @@ class ResumeScorer extends Component {
                                         </div>
                                         <br />
                                         <div className="font14px font12pxUnder500" style={{width: '200px', margin:'auto'}}>
-                                            "I think a resume grader would be a good asset to have to evaluate my resume prior to applying for a job because I could get feedback.
-                                            That would help me make my resume better and be a “stand out” among others who didn’t use this great tool."
+                                            "The resume analysis is a great asset to evaluate my resume before applying for a job.
+                                            This helps make my resume a “stand out” among others who didn’t use the analysis."
                                         </div>
                                     </div>
                             </Paper>
