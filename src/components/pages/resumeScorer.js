@@ -87,7 +87,6 @@ const validate = values => {
     return errors
 };
 
-
 class ResumeScorer extends Component {
     constructor(props) {
         super(props);
@@ -107,6 +106,14 @@ class ResumeScorer extends Component {
     handleClose = () => {
         this.setState({open: false});
     };
+    scrollDown() {
+        const scrollPosTop = window.innerWidth > 500 ? 710 : 550;
+        window.scroll({
+            top: scrollPosTop,
+            left: 0,
+            behavior: 'smooth'
+        });
+    }
 
 
     handleSubmit(e) {
@@ -239,14 +246,25 @@ class ResumeScorer extends Component {
                              style={{zIndex: "20", marginTop: '-10px'}}>
                             How does your resume score?
                             <div className="font24px font18pxUnder500">
-                                Free comparative analysis, skills breakdown and data-driven suggestions.
+                                Comparative analysis, skills breakdown and <div className="br above700only"><br/></div>data-driven suggestions.
                             </div>
                             <button
-                                className="outlineButton whiteText font30px font20pxUnder500 redToLightRedGradientButton"
+                                className="bigOutlineButton whiteText font30px font20pxUnder500 redToLightRedGradientButton"
                                 onClick={this.handleOpen}
                             >
-                                {"Upload Your Resume"}
-                            </button>
+                                <div>
+                                    &#8679;
+                                </div>
+                                Get a Free Resume Analysis
+                            </button> <br/>
+                            <div className="scrollDownButton" onClick={() => this.scrollDown()}>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                                <div>
+                                    <div/><div/>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div style={{marginTop: '60px', marginBottom: '40px', overflow: 'auto'}} className="center">
@@ -293,7 +311,7 @@ class ResumeScorer extends Component {
                             <div className="horizListFull">
                                 <div className="horizListSpacer" style={{marginLeft: "20%"}}
                                 >
-                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                    <div className="horizListText font20px font16pxUnder800 font12pxUnder700">
                                         <img
                                             alt="Puzzle Icon"
                                             src="/icons/Puzzle2.png"
@@ -306,7 +324,7 @@ class ResumeScorer extends Component {
 
                             <div className="horizListFull">
                                 <div className="horizListSpacer" style={{marginLeft: "5%", marginRight: '5%'}}>
-                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                    <div className="horizListText font20px font16pxUnder800 font12pxUnder700">
                                         <img
                                             alt="Lightbulb Icon"
                                             src="/icons/Lightbulb3.png"
@@ -318,7 +336,7 @@ class ResumeScorer extends Component {
                             </div>
                             <div className="horizListFull">
                                 <div className="horizListSpacer" style={{marginRight: "20%"}}>
-                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700">
+                                    <div className="horizListText font20px font16pxUnder800 font12pxUnder700">
                                         <img
                                             alt="Trophy Icon"
                                             src="/icons/Trophy2.png"
@@ -335,7 +353,7 @@ class ResumeScorer extends Component {
                         >
                             <div onClick={this.handleOpen}
                                  className="invertColorOnHover gradientBorderButtonInterior">
-                                Upload Your Resume
+                                Get a Free Resume Analysis
                             </div>
                         </button>
                     </div>
