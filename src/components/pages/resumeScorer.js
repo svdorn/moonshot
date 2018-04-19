@@ -282,7 +282,7 @@ class ResumeScorer extends Component {
                     </div>
                     <div className="center">
                         <div className="font26px font20pxUnder700" style={{maxWidth: "1000px", margin: "20px auto"}}>
-                            From a single document to actionable insights and data.
+                            From a static document to actionable insights and data.
                         </div>
                     </div>
 
@@ -380,7 +380,7 @@ class ResumeScorer extends Component {
                                             <br />
                                             <div className="font14px font12pxUnder500" style={{width: '200px', margin:'auto'}}>
                                                 {'"'}The resume analysis is a great asset to evaluate my resume before applying for a job.
-                                                This helps make my resume a “stand out” among others who didn’t use the analysis.{'"'}
+                                                This helps make my resume a 'stand out' among others who didn’t use the analysis.{'"'}
                                             </div>
                                         </div>
                                 </Paper>
