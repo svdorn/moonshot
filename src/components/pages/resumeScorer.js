@@ -195,7 +195,7 @@ class ResumeScorer extends Component {
                                 <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
                                 : <form onSubmit={this.handleSubmit.bind(this)} className="center">
                                     <div className="blueTextImportant font36px font30pxUnder700 font26pxUnder500">
-                                        Upload Your Resum&eacute;
+                                        Upload Your Resume
                                     </div>
                                     <Field
                                         name="desiredCareers"
@@ -237,7 +237,7 @@ class ResumeScorer extends Component {
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
                         <div className="infoBox whiteText font40px font24pxUnder500"
                              style={{zIndex: "20", marginTop: '-10px'}}>
-                            How does your resum&eacute; score?
+                            How does your resume score?
                             <div className="font24px font18pxUnder500">
                                 Free comparative analysis, skills breakdown and data-driven suggestions.
                             </div>
@@ -434,7 +434,7 @@ class ResumeScorer extends Component {
         return (
             <div className="jsxWrapper noOverflowX">
                 <MetaTags>
-                    <title>Resum&eacute; Scorer | Moonshot</title>
+                    <title>Resume Scorer | Moonshot</title>
                     <meta name="description"
                           content="Get actionable data and skills reports by just uploading your Resume."/>
                 </MetaTags>
