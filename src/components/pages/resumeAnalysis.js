@@ -439,9 +439,9 @@ class ResumeScorer extends Component {
                     <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
                     <div className="infoBox whiteText font40px font24pxUnder500"
                          style={{zIndex: "20", marginTop: '-10px'}}>
-                        Submitted!
+                        Submitted
                         <div className="font24px font18pxUnder500">
-                            {"You'll get an email back from us within two days with feedback."}
+                            {"You'll receive an email with your Resume Analysis within 48 hours."}
                         </div>
                     </div>
                 </div>
