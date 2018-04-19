@@ -89,7 +89,6 @@ class ResumeScorer extends Component {
 
     handleSubmit(e) {
         e.preventDefault();
-        console.log("YUH")
         const vals = this.props.formData.resumeUpload.values;
 
         // Form validation before submit
@@ -120,8 +119,7 @@ class ResumeScorer extends Component {
         try {
             resumeFile = this.refs.resumeFile.files[0];
         } catch (getFileError) {
-            console.log("getFileError");
-            console.log("Need a resume");
+            console.log("Need a resume.");
             return;
         }
 
@@ -131,13 +129,11 @@ class ResumeScorer extends Component {
         resumeData.append("desiredCareers", desiredCareers);
         resumeData.append("email", email);
         resumeData.append("resumeFile", resumeFile);
-        console.log("resumeData is: ", resumeData)
 
         this.setState({uploadingResume: true});
         //axios.post("/api/resumeScorer/uploadResume", {name, skills, desiredCareers, email, resumeFile})
         axios.post("/api/resumeScorer/uploadResume", resumeData)
         .then(result => {
-            console.log("result: ", result);
             this.setState({uploadingResume: false, doneUploading: true});
         });
     }
@@ -191,7 +187,7 @@ class ResumeScorer extends Component {
                                         label="Email"
                                     /><br/>
                                     <input
-                                        name="resume"
+                                        name="resumeFile"
                                         type="file"
                                         ref="resumeFile"
                                         accept="image/jpg,image/png,application/pdf,application/msword"
