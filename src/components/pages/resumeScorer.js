@@ -212,7 +212,7 @@ class ResumeScorer extends Component {
                                     <Field
                                         name="skills"
                                         component={renderTextField}
-                                        label="Skills"
+                                        label="Top 3 Skills"
                                     /><br/>
                                     <Field
                                         name="fullName"
