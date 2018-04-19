@@ -9,13 +9,19 @@ class StyledContent extends Component {
         let contentHtml = [];
         contentArray.forEach(function(part) {
             // default classNames; if className provided, give the part that className instead
-            let defaultClassNames = "inlineBlock font20px font14pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
+            let defaultClassNames = "inlineBlock marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
+            let fontSizes = "font20px font14pxUnder600";
+            // code looks smaller
             if (part.partType === "code") {
-                defaultClassNames = "inlineBlock font16px font12pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
+                fontSizes = "font16px font12pxUnder600";
             }
-            let className = part.className ? part.className : defaultClassNames;
+            let className = part.className ? part.className : defaultClassNames + " " + fontSizes;
             // if className isn't default but we want to include default classes, add them
             if (part.className && part.includeDefaultClasses) {
+                className = className + " " + defaultClassNames + " " + fontSizes;
+            }
+            // if should include default classes but want custom font sizes
+            if (part.className && part.includeDefaultClassesNotFontSizes) {
                 className = className + " " + defaultClassNames;
             }
             const content = part.content;
