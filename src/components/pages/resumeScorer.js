@@ -33,7 +33,6 @@ const styles = {
         // margin: "auto"
     },
     horizListQuotes: {
-        position: "relative",
         marginTop: "40px",
         marginBottom: "25px"
     },
@@ -352,8 +351,8 @@ class ResumeScorer extends Component {
                                         />
                                     </Paper>
                                         <div className="center">
-                                            <b className="font20px font16pxUnder500">Mark Saari</b>
-                                            <div style={{color: '#7d97ad'}} className="font16px font12pxUnder500">
+                                            <b className="font20px font18pxUnder500">Mark Saari</b>
+                                            <div style={{color: '#7d97ad'}} className="font16px font14pxUnder500">
                                                 UW-MADISON
                                             </div>
                                             <br />
@@ -364,7 +363,7 @@ class ResumeScorer extends Component {
                                         </div>
                                 </Paper>
                             </li>
-                            <li className="horizListFull2">
+                            <li className="horizListFull2 horizListMargin1">
                                 <Paper className="paperBorder" style={{minHeight: "352px", width: "270px", margin:'auto'}} zDepth={3}>
                                     <Paper style={styles.imgContainer} zDepth={3}>
                                         <img
@@ -380,13 +379,13 @@ class ResumeScorer extends Component {
                                             </div>
                                             <br />
                                             <div className="font14px font12pxUnder500" style={{width: '200px', margin:'auto'}}>
-                                                {'"'}I think a resume grader would be a good asset to have to evaluate my resume prior to applying for a job because I could get feedback.
-                                                That would help me make my resume better and be a “stand out” among others who didn’t use this great tool.{'"'}
+                                                {'"'}The resume analysis is a great asset to evaluate my resume before applying for a job.
+                                                This helps make my resume a “stand out” among others who didn’t use the analysis.{'"'}
                                             </div>
                                         </div>
                                 </Paper>
                             </li>
-                            <li className="horizListFull2">
+                            <li className="horizListFull2 horizListMargin2">
                                 <Paper className="paperBorder" style={{minHeight: "352px", width: "270px", margin:'auto'}} zDepth={3}>
                                     <Paper style={styles.imgContainer} zDepth={3}>
                                         <img
@@ -396,8 +395,8 @@ class ResumeScorer extends Component {
                                         />
                                     </Paper>
                                     <div className="center">
-                                        <b className="font20px font16pxUnder500">Cameron Rowe</b>
-                                        <div style={{color: '#7d97ad'}} className="font16px font12pxUnder500">
+                                        <b className="font20px font18pxUnder500">Cameron Rowe</b>
+                                        <div style={{color: '#7d97ad'}} className="font16px font14pxUnder500">
                                             UW-MADISON
                                         </div>
                                         <br />
