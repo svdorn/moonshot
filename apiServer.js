@@ -1050,7 +1050,7 @@ app.post("/alertLinkClicked", function(req, res) {
 
 
 // SEND EMAIL FOR SOMEBODY COMPLETING PATHWAY
-app.post('/user/completePathway', function (req, res) {
+app.post('/user/completePathway', async function(req, res) {
     const successMessage = "Pathway marked complete, our team will be in contact with you shortly!";
     const errorMessage = "Error marking pathway complete, try again or contact us.";
 
@@ -1060,6 +1060,31 @@ app.post('/user/completePathway', function (req, res) {
     const email = sanitize(req.body.email);
     const phoneNumber = sanitize(req.body.phoneNumber);
     let referralCode = sanitize(req.body.referralCode);
+
+    // get the user from the db
+    try {
+        let user = await Users.findById(userId);
+    }
+    // if there's an error getting the user
+    catch (findUserError) {
+        console.log("Error finding user when user tried to complete a pathway: ", findUserError);
+        return res.status(500).send("Server error, try again later.");
+    }
+
+    // if we can't find the user
+    if (user == null) {
+        console.log("Could not find the user that was trying to complete a pathway.");
+        return res.status(400).send("You don't have the right credentials to complete the pathway.");
+    }
+
+    // if the user doesn't have the right verification token
+    if (user.verificationToken !== verificationToken) {
+        console.log("User did not have the right verification token when trying to complete a pathway.");
+        return res.status(400).send("You don't have the right credentials to complete the pathway.");
+    }
+
+    // TODO check if the user completed all the questions in the pathway
+
 
     // remove punctuation and spaces from referral code
     if (referralCode) {
@@ -1244,7 +1269,7 @@ app.post('/user/completePathway', function (req, res) {
         });
     }
 
-    // this gets executed before the code above, it excutes all that when it's ready
+    // this gets executed before the code above, it executes all that when it's ready
     if (referralCode) {
         referralInfo = "<p>Referral Code: " + referralCode + "</p>";
 
