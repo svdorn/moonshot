@@ -62,7 +62,7 @@ class ResumeScorer extends Component {
         return (
             <div className="jsxWrapper noOverflowX">
                 <MetaTags>
-                    <title>Resum&eacute; Scorer | Moonshot</title>
+                    <title>Resume Scorer | Moonshot</title>
                     <meta name="description"
                           content="Get actionable data and skills reports by just uploading your Resume."/>
                 </MetaTags>
@@ -70,7 +70,7 @@ class ResumeScorer extends Component {
                     <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
                     <div className="infoBox whiteText font40px font24pxUnder500"
                          style={{zIndex: "20", marginTop: '-10px'}}>
-                        How does your resum&eacute; score?
+                        How does your resume score?
                         <div className="font24px font18pxUnder500">
                             Free comparative analysis, skills breakdown and <div className="above600only br"><br/></div>data-driven suggestions.
                         </div>
