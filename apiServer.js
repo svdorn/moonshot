@@ -1056,234 +1056,283 @@ app.post('/user/completePathway', async function(req, res) {
 
     const userName = sanitize(req.body.userName);
     const userId = sanitize(req.body._id);
+    const verificationToken = sanitize(req.body.verificationToken);
     const pathwayName = sanitize(req.body.pathwayName);
+    const pathwayId = sanitize(req.body.pathwayId);
     const email = sanitize(req.body.email);
     const phoneNumber = sanitize(req.body.phoneNumber);
+    const skills = sanitize(req.body.skills);
     let referralCode = sanitize(req.body.referralCode);
 
-    // get the user from the db
-    try {
-        let user = await Users.findById(userId);
+    // the user that will be found in the db
+    let user = undefined;
+    // the pathway that will be found in the db
+    let pathway = undefined;
+
+    // function executed after finding the user and the pathway
+    // checks if the user actually completed the pathway, then moves on to
+    // completing the pathway
+    let checkIfAllQuestionsCompleted = () => {
+        console.log("Got here. User is: ", user);
+        console.log("Pathway is: ", pathway);
+        console.log("pathway.steps[0].subSteps: ", pathway.steps[0].subSteps);
     }
+
+
+    console.log("userId is: ");
+    console.log(userId);
+    // get the user from the db
+    Users.findById(userId)
+    .then(foundUser => {
+        // if we can't find the user
+        if (foundUser == null) {
+            console.log("Could not find the user that was trying to complete a pathway.");
+            return res.status(400).send("You don't have the right credentials to complete the pathway.");
+        }
+
+        // if the user doesn't have the right verification token
+        if (foundUser.verificationToken !== verificationToken) {
+            console.log("User did not have the right verification token when trying to complete a pathway.");
+            return res.status(400).send("You don't have the right credentials to complete the pathway.");
+        }
+
+        // set the api-wide user object
+        user = foundUser;
+
+        // if the pathway has already been found, check if all the questions
+        // have been completed, then mark pathway complete
+        if (pathway) {
+            checkIfAllQuestionsCompleted();
+        }
+    })
     // if there's an error getting the user
-    catch (findUserError) {
+    .catch(findUserError => {
         console.log("Error finding user when user tried to complete a pathway: ", findUserError);
         return res.status(500).send("Server error, try again later.");
-    }
+    });
 
-    // if we can't find the user
-    if (user == null) {
-        console.log("Could not find the user that was trying to complete a pathway.");
-        return res.status(400).send("You don't have the right credentials to complete the pathway.");
-    }
-
-    // if the user doesn't have the right verification token
-    if (user.verificationToken !== verificationToken) {
-        console.log("User did not have the right verification token when trying to complete a pathway.");
-        return res.status(400).send("You don't have the right credentials to complete the pathway.");
-    }
-
-    // TODO check if the user completed all the questions in the pathway
+    // check if the user completed all the questions in the pathway
 
 
-    // remove punctuation and spaces from referral code
-    if (referralCode) {
-        referralCode = referralCode.replace(/&amp;|&quot;|&apos;/g,"").replace(/[.,\/#!$%\^&\*;:{}'"=\-_`~()]/g,"").replace(/\s/g,"").toLowerCase();
-    }
+    // get the pathway that the user is completing; only need the steps because
+    // those are the only things we verify
+    Pathways.findById(pathwayId)
+    .select("steps.subSteps.order steps.subSteps.superStepOrder steps.subSteps.contentID steps.order steps.name")
+    .then(foundPathway => {
+        // no pathway found
+        if (!foundPathway) {
+            console.log("Couldn't find pathway that user tried to complete. Pathway id searched for: ", pathwayId);
+            return res.status(404).send("Couldn't find that pathway, sorry!");
+        }
 
-    let referralInfo = "";
+        // set the api-wide pathway object
+        pathway = foundPathway;
+        // if the user has already been found, check if all the questions
+        // have been completed, then mark pathway complete
+        if (user) {
+            checkIfAllQuestionsCompleted();
+        }
+    })
+    // error finding the pathway
+    .catch(findPathwayError => {
+        console.log("Error finding the pathway that the user says they completed: ", findPathwaysErr);
+        return res.status(500).send("Server error, try again later.");
+    })
 
-    let finishPathway = function() {
-        let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-        let subject = 'ACTION REQUIRED: Somebody completed pathway';
-        let content = "<div>"
-            + "<h3>A User has just completed this pathway:</h3>"
-            + "<p>User: "
-            + userName
-            + "</p>"
-            + "<p>User id: "
-            + userId
-            + "</p>"
-            + "<p>Pathway: "
-            + pathwayName
-            + "</p>"
-            + "<p>Contact them with this email: "
-            + email
-            + "</p>"
-            + "<p>or this phone number: "
-            + phoneNumber
-            + "</p>"
-            + referralInfo
-            + "</div>";
-
-
-        // mark pathway complete and change emailTo
-        const _id = sanitize(req.body._id);
-        const verificationToken = sanitize(req.body.verificationToken);
-        const pathwayId = sanitize(req.body.pathwayId);
-        const skills = sanitize(req.body.skills);
-        const query = {_id, verificationToken}
-
-        Users.findOne(query, function (err, user) {
-            if (err) {
-                console.log("error marking pathway complete: ", err);
-            } else if (user && user != null) {
-                user.emailToContact = sanitize(req.body.email);
-                user.phoneNumber = sanitize(req.body.phoneNumber);
-                // find the user's pathway object corresponding to the pathway that was
-                // marked complete
-                const pathwayIndex = user.pathways.findIndex(function(path) {
-                    return path.pathwayId.toString() == pathwayId.toString();
-                });
-                // if the pathway was found in their current pathways, remove it
-                // from current pathways and add it to completed pathways
-                if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
-                    let completedPathway = user.pathways[pathwayIndex];
-                    const newPathwayObject = {
-                        pathwayId: completedPathway.pathwayId,
-                        dateAdded: completedPathway.dateAdded,
-                        dateCompleted: new Date()
-                    }
-
-                    // Put pathway into completed pathways and remove it from current pathways
-                    user.completedPathways.push(newPathwayObject);
-                    user.pathways.splice(pathwayIndex, 1);
-                }
-
-                // add the user's new skills that they gained from this
-                if (Array.isArray(skills)) {
-                    skills.forEach(function(skill) {
-                        // only add the skill if the user does not already have it
-                        const notFound = -1;
-                        if (user.skills.findIndex(function(userSkill) {
-                            return userSkill === skill;
-                        }) === notFound) {
-                            user.skills.push(skill);
-                        }
-                    });
-                }
-
-                // save the user's new info in the db
-                user.save(function(err, updatedUser) {
-                    // safe-guard against us getting a null updatedUser
-                    let userToReturn = updatedUser;
-                    if (err || updatedUser == null || updatedUser == undefined) {
-                        console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
-                        userToReturn = user;
-                        content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
-                    }
-
-                    // get the associated businesses (the ones that have
-                    // this pathway's id in their associated pathway ids array)
-                    // TODO: when refactoring for db speed/minimal data sent,
-                    // this would be a good query to work with. try to return
-                    // only the right candidate
-                    Businesses.find({pathwayIds: pathwayId})
-                        .select("pathwayIds candidates")
-                        .exec(function (findBizErr, businesses) {
-                            if (findBizErr) {
-                                sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "completing");
-                            } else {
-                                // iterate through each business that has this pathway
-                                businesses.forEach(function(business) {
-                                    let candidates = business.candidates;
-
-                                    // find the candidate index within the business' candidate array
-                                    const userIdString = user._id.toString();
-                                    const userIndex = candidates.findIndex(function(candidate) {
-                                        return candidate._id.toString() == userIdString;
-                                    });
-
-                                    // if candidate doesn't exist, add them along with the pathway
-                                    if (userIndex == -1) {
-                                        let candidateToAdd = {
-                                            _id: user._id,
-                                            name: user.name,
-                                            // give the business the email that the candidate wants to be contacted at, not their login email
-                                            email: userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email,
-                                            // will only have this pathway if the candidate didn't exist before
-                                            pathways: [{
-                                                _id: pathwayId,
-                                                name: pathwayName,
-                                                hiringStage: "Not Contacted",
-                                                completionStatus: "Complete"
-                                            }]
-                                        }
-                                        business.candidates.push(candidateToAdd);
-                                    }
-
-                                    // candidate did previously exist
-                                    else {
-                                        let candidate = candidates[userIndex];
-
-                                        // change their email to contact just in case they changed it
-                                        business.candidates[userIndex].email = userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email
-
-                                        // check if they have the current pathway (will be -1 if they don't)
-                                        const pathwayIndex = candidate.pathways.findIndex(function(path) {
-                                            return path._id == pathwayId;
-                                        });
-
-                                        // if the have the current pathway, mark them as having completed it
-                                        if (pathwayIndex > -1) {
-                                            business.candidates[userIndex].pathways[pathwayIndex].completionStatus = "Complete";
-                                        }
-
-                                        // if they don't have the current pathway, add the pathway and mark it complete
-                                        else {
-                                            business.candidates[userIndex].pathways.push({
-                                                _id: pathwayId,
-                                                name: pathwayName,
-                                                hiringStage: "Not Contacted",
-                                                completionStatus: "Complete"
-                                            })
-                                        }
-                                    }
-                                    // save the businesses in db
-                                    business.save(function(updateBizErr, updatedBiz) {
-                                        if (updateBizErr || updatedBiz == null) {
-                                            sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "completing");
-                                        }
-                                    });
-                                });
-                            }
-                        });
-
-                    // only send email if in production
-                    if (process.env.NODE_ENV) {
-                        // send an email to us saying that the user completed a pathway
-                        const sendFrom = "Moonshot";
-                        sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                            if (success) {
-                                res.json({message: successMessage, user: userToReturn});
-                            } else {
-                                res.status(500).send({message: errorMessage, user: userToReturn});
-                            }
-                        });
-                    } else {
-                        // if not in production, just send success message to user
-                        res.json({message: successMessage, user: userToReturn});
-                    }
-                });
-            }
-        });
-    }
-
-    // this gets executed before the code above, it executes all that when it's ready
-    if (referralCode) {
-        referralInfo = "<p>Referral Code: " + referralCode + "</p>";
-
-        Referrals.findOne({referralCode}, function(error, referrer) {
-            if (error || referrer == null || (referrer.email == undefined && referrer.name == undefined)) {
-                referralInfo = referralInfo + "<p>However, no user is associated with that referral code.</p>";
-            } else {
-                referralInfo = referralInfo + "<p>Referrer's email: " + referrer.email + "</p><p>Referrer's Name: " + referrer.name + ". Make sure this isn't the same as the user who completed the pathway.</p>";
-            }
-            finishPathway();
-        });
-    } else {
-        finishPathway();
-    }
+    // // remove punctuation and spaces from referral code
+    // if (referralCode) {
+    //     referralCode = referralCode.replace(/&amp;|&quot;|&apos;/g,"").replace(/[.,\/#!$%\^&\*;:{}'"=\-_`~()]/g,"").replace(/\s/g,"").toLowerCase();
+    // }
+    //
+    // let referralInfo = "";
+    //
+    // let finishPathway = function() {
+    //     let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+    //     let subject = 'ACTION REQUIRED: Somebody completed pathway';
+    //     let content = "<div>"
+    //         + "<h3>A User has just completed this pathway:</h3>"
+    //         + "<p>User: "
+    //         + userName
+    //         + "</p>"
+    //         + "<p>User id: "
+    //         + userId
+    //         + "</p>"
+    //         + "<p>Pathway: "
+    //         + pathwayName
+    //         + "</p>"
+    //         + "<p>Contact them with this email: "
+    //         + email
+    //         + "</p>"
+    //         + "<p>or this phone number: "
+    //         + phoneNumber
+    //         + "</p>"
+    //         + referralInfo
+    //         + "</div>";
+    //
+    //
+    //     // mark pathway complete and change emailTo
+    //     const query = {_id: userId, verificationToken}
+    //
+    //     Users.findOne(query, function (err, user) {
+    //         if (err) {
+    //             console.log("error marking pathway complete: ", err);
+    //         } else if (user && user != null) {
+    //             user.emailToContact = sanitize(req.body.email);
+    //             user.phoneNumber = sanitize(req.body.phoneNumber);
+    //             // find the user's pathway object corresponding to the pathway that was
+    //             // marked complete
+    //             const pathwayIndex = user.pathways.findIndex(function(path) {
+    //                 return path.pathwayId.toString() == pathwayId.toString();
+    //             });
+    //             // if the pathway was found in their current pathways, remove it
+    //             // from current pathways and add it to completed pathways
+    //             if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
+    //                 let completedPathway = user.pathways[pathwayIndex];
+    //                 const newPathwayObject = {
+    //                     pathwayId: completedPathway.pathwayId,
+    //                     dateAdded: completedPathway.dateAdded,
+    //                     dateCompleted: new Date()
+    //                 }
+    //
+    //                 // Put pathway into completed pathways and remove it from current pathways
+    //                 user.completedPathways.push(newPathwayObject);
+    //                 user.pathways.splice(pathwayIndex, 1);
+    //             }
+    //
+    //             // add the user's new skills that they gained from this
+    //             if (Array.isArray(skills)) {
+    //                 skills.forEach(function(skill) {
+    //                     // only add the skill if the user does not already have it
+    //                     const notFound = -1;
+    //                     if (user.skills.findIndex(function(userSkill) {
+    //                         return userSkill === skill;
+    //                     }) === notFound) {
+    //                         user.skills.push(skill);
+    //                     }
+    //                 });
+    //             }
+    //
+    //             // save the user's new info in the db
+    //             user.save(function(err, updatedUser) {
+    //                 // safe-guard against us getting a null updatedUser
+    //                 let userToReturn = updatedUser;
+    //                 if (err || updatedUser == null || updatedUser == undefined) {
+    //                     console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
+    //                     userToReturn = user;
+    //                     content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
+    //                 }
+    //
+    //                 // get the associated businesses (the ones that have
+    //                 // this pathway's id in their associated pathway ids array)
+    //                 // TODO: when refactoring for db speed/minimal data sent,
+    //                 // this would be a good query to work with. try to return
+    //                 // only the right candidate
+    //                 Businesses.find({pathwayIds: pathwayId})
+    //                     .select("pathwayIds candidates")
+    //                     .exec(function (findBizErr, businesses) {
+    //                         if (findBizErr) {
+    //                             sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "completing");
+    //                         } else {
+    //                             // iterate through each business that has this pathway
+    //                             businesses.forEach(function(business) {
+    //                                 let candidates = business.candidates;
+    //
+    //                                 // find the candidate index within the business' candidate array
+    //                                 const userIdString = user._id.toString();
+    //                                 const userIndex = candidates.findIndex(function(candidate) {
+    //                                     return candidate._id.toString() == userIdString;
+    //                                 });
+    //
+    //                                 // if candidate doesn't exist, add them along with the pathway
+    //                                 if (userIndex == -1) {
+    //                                     let candidateToAdd = {
+    //                                         _id: user._id,
+    //                                         name: user.name,
+    //                                         // give the business the email that the candidate wants to be contacted at, not their login email
+    //                                         email: userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email,
+    //                                         // will only have this pathway if the candidate didn't exist before
+    //                                         pathways: [{
+    //                                             _id: pathwayId,
+    //                                             name: pathwayName,
+    //                                             hiringStage: "Not Contacted",
+    //                                             completionStatus: "Complete"
+    //                                         }]
+    //                                     }
+    //                                     business.candidates.push(candidateToAdd);
+    //                                 }
+    //
+    //                                 // candidate did previously exist
+    //                                 else {
+    //                                     let candidate = candidates[userIndex];
+    //
+    //                                     // change their email to contact just in case they changed it
+    //                                     business.candidates[userIndex].email = userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email
+    //
+    //                                     // check if they have the current pathway (will be -1 if they don't)
+    //                                     const pathwayIndex = candidate.pathways.findIndex(function(path) {
+    //                                         return path._id == pathwayId;
+    //                                     });
+    //
+    //                                     // if the have the current pathway, mark them as having completed it
+    //                                     if (pathwayIndex > -1) {
+    //                                         business.candidates[userIndex].pathways[pathwayIndex].completionStatus = "Complete";
+    //                                     }
+    //
+    //                                     // if they don't have the current pathway, add the pathway and mark it complete
+    //                                     else {
+    //                                         business.candidates[userIndex].pathways.push({
+    //                                             _id: pathwayId,
+    //                                             name: pathwayName,
+    //                                             hiringStage: "Not Contacted",
+    //                                             completionStatus: "Complete"
+    //                                         })
+    //                                     }
+    //                                 }
+    //                                 // save the businesses in db
+    //                                 business.save(function(updateBizErr, updatedBiz) {
+    //                                     if (updateBizErr || updatedBiz == null) {
+    //                                         sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "completing");
+    //                                     }
+    //                                 });
+    //                             });
+    //                         }
+    //                     });
+    //
+    //                 // only send email if in production
+    //                 if (process.env.NODE_ENV) {
+    //                     // send an email to us saying that the user completed a pathway
+    //                     const sendFrom = "Moonshot";
+    //                     sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+    //                         if (success) {
+    //                             res.json({message: successMessage, user: userToReturn});
+    //                         } else {
+    //                             res.status(500).send({message: errorMessage, user: userToReturn});
+    //                         }
+    //                     });
+    //                 } else {
+    //                     // if not in production, just send success message to user
+    //                     res.json({message: successMessage, user: userToReturn});
+    //                 }
+    //             });
+    //         }
+    //     });
+    // }
+    //
+    // // this gets executed before the code above, it executes all that when it's ready
+    // if (referralCode) {
+    //     referralInfo = "<p>Referral Code: " + referralCode + "</p>";
+    //
+    //     Referrals.findOne({referralCode}, function(error, referrer) {
+    //         if (error || referrer == null || (referrer.email == undefined && referrer.name == undefined)) {
+    //             referralInfo = referralInfo + "<p>However, no user is associated with that referral code.</p>";
+    //         } else {
+    //             referralInfo = referralInfo + "<p>Referrer's email: " + referrer.email + "</p><p>Referrer's Name: " + referrer.name + ". Make sure this isn't the same as the user who completed the pathway.</p>";
+    //         }
+    //         finishPathway();
+    //     });
+    // } else {
+    //     finishPathway();
+    // }
 });
 
 
@@ -1711,7 +1760,8 @@ function getUserByQuery(query, callback) {
     let doCallbackOrWaitForOtherDBCall = function(err, foundUser) {
         // if a user was found, return it
         if (foundUser && foundUser != null) {
-            callback(undefined, removePassword(foundUser));
+            const NO_ERRORS = undefined;
+            callback(NO_ERRORS, removePassword(foundUser));
             return;
         }
         // no user found in one of the dbs
@@ -1719,7 +1769,8 @@ function getUserByQuery(query, callback) {
             // if this is the second db we've checked, no user was found in
             // either db, so return undefined and an error if one exists
             if (finishedOneCall) {
-                callback(err, undefined);
+                const NO_USER_FOUND = undefined;
+                callback(err, NO_USER_FOUND);
             }
             // if this is the first db we've checkd, mark that a db was checked
             else {
@@ -2519,6 +2570,149 @@ function removeDuplicates(a) {
 }
 
 
+// VERIFY THAT THE GIVEN USER IS AN ADMIN FROM USER ID AND VERIFICATION TOKEN
+function verifyAdmin(userId, verificationToken) {
+    // async call, lets us use await
+    return new Promise((resolve, reject) => {
+        Users.findById(userId, function(findUserErr, foundUser) {
+            // db error finding the user
+            if (findUserErr) {
+                console.log("Error finding admin user by id: ", findUserErr);
+                resolve(false);
+            }
+            // no user found with that id, so can't be an admin user
+            else if (!foundUser) {
+                resolve(false);
+            }
+            // user found
+            else {
+                // wrong verification token, user does not have valid credentials
+                if (foundUser.verificationToken != verificationToken) {
+                    console.log("Someone tried to get verify an admin user with the wrong verification token. User is: ", foundUser);
+                    resolve(false);
+                }
+                // return whether the user is an admin
+                else {
+                    resolve(foundUser.admin);
+                }
+            }
+        });
+    });
+}
+
+
+// VERIFY THAT THE GIVEN USER IS LEGIT AND PART OF THE GIVEN BUSINESS
+// RETURNS THE BUSINESS THAT THE EMPLOYER WORKS FOR ON SUCCESS, UNDEFINED ON FAIL
+async function verifyEmployerAndReturnBusiness(userId, verificationToken, businessId) {
+    return new Promise(async (resolve, reject) => {
+        try {
+            // function to print the info that was given; for when errors occur
+            const printInfo = () => {
+                console.log("Given userId: ", userId);
+                console.log("Given verificationToken: ", verificationToken);
+                console.log("Given businessId: ", businessId);
+            }
+
+            // if the arguments provided are invalid, cannot validate user
+            if (typeof userId !== "string" || typeof verificationToken !== "string" || typeof businessId !== "string") {
+                console.log("Employer could not be verified.");
+                printInfo();
+                resolve(undefined);
+                return;
+            }
+
+            // set to true once we've verified the user is real and has the right
+            // verification token
+            let verifiedUser = false;
+            // set to true once we've verified the user is employed by the
+            // business they say they are
+            let verifiedPosition = false;
+            // the business found in the db, returned on success
+            let business = undefined;
+
+            // find the employer by the given id
+            Employers.findById(userId)
+            .then(foundEmployer => {
+                // if employer couldn't be found from the given id
+                if (!foundEmployer) {
+                    console.log("Couldn't find employer in the database when trying to verify them.");
+                    printInfo();
+                    resolve(undefined);
+                    return;
+                }
+                // make sure the employer has the right verification token
+                if (foundEmployer.verificationToken !== verificationToken) {
+                    console.log("Employer gave wrong verification token when trying to be verified.");
+                    printInfo();
+                    resolve(undefined);
+                    return;
+                }
+                // employer is real, return successfully if position in company verified
+                verifiedUser = true;
+                if (verifiedPosition) {
+                    console.log("returning true");
+                    resolve(business);
+                    return;
+                }
+            })
+            .catch(findEmployerErr => {
+                console.log("Error finding employer in db when trying to verify employer: ", findEmployerErr);
+                printInfo();
+                resolve(undefined);
+                return;
+            })
+
+
+            // make sure the employer is in the business' employer id array
+            Businesses.findById(businessId)
+            .then(foundBusiness => {
+                if (!foundBusiness) {
+                    console.log("Did not find business when trying to verify employer.");
+                    printInfo();
+                    resolve(undefined);
+                    return;
+                }
+
+                // try to find employer in business' employer id array
+                const employerWorksForBusiness = foundBusiness.employerIds.some(employerId => {
+                    // userId is that of the user we are trying to verify
+                    return employerId.toString() === userId;
+                });
+
+                // employer did not exist within the business' employers array
+                if (!employerWorksForBusiness) {
+                    console.log("Employer did not exist within the business' employers array (they don't work for that company).");
+                    printInfo();
+                    resolve(undefined);
+                    return;
+                }
+
+                // employer does work for this company, return successfully if they are verified
+                verifiedPosition = true;
+                business = foundBusiness
+                if (verifiedUser) {
+                    console.log("returning true");
+                    resolve(business);
+                    return;
+                }
+            })
+            .catch(findBusinessErr => {
+                console.log("Error finding business in db when trying to verify employer: ", findBusinessErr);
+                printInfo();
+                resolve(undefined);
+                return;
+            });
+        }
+        // some error, probably in the database, so employer can't be verified
+        catch (error) {
+            console.log("Error verifying employer: ", error);
+            resolve(undefined);
+            return;
+        }
+    });
+}
+
+
 app.get("/infoForAdmin", function(req, res) {
     const query = sanitize(req.query);
     const _id = query.userId;
@@ -3212,7 +3406,7 @@ app.get("/business/pathways", function(req, res) {
                         res.status(500).send("Server error, couldn't get pathways to search by.");
                     } else {
                         const pathwaysToReturn = pathways.map(function(path) {
-                            return path.name;
+                            return {name: path.name, _id: path._id};
                         })
                         res.json(pathwaysToReturn);
                     }
@@ -3386,25 +3580,202 @@ app.post("/resumeScorer/uploadResume", function(req, res) {
 });
 
 
-app.post("/business", function(req, res) {
-    console.log("req.body is: ", req.body);
+// post a new business to the db
+app.post("/business", async function(req, res) {
+    const body = req.body;
+    const userId = sanitize(body.userId);
+    const verificationToken = sanitize(body.verificationToken);
+    const businessName = sanitize(body.businessName);
+    const initialUserName = sanitize(body.initialUserName);
+    const initialUserPassword = sanitize(body.initialUserPassword);
+    const initialUserEmail = sanitize(body.initialUserEmail);
 
-    // validate admin is admin user (have to do this already in other steps,
-    // should probably just make that a function)
+    // validate admin is admin user
+    const isAdmin = await verifyAdmin(userId, verificationToken);
+    if (!isAdmin) {
+        res.status(403).send("You do not have permission to add businesses.");
+        return;
+    }
 
-    // check if another business with that name already exists
+    try {
+        // check if another business with that name already exists
+        const businessNameQuery = {name: businessName};
+        const foundBiz = await Businesses.findOne(businessNameQuery);
 
-    // if so, return error message
+        // business already exists with that name
+        if (foundBiz) {
+            res.status(400).send("A business already exists with that name. Try a different name.");
+            return;
+        }
 
-    // if not, add the business
+        // no business exists with that name, can go ahead and make new business
+        const newBusiness = {
+            name: businessName
+        };
 
-    // check if a user (business- or non-business-) with the email provided
-    // already exists
+        // make the business in the db
+        let createdBusiness = await Businesses.create(newBusiness);
 
-    // if so, return successfully but tell the user to add a different initial
-    // user on the edit business page
+        // check if a user (business- or non-business-) with the email provided
+        // already exists
+        const userEmailQuery = {email: initialUserEmail};
+        getUserByQuery(userEmailQuery, function(findUserErr, foundUser) {
+            // error looking for user by email
+            if (findUserErr) {
+                console.log("Error looking for a user by email: ", findUserErr);
+                res.json("Successful business creation, but couldn't create initial user.");
+                return;
+            }
+            // user found with that email so can't create it
+            else if (foundUser) {
+                res.json("Successful business creation, but user with that email already exists.");
+                return;
+            }
 
-    // otherwise, return successfully
+            // can create the initial user
+
+            // function that will create employer and save them to the business
+            // once the business has been created
+            // executes right after creation once hash as been made
+            const createEmployerWithPassword = async (createHashErr, hash) => {
+                const newEmployer = {
+                    name: initialUserName,
+                    email: initialUserEmail,
+                    password: hash,
+                    userType: "employer",
+                    verificationToken: crypto.randomBytes(64).toString('hex'),
+                    verified: true,
+                    company: {
+                        name: createdBusiness.name,
+                        companyId: createdBusiness._id
+                    }
+                };
+                // create the employer
+                try {
+                    let createdEmployer = await Employers.create(newEmployer);
+
+                    // ensure the business has a list of business user ids
+                    if (!Array.isArray(createdBusiness.businessUserIds)) {
+                        createdBusiness.employerIds = [];
+                    }
+                    // add the employer to the business' list of recruiters
+                    createdBusiness.employerIds.push(createdEmployer._id);
+
+                    try {
+                        // save the business with the new user in it
+                        await createdBusiness.save();
+                        // everything succeeded
+                        res.json("Success!");
+                        return;
+                    }
+                    // error saving employer to business' array of business user ids
+                    catch (saveBizUserIdsErr) {
+                        console.log("error saving employer to business' array of business user ids: ", saveBizUserIdsErr);
+                        res.json("Successful business creation but error associating new business user with business.");
+                        return;
+                    }
+                }
+                // error creating the new user
+                catch (createEmployerErr) {
+                    console.log("Error creating new employer: ", createEmployerErr);
+                    res.json("Successful business creation, but could not create initial user.");
+                    return;
+                }
+            }
+
+            // hash password and create the employer
+            const SALT_ROUNDS = 10;
+            bcrypt.hash(initialUserPassword, SALT_ROUNDS, createEmployerWithPassword);
+        });
+    }
+    // error at some point in business creation
+    catch (dbError) {
+        console.log("Database error during creation: ", dbError);
+        res.status(500).send("Server error, try again later.");
+        return;
+    }
+});
+
+// UPDATE HIRING STAGE OF A CANDIDATE (NOT YET CONTACTED, CONTACTED)
+app.post("/business/updateHiringStage", async function(req, res) {
+    const body = req.body;
+    const userId = sanitize(body.userId);
+    const verificationToken = sanitize(body.verificationToken);
+    const companyId = sanitize(body.companyId);
+    const candidateId = sanitize(body.candidateId);
+    const hiringStage = sanitize(body.hiringStage);
+    const isDismissed = sanitize(body.isDismissed);
+    const pathwayId = sanitize(body.pathwayId);
+
+    console.log("updating hiring stage");
+
+    // if one of the arguments doesn't exist, return with error code
+    if (!userId || !verificationToken || !companyId || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !pathwayId) {
+        console.log("Not all arguments provided to /business/updateHiringStage");
+        console.log("userId: ", userId);
+        console.log("verificationToken: ", verificationToken);
+        console.log("companyId: ", companyId);
+        console.log("candidateId: ", candidateId);
+        console.log("hiringStage: ", hiringStage);
+        console.log("isDismissed: ", isDismissed);
+        console.log("pathwayId: ", pathwayId);
+        res.status(400).send("Bad request.");
+        return;
+    }
+
+    // ensure the hiring stage provided is valid
+    const validHiringStages = ["Not Yet Contacted", "Contacted", "Interviewing", "Hired"];
+    if (!validHiringStages.includes(hiringStage)) {
+        console.log("Invalid hiring stage provided.");
+        return res.status(400).send("Invalid hiring stage provided.");
+    }
+
+    // verify the employer is actually a part of this organization
+    verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
+    .then(business => {
+        // if employer does not have valid credentials
+        if (!business) {
+            console.log("Employer tried to change candidate's hiring status but could not be verified.");
+            res.status(403).send("You do not have permission to change a candidate's hiring stage.");
+            return;
+        }
+
+        // the index of the candidate in the business' candidate array
+        const candidateIndex = business.candidates.findIndex(currCandidate => {
+            return currCandidate._id.toString() === candidateId;
+        });
+
+        let candidate = business.candidates[candidateIndex];
+        // get the index of the pathway in the user's pathways array
+        const pathwayIndex = candidate.pathways.findIndex(currPathway => {
+            return currPathway._id.toString() === pathwayId;
+        })
+
+        // change the candidate's hiring stage and dismissal status to match
+        // the arguments that were passed in
+        candidate.pathways[pathwayIndex].isDismissed = isDismissed;
+        candidate.pathways[pathwayIndex].hiringStage = hiringStage;
+
+        // update the candidate in the business object
+        business.candidates[candidateIndex] = candidate;
+
+        // save the business
+        business.save()
+        .then(updatedBusiness => {
+            return res.json("success");
+        })
+        .catch(updateBusinessErr => {
+            return res.status(500).send("failure!");
+        });
+    })
+    .catch(verifyEmployerErr => {
+        console.log("Error when trying to verify employer when they were trying to edit a candidate's hiring stage: ", verifyEmployerErr);
+        res.status(500).send("Server error, try again later.");
+        return;
+    })
+
+    // TODO make sure the timestamp of the last change is before the timestamp given
+    // if it isn't, don't change the user
 
 });
 

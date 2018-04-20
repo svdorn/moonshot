@@ -52,6 +52,10 @@ export function usersReducers(state = initialState, action) {
             break;
         case "FORGOT_PASSWORD_REQUESTED":
         case "POST_USER_REQUESTED":
+        case "FOR_BUSINESS_REQUESTED":
+        case "CONTACT_US_REQUESTED":
+        case "COMPLETE_PATHWAY_REQUESTED":
+        case "START_LOADING":
             return {
                 ...state,
                 loadingSomething: true
@@ -98,13 +102,6 @@ export function usersReducers(state = initialState, action) {
                 currentUser: action.currentUser
             };
             break;
-        case "FOR_BUSINESS_REQUESTED":
-        case "CONTACT_US_REQUESTED":
-        case "COMPLETE_PATHWAY_REQUESTED":
-            return {
-                ...state, loadingSomething: true
-            };
-            break;
         case "FOR_BUSINESS":
         case "COMPLETE_PATHWAY":
         case "COMPLETE_PATHWAY_REJECTED":
@@ -122,6 +119,8 @@ export function usersReducers(state = initialState, action) {
         case "FORGOT_PASSWORD_REJECTED":
         case "CHANGE_PASS_FORGOT_REJECTED":
         case "FORM_ERROR":
+        case "ERROR_FINISHED_LOADING":
+        case "SUCCESS_FINISHED_LOADING":
             return {
                 ...state, notification: action.notification, loadingSomething: false
             };

@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, addNotification} from "../../../actions/usersActions";
+import {closeNotification, postBusiness} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
@@ -69,7 +69,7 @@ class CreateBusinessAccount extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        this.state = {showLoading: false};
     }
 
 
@@ -112,22 +112,30 @@ class CreateBusinessAccount extends Component {
             return;
         }
 
+        // must be an admin to post a new businesses
+        const currentUser = this.props.currentUser;
+        if (!currentUser || !currentUser.admin) {
+            return;
+        }
+
+        const userId = currentUser._id;
+        const verificationToken = currentUser.verificationToken;
         const businessName = vals.businessName;
         const initialUserName = vals.initialUserName;
         const initialUserPassword = vals.initialUserPassword;
         const initialUserEmail = vals.initialUserEmail;
         let business = {
-            businessName, initialUserName, initialUserPassword, initialUserEmail
+            userId,
+            verificationToken,
+            businessName,
+            initialUserName,
+            initialUserPassword,
+            initialUserEmail
         };
 
-        axios.post("/api/business", business)
-        .then(function(res) {
-            console.log("res is: ", res);
-            // TODO: redirect to edit business page
-        })
-        .catch(function(err) {
-            console.log("error: ", err);
-        })
+        this.setState({showLoading: true});
+
+        this.props.postBusiness(business);
     }
 
 
@@ -192,11 +200,11 @@ class CreateBusinessAccount extends Component {
                                 type="submit"
                                 className="formSubmitButton font24px font16pxUnder600"
                             >
-                                Sign Up
+                                Create
                             </button>
                             <br/>
                         </form>
-                        {this.props.loadingCreateUser ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
+                        {this.props.loadingCreateBusiness ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
                     </div>
                 </div>
             </div>
@@ -208,14 +216,15 @@ class CreateBusinessAccount extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        addNotification
+        postBusiness
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         formData: state.form,
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        loadingCreateBusiness: state.users.loadingSomething
     };
 }
 

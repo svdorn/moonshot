@@ -9,7 +9,7 @@ import PathwayInfo from '../childComponents/pathwayContent/pathwayInfo';
 import {Tabs, Tab, Paper, Drawer, RaisedButton} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, updateCurrentSubStep, setHeaderBlue} from "../../actions/usersActions";
+import {closeNotification, updateCurrentSubStep} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayStepList from '../childComponents/pathwayContent/pathwayStepList';
 import NavigateStepButtons from '../childComponents/pathwayContent/navigateStepsButtons';
@@ -30,7 +30,6 @@ class PathwayContent extends Component {
 
 
     componentDidMount() {
-        // this.props.setHeaderBlue(true);
         const user = this.props.currentUser;
 
         if (user && user != "no user") {
@@ -201,8 +200,6 @@ class PathwayContent extends Component {
     goTo(route) {
         // closes any notification
         this.props.closeNotification();
-        // turns header back to normal
-        // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
@@ -273,8 +270,6 @@ class PathwayContent extends Component {
                 formattedDeadline = undefined;
             }
         }
-
-        console.log("blah")
 
         // the title is either a string set specifically for the title or the name of the pathway (or empty)
         let pathwayTitle = "";
@@ -440,8 +435,7 @@ class PathwayContent extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         updateCurrentSubStep,
-        closeNotification,
-        setHeaderBlue
+        closeNotification
     }, dispatch);
 }
 

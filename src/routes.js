@@ -41,6 +41,7 @@ import AdminPages from './components/pages/adminPages/adminPages'
 import ViewUser from './components/pages/adminPages/viewUser';
 import UserResponses from './components/pages/adminPages/userResponses';
 import CreateBusinessAccount from './components/pages/adminPages/createBusinessAccount';
+import EditBusiness from './components/pages/adminPages/editBusiness';
 
 import ReactGA from 'react-ga';
 ReactGA.initialize(credentials.googleAnalyticsTrackingNumber);
@@ -81,6 +82,7 @@ const routes = (
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>}>
             <IndexRoute component={AdminPages} />
             <Route path="createBusinessAccount" component={CreateBusinessAccount} />
+            <Route path="editBusiness" component={EditBusiness} />
             <Route path="userResponses" component={UserResponses} />
             <Route path="viewUser" component={ViewUser} />
         </Route>

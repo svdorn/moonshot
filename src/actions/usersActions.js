@@ -524,11 +524,29 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
     }
 }
 
-export function setHeaderBlue(shouldBeBlue) {
-    return function(dispatch) {
-        dispatch({type: "TURN_HEADER_BLUE", shouldBeBlue});
-    }
-}
+
+// // Set a candidate's hiring stage for a certain pathway at a certain company
+// export function updateHiringStage(employerUserId, employerVerificationToken, companyId, candidateId, hiringStage, isDismissed, pathwayId) {
+//     return function(dispatch) {
+//         const hiringStageInfo = {
+//             userId: employerUserId,
+//             verificationToken: employerVerificationToken,
+//             companyId: companyId,
+//             candidateId: candidateId,
+//             hiringStage: hiringStage,
+//             isDismissed: isDismissed,
+//             pathwayId: pathwayId
+//         }
+//         axios.post("/api/business/updateHiringStage", hiringStageInfo)
+//         .then(result => {
+//             console.log("result is: ", result);
+//         })
+//         .catch(err => {
+//             console.log("error updating hiring stage: ", err);
+//         })
+//     }
+// }
+
 
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
@@ -546,6 +564,36 @@ export function contactUs(user){
             })
     }
 }
+
+
+// POST A NEW BUSINESS
+export function postBusiness(business) {
+    return function(dispatch) {
+        // show loading bar
+        dispatch({type:"START_LOADING"});
+
+        axios.post("/api/business", business)
+        .then(function(response) {
+            dispatch({type: "SUCCESS_FINISHED_LOADING", notification: {message: response.data, type: "infoHeader"}});
+            // redirect to edit business page
+            if (typeof business.businessName === "string") {
+                const editBusinessUrl = '/admin/editBusiness?' + business.businessName;
+                browserHistory.push(editBusinessUrl);
+                window.scrollTo(0,0);
+            }
+        })
+        .catch(function(err) {
+            console.log("error: ", err);
+            let msg = "Error creating new business. Try again later.";
+            if (err && err.response && typeof err.response.data === "string") {
+                msg = err.response.data;
+            }
+            dispatch({type: "ERROR_FINISHED_LOADING", notification: {message: msg, type: "errorHeader"}});
+            window.scrollTo(0,0);
+        })
+    }
+}
+
 
 export function formError() {
     return function(dispatch) {

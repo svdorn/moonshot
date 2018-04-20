@@ -37,6 +37,7 @@ class MyCandidates extends Component {
             name: "Loading...",
             hiringStage: "",
             email: "",
+            disabled: true
         }
 
         this.state = {
@@ -44,7 +45,9 @@ class MyCandidates extends Component {
             hiringStage: "",
             pathway: "",
             candidates: [emptyCandidate],
-            pathways: []
+            pathways: [],
+            // true if the business has no pathways associated with it
+            noPathways: false
         }
     }
 
@@ -56,17 +59,21 @@ class MyCandidates extends Component {
                 verificationToken: this.props.currentUser.verificationToken
             }
         })
-            .then(function(res) {
+        .then(function(res) {
+            let pathways = res.data;
+            if (Array.isArray(pathways) && pathways.length > 0) {
                 self.setState({
                     pathways: res.data
                 });
-            })
-            .catch(function(err) {
-                console.log("error getting pathways: ", err);
-            });
-
-        // populate initial candidates
-        this.search();
+            } else {
+                self.setState({
+                    noPathways: true
+                })
+            }
+        })
+        .catch(function(err) {
+            console.log("error getting pathways: ", err);
+        });
     }
 
     goTo(route) {
@@ -99,23 +106,25 @@ class MyCandidates extends Component {
     };
 
     search() {
-        axios.get("/api/business/candidateSearch", {
-            params: {
-                searchTerm: this.state.term,
-                hiringStage: this.state.hiringStage,
-                pathway: this.state.pathway,
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
-            }
-        }).then(res => {
-            console.log(res.data);
-            // make sure component is mounted before changing state
-            if (this.refs.myCandidates) {
-                this.setState({candidates: res.data});
-            }
-        }).catch(function (err) {
-            console.log("ERROR: ", err);
-        })
+        if (!this.state.noPathways) {
+            axios.get("/api/business/candidateSearch", {
+                params: {
+                    searchTerm: this.state.term,
+                    hiringStage: this.state.hiringStage,
+                    pathway: this.state.pathway,
+                    userId: this.props.currentUser._id,
+                    verificationToken: this.props.currentUser.verificationToken
+                }
+            }).then(res => {
+                console.log(res.data);
+                // make sure component is mounted before changing state
+                if (this.refs.myCandidates) {
+                    this.setState({candidates: res.data});
+                }
+            }).catch(function (err) {
+                console.log("ERROR: ", err);
+            })
+        }
     }
 
 
@@ -182,20 +191,53 @@ class MyCandidates extends Component {
             }
         }
 
-        // create the pathway previews
+        const currentUser = this.props.currentUser;
+        if (!currentUser) {
+            return null;
+        }
+
+        // create the candidate previews
         let key = 0;
         let self = this;
-        const candidatePreviews = this.state.candidates.map(function (candidate) {
+        const candidatePreviews = this.state.candidates.map(candidate => {
             key++;
+
+            console.log("candidate is: ", candidate);
+
+            // get the id of the current pathway whose candidates are being shown
+            let pathwayId = undefined;
+            let initialHiringStage = "Not Yet Contacted";
+            let initialIsDismissed = false;
+            const pathwayObj = self.state.pathways.find(currPathway => {
+                return currPathway.name === self.state.pathway;
+            });
+
+            // if we are looking at a specific pathway, put in the info that
+            // allows the user to change the candidate's hiring stage info
+            if (pathwayObj) {
+                pathwayId = pathwayObj._id;
+                initialHiringStage = pathwayObj.hiringStage;
+                initialIsDismissed = pathwayObj.isDismissed;
+            }
+
+            let isDisabled = candidate.disabled === true;
 
             return (
                 <li style={{marginTop: '15px'}}
                     key={key}
                 >
                     <CandidatePreview
+                        initialHiringStage={initialHiringStage}
+                        initialIsDismissed={initialIsDismissed}
+                        employerUserId={currentUser._id}
+                        employerVerificationToken={currentUser.verificationToken}
+                        companyId={currentUser.company.companyId}
+                        candidateId={candidate._id}
+                        pathwayId={pathwayId}
                         editHiringStage={true}
                         name={candidate.name}
                         email={candidate.email}
+                        disabled={isDisabled}
                     />
                 </li>
             );
@@ -209,20 +251,11 @@ class MyCandidates extends Component {
         // TODO get companies from DB
         const pathways = this.state.pathways;
         const pathwayItems = pathways.map(function (pathway) {
-            return <MenuItem value={pathway} primaryText={pathway} key={pathway}/>
+            return <MenuItem value={pathway.name} primaryText={pathway.name} key={pathway.name}/>
         })
 
-
-        return (
-            <div className={"jsxWrapper"} ref='myCandidates'>
-                <div className="headerDiv purpleGradient"/>
-                <div style={style.separator}>
-                    <div style={style.separatorLine}/>
-                    <div style={style.separatorText}>
-                        My Candidates
-                    </div>
-                </div>
-
+        const searchBar = (
+            <div>
                 <Toolbar style={style.searchBar} id="discoverSearchBarWideScreen">
                     <ToolbarGroup>
                         <Field
@@ -292,7 +325,21 @@ class MyCandidates extends Component {
                         {pathwayItems}
                     </DropDownMenu>
                 </div>
+            </div>
+        );
 
+
+        return (
+            <div className={"jsxWrapper"} ref='myCandidates'>
+                <div className="headerDiv purpleGradient"/>
+                <div style={style.separator}>
+                    <div style={style.separatorLine}/>
+                    <div style={style.separatorText}>
+                        My Candidates
+                    </div>
+                </div>
+
+                {searchBar}
 
                 <div>
                     <ul className="center" id="aboutMeAreas">

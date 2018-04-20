@@ -5,7 +5,7 @@ import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import {connect} from 'react-redux';
 import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
-import {signout, closeNotification, setHeaderBlue, endOnboarding} from "../actions/usersActions";
+import {signout, closeNotification, endOnboarding} from "../actions/usersActions";
 import {axios} from 'axios';
 
 const styles = {
@@ -456,7 +456,6 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         signout,
         closeNotification,
-        setHeaderBlue,
         endOnboarding
     }, dispatch);
 }

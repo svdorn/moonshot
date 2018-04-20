@@ -52,8 +52,12 @@ class PathwayContentCompletePathway extends Component {
         const pathway = this.props.pathway;
         const currentUser = this.props.currentUser;
         let referralCode = undefined;
-        if (currentUser.answers[pathway.referralQuestionId]) {
-            referralCode = currentUser.answers[pathway.referralQuestionId].value;
+        try {
+            if (currentUser.answers[pathway.referralQuestionId]) {
+                referralCode = currentUser.answers[pathway.referralQuestionId].value;
+            }
+        } catch (getReferralCodeErr) {
+            /* this means they did not have a referral code */
         }
 
         const user = {
