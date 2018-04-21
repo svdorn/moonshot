@@ -238,6 +238,7 @@ class MyCandidates extends Component {
                         name={candidate.name}
                         email={candidate.email}
                         disabled={isDisabled}
+                        profileUrl={candidate.profileUrl}
                     />
                 </li>
             );

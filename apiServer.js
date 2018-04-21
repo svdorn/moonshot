@@ -1172,6 +1172,7 @@ app.post('/user/completePathway', function (req, res) {
                                         let candidateToAdd = {
                                             _id: user._id,
                                             name: user.name,
+                                            profileUrl: user.profileUrl,
                                             // give the business the email that the candidate wants to be contacted at, not their login email
                                             email: userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email,
                                             // will only have this pathway if the candidate didn't exist before
@@ -2051,6 +2052,7 @@ app.post("/user/addPathway", function (req, res) {
                                     let candidateToAdd = {
                                         _id: user._id,
                                         name: user.name,
+                                        profileUrl: user.profileUrl,
                                         // give the business the email that the candidate wants to be contacted at, not their login email
                                         email: user.emailToContact ? user.emailToContact : user.email,
                                         // will only have this pathway if the candidate didn't exist before
@@ -3435,6 +3437,7 @@ app.get("/business/candidateSearch", function(req, res) {
                 }
 
                 // if the candidate made it past all the search terms, add them
+                console.log(candidate);
                 candidatesToReturn.push(candidate);
             });
 

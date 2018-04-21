@@ -92,6 +92,7 @@ class CandidatePreview extends Component {
                     zDepth={2}>
                     <div className="candidatePreviewLiLeftContainer">
                         {this.props.name}
+                        <a href={"/results?user=" + this.props.profileUrl}>See Results</a>
                     </div>
 
                     <div className="verticalDividerCandidatePreview"/>
