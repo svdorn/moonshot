@@ -1314,7 +1314,11 @@ button.link {
     min-width: 20px;
 }
 
-
+.incompleteStepsWarning { padding-left: 0; }
+.incompleteStepsWarning > li {
+    color: red;
+    list-style-type: none;
+}
 
 .onboardingInputWithGradientBorder {
     border: none;

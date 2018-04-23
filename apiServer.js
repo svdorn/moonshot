@@ -1073,14 +1073,54 @@ app.post('/user/completePathway', async function(req, res) {
     // checks if the user actually completed the pathway, then moves on to
     // completing the pathway
     let checkIfAllQuestionsCompleted = () => {
-        console.log("Got here. User is: ", user);
-        console.log("Pathway is: ", pathway);
-        console.log("pathway.steps[0].subSteps: ", pathway.steps[0].subSteps);
+        console.log("checking for incomplete steps");
+
+        // TODO see if the user has any answers at all
+        let userHasAnswers = false;
+        if (typeof user.answers === "object") {
+            userHasAnswers = true;
+        }
+
+        let incompleteSteps = [];
+
+        // go through each step to see if the user completed all the subSteps
+        pathway.steps.forEach(step => {
+            // go through each subStep to see if the user has completed them
+            step.subSteps.forEach(subStep => {
+                // only quizzes will have answers, ignore all other subSteps
+                if (subStep.contentType !== "quiz") {
+                    return;
+                }
+
+                // this subStep is a quiz; see if the user has an answer for it
+                if (!userHasAnswers || !user.answers[subStep.contentID]) {
+                    // add this substep to the list of incomplete steps
+                    incompleteSteps.push({
+                        stepNumber: step.order,
+                        stepName: step.name,
+                        subStepNumber: subStep.order,
+                        subStepName: subStep.name
+                    })
+                }
+            });
+        });
+
+        console.log("incomplete steps: ", incompleteSteps);
+
+        // if there are any incomplete steps, don't let the user finish the pathway
+        if (incompleteSteps.length > 0) {
+            console.log("User tried to finish a pathway without finishing all the steps.");
+            console.log("user: ", user);
+            console.log("pathway name: ", pathway.name);
+            console.log("incompleteSteps: ", incompleteSteps);
+
+            return res.status(400).send({incompleteSteps});
+        }
+
+        // TODO all steps complete, continue with completion process
     }
 
 
-    console.log("userId is: ");
-    console.log(userId);
     // get the user from the db
     Users.findById(userId)
     .then(foundUser => {
@@ -1111,13 +1151,11 @@ app.post('/user/completePathway', async function(req, res) {
         return res.status(500).send("Server error, try again later.");
     });
 
-    // check if the user completed all the questions in the pathway
-
 
     // get the pathway that the user is completing; only need the steps because
     // those are the only things we verify
     Pathways.findById(pathwayId)
-    .select("steps.subSteps.order steps.subSteps.superStepOrder steps.subSteps.contentID steps.order steps.name")
+    .select("steps.subSteps.order steps.subSteps.name steps.subSteps.contentID steps.subSteps.contentType steps.order steps.name")
     .then(foundPathway => {
         // no pathway found
         if (!foundPathway) {

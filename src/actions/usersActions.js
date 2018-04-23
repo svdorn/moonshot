@@ -346,10 +346,37 @@ export function completePathway(user){
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
-                dispatch({type:"COMPLETE_PATHWAY_REJECTED", user: response.data.user, notification: {message: response.data.message, type: "errorHeader"}})
+                // info we get back from the error
+                const errData = err.response.data;
+                // if the error is due to the user not having all steps complete
+                if (typeof errData === "object" && errData.incompleteSteps) {
+                    dispatch({type: "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS", incompleteSteps: errData.incompleteSteps});
+                    return;
+                }
+
+                // if there is a notification message, show that
+                let notification = undefined;
+                if (typeof errData === "string") {
+                    notification = {
+                        message: errData,
+                        type: "errorHeader"
+                    }
+                }
+
+                dispatch({ type:"COMPLETE_PATHWAY_REJECTED", notification })
             })
     }
 }
+
+
+// get rid of any old incomplete steps that would prevent the user from
+// completing a pathway
+export function resetIncompleteSteps() {
+    return function(dispatch) {
+        dispatch({type: "RESET_INCOMPLETE_STEPS"});
+    }
+}
+
 
 
 // Send an email when form filled out on unsubscribe page

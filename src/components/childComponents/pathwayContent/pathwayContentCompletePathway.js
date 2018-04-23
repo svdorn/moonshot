@@ -2,12 +2,15 @@ import React, {Component} from 'react';
 import {Paper, CircularProgress} from 'material-ui';
 import {connect} from 'react-redux';
 import axios from 'axios';
-import {completePathway} from "../../../actions/usersActions";
+import {completePathway, resetIncompleteSteps} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 
 class PathwayContentCompletePathway extends Component {
     constructor(props) {
         super(props);
+
+        // make sure any old incomplete steps don't show up as incomplete steps
+        this.props.resetIncompleteSteps();
 
         let hasUser = false;
         let email = "";
@@ -77,6 +80,85 @@ class PathwayContentCompletePathway extends Component {
     }
 
     render() {
+        let incompleteStepsNotification = null;
+        let thereAreIncompleteSteps = Array.isArray(this.props.incompleteSteps) && this.props.incompleteSteps.length > 0;
+        // create the list of incomplete steps if there are any
+        if (thereAreIncompleteSteps) {
+            // this is just used as a key
+            let subStepCounter = 0;
+
+            // go through every incomplete step and make a corresponding list item
+            let incompleteStepsList = this.props.incompleteSteps.map(incompleteStep => {
+                subStepCounter++;
+
+                let stepNumberExists = typeof incompleteStep.stepNumber !== "undefined";
+                let stepNameExists = typeof incompleteStep.stepName === "string";
+                let subStepNumberExists = typeof incompleteStep.subStepNumber !== "undefined";
+                let subStepNameExists = typeof incompleteStep.subStepName === "string";
+
+                // make the step part
+                let stepHtml = null;
+                if (stepNumberExists && stepNameExists) {
+                    stepHtml = (
+                        <span>
+                            {"Step "}{incompleteStep.stepNumber}{" ("}{incompleteStep.stepName}{") "}
+                        </span>
+                    );
+                } else if (stepNumberExists) {
+                    stepHtml = (
+                        <span>
+                            {"Step "}{incompleteStep.stepNumber}{" "}
+                        </span>
+                    );
+                } else if (stepNameExists) {
+                    stepHtml = (
+                        <span>
+                            {incompleteStep.stepName}{" "}
+                        </span>
+                    )
+                }
+
+                // make the subStep part
+                let subStepHtml = null;
+                if (subStepNumberExists && subStepNameExists) {
+                    subStepHtml = (
+                        <span>
+                            {" Part "}{incompleteStep.subStepNumber}{" ("}{incompleteStep.subStepName}{")"}
+                        </span>
+                    );
+                } else if (subStepNumberExists) {
+                    subStepHtml = (
+                        <span>
+                            {" Part "}{incompleteStep.subStepNumber}
+                        </span>
+                    );
+                } else if (subStepNameExists) {
+                    subStepHtml = (
+                        <span>
+                            {incompleteStep.subStepName}
+                        </span>
+                    )
+                }
+
+                // return the list item
+                return (
+                    <li key={"incomplete substep " + subStepCounter}>
+                        {stepHtml}{subStepHtml}
+                    </li>
+                );
+            })
+
+            incompleteStepsNotification = (
+                <div style={{marginTop: "20px"}}>
+                    You must complete all steps to finish the pathway.
+                    Incomplete steps:
+                    <ul className="incompleteStepsWarning">
+                        { incompleteStepsList }
+                    </ul>
+                </div>
+            )
+        }
+
         return (
             <div className={this.props.className} style={{...this.props.style}}>
                 <div className="center" style={{marginBottom: "10px"}}>
@@ -110,9 +192,11 @@ class PathwayContentCompletePathway extends Component {
                             Complete Pathway
                         </div>
                     </button>
-                    {this.props.loadingEmailSend ?
+                    {this.props.loadingPathwayComplete ?
                         <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
-                        : null}
+                        : null
+                    }
+                    { incompleteStepsNotification }
                 </div>
             </div>
         );
@@ -121,14 +205,16 @@ class PathwayContentCompletePathway extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        completePathway
+        completePathway,
+        resetIncompleteSteps
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        loadingEmailSend: state.users.loadingSomething
+        loadingPathwayComplete: state.users.loadingSomething,
+        incompleteSteps: state.users.incompleteSteps
     };
 }
 
