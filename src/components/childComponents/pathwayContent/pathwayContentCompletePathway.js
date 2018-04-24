@@ -100,19 +100,19 @@ class PathwayContentCompletePathway extends Component {
                 if (stepNumberExists && stepNameExists) {
                     stepHtml = (
                         <span>
-                            {"Step "}{incompleteStep.stepNumber}{" ("}{incompleteStep.stepName}{") "}
+                            {"Step "}{incompleteStep.stepNumber}{" ("}{incompleteStep.stepName}{")"}
                         </span>
                     );
                 } else if (stepNumberExists) {
                     stepHtml = (
                         <span>
-                            {"Step "}{incompleteStep.stepNumber}{" "}
+                            {"Step "}{incompleteStep.stepNumber}
                         </span>
                     );
                 } else if (stepNameExists) {
                     stepHtml = (
                         <span>
-                            {incompleteStep.stepName}{" "}
+                            {incompleteStep.stepName}
                         </span>
                     )
                 }
@@ -122,13 +122,13 @@ class PathwayContentCompletePathway extends Component {
                 if (subStepNumberExists && subStepNameExists) {
                     subStepHtml = (
                         <span>
-                            {" Part "}{incompleteStep.subStepNumber}{" ("}{incompleteStep.subStepName}{")"}
+                            {"Part "}{incompleteStep.subStepNumber}{" ("}{incompleteStep.subStepName}{")"}
                         </span>
                     );
                 } else if (subStepNumberExists) {
                     subStepHtml = (
                         <span>
-                            {" Part "}{incompleteStep.subStepNumber}
+                            {"Part "}{incompleteStep.subStepNumber}
                         </span>
                     );
                 } else if (subStepNameExists) {
@@ -142,7 +142,7 @@ class PathwayContentCompletePathway extends Component {
                 // return the list item
                 return (
                     <li key={"incomplete substep " + subStepCounter}>
-                        {stepHtml}{subStepHtml}
+                        {stepHtml}{" // "}{subStepHtml}
                     </li>
                 );
             })

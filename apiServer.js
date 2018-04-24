@@ -1150,15 +1150,11 @@ app.post('/user/completePathway', async function(req, res) {
     // checks if the user actually completed the pathway, then moves on to
     // completing the pathway
     function checkIfAllQuestionsCompleted() {
-        console.log("checking for incomplete steps");
-
         // see if the user has any answers at all
         let userHasAnswers = false;
         if (typeof user.answers === "object") {
             userHasAnswers = true;
         }
-
-        console.log("userHasAnswers: ", userHasAnswers);
 
         let incompleteSteps = [];
 
@@ -1173,14 +1169,11 @@ app.post('/user/completePathway', async function(req, res) {
 
                 // only add this to incomplete steps if it is required
                 if (subStep.required !== true) {
-                    console.log("substep not required: ", subStep);
                     return;
                 }
 
                 // this subStep is a quiz; see if the user has an answer for it
                 if (!userHasAnswers || !user.answers[subStep.contentID]) {
-                    console.log("incomplete step: ", subStep);
-
                     // add this substep to the list of incomplete steps
                     incompleteSteps.push({
                         stepNumber: step.order,
@@ -1327,13 +1320,13 @@ app.post('/user/completePathway', async function(req, res) {
                     // find the candidate index within the business' candidate array
                     const userIdString = user._id.toString();
                     const userIndex = candidates.findIndex(function(candidate) {
-                        return candidate._id.toString() == userIdString;
+                        return candidate.userId.toString() == userIdString;
                     });
 
                     // if candidate doesn't exist, add them along with the pathway
                     if (userIndex == -1) {
                         let candidateToAdd = {
-                            _id: user._id,
+                            userId: user.userId,
                             name: user.name,
                             // give the business the email that the candidate wants to be contacted at, not their login email
                             email: userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email,
