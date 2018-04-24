@@ -71,7 +71,6 @@ class PathwayContentCompletePathway extends Component {
             verificationToken: currentUser.verificationToken,
             email: this.state.email,
             phoneNumber: this.state.phoneNumber,
-            skills: pathway.skills,
             referralCode: referralCode
         };
 
