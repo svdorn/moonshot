@@ -206,7 +206,7 @@ class MyCandidates extends Component {
 
             // get the id of the current pathway whose candidates are being shown
             let pathwayId = undefined;
-            let initialHiringStage = "Not Yet Contacted";
+            let initialHiringStage = "Not Contacted";
             let initialIsDismissed = false;
             const pathwayObj = self.state.pathways.find(currPathway => {
                 return currPathway.name === self.state.pathway;

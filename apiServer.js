@@ -3758,7 +3758,7 @@ app.post("/business", async function(req, res) {
     }
 });
 
-// UPDATE HIRING STAGE OF A CANDIDATE (NOT YET CONTACTED, CONTACTED)
+// UPDATE HIRING STAGE OF A CANDIDATE (NOT CONTACTED, CONTACTED)
 app.post("/business/updateHiringStage", async function(req, res) {
     const body = req.body;
     const userId = sanitize(body.userId);
@@ -3786,7 +3786,7 @@ app.post("/business/updateHiringStage", async function(req, res) {
     }
 
     // ensure the hiring stage provided is valid
-    const validHiringStages = ["Not Yet Contacted", "Contacted", "Interviewing", "Hired"];
+    const validHiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
     if (!validHiringStages.includes(hiringStage)) {
         console.log("Invalid hiring stage provided.");
         return res.status(400).send("Invalid hiring stage provided.");

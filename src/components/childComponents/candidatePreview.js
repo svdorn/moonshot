@@ -8,7 +8,7 @@ class CandidatePreview extends Component {
         super(props);
 
         const hiringStageSteps = {
-            "Not Yet Contacted": 0,
+            "Not Contacted": 0,
             "Contacted": 1,
             "Interviewing": 2,
             "Hired": 3
@@ -45,7 +45,7 @@ class CandidatePreview extends Component {
 
     updateHiringStageInDB(step, dismissed) {
         if (step <= 3 && step >= 0 && typeof dismissed === "boolean") {
-            const stages = ["Not Yet Contacted", "Contacted", "Interviewing", "Hired"];
+            const stages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
 
             const currentUser = this.props.currentUser;
             console.log("pathwayId: ", this.props.pathwayId)
@@ -99,7 +99,7 @@ class CandidatePreview extends Component {
                     <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
                         <Stepper activeStep={this.state.step}>
                             <Step disabled={((0 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
-                                <StepButton onClick={() => this.handleHiringStageChange(0)}>Not Yet Contacted</StepButton>
+                                <StepButton onClick={() => this.handleHiringStageChange(0)}>Not Contacted</StepButton>
                             </Step>
                             <Step disabled={((1 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
                                 <StepButton onClick={() => this.handleHiringStageChange(1)}>Contacted</StepButton>
