@@ -1087,9 +1087,6 @@ app.post('/user/completePathway', async function(req, res) {
     // the pathway that will be found in the db
     let pathway = undefined;
 
-
-
-
     // get the user from the db
     Users.findById(userId)
     .then(foundUser => {
@@ -2188,13 +2185,16 @@ app.post("/user/addPathway", function (req, res) {
                                 // find the candidate index within the business' candidate array
                                 const userIdString = user._id.toString();
                                 const userIndex = candidates.findIndex(function(candidate) {
+                                    if (!candidate.userId) {
+                                        return false;
+                                    }
                                     return candidate.userId.toString() == userIdString;
                                 });
 
                                 // if candidate doesn't exist, add them along with the pathway
                                 if (userIndex == -1) {
                                     let candidateToAdd = {
-                                        _id: user._id,
+                                        userId: user._id,
                                         name: user.name,
                                         // give the business the email that the candidate wants to be contacted at, not their login email
                                         email: user.emailToContact ? user.emailToContact : user.email,
