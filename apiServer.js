@@ -1323,7 +1323,7 @@ app.post('/user/completePathway', async function(req, res) {
                     // if candidate doesn't exist, add them along with the pathway
                     if (userIndex == -1) {
                         let candidateToAdd = {
-                            userId: user.userId,
+                            userId: user._id,
                             name: user.name,
                             // give the business the email that the candidate wants to be contacted at, not their login email
                             email: userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email,
