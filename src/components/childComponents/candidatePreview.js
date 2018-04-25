@@ -38,8 +38,6 @@ class CandidatePreview extends Component {
     // since some components will be rendered in the same place but be for
     // different people, need to update state when new props are received
     componentWillReceiveProps(nextProps) {
-        console.log("nextProps: ", nextProps);
-
         const hiringStageSteps = {
             "Not Contacted": 0,
             "Contacted": 1,
@@ -100,16 +98,11 @@ class CandidatePreview extends Component {
                 pathwayId: this.props.pathwayId
             }
             axios.post("/api/business/updateHiringStage", hiringStageInfo)
-            .then(result => {
-                console.log("result is: ", result);
-            })
+            // do nothing on success
+            .then(result => {})
             .catch(err => {
                 console.log("error updating hiring stage: ", err);
-            })
-
-            // const hiringStage = stages[step];
-            //
-            // this.props.updateHiringStage(hiringStage, dismissed);
+            });
         }
     }
 
@@ -129,8 +122,6 @@ class CandidatePreview extends Component {
                 marginTop: "5px"
             },
         };
-
-        // console.log(`IN RENDER: name is ${this.props.name}, hiring stage is ${this.props.initialHiringStage}`)
 
         return (
             <div className="candidatePreview">
@@ -176,7 +167,6 @@ class CandidatePreview extends Component {
                         </div>
                     </div>
                 </Paper>
-
             </div>
         )
     }

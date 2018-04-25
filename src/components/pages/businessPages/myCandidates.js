@@ -116,7 +116,6 @@ class MyCandidates extends Component {
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
-                console.log(res.data);
                 // make sure component is mounted before changing state
                 if (this.refs.myCandidates) {
                     this.setState({candidates: res.data});
@@ -204,63 +203,66 @@ class MyCandidates extends Component {
         // create the candidate previews
         let key = 0;
         let self = this;
-        const candidatePreviews = this.state.candidates.map(candidate => {
-            key++;
 
-            console.log("candidate is: ", candidate);
+        let candidatePreviews = (
+            <div className="center">
+                Select a pathway to see your candidates.
+            </div>
+        )
 
-            // candidatePathwayInfo = {
-            //  completionStatus: "Complete",
-            //  hiringStage: "Contacted",
-            //  isDismissed: false,
-            //  _id: [the pathway id]
-            // }
+        if (this.state.pathway != "") {
+            candidatePreviews = this.state.candidates.map(candidate => {
+                key++;
 
-            let candidatePathwayInfo = {
-                hiringStage: "Not Contacted",
-                isDismissed: false
-            }
-
-            // if the candidate does not have a pathways list, it is probably
-            // still loading the page; if we get into this if statement, it
-            // is an actual candidate
-            if (Array.isArray(candidate.pathways)) {
-                const tempPathwayInfo = candidate.pathways.find(path => {
-                    return path._id === pathwayId;
-                });
-                // only set the pathway info if any was actually found
-                if (tempPathwayInfo) {
-                    candidatePathwayInfo = tempPathwayInfo;
+                // candidatePathwayInfo = {
+                //  completionStatus: "Complete",
+                //  hiringStage: "Contacted",
+                //  isDismissed: false,
+                //  _id: [the pathway id]
+                // }
+                let candidatePathwayInfo = {
+                    hiringStage: "Not Contacted",
+                    isDismissed: false
                 }
-            }
 
-            const initialHiringStage = candidatePathwayInfo.hiringStage;
-            const initialIsDismissed = candidatePathwayInfo.isDismissed;
+                // if the candidate does not have a pathways list, it is probably
+                // still loading the page; if we get into this if statement, it
+                // is an actual candidate
+                if (Array.isArray(candidate.pathways)) {
+                    const tempPathwayInfo = candidate.pathways.find(path => {
+                        return path._id === pathwayId;
+                    });
+                    // only set the pathway info if any was actually found
+                    if (tempPathwayInfo) {
+                        candidatePathwayInfo = tempPathwayInfo;
+                    }
+                }
 
-            console.log(`initialHiringStage for ${candidate.name} is ${initialHiringStage}`)
+                const initialHiringStage = candidatePathwayInfo.hiringStage;
+                const initialIsDismissed = candidatePathwayInfo.isDismissed;
+                const isDisabled = candidate.disabled === true;
 
-            const isDisabled = candidate.disabled === true;
-
-            return (
-                <li style={{marginTop: '15px'}}
-                    key={key}
-                >
-                    <CandidatePreview
-                        initialHiringStage={initialHiringStage}
-                        initialIsDismissed={initialIsDismissed}
-                        employerUserId={currentUser._id}
-                        employerVerificationToken={currentUser.verificationToken}
-                        companyId={currentUser.company.companyId}
-                        candidateId={candidate.userId}
-                        pathwayId={pathwayId}
-                        editHiringStage={true}
-                        name={candidate.name}
-                        email={candidate.email}
-                        disabled={isDisabled}
-                    />
-                </li>
-            );
-        });
+                return (
+                    <li style={{marginTop: '15px'}}
+                        key={key}
+                    >
+                        <CandidatePreview
+                            initialHiringStage={initialHiringStage}
+                            initialIsDismissed={initialIsDismissed}
+                            employerUserId={currentUser._id}
+                            employerVerificationToken={currentUser.verificationToken}
+                            companyId={currentUser.company.companyId}
+                            candidateId={candidate.userId}
+                            pathwayId={pathwayId}
+                            editHiringStage={true}
+                            name={candidate.name}
+                            email={candidate.email}
+                            disabled={isDisabled}
+                        />
+                    </li>
+                );
+            });
+        }
 
         const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired", "Dismissed"];
         const hiringStageItems = hiringStages.map(function (hiringStage) {
