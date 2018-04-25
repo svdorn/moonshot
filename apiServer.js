@@ -2188,7 +2188,7 @@ app.post("/user/addPathway", function (req, res) {
                                 // find the candidate index within the business' candidate array
                                 const userIdString = user._id.toString();
                                 const userIndex = candidates.findIndex(function(candidate) {
-                                    return candidate._id.toString() == userIdString;
+                                    return candidate.userId.toString() == userIdString;
                                 });
 
                                 // if candidate doesn't exist, add them along with the pathway
