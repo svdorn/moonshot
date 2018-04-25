@@ -1364,7 +1364,8 @@ app.post('/user/completePathway', async function(req, res) {
                                 _id: pathwayId,
                                 name: pathwayName,
                                 hiringStage: "Not Contacted",
-                                completionStatus: "Complete"
+                                completionStatus: "Complete",
+                                isDismissed: false
                             })
                         }
                     }
@@ -3804,7 +3805,7 @@ app.post("/business/updateHiringStage", async function(req, res) {
 
         // the index of the candidate in the business' candidate array
         const candidateIndex = business.candidates.findIndex(currCandidate => {
-            return currCandidate._id.toString() === candidateId;
+            return currCandidate.userId.toString() === candidateId;
         });
 
         let candidate = business.candidates[candidateIndex];

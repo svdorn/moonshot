@@ -14,16 +14,58 @@ class CandidatePreview extends Component {
             "Hired": 3
         }
 
-        let step = hiringStageSteps[this.props.initialHiringStage];
+        let step = hiringStageSteps[props.initialHiringStage];
 
-        if (this.props.initialIsDismissed) {
+        if (!step) {
+            step = 0;
+        }
+
+        let isDismissed = props.initialIsDismissed;
+        if (isDismissed === undefined) {
+            isDismissed = false;
+        }
+
+        if (props.initialIsDismissed) {
             step = step + 1;
         }
 
         this.state = {
             step: step,
-            dismissed: this.props.initialIsDismissed,
+            dismissed: isDismissed,
         }
+    }
+
+    // since some components will be rendered in the same place but be for
+    // different people, need to update state when new props are received
+    componentWillReceiveProps(nextProps) {
+        console.log("nextProps: ", nextProps);
+
+        const hiringStageSteps = {
+            "Not Contacted": 0,
+            "Contacted": 1,
+            "Interviewing": 2,
+            "Hired": 3
+        }
+
+        let step = hiringStageSteps[nextProps.initialHiringStage];
+
+        if (!step) {
+            step = 0;
+        }
+
+        let isDismissed = nextProps.initialIsDismissed;
+        if (isDismissed === undefined) {
+            isDismissed = false;
+        }
+
+        if (nextProps.initialIsDismissed) {
+            step = step + 1;
+        }
+
+        this.setState({
+            step: step,
+            dismissed: isDismissed,
+        });
     }
 
     handleClick() {
@@ -48,7 +90,6 @@ class CandidatePreview extends Component {
             const stages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
 
             const currentUser = this.props.currentUser;
-            console.log("pathwayId: ", this.props.pathwayId)
             const hiringStageInfo = {
                 userId: this.props.employerUserId,
                 verificationToken: this.props.employerVerificationToken,
@@ -65,6 +106,10 @@ class CandidatePreview extends Component {
             .catch(err => {
                 console.log("error updating hiring stage: ", err);
             })
+
+            // const hiringStage = stages[step];
+            //
+            // this.props.updateHiringStage(hiringStage, dismissed);
         }
     }
 
@@ -84,6 +129,8 @@ class CandidatePreview extends Component {
                 marginTop: "5px"
             },
         };
+
+        // console.log(`IN RENDER: name is ${this.props.name}, hiring stage is ${this.props.initialHiringStage}`)
 
         return (
             <div className="candidatePreview">
