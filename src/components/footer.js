@@ -27,9 +27,9 @@ class Footer extends Component {
         catch (e) {
             pathname = "";
         }
-        if ((this.props.location.pathname === '/mypathways') || (this.props.location.pathname === '/pathway') || (this.props.location.pathname === '/resumeanalysis')) {
+        if ((pathname === '/mypathways') || (pathname === '/pathway') || (pathname === '/resumeanalysis')) {
             footerColor = "purpleToRedLightGradientOpacity";
-        } else if ((this.props.location.pathname === '/profile') || (this.props.location.pathname === '/businessprofile')) {
+        } else if ((pathname === '/profile') || (pathname === '/businessprofile')) {
             footerColor = "orangeToYellowGradientOpacity";
         }
         return (
