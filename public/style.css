@@ -362,6 +362,10 @@ form > h1 {
 .purpleToRedGradient { background: linear-gradient(to bottom right, #721ae9, #e45c67); }
 .redToLightRedGradient { background: linear-gradient(to bottom right, #e24794, #f76740); }
 .redToLightRedDownGradient { background: linear-gradient(to bottom, #e24794, #f76740); }
+.redToLightRedUpGradientOpacity {
+    background: linear-gradient(to top, #e24794, #f76740);
+    opacity: 0.7;
+}
 .purpleToRedLightGradient { background: linear-gradient(to bottom right, #983cc9, #e36273); }
 .purpleToRedLightGradientOpacity {
     background: linear-gradient(to top right, #983cc9, #e36273);

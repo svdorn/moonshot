@@ -27,11 +27,14 @@ class Footer extends Component {
         catch (e) {
             pathname = "";
         }
-        if ((pathname === '/mypathways') || (pathname === '/pathway') || (pathname === '/resumeanalysis')) {
+        if ((pathname === '/mypathways') || (pathname === '/pathway')) {
             footerColor = "purpleToRedLightGradientOpacity";
         } else if ((pathname === '/profile') || (pathname === '/businessprofile')) {
             footerColor = "orangeToYellowGradientOpacity";
+        } else if (pathname === '/resumeanalysis') {
+            footerColor = "redToLightRedUpGradientOpacity";
         }
+
         return (
             <div className="jsxWrapper">
                 <footer className={"footer " + footerColor}>
