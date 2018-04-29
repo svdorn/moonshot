@@ -217,6 +217,12 @@ class ViewUser extends Component {
                                 })
                             });
 
+                            // replace html-encoded entities with decoded versions
+                            answer = answer.replace(/&quot;/g,"\"");
+                            answer = answer.replace(/&amp;/g,"&");
+                            answer = answer.replace(/&lt;/g,"<");
+                            answer = answer.replace(/&gt;/g,">");
+
                             content = (
                                 <div>
                                     <span>{questionName}</span>

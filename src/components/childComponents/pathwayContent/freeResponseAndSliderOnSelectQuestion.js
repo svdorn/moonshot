@@ -33,6 +33,17 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
                 // if the option wasn't saved in db, this will be undefined
                 // otherwise it'll have the "skill" and "answerText" fields
                 options[answer.answerNumber.toString()].value = dbAnswer.value[answer.answerNumber.toString()];
+
+                // if answer text exists, replace it with an html-decoded version of itself
+                let userAnswer = options[answer.answerNumber.toString()].value;
+                if (userAnswer && typeof userAnswer.answerText === "string") {
+                    // only care about the text at this point
+                    userAnswer = userAnswer.answerText;
+                    // replace html-encoded entities with decoded versions
+                    userAnswer = userAnswer.replace(/&quot;/g,"\"").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">");
+
+                    options[answer.answerNumber.toString()].value.answerText = userAnswer;
+                }
             });
         }
 
@@ -66,6 +77,18 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
                     // if the option wasn't saved in db, this will be undefined
                     // otherwise it'll have the "skill" and "answerText" fields
                     options[answer.answerNumber.toString()].value = dbAnswer.value[answer.answerNumber.toString()];
+
+                    // if answer text exists, replace it with an html-decoded version of itself
+                    let userAnswer = options[answer.answerNumber.toString()].value;
+                    if (userAnswer && typeof userAnswer.answerText === "string") {
+                        // replace html-encoded entities with decoded versions
+                        userAnswer = userAnswer.replace(/&quot;/g,"\"");
+                        userAnswer = userAnswer.replace(/&amp;/g,"&");
+                        userAnswer = userAnswer.replace(/&lt;/g,"<");
+                        userAnswer = userAnswer.replace(/&gt;/g,">");
+
+                        options[answer.answerNumber.toString()].value.answerText = userAnswer;
+                    }
                 });
             }
 
