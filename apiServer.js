@@ -106,6 +106,35 @@ app.get("/keepMeLoggedIn", function (req, res) {
     res.json(setting);
 });
 
+
+// change session to store whether user wants default of "Keep Me Logged In"
+// to be checked or unchecked
+app.post("/user/hideProfile", function (req, res) {
+    if (typeof req.body.hideProfile === "boolean") {
+        req.session.stayLoggedIn = req.body.stayLoggedIn;
+    } else {
+        req.session.stayLoggedIn = false;
+    }
+    req.session.save(function (err) {
+        if (err) {
+            console.log("error saving 'keep me logged in' setting: ", err);
+            res.json("error saving 'keep me logged in' setting");
+        } else {
+            res.json("success");
+        }
+    })
+});
+
+
+// get the setting to stay logged in or out
+app.get("/user/hideProfile", function (req, res) {
+    let setting = sanitize(req.session.stayLoggedIn);
+    if (typeof setting !== "boolean") {
+        setting = false;
+    }
+    res.json(setting);
+});
+
 // GET USER SESSION
 app.get('/userSession', function (req, res) {
     if (typeof req.session.userId === 'string') {
@@ -2064,6 +2093,11 @@ app.post('/user/changeSettings', function (req, res) {
                 if (user.name) {
                     foundUser.name = user.name;
                 }
+                if (typeof user.hideProfile === "boolean") {
+                    foundUser.hideProfile = user.hideProfile;
+                }
+
+                console.log("hideProfile: ", user.hideProfile);
 
                 foundUser.save(function(saveErr, newUser) {
                     // if there is an error saving the user's info
@@ -2072,6 +2106,8 @@ app.post('/user/changeSettings', function (req, res) {
                         res.status(500).send("Settings couldn't be updated. Try again later.");
                         return;
                     }
+
+                    console.log("newUser: ", newUser);
 
                     // settings change successful
                     res.json(newUser);

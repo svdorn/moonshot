@@ -54,6 +54,23 @@ const validate = values => {
 };
 
 class Account extends Component {
+    constructor(props) {
+        super(props);
+
+        console.log("props: ", props);
+
+        this.state = {
+            hideProfile: props.currentUser.hideProfile === true
+        };
+
+        console.log("this.state is: ", this.state);
+    }
+
+
+    handleHideProfileClick() {
+        this.setState({ hideProfile: !this.state.hideProfile });
+    }
+
 
     handleSubmit(e) {
         e.preventDefault();
@@ -80,7 +97,8 @@ class Account extends Component {
             name: this.props.formData.settings.values.name,
             email: this.props.formData.settings.values.email,
             password: this.props.formData.settings.values.password,
-            _id: this.props.currentUser._id
+            _id: this.props.currentUser._id,
+            hideProfile: this.state.hideProfile
         };
 
         this.props.updateUser(user);
@@ -125,6 +143,16 @@ class Account extends Component {
                                 autoComplete="new-password"
                             /></div>
                         <br/>
+                        <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleHideProfileClick.bind(this)}>
+                            <img
+                                alt=""
+                                className={"checkMark" + this.state.hideProfile}
+                                src="/icons/CheckMarkBlue.png"
+                            />
+                        </div>
+                        <div className="blueText" style={{display:"inline-block"}}>
+                            Hide Profile From Employers
+                        </div><br/>
                         <button
                             type="submit"
                             className="formSubmitButton font24px font16pxUnder600"
