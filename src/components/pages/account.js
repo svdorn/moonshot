@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateUser} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper} from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm, change} from 'redux-form';
 
 const styles = {
@@ -57,13 +57,9 @@ class Account extends Component {
     constructor(props) {
         super(props);
 
-        console.log("props: ", props);
-
         this.state = {
             hideProfile: props.currentUser.hideProfile === true
         };
-
-        console.log("this.state is: ", this.state);
     }
 
 
@@ -158,7 +154,8 @@ class Account extends Component {
                             className="formSubmitButton font24px font16pxUnder600"
                         >
                             Update Settings
-                        </button>
+                        </button><br/>
+                        {this.props.loadingUpdateSettings ? <CircularProgress style={{marginTop: "10px"}}/> : null}
                     </form>
                 </div>
             </div>
@@ -178,6 +175,7 @@ function mapStateToProps(state) {
         initialValues: state.users.currentUser,
         formData: state.form,
         currentUser: state.users.currentUser,
+        loadingUpdateSettings: state.users.loadingSomething
     };
 }
 
