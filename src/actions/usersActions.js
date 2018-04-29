@@ -33,12 +33,11 @@ export function getUserFromSession(callback) {
 export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
-        
+
         axios.post("/api/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
-                dispatch({type: "CLOSE_NOTIFICATION"});
                 let nextUrl = '/discover';
                 console.log(returnedUser.userType);
                 if (returnedUser.userType === "employer") {
