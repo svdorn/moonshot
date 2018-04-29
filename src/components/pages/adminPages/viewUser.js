@@ -218,10 +218,10 @@ class ViewUser extends Component {
                             });
 
                             // replace html-encoded entities with decoded versions
-                            answer = answer.replace(/&quot;/g,"\"");
-                            answer = answer.replace(/&amp;/g,"&");
-                            answer = answer.replace(/&lt;/g,"<");
-                            answer = answer.replace(/&gt;/g,">");
+                            answer = answer.replace(/&quot;/g,"\"")
+                                           .replace(/&amp;/g,"&")
+                                           .replace(/&lt;/g,"<")
+                                           .replace(/&gt;/g,">");
 
                             content = (
                                 <div>

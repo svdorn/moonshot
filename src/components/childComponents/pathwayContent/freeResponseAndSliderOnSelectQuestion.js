@@ -40,7 +40,10 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
                     // only care about the text at this point
                     userAnswer = userAnswer.answerText;
                     // replace html-encoded entities with decoded versions
-                    userAnswer = userAnswer.replace(/&quot;/g,"\"").replace(/&amp;/g,"&").replace(/&lt;/g,"<").replace(/&gt;/g,">");
+                    userAnswer = userAnswer.replace(/&quot;/g,"\"")
+                                           .replace(/&amp;/g,"&")
+                                           .replace(/&lt;/g,"<")
+                                           .replace(/&gt;/g,">");
 
                     options[answer.answerNumber.toString()].value.answerText = userAnswer;
                 }
