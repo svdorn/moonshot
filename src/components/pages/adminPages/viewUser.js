@@ -220,10 +220,10 @@ class ViewUser extends Component {
                             content = (
                                 <div>
                                     <span>{questionName}</span>
-                                    <br/>
-                                    <span className="blueText">Answer: {answer}</span>
                                     {breakForCorrectness}
                                     {correctOrNot}
+                                    <br/>
+                                    <span className="blueText">Answer: <pre>{answer}</pre></span>
                                 </div>
                             );
                         }

@@ -86,6 +86,7 @@ class PathwayContentMultiSelectQuestion extends Component {
                 <div style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
                 <textarea
                     type="text"
+                    style={{whiteSpace: "pre-wrap"}}
                     className="freeResponseTextArea"
                     value={self.state.answer}
                     onChange={(e) => self.handleInputChange(e)}
