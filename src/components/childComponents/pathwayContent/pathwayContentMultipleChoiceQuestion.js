@@ -147,7 +147,7 @@ class PathwayContentMultipleChoiceQuestion extends Component {
         let medium = self.props.size === 'medium' ? "medium" : "";
         let options = [];
         if (Array.isArray(self.props.answers)) {
-            options = self.props.answers.map(function (answer) {
+            options = self.props.answers.map(answer => {
                 let selectedClass = answer.answerNumber === self.state.answerNumber ? "selected" : "notSelected";
                 return (
                     <div className="multipleChoiceOption clickableNoUnderline"
@@ -156,7 +156,7 @@ class PathwayContentMultipleChoiceQuestion extends Component {
                          onClick={() => self.handleClick(answer.answerNumber, false)}
                     >
                         <div className={"multipleChoiceCircle " + medium + " " + selectedClass}/>
-                        <div className={"multipleChoiceAnswer " + medium}>{answer.body}</div>
+                        <span>{answer.body}</span>
                     </div>
                 );
             });
