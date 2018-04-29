@@ -3600,16 +3600,17 @@ app.post("/resumeScorer/uploadResume", function(req, res) {
         const resumeFileName = resumeFile.name;
 
         // only allow certain file types to be uploaded
-       let extension = resumeFileName.split('.').pop().toLowerCase();
-       const allowedFileTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'];
-       if (!allowedFileTypes.some(function(fileType) {
+        let extension = resumeFileName.split('.').pop().toLowerCase();
+        const allowedFileTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'];
+        if (!allowedFileTypes.some(function(fileType) {
            return fileType === extension;
-       })) {
+        })) {
            console.log(`User tried to upload a file of type .${extension}, which is not allowed.`);
            return res.status(400).send("Wrong file type.");
-       }
+        }
 
         let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "ameyer24@wisc.edu"];
+
         let subject = 'Resume To Be Scored';
         let content =
             '<div>'

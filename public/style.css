@@ -489,6 +489,15 @@ form > h1 {
 }
 
 
+.resumeAnalysisUploadStep {
+    display: none;
+}
+.resumeAnalysisUploadStep.inFrame {
+    display: initial;
+}
+
+
+
 #pathwayDescriptionAndSalary {
     position: relative;
     height: 150px;
