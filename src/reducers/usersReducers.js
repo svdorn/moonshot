@@ -31,11 +31,11 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 notification: action.notification,
-                currentUser: action.payload
+                currentUser: action.payload,
+                loadingSomething: false
             };
             break;
         case "NOTIFICATION":
-        case "LOGIN_REJECTED":
         case "VERIFY_EMAIL_REJECTED":
         case "CHANGE_PASS_FORGOT_REJECTED":
         case "CHANGE_TEMP_PASS_REJECTED":
@@ -44,9 +44,11 @@ export function usersReducers(state = initialState, action) {
             return {...state, notification: action.notification};
             break;
         case "UPDATE_USER_REJECTED":
+        case "LOGIN_REJECTED":
         case "CHANGE_PASSWORD":
         case "CHANGE_PASSWORD_REJECTED":
             return {...state, notification: action.notification, loadingSomething: false};
+            break;
         case "SIGNOUT":
             return {...state, currentUser: undefined};
             break;

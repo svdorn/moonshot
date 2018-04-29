@@ -32,6 +32,8 @@ export function getUserFromSession(callback) {
 
 export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
     return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+        
         axios.post("/api/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
