@@ -247,6 +247,7 @@ class FreeResponseAndSliderOnSelectQuestion extends Component {
                             type="text"
                             className="textAreaOnSelect"
                             value={options[answerNumber].value.answerText}
+                            placeholder="Describe your experience with this in two to three sentences."
                             onChange={(e) => self.handleInputChange(e, answerNumber)}
                         />
                     :
