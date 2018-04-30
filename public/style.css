@@ -2069,9 +2069,8 @@ textarea.freeResponseTextArea {
     height: 300px;
 }
 textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
-    width: 260px;
+    width: calc(100% - 70px);
 }
-textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 .multipleChoiceCircle, .multiSelectCircle {
     width: 20px;
     height: 20px;
@@ -3220,11 +3219,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         word-wrap:break-word;
     }
 
-    textarea.multipleChoiceCustomAnswer {
-        margin-left: 80px;
-        width: 240px;
-    }
-
     .twoOptionsOr { margin: 55px 10px 0; }
 
     .font40pxUnder500 { font-size: 40px; }
@@ -3394,7 +3388,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     }
 
     textarea.multipleChoiceCustomAnswer {
-        margin-left: 30px;
         width: 180px;
     }
 
