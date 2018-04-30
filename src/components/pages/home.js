@@ -325,10 +325,8 @@ class Home extends Component {
                                     className="homepageTrajectoryTextRightIcon personIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
-                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">$100 If You Interview</h2>
-                                    Score an interview through one of our
-                                    technical pathways and we{"'"}ll pay you $100.
-                                    That{"'"}s like a year{"'"}s worth of ramen.
+                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Earn Your Skill IQs</h2>
+                                    Create projects and earn Skill IQs through Pathways. Show your value to employers.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesLeft">
