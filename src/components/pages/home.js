@@ -351,7 +351,7 @@ class Home extends Component {
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
                                     <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Hired by<br/>Innovative Companies</h2>
                                     Compete for open positions by excelling in
-                                    pathways and proving your skills. Get
+                                    Pathways and proving your skills. Get
                                     hired for your skills, not your volunteer hours.
                                 </div>
                             </div>
