@@ -692,11 +692,12 @@ button.link {
     padding: 2px 13px;
 }
 .lightBlueChip {
-    height: 36px;
+    /* height: 36px; */
     background: var(--moonshotLightBlue);
     padding: 1px;
     border-radius: 25px;
-    margin-left: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 .lightBlueChip > div {
     background: white;
@@ -3073,9 +3074,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .gradientBorderPurpleToPinkChip > div {
         font-size: 15px;
         padding-top: 2px;
-    }
-    .lightBlueChip {
-        height: 30px;
     }
     .lightBlueChip > div {
         font-size: 15px;
