@@ -2257,6 +2257,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .font8px { font-size: 8px; }
 .font6px { font-size: 6px; }
 
+.bold { font-weight: bold; }
 .inline { display: inline; }
 .inline-block { display: inline-block; }
 .noPadding { padding: 0 0 0 0 }
