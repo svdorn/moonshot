@@ -76,8 +76,8 @@ class StyledContent extends Component {
                     if (content.length > 0) {
                         const linkText = content.linkText ? content.linkText : content[0];
                         const target = content.newTab === false ? "_self" : "_blank";
-                        return (
-                            <a target={target} href={content[0]}>{linkText}</a>
+                        contentHtml.push(
+                            <a key={++keyCounter + " link"} target={target} href={content[0]}>{linkText}</a>
                         );
                     }
                     break;
