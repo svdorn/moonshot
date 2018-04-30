@@ -9,7 +9,7 @@ class StyledContent extends Component {
         let contentHtml = [];
         contentArray.forEach(function(part) {
             // default classNames; if className provided, give the part that className instead
-            let defaultClassNames = "inlineBlock marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
+            let defaultClassNames = part.includeDefaultClasses === false ? "" : "inlineBlock marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
             let fontSizes = "font20px font14pxUnder600";
             // code looks smaller
             if (part.partType === "code") {
@@ -74,10 +74,15 @@ class StyledContent extends Component {
                     break;
                 case "link":
                     if (content.length > 0) {
-                        const linkText = content.linkText ? content.linkText : content[0];
-                        const target = content.newTab === false ? "_self" : "_blank";
+                        const linkText = part.linkText ? part.linkText : content[0];
+                        const target = part.newTab === false ? "_self" : "_blank";
                         contentHtml.push(
-                            <a key={++keyCounter + " link"} target={target} href={content[0]}>{linkText}</a>
+                            <a key={++keyCounter + " link"}
+                               target={target}
+                               className={className}
+                               href={content[0]}>
+                                {linkText}
+                            </a>
                         );
                     }
                     break;
