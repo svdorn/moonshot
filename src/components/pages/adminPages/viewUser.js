@@ -240,7 +240,7 @@ class ViewUser extends Component {
                                     {breakForCorrectness}
                                     {correctOrNot}
                                     <br/>
-                                    <span className="blueText">Answer: <pre>{answer}</pre></span>
+                                    <span className="blueText">Answer: <pre className="pre-wrap">{answer}</pre></span>
                                 </div>
                             );
                         }
