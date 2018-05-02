@@ -114,7 +114,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
 export function signout() {
     return function(dispatch) {
         dispatch({type:"SIGNOUT"});
-        axios.post("/api/signOut")
+        axios.post("/api/user/signOut")
             .then(function(response) {
             })
             .catch(function(err) {
@@ -520,7 +520,7 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
 
 export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
     return function(dispatch) {
-        axios.post("/api/updateAllOnboarding", {
+        axios.post("/api/candidate/updateAllOnboarding", {
             params: { userId, verificationToken, interests, goals, info }
         })
         .then(function(response) {

@@ -10,12 +10,12 @@ const removePassword = helperFunctions.removePassword;
 
 
 const candidateApis = {
-    updateAllOnboarding
+    POST_updateAllOnboarding
 }
 
 
 // saves all three onboarding steps
-function updateAllOnboarding(req, res) {
+function POST_updateAllOnboarding(req, res) {
     const info = sanitize(req.body.params.info);
     const goals = sanitize(req.body.params.goals);
     const interests = sanitize(req.body.params.interests);

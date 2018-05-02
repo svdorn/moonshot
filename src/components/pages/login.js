@@ -79,7 +79,7 @@ class Login extends Component {
         // logged in from the cookie
         else {
             let self = this;
-            axios.get("/api/keepMeLoggedIn")
+            axios.get("/api/user/keepMeLoggedIn")
             .then(function (res) {
                 let keepMeLoggedIn = res.data;
                 if (typeof keepMeLoggedIn != "boolean") {
@@ -155,7 +155,7 @@ class Login extends Component {
 
     handleCheckMarkClick() {
 
-        axios.post("/api/keepMeLoggedIn", { stayLoggedIn: !this.state.keepMeLoggedIn })
+        axios.post("/api/user/keepMeLoggedIn", { stayLoggedIn: !this.state.keepMeLoggedIn })
         .catch(function(err) {
             console.log("error posting 'keep me logged in' option: ", err);
         });
