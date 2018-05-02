@@ -55,6 +55,7 @@ const sanitize = helperFunctions.sanitize;
 const removeEmptyFields = helperFunctions.removeEmptyFields;
 const verifyUser = helperFunctions.verifyUser;
 const removePassword = helperFunctions.removePassword;
+const printUsersFromPathway = helperFunctions.printUsersFromPathway;
 
 
 // import all the api functions
@@ -85,33 +86,6 @@ app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
 app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
 
 
-// change session to store whether user wants default of "Keep Me Logged In"
-// to be checked or unchecked
-app.post("/user/hideProfile", function (req, res) {
-    if (typeof req.body.hideProfile === "boolean") {
-        req.session.stayLoggedIn = req.body.stayLoggedIn;
-    } else {
-        req.session.stayLoggedIn = false;
-    }
-    req.session.save(function (err) {
-        if (err) {
-            console.log("error saving 'keep me logged in' setting: ", err);
-            res.json("error saving 'keep me logged in' setting");
-        } else {
-            res.json("success");
-        }
-    })
-});
-
-
-// get the setting to stay logged in or out
-app.get("/user/hideProfile", function (req, res) {
-    let setting = sanitize(req.session.stayLoggedIn);
-    if (typeof setting !== "boolean") {
-        setting = false;
-    }
-    res.json(setting);
-});
 
 // GET USER SESSION
 app.get('/userSession', function (req, res) {
@@ -178,9 +152,7 @@ app.post('/userSession', function(req, res) {
 // --->>> END SESSION SET UP <<<---
 
 
-
-
-// --->>> EXAMPLE PATHWAY CREATION <<<---
+// --->>> EXAMPLE INFO CREATION <<<---
 
 // const exampleInfo = {
 //     contentArray: []
@@ -190,83 +162,7 @@ app.post('/userSession', function(req, res) {
 //     console.log(link);
 // })
 
-// const exampleVideo = {
-//     link: "https://www.youtube.com/watch?v=3IW3kAGcLM0"
-// }
-//
-// Videos.create(exampleVideo, function(err, video) {
-//     console.log(err);
-//     console.log(video);
-//
-//     const exampleQuiz = {
-//         name: "Big quiz",
-//         random: false,
-//         numQuestions: 1,
-//         questions: [{
-//             order: 1,
-//             options: [{
-//                 body: "What is the answer to life?",
-//                 answers: [{
-//                     body: "42",
-//                     correct: true
-//                 },
-//                 {
-//                     body: "6",
-//                     correct: false
-//                 }],
-//                 multipleCorrect: false,
-//                 needAllCorrect: true
-//             }]
-//         }]
-//     }
-//
-//     Quizzes.create(exampleQuiz, function(err2, quiz) {
-//         console.log(err2);
-//         console.log(quiz);
-//
-//         const examplePathway = {
-//             name: "Create Video Game AI",
-//             previewImage: "/images/BigData.jpg",
-//             sponsor: { name: "Blizzard", logo: "/Logos/Blizzard.png" },
-//             estimatedCompletionTime: "16 Hours",
-//             deadline: new Date(2018, 7, 6, 0, 0, 0, 0),
-//             price: "Free",
-//             comments: [{ email: "frizzkitten@gmail.com", body: "amazing pathway, I learned so much stuff", date: new Date(2017, 11, 19, 11, 37, 5, 6) }],
-//             ratings: [{ email: "frizzkitten@gmail.com", rating: 3 }, { email: "misterkelvinn@gmail.com", rating: 2 }],
-//             avgRating: 2.5,
-//             tags: [ "Artifical Intelligence", "Programming", "Video Games" ],
-//             projects: [{
-//                 name: "Make a Dota 2 AI",
-//                 description: "Have it beat Elon Musk's",
-//                 difficulty: "Hard",
-//                 estimatedTime: "17 Hours"
-//             }],
-//             steps: [
-//                 {
-//                     order: 1,
-//                     name: "Get started",
-//                     contentType: "video",
-//                     contentID: video._id,
-//                     comments: [{ email: "misterkelvinn@gmail.com", body: "what a great first step", date: new Date(2017, 9, 9, 1, 33, 2, 9) }]
-//                 },
-//                 {
-//                     order: 2,
-//                     name: "Review what you learned in the first step",
-//                     contentType: "quiz",
-//                     contentID: quiz._id,
-//                     comments: [{ email: "acethebetterone@gmail.com", body: "2 hard 4 me", date: new Date(2017, 6, 3, 1, 33, 2, 9) }]
-//                 }
-//             ]
-//         }
-//
-//         Pathways.create(examplePathway, function(err3, pathway) {
-//             console.log(err3);
-//             console.log(pathway);
-//         });
-//     })
-// });
-
-// --->>> END EXAMPLE PATHWAY CREATION <<<---
+// --->>> END EXAMPLE INFO CREATION <<<---
 
 
 // print all users from a specific pathway
@@ -274,42 +170,6 @@ app.post('/userSession', function(req, res) {
 // sw: "5a88b4b8734d1d041bb6b386"
 
 // printUsersFromPathway("5a88b4b8734d1d041bb6b386");
-
-function printUsersFromPathway(pathwayIdToCheck) {
-    const pathwayUsersQuery = {
-        $or: [
-            {
-                pathways: {
-                    $elemMatch: {
-                        pathwayId: pathwayIdToCheck
-                    }
-                }
-            },
-            {
-                completedPathways: {
-                    $elemMatch: {
-                        pathwayId: pathwayIdToCheck
-                    }
-                }
-            }
-        ]
-    };
-    Users.find(pathwayUsersQuery, function(err, users) {
-        console.log("err is: ", err);
-
-        users.forEach(function(user) {
-            let userPath = user.pathways.find(function(path) {
-                return path.pathwayId == pathwayIdToCheck;
-            });
-            let currentStep = userPath ? userPath.currentStep : "completed";
-
-            const ourEmails = ["ameyer24@wisc.edu", "austin.thomas.meyer@gmail.com", "frizzkitten@gmail.com", "svdorn@wisc.edu", "treige@wisc.edu", "jye39@wisc.edu", "stevedorn9@gmail.com", "kyle.treige@gmail.com"];
-            if (!ourEmails.includes(user.email)) {
-                console.log("\n\nname: ", user.name, "\nemail: ", user.email, "\ncurrent step: ", currentStep);
-            }
-        })
-    })
-}
 
 
 // update all users with a specific thing, used if something is changed about

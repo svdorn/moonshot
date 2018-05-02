@@ -1,4 +1,5 @@
 const sanitizeHtml = require('sanitize-html');
+var Users = require('../models/users.js');
 
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
@@ -10,7 +11,46 @@ const helperFunctions = {
     sanitize,
     removeEmptyFields,
     verifyUser,
-    removePassword
+    removePassword,
+    printUsersFromPathway
+}
+
+
+// TODO delete this as soon as we have a good way of seeing all users within a pathway
+function printUsersFromPathway(pathwayIdToCheck) {
+    const pathwayUsersQuery = {
+        $or: [
+            {
+                pathways: {
+                    $elemMatch: {
+                        pathwayId: pathwayIdToCheck
+                    }
+                }
+            },
+            {
+                completedPathways: {
+                    $elemMatch: {
+                        pathwayId: pathwayIdToCheck
+                    }
+                }
+            }
+        ]
+    };
+    Users.find(pathwayUsersQuery, function(err, users) {
+        console.log("err is: ", err);
+
+        users.forEach(function(user) {
+            let userPath = user.pathways.find(function(path) {
+                return path.pathwayId == pathwayIdToCheck;
+            });
+            let currentStep = userPath ? userPath.currentStep : "completed";
+
+            const ourEmails = ["ameyer24@wisc.edu", "austin.thomas.meyer@gmail.com", "frizzkitten@gmail.com", "svdorn@wisc.edu", "treige@wisc.edu", "jye39@wisc.edu", "stevedorn9@gmail.com", "kyle.treige@gmail.com"];
+            if (!ourEmails.includes(user.email)) {
+                console.log("\n\nname: ", user.name, "\nemail: ", user.email, "\ncurrent step: ", currentStep);
+            }
+        })
+    })
 }
 
 

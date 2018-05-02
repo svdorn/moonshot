@@ -1,4 +1,5 @@
 var Users = require('../models/users.js');
+var Employers = require('../models/employers.js');
 
 
 // get helper functions
