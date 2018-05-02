@@ -7,31 +7,50 @@ const sanitizeOptions = {
 }
 
 const helperFunctions = {
-    // remove html tags from a variable (any type) to prevent code injection
-    sanitize: function(something) {
-        const somethingType = (typeof something);
-        switch (somethingType) {
-            case "object":
-                return sanitizeObject(something);
-                break;
-            case "boolean":
-            case "number":
-                return something;
-                break;
-            case "string":
-                return sanitizeHtml(something, sanitizeOptions);
-                break;
-            case "undefined":
-            case "symbol":
-            case "function":
-            default:
-                return undefined;
-        }
+    sanitize,
+    removeEmptyFields,
+    verifyUser,
+    removePassword
+}
+
+
+// used when passing the user object back to the user, still contains sensitive
+// data such as the user id and verification token
+function removePassword(user) {
+    if (typeof user === "object" && user != null) {
+        let newUser = user;
+        newUser.password = undefined;
+        return newUser;
+    } else {
+        return undefined;
     }
 }
 
+
+// remove html tags from a variable (any type) to prevent code injection
+function sanitize(something) {
+    const somethingType = (typeof something);
+    switch (somethingType) {
+        case "object":
+            return sanitizeObject(something);
+            break;
+        case "boolean":
+        case "number":
+            return something;
+            break;
+        case "string":
+            return sanitizeHtml(something, sanitizeOptions);
+            break;
+        case "undefined":
+        case "symbol":
+        case "function":
+        default:
+            return undefined;
+    }
+}
+
+
 function sanitizeObject(obj) {
-    console.log("doin it");
     if (!obj) {
         return undefined;
     }
@@ -73,6 +92,7 @@ function sanitizeObject(obj) {
     return newObj;
 }
 
+
 function sanitizeArray(arr) {
     if (!arr) {
         return undefined;
@@ -104,6 +124,91 @@ function sanitizeArray(arr) {
     });
 
     return sanitizedArr;
+}
+
+
+// remove any empty pieces from an object or array all the way down
+function removeEmptyFields(something) {
+    if (typeof something !== "object") {
+        return something;
+    } else {
+        if (Array.isArray(something)) {
+            return removeEmptyArrayFields(something);
+        } else {
+            return removeEmptyObjectFields(something);
+        }
+    }
+}
+
+
+// remove any empty pieces from an object
+function removeEmptyObjectFields(obj) {
+    let newObj = {};
+
+    for (var prop in obj) {
+        // skip loop if the property is from prototype
+        if (!obj.hasOwnProperty(prop)) continue;
+        let value = obj[prop];
+
+        // don't add the value if it is some sort of empty
+        if (!valueIsEmpty(value)) {
+            // go down through the levels of the object if it is an object, then add it
+            if (typeof value === "object") {
+                // remove empty fields from the value
+                valueWithEmptyFieldsRemoved = removeEmptyFields(value);
+                // only add the value if it is still non-empty
+                if (!valueIsEmpty(valueWithEmptyFieldsRemoved)) {
+                    newObj[prop] = valueWithEmptyFieldsRemoved;
+                }
+            } else {
+                // value is not empty, add it to the new object
+                newObj[prop] = value;
+            }
+        }
+    }
+
+    return newObj;
+}
+
+// remove any empty pieces from an array
+function removeEmptyArrayFields(arr) {
+    let newArr = [];
+
+    newArr = arr.map(function(item){
+        return removeEmptyFields(item);
+    });
+
+    newArr = newArr.filter(function(item) {
+        return !valueIsEmpty(item);
+    });
+
+    return newArr;
+}
+
+
+// returns true if the thing is equal to some non-emptyish thing
+function valueIsEmpty(thing) {
+    if (typeof thing === "object") {
+        if (Array.isArray(thing)) {
+            return thing.length === 0;
+        } else {
+            return objectIsEmpty(thing);
+        }
+    } else {
+        return (thing === undefined || thing === null || thing === "");
+    }
+}
+
+
+// returns true if the object is {}
+function objectIsEmpty(obj) {
+    if (obj === null || obj === undefined) { return true; }
+    return Object.keys(obj).length === 0 && obj.constructor === Object;
+}
+
+
+function verifyUser(user, verificationToken) {
+    return user.verificationToken && user.verificationToken == verificationToken;
 }
 
 module.exports = helperFunctions;

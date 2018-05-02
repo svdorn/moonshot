@@ -52,6 +52,9 @@ var Referrals = require('./models/referrals.js');
 // get helper functions
 const helperFunctions = require('./apis/helperFunctions.js');
 const sanitize = helperFunctions.sanitize;
+const removeEmptyFields = helperFunctions.removeEmptyFields;
+const verifyUser = helperFunctions.verifyUser;
+const removePassword = helperFunctions.removePassword;
 
 
 // import all the api functions
@@ -288,13 +291,6 @@ app.post('/userSession', function(req, res) {
 // });
 
 // --->>> END EXAMPLE PATHWAY CREATION <<<---
-
-
-// strictly sanitize, only allow bold and italics in input
-const sanitizeOptions = {
-    allowedTags: ['b', 'i', 'em', 'strong'],
-    allowedAttributes: []
-}
 
 
 // print all users from a specific pathway
@@ -578,81 +574,7 @@ function getFirstName(name) {
 }
 
 
-// remove any empty pieces from an object or array all the way down
-function removeEmptyFields(something) {
-    if (typeof something !== "object") {
-        return something;
-    } else {
-        if (Array.isArray(something)) {
-            return removeEmptyArrayFields(something);
-        } else {
-            return removeEmptyObjectFields(something);
-        }
-    }
-}
 
-// remove any empty pieces from an object
-function removeEmptyObjectFields(obj) {
-    let newObj = {};
-
-    for (var prop in obj) {
-        // skip loop if the property is from prototype
-        if (!obj.hasOwnProperty(prop)) continue;
-        let value = obj[prop];
-
-        // don't add the value if it is some sort of empty
-        if (!valueIsEmpty(value)) {
-            // go down through the levels of the object if it is an object, then add it
-            if (typeof value === "object") {
-                // remove empty fields from the value
-                valueWithEmptyFieldsRemoved = removeEmptyFields(value);
-                // only add the value if it is still non-empty
-                if (!valueIsEmpty(valueWithEmptyFieldsRemoved)) {
-                    newObj[prop] = valueWithEmptyFieldsRemoved;
-                }
-            } else {
-                // value is not empty, add it to the new object
-                newObj[prop] = value;
-            }
-        }
-    }
-
-    return newObj;
-}
-
-// remove any empty pieces from an array
-function removeEmptyArrayFields(arr) {
-    let newArr = [];
-
-    newArr = arr.map(function(item){
-        return removeEmptyFields(item);
-    });
-
-    newArr = newArr.filter(function(item) {
-        return !valueIsEmpty(item);
-    });
-
-    return newArr;
-}
-
-// returns true if the thing is equal to some non-emptyish thing
-function valueIsEmpty(thing) {
-    if (typeof thing === "object") {
-        if (Array.isArray(thing)) {
-            return thing.length === 0;
-        } else {
-            return objectIsEmpty(thing);
-        }
-    } else {
-        return (thing === undefined || thing === null || thing === "");
-    }
-}
-
-// returns true if the object is {}
-function objectIsEmpty(obj) {
-    if (obj === null || obj === undefined) { return true; }
-    return Object.keys(obj).length === 0 && obj.constructor === Object;
-}
 
 
 app.post("/endOnboarding", function (req, res) {
@@ -1903,19 +1825,6 @@ function userForAdmin(user) {
 }
 
 
-// used when passing the user object back to the user, still contains sensitive
-// data such as the user id and verification token
-function removePassword(user) {
-    if (typeof user === "object" && user != null) {
-        let newUser = user;
-        newUser.password = undefined;
-        return newUser;
-    } else {
-        return undefined;
-    }
-}
-
-
 //----->> DELETE USER <<------
 app.delete('/user/:_id', function (req, res) {
     var query = {_id: sanitize(req.params._id)};
@@ -2443,9 +2352,6 @@ app.get('/pathwayByPathwayUrl', function (req, res) {
     })
 });
 
-function verifyUser(user, verificationToken) {
-    return user.verificationToken && user.verificationToken == verificationToken;
-}
 
 function removeContentFromPathway(pathway) {
     if (pathway) {
@@ -3054,65 +2960,7 @@ app.post("/updateAnswer", function (req, res) {
 });
 
 
-app.post("/updateAllOnboarding", function (req, res) {
-    const info = sanitize(req.body.params.info);
-    const goals = sanitize(req.body.params.goals);
-    const interests = sanitize(req.body.params.interests);
-    const userId = sanitize(req.body.params.userId);
-    const verificationToken = sanitize(req.body.params.verificationToken);
-
-    if (userId && verificationToken) {
-        // When true returns the updated document
-        Users.findById(userId, function (findErr, user) {
-            if (findErr) {
-                console.log("Error finding user when updating info during onboarding: ", findErr);
-                res.status(500).send("Server error");
-                return;
-            }
-
-            if (!verifyUser(user, verificationToken)) {
-                console.log("Couldn't verify user when trying to update onboarding info.");
-                res.status(401).send("User does not have valid credentials to update info.");
-                return;
-            }
-
-            if (info) {
-                // if info exists, try to save it
-                const fullInfo = removeEmptyFields(info);
-
-                for (const prop in fullInfo) {
-                    // only use properties that are not inherent to all objects
-                    if (info.hasOwnProperty(prop)) {
-                        console.log("updating " + prop + " to ", fullInfo[prop]);
-                        user.info[prop] = fullInfo[prop];
-                    }
-                }
-            }
-
-            // if goals exist, save them
-            if (goals) {
-                user.info.goals = goals
-            }
-
-            // if interests exist, save them
-            if (interests) {
-                user.info.interests = interests;
-            }
-
-            user.save(function (saveErr, updatedUser) {
-                if (saveErr) {
-                    console.log("Error saving user information when updating info from onboarding: ", saveErr);
-                    res.status(500).send("Server error, couldn't save information.");
-                    return;
-                }
-                res.send(removePassword(updatedUser));
-            });
-        })
-    } else {
-        console.log("Didn't have info or a user id or both.")
-        res.status(403).send("Bad request.");
-    }
-});
+app.post("/updateAllOnboarding", userApis.updateAllOnboarding);
 
 
 // --->> BUSINESS APIS <<--- //
