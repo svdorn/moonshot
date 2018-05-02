@@ -5,6 +5,16 @@ var businessesSchema = mongoose.Schema({
     name: String,
     pathwayIds: [ mongoose.Schema.Types.ObjectId ],
     employerIds: [ mongoose.Schema.Types.ObjectId ],
+
+
+    // ---->>> POST-PIVOT <<<---- //
+
+    // the positions that the company has availabilities for
+    positionIds: [ mongoose.Schema.Types.ObjectId ],
+
+    // ---->>> END POST-PIVOT <<<---- //
+
+
     // the candidates that have completed a pathway from this company
     candidates: [{
         userId: mongoose.Schema.Types.ObjectId,

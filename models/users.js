@@ -154,7 +154,17 @@ var usersSchema = mongoose.Schema({
             }
         }
     */
-    answers: mongoose.Schema.Types.Mixed
+    answers: mongoose.Schema.Types.Mixed,
+
+
+    // ---->>> POST-PIVOT <<<---- //
+
+    // the positions that the candidate has applied to
+    positions: [{
+        positionId: mongoose.Schema.Types.ObjectId
+    }]
+
+    // ---->>> END POST-PIVOT <<<---- //
 });
 
 // 'Users' means we will use the 'users' collection. if 'Books' was in there
