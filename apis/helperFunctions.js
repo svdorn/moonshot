@@ -1,5 +1,6 @@
 const sanitizeHtml = require('sanitize-html');
 var Users = require('../models/users.js');
+var Employers = require('../models/employers.js');
 
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
@@ -12,7 +13,8 @@ const helperFunctions = {
     removeEmptyFields,
     verifyUser,
     removePassword,
-    printUsersFromPathway
+    printUsersFromPathway,
+    getUserByQuery
 }
 
 
@@ -51,6 +53,44 @@ function printUsersFromPathway(pathwayIdToCheck) {
             }
         })
     })
+}
+
+
+// dangerous, returns user with verification token
+function getUserByQuery(query, callback) {
+    let finishedOneCall = false;
+
+    // if user found in one of the DBs, performs the callback
+    // if user not found, check if the other DB is already done
+    //     if so, callback with no user, otherwise, wait for the other DB call
+    let doCallbackOrWaitForOtherDBCall = function(err, foundUser) {
+        // if a user was found, return it
+        if (foundUser && foundUser != null) {
+            const NO_ERRORS = undefined;
+            callback(NO_ERRORS, removePassword(foundUser));
+            return;
+        }
+        // no user found in one of the dbs
+        else {
+            // if this is the second db we've checked, no user was found in
+            // either db, so return undefined and an error if one exists
+            if (finishedOneCall) {
+                const NO_USER_FOUND = undefined;
+                callback(err, NO_USER_FOUND);
+            }
+            // if this is the first db we've checkd, mark that a db was checked
+            else {
+                finishedOneCall = true;
+            }
+        }
+    }
+
+    Users.findOne(query, function (err, foundUser) {
+        doCallbackOrWaitForOtherDBCall(err, foundUser);
+    });
+    Employers.findOne(query, function(err, foundUser) {
+        doCallbackOrWaitForOtherDBCall(err, foundUser);
+    });
 }
 
 

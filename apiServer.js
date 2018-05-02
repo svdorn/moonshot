@@ -56,6 +56,7 @@ const removeEmptyFields = helperFunctions.removeEmptyFields;
 const verifyUser = helperFunctions.verifyUser;
 const removePassword = helperFunctions.removePassword;
 const printUsersFromPathway = helperFunctions.printUsersFromPathway;
+const getUserByQuery = helperFunctions.getUserByQuery;
 
 
 // import all the api functions
@@ -85,68 +86,8 @@ app.post('/user/signOut', userApis.POST_signOut);
 app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
 app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
 
-
-
-// GET USER SESSION
-app.get('/userSession', function (req, res) {
-    if (typeof req.session.userId === 'string') {
-        const userId = sanitize(req.session.userId);
-        getUserByQuery({_id: userId}, function (err, user) {
-            // if no user found, the user was probably deleted. remove the
-            // user from the session and don't log in
-            if (!user || user == null) {
-                req.session.userId = undefined;
-                req.session.save(function(err) {
-                    res.json(undefined);
-                })
-                return;
-            } else {
-                res.json(removePassword(user));
-            }
-        })
-    }
-    else {
-        res.json(undefined);
-    }
-});
-
-
-app.post('/userSession', function(req, res) {
-    const userId = sanitize(req.body.userId);
-    const verificationToken = sanitize(req.body.verificationToken);
-
-    // check if option to stay logged in is true
-    const saveSession = sanitize(req.session.stayLoggedIn);
-    if (!saveSession) {
-        return;
-    }
-
-    if (!userId || !verificationToken) {
-        res.json("either no userId or no verification token");
-        return;
-    }
-
-    // get the user from the id, check the verification token to ensure they
-    // have the right credentials to stay logged in
-    getUserByQuery({_id: userId}, function(error, foundUser) {
-        if (foundUser.verificationToken == verificationToken) {
-            req.session.userId = userId;
-
-            // save user id to session
-            req.session.save(function(err) {
-                if (err) {
-                    console.log("error saving user id to session: ", err2);
-                } else {
-                    res.json(true);
-                    return;
-                }
-            });
-        } else {
-            res.json("incorrect user credentials");
-            return;
-        }
-    });
-})
+app.get('/userSession', userApis.GET_userSession);
+app.post('/userSession', userApis.POST_userSession);
 
 
 // --->>> END SESSION SET UP <<<---
@@ -1497,43 +1438,6 @@ app.post('/getUserByProfileUrl', function (req, res) {
         res.json(safeUser(user));
     })
 });
-
-// dangerous, returns user with verification token
-function getUserByQuery(query, callback) {
-    let finishedOneCall = false;
-
-    // if user found in one of the DBs, performs the callback
-    // if user not found, check if the other DB is already done
-    //     if so, callback with no user, otherwise, wait for the other DB call
-    let doCallbackOrWaitForOtherDBCall = function(err, foundUser) {
-        // if a user was found, return it
-        if (foundUser && foundUser != null) {
-            const NO_ERRORS = undefined;
-            callback(NO_ERRORS, removePassword(foundUser));
-            return;
-        }
-        // no user found in one of the dbs
-        else {
-            // if this is the second db we've checked, no user was found in
-            // either db, so return undefined and an error if one exists
-            if (finishedOneCall) {
-                const NO_USER_FOUND = undefined;
-                callback(err, NO_USER_FOUND);
-            }
-            // if this is the first db we've checkd, mark that a db was checked
-            else {
-                finishedOneCall = true;
-            }
-        }
-    }
-
-    Users.findOne(query, function (err, foundUser) {
-        doCallbackOrWaitForOtherDBCall(err, foundUser);
-    });
-    Employers.findOne(query, function(err, foundUser) {
-        doCallbackOrWaitForOtherDBCall(err, foundUser);
-    });
-}
 
 
 // LOGIN USER
