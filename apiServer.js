@@ -59,6 +59,7 @@ const removePassword = helperFunctions.removePassword;
 
 // import all the api functions
 const userApis = require('./apis/userApis');
+const candidateApis = require('./apis/candidateApis');
 
 
 // --->>> SET UP SESSIONS <<<---
@@ -2960,7 +2961,7 @@ app.post("/updateAnswer", function (req, res) {
 });
 
 
-app.post("/updateAllOnboarding", userApis.updateAllOnboarding);
+app.post("/updateAllOnboarding", candidateApis.updateAllOnboarding);
 
 
 // --->> BUSINESS APIS <<--- //
