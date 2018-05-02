@@ -54,6 +54,10 @@ const helperFunctions = require('./apis/helperFunctions.js');
 const sanitize = helperFunctions.sanitize;
 
 
+// import all the api functions
+const userApis = require('./apis/userApis');
+
+
 // --->>> SET UP SESSIONS <<<---
 app.use(session({
     secret: credentials.secretString,
@@ -71,17 +75,7 @@ app.use(session({
 }));
 
 
-app.post('/signOut', function (req, res) {
-    req.session.userId = undefined;
-    req.session.save(function (err) {
-        if (err) {
-            console.log("error removing user session: ", err);
-            res.json("failure removing user session");
-        } else {
-            res.json("success");
-        }
-    })
-});
+app.post('/signOut', userApis.signOut);
 
 // change session to store whether user wants default of "Keep Me Logged In"
 // to be checked or unchecked
