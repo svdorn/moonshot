@@ -174,7 +174,7 @@ class Results extends Component {
                                             <Tab label="Projects" style={style.topTab}>
                                                 <div style={style.tabContent}
                                                      className="fullHeight font28px font font24pxUnder700 font20pxUnder500 center">
-                                                    <div className="profileProjects">
+                                                    <div className="profileProjects whiteText">
                                                         None
                                                     </div>
                                                 </div>
