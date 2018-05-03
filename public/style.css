@@ -375,6 +375,9 @@ form > h1 {
     background: linear-gradient(to top right, #e24794, #f76740);
     opacity: 0.7;
 }
+.blackBackground {
+    background: #2e2e2e;
+}
 .lightBlueToLightPurpleGradient { background: linear-gradient(to top right, #74e2ff, #b37bfe); }
 .orangeToYellowGradient { background: linear-gradient(to top right, #f24c49, #ebbb8a); }
 .orangeToYellowGradientOpacity {
