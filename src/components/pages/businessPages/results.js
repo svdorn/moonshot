@@ -139,6 +139,9 @@ class Results extends Component {
                 backgroundColor: '#2e2e2e',
                 paddingTop: '10px',
                 paddingBottom: '30px',
+            },
+            lightBlue: {
+                color: '#75dcfc'
             }
         };
 
@@ -198,6 +201,14 @@ class Results extends Component {
                                         >
                                             <Tab label="Skills" style={style.topTab}>
                                                 <div className="center aboutMeSection" style={style.tabContent}>
+                                                    <div className="lightBlackBackground">
+                                                        <div className="font24px font20pxUnder700 font16pxUnder500 whiteText">
+                                                            Candidate Score <b style={style.lightBlue}><u>{overallScore}</u></b>
+                                                        </div>
+                                                        <div>
+                                                            
+                                                        </div>
+                                                    </div>
                                                     <div
                                                         className="whiteText center font24px font20pxUnder700 font16pxUnder500"
                                                         style={{marginTop: '20px'}}>
