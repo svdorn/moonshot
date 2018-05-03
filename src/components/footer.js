@@ -34,7 +34,7 @@ class Footer extends Component {
         } else if (pathname === '/resumeanalysis') {
             footerColor = "redToLightRedUpGradientOpacity";
         } else if (pathname === '/results') {
-            footerColor = "blackBackground";
+            footerColor = "blackBackgroundOpacity";
         }
 
         return (

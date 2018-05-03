@@ -197,7 +197,7 @@ class Results extends Component {
                                             className="myPathwaysTabs"
                                         >
                                             <Tab label="Skills" style={style.topTab}>
-                                                <div className="center fullHeight" style={style.tabContent}>
+                                                <div className="center aboutMeSection" style={style.tabContent}>
                                                     <div
                                                         className="whiteText center font24px font20pxUnder700 font16pxUnder500"
                                                         style={{marginTop: '20px'}}>
@@ -221,7 +221,7 @@ class Results extends Component {
                                                             </ScatterChart>
                                                         </ResponsiveContainer>
                                                     </div>
-                                                    
+
                                                     <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
 
                                                     <div
