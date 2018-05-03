@@ -9,6 +9,7 @@ var bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const sanitizeHtml = require('sanitize-html');
+const fileUpload = require('express-fileupload');
 
 
 var app = express();
@@ -18,6 +19,7 @@ var app = express();
 //app.set('view engine', 'jade');
 
 app.use(logger('dev'));
+app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
@@ -312,14 +314,30 @@ function printUsersFromPathway(pathwayIdToCheck) {
 
 // update all users with a specific thing, used if something is changed about
 // the user model
-// Users.find({}, function(err, users) {
+// Pathways.find({}, function(err, pathways) {
 //     console.log("err is: ", err);
 //
-//     for (let userIdx = 0; userIdx < users.length; userIdx++) {
-//         let user = users[userIdx];
-//         user.userType = "candidate";
-//         user.save(function() {
-//             console.log("user saved");
+//     for (let pathwayIdx = 0; pathwayIdx < pathways.length; pathwayIdx++) {
+//         let pathway = pathways[pathwayIdx];
+//         //pathway.userType = "candidate";
+//
+//         let steps = pathway.steps;
+//
+//         for (let stepIndex = 0; stepIndex < steps.length; stepIndex++) {
+//             let step = steps[stepIndex];
+//             let subSteps = step.subSteps;
+//
+//             for (let subStepIndex = 0; subStepIndex < subSteps.length; subStepIndex++) {
+//                 let subStep = subSteps[subStepIndex];
+//
+//                 if (subStep.contentType === "quiz") {
+//                     pathway.steps[stepIndex].subSteps[subStepIndex].required = true;
+//                 }
+//             }
+//         }
+//
+//         pathway.save(function() {
+//             console.log("pathway saved");
 //         });
 //     }
 // })
@@ -444,7 +462,7 @@ app.post('/user', function (req, res) {
                                         + '</div>';
 
                                     const sendFrom = "Moonshot";
-                                    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
+                                    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
                                         if (!success) {
                                             console.log("Error sending sign up alert email");
                                         }
@@ -498,7 +516,7 @@ app.post('/user', function (req, res) {
                                         + "</div>";
 
                                     const dayAfterSendFrom = "Kyle Treige";
-                                    sendEmail(dayAfterRecipient, dayAfterSubject, dayAfterContent, dayAfterSendFrom, function (success, msg) {
+                                    sendEmail(dayAfterRecipient, dayAfterSubject, dayAfterContent, dayAfterSendFrom, undefined, function (success, msg) {
                                         if (success) {
                                             console.log("sent day-after email");
                                         } else {
@@ -900,7 +918,7 @@ app.post('/sendVerificationEmail', function (req, res) {
             + '</div>';
 
         const sendFrom = "Moonshot";
-        sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
+        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
             if (success) {
                 res.json(msg);
             } else {
@@ -955,9 +973,9 @@ app.post('/user/registerForPathway', function (req, res) {
         + "</div>";
 
     const sendFrom = "Moonshot";
-    sendEmail(recipient1, subject1, content1, sendFrom, function (success, msg) {
+    sendEmail(recipient1, subject1, content1, sendFrom, undefined, function (success, msg) {
         if (success) {
-            sendEmail(recipient2, subject2, content2, sendFrom, function (success, msg) {
+            sendEmail(recipient2, subject2, content2, sendFrom, undefined, function (success, msg) {
                 if (success) {
                     res.json("Check your email for instructions on how to get started.");
                 } else {
@@ -1005,7 +1023,7 @@ app.post('/user/forBusinessEmail', function (req, res) {
         + "</div>";
 
     const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will notify you of your results shortly.");
         } else {
@@ -1036,7 +1054,7 @@ app.post("/alertLinkClicked", function(req, res) {
         + "</div>";
 
     const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
         if (success) {
             res.json(true);
         } else {
@@ -1048,25 +1066,160 @@ app.post("/alertLinkClicked", function(req, res) {
 
 
 // SEND EMAIL FOR SOMEBODY COMPLETING PATHWAY
-app.post('/user/completePathway', function (req, res) {
+app.post('/user/completePathway', async function(req, res) {
     const successMessage = "Pathway marked complete, our team will be in contact with you shortly!";
     const errorMessage = "Error marking pathway complete, try again or contact us.";
 
     const userName = sanitize(req.body.userName);
     const userId = sanitize(req.body._id);
+    const verificationToken = sanitize(req.body.verificationToken);
     const pathwayName = sanitize(req.body.pathwayName);
+    const pathwayId = sanitize(req.body.pathwayId);
     const email = sanitize(req.body.email);
     const phoneNumber = sanitize(req.body.phoneNumber);
     let referralCode = sanitize(req.body.referralCode);
 
-    // remove punctuation and spaces from referral code
-    if (referralCode) {
-        referralCode = referralCode.replace(/&amp;|&quot;|&apos;/g,"").replace(/[.,\/#!$%\^&\*;:{}'"=\-_`~()]/g,"").replace(/\s/g,"").toLowerCase();
-    }
-
+    // the referral info that will be included in the email to Moonshot founders
     let referralInfo = "";
 
-    let finishPathway = function() {
+    // the user that will be found in the db
+    let user = undefined;
+    // the pathway that will be found in the db
+    let pathway = undefined;
+
+    // get the user from the db
+    Users.findById(userId)
+    .then(foundUser => {
+        // if we can't find the user
+        if (foundUser == null) {
+            console.log("Could not find the user that was trying to complete a pathway.");
+            return res.status(400).send("You don't have the right credentials to complete the pathway.");
+        }
+
+        // if the user doesn't have the right verification token
+        if (foundUser.verificationToken !== verificationToken) {
+            console.log("User did not have the right verification token when trying to complete a pathway.");
+            return res.status(400).send("You don't have the right credentials to complete the pathway.");
+        }
+
+        // set the api-wide user object
+        user = foundUser;
+
+        // if the pathway has already been found, check if all the questions
+        // have been completed, then mark pathway complete
+        if (pathway) {
+            checkIfAllQuestionsCompleted();
+        }
+    })
+    // if there's an error getting the user
+    .catch(findUserError => {
+        console.log("Error finding user when user tried to complete a pathway: ", findUserError);
+        return res.status(500).send("Server error, try again later.");
+    });
+
+
+    // get the pathway that the user is completing; only need the steps because
+    // those are the only things we verify
+    Pathways.findById(pathwayId)
+    .select("steps.subSteps.order steps.subSteps.name steps.subSteps.contentID steps.subSteps.contentType steps.subSteps.required steps.order steps.name skills")
+    .then(foundPathway => {
+        // no pathway found
+        if (!foundPathway) {
+            console.log("Couldn't find pathway that user tried to complete. Pathway id searched for: ", pathwayId);
+            return res.status(404).send("Couldn't find that pathway, sorry!");
+        }
+
+        // set the api-wide pathway object
+        pathway = foundPathway;
+        // if the user has already been found, check if all the questions
+        // have been completed, then mark pathway complete
+        if (user) {
+            checkIfAllQuestionsCompleted();
+        }
+    })
+    // error finding the pathway
+    .catch(findPathwayError => {
+        console.log("Error finding the pathway that the user says they completed: ", findPathwayError);
+        return res.status(500).send("Server error, try again later.");
+    })
+
+    // function executed after finding the user and the pathway
+    // checks if the user actually completed the pathway, then moves on to
+    // completing the pathway
+    function checkIfAllQuestionsCompleted() {
+        // see if the user has any answers at all
+        let userHasAnswers = false;
+        if (typeof user.answers === "object") {
+            userHasAnswers = true;
+        }
+
+        let incompleteSteps = [];
+
+        // go through each step to see if the user completed all the subSteps
+        pathway.steps.forEach(step => {
+            // go through each subStep to see if the user has completed them
+            step.subSteps.forEach(subStep => {
+                // only quizzes will have answers, ignore all other subSteps
+                if (subStep.contentType !== "quiz") {
+                    return;
+                }
+
+                // only add this to incomplete steps if it is required
+                if (subStep.required !== true) {
+                    return;
+                }
+
+                // this subStep is a quiz; see if the user has an answer for it
+                if (!userHasAnswers || !user.answers[subStep.contentID]) {
+                    // add this substep to the list of incomplete steps
+                    incompleteSteps.push({
+                        stepNumber: step.order,
+                        stepName: step.name,
+                        subStepNumber: subStep.order,
+                        subStepName: subStep.name
+                    })
+                }
+            });
+        });
+
+        // if there are any incomplete steps, don't let the user finish the pathway
+        if (incompleteSteps.length > 0) {
+            console.log("User tried to finish a pathway without finishing all the steps.");
+            console.log("user: ", user);
+            console.log("pathway name: ", pathway.name);
+            console.log("incompleteSteps: ", incompleteSteps);
+
+            return res.status(400).send({incompleteSteps});
+        }
+
+        // deal with referral code, then mark pathway complete and add user to
+        // business accounts
+
+        // remove punctuation and spaces from referral code
+        if (referralCode) {
+            referralCode = referralCode.replace(/&amp;|&quot;|&apos;/g,"").replace(/[.,\/#!$%\^&\*;:{}'"=\-_`~()]/g,"").replace(/\s/g,"").toLowerCase();
+        }
+
+        // this gets executed before the code above, it executes all that when it's ready
+        if (referralCode) {
+            referralInfo = "<p>Referral Code: " + referralCode + "</p>";
+
+            Referrals.findOne({referralCode}, function(error, referrer) {
+                if (error || referrer == null || (referrer.email == undefined && referrer.name == undefined)) {
+                    referralInfo = referralInfo + "<p>However, no user is associated with that referral code.</p>";
+                } else {
+                    referralInfo = referralInfo + "<p>Referrer's email: " + referrer.email + "</p><p>Referrer's Name: " + referrer.name + ". Make sure this isn't the same as the user who completed the pathway.</p>";
+                }
+                finishPathway();
+            });
+        } else {
+            finishPathway();
+        }
+    }
+
+    // emails moonshot founders telling them someone finished a pathway,
+    // saves user with completed pathway, adds users to business accounts
+    function finishPathway() {
         let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
         let subject = 'ACTION REQUIRED: Somebody completed pathway';
         let content = "<div>"
@@ -1091,172 +1244,154 @@ app.post('/user/completePathway', function (req, res) {
 
 
         // mark pathway complete and change emailTo
-        const _id = sanitize(req.body._id);
-        const verificationToken = sanitize(req.body.verificationToken);
-        const pathwayId = sanitize(req.body.pathwayId);
-        const skills = sanitize(req.body.skills);
-        const query = {_id, verificationToken}
+        user.emailToContact = sanitize(req.body.email);
+        user.phoneNumber = sanitize(req.body.phoneNumber);
+        // find the user's pathway object corresponding to the pathway that was
+        // marked complete
+        const pathwayIndex = user.pathways.findIndex(function(path) {
+            return path.pathwayId.toString() == pathwayId.toString();
+        });
+        // if the pathway was found in their current pathways, remove it
+        // from current pathways and add it to completed pathways
+        if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
+            let completedPathway = user.pathways[pathwayIndex];
+            const newPathwayObject = {
+                pathwayId: completedPathway.pathwayId,
+                dateAdded: completedPathway.dateAdded,
+                dateCompleted: new Date()
+            }
 
-        Users.findOne(query, function (err, user) {
-            if (err) {
-                console.log("error marking pathway complete: ", err);
-            } else if (user && user != null) {
-                user.emailToContact = sanitize(req.body.email);
-                user.phoneNumber = sanitize(req.body.phoneNumber);
-                // find the user's pathway object corresponding to the pathway that was
-                // marked complete
-                const pathwayIndex = user.pathways.findIndex(function(path) {
-                    return path.pathwayId.toString() == pathwayId.toString();
-                });
-                // if the pathway was found in their current pathways, remove it
-                // from current pathways and add it to completed pathways
-                if (typeof pathwayIndex === "number" && pathwayIndex >= 0) {
-                    let completedPathway = user.pathways[pathwayIndex];
-                    const newPathwayObject = {
-                        pathwayId: completedPathway.pathwayId,
-                        dateAdded: completedPathway.dateAdded,
-                        dateCompleted: new Date()
-                    }
+            // Put pathway into completed pathways and remove it from current pathways
+            user.completedPathways.push(newPathwayObject);
+            user.pathways.splice(pathwayIndex, 1);
+        }
+        // if the user didn't have that pathway in the first place, don't let them complete it
+        else {
+            console.log("User tried to complete a pathway without having it in their list of current pathways.");
+            console.log("user: ", user);
+            console.log("pathwayId: ", pathwayId);
+            return res.status(403).send("Must have signed up for that pathway to complete it.");
+        }
 
-                    // Put pathway into completed pathways and remove it from current pathways
-                    user.completedPathways.push(newPathwayObject);
-                    user.pathways.splice(pathwayIndex, 1);
+        // add the user's new skills that they gained from this
+        if (Array.isArray(pathway.skills)) {
+            pathway.skills.forEach(function(skill) {
+                // only add the skill if the user does not already have it
+                const notFound = -1;
+                if (user.skills.findIndex(function(userSkill) {
+                    return userSkill === skill;
+                }) === notFound) {
+                    user.skills.push(skill);
+                }
+            });
+        }
+
+        // save the user's new info in the db
+        user.save(function(err, updatedUser) {
+            // safe-guard against us getting a null updatedUser
+            let userToReturn = updatedUser;
+            if (err || updatedUser == null || updatedUser == undefined) {
+                console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email + ": ", err);
+                userToReturn = user;
+                content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
+            }
+
+            // get the associated businesses (the ones that have
+            // this pathway's id in their associated pathway ids array)
+            // TODO: when refactoring for db speed/minimal data sent,
+            // this would be a good query to work with. try to return
+            // only the right candidate
+            Businesses.find({pathwayIds: pathwayId})
+            .select("pathwayIds candidates")
+            .exec(function (findBizErr, businesses) {
+                if (findBizErr) {
+                    console.log("Error finding businesses corresponding to the pathway user is trying to complete: ", findBizErr);
+                    sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "completing");
+                    return;
                 }
 
-                // add the user's new skills that they gained from this
-                if (Array.isArray(skills)) {
-                    skills.forEach(function(skill) {
-                        // only add the skill if the user does not already have it
-                        const notFound = -1;
-                        if (user.skills.findIndex(function(userSkill) {
-                            return userSkill === skill;
-                        }) === notFound) {
-                            user.skills.push(skill);
+                // iterate through each business that has this pathway
+                businesses.forEach(function(business) {
+                    let candidates = business.candidates;
+
+                    // find the candidate index within the business' candidate array
+                    const userIdString = user._id.toString();
+                    const userIndex = candidates.findIndex(function(candidate) {
+                        return candidate.userId.toString() == userIdString;
+                    });
+
+                    // if candidate doesn't exist, add them along with the pathway
+                    if (userIndex == -1) {
+                        let candidateToAdd = {
+                            userId: user._id,
+                            name: user.name,
+                            // give the business the email that the candidate wants to be contacted at, not their login email
+                            email: userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email,
+                            // will only have this pathway if the candidate didn't exist before
+                            pathways: [{
+                                _id: pathwayId,
+                                name: pathwayName,
+                                hiringStage: "Not Contacted",
+                                completionStatus: "Complete"
+                            }]
+                        }
+                        business.candidates.push(candidateToAdd);
+                    }
+
+                    // candidate did previously exist
+                    else {
+                        let candidate = candidates[userIndex];
+
+                        // change their email to contact just in case they changed it
+                        business.candidates[userIndex].email = userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email;
+
+                        // check if they have the current pathway (will be -1 if they don't)
+                        const pathwayIndex = candidate.pathways.findIndex(function(path) {
+                            return path._id == pathwayId;
+                        });
+
+                        // if the have the current pathway, mark them as having completed it
+                        if (pathwayIndex > -1) {
+                            business.candidates[userIndex].pathways[pathwayIndex].completionStatus = "Complete";
+                        }
+
+                        // if they don't have the current pathway, add the pathway and mark it complete
+                        else {
+                            business.candidates[userIndex].pathways.push({
+                                _id: pathwayId,
+                                name: pathwayName,
+                                hiringStage: "Not Contacted",
+                                completionStatus: "Complete",
+                                isDismissed: false
+                            })
+                        }
+                    }
+
+                    // save the businesses in db
+                    business.save(function(updateBizErr, updatedBiz) {
+                        if (updateBizErr || updatedBiz == null) {
+                            sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "completing");
                         }
                     });
-                }
+                });
+            });
 
-                // save the user's new info in the db
-                user.save(function(err, updatedUser) {
-                    // safe-guard against us getting a null updatedUser
-                    let userToReturn = updatedUser;
-                    if (err || updatedUser == null || updatedUser == undefined) {
-                        console.log("Error marking pathway: " + pathway.name + " as complete for user with email: " + user.email);
-                        userToReturn = user;
-                        content = content + "<div>User's new info was not successfully saved in the database. Look into it.</div>"
-                    }
-
-                    // get the associated businesses (the ones that have
-                    // this pathway's id in their associated pathway ids array)
-                    // TODO: when refactoring for db speed/minimal data sent,
-                    // this would be a good query to work with. try to return
-                    // only the right candidate
-                    Businesses.find({pathwayIds: pathwayId})
-                        .select("pathwayIds candidates")
-                        .exec(function (findBizErr, businesses) {
-                            if (findBizErr) {
-                                sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "completing");
-                            } else {
-                                // iterate through each business that has this pathway
-                                businesses.forEach(function(business) {
-                                    let candidates = business.candidates;
-
-                                    // find the candidate index within the business' candidate array
-                                    const userIdString = user._id.toString();
-                                    const userIndex = candidates.findIndex(function(candidate) {
-                                        return candidate._id.toString() == userIdString;
-                                    });
-
-                                    // if candidate doesn't exist, add them along with the pathway
-                                    if (userIndex == -1) {
-                                        let candidateToAdd = {
-                                            _id: user._id,
-                                            name: user.name,
-                                            profileUrl: user.profileUrl,
-                                            // give the business the email that the candidate wants to be contacted at, not their login email
-                                            email: userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email,
-                                            // will only have this pathway if the candidate didn't exist before
-                                            pathways: [{
-                                                _id: pathwayId,
-                                                name: pathwayName,
-                                                hiringStage: "Not Contacted",
-                                                completionStatus: "Complete"
-                                            }]
-                                        }
-                                        business.candidates.push(candidateToAdd);
-                                    }
-
-                                    // candidate did previously exist
-                                    else {
-                                        let candidate = candidates[userIndex];
-
-                                        // change their email to contact just in case they changed it
-                                        business.candidates[userIndex].email = userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email
-
-                                        // check if they have the current pathway (will be -1 if they don't)
-                                        const pathwayIndex = candidate.pathways.findIndex(function(path) {
-                                            return path._id == pathwayId;
-                                        });
-
-                                        // if the have the current pathway, mark them as having completed it
-                                        if (pathwayIndex > -1) {
-                                            business.candidates[userIndex].pathways[pathwayIndex].completionStatus = "Complete";
-                                        }
-
-                                        // if they don't have the current pathway, add the pathway and mark it complete
-                                        else {
-                                            business.candidates[userIndex].pathways.push({
-                                                _id: pathwayId,
-                                                name: pathwayName,
-                                                hiringStage: "Not Contacted",
-                                                completionStatus: "Complete"
-                                            })
-                                        }
-                                    }
-                                    // save the businesses in db
-                                    business.save(function(updateBizErr, updatedBiz) {
-                                        if (updateBizErr || updatedBiz == null) {
-                                            sendBizUpdateCandidateErrorEmail(user.email, pathwayId, "completing");
-                                        }
-                                    });
-                                });
-                            }
-                        });
-
-                    // only send email if in production
-                    if (process.env.NODE_ENV) {
-                        // send an email to us saying that the user completed a pathway
-                        const sendFrom = "Moonshot";
-                        sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
-                            if (success) {
-                                res.json({message: successMessage, user: userToReturn});
-                            } else {
-                                res.status(500).send({message: errorMessage, user: userToReturn});
-                            }
-                        });
-                    } else {
-                        // if not in production, just send success message to user
+            // only send email if in production
+            if (process.env.NODE_ENV) {
+                // send an email to us saying that the user completed a pathway
+                const sendFrom = "Moonshot";
+                sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+                    if (success) {
                         res.json({message: successMessage, user: userToReturn});
+                    } else {
+                        res.status(500).send({message: errorMessage, user: userToReturn});
                     }
                 });
-            }
-        });
-    }
-
-    // this gets executed before the code above, it excutes all that when it's ready
-    if (referralCode) {
-        referralInfo = "<p>Referral Code: " + referralCode + "</p>";
-
-        Referrals.findOne({referralCode}, function(error, referrer) {
-            if (error || referrer == null || (referrer.email == undefined && referrer.name == undefined)) {
-                referralInfo = referralInfo + "<p>However, no user is associated with that referral code.</p>";
             } else {
-                referralInfo = referralInfo + "<p>Referrer's email: " + referrer.email + "</p><p>Referrer's Name: " + referrer.name + ". Make sure this isn't the same as the user who completed the pathway.</p>";
+                // if not in production, just send success message to user
+                res.json({message: successMessage, user: userToReturn});
             }
-            finishPathway();
         });
-    } else {
-        finishPathway();
     }
 });
 
@@ -1271,8 +1406,9 @@ function sendBizUpdateCandidateErrorEmail(email, pathwayId, pathwayStatus) {
         const errorEmailContent =
             "<p>User email: " + email + "</p>"
             + "<p>PathwayId: " + pathwayId + "</p>";
+        const sendFrom = "Moonshot";
         // send an email to us saying that the user wasn't added to the business' candidates list
-        sendEmail(errorEmailRecipients, errorEmailSubject, errorEmailContent, function(errorEmailSucces, errorEmailMsg) {
+        sendEmail(errorEmailRecipients, errorEmailSubject, errorEmailContent, sendFrom, undefined, function(errorEmailSucces, errorEmailMsg) {
             if (errorEmailMsg) {
                 throw "error";
             }
@@ -1330,7 +1466,7 @@ app.post('/createReferralCode', function(req, res) {
 
         // send email to user who asked for a referral code with the info about the code
         const sendFrom = "Kyle Treige";
-        sendEmail(recipient, subject, emailContent, sendFrom, function (success, msg) {
+        sendEmail(recipient, subject, emailContent, sendFrom, undefined, function (success, msg) {
             if (!success) {
                 console.log("Email not sent to user about referral code. Message: ", msg);
             }
@@ -1391,7 +1527,7 @@ app.post('/user/unsubscribeEmail', function (req, res) {
         + "</div>";
 
     const sendFrom = "Moonshot";
-    sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
+    sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
         if (success) {
             res.json("You have successfully unsubscribed.");
         } else {
@@ -1410,7 +1546,7 @@ app.post('/user/unsubscribeEmail', function (req, res) {
             + sanitize(req.body.email)
             + "</p>"
             + "</div>";
-        sendEmail(recipient, subject, content, sendFrom, function(){});
+        sendEmail(recipient, subject, content, sendFrom, undefined, function(){});
     }
 
     // add email to list of unsubscribed emails
@@ -1449,7 +1585,7 @@ app.post('/user/comingSoonEmail', function (req, res) {
         + "</div>";
 
     const sendFrom = "Moonshot";
-    sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
+    sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
@@ -1481,7 +1617,7 @@ app.post('/user/contactUsEmail', function (req, res) {
         + "</div>";
 
     const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
         if (success) {
             res.json("Email sent successfully, our team will be in contact with you shortly!");
         } else {
@@ -1550,7 +1686,7 @@ app.post('/forgotPassword', function (req, res) {
                     + '</div>';
 
                 const sendFrom = "Moonshot";
-                sendEmail(recipient, subject, content, sendFrom, function (success, msg) {
+                sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
                     if (success) {
                         res.json(msg);
                     } else {
@@ -1564,7 +1700,7 @@ app.post('/forgotPassword', function (req, res) {
 
 // callback needs to be a function of a success boolean and string to return;
 // takes an ARRAY of recipient emails
-function sendEmail(recipients, subject, content, sendFrom, callback) {
+function sendEmail(recipients, subject, content, sendFrom, attachments, callback) {
     if (recipients.length === 0) {
         callback(false, "Couldn't send email. No recipient.")
         return;
@@ -1632,6 +1768,11 @@ function sendEmail(recipients, subject, content, sendFrom, callback) {
             subject: subject, // Subject line
             html: content // html body
         };
+
+        // attach attachments, if they exist
+        if (attachments && Array.isArray(attachments) && attachments.length > 0) {
+            mailOptions.attachments = attachments;
+        }
 
         // send mail with defined transport object
         transporter.sendMail(mailOptions, (error, info) => {
@@ -2019,7 +2160,7 @@ app.post("/user/addPathway", function (req, res) {
                         console.log("Sending email to alert us about new user sign up.");
 
                         const sendFrom = "Moonshot";
-                        sendEmail(recipients, subject, content, sendFrom, function (success, msg) {
+                        sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
                             if (!success) {
                                 console.log("Error sending sign up alert email");
                             }
@@ -2044,13 +2185,16 @@ app.post("/user/addPathway", function (req, res) {
                                 // find the candidate index within the business' candidate array
                                 const userIdString = user._id.toString();
                                 const userIndex = candidates.findIndex(function(candidate) {
-                                    return candidate._id.toString() == userIdString;
+                                    if (!candidate.userId) {
+                                        return false;
+                                    }
+                                    return candidate.userId.toString() == userIdString;
                                 });
 
                                 // if candidate doesn't exist, add them along with the pathway
                                 if (userIndex == -1) {
                                     let candidateToAdd = {
-                                        _id: user._id,
+                                        userId: user._id,
                                         name: user.name,
                                         profileUrl: user.profileUrl,
                                         // give the business the email that the candidate wants to be contacted at, not their login email
@@ -3175,7 +3319,8 @@ app.post('/sendEmployerVerificationEmail', function (req, res) {
             +   '</div>'
             +'</div>';
 
-        sendEmail(recipient, subject, content, function (success, msg) {
+        const sendFrom = "Moonshot";
+        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
             if (success) {
                 res.json(msg);
             } else {
@@ -3447,6 +3592,59 @@ app.get("/business/candidateSearch", function(req, res) {
 });
 
 
+app.post("/resumeScorer/uploadResume", function(req, res) {
+    try {
+        const email = sanitize(req.body.email);
+        const name = sanitize(req.body.name);
+        const desiredCareers = sanitize(req.body.desiredCareers);
+        const skills = sanitize(req.body.skills);
+        const resumeFile = req.files.resumeFile;
+        const resumeFileName = resumeFile.name;
+
+        // only allow certain file types to be uploaded
+       let extension = resumeFileName.split('.').pop().toLowerCase();
+       const allowedFileTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'];
+       if (!allowedFileTypes.some(function(fileType) {
+           return fileType === extension;
+       })) {
+           console.log(`User tried to upload a file of type .${extension}, which is not allowed.`);
+           return res.status(400).send("Wrong file type.");
+       }
+
+        let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "ameyer24@wisc.edu"];
+        let subject = 'Resume To Be Scored';
+        let content =
+            '<div>'
+            +   '<p>New resume to be scored.</p>'
+            +   '<p>Name: ' + name + '</p>'
+            +   '<p>email: ' + email + '</p>'
+            +   '<p>Skills: ' + skills + '</p>'
+            +   '<p>Desired Careers: ' + desiredCareers + '</p>'
+            + '</div>';
+        let attachments = [{
+            filename: resumeFileName,
+            content: new Buffer(resumeFile.data,'7bit')
+        }];
+
+        const sendFrom = "Moonshot";
+        sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {
+            // on failure
+            if (!success) {
+                console.log("Error sending sign up alert email: ", msg);
+                res.status(500).send("Error uploading resume, try again later.");
+                return;
+            }
+            // on success
+            return res.json("Success!");
+        })
+    }
+    catch (error) {
+        console.log("Error sending resume to Kyle: ", error);
+        return res.status(500).send("Error uploading, try again later.");
+    }
+});
+
+
 // post a new business to the db
 app.post("/business", async function(req, res) {
     const body = req.body;
@@ -3563,8 +3761,7 @@ app.post("/business", async function(req, res) {
     }
 });
 
-
-// UPDATE HIRING STAGE OF A CANDIDATE (NOT YET CONTACTED, CONTACTED)
+// UPDATE HIRING STAGE OF A CANDIDATE (NOT CONTACTED, CONTACTED)
 app.post("/business/updateHiringStage", async function(req, res) {
     const body = req.body;
     const userId = sanitize(body.userId);
@@ -3592,7 +3789,7 @@ app.post("/business/updateHiringStage", async function(req, res) {
     }
 
     // ensure the hiring stage provided is valid
-    const validHiringStages = ["Not Yet Contacted", "Contacted", "Interviewing", "Hired"];
+    const validHiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
     if (!validHiringStages.includes(hiringStage)) {
         console.log("Invalid hiring stage provided.");
         return res.status(400).send("Invalid hiring stage provided.");
@@ -3610,7 +3807,7 @@ app.post("/business/updateHiringStage", async function(req, res) {
 
         // the index of the candidate in the business' candidate array
         const candidateIndex = business.candidates.findIndex(currCandidate => {
-            return currCandidate._id.toString() === candidateId;
+            return currCandidate.userId.toString() === candidateId;
         });
 
         let candidate = business.candidates[candidateIndex];

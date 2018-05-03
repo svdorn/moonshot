@@ -171,6 +171,16 @@ export function usersReducers(state = initialState, action) {
                 ...state, currentUser: action.payload
             };
             break;
+        case "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS":
+            return {
+                ...state, incompleteSteps: action.incompleteSteps, loadingSomething: false
+            }
+            break;
+        case "RESET_INCOMPLETE_STEPS":
+            return {
+                ...state, incompleteSteps: undefined
+            }
+            break;
         case "ADD_PATHWAY":
             return {
                 ...state, currentUser: action.payload, notification: action.notification

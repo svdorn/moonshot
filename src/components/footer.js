@@ -17,9 +17,9 @@ class Footer extends Component {
             return null;
         }
         let footerColor = "purpleToBlue";
-        if (this.props.location.pathname === '/myPathways' || this.props.location.pathname === '/pathway') {
+        if ((this.props.location.pathname === '/myPathways') || (this.props.location.pathname === '/pathway') || (this.props.location.pathname === '/resumeAnalysis')) {
             footerColor = "purpleToRedLightGradientOpacity";
-        } else if (this.props.location.pathname === '/profile' || this.props.location.pathname === '/businessProfile') {
+        } else if ((this.props.location.pathname === '/profile') || (this.props.location.pathname === '/businessProfile')) {
             footerColor = "orangeToYellowGradientOpacity";
         }
         return (

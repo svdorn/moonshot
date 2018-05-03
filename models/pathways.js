@@ -12,6 +12,7 @@ var pathwaysSchema = mongoose.Schema({
   showComingSoonBanner: Boolean,
   showToUsers: Boolean,
   url: String,
+  skills: [String],
   sponsor: {
       // sponsor company's name
       name: String,
@@ -151,6 +152,7 @@ var pathwaysSchema = mongoose.Schema({
           order: Number,
           superStepOrder: Number,
           name: String,
+          required: Boolean,
           contentType: String,
           contentID: mongoose.Schema.Types.ObjectId,
           comments: [{ email: String, body: String, date: Date }]

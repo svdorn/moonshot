@@ -59,21 +59,21 @@ class MyCandidates extends Component {
                 verificationToken: this.props.currentUser.verificationToken
             }
         })
-        .then(function(res) {
-            let pathways = res.data;
-            if (Array.isArray(pathways) && pathways.length > 0) {
-                self.setState({
-                    pathways: res.data
-                });
-            } else {
-                self.setState({
-                    noPathways: true
-                })
-            }
-        })
-        .catch(function(err) {
-            console.log("error getting pathways: ", err);
-        });
+            .then(function (res) {
+                let pathways = res.data;
+                if (Array.isArray(pathways) && pathways.length > 0) {
+                    self.setState({
+                        pathways: pathways
+                    });
+                } else {
+                    self.setState({
+                        noPathways: true
+                    })
+                }
+            })
+            .catch(function (err) {
+                console.log("error getting pathways: ", err);
+            });
     }
 
     goTo(route) {
@@ -116,7 +116,6 @@ class MyCandidates extends Component {
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
-                console.log(res.data);
                 // make sure component is mounted before changing state
                 if (this.refs.myCandidates) {
                     this.setState({candidates: res.data});
@@ -196,53 +195,77 @@ class MyCandidates extends Component {
             return null;
         }
 
+        // find the id of the currently selected pathway
+        const pathwayId = this.state.pathway ? this.state.pathways.find(path => {
+            return path.name === this.state.pathway;
+        })._id : undefined;
+
         // create the candidate previews
         let key = 0;
         let self = this;
-        const candidatePreviews = this.state.candidates.map(candidate => {
-            key++;
 
-            console.log("candidate is: ", candidate);
+        let candidatePreviews = (
+            <div className="center">
+                Select a pathway to see your candidates.
+            </div>
+        )
 
-            // get the id of the current pathway whose candidates are being shown
-            let pathwayId = undefined;
-            let initialHiringStage = "Not Yet Contacted";
-            let initialIsDismissed = false;
-            const pathwayObj = self.state.pathways.find(currPathway => {
-                return currPathway.name === self.state.pathway;
+        if (this.state.pathway != "") {
+            candidatePreviews = this.state.candidates.map(candidate => {
+                key++;
+
+                // candidatePathwayInfo = {
+                //  completionStatus: "Complete",
+                //  hiringStage: "Contacted",
+                //  isDismissed: false,
+                //  _id: [the pathway id]
+                // }
+                let candidatePathwayInfo = {
+                    hiringStage: "Not Contacted",
+                    isDismissed: false
+                }
+
+                // if the candidate does not have a pathways list, it is probably
+                // still loading the page; if we get into this if statement, it
+                // is an actual candidate
+                if (Array.isArray(candidate.pathways)) {
+                    const tempPathwayInfo = candidate.pathways.find(path => {
+                        return path._id === pathwayId;
+                    });
+                    // only set the pathway info if any was actually found
+                    if (tempPathwayInfo) {
+                        candidatePathwayInfo = tempPathwayInfo;
+                    }
+                }
+
+                const initialHiringStage = candidatePathwayInfo.hiringStage;
+                const initialIsDismissed = candidatePathwayInfo.isDismissed;
+                const isDisabled = candidate.disabled === true;
+
+
+                return (
+                    <li style={{marginTop: '15px'}}
+                        key={key}
+                    >
+                        <CandidatePreview
+                            initialHiringStage={initialHiringStage}
+                            initialIsDismissed={initialIsDismissed}
+                            employerUserId={currentUser._id}
+                            employerVerificationToken={currentUser.verificationToken}
+                            companyId={currentUser.company.companyId}
+                            candidateId={candidate._id}
+                            pathwayId={pathwayId}
+                            editHiringStage={true}
+                            name={candidate.name}
+                            email={candidate.email}
+                            disabled={isDisabled}
+                            profileUrl={candidate.profileUrl}
+                        />
+                    </li>
+                );
             });
 
-            // if we are looking at a specific pathway, put in the info that
-            // allows the user to change the candidate's hiring stage info
-            if (pathwayObj) {
-                pathwayId = pathwayObj._id;
-                initialHiringStage = pathwayObj.hiringStage;
-                initialIsDismissed = pathwayObj.isDismissed;
-            }
-
-            let isDisabled = candidate.disabled === true;
-
-            return (
-                <li style={{marginTop: '15px'}}
-                    key={key}
-                >
-                    <CandidatePreview
-                        initialHiringStage={initialHiringStage}
-                        initialIsDismissed={initialIsDismissed}
-                        employerUserId={currentUser._id}
-                        employerVerificationToken={currentUser.verificationToken}
-                        companyId={currentUser.company.companyId}
-                        candidateId={candidate._id}
-                        pathwayId={pathwayId}
-                        editHiringStage={true}
-                        name={candidate.name}
-                        email={candidate.email}
-                        disabled={isDisabled}
-                        profileUrl={candidate.profileUrl}
-                    />
-                </li>
-            );
-        });
+        }
 
         const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired", "Dismissed"];
         const hiringStageItems = hiringStages.map(function (hiringStage) {
@@ -344,7 +367,7 @@ class MyCandidates extends Component {
 
                 <div>
                     <ul className="center" id="aboutMeAreas">
-                    {candidatePreviews}
+                        {candidatePreviews}
                     </ul>
                 </div>
             </div>

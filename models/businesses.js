@@ -7,7 +7,7 @@ var businessesSchema = mongoose.Schema({
     employerIds: [ mongoose.Schema.Types.ObjectId ],
     // the candidates that have completed a pathway from this company
     candidates: [{
-        _id: mongoose.Schema.Types.ObjectId,
+        userId: mongoose.Schema.Types.ObjectId,
         name: String,
         email: String,
         pathways: [{
