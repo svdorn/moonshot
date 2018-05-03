@@ -5,7 +5,7 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {Tabs, Tab} from 'material-ui';
-import {ScatterChart, CartesianGrid, Scatter, XAxis, YAxis, Tooltip, Legend} from 'recharts';
+import {ScatterChart, CartesianGrid, Scatter, XAxis, YAxis, ResponsiveContainer} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 
@@ -202,13 +202,21 @@ class Results extends Component {
                                                         className="whiteText center font24px font20pxUnder700 font16pxUnder500">
                                                         Predictive Insights
                                                     </div>
-                                                    <div className="recharts-wrapper">
-                                                        <ScatterChart width={730} height={250} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>>
-                                                            <CartesianGrid strokeDasharray="3 3"/>
-                                                            <XAxis dataKey="x" tickLine={false} stroke="white"/>
-                                                            <YAxis dataKey="y" name="Score" domain={['dataMin', 'auto']} stroke="white"/>
-                                                            <Scatter data={predictiveInsights} fill="#8884d8"/>
-                                                        </ScatterChart>
+                                                    <div>
+                                                        <ResponsiveContainer width="60%" height={250} minWidth={500} className="recharts-wrapper">
+                                                            <ScatterChart margin={{
+                                                                top: 20,
+                                                                right: 50,
+                                                                left: 0,
+                                                                bottom: 0
+                                                            }}>>
+                                                                <CartesianGrid strokeDasharray="3 3"/>
+                                                                <XAxis dataKey="x" tickLine={false} stroke="white"/>
+                                                                <YAxis dataKey="y" name="Score"
+                                                                       domain={['dataMin', 'auto']} stroke="white"/>
+                                                                <Scatter data={predictiveInsights} fill="#8884d8"/>
+                                                            </ScatterChart>
+                                                        </ResponsiveContainer>
                                                     </div>
                                                 </div>
                                             </Tab>
