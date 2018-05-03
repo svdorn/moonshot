@@ -5,6 +5,7 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {Tabs, Tab} from 'material-ui';
+import { ScatterChart } from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 
@@ -15,9 +16,9 @@ class Results extends Component {
         this.state = {
             user: undefined,
             candidate: {},
-            pathway: {},
-            quizzes: {},
-            scores: {}
+            overallScore: undefined,
+            hardSkills: {},
+            predictiveInsights: {}
         };
     }
 
@@ -37,7 +38,7 @@ class Results extends Component {
         }
 
         let self = this;
-        let candidate = {}, pathway = {}, quizzes = {}, scores = {};
+        let candidate = {}, overallScore = undefined, hardSkills = {}, predictiveInsights = {};
 
         if (profileUrl === 'Stephen-Dorn-2-9f66bf7eeac18994') {
             candidate = {
@@ -49,7 +50,7 @@ class Results extends Component {
 
         self.setState({
             ...self.state,
-            user, candidate, pathway, quizzes, scores
+            user, candidate, overallScore, hardSkills, predictiveInsights
         });
 
     }
@@ -109,9 +110,9 @@ class Results extends Component {
 
         const user = this.state.user;
         const candidate = this.state.candidate;
-        const pathway = this.state.pathway;
-        const quizzes = this.state.quizzes;
-        const scores = this.state.scores;
+        const overallScore = this.state.overallScore;
+        const hardSkills = this.state.hardSkills;
+        const predictiveInsights = this.state.predictiveInsights;
 
         let mailtoEmail = undefined;
         if (candidate) {
