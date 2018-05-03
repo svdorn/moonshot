@@ -158,14 +158,19 @@ class PathwayContentCompletePathway extends Component {
             )
         }
 
+        let sponsorName = "the sponsor company";
+        try {
+            sponsorName = this.props.pathway.sponsor.name;
+        } catch (e) {}
+
         return (
             <div className={this.props.className} style={{...this.props.style}}>
                 <div className="center" style={{marginBottom: "10px"}}>
-                    <h4 className="marginTop20px blueText font30px">Be Ready</h4>
+                    <h4 className="marginTop20px blueText font30px">Complete</h4>
 
-                    {"We will review your results and let you know in the next 48 hours if you meet this position's requirements."}
-                    <br/>
-                    {"Verify your contact info so we can reach out to you if you advance to the next round."}
+                    <div style={{margin: "0px 20px"}}>
+                        {`Your pathway results will be sent to ${sponsorName}. Their hiring manager will review your results to decide if you will advance to interviews. Verify your contact info so ${sponsorName} can reach out if you advance to the next round.`}
+                    </div>
                     <br/>
                     <input
                         placeholder="Email address"

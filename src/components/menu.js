@@ -163,6 +163,17 @@ class Menu extends Component {
             isEmployer = true;
         }
 
+        // get the current path from the url
+        let pathname = undefined;
+        // try to get the path; lowercased because capitalization will vary
+        try {
+            pathname = this.props.location.pathname.toLowerCase();
+        }
+        // if the pathname is not yet defined, don't do anything, this will be executed again later
+        catch (e) {
+            pathname = "";
+        }
+
         // the url to be directed to by default
         let homeUrl = "/";
         if (isEmployer) {
@@ -170,7 +181,7 @@ class Menu extends Component {
         }
 
         let isOnboarding = false;
-        if (this.props.location.pathname === '/onboarding') {
+        if (pathname === '/onboarding') {
             isOnboarding = true;
         }
         // color of the dropDown menu icon
@@ -187,10 +198,10 @@ class Menu extends Component {
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
         let hoverWidth = "52px";
-        if (this.props.location.pathname === '/profile') {
+        if (pathname === '/profile') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
         }
-        if (this.props.location.pathname === '/settings') {
+        if (pathname === '/settings') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
             // if settings is selected, the underline bar must be bigger
             // because "settings" is a bigger word
@@ -303,7 +314,7 @@ class Menu extends Component {
                     // default to not underlined
                     let optionClass = menuItemClass;
                     // if this option is the one that is currently selected, underline it
-                    if (self.props.location.pathname === option.url) {
+                    if (pathname === option.url.toLowerCase()) {
                         optionClass = selectedMenuItemClass;
                     }
                     desktopMenu.push(

@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateUser} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper} from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm, change} from 'redux-form';
 
 const styles = {
@@ -54,6 +54,19 @@ const validate = values => {
 };
 
 class Account extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            hideProfile: props.currentUser.hideProfile === true
+        };
+    }
+
+
+    handleHideProfileClick() {
+        this.setState({ hideProfile: !this.state.hideProfile });
+    }
+
 
     handleSubmit(e) {
         e.preventDefault();
@@ -80,7 +93,8 @@ class Account extends Component {
             name: this.props.formData.settings.values.name,
             email: this.props.formData.settings.values.email,
             password: this.props.formData.settings.values.password,
-            _id: this.props.currentUser._id
+            _id: this.props.currentUser._id,
+            hideProfile: this.state.hideProfile
         };
 
         this.props.updateUser(user);
@@ -125,12 +139,23 @@ class Account extends Component {
                                 autoComplete="new-password"
                             /></div>
                         <br/>
+                        <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleHideProfileClick.bind(this)}>
+                            <img
+                                alt=""
+                                className={"checkMark" + this.state.hideProfile}
+                                src="/icons/CheckMarkBlue.png"
+                            />
+                        </div>
+                        <div className="blueText" style={{display:"inline-block"}}>
+                            Hide Profile From Employers
+                        </div><br/>
                         <button
                             type="submit"
                             className="formSubmitButton font24px font16pxUnder600"
                         >
                             Update Settings
-                        </button>
+                        </button><br/>
+                        {this.props.loadingUpdateSettings ? <CircularProgress style={{marginTop: "10px"}}/> : null}
                     </form>
                 </div>
             </div>
@@ -150,6 +175,7 @@ function mapStateToProps(state) {
         initialValues: state.users.currentUser,
         formData: state.form,
         currentUser: state.users.currentUser,
+        loadingUpdateSettings: state.users.loadingSomething
     };
 }
 

@@ -32,11 +32,12 @@ export function getUserFromSession(callback) {
 
 export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
     return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+
         axios.post("/api/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
-                dispatch({type: "CLOSE_NOTIFICATION"});
                 let nextUrl = '/discover';
                 console.log(returnedUser.userType);
                 if (returnedUser.userType === "employer") {
@@ -223,29 +224,35 @@ export function forgotPassword(user) {
 // UPDATE A USER
 export function updateUser(user) {
     return function(dispatch) {
+        // make loading circle show up
+        dispatch({type:"START_LOADING"});
         // update user on the database
         axios.post("/api/user/changeSettings", user)
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}})
-            })
-            .catch(function(err) {
-                dispatch({type:"UPDATE_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
-            });
+        .then(function(response) {
+            dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}});
+            window.scrollTo(0, 0);
+        })
+        .catch(function(err) {
+            dispatch({type:"UPDATE_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
+            window.scrollTo(0, 0);
+        });
     }
 }
 
 export function changePassword(user) {
     return function(dispatch) {
+        // make loading circle show up
+        dispatch({type:"START_LOADING"});
 
         axios.post('/api/user/changepassword', user)
-            .then(function(response) {
-                dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
-                // reset the form
-                dispatch(reset("changePassword"));
-            })
-            .catch(function(err){
-                dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: err.response.data, type: "errorHeader"}})
-            });
+        .then(function(response) {
+            dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
+            // reset the form
+            dispatch(reset("changePassword"));
+        })
+        .catch(function(err){
+            dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: err.response.data, type: "errorHeader"}})
+        });
     }
 }
 

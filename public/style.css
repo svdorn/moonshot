@@ -362,6 +362,10 @@ form > h1 {
 .purpleToRedGradient { background: linear-gradient(to bottom right, #721ae9, #e45c67); }
 .redToLightRedGradient { background: linear-gradient(to bottom right, #e24794, #f76740); }
 .redToLightRedDownGradient { background: linear-gradient(to bottom, #e24794, #f76740); }
+.redToLightRedUpGradientOpacity {
+    background: linear-gradient(to top, #e24794, #f76740);
+    opacity: 0.7;
+}
 .purpleToRedLightGradient { background: linear-gradient(to bottom right, #983cc9, #e36273); }
 .purpleToRedLightGradientOpacity {
     background: linear-gradient(to top right, #983cc9, #e36273);
@@ -483,6 +487,15 @@ form > h1 {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+
+
+.resumeAnalysisUploadStep {
+    display: none;
+}
+.resumeAnalysisUploadStep.inFrame {
+    display: initial;
+}
+
 
 
 #pathwayDescriptionAndSalary {
@@ -679,11 +692,12 @@ button.link {
     padding: 2px 13px;
 }
 .lightBlueChip {
-    height: 36px;
+    /* height: 36px; */
     background: var(--moonshotLightBlue);
     padding: 1px;
     border-radius: 25px;
-    margin-left: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 .lightBlueChip > div {
     background: white;
@@ -1746,7 +1760,7 @@ button.link {
 }
 .homepageTrajectoryTextRightIcon.onHome {
     height: 70px;
-    margin-top: 36px;
+    margin-top: 18px;
 }
 .forBusinessTrajectoryTextLeft {
     float: left;
@@ -2035,41 +2049,48 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .multipleChoiceOption, .multiSelectOption {
     position: relative;
     margin-bottom: 10px;
+
+    text-align: left;
+    margin-left: 80px;
+    margin-right: 80px;
 }
 .multipleChoiceAnswer {
-    max-width: 160px;
-    margin: auto;
+    /* max-width: 160px; */
     overflow-x: hidden;
+    /* margin: auto; */
+
+    display: inline-block;
 }
-.multipleChoiceAnswer.medium {
+/* .multipleChoiceAnswer.medium {
     max-width: 450px;
-}
+} */
 textarea.freeResponseTextArea {
     width: 90%;
     resize: none;
     height: 300px;
 }
 textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
-    width: 260px;
+    width: calc(100% - 70px);
 }
-textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 .multipleChoiceCircle, .multiSelectCircle {
     width: 20px;
     height: 20px;
     background-color: white;
     border-radius: 15px;
     border: 2px solid var(--moonshotLightBlue);
+    margin-top: 4px;
 }
 .multipleChoiceCircle {
-    position: absolute;
-    left: calc(50% - 110px);
-    top: 5px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
 }
 .multipleChoiceCircle.selected, .multiSelectCircle.selected {
     background-color: var(--moonshotLightBlue);
 }
 .multipleChoiceCircle.medium {
-    left: calc(35% - 110px);
+    /* left: calc(35% - 110px); */
 }
 
 
@@ -2205,6 +2226,14 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     font-family: monospace;
 }
 
+.pre-wrap {
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
 .width90Percent { width: 90%; }
 .maxWidth350px { max-width: 350px; }
 
@@ -2237,6 +2266,7 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 .font8px { font-size: 8px; }
 .font6px { font-size: 6px; }
 
+.bold { font-weight: bold; }
 .inline { display: inline; }
 .inline-block { display: inline-block; }
 .noPadding { padding: 0 0 0 0 }
@@ -2878,6 +2908,15 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     }
     .flex-center p { padding: 10px; }
 
+    .multipleChoiceOption, .multiSelectOption {
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+
+    .multipleChoiceCircle {
+        margin-top: 2px;
+    }
+
     .font40pxUnder600 { font-size: 40px; }
     .font38pxUnder600 { font-size: 38px; }
     .font36pxUnder600 { font-size: 36px; }
@@ -3044,9 +3083,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         font-size: 15px;
         padding-top: 2px;
     }
-    .lightBlueChip {
-        height: 30px;
-    }
     .lightBlueChip > div {
         font-size: 15px;
         padding-top: 2px;
@@ -3190,11 +3226,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         word-wrap:break-word;
     }
 
-    textarea.multipleChoiceCustomAnswer {
-        margin-left: 80px;
-        width: 240px;
-    }
-
     .twoOptionsOr { margin: 55px 10px 0; }
 
     .font40pxUnder500 { font-size: 40px; }
@@ -3284,9 +3315,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         width: 80%;
         padding-top: 60%;
     }
-    .multipleChoiceCircle {
-        left: calc(50% - 120px);
-    }
     .pathwayLandingSponsoredBy {
         height: 30px;
     }
@@ -3296,8 +3324,16 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     }
 
     .multiSelectOption { min-height: 30px; }
-    .multiSelectCircle { margin-top: 0px; }
+    .multiSelectCircle, .multipleChoiceCircle {
+        margin-top: 0px;
+        width: 15px;
+        height: 15px;
+    }
     .multiSelectAnswer { margin-top: 2px; }
+    .multipleChoiceOption, .multiSelectOption {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
 
     .pathwayContentTimeText { margin-top: 4px; }
 
@@ -3359,7 +3395,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     }
 
     textarea.multipleChoiceCustomAnswer {
-        margin-left: 30px;
         width: 180px;
     }
 
