@@ -203,14 +203,14 @@ class Results extends Component {
                                                         Predictive Insights
                                                     </div>
                                                     <div>
-                                                        <ResponsiveContainer width="60%" height={250} minWidth={500} className="recharts-wrapper">
+                                                        <ResponsiveContainer width="60%" height={250} minWidth={500}
+                                                                             className="recharts-wrapper">
                                                             <ScatterChart margin={{
                                                                 top: 20,
                                                                 right: 50,
                                                                 left: 0,
                                                                 bottom: 0
-                                                            }}>>
-                                                                <CartesianGrid strokeDasharray="3 3"/>
+                                                            }}>
                                                                 <XAxis dataKey="x" tickLine={false} stroke="white"/>
                                                                 <YAxis dataKey="y" name="Score"
                                                                        domain={['dataMin', 'auto']} stroke="white"/>
