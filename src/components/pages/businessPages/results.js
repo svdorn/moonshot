@@ -199,7 +199,8 @@ class Results extends Component {
                                             <Tab label="Skills" style={style.topTab}>
                                                 <div className="center fullHeight" style={style.tabContent}>
                                                     <div
-                                                        className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                                                        className="whiteText center font24px font20pxUnder700 font16pxUnder500"
+                                                        style={{marginTop: '20px'}}>
                                                         Predictive Insights
                                                     </div>
                                                     <div>
@@ -220,6 +221,9 @@ class Results extends Component {
                                                             </ScatterChart>
                                                         </ResponsiveContainer>
                                                     </div>
+                                                    
+                                                    <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
+
                                                     <div
                                                         className="whiteText center font24px font20pxUnder700 font16pxUnder500">
                                                         Hard Skills
