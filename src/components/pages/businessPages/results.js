@@ -220,6 +220,28 @@ class Results extends Component {
                                                             </ScatterChart>
                                                         </ResponsiveContainer>
                                                     </div>
+                                                    <div
+                                                        className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                                                        Hard Skills
+                                                    </div>
+                                                    <div>
+                                                        <ResponsiveContainer width="60%" height={250} minWidth={500}
+                                                                             className="recharts-wrapper">
+                                                            <ScatterChart margin={{
+                                                                top: 20,
+                                                                right: 50,
+                                                                left: 0,
+                                                                bottom: 0
+                                                            }}>
+                                                                <XAxis dataKey="x" tickLine={false} stroke="white"/>
+                                                                <YAxis dataKey="y" name="Score"
+                                                                       domain={['dataMin', 'auto']} stroke="white"/>
+                                                                <Scatter data={hardSkills} fill="#8884d8" shape="square">
+                                                                    <LabelList dataKey="y" stroke="white" position="top" />
+                                                                </Scatter>
+                                                            </ScatterChart>
+                                                        </ResponsiveContainer>
+                                                    </div>
                                                 </div>
                                             </Tab>
                                             <Tab label="Responses" style={style.topTab}>
