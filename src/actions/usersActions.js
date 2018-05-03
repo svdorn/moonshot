@@ -12,7 +12,7 @@ export function getUserFromSession(callback) {
             errorMessage: undefined
         });
 
-        axios.get("/api/userSession")
+        axios.get("/api/user/session")
             .then(function(response) {
                 dispatch({
                     type: "GET_USER_FROM_SESSION",
@@ -135,7 +135,7 @@ export function postUser(user) {
         dispatch({type: "POST_USER_REQUESTED"});
 
         // post user to database
-        axios.post("/api/user", user)
+        axios.post("/api/candidate/candidate", user)
             // user successfully posted
             .then(function(response) {
                 // send verification email
@@ -287,7 +287,7 @@ export function changePasswordForgot(user) {
         axios.post("api/user/changePasswordForgot", user)
             .then(function(response) {
                 const foundUser = response.data;
-                axios.post("/api/userSession", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
+                axios.post("/api/user/session", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
                 .catch(function(err2) { console.log(err2) });
 
                 dispatch({type:"LOGIN", payload:foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
@@ -313,7 +313,7 @@ export function changeTempPassword(user) {
             dispatch({type: "LOGIN", payload: returnedUser, notification: {message: "Your password was changed, you are now logged in!", type: "infoHeader"}});
             browserHistory.push('/businessHome');
 
-            axios.post("/api/userSession", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
+            axios.post("/api/user/session", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
             .catch(function(err) {
                 // what to do if session couldn't be saved for some reason
             });

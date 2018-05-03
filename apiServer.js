@@ -57,6 +57,10 @@ const verifyUser = helperFunctions.verifyUser;
 const removePassword = helperFunctions.removePassword;
 const printUsersFromPathway = helperFunctions.printUsersFromPathway;
 const getUserByQuery = helperFunctions.getUserByQuery;
+const safeUser = helperFunctions.safeUser;
+const userForAdmin = helperFunctions.userForAdmin;
+const sendEmail = helperFunctions.sendEmail;
+const getFirstName = helperFunctions.getFirstName;
 
 
 // import all the api functions
@@ -64,7 +68,7 @@ const userApis = require('./apis/userApis');
 const candidateApis = require('./apis/candidateApis');
 
 
-// --->>> SET UP SESSIONS <<<---
+// set up the session
 app.use(session({
     secret: credentials.secretString,
     saveUninitialized: false, // doesn't save a session if it is new but not modified
@@ -86,11 +90,9 @@ app.post('/user/signOut', userApis.POST_signOut);
 app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
 app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
 
-app.get('/userSession', userApis.GET_userSession);
-app.post('/userSession', userApis.POST_userSession);
+app.get('/user/session', userApis.GET_session);
+app.post('/user/session', userApis.POST_session);
 
-
-// --->>> END SESSION SET UP <<<---
 
 
 // --->>> EXAMPLE INFO CREATION <<<---
@@ -145,213 +147,7 @@ app.post('/userSession', userApis.POST_userSession);
 
 
 //----->> POST USER <<------
-app.post('/user', function (req, res) {
-    var user = sanitize(req.body);
-
-    // hash the user's password
-    const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(user.password, salt, function (err, hash) {
-            // change the stored password to be the hash
-            user.password = hash;
-            user.verified = false;
-            user.hasFinishedOnboarding = false;
-
-            // create user's verification strings
-            user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
-            user.verificationToken = crypto.randomBytes(64).toString('hex');
-            const query = {email: user.email};
-
-            getUserByQuery(query, function(err, foundUser) {
-                if (err) {
-                    console.log(err);
-                    res.status(500).send("Error creating account, try with a different email or try again later.");
-                    return;
-                }
-                if (foundUser == null || foundUser == undefined) {
-                    // get count of users with that name to get the profile url
-                    Users.count({name: user.name}, function (err, count) {
-                        const randomNumber = crypto.randomBytes(8).toString('hex');
-                        user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
-                        user.admin = false;
-                        user.agreedToTerms = true;
-                        let addedPathway = false;
-
-                        // add pathway to user's My Pathways if they went from
-                        // a landing page.
-                        // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY OR SINGLEWIRE PATHWAY
-                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386" || user.pathwayId === "5abc12cff36d2805e28d27f3" || user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
-                            user.pathways = [{
-                                pathwayId: user.pathwayId,
-                                currentStep: {
-                                    subStep: 1,
-                                    step: 1
-                                }
-                            }];
-                            addedPathway = true;
-                        }
-                        else {
-                            user.pathwayId = undefined;
-                        }
-
-                        user.dateSignedUp = new Date();
-                        // make sure referral code is a string, if not set it
-                        // to undefined (will happen if there is no referral code as well)
-                        if (typeof user.signUpReferralCode !== "string") {
-                            user.signUpReferralCode = undefined;
-                        }
-
-                        // store the user in the db
-                        Users.create(user, function (err, newUser) {
-                            if (err) {
-                                console.log(err);
-                            }
-
-                            req.session.unverifiedUserId = newUser._id;
-                            req.session.save(function (err) {
-                                if (err) {
-                                    console.log("error saving unverifiedUserId to session: ", err);
-                                }
-                            })
-
-                            if (user.signUpReferralCode) {
-                                Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
-                                    if (referralErr) {
-                                        console.log("Error finding referrer for new sign up: ", referralErr);
-                                    } else if (!referrer) {
-                                        console.log("Invalid referral code used: ", user.signUpReferralCode);
-                                    } else {
-                                        referrer.referredUsers.push({
-                                            name: newUser.name,
-                                            email: newUser.email,
-                                            _id: newUser._id
-                                        });
-                                        referrer.save(function(referrerSaveErr, newReferrer) {
-                                            if (referrerSaveErr) {
-                                                console.log("Error saving referrer: ", referrerSaveErr);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-
-                            try {
-                                // send email to everyone if there's a new sign up (if in production mode)
-                                if (process.env.NODE_ENV) {
-                                    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-                                    let subject = 'New Sign Up';
-                                    let additionalText = '';
-                                    if (addedPathway) {
-                                        let pathName = "Singlewire QA";
-                                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
-                                            pathName = "Northwestern Mutual";
-                                        }
-                                        else if (user.pathwayId === "5abc12cff36d2805e28d27f3") {
-                                            pathName = "Curate Full-Stack";
-                                        }
-                                        else if (user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
-                                            pathName = "Dream Home CEO";
-                                        }
-                                        additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
-                                    }
-                                    let content =
-                                        '<div>'
-                                        +   '<p>New user signed up.</p>'
-                                        +   '<p>Name: ' + newUser.name + '</p>'
-                                        +   '<p>email: ' + newUser.email + '</p>'
-                                        +   additionalText
-                                        + '</div>';
-
-                                    const sendFrom = "Moonshot";
-                                    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                                        if (!success) {
-                                            console.log("Error sending sign up alert email");
-                                        }
-                                    })
-                                }
-                            } catch (e) {
-                                console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
-                            }
-
-                            // no reason to return the user with tokens because
-                            // they will have to verify themselves before they
-                            // can do anything anyway
-                            res.json(safeUser(newUser));
-
-                            // send an email to the user one day after signup
-                            try {
-                                const ONE_DAY = 1000 * 60 * 60 * 24;
-
-                                let moonshotUrl = 'https://www.moonshotlearning.org/';
-                                // if we are in development, links are to localhost
-                                if (!process.env.NODE_ENV) {
-                                    moonshotUrl = 'http://localhost:8081/';
-                                }
-
-                                let firstName = getFirstName(newUser.name);
-                                // add in a space before the name, if the user has a name
-                                if (firstName != "") {
-                                    firstName = " " + firstName;
-                                }
-
-                                setTimeout(function() {
-                                    let dayAfterRecipient = [newUser.email];
-                                    let dayAfterSubject = 'Moonshot Fights For You';
-                                    let dayAfterContent =
-                                        "<div style='font-size:15px;text-align:left;font-family: Arial, sans-serif;color:#000000'>"
-                                            + "<p>Hi" + firstName + ",</p>"
-                                            + "<p>My name is Kyle. I'm the co-founder and CEO at Moonshot. I'm honored that you trusted us in your career journey. If you need anything at all, please let me know.</p>"
-                                            + "<p>I individually fight for every Moonshot candidate — Mock interviews, inside tips that our employers are looking for, anything to help you start the career of your dreams.</p>"
-                                            + "<p>Shoot me a message. I'm all ears.</p>"
-                                            + "<p>Yours truly,<br/>Kyle</p>"
-                                            + "<div style='font-size:10px; text-align:left; color:#000000; margin-bottom:50px;'>"
-                                                + "----------------------------------<br/>"
-                                                + "Kyle Treige, Co-Founder & CEO<br/>"
-                                                + "<a href='https://moonshotlearning.org/'>Moonshot</a><br/>"
-                                                + "608-438-4478<br/>"
-                                            + "</div>"
-                                            + "<div style='font-size:10px; text-align:left; color:#C8C8C8; margin-bottom:30px;'>"
-                                                + "<i>Moonshot Learning, Inc.<br/><a href='' style='text-decoration:none;color:#D8D8D8;cursor:default'>1261 Meadow Sweet Dr, Madison, WI 53719</a>.<br/>"
-                                                + '<a style="color:#C8C8C8;" href="' + moonshotUrl + 'unsubscribe?email=' + newUser.email + '">Opt-out of future messages.</a></i>'
-                                            + "</div>"
-                                        + "</div>";
-
-                                    const dayAfterSendFrom = "Kyle Treige";
-                                    sendEmail(dayAfterRecipient, dayAfterSubject, dayAfterContent, dayAfterSendFrom, undefined, function (success, msg) {
-                                        if (success) {
-                                            console.log("sent day-after email");
-                                        } else {
-                                            console.log("error sending day-after email");
-                                        }
-                                    })
-                                }, ONE_DAY);
-                            } catch (e) {
-                                console.log("Not able to send day-after email to ", newUser.name, "with id: ", newUser._id);
-                            }
-                        })
-                    })
-                } else {
-                    res.status(401).send("An account with that email address already exists.");
-                }
-            });
-        });
-    });
-});
-
-
-function getFirstName(name) {
-    // split by spaces, get array of non-spaced names, return the first one
-    let firstName = "";
-    try {
-        firstName = name.split(' ')[0];
-    } catch (e) {
-        firstName = "";
-    }
-    return firstName;
-}
-
-
-
+app.post('/candidate/candidate', candidateApis.POST_candidate);
 
 
 app.post("/endOnboarding", function (req, res) {
@@ -1327,96 +1123,7 @@ app.post('/forgotPassword', function (req, res) {
     })
 });
 
-// callback needs to be a function of a success boolean and string to return;
-// takes an ARRAY of recipient emails
-function sendEmail(recipients, subject, content, sendFrom, attachments, callback) {
-    if (recipients.length === 0) {
-        callback(false, "Couldn't send email. No recipient.")
-        return;
-    }
 
-    // get the list of email addresses that have been opted out
-    let recipientList = "";
-    Emailaddresses.findOne({name: "optedOut"}, function(err, optedOut) {
-        const optedOutStudents = optedOut.emails;
-        recipients.forEach(function(recipient) {
-            emailOptedOut = optedOutStudents.some(function(optedOutEmail) {
-                return optedOutEmail.toLowerCase() === recipient.toLowerCase();
-            });
-            // add the email to the list of recipients to email if the recipient
-            // has not opted out
-            if (!emailOptedOut) {
-                if (recipientList === "") {
-                    recipientList = recipient;
-                } else {
-                    recipientList = recipientList + ", " + recipient;
-                }
-            }
-        });
-
-        // don't send an email if it's not going to be sent to anyone
-        if (recipientList === "") {
-            callback(false, "Couldn't send email. Recipients are on the opt-out list.")
-            return;
-        }
-
-        // the default email account to send emails from
-        let from = '"Moonshot" <do-not-reply@moonshotlearning.org>';
-        let authUser = credentials.emailUsername;
-        let authPass = credentials.emailPassword;
-        if (sendFrom) {
-            if (sendFrom === "Kyle Treige") {
-                from = '"Kyle Treige" <kyle@moonshotlearning.org>';
-                authUser = credentials.kyleEmailUsername;
-                authPass = credentials.kyleEmailPassword;
-            } else {
-                from = '"' + sendFrom + '" <do-not-reply@moonshotlearning.org>';
-            }
-        }
-
-        // create reusable transporter object using the default SMTP transport
-        let transporter = nodemailer.createTransport({
-            // host: 'smtp.ethereal.email',
-            // port: 587,
-            // secure: false, // true for 465, false for other ports
-            // auth: {
-            //     user: 'snabxjzqe3nmg2p7@ethereal.email',
-            //     pass: '5cbJWjTh7YYmz7e2Ce'
-            // }
-            service: 'gmail',
-            auth: {
-                user: authUser,
-                pass: authPass
-            }
-        });
-
-        // setup email data with unicode symbols
-        let mailOptions = {
-            from: from, // sender address
-            to: recipientList, // list of receivers
-            subject: subject, // Subject line
-            html: content // html body
-        };
-
-        // attach attachments, if they exist
-        if (attachments && Array.isArray(attachments) && attachments.length > 0) {
-            mailOptions.attachments = attachments;
-        }
-
-        // send mail with defined transport object
-        transporter.sendMail(mailOptions, (error, info) => {
-            if (error) {
-                console.log(error);
-                callback(false, "Error sending email to user");
-                return;
-            }
-            callback(true, "Email sent! Check your email.");
-            return;
-        });
-    })
-
-
-}
 
 app.post('/getUserById', function (req, res) {
     const _id = sanitize(req.body._id);
@@ -1434,7 +1141,6 @@ app.post('/getUserByProfileUrl', function (req, res) {
     const profileUrl = sanitize(req.body.profileUrl);
     const query = { profileUrl };
     getUserByQuery(query, function (err, user) {
-        console.log("safeUser is: ", safeUser);
         res.json(safeUser(user));
     })
 });
@@ -1532,37 +1238,6 @@ app.post('/login', function (req, res) {
 
     });
 });
-
-
-// this user object can now safely be seen by anyone
-function safeUser(user) {
-    let newUser = Object.assign({}, user);
-    newUser.password = undefined;
-    newUser._id = undefined;
-    newUser.verificationToken = undefined;
-    newUser.emailVerificationToken = undefined;
-    newUser.passwordToken = undefined;
-    newUser.answers = undefined;
-    // doing Object.assign with a document from the db can lead to the new object
-    // having a bunch of properties we don't want with the actual object ending
-    // up in newObj._doc, so take the ._doc property if it exists and treat it
-    // as the actual object
-    if (newUser._doc) {
-        newUser = newUser._doc;
-    }
-    return newUser;
-}
-
-// same as safe user except it has the user's answers to questions
-function userForAdmin(user) {
-    let newUser = Object.assign({}, user)._doc;
-    newUser.password = undefined;
-    newUser._id = undefined;
-    newUser.verificationToken = undefined;
-    newUser.emailVerificationToken = undefined;
-    newUser.passwordToken = undefined;
-    return newUser;
-}
 
 
 //----->> DELETE USER <<------

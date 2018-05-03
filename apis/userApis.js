@@ -9,18 +9,22 @@ const removeEmptyFields = helperFunctions.removeEmptyFields;
 const verifyUser = helperFunctions.verifyUser;
 const removePassword = helperFunctions.removePassword;
 const getUserByQuery = helperFunctions.getUserByQuery;
+const sendEmail = helperFunctions.sendEmail;
+const safeUser = helperFunctions.safeUser;
+const userForAdmin = helperFunctions.userForAdmin;
+const getFirstName = helperFunctions.getFirstName;
 
 
 const userApis = {
     POST_signOut,
     POST_keepMeLoggedIn,
     GET_keepMeLoggedIn,
-    GET_userSession,
-    POST_userSession
+    GET_session,
+    POST_session
 }
 
 
-function GET_userSession(req, res) {
+function GET_session(req, res) {
     if (typeof req.session.userId === 'string') {
         const userId = sanitize(req.session.userId);
         getUserByQuery({_id: userId}, function (err, user) {
@@ -43,7 +47,7 @@ function GET_userSession(req, res) {
 }
 
 
-function POST_userSession(req, res) {
+function POST_session(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
 

@@ -1,6 +1,10 @@
 const sanitizeHtml = require('sanitize-html');
+const nodemailer = require('nodemailer');
+const credentials = require('../credentials');
+
 var Users = require('../models/users.js');
 var Employers = require('../models/employers.js');
+var Emailaddresses = require('../models/emailaddresses.js');
 
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
@@ -14,7 +18,11 @@ const helperFunctions = {
     verifyUser,
     removePassword,
     printUsersFromPathway,
-    getUserByQuery
+    getUserByQuery,
+    sendEmail,
+    safeUser,
+    userForAdmin,
+    getFirstName
 }
 
 
@@ -52,6 +60,148 @@ function printUsersFromPathway(pathwayIdToCheck) {
                 console.log("\n\nname: ", user.name, "\nemail: ", user.email, "\ncurrent step: ", currentStep);
             }
         })
+    })
+}
+
+
+function getFirstName(name) {
+    // split by spaces, get array of non-spaced names, return the first one
+    let firstName = "";
+    try {
+        firstName = name.split(' ')[0];
+    } catch (e) {
+        firstName = "";
+    }
+    return firstName;
+}
+
+
+// this user object can now safely be seen by anyone
+function safeUser(user) {
+    let newUser = Object.assign({}, user);
+
+    // doing Object.assign with a document from the db can lead to the new object
+    // having a bunch of properties we don't want with the actual object ending
+    // up in newObj._doc, so take the ._doc property if it exists and treat it
+    // as the actual object
+    if (newUser._doc) {
+        newUser = newUser._doc;
+    }
+
+    newUser.password = undefined;
+    newUser._id = undefined;
+    newUser.verificationToken = undefined;
+    newUser.emailVerificationToken = undefined;
+    newUser.passwordToken = undefined;
+    newUser.answers = undefined;
+
+    return newUser;
+}
+
+// same as safe user except it has the user's answers to questions
+function userForAdmin(user) {
+    let newUser = Object.assign({}, user);
+
+    if (newUser._doc) {
+        newUser = newUser._doc;
+    }
+
+    newUser.password = undefined;
+    newUser._id = undefined;
+    newUser.verificationToken = undefined;
+    newUser.emailVerificationToken = undefined;
+    newUser.passwordToken = undefined;
+
+    return newUser;
+}
+
+
+// callback needs to be a function of a success boolean and string to return;
+// takes an ARRAY of recipient emails
+function sendEmail(recipients, subject, content, sendFrom, attachments, callback) {
+    if (recipients.length === 0) {
+        callback(false, "Couldn't send email. No recipient.")
+        return;
+    }
+
+    // get the list of email addresses that have been opted out
+    let recipientList = "";
+    Emailaddresses.findOne({name: "optedOut"}, function(err, optedOut) {
+        const optedOutStudents = optedOut.emails;
+        recipients.forEach(function(recipient) {
+            emailOptedOut = optedOutStudents.some(function(optedOutEmail) {
+                return optedOutEmail.toLowerCase() === recipient.toLowerCase();
+            });
+            // add the email to the list of recipients to email if the recipient
+            // has not opted out
+            if (!emailOptedOut) {
+                if (recipientList === "") {
+                    recipientList = recipient;
+                } else {
+                    recipientList = recipientList + ", " + recipient;
+                }
+            }
+        });
+
+        // don't send an email if it's not going to be sent to anyone
+        if (recipientList === "") {
+            callback(false, "Couldn't send email. Recipients are on the opt-out list.")
+            return;
+        }
+
+        // the default email account to send emails from
+        let from = '"Moonshot" <do-not-reply@moonshotlearning.org>';
+        let authUser = credentials.emailUsername;
+        let authPass = credentials.emailPassword;
+        if (sendFrom) {
+            if (sendFrom === "Kyle Treige") {
+                from = '"Kyle Treige" <kyle@moonshotlearning.org>';
+                authUser = credentials.kyleEmailUsername;
+                authPass = credentials.kyleEmailPassword;
+            } else {
+                from = '"' + sendFrom + '" <do-not-reply@moonshotlearning.org>';
+            }
+        }
+
+        // create reusable transporter object using the default SMTP transport
+        let transporter = nodemailer.createTransport({
+            // host: 'smtp.ethereal.email',
+            // port: 587,
+            // secure: false, // true for 465, false for other ports
+            // auth: {
+            //     user: 'snabxjzqe3nmg2p7@ethereal.email',
+            //     pass: '5cbJWjTh7YYmz7e2Ce'
+            // }
+            service: 'gmail',
+            auth: {
+                user: authUser,
+                pass: authPass
+            }
+        });
+
+        // setup email data with unicode symbols
+        let mailOptions = {
+            from: from, // sender address
+            to: recipientList, // list of receivers
+            subject: subject, // Subject line
+            html: content // html body
+        };
+
+        // attach attachments, if they exist
+        if (attachments && Array.isArray(attachments) && attachments.length > 0) {
+            mailOptions.attachments = attachments;
+        }
+
+        // send mail with defined transport object
+        transporter.sendMail(mailOptions, (error, info) => {
+            if (error) {
+                console.log(error);
+                callback(false, "Error sending email to user");
+                return;
+            }
+            callback(true, "Email sent! Check your email.");
+            return;
+        });
     })
 }
 
