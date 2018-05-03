@@ -5,7 +5,7 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {Tabs, Tab} from 'material-ui';
-import {ScatterChart, CartesianGrid, Scatter, XAxis, YAxis, ResponsiveContainer} from 'recharts';
+import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 
@@ -214,7 +214,9 @@ class Results extends Component {
                                                                 <XAxis dataKey="x" tickLine={false} stroke="white"/>
                                                                 <YAxis dataKey="y" name="Score"
                                                                        domain={['dataMin', 'auto']} stroke="white"/>
-                                                                <Scatter data={predictiveInsights} fill="#8884d8"/>
+                                                                <Scatter data={predictiveInsights} fill="#8884d8" shape="square">
+                                                                    <LabelList dataKey="y" stroke="white" position="top" />
+                                                                </Scatter>
                                                             </ScatterChart>
                                                         </ResponsiveContainer>
                                                     </div>
