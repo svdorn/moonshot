@@ -5,7 +5,7 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import {Tabs, Tab} from 'material-ui';
-import { ScatterChart } from 'recharts';
+import {ScatterChart, CartesianGrid, Scatter, XAxis, YAxis, Tooltip, Legend} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 
@@ -17,8 +17,8 @@ class Results extends Component {
             user: undefined,
             candidate: {},
             overallScore: undefined,
-            hardSkills: {},
-            predictiveInsights: {}
+            hardSkills: [],
+            predictiveInsights: [],
         };
     }
 
@@ -38,7 +38,7 @@ class Results extends Component {
         }
 
         let self = this;
-        let candidate = {}, overallScore = undefined, hardSkills = {}, predictiveInsights = {};
+        let candidate = {}, overallScore = undefined, hardSkills = [], predictiveInsights = [];
 
         if (profileUrl === 'Stephen-Dorn-2-9f66bf7eeac18994') {
             candidate = {
@@ -46,6 +46,43 @@ class Results extends Component {
                 title: 'Software Developer',
                 email: 'stevedorn9@gmail.com',
             };
+            overallScore = 116;
+            hardSkills = [
+                {
+                    x: "Full Stack",
+                    y: 134,
+                },
+                {
+                    x: "Version Control",
+                    y: 107,
+                },
+                {
+                    x: "Machine Learning",
+                    y: 118,
+                },
+                {
+                    x: "Startup",
+                    y: 68,
+                }
+            ];
+            predictiveInsights = [
+                {
+                    x: "Growth",
+                    y: 134,
+                },
+                {
+                    x: "Performance",
+                    y: 107,
+                },
+                {
+                    x: "Culture Fit",
+                    y: 118,
+                },
+                {
+                    x: "Longevity",
+                    y: 68,
+                }
+            ];
         }
 
         self.setState({
@@ -90,9 +127,6 @@ class Results extends Component {
             },
             tabs: {
                 marginTop: '20px',
-            },
-            tab: {
-                color: '#f24c49',
             },
             topTabs: {
                 marginTop: '20px',
@@ -164,7 +198,18 @@ class Results extends Component {
                                         >
                                             <Tab label="Skills" style={style.topTab}>
                                                 <div className="center fullHeight" style={style.tabContent}>
-
+                                                    <div
+                                                        className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                                                        Predictive Insights
+                                                    </div>
+                                                    <div className="recharts-wrapper">
+                                                        <ScatterChart width={730} height={250} margin={{ top: 20, right: 30, left: 0, bottom: 0 }}>>
+                                                            <CartesianGrid strokeDasharray="3 3"/>
+                                                            <XAxis dataKey="x" tickLine={false} stroke="white"/>
+                                                            <YAxis dataKey="y" name="Score" domain={['dataMin', 'auto']} stroke="white"/>
+                                                            <Scatter data={predictiveInsights} fill="#8884d8"/>
+                                                        </ScatterChart>
+                                                    </div>
                                                 </div>
                                             </Tab>
                                             <Tab label="Responses" style={style.topTab}>
