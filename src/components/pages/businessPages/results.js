@@ -136,10 +136,19 @@ class Results extends Component {
                 color: 'white',
             },
             tabContent: {
-                backgroundColor: '#2e2e2e',
                 paddingTop: '10px',
                 paddingBottom: '30px',
-            }
+            },
+            lightBlue: {
+                color: '#75dcfc'
+            },
+            horizList: {
+
+            },
+            horizListIcon: {
+                height: "50px",
+                marginBottom: "10px"
+            },
         };
 
         const user = this.state.user;
@@ -198,6 +207,47 @@ class Results extends Component {
                                         >
                                             <Tab label="Skills" style={style.topTab}>
                                                 <div className="center aboutMeSection" style={style.tabContent}>
+                                                    <div className="lightBlackBackground" style={{minHeight: '140px'}}>
+                                                        <div
+                                                            className="font24px font20pxUnder700 font16pxUnder500 whiteText">
+                                                            Candidate Score <b
+                                                            style={style.lightBlue}><u>{overallScore}</u></b>
+                                                        </div>
+                                                        <div style={style.horizList}>
+                                                            <div className="horizListFull">
+                                                                <div className="horizListSpacer"
+                                                                     style={{marginLeft: "20%"}}
+                                                                >
+                                                                    <div
+                                                                        className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
+                                                                        Overall<div className="under500only br"><br/></div> Predictive<br/>
+                                                                        <p style={style.lightBlue}>AVERAGE</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="horizListFull">
+                                                                <div className="horizListSpacer"
+                                                                     style={{marginLeft: "5%", marginRight: '5%'}}>
+                                                                    <div
+                                                                        className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
+                                                                        Psychometric<div className="under500only br"><br/></div> Archetype<br/>
+                                                                        <p style={style.lightBlue}>INNOVATOR</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="horizListFull">
+                                                                <div className="horizListSpacer"
+                                                                     style={{marginRight: "20%"}}>
+                                                                    <div
+                                                                        className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
+                                                                        Overall<div className="under500only br"><br/></div> Hard Skills<br/>
+                                                                        <p style={style.lightBlue}>EXPERT</p>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                     <div
                                                         className="whiteText center font24px font20pxUnder700 font16pxUnder500"
                                                         style={{marginTop: '20px'}}>
@@ -215,14 +265,17 @@ class Results extends Component {
                                                                 <XAxis dataKey="x" tickLine={false} stroke="white"/>
                                                                 <YAxis dataKey="y" name="Score"
                                                                        domain={['dataMin', 'auto']} stroke="white"/>
-                                                                <Scatter data={predictiveInsights} fill="#8884d8" shape="square">
-                                                                    <LabelList dataKey="y" stroke="white" position="top" />
+                                                                <Scatter data={predictiveInsights} fill="#8884d8"
+                                                                         shape="square">
+                                                                    <LabelList dataKey="y" stroke="white"
+                                                                               position="top"/>
                                                                 </Scatter>
                                                             </ScatterChart>
                                                         </ResponsiveContainer>
                                                     </div>
 
-                                                    <div className="purpleToGreenSpacer" id="picturesToPathwaysHomepageSpacer"/>
+                                                    <div className="purpleToGreenSpacer"
+                                                         id="picturesToPathwaysHomepageSpacer"/>
 
                                                     <div
                                                         className="whiteText center font24px font20pxUnder700 font16pxUnder500">
@@ -240,8 +293,10 @@ class Results extends Component {
                                                                 <XAxis dataKey="x" tickLine={false} stroke="white"/>
                                                                 <YAxis dataKey="y" name="Score"
                                                                        domain={['dataMin', 'auto']} stroke="white"/>
-                                                                <Scatter data={hardSkills} fill="#8884d8" shape="square">
-                                                                    <LabelList dataKey="y" stroke="white" position="top" />
+                                                                <Scatter data={hardSkills} fill="#8884d8"
+                                                                         shape="square">
+                                                                    <LabelList dataKey="y" stroke="white"
+                                                                               position="top"/>
                                                                 </Scatter>
                                                             </ScatterChart>
                                                         </ResponsiveContainer>
