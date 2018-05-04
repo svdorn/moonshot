@@ -222,12 +222,14 @@ form > h1 {
 
 .resultsSlider {
     margin: auto !important;
-
 }
 .resultsSlider > div > div > div {
     background: linear-gradient(to right, #ae7efc, #75dcfc) !important;
 }
-
+/* make the results slider have normal cursor */
+.resultsSlider > div > div > div:nth-child(3) {
+    cursor: default !important;
+}
 
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
     padding-top: 5px;
