@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
-import {Tabs, Tab} from 'material-ui';
+import {Tabs, Tab, Slider} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
@@ -143,11 +143,11 @@ class Results extends Component {
                 color: '#75dcfc'
             },
             horizList: {
-
+                marginTop: '10px',
             },
             horizListIcon: {
                 height: "50px",
-                marginBottom: "10px"
+                marginTop: "-5px"
             },
         };
 
@@ -207,42 +207,59 @@ class Results extends Component {
                                         >
                                             <Tab label="Skills" style={style.topTab}>
                                                 <div className="center aboutMeSection" style={style.tabContent}>
-                                                    <div className="lightBlackBackground" style={{minHeight: '140px'}}>
-                                                        <div
-                                                            className="font24px font20pxUnder700 font16pxUnder500 whiteText">
-                                                            Candidate Score <b
-                                                            style={style.lightBlue}><u>{overallScore}</u></b>
-                                                        </div>
-                                                        <div style={style.horizList}>
-                                                            <div className="horizListFull">
-                                                                <div className="horizListSpacer"
-                                                                     style={{marginLeft: "20%"}}
-                                                                >
-                                                                    <div
-                                                                        className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
-                                                                        Overall<div className="under500only br"><br/></div> Predictive<br/>
-                                                                        <p style={style.lightBlue}>AVERAGE</p>
+                                                    <div className="lightBlackBackground" style={{minHeight: '200px'}}>
+                                                        <div className="paddingTop20px">
+                                                            <div
+                                                                className="font24px font20pxUnder700 font16pxUnder500 whiteText">
+                                                                Candidate Score <b
+                                                                style={style.lightBlue}><u>{overallScore}</u></b>
+                                                            </div>
+                                                            <div style={style.horizList}>
+                                                                <div className="horizListFull">
+                                                                    <div className="horizListSpacer"
+                                                                         style={{marginLeft: "20%"}}
+                                                                    >
+                                                                        <div
+                                                                            className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
+                                                                            Overall<div className="under500only br"><br/></div> Predictive<br/>
+                                                                            <p style={style.lightBlue}>AVERAGE</p>
+                                                                        </div>
+                                                                        <Slider disabled={true}
+                                                                                value={0.5}
+                                                                                style={{maxWidth: '250px'}}
+                                                                                className="resultsSlider"
+                                                                        />
                                                                     </div>
                                                                 </div>
-                                                            </div>
 
-                                                            <div className="horizListFull">
-                                                                <div className="horizListSpacer"
-                                                                     style={{marginLeft: "5%", marginRight: '5%'}}>
-                                                                    <div
-                                                                        className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
-                                                                        Psychometric<div className="under500only br"><br/></div> Archetype<br/>
-                                                                        <p style={style.lightBlue}>INNOVATOR</p>
+                                                                <div className="horizListFull">
+                                                                    <div className="horizListSpacer"
+                                                                         style={{marginLeft: "5%", marginRight: '5%'}}>
+                                                                        <div
+                                                                            className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
+                                                                            Psychometric<div className="under500only br"><br/></div> Archetype<br/>
+                                                                            <p style={style.lightBlue}>INNOVATOR</p>
+                                                                            <img
+                                                                                alt="Atom Icon"
+                                                                                src="/icons/Atom2.png"
+                                                                                style={style.horizListIcon}
+                                                                            />
+                                                                        </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            <div className="horizListFull">
-                                                                <div className="horizListSpacer"
-                                                                     style={{marginRight: "20%"}}>
-                                                                    <div
-                                                                        className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
-                                                                        Overall<div className="under500only br"><br/></div> Hard Skills<br/>
-                                                                        <p style={style.lightBlue}>EXPERT</p>
+                                                                <div className="horizListFull">
+                                                                    <div className="horizListSpacer"
+                                                                         style={{marginRight: "20%"}}>
+                                                                        <div
+                                                                            className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
+                                                                            Overall<div className="under500only br"><br/></div> Hard Skills<br/>
+                                                                            <p style={style.lightBlue}>EXPERT</p>
+                                                                        </div>
+                                                                        <Slider disabled={true}
+                                                                                value={0.9}
+                                                                                style={{maxWidth: '250px'}}
+                                                                                className="resultsSlider"
+                                                                        />
                                                                     </div>
                                                                 </div>
                                                             </div>

@@ -220,6 +220,14 @@ form > h1 {
     margin: 0 20px 0 40px;
 }
 
+.resultsSlider {
+    margin: auto !important;
+
+}
+.resultsSlider > div > div > div {
+    background: linear-gradient(to right, #ae7efc, #75dcfc) !important;
+}
+
 
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
     padding-top: 5px;
@@ -366,6 +374,7 @@ form > h1 {
     background: linear-gradient(to top, #e24794, #f76740);
     opacity: 0.7;
 }
+.cottonCandyGradient { background: linear-gradient(to top right, #ae7efc, #75dcfc); }
 .purpleToRedLightGradient { background: linear-gradient(to bottom right, #983cc9, #e36273); }
 .purpleToRedLightGradientOpacity {
     background: linear-gradient(to top right, #983cc9, #e36273);
@@ -2137,6 +2146,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginBottom10px { margin-bottom: 10px; }
 .marginTop40px { margin-top: 40px; }
 .marginTop20px { margin-top: 20px; }
+.paddingTop40px { padding-top: 40px; }
+.paddingTop20px { padding-top: 20px; }
 
 /* decorative triangles */
 
