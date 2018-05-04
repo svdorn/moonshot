@@ -8,6 +8,7 @@ import {Tabs, Tab, Slider} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
+import PredictiveGraph from '../../miscComponents/predictiveGraph';
 
 class Results extends Component {
     constructor(props) {
@@ -164,6 +165,13 @@ class Results extends Component {
 
         console.log(user);
         console.log(candidate);
+
+        const predictiveDataPoints = [
+            {x: "Growth", y: 134, confidenceInterval: 10},
+            {x: "Performance", y: 107, confidenceInterval: 12},
+            {x: "Culture Fit", y: 118, confidenceInterval: 5},
+            {x: "Longevity", y: 68, confidenceInterval: 3}
+        ];
 
         return (
             <div>
@@ -322,7 +330,10 @@ class Results extends Component {
                                             </Tab>
                                             <Tab label="Responses" style={style.topTab}>
                                                 <div className="center fullHeight" style={style.tabContent}>
-
+                                                    <PredictiveGraph
+                                                        dataPoints={predictiveDataPoints}
+                                                        height={400}
+                                                    />
                                                 </div>
                                             </Tab>
                                             <Tab label="Projects" style={style.topTab}>

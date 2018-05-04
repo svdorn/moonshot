@@ -231,6 +231,46 @@ form > h1 {
     cursor: default !important;
 }
 
+
+.predictiveGraph {
+    position: relative;
+    color: white;
+}
+.predictiveGraphInterior {
+    position: relative;
+    width: 500px;
+    margin-left: 200px;
+}
+.predictiveGraphInterior > .yAxis {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    width: 4px;
+    background: linear-gradient(to top, #ae7efc, #75dcfc);
+}
+.predictiveGraphInterior > .xAxis {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 4px;
+    background-color: rgb(100,100,100);
+}
+.predictiveGraph.xAxisLabel {
+
+}
+.predictiveGraphInterior > .yPointMarker {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: rgb(100,100,100);
+}
+.pointBox {
+    width: 40px;
+    border-radius: 8px;
+    position: absolute;
+}
+
+
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
     padding-top: 5px;
     border: 2px solid var(--moonshotLightBlue);
