@@ -205,7 +205,7 @@ class Results extends Component {
                                             tabItemContainerStyle={{width: '40%'}}
                                             className="myPathwaysTabs"
                                         >
-                                            <Tab label="Skills" style={style.topTab}>
+                                            <Tab label="Analysis" style={style.topTab}>
                                                 <div className="center aboutMeSection" style={style.tabContent}>
                                                     <div className="lightBlackBackground" style={{minHeight: '200px'}}>
                                                         <div className="paddingTop20px">
@@ -323,14 +323,6 @@ class Results extends Component {
                                             <Tab label="Responses" style={style.topTab}>
                                                 <div className="center fullHeight" style={style.tabContent}>
 
-                                                </div>
-                                            </Tab>
-                                            <Tab label="Projects" style={style.topTab}>
-                                                <div style={style.tabContent}
-                                                     className="fullHeight font28px font font24pxUnder700 font20pxUnder500 center">
-                                                    <div className="profileProjects whiteText">
-                                                        None
-                                                    </div>
                                                 </div>
                                             </Tab>
                                         </Tabs>
