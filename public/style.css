@@ -260,8 +260,8 @@ form > h1 {
     text-align: center;
 }
 .xAxisLabelsContainer {
-    width: 50%;
-    margin-left: 25%;
+    /* width: 50%;
+    margin-left: 25%; */
 }
 .rightYAxisLabel {
     color: white;
@@ -281,7 +281,7 @@ form > h1 {
 .leftYAxisLabel > div {
     position: absolute;
     top: 50%;
-    transform: translate(-50%);
+    transform: translate(-50%, -50%);
 }
 .predictiveGraphInterior > .yPointMarker {
     position: absolute;

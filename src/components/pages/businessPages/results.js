@@ -167,10 +167,10 @@ class Results extends Component {
         console.log(candidate);
 
         const predictiveDataPoints = [
-            {x: "Growth", y: 80, confidenceInterval: 14},
-            {x: "Performance", y: 100, confidenceInterval: 12},
-            {x: "Culture Fit", y: 120, confidenceInterval: 15},
-            {x: "Longevity", y: 160, confidenceInterval: 9}
+            {x: "Growth", y: 134, confidenceInterval: 14},
+            {x: "Performance", y: 87, confidenceInterval: 12},
+            {x: "Culture Fit", y: 62, confidenceInterval: 15},
+            {x: "Longevity", y: 113, confidenceInterval: 9}
         ];
 
         return (
