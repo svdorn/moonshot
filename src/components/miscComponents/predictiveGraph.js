@@ -58,8 +58,15 @@ class PredictiveGraph extends Component {
 
         const yPointMarker80 = { bottom: interiorHeight / 3 };
         const yPointMarker120 = { top: interiorHeight / 3 };
+        const yAxisLabel80Style = {
+            bottom: interiorHeight / 3,
+            transform: "translate(100%, 50%)"
+        };
+        const yAxisLabel120Style = {
+            top: interiorHeight / 3,
+            transform: "translate(100%, -50%)"
+        };
 
-        let yAxisLabels = [];
         let xAxisLabels = [];
         let points = [];
 
@@ -72,6 +79,35 @@ class PredictiveGraph extends Component {
             // left: interiorMarginLeft
         };
 
+        const yAxisLabels = ["Poor", "Below Average", "Average", "Above Average", "Excellent"];
+        const numLabels = yAxisLabels.length;
+        let labelCounter = 0;
+        const yAxisLabelDivs = yAxisLabels.map(label => {
+            const labelHeight = 100.0 / numLabels;
+            const fromBottom = labelCounter * labelHeight;
+            // get the rgb values of the point
+            // start at purple and go up to green
+            const percentToGreen = fromBottom / 100;
+            const r = 174 - (57 * percentToGreen);
+            const g = 126 + (94 * percentToGreen);
+            const b = 252;
+
+            const labelStyle = {
+                color: `rgb(${r},${g},${b})`,
+                height: `${labelHeight}%`,
+                bottom: `${fromBottom}%`
+            }
+
+            labelCounter++;
+
+            return (
+                <div className="leftYAxisLabel" style={labelStyle}>
+                    <div>{label}</div>
+                </div>
+            )
+        })
+
+
         // add each point and x axis label to their respective arrays
         dataPoints.forEach(point => {
             const label = point.x;
@@ -81,13 +117,12 @@ class PredictiveGraph extends Component {
             // 160 corresponds to 100%, 100 corresponds to 50%, 40 corresponds to 0%
             const fromBottom = (yValue - 40) * 5 / 6;
 
-
             // get the rgb values of the point
             // start at purple and go up to green
             let percentToGreen = fromBottom / 100;
-            let r = 174 - (57 * percentToGreen);
-            let g = 126 + (94 * percentToGreen);
-            let b = 252;
+            const r = 174 - (57 * percentToGreen);
+            const g = 126 + (94 * percentToGreen);
+            const b = 252;
 
             const color = `rgb(${r},${g},${b})`;
             let colorStyle = { backgroundColor: color };
@@ -155,15 +190,17 @@ class PredictiveGraph extends Component {
                     <div className="yPointMarker" style={yPointMarker80} />
                     <div className="xAxis" style={xAxisStyle} />
                     <div className="yAxis" style={yAxisStyle} />
+                    <div className="leftYAxisLabelContainer">
+                        { yAxisLabelDivs }
+                    </div>
+                    <div className="rightYAxisLabel" style={yAxisLabel120Style}>120</div>
+                    <div className="rightYAxisLabel" style={yAxisLabel80Style}>80</div>
                     <div className="pointsList">
                         { points }
                     </div>
-                </div>
-                <div className="yAxisLabelsContainer">
-                    { yAxisLabels }
-                </div>
-                <div className="xAxisLabelsContainer" style={xAxisLabelsContainerStyle}>
-                    { xAxisLabels }
+                    <div className="xAxisLabelsContainer" style={xAxisLabelsContainerStyle}>
+                        { xAxisLabels }
+                    </div>
                 </div>
             </div>
         )

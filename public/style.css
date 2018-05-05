@@ -263,6 +263,26 @@ form > h1 {
     width: 50%;
     margin-left: 25%;
 }
+.rightYAxisLabel {
+    color: white;
+    position: absolute;
+    right: -5%;
+    transform: translateX(100%);
+}
+.leftYAxisLabelContainer {
+    height: 100%;
+    position: absolute;
+    left: -15%;
+}
+.leftYAxisLabel {
+    display: inline-block;
+    position: absolute;
+}
+.leftYAxisLabel > div {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%);
+}
 .predictiveGraphInterior > .yPointMarker {
     position: absolute;
     width: 100%;
