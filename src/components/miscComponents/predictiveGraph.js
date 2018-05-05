@@ -77,31 +77,37 @@ class PredictiveGraph extends Component {
             const label = point.x;
             const yValue = point.y;
 
-
-
-            // get the rgb values of the point
-            const r = 122;
-            const g = 200;
-            let b = 100 + yValue;
-            if (b > 255) {
-                b = 255;
-            }
-
-            const color = `rgb(${r},${g},${b})`;
-            let colorStyle = { backgroundColor: color };
-
             // 160 is the top of the graph, 40 is the bottom
             // 160 corresponds to 100%, 100 corresponds to 50%, 40 corresponds to 0%
             const fromBottom = (yValue - 40) * 5 / 6;
 
+
+            // get the rgb values of the point
+            // start at purple and go up to green
+            let percentToGreen = fromBottom / 100;
+            let r = 174 - (57 * percentToGreen);
+            let g = 126 + (94 * percentToGreen);
+            let b = 252;
+
+            const color = `rgb(${r},${g},${b})`;
+            let colorStyle = { backgroundColor: color };
+
+
             // the height of the line is determined by the confidence interval
             const confidenceInterval = point.confidenceInterval;
+            const confidenceIntervalHeight = confidenceInterval*5/6;
             const confidenceIntervalStyle = {
-                height: `${confidenceInterval*5/6}%`,
+                height: `${confidenceIntervalHeight}%`,
                 bottom: `${fromBottom}%`,
                 width: "2px"
             };
 
+            const topBorderStyle = {
+                bottom: `${fromBottom + (confidenceIntervalHeight / 2)}%`
+            }
+            const bottomBorderStyle = {
+                bottom: `${fromBottom - (confidenceIntervalHeight / 2)}%`
+            }
 
             const pointBoxStyle = {
                 bottom: `${fromBottom}%`
@@ -125,9 +131,9 @@ class PredictiveGraph extends Component {
             points.push(
                 <div className="pointContainer" style={pointContainerStyle}>
                     <div className="confidenceIntervalLine" style={{...colorStyle, ...confidenceIntervalStyle}} />
-                    <div className="confidenceIntervalTopBorder" style={colorStyle} />
+                    <div className="confidenceIntervalBorder" style={{...colorStyle, ...topBorderStyle}} />
                     <div className="pointBox" style={{...colorStyle, ...pointBoxStyle}}>{yValue}</div>
-                    <div className="confidenceIntervalBottomBorder" style={colorStyle} />
+                    <div className="confidenceIntervalBorder" style={{...colorStyle, ...bottomBorderStyle}} />
                 </div>
             );
 
