@@ -30,6 +30,7 @@ class CandidatePreview extends Component {
         }
 
         this.state = {
+            hiringStage: props.initialHiringStage,
             step: step,
             dismissed: isDismissed,
         }
@@ -61,6 +62,7 @@ class CandidatePreview extends Component {
         }
 
         this.setState({
+            hiringStage: nextProps.initialHiringStage,
             step: step,
             dismissed: isDismissed,
         });
@@ -126,13 +128,55 @@ class CandidatePreview extends Component {
         console.log("this.props: ", this.props);
         const location = this.props.location ? this.props.location : "No location given";
 
+        let percent = "25%";
+        let topRightStyle = {display: "none"};
+        let bottomRightStyle = {display: "inline-block"};
+        let bottomLeftStyle = {display: "inline-block"};
+        let topLeftStyle = {display: "inline-block"};
+
+        switch (this.state.hiringStage) {
+            case "Contacted":
+                percent = "50%";
+                bottomRightStyle = {display: "none"};
+                break;
+            case "Interviewing":
+                percent = "75%";
+                bottomRightStyle = {display: "none"};
+                bottomLeftStyle = {display: "none"};
+                break;
+            case "Interviewing":
+                percent = "100%";
+                bottomRightStyle = {display: "none"};
+                bottomLeftStyle = {display: "none"};
+                topLeftStyle = {display: "none"};
+                break;
+            default:
+                break;
+        }
+
         return (
             <div className="candidatePreview center">
                 <div className="candidateName font24px center">
                     {this.props.name.toUpperCase()}
                 </div>
+                <br/>
                 <div className="candidateLocation">
                     {location}
+                </div>
+                <br/>
+                <div className="candidateScore">
+                    Candidate Score <span>SCORE</span>
+                </div>
+                <br/>
+                <div className="hiringStageCircle">
+                    <div className="circleCover top right" style={topRightStyle} />
+                    <div className="circleCover bottom right" style={bottomRightStyle} />
+                    <div className="circleCover bottom left" style={bottomLeftStyle} />
+                    <div className="circleCover top left" style={topLeftStyle} />
+
+                    <div className="circleCover interior font20px">
+                        <div>{percent}</div>
+                    </div>
                 </div>
                 <br/>
                 {/*<a href={"/results?user=" + this.props.profileUrl}>See Results</a>*/}

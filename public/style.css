@@ -965,10 +965,50 @@ button.link {
     color: white;
     display: inline-block;
     margin: 15px 25px;
+    background-color: #333333;
 }
 .candidatePreview > .candidateName {
     margin: 10px 0 0;
     display: inline-block;
+}
+.candidatePreview > .candidateLocation {
+    display: inline-block;
+}
+.candidatePreview > .candidateScore {
+    display: inline-block;
+}
+.candidatePreview > .hiringStageCircle {
+    background: linear-gradient(to top left, #983cc9, #e36273);
+}
+.candidatePreview > .hiringStageCircle {
+    display: inline-block;
+    width: 86px;
+    height: 86px;
+    border-radius: 100%;
+    position: relative;
+}
+.hiringStageCircle > .circleCover {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background-color: #333333;
+}
+.circleCover.right { right: 0; }
+.circleCover.left { left: 0; }
+.circleCover.top { top: 0; }
+.circleCover.bottom { bottom: 0; }
+.circleCover.interior {
+    border-radius: 100%;
+    width: 80%;
+    height: 80%;
+    left: 10%;
+    top: 10%;
+}
+.circleCover.interior > div {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
 }
 
 .semiOpaqueHoverable {
