@@ -59,21 +59,21 @@ class MyCandidates extends Component {
                 verificationToken: this.props.currentUser.verificationToken
             }
         })
-            .then(function (res) {
-                let pathways = res.data;
-                if (Array.isArray(pathways) && pathways.length > 0) {
-                    self.setState({
-                        pathways: pathways
-                    });
-                } else {
-                    self.setState({
-                        noPathways: true
-                    })
-                }
-            })
-            .catch(function (err) {
-                console.log("error getting pathways: ", err);
-            });
+        .then(function (res) {
+            let pathways = res.data;
+            if (Array.isArray(pathways) && pathways.length > 0) {
+                self.setState({
+                    pathways: pathways
+                });
+            } else {
+                self.setState({
+                    noPathways: true
+                })
+            }
+        })
+        .catch(function (err) {
+            console.log("error getting pathways: ", err);
+        });
     }
 
     goTo(route) {
@@ -354,8 +354,8 @@ class MyCandidates extends Component {
 
 
         return (
-            <div className={"jsxWrapper"} ref='myCandidates'>
-                <div className="headerDiv purpleGradient"/>
+            <div className="jsxWrapper blackBackground fillScreen" ref='myCandidates'>
+                <div className="employerHeader"/>
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>

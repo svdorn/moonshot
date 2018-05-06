@@ -1781,6 +1781,13 @@ button.link {
     height: 100px;
     width: 100%;
 }
+.employerHeader {
+    position: relative;
+    height: 100px;
+    width: 100%;
+    box-shadow: 0px 2px 30px 8px;
+    margin-bottom: 50px;
+}
 
 .purpleToGreenSpacer {
     width: 60%;
