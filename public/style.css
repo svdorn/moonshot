@@ -1011,6 +1011,27 @@ button.link {
     left: 50%;
 }
 
+
+.employerDiv { background-color: #2e2e2e; }
+
+
+.freeResponse {
+    width: 96%;
+    margin: 40px 2%;
+    padding: 15px;
+    color: white;
+    box-shadow:         0px 5px 6px 3px #00000073;
+    -moz-box-shadow:    0px 5px 6px 3px #00000073;
+    -webkit-box-shadow: 0px 5px 6px 3px #00000073;
+}
+.freeResponse > .answer {
+    border: 2px solid rgb(117, 220, 252);
+    padding: 12px;
+    margin-top: 10px;
+}
+
+
+
 .semiOpaqueHoverable {
     opacity: 0.5;
     filter: alpha(opacity=50); /* For IE8 and earlier */
@@ -1350,6 +1371,7 @@ button.link {
 .redText { color: red }
 .whiteText { color: white; }
 .blueText { color: var(--moonshotLightBlue); }
+.lightBlueText { color: rgb(117, 220, 252); }
 .darkBlueText { color: var(--moonshotMidBlue); }
 .purpleText { color: var(--moonshotPurple) }
 .darkPurpleText { color: var(--moonshotDarkPurple) }
@@ -2290,6 +2312,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginTop20px { margin-top: 20px; }
 .paddingTop40px { padding-top: 40px; }
 .paddingTop20px { padding-top: 20px; }
+.paddingBottom40px { padding-bottom: 40px; }
 
 /* decorative triangles */
 

@@ -20,6 +20,7 @@ class Results extends Component {
             overallScore: undefined,
             hardSkills: [],
             predictiveInsights: [],
+            freeResponses: []
         };
     }
 
@@ -86,9 +87,24 @@ class Results extends Component {
             ];
         }
 
+        const freeResponses = [
+            {
+                question: "What is your vision for Dream Home?",
+                answer: "My vision for Dream Home is that it becomes a company that builds homes that are made through renewable energy technology and can be sustainable without the grid. Dream Home would own a home building company, an electric  machinery equipment company, and an alternative energy company to power the equipment. Though this will not be the only route people can take, we would ensure that the technology investments actually make it cheaper and more sustainable at the same time, what's not to love? These homes would be built to be more reliable and less expensive than conventional homes. I see this spreading literally everywhere. By letting people build homes for free even if they do not buy it, we are building a brand and reputation."
+            },
+            {
+                question: "Dissect the model of a billion dollar startup of your choice. Why and how did they grow?",
+                answer: "Spotify started out with the idea of bridging the gap between owning music and downloading it illegally on the internet. After Napster collapsed, they were frustrated at how hard it was to acquire music digitally.  They decided to create a simple two-tier model for streaming music legally, a free radio-like package, and a paid unlimited streaming package. By offering users a free version, they could test their product without even buying it. You could finally choose the music you wanted to listen to, even somewhat for free. Their logic is that even though 37.5 million users use it for free, they are still using it and that's a potential for a new customer.  On the flip side, they have negotiated with just about every music label and has the largest music collection, as more continue to join Spotify since their base is the largest of any music streaming service. They have kept a loyal fan base from the start, and they continue to do so with the music labels and customers."
+            },
+            {
+                question: "Define the customer (psychographic, behavioral, etc.). New home builder? Consumer?",
+                answer: "The ideal customer is someone that has already owns a home. The reason I say this is because someone who's owned an older home understands the costs that are involved with upkeeping an old home. This is also a customer that is currently selling a home but has not bought one yet, someone who is dissatisfied with their current home, or someone who wants to downsize their home and save money. The customer will be anywhere from age 25 to 100, but more specifically the focus should be on people that are maybe 30-60 and have owned a home for a few years at least. The new home builder will be a younger company that exists in a region where home growth is large. They will have to have an entrepreneurial spirit and work with us to grow one another. The ideal situation is that the home builder integrates vertically with Dream Home."
+            }
+        ];
+
         self.setState({
             ...self.state,
-            user, candidate, overallScore, hardSkills, predictiveInsights
+            user, candidate, overallScore, hardSkills, predictiveInsights, freeResponses
         });
 
     }
@@ -102,6 +118,31 @@ class Results extends Component {
         // goes to the top of the new page
         window.scrollTo(0, 0);
     }
+
+
+    makeResponsesSection() {
+        console.log("this.state.freeResponses: ", this.state.freeResponses);
+        let freeResponses = [];
+        if (typeof this.state === "object" && Array.isArray(this.state.freeResponses)) {
+            freeResponses = this.state.freeResponses;
+        }
+
+        let responses = freeResponses.map(freeResponse => {
+            return (
+                <div className="employerDiv freeResponse">
+                    <span className="lightBlueText">{freeResponse.question}</span>
+                    <div className="answer">{freeResponse.answer}</div>
+                </div>
+            )
+        });
+
+        return (
+            <div className="fillScreen candidateResponses">
+                {responses}
+            </div>
+        )
+    }
+
 
     render() {
         const style = {
@@ -163,15 +204,26 @@ class Results extends Component {
             mailtoEmail = "mailto:" + candidate.email;
         }
 
-        console.log(user);
-        console.log(candidate);
-
         const predictiveDataPoints = [
             {x: "Growth", y: 134, confidenceInterval: 14},
             {x: "Performance", y: 87, confidenceInterval: 12},
             {x: "Culture Fit", y: 62, confidenceInterval: 15},
             {x: "Longevity", y: 113, confidenceInterval: 9}
         ];
+
+        // TODO DELETE IF NOT USED
+        const predictiveGraphSection = (
+            <div className="center fullHeight" style={style.tabContent}>
+                <PredictiveGraph
+                    dataPoints={predictiveDataPoints}
+                    height={400}
+                />
+            </div>
+        )
+
+
+        const responsesSection = this.makeResponsesSection();
+
 
         return (
             <div>
@@ -183,7 +235,7 @@ class Results extends Component {
                     <div>
                         {candidate ?
                             <div>
-                                <div className="blackBackground">
+                                <div className="blackBackground paddingBottom40px">
                                     <div className="headerDiv"/>
                                     <div className="profileInfoSkills">
                                         <div className="center">
@@ -329,12 +381,7 @@ class Results extends Component {
                                                 </div>
                                             </Tab>
                                             <Tab label="Responses" style={style.topTab}>
-                                                <div className="center fullHeight" style={style.tabContent}>
-                                                    <PredictiveGraph
-                                                        dataPoints={predictiveDataPoints}
-                                                        height={400}
-                                                    />
-                                                </div>
+                                                {responsesSection}
                                             </Tab>
                                         </Tabs>
                                     </div>
