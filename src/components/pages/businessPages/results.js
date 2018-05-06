@@ -121,7 +121,6 @@ class Results extends Component {
 
 
     makeResponsesSection() {
-        console.log("this.state.freeResponses: ", this.state.freeResponses);
         let freeResponses = [];
         if (typeof this.state === "object" && Array.isArray(this.state.freeResponses)) {
             freeResponses = this.state.freeResponses;
@@ -266,6 +265,7 @@ class Results extends Component {
                                             className="myPathwaysTabs"
                                         >
                                             <Tab label="Analysis" style={style.topTab}>
+                                                <div className="tabsShadow"><div /></div>
                                                 <div className="center aboutMeSection" style={style.tabContent}>
                                                     <div className="lightBlackBackground" style={{minHeight: '200px'}}>
                                                         <div className="paddingTop20px">
@@ -381,6 +381,7 @@ class Results extends Component {
                                                 </div>
                                             </Tab>
                                             <Tab label="Responses" style={style.topTab}>
+                                                <div className="tabsShadow"><div /></div>
                                                 {responsesSection}
                                             </Tab>
                                         </Tabs>
