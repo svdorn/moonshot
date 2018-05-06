@@ -10,6 +10,7 @@ var businessesSchema = mongoose.Schema({
         userId: mongoose.Schema.Types.ObjectId,
         name: String,
         email: String,
+        location: String,
         pathways: [{
             _id: mongoose.Schema.Types.ObjectId,
             name: String,

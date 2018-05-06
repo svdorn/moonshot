@@ -260,6 +260,7 @@ class MyCandidates extends Component {
                             email={candidate.email}
                             disabled={isDisabled}
                             profileUrl={candidate.profileUrl}
+                            location={candidate.location}
                         />
                     </li>
                 );
@@ -366,7 +367,7 @@ class MyCandidates extends Component {
                 {searchBar}
 
                 <div>
-                    <ul className="center" id="aboutMeAreas">
+                    <ul className="horizCenteredList">
                         {candidatePreviews}
                     </ul>
                 </div>

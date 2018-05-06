@@ -123,52 +123,53 @@ class CandidatePreview extends Component {
             },
         };
 
+        console.log("this.props: ", this.props);
+        const location = this.props.location ? this.props.location : "No location given";
+
         return (
-            <div className="candidatePreview">
-                <Paper
-                    className="candidatePreviewPaper candidatePreviewLi font16px font font14pxUnder700 font12pxUnder400"
-                    zDepth={2}>
-                    <div className="candidatePreviewLiLeftContainer">
-                        {this.props.name}
-                        {/*<a href={"/results?user=" + this.props.profileUrl}>See Results</a>*/}
-                        <a href={"/results?user=Stephen-Dorn-2-9f66bf7eeac18994"}>See Results</a>
-                    </div>
+            <div className="candidatePreview center">
+                <div className="candidateName font24px center">
+                    {this.props.name.toUpperCase()}
+                </div>
+                <div className="candidateLocation">
+                    {location}
+                </div>
+                <br/>
+                {/*<a href={"/results?user=" + this.props.profileUrl}>See Results</a>*/}
+                <a href={"/results?user=Stephen-Dorn-2-9f66bf7eeac18994"}>See Results</a>
 
-                    <div className="verticalDividerCandidatePreview"/>
-
-                    <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
-                        <Stepper activeStep={this.state.step}>
-                            <Step disabled={((0 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
-                                <StepButton onClick={() => this.handleHiringStageChange(0)}>Not Contacted</StepButton>
-                            </Step>
-                            <Step disabled={((1 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
-                                <StepButton onClick={() => this.handleHiringStageChange(1)}>Contacted</StepButton>
-                            </Step>
-                            <Step disabled={((2 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
-                                <StepButton onClick={() => this.handleHiringStageChange(2)}>Interviewing</StepButton>
-                            </Step>
-                            <Step disabled={((3 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
-                                <StepButton onClick={() => this.handleHiringStageChange(3)}>Hired</StepButton>
-                            </Step>
-                        </Stepper>
-                        <div className="center">
-                            {this.state.dismissed ?
-                                <RaisedButton label="Dismissed"
-                                              primary={true}
-                                              labelStyle={{color:"white"}}
-                                              onClick={this.handleClick.bind(this)}
-                                              disabled={this.props.disabled}
-                                />
-                                :
-                                <FlatButton label="Dismiss"
-                                            primary={true}
-                                            onClick={this.handleClick.bind(this)}
-                                            disabled={this.props.disabled}
-                                />
-                            }
-                        </div>
+                <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
+                    {/*<Stepper activeStep={this.state.step}>
+                        <Step disabled={((0 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
+                            <StepButton onClick={() => this.handleHiringStageChange(0)}>Not Contacted</StepButton>
+                        </Step>
+                        <Step disabled={((1 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
+                            <StepButton onClick={() => this.handleHiringStageChange(1)}>Contacted</StepButton>
+                        </Step>
+                        <Step disabled={((2 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
+                            <StepButton onClick={() => this.handleHiringStageChange(2)}>Interviewing</StepButton>
+                        </Step>
+                        <Step disabled={((3 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
+                            <StepButton onClick={() => this.handleHiringStageChange(3)}>Hired</StepButton>
+                        </Step>
+                    </Stepper>*/}
+                    <div className="center">
+                        {this.state.dismissed ?
+                            <RaisedButton label="Dismissed"
+                                          primary={true}
+                                          labelStyle={{color:"white"}}
+                                          onClick={this.handleClick.bind(this)}
+                                          disabled={this.props.disabled}
+                            />
+                            :
+                            <FlatButton label="Dismiss"
+                                        primary={true}
+                                        onClick={this.handleClick.bind(this)}
+                                        disabled={this.props.disabled}
+                            />
+                        }
                     </div>
-                </Paper>
+                </div>
             </div>
         )
     }

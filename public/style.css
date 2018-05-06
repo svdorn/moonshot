@@ -353,14 +353,15 @@ form > h1 {
     margin-left: 100px;
     position: absolute;
 }
-.verticalDividerCandidatePreview {
+
+/* .verticalDividerCandidatePreview {
     background-color: #d2d2d2;
     height: calc(100% - 40px);
     width: 2px;
     display: inline-block;
     margin-left: 200px;
     position: absolute;
-}
+} */
 
 .menuDivider {
     width: 2px;
@@ -954,12 +955,20 @@ button.link {
     /* height: 100%; */
     /* width: 100%; */
 }
-.candidatePreviewPaper {
-    width: 90%;
-    max-width: 1000px;
-    height: 170px;
-    margin: auto;
-    padding: 20px;
+
+.candidatePreview {
+    width: 335px;
+    height: 290px;
+    box-shadow:         0px 0px 50px 1px #00000073;
+    -moz-box-shadow:    0px 0px 50px 1px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    color: white;
+    display: inline-block;
+    margin: 15px 25px;
+}
+.candidatePreview > .candidateName {
+    margin: 10px 0 0;
+    display: inline-block;
 }
 
 .semiOpaqueHoverable {
@@ -1631,12 +1640,12 @@ button.link {
     padding-left: 0px;
 }
 
-.candidatePreviewLiLeftContainer {
+/* .candidatePreviewLiLeftContainer {
     width: 160px;
     position: relative;
     float: left;
     text-align: center;
-}
+} */
 
 .aboutMeLiIconContainer {
     height: calc(100% - 40px);
@@ -1679,18 +1688,7 @@ button.link {
     color: black;
     text-decoration: underline;
 }
-.candidatePreviewLi {
-    text-align: left;
-    padding-left: 3%;
-    margin: auto;
-    position: relative;
-}
-.candidatePreviewLi > div {
-    display: inline-block;
-}
-.candidatePreviewLi > div:nth-child(3) {
-    width: calc(100% - 250px);
-}
+
 .aboutMeLiIconContainer {
     vertical-align: top;
     position: absolute;
@@ -1785,7 +1783,9 @@ button.link {
     position: relative;
     height: 100px;
     width: 100%;
-    box-shadow: 0px 2px 30px 8px;
+    box-shadow:         0px 2px 30px 8px;
+    -moz-box-shadow:    0px 2px 30px 8px;
+    -webkit-box-shadow: 0px 2px 30px 8px;
     margin-bottom: 50px;
 }
 

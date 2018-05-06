@@ -1349,10 +1349,15 @@ app.post('/user/completePathway', async function(req, res) {
                         return candidate.userId.toString() == userIdString;
                     });
 
+                    // the candidate's current location
+                    const location = user.info && user.info.location ? user.info.location : "";
+
                     // if candidate doesn't exist, add them along with the pathway
                     if (userIndex == -1) {
                         let candidateToAdd = {
                             userId: user._id,
+                            location: location,
+                            profileUrl: user.profileUrl,
                             name: user.name,
                             // give the business the email that the candidate wants to be contacted at, not their login email
                             email: userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email,
@@ -2227,12 +2232,16 @@ app.post("/user/addPathway", function (req, res) {
                                     return candidate.userId.toString() == userIdString;
                                 });
 
+                                // the candidate's current location
+                                const location = user.info && user.info.location ? user.info.location : "";
+
                                 // if candidate doesn't exist, add them along with the pathway
                                 if (userIndex == -1) {
                                     let candidateToAdd = {
                                         userId: user._id,
                                         name: user.name,
                                         profileUrl: user.profileUrl,
+                                        location: location,
                                         // give the business the email that the candidate wants to be contacted at, not their login email
                                         email: user.emailToContact ? user.emailToContact : user.email,
                                         // will only have this pathway if the candidate didn't exist before
