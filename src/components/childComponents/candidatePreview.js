@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Paper, Stepper, Step, StepButton, FlatButton, RaisedButton} from 'material-ui';
+import {Paper, Stepper, Step, StepButton, FlatButton, RaisedButton, MenuItem, DropDownMenu} from 'material-ui';
 import axios from 'axios';
 
 class CandidatePreview extends Component {
@@ -7,95 +7,71 @@ class CandidatePreview extends Component {
         //TODO ONLY SHOW THE CANDIDATE PREVIEW WHEN A PATHWAY HAS BEEN SELECTED
         super(props);
 
-        const hiringStageSteps = {
-            "Not Contacted": 0,
-            "Contacted": 1,
-            "Interviewing": 2,
-            "Hired": 3
-        }
-
-        let step = hiringStageSteps[props.initialHiringStage];
-
-        if (!step) {
-            step = 0;
-        }
-
         let isDismissed = props.initialIsDismissed;
         if (isDismissed === undefined) {
             isDismissed = false;
         }
 
-        if (props.initialIsDismissed) {
-            step = step + 1;
-        }
+        const possibleStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
+        const validStage = possibleStages.includes(props.initialHiringStage);
+        const hiringStage = validStage ? props.initialHiringStage : possibleStages[0];
 
         this.state = {
-            hiringStage: props.initialHiringStage,
-            step: step,
+            hiringStage,
             dismissed: isDismissed,
+            possibleStages
         }
     }
 
     // since some components will be rendered in the same place but be for
     // different people, need to update state when new props are received
     componentWillReceiveProps(nextProps) {
-        const hiringStageSteps = {
-            "Not Contacted": 0,
-            "Contacted": 1,
-            "Interviewing": 2,
-            "Hired": 3
-        }
-
-        let step = hiringStageSteps[nextProps.initialHiringStage];
-
-        if (!step) {
-            step = 0;
-        }
+        // make sure the stage we're getting is valid
+        const validStage = this.state.possibleStages.includes(nextProps.initialHiringStage);
+        // default to "Not Contacted" if invalid property given
+        const hiringStage = validStage ? nextProps.initialHiringStage : this.state.possibleStages[0];
 
         let isDismissed = nextProps.initialIsDismissed;
-        if (isDismissed === undefined) {
+        // default to not dismissed if invalid property given
+        if (typeof isDismissed !== "boolean") {
             isDismissed = false;
         }
 
-        if (nextProps.initialIsDismissed) {
-            step = step + 1;
-        }
-
         this.setState({
+            ...this.state,
             hiringStage: nextProps.initialHiringStage,
-            step: step,
             dismissed: isDismissed,
         });
     }
 
+
+    // when Dismiss button is clicked
     handleClick() {
-        if (this.state.dismissed) {
-            this.updateHiringStageInDB(this.state.step - 1, false);
-            this.setState({dismissed: false, step: this.state.step - 1});
-        } else {
-            this.updateHiringStageInDB(this.state.step, true);
-            this.setState({dismissed: true, step: this.state.step + 1});
-        }
+        this.updateHiringStageInDB(this.state.hiringStage, !this.state.dismissed);
+        this.setState({ ...this.state, dismissed: !this.state.dismissed });
     }
 
 
-    handleHiringStageChange(step) {
-        this.setState({step});
-        this.updateHiringStageInDB(step, this.state.dismissed);
+    // when hiring stage changed in menu
+    handleHiringStageChange = (event, index, hiringStage) => {
+        console.log("hiringStage: ", hiringStage)
+        this.setState({...this.state, hiringStage})
+        this.updateHiringStageInDB(hiringStage, this.state.dismissed);
     }
 
 
-    updateHiringStageInDB(step, dismissed) {
-        if (step <= 3 && step >= 0 && typeof dismissed === "boolean") {
-            const stages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
+    updateHiringStageInDB(hiringStage, dismissed) {
+        const stages = this.state.possibleStages;
 
+        // ensure inputs are valid
+        if (stages.includes(hiringStage) && typeof dismissed === "boolean") {
             const currentUser = this.props.currentUser;
             const hiringStageInfo = {
                 userId: this.props.employerUserId,
                 verificationToken: this.props.employerVerificationToken,
                 companyId: this.props.companyId,
                 candidateId: this.props.candidateId,
-                hiringStage: stages[step],
+                hiringStage: hiringStage,
                 isDismissed: dismissed,
                 pathwayId: this.props.pathwayId
             }
@@ -111,48 +87,60 @@ class CandidatePreview extends Component {
 
     render() {
         const style = {
-            imgContainer: {
-                height: "40px",
-                width: "40px",
-                borderRadius: '50%',
-                border: "3px solid #00c3ff",
-                display: "inline-block",
-                overflow: "hidden"
+            score: {
+                color: "#D1576F",
+                textDecoration: "underline"
             },
-            img: {
-                height: "34px",
-                marginTop: "5px"
+            anchorOrigin: {
+                vertical: "top",
+                horizontal: "middle"
             },
+            menuLabelStyle: {
+                color: "rgba(255, 255, 255, .8)"
+            },
+            menuUnderlineStyle: {
+                display: "none"
+            }
         };
 
-        console.log("this.props: ", this.props);
         const location = this.props.location ? this.props.location : "No location given";
+        const overallScore = this.props.overallScore ? this.props.overallScore : "N/A";
 
         let percent = "25%";
         let topRightStyle = {display: "none"};
         let bottomRightStyle = {display: "inline-block"};
         let bottomLeftStyle = {display: "inline-block"};
         let topLeftStyle = {display: "inline-block"};
+        let possibleStages = this.state.possibleStages;
 
-        switch (this.state.hiringStage) {
-            case "Contacted":
-                percent = "50%";
-                bottomRightStyle = {display: "none"};
-                break;
-            case "Interviewing":
-                percent = "75%";
-                bottomRightStyle = {display: "none"};
-                bottomLeftStyle = {display: "none"};
-                break;
-            case "Interviewing":
-                percent = "100%";
-                bottomRightStyle = {display: "none"};
-                bottomLeftStyle = {display: "none"};
-                topLeftStyle = {display: "none"};
-                break;
-            default:
-                break;
+        // there should only be four possible stages
+        if (Array.isArray(possibleStages) && possibleStages.length === 4) {
+            // determine how much of the circle can be seen based on the hiring stage
+            switch (this.state.hiringStage) {
+                case possibleStages[1]:
+                    percent = "50%";
+                    bottomRightStyle = {display: "none"};
+                    break;
+                case possibleStages[2]:
+                    percent = "75%";
+                    bottomRightStyle = {display: "none"};
+                    bottomLeftStyle = {display: "none"};
+                    break;
+                case possibleStages[3]:
+                    percent = "100%";
+                    bottomRightStyle = {display: "none"};
+                    bottomLeftStyle = {display: "none"};
+                    topLeftStyle = {display: "none"};
+                    break;
+                default:
+                    break;
+            }
         }
+
+        const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
+        const menuItems = hiringStages.map(stage => {
+            return (<MenuItem value={stage} primaryText={stage.toUpperCase()} />)
+        });
 
         return (
             <div className="candidatePreview center">
@@ -165,7 +153,7 @@ class CandidatePreview extends Component {
                 </div>
                 <br/>
                 <div className="candidateScore">
-                    Candidate Score <span>SCORE</span>
+                    Candidate Score <span className="font20px" style={style.score}>{overallScore}</span>
                 </div>
                 <br/>
                 <div className="hiringStageCircle">
@@ -180,23 +168,19 @@ class CandidatePreview extends Component {
                 </div>
                 <br/>
                 {/*<a href={"/results?user=" + this.props.profileUrl}>See Results</a>*/}
-                <a href={"/results?user=Stephen-Dorn-2-9f66bf7eeac18994"}>See Results</a>
+                {/*<a href={"/results?user=Stephen-Dorn-2-9f66bf7eeac18994"}>See Results</a>*/}
+
+                <DropDownMenu value={this.state.hiringStage}
+                              onChange={this.handleHiringStageChange.bind(this)}
+                              labelStyle={style.menuLabelStyle}
+                              anchorOrigin={style.anchorOrigin}
+                              underlineStyle={style.menuUnderlineStyle}
+                              style={{paddingLeft: "20px"}}
+                >
+                    {menuItems}
+                </DropDownMenu>
 
                 <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
-                    {/*<Stepper activeStep={this.state.step}>
-                        <Step disabled={((0 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
-                            <StepButton onClick={() => this.handleHiringStageChange(0)}>Not Contacted</StepButton>
-                        </Step>
-                        <Step disabled={((1 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
-                            <StepButton onClick={() => this.handleHiringStageChange(1)}>Contacted</StepButton>
-                        </Step>
-                        <Step disabled={((2 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
-                            <StepButton onClick={() => this.handleHiringStageChange(2)}>Interviewing</StepButton>
-                        </Step>
-                        <Step disabled={((3 - this.state.step) > 1) || this.state.dismissed || this.props.disabled}>
-                            <StepButton onClick={() => this.handleHiringStageChange(3)}>Hired</StepButton>
-                        </Step>
-                    </Stepper>*/}
                     <div className="center">
                         {this.state.dismissed ?
                             <RaisedButton label="Dismissed"

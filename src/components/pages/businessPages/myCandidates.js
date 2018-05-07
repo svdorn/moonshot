@@ -18,7 +18,6 @@ import {closeNotification} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
 import CandidatePreview from '../../childComponents/candidatePreview';
-import styles from '../../../../public/styles';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -156,6 +155,13 @@ class MyCandidates extends Component {
                 margin: "auto",
                 marginTop: "0px",
                 marginBottom: "30px"
+            },
+            anchorOrigin: {
+                vertical: "top",
+                horizontal: "left"
+            },
+            menuLabelStyle: {
+                color: "rgba(255,255,255,.8)"
             }
         }
 
@@ -211,6 +217,7 @@ class MyCandidates extends Component {
                 const initialIsDismissed = candidatePathwayInfo.isDismissed;
                 const isDisabled = candidate.disabled === true;
 
+                console.log("candidate: ", candidate);
 
                 return (
                     <li style={{marginTop: '15px'}}
@@ -230,6 +237,10 @@ class MyCandidates extends Component {
                             disabled={isDisabled}
                             profileUrl={candidate.profileUrl}
                             location={candidate.location}
+                            overallScore={candidatePathwayInfo.overallScore}
+                            predicted={candidatePathwayInfo.predicted}
+                            archetype={candidate.archetype}
+                            skill={candidatePathwayInfo.skill}
                         />
                     </li>
                 );
@@ -256,6 +267,8 @@ class MyCandidates extends Component {
         const searchFloatingLabelStyle = searchHintStyle;
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
+        //TODO to change the menu style, use menuStyle prop
+
         const searchBar = (
             <div>
                 <Toolbar style={style.searchBar} id="discoverSearchBarWideScreen">
@@ -277,8 +290,8 @@ class MyCandidates extends Component {
                     <ToolbarGroup>
                         <DropDownMenu value={this.state.hiringStage}
                                       onChange={this.handleHiringStageChange}
-                                      underlineStyle={styles.underlineStyle}
-                                      anchorOrigin={styles.anchorOrigin}
+                                      labelStyle={style.menuLabelStyle}
+                                      anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px"}}
                         >
                             <MenuItem value={""} primaryText="Hiring Stage"/>
@@ -287,8 +300,8 @@ class MyCandidates extends Component {
                         </DropDownMenu>
                         <DropDownMenu value={this.state.pathway}
                                       onChange={this.handlePathwayChange}
-                                      underlineStyle={styles.underlineStyle}
-                                      anchorOrigin={styles.anchorOrigin}
+                                      labelStyle={style.menuLabelStyle}
+                                      anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px"}}
                         >
                             <MenuItem value={""} primaryText="Pathway"/>
@@ -317,8 +330,8 @@ class MyCandidates extends Component {
 
                     <DropDownMenu value={this.state.hiringStage}
                                   onChange={this.handleHiringStageChange}
-                                  underlineStyle={styles.underlineStyle}
-                                  anchorOrigin={styles.anchorOrigin}
+                                  labelStyle={style.menuLabelStyle}
+                                  anchorOrigin={style.anchorOrigin}
                                   style={{fontSize: "20px", marginTop: "11px"}}
                     >
                         <MenuItem value={""} primaryText="Hiring Stage"/>
@@ -328,8 +341,8 @@ class MyCandidates extends Component {
                     <div><br/></div>
                     <DropDownMenu value={this.state.pathway}
                                   onChange={this.handlePathwayChange}
-                                  underlineStyle={styles.underlineStyle}
-                                  anchorOrigin={styles.anchorOrigin}
+                                  labelStyle={style.menuLabelStyle}
+                                  anchorOrigin={style.anchorOrigin}
                                   style={{fontSize: "20px", marginTop: "11px"}}
                     >
                         <MenuItem value={""} primaryText="Pathway"/>

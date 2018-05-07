@@ -978,14 +978,13 @@ button.link {
     display: inline-block;
 }
 .candidatePreview > .hiringStageCircle {
-    background: linear-gradient(to top left, #983cc9, #e36273);
-}
-.candidatePreview > .hiringStageCircle {
     display: inline-block;
     width: 86px;
     height: 86px;
     border-radius: 100%;
     position: relative;
+    background: linear-gradient(to top left, #983cc9, #e36273);
+    margin-top: 20px;
 }
 .hiringStageCircle > .circleCover {
     position: absolute;
