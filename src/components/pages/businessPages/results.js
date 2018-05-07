@@ -209,17 +209,12 @@ class Results extends Component {
             {x: "Culture Fit", y: 62, confidenceInterval: 15},
             {x: "Longevity", y: 113, confidenceInterval: 9}
         ];
-
-        // TODO DELETE IF NOT USED
-        const predictiveGraphSection = (
-            <div className="center fullHeight" style={style.tabContent}>
-                <PredictiveGraph
-                    dataPoints={predictiveDataPoints}
-                    height={400}
-                />
-            </div>
-        )
-
+        const hardSkillsDataPoints = [
+            {x: "Full Stack", y: 120, confidenceInterval: 13},
+            {x: "Version Control", y: 132, confidenceInterval: 11},
+            {x: "Artificial Intelligence", y: 91, confidenceInterval: 10},
+            {x: "Startup", y: 68, confidenceInterval: 16}
+        ];
 
         const responsesSection = this.makeResponsesSection();
 
@@ -265,7 +260,9 @@ class Results extends Component {
                                             className="myPathwaysTabs"
                                         >
                                             <Tab label="Analysis" style={style.topTab}>
-                                                <div className="tabsShadow"><div /></div>
+                                                <div className="tabsShadow">
+                                                    <div/>
+                                                </div>
                                                 <div className="center aboutMeSection" style={style.tabContent}>
                                                     <div className="lightBlackBackground" style={{minHeight: '200px'}}>
                                                         <div className="paddingTop20px">
@@ -281,7 +278,9 @@ class Results extends Component {
                                                                     >
                                                                         <div
                                                                             className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Overall<div className="under500only br"><br/></div> Predictive<br/>
+                                                                            Overall
+                                                                            <div className="under500only br"><br/></div>
+                                                                            Predictive<br/>
                                                                             <p style={style.lightBlue}>AVERAGE</p>
                                                                         </div>
                                                                         <Slider disabled={true}
@@ -297,7 +296,9 @@ class Results extends Component {
                                                                          style={{marginLeft: "5%", marginRight: '5%'}}>
                                                                         <div
                                                                             className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Psychometric<div className="under500only br"><br/></div> Archetype<br/>
+                                                                            Psychometric
+                                                                            <div className="under500only br"><br/></div>
+                                                                            Archetype<br/>
                                                                             <p style={style.lightBlue}>INNOVATOR</p>
                                                                             <img
                                                                                 alt="Atom Icon"
@@ -312,7 +313,9 @@ class Results extends Component {
                                                                          style={{marginRight: "20%"}}>
                                                                         <div
                                                                             className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Overall<div className="under500only br"><br/></div> Hard Skills<br/>
+                                                                            Overall
+                                                                            <div className="under500only br"><br/></div>
+                                                                            Hard Skills<br/>
                                                                             <p style={style.lightBlue}>EXPERT</p>
                                                                         </div>
                                                                         <Slider disabled={true}
@@ -331,24 +334,10 @@ class Results extends Component {
                                                         Predictive Insights
                                                     </div>
                                                     <div>
-                                                        <ResponsiveContainer width="60%" height={250} minWidth={500}
-                                                                             className="recharts-wrapper">
-                                                            <ScatterChart margin={{
-                                                                top: 20,
-                                                                right: 50,
-                                                                left: 0,
-                                                                bottom: 0
-                                                            }}>
-                                                                <XAxis dataKey="x" tickLine={false} stroke="white"/>
-                                                                <YAxis dataKey="y" name="Score"
-                                                                       domain={['dataMin', 'auto']} stroke="white"/>
-                                                                <Scatter data={predictiveInsights} fill="#8884d8"
-                                                                         shape="square">
-                                                                    <LabelList dataKey="y" stroke="white"
-                                                                               position="top"/>
-                                                                </Scatter>
-                                                            </ScatterChart>
-                                                        </ResponsiveContainer>
+                                                        <PredictiveGraph
+                                                            dataPoints={predictiveDataPoints}
+                                                            height={400}
+                                                        />
                                                     </div>
 
                                                     <div className="purpleToGreenSpacer"
@@ -359,29 +348,17 @@ class Results extends Component {
                                                         Hard Skills
                                                     </div>
                                                     <div>
-                                                        <ResponsiveContainer width="60%" height={250} minWidth={500}
-                                                                             className="recharts-wrapper">
-                                                            <ScatterChart margin={{
-                                                                top: 20,
-                                                                right: 50,
-                                                                left: 0,
-                                                                bottom: 0
-                                                            }}>
-                                                                <XAxis dataKey="x" tickLine={false} stroke="white"/>
-                                                                <YAxis dataKey="y" name="Score"
-                                                                       domain={['dataMin', 'auto']} stroke="white"/>
-                                                                <Scatter data={hardSkills} fill="#8884d8"
-                                                                         shape="square">
-                                                                    <LabelList dataKey="y" stroke="white"
-                                                                               position="top"/>
-                                                                </Scatter>
-                                                            </ScatterChart>
-                                                        </ResponsiveContainer>
+                                                        <PredictiveGraph
+                                                            dataPoints={hardSkillsDataPoints}
+                                                            height={400}
+                                                        />
                                                     </div>
                                                 </div>
                                             </Tab>
                                             <Tab label="Responses" style={style.topTab}>
-                                                <div className="tabsShadow"><div /></div>
+                                                <div className="tabsShadow">
+                                                    <div/>
+                                                </div>
                                                 {responsesSection}
                                             </Tab>
                                         </Tabs>
