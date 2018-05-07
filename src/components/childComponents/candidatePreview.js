@@ -11,6 +11,7 @@ import {
     Slider
 } from 'material-ui';
 import axios from 'axios';
+import {browserHistory} from 'react-router';
 
 class CandidatePreview extends Component {
     constructor(props) {
@@ -52,6 +53,14 @@ class CandidatePreview extends Component {
             hiringStage: nextProps.initialHiringStage,
             dismissed: isDismissed,
         });
+    }
+
+
+    goTo(route) {
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
 
@@ -267,7 +276,8 @@ class CandidatePreview extends Component {
         });
 
         return (
-            <div className="candidatePreview center">
+            <div className="candidatePreview center" >
+            {/*onClick={this.goTo("/results?user=Stephen-Dorn-2-9f66bf7eeac18994")}*/}
                 <div className="candidateName font24px center">
                     {this.props.name.toUpperCase()}
                 </div>
@@ -292,7 +302,7 @@ class CandidatePreview extends Component {
                 </div>
                 <br/>
                 {/*<a href={"/results?user=" + this.props.profileUrl}>See Results</a>*/}
-                {/*<a href={"/results?user=Stephen-Dorn-2-9f66bf7eeac18994"}>See Results</a>*/}
+
 
                 <DropDownMenu value={this.state.hiringStage}
                               onChange={this.handleHiringStageChange.bind(this)}
