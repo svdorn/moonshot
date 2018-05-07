@@ -129,37 +129,6 @@ class MyCandidates extends Component {
 
     render() {
         const style = {
-            separator1: {
-                width: "70%",
-                margin: "12px auto 0px",
-                position: "relative",
-                height: "40px",
-                textAlign: "center"
-            },
-            separatorLineLeft: {
-                left: 0,
-                width: "calc(50% - 85px);",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
-            },
-            separatorLineRight: {
-                right: 0,
-                width: "calc(50% - 85px);",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
-            },
-            separatorText1: {
-                padding: "0px 40px",
-                backgroundColor: "transparent",
-                display: "inline-block",
-                position: "relative",
-                fontSize: "23px",
-                color: "white"
-            },
             separator: {
                 width: "70%",
                 margin: "25px auto 0px",
@@ -169,16 +138,16 @@ class MyCandidates extends Component {
             },
             separatorText: {
                 padding: "0px 40px",
-                backgroundColor: "white",
+                backgroundColor: "#2e2e2e",
                 display: "inline-block",
                 position: "relative",
                 fontSize: "23px",
-                color: "#b37bfe"
+                color: "white"
             },
             separatorLine: {
                 width: "100%",
                 height: "3px",
-                backgroundColor: "#b37bfe",
+                backgroundColor: "white",
                 position: "absolute",
                 top: "12px"
             },
@@ -205,7 +174,7 @@ class MyCandidates extends Component {
         let self = this;
 
         let candidatePreviews = (
-            <div className="center">
+            <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
                 Select a pathway to see your candidates.
             </div>
         )
@@ -279,6 +248,14 @@ class MyCandidates extends Component {
             return <MenuItem value={pathway.name} primaryText={pathway.name} key={pathway.name}/>
         })
 
+        // the hint that shows up when search bar is in focus
+        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
+        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" }
+
+        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" }
+        const searchFloatingLabelStyle = searchHintStyle;
+        const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
+
         const searchBar = (
             <div>
                 <Toolbar style={style.searchBar} id="discoverSearchBarWideScreen">
@@ -286,6 +263,11 @@ class MyCandidates extends Component {
                         <Field
                             name="search"
                             component={renderTextField}
+                            inputStyle={searchInputStyle}
+                            hintStyle={searchHintStyle}
+                            floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
+                            floatingLabelStyle={searchFloatingLabelStyle}
+                            underlineFocusStyle = {searchUnderlineFocusStyle}
                             label="Search"
                             onChange={event => this.onSearchChange(event.target.value)}
                             value={this.state.searchTerm}
@@ -320,6 +302,11 @@ class MyCandidates extends Component {
                 <div id="discoverSearchBarMedScreen">
                     <Field
                         name="search"
+                        inputStyle={searchInputStyle}
+                        hintStyle={searchHintStyle}
+                        floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
+                        floatingLabelStyle={searchFloatingLabelStyle}
+                        underlineFocusStyle = {searchUnderlineFocusStyle}
                         component={renderTextField}
                         label="Search"
                         onChange={event => this.onSearchChange(event.target.value)}
