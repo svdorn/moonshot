@@ -278,9 +278,7 @@ class Results extends Component {
                                                                     >
                                                                         <div
                                                                             className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Overall
-                                                                            <div className="under500only br"><br/></div>
-                                                                            Predictive<br/>
+                                                                            Overall<div className="under500only br"><br/></div> Predictive<br/>
                                                                             <p style={style.lightBlue}>AVERAGE</p>
                                                                         </div>
                                                                         <Slider disabled={true}
@@ -296,9 +294,7 @@ class Results extends Component {
                                                                          style={{marginLeft: "5%", marginRight: '5%'}}>
                                                                         <div
                                                                             className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Psychometric
-                                                                            <div className="under500only br"><br/></div>
-                                                                            Archetype<br/>
+                                                                            Psychometric<div className="under500only br"><br/></div> Archetype<br/>
                                                                             <p style={style.lightBlue}>INNOVATOR</p>
                                                                             <img
                                                                                 alt="Atom Icon"
@@ -313,9 +309,7 @@ class Results extends Component {
                                                                          style={{marginRight: "20%"}}>
                                                                         <div
                                                                             className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Overall
-                                                                            <div className="under500only br"><br/></div>
-                                                                            Hard Skills<br/>
+                                                                            Overall<div className="under500only br"><br/></div> Hard Skills<br/>
                                                                             <p style={style.lightBlue}>EXPERT</p>
                                                                         </div>
                                                                         <Slider disabled={true}
@@ -365,9 +359,7 @@ class Results extends Component {
                                                                 >
                                                                     <div
                                                                         className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                        <b style={style.lightBlue}>Social
-                                                                            <div className="under500only br"><br/></div>
-                                                                            Type</b><br/>
+                                                                        <b style={style.lightBlue}>Social<div className="under500only br"><br/></div> Type</b><br/>
                                                                         Authoritative
                                                                     </div>
                                                                 </div>
@@ -378,9 +370,7 @@ class Results extends Component {
                                                                      style={{marginLeft: "5%", marginRight: '5%'}}>
                                                                     <div
                                                                         className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                        <b style={style.lightBlue}>Work
-                                                                            <div className="under500only br"><br/></div>
-                                                                            Type</b><br/>
+                                                                        <b style={style.lightBlue}>Work<div className="under500only br"><br/></div> Type</b><br/>
                                                                         Creative
                                                                     </div>
                                                                 </div>
@@ -390,9 +380,7 @@ class Results extends Component {
                                                                      style={{marginRight: "20%"}}>
                                                                     <div
                                                                         className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                        <b style={style.lightBlue}>Key
-                                                                            <div className="under500only br"><br/></div>
-                                                                            Trait</b><br/>
+                                                                        <b style={style.lightBlue}>Key<div className="under500only br"><br/></div> Trait</b><br/>
                                                                         Drive
                                                                     </div>
                                                                 </div>
