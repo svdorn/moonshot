@@ -242,14 +242,14 @@ class Results extends Component {
                                             </div>
                                             <div>
                                                 <div
-                                                    className="whiteText font20px font14pxUnder700">{candidate.name}
+                                                    className="grayText font20px font14pxUnder700">{candidate.name}
                                                 </div>
                                                 {candidate.title ?
-                                                    <div className="whiteText font14px font12pxUnder500">
+                                                    <div className="grayText font14px font12pxUnder500">
                                                         {candidate.title}
                                                     </div>
                                                     : null}
-                                                <a className="font14px font12pxUnder500 whiteText underline"
+                                                <a className="font14px font12pxUnder500 grayText underline"
                                                    href={mailtoEmail}>Contact</a>
                                             </div>
                                         </div>
@@ -267,7 +267,7 @@ class Results extends Component {
                                                     <div className="lightBlackBackground" style={{minHeight: '200px'}}>
                                                         <div className="paddingTop20px">
                                                             <div
-                                                                className="font24px font20pxUnder700 font16pxUnder500 whiteText">
+                                                                className="font24px font20pxUnder700 font16pxUnder500 grayText">
                                                                 Candidate Score <b
                                                                 style={style.lightBlue}><u>{overallScore}</u></b>
                                                             </div>
@@ -277,10 +277,8 @@ class Results extends Component {
                                                                          style={{marginLeft: "20%"}}
                                                                     >
                                                                         <div
-                                                                            className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Overall
-                                                                            <div className="under500only br"><br/></div>
-                                                                            Predictive<br/>
+                                                                            className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                                                            Overall<div className="under500only br"><br/></div> Predictive<br/>
                                                                             <p style={style.lightBlue}>AVERAGE</p>
                                                                         </div>
                                                                         <Slider disabled={true}
@@ -295,10 +293,8 @@ class Results extends Component {
                                                                     <div className="horizListSpacer"
                                                                          style={{marginLeft: "5%", marginRight: '5%'}}>
                                                                         <div
-                                                                            className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Psychometric
-                                                                            <div className="under500only br"><br/></div>
-                                                                            Archetype<br/>
+                                                                            className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                                                            Psychometric<div className="under500only br"><br/></div> Archetype<br/>
                                                                             <p style={style.lightBlue}>INNOVATOR</p>
                                                                             <img
                                                                                 alt="Atom Icon"
@@ -312,10 +308,8 @@ class Results extends Component {
                                                                     <div className="horizListSpacer"
                                                                          style={{marginRight: "20%"}}>
                                                                         <div
-                                                                            className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Overall
-                                                                            <div className="under500only br"><br/></div>
-                                                                            Hard Skills<br/>
+                                                                            className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                                                            Overall<div className="under500only br"><br/></div> Hard Skills<br/>
                                                                             <p style={style.lightBlue}>EXPERT</p>
                                                                         </div>
                                                                         <Slider disabled={true}

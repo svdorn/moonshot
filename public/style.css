@@ -1383,6 +1383,7 @@ button.link {
 .greenText { color: var(--moonshotGreenText); }
 .redText { color: red }
 .whiteText { color: white; }
+.grayText { color: #d7d7d7; }
 .blueText { color: var(--moonshotLightBlue); }
 .lightBlueText { color: rgb(117, 220, 252); }
 .darkBlueText { color: var(--moonshotMidBlue); }
