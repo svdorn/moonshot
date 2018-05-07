@@ -85,6 +85,78 @@ class CandidatePreview extends Component {
     }
 
 
+    makePredictiveSection(sectionType, score) {
+        let prediction = "";
+        let image = null;
+        let sectionStyle = {};
+        switch (sectionType) {
+            case "Predicted":
+                sectionStyle = {
+                    left: "1%"
+                }
+
+                if (typeof score !== "number") { prediction = "N/A" }
+                else if (score < 85) { prediction = "BAD FIT"; }
+                else if (score < 115) { prediction = "AVERAGE FIT"; }
+                else { prediction = "GOOD FIT"; }
+
+                if (typeof score === "number") {
+
+                }
+                break;
+            case "Psychometrics":
+                sectionStyle = {
+                    left: "50%",
+                    transform: "translateX(-50%)"
+                }
+                // the score we get will be the archetype of the candidate
+                prediction = score;
+                let icon = "";
+                let iconStyle = {width: "50%", marginTop: "30px", transform: "translateY(-50%)"}
+                switch (prediction) {
+                    case "Innovator":
+                        icon = "icons/archetypes/Innovator.png";
+                        break;
+                    case "Lover":
+                        icon = "icons/archetypes/Lover.png";
+                        break;
+                    case "Ruler":
+                        icon = "icons/archetypes/Ruler.png";
+                        break;
+                    default:
+                        break;
+                }
+                image = (
+                    <img src={icon} style={iconStyle}/>
+                )
+                break;
+            case "Skill":
+                sectionStyle = {
+                    right: "1%"
+                }
+                if (typeof score !== "number") { prediction = "N/A" }
+                else if (score < 85) { prediction = "NOVICE"; }
+                else if (score < 115) { prediction = "INTERMEDIATE"; }
+                else { prediction = "EXPERT"; }
+
+                if (typeof score === "number") {
+
+                }
+                break;
+            default:
+                break;
+        }
+
+        return (
+            <div className="candidatePreviewPredictiveSection font14px" style={sectionStyle}>
+                {sectionType}<br/>
+                <span style={{color: "#D1576F"}}>{prediction}</span><br/>
+                {image}
+            </div>
+        )
+    }
+
+
     render() {
         const style = {
             score: {
@@ -171,8 +243,7 @@ class CandidatePreview extends Component {
             }
         }
 
-        const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
-        const menuItems = hiringStages.map(stage => {
+        const menuItems = this.state.possibleStages.map(stage => {
             return (<MenuItem value={stage} primaryText={stage.toUpperCase()} />)
         });
 
@@ -214,6 +285,10 @@ class CandidatePreview extends Component {
                 >
                     {menuItems}
                 </DropDownMenu>
+
+                {this.makePredictiveSection("Predicted", this.props.predicted)}
+                {this.makePredictiveSection("Psychometrics", this.props.archetype)}
+                {this.makePredictiveSection("Skill", this.props.skill)}
 
                 <div style={style.darkenerStyle} />
 
