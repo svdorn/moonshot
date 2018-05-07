@@ -2324,8 +2324,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginBottom10px { margin-bottom: 10px; }
 .marginTop40px { margin-top: 40px; }
 .marginTop20px { margin-top: 20px; }
+.marginTop10px { margin-top: 10px; }
 .paddingTop40px { padding-top: 40px; }
 .paddingTop20px { padding-top: 20px; }
+.paddingTop10px { padding-top: 10px; }
 .paddingBottom40px { padding-bottom: 40px; }
 
 /* decorative triangles */

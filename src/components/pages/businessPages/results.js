@@ -278,7 +278,9 @@ class Results extends Component {
                                                                     >
                                                                         <div
                                                                             className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Overall<div className="under500only br"><br/></div> Predictive<br/>
+                                                                            Overall
+                                                                            <div className="under500only br"><br/></div>
+                                                                            Predictive<br/>
                                                                             <p style={style.lightBlue}>AVERAGE</p>
                                                                         </div>
                                                                         <Slider disabled={true}
@@ -294,7 +296,9 @@ class Results extends Component {
                                                                          style={{marginLeft: "5%", marginRight: '5%'}}>
                                                                         <div
                                                                             className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Psychometric<div className="under500only br"><br/></div> Archetype<br/>
+                                                                            Psychometric
+                                                                            <div className="under500only br"><br/></div>
+                                                                            Archetype<br/>
                                                                             <p style={style.lightBlue}>INNOVATOR</p>
                                                                             <img
                                                                                 alt="Atom Icon"
@@ -309,7 +313,9 @@ class Results extends Component {
                                                                          style={{marginRight: "20%"}}>
                                                                         <div
                                                                             className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Overall<div className="under500only br"><br/></div> Hard Skills<br/>
+                                                                            Overall
+                                                                            <div className="under500only br"><br/></div>
+                                                                            Hard Skills<br/>
                                                                             <p style={style.lightBlue}>EXPERT</p>
                                                                         </div>
                                                                         <Slider disabled={true}
@@ -332,6 +338,66 @@ class Results extends Component {
                                                             dataPoints={predictiveDataPoints}
                                                             height={400}
                                                         />
+                                                    </div>
+
+                                                    <div className="purpleToGreenSpacer"
+                                                         id="picturesToPathwaysHomepageSpacer"/>
+
+                                                    <div>
+                                                        <div
+                                                            className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                                                            Psychometric Breakdown
+                                                        </div>
+                                                        <div style={{marginTop: '40px'}}>
+                                                            <img
+                                                                alt="Atom Icon"
+                                                                src="/icons/Atom2.png"
+                                                                style={{height: '70px'}}
+                                                            /><br/>
+                                                            <b className="whiteText font24px font20pxUnder700 font16pxUnder500 paddingTop10px">
+                                                                Innovator
+                                                            </b>
+                                                        </div>
+                                                        <div style={style.horizList}>
+                                                            <div className="horizListFull">
+                                                                <div className="horizListSpacer"
+                                                                     style={{marginLeft: "20%"}}
+                                                                >
+                                                                    <div
+                                                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                                                        <b style={style.lightBlue}>Social
+                                                                            <div className="under500only br"><br/></div>
+                                                                            Type</b><br/>
+                                                                        Authoritative
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="horizListFull">
+                                                                <div className="horizListSpacer"
+                                                                     style={{marginLeft: "5%", marginRight: '5%'}}>
+                                                                    <div
+                                                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                                                        <b style={style.lightBlue}>Work
+                                                                            <div className="under500only br"><br/></div>
+                                                                            Type</b><br/>
+                                                                        Creative
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="horizListFull">
+                                                                <div className="horizListSpacer"
+                                                                     style={{marginRight: "20%"}}>
+                                                                    <div
+                                                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                                                        <b style={style.lightBlue}>Key
+                                                                            <div className="under500only br"><br/></div>
+                                                                            Trait</b><br/>
+                                                                        Drive
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     <div className="purpleToGreenSpacer"
