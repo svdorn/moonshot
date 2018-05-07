@@ -227,7 +227,7 @@ form > h1 {
     background: linear-gradient(to right, #ae7efc, #75dcfc) !important;
 }
 /* make the results slider have normal cursor */
-.resultsSlider > div > div > div:nth-child(3), 
+.resultsSlider > div > div > div:nth-child(3),
 .candidatePreviewSlider > div > div > div:nth-child(3) {
     cursor: default !important;
 }
@@ -358,15 +358,6 @@ form > h1 {
     margin-left: 100px;
     position: absolute;
 }
-
-/* .verticalDividerCandidatePreview {
-    background-color: #d2d2d2;
-    height: calc(100% - 40px);
-    width: 2px;
-    display: inline-block;
-    margin-left: 200px;
-    position: absolute;
-} */
 
 .menuDivider {
     width: 2px;
@@ -965,13 +956,25 @@ button.link {
     position: relative;
     width: 335px;
     height: 390px;
-    box-shadow:         0px 0px 50px 1px #00000073;
     -moz-box-shadow:    0px 0px 50px 1px #00000073;
     -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    box-shadow:         0px 0px 50px 1px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
     color: white;
     display: inline-block;
     margin: 15px 25px;
     background-color: #333333;
+    cursor: pointer;
+}
+.candidatePreview:hover {
+    -moz-box-shadow:    0px 0px 50px 15px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 15px #00000073;
+    box-shadow:         0px 0px 50px 15px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
 }
 .candidatePreview > .candidateName {
     margin: 10px 0 0;
