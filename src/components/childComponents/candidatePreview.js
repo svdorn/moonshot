@@ -187,7 +187,7 @@ class CandidatePreview extends Component {
 
     render() {
         const style = {
-            score: {
+            redLink: {
                 color: "#D1576F",
                 textDecoration: "underline"
             },
@@ -233,7 +233,14 @@ class CandidatePreview extends Component {
                 bottom: "5px",
                 left: "0",
                 right: "0",
-                margin: "auto"
+                margin: "auto",
+                width: "80px"
+            },
+            seeResults: {
+                position: "absolute",
+                left: "12px",
+                bottom: "5px",
+                zIndex: "5"
             }
         };
 
@@ -277,7 +284,7 @@ class CandidatePreview extends Component {
 
         return (
             <div className="candidatePreview center" >
-            {/*onClick={this.goTo("/results?user=Stephen-Dorn-2-9f66bf7eeac18994")}*/}
+            {/* onClick={this.goTo("/results?user=Stephen-Dorn-2-9f66bf7eeac18994")} */}
                 <div className="candidateName font24px center">
                     {this.props.name.toUpperCase()}
                 </div>
@@ -287,7 +294,7 @@ class CandidatePreview extends Component {
                 </div>
                 <br/>
                 <div className="candidateScore">
-                    Candidate Score <span className="font20px" style={style.score}>{overallScore}</span>
+                    Candidate Score <span className="font20px" style={style.redLink}>{overallScore}</span>
                 </div>
                 <br/>
                 <div className="hiringStageCircle">
@@ -301,7 +308,7 @@ class CandidatePreview extends Component {
                     </div>
                 </div>
                 <br/>
-                {/*<a href={"/results?user=" + this.props.profileUrl}>See Results</a>*/}
+
 
 
                 <DropDownMenu value={this.state.hiringStage}
@@ -321,6 +328,7 @@ class CandidatePreview extends Component {
 
                 <div style={style.darkenerStyle} />
 
+
                 <div style={style.dismissButton}>
                     <span onClick={this.handleClick.bind(this)}
                           style={style.dismissText}
@@ -328,6 +336,12 @@ class CandidatePreview extends Component {
                         {this.state.dismissed ? "Dismissed" : "Dismiss"}
                     </span>
                 </div>
+
+                {/*<a href={"/results?user=" + this.props.profileUrl}>See Results</a>*/}
+                <a style={{...style.redLink, ...style.seeResults}}
+                   href="/results?user=Stephen-Dorn-2-9f66bf7eeac18994">
+                    See Results
+                </a>
             </div>
         )
     }
