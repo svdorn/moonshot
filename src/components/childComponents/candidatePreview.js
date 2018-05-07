@@ -119,7 +119,21 @@ class CandidatePreview extends Component {
                 position: "absolute",
                 backgroundColor: "rgba(46,46,46,.7)",
                 // only show the darkener if the candidate has been dismissed
-                display: this.state.dismissed ? "inline-block" : "none"
+                display: this.state.dismissed ? "inline-block" : "none",
+                zIndex: "4"
+            },
+            dismissText: {
+                cursor: "pointer"
+            },
+            dismissButton: {
+                textDecoration: "underline",
+                fontStyle: this.state.dismissed ? "italic" : "normal",
+                zIndex: "5",
+                position: "absolute",
+                bottom: "5px",
+                left: "0",
+                right: "0",
+                margin: "auto"
             }
         };
 
@@ -203,23 +217,12 @@ class CandidatePreview extends Component {
 
                 <div style={style.darkenerStyle} />
 
-                <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
-                    <div className="center">
-                        {this.state.dismissed ?
-                            <RaisedButton label="Dismissed"
-                                          primary={true}
-                                          labelStyle={{color:"white"}}
-                                          onClick={this.handleClick.bind(this)}
-                                          disabled={this.props.disabled}
-                            />
-                            :
-                            <FlatButton label="Dismiss"
-                                        primary={true}
-                                        onClick={this.handleClick.bind(this)}
-                                        disabled={this.props.disabled}
-                            />
-                        }
-                    </div>
+                <div style={style.dismissButton}>
+                    <span onClick={this.handleClick.bind(this)}
+                          style={style.dismissText}
+                    >
+                        {this.state.dismissed ? "Dismissed" : "Dismiss"}
+                    </span>
                 </div>
             </div>
         )
