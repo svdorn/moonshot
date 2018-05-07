@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
-import {Paper, Stepper, Step, StepButton, FlatButton, RaisedButton, MenuItem, DropDownMenu} from 'material-ui';
+import {
+    Paper,
+    Stepper,
+    Step,
+    StepButton,
+    FlatButton,
+    RaisedButton,
+    MenuItem,
+    DropDownMenu,
+    Slider
+} from 'material-ui';
 import axios from 'axios';
 
 class CandidatePreview extends Component {
@@ -89,20 +99,16 @@ class CandidatePreview extends Component {
         let prediction = "";
         let image = null;
         let sectionStyle = {};
+        let ratings = [];
+        const sliderStyle = {
+            width: "80%",
+            marginLeft: "10%"
+        }
+
         switch (sectionType) {
             case "Predicted":
-                sectionStyle = {
-                    left: "1%"
-                }
-
-                if (typeof score !== "number") { prediction = "N/A" }
-                else if (score < 85) { prediction = "BAD FIT"; }
-                else if (score < 115) { prediction = "AVERAGE FIT"; }
-                else { prediction = "GOOD FIT"; }
-
-                if (typeof score === "number") {
-
-                }
+                sectionStyle = { left: "1%" };
+                ratings = ["BAT FIT", "AVERAGE FIT", "GOOD FIT"];
                 break;
             case "Psychometrics":
                 sectionStyle = {
@@ -110,41 +116,54 @@ class CandidatePreview extends Component {
                     transform: "translateX(-50%)"
                 }
                 // the score we get will be the archetype of the candidate
-                prediction = score;
+                prediction = score && typeof score === "string" ? score.toUpperCase() : "";
                 let icon = "";
                 let iconStyle = {width: "50%", marginTop: "30px", transform: "translateY(-50%)"}
                 switch (prediction) {
-                    case "Innovator":
+                    case "INNOVATOR":
                         icon = "icons/archetypes/Innovator.png";
                         break;
-                    case "Lover":
+                    case "LOVER":
                         icon = "icons/archetypes/Lover.png";
                         break;
-                    case "Ruler":
+                    case "RULER":
                         icon = "icons/archetypes/Ruler.png";
                         break;
                     default:
                         break;
                 }
-                image = (
-                    <img src={icon} style={iconStyle}/>
-                )
+                image = (<img src={icon} style={iconStyle}/>);
                 break;
             case "Skill":
-                sectionStyle = {
-                    right: "1%"
-                }
-                if (typeof score !== "number") { prediction = "N/A" }
-                else if (score < 85) { prediction = "NOVICE"; }
-                else if (score < 115) { prediction = "INTERMEDIATE"; }
-                else { prediction = "EXPERT"; }
-
-                if (typeof score === "number") {
-
-                }
+                sectionStyle = { right: "1%" };
+                ratings = ["NOVICE", "INTERMEDIATE", "EXPERT"];
                 break;
             default:
                 break;
+        }
+
+        if (sectionType === "Skill" || sectionType === "Predicted") {
+            if (typeof score !== "number") { prediction = "N/A" }
+            else {
+                if (score < 85) { prediction = ratings[0]; }
+                else if (score < 115) { prediction = ratings[1]; }
+                else { prediction = ratings[2]; }
+
+                let sliderValue = score;
+                // very unlikely someone would get a value under 60 or above 140
+                if (sliderValue < 60) { sliderValue = 60; }
+                else if (sliderValue > 140 ) { sliderValue = 140; }
+
+                image = (
+                    <Slider disabled={true}
+                            min={60}
+                            max={140}
+                            value={sliderValue}
+                            style={sliderStyle}
+                            className="candidatePreviewSlider"
+                    />
+                );
+            }
         }
 
         return (
