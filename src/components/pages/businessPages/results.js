@@ -209,17 +209,12 @@ class Results extends Component {
             {x: "Culture Fit", y: 62, confidenceInterval: 15},
             {x: "Longevity", y: 113, confidenceInterval: 9}
         ];
-
-        // TODO DELETE IF NOT USED
-        const predictiveGraphSection = (
-            <div className="center fullHeight" style={style.tabContent}>
-                <PredictiveGraph
-                    dataPoints={predictiveDataPoints}
-                    height={400}
-                />
-            </div>
-        )
-
+        const hardSkillsDataPoints = [
+            {x: "Full Stack", y: 120, confidenceInterval: 13},
+            {x: "Version Control", y: 132, confidenceInterval: 11},
+            {x: "Artificial Intelligence", y: 91, confidenceInterval: 10},
+            {x: "Startup", y: 68, confidenceInterval: 16}
+        ];
 
         const responsesSection = this.makeResponsesSection();
 
@@ -247,14 +242,14 @@ class Results extends Component {
                                             </div>
                                             <div>
                                                 <div
-                                                    className="whiteText font20px font14pxUnder700">{candidate.name}
+                                                    className="grayText font20px font14pxUnder700">{candidate.name}
                                                 </div>
                                                 {candidate.title ?
-                                                    <div className="whiteText font14px font12pxUnder500">
+                                                    <div className="grayText font14px font12pxUnder500">
                                                         {candidate.title}
                                                     </div>
                                                     : null}
-                                                <a className="font14px font12pxUnder500 whiteText underline"
+                                                <a className="font14px font12pxUnder500 grayText underline"
                                                    href={mailtoEmail}>Contact</a>
                                             </div>
                                         </div>
@@ -265,12 +260,14 @@ class Results extends Component {
                                             className="myPathwaysTabs"
                                         >
                                             <Tab label="Analysis" style={style.topTab}>
-                                                <div className="tabsShadow"><div /></div>
+                                                <div className="tabsShadow">
+                                                    <div/>
+                                                </div>
                                                 <div className="center aboutMeSection" style={style.tabContent}>
                                                     <div className="lightBlackBackground" style={{minHeight: '200px'}}>
                                                         <div className="paddingTop20px">
                                                             <div
-                                                                className="font24px font20pxUnder700 font16pxUnder500 whiteText">
+                                                                className="font24px font20pxUnder700 font16pxUnder500 grayText">
                                                                 Candidate Score <b
                                                                 style={style.lightBlue}><u>{overallScore}</u></b>
                                                             </div>
@@ -280,7 +277,7 @@ class Results extends Component {
                                                                          style={{marginLeft: "20%"}}
                                                                     >
                                                                         <div
-                                                                            className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
+                                                                            className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
                                                                             Overall<div className="under500only br"><br/></div> Predictive<br/>
                                                                             <p style={style.lightBlue}>AVERAGE</p>
                                                                         </div>
@@ -296,7 +293,7 @@ class Results extends Component {
                                                                     <div className="horizListSpacer"
                                                                          style={{marginLeft: "5%", marginRight: '5%'}}>
                                                                         <div
-                                                                            className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
+                                                                            className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
                                                                             Psychometric<div className="under500only br"><br/></div> Archetype<br/>
                                                                             <p style={style.lightBlue}>INNOVATOR</p>
                                                                             <img
@@ -311,7 +308,7 @@ class Results extends Component {
                                                                     <div className="horizListSpacer"
                                                                          style={{marginRight: "20%"}}>
                                                                         <div
-                                                                            className="horizListText whiteText font18px font16pxUnder800 font12pxUnder700">
+                                                                            className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
                                                                             Overall<div className="under500only br"><br/></div> Hard Skills<br/>
                                                                             <p style={style.lightBlue}>EXPERT</p>
                                                                         </div>
@@ -331,24 +328,64 @@ class Results extends Component {
                                                         Predictive Insights
                                                     </div>
                                                     <div>
-                                                        <ResponsiveContainer width="60%" height={250} minWidth={500}
-                                                                             className="recharts-wrapper">
-                                                            <ScatterChart margin={{
-                                                                top: 20,
-                                                                right: 50,
-                                                                left: 0,
-                                                                bottom: 0
-                                                            }}>
-                                                                <XAxis dataKey="x" tickLine={false} stroke="white"/>
-                                                                <YAxis dataKey="y" name="Score"
-                                                                       domain={['dataMin', 'auto']} stroke="white"/>
-                                                                <Scatter data={predictiveInsights} fill="#8884d8"
-                                                                         shape="square">
-                                                                    <LabelList dataKey="y" stroke="white"
-                                                                               position="top"/>
-                                                                </Scatter>
-                                                            </ScatterChart>
-                                                        </ResponsiveContainer>
+                                                        <PredictiveGraph
+                                                            dataPoints={predictiveDataPoints}
+                                                            height={400}
+                                                        />
+                                                    </div>
+
+                                                    <div className="purpleToGreenSpacer"
+                                                         id="picturesToPathwaysHomepageSpacer"/>
+
+                                                    <div>
+                                                        <div
+                                                            className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                                                            Psychometric Breakdown
+                                                        </div>
+                                                        <div style={{marginTop: '40px'}}>
+                                                            <img
+                                                                alt="Atom Icon"
+                                                                src="/icons/Atom2.png"
+                                                                style={{height: '70px'}}
+                                                            /><br/>
+                                                            <b className="whiteText font24px font20pxUnder700 font16pxUnder500 paddingTop10px">
+                                                                Innovator
+                                                            </b>
+                                                        </div>
+                                                        <div style={style.horizList}>
+                                                            <div className="horizListFull">
+                                                                <div className="horizListSpacer"
+                                                                     style={{marginLeft: "20%"}}
+                                                                >
+                                                                    <div
+                                                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                                                        <b style={style.lightBlue}>Social<div className="under500only br"><br/></div> Type</b><br/>
+                                                                        Authoritative
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+
+                                                            <div className="horizListFull">
+                                                                <div className="horizListSpacer"
+                                                                     style={{marginLeft: "5%", marginRight: '5%'}}>
+                                                                    <div
+                                                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                                                        <b style={style.lightBlue}>Work<div className="under500only br"><br/></div> Type</b><br/>
+                                                                        Creative
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div className="horizListFull">
+                                                                <div className="horizListSpacer"
+                                                                     style={{marginRight: "20%"}}>
+                                                                    <div
+                                                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                                                        <b style={style.lightBlue}>Key<div className="under500only br"><br/></div> Trait</b><br/>
+                                                                        Drive
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
 
                                                     <div className="purpleToGreenSpacer"
@@ -359,29 +396,17 @@ class Results extends Component {
                                                         Hard Skills
                                                     </div>
                                                     <div>
-                                                        <ResponsiveContainer width="60%" height={250} minWidth={500}
-                                                                             className="recharts-wrapper">
-                                                            <ScatterChart margin={{
-                                                                top: 20,
-                                                                right: 50,
-                                                                left: 0,
-                                                                bottom: 0
-                                                            }}>
-                                                                <XAxis dataKey="x" tickLine={false} stroke="white"/>
-                                                                <YAxis dataKey="y" name="Score"
-                                                                       domain={['dataMin', 'auto']} stroke="white"/>
-                                                                <Scatter data={hardSkills} fill="#8884d8"
-                                                                         shape="square">
-                                                                    <LabelList dataKey="y" stroke="white"
-                                                                               position="top"/>
-                                                                </Scatter>
-                                                            </ScatterChart>
-                                                        </ResponsiveContainer>
+                                                        <PredictiveGraph
+                                                            dataPoints={hardSkillsDataPoints}
+                                                            height={400}
+                                                        />
                                                     </div>
                                                 </div>
                                             </Tab>
                                             <Tab label="Responses" style={style.topTab}>
-                                                <div className="tabsShadow"><div /></div>
+                                                <div className="tabsShadow">
+                                                    <div/>
+                                                </div>
                                                 {responsesSection}
                                             </Tab>
                                         </Tabs>
