@@ -95,11 +95,31 @@ class CandidatePreview extends Component {
                 vertical: "top",
                 horizontal: "middle"
             },
+            targetOrigin: {
+                vertical: "top",
+                horizontal: "middle"
+            },
+            menuStyle: {
+                marginLeft: "20px"
+            },
             menuLabelStyle: {
-                color: "rgba(255, 255, 255, .8)"
+                color: "rgba(255, 255, 255, .8)",
             },
             menuUnderlineStyle: {
                 display: "none"
+            },
+            menuItemStyle: {
+                textAlign: "center"
+            },
+            darkenerStyle: {
+                width: "100%",
+                height: "100%",
+                left: "0",
+                top: "0",
+                position: "absolute",
+                backgroundColor: "rgba(46,46,46,.7)",
+                // only show the darkener if the candidate has been dismissed
+                display: this.state.dismissed ? "inline-block" : "none"
             }
         };
 
@@ -173,12 +193,15 @@ class CandidatePreview extends Component {
                 <DropDownMenu value={this.state.hiringStage}
                               onChange={this.handleHiringStageChange.bind(this)}
                               labelStyle={style.menuLabelStyle}
+                              menuItemStyle={style.menuItemStyle}
                               anchorOrigin={style.anchorOrigin}
                               underlineStyle={style.menuUnderlineStyle}
-                              style={{paddingLeft: "20px"}}
+                              targetOrigin={style.targetOrigin}
                 >
                     {menuItems}
                 </DropDownMenu>
+
+                <div style={style.darkenerStyle} />
 
                 <div className="candidatePreviewLiInfo" style={{display: 'inline-block'}}>
                     <div className="center">
