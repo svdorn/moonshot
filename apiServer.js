@@ -3850,9 +3850,6 @@ app.post("/business/updateHiringStage", async function(req, res) {
 
         // the index of the candidate in the business' candidate array
         const candidateIndex = business.candidates.findIndex(currCandidate => {
-            console.log("candidateId: ", candidateId);
-            console.log("currCandidate.userId: ", currCandidate.userId);
-            console.log("equal: ", currCandidate.userId.toString() === candidateId.toString());
             return currCandidate.userId.toString() === candidateId.toString();
         });
 
@@ -3867,8 +3864,6 @@ app.post("/business/updateHiringStage", async function(req, res) {
         candidate.pathways[pathwayIndex].isDismissed = isDismissed;
         candidate.pathways[pathwayIndex].hiringStage = hiringStage;
         candidate.pathways[pathwayIndex].hiringStageEdited = new Date();
-
-        console.log("date is: ", new Date());
 
         // update the candidate in the business object
         business.candidates[candidateIndex] = candidate;
