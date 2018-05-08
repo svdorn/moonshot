@@ -2241,7 +2241,14 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     filter: none;
 }
 
-.sliderContainer { margin: 0 20%; }
+.sliderContainer {
+    margin: 0 20%;
+    position: relative;
+}
+
+.sliderNoLeftColor > div:first-child > div:first-child > div:first-child {
+    background-color: rgb(189, 189, 189) !important;
+}
 
 .twoOptionsBox {
     width: 200px;
