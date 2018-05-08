@@ -140,7 +140,7 @@ class CandidatePreview extends Component {
         switch (sectionType) {
             case "Predicted":
                 sectionStyle = { left: "1%" };
-                ratings = ["BAT FIT", "AVERAGE FIT", "GOOD FIT"];
+                ratings = ["BAD FIT", "AVERAGE FIT", "GOOD FIT"];
                 break;
             case "Psychometrics":
                 sectionStyle = {

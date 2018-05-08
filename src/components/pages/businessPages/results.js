@@ -120,6 +120,163 @@ class Results extends Component {
     }
 
 
+    makeAnalysisSection() {
+        const predictiveDataPoints = [
+            {x: "Growth", y: 134, confidenceInterval: 14},
+            {x: "Performance", y: 87, confidenceInterval: 12},
+            {x: "Culture Fit", y: 62, confidenceInterval: 15},
+            {x: "Longevity", y: 113, confidenceInterval: 9}
+        ];
+        const hardSkillsDataPoints = [
+            {x: "Full Stack", y: 120, confidenceInterval: 13},
+            {x: "Version Control", y: 132, confidenceInterval: 11},
+            {x: "Artificial Intelligence", y: 91, confidenceInterval: 10},
+            {x: "Startup", y: 68, confidenceInterval: 16}
+        ];
+
+        return (
+            <div className="center aboutMeSection" style={style.tabContent}>
+                <div className="lightBlackBackground" style={style.candidateScore}>
+                    <div className="paddingTop20px">
+                        <div
+                            className="font24px font20pxUnder700 font16pxUnder500 grayText">
+                            Candidate Score <b style={style.lightBlue}><u>{this.state.overallScore}</u></b>
+                        </div>
+                        <div style={style.horizList}>
+                            <div className="horizListFull">
+                                <div className="horizListSpacer"
+                                     style={{marginLeft: "20%"}}
+                                >
+                                    <div
+                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                        Overall<div className="under500only br"><br/></div> Predictive<br/>
+                                        <p style={style.lightBlue}>AVERAGE</p>
+                                    </div>
+                                    <Slider disabled={true}
+                                            value={0.5}
+                                            style={{maxWidth: '250px'}}
+                                            className="resultsSlider"
+                                    />
+                                </div>
+                            </div>
+
+                            <div className="horizListFull">
+                                <div className="horizListSpacer"
+                                     style={{marginLeft: "5%", marginRight: '5%'}}>
+                                    <div
+                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                        Psychometric<div className="under500only br"><br/></div> Archetype<br/>
+                                        <p style={style.lightBlue}>INNOVATOR</p>
+                                        <img
+                                            alt="Atom Icon"
+                                            src="/icons/Atom2.png"
+                                            style={style.horizListIcon}
+                                        />
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="horizListFull">
+                                <div className="horizListSpacer"
+                                     style={{marginRight: "20%"}}>
+                                    <div
+                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                        Overall<div className="under500only br"><br/></div> Hard Skills<br/>
+                                        <p style={style.lightBlue}>EXPERT</p>
+                                    </div>
+                                    <Slider disabled={true}
+                                            value={0.9}
+                                            style={{maxWidth: '250px'}}
+                                            className="resultsSlider"
+                                    />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div
+                    className="whiteText center font24px font20pxUnder700 font16pxUnder500"
+                    style={{marginTop: '20px'}}>
+                    Predictive Insights
+                </div>
+                <div>
+                    <PredictiveGraph
+                        dataPoints={predictiveDataPoints}
+                        height={400}
+                    />
+                </div>
+
+                <div className="purpleToGreenSpacer"
+                     id="picturesToPathwaysHomepageSpacer"/>
+
+                <div>
+                    <div
+                        className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                        Psychometric Breakdown
+                    </div>
+                    <div style={{marginTop: '40px'}}>
+                        <img
+                            alt="Atom Icon"
+                            src="/icons/Atom2.png"
+                            style={{height: '70px'}}
+                        /><br/>
+                        <b className="whiteText font24px font20pxUnder700 font16pxUnder500 paddingTop10px">
+                            Innovator
+                        </b>
+                    </div>
+                    <div style={{...style.horizList, overflow:"auto"}}>
+                        <div className="horizListFull">
+                            <div className="horizListSpacer"
+                                 style={{marginLeft: "20%"}}
+                            >
+                                <div
+                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    <b style={style.lightBlue}>Social<div className="under500only br"><br/></div> Type</b><br/>
+                                    Authoritative
+                                </div>
+                            </div>
+                        </div>
+
+                        <div className="horizListFull">
+                            <div className="horizListSpacer"
+                                 style={{marginLeft: "5%", marginRight: '5%'}}>
+                                <div
+                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    <b style={style.lightBlue}>Work<div className="under500only br"><br/></div> Type</b><br/>
+                                    Creative
+                                </div>
+                            </div>
+                        </div>
+                        <div className="horizListFull">
+                            <div className="horizListSpacer"
+                                 style={{marginRight: "20%"}}>
+                                <div
+                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    <b style={style.lightBlue}>Key<div className="under500only br"><br/></div> Trait</b><br/>
+                                    Drive
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="purpleToGreenSpacer"
+                     id="picturesToPathwaysHomepageSpacer"/>
+
+                <div
+                    className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                    Hard Skills
+                </div>
+                <div>
+                    <PredictiveGraph
+                        dataPoints={hardSkillsDataPoints}
+                        height={400}
+                    />
+                </div>
+            </div>
+        );
+    }
+
+
     makeResponsesSection() {
         let freeResponses = [];
         if (typeof this.state === "object" && Array.isArray(this.state.freeResponses)) {
@@ -144,80 +301,19 @@ class Results extends Component {
 
 
     render() {
-        const style = {
-            pathwayPreviewUl: {
-                marginTop: "20px",
-            },
-            imgContainer: {
-                height: "100px",
-                width: "100px",
-                borderRadius: '50%',
-                border: "3px solid white",
-                display: "inline-block",
-                overflow: "hidden"
-            },
-            img: {
-                height: "85px",
-                marginTop: "13px"
-            },
-            locationImg: {
-                display: 'inline-block',
-                height: '15px',
-                marginBottom: '5px',
-                marginRight: '5px'
-            },
-            tabs: {
-                marginTop: '20px',
-            },
-            topTabs: {
-                marginTop: '20px',
-
-            },
-            topTab: {
-                color: 'white',
-            },
-            tabContent: {
-                paddingTop: '10px',
-                paddingBottom: '30px',
-            },
-            lightBlue: {
-                color: '#75dcfc'
-            },
-            horizList: {
-                marginTop: '10px',
-            },
-            horizListIcon: {
-                height: "50px",
-                marginTop: "-5px"
-            },
-        };
-
         const user = this.state.user;
         const candidate = this.state.candidate;
-        const overallScore = this.state.overallScore;
         const hardSkills = this.state.hardSkills;
         const predictiveInsights = this.state.predictiveInsights;
+        const profileUrl = "Stephen-Dorn-2-9f66bf7eeac18994";
 
         let mailtoEmail = undefined;
         if (candidate) {
             mailtoEmail = "mailto:" + candidate.email;
         }
 
-        const predictiveDataPoints = [
-            {x: "Growth", y: 134, confidenceInterval: 14},
-            {x: "Performance", y: 87, confidenceInterval: 12},
-            {x: "Culture Fit", y: 62, confidenceInterval: 15},
-            {x: "Longevity", y: 113, confidenceInterval: 9}
-        ];
-        const hardSkillsDataPoints = [
-            {x: "Full Stack", y: 120, confidenceInterval: 13},
-            {x: "Version Control", y: 132, confidenceInterval: 11},
-            {x: "Artificial Intelligence", y: 91, confidenceInterval: 10},
-            {x: "Startup", y: 68, confidenceInterval: 16}
-        ];
-
+        const analysisSection = this.makeAnalysisSection();
         const responsesSection = this.makeResponsesSection();
-
 
         return (
             <div>
@@ -232,24 +328,33 @@ class Results extends Component {
                                 <div className="blackBackground paddingBottom40px">
                                     <div className="headerDiv"/>
                                     <div className="profileInfoSkills">
+                                        <img style={style.leftTriangles} src="images/LeftTriangles.png" />
+                                        <img style={style.rightTriangles} src="images/RightTriangles.png" />
                                         <div className="center">
                                             <div style={style.imgContainer}>
                                                 <img
-                                                    src="/icons/ProfilePicture.png"
+                                                    src="/images/profilePictures/Steve.png"
                                                     alt="Profile picture"
-                                                    style={style.img}
+                                                    style={/*style.img*/style.SteveImg}
                                                 />
                                             </div>
                                             <div>
                                                 <div
-                                                    className="grayText font20px font14pxUnder700">{candidate.name}
+                                                    className="grayText font26px font14pxUnder700">{candidate.name}
                                                 </div>
                                                 {candidate.title ?
-                                                    <div className="grayText font14px font12pxUnder500">
+                                                    <div className="grayText font18px font12pxUnder500">
                                                         {candidate.title}
                                                     </div>
-                                                    : null}
-                                                <a className="font14px font12pxUnder500 grayText underline"
+                                                    : null
+                                                }
+                                                {profileUrl ?
+                                                    <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
+                                                       href={`/profile?user=${profileUrl}`}>Profile</a>
+                                                    : null
+                                                }
+                                                <br/>
+                                                <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
                                                    href={mailtoEmail}>Contact</a>
                                             </div>
                                         </div>
@@ -260,148 +365,10 @@ class Results extends Component {
                                             className="myPathwaysTabs"
                                         >
                                             <Tab label="Analysis" style={style.topTab}>
-                                                <div className="tabsShadow">
+                                                <div className="tabsShadow" style={{position:"absolute"}}>
                                                     <div/>
                                                 </div>
-                                                <div className="center aboutMeSection" style={style.tabContent}>
-                                                    <div className="lightBlackBackground" style={{minHeight: '200px'}}>
-                                                        <div className="paddingTop20px">
-                                                            <div
-                                                                className="font24px font20pxUnder700 font16pxUnder500 grayText">
-                                                                Candidate Score <b
-                                                                style={style.lightBlue}><u>{overallScore}</u></b>
-                                                            </div>
-                                                            <div style={style.horizList}>
-                                                                <div className="horizListFull">
-                                                                    <div className="horizListSpacer"
-                                                                         style={{marginLeft: "20%"}}
-                                                                    >
-                                                                        <div
-                                                                            className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Overall<div className="under500only br"><br/></div> Predictive<br/>
-                                                                            <p style={style.lightBlue}>AVERAGE</p>
-                                                                        </div>
-                                                                        <Slider disabled={true}
-                                                                                value={0.5}
-                                                                                style={{maxWidth: '250px'}}
-                                                                                className="resultsSlider"
-                                                                        />
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className="horizListFull">
-                                                                    <div className="horizListSpacer"
-                                                                         style={{marginLeft: "5%", marginRight: '5%'}}>
-                                                                        <div
-                                                                            className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Psychometric<div className="under500only br"><br/></div> Archetype<br/>
-                                                                            <p style={style.lightBlue}>INNOVATOR</p>
-                                                                            <img
-                                                                                alt="Atom Icon"
-                                                                                src="/icons/Atom2.png"
-                                                                                style={style.horizListIcon}
-                                                                            />
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div className="horizListFull">
-                                                                    <div className="horizListSpacer"
-                                                                         style={{marginRight: "20%"}}>
-                                                                        <div
-                                                                            className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                            Overall<div className="under500only br"><br/></div> Hard Skills<br/>
-                                                                            <p style={style.lightBlue}>EXPERT</p>
-                                                                        </div>
-                                                                        <Slider disabled={true}
-                                                                                value={0.9}
-                                                                                style={{maxWidth: '250px'}}
-                                                                                className="resultsSlider"
-                                                                        />
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div
-                                                        className="whiteText center font24px font20pxUnder700 font16pxUnder500"
-                                                        style={{marginTop: '20px'}}>
-                                                        Predictive Insights
-                                                    </div>
-                                                    <div>
-                                                        <PredictiveGraph
-                                                            dataPoints={predictiveDataPoints}
-                                                            height={400}
-                                                        />
-                                                    </div>
-
-                                                    <div className="purpleToGreenSpacer"
-                                                         id="picturesToPathwaysHomepageSpacer"/>
-
-                                                    <div>
-                                                        <div
-                                                            className="whiteText center font24px font20pxUnder700 font16pxUnder500">
-                                                            Psychometric Breakdown
-                                                        </div>
-                                                        <div style={{marginTop: '40px'}}>
-                                                            <img
-                                                                alt="Atom Icon"
-                                                                src="/icons/Atom2.png"
-                                                                style={{height: '70px'}}
-                                                            /><br/>
-                                                            <b className="whiteText font24px font20pxUnder700 font16pxUnder500 paddingTop10px">
-                                                                Innovator
-                                                            </b>
-                                                        </div>
-                                                        <div style={{...style.horizList, overflow:"auto"}}>
-                                                            <div className="horizListFull">
-                                                                <div className="horizListSpacer"
-                                                                     style={{marginLeft: "20%"}}
-                                                                >
-                                                                    <div
-                                                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                        <b style={style.lightBlue}>Social<div className="under500only br"><br/></div> Type</b><br/>
-                                                                        Authoritative
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-
-                                                            <div className="horizListFull">
-                                                                <div className="horizListSpacer"
-                                                                     style={{marginLeft: "5%", marginRight: '5%'}}>
-                                                                    <div
-                                                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                        <b style={style.lightBlue}>Work<div className="under500only br"><br/></div> Type</b><br/>
-                                                                        Creative
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div className="horizListFull">
-                                                                <div className="horizListSpacer"
-                                                                     style={{marginRight: "20%"}}>
-                                                                    <div
-                                                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                                                        <b style={style.lightBlue}>Key<div className="under500only br"><br/></div> Trait</b><br/>
-                                                                        Drive
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="purpleToGreenSpacer"
-                                                         id="picturesToPathwaysHomepageSpacer"/>
-
-                                                    <div
-                                                        className="whiteText center font24px font20pxUnder700 font16pxUnder500">
-                                                        Hard Skills
-                                                    </div>
-                                                    <div>
-                                                        <PredictiveGraph
-                                                            dataPoints={hardSkillsDataPoints}
-                                                            height={400}
-                                                        />
-                                                    </div>
-                                                </div>
+                                                {analysisSection}
                                             </Tab>
                                             <Tab label="Responses" style={style.topTab}>
                                                 <div className="tabsShadow">
@@ -426,6 +393,75 @@ class Results extends Component {
         );
     }
 }
+
+
+const style = {
+    pathwayPreviewUl: {
+        marginTop: "20px",
+    },
+    imgContainer: {
+        height: "150px",
+        width: "150px",
+        borderRadius: '50%',
+        border: "3px solid white",
+        display: "inline-block",
+        overflow: "hidden"
+    },
+    img: {
+        height: "85px",
+        marginTop: "13px"
+    },
+    SteveImg: {
+        height: "100%"
+    },
+    locationImg: {
+        display: 'inline-block',
+        height: '15px',
+        marginBottom: '5px',
+        marginRight: '5px'
+    },
+    tabs: {
+        marginTop: '20px',
+    },
+    topTabs: {
+        marginTop: '20px',
+
+    },
+    topTab: {
+        color: 'white',
+    },
+    tabContent: {
+        paddingTop: '10px',
+        paddingBottom: '30px',
+    },
+    lightBlue: {
+        color: '#75dcfc'
+    },
+    horizList: {
+        marginTop: '10px',
+    },
+    horizListIcon: {
+        height: "50px",
+        marginTop: "-5px"
+    },
+    leftTriangles: {
+        position: "absolute",
+        left: "100px",
+        height: "300px",
+        top: "100px"
+    },
+    rightTriangles: {
+        position: "absolute",
+        right: "100px",
+        height: "300px",
+        top: "100px"
+    },
+    candidateScore: {
+        minHeight: '200px',
+        padding: "20px",
+        overflow: "auto"
+    }
+};
 
 
 function mapDispatchToProps(dispatch) {

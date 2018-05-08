@@ -1406,6 +1406,10 @@ button.link {
 .darkPurpleText { color: var(--moonshotDarkPurple) }
 .lightPurpleText { color: #b37bfe; }
 .orangeText { color: #f24c49; }
+
+.grayTextOnHover:hover { color: #d7d7d7; }
+
+
 .onboarding3PurpleText { color: var(--onboarding3Purple); }
 .onboardingPage1Text {
     background: linear-gradient(to right, #5deaff, #3dabff);
