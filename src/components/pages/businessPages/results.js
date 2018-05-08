@@ -195,7 +195,7 @@ class Results extends Component {
                 </div>
                 <div
                     className="whiteText center font24px font20pxUnder700 font16pxUnder500"
-                    style={{marginTop: '20px'}}>
+                    style={{marginTop: '40px'}}>
                     Predicted Performance
                 </div>
                 <div>
@@ -428,9 +428,6 @@ class Results extends Component {
 
 
 const style = {
-    pathwayPreviewUl: {
-        marginTop: "20px",
-    },
     imgContainer: {
         height: "150px",
         width: "150px",
@@ -457,7 +454,6 @@ const style = {
     },
     topTabs: {
         marginTop: '20px',
-
     },
     topTab: {
         color: 'white',
