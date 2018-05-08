@@ -9,7 +9,7 @@ import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-route
 
 import Login from './components/pages/login';
 import Signup from './components/pages/signup';
-import BusinessHome from './components/pages/businessHome';
+import AddUser from './components/pages/addUser';
 import MyCandidates from './components/pages/businessPages/myCandidates';
 import BusinessProfile from './components/pages/businessPages/businessProfile';
 import Results from './components/pages/businessPages/results';
@@ -57,7 +57,7 @@ const routes = (
         <IndexRoute component={Home} />
         <Route path='login' component={Login} />
         <Route path="signup" component={Signup} />
-        <Route path="businessHome" component={AuthenticatedComponent} page={<BusinessHome/>} userType="employer" />
+        <Route path="addUser" component={AuthenticatedComponent} page={<AddUser/>} userType="employer" />
         <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType="employer" />
         <Route path="businessProfile" component={AuthenticatedComponent} page={<BusinessProfile/>} userType="employer" />
         <Route path="results" component={AuthenticatedComponent} page={<Results />} userType="employer" />

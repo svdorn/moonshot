@@ -65,7 +65,8 @@ class Menu extends Component {
             }
         } else if (value === 2) {
             this.goTo('/settings');
-        } else if (value === 4) {
+        }
+        else if (value === 4) {
             // do nothing
         } else {
             if (this.props.location.pathname === '/onboarding') {
@@ -112,6 +113,9 @@ class Menu extends Component {
                 break;
             case "Settings":
                 this.goTo("/settings");
+                break;
+            case "Add User":
+                this.goTo("/addUser");
                 break;
             default:
                 break;
@@ -177,7 +181,7 @@ class Menu extends Component {
         // the url to be directed to by default
         let homeUrl = "/";
         if (isEmployer) {
-            homeUrl = "/businessHome";
+            homeUrl = "/myCandidates";
         }
 
         let isOnboarding = false;
@@ -266,13 +270,13 @@ class Menu extends Component {
         // if the current user is an employer
         else if (isEmployer) {
             menuOptions = [
-                {optionType: "url", title: "Home", url: "/businessHome"},
                 {optionType: "url", title: "My Candidates", url: "/myCandidates"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     {optionType: "url", title: "Profile", url: "/businessProfile"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
+                    {optionType: "url", title: "Add User", url: "/addUser"},
                     {optionType: "signOut"}
                 ]}
             ];

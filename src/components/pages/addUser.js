@@ -59,7 +59,7 @@ const validate = values => {
     return errors
 };
 
-class BusinessHome extends Component {
+class AddUser extends Component {
     constructor(props) {
         super(props);
 
@@ -208,9 +208,9 @@ function mapStateToProps(state) {
     };
 }
 
-BusinessHome = reduxForm({
+AddUser = reduxForm({
     form: 'signup',
     validate,
-})(BusinessHome);
+})(AddUser);
 
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessHome);
+export default connect(mapStateToProps, mapDispatchToProps)(AddUser);
