@@ -62,9 +62,17 @@ class MyCandidates extends Component {
         .then(function (res) {
             let pathways = res.data;
             if (Array.isArray(pathways) && pathways.length > 0) {
+                const firstPathwayName = pathways[0].name;
+                if (firstPathwayName) {
+                    let selectedPathway = firstPathwayName;
+                }
                 self.setState({
-                    pathways: pathways
-                });
+                    pathways: pathways,
+                    pathway: firstPathwayName
+                },
+                    // search for candidates of first pathway
+                    self.search()
+                );
             } else {
                 self.setState({
                     noPathways: true
@@ -182,7 +190,7 @@ class MyCandidates extends Component {
 
         let candidatePreviews = (
             <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                Select a pathway to see your candidates.
+                {this.state.pathways.length === 0 ? "Loading pathways..." : "Select a pathway to see your candidates."}
             </div>
         )
 
@@ -211,8 +219,6 @@ class MyCandidates extends Component {
                 const initialHiringStage = candidatePathwayInfo.hiringStage;
                 const initialIsDismissed = candidatePathwayInfo.isDismissed;
                 const isDisabled = candidate.disabled === true;
-
-                console.log("candidate: ", candidate);
 
                 return (
                     <li style={{marginTop: '15px'}}
