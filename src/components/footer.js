@@ -16,6 +16,8 @@ class Footer extends Component {
         if (this.props.isOnboarding) {
             return null;
         }
+        let shadowDivClass = "";
+        let extraSpace = "";
         let footerColor = "purpleToBlue";
         // get the path from the url
         let pathname = undefined;
@@ -34,12 +36,15 @@ class Footer extends Component {
         } else if (pathname === '/resumeanalysis') {
             footerColor = "redToLightRedUpGradientOpacity";
         } else if (pathname === '/results' || pathname === '/mycandidates') {
+            shadowDivClass = "tabsShadow";
+            extraSpace = " topSpace";
             footerColor = "blackBackgroundOpacity";
         }
 
         return (
             <div className="jsxWrapper">
-                <footer className={"footer " + footerColor}>
+                <div className={shadowDivClass} style={{position:"absolute"}}><div/></div>
+                <footer className={"footer " + footerColor + extraSpace}>
                     <ul className="horizCenteredList">
                         <li className="center">
                             <img

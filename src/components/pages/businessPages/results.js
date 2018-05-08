@@ -352,7 +352,7 @@ class Results extends Component {
                                                                 Innovator
                                                             </b>
                                                         </div>
-                                                        <div style={style.horizList}>
+                                                        <div style={{...style.horizList, overflow:"auto"}}>
                                                             <div className="horizListFull">
                                                                 <div className="horizListSpacer"
                                                                      style={{marginLeft: "20%"}}
