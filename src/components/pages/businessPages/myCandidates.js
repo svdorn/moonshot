@@ -16,6 +16,7 @@ import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
+import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import CandidatePreview from '../../childComponents/candidatePreview';
 
@@ -351,6 +352,10 @@ class MyCandidates extends Component {
 
         return (
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
+                <MetaTags>
+                    <title>My Candidates | Moonshot</title>
+                    <meta name="description" content="View analytical breakdowns and manage your candidates."/>
+                </MetaTags>
                 <div className="employerHeader"/>
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
