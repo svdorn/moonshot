@@ -481,7 +481,7 @@ form > h1 {
     background: #2e2e2e;
 }
 .lightBlackBackground {
-    background: #323234;
+    background: #383838;
 }
 .blackBackgroundOpacity {
     background: #2e2e2e;
@@ -1379,6 +1379,10 @@ button.link {
     padding: 0;
     list-style: none;
     text-align: center;
+}
+
+.characteristicsList > div > div {
+    margin: 10px 20px;
 }
 
 .logoBar {

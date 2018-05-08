@@ -149,7 +149,7 @@ class Results extends Component {
                                 >
                                     <div
                                         className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                        Overall<div className="under500only br"><br/></div> Predictive<br/>
+                                        Predicted<div className="under500only br"><br/></div> Performance<br/>
                                         <p style={style.lightBlue}>AVERAGE</p>
                                     </div>
                                     <Slider disabled={true}
@@ -180,7 +180,7 @@ class Results extends Component {
                                      style={{marginRight: "20%"}}>
                                     <div
                                         className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                        Overall<div className="under500only br"><br/></div> Hard Skills<br/>
+                                        Skill Level<br/>
                                         <p style={style.lightBlue}>EXPERT</p>
                                     </div>
                                     <Slider disabled={true}
@@ -196,7 +196,7 @@ class Results extends Component {
                 <div
                     className="whiteText center font24px font20pxUnder700 font16pxUnder500"
                     style={{marginTop: '20px'}}>
-                    Predictive Insights
+                    Predicted Performance
                 </div>
                 <div>
                     <PredictiveGraph
@@ -229,7 +229,7 @@ class Results extends Component {
                                  style={{marginLeft: "20%"}}
                             >
                                 <div
-                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    className="horizListText grayText font24px font20pxUnder700 font16pxUnder500">
                                     <b style={style.lightBlue}>Social<div className="under500only br"><br/></div> Type</b><br/>
                                     Authoritative
                                 </div>
@@ -240,7 +240,7 @@ class Results extends Component {
                             <div className="horizListSpacer"
                                  style={{marginLeft: "5%", marginRight: '5%'}}>
                                 <div
-                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    className="horizListText grayText font24px font20pxUnder700 font16pxUnder500">
                                     <b style={style.lightBlue}>Work<div className="under500only br"><br/></div> Type</b><br/>
                                     Creative
                                 </div>
@@ -250,7 +250,7 @@ class Results extends Component {
                             <div className="horizListSpacer"
                                  style={{marginRight: "20%"}}>
                                 <div
-                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    className="horizListText grayText font24px font20pxUnder700 font16pxUnder500">
                                     <b style={style.lightBlue}>Key<div className="under500only br"><br/></div> Trait</b><br/>
                                     Drive
                                 </div>
@@ -259,12 +259,44 @@ class Results extends Component {
                     </div>
                 </div>
 
+                <div style={style.characteristics} className="grayText font24px characteristicsList">
+                    <b className="font24px font20pxUnder700 font16pxUnder500 paddingTop10px" style={style.characteristicsTitle}>
+                        Characteristics
+                    </b>
+                    <div style={style.characteristicsListRow}>
+                        <div>Creative</div>
+                        <div>Success-Oriented</div>
+                        <div>Idea-Generator</div>
+                        <div>Multi-Tasker</div>
+                    </div>
+                    <div style={style.characteristicsListRow}>
+                        <div>Dislike for Routines</div>
+                        <div>Assertive</div>
+                        <div>Outspoken</div>
+                    </div>
+                    <div style={style.characteristicsListRow}>
+                        <div>Individualistic</div>
+                        <div>Perfectionist</div>
+                    </div>
+                </div>
+
+                <div style={style.descriptionBox} className="grayText font24px">
+                    <b className="font24px font20pxUnder700 font16pxUnder500 paddingTop10px" style={style.characteristicsTitle}>
+                        Description
+                    </b>
+                    <div style={style.description}>
+                        {"An out-of-the box thinker - flexible, energetic, and always"}<br/>
+                        {"engaged with their many interests and projects. Always curious, they're"}<br/>
+                        {"highly motivated by challenge and novelty."}<br/>
+                    </div>
+                </div>
+
                 <div className="purpleToGreenSpacer"
                      id="picturesToPathwaysHomepageSpacer"/>
 
                 <div
                     className="whiteText center font24px font20pxUnder700 font16pxUnder500">
-                    Hard Skills
+                    Skills Evaluation
                 </div>
                 <div>
                     <PredictiveGraph
@@ -431,14 +463,13 @@ const style = {
         color: 'white',
     },
     tabContent: {
-        paddingTop: '10px',
         paddingBottom: '30px',
     },
     lightBlue: {
         color: '#75dcfc'
     },
     horizList: {
-        marginTop: '10px',
+        marginTop: '40px',
     },
     horizListIcon: {
         height: "50px",
@@ -460,6 +491,19 @@ const style = {
         minHeight: '200px',
         padding: "20px",
         overflow: "auto"
+    },
+    characteristics: {
+        paddingTop: "40px"
+    },
+    characteristicsTitle: {
+        color: "#96ADFC"
+    },
+    characteristicsListRow: {
+        display: "flex",
+        justifyContent: "center"
+    },
+    descriptionBox: {
+        paddingTop: "40px"
     }
 };
 
