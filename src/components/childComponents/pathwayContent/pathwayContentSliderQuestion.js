@@ -14,12 +14,13 @@ class PathwayContentSliderQuestion extends Component {
         const maxValue = typeof props.maxValue === "number" ? props.maxValue : 10;
         const step = typeof props.step === "number" ? props.step : 1;
         const quizId = props.quizId;
+
         let sliderValue = minValue;
-        console.log("this.props.initialValue: ", this.props.initialValue);
         if (typeof this.props.initialValue !== undefined) {
             sliderValue = this.props.initialValue;
         }
         const originalSliderValue = sliderValue;
+
         // try to assign the value to the value that the user already had from the db
         try {
             const userValue = props.currentUser.answers[props.quizId].value;
@@ -46,7 +47,13 @@ class PathwayContentSliderQuestion extends Component {
             const maxValue = typeof this.props.maxValue === "number" ? this.props.maxValue : 10;
             const step = typeof this.props.step === "number" ? this.props.step : 1;
             const quizId = this.props.quizId
+
             let sliderValue = minValue;
+            if (typeof this.props.initialValue !== undefined) {
+                sliderValue = this.props.initialValue;
+            }
+            const originalSliderValue = sliderValue;
+
             // try to assign the value to the value that the user already had from the db
             try {
                 const userValue = this.props.currentUser.answers[this.props.quizId].value;
@@ -58,7 +65,7 @@ class PathwayContentSliderQuestion extends Component {
             } catch(e) {
                 // if user didn't have something saved, assign the initial value to
                 // be whatever the props told it to be, if specified
-                sliderValue = minValue;
+                sliderValue = originalSliderValue;
             }
             this.setState ({
                 minValue, maxValue, step, sliderValue, quizId
