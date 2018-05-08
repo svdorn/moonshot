@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux';
 import {postEmployer, onSignUpPage} from '../../actions/usersActions';
 import {TextField, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
-import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 
 const styles = {
@@ -134,6 +134,10 @@ class AddUser extends Component {
     render() {
         return (
             <div className="fullHeight greenToBlue formContainer">
+                <MetaTags>
+                    <title>Add User | Moonshot</title>
+                    <meta name="description" content="Add a user to your business account."/>
+                </MetaTags>
                 <div className="form lightWhiteForm">
                     {this.state.email != "" && this.props.userPosted ?
                         <div className="center">
