@@ -3627,7 +3627,6 @@ app.get("/business/candidateSearch", function(req, res) {
                 }
 
                 // if the candidate made it past all the search terms, add them
-                console.log(candidate);
                 candidatesToReturn.push(candidate);
             });
 
@@ -3807,7 +3806,7 @@ app.post("/business", async function(req, res) {
     }
 });
 
-// UPDATE HIRING STAGE OF A CANDIDATE (NOT CONTACTED, CONTACTED)
+// UPDATE HIRING STAGE OF A CANDIDATE (NOT CONTACTED, CONTACTED, INTERVIEWING, HIRED)
 app.post("/business/updateHiringStage", async function(req, res) {
     const body = req.body;
     const userId = sanitize(body.userId);
@@ -3817,8 +3816,6 @@ app.post("/business/updateHiringStage", async function(req, res) {
     const hiringStage = sanitize(body.hiringStage);
     const isDismissed = sanitize(body.isDismissed);
     const pathwayId = sanitize(body.pathwayId);
-
-    console.log("updating hiring stage");
 
     // if one of the arguments doesn't exist, return with error code
     if (!userId || !verificationToken || !companyId || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !pathwayId) {
@@ -3853,7 +3850,10 @@ app.post("/business/updateHiringStage", async function(req, res) {
 
         // the index of the candidate in the business' candidate array
         const candidateIndex = business.candidates.findIndex(currCandidate => {
-            return currCandidate.userId.toString() === candidateId;
+            console.log("candidateId: ", candidateId);
+            console.log("currCandidate.userId: ", currCandidate.userId);
+            console.log("equal: ", currCandidate.userId.toString() === candidateId.toString());
+            return currCandidate.userId.toString() === candidateId.toString();
         });
 
         let candidate = business.candidates[candidateIndex];
@@ -3866,6 +3866,9 @@ app.post("/business/updateHiringStage", async function(req, res) {
         // the arguments that were passed in
         candidate.pathways[pathwayIndex].isDismissed = isDismissed;
         candidate.pathways[pathwayIndex].hiringStage = hiringStage;
+        candidate.pathways[pathwayIndex].hiringStageEdited = new Date();
+
+        console.log("date is: ", new Date());
 
         // update the candidate in the business object
         business.candidates[candidateIndex] = candidate;

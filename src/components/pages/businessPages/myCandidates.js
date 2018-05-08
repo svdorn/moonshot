@@ -189,12 +189,6 @@ class MyCandidates extends Component {
             candidatePreviews = this.state.candidates.map(candidate => {
                 key++;
 
-                // candidatePathwayInfo = {
-                //  completionStatus: "Complete",
-                //  hiringStage: "Contacted",
-                //  isDismissed: false,
-                //  _id: [the pathway id]
-                // }
                 let candidatePathwayInfo = {
                     hiringStage: "Not Contacted",
                     isDismissed: false
@@ -229,7 +223,7 @@ class MyCandidates extends Component {
                             employerUserId={currentUser._id}
                             employerVerificationToken={currentUser.verificationToken}
                             companyId={currentUser.company.companyId}
-                            candidateId={candidate._id}
+                            candidateId={candidate.userId}
                             pathwayId={pathwayId}
                             editHiringStage={true}
                             name={candidate.name}
@@ -241,6 +235,7 @@ class MyCandidates extends Component {
                             predicted={candidatePathwayInfo.predicted}
                             archetype={candidate.archetype}
                             skill={candidatePathwayInfo.skill}
+                            lastEdited={candidatePathwayInfo.hiringStageEdited}
                         />
                     </li>
                 );
@@ -248,7 +243,7 @@ class MyCandidates extends Component {
 
         }
 
-        const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired", "Dismissed"];
+        const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
         const hiringStageItems = hiringStages.map(function (hiringStage) {
             return <MenuItem value={hiringStage} primaryText={hiringStage} key={hiringStage}/>
         })
@@ -355,7 +350,7 @@ class MyCandidates extends Component {
 
 
         return (
-            <div className="jsxWrapper blackBackground fillScreen" ref='myCandidates'>
+            <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
                 <div className="employerHeader"/>
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>

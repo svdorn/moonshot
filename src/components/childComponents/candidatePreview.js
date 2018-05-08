@@ -26,13 +26,35 @@ class CandidatePreview extends Component {
         const possibleStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
         const validStage = possibleStages.includes(props.initialHiringStage);
         const hiringStage = validStage ? props.initialHiringStage : possibleStages[0];
+        const lastEdited = this.formatDateString(props.lastEdited);
 
         this.state = {
             hiringStage,
             dismissed: isDismissed,
-            possibleStages
+            possibleStages,
+            lastEdited
         }
     }
+
+
+    // create date string from db date string
+    formatDateString(dateString) {
+        const BASE10 = 10;
+        if (dateString && dateString != null && dateString != "" && dateString.length > 10) {
+            const date = new Date(dateString);
+            const year = date.getFullYear().toString().substr(-2);
+            let month = date.getMonth().toString();
+            let day = date.getDate().toString();
+            if (month.length === 1) { month = "0" + month; }
+            if (day.length === 1) { day = "0" + day; }
+
+            return `${month}/${day}/${year}`;
+        } else {
+            return "N/A";
+        }
+    }
+
+
 
     // since some components will be rendered in the same place but be for
     // different people, need to update state when new props are received
@@ -52,6 +74,7 @@ class CandidatePreview extends Component {
             ...this.state,
             hiringStage: nextProps.initialHiringStage,
             dismissed: isDismissed,
+            lastEdited: this.formatDateString(nextProps.lastEdited)
         });
     }
 
@@ -67,14 +90,14 @@ class CandidatePreview extends Component {
     // when Dismiss button is clicked
     handleClick() {
         this.updateHiringStageInDB(this.state.hiringStage, !this.state.dismissed);
-        this.setState({ ...this.state, dismissed: !this.state.dismissed });
+        this.setState({ ...this.state, dismissed: !this.state.dismissed, lastEdited: this.formatDateString((new Date()).toString()) });
     }
 
 
     // when hiring stage changed in menu
     handleHiringStageChange = (event, index, hiringStage) => {
         console.log("hiringStage: ", hiringStage)
-        this.setState({...this.state, hiringStage})
+        this.setState({ ...this.state, hiringStage, lastEdited: this.formatDateString((new Date()).toString()) })
         this.updateHiringStageInDB(hiringStage, this.state.dismissed);
     }
 
@@ -240,7 +263,15 @@ class CandidatePreview extends Component {
                 position: "absolute",
                 left: "12px",
                 bottom: "5px",
-                zIndex: "5"
+                zIndex: "7"
+            },
+            lastUpdated: {
+                position: "absolute",
+                textAlign: "center",
+                width: "92px",
+                bottom: "3px",
+                right: "8px",
+                zIndex: "6",
             }
         };
 
@@ -279,7 +310,7 @@ class CandidatePreview extends Component {
         }
 
         const menuItems = this.state.possibleStages.map(stage => {
-            return (<MenuItem value={stage} primaryText={stage.toUpperCase()} />)
+            return (<MenuItem key={stage} value={stage} primaryText={stage.toUpperCase()} />)
         });
 
         return (
@@ -308,8 +339,6 @@ class CandidatePreview extends Component {
                     </div>
                 </div>
                 <br/>
-
-
 
                 <DropDownMenu value={this.state.hiringStage}
                               onChange={this.handleHiringStageChange.bind(this)}
@@ -342,6 +371,11 @@ class CandidatePreview extends Component {
                    href="/results?user=Stephen-Dorn-2-9f66bf7eeac18994">
                     See Results
                 </a>
+
+                <div className="font12px" style={style.lastUpdated}>
+                    Last Updated<br/>
+                    {this.state.lastEdited}
+                </div>
             </div>
         )
     }

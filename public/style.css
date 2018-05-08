@@ -955,7 +955,7 @@ button.link {
 .candidatePreview {
     position: relative;
     width: 335px;
-    height: 390px;
+    height: 400px;
     -moz-box-shadow:    0px 0px 50px 1px #00000073;
     -webkit-box-shadow: 0px 0px 50px 1px #00000073;
     box-shadow:         0px 0px 50px 1px #00000073;
@@ -1022,7 +1022,7 @@ button.link {
     position: absolute;
     display: inline-block;
     height: 110px;
-    bottom: 20px;
+    bottom: 30px;
 }
 
 
