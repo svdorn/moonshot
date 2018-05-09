@@ -704,12 +704,6 @@ async function POST_addPathway(req, res) {
 
 
     if (_id && pathwayId && verificationToken) {
-        // TODO: REMOVE THIS, CHANGE HOW THIS FUNCTION WORKS ONCE WE START
-        // ADDING PATHWAYS BESIDES NWM AND SINGLEWIRE
-        if (pathwayId !== "5a80b3cf734d1d0d42e9fcad" && pathwayId !== "5a88b4b8734d1d041bb6b386" && pathwayId !== "5abc12cff36d2805e28d27f3" && pathwayId !== "5ac3bc92734d1d4f8afa8ac4") {
-            return res.status(403).send("You cannot currently sign up for that pathway.");
-        }
-
         let dbPatway = undefined;
         try {
             // find the given pathway

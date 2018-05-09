@@ -24,7 +24,8 @@ const userApis = {
     GET_session,
     POST_session,
     POST_verifyEmail,
-    POST_changePasswordForgot
+    POST_changePasswordForgot,
+    POST_changePassword
 }
 
 
@@ -253,7 +254,63 @@ function POST_changePasswordForgot(req, res) {
 }
 
 
+function POST_changePassword(req, res) {
+    var user = sanitize(req.body);
+    var query = {_id: user._id};
 
+    // if the field doesn't exist, $set will set a new field
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, function (saltErr, salt) {
+        if (saltErr) {
+            console.log("Error generating salt for resetting password: ", saltErr);
+            return res.status(500).send("Server error. Could not change password.");
+        }
+        bcrypt.hash(user.password, salt, function (hashErr, hash) {
+            // error encrypting the new password
+            if (hashErr) {
+                console.log("Error hashing user's new password when trying to reset password: ", hashErr);
+                return res.status(500).send("Server error. Couldn't change password.");
+            }
+
+            Users.findOne(query, function (dbFindErr, userFromDB) {
+                if (dbFindErr) {
+                    console.log("Error finding the user that is trying to reset their password: ", dbFindErr);
+                    return res.status(500).send("Server error. Couldn't change password.");
+                }
+
+                // CHECK IF A USER WAS FOUND
+                if (!userFromDB) {
+                    return res.status(404).send("Server error. Couldn't change password.");
+                }
+
+                bcrypt.compare(user.oldpass, userFromDB.password, function (passwordError, passwordsMatch) {
+                    // error comparing passwords, not necessarily that the passwords don't match
+                    if (passwordError) {
+                        console.log("Error comparing passwords when trying to reset password: ", passwordError);
+                        return res.status(500).send("Server error. Couldn't change password.");
+                    }
+                    // user gave the correct old password
+                    else if (passwordsMatch) {
+                        // update the user's password
+                        userFromDB.password = hash;
+                        // save the user in the db
+                        userFromDB.save(function(saveErr, newUser) {
+                            if (saveErr) {
+                                console.log("Error saving user's new password when resetting: ", saveErr);
+                                return res.status(500).send("Server error. Couldn't change password.");
+                            } else {
+                                //successfully changed user's password
+                                return res.json(removePassword(newUser));
+                            }
+                        });
+                    } else {
+                        return res.status(400).send("Old password is incorrect.");
+                    }
+                });
+            });
+        });
+    });
+}
 
 
 module.exports = userApis;

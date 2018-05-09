@@ -244,7 +244,7 @@ export function changePassword(user) {
         // make loading circle show up
         dispatch({type:"START_LOADING"});
 
-        axios.post('/api/user/changepassword', user)
+        axios.post('/api/user/changePassword', user)
         .then(function(response) {
             dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
             // reset the form
