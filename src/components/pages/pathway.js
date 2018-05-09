@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {registerForPathway, closeNotification, addPathway} from '../../actions/usersActions';
+import {closeNotification, addPathway} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress, Divider, Chip} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import style from '../../../public/styles';
@@ -67,39 +67,16 @@ class Pathway extends Component {
     }
 
     handleClick() {
-        // TODO: CHANGE THIS SO THAT ANY PATHWAY CAN BE SIGNED UP FOR
-        // Check if it is a pathway that is currently available
-        if (this.state.pathway.url === "Northwestern-Mutual-Sales" || this.state.pathway.url === "Singlewire-QA-Analyst" || this.state.pathway.url === "Curate-Full-Stack" || this.state.pathway.url === "DreamHome-Startup-CEO") {
-            if (this.props.currentUser) {
-                const user = {
-                    _id: this.props.currentUser._id,
-                    pathwayId: this.state.pathway._id,
-                    verificationToken: this.props.currentUser.verificationToken,
-                    pathwayUrl: this.state.pathway.url,
-                    pathwayName: this.state.pathway.name
-                };
-                this.props.addPathway(user);
-            } else {
-                browserHistory.push({
-                    pathname: "/signup",
-                    query: {
-                        pathway: this.state.pathway._id,
-                        redirect: "/pathwayContent?pathway=" + this.state.pathway.url
-                    }
-                });
-                window.scrollTo(0, 0);
-            }
-        }
-
-        else if (this.props.currentUser) {
+        if (this.props.currentUser) {
             const user = {
-                pathway: this.state.pathway.name,
-                name: this.props.currentUser.name,
-                email: this.props.currentUser.email,
+                _id: this.props.currentUser._id,
+                pathwayId: this.state.pathway._id,
+                verificationToken: this.props.currentUser.verificationToken,
+                pathwayUrl: this.state.pathway.url,
+                pathwayName: this.state.pathway.name
             };
-            this.props.registerForPathway(user);
+            this.props.addPathway(user);
         } else {
-            // Not logged in
             browserHistory.push({
                 pathname: "/signup",
                 query: {
@@ -107,6 +84,7 @@ class Pathway extends Component {
                     redirect: "/pathwayContent?pathway=" + this.state.pathway.url
                 }
             });
+            window.scrollTo(0, 0);
         }
     }
 
@@ -1061,7 +1039,6 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        registerForPathway,
         closeNotification,
         addPathway,
     }, dispatch);

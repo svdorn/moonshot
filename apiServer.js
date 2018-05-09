@@ -98,114 +98,12 @@ app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
-
-// VERIFY CHANGE PASSWORD
 app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
 
 
-// SEND EMAIL
-app.post('/sendVerificationEmail', function (req, res) {
-    let email = sanitize(req.body.email);
-    let query = {email: email};
 
-    let moonshotUrl = 'https://www.moonshotlearning.org/';
-    // if we are in development, links are to localhost
-    if (!process.env.NODE_ENV) {
-        moonshotUrl = 'http://localhost:8081/';
-    }
-
-    Users.findOne(query, function (err, user) {
-        let recipient = [user.email];
-        let subject = 'Verify email';
-        let content =
-            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
-                    + '<div style="text-align:justify;width:80%;margin-left:10%;">'
-                    + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="' + moonshotUrl + 'verifyEmail?token=' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
-                    + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.org</a>.</span><br/>'
-                    + '</div>'
-                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'verifyEmail?token='
-                + user.emailVerificationToken
-                + '">VERIFY ACCOUNT</a>'
-                + '<div style="text-align:left;width:80%;margin-left:10%;">'
-                    + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
-                    + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
-                    + '</div>'
-                + '</div>'
-            + '</div>';
-
-        const sendFrom = "Moonshot";
-        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-            if (success) {
-                res.json(msg);
-            } else {
-                res.status(500).send(msg);
-            }
-        })
-    });
-});
-
-
-// SEND EMAIL FOR REGISTERING FOR PATHWAYS
-app.post('/user/registerForPathway', function (req, res) {
-    const pathwayName = sanitize(req.body.pathway);
-    const studentName = sanitize(req.body.name);
-    const studentEmail = sanitize(req.body.email);
-
-    let recipient1 = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "ameyer24@wisc.edu"];
-    let subject1 = "Student Registration for " + pathwayName;
-    let content1 = "<div>"
-        + "<h3>Student Registration for Pathway:</h3>"
-        + "<h4>Pathway: "
-        + pathwayName
-        + "</h4>"
-        + "<h4>Student: "
-        + studentName
-        + "</h4>"
-        + "<h4>Student Email: "
-        + studentEmail
-        + "</h4>"
-        + "<p>If the student doesn't get back to you soon with an email, make sure to reach out to them.</p>"
-        + "<p>-Moonshot</p>"
-        + "</div>";
-
-    let name = studentName.replace(/(([^\s]+\s\s*){1})(.*)/, "$1").trim();
-    let recipient2 = [studentEmail];
-    let subject2 = "First steps for " + pathwayName + " Pathway - book a 15 min call";
-    let content2 = "<div>"
-        + "<p>Hi " + name + "," + "</p>"
-        + "<p>My name is Kyle and I’m one of the founders at Moonshot. We are excited for you to get going on the pathway!</p>"
-        + "<p>Before you do we've got a few things to cover:<br/>"
-        + "- There are limited scholarships that the sponsor company offers.<br/>"
-        + "- So … We need to learn a bit about you first!<br/>"
-        + "- Step 1: " + "<b><u>Send a link to your LinkedIn profile</u></b>" + " (not required but you can also attach"
-        + " your resume, link to a project, something you are proud of, etc) to kyle@moonshotlearning.org." + "</p>"
-        + "<p>If you have any questions, shoot me a message. I'll review everything and be back to you shortly!</p>"
-        + "<p>Talk soon,<br/>"
-        + "Kyle</p>"
-        + "<p>-------------------------------------------<br/>"
-        + "Kyle Treige, Co-Founder & CEO <br/>"
-        + "<a href='https://www.moonshotlearning.org/' target='_blank'>Moonshot</a><br/>"
-        + "608-438-4478</p>"
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipient1, subject1, content1, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            sendEmail(recipient2, subject2, content2, sendFrom, undefined, function (success, msg) {
-                if (success) {
-                    res.json("Check your email for instructions on how to get started.");
-                } else {
-                    res.status(500).send(msg);
-                }
-            })
-        } else {
-            res.status(500).send(msg);
-        }
-    })
-});
+// NEED TO TEST
+app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 
 // SEND EMAIL FOR FOR BUSINESS
 app.post('/user/forBusinessEmail', function (req, res) {
