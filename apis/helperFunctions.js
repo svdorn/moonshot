@@ -259,7 +259,6 @@ function removePassword(user) {
 
 // remove html tags from a variable (any type) to prevent code injection
 function sanitize(something) {
-    console.log("sanitizing");
     const somethingType = (typeof something);
     switch (somethingType) {
         case "object":

@@ -50,17 +50,17 @@ var Referrals = require('./models/referrals.js');
 
 
 // get helper functions
-const helperFunctions = require('./apis/helperFunctions.js');
-const sanitize = helperFunctions.sanitize;
-const removeEmptyFields = helperFunctions.removeEmptyFields;
-const verifyUser = helperFunctions.verifyUser;
-const removePassword = helperFunctions.removePassword;
-const printUsersFromPathway = helperFunctions.printUsersFromPathway;
-const getUserByQuery = helperFunctions.getUserByQuery;
-const safeUser = helperFunctions.safeUser;
-const userForAdmin = helperFunctions.userForAdmin;
-const sendEmail = helperFunctions.sendEmail;
-const getFirstName = helperFunctions.getFirstName;
+const { sanitize,
+        removeEmptyFields,
+        verifyUser,
+        removePassword,
+        getUserByQuery,
+        sendEmail,
+        safeUser,
+        userForAdmin,
+        getFirstName,
+        printUsersFromPathway
+} = require('./apis/helperFunctions.js');
 
 
 // import all the api functions
@@ -93,158 +93,13 @@ app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
 
-
-
-// --->>> EXAMPLE INFO CREATION <<<---
-
-// const exampleInfo = {
-//     contentArray: []
-// }
-// Info.create(exampleInfo, function(err, link) {
-//     console.log(err);
-//     console.log(link);
-// })
-
-// --->>> END EXAMPLE INFO CREATION <<<---
-
-
-// print all users from a specific pathway
-// nwm: "5a80b3cf734d1d0d42e9fcad"
-// sw: "5a88b4b8734d1d041bb6b386"
-
-// printUsersFromPathway("5a88b4b8734d1d041bb6b386");
-
-
-// update all users with a specific thing, used if something is changed about
-// the user model
-// Pathways.find({}, function(err, pathways) {
-//     console.log("err is: ", err);
-//
-//     for (let pathwayIdx = 0; pathwayIdx < pathways.length; pathwayIdx++) {
-//         let pathway = pathways[pathwayIdx];
-//         //pathway.userType = "candidate";
-//
-//         let steps = pathway.steps;
-//
-//         for (let stepIndex = 0; stepIndex < steps.length; stepIndex++) {
-//             let step = steps[stepIndex];
-//             let subSteps = step.subSteps;
-//
-//             for (let subStepIndex = 0; subStepIndex < subSteps.length; subStepIndex++) {
-//                 let subStep = subSteps[subStepIndex];
-//
-//                 if (subStep.contentType === "quiz") {
-//                     pathway.steps[stepIndex].subSteps[subStepIndex].required = true;
-//                 }
-//             }
-//         }
-//
-//         pathway.save(function() {
-//             console.log("pathway saved");
-//         });
-//     }
-// })
-
-
-//----->> POST USER <<------
+//----->> POST NEW CANDIDATE <<------
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 
-
-app.post("/endOnboarding", function (req, res) {
-    const userId = sanitize(req.body.userId);
-    const verificationToken = sanitize(req.body.verificationToken);
-    const removeRedirectField = sanitize(req.body.removeRedirectField);
-
-    const query = {_id: userId, verificationToken};
-    let update = {
-        '$set': {
-            hasFinishedOnboarding: true
-        }
-    };
-
-    if (removeRedirectField) {
-        update['$unset'] = { redirect: "" }
-    }
-
-    // When true returns the updated document
-    const options = {new: true};
-
-    Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
-        if (!err && updatedUser) {
-            res.json(removePassword(updatedUser));
-        } else {
-            res.status(500).send("Error ending onboarding.");
-        }
-    });
-});
+app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 
 
-app.post('/verifyEmail', function (req, res) {
-    const token = sanitize(req.body.token);
-    const userType = sanitize(req.body.userType);
-
-    // query form business user database if the user is a business user
-    const DB = (userType === "employer") ? Employers : Users;
-
-    if (!token) {
-        res.status(400).send("Url not in the right format");
-        return;
-    }
-
-    var query = {emailVerificationToken: token};
-    DB.findOne(query, function (err, user) {
-        if (err) {
-            console.log("Error trying to find user from verification token");
-            res.status(500).send("Server error, try again later");
-            return;
-        }
-
-        if (!user) {
-            res.status(404).send("User not found from url");
-            return;
-        }
-
-        user.verified = true;
-        user.emailVerificationToken = undefined;
-
-        user.save(function(updateErr, updatedUser) {
-            if (updateErr) {
-                console.log("Error saving user's verified status to true: ", updateErr);
-                res.status(500).send("Server error, try again later");
-                return;
-            }
-
-            // we don't save the user session if logging in as business user
-            // because it is likely the account was created on a different computer
-            if (userType === "employer") {
-                res.json(updatedUser.email);
-                return;
-            }
-
-            // if the session has the user's id, can immediately log them in
-            sessionUserId = sanitize(req.session.unverifiedUserId);
-            req.session.unverifiedUserId = undefined;
-
-            req.session.userId = sessionUserId;
-
-            req.session.save(function (err) {
-                if (err) {
-                    console.log("Error saving session after verifying user: ", err);
-                }
-            });
-
-            if (sessionUserId && sessionUserId == updatedUser._id) {
-                res.json(removePassword(updatedUser));
-                return;
-            }
-            // otherwise, bring the user to the login page
-            else {
-                res.json("go to login");
-                return;
-            }
-        });
-    });
-});
+app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 
 // VERIFY CHANGE PASSWORD
 app.post('/user/changePasswordForgot', function (req, res) {
@@ -3056,6 +2911,59 @@ app.post("/business/updateHiringStage", async function(req, res) {
 // --->> END BUSINESS APIS <<--- //
 
 // END APIs
+
+
+// --->>> EXAMPLE INFO CREATION <<<---
+
+// const exampleInfo = {
+//     contentArray: []
+// }
+// Info.create(exampleInfo, function(err, link) {
+//     console.log(err);
+//     console.log(link);
+// })
+
+// --->>> END EXAMPLE INFO CREATION <<<---
+
+
+// print all users from a specific pathway
+// nwm: "5a80b3cf734d1d0d42e9fcad"
+// sw: "5a88b4b8734d1d041bb6b386"
+
+// printUsersFromPathway("5a88b4b8734d1d041bb6b386");
+
+
+// update all users with a specific thing, used if something is changed about
+// the user model
+// Pathways.find({}, function(err, pathways) {
+//     console.log("err is: ", err);
+//
+//     for (let pathwayIdx = 0; pathwayIdx < pathways.length; pathwayIdx++) {
+//         let pathway = pathways[pathwayIdx];
+//         //pathway.userType = "candidate";
+//
+//         let steps = pathway.steps;
+//
+//         for (let stepIndex = 0; stepIndex < steps.length; stepIndex++) {
+//             let step = steps[stepIndex];
+//             let subSteps = step.subSteps;
+//
+//             for (let subStepIndex = 0; subStepIndex < subSteps.length; subStepIndex++) {
+//                 let subStep = subSteps[subStepIndex];
+//
+//                 if (subStep.contentType === "quiz") {
+//                     pathway.steps[stepIndex].subSteps[subStepIndex].required = true;
+//                 }
+//             }
+//         }
+//
+//         pathway.save(function() {
+//             console.log("pathway saved");
+//         });
+//     }
+// })
+
+
 
 app.listen(3001, function (err) {
     if (err) {

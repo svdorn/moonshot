@@ -259,7 +259,7 @@ export function changePassword(user) {
 // VERIFY EMAIL
 export function verifyEmail(userType, token) {
     return function(dispatch) {
-        axios.post("/api/verifyEmail", {userType, token})
+        axios.post("/api/user/verifyEmail", {userType, token})
             .then(function(response) {
                 if (!response.data || response.data === "go to login" || userType == "employer") {
                     let nextLocation = "/login";
@@ -542,7 +542,7 @@ export function startOnboarding(){
 export function endOnboarding(user, markOnboardingComplete, removeRedirectField){
     return function(dispatch) {
         if (markOnboardingComplete) {
-            axios.post("/api/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
+            axios.post("/api/candidate/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
             .then(function(response) {
                 dispatch({type: "END_ONBOARDING", user: response.data});
             })

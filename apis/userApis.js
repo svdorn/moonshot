@@ -20,7 +20,8 @@ const userApis = {
     POST_keepMeLoggedIn,
     GET_keepMeLoggedIn,
     GET_session,
-    POST_session
+    POST_session,
+    POST_verifyEmail
 }
 
 
@@ -125,6 +126,69 @@ function GET_keepMeLoggedIn(req, res) {
         setting = false;
     }
     res.json(setting);
+}
+
+
+// verify user's email so they can sign in
+function POST_verifyEmail(req, res) {
+    const token = sanitize(req.body.token);
+    const userType = sanitize(req.body.userType);
+
+    // query form business user database if the user is a business user
+    const DB = (userType === "employer") ? Employers : Users;
+
+    if (!token) {
+        res.status(400).send("Url not in the right format");
+        return;
+    }
+
+    var query = {emailVerificationToken: token};
+    DB.findOne(query, function (err, user) {
+        if (err) {
+            console.log("Error trying to find user from verification token");
+            return res.status(500).send("Server error, try again later");
+        }
+
+        if (!user) {
+            return res.status(404).send("User not found from url");
+        }
+
+        user.verified = true;
+        user.emailVerificationToken = undefined;
+
+        user.save(function(updateErr, updatedUser) {
+            if (updateErr) {
+                console.log("Error saving user's verified status to true: ", updateErr);
+                return res.status(500).send("Server error, try again later");
+            }
+
+            // we don't save the user session if logging in as business user
+            // because it is likely the account was created on a different computer
+            if (userType === "employer") {
+                return res.json(updatedUser.email);
+            }
+
+            // if the session has the user's id, can immediately log them in
+            sessionUserId = sanitize(req.session.unverifiedUserId);
+            req.session.unverifiedUserId = undefined;
+
+            req.session.userId = sessionUserId;
+
+            req.session.save(function (err) {
+                if (err) {
+                    console.log("Error saving session after verifying user: ", err);
+                }
+            });
+
+            if (sessionUserId && sessionUserId == updatedUser._id) {
+                return res.json(removePassword(updatedUser));
+            }
+            // otherwise, bring the user to the login page
+            else {
+                return res.json("go to login");
+            }
+        });
+    });
 }
 
 

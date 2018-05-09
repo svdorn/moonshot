@@ -19,7 +19,8 @@ const { sanitize,
 
 const candidateApis = {
     POST_updateAllOnboarding,
-    POST_candidate
+    POST_candidate,
+    POST_endOnboarding
 }
 
 
@@ -277,6 +278,36 @@ function POST_updateAllOnboarding(req, res) {
         console.log("Didn't have info or a user id or both.")
         res.status(403).send("Bad request.");
     }
+}
+
+
+// end candidate's onboarding so they can get on to the rest of the site
+function POST_endOnboarding(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const removeRedirectField = sanitize(req.body.removeRedirectField);
+
+    const query = {_id: userId, verificationToken};
+    let update = {
+        '$set': {
+            hasFinishedOnboarding: true
+        }
+    };
+
+    if (removeRedirectField) {
+        update['$unset'] = { redirect: "" }
+    }
+
+    // When true returns the updated document
+    const options = {new: true};
+
+    Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
+        if (!err && updatedUser) {
+            res.json(removePassword(updatedUser));
+        } else {
+            res.status(500).send("Error ending onboarding.");
+        }
+    });
 }
 
 
