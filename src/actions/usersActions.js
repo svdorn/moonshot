@@ -34,7 +34,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
 
-        axios.post("/api/login", {user, saveSession})
+        axios.post("/api/user/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
@@ -86,28 +86,6 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
             });
     }
 }
-
-//
-// export function addPathwayAndLogin(user, saveSession, pathwayName) {
-//     return function(dispatch) {
-//         axios.post("/api/login", {user, saveSession})
-//             .then(function(response) {
-//                 const returnedUser = response.data;
-//                 dispatch({type:"LOGIN", payload: returnedUser});
-//                 dispatch({type: "CLOSE_NOTIFICATION"});
-//                 let nextUrl = '/discover';
-//                 if (!returnedUser.hasFinishedOnboarding) {
-//                     nextUrl = "/onboarding";
-//                 } else if (navigateBackUrl) {
-//                     nextUrl = navigateBackUrl;
-//                 }
-//                 browserHistory.push(nextUrl);
-//             })
-//             .catch(function(err) {
-//                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
-//             });
-//     }
-// }
 
 
 // LOG USER OUT

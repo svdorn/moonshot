@@ -28,7 +28,8 @@ const userApis = {
     POST_changePasswordForgot,
     POST_changePassword,
     POST_forgotPassword,
-    GET_userByProfileUrl
+    GET_userByProfileUrl,
+    POST_login
 }
 
 
@@ -395,6 +396,90 @@ function GET_userByProfileUrl(req, res) {
         if (err) { return res.status(400).send("Bad url"); }
         return res.json(safeUser(user));
     });
+}
+
+
+function POST_login(req, res) {
+    const reqUser = sanitize(req.body.user);
+    let saveSession = sanitize(req.body.saveSession);
+
+    if (typeof saveSession !== "boolean") {
+        saveSession = false;
+    }
+    var email = reqUser.email;
+    var password = reqUser.password;
+
+    let user = null;
+
+    // searches for user by case-insensitive email
+    const emailRegex = new RegExp(email, "i");
+    var query = {email: emailRegex};
+    Users.findOne(query, function (err, foundUser) {
+        if (err) {
+            return res.status(500).send("Error performing query to find user in db. ", err);
+        }
+
+        // CHECK IF A USER WAS FOUND
+        if (!foundUser || foundUser == null) {
+            // CHECK IF THE USER IS IN THE BUSINESS USER DB
+            Employers.findOne(query, function(err2, foundEmployer) {
+                if (err2) {
+                    return res.status(500).send("Error performing query to find user in business user db. ", err);
+                }
+
+                if (!foundEmployer || foundEmployer == null) {
+                    console.log('looked in business db, none found')
+                    return res.status(404).send("No user with that email was found.");
+                }
+
+                user = foundEmployer;
+                tryLoggingIn();
+                return;
+            });
+        }
+        // USER FOUND IN USER DB
+        else {
+            user = foundUser;
+            tryLoggingIn();
+            return;
+        }
+    });
+
+    // executed once a user is found
+    function tryLoggingIn() {
+        bcrypt.compare(password, user.password, function (passwordError, passwordsMatch) {
+            // if hashing password fails
+            if (passwordError) {
+                return res.status(500).send("Error logging in, try again later.");
+            }
+            // passwords match
+            else if (passwordsMatch) {
+                // check if user verified email address
+                if (user.verified) {
+                    user = removePassword(user);
+                    if (saveSession) {
+                        req.session.userId = user._id;
+                        req.session.save(function (err) {
+                            if (err) {
+                                console.log("error saving user session", err);
+                            }
+                            return res.json(removePassword(user));
+                        });
+                    } else {
+                        return res.json(removePassword(user));
+                    }
+                }
+                // if user has not yet verified email address, don't log in
+                else {
+                    return res.status(401).send("Email not yet verified");
+                }
+            }
+            // wrong password
+            else {
+                return res.status(400).send("Password is incorrect.");
+            }
+        });
+    }
 }
 
 
