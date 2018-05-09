@@ -37,7 +37,6 @@ export function usersReducers(state = initialState, action) {
             break;
         case "NOTIFICATION":
         case "VERIFY_EMAIL_REJECTED":
-        case "CHANGE_PASS_FORGOT_REJECTED":
         case "CHANGE_TEMP_PASS_REJECTED":
         case "ADD_PATHWAY_REJECTED":
         case "ADD_NOTIFICATION":

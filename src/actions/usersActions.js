@@ -284,6 +284,9 @@ export function verifyEmail(userType, token) {
 
 export function changePasswordForgot(user) {
     return function(dispatch) {
+        // activate loading spinner
+        dispatch({type: "START_LOADING"});
+
         axios.post("api/user/changePasswordForgot", user)
             .then(function(response) {
                 const foundUser = response.data;

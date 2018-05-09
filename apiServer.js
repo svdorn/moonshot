@@ -93,75 +93,14 @@ app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
 
-//----->> POST NEW CANDIDATE <<------
+// POST NEW CANDIDATE
 app.post('/candidate/candidate', candidateApis.POST_candidate);
-
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
-
 
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 
 // VERIFY CHANGE PASSWORD
-app.post('/user/changePasswordForgot', function (req, res) {
-    let token = sanitize(req.body.token).toString();
-    let password = sanitize(req.body.password);
-
-    var query = {passwordToken: token};
-    Users.findOne(query, function (err, user) {
-        if (err) {
-            console.log("Error trying to find user from password token: ", err);
-            res.status(500).send("Server error, try again later");
-            return;
-        }
-
-        if (!user) {
-            res.status(404).send("User not found from link");
-            return;
-        }
-
-        const currentTime = Date.now();
-        if (currentTime > user.passwordTokenExpirationTime) {
-            res.status(401).send("Time ran out, try sending email again");
-            return;
-        }
-
-        let query = {_id: user._id};
-        const saltRounds = 10;
-        bcrypt.genSalt(saltRounds, function (err, salt) {
-            bcrypt.hash(password, salt, function (err, hash) {
-                // change the stored password to be the hash
-                const newPassword = hash;
-                // if the field doesn't exist, $set will set a new field
-                // can be verified because the user had to go to their email
-                // to get to this page
-                var update = {
-                    '$set': {
-                        password: newPassword,
-                        verified: true
-                    },
-                    '$unset': {
-                        passwordToken: "",
-                        passwordTokenExpirationTime: "",
-                    }
-                };
-
-                // When true returns the updated document
-                var options = {new: true};
-
-                Users.findOneAndUpdate(query, update, options, function (err, newUser) {
-                    if (err) {
-                        console.log(err);
-                        res.status(500).send("Error saving new password");
-                        return;
-                    }
-
-                    // successfully created new password
-                    res.json(removePassword(newUser));
-                });
-            })
-        })
-    });
-});
+app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
 
 
 // SEND EMAIL
