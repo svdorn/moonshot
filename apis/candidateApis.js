@@ -26,7 +26,8 @@ const candidateApis = {
     POST_endOnboarding,
     POST_sendVerificationEmail,
     POST_completePathway,
-    POST_addPathway
+    POST_addPathway,
+    POST_comingSoonEmail
 }
 
 
@@ -864,6 +865,33 @@ async function POST_addPathway(req, res) {
     } else {
         return res.status(400).send("Bad request.");
     }
+}
+
+
+// send email to admins saying a user signed up to be in a pathway that is coming soon
+function POST_comingSoonEmail(req, res) {
+    let recipient = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "ameyer24@wisc.edu"];
+    let subject = 'Moonshot Coming Soon Pathway';
+    let content = "<div>"
+        + "<h3>Pathway:</h3>"
+        + "<p>Name: "
+        + sanitize(req.body.name)
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "<p>Pathway: "
+        + sanitize(req.body.pathway)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Email sent successfully, our team will be in contact with you shortly!");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
 }
 
 

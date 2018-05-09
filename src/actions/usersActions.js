@@ -211,7 +211,7 @@ export function forgotPassword(user) {
     return function(dispatch) {
         dispatch({type: "FORGOT_PASSWORD_REQUESTED"});
 
-        axios.post("/api/forgotPassword", user)
+        axios.post("/api/user/forgotPassword", user)
             .then(function(response) {
                 dispatch({type:"FORGOT_PASSWORD", notification:{message: response.data, type:"infoHeader"}})
             })
@@ -418,7 +418,7 @@ export function comingSoon(user, signedIn){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
-        axios.post("api/user/comingSoonEmail", user)
+        axios.post("api/candidate/comingSoonEmail", user)
             .then(function(response) {
                 if (!signedIn) {
                     dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
@@ -547,35 +547,12 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
 }
 
 
-// // Set a candidate's hiring stage for a certain pathway at a certain company
-// export function updateHiringStage(employerUserId, employerVerificationToken, companyId, candidateId, hiringStage, isDismissed, pathwayId) {
-//     return function(dispatch) {
-//         const hiringStageInfo = {
-//             userId: employerUserId,
-//             verificationToken: employerVerificationToken,
-//             companyId: companyId,
-//             candidateId: candidateId,
-//             hiringStage: hiringStage,
-//             isDismissed: isDismissed,
-//             pathwayId: pathwayId
-//         }
-//         axios.post("/api/business/updateHiringStage", hiringStageInfo)
-//         .then(result => {
-//             console.log("result is: ", result);
-//         })
-//         .catch(err => {
-//             console.log("error updating hiring stage: ", err);
-//         })
-//     }
-// }
-
-
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
     return function(dispatch) {
         dispatch({type: "CONTACT_US_REQUESTED"});
 
-        axios.post("api/user/contactUsEmail", user)
+        axios.post("api/business/contactUsEmail", user)
             .then(function(response) {
                 dispatch({type:"CONTACT_US", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/myPathways');

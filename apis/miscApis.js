@@ -1,4 +1,5 @@
 var Referrals = require('../models/referrals.js');
+var Emailaddresses = require('../models/emailaddresses.js');
 
 // get helper functions
 const { sanitize,
@@ -14,7 +15,8 @@ const { sanitize,
 
 
 const miscApis = {
-    POST_createReferralCode
+    POST_createReferralCode,
+    POST_unsubscribeEmail
 }
 
 function POST_createReferralCode(req, res) {
@@ -108,6 +110,57 @@ function POST_createReferralCode(req, res) {
             sendReferralEmail(user.referralCode);
             res.json(user.referralCode);
             return;
+        }
+    });
+}
+
+
+function POST_unsubscribeEmail(req, res) {
+    let recipient = ["kyle@moonshotlearning.org"];
+    let subject = 'URGENT ACTION - User Unsubscribe from Moonshot';
+    let content = "<div>"
+        + "<h3>This email is Unsubscribing from Moonshot Emails:</h3>"
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("You have successfully unsubscribed.");
+        } else {
+            res.status(500).send(msg);
+        }
+    });
+
+    const optOutError = function(error) {
+        console.log("ERROR ADDING EMAIL TO OPT OUT LIST: " + req.body.email);
+        console.log("The error was: ", error);
+        let recipient = ["ameyer24@wisc.edu"];
+        let subject = "MOONSHOT - URGENT ACTION - User was not unsubscribed"
+        let content = "<div>"
+            + "<h3>This email could not be added to the optOut list:</h3>"
+            + "<p>Email: "
+            + sanitize(req.body.email)
+            + "</p>"
+            + "</div>";
+        sendEmail(recipient, subject, content, sendFrom, undefined, function(){});
+    }
+
+    // add email to list of unsubscribed emails
+    Emailaddresses.findOne({name: "optedOut"}, function(err, optedOut) {
+        if (err) {
+            optOutError(err);
+        }
+        else {
+            console.log("adding to opted-out list: ", req.body.email)
+            optedOut.emails.push(req.body.email);
+            optedOut.save(function(err2, newOptedOut) {
+                if (err2) {
+                    optOutError(err2);
+                }
+            });
         }
     });
 }

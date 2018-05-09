@@ -57,8 +57,8 @@ class Profile extends Component {
 
         // looking at someone else's profile
         else {
-            axios.post("/api/getUserByProfileUrl", {profileUrl}
-            ).then(res => {
+            axios.get("/api/user/userByProfileUrl", {params: {profileUrl}})
+            .then(res => {
                 const user = res.data;
 
                 this.setState({

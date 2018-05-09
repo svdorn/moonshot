@@ -2,6 +2,7 @@ var Users = require('../models/users.js');
 var Employers = require('../models/employers.js');
 
 var bcrypt = require('bcryptjs');
+var crypto = require('crypto');
 
 
 // get helper functions
@@ -25,7 +26,9 @@ const userApis = {
     POST_session,
     POST_verifyEmail,
     POST_changePasswordForgot,
-    POST_changePassword
+    POST_changePassword,
+    POST_forgotPassword,
+    GET_userByProfileUrl
 }
 
 
@@ -309,6 +312,88 @@ function POST_changePassword(req, res) {
                 });
             });
         });
+    });
+}
+
+
+// send email for password reset
+function POST_forgotPassword(req, res) {
+    let email = sanitize(req.body.email);
+    let query = {email: email};
+
+    const user = getUserByQuery(query, function (err, user) {
+        if (!user) {
+            console.log("Couldn't find user to set their password change token.");
+            return res.status(401).send("Cannot find user");
+        } else {
+            // token that will go in the url
+            const newPasswordToken = crypto.randomBytes(64).toString('hex');
+            // password token expires in one hour (minutes * seconds * milliseconds)
+            const newTime = Date.now() + (60 * 60 * 1000);
+
+            const query2 = {_id: user._id};
+            const update = {
+                '$set': {
+                    passwordToken: newPasswordToken,
+                    passwordTokenExpirationTime: newTime,
+                }
+            };
+
+            const options = {new: true};
+
+            Users.findOneAndUpdate(query2, update, options, function (err, foundUser) {
+                if (err) {
+                    console.log("Error giving user reset-password token: ", err);
+                    return res.status(500).send("Server error, try again later.");
+                }
+
+                // if we're in development (on localhost) navigate to localhost
+                let moonshotUrl = "https://www.moonshotlearning.org/";
+                if (!process.env.NODE_ENV) {
+                    moonshotUrl = "http://localhost:8081/";
+                }
+                const recipient = [user.email];
+                const subject = 'Change Password';
+
+                const content =
+                    '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+                        + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                            + '<div style="text-align:justify;width:80%;margin-left:10%;">'
+                            + "<span style='margin-bottom:20px;display:inline-block;'>Hello! We got a request to change your password. If that wasn't from you, you can ignore this email and your password will stay the same. Otherwise click here:</span><br/>"
+                            + '</div>'
+                        + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:5px 20px 20px;" href="' + moonshotUrl + 'changePassword?token='
+                        + newPasswordToken
+                        + '">Change Password</a>'
+                        + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                            + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                                + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                                + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
+                            + '</div>'
+                        + '</div>'
+                    + '</div>';
+
+                const sendFrom = "Moonshot";
+                sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+                    if (success) {
+                        res.json(msg);
+                    } else {
+                        res.status(500).send(msg);
+                    }
+                })
+            });
+        }
+    })
+}
+
+
+function GET_userByProfileUrl(req, res) {
+    if (typeof req.query !== "object") { return res.status(400).send("Bad url."); }
+
+    const profileUrl = sanitize(req.query.profileUrl);
+    const query = { profileUrl };
+    getUserByQuery(query, function (err, user) {
+        if (err) { return res.status(400).send("Bad url"); }
+        return res.json(safeUser(user));
     });
 }
 
