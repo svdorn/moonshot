@@ -3,16 +3,16 @@ var Employers = require('../models/employers.js');
 
 
 // get helper functions
-const helperFunctions = require('./helperFunctions.js');
-const sanitize = helperFunctions.sanitize;
-const removeEmptyFields = helperFunctions.removeEmptyFields;
-const verifyUser = helperFunctions.verifyUser;
-const removePassword = helperFunctions.removePassword;
-const getUserByQuery = helperFunctions.getUserByQuery;
-const sendEmail = helperFunctions.sendEmail;
-const safeUser = helperFunctions.safeUser;
-const userForAdmin = helperFunctions.userForAdmin;
-const getFirstName = helperFunctions.getFirstName;
+const { sanitize,
+        removeEmptyFields,
+        verifyUser,
+        removePassword,
+        getUserByQuery,
+        sendEmail,
+        safeUser,
+        userForAdmin,
+        getFirstName
+} = require('./helperFunctions.js');
 
 
 const userApis = {
