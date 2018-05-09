@@ -56,18 +56,10 @@ class PathwayContent extends Component {
                 }
             }
 
-            // if no pathway url given, return
-            // if (!this.props.location || !this.props.location.query || !this.props.location.query.pathway) {
-            //     return;
-            // }
-            // set the pathway url to the one in the url's query
-            //const pathwayUrl = this.props.location.query.pathway;
-
-            axios.get("/api/pathwayByPathwayUrl", {
+            axios.get("/api/pathway/pathwayByPathwayUrl", {
                 params: {
                     pathwayUrl,
                     userId: user._id,
-//                    hashedVerificationToken: user.hashedVerificationToken
                     verificationToken: user.verificationToken
                 }
             }).then(res => {

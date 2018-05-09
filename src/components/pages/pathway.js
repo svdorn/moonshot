@@ -56,7 +56,7 @@ class Pathway extends Component {
         // set the pathway url to the one in the url's query
         // let pathwayUrl = this.props.location.query.pathway;
 
-        axios.get("/api/pathwayByPathwayUrlNoContent", {
+        axios.get("/api/pathway/pathwayByPathwayUrlNoContent", {
             params: {
                 pathwayUrl
             }

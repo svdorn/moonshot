@@ -17,7 +17,7 @@ class PathwayContentVideo extends Component {
         if (this.props.step !== this.state.currStep) {
             const id = this.props.step.contentID;
 
-            axios.get("/api/getVideo", {
+            axios.get("/api/pathway/video", {
                 params: {
                     _id: id
                 }
@@ -33,7 +33,7 @@ class PathwayContentVideo extends Component {
         if (this.props.step !== this.state.currStep) {
             const id = this.props.step.contentID;
 
-            axios.get("/api/getVideo", {
+            axios.get("/api/pathway/video", {
                 params: {
                     _id: id
                 }

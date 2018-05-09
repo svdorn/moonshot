@@ -22,7 +22,7 @@ class PathwayContentQuiz extends Component {
     componentDidMount() {
         const id = this.props.step.contentID;
 
-        axios.get("/api/getQuiz", {
+        axios.get("/api/pathway/quiz", {
             params: {
                 _id: id
             }
@@ -39,7 +39,7 @@ class PathwayContentQuiz extends Component {
         if (this.props.step !== this.state.currStep) {
             const id = this.props.step.contentID;
 
-            axios.get("/api/getQuiz", {
+            axios.get("/api/pathway/quiz", {
                 params: {
                 _id: id
                 }

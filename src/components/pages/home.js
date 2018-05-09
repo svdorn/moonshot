@@ -97,7 +97,7 @@ class Home extends Component {
     };
 
     componentDidMount() {
-        axios.get("/api/topPathways", {
+        axios.get("/api/pathway/topPathways", {
             params: {numPathways: 6}
         }).then(res => {
             // make sure component is mounted before changing state

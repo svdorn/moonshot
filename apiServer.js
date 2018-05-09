@@ -70,6 +70,7 @@ const businessApis = require('./apis/businessApis');
 const employerApis = require('./apis/employerApis');
 const adminApis = require('./apis/adminApis');
 const miscApis = require('./apis/miscApis');
+const pathwayApis = require('./apis/pathwayApis');
 
 
 // set up the session
@@ -97,16 +98,17 @@ app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
 
-// POST NEW CANDIDATE
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
+app.post('/user/login', userApis.POST_login);
+
+app.get('/pathway/topPathways', pathwayApis.GET_topPathways);
 
 
-
-// NEED TO TEST
+// --->> NEED TO TEST <<---
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 app.post('/candidate/completePathway', candidateApis.POST_completePathway);
 app.post("/candidate/addPathway", candidateApis.POST_addPathway);
@@ -120,369 +122,21 @@ app.post("/admin/alertLinkClicked", adminApis.POST_alertLinkClicked);
 app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
 app.post('/user/changePassword', userApis.POST_changePassword);
 app.post('/user/forgotPassword', userApis.POST_forgotPassword);
-app.post('/user/login', userApis.POST_login);
+app.post('/user/changeSettings', userApis.POST_changeSettings);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 
 
-
-
-//----->> DELETE USER <<------
-app.delete('/user/:_id', function (req, res) {
-    var query = {_id: sanitize(req.params._id)};
-
-    Users.remove(query, function (err, user) {
-        if (err) {
-            console.log(err);
-        }
-        res.json(safeUser(user));
-    })
-});
-
-//----->> UPDATE USER <<------
-app.post('/user/changeSettings', function (req, res) {
-    const user = sanitize(req.body);
-    const password = user.password;
-
-    if (!user.password || !user.name || !user.email) {
-        console.log("Not all arguments provided for settings change.");
-        res.status(400).send("No fields can be empty.");
-        return;
-    }
-
-    const userQuery = {_id: user._id}
-
-    Users.findOne(userQuery, function(findUserErr, foundUser) {
-        // if error while trying to find current user
-        if (findUserErr) {
-            console.log("Error finding user in db when trying to update settings: ", findUserErr);
-            res.status(500).send("Settings couldn't be updated. Try again later.");
-            return;
-        }
-
-        if (!foundUser) {
-            console.log("Didn't find a user with given id when trying to update settings.");
-            res.status(500).send("Settings couldn't be updated. Try again later.");
-            return;
-        }
-
-        bcrypt.compare(password, foundUser.password, function (passwordError, passwordsMatch) {
-            // error comparing password to user's password, doesn't necessarily
-            // mean that the password is wrong
-            if (passwordError) {
-                console.log("Error comparing passwords when trying to update settings: ", passwordError);
-                res.status(500).send("Settings couldn't be updated. Try again later.");
-                return;
-            }
-
-            // user entered wrong password
-            if (!passwordsMatch) {
-                res.status(400).send("Incorrect password");
-                return;
-            }
-
-            // see if there's another user with the new email
-            const emailQuery = {email: user.email};
-            Users.findOne(emailQuery, function(emailQueryErr, userWithEmail) {
-                // don't want two users with the same email, so in case of db search
-                // failure, return unsuccessfully
-                if (emailQueryErr) {
-                    console.log("Error trying to find a user with the same email address as the one provided by user trying to change settings: ", emailQueryErr);
-                    res.status(500).send("Settings couldn't be updated. Try again later.");
-                    return;
-                }
-
-                // someone else already has that email
-                if (userWithEmail && userWithEmail._id.toString() != foundUser._id.toString()) {
-                    res.status(400).send("That email address is already taken.");
-                    return;
-                }
-
-                // all is good, update the user (as long as email and name are not blank)
-                if (user.email) {
-                    foundUser.email = user.email;
-                }
-                if (user.name) {
-                    foundUser.name = user.name;
-                }
-                if (typeof user.hideProfile === "boolean") {
-                    foundUser.hideProfile = user.hideProfile;
-                }
-
-                console.log("hideProfile: ", user.hideProfile);
-
-                foundUser.save(function(saveErr, newUser) {
-                    // if there is an error saving the user's info
-                    if (saveErr) {
-                        console.log("Error when saving user's changed info: ", saveErr);
-                        res.status(500).send("Settings couldn't be updated. Try again later.");
-                        return;
-                    }
-
-                    console.log("newUser: ", newUser);
-
-                    // settings change successful
-                    res.json(newUser);
-                })
-            });
-        });
-    })
-});
-
-
-
-
-//----->> GET TOP PATHWAYS <<------
-app.get('/topPathways', function (req, res) {
-    const numPathways = parseInt(sanitize(req.query.numPathways), 10);
-
-    // gets the most popular pathways, the number of pathways is numPathways;
-    // only show the ones that are ready for users to see
-    Pathways.find({showToUsers: true})
-        .sort({avgRating: 1})
-        .limit(numPathways)
-        .select("name previewImage sponsor estimatedCompletionTime deadline price comingSoon showComingSoonBanner url")
-        .exec(function (err, pathways) {
-            if (err) {
-                res.status(500).send("Not able to get top pathways");
-            } else if (pathways.length == 0) {
-                res.status(500).send("No pathways found");
-            } else {
-                res.json(pathways);
-            }
-        });
-});
-
-//----->> GET LINK BY ID <<-----
-app.get('/getLink', function (req, res) {
-    const _id = sanitize(req.query._id);
-    const query = {_id: _id};
-
-    Links.findOne(query, function (err, link) {
-        if (err) {
-            console.log("error in get link by id")
-        } else {
-            res.json(link);
-        }
-
-    })
-});
-
-//----->> GET ARTICLE BY ID <<-----
-app.get('/getArticle', function (req, res) {
-    const _id = sanitize(req.query._id);
-    const query = {_id: _id};
-
-    Articles.findOne(query, function (err, article) {
-        if (err) {
-            console.log("error in get article by id")
-        } else {
-            res.json(article);
-        }
-
-    })
-});
-
-
-//----->> GET ARTICLE BY ID <<-----
-app.get('/getPathwayInfo', function (req, res) {
-    const _id = sanitize(req.query._id);
-    const query = {_id: _id};
-
-    Info.findOne(query, function (err, info) {
-        if (err) {
-            console.log("error in get article by id")
-        } else {
-            res.json(info);
-        }
-
-    })
-});
-
-
-//----->> GET QUIZ BY ID <<-----
-app.get('/getQuiz', function (req, res) {
-    const _id = sanitize(req.query._id);
-    const query = {_id: _id};
-
-    Quizzes.findOne(query, function (err, quiz) {
-        if (err) {
-            console.log("error in get quiz by id")
-            res.status(404).send("Quiz not found");
-        } else {
-            if (quiz != null) {
-                quiz.correctAnswerNumber = undefined;
-            }
-            res.json(quiz);
-        }
-
-    })
-});
-
-//----->> GET VIDEO BY ID <<-----
-app.get('/getVideo', function (req, res) {
-    const _id = sanitize(req.query._id);
-    const query = {_id: _id};
-
-    Videos.findOne(query, function (err, link) {
-        if (err) {
-            console.log("error in get video by id")
-        } else {
-            res.json(link);
-        }
-
-    })
-});
-
-//----->> GET PATHWAY BY ID <<-----
-app.get('/pathwayByIdNoContent', function (req, res) {
-    const _id = sanitize(req.query._id);
-    const query = {_id: _id};
-
-    Pathways.findOne(query, function (err, pathway) {
-        if (err) {
-            console.log("error in get pathway by id")
-        } else {
-            if (pathway) {
-                res.json(removeContentFromPathway(pathway));
-            } else {
-                res.json(undefined);
-            }
-        }
-
-    })
-});
-
-//----->> GET PATHWAY BY URL <<-----
-app.get('/pathwayByPathwayUrlNoContent', function (req, res) {
-    const pathwayUrl = sanitize(req.query.pathwayUrl);
-    const query = {url: pathwayUrl};
-
-    Pathways.findOne(query, function (err, pathway) {
-        if (err) {
-            console.log("error in get pathway by url")
-        } else if (pathway) {
-            res.json(removeContentFromPathway(pathway));
-        } else {
-            res.status(404).send("No pathway found");
-        }
-
-    })
-});
-
-app.get('/pathwayByPathwayUrl', function (req, res) {
-    const pathwayUrl = sanitize(req.query.pathwayUrl);
-    const userId = sanitize(req.query.userId);
-//    const hashedVerificationToken = req.query.hashedVerificationToken;
-
-    const verificationToken = sanitize(req.query.verificationToken);
-    const query = {url: pathwayUrl};
-
-    Pathways.findOne(query, function (err, pathway) {
-        if (err) {
-            console.log("error in get pathway by url");
-            res.status(404).send("Error getting pathway by url");
-            return;
-        } else if (pathway) {
-            // get the user from the database, can't trust user from frontend
-            // because they can change their info there
-            Users.findOne({_id: userId}, function (err, user) {
-                if (err) {
-                    console.log("error getting user: ", err);
-                    res.status(500).send("Error getting pathway");
-                    return;
-                } else {
-                    // check that user is who they say they are
-                    if (verifyUser(user, verificationToken)) {
-                        // check that user has access to that pathway
-                        const hasAccessToPathway = user.pathways.some(function (path) {
-                            return pathway._id.toString() == path.pathwayId.toString();
-                        })
-                        if (hasAccessToPathway) {
-                            res.json(pathway);
-                            return;
-                        } else {
-                            res.status(403).send("User does not have access to this pathway.");
-                            return;
-                        }
-                    } else {
-                        console.log("verification token does not match")
-                        res.status(403).send("Incorrect user credentials");
-                        return;
-                    }
-                }
-            })
-        } else {
-            res.status(404).send("No pathway found");
-        }
-
-    })
-});
-
-
-function removeContentFromPathway(pathway) {
-    if (pathway) {
-        steps = pathway.steps;
-        if (steps) {
-            for (let i = 0; i < steps.length; i++) {
-                steps[i].substeps = undefined;
-            }
-            pathway.steps = steps;
-        }
-    }
-
-    return pathway;
-}
-
-//----->> SEARCH PATHWAYS <<------
-app.get('/pathways/search', function (req, res) {
-    const MAX_PATHWAYS_TO_RETURN = 1000;
-    let query = {showToUsers: true};
-
-    let term = sanitize(req.query.searchTerm);
-    if (term && term !== "") {
-        // if there is a search term, add it to the query
-        const termRegex = new RegExp(term, "i");
-        query["name"] = termRegex;
-    }
-
-    let limit = parseInt(sanitize(req.query.limit), 10);
-    if (limit === NaN) {
-        limit = MAX_PATHWAYS_TO_RETURN;
-    }
-    const sortNOTYET = sanitize(req.body.sort);
-
-    // add category to query if it exists
-    const category = sanitize(req.query.category);
-    if (category && category !== "") {
-        query["tags"] = category;
-    }
-
-    // add company to query if it exists
-    const company = sanitize(req.query.company);
-    if (company && company !== "") {
-        query["sponsor.name"] = company;
-    }
-
-    //const limit = 4;
-    const sort = {avgRating: 1};
-    // only get these properties of the pathways
-    const select = "name previewImage sponsor estimatedCompletionTime deadline price tags comingSoon showComingSoonBanner url";
-
-    Pathways.find(query)
-        .limit(limit)
-        .sort(sort)
-        .select(select)
-        .exec(function (err, pathways) {
-            console.log("pathways: ", pathways);
-            if (err) {
-                res.status(500).send("Error getting searched-for pathways");
-            } else {
-                res.json(pathways);
-            }
-        });
-});
+app.get('/pathway/link', pathwayApis.GET_link);
+app.get('/pathway/article', pathwayApis.GET_article);
+app.get('/pathway/info', pathwayApis.GET_info);
+app.get('/pathway/quiz', pathwayApis.GET_quiz);
+app.get('/pathway/video', pathwayApis.GET_video);
+app.get('/pathway/pathwayByIdNoContent', pathwayApis.GET_pathwayByIdNoContent);
+app.get('/pathway/pathwayByPathwayUrlNoContent', pathwayApis.GET_pathwayByPathwayUrlNoContent);
+app.get('/pathway/pathwayByPathwayUrl', pathwayApis.GET_pathwayByPathwayUrl);
+app.get('/pathway/search', pathwayApis.GET_search);
 
 
 app.get("/pathways/getAllCompaniesAndCategories", function(req, res) {

@@ -76,7 +76,7 @@ class Discover extends Component {
         })
 
         // populate featuredPathways with initial pathways
-        axios.get("/api/pathways/search", {
+        axios.get("/api/pathway/search", {
             params: {
                 limit: 3
             }
@@ -139,7 +139,7 @@ class Discover extends Component {
     };
 
     search() {
-        axios.get("/api/pathways/search", {
+        axios.get("/api/pathway/search", {
             params: {
                 searchTerm: this.state.term,
                 category: this.state.category,

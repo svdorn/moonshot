@@ -16,7 +16,7 @@ class PathwayContentLink extends Component {
         if (this.props.step !== this.state.currStep) {
             const id = this.props.step.contentID;
 
-            axios.get("/api/getLink", {
+            axios.get("/api/pathway/link", {
                 params: {
                     _id: id
                 }
@@ -32,7 +32,7 @@ class PathwayContentLink extends Component {
         if (this.props.step !== this.state.currStep) {
             const id = this.props.step.contentID;
 
-            axios.get("/api/getLink", {
+            axios.get("/api/pathway/link", {
                 params: {
                     _id: id
                 }
