@@ -22,7 +22,8 @@ const helperFunctions = {
     sendEmail,
     safeUser,
     userForAdmin,
-    getFirstName
+    getFirstName,
+    sendBizUpdateCandidateErrorEmail
 }
 
 
@@ -440,5 +441,30 @@ function objectIsEmpty(obj) {
 function verifyUser(user, verificationToken) {
     return user.verificationToken && user.verificationToken == verificationToken;
 }
+
+
+// function to send an email to us if the associated businesses were not updated
+function sendBizUpdateCandidateErrorEmail(email, pathwayId, pathwayStatus) {
+    try {
+        console.log("ERROR " + pathwayStatus + " STUDENT AS A BUSINESS' CANDIDATE");
+        // const errorEmailRecipients = ["ameyer24@wisc.edu", "stevedorn9@gmail.com"];
+        const errorEmailRecipients = ["ameyer24@wisc.edu"];
+        const errorEmailSubject = "Error " + pathwayStatus + " User Into Business Candidates Array";
+        const errorEmailContent =
+            "<p>User email: " + email + "</p>"
+            + "<p>PathwayId: " + pathwayId + "</p>";
+        const sendFrom = "Moonshot";
+        // send an email to us saying that the user wasn't added to the business' candidates list
+        sendEmail(errorEmailRecipients, errorEmailSubject, errorEmailContent, sendFrom, undefined, function(errorEmailSucces, errorEmailMsg) {
+            if (errorEmailMsg) {
+                throw "error";
+            }
+        })
+    } catch (e) {
+        console.log("ERROR SENDING EMAIL ALERTING US THAT A STUDENT WAS NOT ADDED AS A BUSINESS CANDIDATE AFTER PATHWAY " + pathwayStatus + ". STUDENT EMAIL: ", email, ". PATHWAY: ", pathwayId);
+    }
+}
+
+
 
 module.exports = helperFunctions;

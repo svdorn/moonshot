@@ -59,7 +59,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 if (shouldAddPathwayToUser) {
                     // if the user doesn't already have this pathway, give it
                     // to them, then redirect to the pathway content page
-                    axios.post("/api/user/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayName})
+                    axios.post("/api/candidate/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayName})
                     .then(function(response) {
                         dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                         // navigateBackUrl should be equal to the url for the pathway
@@ -332,7 +332,7 @@ export function forBusiness(user){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
-        axios.post("api/user/forBusinessEmail", user)
+        axios.post("api/business/forBusinessEmail", user)
             .then(function(response) {
                 dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/');
@@ -344,12 +344,13 @@ export function forBusiness(user){
     }
 }
 
+
 // Send an email when somebody completes a pathway
 export function completePathway(user){
     return function(dispatch) {
         dispatch({type: "COMPLETE_PATHWAY_REQUESTED"});
 
-        axios.post("api/user/completePathway", user)
+        axios.post("api/candidate/completePathway", user)
             .then(function(response) {
                 dispatch({type:"COMPLETE_PATHWAY", user: response.data.user, notification: {message:response.data.message, type:"infoHeader"}});
                 browserHistory.push('/discover');
@@ -437,7 +438,7 @@ export function comingSoon(user, signedIn){
 // ADD a pathway to a user
 export function addPathway(user) {
     return function(dispatch) {
-        axios.post("/api/user/addPathway", user)
+        axios.post("/api/candidate/addPathway", user)
             .then(function(response) {
                 dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                 window.scrollTo(0, 0);

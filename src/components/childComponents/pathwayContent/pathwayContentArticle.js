@@ -50,7 +50,7 @@ class PathwayContentArticle extends Component {
         const linkFunction = this.state.content.linkFunction;
         if (linkFunction) {
             if (linkFunction === "clickedAlert") {
-                axios.post("/api/alertLinkClicked", {
+                axios.post("/api/admin/alertLinkClicked", {
                     params: {
                         name: this.props.currentUser.name,
                         userId: this.props.currentUser._id,
