@@ -21,7 +21,7 @@ class UserResponses extends Component {
 
         let self = this;
 
-        axios.get("/api/infoForAdmin", {params: {
+        axios.get("/api/admin/info", {params: {
             userId: user._id,
             verificationToken: user.verificationToken
         }})

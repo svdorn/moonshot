@@ -23,7 +23,8 @@ const helperFunctions = {
     safeUser,
     userForAdmin,
     getFirstName,
-    sendBizUpdateCandidateErrorEmail
+    sendBizUpdateCandidateErrorEmail,
+    removeDuplicates
 }
 
 
@@ -463,6 +464,33 @@ function sendBizUpdateCandidateErrorEmail(email, pathwayId, pathwayStatus) {
     } catch (e) {
         console.log("ERROR SENDING EMAIL ALERTING US THAT A STUDENT WAS NOT ADDED AS A BUSINESS CANDIDATE AFTER PATHWAY " + pathwayStatus + ". STUDENT EMAIL: ", email, ". PATHWAY: ", pathwayId);
     }
+}
+
+
+// DOES NOT WORK FOR REMOVING DUPLICATE OBJECTS, ONLY STRINGS/INTS
+function removeDuplicates(a) {
+    // the hash object
+    let seen = {};
+    // array to be returned
+    let out = [];
+    // length of array to be checked
+    const len = a.length;
+    // position in array to be returned
+    let j = 0;
+    // go through each element in the given array
+    for(let i = 0; i < len; i++) {
+        // the item in the given array
+        const item = a[i];
+        // if seen[item] === 1, we have seen it before
+        if(seen[item] !== 1) {
+            // we haven't seen the item before, so mark it seen...
+            seen[item] = 1;
+            // ...and add it to the list to be returned
+            out[j++] = item;
+        }
+    }
+    // return the new duplicate-free array
+    return out;
 }
 
 

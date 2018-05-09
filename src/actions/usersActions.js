@@ -549,7 +549,7 @@ export function postBusiness(business) {
         // show loading bar
         dispatch({type:"START_LOADING"});
 
-        axios.post("/api/business", business)
+        axios.post("/api/admin/business", business)
         .then(function(response) {
             dispatch({type: "SUCCESS_FINISHED_LOADING", notification: {message: response.data, type: "infoHeader"}});
             // redirect to edit business page

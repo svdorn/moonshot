@@ -64,7 +64,7 @@ class Discover extends Component {
         // populate explorePathways with initial pathways
         self.search();
 
-        axios.get("/api/pathways/getAllCompaniesAndCategories")
+        axios.get("/api/pathway/allCompaniesAndCategories")
         .then(function(res) {
             // make sure component is mounted before changing state
             if (self.refs.discover) {

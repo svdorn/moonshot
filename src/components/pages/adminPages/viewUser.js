@@ -36,7 +36,7 @@ class ViewUser extends Component {
 
         let self = this;
 
-        axios.get("/api/userForAdmin", {
+        axios.get("/api/admin/candidateResponses", {
             params: {
                 adminUserId: user._id,
                 verificationToken: user.verificationToken,

@@ -14,7 +14,8 @@ const { sanitize,
         sendEmail,
         safeUser,
         userForAdmin,
-        getFirstName
+        getFirstName,
+        removeDuplicates
 } = require('./helperFunctions.js');
 
 
@@ -28,7 +29,8 @@ const pathwayApis = {
     GET_pathwayByIdNoContent,
     GET_pathwayByPathwayUrl,
     GET_pathwayByPathwayUrlNoContent,
-    GET_search
+    GET_search,
+    GET_allCompaniesAndCategories
 }
 
 
@@ -258,6 +260,38 @@ function GET_search(req, res) {
                 res.json(pathways);
             }
         });
+}
+
+
+function GET_allCompaniesAndCategories(req, res) {
+    Pathways.find()
+    .select("sponsor.name tags")
+    .exec(function(err, pathways) {
+        if (err) {
+            console.log("Error finding pathways when getting all companies and categories.");
+            return res.json({companies: [], categories: []});
+        } else if (!pathways) {
+            return res.json({companies: [], categories: []});
+        }
+
+        let companies = [];
+        let categories = [];
+
+        // go through each pathway, add the sponsor name and tags to the lists
+        pathways.forEach(function(pathway) {
+            // only add tags and company names if they exist
+            if (pathway && pathway.sponsor && pathway.sponsor.name) {
+                companies.push(pathway.sponsor.name);
+            }
+            if (pathway && pathway.tags) {
+                categories = categories.concat(pathway.tags);
+            }
+        })
+
+        companies = removeDuplicates(companies);
+        categories = removeDuplicates(categories);
+        res.json({companies, categories})
+    });
 }
 
 

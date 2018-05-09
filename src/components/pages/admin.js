@@ -24,23 +24,6 @@ class Admin extends Component {
             this.goTo("/");
             return;
         }
-
-        // let self = this;
-        //
-        // axios.get("/api/infoForAdmin", {params: {
-        //     userId: user._id,
-        //     verificationToken: user.verificationToken
-        // }})
-        // .then(function(response) {
-        //     const usersArray = response.data;
-        //     self.setState({
-        //         ...self.state,
-        //         users: usersArray
-        //     })
-        // })
-        // .catch(function(err) {
-        //     console.log("error with getting info for admin");
-        // })
     }
 
 
