@@ -24,62 +24,37 @@ const styles = {
 class Menu extends Component {
     constructor(props) {
         super(props);
-        let value = 1;
         let dropDownSelected = "Profile";
         if (this.props.location.pathname === '/settings') {
-            value = 2;
             dropDownSelected = "Settings";
+        } else if (this.props.location.pathname.toLowerCase() === '/adduser') {
+            dropDownSelected = "Add User";
         } else if (this.props.location.pathname === '/onboarding') {
-            value = 4;
             dropDownSelected = "Name";
         }
-        this.state = {value, dropDownSelected};
+        this.state = {dropDownSelected};
     }
 
     componentDidUpdate() {
         if (this.props.location.pathname === '/settings') {
-            if (this.state.value !== 2) {
-                this.setState({value: 2, dropDownSelected: "Settings"});
+            if (this.state.dropDownSelected !== "Settings") {
+                this.setState({dropDownSelected: "Settings"});
+            }
+        } else if (this.props.location.pathname.toLowerCase() === '/adduser') {
+            if (this.state.dropDownSelected !== "Add User") {
+                this.setState({dropDownSelected: "Add User"});
             }
         } else if (this.props.location.pathname === '/onboarding') {
-            if (this.state.value !== 4) {
-                this.setState({value: 4});
-            }
             if (this.state.dropDownSelected !== "Name") {
                 this.setState({dropDownSelected: "Name"})
             }
         } else {
             // set dropdown to be on Profile if not on settings or onboarding pages
-            if (this.state.value !== 1) {
-                this.setState({value: 1, dropDownSelected: "Profile"});
+            if (this.state.dropDownSelected !== "Profile") {
+                this.setState({dropDownSelected: "Profile"});
             }
         }
     }
-
-    handleChange = (event, index, value) => {
-        if (value === 1) {
-            if (this.props.currentUser.userType === "employer") {
-                this.goTo('/businessProfile');
-            } else {
-                this.goTo('/profile');
-            }
-        } else if (value === 2) {
-            this.goTo('/settings');
-        } else if (value === 4) {
-            // do nothing
-        } else {
-            if (this.props.location.pathname === '/onboarding') {
-                // user is signing out while on onboarding, don't mark onboarding complete yet
-                const markOnboardingComplete = false;
-                this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
-            }
-
-            value = 1;
-            this.props.signout();
-            this.goTo('/');
-        }
-        this.setState({value});
-    };
 
 
     // fires when a dropDown menu item is clicked
@@ -113,6 +88,9 @@ class Menu extends Component {
             case "Settings":
                 this.goTo("/settings");
                 break;
+            case "Add User":
+                this.goTo("/addUser");
+                break;
             default:
                 break;
         }
@@ -123,11 +101,6 @@ class Menu extends Component {
         }
     };
 
-
-    selectItem(route, value) {
-        this.goTo(route);
-        this.setState({value});
-    }
 
     selectAndGoTo(route, value) {
         this.setState({dropDownSelected: value});
@@ -141,7 +114,6 @@ class Menu extends Component {
         }
         this.props.signout();
         this.goTo('/');
-        this.setState({value: 1});
     }
 
     goTo(route) {
@@ -177,7 +149,7 @@ class Menu extends Component {
         // the url to be directed to by default
         let homeUrl = "/";
         if (isEmployer) {
-            homeUrl = "/businessHome";
+            homeUrl = "/myCandidates";
         }
 
         let isOnboarding = false;
@@ -198,7 +170,7 @@ class Menu extends Component {
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
         let hoverWidth = "52px";
-        if (pathname === '/profile') {
+        if (pathname === '/profile' || pathname === '/businessprofile') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
         }
         if (pathname === '/settings') {
@@ -206,6 +178,12 @@ class Menu extends Component {
             // if settings is selected, the underline bar must be bigger
             // because "settings" is a bigger word
             hoverWidth = "67px";
+        }
+        if (pathname === '/adduser') {
+            dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+            // if settings is selected, the underline bar must be bigger
+            // because "settings" is a bigger word
+            hoverWidth = "77px";
         }
 
 
@@ -266,13 +244,13 @@ class Menu extends Component {
         // if the current user is an employer
         else if (isEmployer) {
             menuOptions = [
-                {optionType: "url", title: "Home", url: "/businessHome"},
                 {optionType: "url", title: "My Candidates", url: "/myCandidates"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     {optionType: "url", title: "Profile", url: "/businessProfile"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
+                    {optionType: "url", title: "Add User", url: "/addUser"},
                     {optionType: "signOut"}
                 ]}
             ];

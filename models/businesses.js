@@ -10,13 +10,22 @@ var businessesSchema = mongoose.Schema({
         userId: mongoose.Schema.Types.ObjectId,
         name: String,
         email: String,
+        location: String,
+        // the psychometric personality type
+        archetype: String,
         pathways: [{
             _id: mongoose.Schema.Types.ObjectId,
             name: String,
             hiringStage: String,
             isDismissed: Boolean,
             completionStatus: String,
-            hiringStageEdited: Date
+            hiringStageEdited: Date,
+            // overall recommendation for hire
+            overallScore: Number,
+            // how well the candidate will probably do in the position
+            predicted: Number,
+            // how good the candidate is at the skills required for the position
+            skill: Number
         }]
     }]
 });

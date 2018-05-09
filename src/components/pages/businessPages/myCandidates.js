@@ -16,9 +16,9 @@ import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
+import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import CandidatePreview from '../../childComponents/candidatePreview';
-import styles from '../../../../public/styles';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -59,19 +59,27 @@ class MyCandidates extends Component {
                 verificationToken: this.props.currentUser.verificationToken
             }
         })
-        .then(function(res) {
+        .then(function (res) {
             let pathways = res.data;
             if (Array.isArray(pathways) && pathways.length > 0) {
+                const firstPathwayName = pathways[0].name;
+                if (firstPathwayName) {
+                    let selectedPathway = firstPathwayName;
+                }
                 self.setState({
-                    pathways: pathways
-                });
+                    pathways: pathways,
+                    pathway: firstPathwayName
+                },
+                    // search for candidates of first pathway
+                    self.search()
+                );
             } else {
                 self.setState({
                     noPathways: true
                 })
             }
         })
-        .catch(function(err) {
+        .catch(function (err) {
             console.log("error getting pathways: ", err);
         });
     }
@@ -129,37 +137,6 @@ class MyCandidates extends Component {
 
     render() {
         const style = {
-            separator1: {
-                width: "70%",
-                margin: "12px auto 0px",
-                position: "relative",
-                height: "40px",
-                textAlign: "center"
-            },
-            separatorLineLeft: {
-                left: 0,
-                width: "calc(50% - 85px);",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
-            },
-            separatorLineRight: {
-                right: 0,
-                width: "calc(50% - 85px);",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
-            },
-            separatorText1: {
-                padding: "0px 40px",
-                backgroundColor: "transparent",
-                display: "inline-block",
-                position: "relative",
-                fontSize: "23px",
-                color: "white"
-            },
             separator: {
                 width: "70%",
                 margin: "25px auto 0px",
@@ -169,16 +146,16 @@ class MyCandidates extends Component {
             },
             separatorText: {
                 padding: "0px 40px",
-                backgroundColor: "white",
+                backgroundColor: "#2e2e2e",
                 display: "inline-block",
                 position: "relative",
                 fontSize: "23px",
-                color: "#b37bfe"
+                color: "white"
             },
             separatorLine: {
                 width: "100%",
                 height: "3px",
-                backgroundColor: "#b37bfe",
+                backgroundColor: "white",
                 position: "absolute",
                 top: "12px"
             },
@@ -187,6 +164,13 @@ class MyCandidates extends Component {
                 margin: "auto",
                 marginTop: "0px",
                 marginBottom: "30px"
+            },
+            anchorOrigin: {
+                vertical: "top",
+                horizontal: "left"
+            },
+            menuLabelStyle: {
+                color: "rgba(255,255,255,.8)"
             }
         }
 
@@ -205,8 +189,8 @@ class MyCandidates extends Component {
         let self = this;
 
         let candidatePreviews = (
-            <div className="center">
-                Select a pathway to see your candidates.
+            <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                {this.state.pathways.length === 0 ? "Loading pathways..." : "Select a pathway to see your candidates."}
             </div>
         )
 
@@ -214,12 +198,6 @@ class MyCandidates extends Component {
             candidatePreviews = this.state.candidates.map(candidate => {
                 key++;
 
-                // candidatePathwayInfo = {
-                //  completionStatus: "Complete",
-                //  hiringStage: "Contacted",
-                //  isDismissed: false,
-                //  _id: [the pathway id]
-                // }
                 let candidatePathwayInfo = {
                     hiringStage: "Not Contacted",
                     isDismissed: false
@@ -258,13 +236,21 @@ class MyCandidates extends Component {
                             name={candidate.name}
                             email={candidate.email}
                             disabled={isDisabled}
+                            profileUrl={candidate.profileUrl}
+                            location={candidate.location}
+                            overallScore={candidatePathwayInfo.overallScore}
+                            predicted={candidatePathwayInfo.predicted}
+                            archetype={candidate.archetype}
+                            skill={candidatePathwayInfo.skill}
+                            lastEdited={candidatePathwayInfo.hiringStageEdited}
                         />
                     </li>
                 );
             });
+
         }
 
-        const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired", "Dismissed"];
+        const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
         const hiringStageItems = hiringStages.map(function (hiringStage) {
             return <MenuItem value={hiringStage} primaryText={hiringStage} key={hiringStage}/>
         })
@@ -275,6 +261,16 @@ class MyCandidates extends Component {
             return <MenuItem value={pathway.name} primaryText={pathway.name} key={pathway.name}/>
         })
 
+        // the hint that shows up when search bar is in focus
+        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
+        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" }
+
+        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" }
+        const searchFloatingLabelStyle = searchHintStyle;
+        const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
+
+        //TODO to change the menu style, use menuStyle prop
+
         const searchBar = (
             <div>
                 <Toolbar style={style.searchBar} id="discoverSearchBarWideScreen">
@@ -282,6 +278,11 @@ class MyCandidates extends Component {
                         <Field
                             name="search"
                             component={renderTextField}
+                            inputStyle={searchInputStyle}
+                            hintStyle={searchHintStyle}
+                            floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
+                            floatingLabelStyle={searchFloatingLabelStyle}
+                            underlineFocusStyle = {searchUnderlineFocusStyle}
                             label="Search"
                             onChange={event => this.onSearchChange(event.target.value)}
                             value={this.state.searchTerm}
@@ -291,8 +292,8 @@ class MyCandidates extends Component {
                     <ToolbarGroup>
                         <DropDownMenu value={this.state.hiringStage}
                                       onChange={this.handleHiringStageChange}
-                                      underlineStyle={styles.underlineStyle}
-                                      anchorOrigin={styles.anchorOrigin}
+                                      labelStyle={style.menuLabelStyle}
+                                      anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px"}}
                         >
                             <MenuItem value={""} primaryText="Hiring Stage"/>
@@ -301,8 +302,8 @@ class MyCandidates extends Component {
                         </DropDownMenu>
                         <DropDownMenu value={this.state.pathway}
                                       onChange={this.handlePathwayChange}
-                                      underlineStyle={styles.underlineStyle}
-                                      anchorOrigin={styles.anchorOrigin}
+                                      labelStyle={style.menuLabelStyle}
+                                      anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px"}}
                         >
                             <MenuItem value={""} primaryText="Pathway"/>
@@ -316,6 +317,11 @@ class MyCandidates extends Component {
                 <div id="discoverSearchBarMedScreen">
                     <Field
                         name="search"
+                        inputStyle={searchInputStyle}
+                        hintStyle={searchHintStyle}
+                        floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
+                        floatingLabelStyle={searchFloatingLabelStyle}
+                        underlineFocusStyle = {searchUnderlineFocusStyle}
                         component={renderTextField}
                         label="Search"
                         onChange={event => this.onSearchChange(event.target.value)}
@@ -326,8 +332,8 @@ class MyCandidates extends Component {
 
                     <DropDownMenu value={this.state.hiringStage}
                                   onChange={this.handleHiringStageChange}
-                                  underlineStyle={styles.underlineStyle}
-                                  anchorOrigin={styles.anchorOrigin}
+                                  labelStyle={style.menuLabelStyle}
+                                  anchorOrigin={style.anchorOrigin}
                                   style={{fontSize: "20px", marginTop: "11px"}}
                     >
                         <MenuItem value={""} primaryText="Hiring Stage"/>
@@ -337,8 +343,8 @@ class MyCandidates extends Component {
                     <div><br/></div>
                     <DropDownMenu value={this.state.pathway}
                                   onChange={this.handlePathwayChange}
-                                  underlineStyle={styles.underlineStyle}
-                                  anchorOrigin={styles.anchorOrigin}
+                                  labelStyle={style.menuLabelStyle}
+                                  anchorOrigin={style.anchorOrigin}
                                   style={{fontSize: "20px", marginTop: "11px"}}
                     >
                         <MenuItem value={""} primaryText="Pathway"/>
@@ -351,8 +357,12 @@ class MyCandidates extends Component {
 
 
         return (
-            <div className={"jsxWrapper"} ref='myCandidates'>
-                <div className="headerDiv purpleGradient"/>
+            <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
+                <MetaTags>
+                    <title>My Candidates | Moonshot</title>
+                    <meta name="description" content="View analytical breakdowns and manage your candidates."/>
+                </MetaTags>
+                <div className="employerHeader"/>
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>
@@ -363,8 +373,8 @@ class MyCandidates extends Component {
                 {searchBar}
 
                 <div>
-                    <ul className="center" id="aboutMeAreas">
-                    {candidatePreviews}
+                    <ul className="horizCenteredList">
+                        {candidatePreviews}
                     </ul>
                 </div>
             </div>

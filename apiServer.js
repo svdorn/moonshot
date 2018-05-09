@@ -745,10 +745,15 @@ app.post('/user/completePathway', async function(req, res) {
                         return candidate.userId.toString() == userIdString;
                     });
 
+                    // the candidate's current location
+                    const location = user.info && user.info.location ? user.info.location : "";
+
                     // if candidate doesn't exist, add them along with the pathway
                     if (userIndex == -1) {
                         let candidateToAdd = {
                             userId: user._id,
+                            location: location,
+                            profileUrl: user.profileUrl,
                             name: user.name,
                             // give the business the email that the candidate wants to be contacted at, not their login email
                             email: userToReturn.emailToContact ? userToReturn.emailToContact : userToReturn.email,
@@ -1452,11 +1457,16 @@ app.post("/user/addPathway", function (req, res) {
                                     return candidate.userId.toString() == userIdString;
                                 });
 
+                                // the candidate's current location
+                                const location = user.info && user.info.location ? user.info.location : "";
+
                                 // if candidate doesn't exist, add them along with the pathway
                                 if (userIndex == -1) {
                                     let candidateToAdd = {
                                         userId: user._id,
                                         name: user.name,
+                                        profileUrl: user.profileUrl,
+                                        location: location,
                                         // give the business the email that the candidate wants to be contacted at, not their login email
                                         email: user.emailToContact ? user.emailToContact : user.email,
                                         // will only have this pathway if the candidate didn't exist before
@@ -2960,7 +2970,7 @@ app.post("/business", async function(req, res) {
     }
 });
 
-// UPDATE HIRING STAGE OF A CANDIDATE (NOT CONTACTED, CONTACTED)
+// UPDATE HIRING STAGE OF A CANDIDATE (NOT CONTACTED, CONTACTED, INTERVIEWING, HIRED)
 app.post("/business/updateHiringStage", async function(req, res) {
     const body = req.body;
     const userId = sanitize(body.userId);
@@ -2970,8 +2980,6 @@ app.post("/business/updateHiringStage", async function(req, res) {
     const hiringStage = sanitize(body.hiringStage);
     const isDismissed = sanitize(body.isDismissed);
     const pathwayId = sanitize(body.pathwayId);
-
-    console.log("updating hiring stage");
 
     // if one of the arguments doesn't exist, return with error code
     if (!userId || !verificationToken || !companyId || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !pathwayId) {
@@ -3006,7 +3014,7 @@ app.post("/business/updateHiringStage", async function(req, res) {
 
         // the index of the candidate in the business' candidate array
         const candidateIndex = business.candidates.findIndex(currCandidate => {
-            return currCandidate.userId.toString() === candidateId;
+            return currCandidate.userId.toString() === candidateId.toString();
         });
 
         let candidate = business.candidates[candidateIndex];
@@ -3019,6 +3027,7 @@ app.post("/business/updateHiringStage", async function(req, res) {
         // the arguments that were passed in
         candidate.pathways[pathwayIndex].isDismissed = isDismissed;
         candidate.pathways[pathwayIndex].hiringStage = hiringStage;
+        candidate.pathways[pathwayIndex].hiringStageEdited = new Date();
 
         // update the candidate in the business object
         business.candidates[candidateIndex] = candidate;

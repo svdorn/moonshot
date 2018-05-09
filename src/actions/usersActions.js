@@ -41,7 +41,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 let nextUrl = '/discover';
                 console.log(returnedUser.userType);
                 if (returnedUser.userType === "employer") {
-                    nextUrl = 'businessHome';
+                    nextUrl = '/myCandidates';
                 }
                 if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";
@@ -311,7 +311,7 @@ export function changeTempPassword(user) {
             const returnedUser = response.data;
 
             dispatch({type: "LOGIN", payload: returnedUser, notification: {message: "Your password was changed, you are now logged in!", type: "infoHeader"}});
-            browserHistory.push('/businessHome');
+            browserHistory.push('/myCandidates');
 
             axios.post("/api/user/session", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
             .catch(function(err) {
