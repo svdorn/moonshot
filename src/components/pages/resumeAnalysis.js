@@ -265,8 +265,7 @@ class ResumeScorer extends Component {
         resumeData.append("resumeFile", resumeFile);
 
         this.setState({uploadingResume: true});
-        //axios.post("/api/resumeScorer/uploadResume", {name, skills, desiredCareers, email, resumeFile})
-        axios.post("/api/resumeScorer/uploadResume", resumeData)
+        axios.post("/api/misc/resumeScorer/uploadResume", resumeData)
         .then(result => {
             // go to screen saying upload was successful
             this.setState({uploadingResume: false, doneUploading: true});

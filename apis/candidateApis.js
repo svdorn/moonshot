@@ -3,7 +3,7 @@ var Referrals = require('../models/referrals.js');
 var Pathways = require('../models/pathways.js');
 var Businesses = require('../models/pathways.js');
 
-var bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 
 // get helper functions
@@ -16,7 +16,7 @@ const { sanitize,
         safeUser,
         userForAdmin,
         getFirstName,
-        sendBizUpdateCandidateErrorEmail
+        sendBizUpdateCandidateErrorEmail,
 } = require('./helperFunctions.js');
 
 
@@ -27,7 +27,8 @@ const candidateApis = {
     POST_sendVerificationEmail,
     POST_completePathway,
     POST_addPathway,
-    POST_comingSoonEmail
+    POST_comingSoonEmail,
+    POST_updateAnswer
 }
 
 
@@ -891,6 +892,52 @@ function POST_comingSoonEmail(req, res) {
         } else {
             res.status(500).send(msg);
         }
+    })
+}
+
+
+function POST_updateAnswer(req, res) {
+    let params, userId, verificationToken, quizId, answer;
+    try {
+        // get all the parameters
+        params = sanitize(req.body.params);
+        userId = params.userId;
+        verificationToken = params.verificationToken;
+        quizId = params.quizId;
+        answer = params.answer;
+    } catch (e) {
+        console.log("Error updating answer: ", e);
+        return res.status(400).send("Wrong request format.");
+    }
+
+    Users.findById(userId, function (findErr, user) {
+        if (findErr) {
+            console.log("Error finding user by id when trying to update answer: ", findErr);
+            return res.status(404).send("Current user not found.");
+        }
+
+        if (!verifyUser(user, verificationToken)) {
+            console.log("can't verify user");
+            return res.status(401).send("User does not have valid credentials to update answers.");
+        }
+
+        // create answers object for user if it doesn't exist or is the wrong format
+        if (!user.answers || typeof user.answers !== "object" || Array.isArray(user.answers)) {
+            user.answers = {};
+        }
+
+        // update the user's answer to the given question
+        user.answers[quizId.toString()] = answer;
+        // so that Mongoose knows to update the answers object in the db
+        user.markModified('answers');
+
+        user.save(function (saveErr, updatedUser) {
+            if (saveErr) {
+                console.log("Error updating answer to a question: ", saveErr)
+                return res.status(500).send("Server error, try again later.");
+            }
+            return res.send(removePassword(updatedUser));
+        });
     })
 }
 

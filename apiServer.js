@@ -1,66 +1,34 @@
-var express = require('express');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
-var logger = require('morgan');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const logger = require('morgan');
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 const credentials = require('./credentials');
-var bcrypt = require('bcryptjs');
+const bcrypt = require('bcryptjs');
 const nodemailer = require('nodemailer');
 const crypto = require('crypto');
 const sanitizeHtml = require('sanitize-html');
 const fileUpload = require('express-fileupload');
-
+const mongoose = require('mongoose');
 
 var app = express();
-
-// view engine setup
-//app.set('views', path.join(__dirname, 'views'));
-//app.set('view engine', 'jade');
 
 app.use(logger('dev'));
 app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
+
 // trust the first proxy encountered because we run through a proxy
 app.set('trust proxy', 1);
 
-// APIs
-var mongoose = require('mongoose');
-// MONGO LAB
+// connect to mLab
 const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
 mongoose.connect(dbConnectLink);
 
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
-
-
-var Users = require('./models/users.js');
-var Employers = require('./models/employers.js');
-var Businesses = require('./models/businesses.js');
-var Pathways = require('./models/pathways.js');
-var Articles = require('./models/articles.js');
-var Videos = require('./models/videos.js');
-var Quizzes = require('./models/quizzes.js');
-var Links = require('./models/links.js');
-var Info = require('./models/info.js');
-var Emailaddresses = require('./models/emailaddresses.js');
-var Referrals = require('./models/referrals.js');
-
-
-// get helper functions
-const { sanitize,
-        removeEmptyFields,
-        verifyUser,
-        removePassword,
-        getUserByQuery,
-        sendEmail,
-        safeUser,
-        userForAdmin,
-        getFirstName,
-        printUsersFromPathway
-} = require('./apis/helperFunctions.js');
 
 
 // import all the api functions
@@ -90,6 +58,8 @@ app.use(session({
 }));
 
 
+// ----->> START APIS <<----- //
+
 app.post('/user/signOut', userApis.POST_signOut);
 
 app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
@@ -113,10 +83,15 @@ app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerification
 app.post('/candidate/completePathway', candidateApis.POST_completePathway);
 app.post("/candidate/addPathway", candidateApis.POST_addPathway);
 app.post('/candidate/comingSoonEmail', candidateApis.POST_comingSoonEmail);
+app.post("/candidate/currentPathwayStep", userApis.POST_currentPathwayStep);
+app.post("/candidate/updateAnswer", candidateApis.POST_updateAnswer);
+app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 
 app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
+app.get("/business/pathways", businessApis.GET_pathways);
+app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 
 app.post("/admin/alertLinkClicked", adminApis.POST_alertLinkClicked);
 app.post("/admin/business", adminApis.POST_business);
@@ -127,10 +102,7 @@ app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
 app.post('/user/changePassword', userApis.POST_changePassword);
 app.post('/user/forgotPassword', userApis.POST_forgotPassword);
 app.post('/user/changeSettings', userApis.POST_changeSettings);
-
-app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
-
 
 app.get('/pathway/link', pathwayApis.GET_link);
 app.get('/pathway/article', pathwayApis.GET_article);
@@ -143,597 +115,15 @@ app.get('/pathway/pathwayByPathwayUrl', pathwayApis.GET_pathwayByPathwayUrl);
 app.get('/pathway/search', pathwayApis.GET_search);
 app.get("/pathway/allCompaniesAndCategories", pathwayApis.GET_allCompaniesAndCategories);
 
+app.post('/employer/newEmployer', employerApis.POST_newEmployer);
+app.post('/employer/sendVerificationEmail', employerApis.POST_sendVerificationEmail);
+app.post('/employer/changeTempPassword', employerApis.POST_changeTempPassword);
 
+app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
+app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
 
 
-app.post("/userCurrentStep", function (req, res) {
-    const userId = sanitize(req.body.params.userId);
-    const pathwayId = sanitize(req.body.params.pathwayId);
-    const stepNumber = sanitize(req.body.params.stepNumber);
-    const subStepNumber = sanitize(req.body.params.subStepNumber);
-    const verificationToken = sanitize(req.body.params.verificationToken);
-
-    Users.findById(userId, function (err, user) {
-        if (!verifyUser(user, verificationToken)) {
-            res.status(401).send("User does not have valid credentials to save step.");
-            return;
-        }
-
-        let pathwayIndex = user.pathways.findIndex(function (path) {
-            return path.pathwayId == pathwayId;
-        });
-        user.pathways[pathwayIndex].currentStep = {
-            subStep: subStepNumber,
-            step: stepNumber
-        }
-        user.save(function () {
-            res.json(true);
-        });
-    })
-        .catch(function (err) {
-            console.log("error saving the current step, ", err);
-        })
-});
-
-app.get("/infoByUserId", function (req, res) {
-    infoType = sanitize(req.query.infoType);
-    const userId = sanitize(req.query.userId);
-
-    if (userId && infoType) {
-        Users.findById(userId, function (err, user) {
-            if (err) {
-                res.status(500).send("Could not get user");
-            } else {
-                // if the user doesn't have info saved in db, return empty array
-                if (!user.info) {
-                    res.json([]);
-                }
-                res.json(user.info[infoType]);
-            }
-        });
-    } else {
-        res.send(undefined);
-    }
-});
-
-
-app.post("/updateAnswer", function (req, res) {
-    let params, userId, verificationToken, quizId, answer;
-    try {
-        // get all the parameters
-        params = sanitize(req.body.params);
-        userId = params.userId;
-        verificationToken = params.verificationToken;
-        quizId = params.quizId;
-        answer = params.answer;
-    } catch (e) {
-        res.status(400).send("Wrong request format.");
-        return;
-    }
-
-    Users.findById(userId, function (findErr, user) {
-        if (findErr) {
-            console.log("Error finding user by id when trying to update answer: ", findErr);
-            res.status(404).send("Current user not found.");
-            return;
-        }
-
-        if (!verifyUser(user, verificationToken)) {
-            console.log("can't verify user");
-            res.status(401).send("User does not have valid credentials to update answers.");
-            return;
-        }
-
-        // create answers object for user if it doesn't exist or is the wrong format
-        if (!user.answers || typeof user.answers !== "object" || Array.isArray(user.answers)) {
-            user.answers = {};
-        }
-
-        // update the user's answer to the given question
-        user.answers[quizId.toString()] = answer;
-        // so that Mongoose knows to update the answers object in the db
-        user.markModified('answers');
-
-        user.save(function (saveErr, updatedUser) {
-            if (saveErr) {
-                console.log("Error updating answer to a question: ", saveErr)
-                res.status(500).send("Server error, try again later.");
-                return;
-            }
-            res.send(removePassword(updatedUser));
-        });
-    })
-});
-
-
-app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
-
-
-// --->> BUSINESS APIS <<--- //
-
-//----->> POST EMPLOYER <<------
-// creates a new user at the same company the current user works for
-app.post('/employer', function (req, res) {
-    let newUser = sanitize(req.body.newUser);
-    let currentUser = sanitize(req.body.currentUser);
-
-    // if no user given
-    if (!newUser) {
-        res.status(400).send("No user to create was sent.");
-        return;
-    }
-
-    // if no current user
-    if (!currentUser) {
-        res.status(403).send("Must be logged in to create a business user.");
-        return;
-    }
-
-    let query = {_id: currentUser._id};
-    Employers.findOne(query, function (err, currentUserFromDB) {
-        if (err) {
-            console.log("error getting current user on business user creation: ", err);
-            res.status(500).send("Error, try again later.");
-            return;
-        }
-
-        // current user not found in db
-        if (!currentUserFromDB || currentUserFromDB == null) {
-            res.status(500).send("Your account was not found.");
-            return;
-        }
-
-        // if current user does not have the right verification token
-        if (!currentUser.verificationToken || currentUser.verificationToken !== currentUserFromDB.verificationToken) {
-            res.status(403).send("Current user has incorrect credentials.");
-            return;
-        }
-
-        // if current user does not have correct permissions
-        if (currentUserFromDB.userType !== "employer") {
-            res.status(403).send("User does not have the correct permissions to create a new business user.");
-            return;
-        }
-
-        if (!currentUserFromDB.company || !currentUserFromDB.company.companyId) {
-            res.status(403).send("User does not have an attached business.");
-        }
-
-        // hash the user's temporary password
-        const saltRounds = 10;
-        bcrypt.genSalt(saltRounds, function (err, salt) {
-            bcrypt.hash(newUser.password, salt, function (err2, hash) {
-                // change the stored password to be the hash
-                newUser.password = hash;
-                newUser.verified = false;
-                newUser.company = currentUserFromDB.company;
-
-                // create user's verification strings
-                newUser.emailVerificationToken = crypto.randomBytes(64).toString('hex');
-                newUser.verificationToken = crypto.randomBytes(64).toString('hex');
-                const query = {email: newUser.email};
-
-                // check if there's already a user with that email
-                getUserByQuery(query, function(error, foundUser) {
-                    if (error && error !== null) {
-                        console.log(error);
-                        res.status(500).send("Error creating new user, try again later or contact support.");
-                        return;
-                    }
-
-                    // if found user is null, that means no user with that email already exists,
-                    // which is what we want
-                    if (foundUser == null || foundUser == undefined) {
-                        // store the user in the db
-                        Employers.create(newUser, function (err4, newUserFromDB) {
-                            if (err4) {
-                                console.log(err4);
-                                res.status(500).send("Error, please try again later.");
-                                return;
-                            }
-
-                            // add the user to the company
-                            const companyQuery = {_id: currentUserFromDB.company.companyId};
-                            Businesses.findOne(companyQuery, function(err5, company) {
-                                if (err5) {
-                                    console.log(err5);
-                                    res.status(500).send("Error adding user to company record.");
-                                    return;
-                                }
-
-                                company.employerIds.push(newUserFromDB._id);
-                                // save the new company info with the new user's id
-                                company.save(function(err6) {
-                                    if (err6) {
-                                        console.log(err56);
-                                        res.status(500).send("Error adding user to company record.");
-                                        return;
-                                    }
-
-                                    // success, send back the name of the company they work for
-                                    res.json(company.name);
-                                });
-                            });
-                        })
-                    } else {
-                        res.status(401).send("An account with that email address already exists.");
-                    }
-                });
-            });
-        });
-    });
-});
-
-
-// SEND BUSINESS USER VERIFICATION EMAIL
-app.post('/sendEmployerVerificationEmail', function (req, res) {
-    let email = sanitize(req.body.email);
-    let companyName = sanitize(req.body.companyName);
-    let query = {email: email};
-
-    Employers.findOne(query, function (err, user) {
-        let recipient = user.email;
-        let subject = 'Verify email';
-        let content =
-             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-            +   '<a href="https://www.moonshotlearning.org/" style="color:#00c3ff"><img style="height:100px;margin-bottom:20px"src="https://image.ibb.co/ndbrrm/Official_Logo_Blue.png"/></a><br/>'
-            +   '<div style="text-align:justify;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">You have been signed up for Moonshot through ' + companyName + '! Please <a href="https://www.moonshotlearning.org/verifyEmail?userType=employer&token=' + user.emailVerificationToken + '">verify your account</a> to start finding your next great hire.</span><br/>'
-            +       '<span style="display:inline-block;">If you have any questions or concerns, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.com</a>.</span><br/>'
-            +   '</div>'
-            +   '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="https://www.moonshotlearning.org/verifyEmail?userType=employer&token='
-            +   user.emailVerificationToken
-            +   '">VERIFY ACCOUNT</a>'
-            +   '<div style="text-align:left;width:80%;margin-left:10%;">'
-            +       '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
-            +   '</div>'
-            +'</div>';
-
-        const sendFrom = "Moonshot";
-        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-            if (success) {
-                res.json(msg);
-            } else {
-                res.status(500).send(msg);
-            }
-        })
-    });
-});
-
-
-// VERIFY CHANGE PASSWORD
-app.post('/changeTempPassword', function (req, res) {
-    const userInfo = sanitize(req.body);
-
-    const email = userInfo.email;
-    const oldPassword = userInfo.oldPassword;
-    const password = userInfo.password;
-
-    var query = {email};
-    Employers.findOne(query, function (err, user) {
-        if (err || user == undefined || user == null) {
-            res.status(404).send("User not found.");
-            return;
-        }
-
-        if (!user.verified) {
-            res.status(403).send("Must verify email before changing password.")
-            return;
-        }
-
-        bcrypt.compare(oldPassword, user.password, function (passwordError, passwordsMatch) {
-            if (!passwordsMatch || passwordError) {
-                console.log("if there was an error, it was: ", passwordError);
-                console.log("passwords match: ", passwordsMatch)
-                res.status(403).send("Old password is incorrect.");
-                return;
-            }
-
-            query = {_id: user._id};
-            const saltRounds = 10;
-            bcrypt.genSalt(saltRounds, function (err2, salt) {
-                bcrypt.hash(password, salt, function (err3, hash) {
-                    if (err2 || err3) {
-                        console.log("errors in hashing: ", err2, err3);
-                        res.status(500).send("Error saving new password.");
-                        return;
-                    }
-
-                    // change the stored password to be the hash
-                    const newPassword = hash;
-                    // if the field doesn't exist, $set will set a new field
-                    var update = {
-                        '$set': {
-                            password: newPassword
-                        },
-                        '$unset': {
-                            passwordToken: "",
-                            time: '',
-                        }
-                    };
-
-                    // When true returns the updated document
-                    var options = {new: true};
-
-                    Employers.findOneAndUpdate(query, update, options, function (err4, newUser) {
-                        if (err4) {
-                            console.log(err4);
-                            res.status(500).send("Error saving new password.");
-                            return;
-                        }
-
-                        res.json(removePassword(newUser));
-                    });
-                });
-            });
-        });
-    });
-});
-
-
-// GET A COMPANY'S PATHWAY NAMES
-app.get("/business/pathways", function(req, res) {
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
-
-    if (!userId || !verificationToken) {
-        res.status(400).send("Bad request.");
-        return;
-    }
-
-    Employers.findById(userId, function(findBUserErr, user) {
-        // error finding user in db
-        if (findBUserErr) {
-            console.log("Error finding business user who was trying to see their pathways: ", findBUserErr);
-            res.status(500).send("Server error, try again later.");
-            return;
-        }
-
-        // couldn't find user in business user db, either they have the wrong
-        // type of account or are trying to pull some dubious shenanigans
-        if (!user) {
-            res.status(403).send("You do not have permission to access pathway info.");
-            return;
-        }
-
-        // user does not have the right verification token, probably trying to
-        // pull a fast one on us
-        if (user.verificationToken !== verificationToken) {
-            res.status(403).send("You do not have permission to access pathway info.");
-            return;
-        }
-
-        const companyId = user.company.companyId;
-        Businesses.findById(companyId, function(findBizErr, company) {
-            if (findBizErr) {
-                console.log("Error finding business when trying to search for pathways: ", findBizErr);
-                res.status(500).send("Server error, try again later.");
-                return;
-            }
-
-            if (!company) {
-                console.log("Business not found when trying to search for pathways.");
-                res.status(500).send("Server error, try again later.");
-                return;
-            }
-
-            // if the business doesn't have an associated user with the given
-            // user id, don't let them see this business' candidates
-            const userIdString = userId.toString();
-            if (!company.employerIds.some(function(bizUserId) {
-                return bizUserId.toString() === userIdString;
-            })) {
-                console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
-                res.status(403).send("You do not have access to this business' pathways.");
-                return;
-            }
-
-            // if we got to this point it means the user is allowed to see pathways
-
-            let pathwayQuery = { '_id': { $in: company.pathwayIds } }
-
-            // find names of all the pathways associated with the business
-            Pathways.find(pathwayQuery)
-                .select("name")
-                .exec(function(findPathwaysErr, pathways) {
-                    if (findPathwaysErr) {
-                        res.status(500).send("Server error, couldn't get pathways to search by.");
-                    } else {
-                        const pathwaysToReturn = pathways.map(function(path) {
-                            return {name: path.name, _id: path._id};
-                        })
-                        res.json(pathwaysToReturn);
-                    }
-                });
-        });
-    })
-});
-
-
-// SEARCH FOR CANDIDATES
-app.get("/business/candidateSearch", function(req, res) {
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
-
-    if (!userId || !verificationToken) {
-        res.status(400).send("Bad request.");
-        return;
-    }
-
-    Employers.findById(userId, function(findBUserErr, user) {
-        // error finding user in db
-        if (findBUserErr) {
-            console.log("Error finding business user who was trying to see their candidates: ", findBUserErr);
-            res.status(500).send("Server error, try again later.");
-            return;
-        }
-
-        // couldn't find user in business user db, either they have the wrong
-        // type of account or are trying to pull some dubious shenanigans
-        if (!user) {
-            res.status(403).send("You do not have permission to access candidate info.");
-            return;
-        }
-
-        // user does not have the right verification token, probably trying to
-        // pull a fast one on us
-        if (user.verificationToken !== verificationToken) {
-            res.status(403).send("You do not have permission to access candidate info.");
-            return;
-        }
-
-        const companyId = user.company.companyId;
-        Businesses.findById(companyId, function(findBizErr, company) {
-            if (findBizErr) {
-                console.log("Error finding business when trying to search for candidates: ", findBizErr);
-                res.status(500).send("Server error, try again later.");
-                return;
-            }
-
-            if (!company) {
-                console.log("Business not found when trying to search for candidates.");
-                res.status(500).send("Server error, try again later.");
-                return;
-            }
-
-            // if the business doesn't have an associated user with the given
-            // user id, don't let them see this business' candidates
-            const userIdString = userId.toString();
-            if (!company.employerIds.some(function(bizUserId) {
-                return bizUserId.toString() === userIdString;
-            })) {
-                console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
-                res.status(403).send("You do not have access to this business' candidates.");
-                return;
-            }
-
-            // if we got to this point it means the user is allowed to see candidates
-
-            // all of a company's candidates
-            const allCandidates = company.candidates;
-
-            const searchTerm = sanitize(req.query.searchTerm);
-            const hiringStage = sanitize(req.query.hiringStage);
-            const pathway = sanitize(req.query.pathway);
-
-            let candidatesToReturn = [];
-
-            // go through each candidate, only add them if they match all
-            // the search factors
-            allCandidates.forEach(function(candidate) {
-                if (searchTerm) {
-                    // case insensitive search term regex
-                    const termRegex = new RegExp(searchTerm, "i");
-                    // if neither name nor email match search term, don't add
-                    if (!(termRegex.test(candidate.email) || termRegex.test(candidate.name))) {
-                        return;
-                    }
-                }
-                if (hiringStage || pathway) {
-                    // go through each of the candidates pathways, if they aren't
-                    // at this hiring stage for any, return
-                    const hasStageAndPathway = candidate.pathways.some(function(path) {
-                        // if only looking for a certain pathway, just look for matching pathway
-                        if (!hiringStage) {
-                            return path.name == pathway;
-                        }
-                        // if only looking for certain hiring stage, just look for matching hiring stage
-                        else if (!pathway) {
-                            return path.hiringStage == hiringStage;
-                        }
-                        // otherwise look for a matching pathway name AND hiring stage on the same pathway
-                        else {
-                            return path.hiringStage == hiringStage && path.name == pathway;
-                        }
-                    });
-                    if (!hasStageAndPathway) {
-                        return;
-                    }
-                }
-
-                // if the candidate made it past all the search terms, add them
-                candidatesToReturn.push(candidate);
-            });
-
-            res.json(candidatesToReturn);
-        });
-    })
-});
-
-
-app.post("/resumeScorer/uploadResume", function(req, res) {
-    try {
-        const email = sanitize(req.body.email);
-        const name = sanitize(req.body.name);
-        const desiredCareers = sanitize(req.body.desiredCareers);
-        const skills = sanitize(req.body.skills);
-        const resumeFile = req.files.resumeFile;
-        const resumeFileName = resumeFile.name;
-
-        // only allow certain file types to be uploaded
-        let extension = resumeFileName.split('.').pop().toLowerCase();
-        const allowedFileTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'];
-        if (!allowedFileTypes.some(function(fileType) {
-           return fileType === extension;
-        })) {
-           console.log(`User tried to upload a file of type .${extension}, which is not allowed.`);
-           return res.status(400).send("Wrong file type.");
-        }
-
-        let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "ameyer24@wisc.edu"];
-
-        let subject = 'Resume To Be Scored';
-        let content =
-            '<div>'
-            +   '<p>New resume to be scored.</p>'
-            +   '<p>Name: ' + name + '</p>'
-            +   '<p>email: ' + email + '</p>'
-            +   '<p>Skills: ' + skills + '</p>'
-            +   '<p>Desired Careers: ' + desiredCareers + '</p>'
-            + '</div>';
-        let attachments = [{
-            filename: resumeFileName,
-            content: new Buffer(resumeFile.data,'7bit')
-        }];
-
-        const sendFrom = "Moonshot";
-        sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {
-            // on failure
-            if (!success) {
-                console.log("Error sending sign up alert email: ", msg);
-                res.status(500).send("Error uploading resume, try again later.");
-                return;
-            }
-            // on success
-            return res.json("Success!");
-        })
-    }
-    catch (error) {
-        console.log("Error sending resume to Kyle: ", error);
-        return res.status(500).send("Error uploading, try again later.");
-    }
-});
-
-
-
-
-
-// --->> END BUSINESS APIS <<--- //
-
-// END APIs
-
-
-// --->>> EXAMPLE INFO CREATION <<<---
-
-// const exampleInfo = {
-//     contentArray: []
-// }
-// Info.create(exampleInfo, function(err, link) {
-//     console.log(err);
-//     console.log(link);
-// })
-
-// --->>> END EXAMPLE INFO CREATION <<<---
+// ----->> END APIs <<----- //
 
 
 // print all users from a specific pathway
@@ -741,39 +131,6 @@ app.post("/resumeScorer/uploadResume", function(req, res) {
 // sw: "5a88b4b8734d1d041bb6b386"
 
 // printUsersFromPathway("5a88b4b8734d1d041bb6b386");
-
-
-// update all users with a specific thing, used if something is changed about
-// the user model
-// Pathways.find({}, function(err, pathways) {
-//     console.log("err is: ", err);
-//
-//     for (let pathwayIdx = 0; pathwayIdx < pathways.length; pathwayIdx++) {
-//         let pathway = pathways[pathwayIdx];
-//         //pathway.userType = "candidate";
-//
-//         let steps = pathway.steps;
-//
-//         for (let stepIndex = 0; stepIndex < steps.length; stepIndex++) {
-//             let step = steps[stepIndex];
-//             let subSteps = step.subSteps;
-//
-//             for (let subStepIndex = 0; subStepIndex < subSteps.length; subStepIndex++) {
-//                 let subStep = subSteps[subStepIndex];
-//
-//                 if (subStep.contentType === "quiz") {
-//                     pathway.steps[stepIndex].subSteps[subStepIndex].required = true;
-//                 }
-//             }
-//         }
-//
-//         pathway.save(function() {
-//             console.log("pathway saved");
-//         });
-//     }
-// })
-
-
 
 app.listen(3001, function (err) {
     if (err) {

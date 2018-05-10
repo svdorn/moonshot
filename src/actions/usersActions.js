@@ -143,11 +143,11 @@ export function postEmployer(newUser, currentUser) {
         dispatch({type: "POST_USER_REQUESTED"});
 
         // post user to database
-        axios.post("/api/employer", {newUser, currentUser})
+        axios.post("/api/employer/newEmployer", {newUser, currentUser})
             // user successfully posted
             .then(function(companyName) {
                 // send verification email
-                axios.post("/api/sendEmployerVerificationEmail", {email: newUser.email, companyName})
+                axios.post("/api/employer/sendVerificationEmail", {email: newUser.email, companyName})
                     // successfully sent verification email
                     .then(function(emailResponse) {
                         dispatch({type:"POST_USER"});
@@ -287,7 +287,7 @@ export function changePasswordForgot(user) {
 
 export function changeTempPassword(user) {
     return function(dispatch) {
-        axios.post("/api/changeTempPassword", user)
+        axios.post("/api/employer/changeTempPassword", user)
         .then(function(response) {
             const returnedUser = response.data;
 
@@ -452,7 +452,7 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
         }).currentStep = {subStep: subStep.order, step: stepNumber};
         dispatch({type: "UPDATE_CURRENT_SUBSTEP", payload: subStep, pathwayId, currentUser});
 
-        axios.post("/api/userCurrentStep", {
+        axios.post("/api/candidate/currentPathwayStep", {
             params: {
                 userId: user._id,
                 pathwayId: pathwayId,
@@ -470,7 +470,7 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
 
 export function updateAnswer(userId, verificationToken, quizId, answer) {
     return function(dispatch) {
-        axios.post("/api/updateAnswer", {
+        axios.post("/api/candidate/updateAnswer", {
             params: { userId, verificationToken, quizId, answer }
         })
         .then(function(response) {
