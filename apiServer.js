@@ -77,6 +77,8 @@ app.post('/user/login', userApis.POST_login);
 
 app.get('/pathway/topPathways', pathwayApis.GET_topPathways);
 
+app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
+
 
 // --->> NEED TO TEST <<---
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
@@ -120,7 +122,7 @@ app.post('/employer/sendVerificationEmail', employerApis.POST_sendVerificationEm
 app.post('/employer/changeTempPassword', employerApis.POST_changeTempPassword);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
-app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
+
 
 
 // ----->> END APIs <<----- //
