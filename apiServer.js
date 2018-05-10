@@ -80,14 +80,15 @@ app.get('/pathway/topPathways', pathwayApis.GET_topPathways);
 app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
 
 
-// --->> NEED TO TEST <<---
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
-app.post('/candidate/completePathway', candidateApis.POST_completePathway);
-app.post("/candidate/addPathway", candidateApis.POST_addPathway);
-app.post('/candidate/comingSoonEmail', candidateApis.POST_comingSoonEmail);
-app.post("/candidate/currentPathwayStep", userApis.POST_currentPathwayStep);
-app.post("/candidate/updateAnswer", candidateApis.POST_updateAnswer);
 app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
+app.post('/candidate/comingSoonEmail', candidateApis.POST_comingSoonEmail);
+app.post("/candidate/addPathway", candidateApis.POST_addPathway);
+app.post('/candidate/completePathway', candidateApis.POST_completePathway);
+app.post("/candidate/updateAnswer", candidateApis.POST_updateAnswer);
+app.post("/candidate/currentPathwayStep", userApis.POST_currentPathwayStep);
+
+// --->> NEED TO TEST <<---
 
 app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
