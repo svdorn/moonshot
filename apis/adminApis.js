@@ -1,6 +1,11 @@
 var Businesses = require('../models/businesses.js');
 var Employers = require('../models/employers.js');
 var Users = require('../models/users.js');
+var Pathways = require('../models/pathways.js');
+var Quizzes = require('../models/quizzes.js');
+
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 
 // get helper functions
 const { sanitize,

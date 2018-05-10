@@ -93,14 +93,13 @@ app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.get("/business/pathways", businessApis.GET_pathways);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
-// --->> NEED TO TEST <<---
-
 
 app.post("/admin/alertLinkClicked", adminApis.POST_alertLinkClicked);
 app.post("/admin/business", adminApis.POST_business);
 app.get("/admin/info", adminApis.GET_info);
 app.get("/admin/candidateResponses", adminApis.GET_candidateResponses);
 
+// --->> NEED TO TEST <<---
 app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
 app.post('/user/changePassword', userApis.POST_changePassword);
 app.post('/user/forgotPassword', userApis.POST_forgotPassword);
