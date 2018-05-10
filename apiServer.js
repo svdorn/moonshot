@@ -88,9 +88,9 @@ app.post('/candidate/completePathway', candidateApis.POST_completePathway);
 app.post("/candidate/updateAnswer", candidateApis.POST_updateAnswer);
 app.post("/candidate/currentPathwayStep", userApis.POST_currentPathwayStep);
 
+app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
 // --->> NEED TO TEST <<---
 
-app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.get("/business/pathways", businessApis.GET_pathways);
