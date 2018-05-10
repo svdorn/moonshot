@@ -99,12 +99,12 @@ app.post("/admin/business", adminApis.POST_business);
 app.get("/admin/info", adminApis.GET_info);
 app.get("/admin/candidateResponses", adminApis.GET_candidateResponses);
 
-// --->> NEED TO TEST <<---
 app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
 app.post('/user/changePassword', userApis.POST_changePassword);
 app.post('/user/forgotPassword', userApis.POST_forgotPassword);
 app.post('/user/changeSettings', userApis.POST_changeSettings);
 app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
+
 
 app.get('/pathway/link', pathwayApis.GET_link);
 app.get('/pathway/article', pathwayApis.GET_article);
@@ -117,6 +117,7 @@ app.get('/pathway/pathwayByPathwayUrl', pathwayApis.GET_pathwayByPathwayUrl);
 app.get('/pathway/search', pathwayApis.GET_search);
 app.get("/pathway/allCompaniesAndCategories", pathwayApis.GET_allCompaniesAndCategories);
 
+// --->> NEED TO TEST <<---
 app.post('/employer/newEmployer', employerApis.POST_newEmployer);
 app.post('/employer/sendVerificationEmail', employerApis.POST_sendVerificationEmail);
 app.post('/employer/changeTempPassword', employerApis.POST_changeTempPassword);
