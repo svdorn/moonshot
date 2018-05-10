@@ -134,7 +134,7 @@ function POST_sendVerificationEmail(req, res) {
     let query = {email: email};
 
     Employers.findOne(query, function (err, user) {
-        let recipient = user.email;
+        let recipient = [user.email];
         let subject = 'Verify email';
         let content =
              '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'

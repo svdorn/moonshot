@@ -117,10 +117,10 @@ app.get('/pathway/pathwayByPathwayUrl', pathwayApis.GET_pathwayByPathwayUrl);
 app.get('/pathway/search', pathwayApis.GET_search);
 app.get("/pathway/allCompaniesAndCategories", pathwayApis.GET_allCompaniesAndCategories);
 
-// --->> NEED TO TEST <<---
 app.post('/employer/newEmployer', employerApis.POST_newEmployer);
 app.post('/employer/sendVerificationEmail', employerApis.POST_sendVerificationEmail);
 app.post('/employer/changeTempPassword', employerApis.POST_changeTempPassword);
+// --->> NEED TO TEST <<---
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 
