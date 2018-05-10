@@ -121,7 +121,26 @@ function userForAdmin(user) {
 // callback needs to be a function of a success boolean and string to return;
 // takes an ARRAY of recipient emails
 function sendEmail(recipients, subject, content, sendFrom, attachments, callback) {
-    if (recipients.length === 0) {
+    // recipientArray is an array of strings while recipientList is one string with commas
+    let recipientArray = [];
+    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
+    // if only one recipient was given, in string form, and it is an actual email address
+    if (typeof recipients === "string" && emailRegex.test(recipients)) {
+        // add it to the recipients list
+        recipientArray.push(recipients);
+    }
+    // if recipients is an array like it's supposed to be
+    else if (Array.isArray(recipients)) {
+        // set the recipient list to be everyone who was passed in
+        recipientArray = recipients;
+    }
+    // otherwise return unsuccessfully
+    else {
+        callback(false, "Invalid argument. Recipients should be a list of strings.");
+        return;
+    }
+
+    if (recipientArray.length === 0) {
         callback(false, "Couldn't send email. No recipient.")
         return;
     }
@@ -130,24 +149,27 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
     let recipientList = "";
     Emailaddresses.findOne({name: "optedOut"}, function(err, optedOut) {
         const optedOutStudents = optedOut.emails;
-        recipients.forEach(function(recipient) {
-            emailOptedOut = optedOutStudents.some(function(optedOutEmail) {
-                return optedOutEmail.toLowerCase() === recipient.toLowerCase();
-            });
-            // add the email to the list of recipients to email if the recipient
-            // has not opted out
-            if (!emailOptedOut) {
-                if (recipientList === "") {
-                    recipientList = recipient;
-                } else {
-                    recipientList = recipientList + ", " + recipient;
+        recipientArray.forEach(recipient => {
+            // make sure the email is a legitimate address
+            if (emailRegex.test(recipient)) {
+                emailOptedOut = optedOutStudents.some(function(optedOutEmail) {
+                    return optedOutEmail.toLowerCase() === recipient.toLowerCase();
+                });
+                // add the email to the list of recipients to email if the recipient
+                // has not opted out
+                if (!emailOptedOut) {
+                    if (recipientList === "") {
+                        recipientList = recipient;
+                    } else {
+                        recipientList = recipientList + ", " + recipient;
+                    }
                 }
             }
         });
 
         // don't send an email if it's not going to be sent to anyone
         if (recipientList === "") {
-            callback(false, "Couldn't send email. Recipients are on the opt-out list.")
+            callback(false, "Couldn't send email. Recipients are on the opt-out list or no valid emails were given.")
             return;
         }
 

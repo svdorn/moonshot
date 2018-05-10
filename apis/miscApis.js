@@ -1,6 +1,8 @@
 var Referrals = require('../models/referrals.js');
 var Emailaddresses = require('../models/emailaddresses.js');
 
+const crypto = require('crypto');
+
 // get helper functions
 const { sanitize,
         removeEmptyFields,

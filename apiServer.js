@@ -57,7 +57,6 @@ app.use(session({
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
 
-
 // ----->> START APIS <<----- //
 
 app.post('/user/signOut', userApis.POST_signOut);
@@ -120,10 +119,8 @@ app.get("/pathway/allCompaniesAndCategories", pathwayApis.GET_allCompaniesAndCat
 app.post('/employer/newEmployer', employerApis.POST_newEmployer);
 app.post('/employer/sendVerificationEmail', employerApis.POST_sendVerificationEmail);
 app.post('/employer/changeTempPassword', employerApis.POST_changeTempPassword);
-// --->> NEED TO TEST <<---
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
-
 
 
 // ----->> END APIs <<----- //
