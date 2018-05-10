@@ -89,12 +89,12 @@ app.post("/candidate/updateAnswer", candidateApis.POST_updateAnswer);
 app.post("/candidate/currentPathwayStep", userApis.POST_currentPathwayStep);
 
 app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
-// --->> NEED TO TEST <<---
-
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.get("/business/pathways", businessApis.GET_pathways);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
+// --->> NEED TO TEST <<---
+
 
 app.post("/admin/alertLinkClicked", adminApis.POST_alertLinkClicked);
 app.post("/admin/business", adminApis.POST_business);

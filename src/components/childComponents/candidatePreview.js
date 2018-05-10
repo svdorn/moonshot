@@ -96,7 +96,6 @@ class CandidatePreview extends Component {
 
     // when hiring stage changed in menu
     handleHiringStageChange = (event, index, hiringStage) => {
-        console.log("hiringStage: ", hiringStage)
         this.setState({ ...this.state, hiringStage, lastEdited: this.formatDateString((new Date()).toString()) })
         this.updateHiringStageInDB(hiringStage, this.state.dismissed);
     }

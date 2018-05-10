@@ -1,6 +1,7 @@
 var Businesses = require('../models/businesses.js');
 var Employers = require('../models/employers.js');
 var Users = require('../models/users.js');
+var Pathways = require('../models/pathways.js');
 
 // get helper functions
 const { sanitize,
@@ -228,7 +229,6 @@ async function verifyEmployerAndReturnBusiness(userId, verificationToken, busine
                 // employer is real, return successfully if position in company verified
                 verifiedUser = true;
                 if (verifiedPosition) {
-                    console.log("returning true");
                     return resolve(business);
                 }
             })
@@ -265,7 +265,6 @@ async function verifyEmployerAndReturnBusiness(userId, verificationToken, busine
                 verifiedPosition = true;
                 business = foundBusiness
                 if (verifiedUser) {
-                    console.log("returning true");
                     return resolve(business);
                 }
             })
