@@ -104,7 +104,6 @@ app.post('/user/forgotPassword', userApis.POST_forgotPassword);
 app.post('/user/changeSettings', userApis.POST_changeSettings);
 app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 
-
 app.get('/pathway/link', pathwayApis.GET_link);
 app.get('/pathway/article', pathwayApis.GET_article);
 app.get('/pathway/info', pathwayApis.GET_info);
