@@ -38,7 +38,6 @@
     "morgan": "~1.9.0",
     "nodemailer": "^4.6.4",
     "react": "^16.3.2",
-    "react-bootstrap": "^0.31.5",
     "react-dom": "^16.3.2",
     "react-ga": "^2.5.0",
     "react-meta-tags": "^0.3.0",
