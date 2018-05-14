@@ -21,7 +21,7 @@
     "babel-preset-react": "^6.24.1",
     "babel-preset-stage-1": "^6.24.1",
     "bcryptjs": "^2.4.3",
-    "body-parser": "~1.18.2",
+    "body-parser": "^1.18.3",
     "connect-mongo": "^2.0.0",
     "cookie-parser": "~1.4.3",
     "debug": "~2.6.9",
