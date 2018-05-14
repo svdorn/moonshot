@@ -1,0 +1,28 @@
+const expect = require('chai').expect;
+const {
+    sanitize,
+    removeEmptyFields,
+    verifyUser,
+    removePassword,
+    printUsersFromPathway,
+    getUserByQuery,
+    sendEmail,
+    safeUser,
+    userForAdmin,
+    getFirstName,
+    sendBizUpdateCandidateErrorEmail,
+    removeDuplicates
+} = require('../apis/helperFunctions');
+
+describe('getFirstName()', function() {
+    it('should get the first name from a full name string', function() {
+        // ARRANGE
+        const fullName = "Austin McJangus Meyer";
+
+        // ACT
+        const firstName = getFirstName(fullName);
+
+        // ASSERT
+        expect(firstName).to.be.equal("Austin");
+    });
+});

@@ -3,7 +3,11 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "node ./bin/www & node apiServer.js"
+    "start": "node ./bin/www & node apiServer.js",
+    "test": "mocha"
+  },
+  "directories": {
+      "test": "test"
   },
   "devDependencies": {
     "chai": "^4.1.2",

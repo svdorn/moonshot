@@ -60,25 +60,21 @@ app.use(session({
 // ----->> START APIS <<----- //
 
 app.post('/user/signOut', userApis.POST_signOut);
-
 app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
 app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
-
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
-
-app.post('/candidate/candidate', candidateApis.POST_candidate);
-app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
-
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
 app.post('/user/login', userApis.POST_login);
+app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
+app.post('/user/changePassword', userApis.POST_changePassword);
+app.post('/user/forgotPassword', userApis.POST_forgotPassword);
+app.post('/user/changeSettings', userApis.POST_changeSettings);
+app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 
-app.get('/pathway/topPathways', pathwayApis.GET_topPathways);
-
-app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
-
-
+app.post('/candidate/candidate', candidateApis.POST_candidate);
+app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 app.post('/candidate/comingSoonEmail', candidateApis.POST_comingSoonEmail);
@@ -98,12 +94,6 @@ app.post("/admin/business", adminApis.POST_business);
 app.get("/admin/info", adminApis.GET_info);
 app.get("/admin/candidateResponses", adminApis.GET_candidateResponses);
 
-app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
-app.post('/user/changePassword', userApis.POST_changePassword);
-app.post('/user/forgotPassword', userApis.POST_forgotPassword);
-app.post('/user/changeSettings', userApis.POST_changeSettings);
-app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
-
 app.get('/pathway/link', pathwayApis.GET_link);
 app.get('/pathway/article', pathwayApis.GET_article);
 app.get('/pathway/info', pathwayApis.GET_info);
@@ -114,12 +104,14 @@ app.get('/pathway/pathwayByPathwayUrlNoContent', pathwayApis.GET_pathwayByPathwa
 app.get('/pathway/pathwayByPathwayUrl', pathwayApis.GET_pathwayByPathwayUrl);
 app.get('/pathway/search', pathwayApis.GET_search);
 app.get("/pathway/allCompaniesAndCategories", pathwayApis.GET_allCompaniesAndCategories);
+app.get('/pathway/topPathways', pathwayApis.GET_topPathways);
 
 app.post('/employer/newEmployer', employerApis.POST_newEmployer);
 app.post('/employer/sendVerificationEmail', employerApis.POST_sendVerificationEmail);
 app.post('/employer/changeTempPassword', employerApis.POST_changeTempPassword);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
+app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
 
 
 // ----->> END APIs <<----- //
