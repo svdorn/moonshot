@@ -6,7 +6,6 @@ var businessesSchema = mongoose.Schema({
     pathwayIds: [ mongoose.Schema.Types.ObjectId ],
     employerIds: [ mongoose.Schema.Types.ObjectId ],
 
-
     // ---->>> POST-PIVOT <<<---- //
 
     // the positions that the company is (or was) hiring for

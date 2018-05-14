@@ -161,12 +161,61 @@ var usersSchema = mongoose.Schema({
 
     // ---->>> POST-PIVOT <<<---- //
 
+    skills: [{
+        // id of the skill
+        skillId: mongoose.Schema.Types.ObjectId,
+        // the score the user got on their most recent attempt
+        mostRecentScore: Number,
+        // the list of times the candidate has taken the skill test
+        attempts: [{
+            // if the user is currently taking the test
+            inProgress: Boolean,
+            // the level the user is currently on (only applies if test is in progress);
+            // will be something like 3.9, so user will be getting level 3 questions,
+            // then if user gets the question right it'll go up, maybe to 4.1 or
+            // something, so then the user will then get level 4 questions
+            currentLevel: Number,
+            // the score the user got on the test; undefined if in progress
+            score: Number,
+            // the levels the user got through with the associated answers to questions
+            levels: [{
+                // the level of difficulty of the questions
+                level: Number,
+                // the questions the candidate answered at this level of difficulty
+                questions: [{
+                    // the moonshot-generated (not mongo) id of the question
+                    questionId: Number,
+                    // if the candidate chose the correct answers
+                    isCorrect: Boolean,
+                    // the (moonshot-generated) answer ids that the user chose
+                    answerIds: [ Number ]
+                }]
+            }]
+        }]
+    }],
+
     // the positions that the candidate has applied to
     positions: [{
         // the company that is offering this position
         companyId: mongoose.Schema.Types.ObjectId,
         // the Moonshot-generated id of the position within that company
         positionId: Number,
+        // the hiring stage of the candidate, which the company has determined
+        // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
+        hiringStage: String,
+        // the scores the user got for the position
+        scores: {
+            // combination of all the scores
+            overall: Number,
+            // how good of a culture fit the candidate has
+            culture: Number,
+            // how much the candidate could grow in the position
+            growth: Number,
+            // if the candidate would stay at the company for a long time
+            longevity: Number,
+            // how well the candidate would do at that specific position
+            performance: Number
+        }
     }]
 
     // ---->>> END POST-PIVOT <<<---- //
