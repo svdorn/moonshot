@@ -163,7 +163,10 @@ var usersSchema = mongoose.Schema({
 
     // the positions that the candidate has applied to
     positions: [{
-        positionId: mongoose.Schema.Types.ObjectId
+        // the company that is offering this position
+        companyId: mongoose.Schema.Types.ObjectId,
+        // the Moonshot-generated id of the position within that company
+        positionId: Number,
     }]
 
     // ---->>> END POST-PIVOT <<<---- //
