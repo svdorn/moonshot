@@ -177,18 +177,25 @@ var usersSchema = mongoose.Schema({
             currentLevel: Number,
             // the score the user got on the test; undefined if in progress
             score: Number,
-            // the levels the user got through with the associated answers to questions
-            levels: [{
-                // the level of difficulty of the questions
-                level: Number,
-                // the questions the candidate answered at this level of difficulty
-                questions: [{
-                    // the moonshot-generated (not mongo) id of the question
-                    questionId: Number,
-                    // if the candidate chose the correct answers
-                    isCorrect: Boolean,
-                    // the (moonshot-generated) answer ids that the user chose
-                    answerIds: [ Number ]
+            // the different sub skills involved in the overall skill
+            subSkills: [{
+                // moonshot-generated (not mongo) id to keep track of subSkills, only unique within skill
+                subSkillId: Number,
+                // the score the user got on the sub skill test; undefined if in progress
+                score: Number,
+                // the levels the user got through with the associated answers to questions
+                levels: [{
+                    // the level of difficulty of the questions
+                    level: Number,
+                    // the questions the candidate answered at this level of difficulty
+                    questions: [{
+                        // the moonshot-generated (not mongo) id of the question
+                        questionId: Number,
+                        // if the candidate chose the correct answers
+                        isCorrect: Boolean,
+                        // the (moonshot-generated) answer ids that the user chose
+                        answerIds: [ Number ]
+                    }]
                 }]
             }]
         }]
