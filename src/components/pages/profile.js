@@ -57,8 +57,8 @@ class Profile extends Component {
 
         // looking at someone else's profile
         else {
-            axios.post("/api/getUserByProfileUrl", {profileUrl}
-            ).then(res => {
+            axios.get("/api/user/userByProfileUrl", {params: {profileUrl}})
+            .then(res => {
                 const user = res.data;
 
                 this.setState({
@@ -90,7 +90,7 @@ class Profile extends Component {
 
                 for (let i = 0; i < user.pathways.length; i++) {
                     let id = user.pathways[i].pathwayId;
-                    axios.get("/api/pathwayByIdNoContent", {
+                    axios.get("/api/pathway/pathwayByIdNoContent", {
                         params: {
                             _id: id
                         }
@@ -150,7 +150,7 @@ class Profile extends Component {
             if (user.completedPathways) {
                 for (let i = 0; i < user.completedPathways.length; i++) {
                     let id = user.completedPathways[i].pathwayId;
-                    axios.get("/api/pathwayByIdNoContent", {
+                    axios.get("/api/pathway/pathwayByIdNoContent", {
                         params: {
                             _id: id
                         }

@@ -64,7 +64,7 @@ class Discover extends Component {
         // populate explorePathways with initial pathways
         self.search();
 
-        axios.get("/api/pathways/getAllCompaniesAndCategories")
+        axios.get("/api/pathway/allCompaniesAndCategories")
         .then(function(res) {
             // make sure component is mounted before changing state
             if (self.refs.discover) {
@@ -76,7 +76,7 @@ class Discover extends Component {
         })
 
         // populate featuredPathways with initial pathways
-        axios.get("/api/pathways/search", {
+        axios.get("/api/pathway/search", {
             params: {
                 limit: 3
             }
@@ -139,7 +139,7 @@ class Discover extends Component {
     };
 
     search() {
-        axios.get("/api/pathways/search", {
+        axios.get("/api/pathway/search", {
             params: {
                 searchTerm: this.state.term,
                 category: this.state.category,

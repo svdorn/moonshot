@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {changePassword} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper} from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 
 const styles = {
@@ -116,7 +116,8 @@ class PasswordChange extends Component {
                             className="formSubmitButton font24px font16pxUnder600"
                         >
                             Change Password
-                        </button>
+                        </button><br/>
+                        {this.props.loadingChangePassword ? <CircularProgress style={{marginTop: "10px"}}/> : null}
                     </form>
                 </div>
             </div>
@@ -134,6 +135,7 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         currentUser: state.users.currentUser,
+        loadingChangePassword: state.users.loadingSomething
     };
 }
 

@@ -12,7 +12,7 @@ export function getUserFromSession(callback) {
             errorMessage: undefined
         });
 
-        axios.get("/api/userSession")
+        axios.get("/api/user/session")
             .then(function(response) {
                 dispatch({
                     type: "GET_USER_FROM_SESSION",
@@ -32,15 +32,16 @@ export function getUserFromSession(callback) {
 
 export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
     return function(dispatch) {
-        axios.post("/api/login", {user, saveSession})
+        dispatch({type: "START_LOADING"});
+
+        axios.post("/api/user/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
-                dispatch({type: "CLOSE_NOTIFICATION"});
                 let nextUrl = '/discover';
                 console.log(returnedUser.userType);
                 if (returnedUser.userType === "employer") {
-                    nextUrl = 'businessHome';
+                    nextUrl = '/myCandidates';
                 }
                 if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";
@@ -58,7 +59,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 if (shouldAddPathwayToUser) {
                     // if the user doesn't already have this pathway, give it
                     // to them, then redirect to the pathway content page
-                    axios.post("/api/user/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayName})
+                    axios.post("/api/candidate/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayName})
                     .then(function(response) {
                         dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                         // navigateBackUrl should be equal to the url for the pathway
@@ -86,34 +87,12 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
     }
 }
 
-//
-// export function addPathwayAndLogin(user, saveSession, pathwayName) {
-//     return function(dispatch) {
-//         axios.post("/api/login", {user, saveSession})
-//             .then(function(response) {
-//                 const returnedUser = response.data;
-//                 dispatch({type:"LOGIN", payload: returnedUser});
-//                 dispatch({type: "CLOSE_NOTIFICATION"});
-//                 let nextUrl = '/discover';
-//                 if (!returnedUser.hasFinishedOnboarding) {
-//                     nextUrl = "/onboarding";
-//                 } else if (navigateBackUrl) {
-//                     nextUrl = navigateBackUrl;
-//                 }
-//                 browserHistory.push(nextUrl);
-//             })
-//             .catch(function(err) {
-//                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
-//             });
-//     }
-// }
-
 
 // LOG USER OUT
 export function signout() {
     return function(dispatch) {
         dispatch({type:"SIGNOUT"});
-        axios.post("/api/signOut")
+        axios.post("/api/user/signOut")
             .then(function(response) {
             })
             .catch(function(err) {
@@ -134,11 +113,11 @@ export function postUser(user) {
         dispatch({type: "POST_USER_REQUESTED"});
 
         // post user to database
-        axios.post("/api/user", user)
+        axios.post("/api/candidate/candidate", user)
             // user successfully posted
             .then(function(response) {
                 // send verification email
-                axios.post("/api/sendVerificationEmail", {email: user.email})
+                axios.post("/api/candidate/sendVerificationEmail", {email: user.email})
                     // successfully sent verification email
                     .then(function(emailResponse) {
                         dispatch({type:"POST_USER"});
@@ -164,11 +143,11 @@ export function postEmployer(newUser, currentUser) {
         dispatch({type: "POST_USER_REQUESTED"});
 
         // post user to database
-        axios.post("/api/employer", {newUser, currentUser})
+        axios.post("/api/employer/newEmployer", {newUser, currentUser})
             // user successfully posted
             .then(function(companyName) {
                 // send verification email
-                axios.post("/api/sendEmployerVerificationEmail", {email: newUser.email, companyName})
+                axios.post("/api/employer/sendVerificationEmail", {email: newUser.email, companyName})
                     // successfully sent verification email
                     .then(function(emailResponse) {
                         dispatch({type:"POST_USER"});
@@ -176,7 +155,7 @@ export function postEmployer(newUser, currentUser) {
                     })
                     // error sending verification email
                     .catch(function(emailError) {
-                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: response.data, type: "errorHeader"}});
+                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: emailError.response.data, type: "errorHeader"}});
                         window.scrollTo(0,0);
                     });
             })
@@ -210,7 +189,7 @@ export function forgotPassword(user) {
     return function(dispatch) {
         dispatch({type: "FORGOT_PASSWORD_REQUESTED"});
 
-        axios.post("/api/forgotPassword", user)
+        axios.post("/api/user/forgotPassword", user)
             .then(function(response) {
                 dispatch({type:"FORGOT_PASSWORD", notification:{message: response.data, type:"infoHeader"}})
             })
@@ -223,36 +202,42 @@ export function forgotPassword(user) {
 // UPDATE A USER
 export function updateUser(user) {
     return function(dispatch) {
+        // make loading circle show up
+        dispatch({type:"START_LOADING"});
         // update user on the database
         axios.post("/api/user/changeSettings", user)
-            .then(function(response) {
-                dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}})
-            })
-            .catch(function(err) {
-                dispatch({type:"UPDATE_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
-            });
+        .then(function(response) {
+            dispatch({type:"UPDATE_USER", payload:response.data, notification:{message: "Settings updated!", type: "infoHeader"}});
+            window.scrollTo(0, 0);
+        })
+        .catch(function(err) {
+            dispatch({type:"UPDATE_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
+            window.scrollTo(0, 0);
+        });
     }
 }
 
 export function changePassword(user) {
     return function(dispatch) {
+        // make loading circle show up
+        dispatch({type:"START_LOADING"});
 
-        axios.post('/api/user/changepassword', user)
-            .then(function(response) {
-                dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
-                // reset the form
-                dispatch(reset("changePassword"));
-            })
-            .catch(function(err){
-                dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: err.response.data, type: "errorHeader"}})
-            });
+        axios.post('/api/user/changePassword', user)
+        .then(function(response) {
+            dispatch({type:"CHANGE_PASSWORD", payload:response.data, notification:{message:"Password changed!", type:"infoHeader"}})
+            // reset the form
+            dispatch(reset("changePassword"));
+        })
+        .catch(function(err){
+            dispatch({type:"CHANGE_PASSWORD_REJECTED", notification:{message: err.response.data, type: "errorHeader"}})
+        });
     }
 }
 
 // VERIFY EMAIL
 export function verifyEmail(userType, token) {
     return function(dispatch) {
-        axios.post("/api/verifyEmail", {userType, token})
+        axios.post("/api/user/verifyEmail", {userType, token})
             .then(function(response) {
                 if (!response.data || response.data === "go to login" || userType == "employer") {
                     let nextLocation = "/login";
@@ -277,10 +262,13 @@ export function verifyEmail(userType, token) {
 
 export function changePasswordForgot(user) {
     return function(dispatch) {
+        // activate loading spinner
+        dispatch({type: "START_LOADING"});
+
         axios.post("api/user/changePasswordForgot", user)
             .then(function(response) {
                 const foundUser = response.data;
-                axios.post("/api/userSession", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
+                axios.post("/api/user/session", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
                 .catch(function(err2) { console.log(err2) });
 
                 dispatch({type:"LOGIN", payload:foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
@@ -299,14 +287,14 @@ export function changePasswordForgot(user) {
 
 export function changeTempPassword(user) {
     return function(dispatch) {
-        axios.post("/api/changeTempPassword", user)
+        axios.post("/api/employer/changeTempPassword", user)
         .then(function(response) {
             const returnedUser = response.data;
 
             dispatch({type: "LOGIN", payload: returnedUser, notification: {message: "Your password was changed, you are now logged in!", type: "infoHeader"}});
-            browserHistory.push('/businessHome');
+            browserHistory.push('/myCandidates');
 
-            axios.post("/api/userSession", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
+            axios.post("/api/user/session", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
             .catch(function(err) {
                 // what to do if session couldn't be saved for some reason
             });
@@ -322,7 +310,7 @@ export function forBusiness(user){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
-        axios.post("api/user/forBusinessEmail", user)
+        axios.post("api/business/forBusinessEmail", user)
             .then(function(response) {
                 dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/');
@@ -334,12 +322,13 @@ export function forBusiness(user){
     }
 }
 
+
 // Send an email when somebody completes a pathway
 export function completePathway(user){
     return function(dispatch) {
         dispatch({type: "COMPLETE_PATHWAY_REQUESTED"});
 
-        axios.post("api/user/completePathway", user)
+        axios.post("api/candidate/completePathway", user)
             .then(function(response) {
                 dispatch({type:"COMPLETE_PATHWAY", user: response.data.user, notification: {message:response.data.message, type:"infoHeader"}});
                 browserHistory.push('/discover');
@@ -407,7 +396,7 @@ export function comingSoon(user, signedIn){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
-        axios.post("api/user/comingSoonEmail", user)
+        axios.post("api/candidate/comingSoonEmail", user)
             .then(function(response) {
                 if (!signedIn) {
                     dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
@@ -424,26 +413,10 @@ export function comingSoon(user, signedIn){
     }
 }
 
-// Send an email when a student registers for a pathway
-export function registerForPathway(user) {
-    return function(dispatch) {
-        dispatch({type: "REGISTER_FOR_PATHWAY_REQUESTED"});
-
-        axios.post("/api/user/registerForPathway", user)
-            .then(function(response) {
-                window.scrollTo(0, 0);
-                dispatch({type:"REGISTER_FOR_PATHWAY", notification: {message:response.data, type:"infoHeader"}});
-            })
-            .catch(function(err) {
-                dispatch({type:"REGISTER_FOR_PATHWAY", notification: {message: "Error sending email and registering, please try again.", type: "errorHeader"}})
-            })
-    }
-}
-
 // ADD a pathway to a user
 export function addPathway(user) {
     return function(dispatch) {
-        axios.post("/api/user/addPathway", user)
+        axios.post("/api/candidate/addPathway", user)
             .then(function(response) {
                 dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                 window.scrollTo(0, 0);
@@ -479,7 +452,7 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
         }).currentStep = {subStep: subStep.order, step: stepNumber};
         dispatch({type: "UPDATE_CURRENT_SUBSTEP", payload: subStep, pathwayId, currentUser});
 
-        axios.post("/api/userCurrentStep", {
+        axios.post("/api/candidate/currentPathwayStep", {
             params: {
                 userId: user._id,
                 pathwayId: pathwayId,
@@ -497,7 +470,7 @@ export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
 
 export function updateAnswer(userId, verificationToken, quizId, answer) {
     return function(dispatch) {
-        axios.post("/api/updateAnswer", {
+        axios.post("/api/candidate/updateAnswer", {
             params: { userId, verificationToken, quizId, answer }
         })
         .then(function(response) {
@@ -513,7 +486,7 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
 
 export function updateAllOnboarding(userId, verificationToken, interests, goals, info) {
     return function(dispatch) {
-        axios.post("/api/updateAllOnboarding", {
+        axios.post("/api/candidate/updateAllOnboarding", {
             params: { userId, verificationToken, interests, goals, info }
         })
         .then(function(response) {
@@ -535,7 +508,7 @@ export function startOnboarding(){
 export function endOnboarding(user, markOnboardingComplete, removeRedirectField){
     return function(dispatch) {
         if (markOnboardingComplete) {
-            axios.post("/api/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
+            axios.post("/api/candidate/endOnboarding", {userId: user._id, verificationToken: user.verificationToken, removeRedirectField})
             .then(function(response) {
                 dispatch({type: "END_ONBOARDING", user: response.data});
             })
@@ -552,35 +525,12 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
 }
 
 
-// // Set a candidate's hiring stage for a certain pathway at a certain company
-// export function updateHiringStage(employerUserId, employerVerificationToken, companyId, candidateId, hiringStage, isDismissed, pathwayId) {
-//     return function(dispatch) {
-//         const hiringStageInfo = {
-//             userId: employerUserId,
-//             verificationToken: employerVerificationToken,
-//             companyId: companyId,
-//             candidateId: candidateId,
-//             hiringStage: hiringStage,
-//             isDismissed: isDismissed,
-//             pathwayId: pathwayId
-//         }
-//         axios.post("/api/business/updateHiringStage", hiringStageInfo)
-//         .then(result => {
-//             console.log("result is: ", result);
-//         })
-//         .catch(err => {
-//             console.log("error updating hiring stage: ", err);
-//         })
-//     }
-// }
-
-
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
     return function(dispatch) {
         dispatch({type: "CONTACT_US_REQUESTED"});
 
-        axios.post("api/user/contactUsEmail", user)
+        axios.post("api/business/contactUsEmail", user)
             .then(function(response) {
                 dispatch({type:"CONTACT_US", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/myPathways');
@@ -599,7 +549,7 @@ export function postBusiness(business) {
         // show loading bar
         dispatch({type:"START_LOADING"});
 
-        axios.post("/api/business", business)
+        axios.post("/api/admin/business", business)
         .then(function(response) {
             dispatch({type: "SUCCESS_FINISHED_LOADING", notification: {message: response.data, type: "infoHeader"}});
             // redirect to edit business page

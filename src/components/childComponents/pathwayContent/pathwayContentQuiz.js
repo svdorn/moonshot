@@ -22,7 +22,7 @@ class PathwayContentQuiz extends Component {
     componentDidMount() {
         const id = this.props.step.contentID;
 
-        axios.get("/api/getQuiz", {
+        axios.get("/api/pathway/quiz", {
             params: {
                 _id: id
             }
@@ -39,7 +39,7 @@ class PathwayContentQuiz extends Component {
         if (this.props.step !== this.state.currStep) {
             const id = this.props.step.contentID;
 
-            axios.get("/api/getQuiz", {
+            axios.get("/api/pathway/quiz", {
                 params: {
                 _id: id
                 }
@@ -67,7 +67,12 @@ class PathwayContentQuiz extends Component {
                             question={quiz.question}
                             minValue={quiz.sliderOptions.minValue}
                             maxValue={quiz.sliderOptions.maxValue}
+                            showEndValues={quiz.sliderOptions.showEndValues}
+                            showCurrentValue={quiz.sliderOptions.showCurrentValue}
+                            leftText={quiz.sliderOptions.leftText}
+                            rightText={quiz.sliderOptions.rightText}
                             initialValue={quiz.sliderOptions.initialValue}
+                            noLeftColor={quiz.sliderOptions.noLeftColor}
                             step={quiz.sliderOptions.step}
                             quizId={quiz._id}
                         />

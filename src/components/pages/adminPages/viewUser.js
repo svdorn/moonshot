@@ -36,7 +36,7 @@ class ViewUser extends Component {
 
         let self = this;
 
-        axios.get("/api/userForAdmin", {
+        axios.get("/api/admin/candidateResponses", {
             params: {
                 adminUserId: user._id,
                 verificationToken: user.verificationToken,
@@ -157,10 +157,19 @@ class ViewUser extends Component {
                                             }}>{selectable.body}:</div>);
                                             // find if the item was selected
                                             // if so, add the values of the answers
-                                            let userAnswer = answerValue.value[selectable.answerNumber]
+                                            let userAnswer = answerValue.value[selectable.answerNumber];
+                                            let answerText = "";
+
+                                            if (userAnswer && typeof userAnswer.answerText === "string") {
+                                                // html decode it
+                                                answerText = userAnswer.answerText.replace(/&quot;/g,"\"")
+                                                                                  .replace(/&amp;/g,"&")
+                                                                                  .replace(/&lt;/g,"<")
+                                                                                  .replace(/&gt;/g,">");
+                                            }
                                             if (userAnswer) {
                                                 answerInterior.push(<span key={keyCounter++}><br/><div
-                                                    style={{marginLeft: "20px"}}>Skill: {userAnswer.skill}<br/>Experience: {userAnswer.answerText}<br/></div></span>);
+                                                    style={{marginLeft: "20px"}}>Skill: {userAnswer.skill}<br/>Experience: {answerText}<br/></div></span>);
                                             }
                                             // if not, tell the user that this was not selected
                                             else {
@@ -217,13 +226,21 @@ class ViewUser extends Component {
                                 })
                             });
 
+                            // replace html-encoded entities with decoded versions
+                            if (typeof answer === "string") {
+                                answer = answer.replace(/&quot;/g,"\"")
+                                               .replace(/&amp;/g,"&")
+                                               .replace(/&lt;/g,"<")
+                                               .replace(/&gt;/g,">");
+                            }
+
                             content = (
                                 <div>
                                     <span>{questionName}</span>
-                                    <br/>
-                                    <span className="blueText">Answer: {answer}</span>
                                     {breakForCorrectness}
                                     {correctOrNot}
+                                    <br/>
+                                    <span className="blueText">Answer: <pre className="pre-wrap">{answer}</pre></span>
                                 </div>
                             );
                         }

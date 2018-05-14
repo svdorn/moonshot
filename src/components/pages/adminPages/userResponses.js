@@ -6,7 +6,7 @@ import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import axios from 'axios';
 
-class Admin extends Component {
+class UserResponses extends Component {
     constructor(props) {
         super(props);
 
@@ -21,7 +21,7 @@ class Admin extends Component {
 
         let self = this;
 
-        axios.get("/api/infoForAdmin", {params: {
+        axios.get("/api/admin/info", {params: {
             userId: user._id,
             verificationToken: user.verificationToken
         }})
@@ -81,4 +81,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Admin);
+export default connect(mapStateToProps, mapDispatchToProps)(UserResponses);

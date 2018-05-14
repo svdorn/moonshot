@@ -37,11 +37,12 @@ header {
 }
 
 footer {
-  position: relative;
-  bottom: 0;
-  width: 100%;
+    position: relative;
+    bottom: 0;
+    width: 100%;
     padding: 10px;
 }
+
 
 .noDisplay { display: none; }
 
@@ -220,6 +221,114 @@ form > h1 {
     margin: 0 20px 0 40px;
 }
 
+.resultsSlider {
+    margin: auto !important;
+}
+.resultsSlider > div > div > div {
+    background: linear-gradient(to right, #ae7efc, #75dcfc) !important;
+}
+/* make the results slider have normal cursor */
+.resultsSlider > div > div > div:nth-child(3),
+.candidatePreviewSlider > div > div > div:nth-child(3) {
+    cursor: default !important;
+}
+
+.candidatePreviewSlider > div > div > div {
+    background: linear-gradient(to right, #983cc9, #e36273) !important;
+}
+
+
+.predictiveGraph {
+    position: relative;
+    color: white;
+}
+.predictiveGraphInterior {
+    position: relative;
+}
+.predictiveGraphInterior > .yAxis {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    width: 4px;
+    background: linear-gradient(to top, #ae7efc, #75dcfc);
+    border-radius: 2px;
+}
+.predictiveGraphInterior > .xAxis {
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    height: 4px;
+    background-color: rgb(100,100,100);
+    border-radius: 2px;
+}
+.xAxisLabelsContainer > .xAxisLabel {
+    display: inline-block;
+    text-align: center;
+}
+.xAxisLabelsContainer {
+    /* width: 50%;
+    margin-left: 25%; */
+}
+.rightYAxisLabel {
+    color: white;
+    position: absolute;
+    right: -5%;
+    transform: translateX(100%);
+}
+.leftYAxisLabelContainer {
+    height: 100%;
+    position: absolute;
+    left: -15%;
+}
+.leftYAxisLabel {
+    display: inline-block;
+    position: absolute;
+}
+.leftYAxisLabel > div {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.predictiveGraphInterior > .yPointMarker {
+    position: absolute;
+    width: 100%;
+    height: 2px;
+    background-color: rgb(100,100,100);
+}
+.predictiveGraphInterior > .pointsList {
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+.predictiveGraphInterior > .pointsList > .pointContainer {
+    display: inline-block;
+    text-align: center;
+    height: 100%;
+    position: relative;
+}
+/* all the elements within point containers are horizontally centered */
+.pointsList > .pointContainer > div {
+    position: absolute;
+    left: 0;
+    right: 0;
+    margin: auto;
+}
+.pointBox {
+    width: 40px;
+    border-radius: 8px;
+    /* to vertically center */
+    transform: translateY(50%);
+}
+.confidenceIntervalLine {
+    /* to vertically center */
+    transform: translateY(50%);
+}
+.confidenceIntervalBorder {
+    height: 2px;
+    width: 10px;
+    transform: translateY(1px);
+}
+
 
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
     padding-top: 5px;
@@ -248,14 +357,6 @@ form > h1 {
     width: 2px;
     display: inline-block;
     margin-left: 100px;
-    position: absolute;
-}
-.verticalDividerCandidatePreview {
-    background-color: #d2d2d2;
-    height: calc(100% - 40px);
-    width: 2px;
-    display: inline-block;
-    margin-left: 200px;
     position: absolute;
 }
 
@@ -362,6 +463,11 @@ form > h1 {
 .purpleToRedGradient { background: linear-gradient(to bottom right, #721ae9, #e45c67); }
 .redToLightRedGradient { background: linear-gradient(to bottom right, #e24794, #f76740); }
 .redToLightRedDownGradient { background: linear-gradient(to bottom, #e24794, #f76740); }
+.redToLightRedUpGradientOpacity {
+    background: linear-gradient(to top, #e24794, #f76740);
+    opacity: 0.7;
+}
+.cottonCandyGradient { background: linear-gradient(to top right, #ae7efc, #75dcfc); }
 .purpleToRedLightGradient { background: linear-gradient(to bottom right, #983cc9, #e36273); }
 .purpleToRedLightGradientOpacity {
     background: linear-gradient(to top right, #983cc9, #e36273);
@@ -370,6 +476,16 @@ form > h1 {
 .redToLightRedGradientOpacity {
     background: linear-gradient(to top right, #e24794, #f76740);
     opacity: 0.7;
+}
+.blackBackground {
+    background: #2e2e2e;
+}
+.lightBlackBackground {
+    background: #383838;
+}
+.blackBackgroundOpacity {
+    background: #2e2e2e;
+    opacity: 0.85;
 }
 .lightBlueToLightPurpleGradient { background: linear-gradient(to top right, #74e2ff, #b37bfe); }
 .orangeToYellowGradient { background: linear-gradient(to top right, #f24c49, #ebbb8a); }
@@ -483,6 +599,15 @@ form > h1 {
     from { opacity: 0; }
     to   { opacity: 1; }
 }
+
+
+.resumeAnalysisUploadStep {
+    display: none;
+}
+.resumeAnalysisUploadStep.inFrame {
+    display: initial;
+}
+
 
 
 #pathwayDescriptionAndSalary {
@@ -679,11 +804,12 @@ button.link {
     padding: 2px 13px;
 }
 .lightBlueChip {
-    height: 36px;
+    /* height: 36px; */
     background: var(--moonshotLightBlue);
     padding: 1px;
     border-radius: 25px;
-    margin-left: 20px;
+    margin-left: 10px;
+    margin-right: 10px;
 }
 .lightBlueChip > div {
     background: white;
@@ -826,13 +952,113 @@ button.link {
     /* height: 100%; */
     /* width: 100%; */
 }
-.candidatePreviewPaper {
-    width: 90%;
-    max-width: 1000px;
-    height: 170px;
-    margin: auto;
-    padding: 20px;
+
+.candidatePreview {
+    position: relative;
+    width: 335px;
+    height: 400px;
+    -moz-box-shadow:    0px 0px 50px 1px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    box-shadow:         0px 0px 50px 1px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
+    color: white;
+    display: inline-block;
+    margin: 15px 25px;
+    background-color: #333333;
 }
+.candidatePreview:hover {
+    -moz-box-shadow:    0px 0px 50px 15px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 15px #00000073;
+    box-shadow:         0px 0px 50px 15px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
+}
+.candidatePreview > .candidateName {
+    margin: 10px 0 0;
+    display: inline-block;
+}
+.candidatePreview > .candidateLocation {
+    display: inline-block;
+}
+.candidatePreview > .candidateScore {
+    display: inline-block;
+}
+.candidatePreview > .hiringStageCircle {
+    display: inline-block;
+    width: 86px;
+    height: 86px;
+    border-radius: 100%;
+    position: relative;
+    background: linear-gradient(to top left, #983cc9, #e36273);
+    margin-top: 20px;
+}
+.hiringStageCircle > .circleCover {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    background-color: #333333;
+}
+.circleCover.right { right: 0; }
+.circleCover.left { left: 0; }
+.circleCover.top { top: 0; }
+.circleCover.bottom { bottom: 0; }
+.circleCover.interior {
+    border-radius: 100%;
+    width: 80%;
+    height: 80%;
+    left: 10%;
+    top: 10%;
+}
+.circleCover.interior > div {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    left: 50%;
+}
+.candidatePreviewPredictiveSection {
+    width: 30%;
+    position: absolute;
+    display: inline-block;
+    height: 110px;
+    bottom: 30px;
+}
+
+
+.employerDiv { background-color: #2e2e2e; }
+
+
+.tabsShadow {
+    width: 100%;
+    overflow-y: hidden;
+    padding: 0 0 30px;
+}
+.tabsShadow > div {
+    width: 100%;
+    box-shadow:         0px 0px 20px 12px #00000073;
+    -moz-box-shadow:    0px 0px 20px 12px #00000073;
+    -webkit-box-shadow: 0px 0px 20px 12px #00000073;
+}
+
+
+.freeResponse {
+    width: 96%;
+    margin: 40px 2%;
+    padding: 15px;
+    color: white;
+    box-shadow:         0px 5px 6px 3px #00000073;
+    -moz-box-shadow:    0px 5px 6px 3px #00000073;
+    -webkit-box-shadow: 0px 5px 6px 3px #00000073;
+}
+.freeResponse > .answer {
+    border: 2px solid rgb(117, 220, 252);
+    padding: 12px;
+    margin-top: 10px;
+}
+
+
 
 .semiOpaqueHoverable {
     opacity: 0.5;
@@ -1155,6 +1381,10 @@ button.link {
     text-align: center;
 }
 
+.characteristicsList > div > div {
+    margin: 10px 20px;
+}
+
 .logoBar {
     text-align: center;
     margin: 20px 0px 40px;
@@ -1172,12 +1402,18 @@ button.link {
 .greenText { color: var(--moonshotGreenText); }
 .redText { color: red }
 .whiteText { color: white; }
+.grayText { color: #d7d7d7; }
 .blueText { color: var(--moonshotLightBlue); }
+.lightBlueText { color: rgb(117, 220, 252); }
 .darkBlueText { color: var(--moonshotMidBlue); }
 .purpleText { color: var(--moonshotPurple) }
 .darkPurpleText { color: var(--moonshotDarkPurple) }
 .lightPurpleText { color: #b37bfe; }
 .orangeText { color: #f24c49; }
+
+.grayTextOnHover:hover { color: #d7d7d7; }
+
+
 .onboarding3PurpleText { color: var(--onboarding3Purple); }
 .onboardingPage1Text {
     background: linear-gradient(to right, #5deaff, #3dabff);
@@ -1503,12 +1739,12 @@ button.link {
     padding-left: 0px;
 }
 
-.candidatePreviewLiLeftContainer {
+/* .candidatePreviewLiLeftContainer {
     width: 160px;
     position: relative;
     float: left;
     text-align: center;
-}
+} */
 
 .aboutMeLiIconContainer {
     height: calc(100% - 40px);
@@ -1551,18 +1787,7 @@ button.link {
     color: black;
     text-decoration: underline;
 }
-.candidatePreviewLi {
-    text-align: left;
-    padding-left: 3%;
-    margin: auto;
-    position: relative;
-}
-.candidatePreviewLi > div {
-    display: inline-block;
-}
-.candidatePreviewLi > div:nth-child(3) {
-    width: calc(100% - 250px);
-}
+
 .aboutMeLiIconContainer {
     vertical-align: top;
     position: absolute;
@@ -1577,6 +1802,7 @@ button.link {
     height: 50px;
     margin-bottom: 10px;
 }
+.footer.topSpace { padding-top: 20px; }
 
 .myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
     background-color: transparent !important;
@@ -1652,6 +1878,15 @@ button.link {
     position: relative;
     height: 100px;
     width: 100%;
+}
+.employerHeader {
+    position: relative;
+    height: 100px;
+    width: 100%;
+    box-shadow:         0px 2px 30px 8px;
+    -moz-box-shadow:    0px 2px 30px 8px;
+    -webkit-box-shadow: 0px 2px 30px 8px;
+    margin-bottom: 50px;
 }
 
 .purpleToGreenSpacer {
@@ -1746,7 +1981,7 @@ button.link {
 }
 .homepageTrajectoryTextRightIcon.onHome {
     height: 70px;
-    margin-top: 36px;
+    margin-top: 18px;
 }
 .forBusinessTrajectoryTextLeft {
     float: left;
@@ -1930,6 +2165,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .blueTextImportant { color: var(--moonshotLightBlue) !important; }
 .blackTextImportant { color: black !important; }
 .whiteTextImportant { color: white !important; }
+.recharts-wrapper {
+    margin : 0 auto;
+}
 
 .aResumeCantDoThis {
     position: relative;
@@ -2003,7 +2241,19 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     filter: none;
 }
 
-.sliderContainer { margin: 0 20%; }
+.sliderContainer {
+    margin: 0 20%;
+    position: relative;
+}
+
+.sliderNoLeftColor > div:first-child > div:first-child > div:first-child {
+    background-color: rgb(189, 189, 189) !important;
+}
+.sliderNoLeftColor > div:first-child > div:first-child > div:nth-child(3) {
+    background-color: rgb(0, 195, 255) !important;
+    border: 2px solid rgb(0, 195, 255) !important;
+}
+
 
 .twoOptionsBox {
     width: 200px;
@@ -2035,41 +2285,48 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .multipleChoiceOption, .multiSelectOption {
     position: relative;
     margin-bottom: 10px;
+
+    text-align: left;
+    margin-left: 80px;
+    margin-right: 80px;
 }
 .multipleChoiceAnswer {
-    max-width: 160px;
-    margin: auto;
+    /* max-width: 160px; */
     overflow-x: hidden;
+    /* margin: auto; */
+
+    display: inline-block;
 }
-.multipleChoiceAnswer.medium {
+/* .multipleChoiceAnswer.medium {
     max-width: 450px;
-}
+} */
 textarea.freeResponseTextArea {
     width: 90%;
     resize: none;
     height: 300px;
 }
 textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
-    width: 260px;
+    width: calc(100% - 70px);
 }
-textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 .multipleChoiceCircle, .multiSelectCircle {
     width: 20px;
     height: 20px;
     background-color: white;
     border-radius: 15px;
     border: 2px solid var(--moonshotLightBlue);
+    margin-top: 4px;
 }
 .multipleChoiceCircle {
-    position: absolute;
-    left: calc(50% - 110px);
-    top: 5px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: 20px;
 }
 .multipleChoiceCircle.selected, .multiSelectCircle.selected {
     background-color: var(--moonshotLightBlue);
 }
 .multipleChoiceCircle.medium {
-    left: calc(35% - 110px);
+    /* left: calc(35% - 110px); */
 }
 
 
@@ -2103,6 +2360,11 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 .marginBottom10px { margin-bottom: 10px; }
 .marginTop40px { margin-top: 40px; }
 .marginTop20px { margin-top: 20px; }
+.marginTop10px { margin-top: 10px; }
+.paddingTop40px { padding-top: 40px; }
+.paddingTop20px { padding-top: 20px; }
+.paddingTop10px { padding-top: 10px; }
+.paddingBottom40px { padding-bottom: 40px; }
 
 /* decorative triangles */
 
@@ -2205,6 +2467,14 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     font-family: monospace;
 }
 
+.pre-wrap {
+    white-space: pre-wrap;       /* Since CSS 2.1 */
+    white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+    white-space: -pre-wrap;      /* Opera 4-6 */
+    white-space: -o-pre-wrap;    /* Opera 7 */
+    word-wrap: break-word;       /* Internet Explorer 5.5+ */
+}
+
 .width90Percent { width: 90%; }
 .maxWidth350px { max-width: 350px; }
 
@@ -2237,6 +2507,7 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
 .font8px { font-size: 8px; }
 .font6px { font-size: 6px; }
 
+.bold { font-weight: bold; }
 .inline { display: inline; }
 .inline-block { display: inline-block; }
 .noPadding { padding: 0 0 0 0 }
@@ -2878,6 +3149,15 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     }
     .flex-center p { padding: 10px; }
 
+    .multipleChoiceOption, .multiSelectOption {
+        margin-left: 50px;
+        margin-right: 50px;
+    }
+
+    .multipleChoiceCircle {
+        margin-top: 2px;
+    }
+
     .font40pxUnder600 { font-size: 40px; }
     .font38pxUnder600 { font-size: 38px; }
     .font36pxUnder600 { font-size: 36px; }
@@ -3044,9 +3324,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         font-size: 15px;
         padding-top: 2px;
     }
-    .lightBlueChip {
-        height: 30px;
-    }
     .lightBlueChip > div {
         font-size: 15px;
         padding-top: 2px;
@@ -3190,11 +3467,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         word-wrap:break-word;
     }
 
-    textarea.multipleChoiceCustomAnswer {
-        margin-left: 80px;
-        width: 240px;
-    }
-
     .twoOptionsOr { margin: 55px 10px 0; }
 
     .font40pxUnder500 { font-size: 40px; }
@@ -3284,9 +3556,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
         width: 80%;
         padding-top: 60%;
     }
-    .multipleChoiceCircle {
-        left: calc(50% - 120px);
-    }
     .pathwayLandingSponsoredBy {
         height: 30px;
     }
@@ -3296,8 +3565,16 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     }
 
     .multiSelectOption { min-height: 30px; }
-    .multiSelectCircle { margin-top: 0px; }
+    .multiSelectCircle, .multipleChoiceCircle {
+        margin-top: 0px;
+        width: 15px;
+        height: 15px;
+    }
     .multiSelectAnswer { margin-top: 2px; }
+    .multipleChoiceOption, .multiSelectOption {
+        margin-left: 30px;
+        margin-right: 30px;
+    }
 
     .pathwayContentTimeText { margin-top: 4px; }
 
@@ -3359,7 +3636,6 @@ textarea.multipleChoiceCustomAnswer { margin-left: 140px; }
     }
 
     textarea.multipleChoiceCustomAnswer {
-        margin-left: 30px;
         width: 180px;
     }
 

@@ -17,7 +17,7 @@ class PathwayContentArticle extends Component {
         if (this.props.step !== this.state.currStep) {
             const id = this.props.step.contentID;
 
-            axios.get("/api/getArticle", {
+            axios.get("/api/pathway/article", {
                 params: {
                     _id: id
                 }
@@ -33,7 +33,7 @@ class PathwayContentArticle extends Component {
         if (this.props.step !== this.state.currStep) {
             const id = this.props.step.contentID;
 
-            axios.get("/api/getArticle", {
+            axios.get("/api/pathway/article", {
                 params: {
                     _id: id
                 }
@@ -50,7 +50,7 @@ class PathwayContentArticle extends Component {
         const linkFunction = this.state.content.linkFunction;
         if (linkFunction) {
             if (linkFunction === "clickedAlert") {
-                axios.post("/api/alertLinkClicked", {
+                axios.post("/api/admin/alertLinkClicked", {
                     params: {
                         name: this.props.currentUser.name,
                         userId: this.props.currentUser._id,

@@ -16,6 +16,8 @@ var usersSchema = mongoose.Schema({
     admin: Boolean,
     // agreed to privacy policy and terms of use
     agreedToTerms: Boolean,
+    // whether the user's profile is hidden from employers
+    hideProfile: Boolean,
     // special url used to access this user's profile
     profileUrl: String,
     // password to log in

@@ -97,7 +97,7 @@ class Home extends Component {
     };
 
     componentDidMount() {
-        axios.get("/api/topPathways", {
+        axios.get("/api/pathway/topPathways", {
             params: {numPathways: 6}
         }).then(res => {
             // make sure component is mounted before changing state
@@ -325,10 +325,8 @@ class Home extends Component {
                                     className="homepageTrajectoryTextRightIcon personIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
-                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">$100 If You Interview</h2>
-                                    Score an interview through one of our
-                                    technical pathways and we{"'"}ll pay you $100.
-                                    That{"'"}s like a year{"'"}s worth of ramen.
+                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Earn Your Skill IQs</h2>
+                                    Create projects and earn Skill IQs through Pathways. Show your value to employers.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesLeft">
@@ -353,7 +351,7 @@ class Home extends Component {
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
                                     <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Hired by<br/>Innovative Companies</h2>
                                     Compete for open positions by excelling in
-                                    pathways and proving your skills. Get
+                                    Pathways and proving your skills. Get
                                     hired for your skills, not your volunteer hours.
                                 </div>
                             </div>

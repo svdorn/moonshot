@@ -26,11 +26,6 @@ const styles = {
     horizListIcon: {
         height: "50px",
         marginBottom: "10px"
-        // position: "absolute",
-        // top: "0",
-        // bottom: "0",
-        // right: "80%",
-        // margin: "auto"
     },
     horizListQuotes: {
         marginTop: "40px",
@@ -94,7 +89,15 @@ class ResumeScorer extends Component {
         this.state = {
             open: false,
             uploadingResume: false,
-            doneUploading: false
+            doneUploading: false,
+            // will be true when user has already uploaded resume and now has
+            // to input their information
+            uploadStepTwo: false,
+            // if user tries to submit without uploading a resume, show an
+            // error banner
+            showNoResumeBanner: false,
+            // if user tries to submit file of invalid type, show error banner
+            showWrongFileTypeBanner: false
         }
     }
 
@@ -113,6 +116,94 @@ class ResumeScorer extends Component {
             left: 0,
             behavior: 'smooth'
         });
+    }
+
+    showNoResumeBanner() {
+        let self = this;
+
+        // don't show it again if it's already showing the banner
+        if (this.state.showNoResumeBanner) {
+            return;
+        }
+
+        // show the alert
+        self.setState({
+            showNoResumeBanner: true,
+        }, hideBannerAfterTimeUp);
+
+        // function to turn banner off after three seconds
+        function hideBannerAfterTimeUp() {
+            const THREE_SECONDS = 3000;
+            setTimeout(() => {
+                self.setState({
+                    showNoResumeBanner: false
+                });
+            }, THREE_SECONDS);
+        }
+    }
+
+
+    showWrongFileTypeBanner() {
+        let self = this;
+
+        // don't show it again if it's already showing the banner
+        if (this.state.showWrongFileTypeBanner) {
+            return;
+        }
+
+        // show the alert
+        self.setState({
+            showWrongFileTypeBanner: true,
+        }, hideBannerAfterTimeUp);
+
+        // function to turn banner off after three seconds
+        function hideBannerAfterTimeUp() {
+            const THREE_SECONDS = 3000;
+            setTimeout(() => {
+                self.setState({
+                    showWrongFileTypeBanner: false
+                });
+            }, THREE_SECONDS);
+        }
+    }
+
+
+    goToStepTwo() {
+        // check that a resume was actually uploaded
+        if (!this || !this.refs || !this.refs.resumeFile || !this.refs.resumeFile.files || this.refs.resumeFile.files.length < 1) {
+            this.showNoResumeBanner();
+            return;
+        }
+
+        // check the file type, show error banner if wrong file type
+        if (!this.isValidFileType(this.refs.resumeFile.files[0].name)) {
+            this.showWrongFileTypeBanner();
+            return;
+        }
+
+
+        // advance to the next step
+        this.setState({ uploadStepTwo: true });
+    }
+
+
+    goToStepOne() {
+        this.setState({uploadStepTwo: false});
+    }
+
+
+    // only allow certain file types to be uploaded
+    isValidFileType(fileName) {
+        // get the file extension from the end of the file name
+        let extension = fileName.split('.').pop().toLowerCase();
+        // file types we allow
+        const allowedFileTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'];
+        // look through the list of allowed file types, if any matches, success
+        const isValid = allowedFileTypes.some(fileType => {
+           return fileType === extension;
+        });
+
+        return isValid;
     }
 
 
@@ -144,11 +235,25 @@ class ResumeScorer extends Component {
         const skills = formValues.skills;
         const desiredCareers = formValues.desiredCareers;
         const email = formValues.email;
+
         let resumeFile = undefined;
         try {
             resumeFile = this.refs.resumeFile.files[0];
         } catch (getFileError) {
             console.log("Need a resume.");
+            return;
+        }
+
+        // check that a resume has been uploaded
+        if (!resumeFile) {
+            // if not, show error message
+            this.showNoResumeBanner();
+            return;
+        }
+
+        // check the file type, show error banner if wrong file type
+        if (!this.isValidFileType(resumeFile.name)) {
+            this.showWrongFileTypeBanner();
             return;
         }
 
@@ -160,8 +265,7 @@ class ResumeScorer extends Component {
         resumeData.append("resumeFile", resumeFile);
 
         this.setState({uploadingResume: true});
-        //axios.post("/api/resumeScorer/uploadResume", {name, skills, desiredCareers, email, resumeFile})
-        axios.post("/api/resumeScorer/uploadResume", resumeData)
+        axios.post("/api/misc/resumeScorer/uploadResume", resumeData)
         .then(result => {
             // go to screen saying upload was successful
             this.setState({uploadingResume: false, doneUploading: true});
@@ -186,61 +290,108 @@ class ResumeScorer extends Component {
 
         // everything that will be shown if the user has not yet uploaded their resume
         if (!this.state.doneUploading) {
+            let uploadPart1Class = "resumeAnalysisUploadStep";
+            let uploadPart2Class = "resumeAnalysisUploadStep";
+            // if we're on step 2, put the second step in the frame
+            if (this.state.uploadStepTwo) {
+                uploadPart2Class = uploadPart2Class + " inFrame";
+            }
+            // otherwise put the first step in the frame
+            else {
+                uploadPart1Class = uploadPart1Class + " inFrame";
+            }
+            const uploadDialog = (
+                <Dialog
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    paperClassName="dialogForBiz"
+                    contentClassName="center"
+                    overlayClassName="dialogOverlay"
+                >
+                    {this.state.uploadingResume ?
+                        <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
+                        : <form onSubmit={this.handleSubmit.bind(this)} className="center">
+                            <div className={uploadPart1Class}>
+                                <div className="blueTextImportant font36px font30pxUnder700 font26pxUnder500">
+                                    Upload Your Resume
+                                </div>
+                                <input
+                                    name="resumeFile"
+                                    type="file"
+                                    ref="resumeFile"
+                                    accept="image/jpg,image/png,application/pdf,application/msword"
+                                    style={{margin:"20px 0"}}
+                                />
+                                <RaisedButton
+                                    label="Continue"
+                                    onClick={this.goToStepTwo.bind(this)}
+                                    primary={true}
+                                    className="raisedButtonWhiteText"
+                                />
+                            </div>
+                            <div className={uploadPart2Class}>
+                                <div className="blueTextImportant font36px font30pxUnder700 font26pxUnder500">
+                                    How Should We Contact You?
+                                </div>
+                                <Field
+                                    name="fullName"
+                                    component={renderTextField}
+                                    label="Full Name"
+                                /><br/>
+                                <Field
+                                    name="email"
+                                    component={renderTextField}
+                                    label="Email"
+                                /><br/>
+                                <Field
+                                    name="desiredCareers"
+                                    component={renderTextField}
+                                    label="Desired Careers"
+                                /> < br/>
+                                <Field
+                                    name="skills"
+                                    component={renderTextField}
+                                    label="Top 3 Skills"
+                                /><br/>
+                                <RaisedButton
+                                    label="Back"
+                                    onClick={this.goToStepOne.bind(this)}
+                                    primary={true}
+                                    className="raisedButtonWhiteText"
+                                    style={{margin: "10px"}}
+                                />
+                                <RaisedButton
+                                    label="Submit"
+                                    type="submit"
+                                    primary={true}
+                                    className="raisedButtonWhiteText"
+                                    style={{margin: "10px"}}
+                                />
+                            </div>
+                            {this.state.showNoResumeBanner ?
+                                <div>
+                                    Upload a resume first!
+                                </div>
+                                : null
+                            }
+                            {this.state.showWrongFileTypeBanner ?
+                                <div>
+                                    Only accepts .jpg, .jpeg, .png, .pdf, .doc, .docx
+                                </div>
+                                : null
+                            }
+                        </form>
+                    }
+                </Dialog>
+            );
+
             page = (
                 <div>
                     <div className={"fullHeight redToLightRedGradient" + blurredClass}>
-                        <Dialog
-                            modal={false}
-                            open={this.state.open}
-                            onRequestClose={this.handleClose}
-                            autoScrollBodyContent={true}
-                            paperClassName="dialogForBiz"
-                            contentClassName="center"
-                            overlayClassName="dialogOverlay"
-                        >
-                            {this.state.uploadingResume ?
-                                <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
-                                : <form onSubmit={this.handleSubmit.bind(this)} className="center">
-                                    <div className="blueTextImportant font36px font30pxUnder700 font26pxUnder500">
-                                        Upload Your Resume
-                                    </div>
-                                    <Field
-                                        name="desiredCareers"
-                                        component={renderTextField}
-                                        label="Desired Careers"
-                                    /> < br/>
-                                    <Field
-                                        name="skills"
-                                        component={renderTextField}
-                                        label="Top 3 Skills"
-                                    /><br/>
-                                    <Field
-                                        name="fullName"
-                                        component={renderTextField}
-                                        label="Full Name"
-                                    /><br/>
-                                    <Field
-                                        name="email"
-                                        component={renderTextField}
-                                        label="Email"
-                                    /><br/>
-                                    <input
-                                        name="resumeFile"
-                                        type="file"
-                                        ref="resumeFile"
-                                        accept="image/jpg,image/png,application/pdf,application/msword"
-                                        style={{margin:"20px 0"}}
-                                    />
-                                    <RaisedButton
-                                        label="Submit"
-                                        type="submit"
-                                        primary={true}
-                                        className="raisedButtonWhiteText"
-                                        style={styles.marginTop}
-                                    />
-                                </form>
-                            }
-                        </Dialog>
+                        { uploadDialog }
+
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="4"/>
                         <div className="infoBox whiteText font40px font24pxUnder500"
                              style={{zIndex: "20", marginTop: '-10px'}}>

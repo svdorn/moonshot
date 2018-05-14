@@ -5,7 +5,7 @@ import {bindActionCreators} from 'redux';
 import {postEmployer, onSignUpPage} from '../../actions/usersActions';
 import {TextField, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
-import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 
 const styles = {
@@ -59,7 +59,7 @@ const validate = values => {
     return errors
 };
 
-class BusinessHome extends Component {
+class AddUser extends Component {
     constructor(props) {
         super(props);
 
@@ -134,6 +134,10 @@ class BusinessHome extends Component {
     render() {
         return (
             <div className="fullHeight greenToBlue formContainer">
+                <MetaTags>
+                    <title>Add User | Moonshot</title>
+                    <meta name="description" content="Add a user to your business account."/>
+                </MetaTags>
                 <div className="form lightWhiteForm">
                     {this.state.email != "" && this.props.userPosted ?
                         <div className="center">
@@ -208,9 +212,9 @@ function mapStateToProps(state) {
     };
 }
 
-BusinessHome = reduxForm({
+AddUser = reduxForm({
     form: 'signup',
     validate,
-})(BusinessHome);
+})(AddUser);
 
-export default connect(mapStateToProps, mapDispatchToProps)(BusinessHome);
+export default connect(mapStateToProps, mapDispatchToProps)(AddUser);

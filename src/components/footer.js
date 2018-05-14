@@ -16,15 +16,35 @@ class Footer extends Component {
         if (this.props.isOnboarding) {
             return null;
         }
+        let shadowDivClass = "";
+        let extraSpace = "";
         let footerColor = "purpleToBlue";
-        if ((this.props.location.pathname === '/myPathways') || (this.props.location.pathname === '/pathway') || (this.props.location.pathname === '/resumeAnalysis')) {
-            footerColor = "purpleToRedLightGradientOpacity";
-        } else if ((this.props.location.pathname === '/profile') || (this.props.location.pathname === '/businessProfile')) {
-            footerColor = "orangeToYellowGradientOpacity";
+        // get the path from the url
+        let pathname = undefined;
+        // try to get the path
+        try {
+            pathname = this.props.location.pathname.toLowerCase();
         }
+        // if the pathname is not yet defined, don't do anything, this will be executed again later
+        catch (e) {
+            pathname = "";
+        }
+        if ((pathname === '/mypathways') || (pathname === '/pathway')) {
+            footerColor = "purpleToRedLightGradientOpacity";
+        } else if ((pathname === '/profile') || (pathname === '/businessprofile')) {
+            footerColor = "orangeToYellowGradientOpacity";
+        } else if (pathname === '/resumeanalysis') {
+            footerColor = "redToLightRedUpGradientOpacity";
+        } else if (pathname === '/results' || pathname === '/mycandidates') {
+            shadowDivClass = "tabsShadow";
+            extraSpace = " topSpace";
+            footerColor = "blackBackgroundOpacity";
+        }
+
         return (
             <div className="jsxWrapper">
-                <footer className={"footer " + footerColor}>
+                <div className={shadowDivClass} style={{position:"absolute"}}><div/></div>
+                <footer className={"footer " + footerColor + extraSpace}>
                     <ul className="horizCenteredList">
                         <li className="center">
                             <img

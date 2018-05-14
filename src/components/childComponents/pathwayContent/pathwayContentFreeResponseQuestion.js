@@ -17,6 +17,11 @@ class PathwayContentMultiSelectQuestion extends Component {
         // if the user has an answer saved in the db, bring it up
         if (props.currentUser && props.currentUser.answers && props.currentUser.answers[quizId]) {
             answer = props.currentUser.answers[quizId].value;
+            // html decode it
+            answer = answer.replace(/&quot;/g,"\"")
+                           .replace(/&amp;/g,"&")
+                           .replace(/&lt;/g,"<")
+                           .replace(/&gt;/g,">");
         }
 
         this.state = { quizId, answer };
@@ -30,6 +35,11 @@ class PathwayContentMultiSelectQuestion extends Component {
             // if the user has an answer saved in the db, bring it up
             if (props.currentUser && props.currentUser.answers && props.currentUser.answers[quizId]) {
                 answer = props.currentUser.answers[quizId].value;
+                // html decode it
+                answer = answer.replace(/&quot;/g,"\"")
+                               .replace(/&amp;/g,"&")
+                               .replace(/&lt;/g,"<")
+                               .replace(/&gt;/g,">");
             }
 
             this.setState({ quizId, answer });
@@ -86,6 +96,7 @@ class PathwayContentMultiSelectQuestion extends Component {
                 <div style={{marginBottom:"20px"}}><Question question={this.props.question} /></div>
                 <textarea
                     type="text"
+                    style={{whiteSpace: "pre-wrap"}}
                     className="freeResponseTextArea"
                     value={self.state.answer}
                     onChange={(e) => self.handleInputChange(e)}

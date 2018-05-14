@@ -1,7 +1,7 @@
 "use strict"
 import React, { Component } from 'react';
 import axios from 'axios';
-import { TextField } from 'material-ui';
+import { TextField, CircularProgress } from 'material-ui';
 import { login, closeNotification, addPathwayAndLogin } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -79,7 +79,7 @@ class Login extends Component {
         // logged in from the cookie
         else {
             let self = this;
-            axios.get("/api/keepMeLoggedIn")
+            axios.get("/api/user/keepMeLoggedIn")
             .then(function (res) {
                 let keepMeLoggedIn = res.data;
                 if (typeof keepMeLoggedIn != "boolean") {
@@ -155,7 +155,7 @@ class Login extends Component {
 
     handleCheckMarkClick() {
 
-        axios.post("/api/keepMeLoggedIn", { stayLoggedIn: !this.state.keepMeLoggedIn })
+        axios.post("/api/user/keepMeLoggedIn", { stayLoggedIn: !this.state.keepMeLoggedIn })
         .catch(function(err) {
             console.log("error posting 'keep me logged in' option: ", err);
         });
@@ -226,6 +226,8 @@ class Login extends Component {
                         <div className="clickable blueText" onClick={() => this.goTo({pathname: '/signup', query: signUpQuery})} style={{display:"inline-block"}}>Create Account</div>
                         <br/>
                         <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')} style={{display:"inline-block", marginLeft:"7px"}}>Forgot Password?</div>
+                        <br/>
+                        {this.props.loadingLogin ? <CircularProgress style={{marginTop: "10px"}}/> : null}
                     </form>
                 </div>
 
@@ -245,7 +247,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        formData: state.form
+        formData: state.form,
+        loadingLogin: state.users.loadingSomething
     };
 }
 
