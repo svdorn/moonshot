@@ -161,6 +161,7 @@ var usersSchema = mongoose.Schema({
 
     // ---->>> POST-PIVOT <<<---- //
 
+    // skills tests the user has taken
     skills: [{
         // id of the skill
         skillId: mongoose.Schema.Types.ObjectId,
@@ -170,6 +171,12 @@ var usersSchema = mongoose.Schema({
         attempts: [{
             // if the user is currently taking the test
             inProgress: Boolean,
+            // the date and time the user took the test
+            startDate: Date,
+            // the date and time the user finished the test
+            endDate: Date,
+            // how long it took overall in milliseconds to finish the test (difference between endDate and startDate)
+            totalTime: Number,
             // the level the user is currently on (only applies if test is in progress);
             // will be something like 3.9, so user will be getting level 3 questions,
             // then if user gets the question right it'll go up, maybe to 4.1 or
@@ -194,12 +201,91 @@ var usersSchema = mongoose.Schema({
                         // if the candidate chose the correct answers
                         isCorrect: Boolean,
                         // the (moonshot-generated) answer ids that the user chose
-                        answerIds: [ Number ]
+                        answerIds: [ Number ],
+                        // the date and time the user started the question
+                        startDate: Date,
+                        // the date and time the user finished the question
+                        endDate: Date,
+                        // how long it took overall in milliseconds to finish the
+                        // question (difference between endDate and startDate)
+                        totalTime: Number,
                     }]
                 }]
             }]
         }]
     }],
+
+    // the user's pyschometric test answers and results
+    psychometricTest: {
+        // whether the user is currently taking the test
+        inProgress: Boolean,
+        // the date and time the user took the test
+        startDate: Date,
+        // the date and time the user finished the test
+        endDate: Date,
+        // how long it took overall in milliseconds to finish the test (difference between endDate and startDate)
+        totalTime: Number,
+        // whether the user is allowed to get rephrases for questions
+        rephrase: Boolean,
+        // how many times the user can rephrase a question
+        numRephrasesAllowed: Number,
+        // how many questions in total are in the test
+        testLength: Number,
+        // array positions of factors that have not yet been completed
+        // for example, if factors in array positions 0 and 4 were complete,
+        // the array would look like [ 1, 2, 3, 5, 6 ]
+        incompleteFactors: [ Number ],
+        // the overall factors the questions test for
+        factors: [{
+            // moonshot-generated (not mongo) id for the factor
+            factorId: Number,
+            // name of the factor ("Honesty-Humility, Emotionality, Extraversion...")
+            // at the time the user took the test
+            name: String,
+            // the factor score (-5 to 5), calculated from the facet scores
+            score: Number,
+            // the array positions of facets that have not yet been completed
+            // similar to incompleteFactors above
+            incompleteFacets: [ Number ],
+            // the facets we're testing for
+            facets: [{
+                // the facet score (-5 to 5), calculated after the test is done
+                score: Number,
+                // how important the facet is in calculating the factor score
+                weight: Number,
+                // the moonshot-generated id of the facet
+                facetId: Number,
+                // name of the facet at the time the user completed the test
+                name: String,
+                // the responses users had to facet questions
+                responses: [{
+                    // when this question was asked compared to the other facet questions
+                    order: Number,
+                    // the question id of the question that was actually answered
+                    answeredId: Number,
+                    // the answer (-5 to 5) that the user chose
+                    answer: Number,
+                    // exact date/time the user started the first phrasing of this question
+                    startDate: Date,
+                    // exact date/time the user answered the question
+                    endDate: Date,
+                    // total time in milliseconds it took to answer the question
+                    totalTime: Number,
+                    // the moonshot-generated ids of questions that were skipped
+                    // when this question was being asked
+                    skips: [{
+                        // the time the skip button was pressed
+                        skipDate: Date,
+                        // the time the user spent on this version of the question
+                        // before asking for a rephrase (in milliseconds)
+                        skipTime: Number,
+                        // the moonshot generated id of the question that was skipped
+                        questionId: Number
+                    }]
+                }]
+            }]
+        }]
+    },
 
     // the positions that the candidate has applied to
     positions: [{
@@ -210,6 +296,15 @@ var usersSchema = mongoose.Schema({
         // the hiring stage of the candidate, which the company has determined
         // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
         hiringStage: String,
+        // dates/times the hiring stage of the candidate was changed for this position
+        hiringStageChanges: [{
+            // what the hiring stage was changed to
+            hiringStage: String,
+            // the date/time the hiring stage was changed
+            dateChanged: Date
+        }],
+        // the date and time the user applied to the position
+        appliedTime: Date,
         // the scores the user got for the position
         scores: {
             // combination of all the scores
