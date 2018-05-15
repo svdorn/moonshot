@@ -7,8 +7,6 @@ var positionsSchema = mongoose.Schema({
     // the more granular areas that a candidate has to understand within a skill;
     // for example, front-end developer skill could consist of HTML, CSS, Javascript subskills
     subSkills: [{
-        // moonshot-generated (not mongo) id to keep track of subSkills, only unique within skill
-        subSkillId: String,
         // the name of the sub skill
         name: String,
         // how important this sub skill is in determining overall Skill IQ
@@ -19,8 +17,6 @@ var positionsSchema = mongoose.Schema({
             level: Number,
             // the questions that are all around the same level of difficulty
             questions: [{
-                // an id that we generate (pretty much from a counter, NOT a mongo id)
-                questionId: String,
                 // the question that is displayed
                 body: {[
                     // the type of this part of the question, e.g. "ul" or "ol" or "text" or "image"
@@ -42,8 +38,6 @@ var positionsSchema = mongoose.Schema({
                 ]},
                 // the answers that can be chosen
                 options: [{
-                    // the id we generate to differentiate options (NOT a mongo id)
-                    optionId: String,
                     // what is displayed on-screen
                     body: {[
                         // the type of this part of the question, e.g. "ul" or "ol" or "text" or "image"
@@ -67,8 +61,8 @@ var positionsSchema = mongoose.Schema({
                 // if you can select multiple answers (and therefore, multiple
                 // answers could potentially be correct)
                 multiSelect: Boolean,
-                // the answerIds of the answer(s) that must be selected to get the question right
-                correctAnswers: [ Number ]
+                // the answer ids of the answer(s) that must be selected to get the question right
+                correctAnswers: [ mongoose.Schema.Types.ObjectId ]
             }]
         }]
     }]

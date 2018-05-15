@@ -1,5 +1,6 @@
 var Users = require('../models/users.js');
 var Employers = require('../models/employers.js');
+const Psychtests = require('../models/psychtests.js');
 
 var bcrypt = require('bcryptjs');
 var crypto = require('crypto');
@@ -31,7 +32,1157 @@ const userApis = {
     POST_changeSettings,
     GET_userByProfileUrl,
     POST_login,
-    POST_currentPathwayStep
+    POST_currentPathwayStep,
+    postPsych
+}
+
+
+function postPsych () {
+const psychtest = {
+    factors: [
+        {
+            name: "Honesty-Humility",
+            factorId: "0-2039",
+            facets: [
+                {
+                    weight: .25,
+                    facetId: "0-8d34",
+                    name: "facet1",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "1-3334",
+                    name: "facet2",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "2-9999",
+                    name: "facet3",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "3-1604",
+                    name: "facet4",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Emotionality",
+            factorId: "1-0912",
+            facets: [
+                {
+                    weight: .25,
+                    facetId: "0-8d34",
+                    name: "facet1",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "1-3334",
+                    name: "facet2",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "2-9999",
+                    name: "facet3",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "3-1604",
+                    name: "facet4",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Extraversion",
+            factorId: "2-9876",
+            facets: [
+                {
+                    weight: .25,
+                    facetId: "0-8d34",
+                    name: "facet1",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "1-3334",
+                    name: "facet2",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "2-9999",
+                    name: "facet3",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "3-1604",
+                    name: "facet4",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Agreeableness",
+            factorId: "3-1010",
+            facets: [
+                {
+                    weight: .25,
+                    facetId: "0-8d34",
+                    name: "facet1",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "1-3334",
+                    name: "facet2",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "2-9999",
+                    name: "facet3",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "3-1604",
+                    name: "facet4",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Conscientiousness",
+            factorId: "4-9678",
+            facets: [
+                {
+                    weight: .25,
+                    facetId: "0-8d34",
+                    name: "facet1",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "1-3334",
+                    name: "facet2",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "2-9999",
+                    name: "facet3",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "3-1604",
+                    name: "facet4",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Openness to Experience",
+            factorId: "5-3459",
+            facets: [
+                {
+                    weight: .25,
+                    facetId: "0-8d34",
+                    name: "facet1",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "1-3334",
+                    name: "facet2",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "2-9999",
+                    name: "facet3",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "3-1604",
+                    name: "facet4",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            name: "Altruism",
+            factorId: "6-0999",
+            facets: [
+                {
+                    weight: .25,
+                    facetId: "0-8d34",
+                    name: "facet1",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "1-3334",
+                    name: "facet2",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "2-9999",
+                    name: "facet3",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                },
+                {
+                    weight: .25,
+                    facetId: "3-1604",
+                    name: "facet4",
+                    questions: [
+                        {
+                            body: "aspdoifjasdf",
+                            questionId: "0-1234"
+                        },
+                        {
+                            body: "efrgtredsdsasd",
+                            questionId: "1-1234"
+                        },
+                        {
+                            body: "asfdsgfafsdafsd",
+                            questionId: "2-1234"
+                        },
+                        {
+                            body: "asfdgfsafsdgaffsdgf",
+                            questionId: "3-1234"
+                        },
+                        {
+                            body: "werdgfsawr",
+                            questionId: "4-1234"
+                        },
+                        {
+                            body: "qrw4t",
+                            questionId: "5-1234"
+                        },
+                        {
+                            body: "w4354re",
+                            questionId: "6-1234"
+                        },
+                        {
+                            body: "u89okie",
+                            questionId: "7-1234"
+                        }
+                    ]
+                }
+            ]
+        },
+
+    ]
+}
+
+Psychtests.create(psychtest, (err, res) => {
+    console.log(err);
+    console.log(res);
+});
+
 }
 
 

@@ -59,6 +59,8 @@ app.use(session({
 
 // ----->> START APIS <<----- //
 
+//userApis.postPsych();
+
 app.post('/user/signOut', userApis.POST_signOut);
 
 app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);

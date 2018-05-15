@@ -6,26 +6,22 @@ var psychtestsSchema = mongoose.Schema({
     factors: [{
         // the name of the factor ("Honesty-Humility, Emotionality, Extraversion...")
         name: String,
-        // moonshot-generated id
-        factorId: Number,
         // the facets make up the factors
         facets: [{
             // how important the facet is in calculating factor scores
             weight: Number,
-            // moonshot-generated facet identifier
-            facetId: String,
             // name of the facet
             name: String,
             // questions that can be asked for this facet
             questions: [{
                 // the text of the question
                 body: String,
-                // moonshot-generated unique identifier
-                questionId: String
+                // optional; indicates that sliding left means 5 and sliding right means -5
+                invertScore: Boolean
             }]
         }]
     }]
 });
 
-var Psychtests = mongoose.model('Psychtests', pyschtestsSchema);
+var Psychtests = mongoose.model('Psychtests', psychtestsSchema);
 module.exports = Psychtests;

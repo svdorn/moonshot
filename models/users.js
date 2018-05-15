@@ -186,8 +186,8 @@ var usersSchema = mongoose.Schema({
             score: Number,
             // the different sub skills involved in the overall skill
             subSkills: [{
-                // moonshot-generated (not mongo) id to keep track of subSkills, only unique within skill
-                subSkillId: String,
+                // mongo id to keep track of subSkills
+                subSkillId: mongoose.Schema.Types.ObjectId,
                 // the score the user got on the sub skill test; undefined if in progress
                 score: Number,
                 // the levels the user got through with the associated answers to questions
@@ -196,12 +196,12 @@ var usersSchema = mongoose.Schema({
                     level: Number,
                     // the questions the candidate answered at this level of difficulty
                     questions: [{
-                        // the moonshot-generated (not mongo) id of the question
-                        questionId: String,
+                        // id of the question
+                        questionId: mongoose.Schema.Types.ObjectId,
                         // if the candidate chose the correct answers
                         isCorrect: Boolean,
-                        // the (moonshot-generated) answer ids that the user chose
-                        answerIds: [ String ],
+                        // the ids of answers that the user chose
+                        answerIds: [ mongoose.Schema.Types.ObjectId ],
                         // the date and time the user started the question
                         startDate: Date,
                         // the date and time the user finished the question
@@ -215,7 +215,7 @@ var usersSchema = mongoose.Schema({
         }]
     }],
 
-    // the user's pyschometric test answers and results
+    // the user's psychometric test answers and results
     psychometricTest: {
         // whether the user is currently taking the test
         inProgress: Boolean,
@@ -237,8 +237,8 @@ var usersSchema = mongoose.Schema({
         incompleteFactors: [ Number ],
         // the overall factors the questions test for
         factors: [{
-            // moonshot-generated (not mongo) id for the factor
-            factorId: String,
+            // id for the factor
+            factorId: mongoose.Schema.Types.ObjectId,
             // name of the factor ("Honesty-Humility, Emotionality, Extraversion...")
             // at the time the user took the test
             name: String,
@@ -254,8 +254,8 @@ var usersSchema = mongoose.Schema({
                 // the weight that was used for this facet in calculating the
                 // user's factor scores
                 weight: Number,
-                // the moonshot-generated id of the facet
-                facetId: String,
+                // unique facet identifier
+                facetId: mongoose.Schema.Types.ObjectId,
                 // name of the facet at the time the user completed the test
                 name: String,
                 // the responses users had to facet questions
@@ -263,7 +263,7 @@ var usersSchema = mongoose.Schema({
                     // when this question was asked compared to the other facet questions
                     order: Number,
                     // the question id of the question that was actually answered
-                    answeredId: String,
+                    answeredId: mongoose.Schema.Types.ObjectId,
                     // the answer (-5 to 5) that the user chose
                     answer: Number,
                     // exact date/time the user started the first phrasing of this question
@@ -280,8 +280,8 @@ var usersSchema = mongoose.Schema({
                         // the time the user spent on this version of the question
                         // before asking for a rephrase (in milliseconds)
                         skipTime: Number,
-                        // the moonshot generated id of the question that was skipped
-                        questionId: String
+                        // the id of the question that was skipped
+                        questionId: mongoose.Schema.Types.ObjectId
                     }]
                 }]
             }]
@@ -292,8 +292,8 @@ var usersSchema = mongoose.Schema({
     positions: [{
         // the company that is offering this position
         companyId: mongoose.Schema.Types.ObjectId,
-        // the Moonshot-generated id of the position within that company
-        positionId: String,
+        // the id of the position within that company
+        positionId: mongoose.Schema.Types.ObjectId,
         // the hiring stage of the candidate, which the company has determined
         // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
         hiringStage: String,

@@ -10,8 +10,6 @@ var businessesSchema = mongoose.Schema({
 
     // the positions that the company is (or was) hiring for
     positions: [{
-        // NOT MONGO ID, just an id we make to identify the positions WITHIN companies
-        positionId: String,
         // name of the position (such as "Machine Learning Developer")
         name: String,
         // if the position should be listed as one that candidates can apply for
@@ -22,8 +20,6 @@ var businessesSchema = mongoose.Schema({
         freeResponseQuestions: [{
             // the text of the question (e.g. "Why do you want to work here?")
             body: String,
-            // the id of the question (not a mongo id, just made by a counter)
-            questionId: String,
             // if you have to answer this question to finish applying
             required: Boolean
         }],
