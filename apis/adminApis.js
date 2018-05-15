@@ -33,7 +33,10 @@ function POST_alertLinkClicked(req, res) {
     const id = sanitize(req.body.params.userId);
     const link = sanitize(req.body.params.link);
 
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
+    console.log("process.env.NODE_ENV: ", process.env.NODE_ENV);
+
+    // let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
+    let recipients = ["ameyer24@wisc.edu"];
     let subject = 'Someone just clicked the NWM Culture Index Link';
     let content = "<div>"
         + "<h3>Send an email to Northwestern Mutual (Preston) telling him NOT to interview this person until we give him the go-ahead. Make sure this is the right link, it's possible that this email hasn't been updated in the codebase yet but there are other links that you'll need to be notified of.</h3>"

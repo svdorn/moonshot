@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www & node apiServer.js",
-    "test": "mocha"
+    "test": "mocha --timeout 120000"
   },
   "directories": {
     "test": "test"
@@ -12,8 +12,12 @@
   "devDependencies": {
     "chai": "^4.1.2",
     "mocha": "^5.1.1",
+    "mockgoose": "^7.3.5",
     "nodemon": "^1.17.4",
     "redux-logger": "^3.0.6",
+    "sinon": "^5.0.7",
+    "sinon-chai": "^3.0.0",
+    "sinon-express-mock": "^2.0.0",
     "webpack": "^4.8.3",
     "webpack-cli": "^2.1.3"
   },

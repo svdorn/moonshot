@@ -22,6 +22,7 @@ const miscApis = {
     POST_resumeScorer_uploadResume
 }
 
+
 function POST_createReferralCode(req, res) {
     const name = sanitize(req.body.name);
     // make it to lower case so that it's case insensitive
@@ -111,7 +112,8 @@ function POST_createReferralCode(req, res) {
         else {
             // if the user already has a referral code, give them that
             sendReferralEmail(user.referralCode);
-            res.json(user.referralCode);
+            //res.json(user.referralCode);
+            res.json("jangus");
             return;
         }
     });

@@ -1,3 +1,6 @@
+// set the environment to know it is in testing mode
+process.env.NODE_ENV = 'test';
+
 const expect = require('chai').expect;
 const {
     sanitize,
