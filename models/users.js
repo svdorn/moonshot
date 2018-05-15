@@ -187,7 +187,7 @@ var usersSchema = mongoose.Schema({
             // the different sub skills involved in the overall skill
             subSkills: [{
                 // moonshot-generated (not mongo) id to keep track of subSkills, only unique within skill
-                subSkillId: Number,
+                subSkillId: String,
                 // the score the user got on the sub skill test; undefined if in progress
                 score: Number,
                 // the levels the user got through with the associated answers to questions
@@ -197,11 +197,11 @@ var usersSchema = mongoose.Schema({
                     // the questions the candidate answered at this level of difficulty
                     questions: [{
                         // the moonshot-generated (not mongo) id of the question
-                        questionId: Number,
+                        questionId: String,
                         // if the candidate chose the correct answers
                         isCorrect: Boolean,
                         // the (moonshot-generated) answer ids that the user chose
-                        answerIds: [ Number ],
+                        answerIds: [ String ],
                         // the date and time the user started the question
                         startDate: Date,
                         // the date and time the user finished the question
@@ -238,7 +238,7 @@ var usersSchema = mongoose.Schema({
         // the overall factors the questions test for
         factors: [{
             // moonshot-generated (not mongo) id for the factor
-            factorId: Number,
+            factorId: String,
             // name of the factor ("Honesty-Humility, Emotionality, Extraversion...")
             // at the time the user took the test
             name: String,
@@ -251,10 +251,11 @@ var usersSchema = mongoose.Schema({
             facets: [{
                 // the facet score (-5 to 5), calculated after the test is done
                 score: Number,
-                // how important the facet is in calculating the factor score
+                // the weight that was used for this facet in calculating the
+                // user's factor scores
                 weight: Number,
                 // the moonshot-generated id of the facet
-                facetId: Number,
+                facetId: String,
                 // name of the facet at the time the user completed the test
                 name: String,
                 // the responses users had to facet questions
@@ -262,7 +263,7 @@ var usersSchema = mongoose.Schema({
                     // when this question was asked compared to the other facet questions
                     order: Number,
                     // the question id of the question that was actually answered
-                    answeredId: Number,
+                    answeredId: String,
                     // the answer (-5 to 5) that the user chose
                     answer: Number,
                     // exact date/time the user started the first phrasing of this question
@@ -280,7 +281,7 @@ var usersSchema = mongoose.Schema({
                         // before asking for a rephrase (in milliseconds)
                         skipTime: Number,
                         // the moonshot generated id of the question that was skipped
-                        questionId: Number
+                        questionId: String
                     }]
                 }]
             }]
@@ -292,7 +293,7 @@ var usersSchema = mongoose.Schema({
         // the company that is offering this position
         companyId: mongoose.Schema.Types.ObjectId,
         // the Moonshot-generated id of the position within that company
-        positionId: Number,
+        positionId: String,
         // the hiring stage of the candidate, which the company has determined
         // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
         hiringStage: String,

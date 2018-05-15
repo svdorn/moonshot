@@ -8,7 +8,7 @@ var positionsSchema = mongoose.Schema({
     // for example, front-end developer skill could consist of HTML, CSS, Javascript subskills
     subSkills: [{
         // moonshot-generated (not mongo) id to keep track of subSkills, only unique within skill
-        subSkillId: Number,
+        subSkillId: String,
         // the name of the sub skill
         name: String,
         // how important this sub skill is in determining overall Skill IQ
@@ -20,7 +20,7 @@ var positionsSchema = mongoose.Schema({
             // the questions that are all around the same level of difficulty
             questions: [{
                 // an id that we generate (pretty much from a counter, NOT a mongo id)
-                questionId: Number,
+                questionId: String,
                 // the question that is displayed
                 body: {[
                     // the type of this part of the question, e.g. "ul" or "ol" or "text" or "image"
@@ -30,7 +30,7 @@ var positionsSchema = mongoose.Schema({
                     // include the classes that question parts default to having
                     includeDefaultClasses: Boolean,
                     // the content of the part; if content is just text, array will be length 1
-                    content: [String],
+                    content: [ String ],
                     // text that will show up if this question part is a link (optional)
                     linkText: String,
                     // if the question part is a link, should the link open a new tab? (optional, defaults to true)
@@ -43,7 +43,7 @@ var positionsSchema = mongoose.Schema({
                 // the answers that can be chosen
                 options: [{
                     // the id we generate to differentiate options (NOT a mongo id)
-                    optionId: Number,
+                    optionId: String,
                     // what is displayed on-screen
                     body: {[
                         // the type of this part of the question, e.g. "ul" or "ol" or "text" or "image"
@@ -53,7 +53,7 @@ var positionsSchema = mongoose.Schema({
                         // include the classes that answer parts default to having
                         includeDefaultClasses: Boolean,
                         // the content of the part; if content is just text, array will be length 1
-                        content: [String],
+                        content: [ String ],
                         // text that will show up if this question part is a link (optional)
                         linkText: String,
                         // if the question part is a link, should the link open a new tab? (optional, defaults to true)
