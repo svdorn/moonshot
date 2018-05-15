@@ -14,7 +14,9 @@ const mongoose = require('mongoose');
 
 var app = express();
 
-app.use(logger('dev'));
+if (process.env.NODE_ENV !== "test") {
+    app.use(logger('dev'));
+}
 app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
