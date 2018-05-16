@@ -41,6 +41,9 @@ const miscApis = require('./apis/miscApis');
 const pathwayApis = require('./apis/pathwayApis');
 
 
+
+
+
 // set up the session
 app.use(session({
     secret: credentials.secretString,
@@ -51,7 +54,7 @@ app.use(session({
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
         // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
-        secure: !!process.env.NODE_ENV // only make the cookie if accessing via https
+        secure: process.env.NODE_ENV !== "development" // only make the cookie if accessing via https
     },
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
@@ -59,7 +62,10 @@ app.use(session({
 
 // ----->> START APIS <<----- //
 
-//userApis.postPsych();
+const mlFunctions = require('./apis/mlFunctions');
+mlFunctions.calculateKClusters();
+
+app.post('/user/startPsychEval', userApis.POST_startPsychEval);
 
 app.post('/user/signOut', userApis.POST_signOut);
 
