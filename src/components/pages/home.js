@@ -268,7 +268,7 @@ class Home extends Component {
                         <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
 
                         <div className="infoBox whiteText font40px font30pxUnder700 font24pxUnder500 font20pxUnder400 font18pxUnder350">
-                            Your modern resume.<br/>We{"'"}ll help you get hired for<br/>your skills, not your GPA.<br/>
+                            Your modern resume.<br/>We{"'"}ll help you get hired for<br/>who you are.<br/>
                             <button className="outlineButton font30px font20pxUnder500 blueWhiteButton"
                                     onClick={() => this.scrollDown()}>
                                 Get Started
@@ -300,8 +300,7 @@ class Home extends Component {
                                 />
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
                                     <h2 className="greenText font28px font24pxUnder800 font22pxUnder500">Complete Pathways To Get Evaluated For Open Positions</h2>
-                                      Pathways are employer-sponsored courses
-                                      evaluating you for in-demand positions.
+                                      Pathways are 30 to 45 minute position evaluations given by employers.
 
                                 </div>
                             </div>
@@ -325,8 +324,8 @@ class Home extends Component {
                                     className="homepageTrajectoryTextRightIcon personIcon onHome"
                                 />
                                 <div className="homepageTrajectoryTextRightDiv onHome font18px font16pxUnder800">
-                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Earn Your Skill IQs</h2>
-                                    Create projects and earn Skill IQs through Pathways. Show your value to employers.
+                                    <h2 className="blueText font28px font24pxUnder800 font22pxUnder500">Build Your Cred</h2>
+                                    Complete a psychometric analysis to prove your potential and earn Skill IQs with short quizzes.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesLeft">
@@ -351,8 +350,7 @@ class Home extends Component {
                                 <div className="homepageTrajectoryTextLeftDiv onHome font18px font16pxUnder800">
                                     <h2 className="purpleText font28px font24pxUnder800 font22pxUnder500">Get Hired by<br/>Innovative Companies</h2>
                                     Compete for open positions by excelling in
-                                    Pathways and proving your skills. Get
-                                    hired for your skills, not your volunteer hours.
+                                    Pathways and building your credentials.
                                 </div>
                             </div>
                             <div className="homepageTrajectoryImagesRight">
@@ -369,9 +367,8 @@ class Home extends Component {
 
                     <div className="topMarginOnSmallScreen" style={{textAlign: "center"}}>
                         <div className="center font34px font32pxUnder800 font26pxUnder500 blueText clickableNoUnderline inlineBlock" onClick={() => this.goTo("/discover")}>Pathways</div>
-                        <div className="homePathwaysDesc font18px font16pxUnder800">
-                            Moonshot courses are organized in<div className="br under500only"><br/></div> pathways and
-                            sponsored<br/>by employers hiring for those skills.
+                        <div className="homePathwaysDesc font18px font16pxUnder800" style={{padding: "0 20px"}}>
+                            Online evaluations given by employers to assess you for an open position.
                         </div>
 
                         <ul className="horizCenteredList pathwayPrevList" style={{minHeight:"400px", maxHeight:"779px", overflow:"hidden", maxWidth:"1000px"}}>
