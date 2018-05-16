@@ -33,7 +33,167 @@ const userApis = {
     GET_userByProfileUrl,
     POST_login,
     POST_currentPathwayStep,
-    POST_startPsychEval
+    POST_startPsychEval,
+    POST_answerPsychQuestion,
+    makeMockPsychData
+}
+
+
+async function makeMockPsychData() {
+    let user = await Users.findById("5a95fed783705f7be1f7c158");
+    let psychometricTest = user.psychometricTest;
+    for (let factorIndex = 0; factorIndex < psychometricTest.factors.length; factorIndex++) {
+        let factor = psychometricTest.factors[factorIndex];
+
+        factor.incompleteFacets = [];
+
+        let facetTotal = 0;
+
+        for (let facetIndex = 0; facetIndex < factor.facets.length; facetIndex++) {
+            let facet = factor.facets[facetIndex];
+
+            facet.score = Math.floor(Math.random() * 11) - 5;
+
+            facetTotal += facet.score;
+
+            factor.facets[facetIndex] = facet;
+        }
+
+        factor.score = facetTotal / factor.facets.length;
+
+        psychometricTest.factors[factorIndex] = factor;
+    }
+
+    user.psychometricTest = psychometricTest;
+
+    user.psychometricTest.endDate = new Date();
+
+    user.save()
+    .then(result => {
+        console.log("result: ", result);
+    })
+    .catch(err => {
+        console.log("err: ", err);
+    })
+}
+
+// DANGEROUS, returns user with all fields
+async function getAndVerifyUser(userId, verificationToken) {
+    return new Promise(async function(resolve, reject) {
+        // get the user from the db
+        let user = undefined;
+        try {
+            user = await Users.findById(userId);
+        } catch (getUserError) {
+            console.log("Error getting user from the database: ", getUserError);
+            reject({status: 500, message: "Server error, try again later", error: getUserError});
+        }
+
+        // verify user's identity
+        if (!verificationToken && user.verificationToken !== verificationToken) {
+            console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
+            reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
+        }
+
+        resolve(user);
+    })
+}
+
+
+async function POST_answerPsychQuestion(req, res) {
+    userId = "5af493a242f28d407fefdc41";
+    verificationToken = "2246696e0517ce1e4d320a2023d7d1fd88e3fa537a17a50059d444aebefabc87f29927881df0eed1658968014aac4462d468b859c430a5fe5d9d84b2f1ecabab";
+    //const userId = sanitize(req.userId);
+    //const verificationToken = sanitize(req.verificationToken);
+    let user = undefined;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserErrorObj) {
+        return res.status(getUserErrorObj.status).send(getUserErrorObj.message);
+    }
+
+    // const factorId = sanitize(req.factorId);
+    // let factorIndex = sanitize(req.factorIndex);
+    // const facetId = sanitize(req.facetId);
+    // let facetIndex = sanitize(req.facetIndex);
+    // const answer = sanitize(req.answer);
+    // const questionId = sanitize(req.questionId);
+
+    const factorId = "5afb4b6407602b3e2f3a25b4";
+    let factorIndex = 0;
+    const facetId = "5afb4b6407602b3e2f3a25d0";
+    let facetIndex = 0;
+
+    const answer = -4;
+    const questionId = "5afb4b6407602b3e2f3a25d8"
+
+    let psychometricTest = user.psychometricTest;
+    let factors = psychometricTest.factors;
+
+    // find out how many questions have already been answered for this facet
+    // get the factor of the question that was answered
+    let factor = factors[factorIndex];
+    console.log("factorIndex is: ", factorIndex);
+    console.log("factor is: ", factor);
+    // make sure we have the right factor
+    if (factor.factorId.toString() !== factorId.toString()) {
+        factorIndex = factors.findIndex(currFactor => {
+            return currFactor.factorId.toString() === factorId.toString();
+        });
+        if (!factorIndex || factorIndex === -1) {
+            console.log("Couldn't find factor with id: ", factorId);
+            return res.status(400).send("Bad input.");
+        }
+        factor = factors[factorIndex];
+    }
+
+    let facets = factor.facets;
+    let facet = facets[facetIndex];
+    // make sure we have the right facet
+    if (facet.facetId.toString() !== facetId.toString()) {
+        facetIndex = facets.findIndex(currFacet => {
+            return currFacet.facetId.toString() === facetId.toString();
+        });
+        if (!facetIndex || facetIndex === -1) {
+            console.log("Couldn't find facet with id: ", factorId);
+            return res.status(400).send("Bad input.");
+        }
+        facet = facets[facetIndex];
+    }
+
+    // if this question hasn't been started, can't answer it
+    if (facet.responses.length === 0) {
+        console.log("Facet.responses.length was 0.");
+        return res.status(400).send("Haven't started that question yet.");
+    }
+
+    // the most recent response is the one that will always be edited
+    let response = facet.responses[facet.responses.length - 1];
+    response.answer = answer;
+    response.answeredId = questionId;
+    response.endDate = new Date();
+    const startDateMillis = (new Date(response.startDate)).getTime();
+    // record number of milliseconds between starting and ending the question
+    response.totalTime = response.endDate.getTime() - startDateMillis;
+
+    facet.responses[facet.responses.length - 1] = response;
+    facets[facetIndex] = facet;
+    factor.facets = facets;
+    factors[factorIndex] = factor;
+    psychometricTest.factors = factors;
+    user.psychometricTest = psychometricTest;
+
+    let updatedUser = undefined;
+    try {
+        updatedUser = await user.save();
+    } catch(saveUserErr) {
+        console.log("Error saving user that was trying to save a pysch question answer: ", saveUserErr);
+        return res.status(500).send("Server error.");
+    }
+
+    console.log("updatedUser is: ", updatedUser);
+
+    //res.json("success");
 }
 
 
@@ -109,8 +269,8 @@ async function POST_startPsychEval(req, res) {
         // currently not allowing any rephrases, change later
         rephrase: false,
         numRephrasesAllowed: 0,
-        // 100 questions
-        testLength: 100,
+        // around 100 questions
+        questionsPerFacet: 4,
         incompleteFactors,
         factors
     }

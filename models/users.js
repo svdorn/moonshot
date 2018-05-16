@@ -162,7 +162,7 @@ var usersSchema = mongoose.Schema({
     // ---->>> POST-PIVOT <<<---- //
 
     // skills tests the user has taken
-    skills: [{
+    skillsTests: [{
         // id of the skill
         skillId: mongoose.Schema.Types.ObjectId,
         // the score the user got on their most recent attempt
@@ -229,8 +229,8 @@ var usersSchema = mongoose.Schema({
         rephrase: Boolean,
         // how many times the user can rephrase a question
         numRephrasesAllowed: Number,
-        // how many questions in total are in the test
-        testLength: Number,
+        // determines how long the test will be
+        questionsPerFacet: Number,
         // array positions of factors that have not yet been completed
         // for example, if factors in array positions 0 and 4 were complete,
         // the array would look like [ 1, 2, 3, 5, 6 ]
