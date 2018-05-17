@@ -235,6 +235,25 @@ var usersSchema = mongoose.Schema({
         // for example, if factors in array positions 0 and 4 were complete,
         // the array would look like [ 1, 2, 3, 5, 6 ]
         incompleteFactors: [ Number ],
+        // current question that the user is on
+        currentQuestion: {
+            // the index of the factor within the user's factors array
+            factorIndex: Number,
+            // the id of the factor in the test db
+            factorId: mongoose.Schema.Types.ObjectId,
+            // the index of the facet within the user's factors array
+            facetIndex: Number,
+            // the id of the factor in the test db
+            facetId: mongoose.Schema.Types.ObjectId,
+            // the id of the question being asked
+            questionId: mongoose.Schema.Types.ObjectId,
+            // if this is the third question from this facet, responseIndex will be 2
+            responseIndex: Number,
+            // the text of the question
+            body: String,
+            // if the score should be inverted after answering
+            invertScore: Boolean
+        },
         // the overall factors the questions test for
         factors: [{
             // id for the factor
@@ -258,10 +277,10 @@ var usersSchema = mongoose.Schema({
                 facetId: mongoose.Schema.Types.ObjectId,
                 // name of the facet at the time the user completed the test
                 name: String,
+                // questions that have already been used for this facet
+                usedQuestions: [ mongoose.Schema.Types.ObjectId ],
                 // the responses users had to facet questions
                 responses: [{
-                    // when this question was asked compared to the other facet questions
-                    order: Number,
                     // the question id of the question that was actually answered
                     answeredId: mongoose.Schema.Types.ObjectId,
                     // the answer (-5 to 5) that the user chose

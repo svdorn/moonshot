@@ -65,7 +65,8 @@ app.use(session({
 const mlFunctions = require('./apis/mlFunctions');
 // mlFunctions.calculateKClusters();
 
-userApis.POST_answerPsychQuestion();
+//userApis.POST_startPsychEval();
+//userApis.POST_answerPsychQuestion();
 //userApis.makeMockPsychData();
 
 app.post('/user/startPsychEval', userApis.POST_startPsychEval);
