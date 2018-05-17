@@ -5,8 +5,35 @@ class PsychSlider extends Component {
     constructor(props) {
         super(props);
 
-        // start out with the slider in the middle
-        this.state = { answer: 0 };
+        let width = this.props.width;
+        let height = this.props.height;
+        if (!width) {
+            if (this.props.style && this.props.style.width) {
+                width = this.props.style.width;
+            } else {
+                // default width
+                width = 350;
+            }
+        }
+        if (!height) {
+            if (this.props.style && this.props.style.height) {
+                height = this.props.style.height;
+            } else {
+                // default height
+                height = 200;
+            }
+        }
+        if (typeof width === "string") { width = parseInt(width, 10) };
+        if (typeof height === "string") { height = parseInt(height, 10) };
+
+        this.state = {
+            // start out with the slider in the middle
+            answer: 0,
+            // user has not selected an answer
+            answered: false,
+            // width and height of the slider
+            width, height
+        };
     }
 
 
@@ -15,17 +42,73 @@ class PsychSlider extends Component {
     }
 
 
+    componentWillReceiveProps(newProps) {
+
+    }
+
+
+    // width and height correspond to the width and height of the whole slider
+    makeVerticalLines(coverColor) {
+        // make the 9 vertical lines separating the gradient things
+        const verticalLines = [];
+        const width = this.state.width;
+        const height = this.state.height;
+
+        const EXTRA_LENGTH = width / 120;
+        for (let lineIndex = 1; lineIndex <= 17; lineIndex+=2) {
+            let extraLeft = -EXTRA_LENGTH;
+            let extraMiddle = 0;
+            if (lineIndex > 9) {
+                extraLeft = EXTRA_LENGTH
+            };
+            if (lineIndex === 9) {
+                extraMiddle = 2 * EXTRA_LENGTH;
+            };
+            const lineStyle = {
+                backgroundColor: coverColor,
+                position: "absolute",
+                height: "100%",
+                width: `${(width/19) + (2 * EXTRA_LENGTH) + extraMiddle}px`,
+                left: `${(lineIndex*width/19) - EXTRA_LENGTH + extraLeft}px`
+            }
+
+            verticalLines.push(
+                <div key={`line${lineIndex}`} style={lineStyle} />
+            );
+        }
+
+        return verticalLines;
+    }
+
+
+    onClick(event) {
+        // how far left on the screen they clicked
+        const xClick = event.clientX;
+        console.log("xClick: ", xClick);
+        // how far left on the screen the slider is
+        const xOffset = event.currentTarget.offsetLeft;
+        console.log("xOffset: ", xOffset);
+        // how far left in the slider they clicked
+        const fromLeft = xClick - xOffset;
+        console.log("event: ", event);
+        console.log("fromLeft: ", fromLeft);
+
+    }
+
+
     // unfortunately you have to use px instead of % for width and height
     render() {
         const coverColor = this.props.backgroundColor ? this.props.backgroundColor : "#2e2e2e";
+        const width = this.state.width;
+        const height = this.state.height;
 
-        let sliderStyle = { ...this.props.style, position: "relative", overflowY: "hidden" };
-        if (this.props.width) { sliderStyle.width = this.props.width; }
-        if (this.props.height) { sliderStyle.height = this.props.height; }
-        if (!sliderStyle.width) { sliderStyle.width = "350px"; }
-        if (!sliderStyle.height) { sliderStyle.height = "200px"; }
-        const width = parseInt(sliderStyle.width, 10);
-        const height = parseInt(sliderStyle.height, 10);
+        let sliderStyle = {
+            ...this.props.style,
+            position: "relative",
+            overflowY: "hidden",
+            width: `${width}px`,
+            height: `${height}px`
+        };
 
         // the gradient color towards the middles of things
         const gradientNotSelected = "#f25a2b";
@@ -54,30 +137,7 @@ class PsychSlider extends Component {
             top: "45%"
         };
 
-        // make the 9 vertical lines separating the gradient things
-        const verticalLines = [];
-        const EXTRA_LENGTH = width / 120;
-        for (let lineIndex = 1; lineIndex <= 17; lineIndex+=2) {
-            let extraLeft = -EXTRA_LENGTH;
-            let extraMiddle = 0;
-            if (lineIndex > 9) {
-                extraLeft = EXTRA_LENGTH
-            };
-            if (lineIndex === 9) {
-                extraMiddle = 2 * EXTRA_LENGTH;
-            };
-            const lineStyle = {
-                backgroundColor: coverColor,
-                position: "absolute",
-                height: "100%",
-                width: `${(width/19) + (2 * EXTRA_LENGTH) + extraMiddle}px`,
-                left: `${(lineIndex*width/19) - EXTRA_LENGTH + extraLeft}px`
-            }
-
-            verticalLines.push(
-                <div style={lineStyle} />
-            );
-        }
+        const verticalLines = this.makeVerticalLines(coverColor);
 
         let topTriangleCoverStyle = {
             position: "absolute",
@@ -110,7 +170,7 @@ class PsychSlider extends Component {
         const circleStyle = {};
 
         return (
-            <div className="psychSlider" style={sliderStyle}>
+            <div className="psychSlider" style={sliderStyle} onClick={this.onClick.bind(this)}>
                 <div style={gradientRectRightStyle} />
                 <div style={gradientRectLeftStyle} />
                 <div style={rightCoverStyle} />

@@ -75,7 +75,7 @@ class PsychAnalysis extends Component {
                 <div>
                     {question}
                 </div>
-                <PsychSlider width="350px" height="200px" />
+                <PsychSlider width="350px" height="200px" style={{marginLeft:"200px"}} />
                 <div className="clickable" onClick={this.nextQuestion.bind(this)}>
                     Next
                 </div>
