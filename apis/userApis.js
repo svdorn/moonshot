@@ -90,6 +90,11 @@ async function getAndVerifyUser(userId, verificationToken) {
             reject({status: 500, message: "Server error, try again later", error: getUserError});
         }
 
+        if (!user) {
+            console.log("User not found from id: ", userId);
+            reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
+        }
+
         // verify user's identity
         if (!verificationToken && user.verificationToken !== verificationToken) {
             console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
@@ -102,18 +107,19 @@ async function getAndVerifyUser(userId, verificationToken) {
 
 
 async function POST_answerPsychQuestion(req, res) {
-    //userId = "5af493a242f28d407fefdc41";
-    //verificationToken = "2246696e0517ce1e4d320a2023d7d1fd88e3fa537a17a50059d444aebefabc87f29927881df0eed1658968014aac4462d468b859c430a5fe5d9d84b2f1ecabab";
-    const userId = sanitize(req.userId);
-    const verificationToken = sanitize(req.verificationToken);
+    //const userId = "5af493a242f28d407fefdc41";
+    //const verificationToken = "2246696e0517ce1e4d320a2023d7d1fd88e3fa537a17a50059d444aebefabc87f29927881df0eed1658968014aac4462d468b859c430a5fe5d9d84b2f1ecabab";
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
     let user = undefined;
     try {
         user = await getAndVerifyUser(userId, verificationToken);
     } catch (getUserErrorObj) {
+        console.log("error getting user: ", getUserErrorObj);
         return res.status(getUserErrorObj.status).send(getUserErrorObj.message);
     }
 
-    const answer = sanitize(req.answer);
+    const answer = sanitize(req.body.answer);
     //const answer = -4;
 
     // verify that the answer provided is valid
@@ -224,7 +230,6 @@ async function POST_answerPsychQuestion(req, res) {
         psychometricTest.currentQuestion = undefined;
 
         finishedTest = true;
-        console.log("finished the test");
     }
 
     // otherwise the test is not over so they need a new question

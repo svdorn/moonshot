@@ -291,8 +291,12 @@ function removeIrrelevantInfoKeepToken(user) {
         newUser.password = undefined;
         // remove everything except the info about the current question
         if (newUser.psychometricTest) {
+            const currentQuestion = newUser.psychometricTest.currentQuestion;
             newUser.psychometricTest = {
-                currentQuestion: newUser.psychometricTest.currentQuestion,
+                // only need the body of the current question
+                currentQuestion: {
+                    body: currentQuestion.body
+                },
                 inProgress: newUser.psychometricTest.inProgress
             }
         }

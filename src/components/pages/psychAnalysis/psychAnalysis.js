@@ -3,15 +3,17 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { closeNotification } from "../../../actions/usersActions";
+import { closeNotification, answerPsychQuestion } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
+import PsychSlider from './psychSlider';
 
 class PsychAnalysis extends Component {
     constructor(props) {
         super(props);
 
-        this.state = {};
+        // start out with the slider in the middle
+        this.state = { answer: 0 };
     }
 
 
@@ -33,14 +35,21 @@ class PsychAnalysis extends Component {
     }
 
 
-    render() {
+    // move on to the next psych question
+    nextQuestion() {
+        this.props.answerPsychQuestion(this.props.currentUser._id, this.props.currentUser.verificationToken, this.state.answer);
+    }
 
+
+    render() {
+        // get the current user and question
         let currentUser = undefined;
         let question = "";
         try {
             currentUser = this.props.currentUser;
             console.log("currentUser: ", currentUser);
             const psychometricTest = currentUser.psychometricTest;
+            // if the user already took the test, can't do it again
             if (!psychometricTest.inProgress) {
                 console.log("Can only take the psych test once!");
                 // TODO: make this go to the psych analysis landing page instead of home
@@ -50,10 +59,12 @@ class PsychAnalysis extends Component {
             question = currentUser.psychometricTest.currentQuestion.body;
         } catch (getQuestionError) {
             // TODO: make this go to the psych analysis landing page instead of home
+            console.log("getQuestionError: ", getQuestionError);
             console.log("Need to have started the test to see the questions!");
             this.goTo("/");
             return null;
         }
+
         return (
             <div className="blackBackground fillScreen whiteText">
                 <MetaTags>
@@ -64,6 +75,10 @@ class PsychAnalysis extends Component {
                 <div>
                     {question}
                 </div>
+                <PsychSlider width="400px" height="200px" />
+                <div className="clickable" onClick={this.nextQuestion.bind(this)}>
+                    Next
+                </div>
             </div>
         );
     }
@@ -72,7 +87,8 @@ class PsychAnalysis extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        closeNotification
+        closeNotification,
+        answerPsychQuestion
     }, dispatch);
 }
 

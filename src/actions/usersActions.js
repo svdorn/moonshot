@@ -525,12 +525,31 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
 }
 
 
+export function answerPsychQuestion(userId, verificationToken, answer) {
+    return function(dispatch) {
+        console.log("userId: ", userId);
+        axios.post("/api/user/answerPsychQuestion", {userId, verificationToken, answer})
+        .then(response => {
+            dispatch({
+                type: "ANSWER_PSYCH_QUESTION",
+                user: response.data.user,
+                finishedTest: response.data.finishedTest
+            })
+        })
+        .catch(err => {
+            console.log("Error answering psych question: ", err);
+            dispatch({type: "ANSWER_PSYCH_QUESTION_ERROR", notification: { message: err.response.data, type: "errorHeader" } });
+        });
+    }
+}
+
+
 // Send an email when form filled out on contactUs page
 export function contactUs(user){
     return function(dispatch) {
         dispatch({type: "CONTACT_US_REQUESTED"});
 
-        axios.post("api/business/contactUsEmail", user)
+        axios.post("/api/business/contactUsEmail", user)
             .then(function(response) {
                 dispatch({type:"CONTACT_US", notification: {message:response.data, type:"infoHeader"}});
                 browserHistory.push('/myPathways');
