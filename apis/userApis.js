@@ -11,6 +11,7 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         removePassword,
+        removeIrrelevantInfoKeepToken,
         getUserByQuery,
         sendEmail,
         safeUser,
@@ -342,16 +343,16 @@ async function POST_answerPsychQuestion(req, res) {
         return res.status(500).send("Server error.");
     }
 
-    //res.json({user: removePassword(updatedUser), finishedTest});
+    res.json({user: removeIrrelevantInfoKeepToken(updatedUser), finishedTest});
 }
 
 
 async function POST_startPsychEval(req, res) {
     // check for invalid input
-    // const userId = sanitize(req.userId);
-    // const verificationToken = sanitize(req.verificationToken);
-    const userId = "5af493a242f28d407fefdc41";
-    const verificationToken = "2246696e0517ce1e4d320a2023d7d1fd88e3fa537a17a50059d444aebefabc87f29927881df0eed1658968014aac4462d468b859c430a5fe5d9d84b2f1ecabab";
+    const userId = sanitize(req.userId);
+    const verificationToken = sanitize(req.verificationToken);
+    //const userId = "5af493a242f28d407fefdc41";
+    //const verificationToken = "2246696e0517ce1e4d320a2023d7d1fd88e3fa537a17a50059d444aebefabc87f29927881df0eed1658968014aac4462d468b859c430a5fe5d9d84b2f1ecabab";
 
     // get the user from the db
     let user = undefined;

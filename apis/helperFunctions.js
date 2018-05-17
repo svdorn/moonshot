@@ -17,6 +17,7 @@ const helperFunctions = {
     removeEmptyFields,
     verifyUser,
     removePassword,
+    removeIrrelevantInfoKeepToken,
     printUsersFromPathway,
     getUserByQuery,
     sendEmail,
@@ -274,6 +275,27 @@ function removePassword(user) {
     if (typeof user === "object" && user != null) {
         let newUser = user;
         newUser.password = undefined;
+        return newUser;
+    } else {
+        return undefined;
+    }
+}
+
+
+// used when passing the user object back to the user, still contains sensitive
+// data such as the user id and verification token
+function removeIrrelevantInfoKeepToken(user) {
+    if (typeof user === "object" && user != null) {
+        let newUser = user;
+        // remove the password
+        newUser.password = undefined;
+        // remove everything except the info about the current question
+        if (newUser.psychometricTest) {
+            newUser.psychometricTest = {
+                currentQuestion: newUser.psychometricTest.currentQuestion,
+                inProgress: newUser.psychometricTest.inProgress
+            }
+        }
         return newUser;
     } else {
         return undefined;
