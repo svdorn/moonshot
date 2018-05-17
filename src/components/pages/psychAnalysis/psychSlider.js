@@ -22,7 +22,7 @@ class PsychSlider extends Component {
         let sliderStyle = { ...this.props.style, position: "relative", overflowY: "hidden" };
         if (this.props.width) { sliderStyle.width = this.props.width; }
         if (this.props.height) { sliderStyle.height = this.props.height; }
-        if (!sliderStyle.width) { sliderStyle.width = "400px"; }
+        if (!sliderStyle.width) { sliderStyle.width = "350px"; }
         if (!sliderStyle.height) { sliderStyle.height = "200px"; }
         const width = parseInt(sliderStyle.width, 10);
         const height = parseInt(sliderStyle.height, 10);
@@ -53,7 +53,32 @@ class PsychSlider extends Component {
             backgroundColor: coverColor,
             top: "45%"
         };
-        const verticalLines = null;
+
+        // make the 9 vertical lines separating the gradient things
+        const verticalLines = [];
+        const EXTRA_LENGTH = width / 120;
+        for (let lineIndex = 1; lineIndex <= 17; lineIndex+=2) {
+            let extraLeft = -EXTRA_LENGTH;
+            let extraMiddle = 0;
+            if (lineIndex > 9) {
+                extraLeft = EXTRA_LENGTH
+            };
+            if (lineIndex === 9) {
+                extraMiddle = 2 * EXTRA_LENGTH;
+            };
+            const lineStyle = {
+                backgroundColor: coverColor,
+                position: "absolute",
+                height: "100%",
+                width: `${(width/19) + (2 * EXTRA_LENGTH) + extraMiddle}px`,
+                left: `${(lineIndex*width/19) - EXTRA_LENGTH + extraLeft}px`
+            }
+
+            verticalLines.push(
+                <div style={lineStyle} />
+            );
+        }
+
         let topTriangleCoverStyle = {
             position: "absolute",
             height: "0",
