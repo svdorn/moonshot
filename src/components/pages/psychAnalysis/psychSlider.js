@@ -44,9 +44,11 @@ class PsychSlider extends Component {
     // user has to be able to unclick while outside the slider's div
     componentDidMount() {
         window.addEventListener("mouseup", this.onMouseUp.bind(this));
+        window.addEventListener("mousemove", this.onMouseMove.bind(this));
     }
     componentWillUnmount() {
-        window.removeEventListener("mouseup", this.onMouseUp.bind(this));
+        window.removeEventListener("mouseup");
+        window.removeEventListener("mousemove");
     }
 
 
@@ -85,9 +87,19 @@ class PsychSlider extends Component {
 
 
     onMouseDown(event) {
-        if (!this.state.mouseDown) {
-            const SET_MOUSE_DOWN = true;
-            this.setFromLeft(event, SET_MOUSE_DOWN);
+        let self = this;
+        if (!this.state.sliderOffsetLeft) {
+            event.persist();
+            this.setState({...this.state, sliderOffsetLeft: event.currentTarget.offsetLeft}, setMouseDown);
+        } else {
+            setMouseDown();
+        }
+
+        function setMouseDown() {
+            if (!self.state.mouseDown) {
+                const SET_MOUSE_DOWN = true;
+                self.setFromLeft(event, SET_MOUSE_DOWN);
+            }
         }
     }
     onMouseUp(event) {
@@ -98,22 +110,32 @@ class PsychSlider extends Component {
 
 
     onMouseMove(event) {
-        // only move the circle if the mouse button is pressed down
-        if (this.state.mouseDown) {
+        // only move the circle if the mouse button is pressed down and we know the slider offset
+        if (this.state.mouseDown && this.state.sliderOffsetLeft) {
             this.setFromLeft(event);
         }
     }
 
     setFromLeft(event, setMouseDown) {
+        console.log("setting from left");
         // how far left on the screen they clicked
         const xClick = event.clientX;
         // how far left on the screen the slider is
-        const xOffset = event.currentTarget.offsetLeft;
+        const xOffset = this.state.sliderOffsetLeft;
         // how far left in the slider they clicked
-        const fromLeft = xClick - xOffset;
+        let fromLeft;
+        // if the click is farther left than the slider goes
+        if (xClick <= xOffset) { fromLeft = 0; }
+        // if the click is farther right than the slider goes
+        else if (xClick >= xOffset + this.state.width) { fromLeft = this.state.width; }
+        // if the click is within the slider
+        else { fromLeft = xClick - xOffset; }
+
+        console.log("xClick: ", xClick );
 
         let newState = { ...this.state, fromLeft };
         if (setMouseDown) { newState.mouseDown = true };
+        console.log("newState: ", newState);
         this.setState(newState);
     }
 
@@ -236,8 +258,6 @@ class PsychSlider extends Component {
             <div className="psychSlider"
                 style={sliderStyle}
                 onMouseDown={this.onMouseDown.bind(this)}
-                onMouseMove={this.onMouseMove.bind(this)}
-                onMouseUp={this.onMouseUp.bind(this)}
             >
                 <div style={gradientRectRightStyle} />
                 <div style={gradientRectLeftStyle} />
