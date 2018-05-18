@@ -79,6 +79,7 @@ class PsychAnalysis extends Component {
         }
 
         const sliderWidth = "350px";
+        const topMargin = 120;
         const sliderAndAnswerContainerStyle = {
             width: sliderWidth,
             display: "inline-block",
@@ -86,7 +87,11 @@ class PsychAnalysis extends Component {
         }
 
         let leftOptionStyle = {
-            position: "absolute"
+            position: "absolute",
+            height: `${topMargin/2}px`,
+            display: "table",
+            top: `${topMargin/4}px`,
+            maxWidth: "calc(100% * 2/3)"
         }
         let rightOptionStyle = Object.assign({}, leftOptionStyle);
         leftOptionStyle.transform = "translateX(-50%)";
@@ -94,8 +99,13 @@ class PsychAnalysis extends Component {
         rightOptionStyle.transform = "translateX(50%)";
         rightOptionStyle.right = "0";
 
+        const optionTextStyle = {
+            display: "table-cell",
+            verticalAlign: "middle"
+        }
+
         const sliderStyle = {
-            marginTop: "80px"
+            marginTop: `${topMargin}px`
         }
 
         return (
@@ -109,8 +119,12 @@ class PsychAnalysis extends Component {
                     {question}
                 </div>
                 <div style={sliderAndAnswerContainerStyle}>
-                    <div style={leftOptionStyle}>{leftOption}</div>
-                    <div style={rightOptionStyle}>{rightOption}</div>
+                    <div style={leftOptionStyle}>
+                        <div style={optionTextStyle}>{leftOption}</div>
+                    </div>
+                    <div style={rightOptionStyle}>
+                        <div style={optionTextStyle}>{rightOption}</div>
+                    </div>
                     <PsychSlider
                         width={sliderWidth}
                         height="200px"
