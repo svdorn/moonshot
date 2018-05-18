@@ -115,7 +115,7 @@ class PsychSlider extends Component {
 
     onMouseMove(event) {
         // only move the circle if the mouse button is pressed down and we know the slider offset
-        if (this.state.mouseDown && this.state.sliderOffsetLeft) {
+        if (this.state.mouseDown && typeof this.state.sliderOffsetLeft !== "undefined") {
             this.setFromLeft(event);
         }
     }
@@ -152,7 +152,8 @@ class PsychSlider extends Component {
         const width = this.state.width;
         const height = this.state.height;
 
-        const sliderClass = this.state.mouseDown ? "grabbing" : "grab";
+        let sliderClass = this.state.mouseDown ? "grabbing" : "grab";
+        if (this.props.className) { sliderClass += " " + this.props.className; }
         let sliderStyle = {
             ...this.props.style,
             position: "relative",

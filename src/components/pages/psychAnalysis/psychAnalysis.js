@@ -74,19 +74,19 @@ class PsychAnalysis extends Component {
         }
 
         return (
-            <div className="blackBackground fillScreen whiteText">
+            <div className="blackBackground fillScreen whiteText center">
                 <MetaTags>
                     <title>Psychometric Analysis | Moonshot</title>
                     <meta name="description" content={"Find out what personality type you have! This will let us know how to best help you in getting the perfect job."} />
                 </MetaTags>
                 <div className="employerHeader" />
-                <div>
+                <div className="center">
                     {question}
                 </div>
                 <PsychSlider
                     width="350px"
                     height="200px"
-                    style={{marginLeft:"200px"}}
+                    className="center"
                     updateAnswer={this.updateAnswer.bind(this)}
                 />
                 <div className="clickable" onClick={this.nextQuestion.bind(this)}>

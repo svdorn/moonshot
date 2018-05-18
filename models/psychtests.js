@@ -16,6 +16,10 @@ var psychtestsSchema = mongoose.Schema({
             questions: [{
                 // the text of the question
                 body: String,
+                // the response on the left that the user can drag to
+                leftOption: String,
+                // the response on the right
+                rightOption: String,
                 // optional; indicates that sliding left means 5 and sliding right means -5
                 invertScore: Boolean
             }]

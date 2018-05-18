@@ -251,6 +251,10 @@ var usersSchema = mongoose.Schema({
             responseIndex: Number,
             // the text of the question
             body: String,
+            // the left option as a response to the question
+            leftOption: String,
+            // the right response
+            rightOption: String,
             // if the score should be inverted after answering
             invertScore: Boolean
         },
