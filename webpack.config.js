@@ -9,8 +9,9 @@ module.exports = {
     path: path.resolve(__dirname, 'public')
   },
   watch: true,
+  mode: 'development',
   module: {
-    loaders: [
+    rules: [
       {
         test:/\.js$/,
         exclude:/node_modules/,
