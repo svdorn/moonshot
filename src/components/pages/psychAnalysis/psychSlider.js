@@ -30,8 +30,6 @@ class PsychSlider extends Component {
             // the id of the question currently being answered; need this because
             // when it changes we will reset the score to 0
             questionId: props.questionId,
-            // user has not selected an answer
-            answered: false,
             // how far from the left the slider circle is (as an int); start in middle
             fromLeft: width/2,
             // only move the circle if the mouse is clicked down
@@ -52,21 +50,23 @@ class PsychSlider extends Component {
         window.removeEventListener("mousemove");
     }
 
-
-
-
     // the return value of this is set as state
-    // getDerivedStateFromProps(newProps) {
-    //     console.log("HERE");
-    //     console.log("state: ", state);
-    //
-    //     if (newProps.questionId.toString() !== this.state.questionId) {
-    //         return { questionId: newProps.questionId.toString() }
-    //     }
-    //
-    //     // don't need to update state
-    //     else { return null; }
-    // }
+    static getDerivedStateFromProps(newProps, prevState) {
+        if (newProps.questionId.toString() !== prevState.questionId) {
+            // new question, update current answer to be 0
+            newProps.updateAnswer(0);
+
+            return {
+                // record the question id so we know next time if we need to reset
+                questionId: newProps.questionId.toString(),
+                // reset the slider
+                fromLeft: prevState.width/2,
+            }
+        }
+
+        // don't need to update state
+        else { return null; }
+    }
 
 
     // width and height correspond to the width and height of the whole slider
