@@ -297,7 +297,8 @@ function removeIrrelevantInfoKeepToken(user) {
                 currentQuestion: {
                     body: currentQuestion.body,
                     leftOption: currentQuestion.leftOption,
-                    rightOption: currentQuestion.rightOption
+                    rightOption: currentQuestion.rightOption,
+                    questionId: currentQuestion.questionId
                 },
                 inProgress: newUser.psychometricTest.inProgress
             }

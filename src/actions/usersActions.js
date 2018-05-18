@@ -527,7 +527,6 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
 
 export function answerPsychQuestion(userId, verificationToken, answer) {
     return function(dispatch) {
-        console.log("userId: ", userId);
         axios.post("/api/user/answerPsychQuestion", {userId, verificationToken, answer})
         .then(response => {
             dispatch({

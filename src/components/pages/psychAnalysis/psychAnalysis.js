@@ -55,9 +55,9 @@ class PsychAnalysis extends Component {
         let question = "";
         let leftOption = "";
         let rightOption = "";
+        let questionId = "";
         try {
             currentUser = this.props.currentUser;
-            console.log("currentUser: ", currentUser);
             const psychometricTest = currentUser.psychometricTest;
             // if the user already took the test, can't do it again
             if (!psychometricTest.inProgress) {
@@ -70,6 +70,7 @@ class PsychAnalysis extends Component {
             question = currentQuestion.body;
             leftOption = currentQuestion.leftOption;
             rightOption = currentQuestion.rightOption;
+            questionId = currentQuestion.questionId;
         } catch (getQuestionError) {
             // TODO: make this go to the psych analysis landing page instead of home
             console.log("getQuestionError: ", getQuestionError);
@@ -131,6 +132,7 @@ class PsychAnalysis extends Component {
                         className="center"
                         style={sliderStyle}
                         updateAnswer={this.updateAnswer.bind(this)}
+                        questionId={questionId}
                     />
                 </div>
                 <div className="clickable" onClick={this.nextQuestion.bind(this)}>
