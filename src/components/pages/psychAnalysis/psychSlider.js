@@ -59,22 +59,22 @@ class PsychSlider extends Component {
         const width = this.state.width;
         const height = this.state.height;
 
-        const EXTRA_LENGTH = width / 120;
+        const extraLength = width / 120;
         for (let lineIndex = 1; lineIndex <= 17; lineIndex+=2) {
-            let extraLeft = -EXTRA_LENGTH;
+            let extraLeft = -extraLength;
             let extraMiddle = 0;
             if (lineIndex > 9) {
-                extraLeft = EXTRA_LENGTH
+                extraLeft = extraLength
             };
             if (lineIndex === 9) {
-                extraMiddle = 2 * EXTRA_LENGTH;
+                extraMiddle = 2 * extraLength;
             };
             const lineStyle = {
                 backgroundColor: coverColor,
                 position: "absolute",
                 height: "100%",
-                width: `${(width/19) + (2 * EXTRA_LENGTH) + extraMiddle}px`,
-                left: `${(lineIndex*width/19) - EXTRA_LENGTH + extraLeft}px`
+                width: `${(width/19) + (2 * extraLength) + extraMiddle}px`,
+                left: `${(lineIndex*width/19) - extraLength + extraLeft}px`
             }
 
             verticalLines.push(
@@ -117,7 +117,6 @@ class PsychSlider extends Component {
     }
 
     setFromLeft(event, setMouseDown) {
-        console.log("setting from left");
         // how far left on the screen they clicked
         const xClick = event.clientX;
         // how far left on the screen the slider is
@@ -131,11 +130,8 @@ class PsychSlider extends Component {
         // if the click is within the slider
         else { fromLeft = xClick - xOffset; }
 
-        console.log("xClick: ", xClick );
-
         let newState = { ...this.state, fromLeft };
         if (setMouseDown) { newState.mouseDown = true };
-        console.log("newState: ", newState);
         this.setState(newState);
     }
 
@@ -143,16 +139,18 @@ class PsychSlider extends Component {
     // unfortunately you have to use px instead of % for width and height
     render() {
         const coverColor = this.props.backgroundColor ? this.props.backgroundColor : "#2e2e2e";
-        const NEUTRAL_COLOR = this.props.neutralColor ? this.props.neutralColor : "rgb(160,160,160)";
+        const neutralColor = this.props.neutralColor ? this.props.neutralColor : "rgb(160,160,160)";
         const width = this.state.width;
         const height = this.state.height;
 
+        const cursorStyle = this.state.mouseDown ? "-webkit-grabbing" : "-webkit-grab"
         let sliderStyle = {
             ...this.props.style,
             position: "relative",
             overflowY: "hidden",
             width: `${width}px`,
-            height: `${height}px`
+            height: `${height}px`,
+            cursor: cursorStyle,
         };
 
         // the gradient color towards the middles of things
@@ -178,7 +176,7 @@ class PsychSlider extends Component {
         let rightBigCoverStyle = {
             position: "absolute",
             height: "100%",
-            backgroundColor: NEUTRAL_COLOR,
+            backgroundColor: neutralColor,
             top: "0"
         };
         let leftBigCoverStyle = Object.assign({}, rightBigCoverStyle);
@@ -215,13 +213,13 @@ class PsychSlider extends Component {
         bottomTriangleCoverStyle.bottom = "0";
 
         // the line that the circle sits on
-        const HORIZONTAL_LINE_HEIGHT = "4%";
-        const HORIZONTAL_LINE_TOP = "48%";
+        const horizontalLineHeight = "4%";
+        const horizontalLineTop = "48%";
         let horizontalLineRightStyle = {
             position: "absolute",
             width: "50%",
-            height: HORIZONTAL_LINE_HEIGHT,
-            top: HORIZONTAL_LINE_TOP,
+            height: horizontalLineHeight,
+            top: horizontalLineTop,
         };
         let horizontalLineLeftStyle = Object.assign({}, horizontalLineRightStyle);
         horizontalLineRightStyle.right = 0;
@@ -232,9 +230,9 @@ class PsychSlider extends Component {
         // they cover the line the circle sits on
         let horizontalLineRightCoverStyle = {
             position: "absolute",
-            backgroundColor: NEUTRAL_COLOR,
-            height: HORIZONTAL_LINE_HEIGHT,
-            top: HORIZONTAL_LINE_TOP
+            backgroundColor: neutralColor,
+            height: horizontalLineHeight,
+            top: horizontalLineTop
         };
         let horizontalLineLeftCoverStyle = Object.assign({}, horizontalLineRightCoverStyle);
         horizontalLineRightCoverStyle.width = rightCoverWidth;
@@ -243,15 +241,17 @@ class PsychSlider extends Component {
         horizontalLineLeftCoverStyle.left = "0";
 
         // the circle that will be dragged around
-        const CIRCLE_WIDTH = width/10;
+        const circleWidth = width/10;
+        const rotationDegrees = this.state.fromLeft - (width / 2);
         const circleStyle = {
-            width: `${CIRCLE_WIDTH}px`,
-            height: `${CIRCLE_WIDTH}px`,
+            width: `${circleWidth}px`,
+            height: `${circleWidth}px`,
             borderRadius: "100%",
             position: "absolute",
-            top: `${(height/2) - (CIRCLE_WIDTH/2)}px`,
-            left: `${this.state.fromLeft - (CIRCLE_WIDTH/2)}px`,
-            backgroundColor: "red"
+            top: `${(height/2) - (circleWidth/2)}px`,
+            left: `${this.state.fromLeft - (circleWidth/2)}px`,
+            background: `linear-gradient(to right, ${gradientNotSelected}, ${gradientSelected})`,
+            transform: `rotate(${rotationDegrees}deg)`
         };
 
         return (
