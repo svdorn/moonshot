@@ -2256,6 +2256,22 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 
+.grabbing {
+    cursor: -webkit-grabbing;
+    cursor:    -moz-grabbing;
+    cursor:     -ms-grabbing;
+    cursor:      -o-grabbing;
+    cursor:         grabbing;
+}
+.grab {
+    cursor: -webkit-grab;
+    cursor:    -moz-grab;
+    cursor:     -ms-grab;
+    cursor:      -o-grab;
+    cursor:         grab;
+}
+
+
 .twoOptionsBox {
     width: 200px;
     height: 150px;

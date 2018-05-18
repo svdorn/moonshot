@@ -148,15 +148,15 @@ class PsychSlider extends Component {
         const width = this.state.width;
         const height = this.state.height;
 
-        const cursorStyle = this.state.mouseDown ? "-webkit-grabbing" : "-webkit-grab"
+        const sliderClass = this.state.mouseDown ? "grabbing" : "grab";
         let sliderStyle = {
             ...this.props.style,
             position: "relative",
-            overflowY: "hidden",
+            display: "inline-block",
+            overflowX: "visible",
             width: `${width}px`,
-            height: `${height}px`,
-            cursor: cursorStyle,
-        };
+            height: `${height}px`
+        }
 
         // the gradient color towards the middles of things
         const gradientNotSelected = "#f25a2b";
@@ -181,7 +181,7 @@ class PsychSlider extends Component {
         let rightBigCoverStyle = {
             position: "absolute",
             height: "100%",
-            backgroundColor: neutralColor,
+            backgroundColor: coverColor,
             top: "0"
         };
         let leftBigCoverStyle = Object.assign({}, rightBigCoverStyle);
@@ -260,7 +260,7 @@ class PsychSlider extends Component {
         };
 
         return (
-            <div className="psychSlider"
+            <div className={"psychSlider " + sliderClass}
                 style={sliderStyle}
                 onMouseDown={this.onMouseDown.bind(this)}
             >
