@@ -33,19 +33,20 @@ class PsychSlider extends Component {
             answered: false,
             // how far from the left the slider circle is (as an int)
             fromLeft: width/2,
+            // only move the circle if the mouse is clicked down
+            mouseDown: false,
             // width and height of the slider
             width, height
         };
     }
 
 
+    // user has to be able to unclick while outside the slider's div
     componentDidMount() {
-
+        window.addEventListener("mouseup", this.onMouseUp.bind(this));
     }
-
-
-    componentWillReceiveProps(newProps) {
-
+    componentWillUnmount() {
+        window.removeEventListener("mouseup", this.onMouseUp.bind(this));
     }
 
 
@@ -83,18 +84,37 @@ class PsychSlider extends Component {
     }
 
 
-    onClick(event) {
+    onMouseDown(event) {
+        if (!this.state.mouseDown) {
+            const SET_MOUSE_DOWN = true;
+            this.setFromLeft(event, SET_MOUSE_DOWN);
+        }
+    }
+    onMouseUp(event) {
+        if (this.state.mouseDown) {
+            this.setState({ ...this.state, mouseDown: false })
+        }
+    }
+
+
+    onMouseMove(event) {
+        // only move the circle if the mouse button is pressed down
+        if (this.state.mouseDown) {
+            this.setFromLeft(event);
+        }
+    }
+
+    setFromLeft(event, setMouseDown) {
         // how far left on the screen they clicked
         const xClick = event.clientX;
-        console.log("xClick: ", xClick);
         // how far left on the screen the slider is
         const xOffset = event.currentTarget.offsetLeft;
-        console.log("xOffset: ", xOffset);
         // how far left in the slider they clicked
         const fromLeft = xClick - xOffset;
-        console.log("event: ", event);
-        console.log("fromLeft: ", fromLeft);
-        this.setState({ ...this.state, fromLeft });
+
+        let newState = { ...this.state, fromLeft };
+        if (setMouseDown) { newState.mouseDown = true };
+        this.setState(newState);
     }
 
 
@@ -213,7 +233,12 @@ class PsychSlider extends Component {
         };
 
         return (
-            <div className="psychSlider" style={sliderStyle} onClick={this.onClick.bind(this)}>
+            <div className="psychSlider"
+                style={sliderStyle}
+                onMouseDown={this.onMouseDown.bind(this)}
+                onMouseMove={this.onMouseMove.bind(this)}
+                onMouseUp={this.onMouseUp.bind(this)}
+            >
                 <div style={gradientRectRightStyle} />
                 <div style={gradientRectLeftStyle} />
                 <div style={rightBigCoverStyle} />
