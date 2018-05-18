@@ -295,7 +295,9 @@ function removeIrrelevantInfoKeepToken(user) {
             newUser.psychometricTest = {
                 // only need the body of the current question
                 currentQuestion: {
-                    body: currentQuestion.body
+                    body: currentQuestion.body,
+                    leftOption: currentQuestion.leftOption,
+                    rightOption: currentQuestion.rightOption
                 },
                 inProgress: newUser.psychometricTest.inProgress
             }
