@@ -132,7 +132,12 @@ class PsychSlider extends Component {
 
         let newState = { ...this.state, fromLeft };
         if (setMouseDown) { newState.mouseDown = true };
-        this.setState(newState);
+
+        // get new answer from -5 to 5
+        let newAnswer = (fromLeft*10 / this.state.width) - 5;
+
+        // set the state for fromLeft and update answer
+        this.setState(newState, () => this.props.updateAnswer(newAnswer));
     }
 
 

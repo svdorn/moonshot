@@ -41,6 +41,14 @@ class PsychAnalysis extends Component {
     }
 
 
+    updateAnswer(newAnswer) {
+        this.setState({
+            ...this.state,
+            answer: newAnswer
+        })
+    }
+
+
     render() {
         // get the current user and question
         let currentUser = undefined;
@@ -75,7 +83,12 @@ class PsychAnalysis extends Component {
                 <div>
                     {question}
                 </div>
-                <PsychSlider width="350px" height="200px" style={{marginLeft:"200px"}} />
+                <PsychSlider
+                    width="350px"
+                    height="200px"
+                    style={{marginLeft:"200px"}}
+                    updateAnswer={this.updateAnswer.bind(this)}
+                />
                 <div className="clickable" onClick={this.nextQuestion.bind(this)}>
                     Next
                 </div>
