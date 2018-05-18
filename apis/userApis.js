@@ -35,8 +35,7 @@ const userApis = {
     POST_login,
     POST_currentPathwayStep,
     POST_startPsychEval,
-    POST_answerPsychQuestion,
-    makeMockPsychData
+    POST_answerPsychQuestion
 }
 
 
@@ -330,6 +329,8 @@ async function POST_answerPsychQuestion(req, res) {
             questionId: newQuestion._id,
             responseIndex: newFacet.responses.length - 1,
             body: newQuestion.body,
+            leftOption: newQuestion.leftOption,
+            rightOption: newQuestion.rightOption,
             invertScore: newQuestion.invertScore
         }
 
@@ -436,6 +437,8 @@ async function POST_startPsychEval(req, res) {
         // since this is the first response to the quiz it must be the first in the facet too
         responseIndex: 0,
         body: question.body,
+        leftOption: question.leftOption,
+        rightOption: question.rightOption,
         invertScore: question.invertScore
     }
 
