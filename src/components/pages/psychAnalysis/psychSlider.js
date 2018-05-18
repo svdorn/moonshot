@@ -31,6 +31,8 @@ class PsychSlider extends Component {
             answer: 0,
             // user has not selected an answer
             answered: false,
+            // how far from the left the slider circle is (as an int)
+            fromLeft: width/2,
             // width and height of the slider
             width, height
         };
@@ -92,13 +94,14 @@ class PsychSlider extends Component {
         const fromLeft = xClick - xOffset;
         console.log("event: ", event);
         console.log("fromLeft: ", fromLeft);
-
+        this.setState({ ...this.state, fromLeft });
     }
 
 
     // unfortunately you have to use px instead of % for width and height
     render() {
         const coverColor = this.props.backgroundColor ? this.props.backgroundColor : "#2e2e2e";
+        const NEUTRAL_COLOR = this.props.neutralColor ? this.props.neutralColor : "rgb(160,160,160)";
         const width = this.state.width;
         const height = this.state.height;
 
@@ -115,7 +118,7 @@ class PsychSlider extends Component {
         // the gradient color when the thing is being selected
         const gradientSelected = "#ec008c";
 
-        // the gradients that look like they're on the lines when being slid over
+        // the gradients that look like they're on the lines
         let gradientRectRightStyle = {
             position: "absolute",
             width: "50%",
@@ -127,8 +130,23 @@ class PsychSlider extends Component {
         gradientRectRightStyle.background = `linear-gradient(to right, ${gradientNotSelected}, ${gradientSelected})`;
         gradientRectLeftStyle.background = `linear-gradient(to left, ${gradientNotSelected}, ${gradientSelected})`;
 
-        const rightCoverStyle = {};
-        const leftCoverStyle = {};
+        // makes the lines look gray when not being slid over
+        const rightCoverWidth = this.state.fromLeft < width/2 ? "50%" : `${width - this.state.fromLeft}px`;
+        const leftCoverWidth = this.state.fromLeft < width/2 ? this.state.fromLeft : "50%";
+        let rightBigCoverStyle = {
+            position: "absolute",
+            height: "100%",
+            backgroundColor: NEUTRAL_COLOR,
+            top: "0"
+        };
+        let leftBigCoverStyle = Object.assign({}, rightBigCoverStyle);
+        rightBigCoverStyle.width = rightCoverWidth;
+        leftBigCoverStyle.width = leftCoverWidth;
+        rightBigCoverStyle.right = "0";
+        leftBigCoverStyle.left = "0";
+
+        // covers the middle of the slider so the colored thing that the slider
+        // goes on has room to breathe on top and bottom
         const horizontalCoverStyle = {
             position: "absolute",
             height: "10%",
@@ -137,8 +155,10 @@ class PsychSlider extends Component {
             top: "45%"
         };
 
+        // the background-colored lines that split up the gradient lines
         const verticalLines = this.makeVerticalLines(coverColor);
 
+        // the triangles on top and bottom that make the lines show up as increasing in height
         let topTriangleCoverStyle = {
             position: "absolute",
             height: "0",
@@ -153,11 +173,13 @@ class PsychSlider extends Component {
         bottomTriangleCoverStyle.bottom = "0";
 
         // the line that the circle sits on
+        const HORIZONTAL_LINE_HEIGHT = "4%";
+        const HORIZONTAL_LINE_TOP = "48%";
         let horizontalLineRightStyle = {
             position: "absolute",
             width: "50%",
-            height: "4%",
-            top: "48%"
+            height: HORIZONTAL_LINE_HEIGHT,
+            top: HORIZONTAL_LINE_TOP,
         };
         let horizontalLineLeftStyle = Object.assign({}, horizontalLineRightStyle);
         horizontalLineRightStyle.right = 0;
@@ -165,16 +187,37 @@ class PsychSlider extends Component {
         horizontalLineRightStyle.background = `linear-gradient(to right, ${gradientNotSelected}, ${gradientSelected})`;
         horizontalLineLeftStyle.background = `linear-gradient(to left, ${gradientNotSelected}, ${gradientSelected})`;
 
-        const horizontalLineRightCoverStyle = {};
-        const horizontalLineLeftCoverStyle = {};
-        const circleStyle = {};
+        // they cover the line the circle sits on
+        let horizontalLineRightCoverStyle = {
+            position: "absolute",
+            backgroundColor: NEUTRAL_COLOR,
+            height: HORIZONTAL_LINE_HEIGHT,
+            top: HORIZONTAL_LINE_TOP
+        };
+        let horizontalLineLeftCoverStyle = Object.assign({}, horizontalLineRightCoverStyle);
+        horizontalLineRightCoverStyle.width = rightCoverWidth;
+        horizontalLineLeftCoverStyle.width = leftCoverWidth;
+        horizontalLineRightCoverStyle.right = "0";
+        horizontalLineLeftCoverStyle.left = "0";
+
+        // the circle that will be dragged around
+        const CIRCLE_WIDTH = width/10;
+        const circleStyle = {
+            width: `${CIRCLE_WIDTH}px`,
+            height: `${CIRCLE_WIDTH}px`,
+            borderRadius: "100%",
+            position: "absolute",
+            top: `${(height/2) - (CIRCLE_WIDTH/2)}px`,
+            left: `${this.state.fromLeft - (CIRCLE_WIDTH/2)}px`,
+            backgroundColor: "red"
+        };
 
         return (
             <div className="psychSlider" style={sliderStyle} onClick={this.onClick.bind(this)}>
                 <div style={gradientRectRightStyle} />
                 <div style={gradientRectLeftStyle} />
-                <div style={rightCoverStyle} />
-                <div style={leftCoverStyle} />
+                <div style={rightBigCoverStyle} />
+                <div style={leftBigCoverStyle} />
                 <div style={horizontalCoverStyle} />
                 {verticalLines}
                 <div style={topTriangleCoverStyle} />
