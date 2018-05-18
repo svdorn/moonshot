@@ -88,6 +88,7 @@ class PsychSlider extends Component {
 
     onMouseDown(event) {
         let self = this;
+        document.body.className += " " + "grabbing";
         if (!this.state.sliderOffsetLeft) {
             event.persist();
             this.setState({...this.state, sliderOffsetLeft: event.currentTarget.offsetLeft}, setMouseDown);
@@ -102,7 +103,10 @@ class PsychSlider extends Component {
             }
         }
     }
+
+
     onMouseUp(event) {
+        document.body.className = document.body.className.replace("grabbing", "");
         if (this.state.mouseDown) {
             this.setState({ ...this.state, mouseDown: false })
         }
