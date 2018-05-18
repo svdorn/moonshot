@@ -53,6 +53,8 @@ class PsychAnalysis extends Component {
         // get the current user and question
         let currentUser = undefined;
         let question = "";
+        let leftOption = "";
+        let rightOption = "";
         try {
             currentUser = this.props.currentUser;
             console.log("currentUser: ", currentUser);
@@ -64,13 +66,36 @@ class PsychAnalysis extends Component {
                 this.goTo("/");
                 return null;
             }
-            question = currentUser.psychometricTest.currentQuestion.body;
+            const currentQuestion = currentUser.psychometricTest.currentQuestion;
+            question = currentQuestion.body;
+            leftOption = currentQuestion.leftOption;
+            rightOption = currentQuestion.rightOption;
         } catch (getQuestionError) {
             // TODO: make this go to the psych analysis landing page instead of home
             console.log("getQuestionError: ", getQuestionError);
             console.log("Need to have started the test to see the questions!");
             this.goTo("/");
             return null;
+        }
+
+        const sliderWidth = "350px";
+        const sliderAndAnswerContainerStyle = {
+            width: sliderWidth,
+            display: "inline-block",
+            position: "relative"
+        }
+
+        let leftOptionStyle = {
+            position: "absolute"
+        }
+        let rightOptionStyle = Object.assign({}, leftOptionStyle);
+        leftOptionStyle.transform = "translateX(-50%)";
+        leftOptionStyle.left = "0";
+        rightOptionStyle.transform = "translateX(50%)";
+        rightOptionStyle.right = "0";
+
+        const sliderStyle = {
+            marginTop: "80px"
         }
 
         return (
@@ -83,12 +108,17 @@ class PsychAnalysis extends Component {
                 <div className="center">
                     {question}
                 </div>
-                <PsychSlider
-                    width="350px"
-                    height="200px"
-                    className="center"
-                    updateAnswer={this.updateAnswer.bind(this)}
-                />
+                <div style={sliderAndAnswerContainerStyle}>
+                    <div style={leftOptionStyle}>{leftOption}</div>
+                    <div style={rightOptionStyle}>{rightOption}</div>
+                    <PsychSlider
+                        width={sliderWidth}
+                        height="200px"
+                        className="center"
+                        style={sliderStyle}
+                        updateAnswer={this.updateAnswer.bind(this)}
+                    />
+                </div>
                 <div className="clickable" onClick={this.nextQuestion.bind(this)}>
                     Next
                 </div>

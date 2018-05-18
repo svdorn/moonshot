@@ -89,12 +89,25 @@ class PsychSlider extends Component {
     onMouseDown(event) {
         let self = this;
         document.body.className += " " + "grabbing";
-        if (!this.state.sliderOffsetLeft) {
-            event.persist();
-            this.setState({...this.state, sliderOffsetLeft: event.currentTarget.offsetLeft}, setMouseDown);
-        } else {
-            setMouseDown();
+
+        // need to calculate offset left of slider in case it has changed
+        let counter = 0;
+        let target = event.target;
+
+        // need to be on the big psychSlider container element to find the right left offset
+        while(![...target.classList].includes("psychSlider")) {
+            target = target.parentElement;
+            // no reason we should get farther than ten elements up
+            counter++
+            if (counter === 10) { break; }
         }
+
+        let offsetLeft = 0;
+        // if the target is legit, set the correct left offset
+        if (counter < 10 && target) { offsetLeft = target.getBoundingClientRect().left; };
+
+        event.persist();
+        this.setState({...this.state, sliderOffsetLeft: offsetLeft}, setMouseDown);
 
         function setMouseDown() {
             if (!self.state.mouseDown) {
@@ -139,6 +152,10 @@ class PsychSlider extends Component {
 
         // get new answer from -5 to 5
         let newAnswer = (fromLeft*10 / this.state.width) - 5;
+
+        // console.log("xClick: ", xClick);
+        // console.log("xOffset: ", xOffset);
+        // console.log("fromLeft: ", fromLeft);
 
         // set the state for fromLeft and update answer
         this.setState(newState, () => this.props.updateAnswer(newAnswer));
@@ -186,7 +203,7 @@ class PsychSlider extends Component {
         let rightBigCoverStyle = {
             position: "absolute",
             height: "100%",
-            backgroundColor: coverColor,
+            backgroundColor: neutralColor,
             top: "0"
         };
         let leftBigCoverStyle = Object.assign({}, rightBigCoverStyle);
