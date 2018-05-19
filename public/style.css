@@ -148,6 +148,17 @@ form > h1 {
   padding: 0 60px 15px 60px;
 }
 
+#stripes {
+    width: 100%;
+    height: 710px;
+    overflow: hidden;
+    -webkit-transform: skewY(-12deg);
+    transform: skewY(-12deg);
+    -webkit-transform-origin: 0;
+    transform-origin: 0;
+    background: #383838;
+}
+
 .smallLogoPLP {
     height: 80px;
 }

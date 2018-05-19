@@ -9,9 +9,15 @@ import MetaTags from 'react-meta-tags';
 
 class BusinessHome extends Component {
     render() {
-        return(
+        return (
             <div>
-                BHome
+                <div>
+                    <div id="stripes"/>
+                    <section id="intro">
+
+                    </section>
+                </div>
+
             </div>
         );
     }
@@ -19,9 +25,7 @@ class BusinessHome extends Component {
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({
-
-    }, dispatch);
+    return bindActionCreators({}, dispatch);
 }
 
 function mapStateToProps(state) {
