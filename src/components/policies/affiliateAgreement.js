@@ -27,7 +27,7 @@ class PrivacyPolicy extends Component {
 
                     <br/><br/>Last updated: 3/12/2018
 
-                    <br/><br/>THIS IS A LEGAL AGREEMENT BETWEEN YOU AND MOONSHOT LEARNING, INC. (MOONSHOTLEARNING.ORG)
+                    <br/><br/>THIS IS A LEGAL AGREEMENT BETWEEN YOU AND MOONSHOT LEARNING, INC. (MOONSHOTINSIGHTS.IO)
 
                     <br/><br/>BY ACCEPTING THIS AGREEMENT, YOU ARE AGREEING THAT YOU HAVE READ AND UNDERSTAND THE TERMS AND CONDITIONS OF THIS AGREEMENT AND THAT YOU AGREE TO BE LEGALLY RESPONSIBLE FOR EACH AND EVERY TERM AND CONDITION.
 
@@ -35,9 +35,9 @@ class PrivacyPolicy extends Component {
 
                     <br/><br/>This Agreement contains the complete terms and conditions that apply to you becoming an
                     affiliate or referrer in Moonshot’s Affiliate Program (“Moonshot” refers to Moonshot Learning, Inc.
-                    and the corresponding site, moonshotlearning.org). The purpose of this Agreement is to allow HTML
-                    linking between your web site and the moonshotlearning.org web site. Please note that throughout this
-                    Agreement, "we," "us," and "our" refer to Moonshot Learning, Inc., moonshotlearning.org or Moonshot,
+                    and the corresponding site, moonshotinsights.io). The purpose of this Agreement is to allow HTML
+                    linking between your web site and the moonshotinsights.io web site. Please note that throughout this
+                    Agreement, "we," "us," and "our" refer to Moonshot Learning, Inc., moonshotinsights.io or Moonshot,
                     and "you," "your," and "yours" refer to the affiliate or referrer.
 
                     <br/><br/><b>2. Affiliate Obligations</b>
@@ -58,7 +58,7 @@ class PrivacyPolicy extends Component {
                     affiliates in our program.
                     <br/><br/>2.1.9. You may not create or design your website or any other website that you operate,
                     explicitly or implied in a manner which resembles our website nor design your website in a manner which
-                    leads customers to believe you are moonshotlearning.org or any other affiliated business.
+                    leads customers to believe you are moonshotinsights.io or any other affiliated business.
                     <br/><br/>2.2. Moonshot reserves the right, at any time, to review your placement and approve the use of
                     Your Links and require that you change the placement or use to comply with the guidelines provided to you.
                     <br/><br/>2.3. The maintenance and the updating of your site and outreach channels will be your responsibility.
@@ -127,7 +127,7 @@ class PrivacyPolicy extends Component {
                     to such unacceptable advertising or solicitation.
 
                     <br/><br/>8.2. Affiliates that among other keywords or exclusively bid in their Pay-Per-Click campaigns on keywords
-                    such as moonshotlearning.org, Moonshot, www.moonshot, www.moonshotlearning.org, and/or any misspellings or similar
+                    such as moonshotinsights.io, Moonshot, www.moonshot, www.moonshotinsights.io, and/or any misspellings or similar
                     alterations of these – be it separately or in combination with other keywords – and do not direct the traffic from such
                     campaigns to their own website prior to re-directing it to ours, will be considered trademark violators, and will be banned
                     from Moonshot’s Affiliate Program. We will do everything possible to contact the affiliate prior to the ban. However, we
@@ -148,7 +148,7 @@ class PrivacyPolicy extends Component {
                     cookies to be overwritten where a user would under normal circumstances have arrived at the same destination through the
                     results given by the search (search engines being, but not limited to, Google, MSN, Yahoo, Overture, AltaVista, Hotbot and
                     similar search or directory engines); (c) set commission tracking cookies through loading of Moonshot site in IFrames,
-                    hidden links and automatic pop ups that open moonshotlearning.org’s site; (d) targets text on web sites, other than those
+                    hidden links and automatic pop ups that open moonshotinsights.io’s site; (d) targets text on web sites, other than those
                     web sites 100% owned by the application owner, for the purpose of contextual marketing; (e) removes, replaces or blocks
                     the visibility of Affiliate banners with any other banners, other than those that are on web sites 100% owned by the owner
                     of the application.
@@ -170,7 +170,7 @@ class PrivacyPolicy extends Component {
 
                     <br/><br/><b>10. Disclaimer</b>
 
-                    <br/><br/>MOONSHOT MAKES NO EXPRESS OR IMPLIED REPRESENTATIONS OR WARRANTIES REGARDING MOONSHOTLEARNING.ORG SERVICE AND WEB SITE
+                    <br/><br/>MOONSHOT MAKES NO EXPRESS OR IMPLIED REPRESENTATIONS OR WARRANTIES REGARDING MOONSHOTINSIGHTS.IO SERVICE AND WEB SITE
                     OR THE PRODUCTS OR SERVICES PROVIDED THEREIN, ANY IMPLIED WARRANTIES OF MOONSHOT ABILITY, FITNESS FOR A PARTICULAR PURPOSE, AND
                     NON-INFRINGEMENT ARE EXPRESSLY DISCLAIMED AND EXCLUDED. IN ADDITION, WE MAKE NO REPRESENTATION THAT THE OPERATION OF OUR SITE WILL
                     BE UNINTERRUPTED OR ERROR FREE, AND WE WILL NOT BE LIABLE FOR THE CONSEQUENCES OF ANY INTERRUPTIONS OR ERRORS.

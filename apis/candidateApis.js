@@ -169,7 +169,7 @@ function POST_candidate(req, res) {
                             try {
                                 const ONE_DAY = 1000 * 60 * 60 * 24;
 
-                                let moonshotUrl = 'https://www.moonshotlearning.org/';
+                                let moonshotUrl = 'https://www.moonshotinsights.io/';
                                 // if we are in development, links are to localhost
                                 if (!process.env.NODE_ENV) {
                                     moonshotUrl = 'http://localhost:8081/';
@@ -194,7 +194,7 @@ function POST_candidate(req, res) {
                                             + "<div style='font-size:10px; text-align:left; color:#000000; margin-bottom:50px;'>"
                                                 + "----------------------------------<br/>"
                                                 + "Kyle Treige, Co-Founder & CEO<br/>"
-                                                + "<a href='https://moonshotlearning.org/'>Moonshot</a><br/>"
+                                                + "<a href='https://moonshotinsights.io/'>Moonshot</a><br/>"
                                                 + "608-438-4478<br/>"
                                             + "</div>"
                                             + "<div style='font-size:10px; text-align:left; color:#C8C8C8; margin-bottom:30px;'>"
@@ -323,7 +323,7 @@ function POST_sendVerificationEmail(req, res) {
     let email = sanitize(req.body.email);
     let query = {email: email};
 
-    let moonshotUrl = 'https://www.moonshotlearning.org/';
+    let moonshotUrl = 'https://www.moonshotinsights.io/';
     // if we are in development, links are to localhost
     if (!process.env.NODE_ENV) {
         moonshotUrl = 'http://localhost:8081/';

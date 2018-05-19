@@ -29,7 +29,7 @@ class TermsOfUse extends Component {
                     <br/><br/> Last updated: 3/2/2018
 
                     <br/><br/> Please read these Terms of Use ("Terms", "Terms of Use") carefully before using
-                    moonshotlearning.org (“website”, “site”) operated by Moonshot Learning, Inc. (“Moonshot”, "us", "we", or
+                    moonshotinsights.io (“website”, “site”) operated by Moonshot Learning, Inc. (“Moonshot”, "us", "we", or
                     "our").
 
                     <br/><br/> Your access to and use of the Site is conditioned on your acceptance of and compliance with
@@ -80,7 +80,7 @@ class TermsOfUse extends Component {
 
                     <br/><br/> Moonshot does not guarantee that the information provided on our website is accurate,
                     complete or suitable for any purpose. Moonshot cannot be held responsible for any errors in the content
-                    engaged through moonshotlearning.org.
+                    engaged through moonshotinsights.io.
 
                     <br/><br/> <b>Incentive Disclaimer</b>
 

@@ -351,7 +351,7 @@ function POST_forgotPassword(req, res) {
                 }
 
                 // if we're in development (on localhost) navigate to localhost
-                let moonshotUrl = "https://www.moonshotlearning.org/";
+                let moonshotUrl = "https://www.moonshotinsights.io/";
                 if (!process.env.NODE_ENV) {
                     moonshotUrl = "http://localhost:8081/";
                 }
