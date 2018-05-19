@@ -11,15 +11,23 @@ class BusinessHome extends Component {
     render() {
         return (
             <div>
-                <div style={{height: '700px'}}>
+                <div>
                     <div id="stripes" />
                     <section id="intro">
                         <div className="container-header">
                             <h1>Hey</h1>
                         </div>
                     </section>
+                    <figure className="floatingCards">
+                        <div className="leftFloatingCard leftFloatingCardDeepShadow"/>
+                        <div className="rightFloatingCard">
+                            <img src="/images/ProductScreenshot1.jpg" />
+                        </div>
+                        <div className="leftFloatingCard leftFloatingCardNearShadow">
+                            <img src="/images/ProductScreenshot2.jpg" />
+                        </div>
+                    </figure>
                 </div>
-
             </div>
         );
     }
