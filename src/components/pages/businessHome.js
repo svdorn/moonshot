@@ -12,9 +12,12 @@ class BusinessHome extends Component {
         return (
             <div>
                 <div>
-                    <div id="stripes"/>
+                    <div id="stripes">
+                    </div>
                     <section id="intro">
-
+                        <div className="container-header">
+                            <h1>Hey</h1>
+                        </div>
                     </section>
                 </div>
 
