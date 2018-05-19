@@ -11,9 +11,8 @@ class BusinessHome extends Component {
     render() {
         return (
             <div>
-                <div>
-                    <div id="stripes">
-                    </div>
+                <div style={{height: '700px'}}>
+                    <div id="stripes" />
                     <section id="intro">
                         <div className="container-header">
                             <h1>Hey</h1>
