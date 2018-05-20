@@ -2088,6 +2088,8 @@ button.link {
 .businessHomeTrajectoryImagesLeft > img,
 .businessHomeTrajectoryImagesRight > img {
     transition: all 0.2s ease-in;
+    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    box-shadow: 0px 0px 50px 1px #00000073;
     top: -50px;
     height: 270px;
     z-index: 10;
@@ -2095,8 +2097,8 @@ button.link {
     position: absolute;
 }
 .businessHomeTrajectoryImagesLeft > img {
-    margin: 30px 0 0 30px;
-    left: 4%;
+    margin: 30px 0 0 0;
+    left: 2%;
 }
 .businessHomeTrajectoryImagesRight > img {
     right: 4%;
