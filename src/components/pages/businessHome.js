@@ -21,6 +21,14 @@ class BusinessHome extends Component {
                             <div className="skewedRectangle" />
                             <div className="skewedRectangle" />
                         </div>
+                        <div className="skewedRectangles">
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                        </div>
                     </div>
                     <div className="infoContainer font20px">
                         <div className="content">

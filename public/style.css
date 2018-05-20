@@ -156,13 +156,15 @@ form > h1 {
 
 
 
+
 .businessHome {
+    --rowWidth: 5px;
     --contentColumns: 24;
     --gutterColumns: 8;
     --contentColumnWidth: calc(1040px / var(--contentColumns));
     --gutterColumnWidth: var(--contentColumnWidth);
 }
-.skewedRectanglesContainer {
+.frontPage > .skewedRectanglesContainer {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -177,56 +179,81 @@ form > h1 {
     width: 100%;
     height: 100%;
     -webkit-transform: skewY(-12deg);
-    transform: skewY(-12deg);
+    transform: skewY(-10deg);
     overflow: hidden;
 }
-.skewedRectangles {
+.frontPage > .skewedRectanglesContainer > .skewedRectangles {
     display: grid;
     position: absolute;
+    grid-template-rows: repeat(auto-fill, var(--rowWidth));
     grid-template-columns:
         [viewport-start] 1fr
         [left-gutter-start] repeat(var(--gutterColumns),var(--gutterColumnWidth))
         [left-gutter-end content-start] repeat(var(--contentColumns),var(--contentColumnWidth))
         [content-end right-gutter-start] repeat(var(--gutterColumns),var(--gutterColumnWidth))
-        [right-gutter-end] 1fr
-        [viewport-end];
-    grid-template-rows: repeat(auto-fill, 5px);
-    height: 200%;
+        [right-gutter-end] 1fr [viewport-end];
     width: 100%;
     min-width: calc((var(--gutterColumns) * var(--gutterColumnWidth) * 2) + (var(--contentColumns) * var(--contentColumnWidth)) );
 }
-.skewedRectangle {
+.frontPage > .skewedRectanglesContainer > .skewedRectangles > .skewedRectangle {
     width: 100%;
     height: 100%;
     position: relative;
 }
-.skewedRectangle:nth-child(1) {
+/* FIRST GRID OF SKEWED RECTANGLES */
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child {
+    height: calc(var(--rowWidth) * 62);
+    /* background-color: #2e2e2e; */
+}
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
     background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 46;
-    grid-row-end: 50;
+    grid-row-start: 59;
+    grid-row-end: 63;
     grid-column-start: 1;
     grid-column-end: 10;
 }
-.skewedRectangle:nth-child(2) {
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 16;
+    grid-row-end: 20;
+    grid-column-start: 29;
+    grid-column-end: 35;
+}
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 22;
+    grid-row-end: 26;
+    grid-column-start: 32;
+    grid-column-end: 50;
+}
+/* SECOND GRID OF SKEWED RECTANGLES */
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) {
+    /* account for the first skewed rectangles grid */
+    margin-top: calc(var(--rowWidth) * 62);
+    height: calc(var(--rowWidth) * 49);
+    background-color: #323232;
+}
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) {
     background: linear-gradient(to right, #9c9ffe, #aa89fe);
-    grid-row-start: 50;
-    grid-row-end: 54;
+    grid-row-start: 1;
+    grid-row-end: 5;
     grid-column-start: 1;
     grid-column-end: 9;
 }
-.skewedRectangle:nth-child(3) {
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(2) {
     background: linear-gradient(to right, #9c9ffe, #aa89fe);
-    grid-row-start: 50;
-    grid-row-end: 54;
-    grid-column-start: 20;
-    grid-column-end: 24;
+    grid-row-start: 1;
+    grid-row-end: 5;
+    grid-column-start: 24;
+    grid-column-end: 33;
 }
+
 
 
 .businessHome.frontPage {
     position: relative;
     padding-top: 200px;
-    margin-bottom: 200px;
+    padding-bottom: 200px;
 
 }
 .businessHome > .infoContainer {
