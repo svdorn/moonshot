@@ -277,6 +277,7 @@ form > h1 {
     -webkit-box-flex: 1;
     -ms-flex: 1 0 50%;
     flex: 1 0 50%;
+    position: relative;
 }
 .infoText {
     margin: 0;
@@ -310,6 +311,24 @@ form > h1 {
     border-radius: 10px;
     padding: 4px 10px;
     cursor: pointer;
+}
+
+#myCandidatesScreenshot {
+    --device-scale: 0.32;
+    position: relative;
+    left: 119%;
+    top: 57%;
+    color: black;
+    width: calc(1350px * var(--device-scale));
+    height: calc(1280px * var(--device-scale));
+    -webkit-transform: translate(-50%,-50%) rotate3d(.342,-.94,0,25deg) rotate(9deg);
+    transform: translate(-50%,-50%) rotate3d(.342,-.94,0,25deg) rotate(9deg);
+    -webkit-box-shadow: 7px 10px 22px -3px rgba(10,10,10,.8);
+    box-shadow: 7px 10px 22px -3px rgba(10,10,10,.8);
+}
+#myCandidatesScreenshot > img {
+    width: 100%;
+    height: 100%;
 }
 
 

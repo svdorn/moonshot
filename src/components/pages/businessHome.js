@@ -17,15 +17,8 @@ class BusinessHome extends Component {
                             <div className="skewedRectangle" />
                             <div className="skewedRectangle" />
                             <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
                         </div>
                         <div className="skewedRectangles">
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
                             <div className="skewedRectangle" />
                             <div className="skewedRectangle" />
                         </div>
@@ -50,7 +43,9 @@ class BusinessHome extends Component {
                             </div>
                         </div>
                         <figure className="productScreenshots">
-
+                            <div id="myCandidatesScreenshot">
+                                <img src="images/businessHome/ProductScreenshot1.jpg" />
+                            </div>
                         </figure>
                     </div>
                 </div>
