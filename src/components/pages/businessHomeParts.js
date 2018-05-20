@@ -20,11 +20,14 @@ class BusinessHomeParts extends Component {
                                 Analyze candidates to see if they exhibit the profile of
                                 proven high performers in that position.
                             </div>
+                            <button className="slightlyRoundedButton">
+                                Hire Faster
+                            </button>
                         </div>
                         <div className="businessHomeTrajectoryImagesRight forBusiness">
                             <img
                                 alt="My Candidates Management"
-                                src="/images/businessHome/ProductScreenshot3.png"
+                                src="/images/businessHome/ProductScreenshot3v6.png"
                             />
                         </div>
                     </div>
@@ -41,7 +44,7 @@ class BusinessHomeParts extends Component {
                                 instead of conjecture based on a resume.
                             </div>
                         </div>
-                        <div className="businessHomeTrajectoryImagesLeft forBusiness">
+                        <div className="businessHomeTrajectoryImagesLeft businessHomeTrajectoryImagesShadow forBusiness">
                             <img
                                 alt="Predictive Insights"
                                 src="/images/businessHome/PredictiveInsights.jpg"
@@ -60,7 +63,7 @@ class BusinessHomeParts extends Component {
                             </div>
                         </div>
 
-                        <div className="businessHomeTrajectoryImagesRight forBusiness">
+                        <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
                             <img
                                 alt="Analysis Text"
                                 src="/images/businessHome/ProductScreenshot5.jpg"
