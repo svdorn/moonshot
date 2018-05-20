@@ -1467,6 +1467,9 @@ button.link {
 .blueTextOnHover:hover { color: var(--moonshotLightBlue); }
 
 .greenText { color: var(--moonshotGreenText); }
+.pinkTextHome { color: #d3546e; }
+.blueTextHome { color: #72d6f5; }
+.orangeTextHome { color: #ff5438; }
 .redText { color: red }
 .whiteText { color: white; }
 .grayText { color: #d7d7d7; }
@@ -2075,6 +2078,34 @@ button.link {
     float: right;
     margin-right: 2%;
 }
+.businessHomeTrajectoryImagesLeft {
+    float: left;
+}
+.businessHomeTrajectoryImagesRight {
+    float: right;
+    margin-right: 2%;
+}
+.businessHomeTrajectoryImagesLeft > img,
+.businessHomeTrajectoryImagesRight > img {
+    transition: all 0.2s ease-in;
+    top: -50px;
+    height: 270px;
+    z-index: 10;
+    width: 400px;
+    position: absolute;
+}
+.businessHomeTrajectoryImagesLeft > img {
+    margin: 30px 0 0 30px;
+    left: 4%;
+}
+.businessHomeTrajectoryImagesRight > img {
+    right: 4%;
+    margin: 30px 30px 0 0;
+}
+.homepageTrajectoryImagesRight {
+    float: right;
+    margin-right: 2%;
+}
 .homepageTrajectoryImagesLeft {
     float: left;
 }
@@ -2656,6 +2687,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .homepageTrajectoryImagesLeft > img {
         left: 2%;
     }
+    .businessHomeTrajectoryImagesLeft > img {
+        left: 2%;
+    }
+    .businessHomeTrajectoryImagesRight > img {
+        right: 2%;
+    }
     .homepageImgBackgroundLeft.forBusiness {
         left: 0%;
     }
@@ -2667,6 +2704,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .homepageTrajectoryImagesLeft.forBusiness > img {
         left: 0%;
+    }
+    .businessHomeTrajectoryImagesLeft > img {
+        left: 0%;
+    }
+    .businessHomeTrajectoryImagesRight > img {
+        right: 0%;
     }
     .boxStyle {
         margin: 200px auto 0 10px;
@@ -2708,6 +2751,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .homepageTrajectoryImagesRight > img,
     .homepageImgBackgroundLeft,
     .homepageImgBackgroundRight {
+        height: 216px;
+        width: 320px;
+        transition: all 0.2s ease-out;
+    }
+    .businessHomeTrajectoryImagesLeft > img,
+    .businessHomeTrajectoryImagesRight > img {
         height: 216px;
         width: 320px;
         transition: all 0.2s ease-out;
@@ -2859,6 +2908,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .homepageTrajectoryImagesRight { display: none; }
     .homepageTrajectoryImagesLeft { display: none; }
+    .businessHomeTrajectoryImagesLeft { display: none; }
+    .businessHomeTrajectoryImagesRight { display: none; }
     .homepageTrajectoryTextLeft { float: initial; }
     .homepageTrajectoryTextRight {
         float: initial;
