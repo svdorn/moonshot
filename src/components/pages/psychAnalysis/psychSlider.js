@@ -46,8 +46,8 @@ class PsychSlider extends Component {
         window.addEventListener("mousemove", this.onMouseMove.bind(this));
     }
     componentWillUnmount() {
-        window.removeEventListener("mouseup");
-        window.removeEventListener("mousemove");
+        window.removeEventListener("mouseup", this.onMouseUp.bind(this));
+        window.removeEventListener("mousemove", this.onMouseMove.bind(this));
     }
 
     // the return value of this is set as state

@@ -106,8 +106,6 @@ async function getAndVerifyUser(userId, verificationToken) {
 
 
 async function POST_answerPsychQuestion(req, res) {
-    //const userId = "5af493a242f28d407fefdc41";
-    //const verificationToken = "2246696e0517ce1e4d320a2023d7d1fd88e3fa537a17a50059d444aebefabc87f29927881df0eed1658968014aac4462d468b859c430a5fe5d9d84b2f1ecabab";
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
     let user = undefined;
@@ -226,7 +224,7 @@ async function POST_answerPsychQuestion(req, res) {
         psychometricTest.endDate = new Date();
         psychometricTest.totalTime = psychometricTest.endDate.getTime() - psychometricTest.startDate.getTime();
         psychometricTest.inProgress = false;
-        psychometricTest.currentQuestion = undefined;
+        psychometricTest.currentQuestion = { body: "You finished the psychometric analysis! Click 'Finish' to see your results!" };
 
         finishedTest = true;
     }
@@ -456,7 +454,7 @@ async function POST_startPsychEval(req, res) {
         rephrase: false,
         numRephrasesAllowed: 0,
         // around 75 questions
-        questionsPerFacet: 3,
+        questionsPerFacet: 1,
         incompleteFactors,
         factors,
         currentQuestion

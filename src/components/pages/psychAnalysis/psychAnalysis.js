@@ -18,9 +18,22 @@ class PsychAnalysis extends Component {
 
 
     componentDidMount() {
+        const currentUser = this.props.currentUser;
         // make sure a user is logged in
-        if (!this.props.currentUser) {
-            goTo("/");
+        if (!currentUser) {
+            this.goTo("/login");
+        }
+        // if the user already took the test, can't do it again
+        else if (!currentUser.psychometricTest) {
+            console.log("Have to have started the psych test first!");
+            // TODO: make this go to the psych analysis landing page instead of home
+            this.goTo("/");
+        }
+        // if the user already took the test, can't do it again
+        else if (!currentUser.psychometricTest.inProgress) {
+            console.log("Can only take the psych test once!");
+            // TODO: make this go to the psych analysis landing page instead of home
+            this.goTo("/");
         }
     }
 
@@ -41,6 +54,11 @@ class PsychAnalysis extends Component {
     }
 
 
+    finishTest() {
+        this.goTo("/analysisResults");
+    }
+
+
     updateAnswer(newAnswer) {
         this.setState({
             ...this.state,
@@ -56,16 +74,11 @@ class PsychAnalysis extends Component {
         let leftOption = "";
         let rightOption = "";
         let questionId = "";
+        let testInProgress = true;
         try {
             currentUser = this.props.currentUser;
             const psychometricTest = currentUser.psychometricTest;
-            // if the user already took the test, can't do it again
-            if (!psychometricTest.inProgress) {
-                console.log("Can only take the psych test once!");
-                // TODO: make this go to the psych analysis landing page instead of home
-                this.goTo("/");
-                return null;
-            }
+            testInProgress = psychometricTest.inProgress;
             const currentQuestion = currentUser.psychometricTest.currentQuestion;
             question = currentQuestion.body;
             leftOption = currentQuestion.leftOption;
@@ -119,25 +132,33 @@ class PsychAnalysis extends Component {
                 <div className="center">
                     {question}
                 </div>
-                <div style={sliderAndAnswerContainerStyle}>
-                    <div style={leftOptionStyle}>
-                        <div style={optionTextStyle}>{leftOption}</div>
+                {testInProgress ?
+                    <div>
+                        <div style={sliderAndAnswerContainerStyle}>
+                            <div style={leftOptionStyle}>
+                                <div style={optionTextStyle}>{leftOption}</div>
+                            </div>
+                            <div style={rightOptionStyle}>
+                                <div style={optionTextStyle}>{rightOption}</div>
+                            </div>
+                            <PsychSlider
+                                width={sliderWidth}
+                                height="200px"
+                                className="center"
+                                style={sliderStyle}
+                                updateAnswer={this.updateAnswer.bind(this)}
+                                questionId={questionId}
+                            />
+                        </div>
+                        <div className="clickable" onClick={this.nextQuestion.bind(this)}>
+                            Next
+                        </div>
                     </div>
-                    <div style={rightOptionStyle}>
-                        <div style={optionTextStyle}>{rightOption}</div>
+                    :
+                    <div className="clickable" onClick={this.finishTest.bind(this)}>
+                        Finish
                     </div>
-                    <PsychSlider
-                        width={sliderWidth}
-                        height="200px"
-                        className="center"
-                        style={sliderStyle}
-                        updateAnswer={this.updateAnswer.bind(this)}
-                        questionId={questionId}
-                    />
-                </div>
-                <div className="clickable" onClick={this.nextQuestion.bind(this)}>
-                    Next
-                </div>
+                }
             </div>
         );
     }
