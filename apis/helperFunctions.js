@@ -174,16 +174,16 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
         }
 
         // the default email account to send emails from
-        let from = '"Moonshot" <do-not-reply@moonshotlearning.org>';
+        let from = '"Moonshot" <do-not-reply@moonshotinsights.io>';
         let authUser = credentials.emailUsername;
         let authPass = credentials.emailPassword;
         if (sendFrom) {
             if (sendFrom === "Kyle Treige") {
-                from = '"Kyle Treige" <kyle@moonshotlearning.org>';
+                from = '"Kyle Treige" <kyle@moonshotinsights.io>';
                 authUser = credentials.kyleEmailUsername;
                 authPass = credentials.kyleEmailPassword;
             } else {
-                from = '"' + sendFrom + '" <do-not-reply@moonshotlearning.org>';
+                from = '"' + sendFrom + '" <do-not-reply@moonshotinsights.io>';
             }
         }
 

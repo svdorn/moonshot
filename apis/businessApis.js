@@ -33,7 +33,7 @@ function POST_forBusinessEmail(req, res) {
     if (req.body.message) {
         message = sanitize(req.body.message);
     }
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io"];
     let subject = 'Moonshot Sales Lead - From For Business Page';
     let content = "<div>"
         + "<h3>Sales Lead from For Business Page:</h3>"
@@ -76,7 +76,7 @@ function POST_contactUsEmail(req, res) {
     if (req.body.message) {
         message = sanitize(req.body.message);
     }
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io"];
     let subject = 'Moonshot Pathway Question -- Contact Us Form';
     let content = "<div>"
         + "<h3>Questions from pathway:</h3>"

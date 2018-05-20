@@ -57,7 +57,7 @@ function POST_createReferralCode(req, res) {
             +   "<p>-----------------------------</p>"
             +   "<div style='font-size:12px'>Kyle Treige, Co-Founder & CEO<br/>"
             +   "<a href='" + moonshotUrl + "'>Moonshot<br/>"
-            +   "kyle@moonshotlearning.org<br/>"
+            +   "kyle@moonshotinsights.io<br/>"
             +   "608-438-4478</div>"
 
             +   '<div style="font-size:10px; color:#C8C8C8; margin-top:30px; margin-bottom:30px;">'
@@ -119,7 +119,7 @@ function POST_createReferralCode(req, res) {
 
 
 function POST_unsubscribeEmail(req, res) {
-    let recipient = ["kyle@moonshotlearning.org"];
+    let recipient = ["kyle@moonshotinsights.io"];
     let subject = 'URGENT ACTION - User Unsubscribe from Moonshot';
     let content = "<div>"
         + "<h3>This email is Unsubscribing from Moonshot Emails:</h3>"
@@ -188,7 +188,7 @@ function POST_resumeScorer_uploadResume(req, res) {
            return res.status(400).send("Wrong file type.");
         }
 
-        let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "ameyer24@wisc.edu"];
+        let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "ameyer24@wisc.edu"];
 
         let subject = 'Resume To Be Scored';
         let content =
