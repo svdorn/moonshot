@@ -10,7 +10,7 @@ import MetaTags from 'react-meta-tags';
 class BusinessHome extends Component {
     render() {
         return (
-            <div>
+            <div className="blackBackground">
                 <div className="businessHome frontPage">
                     <div className="skewedRectanglesContainer">
                         <div className="skewedRectangles">
