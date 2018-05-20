@@ -16,7 +16,7 @@ class BusinessHomeParts extends Component {
                     <div className="homepageTrajectory forBusiness" id="whatSkillsAreYouHiringFor">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forBusiness whiteText">
-                                <h2 className="pinkTextHome font28px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above800only br"><br/></div>will be top performers</h2>
+                                <h2 className="pinkTextHome font28px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
                                 Analyze candidates to see if they exhibit the profile of
                                 proven high performers in that position.
                             </div>
@@ -34,7 +34,7 @@ class BusinessHomeParts extends Component {
                     <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextRight forBusiness">
                             <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forBusiness whiteText">
-                                <h2 className="blueTextHome font28px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above500only br"><br/></div>and guesswork
+                                <h2 className="blueTextHome font28px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
                                 </h2>
                                 Why read hundreds of resumes? Moonshot uses
                                 machine learning to reveal the empirical evidence
