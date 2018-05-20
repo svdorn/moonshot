@@ -11,7 +11,47 @@ class BusinessHome extends Component {
     render() {
         return (
             <div>
-                <div>
+                <div className="businessHome frontPage">
+                    <div className="skewedRectanglesContainer">
+                        <div className="skewedRectangles">
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                        </div>
+                    </div>
+                    <div className="infoContainer font20px">
+                        <div className="content">
+                            <h1 className="bigTitle font46px" style={{color:"#72d6f5"}}>Know who to hire.</h1>
+                            <p className="infoText">Predict candidate performance based on employees at your company and companies with similar positions.</p>
+                            <div className="buttonArea">
+                                <input className="blackInput" type="text" placeholder="Email Address" />
+                                <div className="mediumButton" style={{
+                                    background: "linear-gradient(to right, #7ad6fe, #b172fe)",
+                                    marginLeft: "20px"
+                                }}>
+                                    Get Started
+                                </div>
+                            </div>
+                            <div className="infoText i flex">
+                                <div>Free for first position</div>
+                                <div>•</div>
+                                <div>Unlimited evaluations</div>
+                            </div>
+                        </div>
+                        <figure className="productScreenshots">
+
+                        </figure>
+                    </div>
+                </div>
+
+
+
+
+
+                {/*<div>
                     <div id="stripes" />
                     <section id="intro">
                         <div className="container-header">
@@ -27,7 +67,7 @@ class BusinessHome extends Component {
                             <img src="/images/ProductScreenshot2.jpg" />
                         </div>
                     </figure>
-                </div>
+                </div>*/}
             </div>
         );
     }
