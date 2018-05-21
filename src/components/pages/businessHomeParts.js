@@ -54,7 +54,7 @@ class BusinessHomeParts extends Component {
                             />
                         </div>
                     </div>
-                    <br/>
+                    <br />
 
                     <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextLeft forBusiness">

@@ -478,13 +478,13 @@ form > h1 {
     border: none;
 }
 .pinkToPurpleButtonGradient {
-    background: linear-gradient(to left, #d1507c, #d3546e);
+    background: linear-gradient(to right, #d45279, #7d22dc);
 }
 .blueToPurpleButtonGradient {
-    background: linear-gradient(to left, #7bd6fe, #ab86fe);
+    background: linear-gradient(to right, #7bd6fe, #ab86fe);
 }
 .orangeToRedButtonGradient {
-    background: linear-gradient(to left, #ff5438, #fe256e);
+    background: linear-gradient(to right, #ff5438, #fe256e);
 }
 
 
