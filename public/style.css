@@ -164,6 +164,7 @@ form > h1 {
     --contentColumnWidth: calc(1040px / var(--contentColumns));
     --gutterColumnWidth: var(--contentColumnWidth);
 }
+.businessHome.blackBackground { overflow-x: hidden; }
 .frontPage > .skewedRectanglesContainer {
     display: -webkit-box;
     display: -ms-flexbox;
@@ -230,7 +231,7 @@ form > h1 {
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) {
     /* account for the first skewed rectangles grid */
     margin-top: calc(var(--rowWidth) * 62);
-    height: calc(var(--rowWidth) * 49);
+    height: calc(var(--rowWidth) * 62);
     background-color: #323232;
 }
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) {
@@ -247,7 +248,16 @@ form > h1 {
     grid-column-start: 24;
     grid-column-end: 33;
 }
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(3) {
+    background-color: #2e2e2e;
+    grid-row-start: 49;
+    grid-row-end: 63;
+    grid-column-start: 1;
+    grid-column-end: 16;
+}
+/* THIRD GRID */
 
+/* END THIRD GRID */
 
 
 .businessHome.frontPage {
@@ -341,6 +351,24 @@ form > h1 {
     transform: translate(-50%,-50%) rotate3d(.5,.866,0,16deg) rotate(-2deg);
     -webkit-box-shadow: -7px 2px 29px 1px rgba(10,0,10,.7);
     box-shadow: -7px 2px 29px 1px rgba(10,0,10,.7);
+}
+
+.partnerLogos {
+    height: 40px;
+    position: relative;
+}
+.partnerLogos > div {
+    justify-content: space-around;
+    display: flex;
+    max-width: 940px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    height: 100%;
+    position: absolute;
+}
+.partnerLogo {
+    height: 100%;
 }
 
 

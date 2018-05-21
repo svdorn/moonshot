@@ -9,8 +9,13 @@ import MetaTags from 'react-meta-tags';
 
 class BusinessHome extends Component {
     render() {
+        const logoImages = ["NWMLogoWhite.png", "DreamHomeLogoWhite.png", "SinglewireLogoWhite.png", "CurateLogoWhite.png"];
+        const logos = logoImages.map(src => {
+            return (<img key={"logo" + src} className="partnerLogo" src={`/logos/${src}`} />);
+        });
+
         return (
-            <div className="blackBackground">
+            <div className="blackBackground businessHome">
                 <div className="businessHome frontPage">
                     <div className="skewedRectanglesContainer">
                         <div className="skewedRectangles">
@@ -19,6 +24,7 @@ class BusinessHome extends Component {
                             <div className="skewedRectangle" />
                         </div>
                         <div className="skewedRectangles">
+                            <div className="skewedRectangle" />
                             <div className="skewedRectangle" />
                             <div className="skewedRectangle" />
                         </div>
@@ -51,6 +57,15 @@ class BusinessHome extends Component {
                             </div>
                         </figure>
                     </div>
+                </div>
+
+                <div className="partnerLogos">
+                    <div>
+                        {logos}
+                    </div>
+                </div>
+
+                <div style={{marginTop:"400px"}}>
                 </div>
 
 
