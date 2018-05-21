@@ -182,6 +182,11 @@ form > h1 {
     -webkit-transform: skewY(-12deg);
     transform: skewY(-12deg);
     overflow: hidden;
+
+    /* for margin transition when text gets smaller */
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .skewedRectanglesContainer > .skewedRectangles {
     display: grid;
@@ -282,13 +287,6 @@ form > h1 {
     grid-column-start: 28;
     grid-column-end: 32;
 }
-/* .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(7) {
-    background: linear-gradient(to right, #7199ce, #6177ab);
-    grid-row-start: 63;
-    grid-row-end: 67;
-    grid-column-start: 37;
-    grid-column-end: 43;
-} */
 /* THIRD GRID */
 
 /* END THIRD GRID */
@@ -425,6 +423,19 @@ form > h1 {
     height: 100%;
     width: auto;
 }
+
+#threeScreenshots {
+    margin-top: 135px;
+}
+#threeScreenshots > .homepageTrajectory.forBusiness {
+    margin-bottom: 0;
+}
+
+
+
+
+
+
 
 
 
@@ -3168,6 +3179,13 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 300px;
     }
     .forBusinessBox { padding-top: 13px; }
+
+    .frontPage > .skewedRectanglesContainer {
+        margin-top: -45px;
+        -webkit-transition: all 0.5s ease;
+        -ms-transition: all 0.5s ease;
+        transition: all 0.5s ease;
+    }
 
     #resultsScreenshot { --device-scale: .17; }
     #myCandidatesScreenshot { --device-scale: .25; }
