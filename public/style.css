@@ -1246,6 +1246,11 @@ button.link {
     height: 100%;
     width: 100%;
 }
+.businessHomeBoxIcons {
+    height: 100px;
+    margin-top: 20px;
+}
+
 .discoverPageBorder {
     border: 3px solid white;
 }
@@ -1735,6 +1740,7 @@ button.link {
 .darkPurpleText { color: var(--moonshotDarkPurple) }
 .darkDarkPurpleText { color: #b17dfe; }
 .brightPinkText { color: #fd0d8b; }
+.brightOrangeText { color: #ff5d27; }
 .lightPurpleText { color: #b37bfe; }
 .orangeText { color: #f24c49; }
 

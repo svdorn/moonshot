@@ -178,11 +178,37 @@ class BusinessHomeParts extends Component {
                         <Paper className="clickableNoUnderline businessHomeGradientBorder paperBoxBusinessHome"
                             zDepth={2}>
                             <div style={{textAlign: "center", position: "relative"}}>
+                                <img
+                                    src="/images/businessHome/PaperAirplane.png"
+                                    alt="Paper Airplane Icon"
+                                    className="businessHomeBoxIcons"
+                                />
+                                <div className="brightPinkText marginTop40px font22px">
+                                    STARTER
+                                </div>
+                                <br/>
+                                <i className="whiteText marginTop20px font16px">
+                                    First Position Free
+                                </i>
                             </div>
                         </Paper>
                         <Paper className="clickableNoUnderline businessHomeGradientBorder paperBoxBusinessHome"
                                zDepth={2}>
                             <div style={{textAlign: "center", position: "relative"}}>
+                                <img
+                                    src="/images/businessHome/EnterpriseRocket.png"
+                                    alt="Enterprise Rocket Icon"
+                                    className="businessHomeBoxIcons"
+                                />
+                                <div className="brightOrangeText marginTop40px font22px">
+                                    PLUS
+                                </div>
+                                <br/>
+                                <i className="whiteText marginTop20px font16px">
+                                    Each Additional Position<div className="above1000only noHeight"><br/></div> Starting at $79
+                                    <br/>
+                                    <i className="font12px">per position/month</i>
+                                </i>
                             </div>
                         </Paper>
                     </div>
