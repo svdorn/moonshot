@@ -175,7 +175,7 @@ class BusinessHomeParts extends Component {
                                 <div>Unlimited Hires</div>
                             </div>
                         </div>
-                        <Paper className="clickableNoUnderline businessHomeGradientBorder paperBoxBusinessHome"
+                        <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
                             zDepth={2}>
                             <div style={{textAlign: "center", position: "relative"}}>
                                 <img
@@ -186,13 +186,23 @@ class BusinessHomeParts extends Component {
                                 <div className="brightPinkText marginTop40px font22px">
                                     STARTER
                                 </div>
-                                <br/>
-                                <i className="whiteText marginTop20px font16px">
-                                    First Position Free
-                                </i>
+                                <div style={{height: '70px', lineHeight: '70px'}}>
+                                    <i className="whiteText marginTop20px font16px">
+                                        First Position Free
+                                    </i>
+                                </div>
+                                <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
+                                <div className="whiteText font16px" style={{width: '90%', margin: 'auto'}}>
+                                    Start with one position. You can run unlimited candidate
+                                    evaluations to see the results. No cost, no risk, no
+                                    excuses not to kick this off the ground.
+                                </div>
+                                <button className="whiteText clickableNoUnderline marginTop20px font18px" style={{background: '#fd0d8b', border: 'none'}}>
+                                    Take Off
+                                </button>
                             </div>
                         </Paper>
-                        <Paper className="clickableNoUnderline businessHomeGradientBorder paperBoxBusinessHome"
+                        <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
                                zDepth={2}>
                             <div style={{textAlign: "center", position: "relative"}}>
                                 <img
@@ -203,12 +213,22 @@ class BusinessHomeParts extends Component {
                                 <div className="brightOrangeText marginTop40px font22px">
                                     PLUS
                                 </div>
-                                <br/>
-                                <i className="whiteText marginTop20px font16px">
-                                    Each Additional Position<div className="above1000only noHeight"><br/></div> Starting at $79
-                                    <br/>
-                                    <i className="font12px">per position/month</i>
-                                </i>
+                                <div style={{height: '70px'}}>
+                                    <i className="whiteText marginTop20px font16px">
+                                        Each Additional Position<div className="above1000only noHeight"><br/></div> Starting at $79
+                                        <br/>
+                                        <i className="font12px">per position/month</i>
+                                    </i>
+                                </div>
+                                <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
+                                <div className="whiteText font16px" style={{width: '90%', margin: 'auto'}}>
+                                    Easily scale the number of positions you are
+                                    evaluating through Moonshot. Unlimited candidate
+                                    evaluations for each position.
+                                </div>
+                                <button className="clickableNoUnderline whiteText marginTop20px font18px" style={{background: '#ff5d27', border: 'none'}}>
+                                    Blast Off
+                                </button>
                             </div>
                         </Paper>
                     </div>

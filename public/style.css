@@ -1183,7 +1183,7 @@ button.link {
 }
 
 .paperBoxBusinessHome {
-    height: 500px;
+    height: 480px;
     width: 340px;
     display: inline-block;
     margin: 0 25px 40px;
@@ -2235,6 +2235,18 @@ button.link {
     height: 2px;
     margin: 70px 20%;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
+}
+.pinkToOrangeSpacer {
+    width: 60%;
+    height: 2px;
+    margin: 70px 20%;
+    background: linear-gradient(to right, #fd0d8b, #ff5d27);
+}
+.orangeToPinkSpacer {
+    width: 60%;
+    height: 2px;
+    margin: 70px 20%;
+    background: linear-gradient(to right, #ff5d27, #fd0d8b);
 }
 .purpleToRedSpacer {
     width: 60%;
