@@ -165,7 +165,7 @@ form > h1 {
     --gutterColumnWidth: var(--contentColumnWidth);
 }
 .businessHome.blackBackground { overflow-x: hidden; }
-.frontPage > .skewedRectanglesContainer {
+.skewedRectanglesContainer {
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;
@@ -183,7 +183,7 @@ form > h1 {
     transform: skewY(-12deg);
     overflow: hidden;
 }
-.frontPage > .skewedRectanglesContainer > .skewedRectangles {
+.skewedRectanglesContainer > .skewedRectangles {
     display: grid;
     position: absolute;
     grid-template-rows: repeat(auto-fill, var(--rowWidth));
@@ -196,7 +196,7 @@ form > h1 {
     width: 100%;
     min-width: calc((var(--gutterColumns) * var(--gutterColumnWidth) * 2) + (var(--contentColumns) * var(--contentColumnWidth)) );
 }
-.frontPage > .skewedRectanglesContainer > .skewedRectangles > .skewedRectangle {
+.skewedRectanglesContainer > .skewedRectangles > .skewedRectangle {
     width: 100%;
     height: 100%;
     position: relative;
@@ -204,7 +204,6 @@ form > h1 {
 /* FIRST GRID OF SKEWED RECTANGLES */
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child {
     height: calc(var(--rowWidth) * 62);
-    /* background-color: #2e2e2e; */
 }
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
     background: linear-gradient(to right, #a196fe, #80cffe);
@@ -3517,6 +3516,68 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: 5px;
     }
 
+    .frontPage .skewedRectanglesContainer:first-child { display: none; }
+    .frontPage .skewedRectanglesContainer:nth-child(2) { display: none; }
+    .logoContainer.skewedContainer { position: relative; }
+    .logoContainer .skewedRectanglesContainer { overflow: visible; }
+    .logoContainer .skewedRectanglesContainer .skewedRectangles:first-child {
+        height: calc(var(--rowWidth) * 56);
+        background-color: #323232;
+        top: -145px;
+    }
+    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+        background: #2e2e2e;
+        grid-row-start: 1;
+        grid-row-end: 5;
+        grid-column-start: 1;
+        grid-column-end: 15;
+    }
+    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+        background: linear-gradient(to right, #a196fe, #80cffe);
+        grid-row-start: 1;
+        grid-row-end: 5;
+        grid-column-start: 15;
+        grid-column-end: 19;
+    }
+    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+        background: #2e2e2e;
+        grid-row-start: 1;
+        grid-row-end: 5;
+        grid-column-start: 19;
+        grid-column-end: 30;
+    }
+    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        background: linear-gradient(to right, #9c9ffe, #aa89fe);
+        grid-row-start: 5;
+        grid-row-end: 9;
+        grid-column-start: 12;
+        grid-column-end: 18;
+    }
+    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+        background: #2e2e2e;
+        grid-row-start: 44;
+        grid-row-end: 53;
+        grid-column-start: 1;
+        grid-column-end: 20;
+    }
+    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+        background: #2e2e2e;
+        grid-row-start: 53;
+        grid-row-end: 57;
+        grid-column-start: 1;
+        grid-column-end: 26;
+    }
+    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+        background: linear-gradient(to right, #ad84fe, #86c5fe);
+        grid-row-start: 53;
+        grid-row-end: 57;
+        grid-column-start: 26;
+        grid-column-end: 32;
+    }
+
+
+    /* END FRONT PAGE */
+
     .marginSides40pxUnder700 { margin-right: 40px; margin-left: 40px; }
 
     .font48pxUnder700 { font-size: 48px; }
@@ -4062,6 +4123,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .frontPage .infoText.flex {
         margin-right: calc((100% - 250px) / 1.2);
+    }
+
+    .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+        background: linear-gradient(to right, #ad84fe, #86c5fe);
+        grid-row-start: 53;
+        grid-row-end: 57;
+        grid-column-start: 25;
+        grid-column-end: 32;
     }
 
 

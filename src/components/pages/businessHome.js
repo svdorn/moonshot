@@ -63,6 +63,30 @@ class BusinessHome extends Component {
                     </div>
                 </div>
 
+                {/* <!-- The skewed rectangles that only come up on small screen --> */}
+                <div className="logoContainer skewedContainer">
+                    <div className="skewedRectanglesContainer">
+                        <div className="skewedRectangles">
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                        </div>
+                    </div>
+                </div>
+
                 <div className="partnerLogos">
                     <div>
                         {logos}
