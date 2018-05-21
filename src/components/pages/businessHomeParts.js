@@ -150,11 +150,12 @@ class BusinessHomeParts extends Component {
                             alt="CrystalBall"
                             height={300}
                         />
-                        <button className="blueToDarkPurpleButtonGradient bigButton"
-                                style={{marginTop: "35px", color: 'white'}}
+                        <br/>
+                        <button className="blueToDarkPurpleButtonGradientReverse bigButton"
+                                style={{marginTop: "25px", color: 'white'}}
                         >
-                            <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
-                                {"Learn More"}
+                            <div className="invertColorOnHover gradientBorderButtonInteriorGradient">
+                                {"See the Future"}
                             </div>
                         </button>
                     </div>

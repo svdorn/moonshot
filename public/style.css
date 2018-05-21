@@ -458,6 +458,10 @@ form > h1 {
     background: linear-gradient(to bottom right, #72d6f5, #b17dfe);
     color: #72d6f5;
 }
+.blueToDarkPurpleButtonGradientReverse {
+    background: linear-gradient(to top left, #72d6f5, #b17dfe);
+    color: #72d6f5;
+}
 .orangeToRedButtonGradient {
     background: linear-gradient(to right, #ff5438, #fe256e);
 }
@@ -1133,6 +1137,7 @@ button.link {
 .blueToPurpleButtonExterior,
 .purpleToRedButtonExterior,
 .blueToDarkPurpleButtonGradient,
+.blueToDarkPurpleButtonGradientReverse,
 .redToLightRedButtonExterior {
     padding: 2px;
     border: none;
@@ -1149,6 +1154,14 @@ button.link {
     width: 100%;
     height: 100%;
     background: #2e2e2e;
+}
+.gradientBorderButtonInteriorGradient {
+    background: linear-gradient(to right, #b172fe, #7ad6fe, #b172fe);
+    background-position-x: -112px;
+    background-size: 150%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .bigButton {
     font-size: 25px;
@@ -1906,6 +1919,13 @@ button.link {
     color: white;
     background-color: rgba(0,0,0,0);
     background: rgba(0,0,0,0);
+}
+
+.invertColorOnHover.gradientBorderButtonInteriorGradient:hover {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 .videoContainer {
