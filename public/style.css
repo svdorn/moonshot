@@ -2946,6 +2946,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .businessHomeTrajectoryImagesRight > img {
         right: 2%;
     }
+    .businessHomeTrajectoryImageRightNoBorder > img {
+        right: 2%;
+    }
     .homepageImgBackgroundLeft.forBusiness {
         left: 0%;
     }
@@ -2962,6 +2965,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         left: 0%;
     }
     .businessHomeTrajectoryImagesRight > img {
+        right: 0%;
+    }
+    .businessHomeTrajectoryImageRightNoBorder > img {
         right: 0%;
     }
     .boxStyle {
@@ -3013,6 +3019,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         top: 0px;
         height: 216px;
         width: 320px;
+        transition: all 0.2s ease-out;
+    }
+    .businessHomeTrajectoryImageRightNoBorder > img {
+        top: 0px;
+        height: 251px;
+        width: 372px;
         transition: all 0.2s ease-out;
     }
     /* .homepageTrajectoryImagesLeft,
@@ -3164,6 +3176,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .homepageTrajectoryImagesLeft { display: none; }
     .businessHomeTrajectoryImagesLeft { display: none; }
     .businessHomeTrajectoryImagesRight { display: none; }
+    .businessHomeTrajectoryImageRightNoBorder { display: none; }
     .homepageTrajectoryTextLeft { float: initial; }
     .homepageTrajectoryTextRight {
         float: initial;
