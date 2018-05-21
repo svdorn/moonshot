@@ -215,7 +215,7 @@ class BusinessHomeParts extends Component {
                                 </div>
                                 <div style={{height: '70px'}}>
                                     <i className="whiteText marginTop20px font16px">
-                                        Each Additional Position<div className="above1000only noHeight"><br/></div> Starting at $79
+                                        Each Additional Position<br/> Starting at $79
                                         <br/>
                                         <i className="font12px">per position/month</i>
                                     </i>
