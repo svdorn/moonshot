@@ -9,9 +9,14 @@ import MetaTags from 'react-meta-tags';
 
 class BusinessHome extends Component {
     render() {
-        const logoImages = ["NWMLogoWhite.png", "DreamHomeLogoWhite.png", "SinglewireLogoWhite.png", "CurateLogoWhite.png"];
-        const logos = logoImages.map(src => {
-            return (<img key={"logo" + src} className="partnerLogo" src={`/logos/${src}`} />);
+        const logoImages = [
+            {src: "NWMLogoWhite.png", partner: "Northwestern Mutual"},
+            {src: "DreamHomeLogoWhite.png", partner: "Dream Home"},
+            {src: "SinglewireLogoWhite.png", partner: "Singlewire Software"},
+            {src: "CurateLogoWhite.png", partner: "Curate Solutions"}
+        ];
+        const logos = logoImages.map(img => {
+            return (<img alt={`${img.partner} Logo`} key={img.partner+"logo"} className="partnerLogo" src={`/logos/${img.src}`} />);
         });
 
         return (
@@ -50,10 +55,10 @@ class BusinessHome extends Component {
                         </div>
                         <figure className="productScreenshots">
                             <div id="myCandidatesScreenshot">
-                                <img src="images/businessHome/ProductScreenshot1.jpg" />
+                                <img src="images/businessHome/ProductScreenshot1.jpg" alt="My Candidates Page Screenshot"/>
                             </div>
                             <div id="resultsScreenshot">
-                                <img src="images/businessHome/ProductScreenshot2.jpg" />
+                                <img src="images/businessHome/ProductScreenshot2.jpg" alt="Candidate Results Page Screenshot" />
                             </div>
                         </figure>
                     </div>
@@ -67,28 +72,6 @@ class BusinessHome extends Component {
 
                 <div style={{marginTop:"400px"}}>
                 </div>
-
-
-
-
-
-                {/*<div>
-                    <div id="stripes" />
-                    <section id="intro">
-                        <div className="container-header">
-                            <h1>Hey</h1>
-                        </div>
-                    </section>
-                    <figure className="floatingCards">
-                        <div className="leftFloatingCard leftFloatingCardDeepShadow"/>
-                        <div className="rightFloatingCard">
-                            <img src="/images/ProductScreenshot1.jpg" />
-                        </div>
-                        <div className="leftFloatingCard leftFloatingCardNearShadow">
-                            <img src="/images/ProductScreenshot2.jpg" />
-                        </div>
-                    </figure>
-                </div>*/}
             </div>
         );
     }
