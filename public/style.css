@@ -2415,6 +2415,11 @@ button.link {
     margin-left: 0px;
     text-align: left;
 }
+.homepageTrajectoryTextLeftDiv.forHome,
+.homepageTrajectoryTextRightDiv.forHome {
+    margin-left: 0px;
+    text-align: left;
+}
 .forBusinessTrajectoryTextLeftDiv,
 .forBusinessTrajectoryTextRightDiv {
     float: right;
@@ -3199,12 +3204,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .homepageTrajectoryTextLeftDiv, .homepageTrajectoryTextRightDiv {
         text-align: left;
-        padding-left: 120px;
         margin-left: 0px;
         margin-bottom: 20px;
     }
     .homepageTrajectoryTextLeftDiv.forBusiness, .homepageTrajectoryTextRightDiv.forBusiness {
         padding-left: 20%;
+    }
+    .homepageTrajectoryTextLeftDiv.forHome, homepageTrajectoryTextRightDiv.forHome {
+        padding-left: 0;
     }
     .homepageTrajectoryTextLeftIcon,
     .homepageTrajectoryTextRightIcon {
@@ -3239,6 +3246,11 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .homepageTrajectoryTextLeftDiv.forBusiness,
     .homepageTrajectoryTextRightDiv.forBusiness {
+        text-align: left;
+        margin-bottom: 0px;
+    }
+    .homepageTrajectoryTextLeftDiv.forHome,
+    .homepageTrajectoryTextRightDiv.forHome {
         text-align: left;
         margin-bottom: 0px;
     }
@@ -3658,6 +3670,11 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         padding-left: 24%;
         padding-right: 5%;
         height: 160px;
+    }
+    .homepageTrajectoryTextLeftDiv.forHome,
+    .homepageTrajectoryTextRightDiv.forHome {
+        padding-left: 5%;
+        padding-right: 5%;
     }
     .homepageTrajectoryTextRight.forBusiness,
     .homepageTrajectoryTextLeft.forBusiness {
