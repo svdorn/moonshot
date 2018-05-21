@@ -437,6 +437,10 @@ form > h1 {
     line-height: initial;
 }
 
+.width400px {
+    width: 400px;
+}
+
 .greenButton {
     background-color: white;
     border: 2px solid var(--moonshotGreenText);
@@ -1178,6 +1182,14 @@ button.link {
     vertical-align: top;
 }
 
+.paperBoxBusinessHome {
+    height: 500px;
+    width: 340px;
+    display: inline-block;
+    margin: 0 25px 40px;
+    vertical-align: top;
+}
+
 .gradientBorderPurple {
     background: linear-gradient(to right, #be6aff, #7f0eff);
     padding: 2px;
@@ -1222,6 +1234,15 @@ button.link {
 }
 .whiteBorder > div {
     background: linear-gradient(to bottom right, #983cc9, #e36273);
+    height: 100%;
+    width: 100%;
+}
+.businessHomeGradientBorder {
+    padding: 2px;
+    background: linear-gradient(to top left, #ff5d27, #fd0d8b);
+}
+.businessHomeGradientBorder > div {
+    background: #2e2e2e;
     height: 100%;
     width: 100%;
 }
@@ -1713,6 +1734,7 @@ button.link {
 .purpleText { color: var(--moonshotPurple) }
 .darkPurpleText { color: var(--moonshotDarkPurple) }
 .darkDarkPurpleText { color: #b17dfe; }
+.brightPinkText { color: #fd0d8b; }
 .lightPurpleText { color: #b37bfe; }
 .orangeText { color: #f24c49; }
 
@@ -3557,6 +3579,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .font10pxUnder700 { font-size: 10px; }
     .font8pxUnder700 { font-size: 8px; }
     .font6pxUnder700 { font-size: 6px; }
+
+    .width300pxUnder700 { width: 300px; }
 }
 
 @media only screen and (min-width: 660px) {
@@ -4104,6 +4128,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .font6pxUnder400 { font-size: 6px; }
 
     .font10pxUnder400Important { font-size: 10px !important; }
+
+    .width250pxUnder400 { width: 250px; }
 
 }
 

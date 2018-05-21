@@ -4,6 +4,7 @@ import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
+import {Paper} from 'material-ui';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 
@@ -158,6 +159,32 @@ class BusinessHomeParts extends Component {
                                 {"See the Future"}
                             </div>
                         </button>
+                    </div>
+                </section>
+
+                <div className="marginTop40px marginBottom40px"/>
+
+                <section>
+                    <div className="forBusinessBoxesContainer">
+                        <div className="font36px font32pxUnder700 font26pxUnder500 center brightPinkText"
+                             style={{marginBottom: '50px'}}>
+                            The New Baseline Evaluation
+                            <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
+                                <div>Unlimited Candidates</div>
+                                <div>•</div>
+                                <div>Unlimited Hires</div>
+                            </div>
+                        </div>
+                        <Paper className="clickableNoUnderline businessHomeGradientBorder paperBoxBusinessHome"
+                            zDepth={2}>
+                            <div style={{textAlign: "center", position: "relative"}}>
+                            </div>
+                        </Paper>
+                        <Paper className="clickableNoUnderline businessHomeGradientBorder paperBoxBusinessHome"
+                               zDepth={2}>
+                            <div style={{textAlign: "center", position: "relative"}}>
+                            </div>
+                        </Paper>
                     </div>
                 </section>
                 <div className="marginTop40px marginBottom40px"/>
