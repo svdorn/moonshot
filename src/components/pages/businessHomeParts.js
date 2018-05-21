@@ -29,7 +29,7 @@ class BusinessHomeParts extends Component {
                                 alt="My Candidates Management"
                                 src="/images/businessHome/ProductScreenshot3v6.png"
                             />
-                        </div>
+                            </div>
                     </div>
 
                     <br/>

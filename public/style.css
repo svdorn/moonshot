@@ -3179,9 +3179,24 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .homepageTrajectoryImagesRight { display: none; }
     .homepageTrajectoryImagesLeft { display: none; }
-    .businessHomeTrajectoryImagesLeft { display: none; }
-    .businessHomeTrajectoryImagesRight { display: none; }
-    .businessHomeTrajectoryImageRightNoBorder { display: none; }
+    .businessHomeTrajectoryImagesLeft > img {
+        position: relative;
+        margin-top: 60px;
+    }
+    .businessHomeTrajectoryImagesRight > img {
+        position: relative;
+        margin-top: 40px;
+        margin-left: 30px;
+    }
+    .businessHomeTrajectoryImageRightNoBorder > img {
+        position: relative;
+        margin-right: 10px;
+    }
+    .businessHomeTrajectoryImageRightNoBorder,
+    .businessHomeTrajectoryImagesRight,
+    .businessHomeTrajectoryImagesLeft {
+        float: none;
+    }
     .homepageTrajectoryTextLeft { float: initial; }
     .homepageTrajectoryTextRight {
         float: initial;
