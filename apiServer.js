@@ -69,6 +69,9 @@ const mlFunctions = require('./apis/mlFunctions');
 
 //userApis.POST_startPsychEval();
 //userApis.POST_answerPsychQuestion();
+
+//userApis.GET_printPsychScore();
+
 //userApis.makeMockPsychData();
 
 app.post('/user/startPsychEval', userApis.POST_startPsychEval);

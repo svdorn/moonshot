@@ -35,7 +35,74 @@ const userApis = {
     POST_login,
     POST_currentPathwayStep,
     POST_startPsychEval,
-    POST_answerPsychQuestion
+    POST_answerPsychQuestion,
+    GET_printPsychScore
+}
+
+
+async function GET_printPsychScore(req, res) {
+    const userId = "5af493a242f28d407fefdc41";
+    const verificationToken = "2246696e0517ce1e4d320a2023d7d1fd88e3fa537a17a50059d444aebefabc87f29927881df0eed1658968014aac4462d468b859c430a5fe5d9d84b2f1ecabab";
+
+    //const userId = sanitize(req.body.userId);
+    //const verificationToken = sanitize(req.body.verificationToken);
+
+    let user = undefined;
+    try {
+        user = await Users.findById(userId);
+    } catch(getUserError) {
+        console.log(getUserError);
+    }
+
+    if (!user) {
+        console.log("User not found when trying to calculate psych score. Id: ", userId);
+        return res.status(404).send("User not found.");
+    }
+
+    if (user.verificationToken !== verificationToken || !verificationToken) {
+        return res.status(403).send("Insufficient permission.");
+    }
+
+    const psych = user.psychometricTest;
+
+    let total = 0.0;
+
+    let factorCounter = 0;
+    let facetCounter = 0;
+
+    let facetTotal = 0;
+    let factorTotal = 0;
+    let responseCounter = 0;
+
+    let factorScoresTotal = 0;
+
+    let currFactor = undefined;
+
+    psych.factors.forEach(factor => {
+        factor.facets.forEach(facet => {
+            facet.responses.forEach(response => {
+                responseCounter++;
+                facetTotal += response.answer;
+            });
+            let facetScore = facetTotal / responseCounter;
+            factorTotal += facetScore;
+            responseCounter = 0;
+            facetCounter++;
+            facetTotal = 0;
+            console.log(`${facet.name} score: `, facetScore);
+
+        });
+
+        let factorScore = factorTotal / facetCounter;
+        factorScoresTotal += factorScore;
+        console.log(`${factor.name.toUpperCase()} SCORE = `, factorScore);
+        facetCounter = 0;
+        factorCounter++;
+        factorTotal = 0;
+    });
+
+    const finalScore = factorScoresTotal / factorCounter;
+    console.log("score: ", finalScore);
 }
 
 
