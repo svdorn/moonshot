@@ -483,9 +483,14 @@ form > h1 {
 .blueToPurpleButtonGradient {
     background: linear-gradient(to right, #7bd6fe, #ab86fe);
 }
+.blueToDarkPurpleButtonGradient {
+    background: linear-gradient(to bottom right, #72d6f5, #b17dfe);
+    color: #72d6f5;
+}
 .orangeToRedButtonGradient {
     background: linear-gradient(to right, #ff5438, #fe256e);
 }
+
 
 
 .blueWhiteButton {
@@ -757,6 +762,10 @@ form > h1 {
     height: 375px;
     position: relative;
     overflow-x: hidden;
+}
+
+.noHeight {
+    height: 0;
 }
 
 .greenToBlue { background: linear-gradient(to top right, var(--moonshotGreen), var(--moonshotLightBlue)); }
@@ -1152,6 +1161,7 @@ button.link {
 .blueGradientButtonExterior,
 .blueToPurpleButtonExterior,
 .purpleToRedButtonExterior,
+.blueToDarkPurpleButtonGradient,
 .redToLightRedButtonExterior {
     padding: 2px;
     border: none;
@@ -1163,6 +1173,11 @@ button.link {
     width: 100%;
     height: 100%;
     background-color: white;
+}
+.gradientBorderButtonInteriorBlack {
+    width: 100%;
+    height: 100%;
+    background: #2e2e2e;
 }
 .bigButton {
     font-size: 25px;
@@ -1713,6 +1728,7 @@ button.link {
 .darkBlueText { color: var(--moonshotMidBlue); }
 .purpleText { color: var(--moonshotPurple) }
 .darkPurpleText { color: var(--moonshotDarkPurple) }
+.darkDarkPurpleText { color: #b17dfe; }
 .lightPurpleText { color: #b37bfe; }
 .orangeText { color: #f24c49; }
 
@@ -1914,7 +1930,8 @@ button.link {
      margin-left: 80px;
  }
 
-.invertColorOnHover.gradientBorderButtonInterior:hover {
+.invertColorOnHover.gradientBorderButtonInterior:hover,
+.invertColorOnHover.gradientBorderButtonInteriorBlack:hover {
     color: white;
     background-color: rgba(0,0,0,0);
     background: rgba(0,0,0,0);
