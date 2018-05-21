@@ -46,6 +46,9 @@ class BusinessHome extends Component {
                             <div id="myCandidatesScreenshot">
                                 <img src="images/businessHome/ProductScreenshot1.jpg" />
                             </div>
+                            <div id="resultsScreenshot">
+                                <img src="images/businessHome/ProductScreenshot2.jpg" />
+                            </div>
                         </figure>
                     </div>
                 </div>
