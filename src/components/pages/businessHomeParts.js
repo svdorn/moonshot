@@ -20,11 +20,11 @@ class BusinessHomeParts extends Component {
                                 Analyze candidates to see if they exhibit the profile of
                                 proven high performers in that position.
                             </div>
-                            <button className="slightlyRoundedButton">
+                            <button className="slightlyRoundedButton marginTop10px pinkToPurpleButtonGradient whiteText">
                                 Hire Faster
                             </button>
                         </div>
-                        <div className="businessHomeTrajectoryImagesRight forBusiness">
+                        <div className="businessHomeTrajectoryImageRightNoBorder forBusiness">
                             <img
                                 alt="My Candidates Management"
                                 src="/images/businessHome/ProductScreenshot3v6.png"
@@ -43,6 +43,9 @@ class BusinessHomeParts extends Component {
                                 machine learning to reveal the empirical evidence
                                 instead of conjecture based on a resume.
                             </div>
+                            <button className="slightlyRoundedButton marginTop10px blueToPurpleButtonGradient whiteText">
+                                Hire Smarter
+                            </button>
                         </div>
                         <div className="businessHomeTrajectoryImagesLeft businessHomeTrajectoryImagesShadow forBusiness">
                             <img
@@ -61,6 +64,9 @@ class BusinessHomeParts extends Component {
                                 Engage your candidates better so they can understand
                                 your company and how they fit.
                             </div>
+                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText">
+                                Hire Better
+                            </button>
                         </div>
 
                         <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">

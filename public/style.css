@@ -475,6 +475,16 @@ form > h1 {
 }
 .slightlyRoundedButton {
     border-radius: 3px 3px 3px 3px;
+    border: none;
+}
+.pinkToPurpleButtonGradient {
+    background: linear-gradient(to left, #d1507c, #d3546e);
+}
+.blueToPurpleButtonGradient {
+    background: linear-gradient(to left, #7bd6fe, #ab86fe);
+}
+.orangeToRedButtonGradient {
+    background: linear-gradient(to left, #ff5438, #fe256e);
 }
 
 
@@ -2310,6 +2320,10 @@ button.link {
     float: right;
     margin-right: 2%;
 }
+.businessHomeTrajectoryImageRightNoBorder {
+    float: right;
+    margin-right: 2%;
+}
 .businessHomeTrajectoryImagesLeft > img,
 .businessHomeTrajectoryImagesRight > img {
     transition: all 0.2s ease-in;
@@ -2318,6 +2332,16 @@ button.link {
     z-index: 10;
     width: 400px;
     position: absolute;
+}
+.businessHomeTrajectoryImageRightNoBorder > img {
+    transition: all 0.2s ease-in;
+    top: -55px;
+    height: 314px;
+    z-index: 10;
+    width: 465px;
+    position: absolute;
+    right: 4%;
+    margin: 30px 20px 0 0;
 }
 .businessHomeTrajectoryImagesShadow > img {
     -webkit-box-shadow: 0px 0px 50px 1px #00000073;
@@ -2986,6 +3010,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .businessHomeTrajectoryImagesLeft > img,
     .businessHomeTrajectoryImagesRight > img {
+        top: 0px;
         height: 216px;
         width: 320px;
         transition: all 0.2s ease-out;
