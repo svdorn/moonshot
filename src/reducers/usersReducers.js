@@ -162,6 +162,16 @@ export function usersReducers(state = initialState, action) {
                 ...state, currentUser: action.payload
             };
             break;
+        case "ANSWER_PSYCH_QUESTION":
+            return {
+                ...state, currentUser: action.user, finishedPsychTest: action.finishedTest
+            }
+            break;
+        case "ANSWER_PSYCH_QUESTION_ERROR":
+            return {
+                ...state, notification: action.notification
+            }
+            break;
         case "COMPLETE_PATHWAY_REJECTED_INCOMPLETE_STEPS":
             return {
                 ...state, incompleteSteps: action.incompleteSteps, loadingSomething: false

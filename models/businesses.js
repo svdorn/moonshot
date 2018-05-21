@@ -5,6 +5,31 @@ var businessesSchema = mongoose.Schema({
     name: String,
     pathwayIds: [ mongoose.Schema.Types.ObjectId ],
     employerIds: [ mongoose.Schema.Types.ObjectId ],
+
+    // ---->>> POST-PIVOT <<<---- //
+
+    // the positions that the company is (or was) hiring for
+    positions: [{
+        // name of the position (such as "Machine Learning Developer")
+        name: String,
+        // if the position should be listed as one that candidates can apply for
+        currentlyHiring: Boolean,
+        // the skill tests a candidate must complete in order to apply
+        skills: [ mongoose.Schema.Types.ObjectId ],
+        // company- and position-specific questions, shown on responses page
+        freeResponseQuestions: [{
+            // the text of the question (e.g. "Why do you want to work here?")
+            body: String,
+            // if you have to answer this question to finish applying
+            required: Boolean
+        }],
+        // candidates who have applied for this position
+        candidateIds: [ mongoose.Schema.Types.ObjectId ]
+    }],
+
+    // ---->>> END POST-PIVOT <<<---- //
+
+
     // the candidates that have completed a pathway from this company
     candidates: [{
         userId: mongoose.Schema.Types.ObjectId,

@@ -22,7 +22,9 @@ const miscApis = {
     POST_resumeScorer_uploadResume
 }
 
+
 function POST_createReferralCode(req, res) {
+    console.log("creating referral code");
     const name = sanitize(req.body.name);
     // make it to lower case so that it's case insensitive
     const email = sanitize(req.body.email).toLowerCase();
@@ -81,8 +83,7 @@ function POST_createReferralCode(req, res) {
     Referrals.findOne(query, function(err, user) {
         // if there was an error somewhere along the way getting the user
         if (err) {
-            res.status(500).send("Server error, try again later.");
-            return;
+            return res.status(500).send("Server error, try again later.");
         }
         // if this user has not already asked for a referral code
         else if (user == null) {
@@ -98,12 +99,10 @@ function POST_createReferralCode(req, res) {
             Referrals.create(userBeingCreated, function(error, newUser) {
                 // if there was an error creating the user
                 if (error) {
-                    res.status(500).send("Server error, try again later.");
-                    return;
+                    return res.status(500).send("Server error, try again later.");
                 } else {
                     sendReferralEmail(newUser.referralCode);
-                    res.json(newUser.referralCode);
-                    return;
+                    return res.json(newUser.referralCode);
                 }
             });
         }
@@ -111,8 +110,8 @@ function POST_createReferralCode(req, res) {
         else {
             // if the user already has a referral code, give them that
             sendReferralEmail(user.referralCode);
-            res.json(user.referralCode);
-            return;
+            //res.json(user.referralCode);
+            return res.json("jangus");
         }
     });
 }

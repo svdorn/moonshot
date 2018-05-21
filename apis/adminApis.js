@@ -20,7 +20,7 @@ const { sanitize,
 } = require('./helperFunctions.js');
 
 
-const employerApis = {
+const adminApis = {
     POST_alertLinkClicked,
     POST_business,
     GET_info,
@@ -428,4 +428,4 @@ function verifyAdmin(userId, verificationToken) {
 }
 
 
-module.exports = employerApis;
+module.exports = adminApis;
