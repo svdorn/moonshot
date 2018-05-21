@@ -401,8 +401,8 @@ class Menu extends Component {
         }
         let moonshotLogoHtml = (
             <img
-                width={187.5}
-                height={60}
+                width={170}
+                height={80}
                 alt="Moonshot"
                 className={logoClassName}
                 id="moonshotLogo"
@@ -414,8 +414,8 @@ class Menu extends Component {
         let menu = (
             <header style={{zIndex: "100"}}>
                 <div>
-                    <Toolbar id="menu" style={{marginTop: "10px"}}>
-                        <ToolbarGroup className="logoToolbarGroup">
+                    <Toolbar id="menu">
+                        <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "25px"}}>
                             {moonshotLogoHtml}
                         </ToolbarGroup>
                         <ToolbarGroup>
