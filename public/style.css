@@ -231,7 +231,7 @@ form > h1 {
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) {
     /* account for the first skewed rectangles grid */
     margin-top: calc(var(--rowWidth) * 62);
-    height: calc(var(--rowWidth) * 62);
+    height: calc(var(--rowWidth) * 66);
     background-color: #323232;
 }
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) {
@@ -254,6 +254,20 @@ form > h1 {
     grid-row-end: 63;
     grid-column-start: 1;
     grid-column-end: 16;
+}
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(4) {
+    background-color: #2e2e2e;
+    grid-row-start: 63;
+    grid-row-end: 67;
+    grid-column-start: 1;
+    grid-column-end: 28;
+}
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(5) {
+    background: linear-gradient(to right, #ad84fe, #86c5fe);
+    grid-row-start: 63;
+    grid-row-end: 67;
+    grid-column-start: 28;
+    grid-column-end: 29;
 }
 /* THIRD GRID */
 
@@ -281,6 +295,9 @@ form > h1 {
     -ms-flex: 1 0 50%;
     flex: 1 0 50%;
     color: white;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .infoContainer > .productScreenshots {
     height: auto;
@@ -289,11 +306,10 @@ form > h1 {
     flex: 1 0 50%;
     position: relative;
 }
-.infoText {
-    margin: 0;
-}
 .flex { display: flex; }
 .i { font-style: italic; }
+.infoText { margin: 0; }
+.infoText.notFull { max-width: calc(1040px/2 - 150px)}
 .infoText.flex {
     justify-content: space-between;
     flex-direction: row;
@@ -309,7 +325,7 @@ form > h1 {
 .blackInput {
     border-radius: 10px;
     border: 1px solid white;
-    padding: 4px 10px;
+    padding: 3px 10px;
     background-color: #222222;
     color: white;
 }
@@ -319,8 +335,25 @@ form > h1 {
 .blackInput:focus { outline-width: 0 }
 .mediumButton {
     border-radius: 10px;
-    padding: 4px 10px;
+    padding: 3px 10px;
     cursor: pointer;
+}
+.frontPage .infoContainer .content .buttonArea .mediumButton.getStarted {
+    margin-left: 10%;
+}
+.mediumButton.getStarted.blueToPurple {
+    background: linear-gradient(to right, #b172fe, #7ad6fe, #b172fe);
+    background-position-x: -64px;
+    background-size: 150%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.mediumButton.getStarted.blueToPurple:hover {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 #myCandidatesScreenshot {

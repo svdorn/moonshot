@@ -32,18 +32,17 @@ class BusinessHome extends Component {
                             <div className="skewedRectangle" />
                             <div className="skewedRectangle" />
                             <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
+                            <div className="skewedRectangle" />
                         </div>
                     </div>
-                    <div className="infoContainer font20px">
+                    <div className="infoContainer font20px font16pxUnder900">
                         <div className="content">
-                            <h1 className="bigTitle font46px" style={{color:"#72d6f5"}}>Know who to hire.</h1>
-                            <p className="infoText">Predict candidate performance based on employees at your company and companies with similar positions.</p>
-                            <div className="buttonArea">
-                                <input className="blackInput" type="text" placeholder="Email Address" />
-                                <div className="mediumButton" style={{
-                                    background: "linear-gradient(to right, #7ad6fe, #b172fe)",
-                                    marginLeft: "20px"
-                                }}>
+                            <h1 className="bigTitle font46px font38pxUnder900" style={{color:"#72d6f5"}}>Know who to hire.</h1>
+                            <p className="infoText notFull">Predict candidate performance based on employees at your company and companies with similar positions.</p>
+                            <div className="buttonArea font18px font14pxUnder900">
+                                <input className="blackInput getStarted" type="text" placeholder="Email Address" />
+                                <div className="mediumButton getStarted blueToPurple">
                                     Get Started
                                 </div>
                             </div>
