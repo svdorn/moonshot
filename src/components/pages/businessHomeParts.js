@@ -143,6 +143,23 @@ class BusinessHomeParts extends Component {
                     </div>
                 </section>
                 <div className="marginTop40px marginBottom40px"/>
+                <section>
+                    <div className="center">
+                        <img
+                            src="/images/businessHome/CrystalBall.png"
+                            alt="CrystalBall"
+                            height={300}
+                        />
+                        <button className="blueToDarkPurpleButtonGradient bigButton"
+                                style={{marginTop: "35px", color: 'white'}}
+                        >
+                            <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
+                                {"Learn More"}
+                            </div>
+                        </button>
+                    </div>
+                </section>
+                <div className="marginTop40px marginBottom40px"/>
                 <div>Here</div>
             </div>
         );
