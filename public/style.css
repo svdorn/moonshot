@@ -3493,7 +3493,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-right: calc((100% - 350px) / 1.5);
     }
     .infoContainer > .productScreenshots {
-        height: 220px;
+        height: 250px;
     }
     #myCandidatesScreenshot {
         top: 230px;
@@ -3507,9 +3507,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: auto;
         /* overflow: auto; */
     }
-    .parnterLogos > div {
+    .partnerLogos > div {
         flex-wrap: wrap;
-        height: auto;
+        height: fit-content;
+        transform: translateY(-50%);
     }
     .partnerLogo {
         height: 30px;
