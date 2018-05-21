@@ -457,6 +457,10 @@ form > h1 {
     line-height: initial;
 }
 
+.width400px {
+    width: 400px;
+}
+
 .greenButton {
     background-color: white;
     border: 2px solid var(--moonshotGreenText);
@@ -476,6 +480,10 @@ form > h1 {
 }
 .blueToDarkPurpleButtonGradient {
     background: linear-gradient(to bottom right, #72d6f5, #b17dfe);
+    color: #72d6f5;
+}
+.blueToDarkPurpleButtonGradientReverse {
+    background: linear-gradient(to top left, #72d6f5, #b17dfe);
     color: #72d6f5;
 }
 .orangeToRedButtonGradient {
@@ -1153,6 +1161,7 @@ button.link {
 .blueToPurpleButtonExterior,
 .purpleToRedButtonExterior,
 .blueToDarkPurpleButtonGradient,
+.blueToDarkPurpleButtonGradientReverse,
 .redToLightRedButtonExterior {
     padding: 2px;
     border: none;
@@ -1170,6 +1179,14 @@ button.link {
     height: 100%;
     background: #2e2e2e;
 }
+.gradientBorderButtonInteriorGradient {
+    background: linear-gradient(to right, #b172fe, #7ad6fe, #b172fe);
+    background-position-x: -112px;
+    background-size: 150%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
 .bigButton {
     font-size: 25px;
     line-height: 120%;
@@ -1180,6 +1197,14 @@ button.link {
 .paperBox {
     height: 300px;
     width: 400px;
+    display: inline-block;
+    margin: 0 25px 40px;
+    vertical-align: top;
+}
+
+.paperBoxBusinessHome {
+    height: 480px;
+    width: 340px;
     display: inline-block;
     margin: 0 25px 40px;
     vertical-align: top;
@@ -1232,6 +1257,20 @@ button.link {
     height: 100%;
     width: 100%;
 }
+.businessHomeGradientBorder {
+    padding: 2px;
+    background: linear-gradient(to top left, #ff5d27, #fd0d8b);
+}
+.businessHomeGradientBorder > div {
+    background: #2e2e2e;
+    height: 100%;
+    width: 100%;
+}
+.businessHomeBoxIcons {
+    height: 100px;
+    margin-top: 20px;
+}
+
 .discoverPageBorder {
     border: 3px solid white;
 }
@@ -1720,6 +1759,8 @@ button.link {
 .purpleText { color: var(--moonshotPurple) }
 .darkPurpleText { color: var(--moonshotDarkPurple) }
 .darkDarkPurpleText { color: #b17dfe; }
+.brightPinkText { color: #fd0d8b; }
+.brightOrangeText { color: #ff5d27; }
 .lightPurpleText { color: #b37bfe; }
 .orangeText { color: #f24c49; }
 
@@ -1926,6 +1967,13 @@ button.link {
     color: white;
     background-color: rgba(0,0,0,0);
     background: rgba(0,0,0,0);
+}
+
+.invertColorOnHover.gradientBorderButtonInteriorGradient:hover {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 .videoContainer {
@@ -2207,6 +2255,18 @@ button.link {
     height: 2px;
     margin: 70px 20%;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
+}
+.pinkToOrangeSpacer {
+    width: 60%;
+    height: 2px;
+    margin: 70px 20%;
+    background: linear-gradient(to right, #fd0d8b, #ff5d27);
+}
+.orangeToPinkSpacer {
+    width: 60%;
+    height: 2px;
+    margin: 70px 20%;
+    background: linear-gradient(to right, #ff5d27, #fd0d8b);
 }
 .purpleToRedSpacer {
     width: 60%;
@@ -3620,6 +3680,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .font10pxUnder700 { font-size: 10px; }
     .font8pxUnder700 { font-size: 8px; }
     .font6pxUnder700 { font-size: 6px; }
+
+    .width300pxUnder700 { width: 300px; }
 }
 
 @media only screen and (min-width: 660px) {
@@ -4145,6 +4207,17 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .frontPage .infoText.flex {
         margin-right: calc((100% - 250px) / 1.2);
     }
+    .paperBoxBusinessHome {
+        height: 395px;
+        width: 280px;
+    }
+    .businessHomeBoxIcons {
+        height: 80px;
+    }
+
+    .marginTop20pxUnder400 {
+        margin-top: 20px;
+    }
 
     .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
         background: linear-gradient(to right, #ad84fe, #86c5fe);
@@ -4175,6 +4248,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .font6pxUnder400 { font-size: 6px; }
 
     .font10pxUnder400Important { font-size: 10px !important; }
+
+    .width250pxUnder400 { width: 250px; }
 
 }
 
