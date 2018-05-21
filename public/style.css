@@ -206,20 +206,27 @@ form > h1 {
     height: calc(var(--rowWidth) * 62);
 }
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-    background: linear-gradient(to right, #a196fe, #80cffe);
+    background: linear-gradient(to right, #80cffe, #a196fe);
     grid-row-start: 59;
     grid-row-end: 63;
     grid-column-start: 1;
-    grid-column-end: 10;
+    grid-column-end: 7;
 }
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 59;
+    grid-row-end: 63;
+    grid-column-start: 7;
+    grid-column-end: 10;
+}
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
     background: linear-gradient(to right, #a196fe, #80cffe);
     grid-row-start: 16;
     grid-row-end: 20;
     grid-column-start: 29;
     grid-column-end: 35;
 }
-.frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
     background: linear-gradient(to right, #a196fe, #80cffe);
     grid-row-start: 22;
     grid-row-end: 26;
@@ -259,15 +266,29 @@ form > h1 {
     grid-row-start: 63;
     grid-row-end: 67;
     grid-column-start: 1;
-    grid-column-end: 28;
+    grid-column-end: 34;
 }
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(5) {
     background: linear-gradient(to right, #ad84fe, #86c5fe);
     grid-row-start: 63;
     grid-row-end: 67;
-    grid-column-start: 28;
-    grid-column-end: 29;
+    grid-column-start: 34;
+    grid-column-end: 37;
 }
+.frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(6) {
+    background: linear-gradient(to right, #86c5fe, #ad84fe);
+    grid-row-start: 63;
+    grid-row-end: 67;
+    grid-column-start: 37;
+    grid-column-end: 43;
+}
+/* .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(7) {
+    background: linear-gradient(to right, #7199ce, #6177ab);
+    grid-row-start: 63;
+    grid-row-end: 67;
+    grid-column-start: 37;
+    grid-column-end: 43;
+} */
 /* THIRD GRID */
 
 /* END THIRD GRID */
