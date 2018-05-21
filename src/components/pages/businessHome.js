@@ -36,9 +36,9 @@ class BusinessHome extends Component {
                             <div className="skewedRectangle" />
                         </div>
                     </div>
-                    <div className="infoContainer font20px font16pxUnder900">
+                    <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
                         <div className="content">
-                            <h1 className="bigTitle font46px font38pxUnder900" style={{color:"#72d6f5"}}>Know who to hire.</h1>
+                            <h1 className="bigTitle font46px font38pxUnder900 font28pxUnder400" style={{color:"#72d6f5"}}>Know who to hire.</h1>
                             <p className="infoText notFull">Predict candidate performance based on employees at your company and companies with similar positions.</p>
                             <div className="buttonArea font18px font14pxUnder900">
                                 <input className="blackInput getStarted" type="text" placeholder="Email Address" />
@@ -46,7 +46,7 @@ class BusinessHome extends Component {
                                     Get Started
                                 </div>
                             </div>
-                            <div className="infoText i flex">
+                            <div className="infoText i flex font12pxUnder400">
                                 <div>Free for first position</div>
                                 <div>•</div>
                                 <div>Unlimited evaluations</div>

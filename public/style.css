@@ -278,8 +278,8 @@ form > h1 {
     position: relative;
     padding-top: 200px;
     padding-bottom: 200px;
-
 }
+.bigTitle { margin-bottom: 20px; }
 .businessHome > .infoContainer {
     display: flex;
     width: 100%;
@@ -289,15 +289,16 @@ form > h1 {
     max-width: 1040px;
     position: relative;
     z-index: 10;
+
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .infoContainer > .content {
     -webkit-box-flex: 1;
     -ms-flex: 1 0 50%;
     flex: 1 0 50%;
     color: white;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
 }
 .infoContainer > .productScreenshots {
     height: auto;
@@ -3029,6 +3030,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .forBusinessBox { padding-top: 13px; }
 
+    #resultsScreenshot { --device-scale: .17; }
+    #myCandidatesScreenshot { --device-scale: .25; }
+
     .font40pxUnder900 { font-size: 40px; }
     .font38pxUnder900 { font-size: 38px; }
     .font36pxUnder900 { font-size: 36px; }
@@ -3392,6 +3396,28 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .pathwayContentTimeText { margin-top: 5px; }
+
+    /* HOME PAGE */
+    .businessHome.frontPage { padding-top: 120px; }
+    .businessHome > .infoContainer {
+        flex-direction: column;
+        padding: 0 30px;
+    }
+    .infoText.notFull {
+        max-width: initial;
+    }
+    .infoText.flex {
+        margin-right: calc((100% - 350px) / 1.5);
+    }
+    .productScreenshots { height: 1px; }
+    #myCandidatesScreenshot {
+        top: 230px;
+        left: 79%;
+    }
+    #resultsScreenshot {
+        top: 200px;
+        left: 50%;
+    }
 
     .marginSides40pxUnder700 { margin-right: 40px; margin-left: 40px; }
 
@@ -3921,6 +3947,20 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .pathwayContentTimeText { margin-top: 4px; }
 
     .marginSides40pxUnder700 { margin-right: 20px; margin-left: 20px; }
+
+    .buttonArea { flex-direction: column; }
+    .frontPage .infoContainer .content .buttonArea .blackInput.getStarted {
+        margin-bottom: 12px;
+        width: 70%;
+    }
+    .frontPage .infoContainer .content .buttonArea .mediumButton.getStarted {
+        margin-left: 0;
+        width: 98px;
+    }
+    .frontPage .infoText.flex {
+        margin-right: calc((100% - 250px) / 1.2);
+    }
+
 
     .font40pxUnder400 { font-size: 40px; }
     .font38pxUnder400 { font-size: 38px; }
