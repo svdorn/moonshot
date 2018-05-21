@@ -183,21 +183,21 @@ class BusinessHomeParts extends Component {
                                     alt="Paper Airplane Icon"
                                     className="businessHomeBoxIcons"
                                 />
-                                <div className="brightPinkText marginTop40px font22px">
+                                <div className="brightPinkText marginTop40px marginTop20pxUnder400 font22px font18pxUnder400">
                                     STARTER
                                 </div>
                                 <div style={{height: '70px', lineHeight: '70px'}}>
-                                    <i className="whiteText marginTop20px font16px">
+                                    <i className="whiteText marginTop20px font16px font14pxUnder400">
                                         First Position Free
                                     </i>
                                 </div>
                                 <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
-                                <div className="whiteText font16px" style={{width: '90%', margin: 'auto'}}>
+                                <div className="whiteText font16px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
                                     Start with one position. You can run unlimited candidate
                                     evaluations to see the results. No cost, no risk, no
                                     excuses not to kick this off the ground.
                                 </div>
-                                <button className="whiteText clickableNoUnderline marginTop20px font18px" style={{background: '#fd0d8b', border: 'none'}}>
+                                <button className="whiteText clickableNoUnderline marginTop20px font18px font14pxUnder400" style={{background: '#fd0d8b', border: 'none'}}>
                                     Take Off
                                 </button>
                             </div>
@@ -210,23 +210,23 @@ class BusinessHomeParts extends Component {
                                     alt="Enterprise Rocket Icon"
                                     className="businessHomeBoxIcons"
                                 />
-                                <div className="brightOrangeText marginTop40px font22px">
+                                <div className="brightOrangeText marginTop40px marginTop20pxUnder400 font22px font18pxUnder400">
                                     PLUS
                                 </div>
                                 <div style={{height: '70px'}}>
-                                    <i className="whiteText marginTop20px font16px">
+                                    <i className="whiteText marginTop20px font16px font14pxUnder400">
                                         Each Additional Position<br/> Starting at $79
                                         <br/>
                                         <i className="font12px">per position/month</i>
                                     </i>
                                 </div>
                                 <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
-                                <div className="whiteText font16px" style={{width: '90%', margin: 'auto'}}>
+                                <div className="whiteText font16px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
                                     Easily scale the number of positions you are
                                     evaluating through Moonshot. Unlimited candidate
                                     evaluations for each position.
                                 </div>
-                                <button className="clickableNoUnderline whiteText marginTop20px font18px" style={{background: '#ff5d27', border: 'none'}}>
+                                <button className="clickableNoUnderline whiteText marginTop20px font18px font14pxUnder400" style={{background: '#ff5d27', border: 'none'}}>
                                     Blast Off
                                 </button>
                             </div>

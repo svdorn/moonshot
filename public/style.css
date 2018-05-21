@@ -4124,6 +4124,17 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .frontPage .infoText.flex {
         margin-right: calc((100% - 250px) / 1.2);
     }
+    .paperBoxBusinessHome {
+        height: 395px;
+        width: 280px;
+    }
+    .businessHomeBoxIcons {
+        height: 80px;
+    }
+
+    .marginTop20pxUnder400 {
+        margin-top: 20px;
+    }
 
 
     .font40pxUnder400 { font-size: 40px; }
