@@ -403,6 +403,7 @@ form > h1 {
 }
 .partnerLogo {
     height: 100%;
+    width: auto;
 }
 
 
@@ -3409,7 +3410,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .infoText.flex {
         margin-right: calc((100% - 350px) / 1.5);
     }
-    .productScreenshots { height: 1px; }
+    .infoContainer > .productScreenshots {
+        height: 220px;
+    }
     #myCandidatesScreenshot {
         top: 230px;
         left: 79%;
@@ -3417,6 +3420,18 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #resultsScreenshot {
         top: 200px;
         left: 50%;
+    }
+    .partnerLogos {
+        height: auto;
+        /* overflow: auto; */
+    }
+    .parnterLogos > div {
+        flex-wrap: wrap;
+        height: auto;
+    }
+    .partnerLogo {
+        height: 30px;
+        margin: 5px;
     }
 
     .marginSides40pxUnder700 { margin-right: 40px; margin-left: 40px; }
