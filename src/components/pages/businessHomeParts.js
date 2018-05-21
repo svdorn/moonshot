@@ -87,7 +87,9 @@ class BusinessHomeParts extends Component {
                         </div>
                     </div>
                 </section>
+
                 <div className="marginTop40px marginBottom40px"/>
+
                 <section>
                     <div className="center">
                         <div className="font36px font32pxUnder700 font26pxUnder500 center darkDarkPurpleText"
@@ -143,7 +145,9 @@ class BusinessHomeParts extends Component {
                         </button>
                     </div>
                 </section>
+
                 <div className="marginTop40px marginBottom40px"/>
+
                 <section>
                     <div className="center">
                         <img

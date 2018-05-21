@@ -431,6 +431,10 @@ form > h1 {
     margin-bottom: 0;
 }
 
+#businessHomeStatistics {
+    margin-top: 40px;
+}
+
 
 
 
@@ -3400,6 +3404,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .pathwayLandingQuoteAltRight {
         display: none;
+    }
+
+    #businessHomeStatistics {
+        margin-top: 100px;
     }
 
     .font40pxUnder800 { font-size: 40px; }
