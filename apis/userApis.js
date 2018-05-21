@@ -459,7 +459,7 @@ async function POST_startPsychEval(req, res) {
         rephrase: false,
         numRephrasesAllowed: 0,
         // around 75 questions
-        questionsPerFacet: 1,
+        questionsPerFacet: 4,
         incompleteFactors,
         factors,
         currentQuestion
