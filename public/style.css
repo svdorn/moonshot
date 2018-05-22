@@ -291,6 +291,7 @@ form > h1 {
 /* GRID FOR STATISTICS PAGE */
 #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer {
     margin-top: -500px;
+    height: 1200px;
 }
 #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
     height: calc(var(--rowWidth) * 400);
@@ -559,10 +560,15 @@ form > h1 {
     max-width: 1340px;
     position: relative;
 }
+#businessHomeStatistics .horizListText {
+    height: 60px;
+}
 
 #moonshotProcess {
-    margin-top: 200px;
-    margin-bottom: 200px;
+    margin-top: 150px;
+    margin-bottom: 180px;
+    position: relative;
+    z-index: 1;
 }
 #moonshotProcess h1 {
     color: #72d6f5;
@@ -706,6 +712,23 @@ form > h1 {
     display: inline-block;
     width: calc(100% - 28px);
     margin-left: 24px;
+}
+
+
+/* #businessHomeStatistics div {
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+} */
+div {
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.statisticsHeader {
+    padding: 0 16px;
+    margin-bottom: 40px;
+    height: 80px;
 }
 
 
@@ -3525,6 +3548,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 44;
         grid-column-end: 32;
     }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
+        grid-column-start: 30;
+    }
 
     .noPadding { padding: 0 0 0 0 }
 
@@ -4336,6 +4362,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-start: 29;
         grid-column-end: 43;
     }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        grid-column-start: 27;
+    }
 
     .crystalBall {
         height: 300px;
@@ -4846,6 +4875,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .processListItem > img {
         height: 10px;
         top: calc(50% - 2px);
+    }
+
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        grid-column-start: 26;
     }
 
     .font40pxUnder400 { font-size: 40px; }

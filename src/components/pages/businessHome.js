@@ -509,8 +509,7 @@ class BusinessHome extends Component {
 
                     <div>
                         <div className="center">
-                            <div className="font36px font32pxUnder700 font26pxUnder500 center darkDarkPurpleText"
-                                 style={{marginBottom: '50px'}}>
+                            <div className="font36px font32pxUnder700 font26pxUnder500 font24pxUnder400 center darkDarkPurpleText statisticsHeader">
                                 Predictive Analytics Improve Hiring Results
                             </div>
                             <div>
