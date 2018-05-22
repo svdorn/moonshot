@@ -440,6 +440,17 @@ form > h1 {
     margin-top: 200px;
     margin-bottom: 200px;
 }
+#moonshotProcess h1 {
+    color: #72d6f5;
+    width: calc(100% - 60px);
+    text-align: center;
+    margin-bottom: 56px;
+    margin-left: 30px;
+
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
 .processButtonsContainer {
     position: relative;
     display: inline-block;
@@ -447,7 +458,7 @@ form > h1 {
     transform: translateX(-50%);
 }
 .processButtonsContainer > div {
-    margin: 0 12px;
+    margin: 0 12px 7px;
     display: inline-block;
     position: relative;
 }
@@ -455,6 +466,10 @@ form > h1 {
     height: 60px;
     position: relative;
     width: 170px;
+
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .processHeaderContainer > div {
     position: absolute;
@@ -466,8 +481,8 @@ form > h1 {
 }
 .processButtonsContainer > div:nth-child(1) > div > div:nth-child(-n + 2) { --borderColor: #a88cfe; }
 .processButtonsContainer > div:nth-child(2) > div > div:nth-child(-n + 2) { --borderColor: #a591fe; }
-.processButtonsContainer > div:nth-child(3) > div > div:nth-child(-n + 2) { --borderColor: #8cb8fe; }
-.processButtonsContainer > div:nth-child(4) > div > div:nth-child(-n + 2) { --borderColor: #7ed2fe; }
+.processButtonsContainer > div:nth-child(4) > div > div:nth-child(-n + 2) { --borderColor: #8cb8fe; }
+.processButtonsContainer > div:nth-child(5) > div > div:nth-child(-n + 2) { --borderColor: #7ed2fe; }
 .processHeaderContainer > div:first-child {
     top: 0;
     border-top: 3px solid var(--borderColor);
@@ -501,6 +516,10 @@ form > h1 {
     -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
     -moz-box-shadow:    0 0 80px 1px rgba(0,0,0,.5);
     box-shadow:         0 0 80px 1px rgba(0,0,0,.5);
+
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 /* gray box surrounding text and centerline */
 .processOutline > div {
@@ -545,8 +564,9 @@ form > h1 {
 /* check mark icon */
 .processListItem > img {
     display: inline-block;
-    height: 18px;
+    height: 13px;
     margin-right: 15px;
+    margin-bottom: 6px
 }
 
 
@@ -3344,6 +3364,38 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 }
 
+@media only screen and (min-width: 851px) {
+    .under850only { display: none; }
+}
+@media only screen and (max-width: 850px) {
+    #moonshotProcess h1 { margin-bottom: 40px; }
+    .processOutline { width: 580px; }
+
+    .font50pxUnder850 { font-size: 50px; }
+    .font48pxUnder850 { font-size: 48px; }
+    .font46pxUnder850 { font-size: 46px; }
+    .font44pxUnder850 { font-size: 44px; }
+    .font42pxUnder850 { font-size: 42px; }
+    .font40pxUnder850 { font-size: 40px; }
+    .font38pxUnder850 { font-size: 38px; }
+    .font36pxUnder850 { font-size: 36px; }
+    .font34pxUnder850 { font-size: 34px; }
+    .font32pxUnder850 { font-size: 32px; }
+    .font30pxUnder850 { font-size: 30px; }
+    .font28pxUnder850 { font-size: 28px; }
+    .font26pxUnder850 { font-size: 26px; }
+    .font24pxUnder850 { font-size: 24px; }
+    .font22pxUnder850 { font-size: 22px; }
+    .font20pxUnder850 { font-size: 20px; }
+    .font18pxUnder850 { font-size: 18px; }
+    .font16pxUnder850 { font-size: 16px; }
+    .font14pxUnder850 { font-size: 14px; }
+    .font12pxUnder850 { font-size: 12px; }
+    .font10pxUnder850 { font-size: 10px; }
+    .font8pxUnder850 { font-size: 8px; }
+    .font6pxUnder850 { font-size: 6px; }
+}
+
 @media only screen and (max-width: 821px) {
     .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(3) {
         display: none;
@@ -3922,6 +3974,11 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .multipleChoiceCircle {
         margin-top: 2px;
+    }
+
+    .processHeaderContainer {
+        height: 50px;
+        width: 144px;
     }
 
     .font40pxUnder600 { font-size: 40px; }

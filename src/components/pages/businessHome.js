@@ -200,7 +200,7 @@ class BusinessHome extends Component {
             processButtons.push(
                 <div>
                     { selected ? shadowBox : null }
-                    <div className="processHeaderContainer clickable font18px"
+                    <div className="processHeaderContainer clickable font18px font14pxUnder600"
                          onClick={() => this.selectProcess(processIndex)}
                     >
                         <div style={colorStyle} />
@@ -209,6 +209,10 @@ class BusinessHome extends Component {
                     </div>
                 </div>
             );
+
+            if (processIndex === 1) {
+                processButtons.push(<br className="under850only"/>)
+            }
         };
 
         const processList = processObjects[this.state.infoIndex].list.map(infoListText => {
@@ -220,11 +224,12 @@ class BusinessHome extends Component {
         });
 
         const processSection = (
-            <section id="moonshotProcess" style={{height: "500px"}}>
+            <section id="moonshotProcess">
+                <h1 className="font34px font30pxUnder850">{"Moonshot's Process to Predict Candidate Performance"}</h1>
                 <div className="processButtonsContainer">
                     { processButtons }
                 </div>
-                <div className="processOutline font18px">
+                <div className="processOutline font18px font16pxUnder850">
                     <div>
                         <div>
                             <div>
