@@ -4112,9 +4112,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
 
-
-
-
     .font40pxUnder800 { font-size: 40px; }
     .font38pxUnder800 { font-size: 38px; }
     .font36pxUnder800 { font-size: 36px; }
@@ -5058,6 +5055,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 57;
         grid-column-start: 25;
         grid-column-end: 32;
+    }
+
+    #threeScreenshots .businessHomeTrajectoryImagesRight {
+        margin-right: 0;
     }
 
     #moonshotProcess h1 { margin-bottom: 26px; }
