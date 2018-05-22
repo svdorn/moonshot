@@ -59,7 +59,7 @@ function POST_forBusinessEmail(req, res) {
     const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
         if (success) {
-            res.json("Email sent successfully, our team will get back to you shortly.");
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
         } else {
             res.status(500).send(msg);
         }

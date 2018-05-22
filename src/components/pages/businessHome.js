@@ -291,46 +291,62 @@ class BusinessHome extends Component {
                     contentClassName="center"
                     overlayClassName="dialogOverlay"
                 >
-                    {this.props.loadingEmailSend ?
-                        <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
-                        : < form onSubmit={this.handleSubmit.bind(this)} className="center">
-                            <div className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px" >
-                                Predict Candidate Success
-                            </div>
-                            <Field
-                                name="name"
-                                component={renderTextField}
-                                label="Full Name*"
-                                style={{marginTop: '1px'}}
-                            /> < br/>
-                            < Field
-                                name="email"
-                                component={renderTextField}
-                                label="Email*"
-                            /><br/>
-                            <Field
-                                name="company"
-                                component={renderTextField}
-                                label="Company"
-                            /><br/>
-                            <Field
-                                name="phone"
-                                component={renderTextField}
-                                label="Phone Number"
-                            /><br/>
-                            <RaisedButton
-                                label="Send"
-                                type="submit"
-                                className="raisedButtonBusinessHome"
-                                style={{marginTop: '20px'}}
-                            />
-                            <br/>
-                            <div className="infoText i flex font12px whiteText center" style={{margin: '10px auto', width: '250px'}}>
-                                <div>Free for First Position</div>
-                                <div>•</div>
-                                <div>Unlimited Evaluations</div>
-                            </div>
-                        </form>
+                    {this.props.notification ?
+                        <div className="center font20px font16pxUnder400 whiteText">
+                            {this.props.notification.message}
+                            <br />
+                            <img
+                                className="footerMoonshotLogo marginTop40px"
+                                alt="Moonshot Logo"
+                                title="Moonshot Logo"
+                                src="/images/OfficialLogoWhite.png"/>
+                        </div>
+                        :
+                        <div>
+                        {this.props.loadingEmailSend ?
+                            <div className="center"><CircularProgress className="marginTop40px"/></div>
+                            : < form onSubmit={this.handleSubmit.bind(this)} className="center">
+                                <div
+                                    className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
+                                    Predict Candidate Success
+                                </div>
+                                <Field
+                                    name="name"
+                                    component={renderTextField}
+                                    label="Full Name*"
+                                    style={{marginTop: '1px'}}
+                                /> < br/>
+                                < Field
+                                    name="email"
+                                    component={renderTextField}
+                                    label="Email*"
+                                /><br/>
+                                <Field
+                                    name="company"
+                                    component={renderTextField}
+                                    label="Company"
+                                /><br/>
+                                <Field
+                                    name="phone"
+                                    component={renderTextField}
+                                    label="Phone Number"
+                                /><br/>
+                                <RaisedButton
+                                    label="Send"
+                                    type="submit"
+                                    className="raisedButtonBusinessHome"
+                                    style={{marginTop: '20px'}}
+                                />
+                                <br/>
+                                <div className="infoText i flex font12px whiteText center"
+                                     style={{margin: '10px auto', width: '250px'}}>
+                                    <div>Free for First Position</div>
+                                    <div>•</div>
+                                    <div>Unlimited Evaluations</div>
+                                </div>
+                            </form>
+                    }
+                        </div>
                     }
                 </Dialog>
             <div className="blackBackground businessHome">
@@ -481,76 +497,100 @@ class BusinessHome extends Component {
                                 <div className="skewedRectangle" />
                                 <div className="skewedRectangle" />
                                 <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
                             </div>
                         </div>
                     </div>
 
-                    <div className="center">
-                        <div className="font36px font32pxUnder700 font26pxUnder500 center darkDarkPurpleText"
-                             style={{marginBottom: '50px'}}>
-                            Predictive Analytics Improve Hiring Results
+                    <div>
+                        <div className="center">
+                            <div className="font36px font32pxUnder700 font26pxUnder500 font24pxUnder400 center darkDarkPurpleText statisticsHeader">
+                                Predictive Analytics Improve Hiring Results
+                            </div>
+                            <div>
+                                <div style={style.bottomListItem}>
+                                    <img src="/images/businessHome/Hourglass.png"
+                                         alt="Hourglass Icon"
+                                         className="forBusinessIcon"
+                                         style={{marginRight: '10px'}}/>
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
+                                    </div>
+                                </div>
+                                <div style={style.bottomListItem}>
+                                    <img src="/images/businessHome/Diamond.png"
+                                         alt="Diamond Icon"
+                                         className="forBusinessIcon"
+                                         style={{marginLeft: '10px'}}/>
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={{marginTop: '40px'}}>
+                                <div style={style.bottomListItem}>
+                                    <img src="/images/businessHome/Turnover.png"
+                                         alt="Turnover Icon"
+                                         className="forBusinessIcon"/>
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        Up to 70% decrease<div className="above1000only noHeight"><br/></div> in employee turnover
+                                    </div>
+                                </div>
+                                <div style={style.bottomListItem}>
+                                    <img src="/images/businessHome/Lightbulb4.png"
+                                         alt="Lightbulb Icon"
+                                         className="forBusinessIcon"/>
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        More than 85% of candidates<div className="above1000only noHeight"><br/></div> rate their experience as positive
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <div style={style.bottomListItem}>
-                                <img src="/images/businessHome/Hourglass.png"
-                                     alt="Hourglass Icon"
-                                     className="forBusinessIcon"
-                                     style={{marginRight: '10px'}}/>
-                                <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                    Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
+                        <div className="center">
+                            <button className="blueToDarkPurpleButtonGradient bigButton"
+                                    style={{marginTop: "35px", color: '#72d6f5'}}
+                                    onClick={this.handleOpen}
+                            >
+                                <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
+                                    {"Learn More"}
                                 </div>
-                            </div>
-                            <div style={style.bottomListItem}>
-                                <img src="/images/businessHome/Diamond.png"
-                                     alt="Diamond Icon"
-                                     className="forBusinessIcon"
-                                     style={{marginLeft: '10px'}}/>
-                                <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                    Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
-                                </div>
-                            </div>
+                            </button>
                         </div>
-                        <div style={{marginTop: '40px'}}>
-                            <div style={style.bottomListItem}>
-                                <img src="/images/businessHome/Turnover.png"
-                                     alt="Turnover Icon"
-                                     className="forBusinessIcon"/>
-                                <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                    Up to 70% decrease<div className="above1000only noHeight"><br/></div> in employee turnover
-                                </div>
-                            </div>
-                            <div style={style.bottomListItem}>
-                                <img src="/images/businessHome/Lightbulb4.png"
-                                     alt="Lightbulb Icon"
-                                     className="forBusinessIcon"/>
-                                <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                    More than 85% of candidates<div className="above1000only noHeight"><br/></div> rate their experience as positive
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="center">
-                        <button className="blueToDarkPurpleButtonGradient bigButton"
-                                style={{marginTop: "35px", color: '#72d6f5'}}
-                                onClick={this.handleOpen}
-                        >
-                            <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
-                                {"Learn More"}
-                            </div>
-                        </button>
                     </div>
                 </section>
 
-
-
-
                 { processSection }
 
+                <section id="baselineEvaluation">
+                    <div className="skewedContainer">
+                        <div className="skewedRectanglesContainer">
+                            <div className="skewedRectangles">
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                            </div>
+                        </div>
+                    </div>
 
-
-
-
-                <section>
                     <div className="forBusinessBoxesContainer">
                         <div className="font36px font32pxUnder700 font26pxUnder500 center brightPinkText"
                              style={{marginBottom: '50px'}}>
@@ -588,6 +628,7 @@ class BusinessHome extends Component {
                                 </button>
                             </div>
                         </Paper>
+                        <div className="under800only" style={{height:"0px"}}><br/></div>
                         <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
                                zDepth={2}>
                             <div style={{textAlign: "center", position: "relative"}}>
@@ -620,10 +661,10 @@ class BusinessHome extends Component {
                     </div>
                 </section>
 
-                <section className="marginBottom60px">
+                <section id="crystalBall" className="marginBottom60px">
                     <div className="center">
                         <div className="blueTextHome font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
-                            Your crystal ball to identify<div className="above800only noHeight"><br/></div> good and bad hires before it's too late.
+                            {"Your crystal ball to identify"}<div className="above800only noHeight"><br/></div>{" good and bad hires before it's too late."}
                         </div>
                         <img
                             src="/images/businessHome/CrystalBall.png"
@@ -658,6 +699,7 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         loadingEmailSend: state.users.loadingSomething,
+        notification: state.users.notification,
     };
 }
 
