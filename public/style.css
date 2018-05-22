@@ -435,6 +435,43 @@ form > h1 {
     margin-top: 40px;
 }
 
+.processHeaderContainer {
+    height: 60px;
+    position: relative;
+    width: 170px;
+    margin-top: 100px;
+    margin-left: 300px;
+}
+.processHeaderContainer > div {
+    position: absolute;
+}
+.processHeaderContainer > div:nth-child(-n + 2) {
+    height: 50%;
+    width: 100%;
+    background-color: red;
+}
+.processHeaderContainer > div:first-child {
+    top: 0;
+    border-top: 2px solid blue;
+    border-left: 2px solid blue;
+    border-right: 2px solid blue;
+    transform: skewX(45deg);
+}
+.processHeaderContainer > div:nth-child(2) {
+    bottom: 0;
+    border-bottom: 2px solid blue;
+    border-left: 2px solid blue;
+    border-right: 2px solid blue;
+    transform: skewX(-45deg);
+}
+.processHeaderContainer > div:nth-child(3) {
+    color: white;
+    text-align: center;
+    transform: translateY(-50%);
+    width: 100%;
+    top: 50%;
+}
+
 
 
 

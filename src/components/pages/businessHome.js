@@ -1,13 +1,28 @@
 "use strict"
 import React, {Component} from 'react';
-import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
-import {closeNotification} from "../../actions/usersActions";
-import {bindActionCreators} from 'redux';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+import { closeNotification } from "../../actions/usersActions";
+import { bindActionCreators } from 'redux';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
+import { Paper } from 'material-ui'
 
 class BusinessHome extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            infoIndex: 0
+        }
+    }
+
+
+    selectProcess(infoIndex) {
+        this.setState({ infoIndex });
+    }
+
+
     render() {
         const logoImages = [
             {src: "NWMLogoWhite.png", partner: "Northwestern Mutual"},
@@ -28,6 +43,20 @@ class BusinessHome extends Component {
                 verticalAlign: 'top',
             },
         }
+
+        // const processObjects = [
+        //     {
+        //         title: (<div>Evaluation<br/>Creation</div>),
+        //         info: "Tell us what skills you need and three to five open-ended questions you want to add.",
+        //         list: [
+        //             "Psychometric Analysis",
+        //             "Skill IQ Quizzes",
+        //             "Interview Questions"
+        //         ]
+        //     },
+        //
+        // ]
+        // const processButtons =
 
         return (
             <div className="blackBackground businessHome">
@@ -214,6 +243,108 @@ class BusinessHome extends Component {
                         >
                             <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
                                 {"Learn More"}
+                            </div>
+                        </button>
+                    </div>
+                </section>
+
+
+
+
+                <section id="moonshotProcess" style={{height: "500px"}}>
+                    <div className="processHeaderContainer clickable font18px" onClick={() => this.selectProcess(1)}>
+                        <div/><div/>
+
+                    </div>
+                </section>
+
+
+
+
+
+                <section>
+                    <div className="forBusinessBoxesContainer">
+                        <div className="font36px font32pxUnder700 font26pxUnder500 center brightPinkText"
+                             style={{marginBottom: '50px'}}>
+                            The New Baseline Evaluation
+                            <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
+                                <div>Unlimited Candidates</div>
+                                <div>•</div>
+                                <div>Unlimited Hires</div>
+                            </div>
+                        </div>
+                        <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
+                            zDepth={2}>
+                            <div style={{textAlign: "center", position: "relative"}}>
+                                <img
+                                    src="/images/businessHome/PaperAirplane.png"
+                                    alt="Paper Airplane Icon"
+                                    className="businessHomeBoxIcons"
+                                />
+                                <div className="brightPinkText marginTop40px marginTop20pxUnder400 font22px font18pxUnder400">
+                                    STARTER
+                                </div>
+                                <div style={{height: '70px', lineHeight: '70px'}}>
+                                    <i className="whiteText marginTop20px font16px font14pxUnder400">
+                                        First Position Free
+                                    </i>
+                                </div>
+                                <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
+                                <div className="whiteText font16px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
+                                    Start with one position. You can run unlimited candidate
+                                    evaluations to see the results. No cost, no risk, no
+                                    excuses not to kick this off the ground.
+                                </div>
+                                <button className="whiteText clickableNoUnderline marginTop20px font18px font14pxUnder400" style={{background: '#fd0d8b', border: 'none'}}>
+                                    Take Off
+                                </button>
+                            </div>
+                        </Paper>
+                        <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
+                               zDepth={2}>
+                            <div style={{textAlign: "center", position: "relative"}}>
+                                <img
+                                    src="/images/businessHome/EnterpriseRocket.png"
+                                    alt="Enterprise Rocket Icon"
+                                    className="businessHomeBoxIcons"
+                                />
+                                <div className="brightOrangeText marginTop40px marginTop20pxUnder400 font22px font18pxUnder400">
+                                    PLUS
+                                </div>
+                                <div style={{height: '70px'}}>
+                                    <i className="whiteText marginTop20px font16px font14pxUnder400">
+                                        Each Additional Position<br/> Starting at $79
+                                        <br/>
+                                        <i className="font12px">per position/month</i>
+                                    </i>
+                                </div>
+                                <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
+                                <div className="whiteText font16px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
+                                    Easily scale the number of positions you are
+                                    evaluating through Moonshot. Unlimited candidate
+                                    evaluations for each position.
+                                </div>
+                                <button className="clickableNoUnderline whiteText marginTop20px font18px font14pxUnder400" style={{background: '#ff5d27', border: 'none'}}>
+                                    Blast Off
+                                </button>
+                            </div>
+                        </Paper>
+                    </div>
+                </section>
+
+                <section>
+                    <div className="center">
+                        <img
+                            src="/images/businessHome/CrystalBall.png"
+                            alt="CrystalBall"
+                            height={300}
+                        />
+                        <br/>
+                        <button className="blueToDarkPurpleButtonGradientReverse bigButton"
+                                style={{marginTop: "25px", color: 'white'}}
+                        >
+                            <div className="invertColorOnHover gradientBorderButtonInteriorGradient">
+                                {"See the Future"}
                             </div>
                         </button>
                     </div>
