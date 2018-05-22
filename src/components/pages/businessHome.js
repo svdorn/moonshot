@@ -14,7 +14,7 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
         hintStyle={{color: 'white'}}
-        inputStyle={{color: 'white'}}
+        inputStyle={{color: '#72d6f5'}}
         underlineStyle={{color: '#72d6f5'}}
         errorText={touched && error}
         {...input}
