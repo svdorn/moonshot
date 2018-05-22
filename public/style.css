@@ -452,14 +452,16 @@ form > h1 {
 }
 
 #threeScreenshots {
-    margin-top: 135px;
+    margin: 135px auto;
+    max-width: 1240px;
 }
 #threeScreenshots > .homepageTrajectory.forBusiness {
     margin-bottom: 0;
 }
 
 #businessHomeStatistics {
-    margin-top: 40px;
+    margin: 40px auto;
+    max-width: 1340px;
 }
 
 #moonshotProcess {
