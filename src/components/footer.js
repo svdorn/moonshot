@@ -39,6 +39,8 @@ class Footer extends Component {
             shadowDivClass = "tabsShadow";
             extraSpace = " topSpace";
             footerColor = "blackBackgroundOpacity";
+        } else if (pathname === '/home') {
+            footerColor = "blackBackgroundOpacity";
         }
 
         return (

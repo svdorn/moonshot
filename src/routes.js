@@ -13,10 +13,11 @@ import AddUser from './components/pages/addUser';
 import MyCandidates from './components/pages/businessPages/myCandidates';
 import BusinessProfile from './components/pages/businessPages/businessProfile';
 import Results from './components/pages/businessPages/results';
+import BusinessHome from './components/pages/businessHome';
+import BusinessHomeParts from './components/pages/businessHomeParts';
 import Main from './main';
 import AuthenticatedComponent from './components/AuthenticatedComponent';
 import Home from './components/pages/home';
-import ForBusiness from './components/pages/forBusiness';
 import Profile from './components/pages/profile';
 import Settings from './components/pages/settings';
 import VerifyEmail from './components/pages/verifyEmail';
@@ -57,15 +58,15 @@ function fireTracking() {
 const routes = (
   <Router onUpdate={fireTracking} history={browserHistory}>
     <Route path="/" component={Main}>
-        <IndexRoute component={Home} />
+        <IndexRoute component={BusinessHome} />
         <Route path='login' component={Login} />
         <Route path="signup" component={Signup} />
         <Route path="addUser" component={AuthenticatedComponent} page={<AddUser/>} userType="employer" />
         <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType="employer" />
         <Route path="businessProfile" component={AuthenticatedComponent} page={<BusinessProfile/>} userType="employer" />
         <Route path="results" component={AuthenticatedComponent} page={<Results />} userType="employer" />
-        <Route path='forBusiness' component={ForBusiness} />
         <Route path="profile" component={Profile} />
+        <Route path="forCandidates" component={Home} />
         <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
         <Route path="verifyEmail" component={VerifyEmail} />
         <Route path="forgotPassword" component={ForgotPassword} />

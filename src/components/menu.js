@@ -220,8 +220,7 @@ class Menu extends Component {
             loggedInClass = " loggedOut";
             menuOptions = [
                 {optionType: "url", title: "Home", url: "/"},
-                {optionType: "url", title: "Discover", url: "/discover"},
-                {optionType: "url", title: "For Business", url: "/forBusiness"},
+                {optionType: "url", title: "For Candidates", url: "/forCandidates"},
                 {optionType: "separator"},
                 {optionType: "url", title: "Sign In", url: "/login"},
             ];
@@ -401,8 +400,8 @@ class Menu extends Component {
         }
         let moonshotLogoHtml = (
             <img
-                width={187.5}
-                height={60}
+                width={170}
+                height={80}
                 alt="Moonshot"
                 className={logoClassName}
                 id="moonshotLogo"
@@ -414,8 +413,8 @@ class Menu extends Component {
         let menu = (
             <header style={{zIndex: "100"}}>
                 <div>
-                    <Toolbar id="menu" style={{marginTop: "10px"}}>
-                        <ToolbarGroup className="logoToolbarGroup">
+                    <Toolbar id="menu">
+                        <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "30px"}}>
                             {moonshotLogoHtml}
                         </ToolbarGroup>
                         <ToolbarGroup>
