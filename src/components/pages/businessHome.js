@@ -187,11 +187,13 @@ class BusinessHome extends Component {
                 { processButtons }
                 <div className="processOutline">
                     <div>
-                        { processObjects[this.state.infoIndex].info }
-                    </div>
-                    <div className="centerLine"/>
-                    <div>
-                        { processList }
+                        <div>
+                            { processObjects[this.state.infoIndex].info }
+                        </div>
+                        <div className="centerLine"/>
+                        <div>
+                            { processList }
+                        </div>
                     </div>
                 </div>
             </section>

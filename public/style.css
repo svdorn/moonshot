@@ -436,7 +436,6 @@ form > h1 {
     margin-top: 40px;
 }
 
-
 #moonshotProcess {
     margin-top: 200px;
     margin-bottom: 200px;
@@ -451,25 +450,27 @@ form > h1 {
 .processHeaderContainer > div {
     position: absolute;
 }
+/* selects the top and bottom divs within the container - the skewed ones without text */
 .processHeaderContainer > div:nth-child(-n + 2) {
     height: 50%;
     width: 100%;
-    background-color: red;
+    background-color: #2e2e2e;
 }
 .processHeaderContainer > div:first-child {
     top: 0;
-    border-top: 2px solid blue;
-    border-left: 2px solid blue;
-    border-right: 2px solid blue;
+    border-top: 3px solid blue;
+    border-left: 4px solid blue;
+    border-right: 4px solid blue;
     transform: skewX(45deg);
 }
 .processHeaderContainer > div:nth-child(2) {
     bottom: 0;
-    border-bottom: 2px solid blue;
-    border-left: 2px solid blue;
-    border-right: 2px solid blue;
+    border-bottom: 3px solid blue;
+    border-left: 4px solid blue;
+    border-right: 4px solid blue;
     transform: skewX(-45deg);
 }
+/* the part of the process header that has text */
 .processHeaderContainer > div:nth-child(3) {
     color: white;
     text-align: center;
@@ -478,12 +479,21 @@ form > h1 {
     top: 50%;
 }
 .processOutline {
-    width: 100%;
+    width: 700px;
     background: linear-gradient(to right, #a88cfe, #7ed2fe);
+    height: 300px;
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
 }
 .processOutline > div {
-    margin: 5px;
-    background-color: black;
+    background-color: #2e2e2e;
+    color: white;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    position: absolute;
+    left: 2px;
+    top: 2px;
 }
 
 
