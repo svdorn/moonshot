@@ -3183,6 +3183,15 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 }
 
+@media only screen and (max-width: 1100px) {
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+        grid-column-end: 12;
+    }
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) {
+        grid-column-end: 11;
+    }
+}
+
 @media only screen and (max-width: 1095px) {
     .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(4) {
         display: none;
@@ -3360,6 +3369,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: auto;
         padding-top: 56.25%
     }
+
     .noPadding { padding: 0 0 0 0 }
 
     .font40pxUnder1000 { font-size: 40px; }
@@ -3870,10 +3880,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     /* hide all but the first two rectangles of the first container */
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(n+3) { display: none; }
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-        grid-row-start: 59;
-        grid-row-end: 63;
-        grid-column-start: 17;
-        grid-column-end: 21;
+        grid-row-start: 48;
+        grid-row-end: 52;
+        grid-column-start: 28;
+        grid-column-end: 40;
     }
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
         grid-row-start: 42;
@@ -4543,9 +4553,24 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: 20px;
     }
 
-    .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
-        grid-column-start: 25;
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+        display: none;
     }
+    .frontPage > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+        display: none;
+    }
+
+    #resultsScreenshot {
+        --device-scale: 0.13;
+        top: 170px;
+        left: 42%;
+    }
+    #myCandidatesScreenshot {
+        --device-scale: 0.21;
+        top: 194px;
+        left: 89%;
+    }
+
     .logoContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
         background: linear-gradient(to right, #ad84fe, #86c5fe);
         grid-row-start: 53;
