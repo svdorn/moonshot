@@ -561,12 +561,21 @@ form > h1 {
 .processOutline > div > div:nth-child(3) > div {
     padding: 0 20px;
 }
+.processListItem {
+    position: relative;
+}
 /* check mark icon */
 .processListItem > img {
     display: inline-block;
     height: 13px;
-    margin-right: 15px;
-    margin-bottom: 6px
+    position: absolute;
+    top: calc(50% - 3px);
+    transform: translateY(-50%);
+}
+.processListItem > div {
+    display: inline-block;
+    width: calc(100% - 28px);
+    margin-left: 24px;
 }
 
 
@@ -3980,6 +3989,18 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 50px;
         width: 144px;
     }
+    .processOutline {
+        width: 370px;
+    }
+    .processOutline > div > div:first-child > div {
+        padding: 0 10px;
+    }
+    .processOutline > div > div:nth-child(3) > div { padding: 0 10px; }
+    .processListItem > img { margin-right: 8px; }
+    .processListItem > div {
+        width: calc(100% - 30px);
+        margin-left: 20px;
+    }
 
     .font40pxUnder600 { font-size: 40px; }
     .font38pxUnder600 { font-size: 38px; }
@@ -4340,6 +4361,25 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         float: right;
         margin: -30px 20% 0px;
     }
+
+    .font40pxUnder450 { font-size: 40px; }
+    .font38pxUnder450 { font-size: 38px; }
+    .font36pxUnder450 { font-size: 36px; }
+    .font34pxUnder450 { font-size: 34px; }
+    .font32pxUnder450 { font-size: 32px; }
+    .font30pxUnder450 { font-size: 30px; }
+    .font28pxUnder450 { font-size: 28px; }
+    .font26pxUnder450 { font-size: 26px; }
+    .font24pxUnder450 { font-size: 24px; }
+    .font22pxUnder450 { font-size: 22px; }
+    .font20pxUnder450 { font-size: 20px; }
+    .font18pxUnder450 { font-size: 18px; }
+    .font16pxUnder450 { font-size: 16px; }
+    .font14pxUnder450 { font-size: 14px; }
+    .font12pxUnder450 { font-size: 12px; }
+    .font10pxUnder450 { font-size: 10px; }
+    .font8pxUnder450 { font-size: 8px; }
+    .font6pxUnder450 { font-size: 6px; }
 }
 
 @media only screen and (min-width: 401px) {
@@ -4443,6 +4483,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-end: 32;
     }
 
+    .processOutline { width: 280px; }
+    .processHeaderContainer { width: 108px; }
+    .processListItem > img {
+        height: 10px;
+        top: calc(50% - 2px);
+    }
 
     .font40pxUnder400 { font-size: 40px; }
     .font38pxUnder400 { font-size: 38px; }
