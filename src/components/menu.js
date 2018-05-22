@@ -220,8 +220,7 @@ class Menu extends Component {
             loggedInClass = " loggedOut";
             menuOptions = [
                 {optionType: "url", title: "Home", url: "/"},
-                {optionType: "url", title: "Discover", url: "/discover"},
-                {optionType: "url", title: "For Business", url: "/forBusiness"},
+                {optionType: "url", title: "For Candidates", url: "/forCandidates"},
                 {optionType: "separator"},
                 {optionType: "url", title: "Sign In", url: "/login"},
             ];

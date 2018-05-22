@@ -63,7 +63,7 @@ const routes = (
         <Route path="businessProfile" component={AuthenticatedComponent} page={<BusinessProfile/>} userType="employer" />
         <Route path="results" component={AuthenticatedComponent} page={<Results />} userType="employer" />
         <Route path="profile" component={Profile} />
-        <Route path="myCandidates" component={Home} />
+        <Route path="forCandidates" component={Home} />
         <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
         <Route path="verifyEmail" component={VerifyEmail} />
         <Route path="forgotPassword" component={ForgotPassword} />
