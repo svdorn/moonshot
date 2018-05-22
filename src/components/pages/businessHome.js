@@ -628,6 +628,7 @@ class BusinessHome extends Component {
                                 </button>
                             </div>
                         </Paper>
+                        <div className="under800only" style={{height:"0px"}}><br/></div>
                         <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
                                zDepth={2}>
                             <div style={{textAlign: "center", position: "relative"}}>
