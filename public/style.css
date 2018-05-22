@@ -375,6 +375,22 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+.purpleToBlueAnimate {
+    background: linear-gradient(to right, #7ad6fe, #ab86fe, #7ad6fe);
+    background-position-x: -64px;
+    background-size: 150%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.mediumLargeButton:focus { outline: none; }
+.purpleToBlueAnimate.mediumLargeButton { background-position-x: -112px; }
+.purpleToBlueAnimate:hover {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
 
 #myCandidatesScreenshot {
     --device-scale: 0.32;
@@ -451,6 +467,12 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+#moonshotProcess > div:nth-child(4) {
+    margin-top: 40px;
+}
+#moonshotProcess > div > button {
+    padding: 6px 20px;
+}
 .processButtonsContainer {
     position: relative;
     display: inline-block;
@@ -508,7 +530,7 @@ form > h1 {
 .processOutline {
     width: 800px;
     background: linear-gradient(to right, #a88cfe, #7ed2fe);
-    height: 200px;
+    height: 220px;
     position: relative;
     left: 50%;
     margin-top: 20px;
@@ -630,6 +652,7 @@ form > h1 {
 .slightlyRoundedButton {
     border-radius: 3px 3px 3px 3px;
     border: none;
+    cursor: pointer;
 }
 .slightlyRoundedButton:focus {
     outline: none;
@@ -3418,7 +3441,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 @media only screen and (max-width: 850px) {
     #moonshotProcess h1 { margin-bottom: 40px; }
-    .processOutline { width: 580px; }
+    .processOutline {
+        width: 580px;
+        height: 200px;
+    }
 
     .font50pxUnder850 { font-size: 50px; }
     .font48pxUnder850 { font-size: 48px; }
@@ -4041,6 +4067,11 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: calc(100% - 30px);
         margin-left: 20px;
     }
+    #moonshotProcess > div:nth-child(4) {
+        margin-top: 30px;
+    }
+    .purpleToBlueAnimate.mediumLargeButton { background-position-x: -80px; }
+    .purpleToBlueAnimate.mediumLargeButton:hover { background-position-x: 0px; }
 
     .font40pxUnder600 { font-size: 40px; }
     .font38pxUnder600 { font-size: 38px; }
@@ -4523,7 +4554,11 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-end: 32;
     }
 
-    .processOutline { width: 280px; }
+    #moonshotProcess h1 { margin-bottom: 26px; }
+    .processOutline {
+        width: 280px;
+        margin-top: 12px;
+    }
     .processHeaderContainer { width: 108px; }
     .processListItem > img {
         height: 10px;
