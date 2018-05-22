@@ -291,46 +291,62 @@ class BusinessHome extends Component {
                     contentClassName="center"
                     overlayClassName="dialogOverlay"
                 >
-                    {this.props.loadingEmailSend ?
-                        <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
-                        : < form onSubmit={this.handleSubmit.bind(this)} className="center">
-                            <div className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px" >
-                                Predict Candidate Success
-                            </div>
-                            <Field
-                                name="name"
-                                component={renderTextField}
-                                label="Full Name*"
-                                style={{marginTop: '1px'}}
-                            /> < br/>
-                            < Field
-                                name="email"
-                                component={renderTextField}
-                                label="Email*"
-                            /><br/>
-                            <Field
-                                name="company"
-                                component={renderTextField}
-                                label="Company"
-                            /><br/>
-                            <Field
-                                name="phone"
-                                component={renderTextField}
-                                label="Phone Number"
-                            /><br/>
-                            <RaisedButton
-                                label="Send"
-                                type="submit"
-                                className="raisedButtonBusinessHome"
-                                style={{marginTop: '20px'}}
-                            />
-                            <br/>
-                            <div className="infoText i flex font12px whiteText center" style={{margin: '10px auto', width: '250px'}}>
-                                <div>Free for First Position</div>
-                                <div>•</div>
-                                <div>Unlimited Evaluations</div>
-                            </div>
-                        </form>
+                    {this.props.notification ?
+                        <div className="center font20px font16pxUnder400 whiteText">
+                            {this.props.notification.message}
+                            <br />
+                            <img
+                                className="footerMoonshotLogo marginTop40px"
+                                alt="Moonshot Logo"
+                                title="Moonshot Logo"
+                                src="/images/OfficialLogoWhite.png"/>
+                        </div>
+                        :
+                        <div>
+                        {this.props.loadingEmailSend ?
+                            <div className="center"><CircularProgress className="marginTop40px"/></div>
+                            : < form onSubmit={this.handleSubmit.bind(this)} className="center">
+                                <div
+                                    className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
+                                    Predict Candidate Success
+                                </div>
+                                <Field
+                                    name="name"
+                                    component={renderTextField}
+                                    label="Full Name*"
+                                    style={{marginTop: '1px'}}
+                                /> < br/>
+                                < Field
+                                    name="email"
+                                    component={renderTextField}
+                                    label="Email*"
+                                /><br/>
+                                <Field
+                                    name="company"
+                                    component={renderTextField}
+                                    label="Company"
+                                /><br/>
+                                <Field
+                                    name="phone"
+                                    component={renderTextField}
+                                    label="Phone Number"
+                                /><br/>
+                                <RaisedButton
+                                    label="Send"
+                                    type="submit"
+                                    className="raisedButtonBusinessHome"
+                                    style={{marginTop: '20px'}}
+                                />
+                                <br/>
+                                <div className="infoText i flex font12px whiteText center"
+                                     style={{margin: '10px auto', width: '250px'}}>
+                                    <div>Free for First Position</div>
+                                    <div>•</div>
+                                    <div>Unlimited Evaluations</div>
+                                </div>
+                            </form>
+                    }
+                        </div>
                     }
                 </Dialog>
             <div className="blackBackground businessHome">
@@ -658,6 +674,7 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         loadingEmailSend: state.users.loadingSomething,
+        notification: state.users.notification,
     };
 }
 
