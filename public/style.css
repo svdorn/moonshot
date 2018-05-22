@@ -435,12 +435,17 @@ form > h1 {
     margin-top: 40px;
 }
 
+
+#moonshotProcess {
+    margin-top: 200px;
+    margin-bottom: 200px;
+}
 .processHeaderContainer {
     height: 60px;
     position: relative;
     width: 170px;
-    margin-top: 100px;
-    margin-left: 300px;
+    margin-left: 30px;
+    display: inline-block;
 }
 .processHeaderContainer > div {
     position: absolute;
@@ -470,6 +475,14 @@ form > h1 {
     transform: translateY(-50%);
     width: 100%;
     top: 50%;
+}
+.processOutline {
+    width: 100%;
+    background: linear-gradient(to right, #a88cfe, #7ed2fe);
+}
+.processOutline > div {
+    margin: 5px;
+    background-color: black;
 }
 
 

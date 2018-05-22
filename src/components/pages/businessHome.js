@@ -44,19 +44,82 @@ class BusinessHome extends Component {
             },
         }
 
-        // const processObjects = [
-        //     {
-        //         title: (<div>Evaluation<br/>Creation</div>),
-        //         info: "Tell us what skills you need and three to five open-ended questions you want to add.",
-        //         list: [
-        //             "Psychometric Analysis",
-        //             "Skill IQ Quizzes",
-        //             "Interview Questions"
-        //         ]
-        //     },
-        //
-        // ]
-        // const processButtons =
+        const processObjects = [
+            {
+                title: (<div>Evaluation<br/>Creation</div>),
+                info: "Tell us what skills you need and three to five open-ended questions you want to add.",
+                list: [
+                    "Psychometric Analysis",
+                    "Skill IQ Quizzes",
+                    "Interview Questions"
+                ]
+            },
+            {
+                title: (<div>Employee<br/>Completion</div>),
+                info: "Employees complete the evaluation to create a baseline for candidates.",
+                list: [
+                    "Create Baseline",
+                    "Better Understand Employers",
+                    "Pyschometric Profiles",
+                    "Skill IQs"
+                ]
+            },
+            {
+                title: (<div>Manager<br/>Feedback</div>),
+                info: "Managers complete an assessment for each employee so Moonshot can create performance profiles to analyze candidates.",
+                list: [
+                    "Performance Profiles",
+                    "Performance Management"
+                ]
+            },
+            {
+                title: (<div>Candidate<br/>Completion</div>),
+                info: "All incoming candidates are evaluated to predict their performance.",
+                list: [
+                    "Psychometric Profiles",
+                    "Skill IQs",
+                    "Qualitative Responses",
+                    "Predicted Job Performance",
+                    "Predicted Culture Fit",
+                    "Predicted Longevity",
+                    "Predicted Growth"
+                ]
+            }
+        ]
+
+        let processButtons = [];
+        const numProcesses = processObjects.length;
+        for (let processIndex = 0; processIndex < numProcesses; processIndex++) {
+            processButtons.push(
+                <div className="processHeaderContainer clickable font18px" onClick={() => this.selectProcess(processIndex)}>
+                    <div/><div/>
+                    {processObjects[processIndex].title}
+                </div>
+            );
+        };
+
+        const processList = processObjects[this.state.infoIndex].list.map(infoListText => {
+            return (
+                <div className="processListItem">
+                    { infoListText }
+                </div>
+            );
+        });
+
+        const processSection = (
+            <section id="moonshotProcess" style={{height: "500px"}}>
+                { processButtons }
+                <div className="processOutline">
+                    <div>
+                        { processObjects[this.state.infoIndex].info }
+                    </div>
+                    <div className="centerLine"/>
+                    <div>
+                        { processList }
+                    </div>
+                </div>
+            </section>
+        );
 
         return (
             <div className="blackBackground businessHome">
@@ -251,12 +314,7 @@ class BusinessHome extends Component {
 
 
 
-                <section id="moonshotProcess" style={{height: "500px"}}>
-                    <div className="processHeaderContainer clickable font18px" onClick={() => this.selectProcess(1)}>
-                        <div/><div/>
-
-                    </div>
-                </section>
+                { processSection }
 
 
 
