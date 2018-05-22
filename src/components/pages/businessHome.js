@@ -604,10 +604,13 @@ class BusinessHome extends Component {
 
                 <section>
                     <div className="center">
+                        <div className="blueTextHome font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
+                            Your crystal ball to identify<div className="above800only noHeight"><br/></div> good and bad hires before it's too late.
+                        </div>
                         <img
                             src="/images/businessHome/CrystalBall.png"
                             alt="CrystalBall"
-                            height={300}
+                            className="crystalBall"
                         />
                         <br/>
                         <button className="blueToDarkPurpleButtonGradientReverse bigButton"

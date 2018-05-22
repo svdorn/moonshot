@@ -3019,6 +3019,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     text-align: center;
 }
 
+.crystalBall {
+    height: 400px;
+}
 
 
 .inlineBlock { display: inline-block; }
@@ -3026,6 +3029,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginBottom40px { margin-bottom: 40px; }
 .marginBottom20px { margin-bottom: 20px; }
 .marginBottom10px { margin-bottom: 10px; }
+.marginBottom30pxImportant { margin-bottom: 30px !important; }
 .marginTop40px { margin-top: 40px; }
 .marginTop20px { margin-top: 20px; }
 .marginTop10px { margin-top: 10px; }
@@ -4092,6 +4096,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .purpleToBlueAnimate.mediumLargeButton { background-position-x: -80px; }
     .purpleToBlueAnimate.mediumLargeButton:hover { background-position-x: 0px; }
+
+    .crystalBall {
+        height: 300px;
+    }
 
     .font40pxUnder600 { font-size: 40px; }
     .font38pxUnder600 { font-size: 38px; }
