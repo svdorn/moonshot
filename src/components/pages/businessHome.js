@@ -96,7 +96,16 @@ class BusinessHome extends Component {
     onChange(e) {
         this.setState({
             email: e.target.value
-        })
+        }, () => {
+            this.updateEmail()
+        });
+    }
+
+    updateEmail() {
+        const email = {
+            email: this.state.email,
+        }
+        this.props.initialize(email);
     }
 
 
@@ -346,7 +355,7 @@ class BusinessHome extends Component {
                             <div className="buttonArea font18px font14pxUnder900">
                                 <input className="blackInput getStarted" type="text" placeholder="Email Address" name="email"
                                 value={this.state.email} onChange={this.onChange.bind(this)}/>
-                                <div className="mediumButton getStarted blueToPurple">
+                                <div className="mediumButton getStarted blueToPurple" onClick={this.handleOpen}>
                                     Get Started
                                 </div>
                             </div>
@@ -634,6 +643,7 @@ function mapStateToProps(state) {
 BusinessHome = reduxForm({
     form: 'forBusiness',
     validate,
+    enableReinitialize: true,
 })(BusinessHome);
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessHome);
