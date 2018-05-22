@@ -715,12 +715,7 @@ form > h1 {
 }
 
 
-/* #businessHomeStatistics div {
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-} */
-div {
+#businessHomeStatistics div {
     -webkit-transition: all 0.5s ease;
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
