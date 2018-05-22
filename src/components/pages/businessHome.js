@@ -204,6 +204,8 @@ class BusinessHome extends Component {
             blurredClass = 'dialogForBizOverlay';
         }
 
+        console.log(this.props);
+
 
         return (
             <div className={blurredClass}>
@@ -251,7 +253,7 @@ class BusinessHome extends Component {
                                 style={{marginTop: '20px'}}
                             />
                             <br/>
-                            <div className="infoText i flex font10px whiteText center" style={{margin: '10px auto', width: '250px'}}>
+                            <div className="infoText i flex font12px whiteText center" style={{margin: '10px auto', width: '250px'}}>
                                 <div>Free for First Position</div>
                                 <div>•</div>
                                 <div>Unlimited Evaluations</div>
