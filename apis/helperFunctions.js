@@ -17,6 +17,7 @@ const helperFunctions = {
     removeEmptyFields,
     verifyUser,
     removePassword,
+    removeIrrelevantInfoKeepToken,
     printUsersFromPathway,
     getUserByQuery,
     sendEmail,
@@ -174,16 +175,16 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
         }
 
         // the default email account to send emails from
-        let from = '"Moonshot" <do-not-reply@moonshotlearning.org>';
+        let from = '"Moonshot" <do-not-reply@moonshotinsights.io>';
         let authUser = credentials.emailUsername;
         let authPass = credentials.emailPassword;
         if (sendFrom) {
             if (sendFrom === "Kyle Treige") {
-                from = '"Kyle Treige" <kyle@moonshotlearning.org>';
+                from = '"Kyle Treige" <kyle@moonshotinsights.io>';
                 authUser = credentials.kyleEmailUsername;
                 authPass = credentials.kyleEmailPassword;
             } else {
-                from = '"' + sendFrom + '" <do-not-reply@moonshotlearning.org>';
+                from = '"' + sendFrom + '" <do-not-reply@moonshotinsights.io>';
             }
         }
 
@@ -274,6 +275,34 @@ function removePassword(user) {
     if (typeof user === "object" && user != null) {
         let newUser = user;
         newUser.password = undefined;
+        return newUser;
+    } else {
+        return undefined;
+    }
+}
+
+
+// used when passing the user object back to the user, still contains sensitive
+// data such as the user id and verification token
+function removeIrrelevantInfoKeepToken(user) {
+    if (typeof user === "object" && user != null) {
+        let newUser = user;
+        // remove the password
+        newUser.password = undefined;
+        // remove everything except the info about the current question
+        if (newUser.psychometricTest) {
+            const currentQuestion = newUser.psychometricTest.currentQuestion;
+            newUser.psychometricTest = {
+                // only need the body of the current question
+                currentQuestion: {
+                    body: currentQuestion.body,
+                    leftOption: currentQuestion.leftOption,
+                    rightOption: currentQuestion.rightOption,
+                    questionId: currentQuestion.questionId
+                },
+                inProgress: newUser.psychometricTest.inProgress
+            }
+        }
         return newUser;
     } else {
         return undefined;

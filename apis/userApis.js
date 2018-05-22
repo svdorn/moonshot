@@ -1,5 +1,6 @@
 var Users = require('../models/users.js');
 var Employers = require('../models/employers.js');
+var Psychtests = require('../models/psychtests.js');
 
 var bcrypt = require('bcryptjs');
 var crypto = require('crypto');
@@ -10,6 +11,7 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         removePassword,
+        removeIrrelevantInfoKeepToken,
         getUserByQuery,
         sendEmail,
         safeUser,
@@ -31,7 +33,445 @@ const userApis = {
     POST_changeSettings,
     GET_userByProfileUrl,
     POST_login,
-    POST_currentPathwayStep
+    POST_currentPathwayStep,
+    POST_startPsychEval,
+    POST_answerPsychQuestion
+}
+
+
+async function makeMockPsychData() {
+    let user = await Users.findById("5a95fed783705f7be1f7c158");
+    let psychometricTest = user.psychometricTest;
+    for (let factorIndex = 0; factorIndex < psychometricTest.factors.length; factorIndex++) {
+        let factor = psychometricTest.factors[factorIndex];
+
+        factor.incompleteFacets = [];
+
+        let facetTotal = 0;
+
+        for (let facetIndex = 0; facetIndex < factor.facets.length; facetIndex++) {
+            let facet = factor.facets[facetIndex];
+
+            facet.score = Math.floor(Math.random() * 11) - 5;
+
+            facetTotal += facet.score;
+
+            factor.facets[facetIndex] = facet;
+        }
+
+        factor.score = facetTotal / factor.facets.length;
+
+        psychometricTest.factors[factorIndex] = factor;
+    }
+
+    user.psychometricTest = psychometricTest;
+
+    user.psychometricTest.endDate = new Date();
+
+    user.save()
+    .then(result => {
+        console.log("result: ", result);
+    })
+    .catch(err => {
+        console.log("err: ", err);
+    })
+}
+
+// DANGEROUS, returns user with all fields
+async function getAndVerifyUser(userId, verificationToken) {
+    return new Promise(async function(resolve, reject) {
+        // get the user from the db
+        let user = undefined;
+        try {
+            user = await Users.findById(userId);
+        } catch (getUserError) {
+            console.log("Error getting user from the database: ", getUserError);
+            reject({status: 500, message: "Server error, try again later", error: getUserError});
+        }
+
+        if (!user) {
+            console.log("User not found from id: ", userId);
+            reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
+        }
+
+        // verify user's identity
+        if (!verificationToken && user.verificationToken !== verificationToken) {
+            console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
+            reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
+        }
+
+        resolve(user);
+    })
+}
+
+
+async function POST_answerPsychQuestion(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    let user = undefined;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserErrorObj) {
+        console.log("error getting user: ", getUserErrorObj);
+        return res.status(getUserErrorObj.status).send(getUserErrorObj.message);
+    }
+
+    const answer = sanitize(req.body.answer);
+    //const answer = -4;
+
+    // verify that the answer provided is valid
+    const MINIMUM_SCORE = -5;
+    const MAXIMUM_SCORE = 5;
+    if (typeof answer !== "number" || answer < MINIMUM_SCORE || answer > MAXIMUM_SCORE) {
+        console.log(`User with id ${userId} tried to answer a psych question with an invalid answer.`);
+        return res.status(400).send("Invalid input.");
+    }
+
+    let psychometricTest = user.psychometricTest;
+
+    // if the test is not in progress the user can't complete a question
+    if (!psychometricTest.inProgress) {
+        console.log(`User with id ${userId} tried to answer a question without test being in progress.`);
+        return res.status(403).send("You can't answer a question after finishing the analysis!");
+    }
+
+    let factors = psychometricTest.factors;
+    const currentQuestion = psychometricTest.currentQuestion;
+
+    const factorId = currentQuestion.factorId;
+    const factorIndex = currentQuestion.factorIndex;
+    const facetId = currentQuestion.facetId;
+    const facetIndex = currentQuestion.facetIndex;
+
+
+    // find out how many questions have already been answered for this facet
+    // get the factor of the question that was answered
+    let factor = factors[factorIndex];
+    // make sure we have the right factor
+    if (factor.factorId.toString() !== factorId.toString()) {
+        factorIndex = factors.findIndex(currFactor => {
+            return currFactor.factorId.toString() === factorId.toString();
+        });
+        if (!factorIndex || factorIndex === -1) {
+            console.log("Couldn't find factor with id: ", factorId);
+            return res.status(400).send("Bad input.");
+        }
+        factor = factors[factorIndex];
+    }
+
+    let facets = factor.facets;
+    let facet = facets[facetIndex];
+    // make sure we have the right facet
+    if (facet.facetId.toString() !== facetId.toString()) {
+        facetIndex = facets.findIndex(currFacet => {
+            return currFacet.facetId.toString() === facetId.toString();
+        });
+        if (!facetIndex || facetIndex === -1) {
+            console.log("Couldn't find facet with id: ", factorId);
+            return res.status(400).send("Bad input.");
+        }
+        facet = facets[facetIndex];
+    }
+
+    // if this question hasn't been started, can't answer it
+    if (facet.responses.length === 0) {
+        console.log("Facet.responses.length was 0.");
+        return res.status(400).send("Haven't started that question yet.");
+    }
+
+    // the most recent response is the one that will always be edited
+    let response = facet.responses[facet.responses.length - 1];
+    response.answer = currentQuestion.invertScore === true ? answer*(-1) : answer;
+    response.answeredId = currentQuestion.questionId;
+    response.endDate = new Date();
+    const startDateMillis = (new Date(response.startDate)).getTime();
+    // record number of milliseconds between starting and ending the question
+    response.totalTime = response.endDate.getTime() - startDateMillis;
+
+    // save the question as not available for use anymore
+    facet.usedQuestions.push(currentQuestion.questionId);
+
+    // save the response within the facet
+    facet.responses[facet.responses.length - 1] = response;
+    facets[facetIndex] = facet;
+    factor.facets = facets;
+
+    // check if the facet is done being tested for
+    if (facet.responses.length === psychometricTest.questionsPerFacet) {
+        const indexOfFacetIndexToRemove = factor.incompleteFacets.findIndex(incompleteFacetIndex => {
+            return incompleteFacetIndex === facetIndex;
+        })
+        // remove this facet so we know not to test for it again
+        factor.incompleteFacets.splice(indexOfFacetIndexToRemove, 1);
+    }
+
+    factors[factorIndex] = factor;
+    psychometricTest.factors = factors;
+
+    // check if the factor is done being tested for
+    if (factor.incompleteFacets.length === 0) {
+        const indexOfFactorIndexToRemove = psychometricTest.incompleteFactors.findIndex(incompleteFactorIndex => {
+            return incompleteFactorIndex === factorIndex;
+        });
+        // remove this factor so we know not to test for it again
+        psychometricTest.incompleteFactors.splice(indexOfFactorIndexToRemove, 1);
+    }
+
+    // check if the test is over (all factors have been completed tested for)
+    let finishedTest = false;
+    if (psychometricTest.incompleteFactors.length === 0) {
+        // finish the test
+        psychometricTest.endDate = new Date();
+        psychometricTest.totalTime = psychometricTest.endDate.getTime() - psychometricTest.startDate.getTime();
+        psychometricTest.inProgress = false;
+        psychometricTest.currentQuestion = { body: "You finished the psychometric analysis! Click 'Finish' to see your results!" };
+
+        finishedTest = true;
+    }
+
+    // otherwise the test is not over so they need a new question
+    else {
+        // the index of the factor that will be tested next
+        // pick a random index from the index of factors that are not yet finished
+        const newFactorIndex = psychometricTest.incompleteFactors[Math.floor(Math.random() * psychometricTest.incompleteFactors.length)];
+        let newFactor = psychometricTest.factors[newFactorIndex];
+        const newFactorId = newFactor.factorId;
+        const newFacetIndex = newFactor.incompleteFacets[Math.floor(Math.random() * newFactor.incompleteFacets.length)]
+        let newFacet = newFactor.facets[newFacetIndex];
+        const newFacetId = newFacet.facetId;
+
+        // the actual psych test with all its questions
+        let psychTest = undefined;
+        try {
+            psychTest = await Psychtests.findOne({});
+        } catch (getPsychTestError) {
+            console.log("Error getting the psych test: ", getPsychTestError);
+            return res.status(500).send("Server error.");
+        }
+
+        // get the factor from the db so we can assign a new question
+        let testFactor = undefined;
+        // try using the index that we have stored. if the ids match, we have the right factor
+        if (psychTest.factors[newFactorIndex]._id.toString() === newFactorId.toString()) {
+            testFactor = psychTest.factors[newFactorIndex];
+        }
+        // otherwise we need to search for the right factor
+        else {
+            testFactor = psychTest.factors.find(currTestFactor => {
+                return currTestFactor._id.toString() === newFactorId.toString();
+            })
+        }
+        // if the real factor wasn't found
+        if (!testFactor) {
+            console.log("Couldn't find the actual test factor from the factor id in the user object. Factor id: ", newFactorId);
+            return res.status(500).send("Server error.");
+        }
+
+        // get the facet from the db so we can assign a new question
+        let testFacet = undefined;
+        // try using the index that we have stored. if the ids match, we have the right factor
+        if (testFactor.facets[newFacetIndex]._id.toString() === newFacetId.toString()) {
+            testFacet = testFactor.facets[newFacetIndex];
+        }
+        // otherwise we need to search for the right factor
+        else {
+            testFacet = testFactor.facets.find(currTestFacet => {
+                return currTestFacet._id.toString() === newFacetId.toString();
+            })
+        }
+        // if the real facet wasn't found
+        if (!testFacet) {
+            console.log("Couldn't find the actual test facet from the factor id in the user object. Factor id: ", newFacetId);
+            return res.status(500).send("Server error.");
+        }
+
+        // factor and facet have been found
+        // now find a random question
+        let newQuestionIndex = Math.floor(Math.random() * testFacet.questions.length);
+        // if this is the index of a question that has already been used, find
+        // a question that has not yet been used
+        let questionCounter = 0;
+        while (newFacet.usedQuestions.some(questionId => {
+            return questionId.toString() === testFacet.questions[newQuestionIndex]._id.toString();
+        })) {
+            newQuestionIndex++;
+            questionCounter++;
+            // can't have a question index out of bounds, that would be sad
+            if (newQuestionIndex >= testFacet.questions.length) {
+                newQuestionIndex = 0;
+            }
+
+            // if we have tried all the questions and all have been used, we
+            // somehow ran out
+            if (questionCounter > testFacet.questions.length) {
+                console.log("Ran out of questions! New Facet: ", newFacet);
+                res.status(500).send("Ran out of questions!");
+            }
+        }
+
+        // if responses isn't an array, make it one
+        if (!Array.isArray(newFacet.responses)) { newFacet.responses = []; }
+        // add the new response that is currently in the making
+        newFacet.responses.push({
+            startDate: new Date(),
+            skips: []
+        });
+
+        // we now have a question
+        const newQuestion = testFacet.questions[newQuestionIndex];
+        psychometricTest.currentQuestion = {
+            factorIndex: newFactorIndex,
+            factorId: newFactor.factorId,
+            facetIndex: newFacetIndex,
+            facetId: newFacet.facetId,
+            questionId: newQuestion._id,
+            responseIndex: newFacet.responses.length - 1,
+            body: newQuestion.body,
+            leftOption: newQuestion.leftOption,
+            rightOption: newQuestion.rightOption,
+            invertScore: newQuestion.invertScore
+        }
+
+        // update the user with the info about the new question
+        newFactor.facets[newFacetIndex] = newFacet;
+        psychometricTest.factors[newFactorIndex] = newFactor;
+    }
+
+    user.psychometricTest = psychometricTest;
+
+    let updatedUser = undefined;
+    try {
+        updatedUser = await user.save();
+    } catch(saveUserErr) {
+        console.log("Error saving user that was trying to save a psych question answer: ", saveUserErr);
+        return res.status(500).send("Server error.");
+    }
+
+    res.json({user: removeIrrelevantInfoKeepToken(updatedUser), finishedTest});
+}
+
+
+async function POST_startPsychEval(req, res) {
+    // check for invalid input
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    //const userId = "5af493a242f28d407fefdc41";
+    //const verificationToken = "2246696e0517ce1e4d320a2023d7d1fd88e3fa537a17a50059d444aebefabc87f29927881df0eed1658968014aac4462d468b859c430a5fe5d9d84b2f1ecabab";
+
+    // get the user from the db
+    let user = undefined;
+    try {
+        user = await Users.findById(userId);
+    } catch (getUserError) {
+        console.log("Error getting user from the database: ", getUserError);
+        return res.status(500).send("Server error, try again later.");
+    }
+
+    if (!user) {
+        console.log("Couldn't find user from userId: ", userId);
+        res.status(404).send("Couldn't find user.");
+    }
+
+    // verify user's identity
+    if (!verificationToken && user.verificationToken !== verificationToken) {
+        console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
+        return res.status(403).send("Invalid user credentials.");
+    }
+
+    if (user.psychometricTest.startDate) {
+        return res.status(400).send("You can't take the exam twice! If you need to take the exam again, contact us.");
+    }
+
+    let psychTest = undefined;
+    try {
+        psychTest = await Psychtests.find();
+        psychTest = psychTest[0];
+        console.log("psych test is: ", psychTest);
+    } catch (getTestError) {
+        console.log("Error getting psych test from the database: ", getTestError);
+        return res.status(500).send("Server error, try again later.");
+    }
+
+    // make the incompleteFactors list; will end up as [0, 1, 2, ...] for however many factors there are
+    const numFactors = psychTest.factors.length;
+    let incompleteFactors = [];
+    for (let factorIndex = 0; factorIndex < numFactors; factorIndex++) {
+        incompleteFactors.push(factorIndex);
+    }
+
+    let factors = psychTest.factors.map(factor => {
+        const numFacets = factor.facets.length;
+        let incompleteFacets = [];
+        for (let facetIndex = 0; facetIndex < numFacets; facetIndex++) {
+            incompleteFacets.push(facetIndex);
+        }
+
+        let facets = factor.facets.map(facet => {
+            return {
+                weight: facet.weight,
+                facetId: facet._id,
+                name: facet.name,
+                responses: []
+            }
+        })
+
+        return {
+            factorId: factor._id,
+            name: factor.name,
+            incompleteFacets,
+            facets
+        }
+    });
+
+    // get a random question; since we just assigned the factors from the test,
+    // we know the indexes will be the same
+    const factorIndex = Math.floor(Math.random() * factors.length);
+    const factor = psychTest.factors[factorIndex];
+    const facetIndex = Math.floor(Math.random() * factor.facets.length);
+    const facet = factor.facets[facetIndex];
+    const question = facet.questions[Math.floor(Math.random() * facet.questions.length)];
+
+    const currentQuestion = {
+        factorIndex,
+        factorId: factor._id,
+        facetIndex: facetIndex,
+        facetId: facet._id,
+        questionId: question._id,
+        // since this is the first response to the quiz it must be the first in the facet too
+        responseIndex: 0,
+        body: question.body,
+        leftOption: question.leftOption,
+        rightOption: question.rightOption,
+        invertScore: question.invertScore
+    }
+
+    // tell the facet that we're giving it a response
+    factors[factorIndex].facets[facetIndex].responses = [{
+        startDate: new Date(),
+        skips: []
+    }];
+
+    user.psychometricTest = {
+        // user has not finished the exam
+        inProgress: true,
+        startDate: new Date(),
+        // currently not allowing any rephrases, change later
+        rephrase: false,
+        numRephrasesAllowed: 0,
+        // around 75 questions
+        questionsPerFacet: 4,
+        incompleteFactors,
+        factors,
+        currentQuestion
+    }
+
+    try {
+        await user.save();
+        return res.json(removePassword(user));
+    } catch (saveUserErr) {
+        console.log("Error saving user when trying to start psych exam: ", saveUserErr);
+        return res.status(400).send("Server error, try again later.");
+    }
 }
 
 

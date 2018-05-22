@@ -2500,6 +2500,7 @@ button.link {
     -moz-box-shadow:    0px 2px 30px 8px;
     -webkit-box-shadow: 0px 2px 30px 8px;
     margin-bottom: 50px;
+    color: rgba(20,20,20,.4)
 }
 
 .purpleToGreenSpacer {
@@ -2932,6 +2933,22 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .sliderNoLeftColor > div:first-child > div:first-child > div:nth-child(3) {
     background-color: rgb(0, 195, 255) !important;
     border: 2px solid rgb(0, 195, 255) !important;
+}
+
+
+.grabbing {
+    cursor: -webkit-grabbing;
+    cursor:    -moz-grabbing;
+    cursor:     -ms-grabbing;
+    cursor:      -o-grabbing;
+    cursor:         grabbing;
+}
+.grab {
+    cursor: -webkit-grab;
+    cursor:    -moz-grab;
+    cursor:     -ms-grab;
+    cursor:      -o-grab;
+    cursor:         grab;
 }
 
 

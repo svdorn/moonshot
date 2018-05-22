@@ -156,7 +156,195 @@ var usersSchema = mongoose.Schema({
             }
         }
     */
-    answers: mongoose.Schema.Types.Mixed
+    answers: mongoose.Schema.Types.Mixed,
+
+
+    // ---->>> POST-PIVOT <<<---- //
+
+    // skills tests the user has taken
+    skillsTests: [{
+        // id of the skill
+        skillId: mongoose.Schema.Types.ObjectId,
+        // the score the user got on their most recent attempt
+        mostRecentScore: Number,
+        // the list of times the candidate has taken the skill test
+        attempts: [{
+            // if the user is currently taking the test
+            inProgress: Boolean,
+            // the date and time the user took the test
+            startDate: Date,
+            // the date and time the user finished the test
+            endDate: Date,
+            // how long it took overall in milliseconds to finish the test (difference between endDate and startDate)
+            totalTime: Number,
+            // the level the user is currently on (only applies if test is in progress);
+            // will be something like 3.9, so user will be getting level 3 questions,
+            // then if user gets the question right it'll go up, maybe to 4.1 or
+            // something, so then the user will then get level 4 questions
+            currentLevel: Number,
+            // the score the user got on the test; undefined if in progress
+            score: Number,
+            // the different sub skills involved in the overall skill
+            subSkills: [{
+                // mongo id to keep track of subSkills
+                subSkillId: mongoose.Schema.Types.ObjectId,
+                // the score the user got on the sub skill test; undefined if in progress
+                score: Number,
+                // the levels the user got through with the associated answers to questions
+                levels: [{
+                    // the level of difficulty of the questions
+                    level: Number,
+                    // the questions the candidate answered at this level of difficulty
+                    questions: [{
+                        // id of the question
+                        questionId: mongoose.Schema.Types.ObjectId,
+                        // if the candidate chose the correct answers
+                        isCorrect: Boolean,
+                        // the ids of answers that the user chose
+                        answerIds: [ mongoose.Schema.Types.ObjectId ],
+                        // the date and time the user started the question
+                        startDate: Date,
+                        // the date and time the user finished the question
+                        endDate: Date,
+                        // how long it took overall in milliseconds to finish the
+                        // question (difference between endDate and startDate)
+                        totalTime: Number,
+                    }]
+                }]
+            }]
+        }]
+    }],
+
+    // the user's psychometric test answers and results
+    psychometricTest: {
+        // whether the user is currently taking the test
+        inProgress: Boolean,
+        // the date and time the user took the test
+        startDate: Date,
+        // the date and time the user finished the test
+        endDate: Date,
+        // how long it took overall in milliseconds to finish the test (difference between endDate and startDate)
+        totalTime: Number,
+        // whether the user is allowed to get rephrases for questions
+        rephrase: Boolean,
+        // how many times the user can rephrase a question
+        numRephrasesAllowed: Number,
+        // determines how long the test will be
+        questionsPerFacet: Number,
+        // array positions of factors that have not yet been completed
+        // for example, if factors in array positions 0 and 4 were complete,
+        // the array would look like [ 1, 2, 3, 5, 6 ]
+        incompleteFactors: [ Number ],
+        // current question that the user is on
+        currentQuestion: {
+            // the index of the factor within the user's factors array
+            factorIndex: Number,
+            // the id of the factor in the test db
+            factorId: mongoose.Schema.Types.ObjectId,
+            // the index of the facet within the user's factors array
+            facetIndex: Number,
+            // the id of the factor in the test db
+            facetId: mongoose.Schema.Types.ObjectId,
+            // the id of the question being asked
+            questionId: mongoose.Schema.Types.ObjectId,
+            // if this is the third question from this facet, responseIndex will be 2
+            responseIndex: Number,
+            // the text of the question
+            body: String,
+            // the left option as a response to the question
+            leftOption: String,
+            // the right response
+            rightOption: String,
+            // if the score should be inverted after answering
+            invertScore: Boolean
+        },
+        // the overall factors the questions test for
+        factors: [{
+            // id for the factor
+            factorId: mongoose.Schema.Types.ObjectId,
+            // name of the factor ("Honesty-Humility, Emotionality, Extraversion...")
+            // at the time the user took the test
+            name: String,
+            // the factor score (-5 to 5), calculated from the facet scores
+            score: Number,
+            // the array positions of facets that have not yet been completed
+            // similar to incompleteFactors above
+            incompleteFacets: [ Number ],
+            // the facets we're testing for
+            facets: [{
+                // the facet score (-5 to 5), calculated after the test is done
+                score: Number,
+                // the weight that was used for this facet in calculating the
+                // user's factor scores
+                weight: Number,
+                // unique facet identifier
+                facetId: mongoose.Schema.Types.ObjectId,
+                // name of the facet at the time the user completed the test
+                name: String,
+                // questions that have already been used for this facet
+                usedQuestions: [ mongoose.Schema.Types.ObjectId ],
+                // the responses users had to facet questions
+                responses: [{
+                    // the question id of the question that was actually answered
+                    answeredId: mongoose.Schema.Types.ObjectId,
+                    // the answer (-5 to 5) that the user chose
+                    answer: Number,
+                    // exact date/time the user started the first phrasing of this question
+                    startDate: Date,
+                    // exact date/time the user answered the question
+                    endDate: Date,
+                    // total time in milliseconds it took to answer the question
+                    totalTime: Number,
+                    // the moonshot-generated ids of questions that were skipped
+                    // when this question was being asked
+                    skips: [{
+                        // the time the skip button was pressed
+                        skipDate: Date,
+                        // the time the user spent on this version of the question
+                        // before asking for a rephrase (in milliseconds)
+                        skipTime: Number,
+                        // the id of the question that was skipped
+                        questionId: mongoose.Schema.Types.ObjectId
+                    }]
+                }]
+            }]
+        }]
+    },
+
+    // the positions that the candidate has applied to
+    positions: [{
+        // the company that is offering this position
+        companyId: mongoose.Schema.Types.ObjectId,
+        // the id of the position within that company
+        positionId: mongoose.Schema.Types.ObjectId,
+        // the hiring stage of the candidate, which the company has determined
+        // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
+        hiringStage: String,
+        // dates/times the hiring stage of the candidate was changed for this position
+        hiringStageChanges: [{
+            // what the hiring stage was changed to
+            hiringStage: String,
+            // the date/time the hiring stage was changed
+            dateChanged: Date
+        }],
+        // the date and time the user applied to the position
+        appliedTime: Date,
+        // the scores the user got for the position
+        scores: {
+            // combination of all the scores
+            overall: Number,
+            // how good of a culture fit the candidate has
+            culture: Number,
+            // how much the candidate could grow in the position
+            growth: Number,
+            // if the candidate would stay at the company for a long time
+            longevity: Number,
+            // how well the candidate would do at that specific position
+            performance: Number
+        }
+    }]
+
+    // ---->>> END POST-PIVOT <<<---- //
 });
 
 // 'Users' means we will use the 'users' collection. if 'Books' was in there
