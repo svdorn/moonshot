@@ -277,6 +277,10 @@ class BusinessHome extends Component {
 
         return (
             <div className={blurredClass}>
+                <MetaTags>
+                    <title>Moonshot</title>
+                    <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
+                </MetaTags>
                 <Dialog
                     actions={actions}
                     modal={false}
