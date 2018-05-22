@@ -13,7 +13,8 @@ import {Field, reduxForm} from 'redux-form';
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
-        hintStyle={{color: '#00d2ff'}}
+        hintStyle={{color: 'white'}}
+        inputStyle={{color: 'white'}}
         errorText={touched && error}
         {...input}
         {...custom}
@@ -115,8 +116,8 @@ class BusinessHome extends Component {
         const actions = [
             <FlatButton
                 label="Close"
-                primary={true}
                 onClick={this.handleClose}
+                className="whiteTextImportant"
             />,
         ];
 
@@ -220,7 +221,7 @@ class BusinessHome extends Component {
                     {this.props.loadingEmailSend ?
                         <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
                         : < form onSubmit={this.handleSubmit.bind(this)} className="center">
-                            <div className="blueTextImportant font28px font24pxUnder700 font20pxUnder500">
+                            <div className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500">
                                 Predict Candidate Success
                             </div>
                             <Field
@@ -246,12 +247,11 @@ class BusinessHome extends Component {
                             <RaisedButton
                                 label="Send"
                                 type="submit"
-                                primary={true}
-                                className="raisedButtonWhiteText"
+                                className="raisedButtonBusinessHome"
                                 style={{marginTop: '10px'}}
                             />
                             <br/>
-                            <div className="infoText i flex font10px center" style={{margin: '10px auto', width: '250px'}}>
+                            <div className="infoText i flex font10px whiteText center" style={{margin: '10px auto', width: '250px'}}>
                                 <div>Free for First Position</div>
                                 <div>•</div>
                                 <div>Unlimited Evaluations</div>
