@@ -3026,6 +3026,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 .inlineBlock { display: inline-block; }
 .marginSides80px { margin-right: 80px; margin-left: 80px; }
+.marginBottom60px { margin-bottom: 60px; }
 .marginBottom40px { margin-bottom: 40px; }
 .marginBottom20px { margin-bottom: 20px; }
 .marginBottom10px { margin-bottom: 10px; }
