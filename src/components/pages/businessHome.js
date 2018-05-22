@@ -481,63 +481,71 @@ class BusinessHome extends Component {
                                 <div className="skewedRectangle" />
                                 <div className="skewedRectangle" />
                                 <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
                             </div>
                         </div>
                     </div>
 
-                    <div className="center">
-                        <div className="font36px font32pxUnder700 font26pxUnder500 center darkDarkPurpleText"
-                             style={{marginBottom: '50px'}}>
-                            Predictive Analytics Improve Hiring Results
+                    <div>
+                        <div className="center">
+                            <div className="font36px font32pxUnder700 font26pxUnder500 center darkDarkPurpleText"
+                                 style={{marginBottom: '50px'}}>
+                                Predictive Analytics Improve Hiring Results
+                            </div>
+                            <div>
+                                <div style={style.bottomListItem}>
+                                    <img src="/images/businessHome/Hourglass.png"
+                                         alt="Hourglass Icon"
+                                         className="forBusinessIcon"
+                                         style={{marginRight: '10px'}}/>
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
+                                    </div>
+                                </div>
+                                <div style={style.bottomListItem}>
+                                    <img src="/images/businessHome/Diamond.png"
+                                         alt="Diamond Icon"
+                                         className="forBusinessIcon"
+                                         style={{marginLeft: '10px'}}/>
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
+                                    </div>
+                                </div>
+                            </div>
+                            <div style={{marginTop: '40px'}}>
+                                <div style={style.bottomListItem}>
+                                    <img src="/images/businessHome/Turnover.png"
+                                         alt="Turnover Icon"
+                                         className="forBusinessIcon"/>
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        Up to 70% decrease<div className="above1000only noHeight"><br/></div> in employee turnover
+                                    </div>
+                                </div>
+                                <div style={style.bottomListItem}>
+                                    <img src="/images/businessHome/Lightbulb4.png"
+                                         alt="Lightbulb Icon"
+                                         className="forBusinessIcon"/>
+                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        More than 85% of candidates<div className="above1000only noHeight"><br/></div> rate their experience as positive
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                        <div>
-                            <div style={style.bottomListItem}>
-                                <img src="/images/businessHome/Hourglass.png"
-                                     alt="Hourglass Icon"
-                                     className="forBusinessIcon"
-                                     style={{marginRight: '10px'}}/>
-                                <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                    Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
+                        <div className="center">
+                            <button className="blueToDarkPurpleButtonGradient bigButton"
+                                    style={{marginTop: "35px", color: '#72d6f5'}}
+                                    onClick={this.handleOpen}
+                            >
+                                <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
+                                    {"Learn More"}
                                 </div>
-                            </div>
-                            <div style={style.bottomListItem}>
-                                <img src="/images/businessHome/Diamond.png"
-                                     alt="Diamond Icon"
-                                     className="forBusinessIcon"
-                                     style={{marginLeft: '10px'}}/>
-                                <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                    Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
-                                </div>
-                            </div>
+                            </button>
                         </div>
-                        <div style={{marginTop: '40px'}}>
-                            <div style={style.bottomListItem}>
-                                <img src="/images/businessHome/Turnover.png"
-                                     alt="Turnover Icon"
-                                     className="forBusinessIcon"/>
-                                <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                    Up to 70% decrease<div className="above1000only noHeight"><br/></div> in employee turnover
-                                </div>
-                            </div>
-                            <div style={style.bottomListItem}>
-                                <img src="/images/businessHome/Lightbulb4.png"
-                                     alt="Lightbulb Icon"
-                                     className="forBusinessIcon"/>
-                                <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                    More than 85% of candidates<div className="above1000only noHeight"><br/></div> rate their experience as positive
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div className="center">
-                        <button className="blueToDarkPurpleButtonGradient bigButton"
-                                style={{marginTop: "35px", color: '#72d6f5'}}
-                                onClick={this.handleOpen}
-                        >
-                            <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
-                                {"Learn More"}
-                            </div>
-                        </button>
                     </div>
                 </section>
 

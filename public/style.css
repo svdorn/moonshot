@@ -237,7 +237,7 @@ form > h1 {
     grid-row-start: 22;
     grid-row-end: 26;
     grid-column-start: 32;
-    grid-column-end: 50;
+    grid-column-end: 41;
 }
 /* SECOND GRID OF SKEWED RECTANGLES */
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) {
@@ -279,7 +279,7 @@ form > h1 {
     grid-row-start: 63;
     grid-row-end: 67;
     grid-column-start: 34;
-    grid-column-end: 37;
+    grid-column-end: 43;
 }
 .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(6) {
     background: linear-gradient(to right, #86c5fe, #ad84fe);
@@ -289,16 +289,109 @@ form > h1 {
     grid-column-end: 32;
 }
 /* GRID FOR STATISTICS PAGE */
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer {
+    margin-top: -500px;
+}
 #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
-    top: -400px;
-    height: calc(var(--rowWidth) * 250);
+    height: calc(var(--rowWidth) * 400);
 }
 #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
-    background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 59;
-    grid-row-end: 63;
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 29;
+    grid-row-end: 33;
+    grid-column-start: 26;
+    grid-column-end: 33;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+    background: #323232;
+    grid-row-start: 103;
+    grid-row-end: 206;
     grid-column-start: 1;
-    grid-column-end: 20;
+    grid-column-end: 43;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+    background: #323232;
+    grid-row-start: 71;
+    grid-row-end: 103;
+    grid-column-start: 1;
+    grid-column-end: 26;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 103;
+    grid-row-end: 107;
+    grid-column-start: 32;
+    grid-column-end: 38;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 78;
+    grid-row-end: 82;
+    grid-column-start: 24;
+    grid-column-end: 29;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 67;
+    grid-row-end: 71;
+    grid-column-start: 1;
+    grid-column-end: 8;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 67;
+    grid-row-end: 71;
+    grid-column-start: 8;
+    grid-column-end: 11;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 71;
+    grid-row-end: 75;
+    grid-column-start: 7;
+    grid-column-end: 12;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(9) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 71;
+    grid-row-end: 75;
+    grid-column-start: 1;
+    grid-column-end: 7;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 67;
+    grid-row-end: 71;
+    grid-column-start: 21;
+    grid-column-end: 25;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 202;
+    grid-row-end: 206;
+    grid-column-start: 34;
+    grid-column-end: 38;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 202;
+    grid-row-end: 206;
+    grid-column-start: 38;
+    grid-column-end: 43;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 206;
+    grid-row-end: 210;
+    grid-column-start: 33;
+    grid-column-end: 38;
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(14) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 206;
+    grid-row-end: 210;
+    grid-column-start: 38;
+    grid-column-end: 43;
 }
 /* END STATS PAGE GRID */
 
@@ -452,16 +545,19 @@ form > h1 {
 }
 
 #threeScreenshots {
-    margin: 135px auto;
+    margin: 135px auto 60px;
     max-width: 1240px;
+    position: relative;
+    z-index: 1;
 }
 #threeScreenshots > .homepageTrajectory.forBusiness {
     margin-bottom: 0;
 }
 
-#businessHomeStatistics {
+#businessHomeStatistics > div:nth-child(2){
     margin: 40px auto;
     max-width: 1340px;
+    position: relative;
 }
 
 #moonshotProcess {
@@ -3407,6 +3503,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         padding-top: 56.25%
     }
 
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+        grid-row-start: 40;
+        grid-row-end: 44;
+        grid-column-end: 32;
+    }
+
     .noPadding { padding: 0 0 0 0 }
 
     .font40pxUnder1000 { font-size: 40px; }
@@ -3701,6 +3803,80 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #businessHomeStatistics {
         margin-top: 100px;
     }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5-n) {
+        /* display: none; */
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+        grid-row-start: 67;
+        grid-row-end: 71;
+        grid-column-start: 15;
+        grid-column-end: 20;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        background: linear-gradient(to right, #80cffe, #a196fe);
+        grid-row-start: 103;
+        grid-row-end: 107;
+        grid-column-start: 29;
+        grid-column-end: 38;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+        grid-row-start: 71;
+        grid-row-end: 75;
+        grid-column-start: 24;
+        grid-column-end: 26;
+    }
+    /* #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+        grid-row-start: 202;
+        grid-row-end: 206;
+        grid-column-start: 20;
+        grid-column-end: 38;
+    } */
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+        background: linear-gradient(to right, #80cffe, #a196fe);
+        grid-row-start: 202;
+        grid-row-end: 206;
+        grid-column-start: 1;
+        grid-column-end: 12;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
+        background: linear-gradient(to right, #a196fe, #80cffe);
+        grid-row-start: 202;
+        grid-row-end: 206;
+        grid-column-start: 12;
+        grid-column-end: 16;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(9) {
+        background: linear-gradient(to right, #a196fe, #80cffe);
+        grid-row-start: 206;
+        grid-row-end: 210;
+        grid-column-start: 1;
+        grid-column-end: 12;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
+        background: linear-gradient(to right, #80cffe, #a196fe);
+        grid-row-start: 206;
+        grid-row-end: 210;
+        grid-column-start: 12;
+        grid-column-end: 17;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
+        background: linear-gradient(to right, #80cffe, #a196fe);
+        grid-row-start: 202;
+        grid-row-end: 206;
+        grid-column-start: 29;
+        grid-column-end: 33;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
+        background: linear-gradient(to right, #a196fe, #80cffe);
+        grid-row-start: 202;
+        grid-row-end: 206;
+        grid-column-start: 33;
+        grid-column-end: 43;
+    }
+
+
+
+
 
     .font40pxUnder800 { font-size: 40px; }
     .font38pxUnder800 { font-size: 38px; }
@@ -4119,6 +4295,30 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .purpleToBlueAnimate.mediumLargeButton { background-position-x: -80px; }
     .purpleToBlueAnimate.mediumLargeButton:hover { background-position-x: 0px; }
+
+
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+        grid-column-end: 14;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
+        grid-column-start: 14;
+        grid-column-end: 18;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(9) {
+        grid-column-end: 15;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
+        grid-column-start: 15;
+        grid-column-end: 19;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
+        grid-column-start: 25;
+        grid-column-end: 29;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
+        grid-column-start: 29;
+        grid-column-end: 43;
+    }
 
     .crystalBall {
         height: 300px;
