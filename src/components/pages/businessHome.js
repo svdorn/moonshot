@@ -141,7 +141,7 @@ class BusinessHome extends Component {
         const processObjects = [
             {
                 title: (<div>Evaluation<br/>Creation</div>),
-                info: "Tell us what skills you need and three to five open-ended questions you want to add.",
+                info: "Tell us what skills you need and 3 to 5 open-ended questions you want to add.",
                 list: [
                     "Psychometric Analysis",
                     "Skill IQ Quizzes",
@@ -565,7 +565,7 @@ class BusinessHome extends Component {
                                     evaluations to see the results. No cost, no risk, no
                                     excuses not to kick this off the ground.
                                 </div>
-                                <button className="whiteText clickableNoUnderline marginTop20px font18px font14pxUnder400" style={{background: '#fd0d8b', border: 'none'}} onClick={this.handleOpen}>
+                                <button className="whiteText clickableNoUnderline transitionButton orangeToRedSmallButtonGradientLeft marginTop20px font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                     Take Off
                                 </button>
                             </div>
@@ -594,7 +594,7 @@ class BusinessHome extends Component {
                                     evaluating through Moonshot. Unlimited candidate
                                     evaluations for each position.
                                 </div>
-                                <button className="clickableNoUnderline whiteText marginTop20px font18px font14pxUnder400" style={{background: '#ff5d27', border: 'none'}} onClick={this.handleOpen}>
+                                <button className="clickableNoUnderline transitionButton orangeToRedSmallButtonGradientRight whiteText marginTop20px font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                     Blast Off
                                 </button>
                             </div>

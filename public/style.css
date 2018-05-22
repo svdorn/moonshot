@@ -707,6 +707,26 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+.orangeToRedSmallButtonGradientRight {
+    background: linear-gradient(to right, #fe256e, #ff5438, #fe256e);
+    background-position-x: -50px;
+}
+.orangeToRedSmallButtonGradientLeft {
+    background: linear-gradient(to right, #ff5438, #fe256e, #ff5438);
+    background-position-x: -50px;
+}
+.transitionButton {
+    background-size: 150%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.transitionButton:hover {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
 
 
 
