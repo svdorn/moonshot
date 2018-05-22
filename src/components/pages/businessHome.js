@@ -467,6 +467,20 @@ class BusinessHome extends Component {
                 </section>
 
                 <section id="businessHomeStatistics">
+                    <div className="skewedContainer">
+                        <div className="skewedRectanglesContainer">
+                            <div className="skewedRectangles">
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="center">
                         <div className="font36px font32pxUnder700 font26pxUnder500 center darkDarkPurpleText"
                              style={{marginBottom: '50px'}}>

@@ -288,9 +288,19 @@ form > h1 {
     grid-column-start: 28;
     grid-column-end: 32;
 }
-/* THIRD GRID */
-
-/* END THIRD GRID */
+/* GRID FOR STATISTICS PAGE */
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
+    top: -400px;
+    height: calc(var(--rowWidth) * 250);
+}
+#businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 59;
+    grid-row-end: 63;
+    grid-column-start: 1;
+    grid-column-end: 20;
+}
+/* END STATS PAGE GRID */
 
 
 .businessHome.frontPage {
