@@ -386,7 +386,8 @@ class BusinessHome extends Component {
                                 Analyze candidates to see if they exhibit the profile of
                                 proven high performers in that position.
                             </div>
-                            <button className="slightlyRoundedButton marginTop10px pinkToPurpleButtonGradient whiteText" onClick={this.handleOpen}>
+                            <button className="slightlyRoundedButton marginTop10px pinkToPurpleButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
+                                    onClick={this.handleOpen}>
                                 Hire Faster
                             </button>
                         </div>
@@ -409,7 +410,8 @@ class BusinessHome extends Component {
                                 machine learning to reveal the empirical evidence
                                 instead of conjecture based on a resume.
                             </div>
-                            <button className="slightlyRoundedButton marginTop10px blueToPurpleButtonGradient whiteText" onClick={this.handleOpen}>
+                            <button className="slightlyRoundedButton marginTop10px blueToPurpleButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
+                                    onClick={this.handleOpen}>
                                 Hire Smarter
                             </button>
                         </div>
@@ -430,7 +432,8 @@ class BusinessHome extends Component {
                                 Engage your candidates better so they can understand
                                 your company and how they fit.
                             </div>
-                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText" onClick={this.handleOpen}>
+                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
+                                    onClick={this.handleOpen}>
                                 Hire Better
                             </button>
                         </div>
