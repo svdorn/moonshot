@@ -46,6 +46,7 @@ class BusinessHome extends Component {
         this.state = {
             infoIndex: 0,
             open: false,
+            email: ''
         }
     }
 
@@ -90,6 +91,12 @@ class BusinessHome extends Component {
         };
 
         this.props.forBusiness(user);
+    }
+
+    onChange(e) {
+        this.setState({
+            email: e.target.value
+        })
     }
 
 
@@ -254,9 +261,6 @@ class BusinessHome extends Component {
             blurredClass = 'dialogForBizOverlay';
         }
 
-        console.log(this.props);
-
-
         return (
             <div className={blurredClass}>
                 <Dialog
@@ -335,7 +339,8 @@ class BusinessHome extends Component {
                             <h1 className="bigTitle font46px font38pxUnder900 font28pxUnder400" style={{color:"#72d6f5"}}>Know who to hire.</h1>
                             <p className="infoText notFull">Predict candidate performance based on employees at your company and companies with similar positions.</p>
                             <div className="buttonArea font18px font14pxUnder900">
-                                <input className="blackInput getStarted" type="text" placeholder="Email Address" />
+                                <input className="blackInput getStarted" type="text" placeholder="Email Address" name="email"
+                                value={this.state.email} onChange={this.onChange.bind(this)}/>
                                 <div className="mediumButton getStarted blueToPurple">
                                     Get Started
                                 </div>
