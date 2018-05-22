@@ -167,9 +167,14 @@ class BusinessHome extends Component {
         let processButtons = [];
         const numProcesses = processObjects.length;
         for (let processIndex = 0; processIndex < numProcesses; processIndex++) {
+            const selected = this.state.infoIndex === processIndex;
+            const topStyle = selected ? {} : {};
+            const bottomStyle = selected ? {} : {};
             processButtons.push(
-                <div className="processHeaderContainer clickable font18px" onClick={() => this.selectProcess(processIndex)}>
-                    <div/><div/>
+                <div className="processHeaderContainer clickable font18px"
+                     onClick={() => this.selectProcess(processIndex)}
+                >
+                    <div style={topStyle} /><div style={bottomStyle} />
                     {processObjects[processIndex].title}
                 </div>
             );
@@ -178,7 +183,7 @@ class BusinessHome extends Component {
         const processList = processObjects[this.state.infoIndex].list.map(infoListText => {
             return (
                 <div className="processListItem">
-                    { infoListText }
+                    <img src="/icons/CheckMark.png" />{ infoListText }
                 </div>
             );
         });
@@ -186,14 +191,18 @@ class BusinessHome extends Component {
         const processSection = (
             <section id="moonshotProcess" style={{height: "500px"}}>
                 { processButtons }
-                <div className="processOutline">
+                <div className="processOutline font18px">
                     <div>
                         <div>
-                            { processObjects[this.state.infoIndex].info }
+                            <div>
+                                { processObjects[this.state.infoIndex].info }
+                            </div>
                         </div>
-                        <div className="centerLine"/>
+                        <div/>
                         <div>
-                            { processList }
+                            <div>
+                                { processList }
+                            </div>
                         </div>
                     </div>
                 </div>
