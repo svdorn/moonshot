@@ -15,6 +15,7 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         hintText={label}
         hintStyle={{color: 'white'}}
         inputStyle={{color: 'white'}}
+        underlineStyle={{color: '#72d6f5'}}
         errorText={touched && error}
         {...input}
         {...custom}
@@ -258,6 +259,8 @@ class BusinessHome extends Component {
             blurredClass = 'dialogForBizOverlay';
         }
 
+        console.log(this.props);
+
 
         return (
             <div className={blurredClass}>
@@ -274,13 +277,14 @@ class BusinessHome extends Component {
                     {this.props.loadingEmailSend ?
                         <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
                         : < form onSubmit={this.handleSubmit.bind(this)} className="center">
-                            <div className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500">
+                            <div className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px" >
                                 Predict Candidate Success
                             </div>
                             <Field
                                 name="name"
                                 component={renderTextField}
                                 label="Full Name*"
+                                style={{marginTop: '1px'}}
                             /> < br/>
                             < Field
                                 name="email"
@@ -301,10 +305,10 @@ class BusinessHome extends Component {
                                 label="Send"
                                 type="submit"
                                 className="raisedButtonBusinessHome"
-                                style={{marginTop: '10px'}}
+                                style={{marginTop: '20px'}}
                             />
                             <br/>
-                            <div className="infoText i flex font10px whiteText center" style={{margin: '10px auto', width: '250px'}}>
+                            <div className="infoText i flex font12px whiteText center" style={{margin: '10px auto', width: '250px'}}>
                                 <div>Free for First Position</div>
                                 <div>•</div>
                                 <div>Unlimited Evaluations</div>
