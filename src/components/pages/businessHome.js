@@ -226,7 +226,7 @@ class BusinessHome extends Component {
 
         const processSection = (
             <section id="moonshotProcess">
-                <h1 className="font34px font30pxUnder850 font26pxUnder500">{"Moonshot's Process to Predict Candidate Performance"}</h1>
+                <h1 className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400">{"Moonshot's Process to Predict Candidate Performance"}</h1>
                 <div className="processButtonsContainer">
                     { processButtons }
                 </div>
@@ -244,6 +244,11 @@ class BusinessHome extends Component {
                             </div>
                         </div>
                     </div>
+                </div>
+                <div className="center">
+                    <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen}>
+                        Get Started
+                    </button>
                 </div>
             </section>
         );
