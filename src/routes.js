@@ -39,6 +39,9 @@ import PrivacyPolicy from './components/policies/privacyPolicy';
 import TermsOfUse from './components/policies/termsOfUse';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
 
+import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
+import AnalysisResults from './components/pages/psychAnalysis/analysisResults';
+
 import AdminPages from './components/pages/adminPages/adminPages'
 import ViewUser from './components/pages/adminPages/viewUser';
 import UserResponses from './components/pages/adminPages/userResponses';
@@ -81,6 +84,9 @@ const routes = (
         <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
         <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
         <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
+
+        <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
+        <Route path="analysisResults" component={AuthenticatedComponent} page={<AnalysisResults/>} />
 
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>}>
             <IndexRoute component={AdminPages} />

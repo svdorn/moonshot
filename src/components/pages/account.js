@@ -5,6 +5,7 @@ import {bindActionCreators} from 'redux';
 import {updateUser} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm, change} from 'redux-form';
+import axios from 'axios';
 
 const styles = {
     floatingLabelStyle: {
@@ -104,6 +105,17 @@ class Account extends Component {
         this.props.untouch("password");
     }
 
+    signUpForPsych() {
+        console.log("currentUser: ", this.props.currentUser);
+        axios.post("/api/user/startPsychEval", {userId: this.props.currentUser._id, verificationToken: this.props.currentUser.verificationToken})
+        .then(result => {
+            console.log("result: ", result);
+        })
+        .catch(error => {
+            console.log("error: ", error);
+        });
+    }
+
     //name, email, password, confirm password, signup button
     render() {
         return (
@@ -158,6 +170,7 @@ class Account extends Component {
                         {this.props.loadingUpdateSettings ? <CircularProgress style={{marginTop: "10px"}}/> : null}
                     </form>
                 </div>
+                <div className="clickable" onClick={this.signUpForPsych.bind(this)}>Sign up for psychometric exam</div>
             </div>
         );
     }

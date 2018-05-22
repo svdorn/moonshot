@@ -14,7 +14,9 @@ const mongoose = require('mongoose');
 
 var app = express();
 
-app.use(logger('dev'));
+if (process.env.NODE_ENV !== "test") {
+    app.use(logger('dev'));
+}
 app.use(fileUpload());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
@@ -41,6 +43,9 @@ const miscApis = require('./apis/miscApis');
 const pathwayApis = require('./apis/pathwayApis');
 
 
+
+
+
 // set up the session
 app.use(session({
     secret: credentials.secretString,
@@ -51,7 +56,7 @@ app.use(session({
     cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days in milliseconds
         // evaluates to true if in production, false if in development (i.e. NODE_ENV not set)
-        secure: !!process.env.NODE_ENV // only make the cookie if accessing via https
+        secure: process.env.NODE_ENV !== "development" // only make the cookie if accessing via https
     },
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
@@ -59,26 +64,32 @@ app.use(session({
 
 // ----->> START APIS <<----- //
 
-app.post('/user/signOut', userApis.POST_signOut);
+const mlFunctions = require('./apis/mlFunctions');
+// mlFunctions.calculateKClusters();
 
+//userApis.POST_startPsychEval();
+//userApis.POST_answerPsychQuestion();
+//userApis.makeMockPsychData();
+
+app.post('/user/startPsychEval', userApis.POST_startPsychEval);
+app.post('/user/answerPsychQuestion', userApis.POST_answerPsychQuestion);
+
+app.post('/user/signOut', userApis.POST_signOut);
 app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
 app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
-
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
-
-app.post('/candidate/candidate', candidateApis.POST_candidate);
-app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
-
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
 app.post('/user/login', userApis.POST_login);
+app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
+app.post('/user/changePassword', userApis.POST_changePassword);
+app.post('/user/forgotPassword', userApis.POST_forgotPassword);
+app.post('/user/changeSettings', userApis.POST_changeSettings);
+app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 
-app.get('/pathway/topPathways', pathwayApis.GET_topPathways);
-
-app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
-
-
+app.post('/candidate/candidate', candidateApis.POST_candidate);
+app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 app.post('/candidate/comingSoonEmail', candidateApis.POST_comingSoonEmail);
@@ -98,13 +109,6 @@ app.post("/admin/business", adminApis.POST_business);
 app.get("/admin/info", adminApis.GET_info);
 app.get("/admin/candidateResponses", adminApis.GET_candidateResponses);
 
-app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
-app.post('/user/changePassword', userApis.POST_changePassword);
-app.post('/user/forgotPassword', userApis.POST_forgotPassword);
-app.post('/user/changeSettings', userApis.POST_changeSettings);
-app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
-
-
 app.get('/pathway/link', pathwayApis.GET_link);
 app.get('/pathway/article', pathwayApis.GET_article);
 app.get('/pathway/info', pathwayApis.GET_info);
@@ -115,12 +119,14 @@ app.get('/pathway/pathwayByPathwayUrlNoContent', pathwayApis.GET_pathwayByPathwa
 app.get('/pathway/pathwayByPathwayUrl', pathwayApis.GET_pathwayByPathwayUrl);
 app.get('/pathway/search', pathwayApis.GET_search);
 app.get("/pathway/allCompaniesAndCategories", pathwayApis.GET_allCompaniesAndCategories);
+app.get('/pathway/topPathways', pathwayApis.GET_topPathways);
 
 app.post('/employer/newEmployer', employerApis.POST_newEmployer);
 app.post('/employer/sendVerificationEmail', employerApis.POST_sendVerificationEmail);
 app.post('/employer/changeTempPassword', employerApis.POST_changeTempPassword);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
+app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
 
 
 // ----->> END APIs <<----- //

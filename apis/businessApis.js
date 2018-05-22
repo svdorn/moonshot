@@ -39,6 +39,7 @@ function POST_forBusinessEmail(req, res) {
     }
     let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
     let subject = 'Moonshot Sales Lead - From Home Page';
+  
     let content = "<div>"
         + "<h3>Sales Lead from Home Page:</h3>"
         + "<p>Name: "
@@ -58,7 +59,7 @@ function POST_forBusinessEmail(req, res) {
     const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
         if (success) {
-            res.json("Email sent successfully, our team will get back to you shortly.");
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
         } else {
             res.status(500).send(msg);
         }
@@ -71,7 +72,7 @@ function POST_contactUsEmail(req, res) {
     if (req.body.message) {
         message = sanitize(req.body.message);
     }
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io"];
     let subject = 'Moonshot Pathway Question -- Contact Us Form';
     let content = "<div>"
         + "<h3>Questions from pathway:</h3>"
