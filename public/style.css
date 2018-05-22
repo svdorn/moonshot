@@ -440,12 +440,21 @@ form > h1 {
     margin-top: 200px;
     margin-bottom: 200px;
 }
+.processButtonsContainer {
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.processButtonsContainer > div {
+    margin: 0 12px;
+    display: inline-block;
+    position: relative;
+}
 .processHeaderContainer {
     height: 60px;
     position: relative;
     width: 170px;
-    margin-left: 30px;
-    display: inline-block;
 }
 .processHeaderContainer > div {
     position: absolute;
@@ -454,20 +463,23 @@ form > h1 {
 .processHeaderContainer > div:nth-child(-n + 2) {
     height: 50%;
     width: 100%;
-    background-color: #2e2e2e;
 }
+.processButtonsContainer > div:nth-child(1) > div > div:nth-child(-n + 2) { --borderColor: #a88cfe; }
+.processButtonsContainer > div:nth-child(2) > div > div:nth-child(-n + 2) { --borderColor: #a591fe; }
+.processButtonsContainer > div:nth-child(3) > div > div:nth-child(-n + 2) { --borderColor: #8cb8fe; }
+.processButtonsContainer > div:nth-child(4) > div > div:nth-child(-n + 2) { --borderColor: #7ed2fe; }
 .processHeaderContainer > div:first-child {
     top: 0;
-    border-top: 3px solid blue;
-    border-left: 6px solid blue;
-    border-right: 6px solid blue;
+    border-top: 3px solid var(--borderColor);
+    border-left: 6px solid var(--borderColor);
+    border-right: 6px solid var(--borderColor);
     transform: skewX(55deg);
 }
 .processHeaderContainer > div:nth-child(2) {
     bottom: 0;
-    border-bottom: 3px solid blue;
-    border-left: 6px solid blue;
-    border-right: 6px solid blue;
+    border-bottom: 3px solid var(--borderColor);
+    border-left: 6px solid var(--borderColor);
+    border-right: 6px solid var(--borderColor);
     transform: skewX(-55deg);
 }
 /* the part of the process header that has text */
@@ -484,6 +496,7 @@ form > h1 {
     height: 200px;
     position: relative;
     left: 50%;
+    margin-top: 20px;
     transform: translateX(-50%);
     -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
     -moz-box-shadow:    0 0 80px 1px rgba(0,0,0,.5);

@@ -165,17 +165,48 @@ class BusinessHome extends Component {
         ]
 
         let processButtons = [];
+        const colors = [
+            {r:177,g:125,b:254},
+            {r:167,g:143,b:254},
+            {r:166,g:144,b:254},
+            {r:147,g:174,b:254},
+            {r:147,g:174,b:254},
+            {r:131,g:201,b:254},
+            {r:129,g:203,b:254},
+            {r:121,g:218,b:254}
+        ]
         const numProcesses = processObjects.length;
+        const shadowBox = (
+            <div style={{
+                WebkitBoxShadow: "0 0 80px 20px rgba(0,0,0,.5)",
+                MozBoxShadow:    "0 0 80px 20px rgba(0,0,0,.5)",
+                boxShadow:       "0 0 80px 20px rgba(0,0,0,.5)",
+                width: "100%",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)"
+            }} />
+        );
         for (let processIndex = 0; processIndex < numProcesses; processIndex++) {
             const selected = this.state.infoIndex === processIndex;
-            const topStyle = selected ? {} : {};
-            const bottomStyle = selected ? {} : {};
+            const leftRgb = colors[processIndex*2];
+            const rightRgb = colors[processIndex*2 + 1];
+            const opacity = selected ? .8 : .1;
+            let colorStyle = {
+                background: `linear-gradient(to right, rgba(${leftRgb.r},${leftRgb.g},${leftRgb.b},${opacity}), rgba(${rightRgb.r},${rightRgb.g},${rightRgb.b},${opacity}))`
+            }
+
             processButtons.push(
-                <div className="processHeaderContainer clickable font18px"
-                     onClick={() => this.selectProcess(processIndex)}
-                >
-                    <div style={topStyle} /><div style={bottomStyle} />
-                    {processObjects[processIndex].title}
+                <div>
+                    { selected ? shadowBox : null }
+                    <div className="processHeaderContainer clickable font18px"
+                         onClick={() => this.selectProcess(processIndex)}
+                    >
+                        <div style={colorStyle} />
+                        <div style={colorStyle} />
+                        {processObjects[processIndex].title}
+                    </div>
                 </div>
             );
         };
@@ -183,14 +214,16 @@ class BusinessHome extends Component {
         const processList = processObjects[this.state.infoIndex].list.map(infoListText => {
             return (
                 <div className="processListItem">
-                    <img src="/icons/CheckMark.png" />{ infoListText }
+                    <img src="/icons/CheckMarkRoundedWhite.png" />{ infoListText }
                 </div>
             );
         });
 
         const processSection = (
             <section id="moonshotProcess" style={{height: "500px"}}>
-                { processButtons }
+                <div className="processButtonsContainer">
+                    { processButtons }
+                </div>
                 <div className="processOutline font18px">
                     <div>
                         <div>
