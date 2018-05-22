@@ -635,10 +635,32 @@ form > h1 {
     outline: none;
 }
 .pinkToPurpleButtonGradient {
-    background: linear-gradient(to right, #d45279, #7d22dc);
+    background: linear-gradient(to right, #7d22dc, #d45279, #7d22dc);
+    background-position-x: -80px;
+    background-size: 150%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.pinkToPurpleButtonGradient:hover {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .blueToPurpleButtonGradient {
-    background: linear-gradient(to right, #7bd6fe, #ab86fe);
+    background: linear-gradient(to right, #ab86fe, #7bd6fe, #ab86fe);
+    background-position-x: -80px;
+    background-size: 150%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.blueToPurpleButtonGradient:hover {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .blueToDarkPurpleButtonGradient {
     background: linear-gradient(to bottom right, #72d6f5, #b17dfe);
@@ -649,7 +671,18 @@ form > h1 {
     color: #72d6f5;
 }
 .orangeToRedButtonGradient {
-    background: linear-gradient(to right, #ff5438, #fe256e);
+    background: linear-gradient(to right, #fe256e, #ff5438, #fe256e);
+    background-position-x: -80px;
+    background-size: 150%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.orangeToRedButtonGradient:hover {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 
 
