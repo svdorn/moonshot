@@ -166,34 +166,84 @@ class BusinessHome extends Component {
         ]
 
         let processButtons = [];
+        const colors = [
+            {r:177,g:125,b:254},
+            {r:167,g:143,b:254},
+            {r:166,g:144,b:254},
+            {r:147,g:174,b:254},
+            {r:147,g:174,b:254},
+            {r:131,g:201,b:254},
+            {r:129,g:203,b:254},
+            {r:121,g:218,b:254}
+        ]
         const numProcesses = processObjects.length;
+        const shadowBox = (
+            <div style={{
+                WebkitBoxShadow: "0 0 80px 20px rgba(0,0,0,.5)",
+                MozBoxShadow:    "0 0 80px 20px rgba(0,0,0,.5)",
+                boxShadow:       "0 0 80px 20px rgba(0,0,0,.5)",
+                width: "100%",
+                position: "absolute",
+                top: "50%",
+                left: "50%",
+                transform: "translate(-50%, -50%)"
+            }} />
+        );
         for (let processIndex = 0; processIndex < numProcesses; processIndex++) {
+            const selected = this.state.infoIndex === processIndex;
+            const leftRgb = colors[processIndex*2];
+            const rightRgb = colors[processIndex*2 + 1];
+            const opacity = selected ? .8 : .1;
+            let colorStyle = {
+                background: `linear-gradient(to right, rgba(${leftRgb.r},${leftRgb.g},${leftRgb.b},${opacity}), rgba(${rightRgb.r},${rightRgb.g},${rightRgb.b},${opacity}))`
+            }
+
             processButtons.push(
-                <div className="processHeaderContainer clickable font18px" onClick={() => this.selectProcess(processIndex)}>
-                    <div/><div/>
-                    {processObjects[processIndex].title}
+                <div>
+                    { selected ? shadowBox : null }
+                    <div className="processHeaderContainer clickable font18px font14pxUnder600 font12pxUnder400"
+                         onClick={() => this.selectProcess(processIndex)}
+                    >
+                        <div style={colorStyle} />
+                        <div style={colorStyle} />
+                        {processObjects[processIndex].title}
+                    </div>
                 </div>
             );
+
+            if (processIndex === 1) {
+                processButtons.push(<br className="under850only"/>)
+            }
         };
 
         const processList = processObjects[this.state.infoIndex].list.map(infoListText => {
             return (
                 <div className="processListItem">
-                    { infoListText }
+                    <img src="/icons/CheckMarkRoundedWhite.png" />
+                    <div>{ infoListText }</div>
                 </div>
             );
         });
 
         const processSection = (
-            <section id="moonshotProcess" style={{height: "500px"}}>
-                { processButtons }
-                <div className="processOutline">
+            <section id="moonshotProcess">
+                <h1 className="font34px font30pxUnder850 font26pxUnder500">{"Moonshot's Process to Predict Candidate Performance"}</h1>
+                <div className="processButtonsContainer">
+                    { processButtons }
+                </div>
+                <div className="processOutline font18px font16pxUnder850 font12pxUnder600 font10pxUnder400">
                     <div>
-                        { processObjects[this.state.infoIndex].info }
-                    </div>
-                    <div className="centerLine"/>
-                    <div>
-                        { processList }
+                        <div>
+                            <div>
+                                { processObjects[this.state.infoIndex].info }
+                            </div>
+                        </div>
+                        <div/>
+                        <div>
+                            <div>
+                                { processList }
+                            </div>
+                        </div>
                     </div>
                 </div>
             </section>

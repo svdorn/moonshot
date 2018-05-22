@@ -182,6 +182,7 @@ form > h1 {
     -webkit-transform: skewY(-12deg);
     transform: skewY(-12deg);
     overflow: hidden;
+    pointer-events: none;
 
     /* for margin transition when text gets smaller */
     -webkit-transition: all 0.5s ease;
@@ -435,40 +436,68 @@ form > h1 {
     margin-top: 40px;
 }
 
-
 #moonshotProcess {
     margin-top: 200px;
     margin-bottom: 200px;
+}
+#moonshotProcess h1 {
+    color: #72d6f5;
+    width: calc(100% - 60px);
+    text-align: center;
+    margin-bottom: 56px;
+    margin-left: 30px;
+
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.processButtonsContainer {
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+}
+.processButtonsContainer > div {
+    margin: 0 12px 7px;
+    display: inline-block;
+    position: relative;
 }
 .processHeaderContainer {
     height: 60px;
     position: relative;
     width: 170px;
-    margin-left: 30px;
-    display: inline-block;
+
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .processHeaderContainer > div {
     position: absolute;
 }
+/* selects the top and bottom divs within the container - the skewed ones without text */
 .processHeaderContainer > div:nth-child(-n + 2) {
     height: 50%;
     width: 100%;
-    background-color: red;
 }
+.processButtonsContainer > div:nth-child(1) > div > div:nth-child(-n + 2) { --borderColor: #a88cfe; }
+.processButtonsContainer > div:nth-child(2) > div > div:nth-child(-n + 2) { --borderColor: #a591fe; }
+.processButtonsContainer > div:nth-child(4) > div > div:nth-child(-n + 2) { --borderColor: #8cb8fe; }
+.processButtonsContainer > div:nth-child(5) > div > div:nth-child(-n + 2) { --borderColor: #7ed2fe; }
 .processHeaderContainer > div:first-child {
     top: 0;
-    border-top: 2px solid blue;
-    border-left: 2px solid blue;
-    border-right: 2px solid blue;
-    transform: skewX(45deg);
+    border-top: 3px solid var(--borderColor);
+    border-left: 6px solid var(--borderColor);
+    border-right: 6px solid var(--borderColor);
+    transform: skewX(55deg);
 }
 .processHeaderContainer > div:nth-child(2) {
     bottom: 0;
-    border-bottom: 2px solid blue;
-    border-left: 2px solid blue;
-    border-right: 2px solid blue;
-    transform: skewX(-45deg);
+    border-bottom: 3px solid var(--borderColor);
+    border-left: 6px solid var(--borderColor);
+    border-right: 6px solid var(--borderColor);
+    transform: skewX(-55deg);
 }
+/* the part of the process header that has text */
 .processHeaderContainer > div:nth-child(3) {
     color: white;
     text-align: center;
@@ -477,13 +506,78 @@ form > h1 {
     top: 50%;
 }
 .processOutline {
-    width: 100%;
+    width: 800px;
     background: linear-gradient(to right, #a88cfe, #7ed2fe);
+    height: 200px;
+    position: relative;
+    left: 50%;
+    margin-top: 20px;
+    transform: translateX(-50%);
+    -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
+    -moz-box-shadow:    0 0 80px 1px rgba(0,0,0,.5);
+    box-shadow:         0 0 80px 1px rgba(0,0,0,.5);
+
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
+/* gray box surrounding text and centerline */
 .processOutline > div {
-    margin: 5px;
-    background-color: black;
+    background-color: #2e2e2e;
+    color: white;
+    width: calc(100% - 4px);
+    height: calc(100% - 4px);
+    position: absolute;
+    left: 2px;
+    top: 2px;
+    display: flex;
+    flex-direction: row;
 }
+/* first and third children - the ones with text */
+.processOutline > div > div:nth-child(2n + 1) {
+    flex: 1;
+    position: relative;
+}
+.processOutline > div > div:nth-child(2n + 1) > div {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+/* the info part on the left */
+.processOutline > div > div:first-child > div {
+    text-align: center;
+    padding: 0 25px;
+}
+/* the centerline */
+.processOutline > div > div:nth-child(2) {
+    width: 2px;
+    height: 140px;
+    background: linear-gradient(to top, #a88cfe, #7ed2fe);
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+/* the list */
+.processOutline > div > div:nth-child(3) > div {
+    padding: 0 20px;
+}
+.processListItem {
+    position: relative;
+}
+/* check mark icon */
+.processListItem > img {
+    display: inline-block;
+    height: 13px;
+    position: absolute;
+    top: calc(50% - 3px);
+    transform: translateY(-50%);
+}
+.processListItem > div {
+    display: inline-block;
+    width: calc(100% - 28px);
+    margin-left: 24px;
+}
+
 
 
 
@@ -3283,6 +3377,38 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 }
 
+@media only screen and (min-width: 851px) {
+    .under850only { display: none; }
+}
+@media only screen and (max-width: 850px) {
+    #moonshotProcess h1 { margin-bottom: 40px; }
+    .processOutline { width: 580px; }
+
+    .font50pxUnder850 { font-size: 50px; }
+    .font48pxUnder850 { font-size: 48px; }
+    .font46pxUnder850 { font-size: 46px; }
+    .font44pxUnder850 { font-size: 44px; }
+    .font42pxUnder850 { font-size: 42px; }
+    .font40pxUnder850 { font-size: 40px; }
+    .font38pxUnder850 { font-size: 38px; }
+    .font36pxUnder850 { font-size: 36px; }
+    .font34pxUnder850 { font-size: 34px; }
+    .font32pxUnder850 { font-size: 32px; }
+    .font30pxUnder850 { font-size: 30px; }
+    .font28pxUnder850 { font-size: 28px; }
+    .font26pxUnder850 { font-size: 26px; }
+    .font24pxUnder850 { font-size: 24px; }
+    .font22pxUnder850 { font-size: 22px; }
+    .font20pxUnder850 { font-size: 20px; }
+    .font18pxUnder850 { font-size: 18px; }
+    .font16pxUnder850 { font-size: 16px; }
+    .font14pxUnder850 { font-size: 14px; }
+    .font12pxUnder850 { font-size: 12px; }
+    .font10pxUnder850 { font-size: 10px; }
+    .font8pxUnder850 { font-size: 8px; }
+    .font6pxUnder850 { font-size: 6px; }
+}
+
 @media only screen and (max-width: 821px) {
     .pathwayPrevList.oneLinePathwayPrevList > li:nth-child(3) {
         display: none;
@@ -3863,6 +3989,23 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: 2px;
     }
 
+    .processHeaderContainer {
+        height: 50px;
+        width: 144px;
+    }
+    .processOutline {
+        width: 370px;
+    }
+    .processOutline > div > div:first-child > div {
+        padding: 0 10px;
+    }
+    .processOutline > div > div:nth-child(3) > div { padding: 0 10px; }
+    .processListItem > img { margin-right: 8px; }
+    .processListItem > div {
+        width: calc(100% - 30px);
+        margin-left: 20px;
+    }
+
     .font40pxUnder600 { font-size: 40px; }
     .font38pxUnder600 { font-size: 38px; }
     .font36pxUnder600 { font-size: 36px; }
@@ -4222,6 +4365,25 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         float: right;
         margin: -30px 20% 0px;
     }
+
+    .font40pxUnder450 { font-size: 40px; }
+    .font38pxUnder450 { font-size: 38px; }
+    .font36pxUnder450 { font-size: 36px; }
+    .font34pxUnder450 { font-size: 34px; }
+    .font32pxUnder450 { font-size: 32px; }
+    .font30pxUnder450 { font-size: 30px; }
+    .font28pxUnder450 { font-size: 28px; }
+    .font26pxUnder450 { font-size: 26px; }
+    .font24pxUnder450 { font-size: 24px; }
+    .font22pxUnder450 { font-size: 22px; }
+    .font20pxUnder450 { font-size: 20px; }
+    .font18pxUnder450 { font-size: 18px; }
+    .font16pxUnder450 { font-size: 16px; }
+    .font14pxUnder450 { font-size: 14px; }
+    .font12pxUnder450 { font-size: 12px; }
+    .font10pxUnder450 { font-size: 10px; }
+    .font8pxUnder450 { font-size: 8px; }
+    .font6pxUnder450 { font-size: 6px; }
 }
 
 @media only screen and (min-width: 401px) {
@@ -4325,6 +4487,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-end: 32;
     }
 
+    .processOutline { width: 280px; }
+    .processHeaderContainer { width: 108px; }
+    .processListItem > img {
+        height: 10px;
+        top: calc(50% - 2px);
+    }
 
     .font40pxUnder400 { font-size: 40px; }
     .font38pxUnder400 { font-size: 38px; }
