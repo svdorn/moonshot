@@ -182,6 +182,7 @@ form > h1 {
     -webkit-transform: skewY(-12deg);
     transform: skewY(-12deg);
     overflow: hidden;
+    pointer-events: none;
 
     /* for margin transition when text gets smaller */
     -webkit-transition: all 0.5s ease;
