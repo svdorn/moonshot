@@ -291,6 +291,7 @@ form > h1 {
 /* GRID FOR STATISTICS PAGE */
 #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer {
     margin-top: -500px;
+    height: 1200px;
 }
 #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
     height: calc(var(--rowWidth) * 400);
@@ -394,6 +395,134 @@ form > h1 {
     grid-column-end: 43;
 }
 /* END STATS PAGE GRID */
+/* GRID FOR BASELINE EVAL PAGE */
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer {
+    margin-top: -500px;
+    height: 1800px;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles {
+    height: calc(var(--rowWidth) * 400);
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(1) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 29;
+    grid-row-end: 33;
+    grid-column-start: 26;
+    grid-column-end: 33;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+    background: #323232;
+    grid-row-start: 103;
+    grid-row-end: 237;
+    grid-column-start: 1;
+    grid-column-end: 43;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(3) {
+    background: #323232;
+    grid-row-start: 71;
+    grid-row-end: 103;
+    grid-column-start: 1;
+    grid-column-end: 26;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 103;
+    grid-row-end: 107;
+    grid-column-start: 32;
+    grid-column-end: 38;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 160;
+    grid-row-end: 164;
+    grid-column-start: 27;
+    grid-column-end: 32;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 67;
+    grid-row-end: 71;
+    grid-column-start: 1;
+    grid-column-end: 8;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 67;
+    grid-row-end: 71;
+    grid-column-start: 8;
+    grid-column-end: 11;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 71;
+    grid-row-end: 75;
+    grid-column-start: 7;
+    grid-column-end: 12;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(9) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 71;
+    grid-row-end: 75;
+    grid-column-start: 1;
+    grid-column-end: 7;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 156;
+    grid-row-end: 160;
+    grid-column-start: 26;
+    grid-column-end: 31;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 229;
+    grid-row-end: 233;
+    grid-column-start: 31;
+    grid-column-end: 34;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 229;
+    grid-row-end: 233;
+    grid-column-start: 34;
+    grid-column-end: 43;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 233;
+    grid-row-end: 237;
+    grid-column-start: 30;
+    grid-column-end: 35;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(14) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 210;
+    grid-row-end: 214;
+    grid-column-start: 13;
+    grid-column-end: 18;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(15) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 197;
+    grid-row-end: 201;
+    grid-column-start: 12;
+    grid-column-end: 17;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
+    background: linear-gradient(to right, #a196fe, #80cffe);
+    grid-row-start: 237;
+    grid-row-end: 241;
+    grid-column-start: 9;
+    grid-column-end: 14;
+}
+#baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 237;
+    grid-row-end: 241;
+    grid-column-start: 1;
+    grid-column-end: 9;
+}
+/* END BASELINE EVAL PAGE GRID */
 
 
 .businessHome.frontPage {
@@ -559,10 +688,15 @@ form > h1 {
     max-width: 1340px;
     position: relative;
 }
+#businessHomeStatistics .horizListText {
+    height: 60px;
+}
 
 #moonshotProcess {
-    margin-top: 200px;
-    margin-bottom: 200px;
+    margin-top: 150px;
+    margin-bottom: 180px;
+    position: relative;
+    z-index: 1;
 }
 #moonshotProcess h1 {
     color: #72d6f5;
@@ -706,6 +840,38 @@ form > h1 {
     display: inline-block;
     width: calc(100% - 28px);
     margin-left: 24px;
+}
+
+
+#businessHomeStatistics div {
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.statisticsHeader {
+    padding: 0 16px;
+    margin-bottom: 40px;
+    height: 80px;
+}
+
+#baselineEvaluation {
+    position: relative;
+}
+#baselineEvaluation > div:nth-child(2) {
+    position: relative;
+}
+#baselineEvaluation div {
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+#crystalBall {
+    position: relative;
+    margin-top: 200px;
+    margin-bottom: 60px;
+}
+#crystalBall > div {
+    position: relative;
 }
 
 
@@ -3525,6 +3691,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 44;
         grid-column-end: 32;
     }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
+        grid-column-start: 30;
+    }
 
     .noPadding { padding: 0 0 0 0 }
 
@@ -3842,12 +4011,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-start: 24;
         grid-column-end: 26;
     }
-    /* #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
-        grid-row-start: 202;
-        grid-row-end: 206;
-        grid-column-start: 20;
-        grid-column-end: 38;
-    } */
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
         background: linear-gradient(to right, #80cffe, #a196fe);
         grid-row-start: 202;
@@ -3889,6 +4052,63 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-row-end: 206;
         grid-column-start: 33;
         grid-column-end: 43;
+    }
+
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+        grid-row-end: 338;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        grid-column-start: 27;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
+        grid-column-end: 18;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(8) {
+        grid-column-end: 19;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(10) {
+        grid-column-start: 25;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
+        background: linear-gradient(to right, #80cffe, #a196fe);
+        grid-row-start: 198;
+        grid-row-end: 202;
+        grid-column-start: 16;
+        grid-column-end: 22;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
+        grid-row-start: 204;
+        grid-row-end: 208;
+        grid-column-start: 15;
+        grid-column-end: 21;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(14) {
+        grid-row-start: 254;
+        grid-row-end: 258;
+        grid-column-start: 24;
+        grid-column-end: 29;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(15) {
+        grid-row-start: 248;
+        grid-row-end: 252;
+        grid-column-start: 23;
+        grid-column-end: 28;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
+        grid-row-start: 338;
+        grid-row-end: 342;
+        grid-column-start: 9;
+        grid-column-end: 17;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
+        grid-row-start: 338;
+        grid-row-end: 342;
+        grid-column-start: 1;
+        grid-column-end: 9;
+    }
+    .paperBoxBusinessHome {
+        margin-left: 0;
+        margin-right: 0;
     }
 
 
@@ -4335,6 +4555,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
         grid-column-start: 29;
         grid-column-end: 43;
+    }
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        grid-column-start: 27;
     }
 
     .crystalBall {
@@ -4847,6 +5070,31 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 10px;
         top: calc(50% - 2px);
     }
+
+    #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(4) {
+        grid-column-start: 26;
+    }
+
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
+        grid-row-end: 298;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
+        grid-row-start: 178;
+        grid-row-end: 182;
+    }
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
+        grid-row-start: 184;
+        grid-row-end: 188;
+    }
+
+    #baselineEvaluation > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
+        grid-row-start: 298;
+        grid-row-end: 302;
+        grid-column-start: 9;
+        grid-column-end: 20;
+    }
+
+    #crystalBall { margin-top: 110px; }
 
     .font40pxUnder400 { font-size: 40px; }
     .font38pxUnder400 { font-size: 38px; }

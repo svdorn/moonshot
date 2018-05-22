@@ -509,8 +509,7 @@ class BusinessHome extends Component {
 
                     <div>
                         <div className="center">
-                            <div className="font36px font32pxUnder700 font26pxUnder500 center darkDarkPurpleText"
-                                 style={{marginBottom: '50px'}}>
+                            <div className="font36px font32pxUnder700 font26pxUnder500 font24pxUnder400 center darkDarkPurpleText statisticsHeader">
                                 Predictive Analytics Improve Hiring Results
                             </div>
                             <div>
@@ -565,16 +564,33 @@ class BusinessHome extends Component {
                     </div>
                 </section>
 
-
-
-
                 { processSection }
 
+                <section id="baselineEvaluation">
+                    <div className="skewedContainer">
+                        <div className="skewedRectanglesContainer">
+                            <div className="skewedRectangles">
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                            </div>
+                        </div>
+                    </div>
 
-
-
-
-                <section>
                     <div className="forBusinessBoxesContainer">
                         <div className="font36px font32pxUnder700 font26pxUnder500 center brightPinkText"
                              style={{marginBottom: '50px'}}>
@@ -612,6 +628,7 @@ class BusinessHome extends Component {
                                 </button>
                             </div>
                         </Paper>
+                        <div className="under800only" style={{height:"0px"}}><br/></div>
                         <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
                                zDepth={2}>
                             <div style={{textAlign: "center", position: "relative"}}>
@@ -644,10 +661,10 @@ class BusinessHome extends Component {
                     </div>
                 </section>
 
-                <section className="marginBottom60px">
+                <section id="crystalBall" className="marginBottom60px">
                     <div className="center">
                         <div className="blueTextHome font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
-                            Your crystal ball to identify<div className="above800only noHeight"><br/></div> good and bad hires before it's too late.
+                            {"Your crystal ball to identify"}<div className="above800only noHeight"><br/></div>{" good and bad hires before it's too late."}
                         </div>
                         <img
                             src="/images/businessHome/CrystalBall.png"
