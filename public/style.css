@@ -717,6 +717,26 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+.orangeToRedSmallButtonGradientRight {
+    background: linear-gradient(to right, #fe256e, #ff5438, #fe256e);
+    background-position-x: -50px;
+}
+.orangeToRedSmallButtonGradientLeft {
+    background: linear-gradient(to right, #ff5438, #fe256e, #ff5438);
+    background-position-x: -50px;
+}
+.transitionButton {
+    background-size: 150%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.transitionButton:hover {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
 
 
 
@@ -3009,13 +3029,18 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     text-align: center;
 }
 
+.crystalBall {
+    height: 400px;
+}
 
 
 .inlineBlock { display: inline-block; }
 .marginSides80px { margin-right: 80px; margin-left: 80px; }
+.marginBottom60px { margin-bottom: 60px; }
 .marginBottom40px { margin-bottom: 40px; }
 .marginBottom20px { margin-bottom: 20px; }
 .marginBottom10px { margin-bottom: 10px; }
+.marginBottom30pxImportant { margin-bottom: 30px !important; }
 .marginTop40px { margin-top: 40px; }
 .marginTop20px { margin-top: 20px; }
 .marginTop10px { margin-top: 10px; }
@@ -4092,6 +4117,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .purpleToBlueAnimate.mediumLargeButton { background-position-x: -80px; }
     .purpleToBlueAnimate.mediumLargeButton:hover { background-position-x: 0px; }
+
+    .crystalBall {
+        height: 300px;
+    }
 
     .font40pxUnder600 { font-size: 40px; }
     .font38pxUnder600 { font-size: 38px; }

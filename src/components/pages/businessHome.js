@@ -14,7 +14,7 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
         hintStyle={{color: 'white'}}
-        inputStyle={{color: 'white'}}
+        inputStyle={{color: '#72d6f5'}}
         underlineStyle={{color: '#72d6f5'}}
         errorText={touched && error}
         {...input}
@@ -141,7 +141,7 @@ class BusinessHome extends Component {
         const processObjects = [
             {
                 title: (<div>Evaluation<br/>Creation</div>),
-                info: "Tell us what skills you need and three to five open-ended questions you want to add.",
+                info: "Tell us what skills you need and 3 to 5 open-ended questions you want to add.",
                 list: [
                     "Psychometric Analysis",
                     "Skill IQ Quizzes",
@@ -277,6 +277,10 @@ class BusinessHome extends Component {
 
         return (
             <div className={blurredClass}>
+                <MetaTags>
+                    <title>Moonshot</title>
+                    <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
+                </MetaTags>
                 <Dialog
                     actions={actions}
                     modal={false}
@@ -579,7 +583,7 @@ class BusinessHome extends Component {
                                     evaluations to see the results. No cost, no risk, no
                                     excuses not to kick this off the ground.
                                 </div>
-                                <button className="whiteText clickableNoUnderline marginTop20px font18px font14pxUnder400" style={{background: '#fd0d8b', border: 'none'}} onClick={this.handleOpen}>
+                                <button className="whiteText clickableNoUnderline transitionButton orangeToRedSmallButtonGradientLeft marginTop20px font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                     Take Off
                                 </button>
                             </div>
@@ -608,7 +612,7 @@ class BusinessHome extends Component {
                                     evaluating through Moonshot. Unlimited candidate
                                     evaluations for each position.
                                 </div>
-                                <button className="clickableNoUnderline whiteText marginTop20px font18px font14pxUnder400" style={{background: '#ff5d27', border: 'none'}} onClick={this.handleOpen}>
+                                <button className="clickableNoUnderline transitionButton orangeToRedSmallButtonGradientRight whiteText marginTop20px font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                     Blast Off
                                 </button>
                             </div>
@@ -616,12 +620,15 @@ class BusinessHome extends Component {
                     </div>
                 </section>
 
-                <section>
+                <section className="marginBottom60px">
                     <div className="center">
+                        <div className="blueTextHome font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
+                            Your crystal ball to identify<div className="above800only noHeight"><br/></div> good and bad hires before it's too late.
+                        </div>
                         <img
                             src="/images/businessHome/CrystalBall.png"
                             alt="CrystalBall"
-                            height={300}
+                            className="crystalBall"
                         />
                         <br/>
                         <button className="blueToDarkPurpleButtonGradientReverse bigButton"
