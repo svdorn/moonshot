@@ -4,22 +4,90 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
+import {forBusiness} from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
-import { Paper } from 'material-ui'
+import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
+import {Field, reduxForm} from 'redux-form';
+
+const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        hintStyle={{color: '#00d2ff'}}
+        errorText={touched && error}
+        {...input}
+        {...custom}
+    />
+);
+
+const validate = values => {
+    const errors = {};
+    const requiredFields = [
+        'name',
+        'email',
+    ];
+    requiredFields.forEach(field => {
+        if (!values[field]) {
+            errors[field] = 'This field is required'
+        }
+    });
+    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+        errors.email = 'Invalid email address';
+    }
+    return errors
+};
 
 class BusinessHome extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            infoIndex: 0
+            infoIndex: 0,
+            open: false,
         }
     }
 
 
     selectProcess(infoIndex) {
         this.setState({ infoIndex });
+    }
+
+    handleOpen = () => {
+        this.setState({open: true});
+    };
+
+    handleClose = () => {
+        this.setState({open: false});
+    };
+
+    handleSubmit(e) {
+        e.preventDefault();
+        const vals = this.props.formData.forBusiness.values;
+
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'name',
+            'email',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
+
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) return;
+
+        const user = {
+            name: this.props.formData.forBusiness.values.name,
+            email: this.props.formData.forBusiness.values.email,
+            company: this.props.formData.forBusiness.values.company,
+            phone: this.props.formData.forBusiness.values.phone,
+        };
+
+        this.props.forBusiness(user);
     }
 
 
@@ -42,7 +110,15 @@ class BusinessHome extends Component {
                 top: '0',
                 verticalAlign: 'top',
             },
-        }
+        };
+
+        const actions = [
+            <FlatButton
+                label="Close"
+                primary={true}
+                onClick={this.handleClose}
+            />,
+        ];
 
         const processObjects = [
             {
@@ -121,7 +197,66 @@ class BusinessHome extends Component {
             </section>
         );
 
+        let blurredClass = '';
+        if (this.state.open) {
+            blurredClass = 'dialogForBizOverlay';
+        }
+
+
         return (
+            <div className={blurredClass}>
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    paperClassName="dialogForBiz"
+                    contentClassName="center"
+                    overlayClassName="dialogOverlay"
+                >
+                    {this.props.loadingEmailSend ?
+                        <div className="center"><CircularProgress style={{marginTop: "20px"}}/></div>
+                        : < form onSubmit={this.handleSubmit.bind(this)} className="center">
+                            <div className="blueTextImportant font28px font24pxUnder700 font20pxUnder500">
+                                Predict Candidate Success
+                            </div>
+                            <Field
+                                name="name"
+                                component={renderTextField}
+                                label="Full Name*"
+                            /> < br/>
+                            < Field
+                                name="email"
+                                component={renderTextField}
+                                label="Email*"
+                            /><br/>
+                            <Field
+                                name="company"
+                                component={renderTextField}
+                                label="Company"
+                            /><br/>
+                            <Field
+                                name="phone"
+                                component={renderTextField}
+                                label="Phone Number"
+                            /><br/>
+                            <RaisedButton
+                                label="Send"
+                                type="submit"
+                                primary={true}
+                                className="raisedButtonWhiteText"
+                                style={{marginTop: '10px'}}
+                            />
+                            <br/>
+                            <div className="infoText i flex font10px center" style={{margin: '10px auto', width: '250px'}}>
+                                <div>Free for First Position</div>
+                                <div>•</div>
+                                <div>Unlimited Evaluations</div>
+                            </div>
+                        </form>
+                    }
+                </Dialog>
             <div className="blackBackground businessHome">
                 <div className="businessHome frontPage">
                     <div className="skewedRectanglesContainer">
@@ -147,7 +282,7 @@ class BusinessHome extends Component {
                             <p className="infoText notFull">Predict candidate performance based on employees at your company and companies with similar positions.</p>
                             <div className="buttonArea font18px font14pxUnder900">
                                 <input className="blackInput getStarted" type="text" placeholder="Email Address" />
-                                <div className="mediumButton getStarted blueToPurple">
+                                <div className="mediumButton getStarted blueToPurple" onClick={this.handleOpen}>
                                     Get Started
                                 </div>
                             </div>
@@ -408,19 +543,28 @@ class BusinessHome extends Component {
                     </div>
                 </section>
             </div>
+            </div>
         );
     }
 
 }
 
 function mapDispatchToProps(dispatch) {
-    return bindActionCreators({}, dispatch);
+    return bindActionCreators({
+        forBusiness
+    }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        formData: state.form,
+        loadingEmailSend: state.users.loadingSomething,
     };
 }
+
+BusinessHome = reduxForm({
+    form: 'forBusiness',
+    validate,
+})(BusinessHome);
 
 export default connect(mapStateToProps, mapDispatchToProps)(BusinessHome);
