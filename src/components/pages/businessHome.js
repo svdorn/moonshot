@@ -282,7 +282,7 @@ class BusinessHome extends Component {
                             <p className="infoText notFull">Predict candidate performance based on employees at your company and companies with similar positions.</p>
                             <div className="buttonArea font18px font14pxUnder900">
                                 <input className="blackInput getStarted" type="text" placeholder="Email Address" />
-                                <div className="mediumButton getStarted blueToPurple" onClick={this.handleOpen}>
+                                <div className="mediumButton getStarted blueToPurple">
                                     Get Started
                                 </div>
                             </div>
@@ -332,7 +332,7 @@ class BusinessHome extends Component {
                                 Analyze candidates to see if they exhibit the profile of
                                 proven high performers in that position.
                             </div>
-                            <button className="slightlyRoundedButton marginTop10px pinkToPurpleButtonGradient whiteText">
+                            <button className="slightlyRoundedButton marginTop10px pinkToPurpleButtonGradient whiteText" onClick={this.handleOpen}>
                                 Hire Faster
                             </button>
                         </div>
@@ -355,7 +355,7 @@ class BusinessHome extends Component {
                                 machine learning to reveal the empirical evidence
                                 instead of conjecture based on a resume.
                             </div>
-                            <button className="slightlyRoundedButton marginTop10px blueToPurpleButtonGradient whiteText">
+                            <button className="slightlyRoundedButton marginTop10px blueToPurpleButtonGradient whiteText" onClick={this.handleOpen}>
                                 Hire Smarter
                             </button>
                         </div>
@@ -376,7 +376,7 @@ class BusinessHome extends Component {
                                 Engage your candidates better so they can understand
                                 your company and how they fit.
                             </div>
-                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText">
+                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText" onClick={this.handleOpen}>
                                 Hire Better
                             </button>
                         </div>
@@ -438,6 +438,7 @@ class BusinessHome extends Component {
                     <div className="center">
                         <button className="blueToDarkPurpleButtonGradient bigButton"
                                 style={{marginTop: "35px", color: '#72d6f5'}}
+                                onClick={this.handleOpen}
                         >
                             <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
                                 {"Learn More"}
@@ -488,7 +489,7 @@ class BusinessHome extends Component {
                                     evaluations to see the results. No cost, no risk, no
                                     excuses not to kick this off the ground.
                                 </div>
-                                <button className="whiteText clickableNoUnderline marginTop20px font18px font14pxUnder400" style={{background: '#fd0d8b', border: 'none'}}>
+                                <button className="whiteText clickableNoUnderline marginTop20px font18px font14pxUnder400" style={{background: '#fd0d8b', border: 'none'}} onClick={this.handleOpen}>
                                     Take Off
                                 </button>
                             </div>
@@ -517,7 +518,7 @@ class BusinessHome extends Component {
                                     evaluating through Moonshot. Unlimited candidate
                                     evaluations for each position.
                                 </div>
-                                <button className="clickableNoUnderline whiteText marginTop20px font18px font14pxUnder400" style={{background: '#ff5d27', border: 'none'}}>
+                                <button className="clickableNoUnderline whiteText marginTop20px font18px font14pxUnder400" style={{background: '#ff5d27', border: 'none'}} onClick={this.handleOpen}>
                                     Blast Off
                                 </button>
                             </div>
@@ -535,6 +536,7 @@ class BusinessHome extends Component {
                         <br/>
                         <button className="blueToDarkPurpleButtonGradientReverse bigButton"
                                 style={{marginTop: "25px", color: 'white'}}
+                                onClick={this.handleOpen}
                         >
                             <div className="invertColorOnHover gradientBorderButtonInteriorGradient">
                                 {"See the Future"}
