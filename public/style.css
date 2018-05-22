@@ -2602,7 +2602,11 @@ button.link {
     margin: auto;
     background-color: #323232 !important;
 }
-.dialogForBiz > div:first-child { min-height: 300px; }
+.dialogForBiz > div:first-child {
+    min-height: 300px;
+    border-top: none !important;
+    border-bottom: none !important;
+}
 .dialogOverlay {
     filter: none;
 }
