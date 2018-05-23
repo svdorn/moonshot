@@ -114,6 +114,15 @@ class EmployeePreview extends Component {
 
         const questionIndex = this.state.questionIndex;
         const questionIndexDisplay = this.state.questionIndex + 1;
+        // Get the answer to this specific question
+        let questionAnswer = 0;
+        for (answer in this.state.answers) {
+            if (answer.questionIndex === questionIndex) {
+                questionAnswer = answer.score;
+                break;
+            }
+        }
+
         return (
             <div>
             {this.state.gradingInProgress ?
@@ -133,6 +142,7 @@ class EmployeePreview extends Component {
                         <Slider min={this.props.questions[questionIndex].range.lowRange}
                                 max={this.props.questions[questionIndex].range.highRange}
                                 step={1}
+                                value={questionAnswer}
                                 />
                     </div>
                     <div className="marginTop10px">
