@@ -8,6 +8,48 @@ var businessesSchema = mongoose.Schema({
 
     // ---->>> POST-PIVOT <<<---- //
 
+    employees: [{
+        employeeId: mongoose.Schema.Types.ObjectId,
+        // employee's name
+        name: String,
+        // whether someone has graded this employee
+        gradingComplete: Boolean,
+        // the questions that will be asked of the
+        answers: [{
+            // question has been answered
+            complete: Boolean,
+            // what the mangager rated the employee (if this was a range question)
+            score: Number,
+            // the index within the option array of the option that was chosen
+            // (if this was a multiple choice question)
+            selectedIndex: Number,
+            // index of the question within employeeQuestions
+            questionIndex: Number
+        }],
+        // the employee's url to see their results
+        employeeUrl: String
+    }],
+
+    // the questions that managers have to answer about each employee
+    employeeQuestions: [{
+        // the text of the question
+        questionBody: String,
+        // could be 'multipleChoice' OR 'range'
+        questionType: String,
+        range: {
+            // low end of the scale
+            lowRange: Number,
+            // high end of the scale
+            highRange: Number,
+        },
+        multipleChoice: {
+            options: [{
+                // the text of the option
+                body: String
+            }],
+        }
+    }],
+
     // the positions that the company is (or was) hiring for
     positions: [{
         // name of the position (such as "Machine Learning Developer")
