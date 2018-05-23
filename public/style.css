@@ -1816,6 +1816,28 @@ button.link {
     /* width: 100%; */
 }
 
+.employeePreviewGrading {
+    position: relative;
+    width: 420px;
+    height: 220px;
+    -moz-box-shadow:    0px 0px 50px 1px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    box-shadow:         0px 0px 50px 1px #00000073;
+    color: white;
+    display: inline-block;
+    margin: 15px 15px;
+    background-color: #333333;
+}
+.employeePreviewGrading > div:nth-child(4) > div > div > div {
+    width: 80% !important;
+}
+.employeePreviewGrading > div:nth-child(4) > div > div > div > div:first-child {
+    background: linear-gradient(to right, #fd0d8b, #ff5d27);
+}
+.employeePreviewGrading > div:nth-child(4) > div > div > div > div:nth-child(3) {
+    background: linear-gradient(to right, #fd0d8b, #ff5d27);
+}
+
 .employeePreview {
     position: relative;
     width: 210px;

@@ -249,9 +249,11 @@ class MyEmployees extends Component {
                     >
                         <EmployeePreview
                             gradingComplete={employee.gradingComplete}
+                            answers={employee.answers}
                             name={employee.name}
                             employeeId={employee.employeeId}
                             employeeUrl={employee.employeeUrl}
+                            questions={this.state.questions}
                         />
                     </li>
                 );

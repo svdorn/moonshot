@@ -4,11 +4,11 @@ import {
     Stepper,
     Step,
     StepButton,
+    Slider,
     FlatButton,
     RaisedButton,
     MenuItem,
-    DropDownMenu,
-    Slider
+    DropDownMenu
 } from 'material-ui';
 import axios from 'axios';
 import {browserHistory} from 'react-router';
@@ -18,7 +18,9 @@ class EmployeePreview extends Component {
         super(props);
 
         this.state = {
-            gradingComplete: props.gradingComplete
+            gradingComplete: props.gradingComplete,
+            answers: props.answers,
+            gradingInProgress: false
         }
     }
 
@@ -27,7 +29,8 @@ class EmployeePreview extends Component {
     componentWillReceiveProps(nextProps) {
         this.setState({
             ...this.state,
-            gradingComplete: nextProps.gradingComplete
+            gradingComplete: nextProps.gradingComplete,
+            answers: nextProps.answers
         });
     }
 
@@ -39,7 +42,11 @@ class EmployeePreview extends Component {
     }
 
     handleOpen() {
-
+        console.log("here");
+        this.setState({
+            ...this.state,
+            gradingInProgress: true
+        })
     }
 
     render() {
@@ -84,7 +91,38 @@ class EmployeePreview extends Component {
             }
         };
 
+        console.log(this.props.questions);
         return (
+            <div>
+            {this.state.gradingInProgress ?
+                <div className="employeePreviewGrading center">
+                    <div className="employeeName font18px center">
+                        {this.props.name.toUpperCase()}
+                    </div>
+                    <div className="center font18px redPinkText">
+                        Question:
+                        1/11
+                    </div>
+                    <div>
+                        {this.props.questions[0].questionBody}
+                    </div>
+                    <div>
+                        <Slider min={this.props.questions[0].range.lowRange}
+                                max={this.props.questions[0].range.highRange}
+                                step={1}
+                                />
+                    </div>
+                    <div className="marginTop10px">
+                        <i className="completionStage clickable underline center font14px">
+                            Previous
+                        </i>
+                        <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline marginLeft30px"
+                                onClick={this.handleOpen.bind(this)}>
+                            Next
+                        </button>
+                    </div>
+                </div>
+                :
             <div className="employeePreview center">
                 <div className="employeeName font18px center">
                     {this.props.name.toUpperCase()}
@@ -101,13 +139,15 @@ class EmployeePreview extends Component {
                 <br/>
                 <div className="marginTop10px">
                     <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline"
-                            onClick={this.handleOpen}>
+                            onClick={this.handleOpen.bind(this)}>
                         Grade
                     </button>
                     <i className="completionStage clickable underline center font14px marginLeft30px">
                         See Results
                     </i>
                 </div>
+            </div>
+            }
             </div>
         )
     }
