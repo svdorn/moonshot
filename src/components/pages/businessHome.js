@@ -160,7 +160,7 @@ class BusinessHome extends Component {
             },
             {
                 title: (<div>Manager<br/>Feedback</div>),
-                info: "Managers complete an assessment for each employee so Moonshot can create performance profiles to analyze candidates.",
+                info: "Managers complete a ~2 minute assessment for each employee so Moonshot can create performance profiles to analyze candidates.",
                 list: [
                     "Performance Profiles",
                     "Performance Management"
@@ -597,10 +597,14 @@ class BusinessHome extends Component {
                         <div className="font36px font32pxUnder700 font26pxUnder500 center brightPinkText"
                              style={{marginBottom: '50px'}}>
                             The New Baseline Evaluation
-                            <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
-                                <div>Unlimited Candidates</div>
-                                <div>•</div>
-                                <div>Unlimited Hires</div>
+                            <div className="infoTextContainer">
+                                <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
+                                    <div>Unlimited Candidates</div>
+                                    <div>•</div>
+                                    <div>Unlimited Hires</div>
+                                    <div>•</div>
+                                    <div>Free for First Position</div>
+                                </div>
                             </div>
                         </div>
                         <Paper className="businessHomeGradientBorder paperBoxBusinessHome"

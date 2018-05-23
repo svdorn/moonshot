@@ -575,6 +575,14 @@ form > h1 {
 .infoText > div {
     display: inline-block;
 }
+#pricingSection .infoTextContainer {
+    width: calc(100% - 40px);
+    margin-left: 20px;
+}
+#pricingSection .infoText.flex {
+    width: initial;
+    max-width: 600px;
+}
 
 .buttonArea {
     display: flex;
