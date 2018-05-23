@@ -247,7 +247,12 @@ class MyEmployees extends Component {
                     <li style={{marginTop: '15px'}}
                         key={key}
                     >
-                        <EmployeePreview />
+                        <EmployeePreview
+                            gradingComplete={employee.gradingComplete}
+                            name={employee.name}
+                            employeeId={employee.employeeId}
+                            employeeUrl={employee.employeeUrl}
+                        />
                     </li>
                 );
             });
@@ -255,7 +260,7 @@ class MyEmployees extends Component {
         }
 
         console.log(this.state.employees);
-        console.log(this.state.employeeQuestions);
+        console.log(this.state.questions);
         return (
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
                 <MetaTags>

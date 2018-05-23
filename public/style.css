@@ -1814,8 +1814,8 @@ button.link {
 
 .employeePreview {
     position: relative;
-    width: 200px;
-    height: 250px;
+    width: 250px;
+    height: 300px;
     -moz-box-shadow:    0px 0px 50px 1px #00000073;
     -webkit-box-shadow: 0px 0px 50px 1px #00000073;
     box-shadow:         0px 0px 50px 1px #00000073;
@@ -1834,6 +1834,19 @@ button.link {
     -moz-transition: -moz-box-shadow .2s;
     -webkit-transition: -webkit-transition .2s;
     transition: box-shadow .2s;
+}
+.employeePreview > .employeeName {
+    margin: 10px 0 0;
+    display: inline-block;
+}
+.employeePreview > .completionImage {
+    width: 86px;
+    height: 86px;
+    margin-top: 20px;
+    display: inline-block;
+}
+.employeePreview > .completionStage {
+    margin-top: 15px;
 }
 
 .candidatePreview {
