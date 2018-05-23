@@ -26,7 +26,7 @@ class MyEmployees extends Component {
             quesions: [],
             positions: [],
             // true if the business has no positions associated with it
-            noPositions: false
+            noEmployees: false
         }
     }
 
@@ -40,6 +40,18 @@ class MyEmployees extends Component {
         })
         .then(function (res) {
             console.log(res.data);
+            let employeeData = res.data;
+            if (Array.isArray(employeeData.employees) && employeeData.employees.length > 0) {
+                self.setState({
+                    employees: employeeData.employees,
+                    questions: employeeData.employeeQuestions
+                })
+            } else {
+                self.setState({
+                    noEmployees: true,
+                    questions: employeeData.employeeQuestions
+                })
+            }
         })
     }
 
