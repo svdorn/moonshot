@@ -615,7 +615,7 @@ class BusinessHome extends Component {
                                 <div className="whiteText font16px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
                                     Start with one position. You can run unlimited candidate
                                     evaluations to see the results. No cost, no risk, no
-                                    excuses not to kick this off the ground.
+                                    excuses not to kick this off.
                                 </div>
                                 <button className="whiteText clickableNoUnderline transitionButton orangeToRedSmallButtonGradientLeft marginTop20px font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                     Take Off

@@ -241,7 +241,7 @@ form > h1 {
     background: linear-gradient(to right, #a196fe, #80cffe);
     grid-row-start: 22;
     grid-row-end: 26;
-    grid-column-start: 32;
+    grid-column-start: 31;
     grid-column-end: 41;
 }
 /* SECOND GRID OF SKEWED RECTANGLES */
