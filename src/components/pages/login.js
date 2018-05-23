@@ -1,7 +1,7 @@
 "use strict"
 import React, { Component } from 'react';
 import axios from 'axios';
-import { TextField, CircularProgress } from 'material-ui';
+import { TextField, CircularProgress, RaisedButton } from 'material-ui';
 import { login, closeNotification, addPathwayAndLogin } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -86,10 +86,18 @@ class Login extends Component {
             return;
         }
 
-        // if not signed in, get the setting for if the user wants to stay
-        // logged in from the cookie
+
         else {
-            let self = this;
+            // set listener for keyboard enter key
+            const self = this;
+            document.addEventListener('keypress', function (e) {
+                var key = e.which || e.keyCode;
+                if (key === 13) { // 13 is enter
+                    self.handleSubmit();
+                }
+            });
+
+            // get the setting for if the user wants to stay logged in from the cookie
             axios.get("/api/user/keepMeLoggedIn")
             .then(function (res) {
                 let keepMeLoggedIn = res.data;
@@ -108,7 +116,9 @@ class Login extends Component {
     }
 
     handleSubmit(e) {
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
         const vals = this.props.formData.login.values;
 
         // Check if the form is valid
@@ -192,13 +202,13 @@ class Login extends Component {
         return (
             <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
-                    <title>Sign In | Moonshot</title>
-                    <meta name="description" content="Sign in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
+                    <title>Log In | Moonshot</title>
+                    <meta name="description" content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
                 </MetaTags>
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1 style={{marginTop:"15px"}}>Sign In</h1>
+                        <h1 style={{marginTop:"15px"}}>Log In</h1>
                         <div className="inputContainer">
                             {/* <!-- <div className="fieldWhiteSpace"/> --> */}
                             <Field
@@ -217,28 +227,28 @@ class Login extends Component {
                                 className="lightBlueInputText"
                             /><br/><br/>
                         </div>
-                        <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                        <div className="checkbox smallCheckbox whiteCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
                                 alt="Checkmark icon"
                                 className={"checkMark" + this.state.keepMeLoggedIn}
-                                src="/icons/CheckMarkBlue.png"
+                                src="/icons/CheckMarkRoundedWhite.png"
                             />
                         </div>
-                        <div className="blueText" style={{display:"inline-block"}}>
+                        <div style={{display:"inline-block"}}>
                             Keep me signed in
                         </div><br/>
-                        <button
+                        <RaisedButton
+                            label="Log In"
                             type="submit"
-                            className="formSubmitButton font24px font16pxUnder600"
-                        >
-                            Sign In
-                        </button>
+                            className="raisedButtonBusinessHome"
+                            style={{margin: '10px 0'}}
+                        />
                         <br/>
-                        <div className="clickable blueText" onClick={() => this.goTo({pathname: '/signup', query: signUpQuery})} style={{display:"inline-block"}}>Create Account</div>
+                        <div className="clickable underline" onClick={() => this.goTo({pathname: '/signup', query: signUpQuery})} style={{display:"inline-block"}}>Create Account</div>
                         <br/>
-                        <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')} style={{display:"inline-block", marginLeft:"7px"}}>Forgot Password?</div>
+                        <div className="clickable" onClick={() => this.goTo('/forgotPassword')} style={{display:"inline-block", marginLeft:"7px"}}>Forgot Password?</div>
                         <br/>
-                        {this.props.loadingLogin ? <CircularProgress style={{marginTop: "10px"}}/> : null}
+                        {this.props.loadingLogin ? <CircularProgress color="white" style={{marginTop: "10px"}}/> : null}
                     </form>
                 </div>
 

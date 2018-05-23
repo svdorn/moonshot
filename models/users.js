@@ -4,7 +4,7 @@ var mongoose = require('mongoose');
 var usersSchema = mongoose.Schema({
     // user's full name
     name: String,
-    // user's email address, used for sign in
+    // user's email address, used for log in
     email: String,
     // email address that companies should use to contact this person
     emailToContact: String,

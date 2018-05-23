@@ -235,7 +235,7 @@ class Menu extends Component {
                 {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
                 {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
                 {optionType: "separator"},
-                {optionType: "url", title: "Sign In", url: "/login"},
+                {optionType: "url", title: "Log In", url: "/login"},
             ];
         }
         // if the current user is an admin

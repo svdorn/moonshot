@@ -304,8 +304,8 @@ class BusinessHome extends Component {
                                     component={renderTextField}
                                     label="Full Name*"
                                     style={{marginTop: '1px'}}
-                                /> < br/>
-                                < Field
+                                /> <br/>
+                                <Field
                                     name="email"
                                     component={renderTextField}
                                     label="Email*"

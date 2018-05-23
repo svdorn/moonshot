@@ -107,15 +107,17 @@ footer {
 }
 .lightWhiteForm {
     background-color: rgba(255,255,255,.6);
-    color: var(--moonshotBlue);
+    color: white;
 }
 .lightBlackForm {
-    background-color: rgba(0,0,0,.3);
+    z-index: 10;
+    position: relative;
+    background-color: #3a3a3a;
     box-shadow: 0 0 44px 1px black;
     color: rgb(114, 214, 245);
 }
 .lightBlackForm > form {
-    color: rgb(114, 214, 245);
+    color: white;
 }
 .lightBlackForm > form > h1 {
     color: rgb(114, 214, 245);
@@ -2419,15 +2421,10 @@ button.link {
     width: 18px;
     margin: -5px 10px 0px 0px;
 }
-.greenCheckbox {
-    border: 2px solid var(--moonshotGreenText);
-}
-.purpleCheckbox {
-    border: 2px solid #b130d3;
-}
-.blueCheckbox {
-    border: 2px solid var(--moonshotLightBlue);
-}
+.greenCheckbox { border: 2px solid var(--moonshotGreenText); }
+.purpleCheckbox { border: 2px solid #b130d3; }
+.blueCheckbox { border: 2px solid var(--moonshotLightBlue); }
+.whiteCheckbox { border: 2px solid white; }
 .mediumCheckbox > img {
     height: 15px;
     width: 15px;
