@@ -20,7 +20,8 @@ class EmployeePreview extends Component {
         this.state = {
             gradingComplete: props.gradingComplete,
             answers: props.answers,
-            gradingInProgress: false
+            gradingInProgress: false,
+            questionIndex: 0,
         }
     }
 
@@ -47,6 +48,26 @@ class EmployeePreview extends Component {
             ...this.state,
             gradingInProgress: true
         })
+    }
+
+    handleNextQuestion() {
+        const newQuestionIndex = this.state.questionIndex + 1;
+        if (newQuestionIndex < this.props.questions.length) {
+            this.setState({
+                ...this.state,
+                questionIndex: newQuestionIndex
+            })
+        }
+    }
+
+    handlePreviousQuestion() {
+        const newQuestionIndex = this.state.questionIndex - 1;
+        if (newQuestionIndex >= 0) {
+            this.setState({
+                ...this.state,
+                questionIndex: newQuestionIndex
+            })
+        }
     }
 
     render() {
@@ -91,7 +112,8 @@ class EmployeePreview extends Component {
             }
         };
 
-        console.log(this.props.questions);
+        const questionIndex = this.state.questionIndex;
+        const questionIndexDisplay = this.state.questionIndex + 1;
         return (
             <div>
             {this.state.gradingInProgress ?
@@ -101,23 +123,25 @@ class EmployeePreview extends Component {
                     </div>
                     <div className="center font18px redPinkText">
                         Question:
-                        1/11
+                        <br/>
+                        {questionIndexDisplay + '/' + this.props.questions.length}
                     </div>
                     <div>
-                        {this.props.questions[0].questionBody}
+                        {this.props.questions[questionIndex].questionBody}
                     </div>
-                    <div className="center" style={{width: "80%"}}>
-                        <Slider min={this.props.questions[0].range.lowRange}
-                                max={this.props.questions[0].range.highRange}
+                    <div className="center width80width80percentImportant">
+                        <Slider min={this.props.questions[questionIndex].range.lowRange}
+                                max={this.props.questions[questionIndex].range.highRange}
                                 step={1}
                                 />
                     </div>
                     <div className="marginTop10px">
-                        <i className="completionStage clickable underline center font14px">
+                        <i className="completionStage clickable underline center font14px"
+                            onClick={this.handlePreviousQuestion.bind(this)}>
                             Previous
                         </i>
                         <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline marginLeft30px"
-                                onClick={this.handleOpen.bind(this)}>
+                                onClick={this.handleNextQuestion.bind(this)}>
                             Next
                         </button>
                     </div>

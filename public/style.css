@@ -1816,6 +1816,10 @@ button.link {
     /* width: 100%; */
 }
 
+.width80percentImportant {
+    width: 80% !important;
+}
+
 .employeePreviewGrading {
     position: relative;
     width: 420px;
@@ -1827,6 +1831,9 @@ button.link {
     display: inline-block;
     margin: 15px 15px;
     background-color: #333333;
+}
+.employeePreviewGrading > div:nth-child(4) > div > div {
+    margin: 24px auto !important;
 }
 .employeePreviewGrading > div:nth-child(4) > div > div > div > div:first-child {
     background: linear-gradient(to right, #fd0d8b, #ff5d27);
