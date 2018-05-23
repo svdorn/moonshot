@@ -125,6 +125,18 @@ class Menu extends Component {
         window.scrollTo(0, 0);
     }
 
+
+    handleAnchorClick(anchor, wantedPath) {
+        this.goTo(wantedPath);
+        setTimeout(() => {
+            const element = document.getElementById(anchor);
+            if (element) {
+                element.scrollIntoView({behavior: "smooth", block:"start"});
+            }
+        }, 20);
+    }
+
+
     render() {
         let self = this;
 
@@ -220,7 +232,8 @@ class Menu extends Component {
             loggedInClass = " loggedOut";
             menuOptions = [
                 {optionType: "url", title: "Home", url: "/"},
-                {optionType: "url", title: "For Candidates", url: "/forCandidates"},
+                {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
+                {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
                 {optionType: "separator"},
                 {optionType: "url", title: "Sign In", url: "/login"},
             ];
@@ -296,6 +309,14 @@ class Menu extends Component {
                     }
                     desktopMenu.push(
                         <p key={option.title + " desktop"} className={optionClass} onClick={() => self.goTo(option.url)}>{option.title}</p>
+                    );
+                    mobileMenu.push(
+                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.goTo(option.url)}/>
+                    );
+                    break;
+                case "anchor":
+                    desktopMenu.push(
+                        <p key={option.title + " desktop"} className={menuItemClass} onClick={() => self.handleAnchorClick(option.anchor, option.url, pathname)}>{option.title}</p>
                     );
                     mobileMenu.push(
                         <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.goTo(option.url)}/>

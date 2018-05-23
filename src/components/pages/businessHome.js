@@ -243,6 +243,7 @@ class BusinessHome extends Component {
 
         const processSection = (
             <section id="moonshotProcess">
+                <a id="ourProcess" name="ourProcess" className="anchor" />
                 <h1 className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400">{"Moonshot's Process to Predict Candidate Performance"}</h1>
                 <div className="processButtonsContainer">
                     { processButtons }
@@ -262,7 +263,7 @@ class BusinessHome extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="center">
+                <div className="center" style={{marginTop: "20px"}}>
                     <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen}>
                         Get Started
                     </button>
@@ -566,7 +567,8 @@ class BusinessHome extends Component {
 
                 { processSection }
 
-                <section id="baselineEvaluation">
+                <section id="pricingSection">
+                    <a id="pricing" name="pricing" className="anchor" />
                     <div className="skewedContainer">
                         <div className="skewedRectanglesContainer">
                             <div className="skewedRectangles">
