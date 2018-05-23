@@ -1834,6 +1834,7 @@ button.link {
 }
 .employeePreviewGrading > div:nth-child(4) > div > div {
     margin: 24px auto !important;
+    width: 80% !important;
 }
 .employeePreviewGrading > div:nth-child(4) > div > div > div > div:first-child {
     background: linear-gradient(to right, #fd0d8b, #ff5d27);
