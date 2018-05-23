@@ -193,18 +193,6 @@ class BusinessHome extends Component {
             {r:121,g:218,b:254}
         ]
         const numProcesses = processObjects.length;
-        const shadowBox = (
-            <div style={{
-                WebkitBoxShadow: "0 0 80px 20px rgba(0,0,0,.5)",
-                MozBoxShadow:    "0 0 80px 20px rgba(0,0,0,.5)",
-                boxShadow:       "0 0 80px 20px rgba(0,0,0,.5)",
-                width: "100%",
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)"
-            }} />
-        );
         for (let processIndex = 0; processIndex < numProcesses; processIndex++) {
             const selected = this.state.infoIndex === processIndex;
             const leftRgb = colors[processIndex*2];
@@ -216,7 +204,7 @@ class BusinessHome extends Component {
 
             processButtons.push(
                 <div>
-                    { selected ? shadowBox : null }
+                    <div className="shadowBox" />
                     <div className="processHeaderContainer clickable font18px font14pxUnder600 font12pxUnder400"
                          onClick={() => this.selectProcess(processIndex)}
                     >

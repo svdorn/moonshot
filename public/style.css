@@ -855,6 +855,17 @@ form > h1 {
     width: calc(100% - 28px);
     margin-left: 24px;
 }
+.shadowBox {
+    -webkit-box-shadow: 0 0 80px 20px rgba(0,0,0,.5);
+    -moz-box-shadow:    0 0 80px 20px rgba(0,0,0,.5);
+    box-shadow:        0 0 80px 20px rgba(0,0,0,.5);
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
 
 
 #businessHomeStatistics div {
