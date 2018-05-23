@@ -981,6 +981,10 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+.orangeToRedButtonGradientSmall {
+    background: linear-gradient(to right, #fe256e, #ff5438, #fe256e);
+    background-position-x: 0;
+}
 .orangeToRedSmallButtonGradientRight {
     background: linear-gradient(to right, #fe256e, #ff5438, #fe256e);
     background-position-x: -50px;
@@ -1814,8 +1818,8 @@ button.link {
 
 .employeePreview {
     position: relative;
-    width: 250px;
-    height: 300px;
+    width: 210px;
+    height: 220px;
     -moz-box-shadow:    0px 0px 50px 1px #00000073;
     -webkit-box-shadow: 0px 0px 50px 1px #00000073;
     box-shadow:         0px 0px 50px 1px #00000073;
@@ -1824,7 +1828,7 @@ button.link {
     transition: box-shadow .2s;
     color: white;
     display: inline-block;
-    margin: 15px 25px;
+    margin: 15px 15px;
     background-color: #333333;
 }
 .employeePreview:hover {
@@ -1840,8 +1844,8 @@ button.link {
     display: inline-block;
 }
 .employeePreview > .completionImage {
-    width: 86px;
-    height: 86px;
+    width: 70px;
+    height: 70px;
     margin-top: 20px;
     display: inline-block;
 }
@@ -2311,6 +2315,7 @@ button.link {
 .brightPinkText { color: #fd0d8b; }
 .brightOrangeText { color: #ff5d27; }
 .lightPurpleText { color: #b37bfe; }
+.redPinkText { color: #eb394f; }
 .orangeText { color: #f24c49; }
 
 .grayTextOnHover:hover { color: #d7d7d7; }
@@ -3362,6 +3367,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginTop40px { margin-top: 40px; }
 .marginTop20px { margin-top: 20px; }
 .marginTop10px { margin-top: 10px; }
+.marginLeft40px { margin-left: 40px; }
+.marginLeft30px { margin-left: 30px; }
+.marginLeft20px { margin-left: 20px; }
 .paddingTop40px { padding-top: 40px; }
 .paddingTop20px { padding-top: 20px; }
 .paddingTop10px { padding-top: 10px; }

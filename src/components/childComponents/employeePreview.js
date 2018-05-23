@@ -38,6 +38,10 @@ class EmployeePreview extends Component {
         window.scrollTo(0, 0);
     }
 
+    handleOpen() {
+
+    }
+
     render() {
         const style = {
             redLink: {
@@ -80,22 +84,30 @@ class EmployeePreview extends Component {
             }
         };
 
-        console.log(this.state)
-
         return (
             <div className="employeePreview center">
-                <div className="employeeName font22px center">
+                <div className="employeeName font18px center">
                     {this.props.name.toUpperCase()}
                 </div>
                 <br/>
                 <img
-                    className="completionImage"
+                    className="completionImage marginBottom10px"
                     src={this.state.gradingComplete ? "/icons/CheckMarkEmployeePreview.png" : "/icons/X.png"}
                 />
                 <br />
-                <i className="completionStage center font16px">
+                <i className={"completionStage center font14px " + (this.state.gradingComplete ? "" : "redPinkText")}>
                     {this.state.gradingComplete ? "Complete" : "Incomplete"}
                 </i>
+                <br/>
+                <div className="marginTop10px">
+                    <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline"
+                            onClick={this.handleOpen}>
+                        Grade
+                    </button>
+                    <i className="completionStage clickable underline center font14px marginLeft30px">
+                        See Results
+                    </i>
+                </div>
             </div>
         )
     }
