@@ -9,6 +9,26 @@ import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 
 class MyEmployees extends Component {
+    constructor(props) {
+        super(props);
+
+        const emptyEmployee = {
+            name: "Loading...",
+            complete: "",
+            disabled: true
+        }
+
+        this.state = {
+            searchTerm: "",
+            complete: false,
+            position: "",
+            candidates: [emptyEmployee],
+            positions: [],
+            // true if the business has no pathways associated with it
+            noPathways: false
+        }
+    }
+
     render() {
         return (
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
