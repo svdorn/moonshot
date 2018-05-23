@@ -22,6 +22,7 @@ class EmployeePreview extends Component {
             answers: props.answers,
             gradingInProgress: false,
             questionIndex: 0,
+            questionAnswer: 0
         }
     }
 
@@ -51,16 +52,34 @@ class EmployeePreview extends Component {
     }
 
     handleNextQuestion() {
-        const newQuestionIndex = this.state.questionIndex + 1;
-        if (newQuestionIndex < this.props.questions.length) {
-            this.setState({
-                ...this.state,
-                questionIndex: newQuestionIndex
-            })
-        }
+        // Post the answer in the database
+        let self = this;
+        axios.get("/api/business/answerQuestion", {
+            params: {
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken,
+                score: this.state.questionAnswer,
+                questionIndex: this.state.questionIndex
+            }
+        })
+        .then(function (res) {
+            // Save the answer in state
+
+            // Advance to the next questionAnswer
+            const newQuestionIndex = this.state.questionIndex + 1;
+            if (newQuestionIndex < this.props.questions.length) {
+                this.setState({
+                    ...this.state,
+                    questionIndex: newQuestionIndex
+                })
+            }
+        })
     }
 
     handlePreviousQuestion() {
+        // Post the answer in the database
+
+        // Go to the previous question
         const newQuestionIndex = this.state.questionIndex - 1;
         if (newQuestionIndex >= 0) {
             this.setState({
@@ -68,6 +87,14 @@ class EmployeePreview extends Component {
                 questionIndex: newQuestionIndex
             })
         }
+    }
+
+    changeQuestionAnswer(e, value) {
+        console.log(value);
+        this.setState({
+            ...this.state,
+            questionAnswer: value
+        })
     }
 
     render() {
@@ -143,6 +170,7 @@ class EmployeePreview extends Component {
                                 max={this.props.questions[questionIndex].range.highRange}
                                 step={1}
                                 value={questionAnswer}
+                                onChange={(e, value) => this.changeQuestionAnswer(e, value)}
                                 />
                     </div>
                     <div className="marginTop10px">

@@ -20,6 +20,7 @@ const businessApis = {
     POST_forBusinessEmail,
     POST_contactUsEmail,
     POST_updateHiringStage,
+    POST_answerQuestion,
     GET_pathways,
     GET_candidateSearch,
     GET_employees
@@ -174,6 +175,20 @@ async function POST_updateHiringStage(req, res) {
 
     // TODO make sure the timestamp of the last change is before the timestamp given
     // if it isn't, don't change the user
+}
+
+function POST_answerQuestion(req, res) {
+    const body = req.body;
+    const userId = sanitize(body.userId);
+    const verificationToken = sanitize(body.verificationToken);
+    const questionIndex = sanitize(body.questionIndex);
+    const score = sanitize(body.score);
+
+    if (!userId || !verificationToken || !questionIndex || !score) {
+        return res.status(400).send("Bad request.");
+    }
+
+
 }
 
 
