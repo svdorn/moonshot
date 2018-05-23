@@ -5,6 +5,7 @@ var businessesSchema = mongoose.Schema({
     name: String,
     pathwayIds: [ mongoose.Schema.Types.ObjectId ],
     employerIds: [ mongoose.Schema.Types.ObjectId ],
+    employeeIds: [ mongoose.Schema.Types.ObjectId ],
 
     // ---->>> POST-PIVOT <<<---- //
 

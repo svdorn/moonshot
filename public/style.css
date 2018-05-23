@@ -1812,6 +1812,30 @@ button.link {
     /* width: 100%; */
 }
 
+.employeePreview {
+    position: relative;
+    width: 200px;
+    height: 250px;
+    -moz-box-shadow:    0px 0px 50px 1px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    box-shadow:         0px 0px 50px 1px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
+    color: white;
+    display: inline-block;
+    margin: 15px 25px;
+    background-color: #333333;
+}
+.employeePreview:hover {
+    -moz-box-shadow:    0px 0px 50px 15px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 15px #00000073;
+    box-shadow:         0px 0px 50px 15px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
+}
+
 .candidatePreview {
     position: relative;
     width: 335px;
