@@ -327,7 +327,7 @@ form > h1 {
     grid-row-start: 103;
     grid-row-end: 107;
     grid-column-start: 32;
-    grid-column-end: 38;
+    grid-column-end: 43;
 }
 #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
     background: linear-gradient(to right, #80cffe, #a196fe);
@@ -434,7 +434,7 @@ form > h1 {
     grid-row-start: 103;
     grid-row-end: 107;
     grid-column-start: 32;
-    grid-column-end: 38;
+    grid-column-end: 43;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(5) {
     background: linear-gradient(to right, #80cffe, #a196fe);
@@ -526,6 +526,13 @@ form > h1 {
     grid-row-end: 241;
     grid-column-start: 1;
     grid-column-end: 9;
+}
+#pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(18) {
+    background: linear-gradient(to right, #80cffe, #a196fe);
+    grid-row-start: 233;
+    grid-row-end: 237;
+    grid-column-start: 35;
+    grid-column-end: 43;
 }
 /* END BASELINE EVAL PAGE GRID */
 

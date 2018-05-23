@@ -577,6 +577,7 @@ class BusinessHome extends Component {
                                 <div className="skewedRectangle" />
                                 <div className="skewedRectangle" />
                                 <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
                             </div>
                         </div>
                     </div>
