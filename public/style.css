@@ -10,7 +10,7 @@ body {
 }
 
 :root {
-    --moonshotLightBlue: #00c3ff;
+    --moonshotLightBlue: rgb(114, 214, 245);
     --moonshotMidBlue: #70cbff;
     --moonshotBlue: #66b1ff;
     --moonshotGreen: #3dffdd;
@@ -109,8 +109,19 @@ footer {
     background-color: rgba(255,255,255,.6);
     color: var(--moonshotBlue);
 }
+.lightBlackForm {
+    background-color: rgba(0,0,0,.3);
+    box-shadow: 0 0 44px 1px black;
+    color: rgb(114, 214, 245);
+}
+.lightBlackForm > form {
+    color: rgb(114, 214, 245);
+}
+.lightBlackForm > form > h1 {
+    color: rgb(114, 214, 245);
+}
 .lightBlueInputText > label {
-    color: rgba(0, 195, 255, .7) !important;
+    /* color: rgba(0, 195, 255, .7) !important; */
 }
 
 .lightBlueBoxInput {

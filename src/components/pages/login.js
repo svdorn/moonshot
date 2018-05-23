@@ -10,11 +10,14 @@ import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
 
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -22,7 +25,11 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
     />
@@ -33,7 +40,11 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
         type="password"
@@ -179,17 +190,17 @@ class Login extends Component {
         }
 
         return (
-            <div className="fillScreen greenToBlue formContainer">
+            <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
                     <title>Sign In | Moonshot</title>
                     <meta name="description" content="Sign in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
                 </MetaTags>
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
-                <div className="form lightWhiteForm noBlur">
+                <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1 style={{marginTop:"15px"}}>Sign In</h1>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
+                            {/* <!-- <div className="fieldWhiteSpace"/> --> */}
                             <Field
                                 name="email"
                                 component={renderTextField}
@@ -198,7 +209,7 @@ class Login extends Component {
                             /><br/>
                         </div>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
+                            {/* <!-- <div className="fieldWhiteSpace"/> --> */}
                             <Field
                                 name="password"
                                 component={renderPasswordField}
@@ -208,7 +219,7 @@ class Login extends Component {
                         </div>
                         <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
-                                alt=""
+                                alt="Checkmark icon"
                                 className={"checkMark" + this.state.keepMeLoggedIn}
                                 src="/icons/CheckMarkBlue.png"
                             />
