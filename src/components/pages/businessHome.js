@@ -141,11 +141,11 @@ class BusinessHome extends Component {
         const processObjects = [
             {
                 title: (<div>Evaluation<br/>Creation</div>),
-                info: "Tell us what skills you need and 3 to 5 open-ended questions you want to add.",
+                info: "Evaluations consist of a psychometric analysis, position-based skill tests and qualitative questions typically asked in the first interview.",
                 list: [
                     "Psychometric Analysis",
                     "Skill IQ Quizzes",
-                    "Interview Questions"
+                    "Qualitative Questions"
                 ]
             },
             {
@@ -168,7 +168,7 @@ class BusinessHome extends Component {
             },
             {
                 title: (<div>Candidate<br/>Completion</div>),
-                info: "All incoming candidates are evaluated to predict their performance.",
+                info: "All incoming candidates complete the evaluation so Moonshot can predict their performance.",
                 list: [
                     "Psychometric Profiles",
                     "Skill IQs",
@@ -422,7 +422,7 @@ class BusinessHome extends Component {
                     <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
-                                <h2 className="pinkTextHome font28px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
+                                <h2 className="pinkTextHome font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
                                 Analyze candidates to see if they exhibit the profile of
                                 proven high performers in that position.
                             </div>
@@ -444,7 +444,7 @@ class BusinessHome extends Component {
                     <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextRight forBusiness">
                             <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forHome whiteText">
-                                <h2 className="blueTextHome font28px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
+                                <h2 className="blueTextHome font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
                                 </h2>
                                 Why read hundreds of resumes? Moonshot uses
                                 machine learning to reveal the empirical evidence
@@ -467,7 +467,7 @@ class BusinessHome extends Component {
                     <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
-                                <h2 className="orangeTextHome font28px font24pxUnder800 font22pxUnder500">Improve your candidate <div className="above800only br"><br/></div>experience</h2>
+                                <h2 className="orangeTextHome font30px font24pxUnder800 font22pxUnder500">Improve your candidate <div className="above800only br"><br/></div>experience</h2>
                                 83% of candidates rate their current experience as poor.
                                 Engage your candidates better so they can understand
                                 your company and how they fit.
