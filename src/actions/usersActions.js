@@ -41,7 +41,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 let nextUrl = '/discover';
                 console.log(returnedUser.userType);
                 if (returnedUser.userType === "employer") {
-                    nextUrl = '/myCandidates';
+                    nextUrl = '/myEmployees';
                 }
                 if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";

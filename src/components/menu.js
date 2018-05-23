@@ -149,7 +149,7 @@ class Menu extends Component {
         // the url to be directed to by default
         let homeUrl = "/";
         if (isEmployer) {
-            homeUrl = "/myCandidates";
+            homeUrl = "/myEmployees";
         }
 
         let isOnboarding = false;
