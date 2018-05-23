@@ -42,6 +42,8 @@ import AffiliateAgreement from './components/policies/affiliateAgreement';
 import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
 import AnalysisResults from './components/pages/psychAnalysis/analysisResults';
 
+import SkillTest from './components/pages/skillTest/skillTest';
+
 import AdminPages from './components/pages/adminPages/adminPages'
 import ViewUser from './components/pages/adminPages/viewUser';
 import UserResponses from './components/pages/adminPages/userResponses';
@@ -87,6 +89,8 @@ const routes = (
 
         <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
         <Route path="analysisResults" component={AuthenticatedComponent} page={<AnalysisResults/>} />
+
+        <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
 
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>}>
             <IndexRoute component={AdminPages} />

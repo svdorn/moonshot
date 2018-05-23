@@ -1,9 +1,11 @@
 "use strict"
 var mongoose = require('mongoose');
 
-var positionsSchema = mongoose.Schema({
+var skillsSchema = mongoose.Schema({
     // the name of the skill
     name: String,
+    // the url to get to this skill test
+    url: String,
     // the more granular areas that a candidate has to understand within a skill;
     // for example, front-end developer skill could consist of HTML, CSS, Javascript subskills
     subSkills: [{
@@ -18,7 +20,7 @@ var positionsSchema = mongoose.Schema({
             // the questions that are all around the same level of difficulty
             questions: [{
                 // the question that is displayed
-                body: {[
+                body: [{
                     // the type of this part of the question, e.g. "ul" or "ol" or "text" or "image"
                     partType: String,
                     // className of part
@@ -35,28 +37,28 @@ var positionsSchema = mongoose.Schema({
                     altTag: String,
                     // if you should put a break after the part
                     shouldBreak: Boolean
-                ]},
+                }],
                 // the answers that can be chosen
                 options: [{
-                    // what is displayed on-screen
-                    body: {[
-                        // the type of this part of the question, e.g. "ul" or "ol" or "text" or "image"
-                        partType: String,
-                        // className of part
-                        className: String,
-                        // include the classes that answer parts default to having
-                        includeDefaultClasses: Boolean,
-                        // the content of the part; if content is just text, array will be length 1
-                        content: [ String ],
-                        // text that will show up if this question part is a link (optional)
-                        linkText: String,
-                        // if the question part is a link, should the link open a new tab? (optional, defaults to true)
-                        newTab: Boolean,
-                        // alt text for the image if the part is an image
-                        altTag: String,
-                        // if you should put a break after the part
-                        shouldBreak: Boolean
-                    ]}
+                    // the text of the option. for now only doing multiple choice questions
+                    // with text-only answers
+                    body: String
+                    // // the type of this part of the question, e.g. "ul" or "ol" or "text" or "image"
+                    // partType: String,
+                    // // className of part
+                    // className: String,
+                    // // include the classes that answer parts default to having
+                    // includeDefaultClasses: Boolean,
+                    // // the content of the part; if content is just text, array will be length 1
+                    // content: [ String ],
+                    // // text that will show up if this question part is a link (optional)
+                    // linkText: String,
+                    // // if the question part is a link, should the link open a new tab? (optional, defaults to true)
+                    // newTab: Boolean,
+                    // // alt text for the image if the part is an image
+                    // altTag: String,
+                    // // if you should put a break after the part
+                    // shouldBreak: Boolean
                 }],
                 // if you can select multiple answers (and therefore, multiple
                 // answers could potentially be correct)
@@ -68,5 +70,5 @@ var positionsSchema = mongoose.Schema({
     }]
 });
 
-var Positions = mongoose.model('Positions', potisionsSchema);
-module.exports = Positions;
+var Skills = mongoose.model('Skills', skillsSchema);
+module.exports = Skills;

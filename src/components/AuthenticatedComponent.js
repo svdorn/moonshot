@@ -25,6 +25,8 @@ class AuthenticatedComponent extends Component {
         //     });
         // } else {
             this.checkLoggedIn();
+
+            console.log("AuthenticatedComponent props: ", this.props);
         // }
     }
 
@@ -49,10 +51,12 @@ class AuthenticatedComponent extends Component {
 
 
     render() {
-        // clone the element so that we can put props into the element, such as location and children
+        // clone the element so that we can put props into the element,
+        // such as location, children, params that are passed through the url
         const childElement = React.cloneElement(this.props.route.page, {
             location: this.props.location,
-            children: this.props.children
+            children: this.props.children,
+            params: this.props.params
         });
         return (
             <div>

@@ -41,6 +41,7 @@ const employerApis = require('./apis/employerApis');
 const adminApis = require('./apis/adminApis');
 const miscApis = require('./apis/miscApis');
 const pathwayApis = require('./apis/pathwayApis');
+const skillApis = require('./apis/skillApis');
 
 
 
@@ -76,7 +77,6 @@ const mlFunctions = require('./apis/mlFunctions');
 
 app.post('/user/startPsychEval', userApis.POST_startPsychEval);
 app.post('/user/answerPsychQuestion', userApis.POST_answerPsychQuestion);
-
 app.post('/user/signOut', userApis.POST_signOut);
 app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
 app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
@@ -127,6 +127,9 @@ app.get('/pathway/topPathways', pathwayApis.GET_topPathways);
 app.post('/employer/newEmployer', employerApis.POST_newEmployer);
 app.post('/employer/sendVerificationEmail', employerApis.POST_sendVerificationEmail);
 app.post('/employer/changeTempPassword', employerApis.POST_changeTempPassword);
+
+app.get('/skill/skillByUrl', skillApis.GET_skillByUrl);
+app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
