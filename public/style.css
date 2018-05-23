@@ -570,6 +570,7 @@ form > h1 {
 .infoText.flex {
     justify-content: space-between;
     flex-direction: row;
+    max-width: 450px;
 }
 .infoText > div {
     display: inline-block;
