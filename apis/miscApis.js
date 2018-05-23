@@ -31,7 +31,7 @@ function POST_createReferralCode(req, res) {
 
     let sendReferralEmail = function(theCode) {
         // if we're in development (on localhost) navigate to localhost
-        let moonshotUrl = "https://www.moonshotlearning.org/";
+        let moonshotUrl = "https://www.moonshotinsights.io/";
         if (!process.env.NODE_ENV) {
             moonshotUrl = "http://localhost:8081/";
         }
@@ -41,7 +41,7 @@ function POST_createReferralCode(req, res) {
             "<div style='color:black'>"
             +   "<p>Hello " + name + ",</p>"
 
-            +   "<p>Thank you for signing up as a Moonshot referrer! With us, you can shape the future of the workforce and get paid to do it. Moonshot trains and evaluates college students and recent graduates in skills and positions needed by employers. We do this by creating course pathways that evaluate candidates in positions that our employer partners are hiring for. <a href='https://moonshotlearning.org/discover'>Check out all of our live Pathways</a>.</p>"
+            +   "<p>Thank you for signing up as a Moonshot referrer! With us, you can shape the future of the workforce and get paid to do it. Moonshot trains and evaluates college students and recent graduates in skills and positions needed by employers. We do this by creating course pathways that evaluate candidates in positions that our employer partners are hiring for. <a href='https://moonshotinsights.io/discover'>Check out all of our live Pathways</a>.</p>"
 
             +   "<p>You will earn $300 for everyone you send our way that gets a job through the Moonshot site.</p>"
 
@@ -59,7 +59,7 @@ function POST_createReferralCode(req, res) {
             +   "<p>-----------------------------</p>"
             +   "<div style='font-size:12px'>Kyle Treige, Co-Founder & CEO<br/>"
             +   "<a href='" + moonshotUrl + "'>Moonshot<br/>"
-            +   "kyle@moonshotlearning.org<br/>"
+            +   "kyle@moonshotinsights.io<br/>"
             +   "608-438-4478</div>"
 
             +   '<div style="font-size:10px; color:#C8C8C8; margin-top:30px; margin-bottom:30px;">'
@@ -118,7 +118,7 @@ function POST_createReferralCode(req, res) {
 
 
 function POST_unsubscribeEmail(req, res) {
-    let recipient = ["kyle@moonshotlearning.org"];
+    let recipient = ["kyle@moonshotinsights.io"];
     let subject = 'URGENT ACTION - User Unsubscribe from Moonshot';
     let content = "<div>"
         + "<h3>This email is Unsubscribing from Moonshot Emails:</h3>"
@@ -187,7 +187,7 @@ function POST_resumeScorer_uploadResume(req, res) {
            return res.status(400).send("Wrong file type.");
         }
 
-        let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "ameyer24@wisc.edu"];
+        let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "ameyer24@wisc.edu"];
 
         let subject = 'Resume To Be Scored';
         let content =

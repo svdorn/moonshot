@@ -35,7 +35,7 @@ class Footer extends Component {
             footerColor = "orangeToYellowGradientOpacity";
         } else if (pathname === '/resumeanalysis') {
             footerColor = "redToLightRedUpGradientOpacity";
-        } else if (pathname === '/results' || pathname === '/mycandidates') {
+        } else if (pathname === '/results' || pathname === '/mycandidates' || pathname === '/') {
             shadowDivClass = "tabsShadow";
             extraSpace = " topSpace";
             footerColor = "blackBackgroundOpacity";

@@ -124,7 +124,7 @@ function POST_candidate(req, res) {
                             try {
                                 // send email to everyone if there's a new sign up (if in production mode)
                                 if (process.env.NODE_ENV) {
-                                    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+                                    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
 
                                     let subject = 'New Sign Up';
                                     let additionalText = '';
@@ -169,7 +169,7 @@ function POST_candidate(req, res) {
                             try {
                                 const ONE_DAY = 1000 * 60 * 60 * 24;
 
-                                let moonshotUrl = 'https://www.moonshotlearning.org/';
+                                let moonshotUrl = 'https://www.moonshotinsights.io/';
                                 // if we are in development, links are to localhost
                                 if (!process.env.NODE_ENV) {
                                     moonshotUrl = 'http://localhost:8081/';
@@ -194,7 +194,7 @@ function POST_candidate(req, res) {
                                             + "<div style='font-size:10px; text-align:left; color:#000000; margin-bottom:50px;'>"
                                                 + "----------------------------------<br/>"
                                                 + "Kyle Treige, Co-Founder & CEO<br/>"
-                                                + "<a href='https://moonshotlearning.org/'>Moonshot</a><br/>"
+                                                + "<a href='https://moonshotinsights.io/'>Moonshot</a><br/>"
                                                 + "608-438-4478<br/>"
                                             + "</div>"
                                             + "<div style='font-size:10px; text-align:left; color:#C8C8C8; margin-bottom:30px;'>"
@@ -323,7 +323,7 @@ function POST_sendVerificationEmail(req, res) {
     let email = sanitize(req.body.email);
     let query = {email: email};
 
-    let moonshotUrl = 'https://www.moonshotlearning.org/';
+    let moonshotUrl = 'https://www.moonshotinsights.io/';
     // if we are in development, links are to localhost
     if (!process.env.NODE_ENV) {
         moonshotUrl = 'http://localhost:8081/';
@@ -337,7 +337,7 @@ function POST_sendVerificationEmail(req, res) {
                 + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
                     + '<div style="text-align:justify;width:80%;margin-left:10%;">'
                     + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="' + moonshotUrl + 'verifyEmail?token=' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
-                    + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@MoonshotLearning.org">Support@MoonshotLearning.org</a>.</span><br/>'
+                    + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@moonshotinsights.io">Support@moonshotinsights.io</a>.</span><br/>'
                     + '</div>'
                 + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'verifyEmail?token='
                 + user.emailVerificationToken
@@ -517,7 +517,7 @@ async function POST_completePathway(req, res) {
     // emails moonshot founders telling them someone finished a pathway,
     // saves user with completed pathway, adds users to business accounts
     function finishPathway() {
-        let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+        let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
         let subject = 'ACTION REQUIRED: Somebody completed pathway';
         let content = "<div>"
             + "<h3>A User has just completed this pathway:</h3>"
@@ -759,7 +759,7 @@ async function POST_addPathway(req, res) {
                 try {
                     // send email to everyone to alert them of the added pathway (if in production mode)
                     if (process.env.NODE_ENV) {
-                        let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+                        let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
                         let subject = 'New Pathway Sign Up';
                         let content =
                             '<div>'
@@ -871,7 +871,7 @@ async function POST_addPathway(req, res) {
 
 // send email to admins saying a user signed up to be in a pathway that is coming soon
 function POST_comingSoonEmail(req, res) {
-    let recipient = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "ameyer24@wisc.edu"];
+    let recipient = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "ameyer24@wisc.edu"];
     let subject = 'Moonshot Coming Soon Pathway';
     let content = "<div>"
         + "<h3>Pathway:</h3>"

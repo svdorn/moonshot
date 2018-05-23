@@ -29,41 +29,37 @@ const businessApis = {
 
 
 function POST_forBusinessEmail(req, res) {
-    let message = "None";
-    if (req.body.message) {
-        message = sanitize(req.body.message);
+    let phone = "None given";
+    if (req.body.phone) {
+        phone = sanitize(req.body.phone);
     }
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
-    let subject = 'Moonshot Sales Lead - From For Business Page';
+    let company = "None given";
+    if (req.body.company) {
+        company = sanitize(req.body.company);
+    }
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let subject = 'Moonshot Sales Lead - From Home Page';
+  
     let content = "<div>"
-        + "<h3>Sales Lead from For Business Page:</h3>"
+        + "<h3>Sales Lead from Home Page:</h3>"
         + "<p>Name: "
         + sanitize(req.body.name)
-        + "</p>"
-        + "<p>Company: "
-        + sanitize(req.body.company)
-        + "</p>"
-        + "<p>Title: "
-        + sanitize(req.body.title)
         + "</p>"
         + "<p>Email: "
         + sanitize(req.body.email)
         + "</p>"
+        + "<p>Company: "
+        + company
+        + "</p>"
         + "<p>Phone Number: "
-        + sanitize(req.body.phone)
-        + "</p>"
-        + "<p>Positions they're hiring for: "
-        + sanitize(req.body.positions)
-        + "</p>"
-        + "<p>Message: "
-        + message
+        + phone
         + "</p>"
         + "</div>";
 
     const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
         if (success) {
-            res.json("Email sent successfully, our team will get back to you shortly.");
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
         } else {
             res.status(500).send(msg);
         }
@@ -76,7 +72,7 @@ function POST_contactUsEmail(req, res) {
     if (req.body.message) {
         message = sanitize(req.body.message);
     }
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io"];
     let subject = 'Moonshot Pathway Question -- Contact Us Form';
     let content = "<div>"
         + "<h3>Questions from pathway:</h3>"

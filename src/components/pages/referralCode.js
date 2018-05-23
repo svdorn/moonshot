@@ -228,7 +228,7 @@ class ReferralCode extends Component {
                                 <br/>
                                 <span className="font20px">Your referral url is:</span>
                                 <br/>
-                                <span className="font16px" style={{marginBottom: "20px", display:"inline-block"}}>{"https://moonshotlearning.org/?referralCode="}{this.state.referralCode}</span>
+                                <span className="font16px" style={{marginBottom: "20px", display:"inline-block"}}>{"https://moonshotinsights.io/?referralCode="}{this.state.referralCode}</span>
                                 <br/>
                                 <span className="font16px">
                                     Have your friend enter this code when they

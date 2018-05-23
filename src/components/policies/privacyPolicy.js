@@ -27,7 +27,7 @@ class PrivacyPolicy extends Component {
 
                     <br/><br/>Last updated: 3/2/2018
 
-                    <br/><br/>Moonshot Learning, Inc. ("us", "we", or "our") operates moonshotlearning.org ("website",
+                    <br/><br/>Moonshot Learning, Inc. ("us", "we", or "our") operates moonshotinsights.io ("website",
                     "site"). This Privacy Policy informs you of our policies regarding the collection, use and disclosure of
                     Personal Information we receive from users of the site.
 
