@@ -20,13 +20,27 @@ class MyEmployees extends Component {
 
         this.state = {
             searchTerm: "",
-            complete: false,
+            status: "",
             position: "",
-            candidates: [emptyEmployee],
+            employees: [emptyEmployee],
+            quesions: [],
             positions: [],
-            // true if the business has no pathways associated with it
-            noPathways: false
+            // true if the business has no positions associated with it
+            noPositions: false
         }
+    }
+
+    componentDidMount() {
+        let self = this;
+        axios.get("/api/business/employees", {
+            params: {
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken
+            }
+        })
+        .then(function (res) {
+            console.log(res.data);
+        })
     }
 
     render() {

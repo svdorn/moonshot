@@ -21,7 +21,8 @@ const businessApis = {
     POST_contactUsEmail,
     POST_updateHiringStage,
     GET_pathways,
-    GET_candidateSearch
+    GET_candidateSearch,
+    GET_employees
 }
 
 
@@ -39,7 +40,7 @@ function POST_forBusinessEmail(req, res) {
     }
     let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
     let subject = 'Moonshot Sales Lead - From Home Page';
-  
+
     let content = "<div>"
         + "<h3>Sales Lead from Home Page:</h3>"
         + "<p>Name: "
@@ -278,6 +279,48 @@ async function verifyEmployerAndReturnBusiness(userId, verificationToken, busine
     });
 }
 
+function GET_employees(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    if (!userId || !verificationToken) {
+        return res.status(400).send("Bad request.");
+    }
+
+    Employers.findById(userId, function(findBUserErr, user) {
+        // error finding user in db
+        if (findBUserErr) {
+            console.log("Error finding business user who was trying to see their employees: ", findBUserErr);
+            return res.status(500).send("Server error, try again later.");
+        }
+
+        // couldn't find user in business user db, either they have the wrong
+        // type of account or are trying to pull some dubious shenanigans
+        if (!user) {
+            return res.status(403).send("You do not have permission to access employee info.");
+        }
+
+        // user does not have the right verification token, probably trying to
+        // pull a fast one on us
+        if (user.verificationToken !== verificationToken) {
+            return res.status(403).send("You do not have permission to access employee info.");
+        }
+
+        const companyId = user.company.companyId;
+        let businessQuery = { '_id': companyId }
+
+        Businesses.find(businessQuery)
+        .select("employees employeeQuestions")
+        .exec(function(findEmployeesErr, employees)
+        {
+            if (findEmployeesErr) {
+                return res.status(500).send("Server error, couldn't get employees.");
+            } else {
+                return res.json(employees[0]);
+            }
+        });
+    })
+}
 
 function GET_pathways(req, res) {
     const userId = sanitize(req.query.userId);

@@ -10,8 +10,12 @@ var businessesSchema = mongoose.Schema({
 
     employees: [{
         employeeId: mongoose.Schema.Types.ObjectId,
+        // id of the manager that rated this employee
+        managerId: mongoose.Schema.Types.ObjectId,
         // employee's name
         name: String,
+        // position that the employee is associated with
+        position: mongoose.Schema.Types.ObjectId,
         // whether someone has graded this employee
         gradingComplete: Boolean,
         // the questions that will be asked of the
