@@ -178,14 +178,21 @@ async function POST_updateHiringStage(req, res) {
 }
 
 function POST_answerQuestion(req, res) {
-    const body = req.body;
+    console.log(req.query.userId);
+    const body = req.query;
     const userId = sanitize(body.userId);
     const employeeId = sanitize(body.employeeId);
     const verificationToken = sanitize(body.verificationToken);
     const questionIndex = sanitize(body.questionIndex);
     const score = sanitize(body.score);
+    console.log(userId);
+    console.log(employeeId);
+    console.log(verificationToken);
+    console.log(questionIndex);
+    console.log(score);
 
-    if (!userId || !verificationToken || !questionIndex || !score) {
+    if (!userId || !verificationToken || !questionIndex || !score || !employeeId) {
+        console.log("here");
         return res.status(400).send("Bad request.");
     }
 
