@@ -106,7 +106,7 @@ class EmployeePreview extends Component {
                     <div>
                         {this.props.questions[0].questionBody}
                     </div>
-                    <div>
+                    <div className="center" style={{width: "80%"}}>
                         <Slider min={this.props.questions[0].range.lowRange}
                                 max={this.props.questions[0].range.highRange}
                                 step={1}
