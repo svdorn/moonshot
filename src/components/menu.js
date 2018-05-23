@@ -243,6 +243,7 @@ class Menu extends Component {
         // if the current user is an employer
         else if (isEmployer) {
             menuOptions = [
+                {optionType: "url", title: "My Employees", url: "/myEmployees"},
                 {optionType: "url", title: "My Candidates", url: "/myCandidates"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
