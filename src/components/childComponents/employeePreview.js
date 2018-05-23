@@ -11,6 +11,8 @@ import {
     DropDownMenu
 } from 'material-ui';
 import axios from 'axios';
+import {connect} from 'react-redux';
+import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 
 class EmployeePreview extends Component {
@@ -54,9 +56,10 @@ class EmployeePreview extends Component {
     handleNextQuestion() {
         // Post the answer in the database
         let self = this;
-        axios.get("/api/business/answerQuestion", {
+        axios.post("/api/business/answerQuestion", {
             params: {
                 userId: this.props.currentUser._id,
+                employeeId: this.props.employeeId,
                 verificationToken: this.props.currentUser.verificationToken,
                 score: this.state.questionAnswer,
                 questionIndex: this.state.questionIndex
@@ -64,6 +67,7 @@ class EmployeePreview extends Component {
         })
         .then(function (res) {
             // Save the answer in state
+            console.log(res);
 
             // Advance to the next questionAnswer
             const newQuestionIndex = this.state.questionIndex + 1;
@@ -215,5 +219,17 @@ class EmployeePreview extends Component {
     }
 }
 
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+    }, dispatch);
+}
 
-export default EmployeePreview;
+function mapStateToProps(state) {
+    return {
+        currentUser: state.users.currentUser
+    };
+}
+
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(EmployeePreview);

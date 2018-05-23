@@ -180,6 +180,7 @@ async function POST_updateHiringStage(req, res) {
 function POST_answerQuestion(req, res) {
     const body = req.body;
     const userId = sanitize(body.userId);
+    const employeeId = sanitize(body.employeeId);
     const verificationToken = sanitize(body.verificationToken);
     const questionIndex = sanitize(body.questionIndex);
     const score = sanitize(body.score);
@@ -188,7 +189,54 @@ function POST_answerQuestion(req, res) {
         return res.status(400).send("Bad request.");
     }
 
+    // verify the employer is actually a part of this organization
+    verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
+    .then(business => {
+        // if employer does not have valid credentials
+        if (!business) {
+            console.log("Employer tried to update an answer to a question and didn't have access.");
+            return res.status(403).send("You do not have permission to change an employees answers.");
+        }
 
+        // the index of the employee in the employee array
+        const employeeIndex = business.employees.findIndex(currEmployee => {
+            return currEmployee.userId.toString() === employeeId.toString();
+        });
+
+        let employee = business.employees[employeeIndex];
+
+        // get the index of the answer in the user's answers array
+        const answerIndex = employee.answers.findIndex(answer => {
+            return answer.questionIndex === questionIndex;
+        })
+
+        if (answerIndex === null) {
+            const newAnswer = {
+                complete: true,
+                score: score,
+                questionIndex: questionIndex
+            };
+            employee.answers.push(newAnswer);
+        } else {
+            employee.answers[answerIndex].score = score;
+        }
+
+        // update the employee in the business object
+        business.employees[employeeIndex] = employee;
+
+        // save the business
+        business.save()
+        .then(updatedBusiness => {
+            return res.json("success");
+        })
+        .catch(updateBusinessErr => {
+            return res.status(500).send("failure!");
+        });
+    })
+    .catch(verifyEmployerErr => {
+        console.log("Error when trying to verify employer when they were trying to edit an answer for a question: ", verifyEmployerErr);
+        return res.status(500).send("Server error, try again later.");
+    })
 }
 
 
