@@ -5143,6 +5143,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         grid-column-end: 20;
     }
 
+    .pricingButton { bottom: 32px; }
+
     #crystalBall { margin-top: 110px; }
 
     .font40pxUnder400 { font-size: 40px; }
