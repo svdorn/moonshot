@@ -4511,7 +4511,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .form {
         max-width: 450px;
-        margin-top: 110px;
+        /* margin-top: 110px; */
         overflow: hidden;
     }
     form > h1 {
@@ -4799,7 +4799,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .form {
         max-width: 350px;
-        margin-top: 95px;
+        /* margin-top: 95px; */
         margin-bottom: 0px;
     }
 
