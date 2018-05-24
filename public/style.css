@@ -112,18 +112,15 @@ footer {
 .lightBlackForm {
     z-index: 10;
     position: relative;
-    background-color: #3a3a3a;
+    background-color: #404040;
     box-shadow: 0 0 44px 1px black;
-    color: rgb(114, 214, 245);
+    color: white;
 }
 .lightBlackForm > form {
     color: white;
 }
 .lightBlackForm > form > h1 {
     color: rgb(114, 214, 245);
-}
-.lightBlueInputText > label {
-    /* color: rgba(0, 195, 255, .7) !important; */
 }
 
 .lightBlueBoxInput {

@@ -16,6 +16,8 @@ var usersSchema = mongoose.Schema({
     admin: Boolean,
     // agreed to privacy policy and terms of use
     agreedToTerms: Boolean,
+    // the code the user used to sign up with to get to their first evaluation
+    employerCode: String,
     // whether the user's profile is hidden from employers
     hideProfile: Boolean,
     // special url used to access this user's profile

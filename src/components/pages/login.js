@@ -79,24 +79,18 @@ class Login extends Component {
     }
 
     componentWillMount() {
+        // set listener for keyboard enter key
+        const self = this;
+        document.addEventListener('keypress', self.handleKeyPress.bind(self));
+
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser && this.props.currentUser != "no user") {
-            //this.goTo("/discover");
-            this.props.router.push("/discover");
+            this.props.router.push("/");
             return;
         }
 
 
         else {
-            // set listener for keyboard enter key
-            const self = this;
-            document.addEventListener('keypress', function (e) {
-                var key = e.which || e.keyCode;
-                if (key === 13) { // 13 is enter
-                    self.handleSubmit();
-                }
-            });
-
             // get the setting for if the user wants to stay logged in from the cookie
             axios.get("/api/user/keepMeLoggedIn")
             .then(function (res) {
@@ -114,6 +108,22 @@ class Login extends Component {
             });
         }
     }
+
+
+    componentWillUnmount() {
+        // remove listener for keyboard enter key
+        const self = this;
+        document.removeEventListener('keypress', self.handleKeyPress.bind(self));
+    }
+
+
+    handleKeyPress(e) {
+        var key = e.which || e.keyCode;
+        if (key === 13) { // 13 is enter
+            this.handleSubmit();
+        }
+    }
+
 
     handleSubmit(e) {
         if (e) {
@@ -192,12 +202,8 @@ class Login extends Component {
         const pathway = location.query.pathway;
         const redirect = location.query.redirect;
         let signUpQuery = {};
-        if (pathway) {
-            signUpQuery.pathway = pathway;
-        }
-        if (redirect) {
-            signUpQuery.redirect = redirect;
-        }
+        if (pathway) { signUpQuery.pathway = pathway; }
+        if (redirect) { signUpQuery.redirect = redirect; }
 
         return (
             <div className="fillScreen blackBackground formContainer">
@@ -215,7 +221,6 @@ class Login extends Component {
                                 name="email"
                                 component={renderTextField}
                                 label="Email"
-                                className="lightBlueInputText"
                             /><br/>
                         </div>
                         <div className="inputContainer">
@@ -224,7 +229,6 @@ class Login extends Component {
                                 name="password"
                                 component={renderPasswordField}
                                 label="Password"
-                                className="lightBlueInputText"
                             /><br/><br/>
                         </div>
                         <div className="checkbox smallCheckbox whiteCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
