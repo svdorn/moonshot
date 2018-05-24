@@ -451,7 +451,7 @@ form > h1 {
     grid-row-start: 160;
     grid-row-end: 164;
     grid-column-start: 27;
-    grid-column-end: 32;
+    grid-column-end: 33;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(6) {
     background: linear-gradient(to right, #a196fe, #80cffe);
@@ -486,13 +486,13 @@ form > h1 {
     grid-row-start: 156;
     grid-row-end: 160;
     grid-column-start: 26;
-    grid-column-end: 31;
+    grid-column-end: 32;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
     background: linear-gradient(to right, #a196fe, #80cffe);
     grid-row-start: 226;
     grid-row-end: 230;
-    grid-column-start: 31;
+    grid-column-start: 32;
     grid-column-end: 34;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
@@ -506,7 +506,7 @@ form > h1 {
     background: linear-gradient(to right, #a196fe, #80cffe);
     grid-row-start: 230;
     grid-row-end: 234;
-    grid-column-start: 30;
+    grid-column-start: 31;
     grid-column-end: 35;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(14) {
