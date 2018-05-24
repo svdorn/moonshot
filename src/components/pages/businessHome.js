@@ -54,20 +54,15 @@ class BusinessHome extends Component {
 
 
     componentWillMount() {
-        const showRectangles = this.cssPropertyValueSupported("grid-row-start", "1")
+        const showRectangles = this.cssPropertySupported("gridRowStart")
         console.log("supports rectangles: ", showRectangles);
         this.setState({...this.state, showRectangles});
     }
 
 
-    cssPropertyValueSupported(prop, value) {
-        try {
-            var d = document.createElement('div');
-            d.style[prop] = value;
-            return d.style[prop] === value;
-        } catch(propertyError) {
-            return false;
-        }
+    cssPropertySupported(prop) {
+        try { return document.body.style[prop] !== undefined; }
+        catch (propertyError) { return false; }
     }
 
 
