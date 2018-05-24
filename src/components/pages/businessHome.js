@@ -607,18 +607,18 @@ class BusinessHome extends Component {
                                 <div className="brightPinkText marginTop40px marginTop20pxUnder400 font22px font18pxUnder400">
                                     STARTER
                                 </div>
-                                <div style={{height: '70px', lineHeight: '70px'}}>
-                                    <i className="whiteText marginTop20px font16px font14pxUnder400">
-                                        First Position Free
-                                    </i>
+                                <div style={{height: '80px', lineHeight: '20px'}}>
+                                    <span className="whiteText font30px font24pxUnder400">
+                                        <br/><span style={{display: "inline-block", marginTop:"3px"}}>FREE</span>
+                                        <br/>
+                                        <i className="font12px">for first position</i>
+                                    </span>
                                 </div>
                                 <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
-                                <div className="whiteText font16px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
-                                    Start with one position. You can run unlimited candidate
-                                    evaluations to see the results. No cost, no risk, no
-                                    excuses not to kick this off.
+                                <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
+                                    {"Start with one position to see the results. No cost, no risk, no excuses not to kick this off."}
                                 </div>
-                                <button className="whiteText clickableNoUnderline transitionButton orangeToRedSmallButtonGradientLeft marginTop20px font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
+                                <button className="pricingButton whiteText clickableNoUnderline transitionButton orangeToRedSmallButtonGradientLeft font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                     Take Off
                                 </button>
                             </div>
@@ -635,20 +635,19 @@ class BusinessHome extends Component {
                                 <div className="brightOrangeText marginTop40px marginTop20pxUnder400 font22px font18pxUnder400">
                                     PLUS
                                 </div>
-                                <div style={{height: '70px'}}>
-                                    <i className="whiteText marginTop20px font16px font14pxUnder400">
-                                        Each Additional Position<br/> Starting at $79
+                                <div style={{height: '80px', lineHeight: '20px'}}>
+                                    <span className="whiteText font30px font24pxUnder400">
+                                        <i className="font12px" style={{display: "inline-block", marginBottom:"9px"}}>Starting at</i>
+                                        <br/>$79
                                         <br/>
-                                        <i className="font12px">per position/month</i>
-                                    </i>
+                                        <i className="font12px">per additional position/month</i>
+                                    </span>
                                 </div>
                                 <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
-                                <div className="whiteText font16px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
-                                    Easily scale the number of positions you are
-                                    evaluating through Moonshot. Unlimited candidate
-                                    evaluations for each position.
+                                <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
+                                    {"Easily scale the number of positions you are evaluating through Moonshot."}
                                 </div>
-                                <button className="clickableNoUnderline transitionButton orangeToRedSmallButtonGradientRight whiteText marginTop20px font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
+                                <button className="pricingButton clickableNoUnderline transitionButton orangeToRedSmallButtonGradientRight whiteText font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                     Blast Off
                                 </button>
                             </div>

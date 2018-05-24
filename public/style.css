@@ -427,8 +427,8 @@ form > h1 {
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(2) {
     background: #323232;
-    grid-row-start: 103;
-    grid-row-end: 237;
+    grid-row-start: 100;
+    grid-row-end: 234;
     grid-column-start: 1;
     grid-column-end: 43;
 }
@@ -490,57 +490,57 @@ form > h1 {
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(11) {
     background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 229;
-    grid-row-end: 233;
+    grid-row-start: 226;
+    grid-row-end: 230;
     grid-column-start: 31;
     grid-column-end: 34;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(12) {
     background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 229;
-    grid-row-end: 233;
+    grid-row-start: 226;
+    grid-row-end: 230;
     grid-column-start: 34;
     grid-column-end: 43;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(13) {
     background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 233;
-    grid-row-end: 237;
+    grid-row-start: 230;
+    grid-row-end: 234;
     grid-column-start: 30;
     grid-column-end: 35;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(14) {
     background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 210;
-    grid-row-end: 214;
+    grid-row-start: 207;
+    grid-row-end: 211;
     grid-column-start: 13;
     grid-column-end: 18;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(15) {
     background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 197;
-    grid-row-end: 201;
+    grid-row-start: 194;
+    grid-row-end: 198;
     grid-column-start: 12;
     grid-column-end: 17;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(16) {
     background: linear-gradient(to right, #a196fe, #80cffe);
-    grid-row-start: 237;
-    grid-row-end: 241;
+    grid-row-start: 234;
+    grid-row-end: 238;
     grid-column-start: 9;
     grid-column-end: 14;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(17) {
     background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 237;
-    grid-row-end: 241;
+    grid-row-start: 234;
+    grid-row-end: 238;
     grid-column-start: 1;
     grid-column-end: 9;
 }
 #pricingSection > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(18) {
     background: linear-gradient(to right, #80cffe, #a196fe);
-    grid-row-start: 233;
-    grid-row-end: 237;
+    grid-row-start: 230;
+    grid-row-end: 234;
     grid-column-start: 35;
     grid-column-end: 43;
 }
@@ -1757,7 +1757,7 @@ button.link {
 }
 
 .paperBoxBusinessHome {
-    height: 480px;
+    height: 465px;
     width: 340px;
     display: inline-block;
     margin: 0 25px 40px;
@@ -3352,15 +3352,25 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     height: 400px;
 }
 
+.pricingButton {
+    border: none;
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
 
 .inlineBlock { display: inline-block; }
 .marginSides80px { margin-right: 80px; margin-left: 80px; }
 .marginBottom60px { margin-bottom: 60px; }
 .marginBottom40px { margin-bottom: 40px; }
+.marginBottom30px { margin-bottom: 30px; }
 .marginBottom20px { margin-bottom: 20px; }
 .marginBottom10px { margin-bottom: 10px; }
 .marginBottom30pxImportant { margin-bottom: 30px !important; }
 .marginTop40px { margin-top: 40px; }
+.marginTop30px { margin-top: 30px; }
 .marginTop20px { margin-top: 20px; }
 .marginTop10px { margin-top: 10px; }
 .paddingTop40px { padding-top: 40px; }
