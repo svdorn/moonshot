@@ -46,8 +46,22 @@ class BusinessHome extends Component {
         this.state = {
             infoIndex: 0,
             open: false,
-            email: ''
+            email: '',
+            // initially don't show the rectangles in case the user's browser is old
+            showRectangles: false
         }
+    }
+
+
+    componentWillMount() {
+        this.setState({...this.state, showRectangles: this.cssPropertyValueSupported("grid-row-start", "1")});
+    }
+
+
+    cssPropertyValueSupported(prop, value) {
+        var d = document.createElement('div');
+        d.style[prop] = value;
+        return d.style[prop] === value;
     }
 
 
@@ -340,23 +354,26 @@ class BusinessHome extends Component {
                 </Dialog>
             <div className="blackBackground businessHome">
                 <div className="businessHome frontPage">
-                    <div className="skewedRectanglesContainer">
-                        <div className="skewedRectangles">
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
+                    {this.state.showRectangles ?
+                        <div className="skewedRectanglesContainer">
+                            <div className="skewedRectangles">
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                            </div>
+                            <div className="skewedRectangles">
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                            </div>
                         </div>
-                        <div className="skewedRectangles">
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                        </div>
-                    </div>
+                        : null
+                    }
                     <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
                         <div className="content">
                             <h1 className="bigTitle font46px font38pxUnder900 font28pxUnder400" style={{color:"#72d6f5"}}>Know who to hire.</h1>
@@ -386,19 +403,22 @@ class BusinessHome extends Component {
                 </div>
 
                 {/* <!-- The skewed rectangles that only come up on small screen --> */}
-                <div className="logoContainer skewedContainer">
-                    <div className="skewedRectanglesContainer">
-                        <div className="skewedRectangles">
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
+                {this.state.showRectangles ?
+                    <div className="logoContainer skewedContainer">
+                        <div className="skewedRectanglesContainer">
+                            <div className="skewedRectangles">
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                            </div>
                         </div>
                     </div>
-                </div>
+                    : null
+                }
 
                 <div className="partnerLogos">
                     <div>
@@ -476,25 +496,28 @@ class BusinessHome extends Component {
                 </section>
 
                 <section id="businessHomeStatistics">
-                    <div className="skewedContainer">
-                        <div className="skewedRectanglesContainer">
-                            <div className="skewedRectangles">
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
+                    {this.state.showRectangles ?
+                        <div className="skewedContainer">
+                            <div className="skewedRectanglesContainer">
+                                <div className="skewedRectangles">
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        : null
+                    }
 
                     <div>
                         <div className="center">
@@ -557,30 +580,33 @@ class BusinessHome extends Component {
 
                 <section id="pricingSection">
                     <a id="pricing" name="pricing" className="anchor" />
-                    <div className="skewedContainer">
-                        <div className="skewedRectanglesContainer">
-                            <div className="skewedRectangles">
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
+                    {this.state.showRectangles ?
+                        <div className="skewedContainer">
+                            <div className="skewedRectanglesContainer">
+                                <div className="skewedRectangles">
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        : null
+                    }
 
                     <div className="forBusinessBoxesContainer">
                         <div className="font36px font32pxUnder700 font26pxUnder500 center brightPinkText"
