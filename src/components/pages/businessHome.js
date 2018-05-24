@@ -54,14 +54,20 @@ class BusinessHome extends Component {
 
 
     componentWillMount() {
-        this.setState({...this.state, showRectangles: this.cssPropertyValueSupported("grid-row-start", "1")});
+        const showRectangles = this.cssPropertyValueSupported("grid-row-start", "1")
+        console.log("supports rectangles: ", showRectangles);
+        this.setState({...this.state, showRectangles});
     }
 
 
     cssPropertyValueSupported(prop, value) {
-        var d = document.createElement('div');
-        d.style[prop] = value;
-        return d.style[prop] === value;
+        try {
+            var d = document.createElement('div');
+            d.style[prop] = value;
+            return d.style[prop] === value;
+        } catch(propertyError) {
+            return false;
+        }
     }
 
 
@@ -217,7 +223,7 @@ class BusinessHome extends Component {
             }
 
             processButtons.push(
-                <div>
+                <div kye={"processButton" + processIndex}>
                     <div className="shadowBox" />
                     <div className="processHeaderContainer clickable font18px font14pxUnder600 font12pxUnder400"
                          onClick={() => this.selectProcess(processIndex)}
@@ -236,7 +242,7 @@ class BusinessHome extends Component {
 
         const processList = processObjects[this.state.infoIndex].list.map(infoListText => {
             return (
-                <div className="processListItem">
+                <div className="processListItem" key={infoListText}>
                     <img src="/icons/CheckMarkRoundedWhite.png" />
                     <div>{ infoListText }</div>
                 </div>
@@ -308,7 +314,7 @@ class BusinessHome extends Component {
                         <div>
                         {this.props.loadingEmailSend ?
                             <div className="center"><CircularProgress className="marginTop40px"/></div>
-                            : < form onSubmit={this.handleSubmit.bind(this)} className="center">
+                            : <form onSubmit={this.handleSubmit.bind(this)} className="center">
                                 <div
                                     className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
                                     Predict Candidate Success
