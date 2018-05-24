@@ -316,10 +316,10 @@ class Menu extends Component {
                     break;
                 case "anchor":
                     desktopMenu.push(
-                        <p key={option.title + " desktop"} className={menuItemClass} onClick={() => self.handleAnchorClick(option.anchor, option.url, pathname)}>{option.title}</p>
+                        <p key={option.title + " desktop"} className={menuItemClass} onClick={() => self.handleAnchorClick(option.anchor, option.url)}>{option.title}</p>
                     );
                     mobileMenu.push(
-                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.goTo(option.url)}/>
+                        <MenuItem key={option.title + " mobile"} primaryText={option.title} onClick={() => self.handleAnchorClick(option.anchor, option.url)}/>
                     );
                     break;
                 case "separator":
