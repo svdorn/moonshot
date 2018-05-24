@@ -604,7 +604,7 @@ class BusinessHome extends Component {
                                     alt="Paper Airplane Icon"
                                     className="businessHomeBoxIcons"
                                 />
-                                <div className="brightPinkText marginTop40px marginTop20pxUnder400 font22px font18pxUnder400">
+                                <div className="brightPinkText marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
                                     STARTER
                                 </div>
                                 <div style={{height: '80px', lineHeight: '20px'}}>
@@ -632,7 +632,7 @@ class BusinessHome extends Component {
                                     alt="Enterprise Rocket Icon"
                                     className="businessHomeBoxIcons"
                                 />
-                                <div className="brightOrangeText marginTop40px marginTop20pxUnder400 font22px font18pxUnder400">
+                                <div className="brightOrangeText marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
                                     PLUS
                                 </div>
                                 <div style={{height: '80px', lineHeight: '20px'}}>
