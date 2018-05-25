@@ -3901,8 +3901,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .homepageTrajectoryImagesRight { display: none; }
     .homepageTrajectoryImagesLeft { display: none; }
     .businessHomeTrajectoryImagesLeft > img,
-    .businessHomeTrajectoryImagesRight > img,
-    .businessHomeTrajectoryImageRightNoBorder > img {
+    .businessHomeTrajectoryImagesRight > img {
         position: relative;
         margin-top: 60px;
     }
@@ -3910,8 +3909,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-left: 30px;
     }
     .businessHomeTrajectoryImageRightNoBorder > img {
-        position: relative;
         margin-right: 20px;
+        margin-top: 50px;
+        position: relative;
     }
     .businessHomeTrajectoryImageRightNoBorder,
     .businessHomeTrajectoryImagesRight,
@@ -4671,6 +4671,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: 0px 0 50px;
     }
 
+    #moonshotProcess { margin-top: 100px; }
+
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
     .forBusinessLine {
         height: 516px;
@@ -5122,6 +5124,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 297.6px;
     }
 
+    #moonshotProcess { margin-bottom: 120px; }
     #moonshotProcess h1 { margin-bottom: 26px; }
     .processOutline {
         width: 280px;
