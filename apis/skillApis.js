@@ -14,7 +14,8 @@ const { sanitize,
 
 const businessApis = {
     GET_skillByUrl,
-    POST_answerSkillQuestion
+    POST_answerSkillQuestion,
+    POST_startOrContinueTest
 }
 
 
@@ -26,14 +27,14 @@ function POST_answerSkillQuestion(req, res) {
 }
 
 
-function POST_startSkillEval(req, res) {
+function POST_startOrContinueTest(req, res) {
     try {
         let user = undefined;
         let skill = undefined;
 
-        const userId = sanitize(req.query.userId);
-        const verificationToken = sanitize(req.query.verificationToken);
-        const skillUrl = sanitize(req.query.skillUrl);
+        const userId = sanitize(req.body.userId);
+        const verificationToken = sanitize(req.body.verificationToken);
+        const skillUrl = sanitize(req.body.skillUrl);
 
         if (!userId || !verificationToken || !skillUrl) {
             return res.status(400).send("Not enough arguments provided.");
@@ -82,7 +83,7 @@ function POST_startSkillEval(req, res) {
                 return skillTest.skillId.toString() === skill._id.toString();
             });
 
-            const hasEverTakenTest = typeof testIndex === "number" && testIndex > 0;
+            const hasEverTakenTest = typeof testIndex === "number" && testIndex >= 0;
 
             // if the user has never taken this test before, start it for em
             if (!hasEverTakenTest) {
@@ -94,7 +95,7 @@ function POST_startSkillEval(req, res) {
                 // add the new skill test (which has no attempts) to the user
                 user.skillTests.push(newSkillTest);
                 // we know this is testIndex because it was just pushed
-                testIndex = skillTests.length - 1;
+                testIndex = user.skillTests.length - 1;
                 // get a start date and a question and errthang
                 startNewAttempt(testIndex);
             }
@@ -115,9 +116,11 @@ function POST_startSkillEval(req, res) {
 
             function startNewAttempt(testIndex) {
                 let attemptLevels = skill.levels.map(skillLevel => {
-                    levelNumber: skillLevel.levelNumber,
-                    // empty because the user hasn't answered any questions yet
-                    questions: []
+                    return {
+                        levelNumber: skillLevel.levelNumber,
+                        // empty because the user hasn't answered any questions yet
+                        questions: []
+                    }
                 })
                 let newAttempt = {
                     // starting the test NOW
@@ -129,27 +132,105 @@ function POST_startSkillEval(req, res) {
                 }
                 // add the new attempt to the list of attempts
                 user.skillTests[testIndex].attempts.push(newAttempt);
-                const currentAttemptIndex = attempts.length - 1;
+                const currentAttemptIndex = user.skillTests[testIndex].attempts.length - 1;
 
-                getNewQuestion(currentAttemptIndex);
+                getNewQuestion(testIndex, currentAttemptIndex);
             }
 
             // get a new question - for skill tests that hadn't been started before
-            function getNewQuestion(currentAttemptIndex) {
+            async function getNewQuestion(testIndex, currentAttemptIndex) {
+                const testLevels = skill.levels;
+                // always gonna start at the first level
+                const firstLevel = skill.levels[0];
+                const testQuestions = firstLevel.questions;
 
+                // get a random question from the firt level
+                testQuestionIndex = Math.floor(Math.random() * testQuestions.length);
+                testQuestion = testQuestions[testQuestionIndex];
+                const currentQuestionForDB = {
+                    levelNumber: firstLevel.levelNumber,
+                    levelIndex: 0,
+                    questionId: testQuestion._id,
+                    questionIndex: testQuestionIndex,
+                    // starting this question right now
+                    startDate: new Date(),
+                    correctAnswers: testQuestion.correctAnswers
+                }
+
+                // set the current question for the user
+                user.skillTests[testIndex].currentQuestion = currentQuestionForDB;
+
+                const questionToReturn = {
+                    body: testQuestion.body,
+                    options: testQuestion.options,
+                    multiSelect: testQuestion.multiSelect
+                }
+
+                try {
+                    const updatedUser = await user.save();
+                } catch(saveErr) {
+                    console.log("Error saving user when starting skill test: ", saveErr);
+                }
+
+                return res.json({question:questionToReturn, skillName: skill.name});
             }
 
             // get the question the user left off on
             function getCurrentQuestion(testIndex) {
+                // the current question info the user has stored
+                const userCurrentQuestion = user.skillTests[testIndex].currentQuestion;
+                // the levels with all the question info
                 const testLevels = skill.levels;
-                const currentQuestion = user.skillTests[testIndex].currentQuestion;
-
-                const currentQuestionToReturn = {
-                    body: question.body,
-                    options: question.option,
-                    multiSelect: question.multiSelect
+                // get the current question's level so we can get the actual question
+                // with the body and options
+                let currentTestLevelIndex = userCurrentQuestion.levelIndex
+                let currentTestLevel = testLevels[currentTestLevelIndex];
+                // make sure we actually have the right test level
+                if (currentTestLevel.levelNumber !== userCurrentQuestion.levelNumber) {
+                    currentTestLevelIndex = testLevels.findIndex(level => {
+                        return level.levelNumber === userCurrentQuestion.levelNumber;
+                    });
+                    // couldn't find the test level from db
+                    if (!currentTestLevelIndex || currentTestLevelIndex < 0) {
+                        console.log("Couldn't find right test level. Looking for level number: ", userCurrentQuestion.levelNumber);
+                        return res.status(500).send("Server error, try again later or contact Moonshot or employer.");
+                    }
+                    // found it, set it
+                    else { currentTestLevel = testLevels[currentTestLevelIndex]; }
                 }
-                return res.json(currentQuestionToReturn);
+
+                // repeat the process to get the question info we want from the level
+                const testQuestions = currentTestLevel.questions;
+                // get the current question
+                let currentTestQuestionIndex = userCurrentQuestion.questionIndex;
+                console.log('userCurrentQuestion: ', userCurrentQuestion);
+                let currentTestQuestion;
+                try {
+                    currentTestQuestion = testQuestions[currentTestQuestionIndex];
+                } catch (err) {
+                    currentTestQuestion = {_id: "-1" }
+                }
+                // make sure we actually have the right test level
+                if (currentTestQuestion._id.toString() !== userCurrentQuestion.questionId.toString()) {
+                    currentTestQuestionIndex = testQuestions.findIndex(q => {
+                        return q._id.toString() === userCurrentQuestion.questionId.toString();
+                    });
+                    // couldn't find the test question from db
+                    if (!currentTestQuestionIndex || currentTestQuestionIndex < 0) {
+                        console.log("Couldn't find right test question. Looking for question id: ", userCurrentQuestion.questionId);
+                        return res.status(500).send("Server error, try again later or contact Moonshot or employer.");
+                    }
+                    // found it, set it
+                    else { currentTestQuestion = testLevels[currentTestQuestionIndex]; }
+                }
+
+                // the info that is actually needed by the front end for the user to answer the question
+                const currentQuestionToReturn = {
+                    body: currentTestQuestion.body,
+                    options: currentTestQuestion.options,
+                    multiSelect: currentTestQuestion.multiSelect
+                }
+                return res.json({question: currentQuestionToReturn, skillName: skill.name});
             }
 
             // // if the user has taken the test before

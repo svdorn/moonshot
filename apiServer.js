@@ -130,6 +130,7 @@ app.post('/employer/changeTempPassword', employerApis.POST_changeTempPassword);
 
 app.get('/skill/skillByUrl', skillApis.GET_skillByUrl);
 app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);
+app.post('/skill/startOrContinueTest', skillApis.POST_startOrContinueTest);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);

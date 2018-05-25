@@ -84,7 +84,7 @@ const routes = (
         <Route path="unsubscribe" component={Unsubscribe} />
         <Route path="referral" component={ReferralCode} />
         <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
-        <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
+        <Route path="termsOfUse" com    ponent={TermsOfUse} standalone={true} />
         <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
 
         <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />

@@ -7,6 +7,7 @@ import {  } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
+import { CircularProgress } from "material-ui";
 
 class PsychAnalysis extends Component {
     constructor(props) {
@@ -15,7 +16,8 @@ class PsychAnalysis extends Component {
         this.state = {
             selectedId: undefined,
             question: undefined,
-            finished: false
+            finished: false,
+            skillName: undefined
         };
     }
 
@@ -26,18 +28,6 @@ class PsychAnalysis extends Component {
         if (!currentUser) {
             this.goTo("/login");
         }
-        // if the user already took the test, can't do it again
-        else if (!currentUser.psychometricTest) {
-            console.log("Have to have started the psych test first!");
-            // TODO: make this go to the psych analysis landing page instead of home
-            this.goTo("/");
-        }
-        // if the user already took the test, can't do it again
-        else if (!currentUser.psychometricTest.inProgress) {
-            console.log("Can only take the psych test once!");
-            // TODO: make this go to the psych analysis landing page instead of home
-            this.goTo("/");
-        }
 
         let skillUrl = "";
         try {
@@ -45,14 +35,21 @@ class PsychAnalysis extends Component {
         } catch (getSkillUrlError) {
             console.log("error getting skill url: ", getSkillUrlError);
             // TODO: go to discover skills page or somesuch
-            this.goTo("/");
-            return;
+            return this.goTo("/");
         }
 
-        axios.get("/api/skill/skillByUrl", {params: {userId: currentUser._id, verificationToken: currentUser.verificationToken, skillUrl}})
+        axios.post("/api/skill/startOrContinueTest", {userId: currentUser._id, verificationToken: currentUser.verificationToken, skillUrl})
         .then(result => {
             console.log("result is: ", result);
-            this.setState({...this.state, skill: result.data});
+            this.setState({
+                ...this.state,
+                question: {
+                    body: result.data.question.body,
+                    options: this.shuffle(result.data.question.options),
+                    multiSelect: result.data.question.multiSelect
+                },
+                skillName: result.data.skillName
+            });
         })
         .catch(error => {
             console.log("Error getting skill: ", error.response.data);
@@ -123,20 +120,28 @@ class PsychAnalysis extends Component {
 
     render() {
         let self = this;
-        const skillName = this.state.skill ? this.state.skill.name : "Skill";
-        const additionalMetaText = this.state.skill ? " in " + this.state.skill.name.toLowerCase() : "";
+        const skillName = this.state.skillName ? this.state.skillName : "Skill";
+        const additionalMetaText = this.state.skillName ? " in " + this.state.skillName.toLowerCase() : "";
 
         const question = this.state.question;
+        let answers;
+        if (question) {
+            console.log("question: ", question);
+            answers = question.options.map(option => {
+                const isSelected = this.state.selectedId === option._id;
+                const selectedClass = isSelected ? " selected" : "";
+                return (
+                    <div key={option.body}
+                         onClick={() => self.selectAnswer(option._id)}
+                         className={"skillMultipleChoiceAnswer" + selectedClass}
+                    >
+                        {option.body}
+                    </div>
+                );
+            });
+        }
 
-        const answers = question.options.map(answer => {
-            const isSelected = this.state.selectedId === answer._id;
-            const selectedClass = isSelected ? " selected" : "";
-            <div onClick={() => self.selectAnswer(answer._id)}
-                 className={"skillMultipleChoiceAnswer" + selectedClass}
-            >
-                {answer.body}
-            </div>
-        });
+        const buttonClass = this.state.selectedId === undefined ? "disabled mediumButton inlineBlock" : "mediumButton getStarted blueToPurple inlineBlock"
 
         return (
             <div className="blackBackground fillScreen whiteText center">
@@ -144,9 +149,15 @@ class PsychAnalysis extends Component {
                     <title>{skillName} Test | Moonshot</title>
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
                 </MetaTags>
-                <StyledContent contentArray={question.body} />
-                { answers }
-                <div className="nextSkillQuestion" onClick={this.saveQuestion.bind(this)}>Next</div>
+                <div className="extraHeaderSpace" />
+                { question ?
+                    <div>
+                        <StyledContent contentArray={question.body} />
+                        { answers }
+                        <div className={buttonClass} onClick={this.saveQuestion.bind(this)}>Next</div>
+                    </div>
+                    : <CircularProgress/>
+                }
             </div>
         );
     }

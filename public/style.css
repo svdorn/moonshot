@@ -41,6 +41,10 @@ section {
     height: 80px;
 }
 
+.extraHeaderSpace {
+    height: 200px;
+}
+
 footer {
     position: relative;
     bottom: 0;
@@ -593,6 +597,12 @@ form > h1 {
 .frontPage .infoContainer .content .buttonArea .mediumButton.getStarted {
     margin-left: 10%;
 }
+.disabled.mediumButton {
+    background: linear-gradient(to right, #111111, #afafaf, #111111);
+    background-position-x: -64px;
+    background-size: 150%;
+    cursor: not-allowed;
+}
 .mediumButton.getStarted.blueToPurple {
     background: linear-gradient(to right, #b172fe, #7ad6fe, #b172fe);
     background-position-x: -64px;
@@ -880,6 +890,15 @@ form > h1 {
 
 
 
+
+
+.skillMultipleChoiceAnswer {
+    border: 1px solid white;
+    cursor: pointer;
+}
+.skillMultipleChoiceAnswer.selected {
+    background-color: green;
+}
 
 
 
