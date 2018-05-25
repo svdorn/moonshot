@@ -68,6 +68,31 @@ class EmployeePreview extends Component {
         })
     }
 
+    handleSubmit() {
+        // Post the answer in the database
+        let self = this;
+        const user = {
+            userId: this.props.currentUser._id,
+            employeeId: this.props.employeeId,
+            verificationToken: this.props.currentUser.verificationToken,
+            score: this.state.questionAnswer,
+            questionIndex: this.state.questionIndex,
+            companyId: this.props.currentUser.company.companyId
+        }
+        axios.post("/api/business/answerQuestion", {user})
+        .then(function (res) {
+            // TODO: fix the question answer
+            // Advance to the next questionAnswer and save the answers in state
+            self.setState({
+                ...self.state,
+                questionAnswer: 0,
+                questionIndex: 0,
+                answers: res.data,
+                gradingInProgress: false
+            })
+        })
+    }
+
     handleNextQuestion() {
         // Post the answer in the database
         let self = this;
@@ -224,14 +249,29 @@ class EmployeePreview extends Component {
                                 />
                     </div>
                     <div className="marginTop10px">
-                        <i className="completionStage clickable underline center font14px"
-                            onClick={this.handlePreviousQuestion.bind(this)}>
-                            Previous
-                        </i>
-                        <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline marginLeft30px"
+                        {questionIndexDisplay === this.props.questions.length ?
+                            <div>
+                            <i className="completionStage clickable underline center font14px"
+                                onClick={this.handlePreviousQuestion.bind(this)}>
+                                Previous
+                            </i>
+                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline marginLeft30px"
+                                onClick={this.handleSubmit.bind(this)}>
+                                Submit
+                            </button>
+                            </div>
+                            :
+                            <div>
+                            <i className="completionStage clickable underline center font14px"
+                                onClick={this.handlePreviousQuestion.bind(this)}>
+                                Previous
+                            </i>
+                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline marginLeft30px"
                                 onClick={this.handleNextQuestion.bind(this)}>
-                            Next
-                        </button>
+                                Next
+                            </button>
+                            </div>
+                        }
                     </div>
                 </div>
                 :
