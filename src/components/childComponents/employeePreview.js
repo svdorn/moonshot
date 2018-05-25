@@ -81,7 +81,6 @@ class EmployeePreview extends Component {
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
-            console.log(res.data);
             // Advance to the next questionAnswer and save the answers in state
             const newQuestionIndex = self.state.questionIndex + 1;
             if (newQuestionIndex < self.props.questions.length) {
@@ -122,7 +121,6 @@ class EmployeePreview extends Component {
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
-            console.log(res.data)
             // Go to the previous questionAnswer and save the answers in state
             const newQuestionIndex = self.state.questionIndex - 1;
             if (newQuestionIndex >= 0) {
