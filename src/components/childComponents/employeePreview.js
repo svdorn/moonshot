@@ -22,19 +22,35 @@ class EmployeePreview extends Component {
         this.state = {
             gradingComplete: props.gradingComplete,
             answers: props.answers,
-            gradingInProgress: false,
-            questionIndex: 0,
-            questionAnswer: 0
+            gradingInProgress: false
         }
     }
 
-    // since some components will be rendered in the same place but be for
-    // different people, need to update state when new props are received
-    componentWillReceiveProps(nextProps) {
+    // Set the current question when the component mounts
+    componentDidMount() {
+        // Start the test at the last unanswered question
+        let maxQuestionIndex = 0;
+        let questionAnswer = 0;
+
+        for (let i = 0; i < this.props.answers.length; i++) {
+            const answer = this.props.answers[i];
+            if (answer.questionIndex >= maxQuestionIndex) {
+                maxQuestionIndex = answer.questionIndex;
+            }
+        }
+
+        if ((maxQuestionIndex + 1) < this.props.answers.length) {
+            // Go to the next unanswered question
+            maxQuestionIndex = maxQuestionIndex + 1;
+        } else {
+            // Go to the last question, which has already been filled out
+            maxQuestionIndex = this.props.answers.length;
+        }
+
         this.setState({
             ...this.state,
-            gradingComplete: nextProps.gradingComplete,
-            answers: nextProps.answers
+            questionIndex: maxQuestionIndex,
+            questionAnswer: questionAnswer
         });
     }
 
