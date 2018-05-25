@@ -421,11 +421,7 @@ class BusinessHome extends Component {
                     : null
                 }
 
-                <div className="partnerLogos">
-                    <div>
-                        {logos}
-                    </div>
-                </div>
+                {/*<div className="partnerLogos"><div>{logos}</div></div>*/}
 
                 <section id="threeScreenshots">
                     <div className="homepageTrajectory forBusiness">

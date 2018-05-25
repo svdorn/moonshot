@@ -550,7 +550,8 @@ form > h1 {
 .businessHome.frontPage {
     position: relative;
     padding-top: 200px;
-    padding-bottom: 200px;
+    /* padding-bottom: 200px; */
+    padding-bottom: 75px;
 }
 .bigTitle { margin-bottom: 20px; }
 .businessHome > .infoContainer {
@@ -3677,6 +3678,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: 40px;
     }
 
+    .businessHome.frontPage { padding-bottom: 25px; }
+
     .homepageTrajectoryImagesLeft > img,
     .homepageTrajectoryImagesRight > img,
     .homepageImgBackgroundLeft,
@@ -3897,6 +3900,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     #discoverSearchBarMedScreen > div:nth-child(4) {
         display: none;
     }
+
+    .businessHome.frontPage { padding-bottom: 50px; }
 
     .homepageTrajectoryImagesRight { display: none; }
     .homepageTrajectoryImagesLeft { display: none; }
