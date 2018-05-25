@@ -46,7 +46,6 @@ class EmployeePreview extends Component {
     }
 
     handleOpen() {
-        console.log("here");
         this.setState({
             ...this.state,
             gradingInProgress: true
@@ -66,17 +65,28 @@ class EmployeePreview extends Component {
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
+            console.log(res.data);
             // Advance to the next questionAnswer and save the answers in state
             const newQuestionIndex = self.state.questionIndex + 1;
             if (newQuestionIndex < self.props.questions.length) {
+                let newQuestionAnswer = 0;
+                for (let i = 0; i < res.data.length; i++) {
+                    const answer = res.data[i];
+                    if (answer.questionIndex === newQuestionIndex) {
+                        newQuestionAnswer = answer.score;
+                        break;
+                    }
+                }
                 self.setState({
                     ...self.state,
                     questionIndex: newQuestionIndex,
+                    questionAnswer: newQuestionAnswer,
                     answers: res.data
                 })
             } else {
                 self.setState({
                     ...self.state,
+                    questionAnswer: 0,
                     answers: res.data
                 })
             }
@@ -96,17 +106,28 @@ class EmployeePreview extends Component {
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
+            console.log(res.data)
             // Go to the previous questionAnswer and save the answers in state
             const newQuestionIndex = self.state.questionIndex - 1;
             if (newQuestionIndex >= 0) {
+                let newQuestionAnswer = 0;
+                for (let i = 0; i < res.data.length; i++) {
+                    const answer = res.data[i];
+                    if (answer.questionIndex === newQuestionIndex) {
+                        newQuestionAnswer = answer.score;
+                        break;
+                    }
+                }
                 self.setState({
                     ...self.state,
                     questionIndex: newQuestionIndex,
+                    questionAnswer: newQuestionAnswer,
                     answers: res.data
                 })
             } else {
                 self.setState({
                     ...self.state,
+                    questionAnswer: 0,
                     answers: res.data
                 })
             }
@@ -164,15 +185,6 @@ class EmployeePreview extends Component {
 
         const questionIndex = this.state.questionIndex;
         const questionIndexDisplay = this.state.questionIndex + 1;
-        // Get the answer to this specific question
-        let questionAnswer = 0;
-        for (let i = 0; i < this.state.answers.length; i++) {
-            const answer = this.state.answers[i];
-            if (answer.questionIndex === questionIndex) {
-                questionAnswer = answer.score;
-                break;
-            }
-        }
 
         return (
             <div>
@@ -193,7 +205,7 @@ class EmployeePreview extends Component {
                         <Slider min={this.props.questions[questionIndex].range.lowRange}
                                 max={this.props.questions[questionIndex].range.highRange}
                                 step={1}
-                                value={questionAnswer}
+                                value={this.state.questionAnswer}
                                 onChange={(e, value) => this.changeQuestionAnswer(e, value)}
                                 />
                     </div>
