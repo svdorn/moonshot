@@ -3900,18 +3900,18 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .homepageTrajectoryImagesRight { display: none; }
     .homepageTrajectoryImagesLeft { display: none; }
-    .businessHomeTrajectoryImagesLeft > img {
+    .businessHomeTrajectoryImagesLeft > img,
+    .businessHomeTrajectoryImagesRight > img,
+    .businessHomeTrajectoryImageRightNoBorder > img {
         position: relative;
         margin-top: 60px;
     }
     .businessHomeTrajectoryImagesRight > img {
-        position: relative;
-        margin-top: 40px;
         margin-left: 30px;
     }
     .businessHomeTrajectoryImageRightNoBorder > img {
         position: relative;
-        margin-right: 10px;
+        margin-right: 20px;
     }
     .businessHomeTrajectoryImageRightNoBorder,
     .businessHomeTrajectoryImagesRight,
@@ -4157,6 +4157,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .paperBoxBusinessHome {
         margin-left: 0;
+        margin-right: 0;
+    }
+
+    .businessHomeTrajectoryImageRightNoBorder > img {
         margin-right: 0;
     }
 
@@ -5108,6 +5112,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     #threeScreenshots .businessHomeTrajectoryImagesRight {
         margin-right: 0;
+    }
+    .businessHomeTrajectoryImagesLeft > img, .businessHomeTrajectoryImagesRight > img {
+        height: 172.8px;
+        width: 256px;
+    }
+    .businessHomeTrajectoryImageRightNoBorder > img {
+        height: 200.8px;
+        width: 297.6px;
     }
 
     #moonshotProcess h1 { margin-bottom: 26px; }
