@@ -27,6 +27,8 @@ function POST_answerSkillQuestion(req, res) {
 
 
 function POST_startSkillEval(req, res) {
+
+
     try {
         let user = undefined;
         let skill = undefined;
@@ -73,13 +75,120 @@ function POST_startSkillEval(req, res) {
             if (!user || !skill) { return; }
 
             // make sure the user has a place to store their answers
-            if (!user.skillsTest) {
-                user.skillsTests = [];
+            if (!user.skillTests) {
+                user.skillTests = [];
             }
 
+            // see if user has already taken this test/is currently taking it
+            let testIndex = user.skillTests.findIndex(skillTest => {
+                return skillTest.skillId.toString() === skill._id.toString();
+            });
+
+            const hasEverTakenTest = typeof testIndex === "number" && testIndex > 0;
+
+            // if the user has never taken the test before, start it for em
+            if (!hasEverTakenTest) {
+                initializeTest();
+            }
+
+            // if the user has taken the test before
+            else {
+                // the user's skill test object - has all their answers and attempts
+                userSkill = user.skillTests[skillIndex];
+                let attempts = userSkill.attempts;
+                // check if the attempts array exists at all
+                if (typeof attempts === "undefined") {
+                    userSkill.attempts = [];
+                }
+
+                // user is not currently taking the test - needs to start it
+                if (attempts.length === 0) {
+
+                }
+
+                else {
+                    // last stored attempt is most recent attempt
+                    let mostRecentAttempt = attempts[attempts.length];
+
+                    // if the user is currently taking the test
+                    if (mostRecentAttempt.inProgress === true) {
+
+                    }
+
+                    // if the user has not yet started the most recent attempt
+                    else {
+
+                    }
+                }
+            }
+
+            if (typeof testIndex !== "number" || testIndex < 0) {
+                // create the test object starting from the smallest part
+                // (sub skills), and working up
+                let levels = skill.levels.map(level => {
+                    return {
+                        levelNumber: level.levelNumber,
+                        // questions is empty because they haven't answered any questions yet
+                        questions: []
+                    };
+                });
+                let currentAttempt = {
+                    inProgress: true,
+                    startDate: new Date(),
+                    // always start at level one
+                    currentLevel: 1,
+                    levels
+                }
+                let newTest = {
+                    skillId: skillTest._id,
+                    attempts: [ currentAttempt ],
+                };
+
+                // always start at the first level
+                const currentLevelNumber = 1;
+                const currentLevelIndex = skill.levels.findIndex(level => {
+                    return level === currentLevelNumber;
+                });
+                if (typeof currentLevelIndex !== "number" || currentLevelIndex < 0) {
+                    console.log("Couldn't get first level index.");
+                    return res.status(500).send("Invalid test.");
+                }
+                const levelFromTest = skill.levels[currentLevelIndex];
+                const questionsFromTest = levelFromTest.questions;
+                const questionIndex = Math.floor(Math.random() * questionsFromTest.length);
+                const questionFromTest = questionsFromTest[questionIndex];
+
+                // what gets stored in the user object in the db
+                let currentQuestion = {
+                    levelNumber: currentLevelNumber,
+                    levelIndex: currentLevelIndex,
+                    questionId: questionFromTest._id,
+                    questionIndex: questionIndex,
+                    startDate: new Date(),
+                    correctAnswers: questionFromTest.correctAnswers
+                }
+
+                // what gets return to the user on the front end
+                const currentQuestionToReturn = {
+                    body: questionFromTest.body,
+                    options: questionFromTest.options,
+                    multiSelect: questionFromTest.multiSelect
+                }
+
+                newTest.currentQuestion = currentQuestion;
+
+                // add the test to their list of skill tests
+                user.skillTests.push(newTest);
+
+                return res.json(currentQuestionToReturn);
+            }
+
+            // if they are currently taking it, return the question they're currently on
+            else {
 
 
-            return res.json(skill);
+                return res.json(currentQuestionToReturn);
+            }
         }
     } catch(miscError) {
         console.log("Error getting skill by url: ", miscError);

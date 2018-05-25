@@ -162,11 +162,28 @@ var usersSchema = mongoose.Schema({
     // ---->>> POST-PIVOT <<<---- //
 
     // skills tests the user has taken
-    skillsTests: [{
+    skillTests: [{
         // id of the skill
         skillId: mongoose.Schema.Types.ObjectId,
         // the score the user got on their most recent attempt
         mostRecentScore: Number,
+        // the question the user is currently answering, undefined if test not
+        // in progress; will always be for most recent (in progress) test
+        currentQuestion: {
+            // level of difficulty of the question
+            levelNumber: Number,
+            // index kept for time optimization
+            levelIndex: Number,
+            // id of the question currently being answered
+            questionId: mongoose.Schema.Types.ObjectId,
+            // index for time optimization
+            questionIndex: Number,
+            // the time the question was assigned to the user
+            startDate: Date,
+            // the correct answers so that we don't have to re-find the question
+            // when getting the next question and grading this one
+            correctAnswers: [ mongoose.Schema.Types.ObjectId ]
+        },
         // the list of times the candidate has taken the skill test
         attempts: [{
             // if the user is currently taking the test
@@ -184,32 +201,25 @@ var usersSchema = mongoose.Schema({
             currentLevel: Number,
             // the score the user got on the test; undefined if in progress
             score: Number,
-            // the different sub skills involved in the overall skill
-            subSkills: [{
-                // mongo id to keep track of subSkills
-                subSkillId: mongoose.Schema.Types.ObjectId,
-                // the score the user got on the sub skill test; undefined if in progress
-                score: Number,
-                // the levels the user got through with the associated answers to questions
-                levels: [{
-                    // the level of difficulty of the questions
-                    level: Number,
-                    // the questions the candidate answered at this level of difficulty
-                    questions: [{
-                        // id of the question
-                        questionId: mongoose.Schema.Types.ObjectId,
-                        // if the candidate chose the correct answers
-                        isCorrect: Boolean,
-                        // the ids of answers that the user chose
-                        answerIds: [ mongoose.Schema.Types.ObjectId ],
-                        // the date and time the user started the question
-                        startDate: Date,
-                        // the date and time the user finished the question
-                        endDate: Date,
-                        // how long it took overall in milliseconds to finish the
-                        // question (difference between endDate and startDate)
-                        totalTime: Number,
-                    }]
+            // the levels the user got through with the associated answers to questions
+            levels: [{
+                // the level of difficulty of the questions
+                levelNumber: Number,
+                // the questions the candidate answered at this level of difficulty
+                questions: [{
+                    // id of the question
+                    questionId: mongoose.Schema.Types.ObjectId,
+                    // if the candidate chose the correct answers
+                    isCorrect: Boolean,
+                    // the ids of answers that the user chose
+                    answerIds: [ mongoose.Schema.Types.ObjectId ],
+                    // the date and time the user started the question
+                    startDate: Date,
+                    // the date and time the user finished the question
+                    endDate: Date,
+                    // how long it took overall in milliseconds to finish the
+                    // question (difference between endDate and startDate)
+                    totalTime: Number,
                 }]
             }]
         }]
@@ -345,7 +355,7 @@ var usersSchema = mongoose.Schema({
     }]
 
     // FOR EMPLOYEES ONLY
-    
+
 
     // ---->>> END POST-PIVOT <<<---- //
 });
