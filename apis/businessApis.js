@@ -178,20 +178,15 @@ async function POST_updateHiringStage(req, res) {
 }
 
 function POST_answerQuestion(req, res) {
-    console.log(req.query.userId);
-    const body = req.query;
-    const userId = sanitize(body.userId);
-    const employeeId = sanitize(body.employeeId);
-    const verificationToken = sanitize(body.verificationToken);
-    const questionIndex = sanitize(body.questionIndex);
-    const score = sanitize(body.score);
-    console.log(userId);
-    console.log(employeeId);
-    console.log(verificationToken);
-    console.log(questionIndex);
-    console.log(score);
+    const body = req.body;
+    const userId = sanitize(body.user.userId);
+    const employeeId = sanitize(body.user.employeeId);
+    const verificationToken = sanitize(body.user.verificationToken);
+    const questionIndex = sanitize(body.user.questionIndex);
+    const score = sanitize(body.user.score);
+    const companyId = sanitize(body.user.companyId);
 
-    if (!userId || !verificationToken || !questionIndex || !score || !employeeId) {
+    if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !companyId) {
         console.log("here");
         return res.status(400).send("Bad request.");
     }
@@ -207,17 +202,24 @@ function POST_answerQuestion(req, res) {
 
         // the index of the employee in the employee array
         const employeeIndex = business.employees.findIndex(currEmployee => {
-            return currEmployee.userId.toString() === employeeId.toString();
+            return currEmployee.employeeId.toString() === employeeId.toString();
         });
 
         let employee = business.employees[employeeIndex];
 
-        // get the index of the answer in the user's answers array
-        const answerIndex = employee.answers.findIndex(answer => {
-            return answer.questionIndex === questionIndex;
-        })
+        let answerIndex;
 
-        if (answerIndex === null) {
+        if (employee.answers.length === 0) {
+            answerIndex = null;
+        } else {
+            // get the index of the answer in the user's answers array
+            answerIndex = employee.answers.findIndex(answer => {
+                return answer.questionIndex === questionIndex;
+            });
+        }
+
+
+        if (answerIndex == null) {
             const newAnswer = {
                 complete: true,
                 score: score,
@@ -234,7 +236,7 @@ function POST_answerQuestion(req, res) {
         // save the business
         business.save()
         .then(updatedBusiness => {
-            return res.json("success");
+            return res.json(employee.answers);
         })
         .catch(updateBusinessErr => {
             return res.status(500).send("failure!");

@@ -56,25 +56,27 @@ class EmployeePreview extends Component {
     handleNextQuestion() {
         // Post the answer in the database
         let self = this;
-        axios.post("/api/business/answerQuestion", {
-            params: {
-                userId: this.props.currentUser._id,
-                employeeId: this.props.employeeId,
-                verificationToken: this.props.currentUser.verificationToken,
-                score: this.state.questionAnswer,
-                questionIndex: this.state.questionIndex
-            }
-        })
+        console.log(this);
+        const user = {
+            userId: this.props.currentUser._id,
+            employeeId: this.props.employeeId,
+            verificationToken: this.props.currentUser.verificationToken,
+            score: this.state.questionAnswer,
+            questionIndex: this.state.questionIndex,
+            companyId: this.props.currentUser.company.companyId
+        }
+        axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
             // Save the answer in state
-            console.log(res);
+            console.log(res.data);
 
             // Advance to the next questionAnswer
-            const newQuestionIndex = this.state.questionIndex + 1;
-            if (newQuestionIndex < this.props.questions.length) {
-                this.setState({
-                    ...this.state,
-                    questionIndex: newQuestionIndex
+            const newQuestionIndex = self.state.questionIndex + 1;
+            if (newQuestionIndex < self.props.questions.length) {
+                self.setState({
+                    ...self.state,
+                    questionIndex: newQuestionIndex,
+                    answers: res.data
                 })
             }
         })
@@ -94,7 +96,6 @@ class EmployeePreview extends Component {
     }
 
     changeQuestionAnswer(e, value) {
-        console.log(value);
         this.setState({
             ...this.state,
             questionAnswer: value
@@ -147,7 +148,9 @@ class EmployeePreview extends Component {
         const questionIndexDisplay = this.state.questionIndex + 1;
         // Get the answer to this specific question
         let questionAnswer = 0;
-        for (answer in this.state.answers) {
+        console.log(this.state.answers);
+        for (let answer in this.state.answers) {
+            console.log(answer);
             if (answer.questionIndex === questionIndex) {
                 questionAnswer = answer.score;
                 break;
