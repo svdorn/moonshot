@@ -214,7 +214,6 @@ function POST_answerQuestion(req, res) {
         });
 
         if (answerIndex === -1) {
-            console.log("new answer");
             const newAnswer = {
                 complete: true,
                 score: score,
@@ -222,7 +221,6 @@ function POST_answerQuestion(req, res) {
             };
             employee.answers.push(newAnswer);
         } else {
-            console.log("old answer");
             employee.answers[answerIndex].score = score;
         }
 

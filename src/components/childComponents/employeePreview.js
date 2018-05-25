@@ -56,7 +56,6 @@ class EmployeePreview extends Component {
     handleNextQuestion() {
         // Post the answer in the database
         let self = this;
-        console.log(this);
         const user = {
             userId: this.props.currentUser._id,
             employeeId: this.props.employeeId,
@@ -67,15 +66,17 @@ class EmployeePreview extends Component {
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
-            // Save the answer in state
-            console.log(res.data);
-
-            // Advance to the next questionAnswer
+            // Advance to the next questionAnswer and save the answers in state
             const newQuestionIndex = self.state.questionIndex + 1;
             if (newQuestionIndex < self.props.questions.length) {
                 self.setState({
                     ...self.state,
                     questionIndex: newQuestionIndex,
+                    answers: res.data
+                })
+            } else {
+                self.setState({
+                    ...self.state,
                     answers: res.data
                 })
             }
@@ -84,15 +85,32 @@ class EmployeePreview extends Component {
 
     handlePreviousQuestion() {
         // Post the answer in the database
-
-        // Go to the previous question
-        const newQuestionIndex = this.state.questionIndex - 1;
-        if (newQuestionIndex >= 0) {
-            this.setState({
-                ...this.state,
-                questionIndex: newQuestionIndex
-            })
+        let self = this;
+        const user = {
+            userId: this.props.currentUser._id,
+            employeeId: this.props.employeeId,
+            verificationToken: this.props.currentUser.verificationToken,
+            score: this.state.questionAnswer,
+            questionIndex: this.state.questionIndex,
+            companyId: this.props.currentUser.company.companyId
         }
+        axios.post("/api/business/answerQuestion", {user})
+        .then(function (res) {
+            // Go to the previous questionAnswer and save the answers in state
+            const newQuestionIndex = self.state.questionIndex - 1;
+            if (newQuestionIndex >= 0) {
+                self.setState({
+                    ...self.state,
+                    questionIndex: newQuestionIndex,
+                    answers: res.data
+                })
+            } else {
+                self.setState({
+                    ...self.state,
+                    answers: res.data
+                })
+            }
+        })
     }
 
     changeQuestionAnswer(e, value) {
@@ -148,7 +166,6 @@ class EmployeePreview extends Component {
         const questionIndexDisplay = this.state.questionIndex + 1;
         // Get the answer to this specific question
         let questionAnswer = 0;
-        console.log(this.state.answers);
         for (let i = 0; i < this.state.answers.length; i++) {
             const answer = this.state.answers[i];
             if (answer.questionIndex === questionIndex) {
