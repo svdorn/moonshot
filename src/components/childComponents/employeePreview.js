@@ -149,8 +149,8 @@ class EmployeePreview extends Component {
         // Get the answer to this specific question
         let questionAnswer = 0;
         console.log(this.state.answers);
-        for (let answer in this.state.answers) {
-            console.log(answer);
+        for (let i = 0; i < this.state.answers.length; i++) {
+            const answer = this.state.answers[i];
             if (answer.questionIndex === questionIndex) {
                 questionAnswer = answer.score;
                 break;

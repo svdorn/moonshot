@@ -207,19 +207,14 @@ function POST_answerQuestion(req, res) {
 
         let employee = business.employees[employeeIndex];
 
-        let answerIndex;
 
-        if (employee.answers.length === 0) {
-            answerIndex = null;
-        } else {
-            // get the index of the answer in the user's answers array
-            answerIndex = employee.answers.findIndex(answer => {
-                return answer.questionIndex === questionIndex;
-            });
-        }
+        // get the index of the answer in the user's answers array
+        const answerIndex = employee.answers.findIndex(answer => {
+            return answer.questionIndex === questionIndex;
+        });
 
-
-        if (answerIndex == null) {
+        if (answerIndex === -1) {
+            console.log("new answer");
             const newAnswer = {
                 complete: true,
                 score: score,
@@ -227,6 +222,7 @@ function POST_answerQuestion(req, res) {
             };
             employee.answers.push(newAnswer);
         } else {
+            console.log("old answer");
             employee.answers[answerIndex].score = score;
         }
 
