@@ -64,7 +64,7 @@ class MyEvaluationsPreview extends Component {
                     </div>
                     <div className="font18px blueTextHome">Full Stack Developer</div>
                     <div className="grayText">Curate Evaluation</div>
-                    <div className="whiteText">Estimated Length: <div className="blueTextHome">45 mins</div></div>
+                    <div className="whiteText marginTop10px marginBottom10px">Estimated Length: <div className="blueTextHome">45 mins</div></div>
                     {positionSkills}
                     <div className="grayText font14px font12pxUnder500 marginTop10px">
                         <div className="clickable underline" style={{display: "inline-block"}}>
