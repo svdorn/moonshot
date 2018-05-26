@@ -70,6 +70,14 @@ var businessesSchema = mongoose.Schema({
             // if you have to answer this question to finish applying
             required: Boolean
         }],
+        // how long the position test is projected to take
+        length: Number,
+        // the number of days that the position is designated to be open
+        timeAllotted: Number,
+        // the number of people who have completed the test for this position
+        completions: Number,
+        // the number of people who are currently in the middle of taking the test
+        usersInProgress: Number,
         // candidates who have applied for this position
         candidateIds: [ mongoose.Schema.Types.ObjectId ]
     }],
