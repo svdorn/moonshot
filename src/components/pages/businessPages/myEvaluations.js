@@ -24,7 +24,7 @@ class MyEvaluations extends Component {
         const style = {
             separator: {
                 width: "70%",
-                margin: "25px auto 0px",
+                margin: "25px auto 25px",
                 position: "relative",
                 height: "40px",
                 textAlign: "center"
@@ -46,6 +46,8 @@ class MyEvaluations extends Component {
             }
         }
 
+        const evaluations = <MyEvaluationsPreview />
+
         return(
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEvaluations'>
                 <MetaTags>
@@ -59,7 +61,9 @@ class MyEvaluations extends Component {
                         My Evalutions
                     </div>
                 </div>
-                <MyEvaluationsPreview />
+                <div>
+                    {evaluations}
+                </div>
             </div>
         );
     }
