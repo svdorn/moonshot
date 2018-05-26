@@ -1830,6 +1830,7 @@ button.link {
     margin: auto;
     padding: 20px;
     background-color: #2e2e2e !important;
+    border-left: 2px solid #72d6f5;
 }
 
 .width80percentImportant {
@@ -2715,6 +2716,10 @@ button.link {
 }
 .aboutMeLiInfo {
     margin-left: 145px;
+}
+.myEvalsInfoRight {
+    float: right;
+    margin-right: 20px;
 }
 .candidatePreviewLiInfo {
     margin-left: 215px;
