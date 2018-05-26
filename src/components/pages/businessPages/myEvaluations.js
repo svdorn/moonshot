@@ -9,7 +9,8 @@ import {
     ToolbarGroup,
     Dialog,
     FlatButton,
-    CircularProgress
+    CircularProgress,
+    Paper
 } from 'material-ui';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -57,6 +58,20 @@ class MyEvaluations extends Component {
                         My Evalutions
                     </div>
                 </div>
+                <Paper className="myEvalsBox aboutMeLi" zDepth={2}>
+                    <div className="aboutMeLiIconContainer">
+                        <img alt="My Evals Company Logo" src={"/logos/CurateLogoWhite.png"}/>
+                    </div>
+
+                    <div className="verticalDivider"/>
+
+                    <div className="aboutMeLiInfo" style={{display: 'inline-block'}}>
+                        <b className="font18px blueTextHome">Full Stack Developer</b>
+                        <br/>
+                        <p className="grayText">Curate Evaluation</p>
+                        <p className="whiteText">Estimated Length: <b className="blueTextHome">45 mins</b></p>
+                    </div>
+                </Paper>
             </div>
         );
     }

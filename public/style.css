@@ -1816,6 +1816,15 @@ button.link {
     /* width: 100%; */
 }
 
+.myEvalsBox {
+    width: 70%;
+    max-width: 1000px;
+    height: 200px;
+    margin: auto;
+    padding: 20px;
+    background-color: #2e2e2e !important;
+}
+
 .width80percentImportant {
     width: 80% !important;
 }
