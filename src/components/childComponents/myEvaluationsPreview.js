@@ -21,7 +21,13 @@ class MyEvaluationsPreview extends Component {
     render() {
 
         let positionSkills = null;
-        const skills = ["Python", "Javascript", "Machine Learning"];
+        // TODO: hook up skills to database
+        let skills = ["Python", "Javascript", "Computer Science"];
+        if (this.props.variation === 2) {
+            skills = ["Networking", "Sales", "Management"]
+        } else if (this.props.variation === 3) {
+            skills = ["Cooking", "Culinary Arts"]
+        }
         if (skills) {
             positionSkills = skills.map(function (skill, index) {
                 let margin = "marginLeft10px";

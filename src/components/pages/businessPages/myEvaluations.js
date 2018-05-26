@@ -109,6 +109,7 @@ class MyEvaluations extends Component {
                             skills={position.skills}
                             timeAllotted={position.timeAllotted}
                             usersInProgress={position.usersInProgress}
+                            variation={key}
                         />
                     </li>
                 );
