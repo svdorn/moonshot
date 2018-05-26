@@ -38,8 +38,17 @@ class MyEvaluations extends Component {
             }
         })
         .then(function (res) {
-            let positions = res.data;
-            console.log(positions);
+            let positions = res.data.positions;
+            console.log(positions)
+            if (Array.isArray(positions) && positions.length > 0) {
+                self.setState({
+                    positions
+                })
+            } else {
+                self.setState({
+                    noPositions: true,
+                })
+            }
         })
         .catch(function (err) {
             console.log("error getting positions: ", err);
@@ -47,6 +56,7 @@ class MyEvaluations extends Component {
     }
 
     render() {
+        console.log(this.state.positions);
         const style = {
             separator: {
                 width: "70%",
