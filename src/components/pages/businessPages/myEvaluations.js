@@ -83,7 +83,7 @@ class MyEvaluations extends Component {
 
         let evaluations = (
             <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                Loading employees...
+                Loading evaluations...
             </div>
         );
 
