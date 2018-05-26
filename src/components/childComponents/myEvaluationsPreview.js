@@ -54,18 +54,17 @@ class MyEvaluationsPreview extends Component {
                 <div className="verticalDivider"/>
 
                 <div className="myEvalsInfo" style={{display: 'inline-block'}}>
-                    <b className="font18px blueTextHome">Full Stack Developer</b>
-                    <b style={{float:"right"}} className="blueTextHome font16px center">
+                    <div className="blueTextHome font16px center myEvalsInfoRight">
                         Time Alloted
                         <div className="whiteText marginBottom10px">30 Days</div>
                         Completions
                         <div className="whiteText marginBottom10px">114 Users</div>
                         In Progress
                         <div className="whiteText">34 Users</div>
-                    </b>
-                    <br/>
-                    <p className="grayText">Curate Evaluation</p>
-                    <p className="whiteText">Estimated Length: <b className="blueTextHome">45 mins</b></p>
+                    </div>
+                    <div className="font18px blueTextHome">Full Stack Developer</div>
+                    <div className="grayText">Curate Evaluation</div>
+                    <div className="whiteText">Estimated Length: <div className="blueTextHome">45 mins</div></div>
                     {positionSkills}
                     <div className="grayText font14px font12pxUnder500 marginTop10px">
                         <div className="clickable underline" style={{display: "inline-block"}}>

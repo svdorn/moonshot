@@ -2722,7 +2722,6 @@ button.link {
 }
 .myEvalsInfoRight {
     float: right;
-    margin-right: 20px;
 }
 .candidatePreviewLiInfo {
     margin-left: 215px;
@@ -2747,10 +2746,6 @@ button.link {
 }
 .aboutMeLi > div:nth-child(3) {
     width: calc(100% - 160px);
-}
-.aboutMeLi > div >div:first-of-type {
-    color: #f24c49;
-    font-size: 26px;
 }
 .aboutMeLi > div > span > a {
     color: black;
@@ -4301,6 +4296,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .myEvalsInfo {
         margin-left: 0;
+    }
+    .myEvalsInfoRight {
+        display: none;
     }
     .candidatePreviewLiInfo {
         margin-left: 0;
