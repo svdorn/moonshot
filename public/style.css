@@ -2717,6 +2717,9 @@ button.link {
 .aboutMeLiInfo {
     margin-left: 145px;
 }
+.myEvalsInfo {
+    margin-left: 145px;
+}
 .myEvalsInfoRight {
     float: right;
     margin-right: 20px;
@@ -4294,6 +4297,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: calc(100% - 100px);
     }
     .aboutMeLiInfo {
+        margin-left: 0;
+    }
+    .myEvalsInfo {
         margin-left: 0;
     }
     .candidatePreviewLiInfo {
