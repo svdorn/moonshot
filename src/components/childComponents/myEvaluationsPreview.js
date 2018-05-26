@@ -48,7 +48,7 @@ class MyEvaluationsPreview extends Component {
         return(
             <div className="myEvalsBox aboutMeLi">
                 <div className="aboutMeLiIconContainer">
-                    <img alt="My Evals Company Logo" src={"/logos/CurateLogoWhite.png"}/>
+                    <img alt="My Evals Company Logo" src={this.props.logo}/>
                 </div>
 
                 <div className="verticalDivider"/>
@@ -56,16 +56,16 @@ class MyEvaluationsPreview extends Component {
                 <div className="myEvalsInfo" style={{display: 'inline-block'}}>
                     <div className="blueTextHome font16px center myEvalsInfoRight">
                         Time Allotted
-                        <div className="whiteText marginBottom10px">30 Days</div>
+                        <div className="whiteText marginBottom10px">{this.props.timeAllotted} Days</div>
                         Completions
-                        <div className="whiteText marginBottom10px">114 Users</div>
+                        <div className="whiteText marginBottom10px">{this.props.completions} Users</div>
                         In Progress
-                        <div className="whiteText">34 Users</div>
+                        <div className="whiteText">{this.props.usersInProgress} Users</div>
                     </div>
-                    <div className="font18px blueTextHome">Full Stack Developer</div>
-                    <div className="grayText">Curate Evaluation</div>
+                    <div className="font18px blueTextHome">{this.props.name}</div>
+                    <div className="grayText">{this.props.company} Evaluation</div>
                     <div className="whiteText marginTop10px marginBottom20px">Estimated Length:
-                        <div className="blueTextHome" style={{display:"inline-block"}}>&nbsp;45 mins</div>
+                        <div className="blueTextHome" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
                     </div>
                     {positionSkills}
                     <div className="grayText font16px font14pxUnder500 marginTop10px">

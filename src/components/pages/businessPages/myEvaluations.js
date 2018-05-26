@@ -56,7 +56,6 @@ class MyEvaluations extends Component {
     }
 
     render() {
-        console.log(this.state.positions);
         const style = {
             separator: {
                 width: "70%",
@@ -82,7 +81,40 @@ class MyEvaluations extends Component {
             }
         }
 
-        const evaluations = <MyEvaluationsPreview />
+        let evaluations = (
+            <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                Loading employees...
+            </div>
+        );
+
+        // create the evaluation previews
+        let key = 0;
+        let self = this;
+
+        // TODO: make this work for everybody, not just Curate
+        if (this.state.positions.length !== 0) {
+            evaluations = this.state.positions.map(position => {
+                key++;
+
+                return (
+                    <li style={{marginTop: '15px'}}
+                        key={key}
+                    >
+                        <MyEvaluationsPreview
+                            company="Curate"
+                            logo="/logos/CurateLogoWhite.png"
+                            name={position.name}
+                            completions={position.completions}
+                            length={position.length}
+                            skills={position.skills}
+                            timeAllotted={position.timeAllotted}
+                            usersInProgress={position.usersInProgress}
+                        />
+                    </li>
+                );
+            });
+
+        }
 
         return(
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEvaluations'>
@@ -97,7 +129,7 @@ class MyEvaluations extends Component {
                         My Evalutions
                     </div>
                 </div>
-                <div>
+                <div className="marginBottom60px">
                     {evaluations}
                 </div>
             </div>
