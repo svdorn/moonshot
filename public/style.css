@@ -1204,6 +1204,13 @@ form > h1 {
     background-color: white;
     color: #da5f7b;
 }
+.myEvalsSkillChip {
+    border: 1px solid #72d6f5;
+    border-radius: 10px;
+    background-color: #2e2e2e;
+    color: #72d6f5;
+    padding: 0px 10px 1px;
+}
 .skillChip {
     border-radius: 30px;
     background-color: white;
@@ -3406,6 +3413,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginLeft40px { margin-left: 40px; }
 .marginLeft30px { margin-left: 30px; }
 .marginLeft20px { margin-left: 20px; }
+.marginLeft10px { margin-left: 10px; }
 .paddingTop40px { padding-top: 40px; }
 .paddingTop20px { padding-top: 20px; }
 .paddingTop10px { padding-top: 10px; }
