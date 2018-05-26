@@ -55,7 +55,7 @@ class MyEvaluationsPreview extends Component {
 
                 <div className="myEvalsInfo" style={{display: 'inline-block'}}>
                     <div className="blueTextHome font16px center myEvalsInfoRight">
-                        Time Alloted
+                        Time Allotted
                         <div className="whiteText marginBottom10px">30 Days</div>
                         Completions
                         <div className="whiteText marginBottom10px">114 Users</div>
