@@ -46,7 +46,7 @@ class MyEvaluationsPreview extends Component {
         }
 
         return(
-            <Paper className="myEvalsBox aboutMeLi" zDepth={2}>
+            <div className="myEvalsBox aboutMeLi" zDepth={3}>
                 <div className="aboutMeLiIconContainer">
                     <img alt="My Evals Company Logo" src={"/logos/CurateLogoWhite.png"}/>
                 </div>
@@ -75,7 +75,7 @@ class MyEvaluationsPreview extends Component {
                         </div>
                     </div>
                 </div>
-            </Paper>
+            </div>
         );
     }
 }

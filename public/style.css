@@ -1829,8 +1829,22 @@ button.link {
     height: 210px;
     margin: auto;
     padding: 20px;
-    background-color: #2e2e2e !important;
+    background-color: #333333 !important;
     border-left: 2px solid #72d6f5;
+    -moz-box-shadow:    0px 0px 50px 1px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    box-shadow:         0px 0px 50px 1px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
+}
+.myEvalsBox:hover {
+    -moz-box-shadow:    0px 0px 50px 15px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 15px #00000073;
+    box-shadow:         0px 0px 50px 15px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
 }
 
 .width80percentImportant {
