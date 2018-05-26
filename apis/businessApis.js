@@ -39,7 +39,7 @@ function POST_forBusinessEmail(req, res) {
     }
     let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
     let subject = 'Moonshot Sales Lead - From Home Page';
-  
+
     let content = "<div>"
         + "<h3>Sales Lead from Home Page:</h3>"
         + "<p>Name: "

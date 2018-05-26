@@ -92,7 +92,7 @@ class PsychAnalysis extends Component {
     }
 
 
-    saveQuestion() {
+    nextQuestion() {
         if (typeof this.state.selectedId !== "undefined") {
             const currentUser = this.props.currentUser;
             // don't need to send the question id because the user
@@ -101,14 +101,20 @@ class PsychAnalysis extends Component {
                 userId: currentUser._id,
                 verificationToken: currentUser.verificationToken,
                 skillUrl: this.props.params.skillUrl,
-                answerId: this.state.selectedId
+                // an array because maybe later we'll have multi select questions
+                answerIds: [ this.state.selectedId ]
             }
-            axios.post("/user/saveSkillAnswer", params)
+            axios.post("/api/skill/answerSkillQuestion", params)
             .then(result => {
+                let question = undefined;
+                if (result.data.question) {
+                    question = result.data.question;
+                    question.options = this.shuffle(question.options);
+                }
                 this.setState({
                     selectedId: undefined,
                     finished: result.data.finished,
-                    question: result.data.newQuestion
+                    question
                 });
             })
             .catch(error => {
@@ -154,7 +160,7 @@ class PsychAnalysis extends Component {
                     <div>
                         <StyledContent contentArray={question.body} />
                         { answers }
-                        <div className={buttonClass} onClick={this.saveQuestion.bind(this)}>Next</div>
+                        <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
                     </div>
                     : <CircularProgress/>
                 }

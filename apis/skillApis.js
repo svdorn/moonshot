@@ -8,7 +8,8 @@ const { sanitize,
         removePassword,
         getUserByQuery,
         sendEmail,
-        safeUser
+        safeUser,
+        randomInt
 } = require('./helperFunctions.js');
 
 
@@ -23,7 +24,208 @@ const businessApis = {
 
 
 function POST_answerSkillQuestion(req, res) {
-    return res.json({newQuestion: {}, finished: false});
+    let user = undefined;
+    let skill = undefined;
+
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const skillUrl = sanitize(req.body.skillUrl);
+    const answerIds = sanitize(req.body.answerIds);
+
+    if (!userId || !verificationToken || !skillUrl) {
+        return res.status(400).send("Not enough arguments provided.");
+    }
+
+    // get the user
+    Users.findById(userId)
+    .then(foundUser => {
+        // ensure correct user was found and that they have permissions
+        if (!foundUser) { return res.status(404).send("Could not find current user."); }
+        if (foundUser.verificationToken !== verificationToken) {
+            return res.status(403).send("Invalid user credentials.");
+        }
+
+        user = foundUser;
+        recordAnswerAndGetNewQuestion();
+    })
+    .catch(findUserErr => {
+        console.log("Error finding user in the db when trying to get a skill by url: ", findUserErr);
+        return res.status(500).send("Server error, try again later.");
+    })
+
+    // get the skill
+    Skills.find({url: skillUrl})
+    .then(foundSkills => {
+        if (foundSkills.length === 0 || !foundSkills[0]) { return res.status(404).send("Invalid skill."); }
+        skill = foundSkills[0];
+        recordAnswerAndGetNewQuestion();
+    })
+    .catch(findSkillErr => {
+        console.log("Error finding skill by url: ", findSkillErr);
+        return res.status(500).send("Server error, try again later.");
+    })
+
+    async function recordAnswerAndGetNewQuestion() {
+        if (!user || !skill) { return }
+
+        // see if user has already taken this test/is currently taking it
+        let userSkillIndex = user.skillTests.findIndex(skillTest => {
+            return skillTest.skillId.toString() === skill._id.toString();
+        });
+
+        let userSkill = user.skillTests[userSkillIndex];
+        // most recent (last) attempt is current one
+        let attemptIndex = userSkill.attempts.length - 1;
+        let attempt = userSkill.attempts[attemptIndex];
+        let userCurrentQuestion = userSkill.currentQuestion;
+
+        // record the answer in the user db
+        let userLevelIndex = userCurrentQuestion.levelIndex;
+        let userLevel = attempt.levels[userLevelIndex];
+        if (userLevel.levelNumber !== userCurrentQuestion.levelNumber) {
+            userLevelIndex = attempt.levels.findIndex(level => {
+                return level.levelNumber === userCurrentQuestion.levelNumber;
+            })
+            userLevel = attempt.levels[userLevelIndex];
+        }
+
+        const correctAnswers = userCurrentQuestion.correctAnswers;
+        let isCorrect = true;
+        const numCorrectAnswers = correctAnswers.length;
+        console.log("correctAnswers: ", correctAnswers);
+        for (let correctAnswerIndex = 0; correctAnswerIndex < numCorrectAnswers; correctAnswerIndex++) {
+            const correctAnswerId = correctAnswers[correctAnswerIndex].toString();
+            console.log("correct answer id: ", correctAnswerId);
+            // if this correct answer isn't included within the user's list of answers,
+            // mark them as incorrect
+            if (!answerIds.some(answerId => {
+                return answerId.toString() === correctAnswerId.toString();
+            })) {
+                isCorrect = false;
+                break;
+            }
+        }
+
+        const startDate = userCurrentQuestion.startDate;
+        const endDate = new Date();
+        const totalTime = endDate.getTime() - startDate.getTime();
+
+        userLevel.questions.push({
+            questionId: userCurrentQuestion.questionId,
+            isCorrect, answerIds, startDate, endDate, totalTime
+        });
+        // save this info back to the user object
+        attempt.levels[userLevelIndex] = userLevel;
+        userSkill.attempts[attemptIndex] = attempt;
+        user.skillTests[userSkillIndex] = userSkill;
+
+        // see if the user is done with the test
+        // TODO make a legit way of seeing if the test is over
+        // right now it's just that if you do one question from the hardest level it's over
+        if (attempt.levels[attempt.levels.length - 1].questions.length > 0) {
+            finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
+        }
+
+        else { getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill); }
+    }
+
+    async function getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill ) {
+        // get a new question
+        let newUserLevelIndex = userLevelIndex;
+        // right answer and more levels exist
+        if (isCorrect && userLevelIndex < attempt.levels.length - 1) {
+            newUserLevelIndex++;
+        }
+        // wrong answer and lower levels exist
+        else if (!isCorrect && userLevelIndex > 0) {
+            newUserLevelIndex--;
+        } // level has to stay the same otherwise
+        let newUserLevel = attempt.levels[newUserLevelIndex];
+
+        // get the test level
+        const testLevelIndex = skill.levels.findIndex(level => {
+            return level.levelNumber === newUserLevel.levelNumber;
+        });
+        const testLevel = skill.levels[testLevelIndex];
+
+        // TODO: make this actually test if the percent of questions is small enough,
+        // and if it is not, make it make a list of unused questions to pick from
+
+        // see if the percent of used questions is small enough that we can just
+        // get random questions until one has not been used
+
+        const testLevelQuestions = testLevel.questions;
+        const numTotalQuestions = testLevelQuestions.length;
+        let questionIndex = 0;
+        let questionId = undefined;
+        let question = undefined;
+        // get random indexes of questions until one of the indexes is of a question
+        // that has not yet been answered
+        let counter = 0;
+        do {
+            counter++;
+            if (counter > 100) { return res.status(500).send("Server error, couldn't find a question."); }
+            questionIndex = randomInt(0, numTotalQuestions - 1);
+            question = testLevelQuestions[questionIndex];
+            questionId = question._id.toString();
+        } while (newUserLevel.questions.some(answeredQuestion => answeredQuestion.questionId.toString() === questionId));
+
+        const currentQuestionToStore = {
+            levelNumber: testLevel.levelNumber,
+            levelIndex: testLevelIndex,
+            questionId,
+            questionIndex,
+            startDate: new Date(),
+            correctAnswers: question.correctAnswers
+        }
+
+        userSkill.currentQuestion = currentQuestionToStore;
+        // save this info and the previous new info into the user's current skill
+        user.skillTests[userSkillIndex] = userSkill;
+
+        const currentQuestionToReturn = {
+            body: question.body,
+            options: question.options,
+            multiSelect: question.multiSelect
+        }
+
+        try {
+            await user.save();
+        } catch (saveUserErr) {
+            console.log("Error saving user when answering skill question: ", saveUserErr);
+            return res.status(500).send("Server error.");
+        }
+
+        res.json({question: currentQuestionToReturn, skillName: skill.name, finished: false});
+    }
+
+    async function finishTest(userSkill, userSkillIndex, attempt, attemptIndex) {
+        // attempt is over
+        attempt.endDate = new Date();
+        attempt.totalTime = attempt.endDate.getTime() - attempt.startDate.getTime();
+
+        // get rid of the current question
+        userSkill.currentQuestion = undefined;
+
+        // give the user a score
+        // TODO actually score the user
+        score = randomInt(85, 115);
+        userSkill.mostRecentScore = score;
+        attempt.score = score;
+
+        // save all the new info
+        userSkill.attempts[attemptIndex] = attempt;
+        user.skills[userSkillIndex] = userSkill;
+
+        try {
+            await user.save();
+        } catch (saveUserError) {
+            console.log("Error saving user when trying to finish test: ", saveUserError);
+            return res.status(500).send("Server error.");
+        }
+
+        return res.json({finished: true});
+    }
 }
 
 
@@ -172,7 +374,7 @@ function POST_startOrContinueTest(req, res) {
                     console.log("Error saving user when starting skill test: ", saveErr);
                 }
 
-                return res.json({question:questionToReturn, skillName: skill.name});
+                return res.json({question:questionToReturn, skillName: skill.name, finished: false});
             }
 
             // get the question the user left off on
@@ -230,107 +432,8 @@ function POST_startOrContinueTest(req, res) {
                     options: currentTestQuestion.options,
                     multiSelect: currentTestQuestion.multiSelect
                 }
-                return res.json({question: currentQuestionToReturn, skillName: skill.name});
+                return res.json({question: currentQuestionToReturn, skillName: skill.name, finished: false});
             }
-
-            // // if the user has taken the test before
-            // else {
-            //     // the user's skill test object - has all their answers and attempts
-            //     userSkill = user.skillTests[skillIndex];
-            //     let attempts = userSkill.attempts;
-            //     // check if the attempts array exists at all
-            //     if (typeof attempts === "undefined") {
-            //         userSkill.attempts = [];
-            //     }
-            //
-            //     // user is not currently taking the test - needs to start it
-            //     if (attempts.length === 0) {
-            //
-            //     }
-            //
-            //     else {
-            //         // last stored attempt is most recent attempt
-            //         let mostRecentAttempt = attempts[attempts.length];
-            //
-            //         // if the user is currently taking the test
-            //         if (mostRecentAttempt.inProgress === true) {
-            //
-            //         }
-            //
-            //         // if the user has not yet started the most recent attempt
-            //         else {
-            //
-            //         }
-            //     }
-            // }
-            //
-            // if (typeof testIndex !== "number" || testIndex < 0) {
-            //     // create the test object starting from the smallest part
-            //     // (sub skills), and working up
-            //     let levels = skill.levels.map(level => {
-            //         return {
-            //             levelNumber: level.levelNumber,
-            //             // questions is empty because they haven't answered any questions yet
-            //             questions: []
-            //         };
-            //     });
-            //     let currentAttempt = {
-            //         inProgress: true,
-            //         startDate: new Date(),
-            //         // always start at level one
-            //         currentLevel: 1,
-            //         levels
-            //     }
-            //     let newTest = {
-            //         skillId: skillTest._id,
-            //         attempts: [ currentAttempt ],
-            //     };
-            //
-            //     // always start at the first level
-            //     const currentLevelNumber = 1;
-            //     const currentLevelIndex = skill.levels.findIndex(level => {
-            //         return level === currentLevelNumber;
-            //     });
-            //     if (typeof currentLevelIndex !== "number" || currentLevelIndex < 0) {
-            //         console.log("Couldn't get first level index.");
-            //         return res.status(500).send("Invalid test.");
-            //     }
-            //     const levelFromTest = skill.levels[currentLevelIndex];
-            //     const questionsFromTest = levelFromTest.questions;
-            //     const questionIndex = Math.floor(Math.random() * questionsFromTest.length);
-            //     const questionFromTest = questionsFromTest[questionIndex];
-            //
-            //     // what gets stored in the user object in the db
-            //     let currentQuestion = {
-            //         levelNumber: currentLevelNumber,
-            //         levelIndex: currentLevelIndex,
-            //         questionId: questionFromTest._id,
-            //         questionIndex: questionIndex,
-            //         startDate: new Date(),
-            //         correctAnswers: questionFromTest.correctAnswers
-            //     }
-            //
-            //     // what gets return to the user on the front end
-            //     const currentQuestionToReturn = {
-            //         body: questionFromTest.body,
-            //         options: questionFromTest.options,
-            //         multiSelect: questionFromTest.multiSelect
-            //     }
-            //
-            //     newTest.currentQuestion = currentQuestion;
-            //
-            //     // add the test to their list of skill tests
-            //     user.skillTests.push(newTest);
-            //
-            //     return res.json(currentQuestionToReturn);
-            // }
-            //
-            // // if they are currently taking it, return the question they're currently on
-            // else {
-            //
-            //
-            //     return res.json(currentQuestionToReturn);
-            // }
         }
     } catch(miscError) {
         console.log("Error getting skill by url: ", miscError);

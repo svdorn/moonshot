@@ -172,11 +172,11 @@ var usersSchema = mongoose.Schema({
         currentQuestion: {
             // level of difficulty of the question
             levelNumber: Number,
-            // index kept for time optimization
+            // index of the level within the skill database kept for time optimization
             levelIndex: Number,
             // id of the question currently being answered
             questionId: mongoose.Schema.Types.ObjectId,
-            // index for time optimization
+            // index of the qustion in the skill database for time optimization
             questionIndex: Number,
             // the time the question was assigned to the user
             startDate: Date,

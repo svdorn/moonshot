@@ -44,9 +44,6 @@ const pathwayApis = require('./apis/pathwayApis');
 const skillApis = require('./apis/skillApis');
 
 
-
-
-
 // set up the session
 app.use(session({
     secret: credentials.secretString,
@@ -63,17 +60,11 @@ app.use(session({
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
 
+
 // ----->> START APIS <<----- //
 
+
 const mlFunctions = require('./apis/mlFunctions');
-// mlFunctions.calculateKClusters();
-
-//userApis.POST_startPsychEval();
-//userApis.POST_answerPsychQuestion();
-
-//userApis.GET_printPsychScore();
-
-//userApis.makeMockPsychData();
 
 app.post('/user/startPsychEval', userApis.POST_startPsychEval);
 app.post('/user/answerPsychQuestion', userApis.POST_answerPsychQuestion);

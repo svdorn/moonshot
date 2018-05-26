@@ -25,7 +25,8 @@ const helperFunctions = {
     userForAdmin,
     getFirstName,
     sendBizUpdateCandidateErrorEmail,
-    removeDuplicates
+    removeDuplicates,
+    randomInt
 }
 
 
@@ -64,6 +65,12 @@ function printUsersFromPathway(pathwayIdToCheck) {
             }
         })
     })
+}
+
+
+function randomInt(lowBound, highBound) {
+    const range = highBound - lowBound;
+    return Math.floor(Math.random() * (range + 1)) + lowBound;
 }
 
 
