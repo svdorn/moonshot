@@ -29,7 +29,7 @@ class MyEvaluationsPreview extends Component {
                     margin = "";
                 }
 
-                if (index >= 4) {
+                if (index >= 3) {
                     return null;
                 }
 
@@ -46,7 +46,7 @@ class MyEvaluationsPreview extends Component {
         }
 
         return(
-            <div className="myEvalsBox aboutMeLi" zDepth={3}>
+            <div className="myEvalsBox aboutMeLi">
                 <div className="aboutMeLiIconContainer">
                     <img alt="My Evals Company Logo" src={"/logos/CurateLogoWhite.png"}/>
                 </div>

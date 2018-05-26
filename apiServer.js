@@ -108,6 +108,7 @@ app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.get("/business/pathways", businessApis.GET_pathways);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employees", businessApis.GET_employees);
+app.get("/business/positions", businessApis.GET_positions);
 
 app.post("/admin/alertLinkClicked", adminApis.POST_alertLinkClicked);
 app.post("/admin/business", adminApis.POST_business);

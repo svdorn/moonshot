@@ -19,6 +19,32 @@ import axios from 'axios';
 import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
 
 class MyEvaluations extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            positions: [],
+            // true if the business has no positions associated with it
+            noPositions: false
+        }
+    }
+
+    componentDidMount() {
+        let self = this;
+        axios.get("/api/business/positions", {
+            params: {
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken
+            }
+        })
+        .then(function (res) {
+            let positions = res.data;
+            console.log(positions);
+        })
+        .catch(function (err) {
+            console.log("error getting positions: ", err);
+        });
+    }
 
     render() {
         const style = {

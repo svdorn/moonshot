@@ -23,7 +23,8 @@ const businessApis = {
     POST_answerQuestion,
     GET_pathways,
     GET_candidateSearch,
-    GET_employees
+    GET_employees,
+    GET_positions
 }
 
 
@@ -383,6 +384,49 @@ function GET_employees(req, res) {
                 return res.status(500).send("Server error, couldn't get employees.");
             } else {
                 return res.json(employees[0]);
+            }
+        });
+    })
+}
+
+function GET_positions(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    if (!userId || !verificationToken) {
+        return res.status(400).send("Bad request.");
+    }
+
+    Employers.findById(userId, function(findBUserErr, user) {
+        // error finding user in db
+        if (findBUserErr) {
+            console.log("Error finding business user who was trying to see their positions: ", findBUserErr);
+            return res.status(500).send("Server error, try again later.");
+        }
+
+        // couldn't find user in business user db, either they have the wrong
+        // type of account or are trying to pull some dubious shenanigans
+        if (!user) {
+            return res.status(403).send("You do not have permission to access positions info.");
+        }
+
+        // user does not have the right verification token, probably trying to
+        // pull a fast one on us
+        if (user.verificationToken !== verificationToken) {
+            return res.status(403).send("You do not have permission to access positions info.");
+        }
+
+        const companyId = user.company.companyId;
+        let businessQuery = { '_id': companyId }
+
+        Businesses.find(businessQuery)
+        .select("positions")
+        .exec(function(findPositionsErr, positions)
+        {
+            if (findPositionsErr) {
+                return res.status(500).send("Server error, couldn't get positions.");
+            } else {
+                return res.json(positions[0]);
             }
         });
     })
