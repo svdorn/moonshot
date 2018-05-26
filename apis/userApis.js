@@ -227,22 +227,35 @@ async function POST_startPositionEval(req, res) {
         // go through the user's skills to see which they have completed already
         // TODO: review: this assumes the user won't have any in-progress skill tests
         // when they start a position evalution; determine wheter that is an accurate assumption
-        // position.skills.forEach(skill => {
-        //     if (userSkillTests.some(completedSkill => {
-        //         return completedSkill.skillId.toString() === skill._id.toString();
-        //     })) {
-        //
-        //     }
-        // });
-        // then put those skills at the front of the skills list
+        position.skills.forEach(skillId => {
+            // if the user has already completed this skill test ...
+            if (userSkillTests.some(completedSkill => {
+                return completedSkill.skillId.toString() === skillId.toString();
+            })) {
+                // ... add it to the front of the list and increase test index so we
+                // know to skip it
+                skillTests.unshift(skillId);
+                testIndex++;
+            }
 
+            // if the user hasn't already completed this skill test, just add it
+            // to the end of the array
+            else { skillTests.push(skillId); }
+        });
 
         user.positionInProgress = {
             inProgress: true,
-            positionId,
-            skillTests: position.skills,
-            testIndex
+            freeResponseQuestions: position.freeResponseQuestions,
+            positionId, skillTests, testIndex
         }
+
+        user.save()
+        .then(updatedUser => {
+            return res.json(updatedUser);
+        })
+        .catch(saveUserErr => {
+            return res.status(500).send("Server error, couldn't start position evaluation.");
+        })
     }
 }
 
