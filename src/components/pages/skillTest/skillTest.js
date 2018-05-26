@@ -33,14 +33,12 @@ class PsychAnalysis extends Component {
         try {
             skillUrl = this.props.params.skillUrl;
         } catch (getSkillUrlError) {
-            console.log("error getting skill url: ", getSkillUrlError);
             // TODO: go to discover skills page or somesuch
             return this.goTo("/");
         }
 
         axios.post("/api/skill/startOrContinueTest", {userId: currentUser._id, verificationToken: currentUser.verificationToken, skillUrl})
         .then(result => {
-            console.log("result is: ", result);
             this.setState({
                 ...this.state,
                 question: {
@@ -115,12 +113,18 @@ class PsychAnalysis extends Component {
                     selectedId: undefined,
                     finished: result.data.finished,
                     question
-                });
+                }, () => console.log("state is: ", this.state));
             })
             .catch(error => {
                 console.log("error saving answer: ", error);
             })
         }
+    }
+
+
+    finishTest() {
+        // TODO make it go to the actual results page
+        this.goTo("/");
     }
 
 
@@ -132,7 +136,6 @@ class PsychAnalysis extends Component {
         const question = this.state.question;
         let answers;
         if (question) {
-            console.log("question: ", question);
             answers = question.options.map(option => {
                 const isSelected = this.state.selectedId === option._id;
                 const selectedClass = isSelected ? " selected" : "";
@@ -149,6 +152,26 @@ class PsychAnalysis extends Component {
 
         const buttonClass = this.state.selectedId === undefined ? "disabled mediumButton inlineBlock" : "mediumButton getStarted blueToPurple inlineBlock"
 
+        let content = <CircularProgress/>;
+        if (question) {
+            content = (
+                <div>
+                    <StyledContent contentArray={question.body} />
+                    { answers }
+                    <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
+                </div>
+            );
+        }
+
+        if (this.state.finished) {
+            content = (
+                <div>
+                    Test Complete! Click submit to see your results.
+                    <div className="mediumButton getStarted blueToPurple inlineBlock" onClick={this.finishTest.bind(this)}>Finish</div>
+                </div>
+            );
+        }
+
         return (
             <div className="blackBackground fillScreen whiteText center">
                 <MetaTags>
@@ -156,14 +179,8 @@ class PsychAnalysis extends Component {
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
                 </MetaTags>
                 <div className="extraHeaderSpace" />
-                { question ?
-                    <div>
-                        <StyledContent contentArray={question.body} />
-                        { answers }
-                        <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
-                    </div>
-                    : <CircularProgress/>
-                }
+
+                { content }
             </div>
         );
     }

@@ -203,6 +203,7 @@ function POST_answerSkillQuestion(req, res) {
         // attempt is over
         attempt.endDate = new Date();
         attempt.totalTime = attempt.endDate.getTime() - attempt.startDate.getTime();
+        attempt.inProgress = false;
 
         // get rid of the current question
         userSkill.currentQuestion = undefined;
