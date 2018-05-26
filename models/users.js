@@ -161,6 +161,17 @@ var usersSchema = mongoose.Schema({
 
     // ---->>> POST-PIVOT <<<---- //
 
+    positionInProgress: {
+        // whether there is a test currently being taken
+        inProgress: Boolean,
+        // id of the position within the business
+        positionId: mongoose.Schema.Types.ObjectId,
+        // list of skill urls for the necessary skill tests
+        skillTests: String,
+        // the index of the current test that the user is taking
+        testIndex: String
+    },
+
     // skills tests the user has taken
     skillTests: [{
         // id of the skill

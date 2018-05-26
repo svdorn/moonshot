@@ -34,6 +34,7 @@ const userApis = {
     GET_userByProfileUrl,
     POST_login,
     POST_currentPathwayStep,
+    POST_startPositionEval,
     POST_startPsychEval,
     POST_answerPsychQuestion,
     GET_printPsychScore
@@ -144,6 +145,7 @@ async function makeMockPsychData() {
     })
 }
 
+
 // DANGEROUS, returns user with all fields
 async function getAndVerifyUser(userId, verificationToken) {
     return new Promise(async function(resolve, reject) {
@@ -169,6 +171,79 @@ async function getAndVerifyUser(userId, verificationToken) {
 
         resolve(user);
     })
+}
+
+
+async function POST_startPositionEval(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const businessId = sanitize(req.body.businessId);
+    const positionId = sanitize(req.body.positionId);
+    const positionIdString = positionId.toString();
+
+    let user;
+    getAndVerifyUser(userId, verificationToken)
+    .then(foundUser => {
+        user = foundUser;
+        startEval();
+    })
+    .catch(getUserError => {
+        console.log("Error getting user when trying to start position eval: ", getUserError.error);
+        return res.status(getUserError.status).send(getUserError.message);
+    })
+
+    let business;
+    Businesses.findById(businessId)
+    .then(foundBiz => {
+        business = foundBiz;
+        if (!business) { return res.status(500).send("No position found."); }
+        startEval();
+    })
+    .catch(findBizErr => {
+        console.log("Error getting business when trying to start position eval: ", findBizErr);
+        return res.status(500).send("Server error.");
+    })
+
+
+    function startEval() {
+        // need both to be found before running through this
+        if (!user || !business) { return; }
+
+        if (user.positionInProgress && user.positionInProgress.positionId.toString() !== positionIdString) {
+            return res.status(400).send("You are already in the middle of an evaluation!");
+        }
+
+        const position = business.positions.find(pos => {
+            return pos._id.toString() === positionIdString;
+        });
+
+        if (!position) {
+            return res.status(400).send("Invalid position.");
+        }
+
+        let testIndex = 0;
+        let skillTests = [];
+        let userSkillTests = user.skillTests;
+        // go through the user's skills to see which they have completed already
+        // TODO: review: this assumes the user won't have any in-progress skill tests
+        // when they start a position evalution; determine wheter that is an accurate assumption
+        // position.skills.forEach(skill => {
+        //     if (userSkillTests.some(completedSkill => {
+        //         return completedSkill.skillId.toString() === skill._id.toString();
+        //     })) {
+        //
+        //     }
+        // });
+        // then put those skills at the front of the skills list
+
+
+        user.positionInProgress = {
+            inProgress: true,
+            positionId,
+            skillTests: position.skills,
+            testIndex
+        }
+    }
 }
 
 
