@@ -226,12 +226,14 @@ class CandidatePreview extends Component {
             },
             menuLabelStyle: {
                 color: "rgba(255, 255, 255, .8)",
+                fontSize: "14px"
             },
             menuUnderlineStyle: {
                 display: "none"
             },
             menuItemStyle: {
-                textAlign: "center"
+                textAlign: "center",
+                fontSize: "14px"
             },
             darkenerStyle: {
                 width: "100%",
@@ -315,16 +317,16 @@ class CandidatePreview extends Component {
         return (
             <div className="candidatePreview center" >
             {/* onClick={this.goTo("/results?user=Stephen-Dorn-2-9f66bf7eeac18994")} */}
-                <div className="candidateName font24px center">
+                <div className="candidateName font18px center">
                     {this.props.name.toUpperCase()}
                 </div>
                 <br/>
-                <div className="candidateLocation">
+                <div className="candidateLocation font16px">
                     {location}
                 </div>
                 <br/>
-                <div className="candidateScore">
-                    Candidate Score <span className="font20px" style={style.redLink}>{overallScore}</span>
+                <div className="candidateScore font16px">
+                    Candidate Score <span className="font16px" style={style.redLink}>{overallScore}</span>
                 </div>
                 <br/>
                 <div className="hiringStageCircle">
@@ -333,7 +335,7 @@ class CandidatePreview extends Component {
                     <div className="circleCover bottom left" style={bottomLeftStyle} />
                     <div className="circleCover top left" style={topLeftStyle} />
 
-                    <div className="circleCover interior font20px">
+                    <div className="circleCover interior font16px">
                         <div>{percent}</div>
                     </div>
                 </div>
