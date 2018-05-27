@@ -7,32 +7,44 @@ import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm, change} from 'redux-form';
 import axios from 'axios';
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
-};
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
 
-const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
-        {...input}
-        {...custom}
-        type="password"
-    />
-);
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
+};
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
+    />
+);
+
+const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
+        {...input}
+        {...custom}
+        type="password"
     />
 );
 
@@ -105,26 +117,14 @@ class Account extends Component {
         this.props.untouch("password");
     }
 
-    signUpForPsych() {
-        console.log("currentUser: ", this.props.currentUser);
-        axios.post("/api/user/startPsychEval", {userId: this.props.currentUser._id, verificationToken: this.props.currentUser.verificationToken})
-        .then(result => {
-            console.log("result: ", result);
-        })
-        .catch(error => {
-            console.log("error: ", error);
-        });
-    }
-
     //name, email, password, confirm password, signup button
     render() {
         return (
             <div className="formContainer" style={{display:'inline-block'}}>
-                <div className="form lightWhiteForm">
+                <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Settings</h1>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="name"
                                 component={renderTextField}
@@ -133,7 +133,6 @@ class Account extends Component {
                             /></div>
                         <br/>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="email"
                                 component={renderTextField}
@@ -142,7 +141,6 @@ class Account extends Component {
                             /></div>
                         <br/>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="password"
                                 component={renderPasswordField}
@@ -151,26 +149,25 @@ class Account extends Component {
                                 autoComplete="new-password"
                             /></div>
                         <br/>
-                        <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleHideProfileClick.bind(this)}>
+                        <div className="checkbox smallCheckbox whiteCheckbox" onClick={this.handleHideProfileClick.bind(this)}>
                             <img
                                 alt=""
                                 className={"checkMark" + this.state.hideProfile}
-                                src="/icons/CheckMarkBlue.png"
+                                src="/icons/CheckMarkRoundedWhite.png"
                             />
                         </div>
-                        <div className="blueText" style={{display:"inline-block"}}>
+                        <div className="whiteText" style={{display:"inline-block"}}>
                             Hide Profile From Employers
                         </div><br/>
-                        <button
+                        <RaisedButton
+                            label="Update Settings"
                             type="submit"
-                            className="formSubmitButton font24px font16pxUnder600"
-                        >
-                            Update Settings
-                        </button><br/>
-                        {this.props.loadingUpdateSettings ? <CircularProgress style={{marginTop: "10px"}}/> : null}
+                            className="raisedButtonBusinessHome"
+                            style={{margin: '10px 0'}}
+                        /><br/>
+                        {this.props.loadingUpdateSettings ? <CircularProgress color="white" style={{marginTop: "10px"}}/> : null}
                     </form>
                 </div>
-                <div className="clickable" onClick={this.signUpForPsych.bind(this)}>Sign up for psychometric exam</div>
             </div>
         );
     }
