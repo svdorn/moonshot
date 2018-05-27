@@ -11,6 +11,8 @@ import Login from './components/pages/login';
 import Signup from './components/pages/signup';
 import AddUser from './components/pages/addUser';
 import MyCandidates from './components/pages/businessPages/myCandidates';
+import MyEmployees from './components/pages/businessPages/MyEmployees';
+import MyEvaluations from './components/pages/businessPages/MyEvaluations';
 import BusinessProfile from './components/pages/businessPages/businessProfile';
 import Results from './components/pages/businessPages/results';
 import BusinessHome from './components/pages/businessHome';
@@ -63,6 +65,8 @@ const routes = (
         <Route path="signup" component={Signup} />
         <Route path="addUser" component={AuthenticatedComponent} page={<AddUser/>} userType="employer" />
         <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType="employer" />
+        <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType="employer" />
+        <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} userType="employer" />
         <Route path="businessProfile" component={AuthenticatedComponent} page={<BusinessProfile/>} userType="employer" />
         <Route path="results" component={AuthenticatedComponent} page={<Results />} userType="employer" />
         <Route path="profile" component={Profile} />

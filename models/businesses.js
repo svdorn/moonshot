@@ -5,8 +5,55 @@ var businessesSchema = mongoose.Schema({
     name: String,
     pathwayIds: [ mongoose.Schema.Types.ObjectId ],
     employerIds: [ mongoose.Schema.Types.ObjectId ],
+    employeeIds: [ mongoose.Schema.Types.ObjectId ],
 
     // ---->>> POST-PIVOT <<<---- //
+
+    employees: [{
+        employeeId: mongoose.Schema.Types.ObjectId,
+        // id of the manager that rated this employee
+        managerId: mongoose.Schema.Types.ObjectId,
+        // employee's name
+        name: String,
+        // position that the employee is associated with
+        position: mongoose.Schema.Types.ObjectId,
+        // whether someone has graded this employee
+        gradingComplete: Boolean,
+        // the questions that will be asked of the
+        answers: [{
+            // question has been answered
+            complete: Boolean,
+            // what the mangager rated the employee (if this was a range question)
+            score: Number,
+            // the index within the option array of the option that was chosen
+            // (if this was a multiple choice question)
+            selectedIndex: Number,
+            // index of the question within employeeQuestions
+            questionIndex: Number
+        }],
+        // the employee's url to see their results
+        employeeUrl: String
+    }],
+
+    // the questions that managers have to answer about each employee
+    employeeQuestions: [{
+        // the text of the question
+        questionBody: String,
+        // could be 'multipleChoice' OR 'range'
+        questionType: String,
+        range: {
+            // low end of the scale
+            lowRange: Number,
+            // high end of the scale
+            highRange: Number,
+        },
+        multipleChoice: {
+            options: [{
+                // the text of the option
+                body: String
+            }],
+        }
+    }],
 
     // the positions that the company is (or was) hiring for
     positions: [{
@@ -23,6 +70,14 @@ var businessesSchema = mongoose.Schema({
             // if you have to answer this question to finish applying
             required: Boolean
         }],
+        // how long the position test is projected to take
+        length: Number,
+        // the number of days that the position is designated to be open
+        timeAllotted: Number,
+        // the number of people who have completed the test for this position
+        completions: Number,
+        // the number of people who are currently in the middle of taking the test
+        usersInProgress: Number,
         // candidates who have applied for this position
         candidateIds: [ mongoose.Schema.Types.ObjectId ]
     }],

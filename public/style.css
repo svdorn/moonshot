@@ -1024,6 +1024,10 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+.orangeToRedButtonGradientSmall {
+    background: linear-gradient(to right, #fe256e, #ff5438, #fe256e);
+    background-position-x: 0;
+}
 .orangeToRedSmallButtonGradientRight {
     background: linear-gradient(to right, #fe256e, #ff5438, #fe256e);
     background-position-x: -50px;
@@ -1242,6 +1246,13 @@ form > h1 {
     border-radius: 10px;
     background-color: white;
     color: #da5f7b;
+}
+.myEvalsSkillChip {
+    border: 1px solid #72d6f5;
+    border-radius: 10px;
+    background-color: #2e2e2e;
+    color: #72d6f5;
+    padding: 0px 10px 1px;
 }
 .skillChip {
     border-radius: 30px;
@@ -1855,6 +1866,94 @@ button.link {
     /* width: 100%; */
 }
 
+.myEvalsBox {
+    width: 70%;
+    max-width: 1000px;
+    height: 210px;
+    margin: auto;
+    padding: 20px;
+    background-color: #333333 !important;
+    border-left: 2px solid #72d6f5;
+    -moz-box-shadow:    0px 0px 50px 1px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    box-shadow:         0px 0px 50px 1px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
+}
+.myEvalsBox:hover {
+    -moz-box-shadow:    0px 0px 50px 15px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 15px #00000073;
+    box-shadow:         0px 0px 50px 15px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
+}
+
+.width80percentImportant {
+    width: 80% !important;
+}
+
+.employeePreviewGrading {
+    position: relative;
+    width: 420px;
+    height: 220px;
+    -moz-box-shadow:    0px 0px 50px 1px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    box-shadow:         0px 0px 50px 1px #00000073;
+    color: white;
+    display: inline-block;
+    margin: 15px 15px;
+    background-color: #333333;
+}
+.employeePreviewGrading > div:nth-child(4) > div > div {
+    margin: 24px auto !important;
+    width: 80% !important;
+}
+.employeePreviewGrading > div:nth-child(4) > div > div > div > div:first-child {
+    background: linear-gradient(to right, #fd0d8b, #ff5d27);
+}
+.employeePreviewGrading > div:nth-child(4) > div > div > div > div:nth-child(3) {
+    background: linear-gradient(to right, #fd0d8b, #ff5d27);
+}
+
+.employeePreview {
+    position: relative;
+    width: 210px;
+    height: 220px;
+    -moz-box-shadow:    0px 0px 50px 1px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 1px #00000073;
+    box-shadow:         0px 0px 50px 1px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
+    color: white;
+    display: inline-block;
+    margin: 15px 15px;
+    background-color: #333333;
+}
+.employeePreview:hover {
+    -moz-box-shadow:    0px 0px 50px 15px #00000073;
+    -webkit-box-shadow: 0px 0px 50px 15px #00000073;
+    box-shadow:         0px 0px 50px 15px #00000073;
+    -moz-transition: -moz-box-shadow .2s;
+    -webkit-transition: -webkit-transition .2s;
+    transition: box-shadow .2s;
+}
+.employeePreview > .employeeName {
+    margin: 10px 0 0;
+    display: inline-block;
+}
+.employeePreview > .completionImage {
+    width: 70px;
+    height: 70px;
+    margin-top: 20px;
+    display: inline-block;
+}
+.employeePreview > .completionStage {
+    margin-top: 15px;
+}
+
 .candidatePreview {
     position: relative;
     width: 335px;
@@ -2317,6 +2416,7 @@ button.link {
 .brightPinkText { color: #fd0d8b; }
 .brightOrangeText { color: #ff5d27; }
 .lightPurpleText { color: #b37bfe; }
+.redPinkText { color: #eb394f; }
 .orangeText { color: #f24c49; }
 
 .grayTextOnHover:hover { color: #d7d7d7; }
@@ -2669,6 +2769,12 @@ button.link {
 .aboutMeLiInfo {
     margin-left: 145px;
 }
+.myEvalsInfo {
+    margin-left: 145px;
+}
+.myEvalsInfoRight {
+    float: right;
+}
 .candidatePreviewLiInfo {
     margin-left: 215px;
 }
@@ -2692,10 +2798,6 @@ button.link {
 }
 .aboutMeLi > div:nth-child(3) {
     width: calc(100% - 160px);
-}
-.aboutMeLi > div >div:first-of-type {
-    color: #f24c49;
-    font-size: 26px;
 }
 .aboutMeLi > div > span > a {
     color: black;
@@ -3375,6 +3477,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginTop24px { margin-top: 24px; }
 .marginTop20px { margin-top: 20px; }
 .marginTop10px { margin-top: 10px; }
+.marginLeft40px { margin-left: 40px; }
+.marginLeft30px { margin-left: 30px; }
+.marginLeft20px { margin-left: 20px; }
+.marginLeft10px { margin-left: 10px; }
 .paddingTop40px { padding-top: 40px; }
 .paddingTop20px { padding-top: 20px; }
 .paddingTop10px { padding-top: 10px; }
@@ -4259,6 +4365,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .aboutMeLiInfo {
         margin-left: 0;
+    }
+    .myEvalsInfo {
+        margin-left: 0;
+    }
+    .myEvalsInfoRight {
+        display: none;
     }
     .candidatePreviewLiInfo {
         margin-left: 0;

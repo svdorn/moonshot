@@ -20,8 +20,11 @@ const businessApis = {
     POST_forBusinessEmail,
     POST_contactUsEmail,
     POST_updateHiringStage,
+    POST_answerQuestion,
     GET_pathways,
-    GET_candidateSearch
+    GET_candidateSearch,
+    GET_employees,
+    GET_positions
 }
 
 
@@ -39,7 +42,7 @@ function POST_forBusinessEmail(req, res) {
     }
     let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
     let subject = 'Moonshot Sales Lead - From Home Page';
-  
+
     let content = "<div>"
         + "<h3>Sales Lead from Home Page:</h3>"
         + "<p>Name: "
@@ -175,6 +178,71 @@ async function POST_updateHiringStage(req, res) {
     // if it isn't, don't change the user
 }
 
+function POST_answerQuestion(req, res) {
+    const body = req.body;
+    const userId = sanitize(body.user.userId);
+    const employeeId = sanitize(body.user.employeeId);
+    const verificationToken = sanitize(body.user.verificationToken);
+    const questionIndex = sanitize(body.user.questionIndex);
+    const score = sanitize(body.user.score);
+    const companyId = sanitize(body.user.companyId);
+
+    if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !companyId) {
+        console.log("here");
+        return res.status(400).send("Bad request.");
+    }
+
+    // verify the employer is actually a part of this organization
+    verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
+    .then(business => {
+        // if employer does not have valid credentials
+        if (!business) {
+            console.log("Employer tried to update an answer to a question and didn't have access.");
+            return res.status(403).send("You do not have permission to change an employees answers.");
+        }
+
+        // the index of the employee in the employee array
+        const employeeIndex = business.employees.findIndex(currEmployee => {
+            return currEmployee.employeeId.toString() === employeeId.toString();
+        });
+
+        let employee = business.employees[employeeIndex];
+
+
+        // get the index of the answer in the user's answers array
+        const answerIndex = employee.answers.findIndex(answer => {
+            return answer.questionIndex === questionIndex;
+        });
+
+        if (answerIndex === -1) {
+            const newAnswer = {
+                complete: true,
+                score: score,
+                questionIndex: questionIndex
+            };
+            employee.answers.push(newAnswer);
+        } else {
+            employee.answers[answerIndex].score = score;
+        }
+
+        // update the employee in the business object
+        business.employees[employeeIndex] = employee;
+
+        // save the business
+        business.save()
+        .then(updatedBusiness => {
+            return res.json(employee.answers);
+        })
+        .catch(updateBusinessErr => {
+            return res.status(500).send("failure!");
+        });
+    })
+    .catch(verifyEmployerErr => {
+        console.log("Error when trying to verify employer when they were trying to edit an answer for a question: ", verifyEmployerErr);
+        return res.status(500).send("Server error, try again later.");
+    })
+}
+
 
 // ----->> END APIS <<----- //
 
@@ -278,6 +346,91 @@ async function verifyEmployerAndReturnBusiness(userId, verificationToken, busine
     });
 }
 
+function GET_employees(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    if (!userId || !verificationToken) {
+        return res.status(400).send("Bad request.");
+    }
+
+    Employers.findById(userId, function(findBUserErr, user) {
+        // error finding user in db
+        if (findBUserErr) {
+            console.log("Error finding business user who was trying to see their employees: ", findBUserErr);
+            return res.status(500).send("Server error, try again later.");
+        }
+
+        // couldn't find user in business user db, either they have the wrong
+        // type of account or are trying to pull some dubious shenanigans
+        if (!user) {
+            return res.status(403).send("You do not have permission to access employee info.");
+        }
+
+        // user does not have the right verification token, probably trying to
+        // pull a fast one on us
+        if (user.verificationToken !== verificationToken) {
+            return res.status(403).send("You do not have permission to access employee info.");
+        }
+
+        const companyId = user.company.companyId;
+        let businessQuery = { '_id': companyId }
+
+        Businesses.find(businessQuery)
+        .select("employees employeeQuestions")
+        .exec(function(findEmployeesErr, employees)
+        {
+            if (findEmployeesErr) {
+                return res.status(500).send("Server error, couldn't get employees.");
+            } else {
+                return res.json(employees[0]);
+            }
+        });
+    })
+}
+
+function GET_positions(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    if (!userId || !verificationToken) {
+        return res.status(400).send("Bad request.");
+    }
+
+    Employers.findById(userId, function(findBUserErr, user) {
+        // error finding user in db
+        if (findBUserErr) {
+            console.log("Error finding business user who was trying to see their positions: ", findBUserErr);
+            return res.status(500).send("Server error, try again later.");
+        }
+
+        // couldn't find user in business user db, either they have the wrong
+        // type of account or are trying to pull some dubious shenanigans
+        if (!user) {
+            return res.status(403).send("You do not have permission to access positions info.");
+        }
+
+        // user does not have the right verification token, probably trying to
+        // pull a fast one on us
+        if (user.verificationToken !== verificationToken) {
+            return res.status(403).send("You do not have permission to access positions info.");
+        }
+
+        const companyId = user.company.companyId;
+        let businessQuery = { '_id': companyId }
+
+        Businesses.find(businessQuery)
+        .select("positions")
+        .exec(function(findPositionsErr, positions)
+        {
+            if (findPositionsErr) {
+                return res.status(500).send("Server error, couldn't get positions.");
+            } else {
+                return res.json(positions[0]);
+            }
+        });
+    })
+}
 
 function GET_pathways(req, res) {
     const userId = sanitize(req.query.userId);

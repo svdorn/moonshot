@@ -69,6 +69,9 @@ const mlFunctions = require('./apis/mlFunctions');
 
 //userApis.POST_startPsychEval();
 //userApis.POST_answerPsychQuestion();
+
+//userApis.GET_printPsychScore();
+
 //userApis.makeMockPsychData();
 
 app.post('/user/startPsychEval', userApis.POST_startPsychEval);
@@ -101,8 +104,11 @@ app.post("/candidate/currentPathwayStep", userApis.POST_currentPathwayStep);
 app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
+app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.get("/business/pathways", businessApis.GET_pathways);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
+app.get("/business/employees", businessApis.GET_employees);
+app.get("/business/positions", businessApis.GET_positions);
 
 app.post("/admin/alertLinkClicked", adminApis.POST_alertLinkClicked);
 app.post("/admin/business", adminApis.POST_business);
