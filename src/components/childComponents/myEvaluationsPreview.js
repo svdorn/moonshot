@@ -68,13 +68,13 @@ class MyEvaluationsPreview extends Component {
                         In Progress
                         <div className="whiteText">{this.props.usersInProgress} Users</div>
                     </div>
-                    <div className="font18px blueTextHome">{this.props.name}</div>
+                    <div className="font18px font16pxUnder800 blueTextHome">{this.props.name}</div>
                     <div className="grayText">{this.props.company} Evaluation</div>
-                    <div className="whiteText marginTop10px marginBottom20px">Estimated Length:
+                    <div className="whiteText font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom20px">Estimated Length:
                         <div className="blueTextHome" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
                     </div>
                     {positionSkills}
-                    <div className="grayText font16px font14pxUnder500 marginTop10px">
+                    <div className="grayText font16px font14pxUnder800 marginTop10px">
                         <div className="clickable underline" style={{display: "inline-block"}}>
                             View Evaluation
                         </div>
