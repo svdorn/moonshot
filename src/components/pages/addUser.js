@@ -3,15 +3,20 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {postEmployer, onSignUpPage} from '../../actions/usersActions';
-import {TextField, CircularProgress } from 'material-ui';
+import {TextField, CircularProgress, RaisedButton } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
+import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
+
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -19,7 +24,11 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
     />
@@ -30,7 +39,11 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
         type="password"
@@ -133,12 +146,13 @@ class AddUser extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <div className="fullHeight greenToBlue formContainer">
+            <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
                     <title>Add User | Moonshot</title>
                     <meta name="description" content="Add a user to your business account."/>
                 </MetaTags>
-                <div className="form lightWhiteForm">
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightBlackForm noBlur">
                     {this.state.email != "" && this.props.userPosted ?
                         <div className="center">
                             <h1>New user must verify email address</h1>
@@ -149,7 +163,6 @@ class AddUser extends Component {
                             <form onSubmit={this.handleSubmit.bind(this)}>
                                 <h1 style={{marginTop:"15px"}}>Add user</h1>
                                 <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
                                     <Field
                                         name="name"
                                         component={renderTextField}
@@ -157,7 +170,6 @@ class AddUser extends Component {
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
                                     <Field
                                         name="email"
                                         component={renderTextField}
@@ -165,7 +177,6 @@ class AddUser extends Component {
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
                                     <Field
                                         name="password"
                                         component={renderPasswordField}
@@ -173,21 +184,20 @@ class AddUser extends Component {
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
                                     <Field
                                         name="password2"
                                         component={renderPasswordField}
                                         label="Confirm temporary password"
                                     /><br/>
                                 </div>
-                                <button
+                                <RaisedButton
+                                    label="Add User"
                                     type="submit"
-                                    className="formSubmitButton font24px font16pxUnder600"
-                                >
-                                    Add user
-                                </button>
+                                    className="raisedButtonBusinessHome"
+                                    style={{margin: '30px 0'}}
+                                />
                             </form>
-                            { this.props.loadingCreateUser ? <CircularProgress style={{marginTop:"20px"}}/> : "" }
+                            { this.props.loadingCreateUser ? <CircularProgress color="white" style={{marginTop:"20px"}}/> : null }
                         </div>
                     }
                 </div>
