@@ -16,6 +16,8 @@ import {Paper, CircularProgress} from 'material-ui';
 import {getUserFromSession} from './actions/usersActions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
+// so that axios works in IE < 11
+require('es6-promise').polyfill();
 
 let theme = {
     // this messes with the slider colors
