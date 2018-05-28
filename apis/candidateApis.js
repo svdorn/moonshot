@@ -33,7 +33,11 @@ const candidateApis = {
 
 
 function POST_candidate(req, res) {
-    var user = sanitize(req.body);
+    // TODO: MAKE IT SO YOU CAN ACTUALLY SIGN UP
+    return res.status(400).send("Invalid employer code.");
+
+
+    let user = sanitize(req.body);
 
     // hash the user's password
     const saltRounds = 10;

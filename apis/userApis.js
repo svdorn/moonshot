@@ -793,7 +793,7 @@ function GET_keepMeLoggedIn(req, res) {
 }
 
 
-// verify user's email so they can sign in
+// verify user's email so they can log in
 function POST_verifyEmail(req, res) {
     const token = sanitize(req.body.token);
     const userType = sanitize(req.body.userType);

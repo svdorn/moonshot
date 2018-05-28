@@ -1,7 +1,7 @@
 "use strict"
 import React, { Component } from 'react';
 import axios from 'axios';
-import { TextField, CircularProgress } from 'material-ui';
+import { TextField, CircularProgress, RaisedButton } from 'material-ui';
 import { login, closeNotification, addPathwayAndLogin } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -10,11 +10,14 @@ import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
 
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -22,7 +25,11 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
     />
@@ -33,7 +40,11 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
         type="password"
@@ -68,17 +79,19 @@ class Login extends Component {
     }
 
     componentWillMount() {
+        // set listener for keyboard enter key
+        const self = this;
+        document.addEventListener('keypress', self.handleKeyPress.bind(self));
+
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser && this.props.currentUser != "no user") {
-            //this.goTo("/discover");
-            this.props.router.push("/discover");
+            this.props.router.push("/");
             return;
         }
 
-        // if not signed in, get the setting for if the user wants to stay
-        // logged in from the cookie
+
         else {
-            let self = this;
+            // get the setting for if the user wants to stay logged in from the cookie
             axios.get("/api/user/keepMeLoggedIn")
             .then(function (res) {
                 let keepMeLoggedIn = res.data;
@@ -96,8 +109,26 @@ class Login extends Component {
         }
     }
 
+
+    componentWillUnmount() {
+        // remove listener for keyboard enter key
+        const self = this;
+        document.removeEventListener('keypress', self.handleKeyPress.bind(self));
+    }
+
+
+    handleKeyPress(e) {
+        var key = e.which || e.keyCode;
+        if (key === 13) { // 13 is enter
+            this.handleSubmit();
+        }
+    }
+
+
     handleSubmit(e) {
-        e.preventDefault();
+        if (e) {
+            e.preventDefault();
+        }
         const vals = this.props.formData.login.values;
 
         // Check if the form is valid
@@ -171,63 +202,57 @@ class Login extends Component {
         const pathway = location.query.pathway;
         const redirect = location.query.redirect;
         let signUpQuery = {};
-        if (pathway) {
-            signUpQuery.pathway = pathway;
-        }
-        if (redirect) {
-            signUpQuery.redirect = redirect;
-        }
+        if (pathway) { signUpQuery.pathway = pathway; }
+        if (redirect) { signUpQuery.redirect = redirect; }
 
         return (
-            <div className="fillScreen greenToBlue formContainer">
+            <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
-                    <title>Sign In | Moonshot</title>
-                    <meta name="description" content="Sign in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
+                    <title>Log In | Moonshot</title>
+                    <meta name="description" content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
                 </MetaTags>
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
-                <div className="form lightWhiteForm noBlur">
+                <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1 style={{marginTop:"15px"}}>Sign In</h1>
+                        <h1 style={{marginTop:"15px"}}>Log In</h1>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
+                            {/* <!-- <div className="fieldWhiteSpace"/> --> */}
                             <Field
                                 name="email"
                                 component={renderTextField}
                                 label="Email"
-                                className="lightBlueInputText"
                             /><br/>
                         </div>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
+                            {/* <!-- <div className="fieldWhiteSpace"/> --> */}
                             <Field
                                 name="password"
                                 component={renderPasswordField}
                                 label="Password"
-                                className="lightBlueInputText"
                             /><br/><br/>
                         </div>
-                        <div className="checkbox smallCheckbox blueCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                        <div className="checkbox smallCheckbox whiteCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
-                                alt=""
+                                alt="Checkmark icon"
                                 className={"checkMark" + this.state.keepMeLoggedIn}
-                                src="/icons/CheckMarkBlue.png"
+                                src="/icons/CheckMarkRoundedWhite.png"
                             />
                         </div>
-                        <div className="blueText" style={{display:"inline-block"}}>
+                        <div style={{display:"inline-block"}}>
                             Keep me signed in
                         </div><br/>
-                        <button
+                        <RaisedButton
+                            label="Log In"
                             type="submit"
-                            className="formSubmitButton font24px font16pxUnder600"
-                        >
-                            Sign In
-                        </button>
+                            className="raisedButtonBusinessHome"
+                            style={{margin: '10px 0'}}
+                        />
                         <br/>
-                        <div className="clickable blueText" onClick={() => this.goTo({pathname: '/signup', query: signUpQuery})} style={{display:"inline-block"}}>Create Account</div>
+                        <div className="clickable underline" onClick={() => this.goTo({pathname: '/signup', query: signUpQuery})} style={{display:"inline-block"}}>Create Account</div>
                         <br/>
-                        <div className="clickable blueText" onClick={() => this.goTo('/forgotPassword')} style={{display:"inline-block", marginLeft:"7px"}}>Forgot Password?</div>
+                        <div className="clickable" onClick={() => this.goTo('/forgotPassword')} style={{display:"inline-block", marginLeft:"7px"}}>Forgot Password?</div>
                         <br/>
-                        {this.props.loadingLogin ? <CircularProgress style={{marginTop: "10px"}}/> : null}
+                        {this.props.loadingLogin ? <CircularProgress color="white" style={{marginTop: "10px"}}/> : null}
                     </form>
                 </div>
 

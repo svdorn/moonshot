@@ -46,8 +46,23 @@ class BusinessHome extends Component {
         this.state = {
             infoIndex: 0,
             open: false,
-            email: ''
+            email: '',
+            // initially don't show the rectangles in case the user's browser is old
+            showRectangles: false
         }
+    }
+
+
+    componentWillMount() {
+        const showRectangles = this.cssPropertySupported("gridRowStart")
+        console.log("supports rectangles: ", showRectangles);
+        this.setState({...this.state, showRectangles});
+    }
+
+
+    cssPropertySupported(prop) {
+        try { return document.body.style[prop] !== undefined; }
+        catch (propertyError) { return false; }
     }
 
 
@@ -141,11 +156,11 @@ class BusinessHome extends Component {
         const processObjects = [
             {
                 title: (<div>Evaluation<br/>Creation</div>),
-                info: "Tell us what skills you need and 3 to 5 open-ended questions you want to add.",
+                info: "Evaluations consist of a psychometric analysis, position-based skill tests and qualitative questions typically asked in the first interview.",
                 list: [
                     "Psychometric Analysis",
                     "Skill IQ Quizzes",
-                    "Interview Questions"
+                    "Qualitative Questions"
                 ]
             },
             {
@@ -160,7 +175,7 @@ class BusinessHome extends Component {
             },
             {
                 title: (<div>Manager<br/>Feedback</div>),
-                info: "Managers complete an assessment for each employee so Moonshot can create performance profiles to analyze candidates.",
+                info: "Managers complete a ~2 minute assessment for each employee so Moonshot can create performance profiles to analyze candidates.",
                 list: [
                     "Performance Profiles",
                     "Performance Management"
@@ -168,7 +183,7 @@ class BusinessHome extends Component {
             },
             {
                 title: (<div>Candidate<br/>Completion</div>),
-                info: "All incoming candidates are evaluated to predict their performance.",
+                info: "All incoming candidates complete the evaluation so Moonshot can predict their performance.",
                 list: [
                     "Psychometric Profiles",
                     "Skill IQs",
@@ -193,18 +208,6 @@ class BusinessHome extends Component {
             {r:121,g:218,b:254}
         ]
         const numProcesses = processObjects.length;
-        const shadowBox = (
-            <div style={{
-                WebkitBoxShadow: "0 0 80px 20px rgba(0,0,0,.5)",
-                MozBoxShadow:    "0 0 80px 20px rgba(0,0,0,.5)",
-                boxShadow:       "0 0 80px 20px rgba(0,0,0,.5)",
-                width: "100%",
-                position: "absolute",
-                top: "50%",
-                left: "50%",
-                transform: "translate(-50%, -50%)"
-            }} />
-        );
         for (let processIndex = 0; processIndex < numProcesses; processIndex++) {
             const selected = this.state.infoIndex === processIndex;
             const leftRgb = colors[processIndex*2];
@@ -215,8 +218,8 @@ class BusinessHome extends Component {
             }
 
             processButtons.push(
-                <div>
-                    { selected ? shadowBox : null }
+                <div kye={"processButton" + processIndex}>
+                    <div className="shadowBox" />
                     <div className="processHeaderContainer clickable font18px font14pxUnder600 font12pxUnder400"
                          onClick={() => this.selectProcess(processIndex)}
                     >
@@ -234,7 +237,7 @@ class BusinessHome extends Component {
 
         const processList = processObjects[this.state.infoIndex].list.map(infoListText => {
             return (
-                <div className="processListItem">
+                <div className="processListItem" key={infoListText}>
                     <img src="/icons/CheckMarkRoundedWhite.png" />
                     <div>{ infoListText }</div>
                 </div>
@@ -243,6 +246,7 @@ class BusinessHome extends Component {
 
         const processSection = (
             <section id="moonshotProcess">
+                <a id="ourProcess" name="ourProcess" className="anchor" />
                 <h1 className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400">{"Moonshot's Process to Predict Candidate Performance"}</h1>
                 <div className="processButtonsContainer">
                     { processButtons }
@@ -262,7 +266,7 @@ class BusinessHome extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="center">
+                <div className="center" style={{marginTop: "20px"}}>
                     <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen}>
                         Get Started
                     </button>
@@ -305,7 +309,7 @@ class BusinessHome extends Component {
                         <div>
                         {this.props.loadingEmailSend ?
                             <div className="center"><CircularProgress className="marginTop40px"/></div>
-                            : < form onSubmit={this.handleSubmit.bind(this)} className="center">
+                            : <form onSubmit={this.handleSubmit.bind(this)} className="center">
                                 <div
                                     className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
                                     Predict Candidate Success
@@ -315,8 +319,8 @@ class BusinessHome extends Component {
                                     component={renderTextField}
                                     label="Full Name*"
                                     style={{marginTop: '1px'}}
-                                /> < br/>
-                                < Field
+                                /> <br/>
+                                <Field
                                     name="email"
                                     component={renderTextField}
                                     label="Email*"
@@ -351,23 +355,26 @@ class BusinessHome extends Component {
                 </Dialog>
             <div className="blackBackground businessHome">
                 <div className="businessHome frontPage">
-                    <div className="skewedRectanglesContainer">
-                        <div className="skewedRectangles">
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
+                    {this.state.showRectangles ?
+                        <div className="skewedRectanglesContainer">
+                            <div className="skewedRectangles">
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                            </div>
+                            <div className="skewedRectangles">
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                            </div>
                         </div>
-                        <div className="skewedRectangles">
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                        </div>
-                    </div>
+                        : null
+                    }
                     <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
                         <div className="content">
                             <h1 className="bigTitle font46px font38pxUnder900 font28pxUnder400" style={{color:"#72d6f5"}}>Know who to hire.</h1>
@@ -397,31 +404,30 @@ class BusinessHome extends Component {
                 </div>
 
                 {/* <!-- The skewed rectangles that only come up on small screen --> */}
-                <div className="logoContainer skewedContainer">
-                    <div className="skewedRectanglesContainer">
-                        <div className="skewedRectangles">
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
-                            <div className="skewedRectangle" />
+                {this.state.showRectangles ?
+                    <div className="logoContainer skewedContainer">
+                        <div className="skewedRectanglesContainer">
+                            <div className="skewedRectangles">
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                                <div className="skewedRectangle" />
+                            </div>
                         </div>
                     </div>
-                </div>
+                    : null
+                }
 
-                <div className="partnerLogos">
-                    <div>
-                        {logos}
-                    </div>
-                </div>
+                {/*<div className="partnerLogos"><div>{logos}</div></div>*/}
 
                 <section id="threeScreenshots">
                     <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
-                                <h2 className="pinkTextHome font28px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
+                                <h2 className="pinkTextHome font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
                                 Analyze candidates to see if they exhibit the profile of
                                 proven high performers in that position.
                             </div>
@@ -443,7 +449,7 @@ class BusinessHome extends Component {
                     <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextRight forBusiness">
                             <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forHome whiteText">
-                                <h2 className="blueTextHome font28px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
+                                <h2 className="blueTextHome font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
                                 </h2>
                                 Why read hundreds of resumes? Moonshot uses
                                 machine learning to reveal the empirical evidence
@@ -466,7 +472,7 @@ class BusinessHome extends Component {
                     <div className="homepageTrajectory forBusiness">
                         <div className="homepageTrajectoryTextLeft forBusiness">
                             <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
-                                <h2 className="orangeTextHome font28px font24pxUnder800 font22pxUnder500">Improve your candidate <div className="above800only br"><br/></div>experience</h2>
+                                <h2 className="orangeTextHome font30px font24pxUnder800 font22pxUnder500">Improve your candidate <div className="above800only br"><br/></div>experience</h2>
                                 83% of candidates rate their current experience as poor.
                                 Engage your candidates better so they can understand
                                 your company and how they fit.
@@ -487,25 +493,28 @@ class BusinessHome extends Component {
                 </section>
 
                 <section id="businessHomeStatistics">
-                    <div className="skewedContainer">
-                        <div className="skewedRectanglesContainer">
-                            <div className="skewedRectangles">
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
+                    {this.state.showRectangles ?
+                        <div className="skewedContainer">
+                            <div className="skewedRectanglesContainer">
+                                <div className="skewedRectangles">
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        : null
+                    }
 
                     <div>
                         <div className="center">
@@ -566,39 +575,48 @@ class BusinessHome extends Component {
 
                 { processSection }
 
-                <section id="baselineEvaluation">
-                    <div className="skewedContainer">
-                        <div className="skewedRectanglesContainer">
-                            <div className="skewedRectangles">
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
+                <section id="pricingSection">
+                    <a id="pricing" name="pricing" className="anchor" />
+                    {this.state.showRectangles ?
+                        <div className="skewedContainer">
+                            <div className="skewedRectanglesContainer">
+                                <div className="skewedRectangles">
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                </div>
                             </div>
                         </div>
-                    </div>
+                        : null
+                    }
 
                     <div className="forBusinessBoxesContainer">
                         <div className="font36px font32pxUnder700 font26pxUnder500 center brightPinkText"
                              style={{marginBottom: '50px'}}>
                             The New Baseline Evaluation
-                            <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
-                                <div>Unlimited Candidates</div>
-                                <div>•</div>
-                                <div>Unlimited Hires</div>
+                            <div className="infoTextContainer">
+                                <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
+                                    <div>Unlimited Candidates</div>
+                                    <div>•</div>
+                                    <div>Unlimited Hires</div>
+                                    <div>•</div>
+                                    <div>Free for First Position</div>
+                                </div>
                             </div>
                         </div>
                         <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
@@ -609,21 +627,21 @@ class BusinessHome extends Component {
                                     alt="Paper Airplane Icon"
                                     className="businessHomeBoxIcons"
                                 />
-                                <div className="brightPinkText marginTop40px marginTop20pxUnder400 font22px font18pxUnder400">
+                                <div className="brightPinkText marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
                                     STARTER
                                 </div>
-                                <div style={{height: '70px', lineHeight: '70px'}}>
-                                    <i className="whiteText marginTop20px font16px font14pxUnder400">
-                                        First Position Free
-                                    </i>
+                                <div style={{height: '80px', lineHeight: '20px'}}>
+                                    <span className="whiteText font30px font24pxUnder400">
+                                        <br/><span style={{display: "inline-block", marginTop:"3px"}}>FREE</span>
+                                        <br/>
+                                        <i className="font12px">for first position</i>
+                                    </span>
                                 </div>
                                 <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
-                                <div className="whiteText font16px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
-                                    Start with one position. You can run unlimited candidate
-                                    evaluations to see the results. No cost, no risk, no
-                                    excuses not to kick this off the ground.
+                                <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
+                                    {"Start with one position to see the results. No cost, no risk, no excuses not to kick this off."}
                                 </div>
-                                <button className="whiteText clickableNoUnderline transitionButton orangeToRedSmallButtonGradientLeft marginTop20px font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
+                                <button className="pricingButton whiteText clickableNoUnderline transitionButton orangeToRedSmallButtonGradientLeft font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                     Take Off
                                 </button>
                             </div>
@@ -637,23 +655,22 @@ class BusinessHome extends Component {
                                     alt="Enterprise Rocket Icon"
                                     className="businessHomeBoxIcons"
                                 />
-                                <div className="brightOrangeText marginTop40px marginTop20pxUnder400 font22px font18pxUnder400">
+                                <div className="brightOrangeText marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
                                     PLUS
                                 </div>
-                                <div style={{height: '70px'}}>
-                                    <i className="whiteText marginTop20px font16px font14pxUnder400">
-                                        Each Additional Position<br/> Starting at $79
+                                <div style={{height: '80px', lineHeight: '20px'}}>
+                                    <span className="whiteText font30px font24pxUnder400">
+                                        <i className="font12px" style={{display: "inline-block", marginBottom:"9px"}}>Starting at</i>
+                                        <br/>$79
                                         <br/>
-                                        <i className="font12px">per position/month</i>
-                                    </i>
+                                        <i className="font12px">per additional position/month</i>
+                                    </span>
                                 </div>
                                 <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
-                                <div className="whiteText font16px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
-                                    Easily scale the number of positions you are
-                                    evaluating through Moonshot. Unlimited candidate
-                                    evaluations for each position.
+                                <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
+                                    {"Easily scale the number of positions you are evaluating through Moonshot."}
                                 </div>
-                                <button className="clickableNoUnderline transitionButton orangeToRedSmallButtonGradientRight whiteText marginTop20px font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
+                                <button className="pricingButton clickableNoUnderline transitionButton orangeToRedSmallButtonGradientRight whiteText font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                     Blast Off
                                 </button>
                             </div>

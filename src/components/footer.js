@@ -16,9 +16,9 @@ class Footer extends Component {
         if (this.props.isOnboarding) {
             return null;
         }
-        let shadowDivClass = "";
-        let extraSpace = "";
-        let footerColor = "purpleToBlue";
+        let shadowDivClass = "tabsShadow";
+        let extraSpace = " topSpace";
+        let footerColor = "blackBackgroundOpacity";
         // get the path from the url
         let pathname = undefined;
         // try to get the path
@@ -31,8 +31,12 @@ class Footer extends Component {
         }
         if ((pathname === '/mypathways') || (pathname === '/pathway')) {
             footerColor = "purpleToRedLightGradientOpacity";
+            extraSpace = "";
+            shadowDivClass = "";
         } else if ((pathname === '/profile') || (pathname === '/businessprofile')) {
             footerColor = "orangeToYellowGradientOpacity";
+            extraSpace = "";
+            shadowDivClass = "";
         } else if (pathname === '/resumeanalysis') {
             footerColor = "redToLightRedUpGradientOpacity";
         } else if (pathname === '/results' || pathname === '/mycandidates' || pathname === '/' || pathname === '/myemployees' || pathname === '/myevaluations') {
