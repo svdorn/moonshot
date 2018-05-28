@@ -44,7 +44,7 @@ class EmployeePreview extends Component {
             maxQuestionIndex = maxQuestionIndex + 1;
         } else {
             // Go to the last question, which has already been filled out
-            maxQuestionIndex = this.props.answers.length;
+            maxQuestionIndex = this.props.answers.length - 1;
         }
 
         this.setState({
