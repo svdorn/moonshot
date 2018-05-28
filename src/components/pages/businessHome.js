@@ -55,7 +55,6 @@ class BusinessHome extends Component {
 
     componentWillMount() {
         const showRectangles = this.cssPropertySupported("gridRowStart")
-        console.log("supports rectangles: ", showRectangles);
         this.setState({...this.state, showRectangles});
     }
 
@@ -218,7 +217,7 @@ class BusinessHome extends Component {
             }
 
             processButtons.push(
-                <div kye={"processButton" + processIndex}>
+                <div key={"processButton" + processIndex}>
                     <div className="shadowBox" />
                     <div className="processHeaderContainer clickable font18px font14pxUnder600 font12pxUnder400"
                          onClick={() => this.selectProcess(processIndex)}
@@ -231,7 +230,7 @@ class BusinessHome extends Component {
             );
 
             if (processIndex === 1) {
-                processButtons.push(<br className="under850only"/>)
+                processButtons.push(<br key={`br${processIndex}`} className="under850only"/>)
             }
         };
 
