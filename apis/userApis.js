@@ -39,7 +39,8 @@ const userApis = {
     POST_startPositionEval,
     POST_startPsychEval,
     POST_answerPsychQuestion,
-    GET_printPsychScore
+    GET_printPsychScore,
+    POST_submitFreeResponse
 }
 
 
@@ -176,6 +177,64 @@ async function getAndVerifyUser(userId, verificationToken) {
 }
 
 
+async function POST_submitFreeResponse(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const frqs = sanitize(req.body.frqs);
+
+    let user;
+    let business;
+
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch(getUserError) {
+        console.log("Error getting user when trying to start position eval: ", getUserError.error);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
+    }
+
+    // make sure the user is in the middle of an eval
+    if (!user.positionInProgress || !user.positionInProgress.positionId) {
+        return res.status(400).send("You are not currently in the middle of a position evaluation.");
+    }
+
+    const positionInProgress = user.positionInProgress;
+
+    // get the business offering the current position
+    const businessId = positionInProgress.businessId;
+    try {
+        business = await Businesses.findById(businessId)
+    } catch (findBizErr) {
+        console.log("Error getting business when trying to start position eval: ", findBizErr);
+        return res.status(500).send("Server error.");
+    };
+
+    if (!business) { return res.status(500).send("Position not found."); }
+
+    const now = new Date();
+
+    // submitting the frq questions finishes the whole application, so add this
+    // position to the user's list of position applications
+    user.positions.push({
+        businessId,
+        positionId: positionInProgress.positionId,
+        hiringStage: "Not Contacted",
+        hiringStageChanges: [{hiringStage: "Not Contacted", dateChanged: now}],
+        appliedStartDate: positionInProgress.startDate,
+        appliedEndDate: now,
+        scores: {},
+        freeResponseQuestions: frqs
+    })
+
+    // user is no longer taking a position evaluation
+    user.positionInProgress = undefined;
+
+    // save the user
+    await user.save();
+
+    res.json({updatedUser: user});
+}
+
+
 async function POST_startPositionEval(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
@@ -187,11 +246,18 @@ async function POST_startPositionEval(req, res) {
     getAndVerifyUser(userId, verificationToken)
     .then(foundUser => {
         user = foundUser;
+
+        // make sure the user isn't already in the middle of a position eval
+        if (user.positionInProgress && user.positionInProgress.positionId && user.positionInProgress.positionId.toString() !== positionIdString) {
+            return res.status(400).send("You are already in the middle of an evaluation!");
+        }
+
         startEval();
     })
     .catch(getUserError => {
+        console.log("getUserError: ", getUserError);
         console.log("Error getting user when trying to start position eval: ", getUserError.error);
-        return res.status(getUserError.status).send(getUserError.message);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
     })
 
     let business;
@@ -204,16 +270,12 @@ async function POST_startPositionEval(req, res) {
     .catch(findBizErr => {
         console.log("Error getting business when trying to start position eval: ", findBizErr);
         return res.status(500).send("Server error.");
-    })
+    });
 
 
     async function startEval() {
         // need both to be found before running through this
         if (!user || !business) { return; }
-
-        if (user.positionInProgress && user.positionInProgress.positionId.toString() !== positionIdString) {
-            return res.status(400).send("You are already in the middle of an evaluation!");
-        }
 
         const position = business.positions.find(pos => {
             return pos._id.toString() === positionIdString;
@@ -272,11 +334,13 @@ async function POST_startPositionEval(req, res) {
         user.positionInProgress = {
             inProgress: true,
             freeResponseQuestions: frqsForUser,
-            positionId, skillTests, testIndex
+            businessId, positionId, skillTests, testIndex
         }
 
         const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.inProgress === false;
-        const doneWithSkillTests = testIndex === skillTests.length - 1;
+        // if we're trying to take a test that is past the number of tests we
+        // have, we must be done with all the skill tests
+        const doneWithSkillTests = testIndex === skillTests.length;
         // where the user will be redirected now
         let nextUrl = "";
         // finished with the application just by hitting apply?
@@ -287,7 +351,7 @@ async function POST_startPositionEval(req, res) {
         }
         // otherwise, if the user hasn't done all the skills tests, have the
         // first incomplete skill test be first up
-        else if (doneWithSkillTests) {
+        else if (!doneWithSkillTests) {
             // get the url of the first test
             try {
                 const skillTest = await Skills.findById(skillTests[testIndex]).select("url");

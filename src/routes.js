@@ -46,6 +46,7 @@ import AnalysisResults from './components/pages/psychAnalysis/analysisResults';
 
 import SkillTest from './components/pages/skillTest/skillTest';
 import PositionSignup from './components/pages/positionSignup';
+import FreeResponse from "./components/pages/freeResponse";
 
 import AdminPages from './components/pages/adminPages/adminPages'
 import ViewUser from './components/pages/adminPages/viewUser';
@@ -97,6 +98,7 @@ const routes = (
 
         <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
         <Route path="positionSignup" component={PositionSignup} />
+        <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
 
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>}>
             <IndexRoute component={AdminPages} />

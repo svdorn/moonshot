@@ -1,15 +1,15 @@
 "use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     updateAllOnboarding,
     startOnboarding,
     endOnboarding,
     closeNotification
 } from "../../actions/usersActions";
-import {DatePicker, RaisedButton} from 'material-ui';
-import {bindActionCreators} from 'redux';
-import {browserHistory} from 'react-router';
+import { DatePicker, RaisedButton } from 'material-ui';
+import { bindActionCreators } from 'redux';
+import { browserHistory } from 'react-router';
 import MetaTags from 'react-meta-tags';
 
 class Onboarding extends Component {

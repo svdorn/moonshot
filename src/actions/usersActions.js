@@ -3,6 +3,7 @@ import axios from 'axios';
 import { browserHistory } from 'react-router'
 import { reset } from 'redux-form';
 
+
 // GET USER FROM SESSION
 export function getUserFromSession(callback) {
     return function(dispatch) {
@@ -93,10 +94,8 @@ export function signout() {
     return function(dispatch) {
         dispatch({type:"SIGNOUT"});
         axios.post("/api/user/signOut")
-            .then(function(response) {
-            })
-            .catch(function(err) {
-            });
+        .then(function(response) {})
+        .catch(function(err) {});
     }
 }
 
@@ -111,13 +110,36 @@ export function positionSignup(userId, verificationToken, positionId, businessId
     return function(dispatch) {
         axios.post("/api/user/startPositionEval", {userId, verificationToken, positionId, businessId})
         .then(response => {
+            dispatch({type: "START_POSITION_EVAL", currentUser: response.data.updatedUser});
             if (response.data.finished) {
                 console.log("All parts already answered!");
             } else {
-                this.goTo(response.data.newLocation);
+                browserHistory.push(response.data.nextUrl);
+                window.scrollTo(0, 0);
             }
-            dispatch({type: "START_POSITION_EVAL", currentUser: response.data.updatedUser});
         })
+        .catch(error => {
+            console.log("Error starting position evaluation: ", error);
+        })
+    }
+}
+
+
+export function submitFreeResponse(userId, verificationToken, frqs) {
+    return function(dispatch) {
+        axios.post("/api/user/submitFreeResponse", {userId, verificationToken, frqs})
+        .then(response => {
+            dispatch({
+                type: "SUBMIT_FREE_RESPONSE",
+                currentUser: response.data.updatedUser,
+                nofification: {message: "Application complete!", type: "infoHeader"}
+            });
+            browserHistory.push("/");
+            window.scrollTo(0, 0);
+        })
+        .catch(error => {
+            console.log("Error submitting free response answers: ", error);
+        });
     }
 }
 

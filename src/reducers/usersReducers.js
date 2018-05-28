@@ -92,6 +92,13 @@ export function usersReducers(state = initialState, action) {
         case "DELETE_USER":
             // TODO
             break;
+        case "SUBMIT_FREE_RESPONSE":
+            return {
+                ...state,
+                currentUser: action.currentUser,
+                notification: action.notification
+            }
+            break;
         case "UPDATE_USER":
             return {
                 ...state, currentUser: action.payload, notification: action.notification, loadingSomething: false

@@ -326,7 +326,7 @@ var usersSchema = mongoose.Schema({
     // the positions that the candidate has applied to
     positions: [{
         // the company that is offering this position
-        companyId: mongoose.Schema.Types.ObjectId,
+        businessId: mongoose.Schema.Types.ObjectId,
         // the id of the position within that company
         positionId: mongoose.Schema.Types.ObjectId,
         // the hiring stage of the candidate, which the company has determined
@@ -372,6 +372,8 @@ var usersSchema = mongoose.Schema({
     positionInProgress: {
         // whether there is a test currently being taken
         inProgress: Boolean,
+        // id of the business offering this position
+        businessId: mongoose.Schema.Types.ObjectId,
         // id of the position within the business
         positionId: mongoose.Schema.Types.ObjectId,
         // list of skill urls for the necessary skill tests
