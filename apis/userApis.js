@@ -1,6 +1,8 @@
 var Users = require('../models/users.js');
 var Employers = require('../models/employers.js');
 var Psychtests = require('../models/psychtests.js');
+var Skills = require('../models/skills.js');
+var Businesses = require('../models/businesses.js');
 
 var bcrypt = require('bcryptjs');
 var crypto = require('crypto');
@@ -205,7 +207,7 @@ async function POST_startPositionEval(req, res) {
     })
 
 
-    function startEval() {
+    async function startEval() {
         // need both to be found before running through this
         if (!user || !business) { return; }
 
@@ -243,17 +245,74 @@ async function POST_startPositionEval(req, res) {
             else { skillTests.push(skillId); }
         });
 
+        // create the free response objects that will be stored in the user db
+        const numFRQs = position.freeResponseQuestions.length;
+        let frqsForUser = [];
+        for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
+            const frq = position.freeResponseQuestions[frqIndex];
+            frqsForUser.push({
+                questionId: frq._id,
+                questionIndex: frqIndex,
+                response: undefined,
+                body: frq.body,
+                required: frq.required
+            });
+        }
+
+        // position object within user's positions array
+        let userPosition = {
+            companyId: businessId,
+            positionId,
+            hiringStage: "Not Contacted",
+            hiringStageChanges: [],
+            appliedStartDate: new Date(),
+            freeResponseQuestions: frqsForUser
+        }
+
         user.positionInProgress = {
             inProgress: true,
-            freeResponseQuestions: position.freeResponseQuestions,
+            freeResponseQuestions: frqsForUser,
             positionId, skillTests, testIndex
         }
 
-        user.save()
-        .then(updatedUser => {
-            return res.json(updatedUser);
-        })
-        .catch(saveUserErr => {
+        const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.inProgress === false;
+        const doneWithSkillTests = testIndex === skillTests.length - 1;
+        // where the user will be redirected now
+        let nextUrl = "";
+        // finished with the application just by hitting apply?
+        let finished = false;
+        // if the user hasn't taken the psychometric exam before, have them do that first
+        if (!hasTakenPsychTest) {
+            nextUrl = "/psychometricAnalysis";
+        }
+        // otherwise, if the user hasn't done all the skills tests, have the
+        // first incomplete skill test be first up
+        else if (doneWithSkillTests) {
+            // get the url of the first test
+            try {
+                const skillTest = await Skills.findById(skillTests[testIndex]).select("url");
+                nextUrl = `/skillTest/${skillTest.url}`;
+            } catch (getSkillTestError) {
+                console.log("Error getting skill test: ", getSkillTestError);
+                return res.status(500).send("Server error.");
+            }
+        }
+        // if the user has finished all skill and psych tests, give them the
+        // free response questions they have to answer
+        else if (frqsForUser.length > 0) {
+            // uses the user's positionInProgress object to get the questions
+            nextUrl = "/freeResponse";
+        }
+        // the user is finished already with the application
+        else {
+            userPosition.endDate() = new Date();
+            finished = true;
+            user.positionInProgress = undefined;
+        }
+
+        user.save().then(updatedUser => {
+            return res.json({updatedUser, finished, nextUrl});
+        }).catch(saveUserErr => {
             return res.status(500).send("Server error, couldn't start position evaluation.");
         })
     }

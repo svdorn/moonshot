@@ -45,6 +45,7 @@ import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
 import AnalysisResults from './components/pages/psychAnalysis/analysisResults';
 
 import SkillTest from './components/pages/skillTest/skillTest';
+import PositionSignup from './components/pages/positionSignup';
 
 import AdminPages from './components/pages/adminPages/adminPages'
 import ViewUser from './components/pages/adminPages/viewUser';
@@ -95,6 +96,7 @@ const routes = (
         <Route path="analysisResults" component={AuthenticatedComponent} page={<AnalysisResults/>} />
 
         <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
+        <Route path="positionSignup" component={PositionSignup} />
 
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>}>
             <IndexRoute component={AdminPages} />

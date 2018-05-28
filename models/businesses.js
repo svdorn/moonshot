@@ -79,7 +79,9 @@ var businessesSchema = mongoose.Schema({
         // the number of people who are currently in the middle of taking the test
         usersInProgress: Number,
         // candidates who have applied for this position
-        candidateIds: [ mongoose.Schema.Types.ObjectId ]
+        candidates: [{
+            candidateId: mongoose.Schema.Types.ObjectId
+        }]
     }],
 
     // ---->>> END POST-PIVOT <<<---- //

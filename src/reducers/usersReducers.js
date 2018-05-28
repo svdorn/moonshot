@@ -98,6 +98,7 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "UPDATE_ANSWER":
+        case "START_POSITION_EVAL":
             return {
                 ...state,
                 currentUser: action.currentUser

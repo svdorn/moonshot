@@ -161,17 +161,6 @@ var usersSchema = mongoose.Schema({
 
     // ---->>> POST-PIVOT <<<---- //
 
-    positionInProgress: {
-        // whether there is a test currently being taken
-        inProgress: Boolean,
-        // id of the position within the business
-        positionId: mongoose.Schema.Types.ObjectId,
-        // list of skill urls for the necessary skill tests
-        skillTests: String,
-        // the index of the current test that the user is taking
-        testIndex: String
-    },
-
     // skills tests the user has taken
     skillTests: [{
         // id of the skill
@@ -348,8 +337,10 @@ var usersSchema = mongoose.Schema({
             // the date/time the hiring stage was changed
             dateChanged: Date
         }],
-        // the date and time the user applied to the position
-        appliedTime: Date,
+        // the date the user started application
+        appliedStartDate: Date,
+        // when the user ended and submitted the application
+        appliedEndDate: Date,
         // the scores the user got for the position
         scores: {
             // combination of all the scores
@@ -362,8 +353,43 @@ var usersSchema = mongoose.Schema({
             longevity: Number,
             // how well the candidate would do at that specific position
             performance: Number
-        }
-    }]
+        },
+        // the free response questions specific to this position
+        freeResponseQuestions: [{
+            // the id of the free response question
+            questionId: mongoose.Schema.Types.ObjectId,
+            // the index of the question in the business' position object
+            questionIndex: Number,
+            // what the user responded with
+            response: String,
+            // text of the question
+            body: String
+        }]
+    }],
+
+    positionInProgress: {
+        // whether there is a test currently being taken
+        inProgress: Boolean,
+        // id of the position within the business
+        positionId: mongoose.Schema.Types.ObjectId,
+        // list of skill urls for the necessary skill tests
+        skillTests: String,
+        // the index of the current test that the user is taking
+        testIndex: String,
+        // free response questions associated specifically with this position
+        freeResponseQuestions: [{
+            // the id of the free response question
+            questionId: mongoose.Schema.Types.ObjectId,
+            // the index of the question in the business' position object
+            questionIndex: Number,
+            // text of the question
+            body: String,
+            // what the user responded with
+            response: String,
+            // if the user is required to answer the question
+            required: Boolean
+        }]
+    }
 
     // FOR EMPLOYEES ONLY
 

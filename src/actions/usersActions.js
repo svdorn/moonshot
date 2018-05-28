@@ -106,6 +106,22 @@ export function onSignUpPage() {
     }
 }
 
+
+export function positionSignup(userId, verificationToken, positionId, businessId) {
+    return function(dispatch) {
+        axios.post("/api/user/startPositionEval", {userId, verificationToken, positionId, businessId})
+        .then(response => {
+            if (response.data.finished) {
+                console.log("All parts already answered!");
+            } else {
+                this.goTo(response.data.newLocation);
+            }
+            dispatch({type: "START_POSITION_EVAL", currentUser: response.data.updatedUser});
+        })
+    }
+}
+
+
 // POST USER
 export function postUser(user) {
     return function(dispatch) {
