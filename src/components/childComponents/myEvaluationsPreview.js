@@ -88,7 +88,10 @@ class MyEvaluationsPreview extends Component {
                             View Evaluation
                         </div>
                         <div onClick={() => this.goTo("/myCandidates")} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
-                            See Results
+                            Candidate Results
+                        </div>
+                        <div onClick={() => this.goTo("/myEmployees")} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
+                            Grade Employees
                         </div>
                     </div>
                 </div>
