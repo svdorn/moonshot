@@ -195,7 +195,7 @@ form > h1 {
     width: 60%;
     margin-left: 20%;
     margin-top: 30px;
-    margin-bottom: 50px;
+    margin-bottom: 70px;
     height: 10px;
     --stepCircleWidth: 24px;
     position: relative;
@@ -1050,7 +1050,7 @@ form > h1 {
     transform: translateY(-50%);
 }
 .skillMultipleChoiceCircle > div {
-    background-color: white;
+    background-color: #2e2e2e;
     border-radius: 100%;
     width: 10px;
     height: 10px;

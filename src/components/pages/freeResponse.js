@@ -59,6 +59,11 @@ class FreeResponse extends Component {
 
 
     submit() {
+        window.scroll({
+            top: 0,
+            left: 0,
+            behavior: 'smooth'
+        });
         const self = this;
         // what will be sent to the back-end
         const frqsToSubmit = [];

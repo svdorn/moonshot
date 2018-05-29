@@ -116,7 +116,7 @@ class PsychAnalysis extends Component {
         }
 
         const sliderWidth = "350px";
-        const topMargin = 120;
+        const topMargin = 110;
         const sliderAndAnswerContainerStyle = {
             width: sliderWidth,
             display: "inline-block",
