@@ -256,9 +256,9 @@ class Menu extends Component {
         // if the current user is an employer
         else if (isEmployer) {
             menuOptions = [
-                {optionType: "url", title: "My Evaluations", url: "/myEvaluations"},
-                {optionType: "url", title: "My Employees", url: "/myEmployees"},
-                {optionType: "url", title: "My Candidates", url: "/myCandidates"},
+                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
+                {optionType: "url", title: "Employees", url: "/myEmployees"},
+                {optionType: "url", title: "Candidates", url: "/myCandidates"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     {optionType: "url", title: "Profile", url: "/businessProfile"},
