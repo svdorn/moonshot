@@ -377,7 +377,7 @@ var usersSchema = mongoose.Schema({
         // id of the position within the business
         positionId: mongoose.Schema.Types.ObjectId,
         // list of skill urls for the necessary skill tests
-        skillTests: String,
+        skillTests: [ String ],
         // the index of the current test that the user is taking
         testIndex: String,
         // free response questions associated specifically with this position

@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { closeNotification, answerPsychQuestion } from "../../../actions/usersActions";
+import { closeNotification, addNotification, answerPsychQuestion } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import PsychSlider from './psychSlider';
@@ -55,7 +55,29 @@ class PsychAnalysis extends Component {
 
 
     finishTest() {
-        this.goTo("/analysisResults");
+        // if the user is taking a position evaluation, go to the next step of that
+        const user = this.props.currentUser;
+        const positionInProgress = user.positionInProgress;
+        if (positionInProgress) {
+            // if there are skill tests the user still has to take, go to that skill test
+            if (positionInProgress.skillTests && positionInProgress.testIndex < positionInProgress.skillTests.length) {
+                this.goTo(`/skillTest/${positionInProgress.skillTests[positionInProgress.testIndex]}`);
+            }
+            // otherwise, if there are free response questions to answer, go there
+            else if (positionInProgress.freeResponseQuestions && positionInProgress.freeResponseQuestions.length > 0) {
+                this.goTo("/freeResponse");
+            }
+            // otherwise, the user is done with the test; go home and give them
+            // a notification saying they're done
+            else {
+                this.props.addNotification("Finished application!", "info");
+                this.goTo("/");
+            }
+        }
+        // otherwise the user took the exam as a one-off thing, so show them results
+        else {
+            this.goTo("/analysisResults");
+        }
     }
 
 
@@ -156,7 +178,7 @@ class PsychAnalysis extends Component {
                     </div>
                     :
                     <div className="clickable" onClick={this.finishTest.bind(this)}>
-                        Finish
+                        Finish Psychometric Analysis
                     </div>
                 }
             </div>
@@ -168,7 +190,8 @@ class PsychAnalysis extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        answerPsychQuestion
+        answerPsychQuestion,
+        addNotification
     }, dispatch);
 }
 

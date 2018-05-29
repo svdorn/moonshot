@@ -198,6 +198,7 @@ async function POST_submitFreeResponse(req, res) {
     }
 
     const positionInProgress = user.positionInProgress;
+    const positionId = positionInProgress.positionId.toString();
 
     // get the business offering the current position
     const businessId = positionInProgress.businessId;
@@ -228,10 +229,56 @@ async function POST_submitFreeResponse(req, res) {
     // user is no longer taking a position evaluation
     user.positionInProgress = undefined;
 
-    // save the user
-    await user.save();
+    let userSaved = false;
+    let businessSaved = false;
 
-    res.json({updatedUser: user});
+    // save the user
+    user.save()
+    .then(response => {
+        userSaved = true;
+        returnToUser();
+    })
+    .catch(saveUserError => {
+        res.status(500).send("Error saving responses.");
+    })
+
+    // update the business to say that they have a user who has completed their application
+    let positionIndex = business.positions.findIndex(function(bizPos) {
+        return bizPos._id.toString() === positionId;
+    });
+
+    let businessPos = business.positions[positionIndex];
+    // if the business doesn't contain the current user as an applicant already, add them
+    if (!businessPos.candidates.some(candidateId => {
+        return candidateId.toString() === user._id.toString();
+    })) {
+        businessPos.candidates.push(user._id);
+    }
+    // update the business with new completions and users in progress counts
+    if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
+    if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
+    businessPos.completions++;
+    businessPos.usersInProgress++;
+    business.positions[positionIndex] = businessPos;
+
+    business.save()
+    .then(response => {
+        returnToUser();
+        businessSaved = true;
+    })
+    .catch(error => {
+        console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", error);
+        // return to the user even if there is an error so the user doesn't
+        // know anything is wrong
+        businessSaved = true;
+        returnToUser();
+    });
+
+    function returnToUser() {
+        if (userSaved && businessSaved) {
+            res.json({updatedUser: removePassword(user)});
+        }
+    }
 }
 
 
@@ -338,15 +385,20 @@ async function POST_startPositionEval(req, res) {
         }
 
         const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.inProgress === false;
+        console.log("hasTakenPsychTest: ", hasTakenPsychTest);
         // if we're trying to take a test that is past the number of tests we
         // have, we must be done with all the skill tests
         const doneWithSkillTests = testIndex === skillTests.length;
+        console.log("doneWithSkillTests: ", doneWithSkillTests);
         // where the user will be redirected now
         let nextUrl = "";
         // finished with the application just by hitting apply?
         let finished = false;
         // if the user hasn't taken the psychometric exam before, have them do that first
         if (!hasTakenPsychTest) {
+            // sign up for the psych test
+            user = await internalStartPsychEval(user);
+            // get the user to the psych eval page
             nextUrl = "/psychometricAnalysis";
         }
         // otherwise, if the user hasn't done all the skills tests, have the
@@ -375,7 +427,7 @@ async function POST_startPositionEval(req, res) {
         }
 
         user.save().then(updatedUser => {
-            return res.json({updatedUser, finished, nextUrl});
+            return res.json({updatedUser: removePassword(updatedUser), finished, nextUrl});
         }).catch(saveUserErr => {
             return res.status(500).send("Server error, couldn't start position evaluation.");
         })
@@ -502,9 +554,58 @@ async function POST_answerPsychQuestion(req, res) {
         psychometricTest.endDate = new Date();
         psychometricTest.totalTime = psychometricTest.endDate.getTime() - psychometricTest.startDate.getTime();
         psychometricTest.inProgress = false;
-        psychometricTest.currentQuestion = { body: "You finished the psychometric analysis! Click 'Finish' to see your results!" };
+        psychometricTest.currentQuestion = { body: "You finished the psychometric analysis! Click 'Finish'" };
 
         finishedTest = true;
+
+        // TODO check if the user is taking a position evaluation and if so
+        // whether they're done with it
+        const positionInProgress = user.positionInProgress;
+        if (positionInProgress) {
+            const applicationComplete =
+                (!positionInProgress.skillTests ||
+                 positionInProgress.testIndex >= positionInProgress.skillTests.length) &&
+                (!positionInProgress.freeResponseQuestions ||
+                 positionInProgress.freeResponseQuestions.length === 0);
+            // if the application is complete, mark it as such
+            if (applicationComplete) {
+                // user is no longer taking a position evaluation
+                user.positionInProgress = undefined;
+
+                let business;
+                try {
+                    business = await Businesses.findById(positionInProgress.businessId);
+
+                    // update the business to say that they have a user who has completed their application
+                    let positionIndex = business.positions.findIndex(bizPos => {
+                        return bizPoz._id.toString() === user.positionId.toString();
+                    });
+
+                    let businessPos = business.positions[positionIndex];
+                    // if the business doesn't contain the current user as an applicant already, add them
+                    if (!businessPos.candidates.some(candidateId => {
+                        return candidateId.toString() === user._id.toString();
+                    })) {
+                        businessPos.candidates.push(user._id);
+                    }
+                    // update the business with new completions and users in progress counts
+                    if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
+                    if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
+                    businessPos.completions++;
+                    businessPos.usersInProgress++;
+                    business.positions[positionIndex] = businessPos;
+
+                    try {
+                        await business.save()
+                    } catch (saveBizError) {
+                        console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", saveBizError);
+                    }
+                } catch (updateBizWithCompletionError) {
+                    console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", updateBizWithCompletionError);
+                }
+            }
+        }
+
     }
 
     // otherwise the test is not over so they need a new question
@@ -629,6 +730,98 @@ async function POST_answerPsychQuestion(req, res) {
 }
 
 
+async function internalStartPsychEval(user) {
+    return new Promise(async function(resolve, reject) {
+        if (user.psychometricTest.startDate) {
+            reject({statusCode: 400, error: "psych test already taken", msg: "You can't take the exam twice! If you need to take the exam again, contact us."});
+        }
+
+        let psychTest = undefined;
+        try {
+            psychTest = await Psychtests.find();
+            psychTest = psychTest[0];
+        } catch (getTestError) {
+            reject({statusCode: 500, error: getTestError, msg: "Server error."});
+        }
+
+        // make the incompleteFactors list; will end up as [0, 1, 2, ...] for however many factors there are
+        const numFactors = psychTest.factors.length;
+        let incompleteFactors = [];
+        for (let factorIndex = 0; factorIndex < numFactors; factorIndex++) {
+            incompleteFactors.push(factorIndex);
+        }
+
+        let factors = psychTest.factors.map(factor => {
+            const numFacets = factor.facets.length;
+            let incompleteFacets = [];
+            for (let facetIndex = 0; facetIndex < numFacets; facetIndex++) {
+                incompleteFacets.push(facetIndex);
+            }
+
+            let facets = factor.facets.map(facet => {
+                return {
+                    weight: facet.weight,
+                    facetId: facet._id,
+                    name: facet.name,
+                    responses: []
+                }
+            })
+
+            return {
+                factorId: factor._id,
+                name: factor.name,
+                incompleteFacets,
+                facets
+            }
+        });
+
+        // get a random question; since we just assigned the factors from the test,
+        // we know the indexes will be the same
+        const factorIndex = Math.floor(Math.random() * factors.length);
+        const factor = psychTest.factors[factorIndex];
+        const facetIndex = Math.floor(Math.random() * factor.facets.length);
+        const facet = factor.facets[facetIndex];
+        const question = facet.questions[Math.floor(Math.random() * facet.questions.length)];
+
+        const currentQuestion = {
+            factorIndex,
+            factorId: factor._id,
+            facetIndex: facetIndex,
+            facetId: facet._id,
+            questionId: question._id,
+            // since this is the first response to the quiz it must be the first in the facet too
+            responseIndex: 0,
+            body: question.body,
+            leftOption: question.leftOption,
+            rightOption: question.rightOption,
+            invertScore: question.invertScore
+        }
+
+        // tell the facet that we're giving it a response
+        factors[factorIndex].facets[facetIndex].responses = [{
+            startDate: new Date(),
+            skips: []
+        }];
+
+        user.psychometricTest = {
+            // user has not finished the exam
+            inProgress: true,
+            startDate: new Date(),
+            // currently not allowing any rephrases, change later
+            rephrase: false,
+            numRephrasesAllowed: 0,
+            // around 75 questions
+            questionsPerFacet: 1,
+            incompleteFactors,
+            factors,
+            currentQuestion
+        }
+
+        resolve(user);
+    });
+}
+
+
 async function POST_startPsychEval(req, res) {
     // check for invalid input
     const userId = sanitize(req.body.userId);
@@ -656,91 +849,11 @@ async function POST_startPsychEval(req, res) {
         return res.status(403).send("Invalid user credentials.");
     }
 
-    if (user.psychometricTest.startDate) {
-        return res.status(400).send("You can't take the exam twice! If you need to take the exam again, contact us.");
-    }
-
-    let psychTest = undefined;
     try {
-        psychTest = await Psychtests.find();
-        psychTest = psychTest[0];
-        console.log("psych test is: ", psychTest);
-    } catch (getTestError) {
-        console.log("Error getting psych test from the database: ", getTestError);
-        return res.status(500).send("Server error, try again later.");
-    }
-
-    // make the incompleteFactors list; will end up as [0, 1, 2, ...] for however many factors there are
-    const numFactors = psychTest.factors.length;
-    let incompleteFactors = [];
-    for (let factorIndex = 0; factorIndex < numFactors; factorIndex++) {
-        incompleteFactors.push(factorIndex);
-    }
-
-    let factors = psychTest.factors.map(factor => {
-        const numFacets = factor.facets.length;
-        let incompleteFacets = [];
-        for (let facetIndex = 0; facetIndex < numFacets; facetIndex++) {
-            incompleteFacets.push(facetIndex);
-        }
-
-        let facets = factor.facets.map(facet => {
-            return {
-                weight: facet.weight,
-                facetId: facet._id,
-                name: facet.name,
-                responses: []
-            }
-        })
-
-        return {
-            factorId: factor._id,
-            name: factor.name,
-            incompleteFacets,
-            facets
-        }
-    });
-
-    // get a random question; since we just assigned the factors from the test,
-    // we know the indexes will be the same
-    const factorIndex = Math.floor(Math.random() * factors.length);
-    const factor = psychTest.factors[factorIndex];
-    const facetIndex = Math.floor(Math.random() * factor.facets.length);
-    const facet = factor.facets[facetIndex];
-    const question = facet.questions[Math.floor(Math.random() * facet.questions.length)];
-
-    const currentQuestion = {
-        factorIndex,
-        factorId: factor._id,
-        facetIndex: facetIndex,
-        facetId: facet._id,
-        questionId: question._id,
-        // since this is the first response to the quiz it must be the first in the facet too
-        responseIndex: 0,
-        body: question.body,
-        leftOption: question.leftOption,
-        rightOption: question.rightOption,
-        invertScore: question.invertScore
-    }
-
-    // tell the facet that we're giving it a response
-    factors[factorIndex].facets[facetIndex].responses = [{
-        startDate: new Date(),
-        skips: []
-    }];
-
-    user.psychometricTest = {
-        // user has not finished the exam
-        inProgress: true,
-        startDate: new Date(),
-        // currently not allowing any rephrases, change later
-        rephrase: false,
-        numRephrasesAllowed: 0,
-        // around 75 questions
-        questionsPerFacet: 4,
-        incompleteFactors,
-        factors,
-        currentQuestion
+        user = await internalStartPsychEval(user);
+    } catch (startEvalError) {
+        console.log("Error starting psych eval: ", startEvalError.error);
+        res.status(startEvalError.statusCode).send(startEvalError.msg);
     }
 
     try {

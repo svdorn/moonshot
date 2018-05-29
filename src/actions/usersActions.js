@@ -237,6 +237,14 @@ export function forgotPassword(user) {
     }
 }
 
+
+export function newCurrentUser(currentUser) {
+    return function(dispatch) {
+        dispatch({type: "NEW_CURRENT_USER", currentUser})
+    }
+}
+
+
 // UPDATE A USER
 export function updateUser(user) {
     return function(dispatch) {

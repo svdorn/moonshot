@@ -1,5 +1,6 @@
 const Users = require('../models/users.js');
 const Skills = require('../models/skills.js');
+const Businesses = require('../models/businesses.js');
 
 // get helper functions
 const { sanitize,
@@ -14,7 +15,7 @@ const { sanitize,
 
 
 const businessApis = {
-    GET_skillByUrl,
+    //GET_skillByUrl,
     POST_answerSkillQuestion,
     POST_startOrContinueTest
 }
@@ -54,7 +55,7 @@ function POST_answerSkillQuestion(req, res) {
     })
 
     // get the skill
-    Skills.find({url: skillUrl})
+    Skills.find({ $or: [{url: skillUrl}, {_id: skillUrl}]})
     .then(foundSkills => {
         if (foundSkills.length === 0 || !foundSkills[0]) { return res.status(404).send("Invalid skill."); }
         skill = foundSkills[0];
@@ -196,7 +197,7 @@ function POST_answerSkillQuestion(req, res) {
             return res.status(500).send("Server error.");
         }
 
-        res.json({question: currentQuestionToReturn, skillName: skill.name, finished: false});
+        res.json({updatedUser: user, question: currentQuestionToReturn, skillName: skill.name, finished: false});
     }
 
     async function finishTest(userSkill, userSkillIndex, attempt, attemptIndex) {
@@ -218,6 +219,54 @@ function POST_answerSkillQuestion(req, res) {
         userSkill.attempts[attemptIndex] = attempt;
         user.skills[userSkillIndex] = userSkill;
 
+        // see if the user is doing an application to a position
+        if (user.positionInProgress) {
+            // mark the next skill as the one that must be completed next
+            user.positionInProgress.testIndex++;
+
+            // if the test index is greater than or equal to the number of tests,
+            // user is done with skills section of the application
+            if (user.positionInProgress.testIndex >= user.positionInProgress.skillTests.length) {
+                // if there are no multiple choice questions, user is finished
+                if (!user.positionInProgress.freeResponseQuestions || user.positionInProgress.freeResponseQuestions.length === 0) {
+                    // user is no longer taking a position evaluation
+                    user.positionInProgress = undefined;
+
+                    let business;
+                    try {
+                        business = await Businesses.findById(positionInProgress.businessId);
+
+                        // update the business to say that they have a user who has completed their application
+                        let positionIndex = business.positions.findIndex(bizPos => {
+                            return bizPoz._id.toString() === user.positionId.toString();
+                        });
+
+                        let businessPos = business.positions[positionIndex];
+                        // if the business doesn't contain the current user as an applicant already, add them
+                        if (!businessPos.candidates.some(candidateId => {
+                            return candidateId.toString() === user._id.toString();
+                        })) {
+                            businessPos.candidates.push(user._id);
+                        }
+                        // update the business with new completions and users in progress counts
+                        if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
+                        if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
+                        businessPos.completions++;
+                        businessPos.usersInProgress++;
+                        business.positions[positionIndex] = businessPos;
+
+                        try {
+                            await business.save()
+                        } catch (saveBizError) {
+                            console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", saveBizError);
+                        }
+                    } catch (updateBizWithCompletionError) {
+                        console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", updateBizWithCompletionError);
+                    }
+                }
+            }
+        }
+
         try {
             await user.save();
         } catch (saveUserError) {
@@ -225,7 +274,7 @@ function POST_answerSkillQuestion(req, res) {
             return res.status(500).send("Server error.");
         }
 
-        return res.json({finished: true});
+        return res.json({finished: true, updatedUser: removePassword(user)});
     }
 }
 
@@ -260,8 +309,8 @@ function POST_startOrContinueTest(req, res) {
             return res.status(500).send("Server error, try again later.");
         })
 
-        // get the skill
-        Skills.find({url: skillUrl})
+        // get the skill by either skillUrl or id
+        Skills.find({ $or: [{url: skillUrl}, {_id: skillUrl}]})
         .then(foundSkills => {
             if (foundSkills.length === 0) { return res.status(404).send("Invalid skill."); }
             skill = foundSkills[0];
@@ -270,7 +319,7 @@ function POST_startOrContinueTest(req, res) {
         .catch(findSkillErr => {
             console.log("Error finding skill by url: ", findSkillErr);
             return res.status(500).send("Server error, try again later.");
-        })
+        });
 
         function checkIfStarted() {
             // haven't yet found either the skill or user from the db
@@ -406,7 +455,6 @@ function POST_startOrContinueTest(req, res) {
                 const testQuestions = currentTestLevel.questions;
                 // get the current question
                 let currentTestQuestionIndex = userCurrentQuestion.questionIndex;
-                console.log('userCurrentQuestion: ', userCurrentQuestion);
                 let currentTestQuestion;
                 try {
                     currentTestQuestion = testQuestions[currentTestQuestionIndex];
@@ -445,62 +493,62 @@ function POST_startOrContinueTest(req, res) {
 }
 
 
-function GET_skillByUrl(req, res) {
-    try {
-        let user = undefined;
-        let skill = undefined;
-
-        const userId = sanitize(req.query.userId);
-        const verificationToken = sanitize(req.query.verificationToken);
-        const skillUrl = sanitize(req.query.skillUrl);
-
-        if (!userId || !verificationToken || !skillUrl) {
-            console.log("userId: ", userId);
-            return res.status(400).send("Not enough arguments provided.");
-        }
-
-        // get the user
-        Users.findById(userId)
-        .then(foundUser => {
-            // ensure correct user was found and that they have permissions
-            if (!foundUser) { return res.status(404).send("Could not find current user."); }
-            if (foundUser.verificationToken !== verificationToken) {
-                return res.status(403).send("Invalid user credentials.");
-            }
-
-            user = foundUser;
-            returnSkill();
-        })
-        .catch(findUserErr => {
-            console.log("Error finding user in the db when trying to get a skill by url: ", findUserErr);
-            return res.status(500).send("Server error, try again later.");
-        })
-
-        // get the skill
-        Skills.find({url: skillUrl})
-        .then(foundSkills => {
-            if (foundSkills.length === 0) { return res.status(404).send("Invalid skill."); }
-            skill = foundSkills[0];
-            returnSkill();
-        })
-        .catch(findSkillErr => {
-            console.log("Error finding skill by url: ", findSkillErr);
-            return res.status(500).send("Server error, try again later.");
-        })
-
-        function returnSkill() {
-            // haven't yet found either the skill or user from the db
-            if (!user || !skill) { return; }
-
-            return res.json(skill);
-        }
-    } catch(miscError) {
-        console.log("Error getting skill by url: ", miscError);
-        if (typeof res === "object" && typeof res.status === "function") {
-            return res.status(500).send("Server error");
-        }
-    }
-}
+// function GET_skillByUrl(req, res) {
+//     try {
+//         let user = undefined;
+//         let skill = undefined;
+//
+//         const userId = sanitize(req.query.userId);
+//         const verificationToken = sanitize(req.query.verificationToken);
+//         const skillUrl = sanitize(req.query.skillUrl);
+//
+//         if (!userId || !verificationToken || !skillUrl) {
+//             console.log("userId: ", userId);
+//             return res.status(400).send("Not enough arguments provided.");
+//         }
+//
+//         // get the user
+//         Users.findById(userId)
+//         .then(foundUser => {
+//             // ensure correct user was found and that they have permissions
+//             if (!foundUser) { return res.status(404).send("Could not find current user."); }
+//             if (foundUser.verificationToken !== verificationToken) {
+//                 return res.status(403).send("Invalid user credentials.");
+//             }
+//
+//             user = foundUser;
+//             returnSkill();
+//         })
+//         .catch(findUserErr => {
+//             console.log("Error finding user in the db when trying to get a skill by url: ", findUserErr);
+//             return res.status(500).send("Server error, try again later.");
+//         })
+//
+//         // get the skill
+//         Skills.find({url: skillUrl})
+//         .then(foundSkills => {
+//             if (foundSkills.length === 0) { return res.status(404).send("Invalid skill."); }
+//             skill = foundSkills[0];
+//             returnSkill();
+//         })
+//         .catch(findSkillErr => {
+//             console.log("Error finding skill by url: ", findSkillErr);
+//             return res.status(500).send("Server error, try again later.");
+//         })
+//
+//         function returnSkill() {
+//             // haven't yet found either the skill or user from the db
+//             if (!user || !skill) { return; }
+//
+//             return res.json(skill);
+//         }
+//     } catch(miscError) {
+//         console.log("Error getting skill by url: ", miscError);
+//         if (typeof res === "object" && typeof res.status === "function") {
+//             return res.status(500).send("Server error");
+//         }
+//     }
+// }
 
 
 // ----->> END APIS <<----- //

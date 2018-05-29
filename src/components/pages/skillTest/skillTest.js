@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import {  } from "../../../actions/usersActions";
+import { addNotification, newCurrentUser } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
@@ -104,6 +104,8 @@ class PsychAnalysis extends Component {
             }
             axios.post("/api/skill/answerSkillQuestion", params)
             .then(result => {
+                this.props.newCurrentUser(result.data.updatedUser);
+                console.log("updatedUser: ", result.data.updatedUser);
                 let question = undefined;
                 if (result.data.question) {
                     question = result.data.question;
@@ -123,8 +125,30 @@ class PsychAnalysis extends Component {
 
 
     finishTest() {
-        // TODO make it go to the actual results page
-        this.goTo("/");
+        // if the user is taking a position evaluation, go to the next step of that
+        const user = this.props.currentUser;
+        const positionInProgress = user.positionInProgress;
+        if (positionInProgress) {
+            // if there are skill tests the user still has to take, go to that skill test
+            if (positionInProgress.skillTests && positionInProgress.testIndex < positionInProgress.skillTests.length) {
+                this.goTo(`/skillTest/${positionInProgress.skillTests[positionInProgress.testIndex]}`);
+            }
+            // otherwise, if there are free response questions to answer, go there
+            else if (positionInProgress.freeResponseQuestions && positionInProgress.freeResponseQuestions.length > 0) {
+                this.goTo("/freeResponse");
+            }
+            // otherwise, the user is done with the test; go home and give them
+            // a notification saying they're done
+            else {
+                this.props.addNotification("Finished application!", "info");
+                this.goTo("/");
+            }
+        }
+        // otherwise the user took the exam as a one-off thing, so show them results
+        else {
+            // TODO make it go to the actual results page
+            this.goTo("/");
+        }
     }
 
 
@@ -189,7 +213,7 @@ class PsychAnalysis extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        //answerSkillQuestion
+        addNotification, newCurrentUser
     }, dispatch);
 }
 
