@@ -77,7 +77,8 @@ class Menu extends Component {
                 if (currentUser) {
                     // if user is employer, go to business profile
                     if (currentUser.userType === "employer") {
-                        this.goTo("/businessProfile");
+                        //this.goTo("/businessProfile");
+                        this.goTo("/");
                     }
                     // otherwise go to normal profile
                     else {
@@ -261,7 +262,8 @@ class Menu extends Component {
                 {optionType: "url", title: "Candidates", url: "/myCandidates"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
-                    {optionType: "url", title: "Profile", url: "/businessProfile"},
+                    //{optionType: "url", title: "Profile", url: "/businessProfile"},
+                    {optionType: "url", title: "Profile", url: "/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "url", title: "Add User", url: "/addUser"},
