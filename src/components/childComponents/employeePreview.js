@@ -184,6 +184,12 @@ class EmployeePreview extends Component {
         })
     }
 
+
+    openEmployeeResults() {
+        this.goTo("/employeeResults?user=Jada-Falzon-1-56a7e8ae");
+    }
+
+
     render() {
         console.log(this.state.questionIndex)
         const style = {
@@ -313,7 +319,7 @@ class EmployeePreview extends Component {
                             onClick={this.handleOpen.bind(this)}>
                         Grade
                     </button>
-                    <i className="completionStage clickable underline center font14px marginLeft30px">
+                    <i className="completionStage clickable underline center font14px marginLeft30px" onClick={this.openEmployeeResults.bind(this)}>
                         See Results
                     </i>
                 </div>

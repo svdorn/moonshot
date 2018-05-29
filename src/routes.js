@@ -15,6 +15,7 @@ import MyEmployees from './components/pages/businessPages/myEmployees';
 import MyEvaluations from './components/pages/businessPages/myEvaluations';
 import BusinessProfile from './components/pages/businessPages/businessProfile';
 import Results from './components/pages/businessPages/results';
+import EmployeeResults from './components/pages/businessPages/employeeResults';
 import BusinessHome from './components/pages/businessHome';
 import BusinessHomeParts from './components/pages/businessHomeParts';
 import Main from './main';
@@ -73,6 +74,7 @@ const routes = (
         <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} userType="employer" />
         <Route path="businessProfile" component={AuthenticatedComponent} page={<BusinessProfile/>} userType="employer" />
         <Route path="results" component={AuthenticatedComponent} page={<Results />} userType="employer" />
+        <Route path="employeeResults" component={AuthenticatedComponent} page={<EmployeeResults />} userType="employer" />
         <Route path="profile" component={Profile} />
         <Route path="forCandidates" component={Home} />
         <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>

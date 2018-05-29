@@ -261,8 +261,6 @@ class MyEmployees extends Component {
 
         }
 
-        console.log(this.state.employees);
-        console.log(this.state.questions);
         return (
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
                 <MetaTags>
