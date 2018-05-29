@@ -554,7 +554,7 @@ async function POST_answerPsychQuestion(req, res) {
         psychometricTest.endDate = new Date();
         psychometricTest.totalTime = psychometricTest.endDate.getTime() - psychometricTest.startDate.getTime();
         psychometricTest.inProgress = false;
-        psychometricTest.currentQuestion = { body: "You finished the psychometric analysis! Click 'Finish'" };
+        psychometricTest.currentQuestion = { body: "You finished the psychometric analysis!" };
 
         finishedTest = true;
 

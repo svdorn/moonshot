@@ -8,6 +8,7 @@ import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
 import { CircularProgress } from "material-ui";
+import ProgressBar from '../../miscComponents/progressBar';
 
 class PsychAnalysis extends Component {
     constructor(props) {
@@ -224,6 +225,7 @@ class PsychAnalysis extends Component {
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
                 </MetaTags>
                 <div className="extraHeaderSpace" />
+                <ProgressBar />
                 { content }
             </div>
         );

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { submitFreeResponse } from "../../actions/usersActions";
 import { CircularProgress } from "material-ui";
+import ProgressBar from '../miscComponents/progressBar';
 
 
 class FreeResponse extends Component {
@@ -113,6 +114,7 @@ class FreeResponse extends Component {
         return (
             <div className="blackBackground">
                 <div className="extraHeaderSpace" />
+                <ProgressBar />
                 { freeResponseQuestions }
                 <div className="mediumButton getStarted blueToPurple"
                      onClick={this.submit.bind(this)}

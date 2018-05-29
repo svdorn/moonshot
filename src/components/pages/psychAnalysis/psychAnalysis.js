@@ -7,6 +7,7 @@ import { closeNotification, addNotification, answerPsychQuestion } from "../../.
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import PsychSlider from './psychSlider';
+import ProgressBar from '../../miscComponents/progressBar';
 
 class PsychAnalysis extends Component {
     constructor(props) {
@@ -151,6 +152,7 @@ class PsychAnalysis extends Component {
                     <meta name="description" content={"Find out what personality type you have! This will let us know how to best help you in getting the perfect job."} />
                 </MetaTags>
                 <div className="employerHeader" />
+                <ProgressBar />
                 <div className="center">
                     {question}
                 </div>
@@ -172,13 +174,14 @@ class PsychAnalysis extends Component {
                                 questionId={questionId}
                             />
                         </div>
-                        <div className="clickable" onClick={this.nextQuestion.bind(this)}>
+                        <br/>
+                        <div className="psychAnalysisButton" onClick={this.nextQuestion.bind(this)}>
                             Next
                         </div>
                     </div>
                     :
-                    <div className="clickable" onClick={this.finishTest.bind(this)}>
-                        Finish Psychometric Analysis
+                    <div className="psychAnalysisButton" style={{marginTop: "20px"}} onClick={this.finishTest.bind(this)}>
+                        Finish
                     </div>
                 }
             </div>
