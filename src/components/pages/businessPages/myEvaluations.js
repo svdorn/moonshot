@@ -101,8 +101,8 @@ class MyEvaluations extends Component {
                         key={key}
                     >
                         <MyEvaluationsPreview
-                            company="Curate"
-                            logo="/logos/CurateLogoWhite.png"
+                            company="Moonshot"
+                            logo="/images/OfficialLogoWhite.png"
                             name={position.name}
                             completions={position.completions}
                             length={position.length}
@@ -127,7 +127,7 @@ class MyEvaluations extends Component {
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>
-                        My Evalutions
+                        My Evaluations
                     </div>
                 </div>
                 <div className="marginBottom60px">
