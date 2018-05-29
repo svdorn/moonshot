@@ -373,7 +373,7 @@ class MyCandidates extends Component {
                 {searchBar}
 
                 <div>
-                    <ul className="horizCenteredList">
+                    <ul className="horizCenteredList myCandidatesWidth">
                         {candidatePreviews}
                     </ul>
                 </div>

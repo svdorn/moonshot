@@ -2074,6 +2074,10 @@ button.link {
     max-width: 1200px;
     margin: auto;
 }
+.myCandidatesWidth {
+    max-width: 1700px;
+    margin: auto;
+}
 .gradingSliderContainer {
     position: absolute;
     width: 100%;
