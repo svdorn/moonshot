@@ -117,8 +117,11 @@ class Account extends Component {
         this.props.untouch("password");
     }
 
+
     //name, email, password, confirm password, signup button
     render() {
+        const isCandidate = this.props.currentUser.userType === "candidate";
+
         return (
             <div className="formContainer" style={{display:'inline-block'}}>
                 <div className="form lightBlackForm noBlur">
@@ -149,16 +152,22 @@ class Account extends Component {
                                 autoComplete="new-password"
                             /></div>
                         <br/>
-                        <div className="checkbox smallCheckbox whiteCheckbox" onClick={this.handleHideProfileClick.bind(this)}>
-                            <img
-                                alt=""
-                                className={"checkMark" + this.state.hideProfile}
-                                src="/icons/CheckMarkRoundedWhite.png"
-                            />
-                        </div>
-                        <div className="whiteText" style={{display:"inline-block"}}>
-                            Hide Profile From Employers
-                        </div><br/>
+                        {isCandidate ?
+                            <div>
+                                <div className="checkbox smallCheckbox whiteCheckbox" onClick={this.handleHideProfileClick.bind(this)}>
+                                    <img
+                                        alt=""
+                                        className={"checkMark" + this.state.hideProfile}
+                                        src="/icons/CheckMarkRoundedWhite.png"
+                                    />
+                                </div>
+                                <div className="whiteText" style={{display:"inline-block"}}>
+                                    Hide Profile From Employers
+                                </div>
+                            </div>
+                            : null
+                        }
+                        <br/>
                         <RaisedButton
                             label="Update Settings"
                             type="submit"
