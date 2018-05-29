@@ -187,19 +187,20 @@ class PsychAnalysis extends Component {
                          onClick={() => self.selectAnswer(option._id)}
                          className={"skillMultipleChoiceAnswer" + selectedClass}
                     >
-                        {option.body}
+                        <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
+                        <div className="skillMultipleChoiceOptionText">{option.body}</div>
                     </div>
                 );
             });
         }
 
-        const buttonClass = this.state.selectedId === undefined ? "disabled mediumButton inlineBlock" : "mediumButton getStarted blueToPurple inlineBlock"
+        const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
 
         let content = <CircularProgress/>;
         if (question) {
             content = (
                 <div>
-                    <StyledContent contentArray={question.body} />
+                    <StyledContent contentArray={question.body} style={{marginBottom:"40px"}} />
                     { answers }
                     <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
                 </div>
@@ -210,7 +211,8 @@ class PsychAnalysis extends Component {
             content = (
                 <div>
                     Test Complete! Click submit to see your results.
-                    <div className="mediumButton getStarted blueToPurple inlineBlock" onClick={this.finishTest.bind(this)}>Finish</div>
+                    <br/>
+                    <div className="skillContinueButton" onClick={this.finishTest.bind(this)}>Finish</div>
                 </div>
             );
         }
@@ -222,7 +224,6 @@ class PsychAnalysis extends Component {
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
                 </MetaTags>
                 <div className="extraHeaderSpace" />
-
                 { content }
             </div>
         );

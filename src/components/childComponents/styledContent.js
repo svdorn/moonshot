@@ -152,9 +152,10 @@ class StyledContent extends Component {
         });
 
         const className = this.props.className ? this.props.className : "noStyle";
+        const style = this.props.style ? this.props.style : {};
 
         return (
-            <div className={className}>
+            <div className={className} style={style}>
                 {contentHtml}
             </div>
         );
