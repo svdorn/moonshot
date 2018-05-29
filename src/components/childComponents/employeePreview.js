@@ -237,12 +237,12 @@ class EmployeePreview extends Component {
                     <div className="employeeName font18px center">
                         {this.props.name.toUpperCase()}
                     </div>
-                    <div className="center font18px redPinkText">
+                    <div className="center font14px redPinkText">
                         Question:
                         <br/>
                         {questionIndexDisplay + '/' + this.props.questions.length}
                     </div>
-                    <div>
+                    <div className="font14px">
                         {this.props.questions[questionIndex].questionBody}
                     </div>
                     <div className="center width80width80percentImportant">
