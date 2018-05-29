@@ -22,36 +22,36 @@ class EmployeePreview extends Component {
         this.state = {
             gradingComplete: props.gradingComplete,
             answers: props.answers,
-            gradingInProgress: false
+            gradingInProgress: false,
+            questionIndex: 0,
+            questionAnswer: 0
         }
     }
 
     // Set the current question when the component mounts
     componentDidMount() {
-        // Start the test at the last unanswered question
-        let maxQuestionIndex = 0;
-        let questionAnswer = 0;
-
-        for (let i = 0; i < this.props.answers.length; i++) {
-            const answer = this.props.answers[i];
-            if (answer.questionIndex >= maxQuestionIndex) {
-                maxQuestionIndex = answer.questionIndex;
-            }
-        }
-
-        if ((maxQuestionIndex + 1) < this.props.answers.length) {
-            // Go to the next unanswered question
-            maxQuestionIndex = maxQuestionIndex + 1;
-        } else {
-            // Go to the last question, which has already been filled out
-            maxQuestionIndex = this.props.answers.length - 1;
-        }
-
-        this.setState({
-            ...this.state,
-            questionIndex: maxQuestionIndex,
-            questionAnswer: questionAnswer
-        });
+        // // Start the test at the last unanswered question
+        // let maxQuestionIndex = 0;
+        //
+        // for (let i = 0; i < this.props.answers.length; i++) {
+        //     const answer = this.props.answers[i];
+        //     if (answer.questionIndex >= maxQuestionIndex) {
+        //         maxQuestionIndex = answer.questionIndex;
+        //     }
+        // }
+        //
+        // if ((maxQuestionIndex) > this.props.answers.length) {
+        //     // Go to the next unanswered question
+        //     maxQuestionIndex = maxQuestionIndex;
+        // } else {
+        //     // Go to the last question, which has already been filled out
+        //     maxQuestionIndex = this.props.answers.length - 1;
+        // }
+        //
+        // this.setState({
+        //     ...this.state,
+        //     questionIndex: maxQuestionIndex
+        // });
     }
 
     goTo(route) {
@@ -77,7 +77,8 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            companyId: this.props.currentUser.company.companyId
+            companyId: this.props.currentUser.company.companyId,
+            gradingComplete: true
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
@@ -88,7 +89,8 @@ class EmployeePreview extends Component {
                 questionAnswer: 0,
                 questionIndex: 0,
                 answers: res.data,
-                gradingInProgress: false
+                gradingInProgress: false,
+                gradingComplete: true,
             })
         })
     }
@@ -102,7 +104,8 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            companyId: this.props.currentUser.company.companyId
+            companyId: this.props.currentUser.company.companyId,
+            gradingComplete: false
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
@@ -142,7 +145,8 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            companyId: this.props.currentUser.company.companyId
+            companyId: this.props.currentUser.company.companyId,
+            gradingComplete: false
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
@@ -181,6 +185,7 @@ class EmployeePreview extends Component {
     }
 
     render() {
+        console.log(this.state.questionIndex)
         const style = {
             redLink: {
                 color: "#D1576F",
