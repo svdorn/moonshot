@@ -20,7 +20,7 @@ class ProgressBar extends Component {
 
         let numSteps = 1;
         if (positionInProgress.skillTests) {
-            numSteps = positionInProgress.skillTests.length;
+            numSteps += positionInProgress.skillTests.length;
         }
         if (positionInProgress.freeResponseQuestions && positionInProgress.freeResponseQuestions.length) {
             numSteps++;
@@ -57,7 +57,8 @@ class ProgressBar extends Component {
         for (let stepCounter = 1; stepCounter <= numSteps; stepCounter++) {
             let amountFinished = 100;
             if (stepNumber === stepCounter) {
-                amountFinished = 40;
+                // TODO: MAKE THIS A LEGIT PERCENTAGE OF HOW MUCH IS DONE (0 - 100)
+                amountFinished = 0;
             }
             else if (stepNumber < stepCounter) {
                 amountFinished = 0;
@@ -70,21 +71,21 @@ class ProgressBar extends Component {
 
 
             stepCircles.push(
-                <div className="progressStepCircle" style={{backgroundColor: `rgb(${r},${g},${b})`}}>
+                <div key={"circle" + stepCounter} className="progressStepCircle" style={{backgroundColor: `rgb(${r},${g},${b})`}}>
                     <div><div>{ stepCounter }</div></div>
                 </div>
             );
 
             const interiorStyle = { width: `${amountFinished}%`, background: `linear-gradient(to right, rgb(${r},${g}, ${b}), rgb(${r},${gRight}, ${bRight}))` };
             stepBars.push(
-                <div className="progressStepBar">
+                <div key={"bar" + stepCounter} className="progressStepBar">
                     <div className="progressStepBarInterior" style={interiorStyle} />
                 </div>
             )
         }
 
         stepCircles.push(
-            <div className="progressStepCircle" style={{backgroundColor: `rgb(${rAlways},${gEnd},${bEnd})`}}>
+            <div key="endCircle" className="progressStepCircle" style={{backgroundColor: `rgb(${rAlways},${gEnd},${bEnd})`}}>
                 <div></div>
             </div>
         );
@@ -94,7 +95,7 @@ class ProgressBar extends Component {
                 <div className="font30px">
                     { stepNumber }. { stepName }
                 </div>
-                <div className="progressBar">
+                <div className="progressBar font14px">
                     <div className="progressStepBars">
                         { stepBars }
                     </div>

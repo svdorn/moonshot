@@ -187,14 +187,17 @@ form > h1 {
 
 
 
-
+.progressContainer {
+    color: white;
+    text-align: center;
+}
 .progressBar {
     width: 60%;
     margin-left: 20%;
     margin-top: 30px;
     margin-bottom: 50px;
     height: 10px;
-    --stepCircleWidth: 20px;
+    --stepCircleWidth: 24px;
     position: relative;
     background-color: #CBCBCB;
 }
@@ -225,9 +228,6 @@ form > h1 {
     position: relative;
     display: inline-block;
 }
-.progressStepCircle:last-child {
-
-}
 .progressStepCircle > div {
     width: 80%;
     height: 80%;
@@ -245,6 +245,26 @@ form > h1 {
 }
 .progressStepBarInterior {
     height: 100%;
+}
+
+
+
+.freeResponseQuestions {
+    width: 70%;
+    margin-left: 15%;
+}
+.freeResponseQuestions textarea {
+    width: 100%;
+    height: 120px;
+    background: #242424;
+    border: none;
+    padding: 5px;
+    color: #dcdcdc;
+    margin-top: 10px;
+    margin-bottom: 40px;
+}
+.freeResponseQuestions textarea:focus {
+
 }
 
 

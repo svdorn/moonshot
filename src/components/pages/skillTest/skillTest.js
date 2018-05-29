@@ -224,7 +224,7 @@ class PsychAnalysis extends Component {
                     <title>{skillName} Test | Moonshot</title>
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
                 </MetaTags>
-                <div className="extraHeaderSpace" />
+                <div className="employerHeader" />
                 <ProgressBar />
                 { content }
             </div>

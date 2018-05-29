@@ -112,14 +112,18 @@ class FreeResponse extends Component {
         });
 
         return (
-            <div className="blackBackground">
-                <div className="extraHeaderSpace" />
+            <div className="blackBackground fillScreen whiteText" style={{paddingBottom: "60px"}}>
+                <div className="employerHeader" />
                 <ProgressBar />
-                { freeResponseQuestions }
-                <div className="mediumButton getStarted blueToPurple"
-                     onClick={this.submit.bind(this)}
-                >
-                    Submit application
+                <div className="freeResponseQuestions">
+                    { freeResponseQuestions }
+                </div>
+                <div className="center" style={{width: "100%"}}>
+                    <div className="skillContinueButton"
+                         onClick={this.submit.bind(this)}
+                    >
+                        Submit application
+                    </div>
                 </div>
             </div>
         );
