@@ -211,9 +211,9 @@ class PsychAnalysis extends Component {
         if (this.state.finished) {
             content = (
                 <div>
-                    Test Complete! Click submit to see your results.
+                    Test Complete!
                     <br/>
-                    <div className="skillContinueButton" onClick={this.finishTest.bind(this)}>Finish</div>
+                    <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finishTest.bind(this)}>Finish</div>
                 </div>
             );
         }

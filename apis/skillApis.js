@@ -134,8 +134,8 @@ function POST_answerSkillQuestion(req, res) {
 
         // see if the user is done with the test
         // TODO make a legit way of seeing if the test is over
-        // right now it's just that if you do one question from the hardest level it's over
-        if (attempt.levels[attempt.levels.length - 1].questions.length > 0) {
+        // right now it just finishes if you answer one question
+        if (true) {
             finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
         }
 

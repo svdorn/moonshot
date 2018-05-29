@@ -87,7 +87,7 @@ class FreeResponse extends Component {
 
         if (this.state.submitting) {
             return (
-                <div className="blackBackground">
+                <div className="blackBackground fillScreen center">
                     <div className="extraHeaderSpace" />
                     <CircularProgress />
                 </div>
@@ -104,7 +104,7 @@ class FreeResponse extends Component {
                     <textarea
                         type="text"
                         value={this.state.frqs[frq.questionId].response}
-                        placeholder="Your answer here."
+                        placeholder="Your answer here"
                         onChange={(e) => self.handleInputChange(e, frq.questionId)}
                     />
                 </div>

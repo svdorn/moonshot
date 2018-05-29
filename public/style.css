@@ -263,8 +263,8 @@ form > h1 {
     margin-top: 10px;
     margin-bottom: 40px;
 }
-.freeResponseQuestions textarea:focus {
-
+.freeResponseQuestions textarea::placeholder {
+    font-style: italic;
 }
 
 
