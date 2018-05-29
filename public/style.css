@@ -1906,15 +1906,36 @@ button.link {
     margin: 15px 15px;
     background-color: #333333;
 }
-.employeePreviewGrading > div:nth-child(4) > div > div {
+.employeePreviewGrading > div:nth-child(4) > div:first-child > div {
     margin: 24px auto !important;
     width: 80% !important;
 }
-.employeePreviewGrading > div:nth-child(4) > div > div > div > div:first-child {
+.employeePreviewGrading > div:nth-child(4) > div:first-child > div > div > div:first-child {
     background: linear-gradient(to right, #fd0d8b, #ff5d27);
 }
-.employeePreviewGrading > div:nth-child(4) > div > div > div > div:nth-child(3) {
+.employeePreviewGrading > div:nth-child(4) > div:first-child > div > div > div:nth-child(3) {
     background: linear-gradient(to right, #fd0d8b, #ff5d27);
+}
+.myEmployees.sliderNumbers {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 82%;
+    margin-left: 9%;
+    margin-top: -20px;
+}
+.myEmployees.sliderNumber {
+
+}
+.gradingSliderContainer {
+    position: absolute;
+    width: 100%;
+    bottom: 50px;
+}
+.gradingMovementButtons {
+    position: absolute;
+    width: 100%;
+    bottom: 15px;
 }
 
 .employeePreview {
