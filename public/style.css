@@ -2070,6 +2070,10 @@ button.link {
 .myEmployees.sliderNumber {
 
 }
+.myEmployeesWidth {
+    max-width: 1200px;
+    margin: auto;
+}
 .gradingSliderContainer {
     position: absolute;
     width: 100%;
