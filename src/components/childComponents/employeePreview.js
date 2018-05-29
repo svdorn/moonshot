@@ -235,7 +235,7 @@ class EmployeePreview extends Component {
         const highRange = this.props.questions[questionIndex].range.highRange;
         for (let number = lowRange; number <= highRange; number++) {
             sliderNumbers.push(
-                <div className="myEmployees sliderNumber">
+                <div key={`sliderNumber${number}`} className="myEmployees sliderNumber">
                     { number }
                 </div>
             );
