@@ -42,6 +42,7 @@ const adminApis = require('./apis/adminApis');
 const miscApis = require('./apis/miscApis');
 const pathwayApis = require('./apis/pathwayApis');
 const skillApis = require('./apis/skillApis');
+const mlFunctions = require('./apis/mlFunctions');
 
 
 // set up the session
@@ -63,8 +64,6 @@ app.use(session({
 
 // ----->> START APIS <<----- //
 
-
-const mlFunctions = require('./apis/mlFunctions');
 
 app.post('/user/submitFreeResponse', userApis.POST_submitFreeResponse);
 app.post('/user/startPositionEval', userApis.POST_startPositionEval);

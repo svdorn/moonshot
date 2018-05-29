@@ -55,16 +55,28 @@ function POST_answerSkillQuestion(req, res) {
     })
 
     // get the skill
-    Skills.find({ $or: [{url: skillUrl}, {_id: skillUrl}]})
-    .then(foundSkills => {
-        if (foundSkills.length === 0 || !foundSkills[0]) { return res.status(404).send("Invalid skill."); }
-        skill = foundSkills[0];
-        recordAnswerAndGetNewQuestion();
+    // try using the skillUrl as an id because sometimes it comes in that way
+    Skills.findById(skillUrl)
+    .then(foundSkill => {
+        if (foundSkill) {
+            skill = foundSkill;
+            recordAnswerAndGetNewQuestion();
+        }
+        else { throw "Couldn't find skill using url as id."; }
     })
-    .catch(findSkillErr => {
-        console.log("Error finding skill by url: ", findSkillErr);
-        return res.status(500).send("Server error, try again later.");
-    })
+    .catch(noSkillFromUrlError => {
+        console.log(noSkillFromUrlError);
+        Skills.find({url: skillUrl})
+        .then(foundSkills => {
+            if (foundSkills.length === 0 || !foundSkills[0]) { return res.status(404).send("Invalid skill."); }
+            skill = foundSkills[0];
+            recordAnswerAndGetNewQuestion();
+        })
+        .catch(findSkillErr => {
+            console.log("Error finding skill by url: ", findSkillErr);
+            return res.status(500).send("Server error, try again later.");
+        })
+    });
 
     async function recordAnswerAndGetNewQuestion() {
         if (!user || !skill) { return }
@@ -307,19 +319,33 @@ function POST_startOrContinueTest(req, res) {
         .catch(findUserErr => {
             console.log("Error finding user in the db when trying to get a skill by url: ", findUserErr);
             return res.status(500).send("Server error, try again later.");
-        })
-
-        // get the skill by either skillUrl or id
-        Skills.find({ $or: [{url: skillUrl}, {_id: skillUrl}]})
-        .then(foundSkills => {
-            if (foundSkills.length === 0) { return res.status(404).send("Invalid skill."); }
-            skill = foundSkills[0];
-            checkIfStarted();
-        })
-        .catch(findSkillErr => {
-            console.log("Error finding skill by url: ", findSkillErr);
-            return res.status(500).send("Server error, try again later.");
         });
+
+        // get the skill
+        // try using the skillUrl as an id because sometimes it comes in that way
+        Skills.findById(skillUrl)
+        .then(foundSkill => {
+            if (foundSkill) {
+                skill = foundSkill;
+                checkIfStarted();
+            }
+            else { throw "Couldn't find skill using url as id."; }
+        })
+        .catch(noSkillFromUrlError => {
+            console.log(noSkillFromUrlError);
+            Skills.find({url: skillUrl})
+            .then(foundSkills => {
+                if (foundSkills.length === 0 || !foundSkills[0]) { return res.status(404).send("Invalid skill."); }
+                skill = foundSkills[0];
+                checkIfStarted();
+            })
+            .catch(findSkillErr => {
+                console.log("Error finding skill by url: ", findSkillErr);
+                return res.status(500).send("Server error, try again later.");
+            })
+        });
+
+
 
         function checkIfStarted() {
             // haven't yet found either the skill or user from the db

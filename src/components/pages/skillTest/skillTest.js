@@ -23,30 +23,49 @@ class PsychAnalysis extends Component {
 
 
     componentDidMount() {
+        try {
+            const skillUrl = this.props.params.skillUrl;
+            this.resetPage(skillUrl);
+        } catch (getSkillUrlError) {
+            console.log(getSkillUrlError);
+            // TODO: go to discover skills page or somesuch
+            return this.goTo("/");
+        }
+    }
+
+
+    componentWillReceiveProps(newProps) {
+        // new skill url means we have a new skill to test
+        if (this.props.params.skillUrl !== newProps.params.skillUrl) {
+            this.resetPage(newProps.params.skillUrl)
+        }
+    }
+
+
+    resetPage(skillUrl) {
         const currentUser = this.props.currentUser;
         // make sure a user is logged in
         if (!currentUser) {
             this.goTo("/login");
         }
 
-        let skillUrl = "";
-        try {
-            skillUrl = this.props.params.skillUrl;
-        } catch (getSkillUrlError) {
-            // TODO: go to discover skills page or somesuch
-            return this.goTo("/");
+        const params = {
+            userId: currentUser._id,
+            verificationToken: currentUser.verificationToken,
+            skillUrl
         }
 
-        axios.post("/api/skill/startOrContinueTest", {userId: currentUser._id, verificationToken: currentUser.verificationToken, skillUrl})
+        axios.post("/api/skill/startOrContinueTest", params)
         .then(result => {
             this.setState({
-                ...this.state,
                 question: {
                     body: result.data.question.body,
                     options: this.shuffle(result.data.question.options),
                     multiSelect: result.data.question.multiSelect
                 },
-                skillName: result.data.skillName
+                skillName: result.data.skillName,
+                selectedId: undefined,
+                finished: false
             });
         })
         .catch(error => {
