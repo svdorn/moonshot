@@ -55,16 +55,27 @@ class ProgressBar extends Component {
         let stepCircles = [];
         let stepBars = [];
         for (let stepCounter = 1; stepCounter <= numSteps; stepCounter++) {
+            let amountFinished = 100;
+            if (stepNumber === stepCounter) {
+                amountFinished = 40;
+            }
+            else if (stepNumber < stepCounter) {
+                amountFinished = 0;
+            }
             let r = rAlways;
-            let g = gStart + ((gEnd - gStart) * stepCounter / numSteps);
-            let b = bStart + ((bEnd - bStart) * stepCounter / numSteps);
+            let g = gStart + ((gEnd - gStart) * stepCounter / (numSteps + 1));
+            let b = bStart + ((bEnd - bStart) * stepCounter / (numSteps + 1));
+            let gRight = gStart + ((gEnd - gStart) * (stepCounter + (amountFinished / 100)) / (numSteps + 1));
+            let bRight = bStart + ((bEnd - bStart) * (stepCounter + (amountFinished / 100)) / (numSteps + 1));
+
+
             stepCircles.push(
                 <div className="progressStepCircle" style={{backgroundColor: `rgb(${r},${g},${b})`}}>
                     <div><div>{ stepCounter }</div></div>
                 </div>
             );
 
-            const interiorStyle = { width: "40%" };
+            const interiorStyle = { width: `${amountFinished}%`, background: `linear-gradient(to right, rgb(${r},${g}, ${b}), rgb(${r},${gRight}, ${bRight}))` };
             stepBars.push(
                 <div className="progressStepBar">
                     <div className="progressStepBarInterior" style={interiorStyle} />
@@ -72,9 +83,15 @@ class ProgressBar extends Component {
             )
         }
 
+        stepCircles.push(
+            <div className="progressStepCircle" style={{backgroundColor: `rgb(${rAlways},${gEnd},${bEnd})`}}>
+                <div></div>
+            </div>
+        );
+
         return (
             <div className="progressContainer">
-                <div>
+                <div className="font30px">
                     { stepNumber }. { stepName }
                 </div>
                 <div className="progressBar">

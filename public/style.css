@@ -191,8 +191,12 @@ form > h1 {
 .progressBar {
     width: 60%;
     margin-left: 20%;
-    height: 20px;
+    margin-top: 30px;
     margin-bottom: 50px;
+    height: 10px;
+    --stepCircleWidth: 20px;
+    position: relative;
+    background-color: #CBCBCB;
 }
 .progressStepBars {
     width: 100%;
@@ -204,11 +208,25 @@ form > h1 {
     flex: 1;
     height: 100%;
 }
+.progressStepCircles {
+    position: absolute;
+    width: calc(100% + var(--stepCircleWidth));
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    left: calc(var(--stepCircleWidth) / -2);
+    top: 50%;
+    transform: translateY(-50%);
+}
 .progressStepCircle {
-    width: 20px;
-    height: 20px;
+    width: var(--stepCircleWidth);
+    height: var(--stepCircleWidth);
     border-radius: 100%;
     position: relative;
+    display: inline-block;
+}
+.progressStepCircle:last-child {
+
 }
 .progressStepCircle > div {
     width: 80%;
@@ -224,6 +242,9 @@ form > h1 {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+}
+.progressStepBarInterior {
+    height: 100%;
 }
 
 
