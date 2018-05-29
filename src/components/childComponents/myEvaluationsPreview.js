@@ -12,21 +12,30 @@ import {
     CircularProgress,
     Paper
 } from 'material-ui';
+import {browserHistory} from 'react-router';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import axios from 'axios';
 
 class MyEvaluationsPreview extends Component {
 
+    goTo(route) {
+        console.log("route")
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
+    }
+
     render() {
 
         let positionSkills = null;
         // TODO: hook up skills to database
-        let skills = ["Python", "Javascript", "Computer Science"];
+        let skills = ["Sales", "Finance", "Networking"];
         if (this.props.variation === 2) {
-            skills = ["Networking", "Sales", "Management"]
+            skills = ["Python", "Javascript", "Computer Science"];
         } else if (this.props.variation === 3) {
-            skills = ["Cooking", "Culinary Arts"]
+            skills = ["Networking", "Sales", "Management"];
         }
         if (skills) {
             positionSkills = skills.map(function (skill, index) {
@@ -78,7 +87,7 @@ class MyEvaluationsPreview extends Component {
                         <div className="clickable underline" style={{display: "inline-block"}}>
                             View Evaluation
                         </div>
-                        <div className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
+                        <div onClick={() => this.goTo("/myCandidates")} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
                             See Results
                         </div>
                     </div>

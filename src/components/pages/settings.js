@@ -22,7 +22,7 @@ class Settings extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <div className="fillScreen greenToBlue">
+            <div className="fillScreen lightBlackBackground">
                 <MetaTags>
                     <title>Settings | Moonshot</title>
                     <meta name="description" content="Change your Moonshot account settings." />
@@ -42,9 +42,9 @@ class Settings extends Component {
                         <PasswordChange/>
                     }
                     <br/>
-                    <div className="lightWhiteForm boxStyle">
+                    <div className="lightBlackForm boxStyle">
                         <Menu value={this.state.value} onChange={this.handleChange} style={{}}>
-                            <MenuItem primaryText="Account" disabled={true}/>
+                            <MenuItem primaryText="Account" className="whiteText" disabled={true}/>
                             <Divider/>
                             <MenuItem value={1} primaryText="Settings"/>
                             <MenuItem value={2} primaryText="Change Password"/>

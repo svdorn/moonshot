@@ -186,6 +186,7 @@ function POST_answerQuestion(req, res) {
     const questionIndex = sanitize(body.user.questionIndex);
     const score = sanitize(body.user.score);
     const companyId = sanitize(body.user.companyId);
+    const gradingComplete = sanitize(body.user.gradingComplete);
 
     if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !companyId) {
         console.log("here");
@@ -224,6 +225,8 @@ function POST_answerQuestion(req, res) {
         } else {
             employee.answers[answerIndex].score = score;
         }
+
+        employee.gradingComplete = gradingComplete;
 
         // update the employee in the business object
         business.employees[employeeIndex] = employee;

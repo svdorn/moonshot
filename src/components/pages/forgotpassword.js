@@ -1,6 +1,6 @@
 "use strict"
 import React, {Component} from 'react';
-import {TextField, CircularProgress} from 'material-ui';
+import {TextField, CircularProgress, RaisedButton} from 'material-ui';
 import {forgotPassword} from '../../actions/usersActions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -8,11 +8,14 @@ import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
 
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -20,7 +23,11 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
     />
@@ -70,17 +77,16 @@ class ForgotPassword extends Component {
 
     render() {
         return (
-            <div className="fillScreen greenToBlue formContainer">
+            <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
                     <title>Forgot Password | Moonshot</title>
                     <meta name="description" content="Reset your Moonshot password. It's okay - we all forget things sometimes." />
                 </MetaTags>
-                <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
-                <div className="form lightWhiteForm">
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1>Forgot Password</h1>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="email"
                                 component={renderTextField}
@@ -88,15 +94,14 @@ class ForgotPassword extends Component {
                                 className="lightBlueInputText"
                             /><br/>
                         </div>
-                        <button
-                            style={{marginTop:"20px"}}
+                        <RaisedButton
+                            label="Send Email"
                             type="submit"
-                            className="formSubmitButton font24px font16pxUnder600"
-                        >
-                            Send Email
-                        </button>
+                            className="raisedButtonBusinessHome"
+                            style={{margin: '30px 0'}}
+                        />
                     </form>
-                    {this.props.loading ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
+                    {this.props.loading ? <CircularProgress color="white" style={{marginTop: "20px"}}/> : ""}
                 </div>
             </div>
         );

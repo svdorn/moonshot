@@ -132,7 +132,7 @@ class MyEmployees extends Component {
         })
 
         // TODO get companies from DB
-        const positions = ["First Position", "Second Position"]
+        const positions = ["Financial Represenatative", "Web Developer"]
         const positionItems = positions.map(function (position) {
             return <MenuItem value={position} primaryText={position} key={position}/>
         })
