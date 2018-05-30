@@ -229,7 +229,7 @@ class MyCandidates extends Component {
                             initialIsDismissed={initialIsDismissed}
                             employerUserId={currentUser._id}
                             employerVerificationToken={currentUser.verificationToken}
-                            companyId={currentUser.company.companyId}
+                            companyId={currentUser.businessInfo.company.companyId}
                             candidateId={candidate.userId}
                             pathwayId={pathwayId}
                             editHiringStage={true}

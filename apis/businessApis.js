@@ -487,6 +487,9 @@ function GET_pathways(req, res) {
 
             let pathwayQuery = { '_id': { $in: company.pathwayIds } }
 
+            console.log(company);
+            console.log(company.pathwayIds);
+
             // find names of all the pathways associated with the business
             Pathways.find(pathwayQuery)
             .select("name")
