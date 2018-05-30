@@ -62,7 +62,7 @@ function fireTracking() {
     ReactGA.pageview(window.location.pathname + window.location.search);
 }
 
-const businessUserTypes = ["employee", "manager", "businessAdmin"];
+const businessUserTypes = ["employee", "manager", "accountAdmin"];
 const candidateUserTypes = ["candidate"];
 // TODO: change people who are admins to a userType of admin
 const adminUserTypes = ["admin", "candidate"];

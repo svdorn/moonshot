@@ -76,7 +76,7 @@ class Menu extends Component {
             case "Profile":
                 if (currentUser) {
                     // if user is employer, go to business profile
-                    if (currentUser.userType === "employer") {
+                    if (currentUser.userType === "manager" || currentUser.userType === "employee" || currentUser.userType === "accountAdmin") {
                         //this.goTo("/businessProfile");
                         this.goTo("/");
                     }
@@ -144,7 +144,7 @@ class Menu extends Component {
         let isEmployer = false;
         let currentUser = this.props.currentUser;
 
-        if (currentUser && currentUser.userType === "employer") {
+        if (currentUser && (currentUser.userType === "accountAdmin" || currentUser.userType === "manager" || currentUser.userType === "employee")) {
             isEmployer = true;
         }
 
@@ -254,12 +254,13 @@ class Menu extends Component {
                 ]}
             ];
         }
-        // if the current user is an employer
-        else if (isEmployer) {
+        // if the current user is an account admin for a business
+        else if (currentUser.userType === "accountAdmin") {
             menuOptions = [
                 {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "url", title: "Employees", url: "/myEmployees"},
                 {optionType: "url", title: "Candidates", url: "/myCandidates"},
+                {optionType: "url", title: "Test", url: "/test"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     //{optionType: "url", title: "Profile", url: "/businessProfile"},
@@ -267,6 +268,36 @@ class Menu extends Component {
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "url", title: "Add User", url: "/addUser"},
+                    {optionType: "signOut"}
+                ]}
+            ];
+        }
+        // if the current user is a manager for a business
+        else if (currentUser.userType === "manager") {
+            menuOptions = [
+                {optionType: "url", title: "Employees", url: "/myEmployees"},
+                {optionType: "url", title: "Test", url: "/test"},
+                {optionType: "separator"},
+                {optionType: "dropDown", components: [
+                    //{optionType: "url", title: "Profile", url: "/businessProfile"},
+                    {optionType: "url", title: "Profile", url: "/"},
+                    {optionType: "divider"},
+                    {optionType: "url", title: "Settings", url: "/settings"},
+                    {optionType: "url", title: "Add User", url: "/addUser"},
+                    {optionType: "signOut"}
+                ]}
+            ];
+        }
+        // if the current user is an employee for a business
+        else if (currentUser.userType === "employee") {
+            menuOptions = [
+                {optionType: "url", title: "Test", url: "/test"},
+                {optionType: "separator"},
+                {optionType: "dropDown", components: [
+                    //{optionType: "url", title: "Profile", url: "/businessProfile"},
+                    {optionType: "url", title: "Profile", url: "/"},
+                    {optionType: "divider"},
+                    {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "signOut"}
                 ]}
             ];

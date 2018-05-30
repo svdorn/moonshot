@@ -43,11 +43,15 @@ class AuthenticatedComponent extends Component {
             const currentUserType = this.props.currentUser.userType;
             let authenticatedType = false;
 
-            for (let i = 0; i < types.length; i++) {
-                if (types[i] && currentUserType === types[i]) {
-                    authenticatedType = true;
-                    break;
+            if (types) {
+                for (let i = 0; i < types.length; i++) {
+                    if (types[i] && currentUserType === types[i]) {
+                        authenticatedType = true;
+                        break;
+                    }
                 }
+            } else {
+                authenticatedType = true;
             }
 
             // if one of the authenticated types matches the current user's type, they are authenticated
