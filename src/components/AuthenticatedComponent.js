@@ -25,8 +25,6 @@ class AuthenticatedComponent extends Component {
         //     });
         // } else {
             this.checkLoggedIn();
-
-            console.log("AuthenticatedComponent props: ", this.props);
         // }
     }
 
@@ -43,11 +41,9 @@ class AuthenticatedComponent extends Component {
         else {
             const types = this.props.route.userType;
             const currentUserType = this.props.currentUser.userType;
-            console.log(types);
-            console.log(currentUserType);
             let authenticatedType = false;
+
             for (let i = 0; i < types.length; i++) {
-                console.log(types[i]);
                 if (types[i] && currentUserType === types[i]) {
                     authenticatedType = true;
                     break;

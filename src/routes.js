@@ -64,6 +64,7 @@ function fireTracking() {
 
 const businessUserTypes = ["employee", "manager", "businessAdmin"];
 const candidateUserTypes = ["candidate"];
+const adminUserTypes = ["admin", "candidate"];
 
 const routes = (
   <Router onUpdate={fireTracking} history={browserHistory}>
@@ -105,7 +106,7 @@ const routes = (
         <Route path="positionSignup" component={PositionSignup} />
         <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
 
-        <Route path="admin" component={AuthenticatedComponent} page={<Admin/>}>
+        <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} userType={adminUserTypes}>
             <IndexRoute component={AdminPages} />
             <Route path="createBusinessAccount" component={CreateBusinessAccount} />
             <Route path="editBusiness" component={EditBusiness} />
