@@ -41,10 +41,13 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 dispatch({type:"LOGIN", payload: returnedUser});
                 let nextUrl = '/discover';
                 console.log(returnedUser.userType);
-                if (returnedUser.userType === "manager" || returnedUser.userType === "employee" || returnedUser.userType === "businessAdmin") {
+                if (returnedUser.userType === "manager" || returnedUser.userType === "accountAdmin") {
                     nextUrl = '/myEvaluations';
+                } else if (returnedUser.userType === "employee") {
+                    // TODO: change this to be the correct link to a landing page of a test
+                    nextUrl = '/test';
                 }
-                if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
+                else if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";
                 } else if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
