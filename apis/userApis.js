@@ -1,5 +1,4 @@
 var Users = require('../models/users.js');
-var Employers = require('../models/employers.js');
 var Psychtests = require('../models/psychtests.js');
 var Skills = require('../models/skills.js');
 var Businesses = require('../models/businesses.js');
