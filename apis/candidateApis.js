@@ -19,6 +19,9 @@ const { sanitize,
         sendBizUpdateCandidateErrorEmail,
 } = require('./helperFunctions.js');
 
+// get function to start position evaluation
+const { startEval } = require('./userApis.js');
+
 
 const candidateApis = {
     POST_updateAllOnboarding,
@@ -33,13 +36,49 @@ const candidateApis = {
 
 
 function POST_candidate(req, res) {
-    // TODO: MAKE IT SO YOU CAN ACTUALLY SIGN UP
-    return res.status(400).send("Invalid employer code.");
-
-
     let user = sanitize(req.body);
 
-    // hash the user's password
+    // the things we will need before creating the user
+    let position = undefined;
+    let verifiedUniqueEmail = false;
+    let createdLoginInfo = false;
+
+    // message shown to users with bad employer code
+    const INVALID_CODE = "Invalid employer code."
+
+    // get the position from the employer code
+    const code = user.employerCode;
+    if (code.length !== 10) {
+        console.log(`code not long enough, was ${code.length} characters`);
+        return res.status(400).send(INVALID_CODE);
+    }
+    // business identifier
+    const employerCode = code.substring(0, 8);
+    // position identifier
+    const positionCode = code.substring(8);
+
+    // find the business corresponding to that employer code
+    let business = undefined;
+    Businesses.find({code: employerCode})
+    .then(foundBusiness => {
+        if (!foundBusiness) {
+            console.log("no business found with employer code: ", employerCode);
+            return res.status(400).send(INVALID_CODE);
+        }
+
+        business = foundBusiness;
+        // find the position the candidate is applying to
+        position = business.positions.find(pos => { return pos.code === positionCode; })
+        if (!position) {
+            console.log("no position found with position code: ", positionCode);
+            return res.status(400).send(INVALID_CODE);
+        }
+
+        // make the user with the position
+        makeUser();
+    })
+
+    // hash the user's password and add verification tokens
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function (err, salt) {
         bcrypt.hash(user.password, salt, function (err, hash) {
@@ -51,183 +90,148 @@ function POST_candidate(req, res) {
             // create user's verification strings
             user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
             user.verificationToken = crypto.randomBytes(64).toString('hex');
-            const query = {email: user.email};
 
-            getUserByQuery(query, function(err, foundUser) {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).send("Error creating account, try with a different email or try again later.");
-                }
-                if (foundUser == null || foundUser == undefined) {
-                    // get count of users with that name to get the profile url
-                    Users.count({name: user.name}, function (err, count) {
-                        const randomNumber = crypto.randomBytes(8).toString('hex');
-                        user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
-                        user.admin = false;
-                        user.agreedToTerms = true;
-                        let addedPathway = false;
-
-                        // add pathway to user's My Pathways if they went from
-                        // a landing page.
-                        // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY OR SINGLEWIRE PATHWAY
-                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386" || user.pathwayId === "5abc12cff36d2805e28d27f3" || user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
-                            user.pathways = [{
-                                pathwayId: user.pathwayId,
-                                currentStep: {
-                                    subStep: 1,
-                                    step: 1
-                                }
-                            }];
-                            addedPathway = true;
-                        }
-                        else {
-                            user.pathwayId = undefined;
-                        }
-
-                        user.dateSignedUp = new Date();
-                        // make sure referral code is a string, if not set it
-                        // to undefined (will happen if there is no referral code as well)
-                        if (typeof user.signUpReferralCode !== "string") {
-                            user.signUpReferralCode = undefined;
-                        }
-
-                        // store the user in the db
-                        Users.create(user, function (err, newUser) {
-                            if (err) {
-                                console.log(err);
-                            }
-
-                            req.session.unverifiedUserId = newUser._id;
-                            req.session.save(function (err) {
-                                if (err) {
-                                    console.log("error saving unverifiedUserId to session: ", err);
-                                }
-                            })
-
-                            if (user.signUpReferralCode) {
-                                Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
-                                    if (referralErr) {
-                                        console.log("Error finding referrer for new sign up: ", referralErr);
-                                    } else if (!referrer) {
-                                        console.log("Invalid referral code used: ", user.signUpReferralCode);
-                                    } else {
-                                        referrer.referredUsers.push({
-                                            name: newUser.name,
-                                            email: newUser.email,
-                                            _id: newUser._id
-                                        });
-                                        referrer.save(function(referrerSaveErr, newReferrer) {
-                                            if (referrerSaveErr) {
-                                                console.log("Error saving referrer: ", referrerSaveErr);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-
-                            try {
-                                // send email to everyone if there's a new sign up (if in production mode)
-                                if (process.env.NODE_ENV) {
-                                    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-
-                                    let subject = 'New Sign Up';
-                                    let additionalText = '';
-                                    if (addedPathway) {
-                                        let pathName = "Singlewire QA";
-                                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
-                                            pathName = "Northwestern Mutual";
-                                        }
-                                        else if (user.pathwayId === "5abc12cff36d2805e28d27f3") {
-                                            pathName = "Curate Full-Stack";
-                                        }
-                                        else if (user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
-                                            pathName = "Dream Home CEO";
-                                        }
-                                        additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
-                                    }
-                                    let content =
-                                        '<div>'
-                                        +   '<p>New user signed up.</p>'
-                                        +   '<p>Name: ' + newUser.name + '</p>'
-                                        +   '<p>email: ' + newUser.email + '</p>'
-                                        +   additionalText
-                                        + '</div>';
-
-                                    const sendFrom = "Moonshot";
-                                    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                                        if (!success) {
-                                            console.log("Error sending sign up alert email");
-                                        }
-                                    })
-                                }
-                            } catch (e) {
-                                console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
-                            }
-
-                            // no reason to return the user with tokens because
-                            // they will have to verify themselves before they
-                            // can do anything anyway
-                            res.json(safeUser(newUser));
-
-                            // send an email to the user one day after signup
-                            try {
-                                const ONE_DAY = 1000 * 60 * 60 * 24;
-
-                                let moonshotUrl = 'https://www.moonshotinsights.io/';
-                                // if we are in development, links are to localhost
-                                if (!process.env.NODE_ENV) {
-                                    moonshotUrl = 'http://localhost:8081/';
-                                }
-
-                                let firstName = getFirstName(newUser.name);
-                                // add in a space before the name, if the user has a name
-                                if (firstName != "") {
-                                    firstName = " " + firstName;
-                                }
-
-                                setTimeout(function() {
-                                    let dayAfterRecipient = [newUser.email];
-                                    let dayAfterSubject = 'Moonshot Fights For You';
-                                    let dayAfterContent =
-                                        "<div style='font-size:15px;text-align:left;font-family: Arial, sans-serif;color:#000000'>"
-                                            + "<p>Hi" + firstName + ",</p>"
-                                            + "<p>My name is Kyle. I'm the co-founder and CEO at Moonshot. I'm honored that you trusted us in your career journey. If you need anything at all, please let me know.</p>"
-                                            + "<p>I individually fight for every Moonshot candidate — Mock interviews, inside tips that our employers are looking for, anything to help you start the career of your dreams.</p>"
-                                            + "<p>Shoot me a message. I'm all ears.</p>"
-                                            + "<p>Yours truly,<br/>Kyle</p>"
-                                            + "<div style='font-size:10px; text-align:left; color:#000000; margin-bottom:50px;'>"
-                                                + "----------------------------------<br/>"
-                                                + "Kyle Treige, Co-Founder & CEO<br/>"
-                                                + "<a href='https://moonshotinsights.io/'>Moonshot</a><br/>"
-                                                + "608-438-4478<br/>"
-                                            + "</div>"
-                                            + "<div style='font-size:10px; text-align:left; color:#C8C8C8; margin-bottom:30px;'>"
-                                                + "<i>Moonshot Learning, Inc.<br/><a href='' style='text-decoration:none;color:#D8D8D8;cursor:default'>1261 Meadow Sweet Dr, Madison, WI 53719</a>.<br/>"
-                                                + '<a style="color:#C8C8C8;" href="' + moonshotUrl + 'unsubscribe?email=' + newUser.email + '">Opt-out of future messages.</a></i>'
-                                            + "</div>"
-                                        + "</div>";
-
-                                    const dayAfterSendFrom = "Kyle Treige";
-                                    sendEmail(dayAfterRecipient, dayAfterSubject, dayAfterContent, dayAfterSendFrom, undefined, function (success, msg) {
-                                        if (success) {
-                                            console.log("sent day-after email");
-                                        } else {
-                                            console.log("error sending day-after email");
-                                        }
-                                    })
-                                }, ONE_DAY);
-                            } catch (e) {
-                                console.log("Not able to send day-after email to ", newUser.name, "with id: ", newUser._id);
-                                console.log("Error: ", e);
-                            }
-                        })
-                    })
-                } else {
-                    res.status(401).send("An account with that email address already exists.");
-                }
-            });
+            // mark that we have created verification token and password, then make the user
+            createdLoginInfo = true;
+            makeUser();
         });
     });
+
+    // make sure a user with this email doesn't already exist
+    Users.find({email: user.email})
+    .then(foundUser => {
+        if (foundUser) {
+            return res.status(401).send("An account with that email address already exists.");
+        } else {
+            // mark that we are good to make this user, then try to do it
+            verifiedUniqueEmail = true;
+            makeUser();
+        }
+    })
+    .catch(findUserError => {
+        console.log("error finding user by email: ", findUserError);
+        return res.status(500).send("Server error, try again later.");
+    });
+
+    function makeUser() {
+        // make sure we've found the right position and made sure no user with
+        // the same email exists before making the user
+        if (!position || !verifiedUniqueEmail || !createdLoginInfo) { return; }
+
+        // get count of users with that name to get the profile url
+        Users.count({name: user.name}, function (err, count) {
+            const randomNumber = crypto.randomBytes(8).toString('hex');
+            user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+            user.admin = false;
+            user.agreedToTerms = true;
+            let addedPathway = false;
+
+            // add pathway to user's My Pathways if they went from
+            // a landing page.
+            // TODO: get rid of this once pathways no longer exist
+            if (user.pathwayId) {
+                user.pathways = [{
+                    pathwayId: user.pathwayId,
+                    currentStep: {
+                        subStep: 1,
+                        step: 1
+                    }
+                }];
+                addedPathway = true;
+            }
+            else {
+                user.pathwayId = undefined;
+            }
+
+            user.dateSignedUp = new Date();
+            // make sure referral code is a string, if not set it
+            // to undefined (will happen if there is no referral code as well)
+            if (typeof user.signUpReferralCode !== "string") {
+                user.signUpReferralCode = undefined;
+            }
+
+            // TODO: sign up for position
+
+            // store the user in the db
+            Users.create(user, function (err, newUser) {
+                if (err) {
+                    console.log(err);
+                }
+
+                req.session.unverifiedUserId = newUser._id;
+                req.session.save(function (err) {
+                    if (err) {
+                        console.log("error saving unverifiedUserId to session: ", err);
+                    }
+                })
+
+                if (user.signUpReferralCode) {
+                    Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
+                        if (referralErr) {
+                            console.log("Error finding referrer for new sign up: ", referralErr);
+                        } else if (!referrer) {
+                            console.log("Invalid referral code used: ", user.signUpReferralCode);
+                        } else {
+                            referrer.referredUsers.push({
+                                name: newUser.name,
+                                email: newUser.email,
+                                _id: newUser._id
+                            });
+                            referrer.save(function(referrerSaveErr, newReferrer) {
+                                if (referrerSaveErr) {
+                                    console.log("Error saving referrer: ", referrerSaveErr);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                try {
+                    // send email to everyone if there's a new sign up (if in production mode)
+                    if (process.env.NODE_ENV) {
+                        let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+
+                        let subject = 'New Sign Up';
+                        let additionalText = '';
+                        if (addedPathway) {
+                            let pathName = "Singlewire QA";
+                            if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
+                                pathName = "Northwestern Mutual";
+                            }
+                            else if (user.pathwayId === "5abc12cff36d2805e28d27f3") {
+                                pathName = "Curate Full-Stack";
+                            }
+                            else if (user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
+                                pathName = "Dream Home CEO";
+                            }
+                            additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
+                        }
+                        let content =
+                            '<div>'
+                            +   '<p>New user signed up.</p>'
+                            +   '<p>Name: ' + newUser.name + '</p>'
+                            +   '<p>email: ' + newUser.email + '</p>'
+                            +   additionalText
+                            + '</div>';
+
+                        const sendFrom = "Moonshot";
+                        sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+                            if (!success) {
+                                console.log("Error sending sign up alert email");
+                            }
+                        })
+                    }
+                } catch (e) {
+                    console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
+                }
+
+                // no reason to return the user with tokens because
+                // they will have to verify themselves before they
+                // can do anything anyway
+                res.json(safeUser(newUser));
+            })
+        })
+    }
 }
 
 

@@ -85,9 +85,30 @@ async function POST_business(req, res) {
             return res.status(400).send("A business already exists with that name. Try a different name.");
         }
 
+        // count the businesses so we can make a unique business code
+        let businessCount = 0;
+        try {
+            businessCount = await Businesses.count({});
+        } catch (countError) {
+            console.log("error counting businesses: ", countError);
+            return res.status(500).send("Error counting businesses.");
+        }
+
+        // make the unique code
+        const HEX = 16;
+        let code = businessCount.toString(HEX);
+        // add extra zeroes to the beginning so all codes are the same length
+        const END_CODE_LENGTH = 6;
+        while (code.length < END_CODE_LENGTH) {
+            code = "0" + code;
+        }
+        // add some randomness to the code
+        code = crypto.randomBytes(1).toString('hex') + code;
+
         // no business exists with that name, can go ahead and make new business
         const newBusiness = {
-            name: businessName
+            name: businessName,
+            code
         };
 
         // make the business in the db
@@ -139,6 +160,7 @@ async function POST_business(req, res) {
 
                     try {
                         // save the business with the new user in it
+                        console.log("saving...");
                         await createdBusiness.save();
                         // everything succeeded
                         return res.json("Success!");

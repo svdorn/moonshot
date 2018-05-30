@@ -9,6 +9,9 @@ var businessesSchema = mongoose.Schema({
 
     // ---->>> POST-PIVOT <<<---- //
 
+    // unique company code, added to position code for user sign up
+    code: String,
+
     employees: [{
         employeeId: mongoose.Schema.Types.ObjectId,
         // id of the manager that rated this employee
@@ -59,6 +62,10 @@ var businessesSchema = mongoose.Schema({
     positions: [{
         // name of the position (such as "Machine Learning Developer")
         name: String,
+        // these two characters are position differentiators - they are added
+        // to the business' code; the code candidates will use the full code when
+        // they sign up to be automatically signed up for this position
+        code: String,
         // if the position should be listed as one that candidates can apply for
         currentlyHiring: Boolean,
         // the skill tests a candidate must complete in order to apply
