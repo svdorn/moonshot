@@ -43,6 +43,7 @@ const userApis = {
     POST_submitFreeResponse,
 
     POST_resetFrizz,
+    POST_reset24,
 
     internalStartPsychEval
 }
@@ -180,6 +181,36 @@ async function POST_resetFrizz(req, res) {
     })
     .catch(error => {
         console.log("error resetting frizz: ", error);
+        return res.status(500).send("ERROR");
+    })
+}
+async function POST_reset24(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+
+    let frizz;
+    try {
+        frizz = await getAndVerifyUser(userId, verificationToken);
+    } catch (frizzError) {
+        console.log("error getting 24: ", frizzError);
+        return res.status(500).send("Error getting user.");
+    }
+
+    if (frizz.email != "ameyer24@wisc.edu") {
+        return res.status(403).send("Not logged in with right account.");
+    }
+
+    frizz.skillTests = undefined;
+    frizz.psychometricTest = undefined;
+    frizz.positions = undefined;
+    frizz.positionInProgress = undefined;
+
+    frizz.save()
+    .then(newFrizz => {
+        return res.json(removePassword(newFrizz));
+    })
+    .catch(error => {
+        console.log("error resetting 24: ", error);
         return res.status(500).send("ERROR");
     })
 }

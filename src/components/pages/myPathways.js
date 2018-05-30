@@ -1,10 +1,10 @@
 "use strict"
-import React, {Component} from 'react';
-import {Tabs, Tab, CircularProgress} from 'material-ui';
-import {connect} from 'react-redux';
-import {browserHistory} from 'react-router';
-import {closeNotification} from "../../actions/usersActions";
-import {bindActionCreators} from 'redux';
+import React, { Component } from 'react';
+import { Tabs, Tab, CircularProgress } from 'material-ui';
+import { connect } from 'react-redux';
+import { browserHistory } from 'react-router';
+import { closeNotification, reset24 } from "../../actions/usersActions";
+import { bindActionCreators } from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
@@ -175,6 +175,15 @@ class MyPathways extends Component {
         window.scrollTo(0, 0);
     }
 
+
+    reset24() {
+        const self = this;
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+        this.props.reset24(userId, verificationToken);
+    }
+
+
     render() {
 
         const style = {
@@ -230,6 +239,7 @@ class MyPathways extends Component {
                                             </div>}
                                     </Tab>
                                 </Tabs>
+                                <div style={{height: "3px", width: "3px", backgroundColor: "red", marginLeft: "5px", position: "relative"}} onClick={this.reset24.bind(this)}/>
                             </div>
                             :
                             <div>
@@ -262,6 +272,7 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
+        reset24
     }, dispatch);
 }
 
