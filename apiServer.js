@@ -37,7 +37,6 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 const userApis = require('./apis/userApis');
 const candidateApis = require('./apis/candidateApis');
 const businessApis = require('./apis/businessApis');
-const employerApis = require('./apis/employerApis');
 const adminApis = require('./apis/adminApis');
 const miscApis = require('./apis/miscApis');
 const pathwayApis = require('./apis/pathwayApis');
@@ -119,10 +118,6 @@ app.get('/pathway/pathwayByPathwayUrl', pathwayApis.GET_pathwayByPathwayUrl);
 app.get('/pathway/search', pathwayApis.GET_search);
 app.get("/pathway/allCompaniesAndCategories", pathwayApis.GET_allCompaniesAndCategories);
 app.get('/pathway/topPathways', pathwayApis.GET_topPathways);
-
-app.post('/employer/newEmployer', employerApis.POST_newEmployer);
-app.post('/employer/sendVerificationEmail', employerApis.POST_sendVerificationEmail);
-app.post('/employer/changeTempPassword', employerApis.POST_changeTempPassword);
 
 //app.get('/skill/skillByUrl', skillApis.GET_skillByUrl);
 app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);
