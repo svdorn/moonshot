@@ -365,7 +365,9 @@ var usersSchema = mongoose.Schema({
             // what the user responded with
             response: String,
             // text of the question
-            body: String
+            body: String,
+            // if the question is requird in order to finish the evaluation
+            required: Boolean
         }]
     }],
 
