@@ -102,11 +102,11 @@ const routes = (
         <Route path="positionSignup" component={PositionSignup} />
         <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
 
-        // <Route path="evaluation/:businessId/:positionId" component={}>
-        //     <Route path="psychAnalysis" component={PsychAnalysis} />
-        //     <Route path="skillTest/:skillUrl" component={SkillTest} />
-        //     <Route path="freeResponse" component={FreeResponse} />
-        // </Route>
+        {/*<Route path="evaluation/:businessId/:positionId" component={}>
+            <Route path="psychAnalysis" component={PsychAnalysis} />
+            <Route path="skillTest/:skillUrl" component={SkillTest} />
+            <Route path="freeResponse" component={FreeResponse} />
+        </Route>*/}
 
         <Route path="admin" component={AuthenticatedComponent} page={<Admin/>}>
             <IndexRoute component={AdminPages} />
