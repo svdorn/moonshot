@@ -234,8 +234,8 @@ var usersSchema = mongoose.Schema({
             name: String,
             companyId: mongoose.Schema.Types.ObjectId
         },
-        title: String,
-    }
+        title: String
+    },
 
     // the user's psychometric test answers and results
     psychometricTest: {
