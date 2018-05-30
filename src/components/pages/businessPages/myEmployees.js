@@ -278,7 +278,7 @@ class MyEmployees extends Component {
                 {searchBar}
 
                 <div>
-                    <ul className="horizCenteredList">
+                    <ul className="horizCenteredList myEmployeesWidth">
                         {employeePreviews}
                     </ul>
                 </div>

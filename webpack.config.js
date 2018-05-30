@@ -8,13 +8,17 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public')
   },
+  plugins: [new webpack.IgnorePlugin(/credentials.js/)],
   watch: true,
   mode: 'development',
   module: {
     rules: [
       {
         test:/\.js$/,
-        exclude:/node_modules/,
+        exclude:[
+            /node_modules/,
+            path.resolve(__dirname, "./credentials.js"),
+        ],
         loader: 'babel-loader',
         query: {
           presets: ['react', 'es2015', 'stage-1']
