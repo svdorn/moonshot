@@ -24,14 +24,14 @@ class PsychAnalysis extends Component {
         if (!currentUser) {
             this.goTo("/login");
         }
-        // if the user already took the test, can't do it again
+        // if the user hasn't signed up for the test
         else if (!currentUser.psychometricTest) {
             console.log("Have to have started the psych test first!");
             // TODO: make this go to the psych analysis landing page instead of home
             this.goTo("/");
         }
         // if the user already took the test, can't do it again
-        else if (!currentUser.psychometricTest.inProgress) {
+        else if (currentUser.psychometricTest.inProgress === false) {
             console.log("Can only take the psych test once!");
             // TODO: make this go to the psych analysis landing page instead of home
             this.goTo("/");

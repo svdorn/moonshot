@@ -1,7 +1,7 @@
 var Users = require('../models/users.js');
 var Referrals = require('../models/referrals.js');
 var Pathways = require('../models/pathways.js');
-var Businesses = require('../models/pathways.js');
+var Businesses = require('../models/businesses.js');
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -38,6 +38,9 @@ const candidateApis = {
 function POST_candidate(req, res) {
     let user = sanitize(req.body);
 
+    // if this is true, don't send any more errors
+    let errorSent = false;
+
     // the things we will need before creating the user
     let position = undefined;
     let verifiedUniqueEmail = false;
@@ -60,13 +63,14 @@ function POST_candidate(req, res) {
     // find the business corresponding to that employer code
     let business = undefined;
     Businesses.find({code: employerCode})
-    .then(foundBusiness => {
-        if (!foundBusiness) {
+    .then(foundBusinesses => {
+        if (!foundBusinesses || foundBusinesses.length == 0) {
             console.log("no business found with employer code: ", employerCode);
             return res.status(400).send(INVALID_CODE);
         }
 
-        business = foundBusiness;
+        business = foundBusinesses[0];
+
         // find the position the candidate is applying to
         position = business.positions.find(pos => { return pos.code === positionCode; })
         if (!position) {
@@ -81,7 +85,10 @@ function POST_candidate(req, res) {
     // hash the user's password and add verification tokens
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(user.password, salt, function (err, hash) {
+        if (err) { console.log("genSalt err: ", err); return res.status(500).send("Server error, try again later."); }
+        bcrypt.hash(user.password, salt, function (err2, hash) {
+            if (err2) { console.log("hash err: ", err); return res.status(500).send("Server error, try again later."); }
+
             // change the stored password to be the hash
             user.password = hash;
             user.verified = false;
@@ -99,8 +106,8 @@ function POST_candidate(req, res) {
 
     // make sure a user with this email doesn't already exist
     Users.find({email: user.email})
-    .then(foundUser => {
-        if (foundUser) {
+    .then(foundUsers => {
+        if (foundUsers.length > 0) {
             return res.status(401).send("An account with that email address already exists.");
         } else {
             // mark that we are good to make this user, then try to do it
@@ -173,8 +180,8 @@ function POST_candidate(req, res) {
 
             // position object within user's positions array
             let userPosition = {
-                companyId: businessId,
-                positionId,
+                companyId: business._id,
+                positionId: position._id,
                 hiringStage: "Not Contacted",
                 hiringStageChanges: [],
                 appliedStartDate: new Date(),
@@ -188,7 +195,9 @@ function POST_candidate(req, res) {
             user.positionInProgress = {
                 inProgress: true,
                 freeResponseQuestions: frqsForUser,
-                businessId, positionId, skillTests, testIndex
+                businessId: business._id,
+                positionId: position._id,
+                skillTests, testIndex
             }
 
             // store the user in the db
@@ -205,7 +214,12 @@ function POST_candidate(req, res) {
                 })
 
                 // sign up for the psych test
-                newUser = await internalStartPsychEval(newUser);
+                try {
+                    newUser = await internalStartPsychEval(newUser);
+                    newUser = await newUser.save();
+                } catch (psychEvalSignupError) {
+                    console.log("pyschEvalSignupError: ", psychEvalSignupError);
+                }
 
                 if (user.signUpReferralCode) {
                     Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
@@ -230,7 +244,7 @@ function POST_candidate(req, res) {
 
                 try {
                     // send email to everyone if there's a new sign up (if in production mode)
-                    if (process.env.NODE_ENV) {
+                    if (process.env.NODE_ENV !== "development") {
                         let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
 
                         let subject = 'New Sign Up';
