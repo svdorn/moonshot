@@ -40,7 +40,9 @@ const userApis = {
     POST_startPsychEval,
     POST_answerPsychQuestion,
     GET_printPsychScore,
-    POST_submitFreeResponse
+    POST_submitFreeResponse,
+
+    POST_resetFrizz
 }
 
 
@@ -145,6 +147,38 @@ async function makeMockPsychData() {
     })
     .catch(err => {
         console.log("err: ", err);
+    })
+}
+
+
+async function POST_resetFrizz(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+
+    let frizz;
+    try {
+        frizz = await getAndVerifyUser(userId, verificationToken);
+    } catch (frizzError) {
+        console.log("error getting frizz: ", frizzError);
+        return res.status(500).send("Error getting user.");
+    }
+
+    if (frizz.email != "frizzkitten@gmail.com") {
+        return res.status(403).send("Not logged in with right account.");
+    }
+
+    frizz.skillTests = undefined;
+    frizz.psychometricTest = undefined;
+    frizz.positions = undefined;
+    frizz.positionInProgress = undefined;
+
+    frizz.save()
+    .then(newFrizz => {
+        return res.json(removePassword(newFrizz));
+    })
+    .catch(error => {
+        console.log("error resetting frizz: ", error);
+        return res.status(500).send("ERROR");
     })
 }
 

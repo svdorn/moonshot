@@ -64,6 +64,7 @@ app.use(session({
 
 // ----->> START APIS <<----- //
 
+app.post("/user/resetFrizz", userApis.POST_resetFrizz);
 
 app.post('/user/submitFreeResponse', userApis.POST_submitFreeResponse);
 app.post('/user/startPositionEval', userApis.POST_startPositionEval);

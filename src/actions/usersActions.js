@@ -144,6 +144,22 @@ export function submitFreeResponse(userId, verificationToken, frqs) {
 }
 
 
+export function resetFrizz(userId, verificationToken) {
+    return function(dispatch) {
+        axios.post("/api/user/resetFrizz", {userId, verificationToken})
+        .then(response => {
+            dispatch({type: "USER_UPDATE", currentUser: response.data, notification:{message: "Frizz reset!", type: "infoHeader"}});
+            browserHistory.push("/positionSignup");
+            window.scrollTo(0, 0);
+        })
+        .catch(error => {
+            dispatch({type: "NOTIFICATION", notification:{message: error.response.data, type: "errorHeader"}})
+            console.log("error: ", error);
+        })
+    }
+}
+
+
 // POST USER
 export function postUser(user) {
     return function(dispatch) {

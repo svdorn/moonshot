@@ -16,7 +16,7 @@ import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import ComingSoonForm from '../childComponents/comingSoonForm';
-import {closeNotification, comingSoon} from "../../actions/usersActions";
+import {closeNotification, comingSoon, resetFrizz} from "../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import axios from 'axios';
 import styles from '../../../public/styles';
@@ -96,6 +96,14 @@ class Discover extends Component {
         browserHistory.push(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
+    }
+
+
+    resetFrizz() {
+        const self = this;
+        const userId = this.props.currentUser._id;
+        const verificationToken = this.props.currentUser.verificationToken;
+        this.props.resetFrizz(userId, verificationToken);
     }
 
 
@@ -558,6 +566,8 @@ class Discover extends Component {
                         {explorePathwayPreviews}
                     </ul>
                 </div>
+
+                <div style={{...style.separatorLine, position: "relative", top: "0"}} onClick={this.resetFrizz.bind(this)}/>
             </div>
         );
     }
@@ -566,7 +576,8 @@ class Discover extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        comingSoon
+        comingSoon,
+        resetFrizz
     }, dispatch);
 }
 
