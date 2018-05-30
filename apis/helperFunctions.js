@@ -3,7 +3,6 @@ const nodemailer = require('nodemailer');
 const credentials = require('../credentials');
 
 var Users = require('../models/users.js');
-var Employers = require('../models/employers.js');
 var Emailaddresses = require('../models/emailaddresses.js');
 
 // strictly sanitize, only allow bold and italics in input
@@ -268,9 +267,6 @@ function getUserByQuery(query, callback) {
     }
 
     Users.findOne(query, function (err, foundUser) {
-        doCallbackOrWaitForOtherDBCall(err, foundUser);
-    });
-    Employers.findOne(query, function(err, foundUser) {
         doCallbackOrWaitForOtherDBCall(err, foundUser);
     });
 }
