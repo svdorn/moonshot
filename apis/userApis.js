@@ -42,7 +42,9 @@ const userApis = {
     GET_printPsychScore,
     POST_submitFreeResponse,
 
-    POST_resetFrizz
+    POST_resetFrizz,
+
+    internalStartPsychEval
 }
 
 
@@ -411,6 +413,8 @@ async function POST_startPositionEval(req, res) {
             appliedStartDate: new Date(),
             freeResponseQuestions: frqsForUser
         }
+
+        user.positions.push(userPosition);
 
         user.positionInProgress = {
             inProgress: true,

@@ -20,7 +20,7 @@ const { sanitize,
 } = require('./helperFunctions.js');
 
 // get function to start position evaluation
-const { startEval } = require('./userApis.js');
+const { internalStartPsychEval } = require('./userApis.js');
 
 
 const candidateApis = {
@@ -150,10 +150,49 @@ function POST_candidate(req, res) {
                 user.signUpReferralCode = undefined;
             }
 
-            // TODO: sign up for position
+            // sign up for position
+            // user hasn't taken any skill tests yet, so they're on the first one (index 0)
+            let testIndex = 0;
+            // have to complete all the required skills tests since this is a new
+            // user and will have no previous skill test completions
+            let skillTests = position.skills;
+
+            // create the free response objects that will be stored in the user db
+            const numFRQs = position.freeResponseQuestions.length;
+            let frqsForUser = [];
+            for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
+                const frq = position.freeResponseQuestions[frqIndex];
+                frqsForUser.push({
+                    questionId: frq._id,
+                    questionIndex: frqIndex,
+                    response: undefined,
+                    body: frq.body,
+                    required: frq.required
+                });
+            }
+
+            // position object within user's positions array
+            let userPosition = {
+                companyId: businessId,
+                positionId,
+                hiringStage: "Not Contacted",
+                hiringStageChanges: [],
+                appliedStartDate: new Date(),
+                freeResponseQuestions: frqsForUser
+            }
+
+            // add the position to the user's list of positions
+            user.positions = [ userPosition ];
+
+            // the current position will be the positionInProgress
+            user.positionInProgress = {
+                inProgress: true,
+                freeResponseQuestions: frqsForUser,
+                businessId, positionId, skillTests, testIndex
+            }
 
             // store the user in the db
-            Users.create(user, function (err, newUser) {
+            Users.create(user, async function (err, newUser) {
                 if (err) {
                     console.log(err);
                 }
@@ -164,6 +203,9 @@ function POST_candidate(req, res) {
                         console.log("error saving unverifiedUserId to session: ", err);
                     }
                 })
+
+                // sign up for the psych test
+                newUser = await internalStartPsychEval(newUser);
 
                 if (user.signUpReferralCode) {
                     Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
