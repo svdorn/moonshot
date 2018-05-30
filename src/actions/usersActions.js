@@ -41,7 +41,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 dispatch({type:"LOGIN", payload: returnedUser});
                 let nextUrl = '/discover';
                 console.log(returnedUser.userType);
-                if (returnedUser.userType === "employer") {
+                if (returnedUser.userType === "manager" || returnedUser.userType === "employee" || returnedUser.userType === "businessAdmin") {
                     nextUrl = '/myEvaluations';
                 }
                 if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
