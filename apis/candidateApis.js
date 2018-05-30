@@ -42,45 +42,25 @@ function POST_candidate(req, res) {
     let errorSent = false;
 
     // the things we will need before creating the user
-    let position = undefined;
+    let positionFound = undefined;
     let verifiedUniqueEmail = false;
     let createdLoginInfo = false;
 
-    // message shown to users with bad employer code
-    const INVALID_CODE = "Invalid employer code."
-
-    // get the position from the employer code
-    const code = user.employerCode;
-    if (code.length !== 10) {
-        console.log(`code not long enough, was ${code.length} characters`);
-        return res.status(400).send(INVALID_CODE);
-    }
-    // business identifier
-    const employerCode = code.substring(0, 8);
-    // position identifier
-    const positionCode = code.substring(8);
-
-    // find the business corresponding to that employer code
-    let business = undefined;
-    Businesses.find({code: employerCode})
-    .then(foundBusinesses => {
-        if (!foundBusinesses || foundBusinesses.length == 0) {
-            console.log("no business found with employer code: ", employerCode);
-            return res.status(400).send(INVALID_CODE);
+    // make sure a user with this email doesn't already exist
+    Users.find({email: user.email})
+    .then(foundUsers => {
+        if (foundUsers.length > 0) {
+            return res.status(401).send("An account with that email address already exists.");
+        } else {
+            // mark that we are good to make this user, then try to do it
+            verifiedUniqueEmail = true;
+            makeUser();
         }
-
-        business = foundBusinesses[0];
-
-        // find the position the candidate is applying to
-        position = business.positions.find(pos => { return pos.code === positionCode; })
-        if (!position) {
-            console.log("no position found with position code: ", positionCode);
-            return res.status(400).send(INVALID_CODE);
-        }
-
-        // make the user with the position
-        makeUser();
     })
+    .catch(findUserError => {
+        console.log("error finding user by email: ", findUserError);
+        return res.status(500).send("Server error, try again later.");
+    });
 
     // hash the user's password and add verification tokens
     const saltRounds = 10;
@@ -104,26 +84,89 @@ function POST_candidate(req, res) {
         });
     });
 
-    // make sure a user with this email doesn't already exist
-    Users.find({email: user.email})
-    .then(foundUsers => {
-        if (foundUsers.length > 0) {
-            return res.status(401).send("An account with that email address already exists.");
-        } else {
-            // mark that we are good to make this user, then try to do it
-            verifiedUniqueEmail = true;
-            makeUser();
-        }
+    // message shown to users with bad employer code
+    const INVALID_CODE = "Invalid employer code."
+
+    // get the position from the employer code
+    const code = user.employerCode;
+    if (code.length < 10) {
+        console.log(`code not long enough, was ${code.length} characters`);
+        return res.status(400).send(INVALID_CODE);
+    }
+    // business identifier
+    const employerCode = code.substring(0, 8);
+    // position identifier
+    const positionCode = code.substring(8, 10);
+
+    const uniqueCode = code.length > 10 ? code.substring(10) : undefined;
+
+    // find the business corresponding to that employer code
+    let business = undefined;
+    let position = undefined;
+    Businesses.find({code: employerCode})
+    .then(onceBusinessesFound)
+    .catch(findBizError => {
+        console.log("error finding business by employer code: ", findBizError);
+        return res.status(500).send("Server error.");
     })
-    .catch(findUserError => {
-        console.log("error finding user by email: ", findUserError);
-        return res.status(500).send("Server error, try again later.");
-    });
+
+    async function onceBusinessesFound(foundBusinesses) {
+        if (!foundBusinesses || foundBusinesses.length == 0) {
+            console.log("no business found with employer code: ", employerCode);
+            return res.status(400).send(INVALID_CODE);
+        }
+
+        business = foundBusinesses[0];
+
+        // find the position the candidate is applying to
+        const positionIndex = business.positions.findIndex(pos => { return pos.code === positionCode; })
+        position = business.positions[positionIndex];
+        if (!position) {
+            console.log("no position found with position code: ", positionCode);
+            return res.status(400).send(INVALID_CODE);
+        }
+
+        // if the position requires a special code because it is closed to the public
+        if (position.open === false) {
+            // user does not have a valid code
+            if (!uniqueCode) { console.log("no unique code"); return res.status(400).send(INVALID_CODE); }
+
+            // find the index of the candidate-specific code within the position
+            const oneTimeCodeIndex = position.oneTimeCodes.findIndex(posOneTimeCode => {
+                return posOneTimeCode === uniqueCode;
+            });
+
+            // if the user does have a valid unique code
+            if (typeof oneTimeCodeIndex === "number" && oneTimeCodeIndex > -1) {
+                // remove the code from the position so it can't be used again
+                console.log("oneTimeCodes was: ", position.oneTimeCodes);
+                position.oneTimeCodes.splice(oneTimeCodeIndex, 1);
+                console.log("oneTimeCodes is: ", position.oneTimeCodes);
+                // save the business with that unique code removed
+                business.positions[positionIndex] = position;
+                try {
+                    await business.save();
+                } catch(saveBusinessError) {
+                    console.log("error saving business with unique code removed: ", saveBusinessError);
+                    return res.status(500).send("Server error, try again later.");
+                }
+            }
+            // if the user does NOT have a valid unique code
+            else {
+                console.log("invalid unique code");
+                return res.status(400).send(INVALID_CODE);
+            }
+        }
+
+        // mark that we have found the position, then make the user with the position
+        positionFound = true;
+        makeUser();
+    }
 
     function makeUser() {
         // make sure we've found the right position and made sure no user with
         // the same email exists before making the user
-        if (!position || !verifiedUniqueEmail || !createdLoginInfo) { return; }
+        if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo) { return; }
 
         // get count of users with that name to get the profile url
         Users.count({name: user.name}, function (err, count) {
