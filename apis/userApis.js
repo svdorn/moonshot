@@ -1288,21 +1288,7 @@ function POST_login(req, res) {
 
         // CHECK IF A USER WAS FOUND
         if (!foundUser || foundUser == null) {
-            // CHECK IF THE USER IS IN THE BUSINESS USER DB
-            Employers.findOne(query, function(err2, foundEmployer) {
-                if (err2) {
-                    return res.status(500).send("Error performing query to find user in business user db. ", err);
-                }
-
-                if (!foundEmployer || foundEmployer == null) {
-                    console.log('looked in business db, none found')
-                    return res.status(404).send("No user with that email was found.");
-                }
-
-                user = foundEmployer;
-                tryLoggingIn();
-                return;
-            });
+            return res.status(404).send("No user with that email was found.");
         }
         // USER FOUND IN USER DB
         else {
