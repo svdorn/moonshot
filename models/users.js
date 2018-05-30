@@ -227,6 +227,16 @@ var usersSchema = mongoose.Schema({
         }]
     }],
 
+    // if the user is any type of employer, here is info about the business they work for
+    // and their role at that business
+    businessInfo: {
+        company: {
+            name: String,
+            companyId: mongoose.Schema.Types.ObjectId
+        },
+        title: String,
+    }
+
     // the user's psychometric test answers and results
     psychometricTest: {
         // whether the user is currently taking the test
