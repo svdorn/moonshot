@@ -112,14 +112,6 @@ async function POST_updateHiringStage(req, res) {
 
     // if one of the arguments doesn't exist, return with error code
     if (!userId || !verificationToken || !companyId || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !pathwayId) {
-        console.log("Not all arguments provided to /business/updateHiringStage");
-        console.log("userId: ", userId);
-        console.log("verificationToken: ", verificationToken);
-        console.log("companyId: ", companyId);
-        console.log("candidateId: ", candidateId);
-        console.log("hiringStage: ", hiringStage);
-        console.log("isDismissed: ", isDismissed);
-        console.log("pathwayId: ", pathwayId);
         return res.status(400).send("Bad request.");
     }
 
@@ -188,7 +180,6 @@ function POST_answerQuestion(req, res) {
     const gradingComplete = sanitize(body.user.gradingComplete);
 
     if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !companyId) {
-        console.log("here");
         return res.status(400).send("Bad request.");
     }
 
@@ -486,9 +477,6 @@ function GET_pathways(req, res) {
             // if we got to this point it means the user is allowed to see pathways
 
             let pathwayQuery = { '_id': { $in: company.pathwayIds } }
-
-            console.log(company);
-            console.log(company.pathwayIds);
 
             // find names of all the pathways associated with the business
             Pathways.find(pathwayQuery)
