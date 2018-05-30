@@ -1,5 +1,4 @@
 var Businesses = require('../models/businesses.js');
-var Employers = require('../models/employers.js');
 var Users = require('../models/users.js');
 var Pathways = require('../models/pathways.js');
 
@@ -279,7 +278,7 @@ async function verifyEmployerAndReturnBusiness(userId, verificationToken, busine
             let business = undefined;
 
             // find the employer by the given id
-            Employers.findById(userId)
+            Users.findById(userId)
             .then(foundEmployer => {
                 // if employer couldn't be found from the given id
                 if (!foundEmployer) {
@@ -357,7 +356,7 @@ function GET_employees(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    Employers.findById(userId, function(findBUserErr, user) {
+    Users.findById(userId, function(findBUserErr, user) {
         // error finding user in db
         if (findBUserErr) {
             console.log("Error finding business user who was trying to see their employees: ", findBUserErr);
@@ -376,7 +375,7 @@ function GET_employees(req, res) {
             return res.status(403).send("You do not have permission to access employee info.");
         }
 
-        const companyId = user.company.companyId;
+        const companyId = user.businessInfo.company.companyId;
         let businessQuery = { '_id': companyId }
 
         Businesses.find(businessQuery)
@@ -400,7 +399,7 @@ function GET_positions(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    Employers.findById(userId, function(findBUserErr, user) {
+    Users.findById(userId, function(findBUserErr, user) {
         // error finding user in db
         if (findBUserErr) {
             console.log("Error finding business user who was trying to see their positions: ", findBUserErr);
@@ -419,7 +418,7 @@ function GET_positions(req, res) {
             return res.status(403).send("You do not have permission to access positions info.");
         }
 
-        const companyId = user.company.companyId;
+        const companyId = user.businessInfo.company.companyId;
         let businessQuery = { '_id': companyId }
 
         Businesses.find(businessQuery)
@@ -443,7 +442,7 @@ function GET_pathways(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    Employers.findById(userId, function(findBUserErr, user) {
+    Users.findById(userId, function(findBUserErr, user) {
         // error finding user in db
         if (findBUserErr) {
             console.log("Error finding business user who was trying to see their pathways: ", findBUserErr);
@@ -462,7 +461,7 @@ function GET_pathways(req, res) {
             return res.status(403).send("You do not have permission to access pathway info.");
         }
 
-        const companyId = user.company.companyId;
+        const companyId = user.businessInfo.company.companyId;
         Businesses.findById(companyId, function(findBizErr, company) {
             if (findBizErr) {
                 console.log("Error finding business when trying to search for pathways: ", findBizErr);
@@ -514,7 +513,7 @@ function GET_candidateSearch(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    Employers.findById(userId, function(findBUserErr, user) {
+    Users.findById(userId, function(findBUserErr, user) {
         // error finding user in db
         if (findBUserErr) {
             console.log("Error finding business user who was trying to see their candidates: ", findBUserErr);
@@ -533,7 +532,7 @@ function GET_candidateSearch(req, res) {
             return res.status(403).send("You do not have permission to access candidate info.");
         }
 
-        const companyId = user.company.companyId;
+        const companyId = user.businessInfo.company.companyId;
         Businesses.findById(companyId, function(findBizErr, company) {
             if (findBizErr) {
                 console.log("Error finding business when trying to search for candidates: ", findBizErr);
