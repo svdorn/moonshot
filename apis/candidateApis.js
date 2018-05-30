@@ -127,7 +127,7 @@ function POST_candidate(req, res) {
 
                             try {
                                 // send email to everyone if there's a new sign up (if in production mode)
-                                if (process.env.NODE_ENV) {
+                                if (process.env.NODE_ENV !== "development") {
                                     let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
 
                                     let subject = 'New Sign Up';
@@ -175,7 +175,7 @@ function POST_candidate(req, res) {
 
                                 let moonshotUrl = 'https://www.moonshotinsights.io/';
                                 // if we are in development, links are to localhost
-                                if (!process.env.NODE_ENV) {
+                                if (process.env.NODE_ENV === "development") {
                                     moonshotUrl = 'http://localhost:8081/';
                                 }
 
@@ -329,7 +329,7 @@ function POST_sendVerificationEmail(req, res) {
 
     let moonshotUrl = 'https://www.moonshotinsights.io/';
     // if we are in development, links are to localhost
-    if (!process.env.NODE_ENV) {
+    if (process.env.NODE_ENV === "development") {
         moonshotUrl = 'http://localhost:8081/';
     }
 
@@ -683,7 +683,7 @@ async function POST_completePathway(req, res) {
             });
 
             // only send email if in production
-            if (process.env.NODE_ENV) {
+            if (process.env.NODE_ENV !== "development") {
                 // send an email to us saying that the user completed a pathway
                 const sendFrom = "Moonshot";
                 sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
@@ -762,7 +762,7 @@ async function POST_addPathway(req, res) {
 
                 try {
                     // send email to everyone to alert them of the added pathway (if in production mode)
-                    if (process.env.NODE_ENV) {
+                    if (process.env.NODE_ENV !== "development") {
                         let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
                         let subject = 'New Pathway Sign Up';
                         let content =
