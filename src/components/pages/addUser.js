@@ -7,6 +7,7 @@ import {TextField, CircularProgress, RaisedButton } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
+import AddUserDialog from '../childComponents/AddUserDialog';
 import { browserHistory } from 'react-router';
 
 const style = {
@@ -147,6 +148,7 @@ class AddUser extends Component {
     render() {
         return (
             <div className="fillScreen blackBackground formContainer">
+                <AddUserDialog />
                 <MetaTags>
                     <title>Add User | Moonshot</title>
                     <meta name="description" content="Add a user to your business account."/>
