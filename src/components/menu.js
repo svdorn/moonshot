@@ -260,7 +260,6 @@ class Menu extends Component {
                 {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "url", title: "Employees", url: "/myEmployees"},
                 {optionType: "url", title: "Candidates", url: "/myCandidates"},
-                {optionType: "url", title: "Test", url: "/test"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     //{optionType: "url", title: "Profile", url: "/businessProfile"},
@@ -275,8 +274,8 @@ class Menu extends Component {
         // if the current user is a manager for a business
         else if (currentUser.userType === "manager") {
             menuOptions = [
+                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "url", title: "Employees", url: "/myEmployees"},
-                {optionType: "url", title: "Test", url: "/test"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     //{optionType: "url", title: "Profile", url: "/businessProfile"},
@@ -291,7 +290,7 @@ class Menu extends Component {
         // if the current user is an employee for a business
         else if (currentUser.userType === "employee") {
             menuOptions = [
-                {optionType: "url", title: "Test", url: "/test"},
+                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     //{optionType: "url", title: "Profile", url: "/businessProfile"},
