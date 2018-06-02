@@ -134,6 +134,20 @@ class AddUserDialog extends Component {
         this.setState({position})
     };
 
+    handleScreenNext() {
+        if (this.state.position != "") {
+            const screen = this.state.screen + 1;
+            this.setState({screen});
+        }
+    }
+
+    handleScreenPrevious() {
+        if (this.state.position != "") {
+            const screen = this.state.screen - 1;
+            this.setState({screen});
+        }
+    }
+
     goTo(route) {
         // goes to the wanted page
         browserHistory.push(route);
@@ -196,7 +210,7 @@ class AddUserDialog extends Component {
                     <br/>
                     <RaisedButton
                         label="Next"
-                        type="submit"
+                        onClick={this.handleScreenNext.bind(this)}
                         className="raisedButtonBusinessHome"
                         style={{marginTop: '20px'}}
                     />
