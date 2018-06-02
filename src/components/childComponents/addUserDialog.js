@@ -40,7 +40,7 @@ class AddUserDialog extends Component {
         super(props);
 
         this.state = {
-            email: "",
+            emails: [],
             open: true,
         }
     }
