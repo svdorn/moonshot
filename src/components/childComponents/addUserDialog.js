@@ -135,15 +135,15 @@ class AddUserDialog extends Component {
     };
 
     handleScreenNext() {
-        if (this.state.position != "") {
-            const screen = this.state.screen + 1;
+        const screen = this.state.screen + 1;
+        if (sceen < 1 || screen > 3) {
             this.setState({screen});
         }
     }
 
     handleScreenPrevious() {
-        if (this.state.position != "") {
-            const screen = this.state.screen - 1;
+        const screen = this.state.screen - 1;
+        if (screen < 1 || screen > 3) {
             this.setState({screen});
         }
     }
