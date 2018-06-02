@@ -366,7 +366,6 @@ class AddUserDialog extends Component {
             </div>
         );
 
-        console.log(this.props);
         const screen = this.state.screen;
         let body = <div></div>;
         if (screen === 1) {
