@@ -2888,6 +2888,10 @@ button.link {
 .raisedButtonWhiteText > button > div > div > span {
     color: white !important;
 }
+.raisedButtonAddAnotherEmail > button {
+    text-transform: none !important;
+    background-color: white !important;
+}
 .raisedButtonBusinessHome > button {
     background-color: white !important;
 }

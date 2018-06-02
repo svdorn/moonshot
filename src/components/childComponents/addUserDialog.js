@@ -129,6 +129,10 @@ class AddUserDialog extends Component {
         })
     }
 
+    addCandidateEmail() {
+        console.log("need to add a candidate email")
+    }
+
     handlePositionChange = (event, index) => {
         const position = this.state.positions[index].name;
         this.setState({position})
@@ -197,7 +201,13 @@ class AddUserDialog extends Component {
                     component={renderTextField}
                     label="Email"
                 /><br/>
-                <div className="center marginTop40px">
+                <div className="marginTop20px">
+                    <i className="font14px underline clickable whiteText"
+                        onClick={this.addCandidateEmail}>
+                        Add Another Email
+                        </i>
+                </div>
+                <div className="center marginTop10px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.handleScreenPrevious.bind(this)}>
                         Back
