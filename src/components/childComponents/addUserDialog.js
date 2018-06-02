@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {postEmployer} from '../../actions/usersActions';
-import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider } from 'material-ui';
+import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
@@ -166,6 +166,9 @@ class AddUserDialog extends Component {
             menuLabelStyle: {
                 fontSize: "18px",
                 color: "rgba(255,255,255,.8)"
+            },
+            tab: {
+                color: 'white',
             }
         };
 
@@ -227,43 +230,75 @@ class AddUserDialog extends Component {
                 >
                     <form onSubmit={this.handleSubmit.bind(this)} className="center">
                         <div
-                            className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
-                            Predict Candidate Success
+                            className="whiteText font24px font20pxUnder500 marginTop10px">
+                            Add
                         </div>
-                        <Field
-                            name="name"
-                            component={renderTextField}
-                            label="Full Name*"
-                            style={{marginTop: '1px'}}
-                        /> <br/>
-                        <Field
-                            name="email"
-                            component={renderTextField}
-                            label="Email*"
-                        /><br/>
-                        <Field
-                            name="company"
-                            component={renderTextField}
-                            label="Company"
-                        /><br/>
-                        <Field
-                            name="phone"
-                            component={renderTextField}
-                            label="Phone Number"
-                        /><br/>
-                        <RaisedButton
-                            label="Send"
-                            type="submit"
-                            className="raisedButtonBusinessHome"
-                            style={{marginTop: '20px'}}
-                        />
-                        <br/>
-                        <div className="infoText i flex font12px whiteText center"
-                            style={{margin: '10px auto', width: '250px'}}>
-                            <div>Free for First Position</div>
-                            <div>•</div>
-                            <div>Unlimited Evaluations</div>
-                        </div>
+                        <Tabs
+                            style={{marginTop:"10px"}}
+                            inkBarStyle={{background: 'white'}}
+                            className="addUserTabs"
+                        >
+                            <Tab label="Candidate" style={style.tab}>
+                            <div className="center">
+                            <Field
+                                name="email"
+                                component={renderTextField}
+                                label="Email"
+                            /><br/>
+                            <RaisedButton
+                                label="Next"
+                                onClick={this.handleScreenNext.bind(this)}
+                                className="raisedButtonBusinessHome"
+                                style={{marginTop: '20px'}}
+                            />
+                            </div>
+                            </Tab>
+                            <Tab label="Employee" style={style.tab}>
+                            <div className="center">
+                            <Field
+                                name="email"
+                                component={renderTextField}
+                                label="Email"
+                            /><br/>
+                            <RaisedButton
+                                label="Next"
+                                onClick={this.handleScreenNext.bind(this)}
+                                className="raisedButtonBusinessHome"
+                                style={{marginTop: '20px'}}
+                            />
+                            </div>
+                            </Tab>
+                            <Tab label="Manager" style={style.tab}>
+                            <div className="center">
+                            <Field
+                                name="email"
+                                component={renderTextField}
+                                label="Email"
+                            /><br/>
+                            <RaisedButton
+                                label="Next"
+                                onClick={this.handleScreenNext.bind(this)}
+                                className="raisedButtonBusinessHome"
+                                style={{marginTop: '20px'}}
+                            />
+                            </div>
+                            </Tab>
+                            <Tab label="Admin" style={style.tab}>
+                            <div className="center">
+                            <Field
+                                name="email"
+                                component={renderTextField}
+                                label="Email"
+                            /><br/>
+                            <RaisedButton
+                                label="Next"
+                                onClick={this.handleScreenNext.bind(this)}
+                                className="raisedButtonBusinessHome"
+                                style={{marginTop: '20px'}}
+                            />
+                            </div>
+                            </Tab>
+                        </Tabs>
                     </form>
                 </Dialog>
             }

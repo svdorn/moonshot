@@ -2991,6 +2991,14 @@ button.link {
 }
 .footer.topSpace { padding-top: 20px; }
 
+.addUserTabs > div:first-of-type {
+    background-color: transparent !important;
+    display: inline-block !important;
+}
+.addUserTabs > div > button {
+    font-size: 14px !important;
+}
+
 .myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
     background-color: transparent !important;
     display: inline-block !important;
