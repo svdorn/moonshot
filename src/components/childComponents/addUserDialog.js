@@ -61,10 +61,11 @@ class AddUserDialog extends Component {
         })
         .then(function (res) {
             let positions = res.data.positions;
-            console.log(positions)
             if (Array.isArray(positions) && positions.length > 0) {
+                const firstPositionName = positions[0].name;
                 self.setState({
                     positions,
+                    position: firstPositionName,
                     open: true,
                     screen: 1
                 })
@@ -128,7 +129,8 @@ class AddUserDialog extends Component {
         })
     }
 
-    handlePositionChange = (event, index, positon) => {
+    handlePositionChange = (event, index) => {
+        const position = this.state.positions[index].name;
         this.setState({position})
     };
 
@@ -148,6 +150,7 @@ class AddUserDialog extends Component {
                 horizontal: "left"
             },
             menuLabelStyle: {
+                fontSize: "18px",
                 color: "rgba(255,255,255,.8)"
             }
         };
@@ -179,16 +182,24 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                 >
-                <DropDownMenu value={this.state.position}
+                    <div className="whiteText font24px font20pxUnder500 marginTop20px">
+                        Select a position
+                    </div>
+                    <DropDownMenu value={this.state.position}
                               onChange={this.handlePositionChange}
                               labelStyle={style.menuLabelStyle}
                               anchorOrigin={style.anchorOrigin}
-                              style={{fontSize: "20px", marginTop: "11px"}}
-                >
-                    <MenuItem value={""} primaryText="Position"/>
-                    <Divider/>
-                    {positionItems}
-                </DropDownMenu>
+                              style={{fontSize: "16px"}}
+                    >
+                        {positionItems}
+                    </DropDownMenu>
+                    <br/>
+                    <RaisedButton
+                        label="Next"
+                        type="submit"
+                        className="raisedButtonBusinessHome"
+                        style={{marginTop: '20px'}}
+                    />
                 </Dialog>
                 :
                 <Dialog
