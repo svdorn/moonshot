@@ -48,6 +48,7 @@ class AddUserDialog extends Component {
             position: "",
             // true if the business has no positions associated with it
             noPositions: false,
+            tab: "Candidate",
         }
     }
 
@@ -155,6 +156,10 @@ class AddUserDialog extends Component {
         window.scrollTo(0, 0);
     }
 
+    handleTabChange = (tab) => {
+        this.setState({tab})
+    }
+
 
     //name, email, password, confirm password, signup button
     render() {
@@ -187,7 +192,7 @@ class AddUserDialog extends Component {
         });
 
         const emailSection = (
-            <div className="center">
+            <div className="center marginTop10px">
                 <Field
                     name="email"
                     component={renderTextField}
@@ -200,8 +205,7 @@ class AddUserDialog extends Component {
                     style={{marginTop: '20px'}}
                 />
             </div>
-        )
-
+        );
 
         return (
             <div>
@@ -253,17 +257,19 @@ class AddUserDialog extends Component {
                             style={{marginTop:"10px"}}
                             inkBarStyle={{background: 'white'}}
                             className="addUserTabs"
+                            value={this.state.tab}
+                            onChange={this.handleTabChange}
                         >
-                            <Tab label="Candidate" style={style.tab}>
+                            <Tab label="Candidate" value="Candidate" style={style.tab}>
                                 {emailSection}
                             </Tab>
-                            <Tab label="Employee" style={style.tab}>
+                            <Tab label="Employee" value="Employee" style={style.tab}>
                                 {emailSection}
                             </Tab>
-                            <Tab label="Manager" style={style.tab}>
+                            <Tab label="Manager" value="Manager" style={style.tab}>
                                 {emailSection}
                             </Tab>
-                            <Tab label="Admin" style={style.tab}>
+                            <Tab label="Admin" value="Admin" style={style.tab}>
                                 {emailSection}
                             </Tab>
                         </Tabs>
