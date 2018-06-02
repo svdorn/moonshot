@@ -41,14 +41,13 @@ class AddUserDialog extends Component {
         super(props);
 
         this.state = {
-            emails: [],
             open: true,
             screen: 1,
             positions: [],
             position: "",
             // true if the business has no positions associated with it
             noPositions: false,
-            tab: "Candidate",
+            tab: "Candidate"
         }
     }
 
@@ -191,21 +190,91 @@ class AddUserDialog extends Component {
             return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
         });
 
-        const emailSection = (
+        const candidateSection = (
             <div className="center marginTop10px">
                 <Field
                     name="email"
                     component={renderTextField}
                     label="Email"
                 /><br/>
-                <RaisedButton
-                    label="Next"
-                    onClick={this.handleScreenNext.bind(this)}
-                    className="raisedButtonBusinessHome"
-                    style={{marginTop: '20px'}}
-                />
+                <div className="center marginTop40px">
+                    <i className="font14px underline clickable whiteText"
+                        onClick={this.handleScreenPrevious.bind(this)}>
+                        Back
+                    </i>
+                    <RaisedButton
+                        label="Next"
+                        onClick={this.handleScreenNext.bind(this)}
+                        className="raisedButtonBusinessHome marginLeft40px"
+                    />
+                </div>
             </div>
         );
+
+        const employeeSection = (
+            <div className="center marginTop10px">
+                <Field
+                    name="email"
+                    component={renderTextField}
+                    label="Email"
+                /><br/>
+                <div className="center marginTop40px">
+                    <i className="font14px underline clickable whiteText"
+                        onClick={this.handleScreenPrevious.bind(this)}>
+                        Back
+                    </i>
+                    <RaisedButton
+                        label="Next"
+                        onClick={this.handleScreenNext.bind(this)}
+                        className="raisedButtonBusinessHome marginLeft40px"
+                    />
+                </div>
+            </div>
+        );
+
+        const managerSection = (
+            <div className="center marginTop10px">
+                <Field
+                    name="email"
+                    component={renderTextField}
+                    label="Email"
+                /><br/>
+                <div className="center marginTop40px">
+                    <i className="font14px underline clickable whiteText"
+                        onClick={this.handleScreenPrevious.bind(this)}>
+                        Back
+                    </i>
+                    <RaisedButton
+                        label="Next"
+                        onClick={this.handleScreenNext.bind(this)}
+                        className="raisedButtonBusinessHome marginLeft40px"
+                    />
+                </div>
+            </div>
+        );
+
+        const adminSection = (
+            <div className="center marginTop10px">
+                <Field
+                    name="email"
+                    component={renderTextField}
+                    label="Email"
+                /><br/>
+                <div className="center marginTop40px">
+                    <i className="font14px underline clickable whiteText"
+                        onClick={this.handleScreenPrevious.bind(this)}>
+                        Back
+                    </i>
+                    <RaisedButton
+                        label="Next"
+                        onClick={this.handleScreenNext.bind(this)}
+                        className="raisedButtonBusinessHome marginLeft40px"
+                    />
+                </div>
+            </div>
+        );
+
+        console.log(this.props);
 
         return (
             <div>
@@ -261,16 +330,16 @@ class AddUserDialog extends Component {
                             onChange={this.handleTabChange}
                         >
                             <Tab label="Candidate" value="Candidate" style={style.tab}>
-                                {emailSection}
+                                {candidateSection}
                             </Tab>
                             <Tab label="Employee" value="Employee" style={style.tab}>
-                                {emailSection}
+                                {employeeSection}
                             </Tab>
                             <Tab label="Manager" value="Manager" style={style.tab}>
-                                {emailSection}
+                                {managerSection}
                             </Tab>
                             <Tab label="Admin" value="Admin" style={style.tab}>
-                                {emailSection}
+                                {adminSection}
                             </Tab>
                         </Tabs>
                     </form>
