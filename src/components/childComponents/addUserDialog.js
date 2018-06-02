@@ -47,7 +47,11 @@ class AddUserDialog extends Component {
             position: "",
             // true if the business has no positions associated with it
             noPositions: false,
-            tab: "Candidate"
+            tab: "Candidate",
+            numCandidateEmails: 1,
+            numEmployeeEmails: 1,
+            numManagerEmails: 1,
+            numAdminEmails: 1,
         }
     }
 
@@ -129,8 +133,24 @@ class AddUserDialog extends Component {
         })
     }
 
-    addCandidateEmail() {
-        console.log("need to add a candidate email")
+    addAnotherEmail() {
+        switch(this.state.tab) {
+            case "Candidate":
+                const numCandidateEmails = this.state.numCandidateEmails + 1;
+                this.setState({numCandidateEmails})
+                break;
+            case "Employee":
+                const numEmployeeEmails = this.state.numEmployeeEmails + 1;
+                this.setState({numEmployeeEmails})
+                break;
+            case "Manager":
+                const numManagerEmails = this.state.numManagerEmails + 1;
+                this.setState({numManagerEmails});
+                break;
+            case "Admin":
+                const numAdminEmails = this.state.numAdminEmails + 1;
+                break;
+        }
     }
 
     handlePositionChange = (event, index) => {
@@ -194,16 +214,66 @@ class AddUserDialog extends Component {
             return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
         });
 
+        let candidateEmailSection = [];
+        for (let i = 0; i < this.state.numCandidateEmails; i++) {
+            candidateEmailSection.push(
+                <div>
+                    <Field
+                        name={"candidateEmail" + i}
+                        component={renderTextField}
+                        label="Add Email"
+                    /><br/>
+                </div>
+            );
+        }
+
+        let employeeEmailSection = [];
+        for (let i = 0; i < this.state.numEmployeeEmails; i++) {
+            employeeEmailSection.push(
+                <div>
+                    <Field
+                        name={"employeeEmail" + i}
+                        component={renderTextField}
+                        label="Add Email"
+                    /><br/>
+                </div>
+            );
+        }
+
+        let managerEmailSection = [];
+        for (let i = 0; i < this.state.numManagerEmails; i++) {
+            managerEmailSection.push(
+                <div>
+                    <Field
+                        name={"managerEmail" + i}
+                        component={renderTextField}
+                        label="Add Email"
+                    /><br/>
+                </div>
+            );
+        }
+
+        let adminEmailSection = [];
+        for (let i = 0; i < this.state.numAdminEmails; i++) {
+            adminEmailSection.push(
+                <div>
+                    <Field
+                        name={"adminEmail" + i}
+                        component={renderTextField}
+                        label="Add Email"
+                    /><br/>
+                </div>
+            );
+        }
+
         const candidateSection = (
             <div className="center marginTop10px">
-                <Field
-                    name="email"
-                    component={renderTextField}
-                    label="Email"
-                /><br/>
+                <div>
+                    {candidateEmailSection}
+                </div>
                 <div className="marginTop20px">
                     <i className="font14px underline clickable whiteText"
-                        onClick={this.addCandidateEmail}>
+                        onClick={this.addAnotherEmail.bind(this)}>
                         Add Another Email
                         </i>
                 </div>
@@ -223,12 +293,16 @@ class AddUserDialog extends Component {
 
         const employeeSection = (
             <div className="center marginTop10px">
-                <Field
-                    name="email"
-                    component={renderTextField}
-                    label="Email"
-                /><br/>
-                <div className="center marginTop40px">
+                <div>
+                    {employeeEmailSection}
+                </div>
+                <div className="marginTop20px">
+                    <i className="font14px underline clickable whiteText"
+                        onClick={this.addAnotherEmail.bind(this)}>
+                        Add Another Email
+                        </i>
+                </div>
+                <div className="center marginTop10px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.handleScreenPrevious.bind(this)}>
                         Back
@@ -244,12 +318,16 @@ class AddUserDialog extends Component {
 
         const managerSection = (
             <div className="center marginTop10px">
-                <Field
-                    name="email"
-                    component={renderTextField}
-                    label="Email"
-                /><br/>
-                <div className="center marginTop40px">
+                <div>
+                    {managerEmailSection}
+                </div>
+                <div className="marginTop20px">
+                    <i className="font14px underline clickable whiteText"
+                        onClick={this.addAnotherEmail.bind(this)}>
+                        Add Another Email
+                        </i>
+                </div>
+                <div className="center marginTop10px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.handleScreenPrevious.bind(this)}>
                         Back
@@ -265,12 +343,16 @@ class AddUserDialog extends Component {
 
         const adminSection = (
             <div className="center marginTop10px">
-                <Field
-                    name="email"
-                    component={renderTextField}
-                    label="Email"
-                /><br/>
-                <div className="center marginTop40px">
+                <div>
+                    {adminEmailSection}
+                </div>
+                <div className="marginTop20px">
+                    <i className="font14px underline clickable whiteText"
+                        onClick={this.addAnotherEmail.bind(this)}>
+                        Add Another Email
+                        </i>
+                </div>
+                <div className="center marginTop10px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.handleScreenPrevious.bind(this)}>
                         Back
