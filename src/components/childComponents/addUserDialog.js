@@ -285,10 +285,10 @@ class AddUserDialog extends Component {
         );
 
         console.log(this.props);
-
-        return (
-            <div>
-            {this.state.screen === 1 ?
+        const screen = this.state.screen;
+        let body = <div></div>;
+        if (screen === 1) {
+            body = (
                 <Dialog
                     actions={actions}
                     modal={false}
@@ -317,7 +317,9 @@ class AddUserDialog extends Component {
                         style={{marginTop: '20px'}}
                     />
                 </Dialog>
-                :
+            );
+        } else if (screen === 2) {
+            body = (
                 <Dialog
                     actions={actions}
                     modal={false}
@@ -327,7 +329,7 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                 >
-                    <form onSubmit={this.handleSubmit.bind(this)} className="center">
+                    <form className="center">
                         <div
                             className="whiteText font24px font20pxUnder500 marginTop10px">
                             Add
@@ -354,7 +356,44 @@ class AddUserDialog extends Component {
                         </Tabs>
                     </form>
                 </Dialog>
-            }
+            );
+        } else {
+            body = (
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    paperClassName="dialogForBiz"
+                    contentClassName="center"
+                >
+                    <div className="whiteText font24px font20pxUnder500 marginTop10px">
+                        Finish
+                    </div>
+                    <div className="whiteText font16px font12pxUnder500 marginTop20px">
+                        Thanks for adding users for this position. Click <b className="blueTextHome font18px">Finish</b> to
+                        send emails to your candidates, employees, and/or managers with links so that they can take
+                        the evaluation.
+                    </div>
+                    <div className="center marginTop30px">
+                        <i className="font14px underline clickable whiteText"
+                            onClick={this.handleScreenPrevious.bind(this)}>
+                            Back
+                        </i>
+                        <RaisedButton
+                            label="Finish"
+                            onClick={this.handleSubmit.bind(this)}
+                            className="raisedButtonBusinessHome marginLeft40px"
+                        />
+                    </div>
+                </Dialog>
+            )
+        }
+
+        return (
+            <div>
+                {body}
             </div>
         );
     }
