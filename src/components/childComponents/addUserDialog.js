@@ -136,7 +136,7 @@ class AddUserDialog extends Component {
 
     handleScreenNext() {
         const screen = this.state.screen + 1;
-        if (sceen >= 1 && screen <= 3) {
+        if (screen >= 1 && screen <= 3) {
             this.setState({screen});
         }
     }
@@ -184,7 +184,23 @@ class AddUserDialog extends Component {
         const positions = this.state.positions;
         const positionItems = positions.map(function (position) {
             return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
-        })
+        });
+
+        const emailSection = (
+            <div className="center">
+                <Field
+                    name="email"
+                    component={renderTextField}
+                    label="Email"
+                /><br/>
+                <RaisedButton
+                    label="Next"
+                    onClick={this.handleScreenNext.bind(this)}
+                    className="raisedButtonBusinessHome"
+                    style={{marginTop: '20px'}}
+                />
+            </div>
+        )
 
 
         return (
@@ -239,64 +255,16 @@ class AddUserDialog extends Component {
                             className="addUserTabs"
                         >
                             <Tab label="Candidate" style={style.tab}>
-                            <div className="center">
-                            <Field
-                                name="email"
-                                component={renderTextField}
-                                label="Email"
-                            /><br/>
-                            <RaisedButton
-                                label="Next"
-                                onClick={this.handleScreenNext.bind(this)}
-                                className="raisedButtonBusinessHome"
-                                style={{marginTop: '20px'}}
-                            />
-                            </div>
+                                {emailSection}
                             </Tab>
                             <Tab label="Employee" style={style.tab}>
-                            <div className="center">
-                            <Field
-                                name="email"
-                                component={renderTextField}
-                                label="Email"
-                            /><br/>
-                            <RaisedButton
-                                label="Next"
-                                onClick={this.handleScreenNext.bind(this)}
-                                className="raisedButtonBusinessHome"
-                                style={{marginTop: '20px'}}
-                            />
-                            </div>
+                                {emailSection}
                             </Tab>
                             <Tab label="Manager" style={style.tab}>
-                            <div className="center">
-                            <Field
-                                name="email"
-                                component={renderTextField}
-                                label="Email"
-                            /><br/>
-                            <RaisedButton
-                                label="Next"
-                                onClick={this.handleScreenNext.bind(this)}
-                                className="raisedButtonBusinessHome"
-                                style={{marginTop: '20px'}}
-                            />
-                            </div>
+                                {emailSection}
                             </Tab>
                             <Tab label="Admin" style={style.tab}>
-                            <div className="center">
-                            <Field
-                                name="email"
-                                component={renderTextField}
-                                label="Email"
-                            /><br/>
-                            <RaisedButton
-                                label="Next"
-                                onClick={this.handleScreenNext.bind(this)}
-                                className="raisedButtonBusinessHome"
-                                style={{marginTop: '20px'}}
-                            />
-                            </div>
+                                {emailSection}
                             </Tab>
                         </Tabs>
                     </form>
