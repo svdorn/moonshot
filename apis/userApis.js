@@ -50,8 +50,8 @@ const userApis = {
 
 
 async function GET_printPsychScore(req, res) {
-    const userId = "5af493a242f28d407fefdc41";
-    const verificationToken = "2246696e0517ce1e4d320a2023d7d1fd88e3fa537a17a50059d444aebefabc87f29927881df0eed1658968014aac4462d468b859c430a5fe5d9d84b2f1ecabab";
+    const userId = "5a4670ec6f3fdb4b92f2a58c";
+    const verificationToken = "727679eb45870e104428f9677fd02b7e69fb68f2032aee46d96820f4406260a6";
 
     //const userId = sanitize(req.body.userId);
     //const verificationToken = sanitize(req.body.verificationToken);

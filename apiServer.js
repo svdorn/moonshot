@@ -84,6 +84,7 @@ app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
 app.post('/user/changePassword', userApis.POST_changePassword);
 app.post('/user/forgotPassword', userApis.POST_forgotPassword);
 app.post('/user/changeSettings', userApis.POST_changeSettings);
+app.get('/user/getResults', userApis.GET_printPsychScore);
 app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
