@@ -7,7 +7,7 @@ import {TextField, CircularProgress, RaisedButton } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
-import AddUserDialog from '../childComponents/AddUserDialog';
+import AddUserDialog from '../childComponents/addUserDialog';
 import { browserHistory } from 'react-router';
 
 const style = {
