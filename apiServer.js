@@ -96,6 +96,7 @@ app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
+app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
 app.get("/business/pathways", businessApis.GET_pathways);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employees", businessApis.GET_employees);

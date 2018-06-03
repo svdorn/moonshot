@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postEmployer} from '../../actions/usersActions';
+import {postEmailInvites} from '../../actions/usersActions';
 import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import { browserHistory } from 'react-router';
@@ -19,22 +19,6 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         {...custom}
     />
 );
-
-const validate = values => {
-    const errors = {};
-    const requiredFields = [
-        'email',
-    ];
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'This field is required'
-        }
-    });
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address';
-    }
-    return errors
-};
 
 class AddUserDialog extends Component {
     constructor(props) {
@@ -95,42 +79,87 @@ class AddUserDialog extends Component {
         e.preventDefault();
         const vals = this.props.formData.addUser.values;
 
-        // Form validation before submit
-        let notValid = false;
-        const requiredFields = [
-            'email',
-        ];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
+        // TODO: validate emails somehow
+        // Get the email address out of the objects and store in an array
+        let candidateEmails = [];
+        let employeeEmails = [];
+        let managerEmails = [];
+        let adminEmails = [];
+
+        console.log(candidateEmails);
+        console.log(employeeEmails);
+
+        for (let email in vals) {
+            const emailAddr = vals[email];
+            const emailString = email.replace(new RegExp("[0-9]", "g"),"");
+            console.log(emailString);
+            switch(emailString) {
+                case "candidateEmail":
+                    candidateEmails.push(emailAddr);
+                    break;
+                case "employeeEmail":
+                    employeeEmails.push(emailAddr);
+                    break;
+                case "managerEmail":
+                    managerEmails.push(emailAddr);
+                    break;
+                case "adminEmail":
+                    adminEmails.push(emailAddr);
+                    break;
+                default:
+                    break;
             }
-        });
-        if (notValid) return;
-
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
-            return;
         }
-
-        const email = this.props.formData.addUser.values.email;
-        const newUser = {
-            email,
-            userType: "employer",
-        };
 
         const currentUser = this.props.currentUser;
         const currentUserInfo = {
             _id: currentUser._id,
             verificationToken: currentUser.verificationToken
         }
+        console.log("before post");
 
+        this.props.postEmailInvites(candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo);
 
-        this.props.postEmployer(newUser, currentUserInfo);
+        console.log("Done posting email invites");
 
-        this.setState({
-            ...this.state,
-            email
-        })
+        // const vals = this.props.formData.addUser.values;
+        //
+        // // Form validation before submit
+        // let notValid = false;
+        // const requiredFields = [
+        //     'email',
+        // ];
+        // requiredFields.forEach(field => {
+        //     if (!vals || !vals[field]) {
+        //         this.props.touch(field);
+        //         notValid = true;
+        //     }
+        // });
+        // if (notValid) return;
+        //
+        // if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
+        //     return;
+        // }
+        //
+        // const email = this.props.formData.addUser.values.email;
+        // const newUser = {
+        //     email,
+        //     userType: "employer",
+        // };
+        //
+        // const currentUser = this.props.currentUser;
+        // const currentUserInfo = {
+        //     _id: currentUser._id,
+        //     verificationToken: currentUser.verificationToken
+        // }
+        //
+        //
+        // this.props.postEmployer(newUser, currentUserInfo);
+        //
+        // this.setState({
+        //     ...this.state,
+        //     email
+        // })
     }
 
     addAnotherEmail() {
@@ -482,7 +511,7 @@ class AddUserDialog extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        postEmployer,
+        postEmailInvites,
     }, dispatch);
 }
 
@@ -497,7 +526,6 @@ function mapStateToProps(state) {
 
 AddUserDialog = reduxForm({
     form: 'addUser',
-    validate,
 })(AddUserDialog);
 
 export default connect(mapStateToProps, mapDispatchToProps)(AddUserDialog);

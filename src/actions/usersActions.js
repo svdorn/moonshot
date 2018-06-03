@@ -194,6 +194,23 @@ export function postUser(user) {
     }
 }
 
+// POST EMAIL INVITES
+export function postEmailInvites(candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo) {
+    return function(dispatch) {
+        dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
+
+        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo})
+            // email invites success
+            .then(function(res) {
+                dispatch({type: "POST_EMAIL_INVITES_SUCCESS"});
+            })
+            // error posting email invites
+            .catch(function(err) {
+                dispatch({type: "POST_EMAIL_INVITES_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
+            });
+    }
+}
+
 // POST BUSINESS USER
 export function postEmployer(newUser, currentUser) {
     return function(dispatch) {

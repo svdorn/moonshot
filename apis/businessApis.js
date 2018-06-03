@@ -20,6 +20,7 @@ const businessApis = {
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
+    POST_emailInvites,
     GET_pathways,
     GET_candidateSearch,
     GET_employees,
@@ -29,6 +30,26 @@ const businessApis = {
 
 // ----->> START APIS <<----- //
 
+function POST_emailInvites(req, res) {
+    const candidateEmails = req.body.candidateEmails;
+    const employeeEmails = req.body.employeeEmails;
+    const managerEmails = req.body.managerEmails;
+    const adminEmails = req.body.adminEmails;
+    const _id = req.body.currentUserInfo._id;
+    const verificationToken = req.body.currentUserInfo.verificationToken;
+
+    // if one of the arguments doesn't exist, return with error code
+    if (!candidateEmails || !employeeEmails || !managerEmails || !adminEmails || !_id || !verificationToken) {
+        return res.status(400).send("Bad request.");
+    }
+    console.log(employeeEmails);
+    console.log(candidateEmails);
+    console.log(managerEmails);
+    console.log(adminEmails);
+    console.log(_id);
+    console.log(verificationToken);
+
+}
 
 function POST_forBusinessEmail(req, res) {
     let phone = "None given";
