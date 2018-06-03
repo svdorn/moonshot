@@ -2,6 +2,8 @@ var Businesses = require('../models/businesses.js');
 var Users = require('../models/users.js');
 var Pathways = require('../models/pathways.js');
 
+const crypto = require('crypto');
+
 // get helper functions
 const { sanitize,
         removeEmptyFields,
@@ -39,18 +41,72 @@ function POST_emailInvites(req, res) {
     const userId = sanitize(body.currentUserInfo.userId);
     const verificationToken = sanitize(body.currentUserInfo.verificationToken);
     const companyId = sanitize(body.currentUserInfo.companyId);
+    const positionId = sanitize(body.currentUserInfo.positionId);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!candidateEmails || !employeeEmails || !managerEmails || !adminEmails || !userId || !companyId || !verificationToken) {
+    if (!candidateEmails || !employeeEmails || !managerEmails || !adminEmails || !userId || !companyId || !verificationToken || !positionId) {
         return res.status(400).send("Bad request.");
     }
-    console.log(employeeEmails);
-    console.log(candidateEmails);
-    console.log(managerEmails);
-    console.log(adminEmails);
-    console.log(userId);
-    console.log(companyId);
-    console.log(verificationToken);
+
+    // verify the employer is actually a part of this organization
+    verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
+    .then(business => {
+        // if employer does not have valid credentials
+        if (!business) {
+            console.log("Employer tried to send verification links");
+            return res.status(403).send("You do not have permission to send verification links.");
+        }
+
+        console.log(business);
+
+        console.log(business.employerIds);
+        console.log(business.name);
+        console.log(business.code)
+
+        let code = business.code;
+
+        const positionIndex = business.positions.findIndex(currPosition => {
+            return currPosition._id.toString() === positionId.toString();
+        });
+
+        let position = business.positions[positionIndex];
+
+        console.log(position);
+        // Send candidate emails
+        for (let i = 0; i < candidateEmails.length; i++) {
+            // add code to the position
+            const userCode = crypto.randomBytes(64).toString('hex');
+
+            // send email
+        }
+        // Send employee emails
+
+        // Send manager emails
+
+        // Send admin emails
+
+        // Save the new business object with updated positions array
+        // update the employee in the business object
+        business.positions[positionIndex] = position;
+
+        // save the business
+        business.save()
+        .then(updatedBusiness => {
+            return res.json(position);
+        })
+        .catch(updateBusinessErr => {
+            return res.status(500).send("failure!");
+        });
+
+
+
+
+    })
+    .catch(verifyEmployerErr => {
+        console.log("Error when trying to verify employer when they were trying to send verification links: ", verifyEmployerErr);
+        return res.status(500).send("Server error, try again later.");
+    })
+
 
 }
 

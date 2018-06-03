@@ -81,7 +81,18 @@ var businessesSchema = mongoose.Schema({
         // candidates who have applied for this position
         candidates: [{
             candidateId: mongoose.Schema.Types.ObjectId
-        }]
+        }],
+        // Code for the specific position
+        code: Number,
+        // One-time use codes for candidates
+        candidateCodes: [Number],
+        // One-time use codes for employees
+        employeeCodes: [Number],
+        // One-time use codes for managers
+        managerCodes: [Number],
+        // One-time use codes for admins
+        adminCodes: [Number]
+
     }],
 
     // ---->>> END POST-PIVOT <<<---- //

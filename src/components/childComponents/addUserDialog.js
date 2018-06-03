@@ -86,8 +86,15 @@ class AddUserDialog extends Component {
         let managerEmails = [];
         let adminEmails = [];
 
-        console.log(candidateEmails);
-        console.log(employeeEmails);
+        // Find position in positions array
+        const positions = this.state.positions;
+        let position = {};
+        for (let i = 0; i < positions.length; i++) {
+            if (positions[i].name == this.state.position) {
+                position = positions[i];
+                break;
+            }
+        }
 
         for (let email in vals) {
             const emailAddr = vals[email];
@@ -115,7 +122,8 @@ class AddUserDialog extends Component {
         const currentUserInfo = {
             userId: currentUser._id,
             companyId: currentUser.businessInfo.company.companyId,
-            verificationToken: currentUser.verificationToken
+            verificationToken: currentUser.verificationToken,
+            positionId: position._id
         }
         console.log("before post");
 
