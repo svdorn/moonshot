@@ -248,8 +248,8 @@ class AddUserDialog extends Component {
 
         // TODO get companies from DB
         const positions = this.state.positions;
-        const positionItems = positions.map(function (position) {
-            return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
+        const positionItems = positions.map(function (position, index) {
+            return <MenuItem value={position.name} primaryText={position.name} key={index}/>
         });
 
         let candidateEmailSection = [];
