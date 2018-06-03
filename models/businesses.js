@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 
 var businessesSchema = mongoose.Schema({
     name: String,
+    code: Number,
     pathwayIds: [ mongoose.Schema.Types.ObjectId ],
     employerIds: [ mongoose.Schema.Types.ObjectId ],
     employeeIds: [ mongoose.Schema.Types.ObjectId ],
