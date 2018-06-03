@@ -31,22 +31,25 @@ const businessApis = {
 // ----->> START APIS <<----- //
 
 function POST_emailInvites(req, res) {
-    const candidateEmails = req.body.candidateEmails;
-    const employeeEmails = req.body.employeeEmails;
-    const managerEmails = req.body.managerEmails;
-    const adminEmails = req.body.adminEmails;
-    const _id = req.body.currentUserInfo._id;
-    const verificationToken = req.body.currentUserInfo.verificationToken;
+    const body = req.body;
+    const candidateEmails = sanitize(body.candidateEmails);
+    const employeeEmails = sanitize(body.employeeEmails);
+    const managerEmails = sanitize(body.managerEmails);
+    const adminEmails = sanitize(body.adminEmails);
+    const userId = sanitize(body.currentUserInfo.userId);
+    const verificationToken = sanitize(body.currentUserInfo.verificationToken);
+    const companyId = sanitize(body.currentUserInfo.companyId);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!candidateEmails || !employeeEmails || !managerEmails || !adminEmails || !_id || !verificationToken) {
+    if (!candidateEmails || !employeeEmails || !managerEmails || !adminEmails || !userId || !companyId || !verificationToken) {
         return res.status(400).send("Bad request.");
     }
     console.log(employeeEmails);
     console.log(candidateEmails);
     console.log(managerEmails);
     console.log(adminEmails);
-    console.log(_id);
+    console.log(userId);
+    console.log(companyId);
     console.log(verificationToken);
 
 }
