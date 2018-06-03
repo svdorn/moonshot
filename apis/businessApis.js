@@ -57,12 +57,6 @@ function POST_emailInvites(req, res) {
             return res.status(403).send("You do not have permission to send verification links.");
         }
 
-        console.log(business);
-
-        console.log(business.employerIds);
-        console.log(business.name);
-        console.log(business.code)
-
         let code = business.code;
 
         const positionIndex = business.positions.findIndex(currPosition => {
@@ -71,20 +65,58 @@ function POST_emailInvites(req, res) {
 
         let position = business.positions[positionIndex];
 
-        console.log(position);
+        // Add the position code onto the end of the code
+        code = code.toString().concat(position.code);
+        console.log(code);
+
         // Send candidate emails
         for (let i = 0; i < candidateEmails.length; i++) {
             // add code to the position
             const userCode = crypto.randomBytes(64).toString('hex');
-
+            if (position.candidateCodes) {
+                position.candidateCodes.push(userCode);
+            } else {
+                position.candidateCodes = [];
+                position.candidateCodes.push(userCode);
+            }
             // send email
         }
         // Send employee emails
-
+        for (let i = 0; i < employeeEmails.length; i++) {
+            // add code to the position
+            const userCode = crypto.randomBytes(64).toString('hex');
+            if (position.employeeCodes) {
+                position.employeeCodes.push(userCode);
+            } else {
+                position.employeeCodes = [];
+                position.employeeCodes.push(userCode);
+            }
+            // send email
+        }
         // Send manager emails
-
+        for (let i = 0; i < managerEmails.length; i++) {
+            // add code to the position
+            const userCode = crypto.randomBytes(64).toString('hex');
+            if (position.managerCodes) {
+                position.managerCodes.push(userCode);
+            } else {
+                position.managerCodes = [];
+                position.managerCodes.push(userCode);
+            }
+            // send email
+        }
         // Send admin emails
-
+        for (let i = 0; i < adminEmails.length; i++) {
+            // add code to the position
+            const userCode = crypto.randomBytes(64).toString('hex');
+            if (position.adminCodes) {
+                position.adminCodes.push(userCode);
+            } else {
+                position.adminCodes = [];
+                position.adminCodes.push(userCode);
+            }
+            // send email
+        }
         // Save the new business object with updated positions array
         // update the employee in the business object
         business.positions[positionIndex] = position;

@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 
 var businessesSchema = mongoose.Schema({
     name: String,
-    code: Number,
+    code: String,
     pathwayIds: [ mongoose.Schema.Types.ObjectId ],
     employerIds: [ mongoose.Schema.Types.ObjectId ],
     employeeIds: [ mongoose.Schema.Types.ObjectId ],
@@ -84,15 +84,15 @@ var businessesSchema = mongoose.Schema({
             candidateId: mongoose.Schema.Types.ObjectId
         }],
         // Code for the specific position
-        code: Number,
+        code: String,
         // One-time use codes for candidates
-        candidateCodes: [Number],
+        candidateCodes: [String],
         // One-time use codes for employees
-        employeeCodes: [Number],
+        employeeCodes: [String],
         // One-time use codes for managers
-        managerCodes: [Number],
+        managerCodes: [String],
         // One-time use codes for admins
-        adminCodes: [Number]
+        adminCodes: [String]
 
     }],
 
