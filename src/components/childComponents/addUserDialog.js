@@ -114,7 +114,7 @@ class AddUserDialog extends Component {
         const currentUser = this.props.currentUser;
         const currentUserInfo = {
             userId: currentUser._id,
-            companyId: currentUser.company.companyId,
+            companyId: currentUser.businessInfo.company.companyId,
             verificationToken: currentUser.verificationToken
         }
         console.log("before post");
