@@ -49,10 +49,6 @@ function POST_emailInvites(req, res) {
     }
 
     let moonshotUrl = 'https://www.moonshotinsights.io/';
-    // if we are in development, links are to localhost
-    if (!process.env.NODE_ENV) {
-        moonshotUrl = 'http://localhost:8081/';
-    }
 
     // verify the employer is actually a part of this organization
     verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
@@ -73,7 +69,6 @@ function POST_emailInvites(req, res) {
 
         // Add the position code onto the end of the code
         code = code.toString().concat(position.code);
-        console.log(code);
 
         // Send candidate emails
         for (let i = 0; i < candidateEmails.length; i++) {
