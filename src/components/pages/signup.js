@@ -174,8 +174,6 @@ class Signup extends Component {
             user.userCode = location.query.userCode;
         }
 
-        console.log(user);
-
         this.props.postUser(user);
 
         this.setState({

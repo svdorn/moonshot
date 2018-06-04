@@ -92,13 +92,9 @@ function POST_candidate(req, res) {
     }
     // business identifier
     const employerCode = code.substring(0, 8);
-    console.log("employer code: ", employerCode);
-    console.log(employerCode);
     // position identifier
     const positionCode = code.substring(8, 10);
-    console.log("position code: ", positionCode);
-    console.log("user : ",user);
-
+    // user identifier
     const uniqueCode = user.userCode;
 
     // find the business corresponding to that employer code
@@ -112,7 +108,6 @@ function POST_candidate(req, res) {
     })
 
     async function onceBusinessesFound(foundBusinesses) {
-        console.log(foundBusinesses);
         if (!foundBusinesses || foundBusinesses.length == 0) {
             console.log("no business found with employer code: ", employerCode);
             return res.status(400).send(INVALID_CODE);
@@ -133,15 +128,8 @@ function POST_candidate(req, res) {
             // user does not have a valid code
             if (!uniqueCode) { console.log("no unique code"); return res.status(400).send(INVALID_CODE); }
 
-            console.log(position.candidateCodes);
-            console.log(position.employeeCodes);
-            console.log(position.managerCodes);
-            console.log(position.adminCodes);
-
             // find the index of the candidate-specific code within the position
             const candidateIndex = position.candidateCodes.findIndex(candidateCode => {
-                console.log("Candidate Code: ",candidateCode);
-                console.log("Unique code: ",uniqueCode);
                 return candidateCode == uniqueCode;
             });
             const employeeIndex = position.employeeCodes.findIndex(employeeCode => {
@@ -156,10 +144,7 @@ function POST_candidate(req, res) {
 
             let oneTimeCodeIndex = -1;
             let oneTimeArray = [];
-            console.log(candidateIndex);
-            console.log(employeeIndex);
-            console.log(managerIndex);
-            console.log(adminIndex);
+
             if (candidateIndex !== -1) {
                 user.userType = "candidate";
                 oneTimeCodeIndex = candidateIndex;
@@ -178,15 +163,10 @@ function POST_candidate(req, res) {
                 oneTimeArray = position.adminCodes;
             }
 
-            console.log(oneTimeCodeIndex);
-            console.log(oneTimeArray);
-
             // if the user does have a valid unique code
             if (typeof oneTimeCodeIndex === "number" && oneTimeCodeIndex > -1) {
                 // remove the code from the position so it can't be used again
-                console.log("oneTimeCodes was: ", oneTimeArray);
                 oneTimeArray.splice(oneTimeCodeIndex, 1);
-                console.log("oneTimeCodes is: ", oneTimeArray);
                 // save the business with that unique code removed
                 business.positions[positionIndex] = position;
                 try {
