@@ -99,7 +99,7 @@ class AddUserDialog extends Component {
         for (let email in vals) {
             const emailAddr = vals[email];
             const emailString = email.replace(new RegExp("[0-9]", "g"),"");
-            console.log(emailString);
+
             switch(emailString) {
                 case "candidateEmail":
                     candidateEmails.push(emailAddr);
@@ -125,11 +125,8 @@ class AddUserDialog extends Component {
             verificationToken: currentUser.verificationToken,
             positionId: position._id
         }
-        console.log("before post");
 
         this.props.postEmailInvites(candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo);
-
-        console.log("Done posting email invites");
 
         // const vals = this.props.formData.addUser.values;
         //

@@ -217,12 +217,6 @@ class Signup extends Component {
 
     //name, email, password, confirm password, signup button
     render() {
-        let location = this.props.location;
-        if (location.query) {
-            console.log(location.query);
-            console.log(location.query.code);
-            console.log(location.query.userCode);
-        }
         let urlQuery = {};
         try {
             urlQuery = this.props.location.query;
@@ -293,28 +287,28 @@ class Signup extends Component {
                                         <Field
                                             name="name"
                                             component={renderTextField}
-                                            label="Full Name"
+                                            label="Full Name*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="email"
                                             component={renderTextField}
-                                            label="Email"
+                                            label="Email*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="password"
                                             component={renderPasswordField}
-                                            label="Password"
+                                            label="Password*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="password2"
                                             component={renderPasswordField}
-                                            label="Confirm Password"
+                                            label="Confirm Password*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">

@@ -292,6 +292,7 @@ function POST_candidate(req, res) {
                     });
                 }
 
+                // TODO: change to make for positions, not pathways
                 try {
                     // send email to everyone if there's a new sign up (if in production mode)
                     if (process.env.NODE_ENV !== "development") {
