@@ -1,7 +1,7 @@
 var Users = require('../models/users.js');
 var Referrals = require('../models/referrals.js');
 var Pathways = require('../models/pathways.js');
-var Businesses = require('../models/pathways.js');
+var Businesses = require('../models/businesses.js');
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -33,16 +33,39 @@ const candidateApis = {
 
 
 function POST_candidate(req, res) {
-    // TODO: MAKE IT SO YOU CAN ACTUALLY SIGN UP
-    return res.status(400).send("Invalid employer code.");
-
-
     let user = sanitize(req.body);
 
-    // hash the user's password
+    // if this is true, don't send any more errors
+    let errorSent = false;
+
+    // the things we will need before creating the user
+    let positionFound = undefined;
+    let verifiedUniqueEmail = false;
+    let createdLoginInfo = false;
+
+    // make sure a user with this email doesn't already exist
+    Users.find({email: user.email})
+    .then(foundUsers => {
+        if (foundUsers.length > 0) {
+            return res.status(401).send("An account with that email address already exists.");
+        } else {
+            // mark that we are good to make this user, then try to do it
+            verifiedUniqueEmail = true;
+            makeUser();
+        }
+    })
+    .catch(findUserError => {
+        console.log("error finding user by email: ", findUserError);
+        return res.status(500).send("Server error, try again later.");
+    });
+
+    // hash the user's password and add verification tokens
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function (err, salt) {
-        bcrypt.hash(user.password, salt, function (err, hash) {
+        if (err) { console.log("genSalt err: ", err); return res.status(500).send("Server error, try again later."); }
+        bcrypt.hash(user.password, salt, function (err2, hash) {
+            if (err2) { console.log("hash err: ", err); return res.status(500).send("Server error, try again later."); }
+
             // change the stored password to be the hash
             user.password = hash;
             user.verified = false;
@@ -51,183 +74,290 @@ function POST_candidate(req, res) {
             // create user's verification strings
             user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
             user.verificationToken = crypto.randomBytes(64).toString('hex');
-            const query = {email: user.email};
 
-            getUserByQuery(query, function(err, foundUser) {
-                if (err) {
-                    console.log(err);
-                    return res.status(500).send("Error creating account, try with a different email or try again later.");
-                }
-                if (foundUser == null || foundUser == undefined) {
-                    // get count of users with that name to get the profile url
-                    Users.count({name: user.name}, function (err, count) {
-                        const randomNumber = crypto.randomBytes(8).toString('hex');
-                        user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
-                        user.admin = false;
-                        user.agreedToTerms = true;
-                        let addedPathway = false;
-
-                        // add pathway to user's My Pathways if they went from
-                        // a landing page.
-                        // TODO: CHANGE THIS. RIGHT NOW THIS WILL ONLY WORK FOR THE NWM PATHWAY OR SINGLEWIRE PATHWAY
-                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad" || user.pathwayId === "5a88b4b8734d1d041bb6b386" || user.pathwayId === "5abc12cff36d2805e28d27f3" || user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
-                            user.pathways = [{
-                                pathwayId: user.pathwayId,
-                                currentStep: {
-                                    subStep: 1,
-                                    step: 1
-                                }
-                            }];
-                            addedPathway = true;
-                        }
-                        else {
-                            user.pathwayId = undefined;
-                        }
-
-                        user.dateSignedUp = new Date();
-                        // make sure referral code is a string, if not set it
-                        // to undefined (will happen if there is no referral code as well)
-                        if (typeof user.signUpReferralCode !== "string") {
-                            user.signUpReferralCode = undefined;
-                        }
-
-                        // store the user in the db
-                        Users.create(user, function (err, newUser) {
-                            if (err) {
-                                console.log(err);
-                            }
-
-                            req.session.unverifiedUserId = newUser._id;
-                            req.session.save(function (err) {
-                                if (err) {
-                                    console.log("error saving unverifiedUserId to session: ", err);
-                                }
-                            })
-
-                            if (user.signUpReferralCode) {
-                                Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
-                                    if (referralErr) {
-                                        console.log("Error finding referrer for new sign up: ", referralErr);
-                                    } else if (!referrer) {
-                                        console.log("Invalid referral code used: ", user.signUpReferralCode);
-                                    } else {
-                                        referrer.referredUsers.push({
-                                            name: newUser.name,
-                                            email: newUser.email,
-                                            _id: newUser._id
-                                        });
-                                        referrer.save(function(referrerSaveErr, newReferrer) {
-                                            if (referrerSaveErr) {
-                                                console.log("Error saving referrer: ", referrerSaveErr);
-                                            }
-                                        });
-                                    }
-                                });
-                            }
-
-                            try {
-                                // send email to everyone if there's a new sign up (if in production mode)
-                                if (process.env.NODE_ENV) {
-                                    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-
-                                    let subject = 'New Sign Up';
-                                    let additionalText = '';
-                                    if (addedPathway) {
-                                        let pathName = "Singlewire QA";
-                                        if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
-                                            pathName = "Northwestern Mutual";
-                                        }
-                                        else if (user.pathwayId === "5abc12cff36d2805e28d27f3") {
-                                            pathName = "Curate Full-Stack";
-                                        }
-                                        else if (user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
-                                            pathName = "Dream Home CEO";
-                                        }
-                                        additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
-                                    }
-                                    let content =
-                                        '<div>'
-                                        +   '<p>New user signed up.</p>'
-                                        +   '<p>Name: ' + newUser.name + '</p>'
-                                        +   '<p>email: ' + newUser.email + '</p>'
-                                        +   additionalText
-                                        + '</div>';
-
-                                    const sendFrom = "Moonshot";
-                                    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                                        if (!success) {
-                                            console.log("Error sending sign up alert email");
-                                        }
-                                    })
-                                }
-                            } catch (e) {
-                                console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
-                            }
-
-                            // no reason to return the user with tokens because
-                            // they will have to verify themselves before they
-                            // can do anything anyway
-                            res.json(safeUser(newUser));
-
-                            // send an email to the user one day after signup
-                            try {
-                                const ONE_DAY = 1000 * 60 * 60 * 24;
-
-                                let moonshotUrl = 'https://www.moonshotinsights.io/';
-                                // if we are in development, links are to localhost
-                                if (!process.env.NODE_ENV) {
-                                    moonshotUrl = 'http://localhost:8081/';
-                                }
-
-                                let firstName = getFirstName(newUser.name);
-                                // add in a space before the name, if the user has a name
-                                if (firstName != "") {
-                                    firstName = " " + firstName;
-                                }
-
-                                setTimeout(function() {
-                                    let dayAfterRecipient = [newUser.email];
-                                    let dayAfterSubject = 'Moonshot Fights For You';
-                                    let dayAfterContent =
-                                        "<div style='font-size:15px;text-align:left;font-family: Arial, sans-serif;color:#000000'>"
-                                            + "<p>Hi" + firstName + ",</p>"
-                                            + "<p>My name is Kyle. I'm the co-founder and CEO at Moonshot. I'm honored that you trusted us in your career journey. If you need anything at all, please let me know.</p>"
-                                            + "<p>I individually fight for every Moonshot candidate — Mock interviews, inside tips that our employers are looking for, anything to help you start the career of your dreams.</p>"
-                                            + "<p>Shoot me a message. I'm all ears.</p>"
-                                            + "<p>Yours truly,<br/>Kyle</p>"
-                                            + "<div style='font-size:10px; text-align:left; color:#000000; margin-bottom:50px;'>"
-                                                + "----------------------------------<br/>"
-                                                + "Kyle Treige, Co-Founder & CEO<br/>"
-                                                + "<a href='https://moonshotinsights.io/'>Moonshot</a><br/>"
-                                                + "608-438-4478<br/>"
-                                            + "</div>"
-                                            + "<div style='font-size:10px; text-align:left; color:#C8C8C8; margin-bottom:30px;'>"
-                                                + "<i>Moonshot Learning, Inc.<br/><a href='' style='text-decoration:none;color:#D8D8D8;cursor:default'>1261 Meadow Sweet Dr, Madison, WI 53719</a>.<br/>"
-                                                + '<a style="color:#C8C8C8;" href="' + moonshotUrl + 'unsubscribe?email=' + newUser.email + '">Opt-out of future messages.</a></i>'
-                                            + "</div>"
-                                        + "</div>";
-
-                                    const dayAfterSendFrom = "Kyle Treige";
-                                    sendEmail(dayAfterRecipient, dayAfterSubject, dayAfterContent, dayAfterSendFrom, undefined, function (success, msg) {
-                                        if (success) {
-                                            console.log("sent day-after email");
-                                        } else {
-                                            console.log("error sending day-after email");
-                                        }
-                                    })
-                                }, ONE_DAY);
-                            } catch (e) {
-                                console.log("Not able to send day-after email to ", newUser.name, "with id: ", newUser._id);
-                                console.log("Error: ", e);
-                            }
-                        })
-                    })
-                } else {
-                    res.status(401).send("An account with that email address already exists.");
-                }
-            });
+            // mark that we have created verification token and password, then make the user
+            createdLoginInfo = true;
+            makeUser();
         });
     });
+
+    // message shown to users with bad employer code
+    const INVALID_CODE = "Invalid employer code."
+
+    // get the position from the employer code
+    const code = user.code;
+    if (code.length < 10) {
+        console.log(`code not long enough, was ${code.length} characters`);
+        return res.status(400).send(INVALID_CODE);
+    }
+    // business identifier
+    const employerCode = code.substring(0, 8);
+    console.log("employer code: ", employerCode);
+    console.log(employerCode);
+    // position identifier
+    const positionCode = code.substring(8, 10);
+    console.log("position code: ", positionCode);
+    console.log("user : ",user);
+
+    const uniqueCode = user.userCode;
+
+    // find the business corresponding to that employer code
+    let business = undefined;
+    let position = undefined;
+    Businesses.find({code: employerCode})
+    .then(onceBusinessesFound)
+    .catch(findBizError => {
+        console.log("error finding business by employer code: ", findBizError);
+        return res.status(500).send("Server error.");
+    })
+
+    async function onceBusinessesFound(foundBusinesses) {
+        console.log(foundBusinesses);
+        if (!foundBusinesses || foundBusinesses.length == 0) {
+            console.log("no business found with employer code: ", employerCode);
+            return res.status(400).send(INVALID_CODE);
+        }
+
+        business = foundBusinesses[0];
+
+        // find the position the candidate is applying to
+        const positionIndex = business.positions.findIndex(pos => { return pos.code === positionCode; })
+        position = business.positions[positionIndex];
+        if (!position) {
+            console.log("no position found with position code: ", positionCode);
+            return res.status(400).send(INVALID_CODE);
+        }
+
+        // if the position requires a special code because it is closed to the public
+        if (position.open === false) {
+            // user does not have a valid code
+            if (!uniqueCode) { console.log("no unique code"); return res.status(400).send(INVALID_CODE); }
+
+            console.log(position.candidateCodes);
+            console.log(position.employeeCodes);
+            console.log(position.managerCodes);
+            console.log(position.adminCodes);
+
+            // find the index of the candidate-specific code within the position
+            const candidateIndex = position.candidateCodes.findIndex(candidateCode => {
+                console.log("Candidate Code: ",candidateCode);
+                console.log("Unique code: ",uniqueCode);
+                return candidateCode == uniqueCode;
+            });
+            const employeeIndex = position.employeeCodes.findIndex(employeeCode => {
+                return employeeCode == uniqueCode;
+            });
+            const managerIndex = position.managerCodes.findIndex(managerCode => {
+                return managerCode == uniqueCode;
+            });
+            const adminIndex = position.adminCodes.findIndex(adminCode => {
+                return adminCode == uniqueCode;
+            });
+
+            let oneTimeCodeIndex = -1;
+            let oneTimeArray = [];
+            console.log(candidateIndex);
+            console.log(employeeIndex);
+            console.log(managerIndex);
+            console.log(adminIndex);
+            if (candidateIndex !== -1) {
+                user.userType = "candidate";
+                oneTimeCodeIndex = candidateIndex;
+                oneTimeArray = position.candidateCodes;
+            } else if (employeeIndex !== -1) {
+                user.userType = "employee";
+                oneTimeCodeIndex = employeeIndex;
+                oneTimeArray = position.employeeCodes;
+            } else if (managerIndex !== -1) {
+                user.userType = "manager";
+                oneTimeCodeIndex = managerIndex;
+                oneTimeArray = position.managerCodes;
+            } else {
+                user.userType = "accountAdmin";
+                oneTimeCodeIndex = adminIndex;
+                oneTimeArray = position.adminCodes;
+            }
+
+            console.log(oneTimeCodeIndex);
+            console.log(oneTimeArray);
+
+            // if the user does have a valid unique code
+            if (typeof oneTimeCodeIndex === "number" && oneTimeCodeIndex > -1) {
+                // remove the code from the position so it can't be used again
+                console.log("oneTimeCodes was: ", oneTimeArray);
+                oneTimeArray.splice(oneTimeCodeIndex, 1);
+                console.log("oneTimeCodes is: ", oneTimeArray);
+                // save the business with that unique code removed
+                business.positions[positionIndex] = position;
+                try {
+                    await business.save();
+                } catch(saveBusinessError) {
+                    console.log("error saving business with unique code removed: ", saveBusinessError);
+                    return res.status(500).send("Server error, try again later.");
+                }
+            }
+            // if the user does NOT have a valid unique code
+            else {
+                console.log("invalid unique code");
+                return res.status(400).send(INVALID_CODE);
+            }
+        }
+
+        // mark that we have found the position, then make the user with the position
+        positionFound = true;
+        makeUser();
+    }
+
+    function makeUser() {
+        // make sure we've found the right position and made sure no user with
+        // the same email exists before making the user
+        if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo) { return; }
+
+        // get count of users with that name to get the profile url
+        Users.count({name: user.name}, function (err, count) {
+            const randomNumber = crypto.randomBytes(8).toString('hex');
+            user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+            user.admin = false;
+            user.agreedToTerms = true;
+
+            user.dateSignedUp = new Date();
+            // make sure referral code is a string, if not set it
+            // to undefined (will happen if there is no referral code as well)
+            if (typeof user.signUpReferralCode !== "string") {
+                user.signUpReferralCode = undefined;
+            }
+
+            // sign up for position
+            // user hasn't taken any skill tests yet, so they're on the first one (index 0)
+            let testIndex = 0;
+            // have to complete all the required skills tests since this is a new
+            // user and will have no previous skill test completions
+            let skillTests = position.skills;
+
+            // create the free response objects that will be stored in the user db
+            const numFRQs = position.freeResponseQuestions.length;
+            let frqsForUser = [];
+            for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
+                const frq = position.freeResponseQuestions[frqIndex];
+                frqsForUser.push({
+                    questionId: frq._id,
+                    questionIndex: frqIndex,
+                    response: undefined,
+                    body: frq.body,
+                    required: frq.required
+                });
+            }
+
+            // position object within user's positions array
+            let userPosition = {
+                companyId: business._id,
+                positionId: position._id,
+                hiringStage: "Not Contacted",
+                hiringStageChanges: [],
+                appliedStartDate: new Date(),
+                freeResponseQuestions: frqsForUser
+            }
+
+            // add the position to the user's list of positions
+            user.positions = [ userPosition ];
+
+            // the current position will be the positionInProgress
+            user.positionInProgress = {
+                inProgress: true,
+                freeResponseQuestions: frqsForUser,
+                businessId: business._id,
+                positionId: position._id,
+                skillTests, testIndex
+            }
+
+            // store the user in the db
+            Users.create(user, async function (err, newUser) {
+                if (err) {
+                    console.log(err);
+                }
+
+                req.session.unverifiedUserId = newUser._id;
+                req.session.save(function (err) {
+                    if (err) {
+                        console.log("error saving unverifiedUserId to session: ", err);
+                    }
+                })
+
+                // sign up for the psych test
+                try {
+                    newUser = await internalStartPsychEval(newUser);
+                    newUser = await newUser.save();
+                } catch (psychEvalSignupError) {
+                    console.log("pyschEvalSignupError: ", psychEvalSignupError);
+                }
+
+                if (user.signUpReferralCode) {
+                    Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
+                        if (referralErr) {
+                            console.log("Error finding referrer for new sign up: ", referralErr);
+                        } else if (!referrer) {
+                            console.log("Invalid referral code used: ", user.signUpReferralCode);
+                        } else {
+                            referrer.referredUsers.push({
+                                name: newUser.name,
+                                email: newUser.email,
+                                _id: newUser._id
+                            });
+                            referrer.save(function(referrerSaveErr, newReferrer) {
+                                if (referrerSaveErr) {
+                                    console.log("Error saving referrer: ", referrerSaveErr);
+                                }
+                            });
+                        }
+                    });
+                }
+
+                try {
+                    // send email to everyone if there's a new sign up (if in production mode)
+                    if (process.env.NODE_ENV !== "development") {
+                        let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+
+                        let subject = 'New Sign Up';
+                        let additionalText = '';
+                        if (addedPathway) {
+                            let pathName = "Singlewire QA";
+                            if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
+                                pathName = "Northwestern Mutual";
+                            }
+                            else if (user.pathwayId === "5abc12cff36d2805e28d27f3") {
+                                pathName = "Curate Full-Stack";
+                            }
+                            else if (user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
+                                pathName = "Dream Home CEO";
+                            }
+                            additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
+                        }
+                        let content =
+                            '<div>'
+                            +   '<p>New user signed up.</p>'
+                            +   '<p>Name: ' + newUser.name + '</p>'
+                            +   '<p>email: ' + newUser.email + '</p>'
+                            +   additionalText
+                            + '</div>';
+
+                        const sendFrom = "Moonshot";
+                        sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+                            if (!success) {
+                                console.log("Error sending sign up alert email");
+                            }
+                        })
+                    }
+                } catch (e) {
+                    console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
+                }
+
+                // no reason to return the user with tokens because
+                // they will have to verify themselves before they
+                // can do anything anyway
+                res.json(safeUser(newUser));
+            })
+        })
+    }
 }
 
 

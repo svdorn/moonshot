@@ -92,7 +92,9 @@ var businessesSchema = mongoose.Schema({
         // One-time use codes for managers
         managerCodes: [String],
         // One-time use codes for admins
-        adminCodes: [String]
+        adminCodes: [String],
+        // Whether the position is open to the public
+        open: Boolean
 
     }],
 
