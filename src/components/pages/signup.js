@@ -328,8 +328,8 @@ class Signup extends Component {
                                                 src="/icons/CheckMarkRoundedWhite.png"
                                             />
                                         </div>
-                                        I understand and agree to the <bdi className="clickable" onClick={this.handleOpenPP}>Privacy
-                                        Policy</bdi> and <bdi className="clickable" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
+                                        I understand and agree to the <b className="clickable grayText" onClick={this.handleOpenPP}>Privacy
+                                        Policy</b> and <b className="clickable grayText" onClick={this.handleOpenTOU}>Terms of Use</b>.
                                     </div>
                                     <br/>
                                     <RaisedButton
