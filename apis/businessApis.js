@@ -84,11 +84,16 @@ function POST_emailInvites(req, res) {
             let recipient = [candidateEmails[i]];
             let subject = 'Candidate email';
             let content =
-                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
-                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'signup?code='
+                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                    + '<div style="font-size:28px;color:#0c0c0c;">You&#39;re Been Invited to Moonshot!</div>'
+                    + '<p>&#09;You&#39;ve been invited by (name) from (company) as a candidate!'
+                    + ' Please click the button below to create your account.'
+                    + ' Once you&#39;ve created your account you can begin your evaluation!</p>'
+                    + '<br/><p>Welcome to the Moonshot process!</p>'
+                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode
                     + '">Create Account</a>'
+                    + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
                     + '<div style="text-align:left;width:80%;margin-left:10%;">'
                         + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
                         + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
