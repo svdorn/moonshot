@@ -10,7 +10,7 @@ import StyledContent from "../../childComponents/styledContent";
 import { CircularProgress } from "material-ui";
 import ProgressBar from '../../miscComponents/progressBar';
 
-class PsychAnalysis extends Component {
+class SkillTest extends Component {
     constructor(props) {
         super(props);
 
@@ -246,4 +246,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PsychAnalysis);
+export default connect(mapStateToProps, mapDispatchToProps)(SkillTest);

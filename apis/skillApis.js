@@ -10,7 +10,8 @@ const { sanitize,
         getUserByQuery,
         sendEmail,
         safeUser,
-        randomInt
+        randomInt,
+        frontEndUser
 } = require('./helperFunctions.js');
 
 

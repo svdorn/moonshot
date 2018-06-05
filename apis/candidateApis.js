@@ -17,6 +17,7 @@ const { sanitize,
         userForAdmin,
         getFirstName,
         sendBizUpdateCandidateErrorEmail,
+        frontEndUser
 } = require('./helperFunctions.js');
 
 // get function to start position evaluation

@@ -11,22 +11,7 @@ const sanitizeOptions = {
     allowedAttributes: []
 }
 
-const helperFunctions = {
-    sanitize,
-    removeEmptyFields,
-    verifyUser,
-    removePassword,
-    removeIrrelevantInfoKeepToken,
-    printUsersFromPathway,
-    getUserByQuery,
-    sendEmail,
-    safeUser,
-    userForAdmin,
-    getFirstName,
-    sendBizUpdateCandidateErrorEmail,
-    removeDuplicates,
-    randomInt
-}
+
 
 
 // TODO delete this as soon as we have a good way of seeing all users within a pathway
@@ -65,6 +50,95 @@ function printUsersFromPathway(pathwayIdToCheck) {
         })
     })
 }
+
+
+// removes information from a db user object so that it can be passed for that
+// same user on the front end
+function frontEndUser(dbUser, extraFieldsToRemove) {
+    // copy everything into new user object
+    let newUser = Object.assign({}, dbUser);
+
+    // doing Object.assign with a document from the db can lead to the new object
+    // having a bunch of properties we don't want with the actual object ending
+    // up in newObj._doc, so take the ._doc property if it exists and treat it
+    // as the actual object
+    if (newUser._doc) {
+        newUser = newUser._doc;
+    }
+
+    // clean the psychometric test
+    const currentQuestion = newUser.psychometricTest.currentQuestion;
+    let cleanPsychTest = {
+        currentQuestion: {
+            body: currentQuestion.body,
+            leftOption: currentQuestion.leftOption,
+            rightOption: currentQuestion.rightOption,
+            questionId: currentQuestion.questionId
+        },
+        inProgress: newUser.psychometricTest.inProgress
+    };
+
+    // if the user is currently applying for a position
+    let currentPosition = undefined;
+    if (newUser.positionInProgress) {
+        // find the index of the position the user is
+        const positionInProgressString = newUser.positionInProgress.toString();
+        const positionIndex = user.positions.findIndex(pos => {
+            return pos.positionId.toString() === positionInProgressString;
+        });
+        position = user.positions[positionIndex];
+
+        currentPosition = {
+            inProgress: true,
+            skillTests: position.skillTestIds,
+            testIndex: position.testIndex,
+            freeResponseQuestions: position.freeResponseQuestions
+        }
+    }
+
+    // default things to remove
+    newUser.password = undefined;
+    newUser.emailVerificationToken = undefined;
+    newUser.passwordToken = undefined;
+    newUser.passwordTokenExpirationTime = undefined;
+    newUser.positions = undefined;
+    newUser.skillTests = undefined;
+    newUser.psychometricTest = cleanPsychTest;
+    newUser.currentPosition = currentPosition;
+
+    // if we are given more than the default fields
+    if (Array.isArray(extraFieldsToRemove)) {
+        // go through each extra field and remove them from the user
+        extraFieldsToRemove.forEach(field => {
+            // make sure the field is a string so it can be an object property
+            if (typeof field === "string") {
+                newUser[field] = undefined;
+            }
+        });
+    }
+
+    // return the updated user, ready for front-end use
+    return newUser;
+}
+
+
+// some options for front-end user
+const COMPLETE_CLEAN = [
+    "_id",
+    "verificationToken",
+    "admin",
+    "agreedToTerms",
+    "employerCode",
+    "hideProfile",
+    "referredByCode",
+    "verified",
+    "redirect",
+    "psychometricTest",
+    "positions",
+    "positionInProgress",
+    "currentPosition"
+]
+const NO_TOKENS = [ "verificationToken" ];
 
 
 function randomInt(lowBound, highBound) {
@@ -278,34 +352,6 @@ function removePassword(user) {
     if (typeof user === "object" && user != null) {
         let newUser = user;
         newUser.password = undefined;
-        return newUser;
-    } else {
-        return undefined;
-    }
-}
-
-
-// used when passing the user object back to the user, still contains sensitive
-// data such as the user id and verification token
-function removeIrrelevantInfoKeepToken(user) {
-    if (typeof user === "object" && user != null) {
-        let newUser = user;
-        // remove the password
-        newUser.password = undefined;
-        // remove everything except the info about the current question
-        if (newUser.psychometricTest) {
-            const currentQuestion = newUser.psychometricTest.currentQuestion;
-            newUser.psychometricTest = {
-                // only need the body of the current question
-                currentQuestion: {
-                    body: currentQuestion.body,
-                    leftOption: currentQuestion.leftOption,
-                    rightOption: currentQuestion.rightOption,
-                    questionId: currentQuestion.questionId
-                },
-                inProgress: newUser.psychometricTest.inProgress
-            }
-        }
         return newUser;
     } else {
         return undefined;
@@ -547,6 +593,25 @@ function removeDuplicates(a) {
     return out;
 }
 
+
+const helperFunctions = {
+    sanitize,
+    removeEmptyFields,
+    verifyUser,
+    removePassword,
+    printUsersFromPathway,
+    getUserByQuery,
+    sendEmail,
+    safeUser,
+    userForAdmin,
+    getFirstName,
+    sendBizUpdateCandidateErrorEmail,
+    removeDuplicates,
+    randomInt,
+
+    COMPLETE_CLEAN,
+    NO_TOKENS
+}
 
 
 module.exports = helperFunctions;

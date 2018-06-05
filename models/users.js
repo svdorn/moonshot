@@ -33,7 +33,7 @@ var usersSchema = mongoose.Schema({
     hasFinishedOnboarding: Boolean,
     // used to verify identity
     verificationToken: String,
-    // sent to user's email address, used to user's account
+    // sent to user's email address, used to verify user's account
     emailVerificationToken: String,
     // the code that this user initially got to the site with (will usually be empty)
     referredByCode: String,
@@ -43,8 +43,6 @@ var usersSchema = mongoose.Schema({
     passwordTokenExpirationTime: Number,
     // if the use has verified their account via email
     verified: Boolean,
-    // not actually used right now
-    images: String,
     // list of skills the user has received from completing pathways
     skills: [ String ],
     // general info about the user, can be edited on onboarding or profile

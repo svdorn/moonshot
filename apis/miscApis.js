@@ -12,7 +12,8 @@ const { sanitize,
         sendEmail,
         safeUser,
         userForAdmin,
-        getFirstName
+        getFirstName,
+        frontEndUser
 } = require('./helperFunctions.js');
 
 

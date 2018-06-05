@@ -12,12 +12,12 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         removePassword,
-        removeIrrelevantInfoKeepToken,
         getUserByQuery,
         sendEmail,
-        safeUser,
         userForAdmin,
-        getFirstName
+        getFirstName,
+        frontEndUser,
+        NO_TOKENS
 } = require('./helperFunctions.js');
 
 
@@ -48,6 +48,8 @@ const userApis = {
     internalStartPsychEval,
     addEvaluation
 }
+
+
 
 
 async function GET_printPsychScore(req, res) {
@@ -178,7 +180,7 @@ async function POST_resetFrizz(req, res) {
 
     frizz.save()
     .then(newFrizz => {
-        return res.json(removePassword(newFrizz));
+        return res.json(frontEndUser(newFrizz));
     })
     .catch(error => {
         console.log("error resetting frizz: ", error);
@@ -208,7 +210,7 @@ async function POST_reset24(req, res) {
 
     frizz.save()
     .then(newFrizz => {
-        return res.json(removePassword(newFrizz));
+        return res.json(frontEndUser(newFrizz));
     })
     .catch(error => {
         console.log("error resetting 24: ", error);
@@ -348,7 +350,7 @@ async function POST_submitFreeResponse(req, res) {
 
     function returnToUser() {
         if (userSaved && businessSaved) {
-            res.json({updatedUser: removePassword(user)});
+            res.json({updatedUser: frontEndUser(user)});
         }
     }
 }
@@ -678,7 +680,7 @@ async function POST_startPositionEval(req, res) {
 
         // when the business and user have both been saved, return successfully
         function finish() {
-            if (userSaved && businessSaved) { res.json({updatedUser: removePassword(updatedUser), finished, nextUrl}); }
+            if (userSaved && businessSaved) { res.json({updatedUser: frontEndUser(updatedUser), finished, nextUrl}); }
         }
     }
 }
@@ -985,7 +987,7 @@ async function POST_answerPsychQuestion(req, res) {
         return res.status(500).send("Server error.");
     }
 
-    res.json({user: removeIrrelevantInfoKeepToken(updatedUser), finishedTest});
+    res.json({user: frontEndUser(updatedUser), finishedTest});
 }
 
 
@@ -1117,7 +1119,7 @@ async function POST_startPsychEval(req, res) {
 
     try {
         await user.save();
-        return res.json(removePassword(user));
+        return res.json(frontEndUser(user));
     } catch (saveUserErr) {
         console.log("Error saving user when trying to start psych exam: ", saveUserErr);
         return res.status(400).send("Server error, try again later.");
@@ -1138,7 +1140,7 @@ function GET_session(req, res) {
                 })
                 return;
             } else {
-                res.json(removePassword(user));
+                res.json(frontEndUser(user));
             }
         })
     }
@@ -1281,7 +1283,7 @@ function POST_verifyEmail(req, res) {
             });
 
             if (sessionUserId && sessionUserId == updatedUser._id) {
-                return res.json(removePassword(updatedUser));
+                return res.json(frontEndUser(updatedUser));
             }
             // otherwise, bring the user to the login page
             else {
@@ -1342,7 +1344,7 @@ function POST_changePasswordForgot(req, res) {
                     }
 
                     // successfully created new password
-                    return res.json(removePassword(newUser));
+                    return res.json(frontEndUser(newUser));
                 });
             })
         })
@@ -1396,7 +1398,7 @@ function POST_changePassword(req, res) {
                                 return res.status(500).send("Server error. Couldn't change password.");
                             } else {
                                 //successfully changed user's password
-                                return res.json(removePassword(newUser));
+                                return res.json(frontEndUser(newUser));
                             }
                         });
                     } else {
@@ -1486,7 +1488,7 @@ function GET_userByProfileUrl(req, res) {
     const query = { profileUrl };
     getUserByQuery(query, function (err, user) {
         if (err) { return res.status(400).send("Bad url"); }
-        return res.json(safeUser(user));
+        return res.json(frontEndUser(user, NO_TOKENS));
     });
 }
 
@@ -1541,10 +1543,10 @@ function POST_login(req, res) {
                             if (err) {
                                 console.log("error saving user session", err);
                             }
-                            return res.json(removePassword(user));
+                            return res.json(frontEndUser(user));
                         });
                     } else {
-                        return res.json(removePassword(user));
+                        return res.json(frontEndUser(user));
                     }
                 }
                 // if user has not yet verified email address, don't log in
@@ -1631,7 +1633,7 @@ function POST_changeSettings(req, res) {
                     }
 
                     // settings change successful
-                    return res.json(newUser);
+                    return res.json(frontEndUser(newUser));
                 })
             });
         });

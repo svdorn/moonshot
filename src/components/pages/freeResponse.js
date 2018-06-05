@@ -12,14 +12,14 @@ class FreeResponse extends Component {
     constructor(props) {
         super(props);
 
-        // check if the user has a current position in progres; they need one
+        // check if the user has a current position in progress; they need one
         // in order to have any questions to answer
         const currentUser = props.currentUser;
         if (!currentUser ||
             !currentUser.positionInProgress ||
-            currentUser.positionInProgress === false ||
+             currentUser.positionInProgress === false ||
             !currentUser.positionInProgress.freeResponseQuestions ||
-            currentUser.positionInProgress.freeResponseQuestions.length === 0
+             currentUser.positionInProgress.freeResponseQuestions.length === 0
         ) {
             this.goTo("/");
         }

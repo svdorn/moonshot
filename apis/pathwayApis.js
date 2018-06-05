@@ -15,7 +15,8 @@ const { sanitize,
         safeUser,
         userForAdmin,
         getFirstName,
-        removeDuplicates
+        removeDuplicates,
+        frontEndUser
 } = require('./helperFunctions.js');
 
 
