@@ -20,6 +20,8 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     />
 );
 
+const emailValidate = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined
+
 class AddUserDialog extends Component {
     constructor(props) {
         super(props);
@@ -243,7 +245,6 @@ class AddUserDialog extends Component {
             />,
         ];
 
-        // TODO get companies from DB
         const positions = this.state.positions;
         const positionItems = positions.map(function (position, index) {
             return <MenuItem value={position.name} primaryText={position.name} key={index}/>
@@ -256,7 +257,9 @@ class AddUserDialog extends Component {
                     <Field
                         name={"candidateEmail" + i}
                         component={renderTextField}
-                        label="Add Email"
+                        label="Add Candidate Email"
+                        type="email"
+                        validate={emailValidate}
                     /><br/>
                 </div>
             );
@@ -269,7 +272,9 @@ class AddUserDialog extends Component {
                     <Field
                         name={"employeeEmail" + i}
                         component={renderTextField}
-                        label="Add Email"
+                        label="Add Employee Email"
+                        type="email"
+                        validate={emailValidate}
                     /><br/>
                 </div>
             );
@@ -282,7 +287,9 @@ class AddUserDialog extends Component {
                     <Field
                         name={"managerEmail" + i}
                         component={renderTextField}
-                        label="Add Email"
+                        label="Add Manager Email"
+                        type="email"
+                        validate={emailValidate}
                     /><br/>
                 </div>
             );
@@ -295,7 +302,9 @@ class AddUserDialog extends Component {
                     <Field
                         name={"adminEmail" + i}
                         component={renderTextField}
-                        label="Add Email"
+                        label="Add Admin Email"
+                        type="email"
+                        validate={emailValidate}
                     /><br/>
                 </div>
             );
@@ -309,7 +318,7 @@ class AddUserDialog extends Component {
                 <div className="marginTop20px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        Add Another Email
+                        +Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -334,7 +343,7 @@ class AddUserDialog extends Component {
                 <div className="marginTop20px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        Add Another Email
+                        +Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -359,7 +368,7 @@ class AddUserDialog extends Component {
                 <div className="marginTop20px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        Add Another Email
+                        +Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -384,7 +393,7 @@ class AddUserDialog extends Component {
                 <div className="marginTop20px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        Add Another Email
+                        +Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
