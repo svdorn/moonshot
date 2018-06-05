@@ -354,8 +354,8 @@ var usersSchema = mongoose.Schema({
         appliedStartDate: Date,
         // when the user ended and submitted the application
         appliedEndDate: Date,
-        // list of skill urls for the necessary skill tests
-        skillTests: [ String ],
+        // list of ids for the necessary skill tests
+        skillTestIds: [ mongoose.Schema.Types.ObjectId ],
         // the index of the current test that the user is taking within
         // skillTests array; the tests below the index have alreday been taken
         testIndex: Number,

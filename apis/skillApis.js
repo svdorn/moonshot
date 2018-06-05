@@ -233,49 +233,81 @@ function POST_answerSkillQuestion(req, res) {
 
         // see if the user is doing an application to a position
         if (user.positionInProgress) {
-            // mark the next skill as the one that must be completed next
-            user.positionInProgress.testIndex++;
+            // get the position in progress
+            const positionIndex = user.positions.findIndex(pos => {
+                return pos.positionId.toString() === user.positionInProgress.toString();
+            });
+            // if the position in progress is one that the user actually signed up for
+            if (typeof positionIndex === "number" && positionIndex > 0) {
+                // get the actual position, not just the id
+                let position = user.positions[positionIndex];
 
-            // if the test index is greater than or equal to the number of tests,
-            // user is done with skills section of the application
-            if (user.positionInProgress.testIndex >= user.positionInProgress.skillTests.length) {
-                // if there are no multiple choice questions, user is finished
-                if (!user.positionInProgress.freeResponseQuestions || user.positionInProgress.freeResponseQuestions.length === 0) {
-                    // user is no longer taking a position evaluation
-                    user.positionInProgress = undefined;
+                // see if the position in progress includes this skill test
+                const skillIdString = userSkill.skillId.toString();
+                const testIndex = position.skillTestIds.findIndex(posSkillTestId => {
+                    return posSkillTestId.toString() === skillIdString;
+                });
+                // if so, advance the progress of the position
+                if (typeof testIndex === "number" && testIndex >= 0) {
+                    // move the skill that was just completed to the beginning
+                    // of the skills array
+                    const completedId = position.skillTestIds.splice(testIndex, 1)[0];
+                    position.skillTestIds.unshift(completedId);
 
-                    let business;
-                    try {
-                        business = await Businesses.findById(positionInProgress.businessId);
+                    // increment the skill index
+                    position.testIndex++;
 
-                        // update the business to say that they have a user who has completed their application
-                        let positionIndex = business.positions.findIndex(bizPos => {
-                            return bizPoz._id.toString() === user.positionId.toString();
-                        });
+                    // if the test index is greater than or equal to the number of tests,
+                    // user is done with skills section of the application
+                    if (position.testIndex >= position.skillTestIds.length) {
+                        // if there are no multiple choice questions, user is finished
+                        if (!position.freeResponseQuestions || position.freeResponseQuestions.length === 0) {
+                            // user is no longer taking a position evaluation
+                            user.positionInProgress = undefined;
 
-                        let businessPos = business.positions[positionIndex];
-                        // if the business doesn't contain the current user as an applicant already, add them
-                        if (!businessPos.candidates.some(candidateId => {
-                            return candidateId.toString() === user._id.toString();
-                        })) {
-                            businessPos.candidates.push(user._id);
+                            let business;
+                            try {
+                                business = await Businesses.findById(position.businessId);
+
+                                // update the business to say that they have a user who has completed their application
+                                let positionIndex = business.positions.findIndex(bizPos => {
+                                    return bizPoz._id.toString() === user.positionId.toString();
+                                });
+
+                                let businessPos = business.positions[positionIndex];
+                                // if the business doesn't contain the current user as an applicant already, add them
+                                if (!businessPos.candidates.some(candidateId => {
+                                    return candidateId.toString() === user._id.toString();
+                                })) {
+                                    businessPos.candidates.push(user._id);
+                                }
+                                // update the business with new completions and users in progress counts
+                                if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
+                                if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
+                                businessPos.completions++;
+                                businessPos.usersInProgress--;
+                                business.positions[positionIndex] = businessPos;
+
+                                try {
+                                    await business.save()
+                                } catch (saveBizError) {
+                                    console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", saveBizError);
+                                }
+                            } catch (updateBizWithCompletionError) {
+                                console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", updateBizWithCompletionError);
+                            }
                         }
-                        // update the business with new completions and users in progress counts
-                        if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
-                        if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
-                        businessPos.completions++;
-                        businessPos.usersInProgress++;
-                        business.positions[positionIndex] = businessPos;
-
-                        try {
-                            await business.save()
-                        } catch (saveBizError) {
-                            console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", saveBizError);
-                        }
-                    } catch (updateBizWithCompletionError) {
-                        console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", updateBizWithCompletionError);
                     }
+
+                    // make sure the position gets saved with the new info
+                    user.positions[positionIndex] = position;
                 }
+            }
+
+            // if the position in progress is not included in the user's positions,
+            // something is very wrong; get rid of it
+            else {
+                user.positionInProgress = undefined;
             }
         }
 

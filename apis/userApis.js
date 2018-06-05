@@ -638,7 +638,7 @@ async function POST_startPositionEval(req, res) {
 
             // if we're trying to take a test that is past the number of tests we
             // have, we must be done with all the skill tests
-            const doneWithSkillTests = userPosition.testIndex === userPosition.skillTests.length;
+            const doneWithSkillTests = userPosition.testIndex === userPosition.skillTestIds.length;
 
             // if the user hasn't taken the psychometric exam before, have them do that first
             if (!hasTakenPsychTest) {
@@ -652,7 +652,7 @@ async function POST_startPositionEval(req, res) {
             else if (!doneWithSkillTests) {
                 // get the url of the first test
                 try {
-                    const skillTest = await Skills.findById(userPosition.skillTests[userPosition.testIndex]).select("url");
+                    const skillTest = await Skills.findById(userPosition.skillTestIds[userPosition.testIndex]).select("url");
                     nextUrl = `/skillTest/${skillTest.url}`;
                 } catch (getSkillTestError) {
                     console.log("Error getting skill test: ", getSkillTestError);
