@@ -354,6 +354,11 @@ var usersSchema = mongoose.Schema({
         appliedStartDate: Date,
         // when the user ended and submitted the application
         appliedEndDate: Date,
+        // list of skill urls for the necessary skill tests
+        skillTests: [ String ],
+        // the index of the current test that the user is taking within
+        // skillTests array; the tests below the index have alreday been taken
+        testIndex: Number,
         // the scores the user got for the position
         scores: {
             // combination of all the scores
@@ -377,36 +382,38 @@ var usersSchema = mongoose.Schema({
             response: String,
             // text of the question
             body: String,
-            // if the question is requird in order to finish the evaluation
+            // if the question is required in order to finish the evaluation
             required: Boolean
         }]
     }],
 
-    positionInProgress: {
-        // whether there is a test currently being taken
-        inProgress: Boolean,
-        // id of the business offering this position
-        businessId: mongoose.Schema.Types.ObjectId,
-        // id of the position within the business
-        positionId: mongoose.Schema.Types.ObjectId,
-        // list of skill urls for the necessary skill tests
-        skillTests: [ String ],
-        // the index of the current test that the user is taking
-        testIndex: String,
-        // free response questions associated specifically with this position
-        freeResponseQuestions: [{
-            // the id of the free response question
-            questionId: mongoose.Schema.Types.ObjectId,
-            // the index of the question in the business' position object
-            questionIndex: Number,
-            // text of the question
-            body: String,
-            // what the user responded with
-            response: String,
-            // if the user is required to answer the question
-            required: Boolean
-        }]
-    }
+    // positionInProgress: {
+    //     // whether there is a test currently being taken
+    //     inProgress: Boolean,
+    //     // id of the business offering this position
+    //     businessId: mongoose.Schema.Types.ObjectId,
+    //     // id of the position within the business
+    //     positionId: mongoose.Schema.Types.ObjectId,
+    //     // list of skill urls for the necessary skill tests
+    //     skillTests: [ String ],
+    //     // the index of the current test that the user is taking
+    //     testIndex: Number,
+    //     // free response questions associated specifically with this position
+    //     freeResponseQuestions: [{
+    //         // the id of the free response question
+    //         questionId: mongoose.Schema.Types.ObjectId,
+    //         // the index of the question in the business' position object
+    //         questionIndex: Number,
+    //         // text of the question
+    //         body: String,
+    //         // what the user responded with
+    //         response: String,
+    //         // if the user is required to answer the question
+    //         required: Boolean
+    //     }]
+    // },
+
+    positionInProgress: mongoose.Schema.Types.ObjectId,
 
     // FOR EMPLOYEES ONLY
 

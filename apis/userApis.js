@@ -45,7 +45,8 @@ const userApis = {
     POST_resetFrizz,
     POST_reset24,
 
-    internalStartPsychEval
+    internalStartPsychEval,
+    addEvaluation
 }
 
 
@@ -384,7 +385,7 @@ async function POST_addPositionEval(req, res) {
     async function addEval() {
         // add the evaluation to the user and tell the business the user is in
         try {
-            let { newUser, newBusiness } = await addEvaluation(user, business, positionId);
+            let { newUser, newBusiness, finished } = await addEvaluation(user, business, positionId);
             user = newUser;
             business = newBusiness;
         } catch (addEvaluationError) {
@@ -411,7 +412,7 @@ async function POST_addPositionEval(req, res) {
 }
 
 
-// returns object: {user: userObject, business: businessObject}
+// returns object: {user: userObject, business: businessObject, finished: Boolean, userPositionIndex: Number}
 // DOESN'T SAVE THE TWO, MUST BE SAVED IN CALLING FUNCTION
 async function addEvaluation(user, business, positionId) {
     return new Promise(async function(resolve, reject) {
@@ -452,19 +453,26 @@ async function addEvaluation(user, business, positionId) {
 
             // check if the user already has this position in their positions array
             const businessIdString = business._id.toString();
-            const userHasPosition = user.positions.some(pos => {
+            let userPositionIndex = user.positions.findIndex(pos => {
                 return pos.businessId.toString() === businessIdString && pos.positionId.toString() === positionIdString;
             })
+            const userHasPosition = typeof userPositionIndex === "number" && userPositionIndex >= 0;
             // if so, return successfully because the evaluation has already been added
-            if (userHasPosition) { resolve({user, business}); }
+            if (userHasPosition) {
+                // find out if the user finished the position by seeing if there's an end date
+                const finishedWithEval = user.positions[userPositionIndex].endDate != undefined;
+                resolve({ user, business, finished: finishedWithEval, userPositionIndex });
+            }
             // if not, give them the position with all starting info
             else {
                 // the date at this time, will be used a couple times in the newPosition object
                 const now = new Date();
+
                 // the stage that the user starts out at; not contacted by default
                 // since the user probably hasn't been through interviews before
                 // going through the eval
                 const initialHiringStage = "Not Contacted";
+
                 // create the free response objects that will be stored for the user
                 const numFRQs = position.freeResponseQuestions.length;
                 let frqsForUser = [];
@@ -478,6 +486,44 @@ async function addEvaluation(user, business, positionId) {
                         required: frq.required
                     });
                 }
+
+                // go through the user's skills to see which they have completed already;
+                // this assumes the user won't have any in-progress skill tests when they
+                // start a position evaluation
+                let testIndex = 0;
+                let skillTests = [];
+                let userSkillTests = user.skillTests;
+                position.skills.forEach(skillId => {
+                    // if the user has already completed this skill test ...
+                    if (userSkillTests.some(completedSkill => {
+                        return completedSkill.skillId.toString() === skillId.toString();
+                    })) {
+                        // ... add it to the front of the list and increase test index so we
+                        // know to skip it
+                        skillTests.unshift(skillId);
+                        testIndex++;
+                    }
+
+                    // if the user hasn't already completed this skill test, just add it
+                    // to the end of the array
+                    else { skillTests.push(skillId); }
+                });
+
+                // see if the user has already finished the psych analysis
+                const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.inProgress === false;
+
+                // if we're trying to take a test that is past the number of tests we
+                // have, we must be done with all the skill tests
+                const doneWithSkillTests = testIndex === skillTests.length;
+
+                // see if there are no frqs in this evaluation
+                const noFrqs = frqsForUser.length === 0;
+
+                // if the user has finished the psych test and all skill tests
+                // and there are no frqs, the user has finished already
+                const finished = hasTakenPsychTest && doneWithSkillTests && noFrqs;
+                const appliedEndDate = finished ? now : undefined;
+
                 // starting info about the position
                 const newPosition = {
                     businessId: business._id,
@@ -485,19 +531,22 @@ async function addEvaluation(user, business, positionId) {
                     hiringStage: initialHiringStage,
                     hiringStageChanges: [{ hiringStage: initialHiringStage, dateChanged: now }],
                     appliedStartDate: now,
-                    // evaluation has not yet been completed
-                    appliedEndDate: undefined,
+                    appliedEndDate,
                     // no scores have been calculated yet
                     scores: undefined,
+                    skillTests,
+                    testIndex,
                     freeResponseQuestions: frqsForUser
                 }
 
                 // add the starting info to the user
                 user.positions.push(newPosition);
-            }
+                // position must be last in the array
+                userPositionIndex = user.positions.length - 1;
 
-            // return successfully
-            resolve({user, business});
+                // return successfully
+                resolve({ user, business, finished, userPositionIndex });
+            }
         }
 
         // if there is some random error, return unsuccessfully
@@ -550,115 +599,86 @@ async function POST_startPositionEval(req, res) {
         // need both to be found before running through this
         if (!user || !business) { return; }
 
-        const position = business.positions.find(pos => {
-            return pos._id.toString() === positionIdString;
-        });
-
-        if (!position) {
-            return res.status(400).send("Invalid position.");
-        }
-
-        let testIndex = 0;
-        let skillTests = [];
-        let userSkillTests = user.skillTests;
-        // go through the user's skills to see which they have completed already
-        // TODO: review: this assumes the user won't have any in-progress skill tests
-        // when they start a position evalution; determine wheter that is an accurate assumption
-        position.skills.forEach(skillId => {
-            // if the user has already completed this skill test ...
-            if (userSkillTests.some(completedSkill => {
-                return completedSkill.skillId.toString() === skillId.toString();
-            })) {
-                // ... add it to the front of the list and increase test index so we
-                // know to skip it
-                skillTests.unshift(skillId);
-                testIndex++;
-            }
-
-            // if the user hasn't already completed this skill test, just add it
-            // to the end of the array
-            else { skillTests.push(skillId); }
-        });
-
-        // create the free response objects that will be stored in the user db
-        const numFRQs = position.freeResponseQuestions.length;
-        let frqsForUser = [];
-        for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
-            const frq = position.freeResponseQuestions[frqIndex];
-            frqsForUser.push({
-                questionId: frq._id,
-                questionIndex: frqIndex,
-                response: undefined,
-                body: frq.body,
-                required: frq.required
-            });
-        }
-
-        // position object within user's positions array
-        let userPosition = {
-            companyId: businessId,
-            positionId,
-            hiringStage: "Not Contacted",
-            hiringStageChanges: [],
-            appliedStartDate: new Date(),
-            freeResponseQuestions: frqsForUser
-        }
-
-        user.positions.push(userPosition);
-
-        user.positionInProgress = {
-            inProgress: true,
-            freeResponseQuestions: frqsForUser,
-            businessId, positionId, skillTests, testIndex
-        }
-
-        const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.inProgress === false;
-        console.log("hasTakenPsychTest: ", hasTakenPsychTest);
-        // if we're trying to take a test that is past the number of tests we
-        // have, we must be done with all the skill tests
-        const doneWithSkillTests = testIndex === skillTests.length;
-        console.log("doneWithSkillTests: ", doneWithSkillTests);
-        // where the user will be redirected now
-        let nextUrl = "";
-        // finished with the application just by hitting apply?
+        // add the evaluation to the user and tell the business the user is in
+        let userPositionIndex = undefined;
         let finished = false;
-        // if the user hasn't taken the psychometric exam before, have them do that first
-        if (!hasTakenPsychTest) {
-            // sign up for the psych test
-            user = await internalStartPsychEval(user);
-            // get the user to the psych eval page
-            nextUrl = "/psychometricAnalysis";
-        }
-        // otherwise, if the user hasn't done all the skills tests, have the
-        // first incomplete skill test be first up
-        else if (!doneWithSkillTests) {
-            // get the url of the first test
-            try {
-                const skillTest = await Skills.findById(skillTests[testIndex]).select("url");
-                nextUrl = `/skillTest/${skillTest.url}`;
-            } catch (getSkillTestError) {
-                console.log("Error getting skill test: ", getSkillTestError);
-                return res.status(500).send("Server error.");
-            }
-        }
-        // if the user has finished all skill and psych tests, give them the
-        // free response questions they have to answer
-        else if (frqsForUser.length > 0) {
-            // uses the user's positionInProgress object to get the questions
-            nextUrl = "/freeResponse";
-        }
-        // the user is finished already with the application
-        else {
-            userPosition.endDate() = new Date();
-            finished = true;
-            user.positionInProgress = undefined;
+        try {
+            let addEvalObj = await addEvaluation(user, business, positionId);
+            user = addEvalObj.user;
+            business = addEvalObj.business;
+            userPositionIndex = addEvalObj.userPositionIndex;
+            finished = addEvalObj.finished;
+        } catch (addEvaluationError) {
+            console.log(addEvaluationError);
+            return res.status(500).send("Server error.");
         }
 
-        user.save().then(updatedUser => {
-            return res.json({updatedUser: removePassword(updatedUser), finished, nextUrl});
-        }).catch(saveUserErr => {
-            return res.status(500).send("Server error, couldn't start position evaluation.");
-        })
+        // start the evaluation by setting the position in progress to this one
+        user.positionInProgress = positionId;
+
+        // where the user should be redirected
+        let nextUrl;
+        // if the user has finished the evaluation just by hitting apply
+        if (finished) {
+            // go home if the evaluation is done
+            nextUrl = "/";
+            console.log("Evaluation already finished!");
+        }
+
+        // if the user has to do some steps in the evaluation still
+        else {
+            // the position that was just added to the user object
+            let userPosition = user.positions[userPositionIndex];
+
+            // see if the user ahs already taken the psych analysis
+            const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.inProgress === false;
+
+            // if we're trying to take a test that is past the number of tests we
+            // have, we must be done with all the skill tests
+            const doneWithSkillTests = userPosition.testIndex === userPosition.skillTests.length;
+
+            // if the user hasn't taken the psychometric exam before, have them do that first
+            if (!hasTakenPsychTest) {
+                // sign up for the psych test
+                user = await internalStartPsychEval(user);
+                // get the user to the psych eval page
+                nextUrl = "/psychometricAnalysis";
+            }
+            // otherwise, if the user hasn't done all the skills tests, have the
+            // first incomplete skill test be first up
+            else if (!doneWithSkillTests) {
+                // get the url of the first test
+                try {
+                    const skillTest = await Skills.findById(userPosition.skillTests[userPosition.testIndex]).select("url");
+                    nextUrl = `/skillTest/${skillTest.url}`;
+                } catch (getSkillTestError) {
+                    console.log("Error getting skill test: ", getSkillTestError);
+                    return res.status(500).send("Server error.");
+                }
+            }
+            // if the user has finished all skill and psych tests, give them the
+            // free response questions they have to answer
+            else {
+                // uses the user's positionInProgress object to get the questions
+                nextUrl = "/freeResponse";
+            }
+        }
+
+        // save the user and business and return on success
+        let savedUser = false;
+        let savedBusiness = false;
+        try {
+            user.save().then(savedUser => { user = savedUser; userSaved = true; finish(); }).catch(e => { throw e });
+            business.save().then(savedBiz => { businessSaved = true; finish(); }).catch(e => { throw e });
+        } catch (saveError) {
+            console.log("Error saving user or business when adding a position evaluation.");
+            return res.status(500).send("Server error.")
+        }
+
+        // when the business and user have both been saved, return successfully
+        function finish() {
+            if (userSaved && businessSaved) { res.json({updatedUser: removePassword(updatedUser), finished, nextUrl}); }
+        }
     }
 }
 

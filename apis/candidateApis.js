@@ -20,7 +20,7 @@ const { sanitize,
 } = require('./helperFunctions.js');
 
 // get function to start position evaluation
-const { internalStartPsychEval } = require('./userApis.js');
+const { internalStartPsychEval, addEvaluation } = require('./userApis.js');
 
 
 const candidateApis = {
@@ -196,155 +196,164 @@ function POST_candidate(req, res) {
         makeUser();
     }
 
-    function makeUser() {
+    async function makeUser() {
         // make sure we've found the right position and made sure no user with
         // the same email exists before making the user
         if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo) { return; }
 
         // get count of users with that name to get the profile url
-        Users.count({name: user.name}, function (err, count) {
-            const randomNumber = crypto.randomBytes(8).toString('hex');
-            user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
-            user.admin = false;
-            user.agreedToTerms = true;
+        let count = 0;
+        try {
+            count = await Users.count({name: user.name});
+        } catch (countError) {
+            console.log("Couldn't count the number of users: ", countError);
+            return res.status(500).send("Server error.");
+        }
 
-            user.dateSignedUp = new Date();
-            // make sure referral code is a string, if not set it
-            // to undefined (will happen if there is no referral code as well)
-            if (typeof user.signUpReferralCode !== "string") {
-                user.signUpReferralCode = undefined;
+        const randomNumber = crypto.randomBytes(8).toString('hex');
+        user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+        user.admin = false;
+        user.agreedToTerms = true;
+
+        user.dateSignedUp = new Date();
+        // make sure referral code is a string, if not set it
+        // to undefined (will happen if there is no referral code as well)
+        if (typeof user.signUpReferralCode !== "string") {
+            user.signUpReferralCode = undefined;
+        }
+
+        // // sign up for position
+        // // user hasn't taken any skill tests yet, so they're on the first one (index 0)
+        // let testIndex = 0;
+        // // have to complete all the required skills tests since this is a new
+        // // user and will have no previous skill test completions
+        // let skillTests = position.skills;
+        //
+        // // create the free response objects that will be stored in the user db
+        // const numFRQs = position.freeResponseQuestions.length;
+        // let frqsForUser = [];
+        // for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
+        //     const frq = position.freeResponseQuestions[frqIndex];
+        //     frqsForUser.push({
+        //         questionId: frq._id,
+        //         questionIndex: frqIndex,
+        //         response: undefined,
+        //         body: frq.body,
+        //         required: frq.required
+        //     });
+        // }
+        //
+        // // position object within user's positions array
+        // let userPosition = {
+        //     companyId: business._id,
+        //     positionId: position._id,
+        //     hiringStage: "Not Contacted",
+        //     hiringStageChanges: [],
+        //     appliedStartDate: new Date(),
+        //     freeResponseQuestions: frqsForUser
+        // }
+        //
+        // // add the position to the user's list of positions
+        // user.positions = [ userPosition ];
+        //
+        // // the current position will be the positionInProgress
+        // user.positionInProgress = {
+        //     inProgress: true,
+        //     freeResponseQuestions: frqsForUser,
+        //     businessId: business._id,
+        //     positionId: position._id,
+        //     skillTests, testIndex
+        // }
+
+
+        // store the user in the db
+        try {
+            user = await Users.create(user);
+        } catch (createUserError) {
+            console.log("Error creating user: ", createUserError);
+            return res.status(500).send("Server error.");
+        }
+
+        req.session.unverifiedUserId = user._id;
+        req.session.save(function (err) {
+            if (err) {
+                console.log("error saving unverifiedUserId to session: ", err);
             }
+        })
 
-            // sign up for position
-            // user hasn't taken any skill tests yet, so they're on the first one (index 0)
-            let testIndex = 0;
-            // have to complete all the required skills tests since this is a new
-            // user and will have no previous skill test completions
-            let skillTests = position.skills;
+        // add the evaluation to the user
+        try {
+            let evalObj = await addEvaluation(user, business, position._id);
+            user = evalObj.user;
+            // since the user is just signing up we know that the active
+            // position will be the only one available
+            user.positionInProgress = user.positions[0].positionId;
+            business = evalObj.business;
+            // save the business with the user in there
+            await business.save();
+        } catch (addEvalError) {
+            console.log("Couldn't add evaluation to user: ", addEvalError);
+            return res.status(500).send("Server error.");
+        }
 
-            // create the free response objects that will be stored in the user db
-            const numFRQs = position.freeResponseQuestions.length;
-            let frqsForUser = [];
-            for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
-                const frq = position.freeResponseQuestions[frqIndex];
-                frqsForUser.push({
-                    questionId: frq._id,
-                    questionIndex: frqIndex,
-                    response: undefined,
-                    body: frq.body,
-                    required: frq.required
-                });
-            }
+        // sign up for the psych test
+        try {
+            user = await internalStartPsychEval(user);
+            user = await user.save();
+        } catch (psychEvalSignupError) {
+            console.log("pyschEvalSignupError: ", psychEvalSignupError);
+        }
 
-            // position object within user's positions array
-            let userPosition = {
-                companyId: business._id,
-                positionId: position._id,
-                hiringStage: "Not Contacted",
-                hiringStageChanges: [],
-                appliedStartDate: new Date(),
-                freeResponseQuestions: frqsForUser
-            }
-
-            // add the position to the user's list of positions
-            user.positions = [ userPosition ];
-
-            // the current position will be the positionInProgress
-            user.positionInProgress = {
-                inProgress: true,
-                freeResponseQuestions: frqsForUser,
-                businessId: business._id,
-                positionId: position._id,
-                skillTests, testIndex
-            }
-
-            // store the user in the db
-            Users.create(user, async function (err, newUser) {
-                if (err) {
-                    console.log(err);
-                }
-                req.session.unverifiedUserId = newUser._id;
-                req.session.save(function (err) {
-                    if (err) {
-                        console.log("error saving unverifiedUserId to session: ", err);
-                    }
-                })
-
-                // sign up for the psych test
-                try {
-                    newUser = await internalStartPsychEval(newUser);
-                    newUser = await newUser.save();
-                } catch (psychEvalSignupError) {
-                    console.log("pyschEvalSignupError: ", psychEvalSignupError);
-                }
-
-                if (user.signUpReferralCode) {
-                    Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
-                        if (referralErr) {
-                            console.log("Error finding referrer for new sign up: ", referralErr);
-                        } else if (!referrer) {
-                            console.log("Invalid referral code used: ", user.signUpReferralCode);
-                        } else {
-                            referrer.referredUsers.push({
-                                name: newUser.name,
-                                email: newUser.email,
-                                _id: newUser._id
-                            });
-                            referrer.save(function(referrerSaveErr, newReferrer) {
-                                if (referrerSaveErr) {
-                                    console.log("Error saving referrer: ", referrerSaveErr);
-                                }
-                            });
+        if (user.signUpReferralCode) {
+            Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
+                if (referralErr) {
+                    console.log("Error finding referrer for new sign up: ", referralErr);
+                } else if (!referrer) {
+                    console.log("Invalid referral code used: ", user.signUpReferralCode);
+                } else {
+                    referrer.referredUsers.push({
+                        name: user.name,
+                        email: user.email,
+                        _id: user._id
+                    });
+                    referrer.save(function(referrerSaveErr, newReferrer) {
+                        if (referrerSaveErr) {
+                            console.log("Error saving referrer: ", referrerSaveErr);
                         }
                     });
                 }
+            });
+        }
 
-                // TODO: change to make for positions, not pathways
-                try {
-                    // send email to everyone if there's a new sign up (if in production mode)
-                    if (process.env.NODE_ENV !== "development") {
-                        let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+        // TODO: change to make for positions, not pathways
+        try {
+            // send email to everyone if there's a new sign up (if in production mode)
+            if (process.env.NODE_ENV !== "development") {
+                let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
 
-                        let subject = 'New Sign Up';
-                        let additionalText = '';
-                        if (addedPathway) {
-                            let pathName = "Singlewire QA";
-                            if (user.pathwayId === "5a80b3cf734d1d0d42e9fcad") {
-                                pathName = "Northwestern Mutual";
-                            }
-                            else if (user.pathwayId === "5abc12cff36d2805e28d27f3") {
-                                pathName = "Curate Full-Stack";
-                            }
-                            else if (user.pathwayId === "5ac3bc92734d1d4f8afa8ac4") {
-                                pathName = "Dream Home CEO";
-                            }
-                            additionalText = '<p>Also added pathway: ' +  pathName + '</p>';
-                        }
-                        let content =
-                            '<div>'
-                            +   '<p>New user signed up.</p>'
-                            +   '<p>Name: ' + newUser.name + '</p>'
-                            +   '<p>email: ' + newUser.email + '</p>'
-                            +   additionalText
-                            + '</div>';
+                let subject = 'New Sign Up';
+                let content =
+                    '<div>'
+                    +   '<p>New user signed up.</p>'
+                    +   '<p>Name: ' + user.name + '</p>'
+                    +   '<p>email: ' + user.email + '</p>'
+                    + '</div>';
 
-                        const sendFrom = "Moonshot";
-                        sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                            if (!success) {
-                                console.log("Error sending sign up alert email");
-                            }
-                        })
+                const sendFrom = "Moonshot";
+                sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+                    if (!success) {
+                        console.log("Error sending sign up alert email");
                     }
-                } catch (e) {
-                    console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
-                }
+                })
+            }
+        } catch (e) {
+            console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
+        }
 
-                // no reason to return the user with tokens because
-                // they will have to verify themselves before they
-                // can do anything anyway
-                res.json(safeUser(newUser));
-            })
-        })
+        // no reason to return the user with tokens because
+        // they will have to verify themselves before they
+        // can do anything anyway
+        res.json(safeUser(user));
     }
 }
 
