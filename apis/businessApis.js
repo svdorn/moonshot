@@ -82,7 +82,7 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [candidateEmails[i]];
-            let subject = 'Candidate email';
+            let subject = 'You&#39;ve Been Invited!';
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
@@ -122,7 +122,7 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [employeeEmails[i]];
-            let subject = 'Employee email';
+            let subject = 'You&#39;ve Been Invited!';
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
                     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
@@ -157,7 +157,7 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [managerEmails[i]];
-            let subject = 'Manager email';
+            let subject = 'You&#39;ve Been Invited!';
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
                     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
@@ -192,7 +192,7 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [adminEmails[i]];
-            let subject = 'Admin email';
+            let subject = 'You&#39;ve Been Invited!';
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
                     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
