@@ -261,15 +261,23 @@ async function POST_submitFreeResponse(req, res) {
     }
 
     // make sure the user is in the middle of an eval
-    if (!user.positionInProgress || !user.positionInProgress.positionId) {
+    if (!user.positionInProgress) {
         return res.status(400).send("You are not currently in the middle of a position evaluation.");
     }
 
-    const positionInProgress = user.positionInProgress;
-    const positionId = positionInProgress.positionId.toString();
+    // get the id and actual position for the position in progress
+    const positionId = user.positionInProgress.toString();
+    const userPositionIndex = user.positions.findIndex(pos => {
+        return pos.positionId.toString() === positionId;
+    });
+    if (typeof userPositionIndex !== "number" || userPositionIndex < 0) {
+        console.log("Position not found in user from position id.");
+        return res.status(500).send("Server error.");
+    }
+    let userPosition = user.positions[userPositionIndex];
 
     // get the business offering the current position
-    const businessId = positionInProgress.businessId;
+    const businessId = userPosition.businessId;
     try {
         business = await Businesses.findById(businessId)
     } catch (findBizErr) {
@@ -281,22 +289,18 @@ async function POST_submitFreeResponse(req, res) {
 
     const now = new Date();
 
-    // submitting the frq questions finishes the whole application, so add this
-    // position to the user's list of position applications
-    user.positions.push({
-        businessId,
-        positionId: positionInProgress.positionId,
-        hiringStage: "Not Contacted",
-        hiringStageChanges: [{hiringStage: "Not Contacted", dateChanged: now}],
-        appliedStartDate: positionInProgress.startDate,
-        appliedEndDate: now,
-        scores: {},
-        freeResponseQuestions: frqs
-    })
+    // submitting the frq questions finishes the whole application, so tell the
+    // position it's finished
+    userPosition.appliedEndDate = now;
+    userPosition.freeResponseQuestions = frqs;
+
+    // make sure the updated position is saved to the user
+    user.positions[positionIndex] = userPosition;
 
     // user is no longer taking a position evaluation
     user.positionInProgress = undefined;
 
+    // these will be set to true once the user and business are saved in the db
     let userSaved = false;
     let businessSaved = false;
 
@@ -571,12 +575,6 @@ async function POST_startPositionEval(req, res) {
     getAndVerifyUser(userId, verificationToken)
     .then(foundUser => {
         user = foundUser;
-
-        // make sure the user isn't already in the middle of a position eval
-        if (user.positionInProgress && user.positionInProgress.positionId && user.positionInProgress.positionId.toString() !== positionIdString) {
-            return res.status(400).send("You are already in the middle of an evaluation!");
-        }
-
         startEval();
     })
     .catch(getUserError => {
@@ -809,15 +807,26 @@ async function POST_answerPsychQuestion(req, res) {
 
         finishedTest = true;
 
-        // TODO check if the user is taking a position evaluation and if so
-        // whether they're done with it
-        const positionInProgress = user.positionInProgress;
-        if (positionInProgress) {
+        if (user.positionInProgress) {
+            // check if the user is taking a position evaluation and if so
+            // whether they're now done with it
+            const positionId = user.positionInProgress.toString();
+
+            // get the actual position for the position in progress
+            const userPositionIndex = user.positions.findIndex(pos => {
+                return pos.positionId.toString() === positionId;
+            });
+            if (typeof userPositionIndex !== "number" || userPositionIndex < 0) {
+                console.log("Position not found in user from position id.");
+                return res.status(500).send("Server error.");
+            }
+            let userPosition = user.positions[userPositionIndex];
+
             const applicationComplete =
-                (!positionInProgress.skillTests ||
-                 positionInProgress.testIndex >= positionInProgress.skillTests.length) &&
-                (!positionInProgress.freeResponseQuestions ||
-                 positionInProgress.freeResponseQuestions.length === 0);
+                (!userPosition.skillTests ||
+                 userPosition.testIndex >= userPosition.skillTests.length) &&
+                (!userPosition.freeResponseQuestions ||
+                 userPosition.freeResponseQuestions.length === 0);
             // if the application is complete, mark it as such
             if (applicationComplete) {
                 // user is no longer taking a position evaluation
@@ -825,7 +834,7 @@ async function POST_answerPsychQuestion(req, res) {
 
                 let business;
                 try {
-                    business = await Businesses.findById(positionInProgress.businessId);
+                    business = await Businesses.findById(userPosition.businessId);
 
                     // update the business to say that they have a user who has completed their application
                     let positionIndex = business.positions.findIndex(bizPos => {
@@ -856,7 +865,6 @@ async function POST_answerPsychQuestion(req, res) {
                 }
             }
         }
-
     }
 
     // otherwise the test is not over so they need a new question
