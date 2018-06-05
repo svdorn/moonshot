@@ -417,6 +417,7 @@ async function POST_addPositionEval(req, res) {
 async function addEvaluation(user, business, positionId) {
     return new Promise(async function(resolve, reject) {
         try {
+            console.log("Adding evaluation.");
             // check that all inputs are valid
             if (!user || !business || !positionId) {
                 // return with error saying which input is invalid
@@ -543,6 +544,8 @@ async function addEvaluation(user, business, positionId) {
                 user.positions.push(newPosition);
                 // position must be last in the array
                 userPositionIndex = user.positions.length - 1;
+
+                console.log("added evaluation: useris: ", user);
 
                 // return successfully
                 resolve({ user, business, finished, userPositionIndex });

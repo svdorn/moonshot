@@ -288,6 +288,7 @@ function POST_candidate(req, res) {
             // since the user is just signing up we know that the active
             // position will be the only one available
             user.positionInProgress = user.positions[0].positionId;
+            console.log("user after add eval with positionInProgress: ", user);
             business = evalObj.business;
             // save the business with the user in there
             await business.save();
