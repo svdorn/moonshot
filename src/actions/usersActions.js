@@ -43,6 +43,12 @@ export function closeAddUserModal() {
     }
 }
 
+export function emailFailureExitPage() {
+    return function(dispatch) {
+        dispatch({type: "EMAIL_FAILURE_EXIT_PAGE"});
+    }
+}
+
 export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});

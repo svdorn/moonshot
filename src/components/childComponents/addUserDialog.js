@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postEmailInvites, closeAddUserModal} from '../../actions/usersActions';
+import {postEmailInvites, closeAddUserModal, emailFailureExitPage} from '../../actions/usersActions';
 import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import { browserHistory } from 'react-router';
@@ -194,6 +194,10 @@ class AddUserDialog extends Component {
         if (screen >= 1 && screen <= 3) {
             this.setState({screen});
         }
+    }
+
+    handleFailureExit() {
+        this.props.emailFailureExitPage();
     }
 
     goTo(route) {
@@ -431,6 +435,28 @@ class AddUserDialog extends Component {
                         </div>
                 </Dialog>
             );
+        } else if (this.props.userPostedFailed) {
+            body = (
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    paperClassName="dialogForBiz"
+                    contentClassName="center"
+                    >
+                        <div className="redText font18px font16pxUnder500" style={{width:"90%", margin:"40px auto"}}>
+                            Emails failed to send to users for the {this.state.position} position. Please fix emails and retry.
+                        </div>
+                        <div className="center marginTop20px">
+                            <i className="font14px underline clickable whiteText"
+                                onClick={this.handleFailureExit.bind(this)}>
+                                Back
+                            </i>
+                        </div>
+                </Dialog>
+            );
         } else {
         if (screen === 1) {
             body = (
@@ -555,7 +581,8 @@ class AddUserDialog extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         postEmailInvites,
-        closeAddUserModal
+        closeAddUserModal,
+        emailFailureExitPage
     }, dispatch);
 }
 
@@ -564,6 +591,7 @@ function mapStateToProps(state) {
         formData: state.form,
         loading: state.users.loadingSomething,
         userPosted: state.users.userPosted,
+        userPostedFailed: state.users.userPostedFailed,
         currentUser: state.users.currentUser,
         modalOpen: state.users.userModalOpen
     };
