@@ -39,12 +39,13 @@ function POST_emailInvites(req, res) {
     const managerEmails = sanitize(body.managerEmails);
     const adminEmails = sanitize(body.adminEmails);
     const userId = sanitize(body.currentUserInfo.userId);
+    const userName = sanitize(body.currentUserInfo.userName);
     const verificationToken = sanitize(body.currentUserInfo.verificationToken);
     const companyId = sanitize(body.currentUserInfo.companyId);
     const positionId = sanitize(body.currentUserInfo.positionId);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!candidateEmails || !employeeEmails || !managerEmails || !adminEmails || !userId || !companyId || !verificationToken || !positionId) {
+    if (!candidateEmails || !employeeEmails || !managerEmails || !adminEmails || !userId || !userName || !companyId || !verificationToken || !positionId) {
         return res.status(400).send("Bad request.");
     }
 
@@ -67,6 +68,8 @@ function POST_emailInvites(req, res) {
 
         let position = business.positions[positionIndex];
 
+        const businessName = business.name;
+
         // Add the position code onto the end of the code
         code = code.toString().concat(position.code);
 
@@ -82,19 +85,21 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [candidateEmails[i]];
-            let subject = 'You&#39;ve Been Invited!';
+            let subject = "You've Been Invited!";
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:600px; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by (name) from (company) as a candidate!'
+                    + '<p style="width:60%; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by ' + userName + ' from ' + businessName + ' as a candidate!'
                     + ' Please click the button below to create your account.'
                     + ' Once you&#39;ve created your account you can begin your evaluation!</p>'
-                    + '<br/><p style="width:600px; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
+                    + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode
                     + '">Create Account</a>'
                     + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
-                    + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                    + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
+                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
+                    + '<div style="text-align:left;width:60%;display:inline-block;">'
                         + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
                         + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
                         + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
