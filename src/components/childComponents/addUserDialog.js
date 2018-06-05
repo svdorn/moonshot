@@ -38,6 +38,7 @@ class AddUserDialog extends Component {
             numEmployeeEmails: 1,
             numManagerEmails: 1,
             numAdminEmails: 1,
+            formErrors: false,
         }
     }
 
@@ -86,7 +87,8 @@ class AddUserDialog extends Component {
               numCandidateEmails: 1,
               numEmployeeEmails: 1,
               numManagerEmails: 1,
-              numAdminEmails: 1
+              numAdminEmails: 1,
+              formErrors: false,
           });
         this.props.closeAddUserModal();
     };
@@ -172,9 +174,18 @@ class AddUserDialog extends Component {
     };
 
     handleScreenNext() {
-        const screen = this.state.screen + 1;
-        if (screen >= 1 && screen <= 3) {
-            this.setState({screen});
+        let advanceScreen = true;
+        if (this.state.screen === 2) {
+            if (this.props.formData.addUser.syncErrors) {
+                advanceScreen = false;
+                this.setState({formErrors: true});
+            }
+        }
+        if (advanceScreen) {
+            const screen = this.state.screen + 1;
+            if (screen >= 1 && screen <= 3) {
+                this.setState({screen, formErrors: false});
+            }
         }
     }
 
@@ -468,6 +479,12 @@ class AddUserDialog extends Component {
                             className="whiteText font24px font20pxUnder500 marginTop10px">
                             Add
                         </div>
+                        {this.state.formErrors ?
+                        <div
+                            className="redText font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
+                            Some emails invalid, please enter valid emails before continuing.
+                        </div>
+                        : null}
                         <Tabs
                             style={{marginTop:"10px"}}
                             inkBarStyle={{background: 'white'}}
