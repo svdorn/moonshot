@@ -19,6 +19,7 @@ import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import CandidatePreview from '../../childComponents/candidatePreview';
+import AddUserDialog from '../../childComponents/addUserDialog';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -358,6 +359,7 @@ class MyCandidates extends Component {
 
         return (
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
+                <AddUserDialog />
                 <MetaTags>
                     <title>My Candidates | Moonshot</title>
                     <meta name="description" content="View analytical breakdowns and manage your candidates."/>

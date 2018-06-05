@@ -5,7 +5,7 @@ import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import {connect} from 'react-redux';
 import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
-import {signout, closeNotification, endOnboarding} from "../actions/usersActions";
+import {signout, closeNotification, endOnboarding, openAddUserModal} from "../actions/usersActions";
 import {axios} from 'axios';
 
 const styles = {
@@ -90,7 +90,7 @@ class Menu extends Component {
                 this.goTo("/settings");
                 break;
             case "Add User":
-                this.goTo("/addUser");
+                this.props.openAddUserModal();
                 break;
             default:
                 break;
@@ -499,7 +499,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         signout,
         closeNotification,
-        endOnboarding
+        endOnboarding,
+        openAddUserModal
     }, dispatch);
 }
 

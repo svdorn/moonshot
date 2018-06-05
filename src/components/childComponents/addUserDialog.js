@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postEmailInvites} from '../../actions/usersActions';
+import {postEmailInvites, closeAddUserModal} from '../../actions/usersActions';
 import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import { browserHistory } from 'react-router';
@@ -27,7 +27,7 @@ class AddUserDialog extends Component {
         super(props);
 
         this.state = {
-            open: true,
+            open: props.modalOpen || false,
             screen: 1,
             positions: [],
             position: "",
@@ -56,25 +56,25 @@ class AddUserDialog extends Component {
                 self.setState({
                     positions,
                     position: firstPositionName,
-                    open: true,
                     screen: 1
                 })
             } else {
                 self.setState({
                     noPositions: true,
-                    open: true,
                     screen: 1
                 })
             }
         })
     }
 
-    handleOpen = () => {
-        this.setState({open: true});
-    };
+    componentDidUpdate() {
+        if (this.props.modalOpen != this.state.open && this.props.modalOpen != undefined) {
+            this.setState({open: this.props.modalOpen})
+        }
+    }
 
     handleClose = () => {
-        this.setState({open: false});
+        this.props.closeAddUserModal();
     };
 
     handleSubmit(e) {
@@ -527,6 +527,7 @@ class AddUserDialog extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         postEmailInvites,
+        closeAddUserModal
     }, dispatch);
 }
 
@@ -535,7 +536,8 @@ function mapStateToProps(state) {
         formData: state.form,
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        modalOpen: state.users.userModalOpen
     };
 }
 

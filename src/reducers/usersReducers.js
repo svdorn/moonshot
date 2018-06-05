@@ -11,6 +11,18 @@ const initialState = {
 }
 export function usersReducers(state = initialState, action) {
     switch (action.type) {
+        case "OPEN_ADD_USER_MODAL":
+            return {
+                ...state,
+                userModalOpen: true
+            };
+            break;
+        case "CLOSE_ADD_USER_MODAL":
+            return {
+                ...state,
+                userModalOpen: false
+            };
+            break;
         case "GET_USER_FROM_SESSION_REQUEST":
         case "GET_USER_FROM_SESSION_REJECTED":
             return {

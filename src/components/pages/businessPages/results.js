@@ -9,6 +9,7 @@ import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} fro
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
+import AddUserDialog from '../../childComponents/addUserDialog';
 
 class Results extends Component {
     constructor(props) {
@@ -349,6 +350,7 @@ class Results extends Component {
 
         return (
             <div>
+                <AddUserDialog />
                 <MetaTags>
                     <title>{candidate.name} | Moonshot</title>
                     <meta name="description" content="Results user view."/>

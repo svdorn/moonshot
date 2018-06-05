@@ -6,6 +6,7 @@ import PasswordChange from './passwordchange';
 import Account from './account';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
+import AddUserDialog from '../childComponents/addUserDialog';
 
 class Settings extends Component {
     constructor(props) {
@@ -23,6 +24,7 @@ class Settings extends Component {
     render() {
         return (
             <div className="fillScreen lightBlackBackground">
+                <AddUserDialog />
                 <MetaTags>
                     <title>Settings | Moonshot</title>
                     <meta name="description" content="Change your Moonshot account settings." />
