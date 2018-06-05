@@ -40,7 +40,6 @@ class MyEvaluations extends Component {
         })
         .then(function (res) {
             let positions = res.data.positions;
-            console.log(positions)
             if (Array.isArray(positions) && positions.length > 0) {
                 self.setState({
                     positions
