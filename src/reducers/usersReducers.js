@@ -20,7 +20,8 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_ADD_USER_MODAL":
             return {
                 ...state,
-                userModalOpen: false
+                userModalOpen: false,
+                userPosted: false
             };
             break;
         case "GET_USER_FROM_SESSION_REQUEST":
@@ -65,6 +66,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "FORGOT_PASSWORD_REQUESTED":
         case "POST_USER_REQUESTED":
+        case "POST_EMAIL_INVITES_REQUESTED":
         case "FOR_BUSINESS_REQUESTED":
         case "CONTACT_US_REQUESTED":
         case "COMPLETE_PATHWAY_REQUESTED":
@@ -81,6 +83,7 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         case "POST_USER":
+        case "POST_EMAIL_INVITES_SUCCESS":
             return {
                 ...state,
                 userPosted: true,

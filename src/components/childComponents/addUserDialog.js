@@ -74,6 +74,20 @@ class AddUserDialog extends Component {
     }
 
     handleClose = () => {
+        this.props.reset();
+        let position = "";
+        if (this.state.positions) {
+            position = this.state.positions[0].name;
+        }
+        this.setState({
+              screen: 1,
+              tab: "Candidate",
+              position: position,
+              numCandidateEmails: 1,
+              numEmployeeEmails: 1,
+              numManagerEmails: 1,
+              numAdminEmails: 1
+          });
         this.props.closeAddUserModal();
     };
 
@@ -130,45 +144,6 @@ class AddUserDialog extends Component {
         }
 
         this.props.postEmailInvites(candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo);
-
-        // const vals = this.props.formData.addUser.values;
-        //
-        // // Form validation before submit
-        // let notValid = false;
-        // const requiredFields = [
-        //     'email',
-        // ];
-        // requiredFields.forEach(field => {
-        //     if (!vals || !vals[field]) {
-        //         this.props.touch(field);
-        //         notValid = true;
-        //     }
-        // });
-        // if (notValid) return;
-        //
-        // if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
-        //     return;
-        // }
-        //
-        // const email = this.props.formData.addUser.values.email;
-        // const newUser = {
-        //     email,
-        //     userType: "employer",
-        // };
-        //
-        // const currentUser = this.props.currentUser;
-        // const currentUserInfo = {
-        //     _id: currentUser._id,
-        //     verificationToken: currentUser.verificationToken
-        // }
-        //
-        //
-        // this.props.postEmployer(newUser, currentUserInfo);
-        //
-        // this.setState({
-        //     ...this.state,
-        //     email
-        // })
     }
 
     addAnotherEmail() {
@@ -429,6 +404,22 @@ class AddUserDialog extends Component {
                     </div>
                 </Dialog>
             );
+        } else if (this.props.userPosted) {
+            body = (
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    paperClassName="dialogForBiz"
+                    contentClassName="center"
+                    >
+                        <div className="whiteText font18px font16pxUnder500" style={{width:"90%", margin:"40px auto"}}>
+                            Success, emails have been sent to users with instructions for them to sign up for the {this.state.position} position.
+                        </div>
+                </Dialog>
+            );
         } else {
         if (screen === 1) {
             body = (
@@ -530,6 +521,7 @@ class AddUserDialog extends Component {
                             className="raisedButtonBusinessHome marginLeft40px"
                         />
                     </div>
+                    {this.props.loading ? <CircularProgress color="white" style={{marginTop: "20px"}}/> : ""}
                 </Dialog>
             )
         }
@@ -553,7 +545,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         formData: state.form,
-        loadingCreateUser: state.users.loadingSomething,
+        loading: state.users.loadingSomething,
         userPosted: state.users.userPosted,
         currentUser: state.users.currentUser,
         modalOpen: state.users.userModalOpen
