@@ -169,18 +169,25 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [managerEmails[i]];
-            let subject = 'You&#39;ve Been Invited!';
+            let subject = "You've Been Invited!";
             let content =
-                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
-                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'signup?code='
+                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                    + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
+                    + '<p style="width:60%; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by ' + userName + ' from ' + businessName + ' as a manager!'
+                    + ' Please click the button below to create your account.'
+                    + ' Once you&#39;ve created your account you can begin grading your employees, tracking candidates, and reviewing evaluation results!</p>'
+                    + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
+                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode
                     + '">Create Account</a>'
-                    + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                    + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
+                    + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
+                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
+                    + '<div style="text-align:left;width:60%;display:inline-block;">'
                         + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
                         + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
                         + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + managerEmails[i] + '">Opt-out of future messages.</a></i>'
+                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
                         + '</div>'
                     + '</div>'
                 + '</div>';
