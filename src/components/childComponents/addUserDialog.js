@@ -412,6 +412,23 @@ class AddUserDialog extends Component {
 
         const screen = this.state.screen;
         let body = <div></div>;
+        if (this.state.noPositions) {
+            body = (
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    paperClassName="dialogForBiz"
+                    contentClassName="center"
+                >
+                    <div className="whiteText font20px font16pxUnder500 marginTop20px">
+                        Cannot Add Users because you have no current positions.
+                    </div>
+                </Dialog>
+            );
+        } else {
         if (screen === 1) {
             body = (
                 <Dialog
@@ -514,6 +531,7 @@ class AddUserDialog extends Component {
                     </div>
                 </Dialog>
             )
+        }
         }
 
         return (
