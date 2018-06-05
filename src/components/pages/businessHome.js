@@ -9,6 +9,7 @@ import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
+import AddUserDialog from '../childComponents/addUserDialog';
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
@@ -284,6 +285,7 @@ class BusinessHome extends Component {
                     <title>Moonshot</title>
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
                 </MetaTags>
+                <AddUserDialog />
                 <Dialog
                     actions={actions}
                     modal={false}
