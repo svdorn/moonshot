@@ -85,11 +85,11 @@ function POST_emailInvites(req, res) {
             let subject = 'Candidate email';
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                    + '<div style="font-size:28px;color:#0c0c0c;">You&#39;re Been Invited to Moonshot!</div>'
-                    + '<p>&#09;You&#39;ve been invited by (name) from (company) as a candidate!'
+                    + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
+                    + '<p style="width:600px; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by (name) from (company) as a candidate!'
                     + ' Please click the button below to create your account.'
                     + ' Once you&#39;ve created your account you can begin your evaluation!</p>'
-                    + '<br/><p>Welcome to the Moonshot process!</p>'
+                    + '<br/><p style="width:600px; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode
                     + '">Create Account</a>'
