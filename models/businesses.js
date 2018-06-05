@@ -3,6 +3,7 @@ var mongoose = require('mongoose');
 
 var businessesSchema = mongoose.Schema({
     name: String,
+    code: String,
     pathwayIds: [ mongoose.Schema.Types.ObjectId ],
     employerIds: [ mongoose.Schema.Types.ObjectId ],
     employeeIds: [ mongoose.Schema.Types.ObjectId ],
@@ -93,7 +94,20 @@ var businessesSchema = mongoose.Schema({
         // candidates who have applied for this position
         candidates: [{
             candidateId: mongoose.Schema.Types.ObjectId
-        }]
+        }],
+        // Code for the specific position
+        code: String,
+        // One-time use codes for candidates
+        candidateCodes: [String],
+        // One-time use codes for employees
+        employeeCodes: [String],
+        // One-time use codes for managers
+        managerCodes: [String],
+        // One-time use codes for admins
+        adminCodes: [String],
+        // Whether the position is open to the public
+        open: Boolean
+
     }],
 
     // ---->>> END POST-PIVOT <<<---- //

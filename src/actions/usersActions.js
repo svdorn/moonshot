@@ -41,10 +41,13 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 dispatch({type:"LOGIN", payload: returnedUser});
                 let nextUrl = '/discover';
                 console.log(returnedUser.userType);
-                if (returnedUser.userType === "employer") {
+                if (returnedUser.userType === "manager" || returnedUser.userType === "accountAdmin") {
                     nextUrl = '/myEvaluations';
+                } else if (returnedUser.userType === "employee") {
+                    // TODO: change this to be the correct link to a landing page of a test
+                    nextUrl = '/test';
                 }
-                if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
+                else if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
                     nextUrl = "/onboarding";
                 } else if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
@@ -201,6 +204,23 @@ export function postUser(user) {
             // error posting user
             .catch(function(err) {
                 dispatch({type: "POST_USER_REJECTED", notification:{message: err.response.data, type: "errorHeader"}});
+            });
+    }
+}
+
+// POST EMAIL INVITES
+export function postEmailInvites(candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo) {
+    return function(dispatch) {
+        dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
+
+        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo})
+            // email invites success
+            .then(function(res) {
+                dispatch({type: "POST_EMAIL_INVITES_SUCCESS"});
+            })
+            // error posting email invites
+            .catch(function(err) {
+                dispatch({type: "POST_EMAIL_INVITES_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
     }
 }

@@ -10,7 +10,8 @@ var usersSchema = mongoose.Schema({
     emailToContact: String,
     // phone number for companies to contact this person with
     phoneNumber: String,
-    // should always be "candidate" (for employers, this will be "employer")
+    // "candidate" for candidates, "accountAdmin" for an admin for an employer,
+    // "manager" for a manager of a business, "employee" for an employee of a business
     userType: String,
     // has admin rights on the site, able to create business accounts and see all results
     admin: Boolean,
@@ -226,6 +227,16 @@ var usersSchema = mongoose.Schema({
             }]
         }]
     }],
+
+    // if the user is any type of employer, here is info about the business they work for
+    // and their role at that business
+    businessInfo: {
+        company: {
+            name: String,
+            companyId: mongoose.Schema.Types.ObjectId
+        },
+        title: String
+    },
 
     // the user's psychometric test answers and results
     psychometricTest: {

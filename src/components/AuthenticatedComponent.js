@@ -25,8 +25,6 @@ class AuthenticatedComponent extends Component {
         //     });
         // } else {
             this.checkLoggedIn();
-
-            console.log("AuthenticatedComponent props: ", this.props);
         // }
     }
 
@@ -39,13 +37,29 @@ class AuthenticatedComponent extends Component {
 
             this.props.router.push('/login?redirect=' + redirect);
         }
-        // if there is a user but they don't have the right user type
-        else if (this.props.route.userType && this.props.currentUser.userType !== this.props.route.userType) {
-            this.props.router.push('/');
-        }
-
+        // if there is a user see if they are of the right type
         else {
-            this.setState({userChecked: true});
+            const types = this.props.route.userType;
+            const currentUserType = this.props.currentUser.userType;
+            let authenticatedType = false;
+
+            if (types) {
+                for (let i = 0; i < types.length; i++) {
+                    if (types[i] && currentUserType === types[i]) {
+                        authenticatedType = true;
+                        break;
+                    }
+                }
+            } else {
+                authenticatedType = true;
+            }
+
+            // if one of the authenticated types matches the current user's type, they are authenticated
+            if (authenticatedType) {
+                this.setState({userChecked: true});
+            } else {
+                this.props.router.push('/');
+            }
         }
     }
 

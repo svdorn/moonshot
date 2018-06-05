@@ -1,7 +1,8 @@
 var Businesses = require('../models/businesses.js');
-var Employers = require('../models/employers.js');
 var Users = require('../models/users.js');
 var Pathways = require('../models/pathways.js');
+
+const crypto = require('crypto');
 
 // get helper functions
 const { sanitize,
@@ -21,6 +22,7 @@ const businessApis = {
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
+    POST_emailInvites,
     GET_pathways,
     GET_candidateSearch,
     GET_employees,
@@ -30,6 +32,213 @@ const businessApis = {
 
 // ----->> START APIS <<----- //
 
+function POST_emailInvites(req, res) {
+    const body = req.body;
+    const candidateEmails = sanitize(body.candidateEmails);
+    const employeeEmails = sanitize(body.employeeEmails);
+    const managerEmails = sanitize(body.managerEmails);
+    const adminEmails = sanitize(body.adminEmails);
+    const userId = sanitize(body.currentUserInfo.userId);
+    const verificationToken = sanitize(body.currentUserInfo.verificationToken);
+    const companyId = sanitize(body.currentUserInfo.companyId);
+    const positionId = sanitize(body.currentUserInfo.positionId);
+
+    // if one of the arguments doesn't exist, return with error code
+    if (!candidateEmails || !employeeEmails || !managerEmails || !adminEmails || !userId || !companyId || !verificationToken || !positionId) {
+        return res.status(400).send("Bad request.");
+    }
+
+    let moonshotUrl = 'https://www.moonshotinsights.io/';
+
+    // verify the employer is actually a part of this organization
+    verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
+    .then(business => {
+        // if employer does not have valid credentials
+        if (!business) {
+            console.log("Employer tried to send verification links");
+            return res.status(403).send("You do not have permission to send verification links.");
+        }
+
+        let code = business.code;
+
+        const positionIndex = business.positions.findIndex(currPosition => {
+            return currPosition._id.toString() === positionId.toString();
+        });
+
+        let position = business.positions[positionIndex];
+
+        // Add the position code onto the end of the code
+        code = code.toString().concat(position.code);
+
+        // Send candidate emails
+        for (let i = 0; i < candidateEmails.length; i++) {
+            // add code to the position
+            const userCode = crypto.randomBytes(64).toString('hex');
+            if (position.candidateCodes) {
+                position.candidateCodes.push(userCode);
+            } else {
+                position.candidateCodes = [];
+                position.candidateCodes.push(userCode);
+            }
+            // send email
+            let recipient = [candidateEmails[i]];
+            let subject = 'You&#39;ve Been Invited!';
+            let content =
+                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                    + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
+                    + '<p style="width:600px; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by (name) from (company) as a candidate!'
+                    + ' Please click the button below to create your account.'
+                    + ' Once you&#39;ve created your account you can begin your evaluation!</p>'
+                    + '<br/><p style="width:600px; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
+                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
+                    + code + "&userCode=" + userCode
+                    + '">Create Account</a>'
+                    + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
+                    + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                        + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
+                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
+                        + '</div>'
+                    + '</div>'
+                + '</div>';
+
+            const sendFrom = "Moonshot";
+            sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+                if (!success) {
+                    res.status(500).send(msg);
+                }
+            })
+        }
+        // Send employee emails
+        for (let i = 0; i < employeeEmails.length; i++) {
+            // add code to the position
+            const userCode = crypto.randomBytes(64).toString('hex');
+            if (position.employeeCodes) {
+                position.employeeCodes.push(userCode);
+            } else {
+                position.employeeCodes = [];
+                position.employeeCodes.push(userCode);
+            }
+            // send email
+            let recipient = [employeeEmails[i]];
+            let subject = 'You&#39;ve Been Invited!';
+            let content =
+                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'signup?code='
+                    + code + "&userCode=" + userCode
+                    + '">Create Account</a>'
+                    + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                        + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
+                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + employeeEmails[i] + '">Opt-out of future messages.</a></i>'
+                        + '</div>'
+                    + '</div>'
+                + '</div>';
+
+            const sendFrom = "Moonshot";
+            sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+                if (!success) {
+                    res.status(500).send(msg);
+                }
+            })
+        }
+        // Send manager emails
+        for (let i = 0; i < managerEmails.length; i++) {
+            // add code to the position
+            const userCode = crypto.randomBytes(64).toString('hex');
+            if (position.managerCodes) {
+                position.managerCodes.push(userCode);
+            } else {
+                position.managerCodes = [];
+                position.managerCodes.push(userCode);
+            }
+            // send email
+            let recipient = [managerEmails[i]];
+            let subject = 'You&#39;ve Been Invited!';
+            let content =
+                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'signup?code='
+                    + code + "&userCode=" + userCode
+                    + '">Create Account</a>'
+                    + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                        + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
+                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + managerEmails[i] + '">Opt-out of future messages.</a></i>'
+                        + '</div>'
+                    + '</div>'
+                + '</div>';
+
+            const sendFrom = "Moonshot";
+            sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+                if (!success) {
+                    res.status(500).send(msg);
+                }
+            })
+        }
+        // Send admin emails
+        for (let i = 0; i < adminEmails.length; i++) {
+            // add code to the position
+            const userCode = crypto.randomBytes(64).toString('hex');
+            if (position.adminCodes) {
+                position.adminCodes.push(userCode);
+            } else {
+                position.adminCodes = [];
+                position.adminCodes.push(userCode);
+            }
+            // send email
+            let recipient = [adminEmails[i]];
+            let subject = 'You&#39;ve Been Invited!';
+            let content =
+                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'signup?code='
+                    + code + "&userCode=" + userCode
+                    + '">Create Account</a>'
+                    + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                        + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
+                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + adminEmails[i] + '">Opt-out of future messages.</a></i>'
+                        + '</div>'
+                    + '</div>'
+                + '</div>';
+
+            const sendFrom = "Moonshot";
+            sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+                if (!success) {
+                    res.status(500).send(msg);
+                }
+            })
+        }
+        // Save the new business object with updated positions array
+        // update the employee in the business object
+        business.positions[positionIndex] = position;
+
+        // save the business
+        business.save()
+        .then(updatedBusiness => {
+            return res.json(position);
+        })
+        .catch(updateBusinessErr => {
+            return res.status(500).send("failure!");
+        });
+
+
+
+
+    })
+    .catch(verifyEmployerErr => {
+        console.log("Error when trying to verify employer when they were trying to send verification links: ", verifyEmployerErr);
+        return res.status(500).send("Server error, try again later.");
+    })
+
+
+}
 
 function POST_forBusinessEmail(req, res) {
     let phone = "None given";
@@ -113,14 +322,6 @@ async function POST_updateHiringStage(req, res) {
 
     // if one of the arguments doesn't exist, return with error code
     if (!userId || !verificationToken || !companyId || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !pathwayId) {
-        console.log("Not all arguments provided to /business/updateHiringStage");
-        console.log("userId: ", userId);
-        console.log("verificationToken: ", verificationToken);
-        console.log("companyId: ", companyId);
-        console.log("candidateId: ", candidateId);
-        console.log("hiringStage: ", hiringStage);
-        console.log("isDismissed: ", isDismissed);
-        console.log("pathwayId: ", pathwayId);
         return res.status(400).send("Bad request.");
     }
 
@@ -189,7 +390,6 @@ function POST_answerQuestion(req, res) {
     const gradingComplete = sanitize(body.user.gradingComplete);
 
     if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !companyId) {
-        console.log("here");
         return res.status(400).send("Bad request.");
     }
 
@@ -279,7 +479,7 @@ async function verifyEmployerAndReturnBusiness(userId, verificationToken, busine
             let business = undefined;
 
             // find the employer by the given id
-            Employers.findById(userId)
+            Users.findById(userId)
             .then(foundEmployer => {
                 // if employer couldn't be found from the given id
                 if (!foundEmployer) {
@@ -357,7 +557,7 @@ function GET_employees(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    Employers.findById(userId, function(findBUserErr, user) {
+    Users.findById(userId, function(findBUserErr, user) {
         // error finding user in db
         if (findBUserErr) {
             console.log("Error finding business user who was trying to see their employees: ", findBUserErr);
@@ -376,7 +576,7 @@ function GET_employees(req, res) {
             return res.status(403).send("You do not have permission to access employee info.");
         }
 
-        const companyId = user.company.companyId;
+        const companyId = user.businessInfo.company.companyId;
         let businessQuery = { '_id': companyId }
 
         Businesses.find(businessQuery)
@@ -400,7 +600,7 @@ function GET_positions(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    Employers.findById(userId, function(findBUserErr, user) {
+    Users.findById(userId, function(findBUserErr, user) {
         // error finding user in db
         if (findBUserErr) {
             console.log("Error finding business user who was trying to see their positions: ", findBUserErr);
@@ -419,7 +619,7 @@ function GET_positions(req, res) {
             return res.status(403).send("You do not have permission to access positions info.");
         }
 
-        const companyId = user.company.companyId;
+        const companyId = user.businessInfo.company.companyId;
         let businessQuery = { '_id': companyId }
 
         Businesses.find(businessQuery)
@@ -443,7 +643,7 @@ function GET_pathways(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    Employers.findById(userId, function(findBUserErr, user) {
+    Users.findById(userId, function(findBUserErr, user) {
         // error finding user in db
         if (findBUserErr) {
             console.log("Error finding business user who was trying to see their pathways: ", findBUserErr);
@@ -462,7 +662,7 @@ function GET_pathways(req, res) {
             return res.status(403).send("You do not have permission to access pathway info.");
         }
 
-        const companyId = user.company.companyId;
+        const companyId = user.businessInfo.company.companyId;
         Businesses.findById(companyId, function(findBizErr, company) {
             if (findBizErr) {
                 console.log("Error finding business when trying to search for pathways: ", findBizErr);
@@ -514,7 +714,7 @@ function GET_candidateSearch(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    Employers.findById(userId, function(findBUserErr, user) {
+    Users.findById(userId, function(findBUserErr, user) {
         // error finding user in db
         if (findBUserErr) {
             console.log("Error finding business user who was trying to see their candidates: ", findBUserErr);
@@ -533,7 +733,7 @@ function GET_candidateSearch(req, res) {
             return res.status(403).send("You do not have permission to access candidate info.");
         }
 
-        const companyId = user.company.companyId;
+        const companyId = user.businessInfo.company.companyId;
         Businesses.findById(companyId, function(findBizErr, company) {
             if (findBizErr) {
                 console.log("Error finding business when trying to search for candidates: ", findBizErr);

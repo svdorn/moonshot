@@ -58,8 +58,7 @@ const validate = values => {
         'name',
         'email',
         'password',
-        'password2',
-        'employerCode'
+        'password2'
     ];
     requiredFields.forEach(field => {
         if (!values[field]) {
@@ -140,8 +139,7 @@ class Signup extends Component {
             'name',
             'email',
             'password',
-            'password2',
-            'employerCode'
+            'password2'
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -166,20 +164,14 @@ class Signup extends Component {
         const email = values.email;
         const employerCode = values.employerCode;
         let user = {
-            name, password, email, signUpReferralCode, employerCode,
-            userType: "candidate"
+            name, password, email, signUpReferralCode, employerCode
         };
 
-        // if the user got here from a pathway landing page, add the pathway id
-        // and url for redirect after onboarding completion
+        // if the user got here from a link, add those links
         let location = this.props.location;
         if (location.query) {
-            if (location.query.pathway) {
-                user.pathwayId = location.query.pathway;
-                if (location.query.redirect) {
-                    user.redirect = location.query.redirect;
-                }
-            }
+            user.code = location.query.code;
+            user.userCode = location.query.userCode;
         }
 
         this.props.postUser(user);
@@ -295,28 +287,28 @@ class Signup extends Component {
                                         <Field
                                             name="name"
                                             component={renderTextField}
-                                            label="Full Name"
+                                            label="Full Name*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="email"
                                             component={renderTextField}
-                                            label="Email"
+                                            label="Email*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="password"
                                             component={renderPasswordField}
-                                            label="Password"
+                                            label="Password*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="password2"
                                             component={renderPasswordField}
-                                            label="Confirm Password"
+                                            label="Confirm Password*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
@@ -336,8 +328,8 @@ class Signup extends Component {
                                                 src="/icons/CheckMarkRoundedWhite.png"
                                             />
                                         </div>
-                                        I understand and agree to the <bdi className="clickable" onClick={this.handleOpenPP}>Privacy
-                                        Policy</bdi> and <bdi className="clickable" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
+                                        I understand and agree to the <b className="clickable grayText" onClick={this.handleOpenPP}>Privacy
+                                        Policy</b> and <b className="clickable grayText" onClick={this.handleOpenTOU}>Terms of Use</b>.
                                     </div>
                                     <br/>
                                     <RaisedButton

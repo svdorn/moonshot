@@ -1,5 +1,4 @@
 var Users = require('../models/users.js');
-var Employers = require('../models/employers.js');
 var Psychtests = require('../models/psychtests.js');
 var Skills = require('../models/skills.js');
 var Businesses = require('../models/businesses.js');
@@ -37,6 +36,7 @@ const userApis = {
     POST_login,
     POST_currentPathwayStep,
     POST_startPositionEval,
+    POST_addPositionEval,
     POST_startPsychEval,
     POST_answerPsychQuestion,
     GET_printPsychScore,
@@ -346,6 +346,165 @@ async function POST_submitFreeResponse(req, res) {
             res.json({updatedUser: removePassword(user)});
         }
     }
+}
+
+
+// add a position without starting it
+async function POST_addPositionEval(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const businessId = sanitize(req.body.businessId);
+    const positionId = sanitize(req.body.positionId);
+
+    let user;
+    getAndVerifyUser(userId, verificationToken)
+    .then(foundUser => {
+        // mark that we've found the user
+        user = foundUser;
+
+        addEval();
+    })
+    .catch(getUserError => {
+        console.log("Error getting user when trying to start position eval: ", getUserError.error);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
+    })
+
+    let business;
+    Businesses.findById(businessId)
+    .then(foundBiz => {
+        business = foundBiz;
+        if (!business) { return res.status(500).send("No position found."); }
+        addEval();
+    })
+    .catch(findBizErr => {
+        console.log("Error getting business when trying to start position eval: ", findBizErr);
+        return res.status(500).send("Server error.");
+    });
+
+    async function addEval() {
+        // add the evaluation to the user and tell the business the user is in
+        try {
+            let { newUser, newBusiness } = await addEvaluation(user, business, positionId);
+            user = newUser;
+            business = newBusiness;
+        } catch (addEvaluationError) {
+            console.log(addEvaluationError);
+            return res.status(500).send("Server error.");
+        }
+
+        // save the user and business and return on success
+        let savedUser = false;
+        let savedBusiness = false;
+        try {
+            user.save().then(savedUser => { userSaved = true; finish(); }).catch(e => { throw e });
+            business.save().then(savedBiz => { businessSaved = true; finish(); }).catch(e => { throw e });
+        } catch (saveError) {
+            console.log("Error saving user or business when adding a position evaluation.");
+            return res.status(500).send("Server error.")
+        }
+
+        // when the business and user have both been saved, return successfully
+        function finish() {
+            if (userSaved && businessSaved) { res.json("success"); }
+        }
+    }
+}
+
+
+// returns object: {user: userObject, business: businessObject}
+// DOESN'T SAVE THE TWO, MUST BE SAVED IN CALLING FUNCTION
+async function addEvaluation(user, business, positionId) {
+    return new Promise(async function(resolve, reject) {
+        try {
+            // check that all inputs are valid
+            if (!user || !business || !positionId) {
+                // return with error saying which input is invalid
+                reject("Inputs to addEvaluation not correct. User: ", user, "\nbusiness: ", business, "\npositionId: ", positionId);
+            }
+
+            // find the index of the position from the positionId
+            const positionIdString = positionId.toString();
+            const positionIndex = business.positions.findIndex(pos => {
+                // if the id of the position matches, we found the right index
+                return pos._id.toString() === positionIdString;
+            });
+
+            // check that the position is valid
+            if (typeof positionIndex !== "number" || positionIndex < 0) {
+                console.log("Coudln't find position within business.\npositionId: ", positionId, "\nbusiness: ", business);
+                reject("Invalid position.");
+            }
+
+            // get the actual position from the index
+            let position = business.positions[positionIndex];
+
+            // see if candidate is already marked as being a candidate for this position
+            const userIdString = user._id.toString();
+            const userAlreadyHasPosition = position.candidates.some(candidateId => {
+                return candidateId.toString() === userIdString;
+            });
+            // if not, mark them as being evaluated for this position
+            if (!userAlreadyHasPosition) {
+                position.candidates.push(user._id);
+                // make sure the position is saved within the business object
+                business.positions[positionIndex] = position;
+            }
+
+            // check if the user already has this position in their positions array
+            const businessIdString = business._id.toString();
+            const userHasPosition = user.positions.some(pos => {
+                return pos.businessId.toString() === businessIdString && pos.positionId.toString() === positionIdString;
+            })
+            // if so, return successfully because the evaluation has already been added
+            if (userHasPosition) { resolve({user, business}); }
+            // if not, give them the position with all starting info
+            else {
+                // the date at this time, will be used a couple times in the newPosition object
+                const now = new Date();
+                // the stage that the user starts out at; not contacted by default
+                // since the user probably hasn't been through interviews before
+                // going through the eval
+                const initialHiringStage = "Not Contacted";
+                // create the free response objects that will be stored for the user
+                const numFRQs = position.freeResponseQuestions.length;
+                let frqsForUser = [];
+                for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
+                    const frq = position.freeResponseQuestions[frqIndex];
+                    frqsForUser.push({
+                        questionId: frq._id,
+                        questionIndex: frqIndex,
+                        response: undefined,
+                        body: frq.body,
+                        required: frq.required
+                    });
+                }
+                // starting info about the position
+                const newPosition = {
+                    businessId: business._id,
+                    positionId: position._id,
+                    hiringStage: initialHiringStage,
+                    hiringStageChanges: [{ hiringStage: initialHiringStage, dateChanged: now }],
+                    appliedStartDate: now,
+                    // evaluation has not yet been completed
+                    appliedEndDate: undefined,
+                    // no scores have been calculated yet
+                    scores: undefined,
+                    freeResponseQuestions: frqsForUser
+                }
+
+                // add the starting info to the user
+                user.positions.push(newPosition);
+            }
+
+            // return successfully
+            resolve({user, business});
+        }
+
+        // if there is some random error, return unsuccessfully
+        catch (someError) {
+            reject(someError);
+        }
+    });
 }
 
 
@@ -1323,21 +1482,7 @@ function POST_login(req, res) {
 
         // CHECK IF A USER WAS FOUND
         if (!foundUser || foundUser == null) {
-            // CHECK IF THE USER IS IN THE BUSINESS USER DB
-            Employers.findOne(query, function(err2, foundEmployer) {
-                if (err2) {
-                    return res.status(500).send("Error performing query to find user in business user db. ", err);
-                }
-
-                if (!foundEmployer || foundEmployer == null) {
-                    console.log('looked in business db, none found')
-                    return res.status(404).send("No user with that email was found.");
-                }
-
-                user = foundEmployer;
-                tryLoggingIn();
-                return;
-            });
+            return res.status(404).send("No user with that email was found.");
         }
         // USER FOUND IN USER DB
         else {

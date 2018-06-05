@@ -88,7 +88,9 @@ function POST_candidate(req, res) {
     const INVALID_CODE = "Invalid employer code."
 
     // get the position from the employer code
-    const code = user.employerCode;
+
+    const code = user.code;
+
     if (code.length < 10) {
         console.log(`code not long enough, was ${code.length} characters`);
         return res.status(400).send(INVALID_CODE);
@@ -98,7 +100,8 @@ function POST_candidate(req, res) {
     // position identifier
     const positionCode = code.substring(8, 10);
 
-    const uniqueCode = code.length > 10 ? code.substring(10) : undefined;
+    // user identifier
+    const uniqueCode = user.userCode;
 
     // find the business corresponding to that employer code
     let business = undefined;
@@ -132,16 +135,46 @@ function POST_candidate(req, res) {
             if (!uniqueCode) { console.log("no unique code"); return res.status(400).send(INVALID_CODE); }
 
             // find the index of the candidate-specific code within the position
-            const oneTimeCodeIndex = position.oneTimeCodes.findIndex(posOneTimeCode => {
-                return posOneTimeCode === uniqueCode;
+
+            const candidateIndex = position.candidateCodes.findIndex(candidateCode => {
+                return candidateCode == uniqueCode;
             });
+            const employeeIndex = position.employeeCodes.findIndex(employeeCode => {
+                return employeeCode == uniqueCode;
+            });
+            const managerIndex = position.managerCodes.findIndex(managerCode => {
+                return managerCode == uniqueCode;
+            });
+            const adminIndex = position.adminCodes.findIndex(adminCode => {
+                return adminCode == uniqueCode;
+            });
+
+            let oneTimeCodeIndex = -1;
+            let oneTimeArray = [];
+
+            if (candidateIndex !== -1) {
+                user.userType = "candidate";
+                oneTimeCodeIndex = candidateIndex;
+                oneTimeArray = position.candidateCodes;
+            } else if (employeeIndex !== -1) {
+                user.userType = "employee";
+                oneTimeCodeIndex = employeeIndex;
+                oneTimeArray = position.employeeCodes;
+            } else if (managerIndex !== -1) {
+                user.userType = "manager";
+                oneTimeCodeIndex = managerIndex;
+                oneTimeArray = position.managerCodes;
+            } else {
+                user.userType = "accountAdmin";
+                oneTimeCodeIndex = adminIndex;
+                oneTimeArray = position.adminCodes;
+            }
 
             // if the user does have a valid unique code
             if (typeof oneTimeCodeIndex === "number" && oneTimeCodeIndex > -1) {
                 // remove the code from the position so it can't be used again
-                console.log("oneTimeCodes was: ", position.oneTimeCodes);
-                position.oneTimeCodes.splice(oneTimeCodeIndex, 1);
-                console.log("oneTimeCodes is: ", position.oneTimeCodes);
+                oneTimeArray.splice(oneTimeCodeIndex, 1);
+
                 // save the business with that unique code removed
                 business.positions[positionIndex] = position;
                 try {
@@ -174,24 +207,6 @@ function POST_candidate(req, res) {
             user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
             user.admin = false;
             user.agreedToTerms = true;
-            let addedPathway = false;
-
-            // add pathway to user's My Pathways if they went from
-            // a landing page.
-            // TODO: get rid of this once pathways no longer exist
-            if (user.pathwayId) {
-                user.pathways = [{
-                    pathwayId: user.pathwayId,
-                    currentStep: {
-                        subStep: 1,
-                        step: 1
-                    }
-                }];
-                addedPathway = true;
-            }
-            else {
-                user.pathwayId = undefined;
-            }
 
             user.dateSignedUp = new Date();
             // make sure referral code is a string, if not set it
@@ -248,7 +263,6 @@ function POST_candidate(req, res) {
                 if (err) {
                     console.log(err);
                 }
-
                 req.session.unverifiedUserId = newUser._id;
                 req.session.save(function (err) {
                     if (err) {
@@ -285,6 +299,7 @@ function POST_candidate(req, res) {
                     });
                 }
 
+                // TODO: change to make for positions, not pathways
                 try {
                     // send email to everyone if there's a new sign up (if in production mode)
                     if (process.env.NODE_ENV !== "development") {
