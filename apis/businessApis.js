@@ -19,6 +19,7 @@ const { sanitize,
 const businessApis = {
     POST_forBusinessEmail,
     POST_demoEmail,
+    POST_dialogEmail,
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
@@ -71,7 +72,8 @@ function POST_forBusinessEmail(req, res) {
 }
 
 function POST_demoEmail(req, res) {
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
     let subject = 'Moonshot - Somebody watched the Demo';
 
     let content = "<div>"
@@ -91,7 +93,27 @@ function POST_demoEmail(req, res) {
     })
 }
 
+function POST_dialogEmail(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out email on Homepage';
 
+    let content = "<div>"
+        + "<h3>Email of someone who filled out first page on homepage: </h3>"
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
 
 function POST_contactUsEmail(req, res) {
     let message = "None";

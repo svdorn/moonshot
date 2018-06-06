@@ -4,22 +4,12 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
-import {forBusiness, demoEmail} from '../../actions/usersActions';
+import {forBusiness, demoEmail, dialogEmail} from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import YouTube from 'react-youtube';
-
-const style = {
-    // the hint that shows up when search bar is in focus
-    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
-    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
-
-    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
-    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
-    searchUnderlineFocusStyle: { color: "green" }
-};
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
@@ -36,13 +26,10 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
 const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
-        floatingLabelText={label}
         errorText={touched && error}
-        inputStyle={style.searchInputStyle}
-        hintStyle={style.searchHintStyle}
-        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
-        floatingLabelStyle={style.searchFloatingLabelStyle}
-        underlineFocusStyle = {style.searchUnderlineFocusStyle}
+        inputStyle={{color: '#72d6f5'}}
+        hintStyle={{color: 'white'}}
+        underlineStyle={{color: '#72d6f5'}}
         {...input}
         {...custom}
         type="password"
@@ -174,7 +161,7 @@ class BusinessHome extends Component {
             email: this.props.formData.forBusiness.values.email,
         };
 
-        this.props.demoEmail(user);
+        this.props.dialogEmail(user);
         this.handleNextScreen();
     }
 
@@ -494,17 +481,17 @@ class BusinessHome extends Component {
                             name="company"
                             component={renderTextField}
                             label="Company*"
-                            validate={[required, emailValidate]}
+                            validate={[required]}
                         /><br/>
                         <Field
                             name="password"
-                            component={renderTextField}
+                            component={renderPasswordField}
                             label="Password*"
                             validate={[required]}
                         /><br/>
                         <Field
                             name="confirmPassword"
-                            component={renderTextField}
+                            component={renderPasswordField}
                             label="Confirm Password*"
                             validate={[required]}
                         /><br/>
@@ -906,7 +893,8 @@ class BusinessHome extends Component {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         forBusiness,
-        demoEmail
+        demoEmail,
+        dialogEmail
     }, dispatch);
 }
 
