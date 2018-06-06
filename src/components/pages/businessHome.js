@@ -151,6 +151,34 @@ class BusinessHome extends Component {
         this.handleDemoScreenChange();
     }
 
+    handleSubmitDialogEmail(e) {
+        e.preventDefault();
+        const vals = this.props.formData.forBusiness.values;
+
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'email',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
+
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) return;
+
+        const user = {
+            email: this.props.formData.forBusiness.values.email,
+        };
+
+        this.props.demoEmail(user);
+        this.handleNextScreen();
+    }
+
+
     onChange(e) {
         this.setState({
             email: e.target.value
@@ -426,7 +454,7 @@ class BusinessHome extends Component {
         switch(screen) {
             case 1:
                 dialogBody = (
-                    <form onSubmit={this.handleSubmit.bind(this)} className="center">
+                    <form onSubmit={this.handleSubmitDialogEmail.bind(this)} className="center">
                         <div
                             className="whiteTextImportant font22px font20pxUnder700 font18pxUnder500 marginTop10px">
                             Get Started
@@ -439,7 +467,7 @@ class BusinessHome extends Component {
                         /><br/>
                         <RaisedButton
                             label="Continue"
-                            onClick={this.handleNextScreen}
+                            type="submit"
                             className="raisedButtonBusinessHome"
                             style={{marginTop: '20px'}}
                             />
@@ -463,9 +491,9 @@ class BusinessHome extends Component {
                             validate={[required]}
                         /><br/>
                         <Field
-                            name="email"
+                            name="company"
                             component={renderTextField}
-                            label="Work Email*"
+                            label="Company*"
                             validate={[required, emailValidate]}
                         /><br/>
                         <Field
