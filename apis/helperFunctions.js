@@ -126,12 +126,12 @@ function frontEndUser(dbUser, extraFieldsToRemove) {
     newUser.emailVerificationToken = undefined;
     newUser.passwordToken = undefined;
     newUser.passwordTokenExpirationTime = undefined;
-    newUser.positions = undefined;
     newUser.skillTests = undefined;
+    newUser.positions = undefined;
     newUser.psychometricTest = cleanPsychTest;
     newUser.currentPosition = currentPosition;
 
-    // if we are given more than the default fields
+    // if we are given more than the default fields to remove
     if (Array.isArray(extraFieldsToRemove)) {
         // go through each extra field and remove them from the user
         extraFieldsToRemove.forEach(field => {
@@ -161,9 +161,12 @@ const COMPLETE_CLEAN = [
     "psychometricTest",
     "positions",
     "positionInProgress",
-    "currentPosition"
+    "currentPosition",
+    "emailVerificationToken"
 ]
-const NO_TOKENS = [ "verificationToken" ];
+// don't want employers to see which other positions user has applied for
+const FOR_EMPLOYER = [ "verificationToken", "emailVerificationToken" ];
+const NO_TOKENS = [ "verificationToken", "emailVerificationToken" ];
 
 
 function randomInt(lowBound, highBound) {
@@ -636,6 +639,7 @@ const helperFunctions = {
     frontEndUser,
 
     COMPLETE_CLEAN,
+    FOR_EMPLOYER,
     NO_TOKENS
 }
 

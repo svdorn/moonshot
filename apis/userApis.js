@@ -1,10 +1,11 @@
-var Users = require('../models/users.js');
-var Psychtests = require('../models/psychtests.js');
-var Skills = require('../models/skills.js');
-var Businesses = require('../models/businesses.js');
+const Users = require('../models/users.js');
+const Psychtests = require('../models/psychtests.js');
+const Skills = require('../models/skills.js');
+const Businesses = require('../models/businesses.js');
 
-var bcrypt = require('bcryptjs');
-var crypto = require('crypto');
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+const mongoose = require("mongoose");
 
 
 // get helper functions
@@ -36,11 +37,13 @@ const userApis = {
     POST_login,
     POST_currentPathwayStep,
     POST_startPositionEval,
+    POST_continuePositionEval,
     POST_addPositionEval,
     POST_startPsychEval,
     POST_answerPsychQuestion,
     GET_printPsychScore,
     POST_submitFreeResponse,
+    GET_positions,
 
     POST_resetFrizz,
     POST_reset24,
@@ -356,6 +359,127 @@ async function POST_submitFreeResponse(req, res) {
 }
 
 
+// continue a position that has already been started
+async function POST_continuePositionEval(req, res) {
+    try {
+        const userId = sanitize(req.body.userId);
+        const verificationToken = sanitize(req.body.verificationToken);
+        const businessId = sanitize(req.body.businessId);
+        const positionId = sanitize(req.body.positionId);
+        const positionIdString = positionId.toString();
+
+        let user = undefined;
+        try {
+            user = await getAndVerifyUser(userId, verificationToken);
+        } catch (getUserError) {
+            console.log("Error getting user when trying to continue position eval: ", getUserError.error);
+            return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
+        }
+
+        // get the index of the position within the user object
+        let userPositionIndex = user.positions.findIndex(pos => {
+            return pos.positionId.toString() === positionIdString;
+        });
+        // if the index is not legit, the user hasn't started the position, so
+        // start it instead of continuing it
+        if (typeof userPositionIndex !== "number" || userPositionIndex < 0) {
+            return POST_startPositionEval(req, res);
+        }
+        // otherwise, get the position from the index
+        let position = user.positions[userPositionIndex];
+
+        // see if the user has completed any additional skills since the last time
+        // they made progress on this evaluation
+        let skillTestIds = position.skillTestIds;
+        if (Array.isArray(skillTestIds)) {
+            let numSkillIds = skillTestIds.length;
+            // the index of the skill that the user was on when they last left the eval
+            let skillIndex = position.testIndex;
+            // go through every skill that was not previously completed
+            while (skillIndex < numSkillIds) {
+                currentPositionIdString = skillTestIds[skillIndex].toString();
+                // if the user has a most recent score for the skill, they have
+                // already taken the skill test, so it is done, move it to the front
+                if (user.positions.some(pos => {
+                    return pos.positionId.toString() === currentPositionIdString && pos.mostRecentScore;
+                })) {
+                    // ... so move it to the front of the list ...
+                    const completedId = skillTestIds.splice(skillIndex, 1)[0];
+                    skillTestIds.unshift(completedId);
+                    // ... and let the user object know to start on the next skill
+                    position.testIndex++;
+                }
+
+                // move on to the next skill
+                skillIndex++;
+            }
+        }
+
+        // save the current position as the one in progress
+        user.positionInProgress = positionIdString;
+
+        // save everything we have changed
+        position.skillTestIds = skillTestIds;
+        user.positions[userPositionIndex] = position;
+
+        // if it turns out the user has already finished this evaluation
+        let finished = false;
+        // the next url to direct to user to
+        let nextUrl = "/";
+
+        // if the user has to start or continue the pysch test
+        if (!user.psychometricTest || user.psychometricTest.inProgress) {
+            nextUrl = "/psychometricAnalysis";
+        }
+
+        // if the user has to finish some skill evals
+        else if (Array.isArray(skillTestIds) && position.testIndex < skillTestIds.length) {
+            nextUrl = `/skillTest/${skillTestIds[position.testIndex]}`;
+        }
+
+        // if the user has to do the FRQs
+        else if (
+            // only candidates have to answer frqs
+            user.userType === "candidate" &&
+            // there must be at least one frq
+            Array.isArray(position.freeResponseQuestions) &&
+            position.freeResponseQuestions.length > 0 &&
+            // user must have NOT answered at least one frq
+            position.freeResponseQuestions.some(frq => {
+                return !frq.response;
+            })
+        ) {
+            nextUrl = "/freeResponse";
+        }
+
+        // otherwise the user is done with the eval
+        else {
+            finished = true;
+            nextUrl = "/myEvaluations";
+            console.log("user finished eval!");
+            // this position is NOT the one in progress cuz it's done
+            user.positionInProgress = undefined;
+        }
+
+        // save the user's new info
+        try {
+            await user.save();
+        } catch (saveUserError) {
+            console.log("error saving user who is continuing an eval: ", saveUserError);
+            return res.status(500).send("Server error.");
+        }
+
+        // return the new user as well as the url that the user should be redirected to
+        return res.json({updatedUser: frontEndUser(user), finished, nextUrl});
+    }
+
+    catch (miscError) {
+        console.log("error while trying to continue position eval: ", miscError);
+        return res.status(500).send("Server error.");
+    }
+}
+
+
 // add a position without starting it
 async function POST_addPositionEval(req, res) {
     const userId = sanitize(req.body.userId);
@@ -368,7 +492,6 @@ async function POST_addPositionEval(req, res) {
     .then(foundUser => {
         // mark that we've found the user
         user = foundUser;
-
         addEval();
     })
     .catch(getUserError => {
@@ -1504,8 +1627,91 @@ function GET_userByProfileUrl(req, res) {
     const query = { profileUrl };
     getUserByQuery(query, function (err, user) {
         if (err) { return res.status(400).send("Bad url"); }
-        return res.json(frontEndUser(user, NO_TOKENS));
+        return res.json(frontEndUser(user, FOR_EMPLOYER));
     });
+}
+
+
+// get positions for evaluations page
+async function GET_positions(req, res) {
+    try {
+        const userId = sanitize(req.query.userId);
+        const verificationToken = sanitize(req.query.verificationToken);
+
+        // get the user who is asking for their evaluations page
+        let user;
+        try {
+            user = await getAndVerifyUser(userId, verificationToken);
+        } catch (getUserError) {
+            console.log("error getting user when trying to get positions for evaluations page: ", getUserError);
+            const status = getUserError.status ? getUserError.status : 500;
+            const message = getUserError.message ? getUserError.message : "Server error.";
+            return res.status(status).send(message);
+        }
+
+        // get the user's positions they have applied or are applying to
+        const positions = user.positions;
+        // lets us make an array of unique business ids for businesses who have
+        // positions that the user has applied to; this object also tells us
+        // which businesses have which positions that we want
+        let usedBusinessIds = {};
+        let businessIds = [];
+        // need an array of all the position ids for the query
+        positions.forEach(position => {
+            const businessId = position.businessId;
+            // if this businessId has not already been added to the array ...
+            if (usedBusinessIds[businessId] === undefined) {
+                // ... add it ...
+                businessIds.push(mongoose.Types.ObjectId(businessId));
+                // ... and mark it as being added by adding the current position
+                usedBusinessIds[businessId] = [ position.positionId.toString() ];
+            }
+
+            // otherwise, just add the position to the array for later
+            else {
+                usedBusinessIds[businessId].push(position.positionId.toString());
+            }
+        });
+
+        // get all the businesses who have positions that the user is applying to
+        let businesses = [];
+        try {
+            businesses = await Businesses
+            .find({ "_id": { "$in": businessIds } })
+            .select("name logo positions.name positions.timeAllotted positions._id");
+        } catch (getBusinessesError) {
+            console.log("error getting businesses while trying to get positions for user: ", getBusinessesError);
+            return res.status(500).send("Server error.");
+        }
+
+        // create the positions to send back to the user
+        let positionsToReturn = [];
+        // go through each business
+        businesses.forEach(business => {
+            // go through each position for that business
+            business.positions.forEach(bizPosition => {
+                // if this position is one the user is applying/has applied to...
+                const validPositionIds = usedBusinessIds[business._id.toString()]
+                if (validPositionIds.includes(bizPosition._id.toString())) {
+                    // ... add the position to the list of positions to return
+                    positionsToReturn.push({
+                        businessName: business.name,
+                        businessLogo: business.logo,
+                        businessId: business._id,
+                        positionName: bizPosition.name,
+                        positionId: bizPosition._id
+                    })
+                }
+            });
+        });
+
+        res.json({positions: positionsToReturn});
+    }
+
+    catch (miscError) {
+        console.log("error getting position for evaluations page: ", miscError);
+        return res.status(500).send("Server error while getting evaluations.");
+    }
 }
 
 

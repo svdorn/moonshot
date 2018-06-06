@@ -340,6 +340,10 @@ var usersSchema = mongoose.Schema({
         businessId: mongoose.Schema.Types.ObjectId,
         // the id of the position within that company
         positionId: mongoose.Schema.Types.ObjectId,
+        // the date the company has assigned the evaluation to the user
+        assignedDate: Date,
+        // the date the company has set as a deadline to finish
+        deadline: Date,
         // the hiring stage of the candidate, which the company has determined
         // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
         hiringStage: String,

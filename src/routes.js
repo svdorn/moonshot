@@ -75,7 +75,7 @@ const routes = (
         <Route path="addUser" component={AuthenticatedComponent} page={<AddUser/>} userType={businessUserTypes} />
         <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType={businessUserTypes} />
         <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessUserTypes} />
-        <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} userType={businessUserTypes} />
+        <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} />
         <Route path="businessProfile" component={AuthenticatedComponent} page={<BusinessProfile/>} userType={businessUserTypes} />
         <Route path="results" component={AuthenticatedComponent} page={<Results />} userType={businessUserTypes} />
         <Route path="employeeResults" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessUserTypes} />

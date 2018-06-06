@@ -68,6 +68,7 @@ app.post("/user/reset24", userApis.POST_reset24);
 
 app.post('/user/submitFreeResponse', userApis.POST_submitFreeResponse);
 app.post('/user/startPositionEval', userApis.POST_startPositionEval);
+app.post('/user/continuePositionEval', userApis.POST_continuePositionEval);
 app.post('/user/startPsychEval', userApis.POST_startPsychEval);
 app.post('/user/answerPsychQuestion', userApis.POST_answerPsychQuestion);
 app.post('/user/signOut', userApis.POST_signOut);
@@ -84,6 +85,7 @@ app.post('/user/forgotPassword', userApis.POST_forgotPassword);
 app.post('/user/changeSettings', userApis.POST_changeSettings);
 app.get('/user/getResults', userApis.GET_printPsychScore);
 app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
+app.get('/user/positions', userApis.GET_positions);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);

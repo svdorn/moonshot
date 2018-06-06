@@ -131,6 +131,28 @@ export function positionSignup(userId, verificationToken, positionId, businessId
 }
 
 
+export function continueEval(userId, verificationToken, positionId, businessId) {
+    return function(dispatch) {
+        axios.post("/api/user/continuePositionEval", {userId, verificationToken, positionId, businessId})
+        .then(response => {
+            dispatch({type: "CONTINUE_POSITION_EVAL", currentUser: response.data.updatedUser});
+            if (response.data.finished) {
+                console.log("All parts already answered!");
+            } else {
+                browserHistory.push(response.data.nextUrl);
+                window.scrollTo(0, 0);
+            }
+        })
+        .catch(error => {
+            console.log("Error starting position evaluation: ", error);
+            if (error.response && error.response.data) {
+                console.log(error.response.data);
+            }
+        })
+    }
+}
+
+
 export function submitFreeResponse(userId, verificationToken, frqs) {
     return function(dispatch) {
         axios.post("/api/user/submitFreeResponse", {userId, verificationToken, frqs})

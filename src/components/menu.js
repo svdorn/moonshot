@@ -316,6 +316,7 @@ class Menu extends Component {
         // if the current user is a candidate who is not onboarding
         else if (currentUser.userType === "candidate") {
             menuOptions = [
+                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "url", title: "Discover", url: "/discover"},
                 {optionType: "url", title: "My Pathways", url: "/myPathways"},
                 {optionType: "separator"},

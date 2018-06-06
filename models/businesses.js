@@ -2,8 +2,10 @@
 var mongoose = require('mongoose');
 
 var businessesSchema = mongoose.Schema({
+    // company name
     name: String,
-    code: String,
+    // logo image name within /images/logos/
+    logo: String,
     pathwayIds: [ mongoose.Schema.Types.ObjectId ],
     employerIds: [ mongoose.Schema.Types.ObjectId ],
     employeeIds: [ mongoose.Schema.Types.ObjectId ],

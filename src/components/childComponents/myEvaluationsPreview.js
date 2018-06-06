@@ -1,5 +1,5 @@
 "use strict"
-import React, {Component} from 'react';
+import React, { Component } from "react";
 import {
     TextField,
     DropDownMenu,
@@ -12,10 +12,11 @@ import {
     CircularProgress,
     Paper
 } from 'material-ui';
-import {browserHistory} from 'react-router';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import axios from 'axios';
+import { browserHistory } from "react-router";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import { continueEval } from "../../actions/usersActions";
+import axios from "axios";
 
 class MyEvaluationsPreview extends Component {
 
@@ -27,16 +28,38 @@ class MyEvaluationsPreview extends Component {
         window.scrollTo(0, 0);
     }
 
+
+    // used for candidates and employees only
+    continueEval = () => {
+        const currentUser = this.props.currentUser;
+        this.props.continueEval(currentUser._id, currentUser.verificationToken, this.props.positionId, this.props.businessId);
+    }
+
+
     render() {
 
         let positionSkills = null;
         // TODO: hook up skills to database
         let skills = ["Sales", "Finance", "Networking"];
-        if (this.props.variation === 2) {
-            skills = ["Python", "Javascript", "Computer Science"];
-        } else if (this.props.variation === 3) {
-            skills = ["Networking", "Sales", "Management"];
+        // let skills = ["Sales", "Finance", "Networking"];
+        // if (this.props.variation === 2) {
+        //     skills = ["Python", "Javascript", "Computer Science"];
+        // } else if (this.props.variation === 3) {
+        //     skills = ["Networking", "Sales", "Management"];
+        // }
+
+        // variations can be edit or take
+        // user is a manager or account admin
+        const editing = this.props.variation === "edit"
+        if (editing) {
+
         }
+
+        // user is a candiate or employee
+        else {
+
+        }
+
         if (skills) {
             positionSkills = skills.map(function (skill, index) {
                 let margin = "marginLeft10px";
@@ -60,10 +83,35 @@ class MyEvaluationsPreview extends Component {
             });
         }
 
+        let clickableArea = null;
+        if (editing) {
+            clickableArea = (
+                <div className="grayText font16px font14pxUnder800 marginTop10px">
+                    <div className="clickable underline" style={{display: "inline-block"}}>
+                        View Evaluation
+                    </div>
+                    <div onClick={() => this.goTo("/myCandidates")} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
+                        Candidate Results
+                    </div>
+                    <div onClick={() => this.goTo("/myEmployees")} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
+                        Grade Employees
+                    </div>
+                </div>
+            );
+        } else {
+            clickableArea = (
+                <div className="grayText font16px font14pxUnder800 marginTop10px">
+                    <div onClick={this.continueEval} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
+                        Start/Continue
+                    </div>
+                </div>
+            );
+        }
+
         return(
             <div className="myEvalsBox aboutMeLi">
                 <div className="aboutMeLiIconContainer">
-                    <img alt="My Evals Company Logo" src={this.props.logo}/>
+                    <img alt="My Evals Company Logo" src={`/logos/${this.props.logo}`}/>
                 </div>
 
                 <div className="verticalDivider"/>
@@ -83,17 +131,7 @@ class MyEvaluationsPreview extends Component {
                         <div className="blueTextHome" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
                     </div>
                     {positionSkills}
-                    <div className="grayText font16px font14pxUnder800 marginTop10px">
-                        <div className="clickable underline" style={{display: "inline-block"}}>
-                            View Evaluation
-                        </div>
-                        <div onClick={() => this.goTo("/myCandidates")} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
-                            Candidate Results
-                        </div>
-                        <div onClick={() => this.goTo("/myEmployees")} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
-                            Grade Employees
-                        </div>
-                    </div>
+                    {clickableArea}
                 </div>
             </div>
         );
@@ -102,6 +140,7 @@ class MyEvaluationsPreview extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        continueEval
     }, dispatch);
 }
 
