@@ -95,6 +95,7 @@ app.post("/candidate/updateAnswer", candidateApis.POST_updateAnswer);
 app.post("/candidate/currentPathwayStep", userApis.POST_currentPathwayStep);
 
 app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
+app.post('/business/demoEmail', businessApis.POST_demoEmail);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);

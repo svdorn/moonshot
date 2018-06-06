@@ -4,11 +4,12 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
-import {forBusiness} from '../../actions/usersActions';
+import {forBusiness, demoEmail} from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
+import YouTube from 'react-youtube';
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
@@ -22,22 +23,7 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     />
 );
 
-const validate = values => {
-    const errors = {};
-    const requiredFields = [
-        'name',
-        'email',
-    ];
-    requiredFields.forEach(field => {
-        if (!values[field]) {
-            errors[field] = 'This field is required'
-        }
-    });
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
-        errors.email = 'Invalid email address';
-    }
-    return errors
-};
+const emailValidate = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined;
 
 class BusinessHome extends Component {
     constructor(props) {
@@ -46,6 +32,8 @@ class BusinessHome extends Component {
         this.state = {
             infoIndex: 0,
             open: false,
+            demoOpen: false,
+            demoScreen: 1,
             email: '',
             // initially don't show the rectangles in case the user's browser is old
             showRectangles: false
@@ -107,6 +95,33 @@ class BusinessHome extends Component {
         this.props.forBusiness(user);
     }
 
+    handleEmailFormSubmit(e) {
+        e.preventDefault();
+        const vals = this.props.formData.forBusiness.values;
+
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'email',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
+
+        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) return;
+
+        const user = {
+            email: this.props.formData.forBusiness.values.email,
+        };
+
+        this.props.demoEmail(user);
+        this.handleDemoScreenChange();
+    }
+
     onChange(e) {
         this.setState({
             email: e.target.value
@@ -122,8 +137,29 @@ class BusinessHome extends Component {
         this.props.initialize(email);
     }
 
+    handleDemoOpen = () => {
+        this.setState({demoOpen: true});
+    }
+
+    handleDemoClose = () => {
+        this.setState({demoOpen: false, demoScreen: 1});
+    }
+
+    handleDemoScreenChange = () => {
+        this.setState({demoScreen: 2});
+    }
+
 
     render() {
+        const opts = {
+            height: '390',
+            width: '640',
+            playerVars: { // https://developers.google.com/youtube/player_parameters
+                autoplay: 1,
+                iv_load_policy: 3
+            }
+        };
+
         const logoImages = [
             {src: "NWMLogoWhite.png", partner: "Northwestern Mutual"},
             {src: "DreamHomeLogoWhite.png", partner: "Dream Home"},
@@ -148,6 +184,14 @@ class BusinessHome extends Component {
             <FlatButton
                 label="Close"
                 onClick={this.handleClose}
+                className="whiteTextImportant"
+            />,
+        ];
+
+        const demoActions = [
+            <FlatButton
+                label="Close"
+                onClick={this.handleDemoClose}
                 className="whiteTextImportant"
             />,
         ];
@@ -274,9 +318,63 @@ class BusinessHome extends Component {
         );
 
         let blurredClass = '';
-        if (this.state.open) {
+        if (this.state.open || this.state.demoOpen) {
             blurredClass = 'dialogForBizOverlay';
         }
+
+        let dialogDemoClass = "dialogForBiz";
+        if (this.state.demoScreen === 2) {
+            dialogDemoClass = "dialogForVideo";
+        }
+
+        const demoDialog = (
+            <Dialog
+                actions={demoActions}
+                modal={false}
+                open={this.state.demoOpen}
+                onRequestClose={this.handleDemoClose}
+                autoScrollBodyContent={true}
+                paperClassName={dialogDemoClass}
+                contentClassName="center"
+                overlayClassName="dialogOverlay"
+            >
+                {this.state.demoScreen === 1
+                ?
+                <div>
+                {this.props.loadingEmailSend ?
+                    <div className="center"><CircularProgress className="marginTop40px"/></div>
+                    : <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
+                        <div
+                            className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
+                            See Demo
+                        </div>
+                        <Field
+                            name="email"
+                            component={renderTextField}
+                            label="Work Email*"
+                            validate={emailValidate}
+                        /><br/>
+                        <RaisedButton
+                            label="Continue"
+                            type="submit"
+                            className="raisedButtonBusinessHome"
+                            style={{marginTop: '20px'}}
+                        />
+                    </form>
+                }
+                </div>
+                :
+                <div>
+                    <YouTube
+                        videoId="m4_M9onXmpY"
+                        opts={opts}
+                        onReady={this._onReady}
+                        onEnd={this._onEnd}
+                    />
+                </div>
+            }
+            </Dialog>
+        );
 
         return (
             <div className={blurredClass}>
@@ -284,6 +382,7 @@ class BusinessHome extends Component {
                     <title>Moonshot</title>
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
                 </MetaTags>
+                {demoDialog}
                 <Dialog
                     actions={actions}
                     modal={false}
@@ -377,12 +476,12 @@ class BusinessHome extends Component {
                     <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
                         <div className="content">
                             <h1 className="bigTitle font46px font38pxUnder900 font28pxUnder400" style={{color:"#72d6f5"}}>Know who to hire.</h1>
-                            <p className="infoText notFull">Predict candidate performance based on employees at your company and companies with similar positions.</p>
+                            <p className="infoText notFull">Predict candidate performance so that you can hire the best people for your team, faster.</p>
                             <div className="buttonArea font18px font14pxUnder900">
                                 <input className="blackInput getStarted" type="text" placeholder="Email Address" name="email"
                                 value={this.state.email} onChange={this.onChange.bind(this)}/>
-                                <div className="mediumButton getStarted blueToPurple" onClick={this.handleOpen}>
-                                    Get Started
+                                <div className="mediumButton getStarted blueToPurple" onClick={this.handleDemoOpen}>
+                                    See Demo
                                 </div>
                             </div>
                             <div className="infoText i flex font12pxUnder400">
@@ -707,7 +806,8 @@ class BusinessHome extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        forBusiness
+        forBusiness,
+        demoEmail
     }, dispatch);
 }
 
@@ -721,7 +821,6 @@ function mapStateToProps(state) {
 
 BusinessHome = reduxForm({
     form: 'forBusiness',
-    validate,
     enableReinitialize: true,
 })(BusinessHome);
 
