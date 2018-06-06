@@ -67,6 +67,7 @@ app.post("/user/resetFrizz", userApis.POST_resetFrizz);
 app.post("/user/reset24", userApis.POST_reset24);
 
 app.post('/user/submitFreeResponse', userApis.POST_submitFreeResponse);
+app.post("/user/addPositionEval", userApis.POST_addPositionEval);
 app.post('/user/startPositionEval', userApis.POST_startPositionEval);
 app.post('/user/continuePositionEval', userApis.POST_continuePositionEval);
 app.post('/user/startPsychEval', userApis.POST_startPsychEval);
