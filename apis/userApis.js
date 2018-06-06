@@ -297,7 +297,7 @@ async function POST_submitFreeResponse(req, res) {
     userPosition.freeResponseQuestions = frqs;
 
     // make sure the updated position is saved to the user
-    user.positions[positionIndex] = userPosition;
+    user.positions[userPositionIndex] = userPosition;
 
     // user is no longer taking a position evaluation
     user.positionInProgress = undefined;
@@ -498,8 +498,9 @@ async function addEvaluation(user, business, positionId) {
                 // this assumes the user won't have any in-progress skill tests when they
                 // start a position evaluation
                 let testIndex = 0;
-                let skillTests = [];
+                let skillTestIds = [];
                 let userSkillTests = user.skillTests;
+                console.log("position.skills: ", position.skills);
                 position.skills.forEach(skillId => {
                     // if the user has already completed this skill test ...
                     if (userSkillTests.some(completedSkill => {
@@ -507,13 +508,13 @@ async function addEvaluation(user, business, positionId) {
                     })) {
                         // ... add it to the front of the list and increase test index so we
                         // know to skip it
-                        skillTests.unshift(skillId);
+                        skillTestIds.unshift(skillId);
                         testIndex++;
                     }
 
                     // if the user hasn't already completed this skill test, just add it
                     // to the end of the array
-                    else { skillTests.push(skillId); }
+                    else { console.log("did not complete skill: ", skillId); skillTestIds.push(skillId); }
                 });
 
                 // see if the user has already finished the psych analysis
@@ -521,7 +522,7 @@ async function addEvaluation(user, business, positionId) {
 
                 // if we're trying to take a test that is past the number of tests we
                 // have, we must be done with all the skill tests
-                const doneWithSkillTests = testIndex === skillTests.length;
+                const doneWithSkillTests = testIndex === skillTestIds.length;
 
                 // see if there are no frqs in this evaluation
                 const noFrqs = frqsForUser.length === 0;
@@ -541,7 +542,7 @@ async function addEvaluation(user, business, positionId) {
                     appliedEndDate,
                     // no scores have been calculated yet
                     scores: undefined,
-                    skillTests,
+                    skillTestIds,
                     testIndex,
                     freeResponseQuestions: frqsForUser
                 }
@@ -668,11 +669,19 @@ async function POST_startPositionEval(req, res) {
         }
 
         // save the user and business and return on success
-        let savedUser = false;
-        let savedBusiness = false;
+        let userSaved = false;
+        let businessSaved = false;
         try {
-            user.save().then(savedUser => { user = savedUser; userSaved = true; finish(); }).catch(e => { throw e });
-            business.save().then(savedBiz => { businessSaved = true; finish(); }).catch(e => { throw e });
+            user.save().then(savedUser => {
+                user = savedUser;
+                userSaved = true;
+                finish();
+            }).catch(e => { throw e });
+
+            business.save().then(savedBiz => {
+                businessSaved = true;
+                finish();
+            }).catch(e => { throw e });
         } catch (saveError) {
             console.log("Error saving user or business when adding a position evaluation.");
             return res.status(500).send("Server error.")
@@ -680,7 +689,7 @@ async function POST_startPositionEval(req, res) {
 
         // when the business and user have both been saved, return successfully
         function finish() {
-            if (userSaved && businessSaved) { res.json({updatedUser: frontEndUser(updatedUser), finished, nextUrl}); }
+            if (userSaved && businessSaved) { res.json({updatedUser: frontEndUser(user), finished, nextUrl}); }
         }
     }
 }

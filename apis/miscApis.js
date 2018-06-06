@@ -111,8 +111,7 @@ function POST_createReferralCode(req, res) {
         else {
             // if the user already has a referral code, give them that
             sendReferralEmail(user.referralCode);
-            //res.json(user.referralCode);
-            return res.json("jangus");
+            res.json(user.referralCode);
         }
     });
 }

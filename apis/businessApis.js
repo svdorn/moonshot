@@ -14,7 +14,8 @@ const { sanitize,
         safeUser,
         userForAdmin,
         getFirstName,
-        frontEndUser
+        frontEndUser,
+        NO_TOKENS
 } = require('./helperFunctions.js');
 
 
@@ -801,7 +802,7 @@ function GET_candidateSearch(req, res) {
                 }
 
                 // if the candidate made it past all the search terms, add them
-                candidatesToReturn.push(candidate);
+                candidatesToReturn.push(frontEndUser(candidate, NO_TOKENS));
             });
 
             res.json(candidatesToReturn);

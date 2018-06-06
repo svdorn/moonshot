@@ -17,7 +17,8 @@ const { sanitize,
         userForAdmin,
         getFirstName,
         sendBizUpdateCandidateErrorEmail,
-        frontEndUser
+        frontEndUser,
+        NO_TOKENS
 } = require('./helperFunctions.js');
 
 // get function to start position evaluation
@@ -355,7 +356,7 @@ function POST_candidate(req, res) {
         // no reason to return the user with tokens because
         // they will have to verify themselves before they
         // can do anything anyway
-        res.json(safeUser(user));
+        res.json(frontEndUser(user, NO_TOKENS));
     }
 }
 
@@ -444,7 +445,7 @@ function POST_endOnboarding(req, res) {
 
     Users.findOneAndUpdate(query, update, options, function (err, updatedUser) {
         if (!err && updatedUser) {
-            res.json(removePassword(updatedUser));
+            res.json(frontEndUser(updatedUser));
         } else {
             res.status(500).send("Error ending onboarding.");
         }
@@ -817,14 +818,14 @@ async function POST_completePathway(req, res) {
                 const sendFrom = "Moonshot";
                 sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
                     if (success) {
-                        return res.json({message: successMessage, user: userToReturn});
+                        return res.json({message: successMessage, user: frontEndUser(userToReturn)});
                     } else {
                         return res.status(500).send({message: errorMessage, user: userToReturn});
                     }
                 });
             } else {
                 // if not in production, just send success message to user
-                return res.json({message: successMessage, user: userToReturn});
+                return res.json({message: successMessage, user: frontEndUser(userToReturn)});
             }
         });
     }

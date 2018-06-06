@@ -147,14 +147,14 @@ class SkillTest extends Component {
     finishTest() {
         // if the user is taking a position evaluation, go to the next step of that
         const user = this.props.currentUser;
-        const positionInProgress = user.positionInProgress;
-        if (positionInProgress) {
+        const currentPosition = user.currentPosition;
+        if (currentPosition) {
             // if there are skill tests the user still has to take, go to that skill test
-            if (positionInProgress.skillTests && positionInProgress.testIndex < positionInProgress.skillTests.length) {
-                this.goTo(`/skillTest/${positionInProgress.skillTests[positionInProgress.testIndex]}`);
+            if (currentPosition.skillTests && currentPosition.testIndex < currentPosition.skillTests.length) {
+                this.goTo(`/skillTest/${currentPosition.skillTests[currentPosition.testIndex]}`);
             }
             // otherwise, if there are free response questions to answer, go there
-            else if (positionInProgress.freeResponseQuestions && positionInProgress.freeResponseQuestions.length > 0) {
+            else if (currentPosition.freeResponseQuestions && currentPosition.freeResponseQuestions.length > 0) {
                 this.goTo("/freeResponse");
             }
             // otherwise, the user is done with the test; go home and give them

@@ -16,10 +16,10 @@ class FreeResponse extends Component {
         // in order to have any questions to answer
         const currentUser = props.currentUser;
         if (!currentUser ||
-            !currentUser.positionInProgress ||
-             currentUser.positionInProgress === false ||
-            !currentUser.positionInProgress.freeResponseQuestions ||
-             currentUser.positionInProgress.freeResponseQuestions.length === 0
+            !currentUser.currentPosition ||
+             currentUser.currentPosition === false ||
+            !currentUser.currentPosition.freeResponseQuestions ||
+             currentUser.currentPosition.freeResponseQuestions.length === 0
         ) {
             this.goTo("/");
         }
@@ -27,7 +27,7 @@ class FreeResponse extends Component {
 
         // the object that will hold all the responses
         let frqs = {};
-        currentUser.positionInProgress.freeResponseQuestions.forEach(frq => {
+        currentUser.currentPosition.freeResponseQuestions.forEach(frq => {
             frqs[frq.questionId] = {
                 questionIndex: frq.questionIndex,
                 body: frq.body,
@@ -102,7 +102,7 @@ class FreeResponse extends Component {
         }
 
         // get the list of questions
-        const frqList = this.props.currentUser.positionInProgress.freeResponseQuestions;
+        const frqList = this.props.currentUser.currentPosition.freeResponseQuestions;
         // make the questions that will show up and can be answered
         const freeResponseQuestions = frqList.map(frq => {
             return (

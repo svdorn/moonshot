@@ -48,7 +48,7 @@ function POST_answerSkillQuestion(req, res) {
         }
 
         user = foundUser;
-        recordAnswerAndGetNewQuestion();
+        recordAnswer();
     })
     .catch(findUserErr => {
         console.log("Error finding user in the db when trying to get a skill by url: ", findUserErr);
@@ -61,7 +61,7 @@ function POST_answerSkillQuestion(req, res) {
     .then(foundSkill => {
         if (foundSkill) {
             skill = foundSkill;
-            recordAnswerAndGetNewQuestion();
+            recordAnswer();
         }
         else { throw "Couldn't find skill using url as id."; }
     })
@@ -71,7 +71,7 @@ function POST_answerSkillQuestion(req, res) {
         .then(foundSkills => {
             if (foundSkills.length === 0 || !foundSkills[0]) { return res.status(404).send("Invalid skill."); }
             skill = foundSkills[0];
-            recordAnswerAndGetNewQuestion();
+            recordAnswer();
         })
         .catch(findSkillErr => {
             console.log("Error finding skill by url: ", findSkillErr);
@@ -79,7 +79,7 @@ function POST_answerSkillQuestion(req, res) {
         })
     });
 
-    async function recordAnswerAndGetNewQuestion() {
+    async function recordAnswer() {
         if (!user || !skill) { return }
 
         // see if user has already taken this test/is currently taking it
@@ -210,7 +210,7 @@ function POST_answerSkillQuestion(req, res) {
             return res.status(500).send("Server error.");
         }
 
-        res.json({updatedUser: user, question: currentQuestionToReturn, skillName: skill.name, finished: false});
+        res.json({updatedUser: frontEndUser(user), question: currentQuestionToReturn, skillName: skill.name, finished: false});
     }
 
     async function finishTest(userSkill, userSkillIndex, attempt, attemptIndex) {
@@ -239,8 +239,8 @@ function POST_answerSkillQuestion(req, res) {
                 return pos.positionId.toString() === user.positionInProgress.toString();
             });
             // if the position in progress is one that the user actually signed up for
-            if (typeof positionIndex === "number" && positionIndex > 0) {
-                // get the actual position, not just the id
+            if (typeof positionIndex === "number" && positionIndex >= 0) {
+                // get the actual user position, not just the id
                 let position = user.positions[positionIndex];
 
                 // see if the position in progress includes this skill test
@@ -319,7 +319,7 @@ function POST_answerSkillQuestion(req, res) {
             return res.status(500).send("Server error.");
         }
 
-        return res.json({finished: true, updatedUser: removePassword(user)});
+        return res.json({finished: true, updatedUser: frontEndUser(user)});
     }
 }
 
@@ -483,7 +483,7 @@ function POST_startOrContinueTest(req, res) {
                     console.log("Error saving user when starting skill test: ", saveErr);
                 }
 
-                return res.json({question:questionToReturn, skillName: skill.name, finished: false});
+                return res.json({question: questionToReturn, skillName: skill.name, finished: false});
             }
 
             // get the question the user left off on

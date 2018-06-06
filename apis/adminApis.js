@@ -122,8 +122,7 @@ async function POST_business(req, res) {
             // error looking for user by email
             if (findUserErr) {
                 console.log("Error looking for a user by email: ", findUserErr);
-                res.json("Successful business creation, but couldn't create initial user.");
-                return;
+                return res.json("Successful business creation, but couldn't create initial user.");
             }
             // user found with that email so can't create it
             else if (foundUser) {

@@ -67,26 +67,34 @@ function frontEndUser(dbUser, extraFieldsToRemove) {
     }
 
     // clean the psychometric test
-    const currentQuestion = newUser.psychometricTest.currentQuestion;
-    let cleanPsychTest = {
-        currentQuestion: {
-            body: currentQuestion.body,
-            leftOption: currentQuestion.leftOption,
-            rightOption: currentQuestion.rightOption,
-            questionId: currentQuestion.questionId
-        },
-        inProgress: newUser.psychometricTest.inProgress
-    };
+    let cleanPsychTest = undefined;
+    if (newUser.psychometricTest) {
+        cleanPsychTest = {};
+        if (newUser.psychometricTest.inProgress) {
+            cleanPsychTest.inProgress = newUser.psychometricTest.inProgress;
+        }
+        const currentQuestion = newUser.psychometricTest.currentQuestion;
+        // only applies if the user is currently taking the test
+        if (currentQuestion && typeof currentQuestion === "object") {
+            cleanPsychTest.currentQuestion = {
+                body: currentQuestion.body,
+                leftOption: currentQuestion.leftOption,
+                rightOption: currentQuestion.rightOption,
+                questionId: currentQuestion.questionId
+            }
+
+        }
+    }
 
     // if the user is currently applying for a position
     let currentPosition = undefined;
     if (newUser.positionInProgress) {
         // find the index of the position the user is
         const positionInProgressString = newUser.positionInProgress.toString();
-        const positionIndex = user.positions.findIndex(pos => {
+        const positionIndex = newUser.positions.findIndex(pos => {
             return pos.positionId.toString() === positionInProgressString;
         });
-        position = user.positions[positionIndex];
+        position = newUser.positions[positionIndex];
 
         currentPosition = {
             inProgress: true,
@@ -608,6 +616,7 @@ const helperFunctions = {
     sendBizUpdateCandidateErrorEmail,
     removeDuplicates,
     randomInt,
+    frontEndUser,
 
     COMPLETE_CLEAN,
     NO_TOKENS
