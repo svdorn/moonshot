@@ -117,7 +117,6 @@ export function positionSignup(userId, verificationToken, positionId, businessId
             if (response.data.finished) {
                 console.log("All parts already answered!");
             } else {
-                console.log("Here");
                 browserHistory.push(response.data.nextUrl);
                 window.scrollTo(0, 0);
             }

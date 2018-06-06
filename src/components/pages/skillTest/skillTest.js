@@ -125,7 +125,6 @@ class SkillTest extends Component {
             axios.post("/api/skill/answerSkillQuestion", params)
             .then(result => {
                 this.props.newCurrentUser(result.data.updatedUser);
-                console.log("updatedUser: ", result.data.updatedUser);
                 let question = undefined;
                 if (result.data.question) {
                     question = result.data.question;
@@ -135,7 +134,7 @@ class SkillTest extends Component {
                     selectedId: undefined,
                     finished: result.data.finished,
                     question
-                }, () => console.log("state is: ", this.state));
+                });
             })
             .catch(error => {
                 console.log("error saving answer: ", error);

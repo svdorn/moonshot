@@ -17,7 +17,6 @@ import BusinessProfile from './components/pages/businessPages/businessProfile';
 import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import BusinessHome from './components/pages/businessHome';
-import BusinessHomeParts from './components/pages/businessHomeParts';
 import Main from './main';
 import AuthenticatedComponent from './components/AuthenticatedComponent';
 import Home from './components/pages/home';

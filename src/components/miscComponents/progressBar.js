@@ -20,9 +20,6 @@ class ProgressBar extends Component {
         const SKILL_EVAL = "Skill Evaluation";
         const FREE_RESPONSE = "Free Response";
 
-
-        console.log("currentUser: ", currentUser);
-
         let numSteps = 1;
         if (currentPosition.skillTests) {
             numSteps += currentPosition.skillTests.length;
@@ -50,8 +47,6 @@ class ProgressBar extends Component {
             stepNumber = numSteps;
             stepName = FREE_RESPONSE;
         }
-
-        console.log("step number is: ", stepNumber);
 
         const rAlways = 255;
         const gStart = 37;
