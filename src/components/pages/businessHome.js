@@ -11,6 +11,16 @@ import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } 
 import {Field, reduxForm} from 'redux-form';
 import YouTube from 'react-youtube';
 
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
+
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
+};
+
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
@@ -20,6 +30,22 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         errorText={touched && error}
         {...input}
         {...custom}
+    />
+);
+
+const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
+        {...input}
+        {...custom}
+        type="password"
     />
 );
 
@@ -36,6 +62,7 @@ class BusinessHome extends Component {
             open: false,
             demoOpen: false,
             demoScreen: 1,
+            dialogScreen: 1,
             email: '',
             // initially don't show the rectangles in case the user's browser is old
             showRectangles: false
@@ -151,6 +178,20 @@ class BusinessHome extends Component {
         this.setState({demoScreen: 2});
     }
 
+    handleNextScreen = () => {
+        const dialogScreen = this.state.dialogScreen + 1;
+        if (dialogScreen > 0 && dialogScreen < 6) {
+            this.setState({dialogScreen})
+        }
+    }
+
+    handlePreviousScreen = () => {
+        const dialogScreen = this.state.dialogScreen - 1;
+        if (dialogScreen > 0 && dialogScreen < 6) {
+            this.setState({dialogScreen})
+        }
+    }
+
 
     render() {
         const opts = {
@@ -172,14 +213,12 @@ class BusinessHome extends Component {
             return (<img alt={`${img.partner} Logo`} key={img.partner+"logo"} className="partnerLogo" src={`/logos/${img.src}`} />);
         });
 
-        const style = {
-            bottomListItem: {
+        const bottomListItem = {
                 width: '35%',
                 margin: 'auto',
                 display: 'inline-block',
                 top: '0',
                 verticalAlign: 'top',
-            },
         };
 
         const actions = [
@@ -381,6 +420,100 @@ class BusinessHome extends Component {
             </Dialog>
         );
 
+        // Set the body of the dialog to be the current screen
+        const screen = this.state.dialogScreen;
+        let dialogBody = <div></div>;
+        switch(screen) {
+            case 1:
+                dialogBody = (
+                    <form onSubmit={this.handleSubmit.bind(this)} className="center">
+                        <div
+                            className="whiteTextImportant font22px font20pxUnder700 font18pxUnder500 marginTop10px">
+                            Get Started
+                        </div>
+                        <Field
+                            name="email"
+                            component={renderTextField}
+                            label="Work Email*"
+                            validate={[required, emailValidate]}
+                        /><br/>
+                        <RaisedButton
+                            label="Continue"
+                            onClick={this.handleNextScreen}
+                            className="raisedButtonBusinessHome"
+                            style={{marginTop: '20px'}}
+                            />
+                    </form>
+                );
+                break;
+            case 2:
+                dialogBody = (
+                    <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
+                        <div
+                            className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
+                            Get Started
+                        </div>
+                        <div className="whiteText font14px font12pxUnder500" style={{width: "95%", margin: "10px auto"}}>
+                            No credit card required. Customized position assessment.
+                        </div>
+                        <Field
+                            name="name"
+                            component={renderTextField}
+                            label="Full Name*"
+                            validate={[required]}
+                        /><br/>
+                        <Field
+                            name="email"
+                            component={renderTextField}
+                            label="Work Email*"
+                            validate={[required, emailValidate]}
+                        /><br/>
+                        <Field
+                            name="password"
+                            component={renderTextField}
+                            label="Password*"
+                            validate={[required]}
+                        /><br/>
+                        <Field
+                            name="confirmPassword"
+                            component={renderTextField}
+                            label="Confirm Password*"
+                            validate={[required]}
+                        /><br/>
+                        <RaisedButton
+                            label="Continue"
+                            onClick={this.handleNextScreen}
+                            className="raisedButtonBusinessHome"
+                            style={{marginTop: '20px'}}
+                        />
+                    </form>
+                );
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            default:
+                break;
+        }
+
+        const dialog = (
+            <Dialog
+                actions={actions}
+                modal={false}
+                open={this.state.open}
+                onRequestClose={this.handleClose}
+                autoScrollBodyContent={true}
+                paperClassName="dialogForBiz"
+                contentClassName="center"
+                overlayClassName="dialogOverlay"
+            >
+                {dialogBody}
+            </Dialog>
+        );
+
         return (
             <div className={blurredClass}>
                 <MetaTags>
@@ -388,74 +521,7 @@ class BusinessHome extends Component {
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
                 </MetaTags>
                 {demoDialog}
-                <Dialog
-                    actions={actions}
-                    modal={false}
-                    open={this.state.open}
-                    onRequestClose={this.handleClose}
-                    autoScrollBodyContent={true}
-                    paperClassName="dialogForBiz"
-                    contentClassName="center"
-                    overlayClassName="dialogOverlay"
-                >
-                    {this.props.notification ?
-                        <div className="center font20px font16pxUnder400 whiteText">
-                            {this.props.notification.message}
-                            <br />
-                            <img
-                                className="footerMoonshotLogo marginTop40px"
-                                alt="Moonshot Logo"
-                                title="Moonshot Logo"
-                                src="/images/OfficialLogoWhite.png"/>
-                        </div>
-                        :
-                        <div>
-                        {this.props.loadingEmailSend ?
-                            <div className="center"><CircularProgress className="marginTop40px"/></div>
-                            : <form onSubmit={this.handleSubmit.bind(this)} className="center">
-                                <div
-                                    className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
-                                    Predict Candidate Success
-                                </div>
-                                <Field
-                                    name="name"
-                                    component={renderTextField}
-                                    label="Full Name*"
-                                    style={{marginTop: '1px'}}
-                                /> <br/>
-                                <Field
-                                    name="email"
-                                    component={renderTextField}
-                                    label="Email*"
-                                /><br/>
-                                <Field
-                                    name="company"
-                                    component={renderTextField}
-                                    label="Company"
-                                /><br/>
-                                <Field
-                                    name="phone"
-                                    component={renderTextField}
-                                    label="Phone Number"
-                                /><br/>
-                                <RaisedButton
-                                    label="Send"
-                                    type="submit"
-                                    className="raisedButtonBusinessHome"
-                                    style={{marginTop: '20px'}}
-                                />
-                                <br/>
-                                <div className="infoText i flex font12px whiteText center"
-                                     style={{margin: '10px auto', width: '250px'}}>
-                                    <div>Free for First Position</div>
-                                    <div>•</div>
-                                    <div>Unlimited Evaluations</div>
-                                </div>
-                            </form>
-                    }
-                        </div>
-                    }
-                </Dialog>
+                {dialog}
             <div className="blackBackground businessHome">
                 <div className="businessHome frontPage">
                     {this.state.showRectangles ?
@@ -625,7 +691,7 @@ class BusinessHome extends Component {
                                 Predictive Analytics Improve Hiring Results
                             </div>
                             <div>
-                                <div style={style.bottomListItem}>
+                                <div style={bottomListItem}>
                                     <img src="/images/businessHome/Hourglass.png"
                                          alt="Hourglass Icon"
                                          className="forBusinessIcon"
@@ -634,7 +700,7 @@ class BusinessHome extends Component {
                                         Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
                                     </div>
                                 </div>
-                                <div style={style.bottomListItem}>
+                                <div style={bottomListItem}>
                                     <img src="/images/businessHome/Diamond.png"
                                          alt="Diamond Icon"
                                          className="forBusinessIcon"
@@ -645,7 +711,7 @@ class BusinessHome extends Component {
                                 </div>
                             </div>
                             <div style={{marginTop: '40px'}}>
-                                <div style={style.bottomListItem}>
+                                <div style={bottomListItem}>
                                     <img src="/images/businessHome/Turnover.png"
                                          alt="Turnover Icon"
                                          className="forBusinessIcon"/>
@@ -653,7 +719,7 @@ class BusinessHome extends Component {
                                         Up to 70% decrease<div className="above1000only noHeight"><br/></div> in employee turnover
                                     </div>
                                 </div>
-                                <div style={style.bottomListItem}>
+                                <div style={bottomListItem}>
                                     <img src="/images/businessHome/Lightbulb4.png"
                                          alt="Lightbulb Icon"
                                          className="forBusinessIcon"/>
