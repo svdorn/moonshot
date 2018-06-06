@@ -59,7 +59,6 @@ class PsychAnalysis extends Component {
         // if the user is taking a position evaluation, go to the next step of that
         const user = this.props.currentUser;
         const currentPosition = user.currentPosition;
-        console.log("user: ", user);
         if (currentPosition) {
             // if there are skill tests the user still has to take, go to that skill test
             if (currentPosition.skillTests && currentPosition.testIndex < currentPosition.skillTests.length) {

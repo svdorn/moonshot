@@ -68,12 +68,29 @@ function frontEndUser(dbUser, extraFieldsToRemove) {
 
     // clean the psychometric test
     let cleanPsychTest = undefined;
-    if (newUser.psychometricTest) {
+    const psychTest = newUser.psychometricTest;
+    if (psychTest) {
         cleanPsychTest = {};
-        if (newUser.psychometricTest.inProgress) {
-            cleanPsychTest.inProgress = newUser.psychometricTest.inProgress;
+        if (psychTest.inProgress) {
+            cleanPsychTest.inProgress = psychTest.inProgress;
         }
-        const currentQuestion = newUser.psychometricTest.currentQuestion;
+
+        if (typeof psychTest.questionsPerFacet === "number" && Array.isArray(psychTest.factors)) {
+            // count the number of questions - questions/facet * number of facets
+            let numFacets = 0;
+            psychTest.factors.forEach(factor => {
+                if (factor && typeof factor === "object" && Array.isArray(factor.facets)) {
+                    numFacets += factor.facets.length;
+                }
+            });
+            cleanPsychTest.numQuestions = psychTest.questionsPerFacet * numFacets;
+        }
+
+        if (typeof psychTest.numQuestionsAnswered === "number") {
+            cleanPsychTest.numQuestionsAnswered = psychTest.numQuestionsAnswered;
+        }
+
+        const currentQuestion = psychTest.currentQuestion;
         // only applies if the user is currently taking the test
         if (currentQuestion && typeof currentQuestion === "object") {
             cleanPsychTest.currentQuestion = {

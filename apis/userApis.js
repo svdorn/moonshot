@@ -786,6 +786,13 @@ async function POST_answerPsychQuestion(req, res) {
     facets[facetIndex] = facet;
     factor.facets = facets;
 
+    // create the number of questions answered field if it doesn't exist
+    if (typeof psychometricTest.numQuestionsAnswered !== "number") {
+        psychometricTest.numQuestionsAnswered = 0;
+    }
+    // let the test know that another questions has been answered
+    psychometricTest.numQuestionsAnswered++;
+
     // check if the facet is done being tested for
     if (facet.responses.length === psychometricTest.questionsPerFacet) {
         const indexOfFacetIndexToRemove = factor.incompleteFacets.findIndex(incompleteFacetIndex => {

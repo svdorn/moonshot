@@ -16,6 +16,11 @@ class ProgressBar extends Component {
         const currentUser = this.props.currentUser;
         const currentPosition = currentUser.currentPosition;
 
+        const PSYCH_ANALYSIS = "Psychometric Analysis";
+        const SKILL_EVAL = "Skill Evaluation";
+        const FREE_RESPONSE = "Free Response";
+
+
         console.log("currentUser: ", currentUser);
 
         let numSteps = 1;
@@ -30,21 +35,23 @@ class ProgressBar extends Component {
         let stepName = "";
         // if user has not yet taken psych test or if they're currently taking it
         // they're on the first step
-        if (!currentUser.psychometricTest || currentUser.psychometricTest.inProgress) {
+        if (!currentUser.psychometricTest || (currentUser.psychometricTest && currentUser.psychometricTest.inProgress)) {
             stepNumber = 1;
-            stepName = "Psychometric Analysis";
+            stepName = PSYCH_ANALYSIS;
         }
         // if they are on a skills test, add 2 to the current skill test index
         // (one because index 0 would be the first one and another one because of the psych test)
         else if (currentPosition.skillTests && parseInt(currentPosition.testIndex, 10) < currentPosition.skillTests.length) {
             stepNumber = 2 + parseInt(currentPosition.testIndex, 10);
-            stepName = "Skill Evaluation";
+            stepName = SKILL_EVAL;
         }
         // otherwise user must be on the free response portion
         else {
             stepNumber = numSteps;
-            stepName = "Free Response";
+            stepName = FREE_RESPONSE;
         }
+
+        console.log("step number is: ", stepNumber);
 
         const rAlways = 255;
         const gStart = 37;
@@ -57,8 +64,13 @@ class ProgressBar extends Component {
         for (let stepCounter = 1; stepCounter <= numSteps; stepCounter++) {
             let amountFinished = 100;
             if (stepNumber === stepCounter) {
-                // TODO: MAKE THIS A LEGIT PERCENTAGE OF HOW MUCH IS DONE (0 - 100)
-                amountFinished = 0;
+                if (stepName === PSYCH_ANALYSIS) {
+                    const psychTest = currentUser.psychometricTest;
+                    amountFinished = (psychTest.numQuestionsAnswered / psychTest.numQuestions) * 100;
+                } else {
+                    // TODO: MAKE THIS A LEGIT PERCENTAGE OF HOW MUCH IS DONE (0 - 100)
+                    amountFinished = 0;
+                }
             }
             else if (stepNumber < stepCounter) {
                 amountFinished = 0;
@@ -105,11 +117,6 @@ class ProgressBar extends Component {
                 </div>
             </div>
         );
-    }
-
-    render() {
-        console.log("rendering progress bar");
-        return null;
     }
 }
 

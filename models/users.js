@@ -256,6 +256,8 @@ var usersSchema = mongoose.Schema({
         // for example, if factors in array positions 0 and 4 were complete,
         // the array would look like [ 1, 2, 3, 5, 6 ]
         incompleteFactors: [ Number ],
+        // how many questions in total in the test the user has answered
+        numQuestionsAnswered: Number,
         // current question that the user is on
         currentQuestion: {
             // the index of the factor within the user's factors array
