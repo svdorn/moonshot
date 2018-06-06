@@ -310,8 +310,8 @@ class BusinessHome extends Component {
                     </div>
                 </div>
                 <div className="center" style={{marginTop: "20px"}}>
-                    <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen}>
-                        Get Started
+                    <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleDemoOpen}>
+                        See Demo
                     </button>
                 </div>
             </section>
@@ -347,6 +347,9 @@ class BusinessHome extends Component {
                         <div
                             className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
                             See Demo
+                        </div>
+                        <div className="whiteText font16px font14pxUnder500" style={{width: "85%", margin: "10px auto"}}>
+                            A walkthrough of the employer and candidate experience in Moonshot Insights.
                         </div>
                         <Field
                             name="email"
