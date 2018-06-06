@@ -25,6 +25,8 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
 
 const emailValidate = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined;
 
+const required = value => (value ? undefined : 'This field is required.')
+
 class BusinessHome extends Component {
     constructor(props) {
         super(props);
@@ -355,7 +357,7 @@ class BusinessHome extends Component {
                             name="email"
                             component={renderTextField}
                             label="Work Email*"
-                            validate={emailValidate}
+                            validate={[required, emailValidate]}
                         /><br/>
                         <RaisedButton
                             label="Continue"
