@@ -140,10 +140,10 @@ function POST_answerSkillQuestion(req, res) {
             finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
         }
 
-        else { getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill); }
+        else { getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex); }
     }
 
-    async function getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill ) {
+    async function getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex) {
         // get a new question
         let newUserLevelIndex = userLevelIndex;
         // right answer and more levels exist
@@ -178,7 +178,10 @@ function POST_answerSkillQuestion(req, res) {
         let counter = 0;
         do {
             counter++;
-            if (counter > 100) { return res.status(500).send("Server error, couldn't find a question."); }
+            // if a question could not be found, finish the test
+            if (counter > 100) {
+                return finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
+            }
             questionIndex = randomInt(0, numTotalQuestions - 1);
             question = testLevelQuestions[questionIndex];
             questionId = question._id.toString();
