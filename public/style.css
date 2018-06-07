@@ -2010,19 +2010,28 @@ button.link {
 }
 
 .myEvalsBox {
+    position: relative;
     width: 70%;
     max-width: 1000px;
     height: 210px;
     margin: auto;
     padding: 20px;
     background-color: #333333 !important;
-    border-left: 2px solid #72d6f5;
     -moz-box-shadow:    0px 0px 50px 1px #00000073;
     -webkit-box-shadow: 0px 0px 50px 1px #00000073;
     box-shadow:         0px 0px 50px 1px #00000073;
     -moz-transition: -moz-box-shadow .2s;
     -webkit-transition: -webkit-transition .2s;
     transition: box-shadow .2s;
+}
+.myEvalsBox::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 3px;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(to bottom, #72d6f5, #9A73D9);
 }
 .myEvalsBox:hover {
     -moz-box-shadow:    0px 0px 50px 15px #00000073;
