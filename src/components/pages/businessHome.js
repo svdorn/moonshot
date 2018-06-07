@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
-import {forBusiness, demoEmail, dialogEmail} from '../../actions/usersActions';
+import {forBusiness, demoEmail, dialogEmail, dialogEmailScreen2} from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
@@ -38,7 +38,10 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
 
 const emailValidate = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined;
 
-const required = value => (value ? undefined : 'This field is required.')
+const required = value => (value ? undefined : 'This field is required.');
+
+const passwordsMatch = (value, allValues) => (
+  value !== allValues.password ? "Passwords don't match" : undefined);
 
 class BusinessHome extends Component {
     constructor(props) {
@@ -162,6 +165,40 @@ class BusinessHome extends Component {
         };
 
         this.props.dialogEmail(user);
+        this.handleNextScreen();
+    }
+
+    handleSubmitDialogEmailScreen2(e) {
+        e.preventDefault();
+        const vals = this.props.formData.forBusiness.values;
+
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'name',
+            'company',
+            'password',
+            'confirmPassword'
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
+
+        if (vals.password != vals.confirmPassword) {
+            return;
+        }
+
+        const user = {
+            name: this.props.formData.forBusiness.values.name,
+            company: this.props.formData.forBusiness.values.company,
+            password: this.props.formData.forBusiness.values.password
+        };
+
+        this.props.dialogEmailScreen2(user);
         this.handleNextScreen();
     }
 
@@ -463,7 +500,7 @@ class BusinessHome extends Component {
                 break;
             case 2:
                 dialogBody = (
-                    <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
+                    <form onSubmit={this.handleSubmitDialogEmailScreen2.bind(this)} className="center">
                         <div
                             className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
                             Get Started
@@ -493,11 +530,11 @@ class BusinessHome extends Component {
                             name="confirmPassword"
                             component={renderPasswordField}
                             label="Confirm Password*"
-                            validate={[required]}
+                            validate={[required, passwordsMatch]}
                         /><br/>
                         <RaisedButton
                             label="Continue"
-                            onClick={this.handleNextScreen}
+                            type="submit"
                             className="raisedButtonBusinessHome"
                             style={{marginTop: '20px'}}
                         />
@@ -894,7 +931,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         forBusiness,
         demoEmail,
-        dialogEmail
+        dialogEmail,
+        dialogEmailScreen2
     }, dispatch);
 }
 
