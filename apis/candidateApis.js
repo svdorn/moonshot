@@ -50,6 +50,9 @@ function POST_candidate(req, res) {
         let verifiedUniqueEmail = false;
         let createdLoginInfo = false;
 
+        // the date the position evaluation was assigned
+        let startDate = undefined;
+
         // make sure a user with this email doesn't already exist
         Users.find({email: user.email})
         .then(foundUsers => {
@@ -150,7 +153,7 @@ function POST_candidate(req, res) {
                 const candidateIndex = position.candidateCodes.findIndex(candidateCode => {
                     console.log("\n\ncode1: ", candidateCode);
                     console.log("\ncode2: ", uniqueCode);
-                    return candidateCode == uniqueCode;
+                    return candidateCode.code == uniqueCode;
                 });
                 const employeeIndex = position.employeeCodes.findIndex(employeeCode => {
                     return employeeCode == uniqueCode;
@@ -169,6 +172,8 @@ function POST_candidate(req, res) {
                     user.userType = "candidate";
                     oneTimeCodeIndex = candidateIndex;
                     oneTimeArray = position.candidateCodes;
+                    // get the date the evaluation was assigned
+                    startDate = position.candidateCodes[candidateIndex].startDate;
                 } else if (employeeIndex !== -1) {
                     user.userType = "employee";
                     oneTimeCodeIndex = employeeIndex;
@@ -296,7 +301,7 @@ function POST_candidate(req, res) {
 
             // add the evaluation to the user
             try {
-                let evalObj = await addEvaluation(user, business, position._id);
+                let evalObj = await addEvaluation(user, business, position._id, startDate);
                 user = evalObj.user;
                 // since the user is just signing up we know that the active
                 // position will be the only one available

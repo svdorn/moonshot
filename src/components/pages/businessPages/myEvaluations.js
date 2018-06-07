@@ -133,7 +133,7 @@ class MyEvaluations extends Component {
                     attributes.usersInProgress = position.usersInProgress;
                     attributes.length = position.length;
                     attributes.skills = position.skills;
-                    attributes.timeAllotted = timeAlloted;
+                    attributes.timeAllotted = position.timeAllotted;
                     attributes.logo = "MoonshotWhite.png";
                     attributes.company = "Moonshot";
                     attributes.name = position.name;
@@ -150,16 +150,16 @@ class MyEvaluations extends Component {
                     attributes.company = position.businessName;
                     attributes.businessId = position.businessId.toString();
                     attributes.positionId = position.positionId.toString();
+                    attributes.assignedDate = position.assignedDate;
+                    attributes.deadline = position.deadline;
+                    attributes.completedDate = position.completedDate;
                 }
 
                 return (
                     <li style={{marginTop: '15px'}}
                         key={key}
                     >
-                        <MyEvaluationsPreview
-                            timeAllotted={position.timeAllotted}
-                            {...attributes}
-                        />
+                        <MyEvaluationsPreview {...attributes} />
                     </li>
                 );
             });

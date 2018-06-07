@@ -72,8 +72,6 @@ var businessesSchema = mongoose.Schema({
         // to the business' code; the code candidates will use the full code when
         // they sign up to be automatically signed up for this position
         code: String,
-        // unique codes users use to sign up if it's a closed position
-        oneTimeCodes: [ String ],
         // if the position should be listed as one that candidates can apply for
         currentlyHiring: Boolean,
         // the skill tests a candidate must complete in order to apply
@@ -100,7 +98,12 @@ var businessesSchema = mongoose.Schema({
         // Code for the specific position
         code: String,
         // One-time use codes for candidates
-        candidateCodes: [String],
+        candidateCodes: [{
+            // the actual code
+            code: String,
+            // the date that will be shown for this user's evaluation start date
+            startDate: Date
+        }],
         // One-time use codes for employees
         employeeCodes: [String],
         // One-time use codes for managers

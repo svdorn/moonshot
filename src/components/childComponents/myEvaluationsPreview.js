@@ -36,6 +36,21 @@ class MyEvaluationsPreview extends Component {
     }
 
 
+    makeDatePretty(dateObjString) {
+        if (typeof dateObjString === "string" && dateObjString.length >= 10) {
+            const year = dateObjString.substring(0, 4);
+            let month = dateObjString.substring(5, 7);
+            let date = dateObjString.substring(8, 10);
+            // get rid of leading 0s
+            if (month.charAt(0) === "0") { month = month.charAt(1); }
+            if (date.charAt(0) === "0") { date = date.charAt(1); }
+            return `${month}/${date}/${year}`;
+        } else {
+            return "N/A";
+        }
+    }
+
+
     render() {
 
         let positionSkills = null;
@@ -83,7 +98,9 @@ class MyEvaluationsPreview extends Component {
             });
         }
 
+        let infoArea = null;
         let clickableArea = null;
+        let estimatedLenth = null;
         if (editing) {
             clickableArea = (
                 <div className="grayText font16px font14pxUnder800 marginTop10px">
@@ -98,12 +115,48 @@ class MyEvaluationsPreview extends Component {
                     </div>
                 </div>
             );
+
+            infoArea = (
+                <div className="blueTextHome font16px center myEvalsInfoRight">
+                    Time Allotted
+                    <div className="whiteText marginBottom10px">{this.props.timeAllotted} Days</div>
+                    Completions
+                    <div className="whiteText marginBottom10px">{this.props.completions} Users</div>
+                    In Progress
+                    <div className="whiteText">{this.props.usersInProgress} Users</div>
+                </div>
+            );
+
+            estimatedLength = (
+                <div className="whiteText font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom20px">Estimated Length:
+                    <div className="blueTextHome" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
+                </div>
+            );
         } else {
-            clickableArea = (
-                <div className="grayText font16px font14pxUnder800 marginTop10px">
-                    <div onClick={this.continueEval} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
-                        Start/Continue
+            if (this.props.completedDate) {
+                clickableArea = (
+                    <div className="grayText font16px font14pxUnder800 marginTop10px">
+                        Complete
                     </div>
+                )
+            } else {
+                clickableArea = (
+                    <div className="grayText font16px font14pxUnder800 marginTop10px">
+                        <div onClick={this.continueEval} className="clickable underline" style={{display: "inline-block"}}>
+                            Start/Continue
+                        </div>
+                    </div>
+                );
+            }
+
+            infoArea = (
+                <div className="blueTextHome font16px center myEvalsInfoRight">
+                    Assigned
+                    <div className="whiteText marginBottom10px">{this.makeDatePretty(this.props.assignedDate)}</div>
+                    Deadline
+                    <div className="whiteText marginBottom10px">{this.makeDatePretty(this.props.deadline)}</div>
+                    Completed
+                    <div className="whiteText">{this.makeDatePretty(this.props.completedDate)}</div>
                 </div>
             );
         }
@@ -117,20 +170,11 @@ class MyEvaluationsPreview extends Component {
                 <div className="verticalDivider"/>
 
                 <div className="myEvalsInfo" style={{display: 'inline-block'}}>
-                    <div className="blueTextHome font16px center myEvalsInfoRight">
-                        Time Allotted
-                        <div className="whiteText marginBottom10px">{this.props.timeAllotted} Days</div>
-                        Completions
-                        <div className="whiteText marginBottom10px">{this.props.completions} Users</div>
-                        In Progress
-                        <div className="whiteText">{this.props.usersInProgress} Users</div>
-                    </div>
+                    {infoArea}
                     <div className="font18px font16pxUnder800 blueTextHome">{this.props.name}</div>
                     <div className="grayText">{this.props.company} Evaluation</div>
-                    <div className="whiteText font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom20px">Estimated Length:
-                        <div className="blueTextHome" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
-                    </div>
-                    {positionSkills}
+                    {editing ? estimatedLength : null}
+                    {editing ? positionSkills : null}
                     {clickableArea}
                 </div>
             </div>

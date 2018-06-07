@@ -459,6 +459,10 @@ async function POST_continuePositionEval(req, res) {
             console.log("user finished eval!");
             // this position is NOT the one in progress cuz it's done
             user.positionInProgress = undefined;
+            // if the position doesn't have an end date, end it now
+            if (!position.appliedEndDate) {
+                user.positions[userPositionIndex].appliedEndDate = new Date();
+            }
         }
 
         // save the user's new info
@@ -543,7 +547,7 @@ async function POST_addPositionEval(req, res) {
 
 // returns object: {user: userObject, business: businessObject, finished: Boolean, userPositionIndex: Number}
 // DOESN'T SAVE THE TWO, MUST BE SAVED IN CALLING FUNCTION
-async function addEvaluation(user, business, positionId) {
+async function addEvaluation(user, business, positionId, startDate) {
     return new Promise(async function(resolve, reject) {
         try {
             console.log("Adding evaluation.");
@@ -590,7 +594,7 @@ async function addEvaluation(user, business, positionId) {
             // if so, return successfully because the evaluation has already been added
             if (userHasPosition) {
                 // find out if the user finished the position by seeing if there's an end date
-                const finishedWithEval = user.positions[userPositionIndex].endDate != undefined;
+                const finishedWithEval = user.positions[userPositionIndex].appliedEndDate != undefined;
                 resolve({ user, business, finished: finishedWithEval, userPositionIndex });
             }
             // if not, give them the position with all starting info
@@ -623,7 +627,6 @@ async function addEvaluation(user, business, positionId) {
                 let testIndex = 0;
                 let skillTestIds = [];
                 let userSkillTests = user.skillTests;
-                console.log("position.skills: ", position.skills);
                 position.skills.forEach(skillId => {
                     // if the user has already completed this skill test ...
                     if (userSkillTests.some(completedSkill => {
@@ -655,6 +658,24 @@ async function addEvaluation(user, business, positionId) {
                 const finished = hasTakenPsychTest && doneWithSkillTests && noFrqs;
                 const appliedEndDate = finished ? now : undefined;
 
+                // get the assigned date from the function call
+                const assignedDate = startDate;
+                let deadline = undefined;
+                // if a start date was assigned, figure out the deadline
+                if (assignedDate) {
+                    const daysAllowed = position.timeAllotted;
+                    if (daysAllowed != undefined) {
+                        const year = assignedDate.getFullYear();
+                        const month = assignedDate.getMonth();
+                        const day = assignedDate.getDate() + daysAllowed;
+                        // always sets the due date to be 11:59pm the day it's due
+                        const hour = 23;
+                        const minute = 59;
+                        const second = 59;
+                        deadline = new Date(year, month, day, hour, minute, second);
+                    }
+                }
+
                 // starting info about the position
                 const newPosition = {
                     businessId: business._id,
@@ -663,6 +684,8 @@ async function addEvaluation(user, business, positionId) {
                     hiringStageChanges: [{ hiringStage: initialHiringStage, dateChanged: now }],
                     appliedStartDate: now,
                     appliedEndDate,
+                    assignedDate,
+                    deadline,
                     // no scores have been calculated yet
                     scores: undefined,
                     skillTestIds,
@@ -740,11 +763,9 @@ async function POST_startPositionEval(req, res) {
             return res.status(500).send("Server error.");
         }
 
-        // start the evaluation by setting the position in progress to this one
-        user.positionInProgress = positionId;
-
         // where the user should be redirected
         let nextUrl;
+
         // if the user has finished the evaluation just by hitting apply
         if (finished) {
             // go home if the evaluation is done
@@ -754,6 +775,9 @@ async function POST_startPositionEval(req, res) {
 
         // if the user has to do some steps in the evaluation still
         else {
+            // start the evaluation by setting the position in progress to this one
+            user.positionInProgress = positionId;
+
             // the position that was just added to the user object
             let userPosition = user.positions[userPositionIndex];
 
@@ -972,6 +996,10 @@ async function POST_answerPsychQuestion(req, res) {
             if (applicationComplete) {
                 // user is no longer taking a position evaluation
                 user.positionInProgress = undefined;
+                // if the position doesn't have an end date, end it now
+                if (!userPosition.appliedEndDate) {
+                    user.positions[userPositionIndex].appliedEndDate = new Date();
+                }
 
                 let business;
                 try {
@@ -1659,17 +1687,24 @@ async function GET_positions(req, res) {
         // need an array of all the position ids for the query
         positions.forEach(position => {
             const businessId = position.businessId;
+            // the info needed on the front end about the position that the user has
+            const positionInfo = {
+                positionId: position.positionId.toString(),
+                assignedDate: position.assignedDate,
+                deadline: position.deadline,
+                completedDate: position.appliedEndDate
+            };
             // if this businessId has not already been added to the array ...
             if (usedBusinessIds[businessId] === undefined) {
                 // ... add it ...
                 businessIds.push(mongoose.Types.ObjectId(businessId));
-                // ... and mark it as being added by adding the current position
-                usedBusinessIds[businessId] = [ position.positionId.toString() ];
+                // ... and mark it as being added by adding the current position information
+                usedBusinessIds[businessId] = [ positionInfo ];
             }
 
-            // otherwise, just add the position to the array for later
+            // otherwise, just add the position info to the array for later
             else {
-                usedBusinessIds[businessId].push(position.positionId.toString());
+                usedBusinessIds[businessId].push(positionInfo);
             }
         });
 
@@ -1690,16 +1725,24 @@ async function GET_positions(req, res) {
         businesses.forEach(business => {
             // go through each position for that business
             business.positions.forEach(bizPosition => {
+                const validPositions = usedBusinessIds[business._id.toString()]
+
+                const positionIndex = validPositions.findIndex(pos => {
+                    return pos.positionId === bizPosition._id.toString();
+                });
+
                 // if this position is one the user is applying/has applied to...
-                const validPositionIds = usedBusinessIds[business._id.toString()]
-                if (validPositionIds.includes(bizPosition._id.toString())) {
-                    // ... add the position to the list of positions to return
+                if (positionIndex >= 0) {
+                    // ... and add the position to the list of positions to return
                     positionsToReturn.push({
                         businessName: business.name,
                         businessLogo: business.logo,
                         businessId: business._id,
                         positionName: bizPosition.name,
-                        positionId: bizPosition._id
+                        positionId: bizPosition._id,
+                        assignedDate: validPositions[positionIndex].assignedDate,
+                        deadline: validPositions[positionIndex].deadline,
+                        completedDate: validPositions[positionIndex].completedDate
                     })
                 }
             });

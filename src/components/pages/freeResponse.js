@@ -6,6 +6,7 @@ import { browserHistory } from "react-router";
 import { submitFreeResponse } from "../../actions/usersActions";
 import { CircularProgress } from "material-ui";
 import ProgressBar from '../miscComponents/progressBar';
+import MetaTags from "react-meta-tags";
 
 
 class FreeResponse extends Component {
@@ -120,6 +121,10 @@ class FreeResponse extends Component {
 
         return (
             <div className="blackBackground fillScreen whiteText" style={{paddingBottom: "60px"}}>
+                <MetaTags>
+                    <title>Free Response | Moonshot</title>
+                    <meta name="description" content={"Answer some free response questions to finish your position evaluation."} />
+                </MetaTags>
                 <div className="employerHeader" />
                 <ProgressBar />
                 <div className="freeResponseQuestions">

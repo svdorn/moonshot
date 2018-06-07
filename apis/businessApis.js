@@ -72,15 +72,19 @@ function POST_emailInvites(req, res) {
         // Add the position code onto the end of the code
         code = code.toString().concat(position.code);
 
+        // get current date - used for candidate code start dates
+        const now = new Date();
+
         // Send candidate emails
         for (let i = 0; i < candidateEmails.length; i++) {
             // add code to the position
             const userCode = crypto.randomBytes(64).toString('hex');
+            const codeObj = { code: userCode, startDate: now };
             if (position.candidateCodes) {
-                position.candidateCodes.push(userCode);
+                position.candidateCodes.push(codeObj);
             } else {
                 position.candidateCodes = [];
-                position.candidateCodes.push(userCode);
+                position.candidateCodes.push(codeObj);
             }
             // send email
             let recipient = [candidateEmails[i]];

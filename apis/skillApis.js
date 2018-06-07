@@ -268,6 +268,8 @@ function POST_answerSkillQuestion(req, res) {
                         if (!position.freeResponseQuestions || position.freeResponseQuestions.length === 0) {
                             // user is no longer taking a position evaluation
                             user.positionInProgress = undefined;
+                            // user finished the evaluation
+                            position.appliedEndDate = new Date();
 
                             let business;
                             try {
