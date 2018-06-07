@@ -658,6 +658,21 @@ class BusinessHome extends Component {
             );
                 break;
             case 5:
+                dialogBody = (
+                    <div>
+                        <div className="whiteTextImportant font20px font18pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                            Activate your Assessment
+                        </div>
+                        <div className="whiteTextImportant font12px font10pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                            Our team is now hard at work creating your assessment. Before we can activate
+                            your account, we need to take a few minutes to ensure we are on the same page
+                            with the assessment and roll out the process.
+                        </div>
+                        <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                            We need to chat. Find a time below.
+                        </div>
+                    </div>
+                );
                 break;
             default:
                 break;
