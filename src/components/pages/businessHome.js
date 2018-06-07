@@ -234,7 +234,9 @@ class BusinessHome extends Component {
         // Form validation before submit
         let notValid = false;
         const requiredFields = [
-            'positions'
+            'skill1',
+            'skill2',
+            'skill3'
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -245,14 +247,14 @@ class BusinessHome extends Component {
         if (notValid) return;
 
         const user = {
-            positions: this.props.formData.forBusiness.values.positions
+            skill1: this.props.formData.forBusiness.values.skill1,
+            skill2: this.props.formData.forBusiness.values.skill2,
+            skill3: this.props.formData.forBusiness.values.skill3
         };
 
         this.props.dialogEmailScreen4(user);
         this.handleNextScreen();
     }
-
-
 
     onChange(e) {
         this.setState({
@@ -622,19 +624,28 @@ class BusinessHome extends Component {
             case 4:
             dialogBody = (
                 <form onSubmit={this.handleSubmitDialogEmailScreen3.bind(this)} className="center">
-                    <div className="whiteTextImportant font20px font18pxUnder500" style={{width:"90%", margin:"10px auto"}}>
-                        Just a few quick things to set up your assessment.
+                    <div className="whiteTextImportant font16px font14pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                        What skills do you need to be successful in this position?
                     </div>
                     <div className="whiteText font14px font12pxUnder500" style={{width: "90%", margin: "10px auto"}}>
-                        <i>Every position has a psychometric analysis. <div className="above800only"><br/></div>We already created that for you.</i>
-                    </div>
-                    <div className="whiteText font16px font14pxUnder500" style={{width: "90%", margin: "10px auto"}}>
-                        What positions do you want to select for the assessment?
+                        <i>No research required, we will do that for you. We just want the first three skills that come to mind.</i>
                     </div>
                     <Field
-                        name="positions"
+                        name="skill1"
                         component={renderTextField}
-                        label="Positions* (e.g. Business Analyst, Full-Stack Developer, Sales...)"
+                        label="Skill (e.g. SEO, Recruitment, Written Communication...)"
+                        validate={[required]}
+                    /><br/>
+                    <Field
+                        name="skill2"
+                        component={renderTextField}
+                        label="Skill (e.g. Java, Docker, SQL...)"
+                        validate={[required]}
+                    /><br/>
+                    <Field
+                        name="skill3"
+                        component={renderTextField}
+                        label="Skill (e.g. Markteting Analytics, Enterprise Sales, SEM...)"
                         validate={[required]}
                     /><br/>
                     <RaisedButton

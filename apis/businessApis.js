@@ -172,8 +172,14 @@ function POST_dialogEmailScreen4(req, res) {
 
     let content = "<div>"
         + "<h3>Info of someone who filled out fourth page on homepage: </h3>"
-        + "<p>Positions: "
-        + sanitize(req.body.positions)
+        + "<p>Skill 1: "
+        + sanitize(req.body.skill1)
+        + "</p>"
+        + "<p>Skill 2: "
+        + sanitize(req.body.skill2)
+        + "</p>"
+        + "<p>Skill 3: "
+        + sanitize(req.body.skill3)
         + "</p>"
         + "</div>";
 
