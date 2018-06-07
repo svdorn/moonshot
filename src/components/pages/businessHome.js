@@ -678,7 +678,7 @@ class BusinessHome extends Component {
             );
                 break;
             case 5:
-                const calendly = <div className="calendly-inline-widget" data-url="https://calendly.com/moonshotinsights" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
+                const calendly = <div className="calendly-inline-widget" data-url="https://calendly.com/kyle-treige-moonshot/30min" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
                 dialogBody = (
                     <div>
                         <div className="whiteTextImportant font20px font18pxUnder500" style={{width:"90%", margin:"10px auto"}}>
