@@ -478,7 +478,7 @@ class BusinessHome extends Component {
         }
 
         let dialogDemoClass = "dialogForBiz";
-        if (this.state.demoScreen === 2) {
+        if (this.state.demoScreen === 2 || this.state.dialogScreen === 5) {
             dialogDemoClass = "dialogForVideo";
         }
 
@@ -680,10 +680,7 @@ class BusinessHome extends Component {
                         <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"90%", margin:"10px auto"}}>
                             We need to chat. Find a time below.
                         </div>
-                        // TODO: CALENDLY LINK GOES HERE
-                        <div>
-
-                        </div>
+                        <div className="calendly-inline-widget" data-url="https://calendly.com/moonshotinsights" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
                     </div>
                 );
                 break;
@@ -698,7 +695,7 @@ class BusinessHome extends Component {
                 open={this.state.open}
                 onRequestClose={this.handleClose}
                 autoScrollBodyContent={true}
-                paperClassName="dialogForBiz"
+                paperClassName={dialogDemoClass}
                 contentClassName="center"
                 overlayClassName="dialogOverlay"
             >
@@ -716,7 +713,6 @@ class BusinessHome extends Component {
                 {dialog}
             <div className="blackBackground businessHome">
                 <div className="businessHome frontPage">
-                    <div className="calendly-inline-widget" data-url="https://calendly.com/moonshotinsights" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
                     {this.state.showRectangles ?
                         <div className="skewedRectanglesContainer">
                             <div className="skewedRectangles">
