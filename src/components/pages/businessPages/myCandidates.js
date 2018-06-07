@@ -38,49 +38,61 @@ class MyCandidates extends Component {
             hiringStage: "",
             email: "",
             disabled: true
-        }
+        };
+
+        // if a url query is telling us which position should be selected first
+        let positionNameFromUrl = props.location.query && props.location.query.position ? props.location.query.position : undefined;
 
         this.state = {
             searchTerm: "",
             hiringStage: "",
-            pathway: "",
+            position: "",
             candidates: [emptyCandidate],
-            pathways: [],
-            // true if the business has no pathways associated with it
-            noPathways: false
+            positions: [],
+            positionNameFromUrl,
+            // true if the business has no positions associated with it
+            noPositions: false
         }
     }
 
     componentDidMount() {
         let self = this;
-        axios.get("/api/business/pathways", {
+        axios.get("/api/business/positions", {
             params: {
                 userId: this.props.currentUser._id,
                 verificationToken: this.props.currentUser.verificationToken
             }
         })
         .then(function (res) {
-            let pathways = res.data;
-            if (Array.isArray(pathways) && pathways.length > 0) {
-                const firstPathwayName = pathways[0].name;
-                if (firstPathwayName) {
-                    let selectedPathway = firstPathwayName;
+            let positions = res.data.positions;
+            if (Array.isArray(positions) && positions.length > 0) {
+                // if the url gave us a position to select first, select that one
+                // otherwise, select the first one available
+                let firstPositionName = positions[0].name;
+                if (self.state.positionNameFromUrl && positions.some(position => {
+                    return position.name === self.state.positionNameFromUrl;
+                })) {
+                    firstPositionName = self.state.positionNameFromUrl;
                 }
+                if (firstPositionName) {
+                    let selectedPosition = firstPositionName;
+                }
+
                 self.setState({
-                    pathways: pathways,
-                    pathway: firstPathwayName
+                    positions: positions,
+                    position: firstPositionName
                 },
-                    // search for candidates of first pathway
+                    // search for candidates of first position
                     self.search()
                 );
             } else {
                 self.setState({
-                    noPathways: true
+                    noPositions: true
                 })
             }
         })
         .catch(function (err) {
-            console.log("error getting pathways: ", err);
+            console.log("error getting positions: ", err);
         });
     }
 
@@ -107,19 +119,19 @@ class MyCandidates extends Component {
         })
     };
 
-    handlePathwayChange = (event, index, pathway) => {
-        this.setState({pathway}, () => {
+    handlePositionChange = (event, index, position) => {
+        this.setState({position}, () => {
             this.search();
         })
     };
 
     search() {
-        if (!this.state.noPathways) {
+        if (!this.state.noPositions) {
             axios.get("/api/business/candidateSearch", {
                 params: {
                     searchTerm: this.state.term,
                     hiringStage: this.state.hiringStage,
-                    pathway: this.state.pathway,
+                    position: this.state.position,
                     userId: this.props.currentUser._id,
                     verificationToken: this.props.currentUser.verificationToken
                 }
@@ -179,9 +191,9 @@ class MyCandidates extends Component {
             return null;
         }
 
-        // find the id of the currently selected pathway
-        const pathwayId = this.state.pathway ? this.state.pathways.find(path => {
-            return path.name === this.state.pathway;
+        // find the id of the currently selected position
+        const positionId = this.state.position ? this.state.positions.find(path => {
+            return path.name === this.state.position;
         })._id : undefined;
 
         // create the candidate previews
@@ -190,34 +202,34 @@ class MyCandidates extends Component {
 
         let candidatePreviews = (
             <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                {this.state.pathways.length === 0 ? "Loading pathways..." : "Select a pathway to see your candidates."}
+                {this.state.positions.length === 0 ? "Loading positions..." : "Select a position to see your candidates."}
             </div>
         )
 
-        if (this.state.pathway != "") {
+        if (this.state.position != "") {
             candidatePreviews = this.state.candidates.map(candidate => {
                 key++;
 
-                let candidatePathwayInfo = {
+                let candidatePositionInfo = {
                     hiringStage: "Not Contacted",
                     isDismissed: false
                 }
 
-                // if the candidate does not have a pathways list, it is probably
+                // if the candidate does not have a positions list, it is probably
                 // still loading the page; if we get into this if statement, it
                 // is an actual candidate
-                if (Array.isArray(candidate.pathways)) {
-                    const tempPathwayInfo = candidate.pathways.find(path => {
-                        return path._id === pathwayId;
+                if (Array.isArray(candidate.positions)) {
+                    const tempPositionInfo = candidate.positions.find(path => {
+                        return path._id === positionId;
                     });
-                    // only set the pathway info if any was actually found
-                    if (tempPathwayInfo) {
-                        candidatePathwayInfo = tempPathwayInfo;
+                    // only set the position info if any was actually found
+                    if (tempPositionInfo) {
+                        candidatePositionInfo = tempPositionInfo;
                     }
                 }
 
-                const initialHiringStage = candidatePathwayInfo.hiringStage;
-                const initialIsDismissed = candidatePathwayInfo.isDismissed;
+                const initialHiringStage = candidatePositionInfo.hiringStage;
+                const initialIsDismissed = candidatePositionInfo.isDismissed;
                 const isDisabled = candidate.disabled === true;
 
                 return (
@@ -231,18 +243,18 @@ class MyCandidates extends Component {
                             employerVerificationToken={currentUser.verificationToken}
                             companyId={currentUser.businessInfo.company.companyId}
                             candidateId={candidate.userId}
-                            pathwayId={pathwayId}
+                            positionId={positionId}
                             editHiringStage={true}
                             name={candidate.name}
                             email={candidate.email}
                             disabled={isDisabled}
                             profileUrl={candidate.profileUrl}
                             location={candidate.location}
-                            overallScore={candidatePathwayInfo.overallScore}
-                            predicted={candidatePathwayInfo.predicted}
+                            overallScore={candidatePositionInfo.overallScore}
+                            predicted={candidatePositionInfo.predicted}
                             archetype={candidate.archetype}
-                            skill={candidatePathwayInfo.skill}
-                            lastEdited={candidatePathwayInfo.hiringStageEdited}
+                            skill={candidatePositionInfo.skill}
+                            lastEdited={candidatePositionInfo.hiringStageEdited}
                         />
                     </li>
                 );
@@ -255,10 +267,9 @@ class MyCandidates extends Component {
             return <MenuItem value={hiringStage} primaryText={hiringStage} key={hiringStage}/>
         })
 
-        // TODO get companies from DB
-        const pathways = this.state.pathways;
-        const pathwayItems = pathways.map(function (pathway) {
-            return <MenuItem value={pathway.name} primaryText={pathway.name} key={pathway.name}/>
+        const positions = this.state.positions;
+        const positionItems = positions.map(function (position) {
+            return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
         })
 
         // the hint that shows up when search bar is in focus
@@ -300,15 +311,15 @@ class MyCandidates extends Component {
                             <Divider/>
                             {hiringStageItems}
                         </DropDownMenu>
-                        <DropDownMenu value={this.state.pathway}
-                                      onChange={this.handlePathwayChange}
+                        <DropDownMenu value={this.state.position}
+                                      onChange={this.handlePositionChange}
                                       labelStyle={style.menuLabelStyle}
                                       anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px"}}
                         >
-                            <MenuItem value={""} primaryText="Pathway"/>
+                            <MenuItem value={""} primaryText="Position"/>
                             <Divider/>
-                            {pathwayItems}
+                            {positionItems}
                         </DropDownMenu>
                     </ToolbarGroup>
                 </Toolbar>
@@ -341,15 +352,15 @@ class MyCandidates extends Component {
                         {hiringStageItems}
                     </DropDownMenu>
                     <div><br/></div>
-                    <DropDownMenu value={this.state.pathway}
-                                  onChange={this.handlePathwayChange}
+                    <DropDownMenu value={this.state.position}
+                                  onChange={this.handlePositionChange}
                                   labelStyle={style.menuLabelStyle}
                                   anchorOrigin={style.anchorOrigin}
                                   style={{fontSize: "20px", marginTop: "11px"}}
                     >
-                        <MenuItem value={""} primaryText="Pathway"/>
+                        <MenuItem value={""} primaryText="Position"/>
                         <Divider/>
-                        {pathwayItems}
+                        {positionItems}
                     </DropDownMenu>
                 </div>
             </div>

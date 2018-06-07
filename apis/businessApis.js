@@ -627,18 +627,7 @@ async function GET_positions(req, res) {
         return res.status(500).send("Server error, couldn't get positions.");
     }
 
-    return res.json({logo: business.logo, businessName: business.name, positions: business.positions})
-
-
-        // .exec(function(findPositionsErr, positions)
-        // {
-        //     if (findPositionsErr) {
-        //         return
-        //     } else {
-        //         return res.json(positions[0]);
-        //     }
-        // });
-    //})
+    return res.json({logo: business.logo, businessName: business.name, positions: business.positions});
 }
 
 function GET_pathways(req, res) {

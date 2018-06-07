@@ -100,7 +100,7 @@ class MyEvaluationsPreview extends Component {
                     <div className="clickable underline" style={{display: "inline-block"}}>
                         View Evaluation
                     </div>
-                    <div onClick={() => this.goTo("/myCandidates")} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
+                    <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
                         Candidate Results
                     </div>
                     <div onClick={() => this.goTo("/myEmployees")} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
