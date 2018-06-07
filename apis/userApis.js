@@ -17,6 +17,7 @@ const { sanitize,
         sendEmail,
         userForAdmin,
         getFirstName,
+        getAndVerifyUser,
         frontEndUser,
         NO_TOKENS
 } = require('./helperFunctions.js');
@@ -218,34 +219,6 @@ async function POST_reset24(req, res) {
     .catch(error => {
         console.log("error resetting 24: ", error);
         return res.status(500).send("ERROR");
-    })
-}
-
-
-// DANGEROUS, returns user with all fields
-async function getAndVerifyUser(userId, verificationToken) {
-    return new Promise(async function(resolve, reject) {
-        // get the user from the db
-        let user = undefined;
-        try {
-            user = await Users.findById(userId);
-        } catch (getUserError) {
-            console.log("Error getting user from the database: ", getUserError);
-            reject({status: 500, message: "Server error, try again later", error: getUserError});
-        }
-
-        if (!user) {
-            console.log("User not found from id: ", userId);
-            reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
-        }
-
-        // verify user's identity
-        if (!verificationToken && user.verificationToken !== verificationToken) {
-            console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
-            reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
-        }
-
-        resolve(user);
     })
 }
 

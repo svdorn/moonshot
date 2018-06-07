@@ -14,8 +14,9 @@ const { sanitize,
         safeUser,
         userForAdmin,
         getFirstName,
+        getAndVerifyUser,
         frontEndUser,
-        FOR_EMPLOYER
+        FOR_EMPLOYER,
 } = require('./helperFunctions.js');
 
 
@@ -598,7 +599,7 @@ function GET_employees(req, res) {
     })
 }
 
-function GET_positions(req, res) {
+async function GET_positions(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
@@ -606,39 +607,38 @@ function GET_positions(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    Users.findById(userId, function(findBUserErr, user) {
-        // error finding user in db
-        if (findBUserErr) {
-            console.log("Error finding business user who was trying to see their positions: ", findBUserErr);
-            return res.status(500).send("Server error, try again later.");
-        }
+    // get the user
+    let user;
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (findUserError) {
+        console.log("Error finding businesss user who was trying to see thier positions: ", findUserError);
+        return res.status(500).send("Server error, try again later.");
+    }
 
-        // couldn't find user in business user db, either they have the wrong
-        // type of account or are trying to pull some dubious shenanigans
-        if (!user) {
-            return res.status(403).send("You do not have permission to access positions info.");
-        }
+    // get the business the user works for
+    const companyId = user.businessInfo.company.companyId;
+    let business;
+    try {
+        business = await Businesses
+            .findById(companyId)
+            .select("logo name positions.name positions.completions positions.usersInProgress position.skills positions.timeAllotted");
+    } catch (findBizError) {
+        console.log("Error finding business when getting positions: ", findBizError);
+        return res.status(500).send("Server error, couldn't get positions.");
+    }
 
-        // user does not have the right verification token, probably trying to
-        // pull a fast one on us
-        if (user.verificationToken !== verificationToken) {
-            return res.status(403).send("You do not have permission to access positions info.");
-        }
+    return res.json({logo: business.logo, businessName: business.name, positions: business.positions})
 
-        const companyId = user.businessInfo.company.companyId;
-        let businessQuery = { '_id': companyId }
 
-        Businesses.find(businessQuery)
-        .select("positions")
-        .exec(function(findPositionsErr, positions)
-        {
-            if (findPositionsErr) {
-                return res.status(500).send("Server error, couldn't get positions.");
-            } else {
-                return res.json(positions[0]);
-            }
-        });
-    })
+        // .exec(function(findPositionsErr, positions)
+        // {
+        //     if (findPositionsErr) {
+        //         return
+        //     } else {
+        //         return res.json(positions[0]);
+        //     }
+        // });
+    //})
 }
 
 function GET_pathways(req, res) {

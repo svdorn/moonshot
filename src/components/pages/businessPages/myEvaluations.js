@@ -25,7 +25,11 @@ class MyEvaluations extends Component {
         this.state = {
             positions: [],
             // true if the business has no positions associated with it
-            noPositions: false
+            noPositions: false,
+            // logo of the company - doesn't apply for candidates
+            logo: undefined,
+            // name of the business the user works for - doesn't apply for candidates
+            businessName: undefined
         }
     }
 
@@ -42,7 +46,6 @@ class MyEvaluations extends Component {
                 }
             })
             .then(res => {
-                console.log("res.data.positions: ", res.data.positions)
                 self.positionsFound(res.data.positions);
             })
             .catch(error => {
@@ -60,19 +63,21 @@ class MyEvaluations extends Component {
                 }
             })
             .then(function (res) {
-                this.positionsFound(res.data.positions);
+                console.log("res.data.positions: ", res.data.positions)
+                self.positionsFound(res.data.positions, res.data.logo, res.data.businessName);
             })
             .catch(function (err) {
                 console.log("error getting positions: ", err);
+                if (err.response && err.response.data) { console.log(err.response.data); }
             });
         }
     }
 
 
     // call this after positions are found from back end
-    positionsFound(positions) {
+    positionsFound(positions, logo, businessName) {
         if (Array.isArray(positions) && positions.length > 0) {
-            this.setState({ positions });
+            this.setState({ positions, logo, businessName });
         } else {
             this.setState({ noPositions: true });
         }
@@ -134,10 +139,9 @@ class MyEvaluations extends Component {
                     attributes.length = position.length;
                     attributes.skills = position.skills;
                     attributes.timeAllotted = position.timeAllotted;
-                    attributes.logo = "MoonshotWhite.png";
-                    attributes.company = "Moonshot";
+                    attributes.logo = self.state.logo;
+                    attributes.company = self.state.businessName;
                     attributes.name = position.name;
-                    attributes.length = position.length;
 
                     attributes.variation = "edit";
                 }

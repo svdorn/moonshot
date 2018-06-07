@@ -66,14 +66,6 @@ class MyEvaluationsPreview extends Component {
         // variations can be edit or take
         // user is a manager or account admin
         const editing = this.props.variation === "edit"
-        if (editing) {
-
-        }
-
-        // user is a candiate or employee
-        else {
-
-        }
 
         if (skills) {
             positionSkills = skills.map(function (skill, index) {
@@ -100,7 +92,8 @@ class MyEvaluationsPreview extends Component {
 
         let infoArea = null;
         let clickableArea = null;
-        let estimatedLenth = null;
+        let estimatedLength = null;
+
         if (editing) {
             clickableArea = (
                 <div className="grayText font16px font14pxUnder800 marginTop10px">
