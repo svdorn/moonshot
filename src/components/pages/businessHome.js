@@ -327,8 +327,8 @@ class BusinessHome extends Component {
 
     render() {
         const opts = {
-            height: '390',
-            width: '640',
+            height: '320',
+            width: '525',
             playerVars: { // https://developers.google.com/youtube/player_parameters
                 autoplay: 1,
                 iv_load_policy: 3
@@ -513,10 +513,7 @@ class BusinessHome extends Component {
             >
                 {this.state.demoScreen === 1
                 ?
-                <div>
-                {this.props.loadingEmailSend ?
-                    <div className="center"><CircularProgress className="marginTop40px"/></div>
-                    : <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
+                <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
                         <div
                             className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
                             See Demo
@@ -537,17 +534,13 @@ class BusinessHome extends Component {
                             style={{marginTop: '20px'}}
                         />
                     </form>
-                }
-                </div>
                 :
-                <div>
                     <YouTube
                         videoId="m4_M9onXmpY"
                         opts={opts}
                         onReady={this._onReady}
                         onEnd={this._onEnd}
                     />
-                </div>
             }
             </Dialog>
         );
