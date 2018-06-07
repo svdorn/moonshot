@@ -66,6 +66,15 @@ class BusinessHome extends Component {
     }
 
 
+    componentDidMount() {
+        // add the calendly script
+        const script = document.createElement("script");
+        script.src = "https://assets.calendly.com/assets/external/widget.js";
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+
     cssPropertySupported(prop) {
         try { return document.body.style[prop] !== undefined; }
         catch (propertyError) { return false; }
@@ -707,6 +716,7 @@ class BusinessHome extends Component {
                 {dialog}
             <div className="blackBackground businessHome">
                 <div className="businessHome frontPage">
+                    <div className="calendly-inline-widget" data-url="https://calendly.com/moonshotinsights" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
                     {this.state.showRectangles ?
                         <div className="skewedRectanglesContainer">
                             <div className="skewedRectangles">
