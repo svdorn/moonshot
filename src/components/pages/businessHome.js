@@ -601,15 +601,15 @@ class BusinessHome extends Component {
                             Just a few quick things to set up your assessment.
                         </div>
                         <div className="whiteText font14px font12pxUnder500" style={{width: "90%", margin: "10px auto"}}>
-                            <i>Every position has a psychometric analysis. <div className="above800only"><br/></div>We already created that for you.</i>
+                            <i>Every position has a psychometric analysis. <div className="above800only noHeight"><br/></div>We already created that for you.</i>
                         </div>
-                        <div className="whiteText font16px font14pxUnder500" style={{width: "90%", margin: "10px auto"}}>
+                        <div className="whiteText font16px font14pxUnder500" style={{width: "90%", margin: "10px auto 10px"}}>
                             What positions do you want to select for the assessment?
                         </div>
                         <Field
                             name="positions"
                             component={renderTextField}
-                            label="Positions* (e.g. Business Analyst, Full-Stack Developer, Sales...)"
+                            label="Positions*"
                             validate={[required]}
                         /><br/>
                         <RaisedButton
@@ -623,29 +623,29 @@ class BusinessHome extends Component {
                 break;
             case 4:
             dialogBody = (
-                <form onSubmit={this.handleSubmitDialogEmailScreen3.bind(this)} className="center">
+                <form onSubmit={this.handleSubmitDialogEmailScreen4.bind(this)} className="center">
                     <div className="whiteTextImportant font16px font14pxUnder500" style={{width:"90%", margin:"10px auto"}}>
                         What skills do you need to be successful in this position?
                     </div>
-                    <div className="whiteText font14px font12pxUnder500" style={{width: "90%", margin: "10px auto"}}>
+                    <div className="whiteText font14px font12pxUnder500" style={{width: "90%", margin: "10px auto 10px"}}>
                         <i>No research required, we will do that for you. We just want the first three skills that come to mind.</i>
                     </div>
                     <Field
                         name="skill1"
                         component={renderTextField}
-                        label="Skill (e.g. SEO, Recruitment, Written Communication...)"
+                        label="Skill (e.g. SEO)"
                         validate={[required]}
                     /><br/>
                     <Field
                         name="skill2"
                         component={renderTextField}
-                        label="Skill (e.g. Java, Docker, SQL...)"
+                        label="Skill (e.g. Java)"
                         validate={[required]}
                     /><br/>
                     <Field
                         name="skill3"
                         component={renderTextField}
-                        label="Skill (e.g. Markteting Analytics, Enterprise Sales, SEM...)"
+                        label="Skill (e.g. Enterprise Sales)"
                         validate={[required]}
                     /><br/>
                     <RaisedButton
