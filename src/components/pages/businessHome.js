@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
-import {forBusiness, demoEmail, dialogEmail, dialogEmailScreen2} from '../../actions/usersActions';
+import {forBusiness, demoEmail, dialogEmail, dialogEmailScreen2,dialogEmailScreen3} from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
@@ -199,6 +199,31 @@ class BusinessHome extends Component {
         };
 
         this.props.dialogEmailScreen2(user);
+        this.handleNextScreen();
+    }
+
+    handleSubmitDialogEmailScreen3(e) {
+        e.preventDefault();
+        const vals = this.props.formData.forBusiness.values;
+
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'positions'
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
+
+        const user = {
+            positions: this.props.formData.forBusiness.values.positions
+        };
+
+        this.props.dialogEmailScreen3(user);
         this.handleNextScreen();
     }
 
@@ -542,6 +567,31 @@ class BusinessHome extends Component {
                 );
                 break;
             case 3:
+                dialogBody = (
+                    <form onSubmit={this.handleSubmitDialogEmailScreen3.bind(this)} className="center">
+                        <div className="whiteTextImportant font20px font18pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                            Just a few quick things to set up your assessment.
+                        </div>
+                        <div className="whiteText font14px font12pxUnder500" style={{width: "90%", margin: "10px auto"}}>
+                            <i>Every position has a psychometric analysis. <div className="above800only"><br/></div>We already created that for you.</i>
+                        </div>
+                        <div className="whiteText font16px font14pxUnder500" style={{width: "90%", margin: "10px auto"}}>
+                            What positions do you want to select for the assessment?
+                        </div>
+                        <Field
+                            name="positions"
+                            component={renderTextField}
+                            label="Positions* (e.g. Business Analyst, Full-Stack Developer, Sales...)"
+                            validate={[required]}
+                        /><br/>
+                        <RaisedButton
+                            label="Continue"
+                            type="submit"
+                            className="raisedButtonBusinessHome"
+                            style={{marginTop: '20px'}}
+                        />
+                    </form>
+                );
                 break;
             case 4:
                 break;
@@ -932,7 +982,8 @@ function mapDispatchToProps(dispatch) {
         forBusiness,
         demoEmail,
         dialogEmail,
-        dialogEmailScreen2
+        dialogEmailScreen2,
+        dialogEmailScreen3
     }, dispatch);
 }
 

@@ -21,6 +21,7 @@ const businessApis = {
     POST_demoEmail,
     POST_dialogEmail,
     POST_dialogEmailScreen2,
+    POST_dialogEmailScreen3,
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
@@ -128,6 +129,28 @@ function POST_dialogEmailScreen2(req, res) {
         + "</p>"
         + "<p>Company: "
         + sanitize(req.body.company)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmailScreen3(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out third pg on Homepage';
+
+    let content = "<div>"
+        + "<h3>Info of someone who filled out third page on homepage: </h3>"
+        + "<p>Positions: "
+        + sanitize(req.body.positions)
         + "</p>"
         + "</div>";
 
