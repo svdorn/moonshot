@@ -36,7 +36,7 @@ const userApis = {
     POST_changeSettings,
     GET_userByProfileUrl,
     POST_login,
-    POST_currentPathwayStep,
+    // POST_currentPathwayStep,
     POST_startPositionEval,
     POST_continuePositionEval,
     POST_addPositionEval,
@@ -1879,33 +1879,33 @@ function POST_changeSettings(req, res) {
 }
 
 
-function POST_currentPathwayStep(req, res) {
-    const userId = sanitize(req.body.params.userId);
-    const pathwayId = sanitize(req.body.params.pathwayId);
-    const stepNumber = sanitize(req.body.params.stepNumber);
-    const subStepNumber = sanitize(req.body.params.subStepNumber);
-    const verificationToken = sanitize(req.body.params.verificationToken);
-
-    Users.findById(userId, function (err, user) {
-        if (!verifyUser(user, verificationToken)) {
-            return res.status(401).send("User does not have valid credentials to save step.");
-        }
-
-        let pathwayIndex = user.pathways.findIndex(function (path) {
-            return path.pathwayId == pathwayId;
-        });
-        user.pathways[pathwayIndex].currentStep = {
-            subStep: subStepNumber,
-            step: stepNumber
-        }
-        user.save(function () {
-            res.json(true);
-        });
-    })
-    .catch(function (err) {
-        console.log("error saving the current step, ", err);
-    })
-}
+// function POST_currentPathwayStep(req, res) {
+//     const userId = sanitize(req.body.params.userId);
+//     const pathwayId = sanitize(req.body.params.pathwayId);
+//     const stepNumber = sanitize(req.body.params.stepNumber);
+//     const subStepNumber = sanitize(req.body.params.subStepNumber);
+//     const verificationToken = sanitize(req.body.params.verificationToken);
+//
+//     Users.findById(userId, function (err, user) {
+//         if (!verifyUser(user, verificationToken)) {
+//             return res.status(401).send("User does not have valid credentials to save step.");
+//         }
+//
+//         let pathwayIndex = user.pathways.findIndex(function (path) {
+//             return path.pathwayId == pathwayId;
+//         });
+//         user.pathways[pathwayIndex].currentStep = {
+//             subStep: subStepNumber,
+//             step: stepNumber
+//         }
+//         user.save(function () {
+//             res.json(true);
+//         });
+//     })
+//     .catch(function (err) {
+//         console.log("error saving the current step, ", err);
+//     })
+// }
 
 
 module.exports = userApis;

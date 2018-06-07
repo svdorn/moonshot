@@ -92,11 +92,11 @@ app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
-app.post('/candidate/comingSoonEmail', candidateApis.POST_comingSoonEmail);
-app.post("/candidate/addPathway", candidateApis.POST_addPathway);
-app.post('/candidate/completePathway', candidateApis.POST_completePathway);
-app.post("/candidate/updateAnswer", candidateApis.POST_updateAnswer);
-app.post("/candidate/currentPathwayStep", userApis.POST_currentPathwayStep);
+// app.post('/candidate/comingSoonEmail', candidateApis.POST_comingSoonEmail);
+// app.post("/candidate/addPathway", candidateApis.POST_addPathway);
+// app.post('/candidate/completePathway', candidateApis.POST_completePathway);
+// app.post("/candidate/updateAnswer", candidateApis.POST_updateAnswer);
+// app.post("/candidate/currentPathwayStep", userApis.POST_currentPathwayStep);
 
 app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
@@ -104,7 +104,7 @@ app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
 app.get("/business/pathways", businessApis.GET_pathways);
-//app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
+// app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employees", businessApis.GET_employees);
 app.get("/business/positions", businessApis.GET_positions);
 
