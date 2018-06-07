@@ -421,6 +421,18 @@ export function dialogEmailScreen3(user){
 }
 
 // Send an email when form filled out on forBusiness page
+export function dialogEmailScreen4(user){
+    return function(dispatch) {
+        axios.post("api/business/dialogEmailScreen4", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
 export function forBusiness(user){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
