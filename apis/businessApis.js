@@ -27,7 +27,7 @@ const businessApis = {
     POST_answerQuestion,
     POST_emailInvites,
     GET_pathways,
-    GET_candidateSearch,
+    // GET_candidateSearch,
     GET_employees,
     GET_positions
 }
@@ -701,107 +701,110 @@ function GET_pathways(req, res) {
 }
 
 
-function GET_candidateSearch(req, res) {
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
+// function GET_candidateSearch(req, res) {
+//     const userId = sanitize(req.query.userId);
+//     const verificationToken = sanitize(req.query.verificationToken);
+//
+//     if (!userId || !verificationToken) {
+//         return res.status(400).send("Bad request.");
+//     }
+//
+//     Users.findById(userId, function(findBUserErr, user) {
+//         // error finding user in db
+//         if (findBUserErr) {
+//             console.log("Error finding business user who was trying to see their candidates: ", findBUserErr);
+//             return res.status(500).send("Server error, try again later.");
+//         }
+//
+//         // couldn't find user in business user db, either they have the wrong
+//         // type of account or are trying to pull some dubious shenanigans
+//         if (!user) {
+//             return res.status(403).send("You do not have permission to access candidate info.");
+//         }
+//
+//         // user does not have the right verification token, probably trying to
+//         // pull a fast one on us
+//         if (user.verificationToken !== verificationToken) {
+//             return res.status(403).send("You do not have permission to access candidate info.");
+//         }
+//
+//         const companyId = user.businessInfo.company.companyId;
+//         Businesses.findById(companyId, function(findBizErr, company) {
+//             if (findBizErr) {
+//                 console.log("Error finding business when trying to search for candidates: ", findBizErr);
+//                 return res.status(500).send("Server error, try again later.");
+//             }
+//
+//             if (!company) {
+//                 console.log("Business not found when trying to search for candidates.");
+//                 return res.status(500).send("Server error, try again later.");
+//             }
+//
+//             // if the business doesn't have an associated user with the given
+//             // user id, don't let them see this business' candidates
+//             const userIdString = userId.toString();
+//             if (!company.employerIds.some(function(bizUserId) {
+//                 return bizUserId.toString() === userIdString;
+//             })) {
+//                 console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
+//                 return res.status(403).send("You do not have access to this business' candidates.");
+//             }
+//
+//             // if we got to this point it means the user is allowed to see candidates
+//
+//             // all of a company's candidates
+//             const allCandidates = company.candidates;
+//
+//             const searchTerm = sanitize(req.query.searchTerm);
+//             const hiringStage = sanitize(req.query.hiringStage);
+//             const pathway = sanitize(req.query.pathway);
+//
+//             let candidatesToReturn = [];
+//
+//             // go through each candidate, only add them if they match all
+//             // the search factors
+//             allCandidates.forEach(function(candidate) {
+//                 if (searchTerm) {
+//                     // case insensitive search term regex
+//                     const termRegex = new RegExp(searchTerm, "i");
+//                     // if neither name nor email match search term, don't add
+//                     if (!(termRegex.test(candidate.email) || termRegex.test(candidate.name))) {
+//                         return;
+//                     }
+//                 }
+//                 if (hiringStage || pathway) {
+//                     // go through each of the candidates pathways, if they aren't
+//                     // at this hiring stage for any, return
+//                     const hasStageAndPathway = candidate.pathways.some(function(path) {
+//                         // if only looking for a certain pathway, just look for matching pathway
+//                         if (!hiringStage) {
+//                             return path.name == pathway;
+//                         }
+//                         // if only looking for certain hiring stage, just look for matching hiring stage
+//                         else if (!pathway) {
+//                             return path.hiringStage == hiringStage;
+//                         }
+//                         // otherwise look for a matching pathway name AND hiring stage on the same pathway
+//                         else {
+//                             return path.hiringStage == hiringStage && path.name == pathway;
+//                         }
+//                     });
+//                     if (!hasStageAndPathway) {
+//                         return;
+//                     }
+//                 }
+//
+//                 // if the candidate made it past all the search terms, add them
+//                 candidatesToReturn.push(frontEndUser(candidate, FOR_EMPLOYER));
+//             });
+//
+//             res.json(candidatesToReturn);
+//         });
+//     })
+// }
 
-    if (!userId || !verificationToken) {
-        return res.status(400).send("Bad request.");
-    }
 
-    Users.findById(userId, function(findBUserErr, user) {
-        // error finding user in db
-        if (findBUserErr) {
-            console.log("Error finding business user who was trying to see their candidates: ", findBUserErr);
-            return res.status(500).send("Server error, try again later.");
-        }
 
-        // couldn't find user in business user db, either they have the wrong
-        // type of account or are trying to pull some dubious shenanigans
-        if (!user) {
-            return res.status(403).send("You do not have permission to access candidate info.");
-        }
-
-        // user does not have the right verification token, probably trying to
-        // pull a fast one on us
-        if (user.verificationToken !== verificationToken) {
-            return res.status(403).send("You do not have permission to access candidate info.");
-        }
-
-        const companyId = user.businessInfo.company.companyId;
-        Businesses.findById(companyId, function(findBizErr, company) {
-            if (findBizErr) {
-                console.log("Error finding business when trying to search for candidates: ", findBizErr);
-                return res.status(500).send("Server error, try again later.");
-            }
-
-            if (!company) {
-                console.log("Business not found when trying to search for candidates.");
-                return res.status(500).send("Server error, try again later.");
-            }
-
-            // if the business doesn't have an associated user with the given
-            // user id, don't let them see this business' candidates
-            const userIdString = userId.toString();
-            if (!company.employerIds.some(function(bizUserId) {
-                return bizUserId.toString() === userIdString;
-            })) {
-                console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
-                return res.status(403).send("You do not have access to this business' candidates.");
-            }
-
-            // if we got to this point it means the user is allowed to see candidates
-
-            // all of a company's candidates
-            const allCandidates = company.candidates;
-
-            const searchTerm = sanitize(req.query.searchTerm);
-            const hiringStage = sanitize(req.query.hiringStage);
-            const pathway = sanitize(req.query.pathway);
-
-            let candidatesToReturn = [];
-
-            // go through each candidate, only add them if they match all
-            // the search factors
-            allCandidates.forEach(function(candidate) {
-                if (searchTerm) {
-                    // case insensitive search term regex
-                    const termRegex = new RegExp(searchTerm, "i");
-                    // if neither name nor email match search term, don't add
-                    if (!(termRegex.test(candidate.email) || termRegex.test(candidate.name))) {
-                        return;
-                    }
-                }
-                if (hiringStage || pathway) {
-                    // go through each of the candidates pathways, if they aren't
-                    // at this hiring stage for any, return
-                    const hasStageAndPathway = candidate.pathways.some(function(path) {
-                        // if only looking for a certain pathway, just look for matching pathway
-                        if (!hiringStage) {
-                            return path.name == pathway;
-                        }
-                        // if only looking for certain hiring stage, just look for matching hiring stage
-                        else if (!pathway) {
-                            return path.hiringStage == hiringStage;
-                        }
-                        // otherwise look for a matching pathway name AND hiring stage on the same pathway
-                        else {
-                            return path.hiringStage == hiringStage && path.name == pathway;
-                        }
-                    });
-                    if (!hasStageAndPathway) {
-                        return;
-                    }
-                }
-
-                // if the candidate made it past all the search terms, add them
-                candidatesToReturn.push(frontEndUser(candidate, FOR_EMPLOYER));
-            });
-
-            res.json(candidatesToReturn);
-        });
-    })
-}
 
 
 module.exports = businessApis;

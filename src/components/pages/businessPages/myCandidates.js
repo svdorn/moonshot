@@ -74,6 +74,8 @@ class MyCandidates extends Component {
                 })) {
                     firstPositionName = self.state.positionNameFromUrl;
                 }
+
+                // select this position from the dropdown if it is valid
                 if (firstPositionName) {
                     let selectedPosition = firstPositionName;
                 }

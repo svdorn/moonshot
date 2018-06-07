@@ -93,7 +93,33 @@ var businessesSchema = mongoose.Schema({
         usersInProgress: Number,
         // candidates who have applied for this position
         candidates: [{
-            candidateId: mongoose.Schema.Types.ObjectId
+            // id of the candidate
+            candidateId: mongoose.Schema.Types.ObjectId,
+            // the hiring stage of the candidate, which the company has determined
+            // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
+            hiringStage: String,
+            // dates/times the hiring stage of the candidate was changed for this position
+            hiringStageChanges: [{
+                // what the hiring stage was changed to
+                hiringStage: String,
+                // the date/time the hiring stage was changed
+                dateChanged: Date
+            }],
+            // user's archetype, found from the psychometric test
+            archetype: String,
+            // the scores the user got for the position
+            scores: {
+                // combination of all the scores
+                overall: Number,
+                // how good of a culture fit the candidate has
+                culture: Number,
+                // how much the candidate could grow in the position
+                growth: Number,
+                // if the candidate would stay at the company for a long time
+                longevity: Number,
+                // how well the candidate would do at that specific position
+                performance: Number
+            },
         }],
         // Code for the specific position
         code: String,

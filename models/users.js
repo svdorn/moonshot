@@ -236,6 +236,9 @@ var usersSchema = mongoose.Schema({
         title: String
     },
 
+    // the archetype the user was found to be from the psychometricTest
+    archetype: String,
+
     // the user's psychometric test answers and results
     psychometricTest: {
         // whether the user is currently taking the test
@@ -344,16 +347,6 @@ var usersSchema = mongoose.Schema({
         assignedDate: Date,
         // the date the company has set as a deadline to finish
         deadline: Date,
-        // the hiring stage of the candidate, which the company has determined
-        // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
-        hiringStage: String,
-        // dates/times the hiring stage of the candidate was changed for this position
-        hiringStageChanges: [{
-            // what the hiring stage was changed to
-            hiringStage: String,
-            // the date/time the hiring stage was changed
-            dateChanged: Date
-        }],
         // the date the user started application
         appliedStartDate: Date,
         // when the user ended and submitted the application
@@ -363,19 +356,6 @@ var usersSchema = mongoose.Schema({
         // the index of the current test that the user is taking within
         // skillTests array; the tests below the index have alreday been taken
         testIndex: Number,
-        // the scores the user got for the position
-        scores: {
-            // combination of all the scores
-            overall: Number,
-            // how good of a culture fit the candidate has
-            culture: Number,
-            // how much the candidate could grow in the position
-            growth: Number,
-            // if the candidate would stay at the company for a long time
-            longevity: Number,
-            // how well the candidate would do at that specific position
-            performance: Number
-        },
         // the free response questions specific to this position
         freeResponseQuestions: [{
             // the id of the free response question
@@ -390,32 +370,6 @@ var usersSchema = mongoose.Schema({
             required: Boolean
         }]
     }],
-
-    // positionInProgress: {
-    //     // whether there is a test currently being taken
-    //     inProgress: Boolean,
-    //     // id of the business offering this position
-    //     businessId: mongoose.Schema.Types.ObjectId,
-    //     // id of the position within the business
-    //     positionId: mongoose.Schema.Types.ObjectId,
-    //     // list of skill urls for the necessary skill tests
-    //     skillTests: [ String ],
-    //     // the index of the current test that the user is taking
-    //     testIndex: Number,
-    //     // free response questions associated specifically with this position
-    //     freeResponseQuestions: [{
-    //         // the id of the free response question
-    //         questionId: mongoose.Schema.Types.ObjectId,
-    //         // the index of the question in the business' position object
-    //         questionIndex: Number,
-    //         // text of the question
-    //         body: String,
-    //         // what the user responded with
-    //         response: String,
-    //         // if the user is required to answer the question
-    //         required: Boolean
-    //     }]
-    // },
 
     positionInProgress: mongoose.Schema.Types.ObjectId,
 
