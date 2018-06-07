@@ -66,15 +66,6 @@ class BusinessHome extends Component {
     }
 
 
-    componentDidMount() {
-        // add the calendly script
-        const script = document.createElement("script");
-        script.src = "https://assets.calendly.com/assets/external/widget.js";
-        script.async = true;
-        document.body.appendChild(script);
-    }
-
-
     cssPropertySupported(prop) {
         try { return document.body.style[prop] !== undefined; }
         catch (propertyError) { return false; }
@@ -85,13 +76,24 @@ class BusinessHome extends Component {
         this.setState({ infoIndex });
     }
 
+
+    addCalendlyScript() {
+        const script = document.createElement("script");
+        script.src = "https://assets.calendly.com/assets/external/widget.js";
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+
     handleOpen = () => {
         this.setState({open: true});
     };
 
+
     handleClose = () => {
         this.setState({open: false});
     };
+
 
     handleSubmit(e) {
         e.preventDefault();
@@ -123,6 +125,7 @@ class BusinessHome extends Component {
         this.props.forBusiness(user);
     }
 
+
     handleEmailFormSubmit(e) {
         e.preventDefault();
         const vals = this.props.formData.forBusiness.values;
@@ -150,6 +153,7 @@ class BusinessHome extends Component {
         this.handleDemoScreenChange();
     }
 
+
     handleSubmitDialogEmail(e) {
         e.preventDefault();
         const vals = this.props.formData.forBusiness.values;
@@ -176,6 +180,7 @@ class BusinessHome extends Component {
         this.props.dialogEmail(user);
         this.handleNextScreen();
     }
+
 
     handleSubmitDialogEmailScreen2(e) {
         e.preventDefault();
@@ -211,6 +216,7 @@ class BusinessHome extends Component {
         this.handleNextScreen();
     }
 
+
     handleSubmitDialogEmailScreen3(e) {
         e.preventDefault();
         const vals = this.props.formData.forBusiness.values;
@@ -235,6 +241,7 @@ class BusinessHome extends Component {
         this.props.dialogEmailScreen3(user);
         this.handleNextScreen();
     }
+
 
     handleSubmitDialogEmailScreen4(e) {
         e.preventDefault();
@@ -265,6 +272,7 @@ class BusinessHome extends Component {
         this.handleNextScreen();
     }
 
+
     onChange(e) {
         this.setState({
             email: e.target.value
@@ -273,6 +281,7 @@ class BusinessHome extends Component {
         });
     }
 
+
     updateEmail() {
         const email = {
             email: this.state.email,
@@ -280,24 +289,33 @@ class BusinessHome extends Component {
         this.props.initialize(email);
     }
 
+
     handleDemoOpen = () => {
         this.setState({demoOpen: true});
     }
+
 
     handleDemoClose = () => {
         this.setState({demoOpen: false, demoScreen: 1});
     }
 
+
     handleDemoScreenChange = () => {
         this.setState({demoScreen: 2});
     }
 
+
     handleNextScreen = () => {
         const dialogScreen = this.state.dialogScreen + 1;
         if (dialogScreen > 0 && dialogScreen < 6) {
-            this.setState({dialogScreen})
+            // do nothing if on any screen but the 5th
+            let nextAction = () => {};
+            // if opening to the fifth screen, run calendly script
+            if (dialogScreen === 5) { nextAction = this.addCalendlyScript; }
+            this.setState({dialogScreen}, nextAction)
         }
     }
+
 
     handlePreviousScreen = () => {
         const dialogScreen = this.state.dialogScreen - 1;
@@ -667,6 +685,7 @@ class BusinessHome extends Component {
             );
                 break;
             case 5:
+                const calendly = <div className="calendly-inline-widget" data-url="https://calendly.com/moonshotinsights" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
                 dialogBody = (
                     <div>
                         <div className="whiteTextImportant font20px font18pxUnder500" style={{width:"90%", margin:"10px auto"}}>
@@ -680,7 +699,7 @@ class BusinessHome extends Component {
                         <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"90%", margin:"10px auto"}}>
                             We need to chat. Find a time below.
                         </div>
-                        <div className="calendly-inline-widget" data-url="https://calendly.com/moonshotinsights" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
+                        {calendly}
                     </div>
                 );
                 break;
@@ -711,148 +730,60 @@ class BusinessHome extends Component {
                 </MetaTags>
                 {demoDialog}
                 {dialog}
-            <div className="blackBackground businessHome">
-                <div className="businessHome frontPage">
-                    {this.state.showRectangles ?
-                        <div className="skewedRectanglesContainer">
-                            <div className="skewedRectangles">
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                            </div>
-                            <div className="skewedRectangles">
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                            </div>
-                        </div>
-                        : null
-                    }
-                    <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
-                        <div className="content">
-                            <h1 className="bigTitle font46px font38pxUnder900 font28pxUnder400" style={{color:"#72d6f5"}}>Know who to hire.</h1>
-                            <p className="infoText notFull">Predict candidate performance so that you can hire the best people for your team, faster.</p>
-                            <div className="buttonArea font18px font14pxUnder900">
-                                <input className="blackInput getStarted" type="text" placeholder="Email Address" name="email"
-                                value={this.state.email} onChange={this.onChange.bind(this)}/>
-                                <div className="mediumButton getStarted blueToPurple" onClick={this.handleDemoOpen}>
-                                    See Demo
+                <div className="blackBackground businessHome">
+
+                    <div className="businessHome frontPage">
+                        {this.state.showRectangles ?
+                            <div className="skewedRectanglesContainer">
+                                <div className="skewedRectangles">
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                </div>
+                                <div className="skewedRectangles">
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
+                                    <div className="skewedRectangle" />
                                 </div>
                             </div>
-                            <div className="infoText i flex font12pxUnder400">
-                                <div>Free for first position</div>
-                                <div>•</div>
-                                <div>Unlimited evaluations</div>
+                            : null
+                        }
+                        <div className="infoContainer font20px font16pxUnder900 font14pxUnder400">
+                            <div className="content">
+                                <h1 className="bigTitle font46px font38pxUnder900 font28pxUnder400" style={{color:"#72d6f5"}}>Know who to hire.</h1>
+                                <p className="infoText notFull">Predict candidate performance so that you can hire the best people for your team, faster.</p>
+                                <div className="buttonArea font18px font14pxUnder900">
+                                    <input className="blackInput getStarted" type="text" placeholder="Email Address" name="email"
+                                    value={this.state.email} onChange={this.onChange.bind(this)}/>
+                                    <div className="mediumButton getStarted blueToPurple" onClick={this.handleDemoOpen}>
+                                        See Demo
+                                    </div>
+                                </div>
+                                <div className="infoText i flex font12pxUnder400">
+                                    <div>Free for first position</div>
+                                    <div>•</div>
+                                    <div>Unlimited evaluations</div>
+                                </div>
                             </div>
-                        </div>
-                        <figure className="productScreenshots">
-                            <div id="myCandidatesScreenshot">
-                                <img src="images/businessHome/ProductScreenshot1.jpg" alt="My Candidates Page Screenshot"/>
-                            </div>
-                            <div id="resultsScreenshot">
-                                <img src="images/businessHome/ProductScreenshot2.jpg" alt="Candidate Results Page Screenshot" />
-                            </div>
-                        </figure>
-                    </div>
-                </div>
-
-                {/* <!-- The skewed rectangles that only come up on small screen --> */}
-                {this.state.showRectangles ?
-                    <div className="logoContainer skewedContainer">
-                        <div className="skewedRectanglesContainer">
-                            <div className="skewedRectangles">
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                                <div className="skewedRectangle" />
-                            </div>
+                            <figure className="productScreenshots">
+                                <div id="myCandidatesScreenshot">
+                                    <img src="images/businessHome/ProductScreenshot1.jpg" alt="My Candidates Page Screenshot"/>
+                                </div>
+                                <div id="resultsScreenshot">
+                                    <img src="images/businessHome/ProductScreenshot2.jpg" alt="Candidate Results Page Screenshot" />
+                                </div>
+                            </figure>
                         </div>
                     </div>
-                    : null
-                }
 
-                {/*<div className="partnerLogos"><div>{logos}</div></div>*/}
-
-                <section id="threeScreenshots">
-                    <div className="homepageTrajectory forBusiness">
-                        <div className="homepageTrajectoryTextLeft forBusiness">
-                            <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
-                                <h2 className="pinkTextHome font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
-                                Analyze candidates to see if they exhibit the profile of
-                                proven high performers in that position.
-                            </div>
-                            <button className="slightlyRoundedButton marginTop10px pinkToPurpleButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
-                                    onClick={this.handleOpen}>
-                                Hire Faster
-                            </button>
-                        </div>
-                        <div className="businessHomeTrajectoryImageRightNoBorder forBusiness">
-                            <img
-                                alt="My Candidates Management"
-                                src="/images/businessHome/ProductScreenshot3v6.png"
-                            />
-                            </div>
-                    </div>
-
-                    <br/>
-
-                    <div className="homepageTrajectory forBusiness">
-                        <div className="homepageTrajectoryTextRight forBusiness">
-                            <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forHome whiteText">
-                                <h2 className="blueTextHome font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
-                                </h2>
-                                Why read hundreds of resumes? Moonshot uses
-                                machine learning to reveal the empirical evidence
-                                instead of conjecture based on a resume.
-                            </div>
-                            <button className="slightlyRoundedButton marginTop10px blueToPurpleButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
-                                    onClick={this.handleOpen}>
-                                Hire Smarter
-                            </button>
-                        </div>
-                        <div className="businessHomeTrajectoryImagesLeft businessHomeTrajectoryImagesShadow forBusiness">
-                            <img
-                                alt="Predictive Insights"
-                                src="/images/businessHome/PredictiveInsights.jpg"
-                            />
-                        </div>
-                    </div>
-                    <br />
-
-                    <div className="homepageTrajectory forBusiness">
-                        <div className="homepageTrajectoryTextLeft forBusiness">
-                            <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
-                                <h2 className="orangeTextHome font30px font24pxUnder800 font22pxUnder500">Improve your candidate <div className="above800only br"><br/></div>experience</h2>
-                                83% of candidates rate their current experience as poor.
-                                Engage your candidates better so they can understand
-                                your company and how they fit.
-                            </div>
-                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
-                                    onClick={this.handleOpen}>
-                                Hire Better
-                            </button>
-                        </div>
-
-                        <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
-                            <img
-                                alt="Analysis Text"
-                                src="/images/businessHome/ProductScreenshot5.jpg"
-                            />
-                        </div>
-                    </div>
-                </section>
-
-                <section id="businessHomeStatistics">
+                    {/* <!-- The skewed rectangles that only come up on small screen --> */}
                     {this.state.showRectangles ?
-                        <div className="skewedContainer">
+                        <div className="logoContainer skewedContainer">
                             <div className="skewedRectanglesContainer">
                                 <div className="skewedRectangles">
                                     <div className="skewedRectangle" />
@@ -862,202 +793,291 @@ class BusinessHome extends Component {
                                     <div className="skewedRectangle" />
                                     <div className="skewedRectangle" />
                                     <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
                                 </div>
                             </div>
                         </div>
                         : null
                     }
 
-                    <div>
-                        <div className="center">
-                            <div className="font36px font32pxUnder700 font26pxUnder500 font24pxUnder400 center darkDarkPurpleText statisticsHeader">
-                                Predictive Analytics Improve Hiring Results
+                    {/*<div className="partnerLogos"><div>{logos}</div></div>*/}
+
+                    <section id="threeScreenshots">
+                        <div className="homepageTrajectory forBusiness">
+                            <div className="homepageTrajectoryTextLeft forBusiness">
+                                <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
+                                    <h2 className="pinkTextHome font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
+                                    Analyze candidates to see if they exhibit the profile of
+                                    proven high performers in that position.
+                                </div>
+                                <button className="slightlyRoundedButton marginTop10px pinkToPurpleButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
+                                        onClick={this.handleOpen}>
+                                    Hire Faster
+                                </button>
                             </div>
-                            <div>
-                                <div style={bottomListItem}>
-                                    <img src="/images/businessHome/Hourglass.png"
-                                         alt="Hourglass Icon"
-                                         className="forBusinessIcon"
-                                         style={{marginRight: '10px'}}/>
-                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                        Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
-                                    </div>
+                            <div className="businessHomeTrajectoryImageRightNoBorder forBusiness">
+                                <img
+                                    alt="My Candidates Management"
+                                    src="/images/businessHome/ProductScreenshot3v6.png"
+                                />
                                 </div>
-                                <div style={bottomListItem}>
-                                    <img src="/images/businessHome/Diamond.png"
-                                         alt="Diamond Icon"
-                                         className="forBusinessIcon"
-                                         style={{marginLeft: '10px'}}/>
-                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                        Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
-                                    </div>
+                        </div>
+
+                        <br/>
+
+                        <div className="homepageTrajectory forBusiness">
+                            <div className="homepageTrajectoryTextRight forBusiness">
+                                <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forHome whiteText">
+                                    <h2 className="blueTextHome font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
+                                    </h2>
+                                    Why read hundreds of resumes? Moonshot uses
+                                    machine learning to reveal the empirical evidence
+                                    instead of conjecture based on a resume.
                                 </div>
+                                <button className="slightlyRoundedButton marginTop10px blueToPurpleButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
+                                        onClick={this.handleOpen}>
+                                    Hire Smarter
+                                </button>
                             </div>
-                            <div style={{marginTop: '40px'}}>
-                                <div style={bottomListItem}>
-                                    <img src="/images/businessHome/Turnover.png"
-                                         alt="Turnover Icon"
-                                         className="forBusinessIcon"/>
-                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                        Up to 70% decrease<div className="above1000only noHeight"><br/></div> in employee turnover
-                                    </div>
-                                </div>
-                                <div style={bottomListItem}>
-                                    <img src="/images/businessHome/Lightbulb4.png"
-                                         alt="Lightbulb Icon"
-                                         className="forBusinessIcon"/>
-                                    <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
-                                        More than 85% of candidates<div className="above1000only noHeight"><br/></div> rate their experience as positive
-                                    </div>
-                                </div>
+                            <div className="businessHomeTrajectoryImagesLeft businessHomeTrajectoryImagesShadow forBusiness">
+                                <img
+                                    alt="Predictive Insights"
+                                    src="/images/businessHome/PredictiveInsights.jpg"
+                                />
                             </div>
                         </div>
+                        <br />
+
+                        <div className="homepageTrajectory forBusiness">
+                            <div className="homepageTrajectoryTextLeft forBusiness">
+                                <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
+                                    <h2 className="orangeTextHome font30px font24pxUnder800 font22pxUnder500">Improve your candidate <div className="above800only br"><br/></div>experience</h2>
+                                    83% of candidates rate their current experience as poor.
+                                    Engage your candidates better so they can understand
+                                    your company and how they fit.
+                                </div>
+                                <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
+                                        onClick={this.handleOpen}>
+                                    Hire Better
+                                </button>
+                            </div>
+
+                            <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
+                                <img
+                                    alt="Analysis Text"
+                                    src="/images/businessHome/ProductScreenshot5.jpg"
+                                />
+                            </div>
+                        </div>
+                    </section>
+
+                    <section id="businessHomeStatistics">
+                        {this.state.showRectangles ?
+                            <div className="skewedContainer">
+                                <div className="skewedRectanglesContainer">
+                                    <div className="skewedRectangles">
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                    </div>
+                                </div>
+                            </div>
+                            : null
+                        }
+
+                        <div>
+                            <div className="center">
+                                <div className="font36px font32pxUnder700 font26pxUnder500 font24pxUnder400 center darkDarkPurpleText statisticsHeader">
+                                    Predictive Analytics Improve Hiring Results
+                                </div>
+                                <div>
+                                    <div style={bottomListItem}>
+                                        <img src="/images/businessHome/Hourglass.png"
+                                             alt="Hourglass Icon"
+                                             className="forBusinessIcon"
+                                             style={{marginRight: '10px'}}/>
+                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                            Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
+                                        </div>
+                                    </div>
+                                    <div style={bottomListItem}>
+                                        <img src="/images/businessHome/Diamond.png"
+                                             alt="Diamond Icon"
+                                             className="forBusinessIcon"
+                                             style={{marginLeft: '10px'}}/>
+                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                            Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
+                                        </div>
+                                    </div>
+                                </div>
+                                <div style={{marginTop: '40px'}}>
+                                    <div style={bottomListItem}>
+                                        <img src="/images/businessHome/Turnover.png"
+                                             alt="Turnover Icon"
+                                             className="forBusinessIcon"/>
+                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                            Up to 70% decrease<div className="above1000only noHeight"><br/></div> in employee turnover
+                                        </div>
+                                    </div>
+                                    <div style={bottomListItem}>
+                                        <img src="/images/businessHome/Lightbulb4.png"
+                                             alt="Lightbulb Icon"
+                                             className="forBusinessIcon"/>
+                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                            More than 85% of candidates<div className="above1000only noHeight"><br/></div> rate their experience as positive
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div className="center">
+                                <button className="blueToDarkPurpleButtonGradient bigButton"
+                                        style={{marginTop: "35px", color: '#72d6f5'}}
+                                        onClick={this.handleOpen}
+                                >
+                                    <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
+                                        {"Learn More"}
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </section>
+
+                    { processSection }
+
+                    <section id="pricingSection">
+                        <a id="pricing" name="pricing" className="anchor" />
+                        {this.state.showRectangles ?
+                            <div className="skewedContainer">
+                                <div className="skewedRectanglesContainer">
+                                    <div className="skewedRectangles">
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                        <div className="skewedRectangle" />
+                                    </div>
+                                </div>
+                            </div>
+                            : null
+                        }
+
+                        <div className="forBusinessBoxesContainer">
+                            <div className="font36px font32pxUnder700 font26pxUnder500 center brightPinkText"
+                                 style={{marginBottom: '50px'}}>
+                                The New Baseline Evaluation
+                                <div className="infoTextContainer">
+                                    <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
+                                        <div>Unlimited Candidates</div>
+                                        <div>•</div>
+                                        <div>Unlimited Hires</div>
+                                        <div>•</div>
+                                        <div>Free for First Position</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
+                                zDepth={2}>
+                                <div style={{textAlign: "center", position: "relative"}}>
+                                    <img
+                                        src="/images/businessHome/PaperAirplane.png"
+                                        alt="Paper Airplane Icon"
+                                        className="businessHomeBoxIcons"
+                                    />
+                                    <div className="brightPinkText marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
+                                        STARTER
+                                    </div>
+                                    <div style={{height: '80px', lineHeight: '20px'}}>
+                                        <span className="whiteText font30px font24pxUnder400">
+                                            <br/><span style={{display: "inline-block", marginTop:"3px"}}>FREE</span>
+                                            <br/>
+                                            <i className="font12px">for first position</i>
+                                        </span>
+                                    </div>
+                                    <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
+                                    <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
+                                        {"Start with one position to see the results. No cost, no risk, no excuses not to kick this off."}
+                                    </div>
+                                    <button className="pricingButton whiteText clickableNoUnderline transitionButton orangeToRedSmallButtonGradientLeft font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
+                                        Take Off
+                                    </button>
+                                </div>
+                            </Paper>
+                            <div className="under800only" style={{height:"0px"}}><br/></div>
+                            <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
+                                   zDepth={2}>
+                                <div style={{textAlign: "center", position: "relative"}}>
+                                    <img
+                                        src="/images/businessHome/EnterpriseRocket.png"
+                                        alt="Enterprise Rocket Icon"
+                                        className="businessHomeBoxIcons"
+                                    />
+                                    <div className="brightOrangeText marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
+                                        PLUS
+                                    </div>
+                                    <div style={{height: '80px', lineHeight: '20px'}}>
+                                        <span className="whiteText font30px font24pxUnder400">
+                                            <i className="font12px" style={{display: "inline-block", marginBottom:"9px"}}>Starting at</i>
+                                            <br/>$79
+                                            <br/>
+                                            <i className="font12px">per additional position/month</i>
+                                        </span>
+                                    </div>
+                                    <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
+                                    <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
+                                        {"Easily scale the number of positions you are evaluating through Moonshot."}
+                                    </div>
+                                    <button className="pricingButton clickableNoUnderline transitionButton orangeToRedSmallButtonGradientRight whiteText font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
+                                        Blast Off
+                                    </button>
+                                </div>
+                            </Paper>
+                        </div>
+                    </section>
+
+                    <section id="crystalBall" className="marginBottom60px">
                         <div className="center">
-                            <button className="blueToDarkPurpleButtonGradient bigButton"
-                                    style={{marginTop: "35px", color: '#72d6f5'}}
+                            <div className="blueTextHome font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
+                                {"Your crystal ball to identify"}<div className="above800only noHeight"><br/></div>{" good and bad hires before it's too late."}
+                            </div>
+                            <img
+                                src="/images/businessHome/CrystalBall.png"
+                                alt="CrystalBall"
+                                className="crystalBall"
+                            />
+                            <br/>
+                            <button className="blueToDarkPurpleButtonGradientReverse bigButton"
+                                    style={{marginTop: "25px", color: 'white'}}
                                     onClick={this.handleOpen}
                             >
-                                <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
-                                    {"Learn More"}
+                                <div className="invertColorOnHover gradientBorderButtonInteriorGradient">
+                                    {"See the Future"}
                                 </div>
                             </button>
                         </div>
-                    </div>
-                </section>
-
-                { processSection }
-
-                <section id="pricingSection">
-                    <a id="pricing" name="pricing" className="anchor" />
-                    {this.state.showRectangles ?
-                        <div className="skewedContainer">
-                            <div className="skewedRectanglesContainer">
-                                <div className="skewedRectangles">
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                    <div className="skewedRectangle" />
-                                </div>
-                            </div>
-                        </div>
-                        : null
-                    }
-
-                    <div className="forBusinessBoxesContainer">
-                        <div className="font36px font32pxUnder700 font26pxUnder500 center brightPinkText"
-                             style={{marginBottom: '50px'}}>
-                            The New Baseline Evaluation
-                            <div className="infoTextContainer">
-                                <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
-                                    <div>Unlimited Candidates</div>
-                                    <div>•</div>
-                                    <div>Unlimited Hires</div>
-                                    <div>•</div>
-                                    <div>Free for First Position</div>
-                                </div>
-                            </div>
-                        </div>
-                        <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
-                            zDepth={2}>
-                            <div style={{textAlign: "center", position: "relative"}}>
-                                <img
-                                    src="/images/businessHome/PaperAirplane.png"
-                                    alt="Paper Airplane Icon"
-                                    className="businessHomeBoxIcons"
-                                />
-                                <div className="brightPinkText marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
-                                    STARTER
-                                </div>
-                                <div style={{height: '80px', lineHeight: '20px'}}>
-                                    <span className="whiteText font30px font24pxUnder400">
-                                        <br/><span style={{display: "inline-block", marginTop:"3px"}}>FREE</span>
-                                        <br/>
-                                        <i className="font12px">for first position</i>
-                                    </span>
-                                </div>
-                                <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
-                                <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
-                                    {"Start with one position to see the results. No cost, no risk, no excuses not to kick this off."}
-                                </div>
-                                <button className="pricingButton whiteText clickableNoUnderline transitionButton orangeToRedSmallButtonGradientLeft font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
-                                    Take Off
-                                </button>
-                            </div>
-                        </Paper>
-                        <div className="under800only" style={{height:"0px"}}><br/></div>
-                        <Paper className="businessHomeGradientBorder paperBoxBusinessHome"
-                               zDepth={2}>
-                            <div style={{textAlign: "center", position: "relative"}}>
-                                <img
-                                    src="/images/businessHome/EnterpriseRocket.png"
-                                    alt="Enterprise Rocket Icon"
-                                    className="businessHomeBoxIcons"
-                                />
-                                <div className="brightOrangeText marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
-                                    PLUS
-                                </div>
-                                <div style={{height: '80px', lineHeight: '20px'}}>
-                                    <span className="whiteText font30px font24pxUnder400">
-                                        <i className="font12px" style={{display: "inline-block", marginBottom:"9px"}}>Starting at</i>
-                                        <br/>$79
-                                        <br/>
-                                        <i className="font12px">per additional position/month</i>
-                                    </span>
-                                </div>
-                                <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
-                                <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
-                                    {"Easily scale the number of positions you are evaluating through Moonshot."}
-                                </div>
-                                <button className="pricingButton clickableNoUnderline transitionButton orangeToRedSmallButtonGradientRight whiteText font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
-                                    Blast Off
-                                </button>
-                            </div>
-                        </Paper>
-                    </div>
-                </section>
-
-                <section id="crystalBall" className="marginBottom60px">
-                    <div className="center">
-                        <div className="blueTextHome font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
-                            {"Your crystal ball to identify"}<div className="above800only noHeight"><br/></div>{" good and bad hires before it's too late."}
-                        </div>
-                        <img
-                            src="/images/businessHome/CrystalBall.png"
-                            alt="CrystalBall"
-                            className="crystalBall"
-                        />
-                        <br/>
-                        <button className="blueToDarkPurpleButtonGradientReverse bigButton"
-                                style={{marginTop: "25px", color: 'white'}}
-                                onClick={this.handleOpen}
-                        >
-                            <div className="invertColorOnHover gradientBorderButtonInteriorGradient">
-                                {"See the Future"}
-                            </div>
-                        </button>
-                    </div>
-                </section>
-            </div>
+                    </section>
+                </div>
             </div>
         );
     }
