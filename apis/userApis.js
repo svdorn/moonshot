@@ -692,7 +692,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
 
         // update the business to say that they have a user who has completed their application
         let positionIndex = business.positions.findIndex(bizPos => {
-            return bizPoz._id.toString() === user.positionId.toString();
+            return bizPos._id.toString() === positionId.toString();
         });
 
         let businessPos = business.positions[positionIndex];

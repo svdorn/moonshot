@@ -126,8 +126,12 @@ class PsychAnalysis extends Component {
         // if they are finished with the test and ready to move on, give them a finish button
         if (finishedTest) {
             return (
-                <div className="psychAnalysisButton" style={{marginTop: "20px"}} onClick={this.finishTest.bind(this)}>
-                    Finish
+                <div>
+                    {"You're done with the psychometric analysis!"}
+                    <br/>
+                    <div className="psychAnalysisButton" style={{marginTop: "20px"}} onClick={this.finishTest.bind(this)}>
+                        Finish
+                    </div>
                 </div>
             );
         }
