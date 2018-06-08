@@ -74,6 +74,12 @@ function frontEndUser(dbUser, extraFieldsToRemove) {
         if (psychTest.inProgress) {
             cleanPsychTest.inProgress = psychTest.inProgress;
         }
+        if (psychTest.startDate) {
+            cleanPsychTest.startDate = psychTest.startDate;
+        }
+        if (psychTest.endDate) {
+            cleanPsychTest.endDate = psychTest.endDate;
+        }
 
         if (typeof psychTest.questionsPerFacet === "number" && Array.isArray(psychTest.factors)) {
             // count the number of questions - questions/facet * number of facets

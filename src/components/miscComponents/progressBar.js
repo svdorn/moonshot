@@ -32,7 +32,7 @@ class ProgressBar extends Component {
         let stepName = "";
         // if user has not yet taken psych test or if they're currently taking it
         // they're on the first step
-        if (!currentUser.psychometricTest || (currentUser.psychometricTest && currentUser.psychometricTest.inProgress)) {
+        if (!currentUser.psychometricTest || (currentUser.psychometricTest && !currentUser.psychometricTest.endDate)) {
             stepNumber = 1;
             stepName = PSYCH_ANALYSIS;
         }

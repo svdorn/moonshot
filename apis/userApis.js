@@ -1263,27 +1263,14 @@ async function POST_startPsychEval(req, res) {
     // check for invalid input
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
-    //const userId = "5af493a242f28d407fefdc41";
-    //const verificationToken = "2246696e0517ce1e4d320a2023d7d1fd88e3fa537a17a50059d444aebefabc87f29927881df0eed1658968014aac4462d468b859c430a5fe5d9d84b2f1ecabab";
 
     // get the user from the db
     let user = undefined;
     try {
-        user = await Users.findById(userId);
+        user = await getAndVerifyUser(userId, verificationToken);
     } catch (getUserError) {
         console.log("Error getting user from the database: ", getUserError);
         return res.status(500).send("Server error, try again later.");
-    }
-
-    if (!user) {
-        console.log("Couldn't find user from userId: ", userId);
-        res.status(404).send("Couldn't find user.");
-    }
-
-    // verify user's identity
-    if (!verificationToken && user.verificationToken !== verificationToken) {
-        console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
-        return res.status(403).send("Invalid user credentials.");
     }
 
     try {

@@ -153,6 +153,21 @@ export function continueEval(userId, verificationToken, positionId, businessId) 
 }
 
 
+export function startPsychEval(userId, verificationToken) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+        axios.post("/api/user/startPsychEval", {userId, verificationToken})
+        .then(response => {
+            dispatch({type: "START_PSYCH_EVAL", currentUser: response.data});
+        })
+        .catch(e => {
+            let message = e.response && e.response.data ? e.response.data : "Error starting pysch analysis.";
+            dispatch({type: "START_PSYCH_EVAL_ERROR", notification: {message, type: "errorHeader"}});
+        });
+    }
+}
+
+
 export function submitFreeResponse(userId, verificationToken, frqs) {
     return function(dispatch) {
         axios.post("/api/user/submitFreeResponse", {userId, verificationToken, frqs})
