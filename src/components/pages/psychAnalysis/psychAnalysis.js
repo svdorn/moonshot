@@ -101,7 +101,7 @@ class PsychAnalysis extends Component {
         try {
             currentUser = this.props.currentUser;
             const psychometricTest = currentUser.psychometricTest;
-            testInProgress = psychometricTest.inProgress;
+            testInProgress = psychometricTest.inProgress !== false;
             const currentQuestion = currentUser.psychometricTest.currentQuestion;
             question = currentQuestion.body;
             leftOption = currentQuestion.leftOption;

@@ -254,7 +254,6 @@ function GET_search(req, res) {
         .sort(sort)
         .select(select)
         .exec(function (err, pathways) {
-            console.log("pathways: ", pathways);
             if (err) {
                 res.status(500).send("Error getting searched-for pathways");
             } else {

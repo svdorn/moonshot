@@ -50,7 +50,8 @@ const userApis = {
     POST_reset24,
 
     internalStartPsychEval,
-    addEvaluation
+    addEvaluation,
+    finishPositionEvaluation
 }
 
 
@@ -254,29 +255,23 @@ async function POST_submitFreeResponse(req, res) {
     }
     let userPosition = user.positions[userPositionIndex];
 
-    // get the business offering the current position
-    const businessId = userPosition.businessId;
-    try {
-        business = await Businesses.findById(businessId)
-    } catch (findBizErr) {
-        console.log("Error getting business when trying to start position eval: ", findBizErr);
-        return res.status(500).send("Server error.");
-    };
-
-    if (!business) { return res.status(500).send("Position not found."); }
-
     const now = new Date();
 
-    // submitting the frq questions finishes the whole application, so tell the
-    // position it's finished
-    userPosition.appliedEndDate = now;
+    // update the position with the answered frqs
     userPosition.freeResponseQuestions = frqs;
 
     // make sure the updated position is saved to the user
     user.positions[userPositionIndex] = userPosition;
 
-    // user is no longer taking a position evaluation
-    user.positionInProgress = undefined;
+    // mark the position as complete, as answering frqs is always the last step
+    try {
+        finishEvalObj = await finishPositionEvaluation(user, userPosition.positionId, userPosition.businessId);
+        user = finishEvalObj.user;
+        business = finishEvalObj.business;
+    } catch (finishEvalError) {
+        console.log("error finish position evaluation: ", finishEvalError);
+        return res.status(500).send("Server error.");
+    }
 
     // these will be set to true once the user and business are saved in the db
     let userSaved = false;
@@ -291,25 +286,6 @@ async function POST_submitFreeResponse(req, res) {
     .catch(saveUserError => {
         res.status(500).send("Error saving responses.");
     })
-
-    // update the business to say that they have a user who has completed their application
-    let positionIndex = business.positions.findIndex(function(bizPos) {
-        return bizPos._id.toString() === positionId;
-    });
-
-    let businessPos = business.positions[positionIndex];
-    // if the business doesn't contain the current user as an applicant already, add them
-    if (!businessPos.candidates.some(candidateId => {
-        return candidateId.toString() === user._id.toString();
-    })) {
-        businessPos.candidates.push(user._id);
-    }
-    // update the business with new completions and users in progress counts
-    if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
-    if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
-    businessPos.completions++;
-    businessPos.usersInProgress++;
-    business.positions[positionIndex] = businessPos;
 
     business.save()
     .then(response => {
@@ -337,7 +313,6 @@ async function POST_continuePositionEval(req, res) {
     try {
         const userId = sanitize(req.body.userId);
         const verificationToken = sanitize(req.body.verificationToken);
-        const businessId = sanitize(req.body.businessId);
         const positionId = sanitize(req.body.positionId);
         const positionIdString = positionId.toString();
 
@@ -401,7 +376,7 @@ async function POST_continuePositionEval(req, res) {
         let nextUrl = "/";
 
         // if the user has to start or continue the pysch test
-        if (!user.psychometricTest || user.psychometricTest.inProgress) {
+        if (!user.psychometricTest || (user.psychometricTest && !user.psychometricTest.endDate)) {
             nextUrl = "/psychometricAnalysis";
         }
 
@@ -430,11 +405,16 @@ async function POST_continuePositionEval(req, res) {
             finished = true;
             nextUrl = "/myEvaluations";
             console.log("user finished eval!");
-            // this position is NOT the one in progress cuz it's done
-            user.positionInProgress = undefined;
-            // if the position doesn't have an end date, end it now
-            if (!position.appliedEndDate) {
-                user.positions[userPositionIndex].appliedEndDate = new Date();
+
+            // mark this position as completed
+            try {
+                finishEvalObj = await finishPositionEvaluation(user, position.positionId, position.businessId);
+                user = finishEvalObj.user;
+                // save the business with the updated finished user info
+                await finishEvalObj.business.save();
+            } catch(finishEvalError) {
+                console.log("error finishing eval: ", finishEvalError);
+                return res.status(500).send("Server error.");
             }
         }
 
@@ -523,14 +503,13 @@ async function POST_addPositionEval(req, res) {
 async function addEvaluation(user, business, positionId, startDate) {
     return new Promise(async function(resolve, reject) {
         try {
-            console.log("Adding evaluation.");
             // check that all inputs are valid
             if (!user || !business || !positionId) {
                 // return with error saying which input is invalid
                 reject("Inputs to addEvaluation not correct. User: ", user, "\nbusiness: ", business, "\npositionId: ", positionId);
             }
 
-            // find the index of the position from the positionId
+            // find the index of the position within the business from the positionId
             const positionIdString = positionId.toString();
             const positionIndex = business.positions.findIndex(pos => {
                 // if the id of the position matches, we found the right index
@@ -548,14 +527,13 @@ async function addEvaluation(user, business, positionId, startDate) {
 
             // see if candidate is already marked as being a candidate for this position
             const userIdString = user._id.toString();
-            const userAlreadyHasPosition = position.candidates.some(candidateId => {
+            const userAlreadyInPosition = position.candidates.some(candidateId => {
                 return candidateId.toString() === userIdString;
             });
-            // if not, mark them as being evaluated for this position
-            if (!userAlreadyHasPosition) {
-                position.candidates.push(user._id);
-                // make sure the position is saved within the business object
-                business.positions[positionIndex] = position;
+
+            // if so, they already added the position, so they can't add it again
+            if (userAlreadyInPosition) {
+                reject("That position already knows about the user.");
             }
 
             // check if the user already has this position in their positions array
@@ -568,120 +546,205 @@ async function addEvaluation(user, business, positionId, startDate) {
             if (userHasPosition) {
                 // find out if the user finished the position by seeing if there's an end date
                 const finishedWithEval = user.positions[userPositionIndex].appliedEndDate != undefined;
-                resolve({ user, business, finished: finishedWithEval, userPositionIndex });
+                reject("User has already added that position.");
             }
-            // if not, give them the position with all starting info
-            else {
-                // the date at this time, will be used a couple times in the newPosition object
-                const now = new Date();
 
-                // the stage that the user starts out at; not contacted by default
-                // since the user probably hasn't been through interviews before
-                // going through the eval
-                const initialHiringStage = "Not Contacted";
+            // add the information the business will need about the candidate
+            const userInformation = {
+                candidateId: user._id,
+                hiringStage: "Not Contacted",
+                hiringStageChanges: [{
+                    hiringStage: "Not Contacted",
+                    // status changed to Not Contacted just now
+                    dateChanged: new Date(),
+                }],
+                // could be undefined if user hasn't taken psych test yet
+                archetype: user.archetype
+                // user won't have any scores yet because they haven't done the eval yet
+            }
+            position.candidates.push(userInformation);
+            if (typeof position.usersInProgress !== "number") { position.usersInProgress = 0; }
+            position.usersInProgress++;
+            // make sure the position is saved within the business object
+            business.positions[positionIndex] = position;
 
-                // create the free response objects that will be stored for the user
-                const numFRQs = position.freeResponseQuestions.length;
-                let frqsForUser = [];
-                for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
-                    const frq = position.freeResponseQuestions[frqIndex];
-                    frqsForUser.push({
-                        questionId: frq._id,
-                        questionIndex: frqIndex,
-                        response: undefined,
-                        body: frq.body,
-                        required: frq.required
-                    });
-                }
+            // give user the position with all starting info
+            // the date at this time, will be used a couple times in the newPosition object
+            const now = new Date();
 
-                // go through the user's skills to see which they have completed already;
-                // this assumes the user won't have any in-progress skill tests when they
-                // start a position evaluation
-                let testIndex = 0;
-                let skillTestIds = [];
-                let userSkillTests = user.skillTests;
-                position.skills.forEach(skillId => {
-                    // if the user has already completed this skill test ...
-                    if (userSkillTests.some(completedSkill => {
-                        return completedSkill.skillId.toString() === skillId.toString();
-                    })) {
-                        // ... add it to the front of the list and increase test index so we
-                        // know to skip it
-                        skillTestIds.unshift(skillId);
-                        testIndex++;
-                    }
-
-                    // if the user hasn't already completed this skill test, just add it
-                    // to the end of the array
-                    else { console.log("did not complete skill: ", skillId); skillTestIds.push(skillId); }
+            // create the free response objects that will be stored for the user
+            const numFRQs = position.freeResponseQuestions.length;
+            let frqsForUser = [];
+            for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
+                const frq = position.freeResponseQuestions[frqIndex];
+                frqsForUser.push({
+                    questionId: frq._id,
+                    questionIndex: frqIndex,
+                    response: undefined,
+                    body: frq.body,
+                    required: frq.required
                 });
-
-                // see if the user has already finished the psych analysis
-                const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.inProgress === false;
-
-                // if we're trying to take a test that is past the number of tests we
-                // have, we must be done with all the skill tests
-                const doneWithSkillTests = testIndex === skillTestIds.length;
-
-                // see if there are no frqs in this evaluation
-                const noFrqs = frqsForUser.length === 0;
-
-                // if the user has finished the psych test and all skill tests
-                // and there are no frqs, the user has finished already
-                const finished = hasTakenPsychTest && doneWithSkillTests && noFrqs;
-                const appliedEndDate = finished ? now : undefined;
-
-                // get the assigned date from the function call
-                const assignedDate = startDate;
-                let deadline = undefined;
-                // if a start date was assigned, figure out the deadline
-                if (assignedDate) {
-                    const daysAllowed = position.timeAllotted;
-                    if (daysAllowed != undefined) {
-                        const year = assignedDate.getFullYear();
-                        const month = assignedDate.getMonth();
-                        const day = assignedDate.getDate() + daysAllowed;
-                        // always sets the due date to be 11:59pm the day it's due
-                        const hour = 23;
-                        const minute = 59;
-                        const second = 59;
-                        deadline = new Date(year, month, day, hour, minute, second);
-                    }
-                }
-
-                // starting info about the position
-                const newPosition = {
-                    businessId: business._id,
-                    positionId: position._id,
-                    hiringStage: initialHiringStage,
-                    hiringStageChanges: [{ hiringStage: initialHiringStage, dateChanged: now }],
-                    appliedStartDate: now,
-                    appliedEndDate,
-                    assignedDate,
-                    deadline,
-                    // no scores have been calculated yet
-                    scores: undefined,
-                    skillTestIds,
-                    testIndex,
-                    freeResponseQuestions: frqsForUser
-                }
-
-                // add the starting info to the user
-                user.positions.push(newPosition);
-                // position must be last in the array
-                userPositionIndex = user.positions.length - 1;
-
-                console.log("added evaluation: useris: ", user);
-
-                // return successfully
-                resolve({ user, business, finished, userPositionIndex });
             }
+
+            // go through the user's skills to see which they have completed already;
+            // this assumes the user won't have any in-progress skill tests when they
+            // start a position evaluation
+            let testIndex = 0;
+            let skillTestIds = [];
+            let userSkillTests = user.skillTests;
+            position.skills.forEach(skillId => {
+                // if the user has already completed this skill test ...
+                if (userSkillTests.some(completedSkill => {
+                    return completedSkill.skillId.toString() === skillId.toString();
+                })) {
+                    // ... add it to the front of the list and increase test index so we
+                    // know to skip it
+                    skillTestIds.unshift(skillId);
+                    testIndex++;
+                }
+
+                // if the user hasn't already completed this skill test, just add it
+                // to the end of the array
+                else { console.log("did not complete skill: ", skillId); skillTestIds.push(skillId); }
+            });
+
+            // see if the user has already finished the psych analysis
+            const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.endDate;
+
+            // if we're trying to take a test that is past the number of tests we
+            // have, we must be done with all the skill tests
+            const doneWithSkillTests = testIndex === skillTestIds.length;
+
+            // see if there are no frqs in this evaluation
+            const noFrqs = frqsForUser.length === 0;
+
+            // if the user has finished the psych test and all skill tests
+            // and there are no frqs, the user has finished already
+            const finished = hasTakenPsychTest && doneWithSkillTests && noFrqs;
+            const appliedEndDate = finished ? now : undefined;
+
+            // get the assigned date from the function call
+            const assignedDate = startDate;
+            let deadline = undefined;
+            // if a start date was assigned, figure out the deadline
+            if (assignedDate) {
+                const daysAllowed = position.timeAllotted;
+                if (daysAllowed != undefined) {
+                    const year = assignedDate.getFullYear();
+                    const month = assignedDate.getMonth();
+                    const day = assignedDate.getDate() + daysAllowed;
+                    // always sets the due date to be 11:59pm the day it's due
+                    const hour = 23;
+                    const minute = 59;
+                    const second = 59;
+                    deadline = new Date(year, month, day, hour, minute, second);
+                }
+            }
+
+            // starting info about the position
+            const newPosition = {
+                businessId: business._id,
+                positionId: position._id,
+                appliedStartDate: now,
+                appliedEndDate,
+                assignedDate,
+                deadline,
+                // no scores have been calculated yet
+                scores: undefined,
+                skillTestIds,
+                testIndex,
+                freeResponseQuestions: frqsForUser
+            }
+
+            // add the starting info to the user
+            user.positions.push(newPosition);
+            // position must be last in the array
+            userPositionIndex = user.positions.length - 1;
+
+            // return successfully
+            resolve({ user, business, finished, userPositionIndex });
         }
 
         // if there is some random error, return unsuccessfully
         catch (someError) {
             reject(someError);
         }
+    });
+}
+
+
+// doesn't save the user or business objects, caller has to do that
+async function finishPositionEvaluation(user, positionId, businessId) {
+    return new Promise(async function(resolve, reject) {
+        // user is no longer taking a position evaluation
+        user.positionInProgress = undefined;
+
+        // user finished the evaluation
+        user.positions[user.positions.findIndex(pos => { return pos.positionId.toString() === positionId.toString(); })].appliedEndDate = new Date();
+
+        let business;
+        try {
+            business = await Businesses.findById(position.businessId);
+        } catch (findBusinessError) {
+            console.log("Error getting business: ", findBusinessError);
+            reject(findBusinessError);
+        }
+
+        // update the business to say that they have a user who has completed their application
+        let positionIndex = business.positions.findIndex(bizPos => {
+            return bizPoz._id.toString() === user.positionId.toString();
+        });
+
+        let businessPos = business.positions[positionIndex];
+
+        // find the candidate within the business' position
+        const userId = user._id.toString();
+        let candidateIndex = businessPos.candidates.findIndex(candInfo => {
+            return candInfo.toString() === userId;
+        })
+        // if the business didn't already have the candidate ...
+        if (candidateIndex < 0) {
+            // ... add the candidate to the position
+            const userInfo = {
+                candidateId: user._id,
+                hiringStage: "Not Contacted",
+                hiringStageChanges: [{
+                    hiringStage: "Not Contacted",
+                    // status changed to Not Contacted just now
+                    dateChanged: new Date(),
+                }],
+                // could be undefined if user hasn't taken psych test yet
+                archetype: user.archetype
+            }
+            businessPos.candidates.push(userInfo);
+
+            // set the candidate index as the most recently added candidate
+            candidateIndex = businessPos.candidates.length - 1;
+        }
+
+        // update the candidate saying they're done
+        let candidate = businessPos.candidates[candidateIndex];
+
+        // update the archetype now that the user is sure to have taken the psych test
+        candidate.archetype = user.archetype;
+
+        // TODO: actually score the user
+        candidate.scores = {
+            overall: 114,
+            culture: 97,
+            growth: 117,
+            longevity: 115,
+            performance: 110
+        }
+
+        // update the business with new completions and users in progress counts
+        if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
+        if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
+        businessPos.completions++;
+        businessPos.usersInProgress--;
+        business.positions[positionIndex] = businessPos;
+
+        resolve({user, business});
     });
 }
 
@@ -755,7 +818,7 @@ async function POST_startPositionEval(req, res) {
             let userPosition = user.positions[userPositionIndex];
 
             // see if the user ahs already taken the psych analysis
-            const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.inProgress === false;
+            const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.endDate === false;
 
             // if we're trying to take a test that is past the number of tests we
             // have, we must be done with all the skill tests
@@ -967,43 +1030,16 @@ async function POST_answerPsychQuestion(req, res) {
                  userPosition.freeResponseQuestions.length === 0);
             // if the application is complete, mark it as such
             if (applicationComplete) {
-                // user is no longer taking a position evaluation
-                user.positionInProgress = undefined;
-                // if the position doesn't have an end date, end it now
-                if (!userPosition.appliedEndDate) {
-                    user.positions[userPositionIndex].appliedEndDate = new Date();
-                }
-
                 let business;
                 try {
-                    business = await Businesses.findById(userPosition.businessId);
+                    finishedPositionObj = await finishPositionEvaluation(user, positionId, userPosition.businessId);
+                    business = finishedPositionObj.business;
+                    user = finishedPositionObj.user;
 
-                    // update the business to say that they have a user who has completed their application
-                    let positionIndex = business.positions.findIndex(bizPos => {
-                        return bizPoz._id.toString() === user.positionId.toString();
-                    });
-
-                    let businessPos = business.positions[positionIndex];
-                    // if the business doesn't contain the current user as an applicant already, add them
-                    if (!businessPos.candidates.some(candidateId => {
-                        return candidateId.toString() === user._id.toString();
-                    })) {
-                        businessPos.candidates.push(user._id);
-                    }
-                    // update the business with new completions and users in progress counts
-                    if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
-                    if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
-                    businessPos.completions++;
-                    businessPos.usersInProgress++;
-                    business.positions[positionIndex] = businessPos;
-
-                    try {
-                        await business.save()
-                    } catch (saveBizError) {
-                        console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", saveBizError);
-                    }
-                } catch (updateBizWithCompletionError) {
-                    console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", updateBizWithCompletionError);
+                    await business.save();
+                } catch (finishPositionError) {
+                    console.log("error finishing position: ", finishPositionError);
+                    return res.status(500).send("Server error.");
                 }
             }
         }
@@ -1267,24 +1303,30 @@ async function POST_startPsychEval(req, res) {
 }
 
 
-function GET_session(req, res) {
-    if (typeof req.session.userId === 'string') {
-        const userId = sanitize(req.session.userId);
-        getUserByQuery({_id: userId}, function (err, user) {
-            // if no user found, the user was probably deleted. remove the
-            // user from the session and don't log in
-            if (!user || user == null) {
-                req.session.userId = undefined;
-                req.session.save(function(err) {
-                    res.json(undefined);
-                })
-                return;
-            } else {
-                res.json(frontEndUser(user));
-            }
-        })
+async function GET_session(req, res) {
+    const userId = sanitize(req.session.userId);
+
+    // if there was no previous user logged in, don't return a user
+    if (typeof userId !== 'string') { return res.json(undefined); }
+
+    try {
+        // get the user from db
+        const user = await Users.findById(userId);
+
+        // if no user found, the user was probably deleted. remove the
+        // user from the session and don't log in
+        if (!user) {
+            req.session.userId = undefined;
+            req.session.save();
+            return res.json(undefined);
+        }
+
+        // otherwise return the user that is logged in
+        else { res.json(frontEndUser(user)); }
     }
-    else {
+
+    catch (getUserError) {
+        console.log("error getting user: ", getUserError);
         res.json(undefined);
     }
 }

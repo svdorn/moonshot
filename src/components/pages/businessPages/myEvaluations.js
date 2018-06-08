@@ -46,6 +46,7 @@ class MyEvaluations extends Component {
                 }
             })
             .then(res => {
+                console.log("positions: ", res.data.positions);
                 self.positionsFound(res.data.positions);
             })
             .catch(error => {
@@ -115,6 +116,14 @@ class MyEvaluations extends Component {
                 Loading evaluations...
             </div>
         );
+
+        if (this.state.noPositions) {
+            evaluations = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    No evaluations.
+                </div>
+            )
+        }
 
         // create the evaluation previews
         let key = 0;

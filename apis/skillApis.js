@@ -15,7 +15,7 @@ const { sanitize,
 } = require('./helperFunctions.js');
 
 
-const businessApis = {
+const skillApis = {
     //GET_skillByUrl,
     POST_answerSkillQuestion,
     POST_startOrContinueTest
@@ -261,52 +261,26 @@ function POST_answerSkillQuestion(req, res) {
                     // increment the skill index
                     position.testIndex++;
 
+                    // make sure the position gets saved with the new info
+                    user.positions[positionIndex] = position;
+
                     // if the test index is greater than or equal to the number of tests,
                     // user is done with skills section of the application
                     if (position.testIndex >= position.skillTestIds.length) {
                         // if there are no multiple choice questions, user is finished
                         if (!position.freeResponseQuestions || position.freeResponseQuestions.length === 0) {
-                            // user is no longer taking a position evaluation
-                            user.positionInProgress = undefined;
-                            // user finished the evaluation
-                            position.appliedEndDate = new Date();
-
-                            let business;
                             try {
-                                business = await Businesses.findById(position.businessId);
-
-                                // update the business to say that they have a user who has completed their application
-                                let positionIndex = business.positions.findIndex(bizPos => {
-                                    return bizPoz._id.toString() === user.positionId.toString();
-                                });
-
-                                let businessPos = business.positions[positionIndex];
-                                // if the business doesn't contain the current user as an applicant already, add them
-                                if (!businessPos.candidates.some(candidateId => {
-                                    return candidateId.toString() === user._id.toString();
-                                })) {
-                                    businessPos.candidates.push(user._id);
-                                }
-                                // update the business with new completions and users in progress counts
-                                if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
-                                if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
-                                businessPos.completions++;
-                                businessPos.usersInProgress--;
-                                business.positions[positionIndex] = businessPos;
-
-                                try {
-                                    await business.save()
-                                } catch (saveBizError) {
-                                    console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", saveBizError);
-                                }
-                            } catch (updateBizWithCompletionError) {
-                                console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", updateBizWithCompletionError);
+                                const finishObj = await finishPositionEvaluation(user, positionId, businessId);
+                                // save the business with the new user info
+                                finishObj.business.save();
+                                // update the user
+                                user = finishObj.user;
+                            } catch (finishError) {
+                                console.log("Error finishing eval: ", finishError);
+                                return res.status(500).send("Server error.");
                             }
                         }
                     }
-
-                    // make sure the position gets saved with the new info
-                    user.positions[positionIndex] = position;
                 }
             }
 
@@ -618,4 +592,4 @@ function POST_startOrContinueTest(req, res) {
 // ----->> END APIS <<----- //
 
 
-module.exports = businessApis;
+module.exports = skillApis;

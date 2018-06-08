@@ -38,313 +38,325 @@ const candidateApis = {
 
 
 function POST_candidate(req, res) {
-    try {
-        console.log("req.body: ", req.body);
-        let user = sanitize(req.body);
+    const SERVER_ERROR = "Server error, try again later.";
+    let user = sanitize(req.body);
 
-        // if this is true, don't send any more errors
-        let errorSent = false;
+    // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
+    // the db business document for the business offering the position the user signed up for
+    let business = undefined;
+    // the name of the array of codes within the position within the business
+    let userCodeType = undefined;
+    // the index of the unique position-related code the user used to sign up
+    let oneTimeCodeIndex = -1;
+    // id of the position within the business
+    let positionId = undefined;
+    // the index of the position and actual position within the business
+    let positionIndex = undefined;
+    // if the position the user applying for was found in the business db
+    let positionFound = undefined;
+    // if the user has an email address no one else has used before
+    let verifiedUniqueEmail = false;
+    // if password was set up
+    let createdLoginInfo = false;
+    // whether we counted the users and created a profile url
+    let madeProfileUrl = false;
+    // the date the position evaluation was assigned
+    let startDate = undefined;
+    // <<-------------------------------------------------------->> //
 
-        // the things we will need before creating the user
-        let positionFound = undefined;
-        let verifiedUniqueEmail = false;
-        let createdLoginInfo = false;
+    // --->>> THINGS WE CAN SET FOR USER WITHOUT ASYNC CALLS <<<--- //
+    // admin status must be changed in the db directly
+    user.admin = false;
+    // user has not yet verified email
+    user.verified = false;
+    // had to select that they agreed to the terms to sign up so must be true
+    user.agreedToTerms = true;
+    // user has just signed up
+    user.dateSignedUp = new Date();
+    // hasn't had opportunity to do onboarding yet
+    user.hasFinishedOnboarding = false;
+    // infinite use, used to verify identify when making calls to backend
+    user.verificationToken = crypto.randomBytes(64).toString('hex');
+    // one-time use, used to verify email address before initial login
+    user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
+    // make sure referral code is in right format, otherwise get rid of it
+    if (typeof user.signUpReferralCode !== "string") {
+        user.signUpReferralCode = undefined;
+    }
+    // <<-------------------------------------------------------->> //
 
-        // the date the position evaluation was assigned
-        let startDate = undefined;
-
-        // the business offering the position
-        let business = undefined;
-
-        // the index of the position and actual position within the business
-        let positionIndex = undefined;
-        let position = undefined;
-
-        // make sure a user with this email doesn't already exist
-        Users.find({email: user.email})
-        .then(foundUsers => {
-            if (foundUsers.length > 0) {
-                return res.status(401).send("An account with that email address already exists.");
-            } else {
-                // mark that we are good to make this user, then try to do it
-                verifiedUniqueEmail = true;
-                makeUser();
-            }
-        })
-        .catch(findUserError => {
-            console.log("error finding user by email: ", findUserError);
-            return res.status(500).send("Server error, try again later.");
-        });
-
-        // hash the user's password and add verification tokens
-        const saltRounds = 10;
-        bcrypt.genSalt(saltRounds, function (err, salt) {
-            if (err) { console.log("genSalt err: ", err); return res.status(500).send("Server error, try again later."); }
-            bcrypt.hash(user.password, salt, function (err2, hash) {
-                if (err2) { console.log("hash err: ", err); return res.status(500).send("Server error, try again later."); }
-
-                // change the stored password to be the hash
-                user.password = hash;
-                user.verified = false;
-                user.hasFinishedOnboarding = false;
-
-                // create user's verification strings
-                user.emailVerificationToken = crypto.randomBytes(64).toString('hex');
-                user.verificationToken = crypto.randomBytes(64).toString('hex');
-
-                // mark that we have created verification token and password, then make the user
-                createdLoginInfo = true;
-                makeUser();
-            });
-        });
-
-        // message shown to users with bad employer code
-        const INVALID_CODE = "Invalid employer code."
-
-        // get the position from the employer code
-        let code = user.code;
-
-        if (!code) {
-            code = user.employerCode;
-            if (!code) {
-                return res.status(403).send("Need an employer referral.");
-            }
-        }
-
-        if (code.length < 10 || !user.code && code.length < 11) {
-            console.log(`code not long enough, was ${code.length} characters`);
-            return res.status(400).send(INVALID_CODE);
-        }
-        // business identifier
-        const employerCode = code.substring(0, 8);
-        // position identifier
-        const positionCode = code.substring(8, 10);
-
-        // user identifier
-        const uniqueCode = user.userCode ? user.userCode : code.substring(10);
-
-        // find the business corresponding to that employer code
-        Businesses.find({code: employerCode})
-        .then(onceBusinessesFound)
-        .catch(findBizError => {
-            console.log("error finding business by employer code: ", findBizError);
-            return res.status(500).send("Server error.");
-        })
-
-        async function onceBusinessesFound(foundBusinesses) {
-            if (!foundBusinesses || foundBusinesses.length == 0) {
-                console.log("no business found with employer code: ", employerCode);
-                return res.status(400).send(INVALID_CODE);
-            }
-
-            business = foundBusinesses[0];
-
-            // find the position the candidate is applying to
-            positionIndex = business.positions.findIndex(pos => { return pos.code === positionCode; })
-            position = business.positions[positionIndex];
-            if (!position) {
-                console.log("no position found with position code: ", positionCode);
-                return res.status(400).send(INVALID_CODE);
-            }
-
-            // if the position requires a special code because it is closed to the public
-            if (position.open === false) {
-                // user does not have a valid code
-                if (!uniqueCode) { console.log("no unique code"); return res.status(400).send(INVALID_CODE); }
-
-                // find the index of the candidate-specific code within the position
-                const candidateIndex = position.candidateCodes.findIndex(candidateCode => {
-                    console.log("\n\ncode1: ", candidateCode);
-                    console.log("\ncode2: ", uniqueCode);
-                    return candidateCode.code == uniqueCode;
-                });
-                const employeeIndex = position.employeeCodes.findIndex(employeeCode => {
-                    return employeeCode == uniqueCode;
-                });
-                const managerIndex = position.managerCodes.findIndex(managerCode => {
-                    return managerCode == uniqueCode;
-                });
-                const adminIndex = position.adminCodes.findIndex(adminCode => {
-                    return adminCode == uniqueCode;
-                });
-
-                let oneTimeCodeIndex = -1;
-                let oneTimeArray = [];
-
-                if (candidateIndex !== -1) {
-                    user.userType = "candidate";
-                    oneTimeCodeIndex = candidateIndex;
-                    oneTimeArray = position.candidateCodes;
-                    // get the date the evaluation was assigned
-                    startDate = position.candidateCodes[candidateIndex].startDate;
-                } else if (employeeIndex !== -1) {
-                    user.userType = "employee";
-                    oneTimeCodeIndex = employeeIndex;
-                    oneTimeArray = position.employeeCodes;
-                } else if (managerIndex !== -1) {
-                    user.userType = "manager";
-                    oneTimeCodeIndex = managerIndex;
-                    oneTimeArray = position.managerCodes;
-                } else {
-                    user.userType = "accountAdmin";
-                    oneTimeCodeIndex = adminIndex;
-                    oneTimeArray = position.adminCodes;
-                }
-
-                // if the user does have a valid unique code
-                if (typeof oneTimeCodeIndex === "number" && oneTimeCodeIndex > -1) {
-                    // remove the code from the position so it can't be used again
-                    oneTimeArray.splice(oneTimeCodeIndex, 1);
-
-                    // save the business with that unique code removed
-                    business.positions[positionIndex] = position;
-                    try {
-                        await business.save();
-                    } catch(saveBusinessError) {
-                        console.log("error saving business with unique code removed: ", saveBusinessError);
-                        return res.status(500).send("Server error, try again later.");
-                    }
-                }
-                // if the user does NOT have a valid unique code
-                else {
-                    console.log("invalid unique code");
-                    return res.status(400).send(INVALID_CODE);
-                }
-            }
-
-            // mark that we have found the position, then make the user with the position
-            positionFound = true;
+    // --->>       VERIFY THAT USER HAS UNIQUE EMAIL          <<--- //
+    Users.find({email: user.email})
+    .then(foundUsers => {
+        if (foundUsers.length > 0) {
+            return res.status(400).send("An account with that email address already exists.");
+        } else {
+            // mark that we are good to make this user, then try to do it
+            verifiedUniqueEmail = true;
             makeUser();
         }
+    })
+    .catch(findUserError => {
+        console.log("error finding user by email: ", findUserError);
+        return res.status(500).send(SERVER_ERROR);
+    });
+    // <<-------------------------------------------------------->> //
 
-        async function makeUser() {
-            // make sure we've found the right position and made sure no user with
-            // the same email exists before making the user
-            if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo) { return; }
-
-            // get count of users with that name to get the profile url
-            let count = 0;
-            try {
-                count = await Users.count({name: user.name});
-            } catch (countError) {
-                console.log("Couldn't count the number of users: ", countError);
-                return res.status(500).send("Server error.");
-            }
-
-            const randomNumber = crypto.randomBytes(8).toString('hex');
-            user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
-            user.admin = false;
-            user.agreedToTerms = true;
-
-            user.dateSignedUp = new Date();
-            // make sure referral code is a string, if not set it
-            // to undefined (will happen if there is no referral code as well)
-            if (typeof user.signUpReferralCode !== "string") {
-                user.signUpReferralCode = undefined;
-            }
-
-            // store the user in the db
-            try {
-                user = await Users.create(user);
-            } catch (createUserError) {
-                console.log("Error creating user: ", createUserError);
-                return res.status(500).send("Server error.");
-            }
-
-            req.session.unverifiedUserId = user._id;
-            req.session.save(function (err) {
-                if (err) {
-                    console.log("error saving unverifiedUserId to session: ", err);
-                }
-            })
-
-            // add the user to the position within the business if they're a candidate
-            //TODO
-            // // add the candidate to the list of candidates for this position
-            // position.candidates.push({
-            //     candidateId
-            // })
-
-            // add the evaluation to the user
-            try {
-                let evalObj = await addEvaluation(user, business, position._id, startDate);
-                user = evalObj.user;
-                // since the user is just signing up we know that the active
-                // position will be the only one available
-                user.positionInProgress = user.positions[0].positionId;
-                console.log("user after add eval with positionInProgress: ", user);
-                business = evalObj.business;
-                // save the business with the user in there
-                await business.save();
-            } catch (addEvalError) {
-                console.log("Couldn't add evaluation to user: ", addEvalError);
-                return res.status(500).send("Server error.");
-            }
-
-            // sign up for the psych test
-            try {
-                user = await internalStartPsychEval(user);
-                user = await user.save();
-            } catch (psychEvalSignupError) {
-                console.log("pyschEvalSignupError: ", psychEvalSignupError);
-            }
-
-            if (user.signUpReferralCode) {
-                Referrals.findOne({referralCode: user.signUpReferralCode}, function(referralErr, referrer) {
-                    if (referralErr) {
-                        console.log("Error finding referrer for new sign up: ", referralErr);
-                    } else if (!referrer) {
-                        console.log("Invalid referral code used: ", user.signUpReferralCode);
-                    } else {
-                        referrer.referredUsers.push({
-                            name: user.name,
-                            email: user.email,
-                            _id: user._id
-                        });
-                        referrer.save(function(referrerSaveErr, newReferrer) {
-                            if (referrerSaveErr) {
-                                console.log("Error saving referrer: ", referrerSaveErr);
-                            }
-                        });
-                    }
-                });
-            }
-
-            // TODO: change to make for positions, not pathways
-            try {
-                // send email to everyone if there's a new sign up (if in production mode)
-                if (process.env.NODE_ENV !== "development") {
-                    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
-
-                    let subject = 'New Sign Up';
-                    let content =
-                        '<div>'
-                        +   '<p>New user signed up.</p>'
-                        +   '<p>Name: ' + user.name + '</p>'
-                        +   '<p>email: ' + user.email + '</p>'
-                        + '</div>';
-
-                    const sendFrom = "Moonshot";
-                    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-                        if (!success) {
-                            console.log("Error sending sign up alert email");
-                        }
-                    })
-                }
-            } catch (e) {
-                console.log("ERROR SENDING EMAIL ALERTING US THAT A NEW USER SIGNED UP: ", e);
-            }
-
-            // no reason to return the user with tokens because
-            // they will have to verify themselves before they
-            // can do anything anyway
-            res.json(frontEndUser(user, NO_TOKENS));
+    // --->> VERIFY THAT THE CODE THE USER PROVIDED IS LEGIT  <<--- //
+    verifyPositionCode().then(codeVerified => {
+        positionFound = true;
+        makeUser();
+    }).catch(verifyCodeError => {
+        if (typeof verifyCodeError === "object" && verifyCodeError.status && verifyCodeError.message) {
+            console.log(verifyCodeError.error);
+            return res.status(verifyCodeError.status).send(verifyCodeError.message);
+        } else {
+            console.log("Error verifying position code: ", verifyCodeError);
+            return res.status(500).send(SERVER_ERROR);
         }
+    });
+    // <<-------------------------------------------------------->> //
+
+    // --->> COUNT THE USERS WITH THIS NAME TO ALLOW PROFILE URL CREATION <<--- //
+    Users.count({name: user.name})
+    .then(count => {
+        // create the user's profile url with the count after their name
+        const randomNumber = crypto.randomBytes(8).toString('hex');
+        user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+        madeProfileUrl = true;
+        makeUser();
+    }).catch (countError => {
+        console.log("Couldn't count the number of users: ", countError);
+        return res.status(500).send("Server error.");
+    })
+    // <<-------------------------------------------------------->> //
+
+    // --->>            HASH THE USER'S PASSWORD              <<--- //
+    const saltRounds = 10;
+    bcrypt.hash(user.password, saltRounds, function(hashError, hash) {
+        if (hashError) { console.log("hash error: ", hashError); return res.status(500).send(SERVER_ERROR); }
+
+        // change the stored password to be the hash
+        user.password = hash;
+        // mark that we have created verification token and password, then make the user
+        createdLoginInfo = true;
+        makeUser();
+    });
+    // <<-------------------------------------------------------->> //
+
+    // --->>           CREATE AND UPDATE THE USER             <<--- //
+    async function makeUser() {
+        // make sure all pre-reqs to creating user are met
+        if (!positionFound || !verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
+
+        // make the user db object
+        try {
+            user = await Users.create(user);
+        } catch (createUserError) {
+            console.log("Error creating user: ", createUserError);
+            return res.status(500).send("Server error.");
+        }
+
+        // if the user used a unique code that has to get deleted now ...
+        if (userCodeType) {
+            // ... remove it from the position from the correct codes array
+            business.positions[positionIndex][userCodeType].splice(oneTimeCodeIndex, 1);
+        }
+
+        // save the user's id so that if they click verify email in the same
+        // browser they can be logged in right away
+        req.session.unverifiedUserId = user._id;
+        req.session.save(function (err) {
+            if (err) { console.log("error saving unverifiedUserId to session: ", err); }
+        })
+
+        try {
+            // add the evaluation to the user
+            let evalObj = await addEvaluation(user, business, positionId, startDate);
+            user = evalObj.user;
+            // since the user is just signing up we know that the active
+            // position will be the only one available
+            user.positionInProgress = user.positions[0].positionId;
+
+            // save the user and the business with the new evaluation information
+            let [savedUser, savedBusiness] = await Promise.all([user.save(), business.save()]);
+
+            // no reason to return the user with tokens because they will have to
+            // verify themselves before they can do anything anyway
+            return res.json(frontEndUser(savedUser, NO_TOKENS));
+        }
+        catch (addEvalOrSaveError) {
+            console.log("Couldn't add evaluation to user: ", addEvalOrSaveError);
+            return res.status(500).send(SERVER_ERROR);
+        }
+
+        // sign up for the psych test
+        // try {
+        //     user = await internalStartPsychEval(user);
+        //     user = await user.save();
+        // } catch (psychEvalSignupError) {
+        //     console.log("pyschEvalSignupError: ", psychEvalSignupError);
+        // }
+
+        // add the user to the referrer's list of referred users
+        creditReferrer().catch(referralError => { console.log(referralError); });
+
+        // send the moonshot admins an email saying that a user signed up
+        alertFounders().catch(emailError => { console.log(emailError); });
+    }
+    // <<-------------------------------------------------------->> //
+
+    function creditReferrer() {
+        return new Promise(function(resolve, reject) {
+            // if user used a referral sign up code ...
+            if (user.signUpReferralCode) {
+                // ... find the user that referred them ...
+                Referrals.findOne({referralCode: user.signUpReferralCode})
+                .then(referrer => {
+                    if (!referrer) {
+                        return reject("Invalid referral code used: ", user.signUpReferralCode);
+                    }
+                    // ... add the user to the referrer's list of referrals ...
+                    referrer.referredUsers.push({
+                        name: user.name,
+                        email: user.email,
+                        _id: user._id
+                    });
+                    // ... and save the referrer
+                    referrer.save()
+                    .then(savedReferrer => { return resolve(); })
+                    .catch(saveReferrerError => { return reject(saveReferrerError); })
+                })
+                .catch(referralError => { return reject(referralError); });
+            }
+
+            // no referral code used
+            else { return resolve(); }
+        });
     }
 
-    catch (miscError) {
-        console.log("error signing up user: ", miscError);
-        res.status(500).send("Server error, try again later.");
+    function verifyPositionCode() {
+        return new Promise(function(resolve, reject) {
+            // message shown to users with bad employer code
+            const INVALID_CODE = "Invalid employer code."
+            // get the position from the employer code
+            let code = user.code;
+            // if the user did not provide a code, they can't sign up
+            if (!code) {
+                code = user.employerCode;
+                if (!code) {
+                    return reject({status: 403, message: "Need an employer referral.", error: "No employer referral."});
+                }
+            }
+            // see if the code is a valid length
+            if (code.length < 10 || !user.code && code.length < 11) {
+                return reject({status: 400, message: INVALID_CODE, error: `code not long enough, was ${code.length} characters`});
+            }
+            // business identifier
+            const employerCode = code.substring(0, 8);
+            // position identifier
+            const positionCode = code.substring(8, 10);
+            // user identifier
+            const uniqueCode = user.userCode ? user.userCode : code.substring(10);
+
+            // find the business corresponding to that employer code
+            Businesses.find({code: employerCode})
+            .then(foundBusinesses => {
+                if (!foundBusinesses || foundBusinesses.length == 0) {
+                    return reject({status: 400, message: INVALID_CODE, error: `no business found with employer code: ${employerCode}`})
+                }
+
+                business = foundBusinesses[0];
+
+                // find the position the candidate is applying to
+                positionIndex = business.positions.findIndex(pos => { return pos.code === positionCode; })
+                let position = business.positions[positionIndex];
+                positionId = position._id;
+                if (!position) {
+                    return reject({status: 400, message: INVALID_CODE, error: `no position found with position code: ${positionCode}`});
+                }
+
+                // if the position requires a special code because it is closed to the public
+                if (position.open === false) {
+                    // user needs a unique code; if doesn't have one, reject
+                    if (!uniqueCode) {
+                        return reject({status: 400, message: INVALID_CODE, error: "no unique code"});
+                    }
+
+                    // find the index of the candidate-specific code within the position
+                    const candidateIndex = position.candidateCodes.findIndex(candidateCode => {
+                        return candidateCode.code == uniqueCode;
+                    });
+                    const employeeIndex = position.employeeCodes.findIndex(employeeCode => {
+                        return employeeCode == uniqueCode;
+                    });
+                    const managerIndex = position.managerCodes.findIndex(managerCode => {
+                        return managerCode == uniqueCode;
+                    });
+                    const adminIndex = position.adminCodes.findIndex(adminCode => {
+                        return adminCode == uniqueCode;
+                    });
+
+                    if (candidateIndex !== -1) {
+                        user.userType = "candidate";
+                        oneTimeCodeIndex = candidateIndex;
+                        userCodeType = "candidateCodes";
+                        // get the date the evaluation was assigned
+                        startDate = position.candidateCodes[candidateIndex].startDate;
+                    } else if (employeeIndex !== -1) {
+                        user.userType = "employee";
+                        oneTimeCodeIndex = employeeIndex;
+                        userCodeType = "employeeCodes";
+                    } else if (managerIndex !== -1) {
+                        user.userType = "manager";
+                        oneTimeCodeIndex = managerIndex;
+                        userCodeType = "managerCodes";
+                    } else {
+                        user.userType = "accountAdmin";
+                        oneTimeCodeIndex = adminIndex;
+                        userCodeType = "accountAdmin";
+                    }
+
+                    // if the user does NOT have a valid unique code
+                    if (typeof oneTimeCodeIndex !== "number" || oneTimeCodeIndex < 0){
+                        return reject({status: 400, message: INVALID_CODE, error: "invalid unique code"});
+                    }
+                }
+
+                // the code is legit, resolve
+                return resolve(true);
+            })
+            .catch(findBizError => {
+                console.log("error finding business by employer code");
+                return reject({status: 500, message: SERVER_ERROR, error: findBizError})
+            })
+        });
+    }
+
+    function alertFounders() {
+        return new Promise(function(resolve, reject) {
+            // send email to everyone if there's a new sign up (if in production mode)
+            if (process.env.NODE_ENV !== "development") {
+                let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com", "ameyer24@wisc.edu"];
+
+                let subject = 'New Sign Up';
+                let content =
+                      '<div>'
+                    +   '<p>New user signed up.</p>'
+                    +   '<p>Name: ' + user.name + '</p>'
+                    +   '<p>email: ' + user.email + '</p>'
+                    + '</div>';
+
+                const sendFrom = "Moonshot";
+                sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+                    if (!success) {
+                        return reject("Error sending sign up alert email");
+                    } else {
+                        return resolve();
+                    }
+                })
+            }
+        });
     }
 }
 
