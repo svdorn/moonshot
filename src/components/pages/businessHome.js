@@ -55,7 +55,9 @@ class BusinessHome extends Component {
             dialogScreen: 1,
             email: '',
             // initially don't show the rectangles in case the user's browser is old
-            showRectangles: false
+            showRectangles: false,
+            agreeingToTerms: false,
+            error: ''
         }
     }
 
@@ -94,6 +96,11 @@ class BusinessHome extends Component {
         this.setState({open: false, dialogScreen: 1});
     };
 
+    handleCheckMarkClick() {
+        this.setState({
+            agreeingToTerms: !this.state.agreeingToTerms
+        })
+    };
 
     handleSubmit(e) {
         e.preventDefault();
@@ -185,6 +192,13 @@ class BusinessHome extends Component {
     handleSubmitDialogEmailScreen2(e) {
         e.preventDefault();
         const vals = this.props.formData.forBusiness.values;
+
+        if (!this.state.agreeingToTerms) {
+            this.setState({error: "Must agree to Terms and Conditions to continue."});
+            return;
+        } else {
+            this.setState({error: ''});
+        }
 
         // Form validation before submit
         let notValid = false;
@@ -581,6 +595,11 @@ class BusinessHome extends Component {
                         <div className="whiteText font14px font12pxUnder500" style={{width: "95%", margin: "10px auto"}}>
                             No credit card required. Customized position assessment.
                         </div>
+                        {this.state.error != ''
+                        ? <div className="redText font14px font12pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                                {this.state.error}
+                        </div>
+                        : null}
                         <Field
                             name="name"
                             component={renderTextField}
@@ -605,11 +624,22 @@ class BusinessHome extends Component {
                             label="Confirm Password*"
                             validate={[required, passwordsMatch]}
                         /><br/>
+                        <div style={{margin: "10px auto 10px"}} className="whiteText font14px">
+                            <div className="checkbox smallCheckbox whiteCheckbox"
+                                 onClick={this.handleCheckMarkClick.bind(this)}>
+                                <img
+                                    alt=""
+                                    className={"checkMark" + this.state.agreeingToTerms}
+                                    src="/icons/CheckMarkRoundedWhite.png"
+                                />
+                            </div>
+                            I understand and agree to the <a className="clickableNoUnderline whiteText" href="/privacyPolicy" target="_blank">Privacy
+                            Policy</a> and <a className="whiteText clickableNoUnderline" href="/termsOfUse" target="_blank">Terms of Use</a>.
+                        </div>
                         <RaisedButton
                             label="Continue"
                             type="submit"
-                            className="raisedButtonBusinessHome"
-                            style={{marginTop: '20px'}}
+                            className="raisedButtonBusinessHome marginTop10px"
                         />
                     </form>
                 );
@@ -982,11 +1012,11 @@ class BusinessHome extends Component {
                                 The New Baseline Evaluation
                                 <div className="infoTextContainer">
                                     <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
-                                        <div>Unlimited Candidates</div>
+                                        <div>Free for First Position</div>
+                                        <div>•</div>
+                                        <div>Unlimited Evaluations</div>
                                         <div>•</div>
                                         <div>Unlimited Hires</div>
-                                        <div>•</div>
-                                        <div>Free for First Position</div>
                                     </div>
                                 </div>
                             </div>

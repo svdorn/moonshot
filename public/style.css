@@ -2576,7 +2576,7 @@ button.link {
 .pinkTextHome { color: #d3546e; }
 .blueTextHome { color: #72d6f5; }
 .orangeTextHome { color: #ff5438; }
-.redText { color: red }
+.redText { color: rgb(244, 67, 54); }
 .whiteText { color: white; }
 .grayText { color: #d7d7d7; }
 .blueText { color: var(--moonshotLightBlue); }

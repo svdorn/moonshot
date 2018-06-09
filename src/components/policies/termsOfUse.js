@@ -18,7 +18,7 @@ class TermsOfUse extends Component {
         return (
             <div>
                 {standalone ?
-                    <div className="greenToBlue headerDiv" />
+                    <div className="lightBlackBackground headerDiv" />
                     : null
                 }
 

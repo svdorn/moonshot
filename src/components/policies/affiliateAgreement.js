@@ -6,7 +6,7 @@ class PrivacyPolicy extends Component {
     render() {
         // if the component is its own page or within a different page
         let standalone = false;
-        
+
         try {
             standalone = this.props.route.standalone;
         } catch(e) {
@@ -18,7 +18,7 @@ class PrivacyPolicy extends Component {
         return (
             <div>
                 {standalone ?
-                    <div className="greenToBlue headerDiv" />
+                    <div className="lightBlackBackground headerDiv" />
                     : null
                 }
 
