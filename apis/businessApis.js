@@ -1,6 +1,7 @@
-var Businesses = require('../models/businesses.js');
-var Users = require('../models/users.js');
-var Pathways = require('../models/pathways.js');
+var Businesses = require("../models/businesses.js");
+var Users = require("../models/users.js");
+var Pathways = require("../models/pathways.js");
+const mongoose = require("mongoose");
 
 const crypto = require('crypto');
 
@@ -26,8 +27,8 @@ const businessApis = {
     POST_updateHiringStage,
     POST_answerQuestion,
     POST_emailInvites,
-    GET_pathways,
-    // GET_candidateSearch,
+    // GET_pathways,
+    GET_candidateSearch,
     GET_employees,
     GET_positions
 }
@@ -630,75 +631,160 @@ async function GET_positions(req, res) {
     return res.json({logo: business.logo, businessName: business.name, positions: business.positions});
 }
 
-function GET_pathways(req, res) {
+
+async function GET_candidateSearch(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
-    if (!userId || !verificationToken) {
-        return res.status(400).send("Bad request.");
+    // message displayed on miscellaneous errors
+    const SERVER_ERROR = "Server error, try again later.";
+    // message displayed when user doesn't have right permissions
+    const PERMISSIONS_ERROR = "You don't have permission to do that.";
+
+    // get the user who is trying to search for candidates
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting business user while searching for candidates: ", getUserError);
+        return res.status(401).send(PERMISSIONS_ERROR);
     }
 
-    Users.findById(userId, function(findBUserErr, user) {
-        // error finding user in db
-        if (findBUserErr) {
-            console.log("Error finding business user who was trying to see their pathways: ", findBUserErr);
-            return res.status(500).send("Server error, try again later.");
-        }
+    // if the user is not an admin or manager, they can't search for candidates
+    if (!["accountAdmin", "manager"].includes(user.userType)) {
+        console.log("User is type: ", user.userType);
+        return res.status(401).send(PERMISSIONS_ERROR);
+    }
 
-        // couldn't find user in business user db, either they have the wrong
-        // type of account or are trying to pull some dubious shenanigans
-        if (!user) {
-            return res.status(403).send("You do not have permission to access pathway info.");
-        }
+    // if the user doesn't have
+    if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
+        console.log("User doesn't have associated business.");
+        return res.status(401).send(PERMISSIONS_ERROR);
+    }
 
-        // user does not have the right verification token, probably trying to
-        // pull a fast one on us
-        if (user.verificationToken !== verificationToken) {
-            return res.status(403).send("You do not have permission to access pathway info.");
-        }
+    const companyId = user.businessInfo.company.companyId;
 
-        const companyId = user.businessInfo.company.companyId;
-        Businesses.findById(companyId, function(findBizErr, company) {
-            if (findBizErr) {
-                console.log("Error finding business when trying to search for pathways: ", findBizErr);
-                return res.status(500).send("Server error, try again later.");
+    // the restrictions on the search
+    const searchTerm = sanitize(req.query.searchTerm);
+    const hiringStage = sanitize(req.query.hiringStage);
+    // position name is the only required input to the search
+    const positionName = sanitize(req.query.positionName);
+
+    const businessQuery = {
+        "_id": mongoose.Types.ObjectId(companyId)
+    }
+
+    // get only the position the user is asking for in the positions array
+    const positionQuery = {
+        "positions": {
+            "$elemMatch": {
+                "name": positionName
             }
+        }
+    }
 
-            if (!company) {
-                console.log("Business not found when trying to search for pathways.");
-                return res.status(500).send("Server error, try again later.");
-            }
+    // const term = "Frizz";
+    // const termRegex = new RegExp(term, "i");
+    // query["name"] = termRegex;
+    // let candidateQuery = {
+    //     "positions.candidates" {
+    //         "name": termRegex
+    //     }
+    // }
 
-            // if the business doesn't have an associated user with the given
-            // user id, don't let them see this business' candidates
-            const userIdString = userId.toString();
-            if (!company.employerIds.some(function(bizUserId) {
-                return bizUserId.toString() === userIdString;
-            })) {
-                console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
-                return res.status(403).send("You do not have access to this business' pathways.");
-            }
+    // get the business the user works for
+    let business;
+    try {
+        business = await Businesses
+            .find(businessQuery, positionQuery)
+            .select("positions.name positions.candidates.scores positions.candidates.candidateId positions.candidates.hiringStage positions.candidates.name positions.candidates.archetype");
+        // see if there are none found
+        if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
+        // if any are found, only one is found, as we searched by id
+        business = business[0];
+    } catch (findBizError) {
+        console.log("error finding business for user trying to search for candidates: ", findBizError);
+        return res.status(500).send(SERVER_ERROR);
+    }
 
-            // if we got to this point it means the user is allowed to see pathways
 
-            let pathwayQuery = { '_id': { $in: company.pathwayIds } }
 
-            // find names of all the pathways associated with the business
-            Pathways.find(pathwayQuery)
-            .select("name")
-            .exec(function(findPathwaysErr, pathways) {
-                if (findPathwaysErr) {
-                    return res.status(500).send("Server error, couldn't get pathways to search by.");
-                } else {
-                    const pathwaysToReturn = pathways.map(function(path) {
-                        return {name: path.name, _id: path._id};
-                    });
-                    return res.json(pathwaysToReturn);
-                }
-            });
-        });
-    })
+    //console.log("business: ", business);
+    console.log("positions length: ", business.positions.length);
+
+    res.json(business);
 }
+
+
+// function GET_pathways(req, res) {
+//     const userId = sanitize(req.query.userId);
+//     const verificationToken = sanitize(req.query.verificationToken);
+//
+//     if (!userId || !verificationToken) {
+//         return res.status(400).send("Bad request.");
+//     }
+//
+//     Users.findById(userId, function(findBUserErr, user) {
+//         // error finding user in db
+//         if (findBUserErr) {
+//             console.log("Error finding business user who was trying to see their pathways: ", findBUserErr);
+//             return res.status(500).send("Server error, try again later.");
+//         }
+//
+//         // couldn't find user in business user db, either they have the wrong
+//         // type of account or are trying to pull some dubious shenanigans
+//         if (!user) {
+//             return res.status(403).send("You do not have permission to access pathway info.");
+//         }
+//
+//         // user does not have the right verification token, probably trying to
+//         // pull a fast one on us
+//         if (user.verificationToken !== verificationToken) {
+//             return res.status(403).send("You do not have permission to access pathway info.");
+//         }
+//
+//         const companyId = user.businessInfo.company.companyId;
+//         Businesses.findById(companyId, function(findBizErr, company) {
+//             if (findBizErr) {
+//                 console.log("Error finding business when trying to search for pathways: ", findBizErr);
+//                 return res.status(500).send("Server error, try again later.");
+//             }
+//
+//             if (!company) {
+//                 console.log("Business not found when trying to search for pathways.");
+//                 return res.status(500).send("Server error, try again later.");
+//             }
+//
+//             // if the business doesn't have an associated user with the given
+//             // user id, don't let them see this business' candidates
+//             const userIdString = userId.toString();
+//             if (!company.employerIds.some(function(bizUserId) {
+//                 return bizUserId.toString() === userIdString;
+//             })) {
+//                 console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
+//                 return res.status(403).send("You do not have access to this business' pathways.");
+//             }
+//
+//             // if we got to this point it means the user is allowed to see pathways
+//
+//             let pathwayQuery = { '_id': { $in: company.pathwayIds } }
+//
+//             // find names of all the pathways associated with the business
+//             Pathways.find(pathwayQuery)
+//             .select("name")
+//             .exec(function(findPathwaysErr, pathways) {
+//                 if (findPathwaysErr) {
+//                     return res.status(500).send("Server error, couldn't get pathways to search by.");
+//                 } else {
+//                     const pathwaysToReturn = pathways.map(function(path) {
+//                         return {name: path.name, _id: path._id};
+//                     });
+//                     return res.json(pathwaysToReturn);
+//                 }
+//             });
+//         });
+//     })
+// }
 
 
 // function GET_candidateSearch(req, res) {

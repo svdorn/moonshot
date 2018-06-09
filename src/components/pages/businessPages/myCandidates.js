@@ -85,7 +85,7 @@ class MyCandidates extends Component {
                     position: firstPositionName
                 },
                     // search for candidates of first position
-                    self.search()
+                    self.search
                 );
             } else {
                 self.setState({
@@ -128,16 +128,20 @@ class MyCandidates extends Component {
     };
 
     search() {
-        if (!this.state.noPositions) {
+        // need a position to search for
+        if (!this.state.noPositions && this.state.position) {
+            console.log("positionName: ", this.state.position);
             axios.get("/api/business/candidateSearch", {
                 params: {
                     searchTerm: this.state.term,
                     hiringStage: this.state.hiringStage,
-                    position: this.state.position,
+                    // searching by position name right now, could search by id if want to
+                    positionName: this.state.position,
                     userId: this.props.currentUser._id,
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
+                console.log("res.data: ", res.data);
                 // make sure component is mounted before changing state
                 if (this.refs.myCandidates) {
                     this.setState({candidates: res.data});
@@ -190,7 +194,9 @@ class MyCandidates extends Component {
 
         const currentUser = this.props.currentUser;
         if (!currentUser) {
-            return null;
+            return (
+                <div className="blackBackground fillScreen" />
+            );
         }
 
         // find the id of the currently selected position
@@ -206,7 +212,7 @@ class MyCandidates extends Component {
             <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
                 {this.state.positions.length === 0 ? "Loading positions..." : "Select a position to see your candidates."}
             </div>
-        )
+        );
 
         if (this.state.position != "") {
             candidatePreviews = this.state.candidates.map(candidate => {

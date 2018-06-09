@@ -700,7 +700,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         // find the candidate within the business' position
         const userId = user._id.toString();
         let candidateIndex = businessPos.candidates.findIndex(candInfo => {
-            return candInfo.toString() === userId;
+            return candInfo.candidateId.toString() === userId;
         })
         // if the business didn't already have the candidate ...
         if (candidateIndex < 0) {

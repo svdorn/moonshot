@@ -93,6 +93,8 @@ var businessesSchema = mongoose.Schema({
         usersInProgress: Number,
         // candidates who have applied for this position
         candidates: [{
+            // name of the candidate
+            name: String,
             // id of the candidate
             candidateId: mongoose.Schema.Types.ObjectId,
             // the hiring stage of the candidate, which the company has determined
@@ -107,7 +109,8 @@ var businessesSchema = mongoose.Schema({
             }],
             // user's archetype, found from the psychometric test
             archetype: String,
-            // the scores the user got for the position
+            // the scores the user got for the position; if this is not undefined,
+            // the user has completed the evaluation
             scores: {
                 // combination of all the scores
                 overall: Number,
