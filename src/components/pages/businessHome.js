@@ -568,7 +568,7 @@ class BusinessHome extends Component {
                 dialogBody = (
                     <form onSubmit={this.handleSubmitDialogEmail.bind(this)} className="center">
                         <div
-                            className="whiteTextImportant font22px font20pxUnder700 font18pxUnder500 marginTop10px">
+                            className="blueTextHome font22px font20pxUnder700 font18pxUnder500 marginTop30px">
                             Get Started
                         </div>
                         <Field
@@ -576,12 +576,12 @@ class BusinessHome extends Component {
                             component={renderTextField}
                             label="Work Email*"
                             validate={[required, emailValidate]}
+                            className="marginTop10px"
                         /><br/>
                         <RaisedButton
                             label="Continue"
                             type="submit"
-                            className="raisedButtonBusinessHome"
-                            style={{marginTop: '20px'}}
+                            className="raisedButtonBusinessHome marginTop20px"
                             />
                     </form>
                 );
