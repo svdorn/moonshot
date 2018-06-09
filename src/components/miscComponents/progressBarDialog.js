@@ -57,7 +57,7 @@ class ProgressBarDialog extends Component {
 
         stepCircles.push(
             <div key="endCircle" className="progressStepCircle" style={{backgroundColor: `rgb(${rEnd},${gEnd},${bEnd})`}}>
-                {stepNumber >= 4 ? null : <div></div>}
+                {stepNumber >= 5 ? null : <div></div>}
             </div>
         );
 
