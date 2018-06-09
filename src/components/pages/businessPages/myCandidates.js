@@ -47,6 +47,7 @@ class MyCandidates extends Component {
             searchTerm: "",
             hiringStage: "",
             position: "",
+            sortBy: "",
             candidates: [emptyCandidate],
             positions: [],
             positionNameFromUrl,
@@ -116,15 +117,18 @@ class MyCandidates extends Component {
     }
 
     handleHiringStageChange = (event, index, hiringStage) => {
-        this.setState({hiringStage}, () => {
-            this.search();
-        })
+        this.setState({hiringStage}, this.search);
     };
 
     handlePositionChange = (event, index, position) => {
-        this.setState({position}, () => {
-            this.search();
-        })
+        this.setState({position}, this.search);
+    };
+
+    handleSortByChange = (event, index, sortBy) => {
+        this.setState({sortBy}, () => {
+            // only search if the user put in a new search term
+            if (sortBy !== "") { this.search(); }
+        });
     };
 
     search() {
@@ -137,6 +141,7 @@ class MyCandidates extends Component {
                     hiringStage: this.state.hiringStage,
                     // searching by position name right now, could search by id if want to
                     positionName: this.state.position,
+                    sortBy: this.state.sortBy,
                     userId: this.props.currentUser._id,
                     verificationToken: this.props.currentUser.verificationToken
                 }
@@ -270,6 +275,11 @@ class MyCandidates extends Component {
 
         }
 
+        const sortByOptions = ["Name", "Score"];
+        const sortByItems = sortByOptions.map(function (sortBy) {
+            return <MenuItem value={sortBy} primaryText={sortBy} key={sortBy}/>
+        })
+
         const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
         const hiringStageItems = hiringStages.map(function (hiringStage) {
             return <MenuItem value={hiringStage} primaryText={hiringStage} key={hiringStage}/>
@@ -309,11 +319,21 @@ class MyCandidates extends Component {
                     </ToolbarGroup>
 
                     <ToolbarGroup>
+                        <DropDownMenu value={this.state.sortBy}
+                                      onChange={this.handleSortByChange}
+                                      labelStyle={style.menuLabelStyle}
+                                      anchorOrigin={style.anchorOrigin}
+                                      style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
+                        >
+                            <MenuItem value={""} primaryText="Sort By"/>
+                            <Divider/>
+                            {sortByItems}
+                        </DropDownMenu>
                         <DropDownMenu value={this.state.hiringStage}
                                       onChange={this.handleHiringStageChange}
                                       labelStyle={style.menuLabelStyle}
                                       anchorOrigin={style.anchorOrigin}
-                                      style={{fontSize: "20px", marginTop: "11px"}}
+                                      style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                         >
                             <MenuItem value={""} primaryText="Hiring Stage"/>
                             <Divider/>
@@ -323,7 +343,7 @@ class MyCandidates extends Component {
                                       onChange={this.handlePositionChange}
                                       labelStyle={style.menuLabelStyle}
                                       anchorOrigin={style.anchorOrigin}
-                                      style={{fontSize: "20px", marginTop: "11px"}}
+                                      style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                         >
                             <MenuItem value={""} primaryText="Position"/>
                             <Divider/>
@@ -349,22 +369,33 @@ class MyCandidates extends Component {
 
                     <br/>
 
+                    <DropDownMenu value={this.state.sortBy}
+                                  onChange={this.handleSortByChange}
+                                  labelStyle={style.menuLabelStyle}
+                                  anchorOrigin={style.anchorOrigin}
+                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
+                    >
+                        <MenuItem value={""} primaryText="Sort By"/>
+                        <Divider/>
+                        {sortByItems}
+                    </DropDownMenu>
+                    <br/>
                     <DropDownMenu value={this.state.hiringStage}
                                   onChange={this.handleHiringStageChange}
                                   labelStyle={style.menuLabelStyle}
                                   anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "20px", marginTop: "11px"}}
+                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                     >
                         <MenuItem value={""} primaryText="Hiring Stage"/>
                         <Divider/>
                         {hiringStageItems}
                     </DropDownMenu>
-                    <div><br/></div>
+                    <br/>
                     <DropDownMenu value={this.state.position}
                                   onChange={this.handlePositionChange}
                                   labelStyle={style.menuLabelStyle}
                                   anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "20px", marginTop: "11px"}}
+                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                     >
                         <MenuItem value={""} primaryText="Position"/>
                         <Divider/>

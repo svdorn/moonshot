@@ -669,6 +669,8 @@ async function GET_candidateSearch(req, res) {
     const hiringStage = sanitize(req.query.hiringStage);
     // position name is the only required input to the search
     const positionName = sanitize(req.query.positionName);
+    // the thing we should sort by - default is alphabetical
+    const sortBy = sanitize(req.query.sortBy);
 
     const businessQuery = {
         "_id": mongoose.Types.ObjectId(companyId)
@@ -682,15 +684,6 @@ async function GET_candidateSearch(req, res) {
             }
         }
     }
-
-    // const term = "Frizz";
-    // const termRegex = new RegExp(term, "i");
-    // query["name"] = termRegex;
-    // let candidateQuery = {
-    //     "positions.candidates" {
-    //         "name": termRegex
-    //     }
-    // }
 
     // get the business the user works for
     let business;
@@ -707,12 +700,49 @@ async function GET_candidateSearch(req, res) {
         return res.status(500).send(SERVER_ERROR);
     }
 
+    // make sure the user gave a valid position
+    if (!business.positions || business.positions.length === 0) {
+        return res.status(400).send("Invalid position.");
+    }
 
+    // should only be one position in the array since names should be unique
+    const position = business.positions[0];
+
+    // get the list of candidates and sort and filter them by the given parameters
+    // TODO: this could be done with a more complicated query instead, consider
+    // doing that
+    let candidates = position.candidates;
+
+    // filter by name if search term given
+    if (searchTerm && searchTerm !== "") {
+        const nameRegex = new RegExp(searchTerm, "i");
+        candidates = candidates.filter(candidate => {
+            return nameRegex.test(candidate.name);
+        });
+    }
+
+    // filter by hiring stage if hiring stage given
+    if (hiringStage && hiringStage !== "") {
+        candidates = candidates.filter(candidate => {
+            return candidate.hiringStage === hiringStage;
+        });
+    }
+
+    // default sort property is alphabetical, sort by score if that's the given sort by property
+    let sortProperty = "name";
+    if (typeof sortBy === "string" && sortBy.toLowerCase() === "score") { sortProperty = "scores.overall"; }
+
+    // sort the candidates
+    candidates.sort((candA, candB) => {
+        if (candA[sortProperty] < candB[sortProperty]) { return -1; }
+        if (candA[sortProperty] > candB[sortProperty]) { return 1; }
+        return 0;
+    });
 
     //console.log("business: ", business);
-    console.log("positions length: ", business.positions.length);
+    console.log("candidates: ", candidates);
 
-    res.json(business);
+    res.json(candidates);
 }
 
 
