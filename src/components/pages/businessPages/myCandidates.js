@@ -223,53 +223,13 @@ class MyCandidates extends Component {
             candidatePreviews = this.state.candidates.map(candidate => {
                 key++;
 
-                let candidatePositionInfo = {
-                    hiringStage: "Not Contacted",
-                    isDismissed: false
-                }
-
-                // if the candidate does not have a positions list, it is probably
-                // still loading the page; if we get into this if statement, it
-                // is an actual candidate
-                if (Array.isArray(candidate.positions)) {
-                    const tempPositionInfo = candidate.positions.find(path => {
-                        return path._id === positionId;
-                    });
-                    // only set the position info if any was actually found
-                    if (tempPositionInfo) {
-                        candidatePositionInfo = tempPositionInfo;
-                    }
-                }
-
-                const initialHiringStage = candidatePositionInfo.hiringStage;
-                const initialIsDismissed = candidatePositionInfo.isDismissed;
-                const isDisabled = candidate.disabled === true;
-
-                console.log("positionId: ", positionId)
-
                 return (
-                    <li style={{marginTop: '15px'}}
-                        key={key}
-                    >
+                    <li style={{marginTop: '15px'}} key={key} >
                         <CandidatePreview
-                            initialHiringStage={initialHiringStage}
-                            initialIsDismissed={initialIsDismissed}
-                            employerUserId={currentUser._id}
-                            employerVerificationToken={currentUser.verificationToken}
-                            companyId={currentUser.businessInfo.company.companyId}
-                            candidateId={candidate.candidateId}
+                            candidate={candidate}
                             positionName={this.state.position}
                             editHiringStage={true}
-                            name={candidate.name}
-                            email={candidate.email}
-                            disabled={isDisabled}
-                            profileUrl={candidate.profileUrl}
-                            location={candidate.location}
-                            overallScore={candidatePositionInfo.overallScore}
-                            predicted={candidatePositionInfo.predicted}
-                            archetype={candidate.archetype}
-                            skill={candidatePositionInfo.skill}
-                            lastEdited={candidatePositionInfo.hiringStageEdited}
+                            disabled={candidate.disabled === true}
                         />
                     </li>
                 );
