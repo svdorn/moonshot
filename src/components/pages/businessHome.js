@@ -559,7 +559,7 @@ class BusinessHome extends Component {
                             className="marginTop10px"
                         /><br/>
                         <RaisedButton
-                            label="Continue"
+                            label="Watch Demo"
                             type="submit"
                             className="raisedButtonBusinessHome marginTop30px"
                         />
