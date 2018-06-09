@@ -10,6 +10,7 @@ import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import YouTube from 'react-youtube';
+import ProgressBarDialog from '../miscComponents/ProgressBarDialog';
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
@@ -606,11 +607,11 @@ class BusinessHome extends Component {
                             className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop10px">
                             Get Started
                         </div>
-                        <div className="whiteText font14px font12pxUnder500" style={{width: "95%", margin: "10px auto"}}>
+                        <div className="whiteText font14px font12pxUnder500" style={{width: "95%", margin: "7px auto"}}>
                             No credit card required. Customized position assessment.
                         </div>
                         {this.state.error != ''
-                        ? <div className="redText font14px font12pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                        ? <div className="redText font14px font12pxUnder500" style={{width:"90%", margin:"7px auto"}}>
                                 {this.state.error}
                         </div>
                         : null}
@@ -756,6 +757,7 @@ class BusinessHome extends Component {
                 contentClassName="center"
                 overlayClassName="dialogOverlay"
             >
+                <ProgressBarDialog stepNumber={this.state.dialogScreen}/>
                 {dialogBody}
             </Dialog>
         );
