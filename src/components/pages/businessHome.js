@@ -236,6 +236,7 @@ class BusinessHome extends Component {
 
         const user = {
             name: this.props.formData.forBusiness.values.name,
+            email: this.props.formData.forBusiness.values.email,
             company: this.props.formData.forBusiness.values.company,
             password: this.props.formData.forBusiness.values.password,
             termsAndConditions: this.state.agreeingToTerms
