@@ -31,6 +31,18 @@ export function getUserFromSession(callback) {
     };
 }
 
+export function openAddUserModal() {
+    return function(dispatch) {
+        dispatch({type: "OPEN_ADD_USER_MODAL"});
+    }
+}
+
+export function closeAddUserModal() {
+    return function(dispatch) {
+        dispatch({type: "CLOSE_ADD_USER_MODAL"});
+    }
+}
+
 export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});

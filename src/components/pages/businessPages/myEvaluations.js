@@ -17,6 +17,7 @@ import {bindActionCreators} from 'redux';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
+import AddUserDialog from '../../childComponents/addUserDialog';
 
 class MyEvaluations extends Component {
     constructor(props) {
@@ -181,6 +182,7 @@ class MyEvaluations extends Component {
 
         return(
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEvaluations'>
+                <AddUserDialog />
                 <MetaTags>
                     <title>My Evaluations | Moonshot</title>
                     <meta name="description" content="View the evaluations your company is running."/>

@@ -2,8 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-
-import {postEmailInvites} from '../../actions/usersActions';
+import {postEmailInvites, closeAddUserModal} from '../../actions/usersActions';
 import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import { browserHistory } from 'react-router';
@@ -22,12 +21,14 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     />
 );
 
+const emailValidate = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined
+
 class AddUserDialog extends Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            open: true,
+            open: props.modalOpen || false,
             screen: 1,
             positions: [],
             position: "",
@@ -56,25 +57,25 @@ class AddUserDialog extends Component {
                 self.setState({
                     positions,
                     position: firstPositionName,
-                    open: true,
                     screen: 1
                 })
             } else {
                 self.setState({
                     noPositions: true,
-                    open: true,
                     screen: 1
                 })
             }
         })
     }
 
-    handleOpen = () => {
-        this.setState({open: true});
-    };
+    componentDidUpdate() {
+        if (this.props.modalOpen != this.state.open && this.props.modalOpen != undefined) {
+            this.setState({open: this.props.modalOpen})
+        }
+    }
 
     handleClose = () => {
-        this.setState({open: false});
+        this.props.closeAddUserModal();
     };
 
     handleSubmit(e) {
@@ -248,7 +249,6 @@ class AddUserDialog extends Component {
             />,
         ];
 
-        // TODO get companies from DB
         const positions = this.state.positions;
 
         const positionItems = positions.map(function (position, index) {
@@ -262,7 +262,9 @@ class AddUserDialog extends Component {
                     <Field
                         name={"candidateEmail" + i}
                         component={renderTextField}
-                        label="Add Email"
+                        label="Add Candidate Email"
+                        type="email"
+                        validate={emailValidate}
                     /><br/>
                 </div>
             );
@@ -275,7 +277,9 @@ class AddUserDialog extends Component {
                     <Field
                         name={"employeeEmail" + i}
                         component={renderTextField}
-                        label="Add Email"
+                        label="Add Employee Email"
+                        type="email"
+                        validate={emailValidate}
                     /><br/>
                 </div>
             );
@@ -288,7 +292,9 @@ class AddUserDialog extends Component {
                     <Field
                         name={"managerEmail" + i}
                         component={renderTextField}
-                        label="Add Email"
+                        label="Add Manager Email"
+                        type="email"
+                        validate={emailValidate}
                     /><br/>
                 </div>
             );
@@ -301,7 +307,9 @@ class AddUserDialog extends Component {
                     <Field
                         name={"adminEmail" + i}
                         component={renderTextField}
-                        label="Add Email"
+                        label="Add Admin Email"
+                        type="email"
+                        validate={emailValidate}
                     /><br/>
                 </div>
             );
@@ -315,7 +323,7 @@ class AddUserDialog extends Component {
                 <div className="marginTop20px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        Add Another Email
+                        +Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -340,7 +348,7 @@ class AddUserDialog extends Component {
                 <div className="marginTop20px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        Add Another Email
+                        +Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -365,7 +373,7 @@ class AddUserDialog extends Component {
                 <div className="marginTop20px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        Add Another Email
+                        +Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -390,7 +398,7 @@ class AddUserDialog extends Component {
                 <div className="marginTop20px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        Add Another Email
+                        +Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -528,9 +536,8 @@ class AddUserDialog extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
         postEmailInvites,
-
+        closeAddUserModal
     }, dispatch);
 }
 
@@ -539,7 +546,8 @@ function mapStateToProps(state) {
         formData: state.form,
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        modalOpen: state.users.userModalOpen
     };
 }
 
