@@ -228,6 +228,10 @@ class Menu extends Component {
         let logoIsLink = true;
         // used for menu divider
         let loggedInClass = " loggedIn";
+
+        console.log("currentUser: ", currentUser);
+
+
         // if there is no user logged in
         if (!currentUser) {
             loggedInClass = " loggedOut";

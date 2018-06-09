@@ -1253,7 +1253,7 @@ async function internalStartPsychEval(user) {
             rephrase: false,
             numRephrasesAllowed: 0,
             // around 75 questions
-            questionsPerFacet: 1,
+            questionsPerFacet: 4,
             incompleteFactors,
             factors,
             currentQuestion
@@ -1618,7 +1618,7 @@ function POST_forgotPassword(req, res) {
 
                 // if we're in development (on localhost) navigate to localhost
                 let moonshotUrl = "https://www.moonshotinsights.io/";
-                if (!process.env.NODE_ENV) {
+                if ( process.env.NODE_ENV === "development") {
                     moonshotUrl = "http://localhost:8081/";
                 }
                 const recipient = [user.email];

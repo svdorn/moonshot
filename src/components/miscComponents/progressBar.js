@@ -60,6 +60,7 @@ class ProgressBar extends Component {
             let amountFinished = 100;
             if (stepNumber === stepCounter) {
                 if (stepName === PSYCH_ANALYSIS) {
+                    console.log("currentUser ", currentUser);
                     const psychTest = currentUser.psychometricTest;
                     amountFinished = (psychTest.numQuestionsAnswered / psychTest.numQuestions) * 100;
                 } else {

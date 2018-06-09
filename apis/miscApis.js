@@ -33,7 +33,7 @@ function POST_createReferralCode(req, res) {
     let sendReferralEmail = function(theCode) {
         // if we're in development (on localhost) navigate to localhost
         let moonshotUrl = "https://www.moonshotinsights.io/";
-        if (!process.env.NODE_ENV) {
+        if (process.env.NODE_ENV === "development") {
             moonshotUrl = "http://localhost:8081/";
         }
         const recipient = [email];
@@ -42,7 +42,7 @@ function POST_createReferralCode(req, res) {
             "<div style='color:black'>"
             +   "<p>Hello " + name + ",</p>"
 
-            +   "<p>Thank you for signing up as a Moonshot referrer! With us, you can shape the future of the workforce and get paid to do it. Moonshot trains and evaluates college students and recent graduates in skills and positions needed by employers. We do this by creating course pathways that evaluate candidates in positions that our employer partners are hiring for. <a href='https://moonshotinsights.io/discover'>Check out all of our live Pathways</a>.</p>"
+            +   "<p>Thank you for signing up as a Moonshot referrer! With us, you can shape the future of the workforce and get paid to do it. Moonshot trains and evaluates college students and recent graduates in skills and positions needed by employers. We do this by creating course pathways that evaluate candidates in positions that our employer partners are hiring for. <a href='https://moonshotinsights.io/'>Check out all of our positions</a>.</p>"
 
             +   "<p>You will earn $300 for everyone you send our way that gets a job through the Moonshot site.</p>"
 

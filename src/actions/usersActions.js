@@ -39,7 +39,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
-                let nextUrl = '/discover';
+                let nextUrl = '/myEvaluations';
                 console.log(returnedUser.userType);
                 if (returnedUser.userType === "manager" || returnedUser.userType === "accountAdmin") {
                     nextUrl = '/myEvaluations';
@@ -68,7 +68,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                         dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                         // navigateBackUrl should be equal to the url for the pathway
                         if (!navigateBackUrl) {
-                            navigateBackUrl = "/discover";
+                            navigateBackUrl = "/myEvaluations";
                         }
                         browserHistory.push(nextUrl);
                         window.scrollTo(0, 0);
@@ -438,6 +438,66 @@ export function changeTempPassword(user) {
         .catch(function(err) {
             dispatch({type:"CHANGE_TEMP_PASS_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
         })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function demoEmail(user){
+    return function(dispatch) {
+        axios.post("api/business/demoEmail", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function dialogEmail(user){
+    return function(dispatch) {
+        axios.post("api/business/dialogEmail", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function dialogEmailScreen2(user){
+    return function(dispatch) {
+        axios.post("api/business/dialogEmailScreen2", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function dialogEmailScreen3(user){
+    return function(dispatch) {
+        axios.post("api/business/dialogEmailScreen3", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function dialogEmailScreen4(user){
+    return function(dispatch) {
+        axios.post("api/business/dialogEmailScreen4", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
     }
 }
 

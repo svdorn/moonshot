@@ -22,6 +22,11 @@ const { sanitize,
 
 const businessApis = {
     POST_forBusinessEmail,
+    POST_demoEmail,
+    POST_dialogEmail,
+    POST_dialogEmailScreen2,
+    POST_dialogEmailScreen3,
+    POST_dialogEmailScreen4,
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
@@ -284,6 +289,124 @@ function POST_forBusinessEmail(req, res) {
     })
 }
 
+function POST_demoEmail(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody watched the Demo';
+
+    let content = "<div>"
+        + "<h3>Email of someone who watched demo: </h3>"
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmail(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out email on Homepage';
+
+    let content = "<div>"
+        + "<h3>Email of someone who filled out first page on homepage: </h3>"
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmailScreen2(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out second pg on Homepage';
+
+    let content = "<div>"
+        + "<h3>Info of someone who filled out second page on homepage: </h3>"
+        + "<p>Name: "
+        + sanitize(req.body.name)
+        + "</p>"
+        + "<p>Company: "
+        + sanitize(req.body.company)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmailScreen3(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out third pg on Homepage';
+
+    let content = "<div>"
+        + "<h3>Info of someone who filled out third page on homepage: </h3>"
+        + "<p>Positions: "
+        + sanitize(req.body.positions)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmailScreen4(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out fourth pg on Homepage';
+
+    let content = "<div>"
+        + "<h3>Info of someone who filled out fourth page on homepage: </h3>"
+        + "<p>Skill 1: "
+        + sanitize(req.body.skill1)
+        + "</p>"
+        + "<p>Skill 2: "
+        + sanitize(req.body.skill2)
+        + "</p>"
+        + "<p>Skill 3: "
+        + sanitize(req.body.skill3)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
 
 function POST_contactUsEmail(req, res) {
     let message = "None";

@@ -454,7 +454,7 @@ function POST_sendVerificationEmail(req, res) {
 
     let moonshotUrl = 'https://www.moonshotinsights.io/';
     // if we are in development, links are to localhost
-    if (!process.env.NODE_ENV) {
+    if (process.env.NODE_ENV === "development") {
         moonshotUrl = 'http://localhost:8081/';
     }
 

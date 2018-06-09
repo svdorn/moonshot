@@ -921,6 +921,23 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+/* arrows */
+.processOutline > img {
+    border-radius: 100%;
+    cursor: pointer;
+    position: absolute;
+    width: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    -webkit-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    transition: all 0.2s ease;
+}
+.processOutline > .rightArrow:hover { background-color: rgba(122,222,252,.2); }
+.processOutline > .leftArrow:hover { background-color: rgba(176,129,251,.2); }
+/* arrow pointing left */
+.processOutline > .leftArrow { left: -70px; }
+.processOutline > .rightArrow { right: -70px; }
 /* gray box surrounding text and centerline */
 .processOutline > div {
     background-color: #2e2e2e;
@@ -3389,6 +3406,16 @@ button.link {
     border-top: none !important;
     border-bottom: none !important;
 }
+.dialogForVideo {
+    max-width: 700px;
+    margin: auto;
+    background-color: #323232 !important;
+}
+.dialogForVideo > div:first-child {
+    min-height: 300px;
+    border-top: none !important;
+    border-bottom: none !important;
+}
 .dialogOverlay {
     filter: none;
 }
@@ -4068,6 +4095,40 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .font6pxUnder1000 { font-size: 6px; }
 }
 
+@media only screen and (min-width: 951px) {
+    .under950only { display: none; }
+}
+
+@media only screen and (max-width: 950px) {
+    #moonshotProcess h1 { margin-bottom: 40px; }
+    .processOutline {
+        width: 580px;
+        height: 200px;
+    }
+    .processOutline > img { width: 50px; }
+    .processOutline > .leftArrow { left: -60px; }
+    .processOutline > .rightArrow { right: -60px; }
+
+    .font40pxUnder950 { font-size: 40px; }
+    .font38pxUnder950 { font-size: 38px; }
+    .font36pxUnder950 { font-size: 36px; }
+    .font34pxUnder950 { font-size: 34px; }
+    .font32pxUnder950 { font-size: 32px; }
+    .font30pxUnder950 { font-size: 30px; }
+    .font28pxUnder950 { font-size: 28px; }
+    .font26pxUnder950 { font-size: 26px; }
+    .font24pxUnder950 { font-size: 24px; }
+    .font22pxUnder950 { font-size: 22px; }
+    .font20pxUnder950 { font-size: 20px; }
+    .font18pxUnder950 { font-size: 18px; }
+    .font16pxUnder950 { font-size: 16px; }
+    .font14pxUnder950 { font-size: 14px; }
+    .font12pxUnder950 { font-size: 12px; }
+    .font10pxUnder950 { font-size: 10px; }
+    .font8pxUnder950 { font-size: 8px; }
+    .font6pxUnder950 { font-size: 6px; }
+}
+
 @media only screen and (min-width: 901px) {
     .under900only { display: none; }
 }
@@ -4126,12 +4187,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .under850only { display: none; }
 }
 @media only screen and (max-width: 850px) {
-    #moonshotProcess h1 { margin-bottom: 40px; }
-    .processOutline {
-        width: 580px;
-        height: 200px;
-    }
-
     .font50pxUnder850 { font-size: 50px; }
     .font48pxUnder850 { font-size: 48px; }
     .font46pxUnder850 { font-size: 46px; }
@@ -4540,6 +4595,27 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 700px) {
+    .processHeaderContainer {
+        height: 50px;
+        width: 144px;
+    }
+    .processOutline {
+        width: 370px;
+    }
+    .processOutline > div > div:first-child > div {
+        padding: 0 10px;
+    }
+    .processOutline > div > div:nth-child(3) > div { padding: 0 10px; }
+    .processListItem > img { margin-right: 8px; }
+    .processListItem > div {
+        width: calc(100% - 30px);
+        margin-left: 20px;
+    }
+    #moonshotProcess > div:nth-child(4) {
+        margin-top: 30px;
+    }
+
+
     .homePathwaysDesc {
         padding: 0;
     }
@@ -4868,25 +4944,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: 2px;
     }
 
-    .processHeaderContainer {
-        height: 50px;
-        width: 144px;
-    }
-    .processOutline {
-        width: 370px;
-    }
-    .processOutline > div > div:first-child > div {
-        padding: 0 10px;
-    }
-    .processOutline > div > div:nth-child(3) > div { padding: 0 10px; }
-    .processListItem > img { margin-right: 8px; }
-    .processListItem > div {
-        width: calc(100% - 30px);
-        margin-left: 20px;
-    }
-    #moonshotProcess > div:nth-child(4) {
-        margin-top: 30px;
-    }
     .purpleToBlueAnimate.mediumLargeButton { background-position-x: -80px; }
     .purpleToBlueAnimate.mediumLargeButton:hover { background-position-x: 0px; }
 
@@ -4979,6 +5036,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     #moonshotProcess { margin-top: 100px; }
+    .processOutline > img { display: none; }
 
     #picturesToPathwaysHomepageSpacer { margin-top: 80px; }
     .forBusinessLine {
