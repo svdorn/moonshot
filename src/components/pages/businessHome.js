@@ -464,7 +464,7 @@ class BusinessHome extends Component {
             processButtons.push(
                 <div key={"processButton" + processIndex}>
                     <div className="shadowBox" />
-                    <div className="processHeaderContainer clickable font18px font14pxUnder600 font12pxUnder400"
+                    <div className="processHeaderContainer clickable font18px font14pxUnder700 font12pxUnder400"
                          onClick={() => this.selectProcess(processIndex)}
                     >
                         <div style={colorStyle} />
@@ -475,7 +475,7 @@ class BusinessHome extends Component {
             );
 
             if (processIndex === 1) {
-                processButtons.push(<br key={`br${processIndex}`} className="under850only"/>)
+                processButtons.push(<br key={`br${processIndex}`} className="under950only"/>)
             }
         };
 
@@ -491,11 +491,11 @@ class BusinessHome extends Component {
         const processSection = (
             <section id="moonshotProcess">
                 <a id="ourProcess" name="ourProcess" className="anchor" />
-                <h1 className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400">{"Moonshot's Process to Predict Candidate Performance"}</h1>
+                <h1 className="font34px font30pxUnder950 font26pxUnder500 font24pxUnder450 font20pxUnder400">{"Moonshot's Process to Predict Candidate Performance"}</h1>
                 <div className="processButtonsContainer">
                     { processButtons }
                 </div>
-                <div className="processOutline font18px font16pxUnder850 font12pxUnder600 font10pxUnder400">
+                <div className="processOutline font18px font16pxUnder850 font12pxUnder700 font10pxUnder400">
                     <div>
                         <div>
                             <div>
@@ -509,6 +509,8 @@ class BusinessHome extends Component {
                             </div>
                         </div>
                     </div>
+                    { this.state.infoIndex > 0 ? <img src="/icons/Arrow3.png" className="leftArrow" onClick={() => this.selectProcess(this.state.infoIndex - 1)} /> : null }
+                    { this.state.infoIndex < 3 ? <img src="/icons/Arrow2.png" className="rightArrow" onClick={() => this.selectProcess(this.state.infoIndex + 1)} /> : null }
                 </div>
                 <div className="center" style={{marginTop: "20px"}}>
                     <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleDemoOpen}>
@@ -932,7 +934,7 @@ class BusinessHome extends Component {
 
                         <div>
                             <div className="center">
-                                <div className="font36px font32pxUnder700 font26pxUnder500 font24pxUnder400 center darkDarkPurpleText statisticsHeader">
+                                <div className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400 center darkDarkPurpleText statisticsHeader">
                                     Predictive Analytics Improve Hiring Results
                                 </div>
                                 <div>
