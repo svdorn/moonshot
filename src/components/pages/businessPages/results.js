@@ -28,17 +28,16 @@ class Results extends Component {
 
     componentDidMount() {
         const user = this.props.currentUser;
+
         let profileUrl = "";
         try {
-            profileUrl = this.props.location.query.user;
+            profileUrl = this.props.params.profileUrl;
         } catch (e) {
             this.goTo("/myCandidates");
         }
 
-        if (user.userType !== 'employer') {
-            this.goTo("/");
-            return;
-        }
+        console.log("profile url is: ", profileUrl)
+
 
         let self = this;
         let candidate = {}, overallScore = undefined, hardSkills = [], predictiveInsights = [];

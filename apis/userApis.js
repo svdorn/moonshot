@@ -552,6 +552,7 @@ async function addEvaluation(user, business, positionId, startDate) {
             const userInformation = {
                 candidateId: user._id,
                 name: user.name,
+                profileUrl: user.profileUrl,
                 isDismissed: false,
                 location: user.info ? user.info.location : undefined,
                 hiringStage: "Not Contacted",
@@ -709,6 +710,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
             // ... add the candidate to the position
             const userInfo = {
                 candidateId: user._id,
+                profileUrl: user.profileUrl,
                 name: user.name,
                 location: user.info ? user.info.location : "",
                 isDismissed: false,

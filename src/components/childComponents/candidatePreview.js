@@ -321,6 +321,9 @@ class CandidatePreview extends Component {
             return (<MenuItem key={stage} value={stage} primaryText={stage.toUpperCase()} />)
         });
 
+        const profileUrl = this.props.candidate && this.props.candidate.profileUrl ? this.props.candidate.profileUrl : "";
+        const resultsUrl = `/results/${profileUrl}`;
+
         return (
             <div className="candidatePreview center" >
                 <div className="candidateName font18px center">
@@ -373,9 +376,7 @@ class CandidatePreview extends Component {
                     </span>
                 </div>
 
-                {/*<a href={"/results?user=" + this.props.profileUrl}>See Results</a>*/}
-                <a style={{...style.redLink, ...style.seeResults}}
-                   href="/results?user=Stephen-Dorn-2-9f66bf7eeac18994">
+                <a style={{...style.redLink, ...style.seeResults}} href={resultsUrl}>
                     See Results
                 </a>
 
