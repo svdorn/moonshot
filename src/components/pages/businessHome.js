@@ -545,7 +545,7 @@ class BusinessHome extends Component {
                 ?
                 <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
                         <div
-                            className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop30px">
+                            className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop30px">
                             See Demo
                         </div>
                         <div className="whiteText font16px font14pxUnder500" style={{width: "85%", margin: "10px auto"}}>
