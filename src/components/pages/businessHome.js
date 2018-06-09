@@ -23,6 +23,18 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     />
 );
 
+const renderBlueTextField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        hintStyle={{color: '#72d6f5'}}
+        inputStyle={{color: '#72d6f5'}}
+        underlineStyle={{color: '#72d6f5'}}
+        errorText={touched && error}
+        {...input}
+        {...custom}
+    />
+);
+
 const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
@@ -567,8 +579,7 @@ class BusinessHome extends Component {
             case 1:
                 dialogBody = (
                     <form onSubmit={this.handleSubmitDialogEmail.bind(this)} className="center">
-                        <div
-                            className="blueTextHome font22px font20pxUnder700 font18pxUnder500 marginTop30px">
+                        <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop30px">
                             Get Started
                         </div>
                         <Field
@@ -590,7 +601,7 @@ class BusinessHome extends Component {
                 dialogBody = (
                     <form onSubmit={this.handleSubmitDialogEmailScreen2.bind(this)} className="center">
                         <div
-                            className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
+                            className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop10px">
                             Get Started
                         </div>
                         <div className="whiteText font14px font12pxUnder500" style={{width: "95%", margin: "10px auto"}}>
@@ -648,18 +659,18 @@ class BusinessHome extends Component {
             case 3:
                 dialogBody = (
                     <form onSubmit={this.handleSubmitDialogEmailScreen3.bind(this)} className="center">
-                        <div className="whiteTextImportant font20px font18pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                        <div className="blueTextHome font22px" style={{width:"90%", margin:"10px auto"}}>
                             Just a few quick things to set up your assessment.
                         </div>
-                        <div className="whiteText font14px font12pxUnder500" style={{width: "90%", margin: "10px auto"}}>
+                        <div className="whiteText font14px" style={{width: "90%", margin: "10px auto"}}>
                             <i>Every position has a psychometric analysis. <div className="above800only noHeight"><br/></div>We already created that for you.</i>
                         </div>
-                        <div className="whiteText font16px font14pxUnder500" style={{width: "90%", margin: "10px auto 10px"}}>
+                        <div className="whiteText font14px" style={{width: "90%", margin: "10px auto 10px"}}>
                             What positions do you want to select for the assessment?
                         </div>
                         <Field
                             name="positions"
-                            component={renderTextField}
+                            component={renderBlueTextField}
                             label="Positions* (e.g. Business Analyst)"
                             validate={[required]}
                         /><br/>
@@ -675,10 +686,10 @@ class BusinessHome extends Component {
             case 4:
             dialogBody = (
                 <form onSubmit={this.handleSubmitDialogEmailScreen4.bind(this)} className="center">
-                    <div className="whiteTextImportant font16px font14pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                    <div className="blueTextHome font22px" style={{width:"90%", margin:"10px auto"}}>
                         What skills do you need to be successful in this position?
                     </div>
-                    <div className="whiteText font14px font12pxUnder500" style={{width: "90%", margin: "10px auto 10px"}}>
+                    <div className="whiteText font14px" style={{width: "90%", margin: "10px auto 10px"}}>
                         <i>No research required, we will do that for you. We just want the first three skills that come to mind.</i>
                     </div>
                     <Field
@@ -712,16 +723,17 @@ class BusinessHome extends Component {
                 const calendly = <div className="calendly-inline-widget" data-url="https://calendly.com/kyle-treige-moonshot/30min" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
                 dialogBody = (
                     <div>
-                        <div className="whiteTextImportant font20px font18pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                        <div className="blueTextHome font22px" style={{width:"90%", margin:"10px auto"}}>
                             Activate your Assessment
                         </div>
-                        <div className="whiteTextImportant font12px font10pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                        <div className="whiteTextImportant font12px font10pxUnder500" style={{width:"97%", margin:"10px auto"}}>
                             Our team is now hard at work creating your assessment. Before we can activate
                             your account, we need to take a few minutes to ensure we are on the same page
-                            with the assessment and roll out the process.
+                            with the assessment and roll out the process. Once you have set and confirmed your meeting,
+                            you can close this window. We&#39;ll be in touch shortly.
                         </div>
                         <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"90%", margin:"10px auto"}}>
-                            We need to chat. Find a time below.
+                            Find a time below.
                         </div>
                         {calendly}
                     </div>
