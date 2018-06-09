@@ -243,8 +243,6 @@ class Menu extends Component {
         else if (currentUser.admin) {
             menuOptions = [
                 {optionType: "url", title: "Admin", url: "/admin"},
-                {optionType: "url", title: "Discover", url: "/discover"},
-                {optionType: "url", title: "My Pathways", url: "/myPathways"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     {optionType: "url", title: "Profile", url: "/profile"},
@@ -317,8 +315,6 @@ class Menu extends Component {
         else if (currentUser.userType === "candidate") {
             menuOptions = [
                 {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
-                {optionType: "url", title: "Discover", url: "/discover"},
-                {optionType: "url", title: "My Pathways", url: "/myPathways"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     {optionType: "url", title: "Profile", url: "/profile"},

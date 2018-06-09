@@ -1,7 +1,6 @@
 var Businesses = require('../models/businesses.js');
 var Employers = require('../models/employers.js');
 var Users = require('../models/users.js');
-var Pathways = require('../models/pathways.js');
 var Quizzes = require('../models/quizzes.js');
 
 const bcrypt = require('bcryptjs');
@@ -24,8 +23,7 @@ const { sanitize,
 const adminApis = {
     POST_alertLinkClicked,
     POST_business,
-    GET_info,
-    GET_candidateResponses
+    GET_info
 }
 
 
@@ -225,198 +223,6 @@ function GET_info(req, res) {
         }
     });
 }
-
-
-function GET_candidateResponses(req, res) {
-    const query = sanitize(req.query);
-    const _id = query.adminUserId;
-    const verificationToken = query.verificationToken;
-    const profileUrl = query.profileUrl;
-
-    if (!_id || !verificationToken) {
-        console.log("No user id or verification token for user trying to get admin info.");
-        return res.status(403).send("User does not have valid credentials.");
-    }
-
-    if (!profileUrl) {
-        console.log("No user info requested.");
-        return res.status(400).send("No user info requested.");
-    }
-
-    const adminQuery = { _id, verificationToken };
-
-    Users.findOne(adminQuery, function(err, adminUser) {
-        if (err) {
-            console.log("Error finding admin user: ", err);
-            return res.status(500).send("Error finding current user in db.");
-        } else if (!adminUser || !adminUser.admin || !(adminUser.admin === "true" || adminUser.admin === true) ) {
-            return res.status(403).send("User does not have valid credentials.");
-        } else {
-            Users.findOne({profileUrl}, function(error, user) {
-                if (error) {
-                    console.log("Error getting user for admin: ", error);
-                    return res.status(500).send("Error getting user for admin.");
-                } else if (!user) {
-                    console.log("User not found when trying to find user for admin.");
-                    return res.status(404).send("User not found.");
-                } else {
-                    // have the user, now have to get their pathways to return
-
-                    let pathways = [];
-                    let completedPathways = [];
-                    let foundPathways = 0;
-                    let foundCompletedPathways = 0;
-
-                    // quizzes will look like
-                    // { <subStepId>: quizObject, ... }
-                    let quizzes = {};
-                    let requiredNumQuizzes = 0;
-                    let foundQuizzes = 0;
-
-                    // scores will be an object with every question with an objective answer
-                    // scores[questionId] will be true if the answer is correct
-                    // false if the answer is incorrect
-                    let scores = {}
-
-                    let returnIfFoundEverything = function() {
-                        // if we have found all of the pathways, return all the info to the front end
-                        if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
-                            // grade the user's answers
-                            // console.log("quizzes: ", quizzes);
-                            // console.log("user.answers: ", user.answers);
-                            for (let questionId in quizzes) {
-                                let quiz = quizzes[questionId];
-                                // skip anything that is not a quiz
-                                if (!quizzes.hasOwnProperty(questionId)) { continue; }
-
-                                // if the user answered the question and the question has a correct answer, grade it
-                                if (quiz.hasCorrectAnswers && user.answers[questionId]) {
-                                    // if it's a multiple choice question
-                                    if (quiz.questionType === "multipleChoice" || quiz.questionType === "twoOptions") {
-                                        // get the answer value the user put in
-                                        let userAnswerValue = user.answers[questionId].value;
-                                        let isCorrect = false;
-                                        // if there is an array of correct answers
-                                        if (Array.isArray(quiz.correctAnswerNumber)) {
-                                            // see if the answer value the user put in is one of the right answers
-                                            isCorrect = quiz.correctAnswerNumber.some(function(answerNumber) {
-                                                // return true if the answer value is a correct one
-                                                return answerNumber === userAnswerValue;
-                                            })
-                                        }
-                                        // if there is a single correct answer
-                                        else {
-                                            isCorrect = quiz.correctAnswerNumber == userAnswerValue;
-                                        }
-
-                                        scores[questionId] = isCorrect;
-                                    }
-                                }
-                            }
-
-                            res.json({
-                                user: userForAdmin(user),
-                                pathways,
-                                completedPathways,
-                                quizzes,
-                                scores
-                            });
-                            return;
-                        }
-                    }
-
-                    let getQuizzesFromPathway = function(path) {
-                        if (path && path.steps) {
-                            // find quizzes that go with this pathway
-                            for (let stepIndex = 0; stepIndex < path.steps.length; stepIndex++) {
-                                let step = path.steps[stepIndex];
-                                for (let subStepIndex = 0; subStepIndex < step.subSteps.length; subStepIndex++) {
-                                    let subStep = step.subSteps[subStepIndex];
-                                    if (subStep.contentType === "quiz") {
-                                        // new quiz found, have to retrieve it before returning
-                                        requiredNumQuizzes++;
-
-                                        Quizzes.findOne({_id: subStep.contentID}, function(quizErr, quiz) {
-                                            foundQuizzes++;
-                                            if (quizErr) {
-                                                console.log("Error getting question: ", quizErr);
-                                            } else {
-                                                quizzes[subStep.contentID] = quiz;
-                                            }
-
-                                            returnIfFoundEverything();
-                                        })
-                                    }
-                                }
-                            }
-                        }
-                    }
-
-                    // if the user has no pathways or completed pathways, return simply their info
-                    if (user.pathways.length === 0 && user.completedPathways.lengh === 0) {
-                        res.json({
-                            user: userForAdmin(user),
-                            pathways,
-                            completedPathways
-                        });
-                        return;
-                    }
-
-                    for (let pathwaysIndex = 0; pathwaysIndex < user.pathways.length; pathwaysIndex++) {
-                        Pathways.findOne({_id: user.pathways[pathwaysIndex].pathwayId}, function(pathErr, path) {
-                            if (pathErr) {
-                                console.log(pathErr);
-                            }
-                            pathways.push(path);
-                            // mark that we have found another pathway
-                            foundPathways++;
-
-                            getQuizzesFromPathway(path);
-
-                            // if we have found all of the pathways, return all the info to the front end
-                            // if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
-                            //     res.json({
-                            //         user: userForAdmin(user),
-                            //         pathways,
-                            //         completedPathways
-                            //     });
-                            //     return;
-                            // }
-                            returnIfFoundEverything();
-                        })
-                    }
-
-                    for (let completedPathwaysIndex = 0; completedPathwaysIndex < user.completedPathways.length; completedPathwaysIndex++) {
-                        Pathways.findOne({_id: user.completedPathways[completedPathwaysIndex].pathwayId}, function(pathErr, path) {
-                            if (pathErr) {
-                                console.log(pathErr);
-                            }
-                            completedPathways.push(path);
-                            // mark that we have found another pathway
-                            foundCompletedPathways++;
-
-                            getQuizzesFromPathway(path);
-
-                            returnIfFoundEverything();
-                            // if we have found all of the pathways, return all the info to the front end
-                            // if (foundPathways === user.pathways.length && foundCompletedPathways === user.completedPathways.length && foundQuizzes === requiredNumQuizzes) {
-                            //     res.json({
-                            //         user: userForAdmin(user),
-                            //         pathways,
-                            //         completedPathways
-                            //     });
-                            //     return;
-                            // }
-                        })
-                    }
-                }
-            });
-        }
-    });
-}
-
-
-// ----->> END APIS <<----- //
 
 
 // VERIFY THAT THE GIVEN USER IS AN ADMIN FROM USER ID AND VERIFICATION TOKEN

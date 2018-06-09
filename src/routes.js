@@ -26,12 +26,8 @@ import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
 import ChangeTempPassword from './components/pages/changeTempPassword';
-import Discover from './components/pages/discover';
-import Pathway from './components/pages/pathway';
-import PathwayContent from './components/pages/pathwayContent';
 import ResumeAnalysis from './components/pages/resumeAnalysis';
 import ContactUs from './components/pages/contactUs';
-import MyPathways from './components/pages/myPathways';
 import Onboarding from './components/pages/onboarding';
 import Error404 from './components/pages/error404';
 import Unsubscribe from './components/pages/unsubscribe';
@@ -86,13 +82,9 @@ const routes = (
         <Route path="forgotPassword" component={ForgotPassword} />
         <Route path="changePassword" component={ChangePassword} />
         <Route path="changeTempPassword" component={ChangeTempPassword} />
-        <Route path="discover" component={Discover} />
         <Route path="contactUs" component={ContactUs} />
         <Route path="resumeAnalysis" component={ResumeAnalysis} />
-        <Route path="myPathways" component={AuthenticatedComponent} page={<MyPathways/>} />
         <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding/>} userType={candidateUserTypes} />
-        <Route path="pathway" component={Pathway} />
-        <Route path="pathwayContent" component={AuthenticatedComponent} page={<PathwayContent/>} />
         <Route path="unsubscribe" component={Unsubscribe} />
         <Route path="referral" component={ReferralCode} />
         <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />

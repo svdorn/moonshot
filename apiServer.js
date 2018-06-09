@@ -39,7 +39,6 @@ const candidateApis = require('./apis/candidateApis');
 const businessApis = require('./apis/businessApis');
 const adminApis = require('./apis/adminApis');
 const miscApis = require('./apis/miscApis');
-const pathwayApis = require('./apis/pathwayApis');
 const skillApis = require('./apis/skillApis');
 const mlFunctions = require('./apis/mlFunctions');
 
@@ -92,18 +91,12 @@ app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
-// app.post('/candidate/comingSoonEmail', candidateApis.POST_comingSoonEmail);
-// app.post("/candidate/addPathway", candidateApis.POST_addPathway);
-// app.post('/candidate/completePathway', candidateApis.POST_completePathway);
-// app.post("/candidate/updateAnswer", candidateApis.POST_updateAnswer);
-// app.post("/candidate/currentPathwayStep", userApis.POST_currentPathwayStep);
 
 app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
 app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
-//app.get("/business/pathways", businessApis.GET_pathways);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employees", businessApis.GET_employees);
 app.get("/business/positions", businessApis.GET_positions);
@@ -111,19 +104,6 @@ app.get("/business/positions", businessApis.GET_positions);
 app.post("/admin/alertLinkClicked", adminApis.POST_alertLinkClicked);
 app.post("/admin/business", adminApis.POST_business);
 app.get("/admin/info", adminApis.GET_info);
-app.get("/admin/candidateResponses", adminApis.GET_candidateResponses);
-
-app.get('/pathway/link', pathwayApis.GET_link);
-app.get('/pathway/article', pathwayApis.GET_article);
-app.get('/pathway/info', pathwayApis.GET_info);
-app.get('/pathway/quiz', pathwayApis.GET_quiz);
-app.get('/pathway/video', pathwayApis.GET_video);
-app.get('/pathway/pathwayByIdNoContent', pathwayApis.GET_pathwayByIdNoContent);
-app.get('/pathway/pathwayByPathwayUrlNoContent', pathwayApis.GET_pathwayByPathwayUrlNoContent);
-app.get('/pathway/pathwayByPathwayUrl', pathwayApis.GET_pathwayByPathwayUrl);
-app.get('/pathway/search', pathwayApis.GET_search);
-app.get("/pathway/allCompaniesAndCategories", pathwayApis.GET_allCompaniesAndCategories);
-app.get('/pathway/topPathways', pathwayApis.GET_topPathways);
 
 //app.get('/skill/skillByUrl', skillApis.GET_skillByUrl);
 app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);
@@ -135,12 +115,6 @@ app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadRes
 
 // ----->> END APIs <<----- //
 
-
-// print all users from a specific pathway
-// nwm: "5a80b3cf734d1d0d42e9fcad"
-// sw: "5a88b4b8734d1d041bb6b386"
-
-// printUsersFromPathway("5a88b4b8734d1d041bb6b386");
 
 app.listen(3001, function (err) {
     if (err) {

@@ -1,6 +1,5 @@
 var Businesses = require("../models/businesses.js");
 var Users = require("../models/users.js");
-var Pathways = require("../models/pathways.js");
 const mongoose = require("mongoose");
 
 const crypto = require('crypto');
@@ -27,7 +26,6 @@ const businessApis = {
     POST_updateHiringStage,
     POST_answerQuestion,
     POST_emailInvites,
-    // GET_pathways,
     GET_candidateSearch,
     GET_employees,
     GET_positions
@@ -293,9 +291,9 @@ function POST_contactUsEmail(req, res) {
         message = sanitize(req.body.message);
     }
     let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io"];
-    let subject = 'Moonshot Pathway Question -- Contact Us Form';
+    let subject = 'Moonshot Question -- Contact Us Form';
     let content = "<div>"
-        + "<h3>Questions from pathway:</h3>"
+        + "<h3>Questions:</h3>"
         + "<p>Name: "
         + sanitize(req.body.name)
         + "</p>"

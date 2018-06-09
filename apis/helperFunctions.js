@@ -12,46 +12,6 @@ const sanitizeOptions = {
 }
 
 
-
-
-// TODO delete this as soon as we have a good way of seeing all users within a pathway
-function printUsersFromPathway(pathwayIdToCheck) {
-    const pathwayUsersQuery = {
-        $or: [
-            {
-                pathways: {
-                    $elemMatch: {
-                        pathwayId: pathwayIdToCheck
-                    }
-                }
-            },
-            {
-                completedPathways: {
-                    $elemMatch: {
-                        pathwayId: pathwayIdToCheck
-                    }
-                }
-            }
-        ]
-    };
-    Users.find(pathwayUsersQuery, function(err, users) {
-        console.log("err is: ", err);
-
-        users.forEach(function(user) {
-            let userPath = user.pathways.find(function(path) {
-                return path.pathwayId == pathwayIdToCheck;
-            });
-            let currentStep = userPath ? userPath.currentStep : "completed";
-
-            const ourEmails = ["ameyer24@wisc.edu", "austin.thomas.meyer@gmail.com", "frizzkitten@gmail.com", "svdorn@wisc.edu", "treige@wisc.edu", "jye39@wisc.edu", "stevedorn9@gmail.com", "kyle.treige@gmail.com"];
-            if (!ourEmails.includes(user.email)) {
-                console.log("\n\nname: ", user.name, "\nemail: ", user.email, "\ncurrent step: ", currentStep);
-            }
-        })
-    })
-}
-
-
 // removes information from a db user object so that it can be passed for that
 // same user on the front end
 function frontEndUser(dbUser, extraFieldsToRemove) {
@@ -578,29 +538,6 @@ function verifyUser(user, verificationToken) {
 }
 
 
-// function to send an email to us if the associated businesses were not updated
-function sendBizUpdateCandidateErrorEmail(email, pathwayId, pathwayStatus) {
-    try {
-        console.log("ERROR " + pathwayStatus + " STUDENT AS A BUSINESS' CANDIDATE");
-        // const errorEmailRecipients = ["ameyer24@wisc.edu", "stevedorn9@gmail.com"];
-        const errorEmailRecipients = ["ameyer24@wisc.edu"];
-        const errorEmailSubject = "Error " + pathwayStatus + " User Into Business Candidates Array";
-        const errorEmailContent =
-            "<p>User email: " + email + "</p>"
-            + "<p>PathwayId: " + pathwayId + "</p>";
-        const sendFrom = "Moonshot";
-        // send an email to us saying that the user wasn't added to the business' candidates list
-        sendEmail(errorEmailRecipients, errorEmailSubject, errorEmailContent, sendFrom, undefined, function(errorEmailSucces, errorEmailMsg) {
-            if (errorEmailMsg) {
-                throw "error";
-            }
-        })
-    } catch (e) {
-        console.log("ERROR SENDING EMAIL ALERTING US THAT A STUDENT WAS NOT ADDED AS A BUSINESS CANDIDATE AFTER PATHWAY " + pathwayStatus + ". STUDENT EMAIL: ", email, ". PATHWAY: ", pathwayId);
-    }
-}
-
-
 // DOES NOT WORK FOR REMOVING DUPLICATE OBJECTS, ONLY STRINGS/INTS
 function removeDuplicates(a) {
     // the hash object
@@ -661,13 +598,11 @@ const helperFunctions = {
     removeEmptyFields,
     verifyUser,
     removePassword,
-    printUsersFromPathway,
     getUserByQuery,
     sendEmail,
     safeUser,
     userForAdmin,
     getFirstName,
-    sendBizUpdateCandidateErrorEmail,
     removeDuplicates,
     randomInt,
     frontEndUser,
