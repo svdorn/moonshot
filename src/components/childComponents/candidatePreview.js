@@ -323,7 +323,6 @@ class CandidatePreview extends Component {
 
         return (
             <div className="candidatePreview center" >
-            {/* onClick={this.goTo("/results?user=Stephen-Dorn-2-9f66bf7eeac18994")} */}
                 <div className="candidateName font18px center">
                     {this.props.candidate.name ? this.props.candidate.name.toUpperCase() : ""}
                 </div>
