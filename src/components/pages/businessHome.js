@@ -98,7 +98,8 @@ class BusinessHome extends Component {
 
     handleCheckMarkClick() {
         this.setState({
-            agreeingToTerms: !this.state.agreeingToTerms
+            agreeingToTerms: !this.state.agreeingToTerms,
+            error: ''
         })
     };
 
@@ -223,7 +224,8 @@ class BusinessHome extends Component {
         const user = {
             name: this.props.formData.forBusiness.values.name,
             company: this.props.formData.forBusiness.values.company,
-            password: this.props.formData.forBusiness.values.password
+            password: this.props.formData.forBusiness.values.password,
+            termsAndConditions: this.state.agreeingToTerms
         };
 
         this.props.dialogEmailScreen2(user);
@@ -529,7 +531,7 @@ class BusinessHome extends Component {
                 ?
                 <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
                         <div
-                            className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
+                            className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop30px">
                             See Demo
                         </div>
                         <div className="whiteText font16px font14pxUnder500" style={{width: "85%", margin: "10px auto"}}>
@@ -539,13 +541,12 @@ class BusinessHome extends Component {
                             name="email"
                             component={renderTextField}
                             label="Work Email*"
-                            validate={[required, emailValidate]}
+                            className="marginTop10px"
                         /><br/>
                         <RaisedButton
                             label="Continue"
                             type="submit"
-                            className="raisedButtonBusinessHome"
-                            style={{marginTop: '20px'}}
+                            className="raisedButtonBusinessHome marginTop30px"
                         />
                     </form>
                 :
@@ -633,8 +634,8 @@ class BusinessHome extends Component {
                                     src="/icons/CheckMarkRoundedWhite.png"
                                 />
                             </div>
-                            I understand and agree to the <a className="clickableNoUnderline whiteText" href="/privacyPolicy" target="_blank">Privacy
-                            Policy</a> and <a className="whiteText clickableNoUnderline" href="/termsOfUse" target="_blank">Terms of Use</a>.
+                            I have read and agree to the Moonshot Insights <a className="blueTextHome" href="/privacyPolicy" target="_blank">Privacy
+                            Policy</a> and <a className="blueTextHome" href="/termsOfUse" target="_blank">Terms of Use</a>.
                         </div>
                         <RaisedButton
                             label="Continue"
@@ -659,7 +660,7 @@ class BusinessHome extends Component {
                         <Field
                             name="positions"
                             component={renderTextField}
-                            label="Positions*"
+                            label="Positions* (e.g. Business Analyst)"
                             validate={[required]}
                         /><br/>
                         <RaisedButton
