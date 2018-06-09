@@ -923,14 +923,21 @@ form > h1 {
 }
 /* arrows */
 .processOutline > img {
+    border-radius: 100%;
+    cursor: pointer;
     position: absolute;
     width: 60px;
     top: 50%;
     transform: translateY(-50%);
+    -webkit-transition: all 0.2s ease;
+    -ms-transition: all 0.2s ease;
+    transition: all 0.2s ease;
 }
+.processOutline > .rightArrow:hover { background-color: rgba(122,222,252,.2); }
+.processOutline > .leftArrow:hover { background-color: rgba(176,129,251,.2); }
 /* arrow pointing left */
-.processOutline > img:nth-child(2) { left: -70px; }
-.processOutline > img:nth-child(3) { right: -70px; }
+.processOutline > .leftArrow { left: -70px; }
+.processOutline > .rightArrow { right: -70px; }
 /* gray box surrounding text and centerline */
 .processOutline > div {
     background-color: #2e2e2e;
@@ -4078,8 +4085,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 200px;
     }
     .processOutline > img { width: 50px; }
-    .processOutline > img:nth-child(2) { left: -60px; }
-    .processOutline > img:nth-child(3) { right: -60px; }
+    .processOutline > .leftArrow { left: -60px; }
+    .processOutline > .rightArrow { right: -60px; }
 
     .font40pxUnder950 { font-size: 40px; }
     .font38pxUnder950 { font-size: 38px; }
