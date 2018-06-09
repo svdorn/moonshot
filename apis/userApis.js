@@ -552,6 +552,8 @@ async function addEvaluation(user, business, positionId, startDate) {
             // add the information the business will need about the candidate
             const userInformation = {
                 candidateId: user._id,
+                name: user.name,
+                isDismissed: false,
                 hiringStage: "Not Contacted",
                 hiringStageChanges: [{
                     hiringStage: "Not Contacted",
@@ -707,6 +709,8 @@ async function finishPositionEvaluation(user, positionId, businessId) {
             // ... add the candidate to the position
             const userInfo = {
                 candidateId: user._id,
+                name: user.name,
+                isDismissed: false,
                 hiringStage: "Not Contacted",
                 hiringStageChanges: [{
                     hiringStage: "Not Contacted",

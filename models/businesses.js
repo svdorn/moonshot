@@ -100,6 +100,8 @@ var businessesSchema = mongoose.Schema({
             // the hiring stage of the candidate, which the company has determined
             // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
             hiringStage: String,
+            // if the candidate is no longer being considered for the role
+            isDismissed: Boolean,
             // dates/times the hiring stage of the candidate was changed for this position
             hiringStageChanges: [{
                 // what the hiring stage was changed to

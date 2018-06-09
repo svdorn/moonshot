@@ -110,11 +110,10 @@ class CandidatePreview extends Component {
             const hiringStageInfo = {
                 userId: this.props.employerUserId,
                 verificationToken: this.props.employerVerificationToken,
-                companyId: this.props.companyId,
                 candidateId: this.props.candidateId,
                 hiringStage: hiringStage,
                 isDismissed: dismissed,
-                pathwayId: this.props.pathwayId
+                positionName: this.props.positionName
             }
             axios.post("/api/business/updateHiringStage", hiringStageInfo)
             // do nothing on success

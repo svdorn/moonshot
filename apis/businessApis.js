@@ -318,18 +318,19 @@ function POST_contactUsEmail(req, res) {
 }
 
 
+// updates a candidate for a business as Contacted, Interviewing, Dismissed, etc
+// TODO: this whole thing could probably be done with one query
 async function POST_updateHiringStage(req, res) {
     const body = req.body;
     const userId = sanitize(body.userId);
     const verificationToken = sanitize(body.verificationToken);
-    const companyId = sanitize(body.companyId);
     const candidateId = sanitize(body.candidateId);
     const hiringStage = sanitize(body.hiringStage);
     const isDismissed = sanitize(body.isDismissed);
-    const pathwayId = sanitize(body.pathwayId);
+    const positionName = sanitize(body.positionName);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!userId || !verificationToken || !companyId || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !pathwayId) {
+    if (!userId || !verificationToken || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !positionName) {
         return res.status(400).send("Bad request.");
     }
 
@@ -340,51 +341,56 @@ async function POST_updateHiringStage(req, res) {
         return res.status(400).send("Invalid hiring stage provided.");
     }
 
-    // verify the employer is actually a part of this organization
-    verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
-    .then(business => {
-        // if employer does not have valid credentials
+    // get the user and the business
+    let user;
+    let business;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+        business = await Businesses.findById(user.businessInfo.company.companyId);
         if (!business) {
-            console.log("Employer tried to change candidate's hiring status but could not be verified.");
-            return res.status(403).send("You do not have permission to change a candidate's hiring stage.");
+            console.log("No business found with id: ", user.businessInfo.company.companyId);
+            throw "No business.";
         }
+    } catch (getUserError) {
+        console.log("Error getting user or business from user: ", getUserError);
+        return res.status(403).send("You do not have permission to do that.");
+    }
 
-        // the index of the candidate in the business' candidate array
-        const candidateIndex = business.candidates.findIndex(currCandidate => {
-            return currCandidate.userId.toString() === candidateId.toString();
-        });
+    // get the position index and position
+    const positionIndex = business.positions.findIndex(pos => {
+        return pos.name === positionName;
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(400).send("Invalid position.");
+    }
+    let position = business.positions[positionIndex];
 
-        let candidate = business.candidates[candidateIndex];
-        // get the index of the pathway in the user's pathways array
-        const pathwayIndex = candidate.pathways.findIndex(currPathway => {
-            return currPathway._id.toString() === pathwayId;
-        })
+    // get the candidate index and candidate
+    const candidateIdString = candidateId.toString();
+    const candidateIndex = position.candidates.findIndex(cand => {
+        return cand.candidateId.toString() === candidateIdString;
+    });
+    if (typeof candidateIndex !== "number" || candidateIndex < 0) {
+        return res.status(400).send("Candidate has not applied for that position.");
+    }
 
-        // change the candidate's hiring stage and dismissal status to match
-        // the arguments that were passed in
-        candidate.pathways[pathwayIndex].isDismissed = isDismissed;
-        candidate.pathways[pathwayIndex].hiringStage = hiringStage;
-        candidate.pathways[pathwayIndex].hiringStageEdited = new Date();
-
-        // update the candidate in the business object
-        business.candidates[candidateIndex] = candidate;
-
-        // save the business
-        business.save()
-        .then(updatedBusiness => {
-            return res.json("success");
-        })
-        .catch(updateBusinessErr => {
-            return res.status(500).send("failure!");
-        });
+    // update the candidate info
+    position.candidates[candidateIndex].hiringStage = hiringStage;
+    position.candidates[candidateIndex].isDismissed = isDismissed;
+    position.candidates[candidateIndex].hiringStageChanges.push({
+        hiringStage,
+        dateChanged: new Date()
     })
-    .catch(verifyEmployerErr => {
-        console.log("Error when trying to verify employer when they were trying to edit a candidate's hiring stage: ", verifyEmployerErr);
+    business.positions[positionIndex] = position;
+
+    // save the business
+    try { await business.save(); }
+    catch (bizSaveError) {
+        console.log("Error saving business with candidate with updated hiring stage: ", bizSaveError);
         return res.status(500).send("Server error, try again later.");
-    })
+    }
 
-    // TODO make sure the timestamp of the last change is before the timestamp given
-    // if it isn't, don't change the user
+    return res.json("success");
 }
 
 function POST_answerQuestion(req, res) {
@@ -453,9 +459,6 @@ function POST_answerQuestion(req, res) {
         return res.status(500).send("Server error, try again later.");
     })
 }
-
-
-// ----->> END APIS <<----- //
 
 
 // VERIFY THAT THE GIVEN USER IS LEGIT AND PART OF THE GIVEN BUSINESS

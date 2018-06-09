@@ -245,6 +245,8 @@ class MyCandidates extends Component {
                 const initialIsDismissed = candidatePositionInfo.isDismissed;
                 const isDisabled = candidate.disabled === true;
 
+                console.log("positionId: ", positionId)
+
                 return (
                     <li style={{marginTop: '15px'}}
                         key={key}
@@ -255,8 +257,8 @@ class MyCandidates extends Component {
                             employerUserId={currentUser._id}
                             employerVerificationToken={currentUser.verificationToken}
                             companyId={currentUser.businessInfo.company.companyId}
-                            candidateId={candidate.userId}
-                            positionId={positionId}
+                            candidateId={candidate.candidateId}
+                            positionName={this.state.position}
                             editHiringStage={true}
                             name={candidate.name}
                             email={candidate.email}
