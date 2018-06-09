@@ -33,12 +33,12 @@ class MyCandidates extends Component {
     constructor(props) {
         super(props);
 
-        const emptyCandidate = {
-            name: "Loading...",
-            hiringStage: "",
-            email: "",
-            disabled: true
-        };
+        // const emptyCandidate = {
+        //     name: "Loading...",
+        //     hiringStage: "",
+        //     email: "",
+        //     disabled: true
+        // };
 
         // if a url query is telling us which position should be selected first
         let positionNameFromUrl = props.location.query && props.location.query.position ? props.location.query.position : undefined;
@@ -48,7 +48,8 @@ class MyCandidates extends Component {
             hiringStage: "",
             position: "",
             sortBy: "",
-            candidates: [emptyCandidate],
+            loadingCandidates: true,
+            candidates: [],
             positions: [],
             positionNameFromUrl,
             // true if the business has no positions associated with it
@@ -134,7 +135,6 @@ class MyCandidates extends Component {
     search() {
         // need a position to search for
         if (!this.state.noPositions && this.state.position) {
-            console.log("positionName: ", this.state.position);
             axios.get("/api/business/candidateSearch", {
                 params: {
                     searchTerm: this.state.term,
@@ -149,7 +149,7 @@ class MyCandidates extends Component {
                 console.log("res.data: ", res.data);
                 // make sure component is mounted before changing state
                 if (this.refs.myCandidates) {
-                    this.setState({candidates: res.data});
+                    this.setState({ candidates: res.data, loadingCandidates: false });
                 }
             }).catch(function (err) {
                 console.log("ERROR: ", err);
@@ -385,9 +385,18 @@ class MyCandidates extends Component {
                 {searchBar}
 
                 <div>
-                    <ul className="horizCenteredList myCandidatesWidth">
-                        {candidatePreviews}
-                    </ul>
+                    {candidatePreviews.length > 0 ?
+                        <ul className="horizCenteredList myCandidatesWidth">
+                            {candidatePreviews}
+                        </ul>
+                        :
+                        this.state.loadingCandidates ?
+                            <div className="center"><CircularProgress /></div>
+                            :
+                            <div className="whiteText center">
+                                No candidates
+                            </div>
+                    }
                 </div>
             </div>
         );
