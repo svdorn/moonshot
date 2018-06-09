@@ -283,7 +283,7 @@ class CandidatePreview extends Component {
             }
         };
 
-        const location = this.props.location ? this.props.location : "No location given";
+        const location = this.props.candidate.location ? this.props.candidate.location : "No location given";
         const overallScore = this.props.candidate.scores && this.props.candidate.scores.overall ? this.props.candidate.scores.overall : "N/A";
 
         let percent = "25%";
@@ -325,7 +325,7 @@ class CandidatePreview extends Component {
             <div className="candidatePreview center" >
             {/* onClick={this.goTo("/results?user=Stephen-Dorn-2-9f66bf7eeac18994")} */}
                 <div className="candidateName font18px center">
-                    {this.props.candidate.name.toUpperCase()}
+                    {this.props.candidate.name ? this.props.candidate.name.toUpperCase() : ""}
                 </div>
                 <br/>
                 <div className="candidateLocation font16px">

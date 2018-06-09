@@ -693,7 +693,7 @@ async function GET_candidateSearch(req, res) {
     try {
         business = await Businesses
             .find(businessQuery, positionQuery)
-            .select("positions.name positions.candidates.scores positions.candidates.candidateId positions.candidates.hiringStage positions.candidates.isDismissed positions.candidates.name positions.candidates.archetype positions.candidates.hiringStageChanges.dateChanged");
+            .select("positions.name positions.candidates.scores positions.candidates.candidateId positions.candidates.hiringStage positions.candidates.isDismissed positions.candidates.name positions.candidates.archetype positions.candidates.hiringStageChanges.dateChanged positions.candidates.location");
         // see if there are none found
         if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
         // if any are found, only one is found, as we searched by id
