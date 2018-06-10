@@ -789,8 +789,9 @@ async function GET_evaluationResults(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
     const profileUrl = sanitize(req.query.profileUrl);
-    const positionName = sanitize(req.query.positionName);
     const businessId = sanitize(req.query.businessId);
+    const positionId = sanitize(req.query.positionId);
+    const positionIdString = positionId.toString();
 
     let user, business, candidate;
     try {
@@ -824,7 +825,9 @@ async function GET_evaluationResults(req, res) {
     }
 
     // TODO: verify that the user applied for this position
-
+    const userPositionIndex = user.positions.findIndex(pos => {
+        return pos.positionId.toString() === positionIdString;
+    })
 
     // TODO: get the needed information for the front end
     const results = {};
@@ -838,30 +841,25 @@ async function GET_candidateSearch(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
-    // message displayed on miscellaneous errors
-    const SERVER_ERROR = "Server error, try again later.";
-    // message displayed when user doesn't have right permissions
-    const PERMISSIONS_ERROR = "You don't have permission to do that.";
-
     // get the user who is trying to search for candidates
     let user;
     try {
         user = await getAndVerifyUser(userId, verificationToken);
     } catch (getUserError) {
         console.log("error getting business user while searching for candidates: ", getUserError);
-        return res.status(401).send(PERMISSIONS_ERROR);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
     // if the user is not an admin or manager, they can't search for candidates
     if (!["accountAdmin", "manager"].includes(user.userType)) {
         console.log("User is type: ", user.userType);
-        return res.status(401).send(PERMISSIONS_ERROR);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
     // if the user doesn't have
     if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
         console.log("User doesn't have associated business.");
-        return res.status(401).send(PERMISSIONS_ERROR);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
     const companyId = user.businessInfo.company.companyId;
@@ -899,7 +897,7 @@ async function GET_candidateSearch(req, res) {
         business = business[0];
     } catch (findBizError) {
         console.log("error finding business for user trying to search for candidates: ", findBizError);
-        return res.status(500).send(SERVER_ERROR);
+        return res.status(500).send(errors.SERVER_ERROR);
     }
 
     // make sure the user gave a valid position

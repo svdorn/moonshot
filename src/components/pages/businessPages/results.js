@@ -31,12 +31,12 @@ class Results extends Component {
 
         let profileUrl = "";
         let businessId = "";
-        let positionName = "";
+        let positionId = "";
         try {
             console.log("this.props: ", this.props);
             profileUrl = this.props.params.profileUrl;
             businessId = this.props.currentUser.businessInfo.company.companyId;
-            positionName = this.props.params.positionName;
+            positionId = this.props.params.positionId;
         } catch (e) {
             console.log("error: ", e);
             this.goTo("/myCandidates");
@@ -47,7 +47,7 @@ class Results extends Component {
             params : {
                 userId: user._id,
                 verificationToken: user.verificationToken,
-                profileUrl, businessId, positionName
+                profileUrl, businessId, positionId
             }
         })
         .then(res => {

@@ -206,9 +206,12 @@ class MyCandidates extends Component {
         }
 
         // find the id of the currently selected position
-        const positionId = this.state.position ? this.state.positions.find(path => {
-            return path.name === this.state.position;
-        })._id : undefined;
+        let positionId = "";
+        try {
+            positionId = this.state.positions.find(pos => {
+                return pos.name === this.state.position;
+            })._id;
+        } catch (getPosIdErr) { /* probably just haven't chosen a position yet */ }
 
         // create the candidate previews
         let key = 0;
@@ -228,7 +231,7 @@ class MyCandidates extends Component {
                     <li style={{marginTop: '15px'}} key={key} >
                         <CandidatePreview
                             candidate={candidate}
-                            positionName={this.state.position}
+                            positionId={positionId}
                             editHiringStage={true}
                             disabled={candidate.disabled === true}
                         />
