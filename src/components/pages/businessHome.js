@@ -650,7 +650,7 @@ class BusinessHome extends Component {
                                 />
                             </div>
                             I have read and agree to the Moonshot Insights <a className="blueTextHome" href="/privacyPolicy" target="_blank">Privacy
-                            Policy</a> and <a className="blueTextHome" href="/termsOfUse" target="_blank">Terms of Use</a>.
+                            Policy</a>, <a className="blueTextHome" href="/termsOfUse" target="_blank">Terms of Use</a>, and <a className="blueTextHome" href="/serviceLevelAgreement" target="_blank">Service Level Agreement</a>.
                         </div>
                         <RaisedButton
                             label="Continue"

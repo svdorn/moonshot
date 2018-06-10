@@ -15,8 +15,6 @@ class TermsOfUse extends Component {
 
         let containerStyle = standalone ? {padding:"20px"} : {}
 
-        console.log("here");
-
         return (
             <div>
                 {standalone ?
