@@ -20,7 +20,9 @@ export function usersReducers(state = initialState, action) {
         case "CLOSE_ADD_USER_MODAL":
             return {
                 ...state,
-                userModalOpen: false
+                userModalOpen: false,
+                userPosted: false,
+                userPostedFailed: false
             };
             break;
         case "GET_USER_FROM_SESSION_REQUEST":
@@ -29,6 +31,12 @@ export function usersReducers(state = initialState, action) {
                 ...state,
                 isFetching: action.isFetching,
                 errorMessage: action.errorMessage
+            };
+            break;
+        case "EMAIL_FAILURE_EXIT_PAGE":
+            return {
+                ...state,
+                userPostedFailed: false
             };
             break;
         case "GET_USER_FROM_SESSION":
@@ -60,11 +68,15 @@ export function usersReducers(state = initialState, action) {
         case "CHANGE_PASSWORD_REJECTED":
             return {...state, notification: action.notification, loadingSomething: false};
             break;
+        case "POST_EMAIL_INVITES_REJECTED":
+            return {...state, loadingSomething:false, userPostedFailed: true}
+            break;
         case "SIGNOUT":
             return {...state, currentUser: undefined};
             break;
         case "FORGOT_PASSWORD_REQUESTED":
         case "POST_USER_REQUESTED":
+        case "POST_EMAIL_INVITES_REQUESTED":
         case "FOR_BUSINESS_REQUESTED":
         case "CONTACT_US_REQUESTED":
         case "COMPLETE_PATHWAY_REQUESTED":
@@ -81,6 +93,7 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         case "POST_USER":
+        case "POST_EMAIL_INVITES_SUCCESS":
             return {
                 ...state,
                 userPosted: true,
