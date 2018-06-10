@@ -15,6 +15,8 @@ class TermsOfUse extends Component {
 
         let containerStyle = standalone ? {padding:"20px"} : {}
 
+        console.log("here");
+
         return (
             <div>
                 {standalone ?
@@ -225,15 +227,6 @@ class TermsOfUse extends Component {
 
                     <br/><br/>I HAVE READ THIS AGREEMENT AND AGREE TO ALL OF THE PROVISIONS CONTAINED ABOVE. I UNDERSTAND THAT NOT READING THIS AGREEMENT AND/OR CLAIMING IGNORANCE IS NOT A DEFENSE AND I WILL BE BOUND BY ITS CONDITIONS REGARDLESS.
 
-                    <br/><br/> <b>22. Disclaimers</b>
-
-                    <br/><br/> These terms and conditions are governed by the laws of the United States of America and the
-                    laws of the State of Wisconsin.
-
-                    <br/><br/> <b>22. Disclaimers</b>
-
-                    <br/><br/> These terms and conditions are governed by the laws of the United States of America and the
-                    laws of the State of Wisconsin.
                 </div>
 
                 {standalone ?
