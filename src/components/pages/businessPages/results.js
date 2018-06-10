@@ -31,18 +31,16 @@ class Results extends Component {
 
         let profileUrl = "";
         let businessId = "";
-        let positionId = "";
+        let positionName = "";
         try {
+            console.log("this.props: ", this.props);
             profileUrl = this.props.params.profileUrl;
-            businessId = this.props.params.businessId;
-            positionId = this.props.params.positionId;
+            businessId = this.props.currentUser.businessInfo.company.companyId;
+            positionName = this.props.params.positionName;
         } catch (e) {
+            console.log("error: ", e);
             this.goTo("/myCandidates");
         }
-
-        console.log("profile url is: ", profileUrl);
-        console.log("businessId is: ", businessId);
-        console.log("positionId is: ", positionId);
 
         // TODO backend call to get results info
 

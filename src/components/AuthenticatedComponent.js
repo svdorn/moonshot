@@ -22,7 +22,8 @@ class AuthenticatedComponent extends Component {
 
     checkLoggedIn() {
         // if there is no user, redirect to login page
-        if (   !this.props.currentUser ||  this.props.currentUser == "no user") {
+        const currentUser = this.props.currentUser;
+        if (!currentUser || currentUser == "no user") {
             const location = this.props.location;
             const redirect = location.pathname + location.search;
 
@@ -33,7 +34,7 @@ class AuthenticatedComponent extends Component {
             const types = this.props.route.userType;
             let authenticatedType = true;
             if (types) {
-                authenticatedType = types.includes(currentUserType);
+                authenticatedType = types.includes(currentUser.userType);
             }
 
             // if one of the authenticated types matches the current user's type, they are authenticated

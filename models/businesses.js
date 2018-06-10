@@ -97,6 +97,8 @@ var businessesSchema = mongoose.Schema({
             name: String,
             // id of the candidate
             candidateId: mongoose.Schema.Types.ObjectId,
+            // the url to get to the user's results page
+            profileUrl: String,
             // the hiring stage of the candidate, which the company has determined
             // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
             hiringStage: String,

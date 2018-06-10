@@ -321,8 +321,16 @@ class CandidatePreview extends Component {
             return (<MenuItem key={stage} value={stage} primaryText={stage.toUpperCase()} />)
         });
 
-        const profileUrl = this.props.candidate && this.props.candidate.profileUrl ? this.props.candidate.profileUrl : "";
-        const resultsUrl = `/results/${profileUrl}`;
+        let resultsUrl = "/myCandidates";
+        console.log(this.props.currentUser);
+        try {
+            const profileUrl = this.props.candidate && this.props.candidate.profileUrl ? this.props.candidate.profileUrl : "";
+            const positionName = this.props.positionName;
+            resultsUrl = `/results/${profileUrl}/${positionName}`;
+        } catch (e) {
+            console.log("Error getting results url: ", e);
+        }
+
 
         return (
             <div className="candidatePreview center" >
