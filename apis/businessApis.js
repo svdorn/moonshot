@@ -48,7 +48,7 @@ function POST_forBusinessEmail(req, res) {
     if (req.body.company) {
         company = sanitize(req.body.company);
     }
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
     let subject = 'Moonshot Sales Lead - From Home Page';
 
     let content = "<div>"
@@ -78,7 +78,7 @@ function POST_forBusinessEmail(req, res) {
 }
 
 function POST_demoEmail(req, res) {
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
     let subject = 'Moonshot - Somebody watched the Demo';
 
     let content = "<div>"
@@ -99,7 +99,7 @@ function POST_demoEmail(req, res) {
 }
 
 function POST_dialogEmail(req, res) {
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
     let subject = 'Moonshot - Somebody filled out email on Homepage';
 
     let content = "<div>"
