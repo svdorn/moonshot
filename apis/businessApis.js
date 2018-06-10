@@ -775,7 +775,7 @@ async function GET_positions(req, res) {
     try {
         business = await Businesses
             .findById(companyId)
-            .select("logo name positions.name positions.completions positions.usersInProgress position.skills positions.timeAllotted");
+            .select("logo name positions._id positions.name positions.completions positions.usersInProgress position.skills positions.timeAllotted");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
         return res.status(500).send("Server error, couldn't get positions.");

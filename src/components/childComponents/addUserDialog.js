@@ -53,6 +53,7 @@ class AddUserDialog extends Component {
         })
         .then(function (res) {
             let positions = res.data.positions;
+            console.log("positions: ", positions);
             if (Array.isArray(positions) && positions.length > 0) {
                 const firstPositionName = positions[0].name;
                 self.setState({
