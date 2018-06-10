@@ -78,8 +78,7 @@ function POST_forBusinessEmail(req, res) {
 }
 
 function POST_demoEmail(req, res) {
-    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
-    let recipients = ["stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
     let subject = 'Moonshot - Somebody watched the Demo';
 
     let content = "<div>"
@@ -100,8 +99,7 @@ function POST_demoEmail(req, res) {
 }
 
 function POST_dialogEmail(req, res) {
-    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
-    let recipients = ["stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
     let subject = 'Moonshot - Somebody filled out email on Homepage';
 
     let content = "<div>"
@@ -122,8 +120,7 @@ function POST_dialogEmail(req, res) {
 }
 
 function POST_dialogEmailScreen2(req, res) {
-    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
-    let recipients = ["stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
     let subject = 'Moonshot - Somebody filled out second pg on Homepage';
     const name = sanitize(req.body.name);
     const company = sanitize(req.body.company);
@@ -215,8 +212,7 @@ function POST_dialogEmailScreen2(req, res) {
 }
 
 function POST_dialogEmailScreen3(req, res) {
-    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
-    let recipients = ["stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
     let subject = 'Moonshot - Somebody filled out third pg on Homepage';
 
     let content = "<div>"
@@ -237,8 +233,7 @@ function POST_dialogEmailScreen3(req, res) {
 }
 
 function POST_dialogEmailScreen4(req, res) {
-    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
-    let recipients = ["stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
     let subject = 'Moonshot - Somebody filled out fourth pg on Homepage';
 
     let content = "<div>"

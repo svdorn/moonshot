@@ -16,8 +16,6 @@ class ProgressBar extends Component {
         const currentUser = this.props.currentUser;
         const positionInProgress = currentUser.positionInProgress;
 
-        console.log("currentUser: ", currentUser);
-
         let numSteps = 1;
         if (positionInProgress.skillTests) {
             numSteps += positionInProgress.skillTests.length;
