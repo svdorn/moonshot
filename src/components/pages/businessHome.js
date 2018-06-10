@@ -10,7 +10,7 @@ import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import YouTube from 'react-youtube';
-import ProgressBarDialog from '../miscComponents/ProgressBarDialog';
+import ProgressBarDialog from '../miscComponents/progressBarDialog';
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
