@@ -336,8 +336,8 @@ class Signup extends Component {
                                                 src="/icons/CheckMarkRoundedWhite.png"
                                             />
                                         </div>
-                                        I have read and agree to the Moonshot Insights <bdi className="clickable" onClick={this.handleOpenPP}>Privacy
-                                        Policy</bdi> and <bdi className="clickable" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
+                                        I have read and agree to the Moonshot Insights <bdi className="clickable blueTextHome" onClick={this.handleOpenPP}>Privacy
+                                        Policy</bdi> and <bdi className="clickable blueTextHome" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
                                     </div>
                                     <br/>
                                     <RaisedButton
