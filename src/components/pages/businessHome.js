@@ -9,6 +9,7 @@ import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
+import AddUserDialog from '../childComponents/addUserDialog';
 import YouTube from 'react-youtube';
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -496,6 +497,7 @@ class BusinessHome extends Component {
         if (this.state.open || this.state.demoOpen) {
             blurredClass = 'dialogForBizOverlay';
         }
+
 
         let dialogDemoClass = "dialogForBiz";
         if (this.state.demoScreen === 2 || this.state.dialogScreen === 5) {

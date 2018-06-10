@@ -191,7 +191,6 @@ class EmployeePreview extends Component {
 
 
     render() {
-        console.log(this.state.questionIndex)
         const style = {
             redLink: {
                 color: "#D1576F",
