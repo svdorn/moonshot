@@ -31,8 +31,10 @@ class AuthenticatedComponent extends Component {
         // if there is a user see if they are of the right type
         else {
             const types = this.props.route.userType;
-            const currentUserType = this.props.currentUser.userType;
-            let authenticatedType = types.includes(currentUserType);
+            let authenticatedType = true;
+            if (types) {
+                authenticatedType = types.includes(currentUserType);
+            }
 
             // if one of the authenticated types matches the current user's type, they are authenticated
             if (authenticatedType) {

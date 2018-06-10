@@ -30,13 +30,21 @@ class Results extends Component {
         const user = this.props.currentUser;
 
         let profileUrl = "";
+        let businessId = "";
+        let positionId = "";
         try {
             profileUrl = this.props.params.profileUrl;
+            businessId = this.props.params.businessId;
+            positionId = this.props.params.positionId;
         } catch (e) {
             this.goTo("/myCandidates");
         }
 
-        console.log("profile url is: ", profileUrl)
+        console.log("profile url is: ", profileUrl);
+        console.log("businessId is: ", businessId);
+        console.log("positionId is: ", positionId);
+
+        // TODO backend call to get results info
 
 
         let self = this;
@@ -309,6 +317,15 @@ class Results extends Component {
     }
 
 
+    makePsychSection() {
+        return (
+            <div>
+
+            </div>
+        )
+    }
+
+
     makeResponsesSection() {
         let freeResponses = [];
         if (typeof this.state === "object" && Array.isArray(this.state.freeResponses)) {
@@ -346,6 +363,7 @@ class Results extends Component {
 
         const analysisSection = this.makeAnalysisSection();
         const responsesSection = this.makeResponsesSection();
+        const psychSection = this.makePsychSection();
 
         return (
             <div>
@@ -402,6 +420,12 @@ class Results extends Component {
                                                     <div/>
                                                 </div>
                                                 {analysisSection}
+                                            </Tab>
+                                            <Tab label="Psych" style={style.topTab}>
+                                                <div className="tabsShadow" style={{position:"absolute"}}>
+                                                    <div/>
+                                                </div>
+                                                {psychSection}
                                             </Tab>
                                             <Tab label="Responses" style={style.topTab}>
                                                 <div className="tabsShadow">
