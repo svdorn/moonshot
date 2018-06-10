@@ -3,6 +3,9 @@ var Employers = require('../models/employers.js');
 var Users = require('../models/users.js');
 var Pathways = require('../models/pathways.js');
 
+const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
+
 // get helper functions
 const { sanitize,
         removeEmptyFields,
@@ -18,6 +21,11 @@ const { sanitize,
 
 const businessApis = {
     POST_forBusinessEmail,
+    POST_demoEmail,
+    POST_dialogEmail,
+    POST_dialogEmailScreen2,
+    POST_dialogEmailScreen3,
+    POST_dialogEmailScreen4,
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
@@ -40,7 +48,7 @@ function POST_forBusinessEmail(req, res) {
     if (req.body.company) {
         company = sanitize(req.body.company);
     }
-    let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
     let subject = 'Moonshot Sales Lead - From Home Page';
 
     let content = "<div>"
@@ -69,6 +77,187 @@ function POST_forBusinessEmail(req, res) {
     })
 }
 
+function POST_demoEmail(req, res) {
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody watched the Demo';
+
+    let content = "<div>"
+        + "<h3>Email of someone who watched demo: </h3>"
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmail(req, res) {
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out email on Homepage';
+
+    let content = "<div>"
+        + "<h3>Email of someone who filled out first page on homepage: </h3>"
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmailScreen2(req, res) {
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out second pg on Homepage';
+    const name = sanitize(req.body.name);
+    const company = sanitize(req.body.company);
+    const password = sanitize(req.body.password);
+    const email = sanitize(req.body.email);
+
+    let user = {
+        name: name,
+        email: email
+    };
+    let business = {
+        name: company
+    };
+
+    // hash the user's password
+    const saltRounds = 10;
+    bcrypt.genSalt(saltRounds, function (err, salt) {
+        bcrypt.hash(password, salt, function (err, hash) {
+            // change the stored password to be the hash
+            user.password = hash;
+            user.verified = true;
+            const query = {email: user.email};
+
+            getUserByQuery(query, function(err, foundUser) {
+                if (err) {
+                    console.log(err);
+                    return res.status(500).send("Error creating account, try with a different email or try again later.");
+                }
+                if (foundUser == null || foundUser == undefined) {
+                    // get count of users with that name to get the profile url
+                    Users.count({name: user.name}, function (err, count) {
+                        const randomNumber = crypto.randomBytes(8).toString('hex');
+                        user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+                        user.admin = false;
+                        user.agreedToTerms = true;
+                        user.dateSignedUp = new Date();
+
+                        // store the user in the db
+                        Users.create(user, function (err, newUser) {
+                            if (err) {
+                                console.log(err);
+                            }
+
+                            req.session.unverifiedUserId = newUser._id;
+                            req.session.save(function (err) {
+                                if (err) {
+                                    console.log("error saving unverifiedUserId to session: ", err);
+                                }
+                            })
+
+                            business.employerIds = [];
+                            business.employerIds.push(newUser._id);
+
+                            // Create business
+                            Businesses.create(business, function(err, newBusiness) {
+                                if (err) {
+                                    console.log(err);
+                                } else {
+                                    // Send email with info to us
+                                    let content = "<div>"
+                                        + "<h3>Info of someone who filled out second page on homepage: </h3>"
+                                        + "<p>Name: "
+                                        + sanitize(req.body.name)
+                                        + "</p>"
+                                        + "<p>Company: "
+                                        + sanitize(req.body.company)
+                                        + "</p>"
+                                        + "</div>";
+
+                                    const sendFrom = "Moonshot";
+                                    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+                                        if (success) {
+                                            res.json("Thank you for contacting us, our team will get back to you shortly.");
+                                        } else {
+                                            res.status(500).send(msg);
+                                        }
+                                    })
+                                }
+                            });
+                        });
+                    })
+                } else {
+                    res.status(401).send("An account with that email address already exists.");
+                }
+
+            });
+        });
+    });
+}
+
+function POST_dialogEmailScreen3(req, res) {
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out third pg on Homepage';
+
+    let content = "<div>"
+        + "<h3>Info of someone who filled out third page on homepage: </h3>"
+        + "<p>Positions: "
+        + sanitize(req.body.positions)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmailScreen4(req, res) {
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out fourth pg on Homepage';
+
+    let content = "<div>"
+        + "<h3>Info of someone who filled out fourth page on homepage: </h3>"
+        + "<p>Skill 1: "
+        + sanitize(req.body.skill1)
+        + "</p>"
+        + "<p>Skill 2: "
+        + sanitize(req.body.skill2)
+        + "</p>"
+        + "<p>Skill 3: "
+        + sanitize(req.body.skill3)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
 
 function POST_contactUsEmail(req, res) {
     let message = "None";

@@ -40,6 +40,7 @@ import ReferralCode from './components/pages/referralCode';
 import Admin from './components/pages/admin';
 import PrivacyPolicy from './components/policies/privacyPolicy';
 import TermsOfUse from './components/policies/termsOfUse';
+import ServiceLevelAgreement from './components/policies/serviceLevelAgreement';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
 
 import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
@@ -92,7 +93,8 @@ const routes = (
         <Route path="unsubscribe" component={Unsubscribe} />
         <Route path="referral" component={ReferralCode} />
         <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
-        <Route path="termsOfUse" com    ponent={TermsOfUse} standalone={true} />
+        <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
+        <Route path="serviceLevelAgreement" component={ServiceLevelAgreement} standalone={true} />
         <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
 
         <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
