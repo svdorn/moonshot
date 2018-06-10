@@ -43,6 +43,22 @@ class Results extends Component {
         }
 
         // TODO backend call to get results info
+        axios.get("/api/business/evaluationResults", {
+            params : {
+                userId: user._id,
+                verificationToken: user.verificationToken,
+                profileUrl, businessId, positionName
+            }
+        })
+        .then(res => {
+            console.log("res.data: ", res.data);
+        })
+        .catch(error => {
+            console.log("error: ", error);
+            if (error.response && error.response.data) {
+                console.log(error.response.data);
+            }
+        });
 
 
         let self = this;

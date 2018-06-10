@@ -18,6 +18,8 @@ const { sanitize,
         frontEndUser,
         FOR_EMPLOYER,
 } = require('./helperFunctions.js');
+// get error strings that can be sent back to the user
+const errors = require('./errors.js');
 
 
 const businessApis = {
@@ -33,7 +35,8 @@ const businessApis = {
     POST_emailInvites,
     GET_candidateSearch,
     GET_employees,
-    GET_positions
+    GET_positions,
+    GET_evaluationResults
 }
 
 
@@ -753,6 +756,55 @@ async function GET_positions(req, res) {
     }
 
     return res.json({logo: business.logo, businessName: business.name, positions: business.positions});
+}
+
+
+async function GET_evaluationResults(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+    const profileUrl = sanitize(req.query.profileUrl);
+    const positionName = sanitize(req.query.positionName);
+    const businessId = sanitize(req.query.businessId);
+
+    let user, business, candidate;
+    try {
+        // get the business user, candidate, and business
+        let [foundUser, foundCandidate, foundBusiness] = Promise.all([
+            getAndVerifyUser(userId, verificationToken),
+            Users.findOne({profileUrl}),
+            Businesses.findById(businessId)
+        ]);
+
+        // make sure a user, candidate, and business were found
+        if (!foundUser || !foundCandidate || !foundBusiness) {
+            throw "User or candidate or business not found.";
+        }
+
+        // get the three found objects outside of the try/catch
+        user = foundUser; candidate = foundCandidate; business = foundBusiness;
+    } catch (dbError) {
+        console.log("Error getting user or candidate or business: ", dbError);
+        res.status(500).send("Invalid operation.");
+    }
+
+    // verify that the business user has the right permissions
+    try {
+        if (businessId.toString() !== user.businessInfo.company.companyId()) {
+            throw "Doesn't have right business id.";
+        }
+    } catch (permissionError) {
+        console.log("Business user did not have the right business id: ", permissionsError);
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // TODO: verify that the user applied for this position
+
+
+    // TODO: get the needed information for the front end
+    const results = {};
+
+    // return the information to the front end
+    res.json(results);
 }
 
 
