@@ -57,7 +57,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
-                let nextUrl = '/discover';
+                let nextUrl = '/myEvaluations';
                 console.log(returnedUser.userType);
                 if (returnedUser.userType === "manager" || returnedUser.userType === "accountAdmin") {
                     nextUrl = '/myEvaluations';
@@ -86,7 +86,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                         dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                         // navigateBackUrl should be equal to the url for the pathway
                         if (!navigateBackUrl) {
-                            navigateBackUrl = "/discover";
+                            navigateBackUrl = "/myEvaluations";
                         }
                         browserHistory.push(nextUrl);
                         window.scrollTo(0, 0);
@@ -141,7 +141,47 @@ export function positionSignup(userId, verificationToken, positionId, businessId
         })
         .catch(error => {
             console.log("Error starting position evaluation: ", error);
+            if (error.response && error.response.data) {
+                console.log(error.response.data);
+            }
         })
+    }
+}
+
+
+export function continueEval(userId, verificationToken, positionId, businessId) {
+    return function(dispatch) {
+        axios.post("/api/user/continuePositionEval", {userId, verificationToken, positionId, businessId})
+        .then(response => {
+            dispatch({type: "CONTINUE_POSITION_EVAL", currentUser: response.data.updatedUser});
+            if (response.data.finished) {
+                console.log("All parts already answered!");
+            } else {
+                browserHistory.push(response.data.nextUrl);
+                window.scrollTo(0, 0);
+            }
+        })
+        .catch(error => {
+            console.log("Error starting position evaluation: ", error);
+            if (error.response && error.response.data) {
+                console.log(error.response.data);
+            }
+        })
+    }
+}
+
+
+export function startPsychEval(userId, verificationToken) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+        axios.post("/api/user/startPsychEval", {userId, verificationToken})
+        .then(response => {
+            dispatch({type: "START_PSYCH_EVAL", currentUser: response.data});
+        })
+        .catch(e => {
+            let message = e.response && e.response.data ? e.response.data : "Error starting pysch analysis.";
+            dispatch({type: "START_PSYCH_EVAL_ERROR", notification: {message, type: "errorHeader"}});
+        });
     }
 }
 
@@ -170,6 +210,20 @@ export function resetFrizz(userId, verificationToken) {
         axios.post("/api/user/resetFrizz", {userId, verificationToken})
         .then(response => {
             dispatch({type: "USER_UPDATE", currentUser: response.data, notification:{message: "Frizz reset!", type: "infoHeader"}});
+            browserHistory.push("/positionSignup");
+            window.scrollTo(0, 0);
+        })
+        .catch(error => {
+            dispatch({type: "NOTIFICATION", notification:{message: error.response.data, type: "errorHeader"}})
+            console.log("error: ", error);
+        })
+    }
+}
+export function reset24(userId, verificationToken) {
+    return function(dispatch) {
+        axios.post("/api/user/reset24", {userId, verificationToken})
+        .then(response => {
+            dispatch({type: "USER_UPDATE", currentUser: response.data, notification:{message: "24 reset!", type: "infoHeader"}});
             browserHistory.push("/positionSignup");
             window.scrollTo(0, 0);
         })
@@ -402,6 +456,66 @@ export function changeTempPassword(user) {
         .catch(function(err) {
             dispatch({type:"CHANGE_TEMP_PASS_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
         })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function demoEmail(user){
+    return function(dispatch) {
+        axios.post("api/business/demoEmail", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function dialogEmail(user){
+    return function(dispatch) {
+        axios.post("api/business/dialogEmail", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function dialogEmailScreen2(user){
+    return function(dispatch) {
+        axios.post("api/business/dialogEmailScreen2", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function dialogEmailScreen3(user){
+    return function(dispatch) {
+        axios.post("api/business/dialogEmailScreen3", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
+    }
+}
+
+// Send an email when form filled out on forBusiness page
+export function dialogEmailScreen4(user){
+    return function(dispatch) {
+        axios.post("api/business/dialogEmailScreen4", user)
+            .then(function(response) {
+            })
+            .catch(function(err) {
+                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
+            })
     }
 }
 

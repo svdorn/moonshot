@@ -26,34 +26,65 @@ class MyEvaluations extends Component {
         this.state = {
             positions: [],
             // true if the business has no positions associated with it
-            noPositions: false
+            noPositions: false,
+            // logo of the company - doesn't apply for candidates
+            logo: undefined,
+            // name of the business the user works for - doesn't apply for candidates
+            businessName: undefined
         }
     }
 
     componentDidMount() {
         let self = this;
-        axios.get("/api/business/positions", {
-            params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
-            }
-        })
-        .then(function (res) {
-            let positions = res.data.positions;
-            if (Array.isArray(positions) && positions.length > 0) {
-                self.setState({
-                    positions
-                })
-            } else {
-                self.setState({
-                    noPositions: true,
-                })
-            }
-        })
-        .catch(function (err) {
-            console.log("error getting positions: ", err);
-        });
+        const currentUser = this.props.currentUser;
+        // if the user is here to go through an evaluation, get the positions
+        // they are currently enrolled in
+        if (["employee", "candidate"].includes(currentUser.userType)) {
+            axios.get("/api/user/positions", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken
+                }
+            })
+            .then(res => {
+                console.log("positions: ", res.data.positions);
+                self.positionsFound(res.data.positions);
+            })
+            .catch(error => {
+                console.log("error getting positions: ", error);
+                if (error.response) { console.log(error.response.data); }
+            })
+        }
+
+        // if user is an employer, get all the positions they're evaluating for
+        if (["accountAdmin", "manager"].includes(currentUser.userType)) {
+            axios.get("/api/business/positions", {
+                params: {
+                    userId: this.props.currentUser._id,
+                    verificationToken: this.props.currentUser.verificationToken
+                }
+            })
+            .then(function (res) {
+                console.log("res.data.positions: ", res.data.positions)
+                self.positionsFound(res.data.positions, res.data.logo, res.data.businessName);
+            })
+            .catch(function (err) {
+                console.log("error getting positions: ", err);
+                if (err.response && err.response.data) { console.log(err.response.data); }
+            });
+        }
     }
+
+
+    // call this after positions are found from back end
+    positionsFound(positions, logo, businessName) {
+        if (Array.isArray(positions) && positions.length > 0) {
+            this.setState({ positions, logo, businessName });
+        } else {
+            this.setState({ noPositions: true });
+        }
+    }
+
 
     render() {
         const style = {
@@ -87,30 +118,62 @@ class MyEvaluations extends Component {
             </div>
         );
 
+        if (this.state.noPositions) {
+            evaluations = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    No evaluations.
+                </div>
+            )
+        }
+
         // create the evaluation previews
         let key = 0;
         let self = this;
 
+        const currentUser = this.props.currentUser;
+
         // TODO: make this work for everybody, not just Curate
-        if (this.state.positions.length !== 0) {
+        if (currentUser && this.state.positions.length !== 0) {
+            const userType = currentUser.userType;
+
             evaluations = this.state.positions.map(position => {
                 key++;
+
+                let attributes = {};
+                attributes.company = position.businessName;
+
+                // if user is manager or account admin, preview will look editable
+                if (["accountAdmin", "manager"].includes(currentUser.userType)) {
+                    attributes.completions = position.completions;
+                    attributes.usersInProgress = position.usersInProgress;
+                    attributes.length = position.length;
+                    attributes.skills = position.skills;
+                    attributes.timeAllotted = position.timeAllotted;
+                    attributes.logo = self.state.logo;
+                    attributes.company = self.state.businessName;
+                    attributes.name = position.name;
+
+                    attributes.variation = "edit";
+                }
+
+                // otherwise the preview will look like you can take it
+                else {
+                    attributes.variation = "take";
+                    attributes.logo = position.businessLogo;
+                    attributes.name = position.positionName;
+                    attributes.company = position.businessName;
+                    attributes.businessId = position.businessId.toString();
+                    attributes.positionId = position.positionId.toString();
+                    attributes.assignedDate = position.assignedDate;
+                    attributes.deadline = position.deadline;
+                    attributes.completedDate = position.completedDate;
+                }
 
                 return (
                     <li style={{marginTop: '15px'}}
                         key={key}
                     >
-                        <MyEvaluationsPreview
-                            company="Moonshot"
-                            logo="/images/OfficialLogoWhite.png"
-                            name={position.name}
-                            completions={position.completions}
-                            length={position.length}
-                            skills={position.skills}
-                            timeAllotted={position.timeAllotted}
-                            usersInProgress={position.usersInProgress}
-                            variation={key}
-                        />
+                        <MyEvaluationsPreview {...attributes} />
                     </li>
                 );
             });

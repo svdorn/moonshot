@@ -10,7 +10,7 @@ import StyledContent from "../../childComponents/styledContent";
 import { CircularProgress } from "material-ui";
 import ProgressBar from '../../miscComponents/progressBar';
 
-class PsychAnalysis extends Component {
+class SkillTest extends Component {
     constructor(props) {
         super(props);
 
@@ -125,7 +125,6 @@ class PsychAnalysis extends Component {
             axios.post("/api/skill/answerSkillQuestion", params)
             .then(result => {
                 this.props.newCurrentUser(result.data.updatedUser);
-                console.log("updatedUser: ", result.data.updatedUser);
                 let question = undefined;
                 if (result.data.question) {
                     question = result.data.question;
@@ -135,7 +134,7 @@ class PsychAnalysis extends Component {
                     selectedId: undefined,
                     finished: result.data.finished,
                     question
-                }, () => console.log("state is: ", this.state));
+                });
             })
             .catch(error => {
                 console.log("error saving answer: ", error);
@@ -147,14 +146,14 @@ class PsychAnalysis extends Component {
     finishTest() {
         // if the user is taking a position evaluation, go to the next step of that
         const user = this.props.currentUser;
-        const positionInProgress = user.positionInProgress;
-        if (positionInProgress) {
+        const currentPosition = user.currentPosition;
+        if (currentPosition) {
             // if there are skill tests the user still has to take, go to that skill test
-            if (positionInProgress.skillTests && positionInProgress.testIndex < positionInProgress.skillTests.length) {
-                this.goTo(`/skillTest/${positionInProgress.skillTests[positionInProgress.testIndex]}`);
+            if (currentPosition.skillTests && currentPosition.testIndex < currentPosition.skillTests.length) {
+                this.goTo(`/skillTest/${currentPosition.skillTests[currentPosition.testIndex]}`);
             }
             // otherwise, if there are free response questions to answer, go there
-            else if (positionInProgress.freeResponseQuestions && positionInProgress.freeResponseQuestions.length > 0) {
+            else if (currentPosition.freeResponseQuestions && currentPosition.freeResponseQuestions.length > 0) {
                 this.goTo("/freeResponse");
             }
             // otherwise, the user is done with the test; go home and give them
@@ -246,4 +245,4 @@ function mapStateToProps(state) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PsychAnalysis);
+export default connect(mapStateToProps, mapDispatchToProps)(SkillTest);

@@ -2,13 +2,18 @@
 var mongoose = require('mongoose');
 
 var businessesSchema = mongoose.Schema({
+    // company name
     name: String,
-    code: String,
+    // logo image name within /images/logos/
+    logo: String,
     pathwayIds: [ mongoose.Schema.Types.ObjectId ],
     employerIds: [ mongoose.Schema.Types.ObjectId ],
     employeeIds: [ mongoose.Schema.Types.ObjectId ],
 
     // ---->>> POST-PIVOT <<<---- //
+
+    // unique company code, added to position code for user sign up
+    code: String,
 
     employees: [{
         employeeId: mongoose.Schema.Types.ObjectId,
@@ -60,6 +65,13 @@ var businessesSchema = mongoose.Schema({
     positions: [{
         // name of the position (such as "Machine Learning Developer")
         name: String,
+        // whether the position can be applied to by anyone or if they need a unique
+        // one time code
+        open: Boolean,
+        // these two characters are position differentiators - they are added
+        // to the business' code; the code candidates will use the full code when
+        // they sign up to be automatically signed up for this position
+        code: String,
         // if the position should be listed as one that candidates can apply for
         currentlyHiring: Boolean,
         // the skill tests a candidate must complete in order to apply
@@ -81,12 +93,50 @@ var businessesSchema = mongoose.Schema({
         usersInProgress: Number,
         // candidates who have applied for this position
         candidates: [{
-            candidateId: mongoose.Schema.Types.ObjectId
+            // name of the candidate
+            name: String,
+            // id of the candidate
+            candidateId: mongoose.Schema.Types.ObjectId,
+            // the url to get to the user's results page
+            profileUrl: String,
+            // the hiring stage of the candidate, which the company has determined
+            // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
+            hiringStage: String,
+            // if the candidate is no longer being considered for the role
+            isDismissed: Boolean,
+            // dates/times the hiring stage of the candidate was changed for this position
+            hiringStageChanges: [{
+                // what the hiring stage was changed to
+                hiringStage: String,
+                // the date/time the hiring stage was changed
+                dateChanged: Date
+            }],
+            // user's archetype, found from the psychometric test
+            archetype: String,
+            // the scores the user got for the position; if this is not undefined,
+            // the user has completed the evaluation
+            scores: {
+                // combination of all the scores
+                overall: Number,
+                // how good of a culture fit the candidate has
+                culture: Number,
+                // how much the candidate could grow in the position
+                growth: Number,
+                // if the candidate would stay at the company for a long time
+                longevity: Number,
+                // how well the candidate would do at that specific position
+                performance: Number
+            },
         }],
         // Code for the specific position
         code: String,
         // One-time use codes for candidates
-        candidateCodes: [String],
+        candidateCodes: [{
+            // the actual code
+            code: String,
+            // the date that will be shown for this user's evaluation start date
+            startDate: Date
+        }],
         // One-time use codes for employees
         employeeCodes: [String],
         // One-time use codes for managers

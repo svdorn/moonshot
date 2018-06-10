@@ -1,6 +1,6 @@
-var Businesses = require('../models/businesses.js');
-var Users = require('../models/users.js');
-var Pathways = require('../models/pathways.js');
+var Businesses = require("../models/businesses.js");
+var Users = require("../models/users.js");
+const mongoose = require("mongoose");
 
 const crypto = require('crypto');
 
@@ -13,17 +13,24 @@ const { sanitize,
         sendEmail,
         safeUser,
         userForAdmin,
-        getFirstName
+        getFirstName,
+        getAndVerifyUser,
+        frontEndUser,
+        FOR_EMPLOYER,
 } = require('./helperFunctions.js');
 
 
 const businessApis = {
     POST_forBusinessEmail,
+    POST_demoEmail,
+    POST_dialogEmail,
+    POST_dialogEmailScreen2,
+    POST_dialogEmailScreen3,
+    POST_dialogEmailScreen4,
     POST_contactUsEmail,
     POST_updateHiringStage,
     POST_answerQuestion,
     POST_emailInvites,
-    GET_pathways,
     GET_candidateSearch,
     GET_employees,
     GET_positions
@@ -73,15 +80,19 @@ function POST_emailInvites(req, res) {
         // Add the position code onto the end of the code
         code = code.toString().concat(position.code);
 
+        // get current date - used for candidate code start dates
+        const now = new Date();
+
         // Send candidate emails
         for (let i = 0; i < candidateEmails.length; i++) {
             // add code to the position
             const userCode = crypto.randomBytes(64).toString('hex');
+            const codeObj = { code: userCode, startDate: now };
             if (position.candidateCodes) {
-                position.candidateCodes.push(userCode);
+                position.candidateCodes.push(codeObj);
             } else {
                 position.candidateCodes = [];
-                position.candidateCodes.push(userCode);
+                position.candidateCodes.push(codeObj);
             }
             // send email
             let recipient = [candidateEmails[i]];
@@ -304,6 +315,124 @@ function POST_forBusinessEmail(req, res) {
     })
 }
 
+function POST_demoEmail(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody watched the Demo';
+
+    let content = "<div>"
+        + "<h3>Email of someone who watched demo: </h3>"
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmail(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out email on Homepage';
+
+    let content = "<div>"
+        + "<h3>Email of someone who filled out first page on homepage: </h3>"
+        + "<p>Email: "
+        + sanitize(req.body.email)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmailScreen2(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out second pg on Homepage';
+
+    let content = "<div>"
+        + "<h3>Info of someone who filled out second page on homepage: </h3>"
+        + "<p>Name: "
+        + sanitize(req.body.name)
+        + "</p>"
+        + "<p>Company: "
+        + sanitize(req.body.company)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmailScreen3(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out third pg on Homepage';
+
+    let content = "<div>"
+        + "<h3>Info of someone who filled out third page on homepage: </h3>"
+        + "<p>Positions: "
+        + sanitize(req.body.positions)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_dialogEmailScreen4(req, res) {
+    //let recipients = ["kyle@moonshotlearning.org", "justin@moonshotlearning.org", "stevedorn9@gmail.com"];
+    let recipients = ["stevedorn9@gmail.com"];
+    let subject = 'Moonshot - Somebody filled out fourth pg on Homepage';
+
+    let content = "<div>"
+        + "<h3>Info of someone who filled out fourth page on homepage: </h3>"
+        + "<p>Skill 1: "
+        + sanitize(req.body.skill1)
+        + "</p>"
+        + "<p>Skill 2: "
+        + sanitize(req.body.skill2)
+        + "</p>"
+        + "<p>Skill 3: "
+        + sanitize(req.body.skill3)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
 
 function POST_contactUsEmail(req, res) {
     let message = "None";
@@ -311,9 +440,9 @@ function POST_contactUsEmail(req, res) {
         message = sanitize(req.body.message);
     }
     let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io"];
-    let subject = 'Moonshot Pathway Question -- Contact Us Form';
+    let subject = 'Moonshot Question -- Contact Us Form';
     let content = "<div>"
-        + "<h3>Questions from pathway:</h3>"
+        + "<h3>Questions:</h3>"
         + "<p>Name: "
         + sanitize(req.body.name)
         + "</p>"
@@ -336,18 +465,19 @@ function POST_contactUsEmail(req, res) {
 }
 
 
+// updates a candidate for a business as Contacted, Interviewing, Dismissed, etc
+// TODO: this whole thing could probably be done with one query
 async function POST_updateHiringStage(req, res) {
     const body = req.body;
     const userId = sanitize(body.userId);
     const verificationToken = sanitize(body.verificationToken);
-    const companyId = sanitize(body.companyId);
     const candidateId = sanitize(body.candidateId);
     const hiringStage = sanitize(body.hiringStage);
     const isDismissed = sanitize(body.isDismissed);
-    const pathwayId = sanitize(body.pathwayId);
+    const positionName = sanitize(body.positionName);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!userId || !verificationToken || !companyId || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !pathwayId) {
+    if (!userId || !verificationToken || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !positionName) {
         return res.status(400).send("Bad request.");
     }
 
@@ -358,51 +488,56 @@ async function POST_updateHiringStage(req, res) {
         return res.status(400).send("Invalid hiring stage provided.");
     }
 
-    // verify the employer is actually a part of this organization
-    verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
-    .then(business => {
-        // if employer does not have valid credentials
+    // get the user and the business
+    let user;
+    let business;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+        business = await Businesses.findById(user.businessInfo.company.companyId);
         if (!business) {
-            console.log("Employer tried to change candidate's hiring status but could not be verified.");
-            return res.status(403).send("You do not have permission to change a candidate's hiring stage.");
+            console.log("No business found with id: ", user.businessInfo.company.companyId);
+            throw "No business.";
         }
+    } catch (getUserError) {
+        console.log("Error getting user or business from user: ", getUserError);
+        return res.status(403).send("You do not have permission to do that.");
+    }
 
-        // the index of the candidate in the business' candidate array
-        const candidateIndex = business.candidates.findIndex(currCandidate => {
-            return currCandidate.userId.toString() === candidateId.toString();
-        });
+    // get the position index and position
+    const positionIndex = business.positions.findIndex(pos => {
+        return pos.name === positionName;
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(400).send("Invalid position.");
+    }
+    let position = business.positions[positionIndex];
 
-        let candidate = business.candidates[candidateIndex];
-        // get the index of the pathway in the user's pathways array
-        const pathwayIndex = candidate.pathways.findIndex(currPathway => {
-            return currPathway._id.toString() === pathwayId;
-        })
+    // get the candidate index and candidate
+    const candidateIdString = candidateId.toString();
+    const candidateIndex = position.candidates.findIndex(cand => {
+        return cand.candidateId.toString() === candidateIdString;
+    });
+    if (typeof candidateIndex !== "number" || candidateIndex < 0) {
+        return res.status(400).send("Candidate has not applied for that position.");
+    }
 
-        // change the candidate's hiring stage and dismissal status to match
-        // the arguments that were passed in
-        candidate.pathways[pathwayIndex].isDismissed = isDismissed;
-        candidate.pathways[pathwayIndex].hiringStage = hiringStage;
-        candidate.pathways[pathwayIndex].hiringStageEdited = new Date();
-
-        // update the candidate in the business object
-        business.candidates[candidateIndex] = candidate;
-
-        // save the business
-        business.save()
-        .then(updatedBusiness => {
-            return res.json("success");
-        })
-        .catch(updateBusinessErr => {
-            return res.status(500).send("failure!");
-        });
+    // update the candidate info
+    position.candidates[candidateIndex].hiringStage = hiringStage;
+    position.candidates[candidateIndex].isDismissed = isDismissed;
+    position.candidates[candidateIndex].hiringStageChanges.push({
+        hiringStage,
+        dateChanged: new Date()
     })
-    .catch(verifyEmployerErr => {
-        console.log("Error when trying to verify employer when they were trying to edit a candidate's hiring stage: ", verifyEmployerErr);
+    business.positions[positionIndex] = position;
+
+    // save the business
+    try { await business.save(); }
+    catch (bizSaveError) {
+        console.log("Error saving business with candidate with updated hiring stage: ", bizSaveError);
         return res.status(500).send("Server error, try again later.");
-    })
+    }
 
-    // TODO make sure the timestamp of the last change is before the timestamp given
-    // if it isn't, don't change the user
+    return res.json("success");
 }
 
 function POST_answerQuestion(req, res) {
@@ -471,9 +606,6 @@ function POST_answerQuestion(req, res) {
         return res.status(500).send("Server error, try again later.");
     })
 }
-
-
-// ----->> END APIS <<----- //
 
 
 // VERIFY THAT THE GIVEN USER IS LEGIT AND PART OF THE GIVEN BUSINESS
@@ -618,7 +750,7 @@ function GET_employees(req, res) {
     })
 }
 
-function GET_positions(req, res) {
+async function GET_positions(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
@@ -626,212 +758,138 @@ function GET_positions(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    Users.findById(userId, function(findBUserErr, user) {
-        // error finding user in db
-        if (findBUserErr) {
-            console.log("Error finding business user who was trying to see their positions: ", findBUserErr);
-            return res.status(500).send("Server error, try again later.");
-        }
-
-        // couldn't find user in business user db, either they have the wrong
-        // type of account or are trying to pull some dubious shenanigans
-        if (!user) {
-            return res.status(403).send("You do not have permission to access positions info.");
-        }
-
-        // user does not have the right verification token, probably trying to
-        // pull a fast one on us
-        if (user.verificationToken !== verificationToken) {
-            return res.status(403).send("You do not have permission to access positions info.");
-        }
-
-        const companyId = user.businessInfo.company.companyId;
-        let businessQuery = { '_id': companyId }
-
-        Businesses.find(businessQuery)
-        .select("positions")
-        .exec(function(findPositionsErr, positions)
-        {
-            if (findPositionsErr) {
-                return res.status(500).send("Server error, couldn't get positions.");
-            } else {
-                return res.json(positions[0]);
-            }
-        });
-    })
-}
-
-function GET_pathways(req, res) {
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
-
-    if (!userId || !verificationToken) {
-        return res.status(400).send("Bad request.");
+    // get the user
+    let user;
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (findUserError) {
+        console.log("Error finding businesss user who was trying to see thier positions: ", findUserError);
+        return res.status(500).send("Server error, try again later.");
     }
 
-    Users.findById(userId, function(findBUserErr, user) {
-        // error finding user in db
-        if (findBUserErr) {
-            console.log("Error finding business user who was trying to see their pathways: ", findBUserErr);
-            return res.status(500).send("Server error, try again later.");
-        }
+    // get the business the user works for
+    const companyId = user.businessInfo.company.companyId;
+    let business;
+    try {
+        business = await Businesses
+            .findById(companyId)
+            .select("logo name positions.name positions.completions positions.usersInProgress position.skills positions.timeAllotted");
+    } catch (findBizError) {
+        console.log("Error finding business when getting positions: ", findBizError);
+        return res.status(500).send("Server error, couldn't get positions.");
+    }
 
-        // couldn't find user in business user db, either they have the wrong
-        // type of account or are trying to pull some dubious shenanigans
-        if (!user) {
-            return res.status(403).send("You do not have permission to access pathway info.");
-        }
-
-        // user does not have the right verification token, probably trying to
-        // pull a fast one on us
-        if (user.verificationToken !== verificationToken) {
-            return res.status(403).send("You do not have permission to access pathway info.");
-        }
-
-        const companyId = user.businessInfo.company.companyId;
-        Businesses.findById(companyId, function(findBizErr, company) {
-            if (findBizErr) {
-                console.log("Error finding business when trying to search for pathways: ", findBizErr);
-                return res.status(500).send("Server error, try again later.");
-            }
-
-            if (!company) {
-                console.log("Business not found when trying to search for pathways.");
-                return res.status(500).send("Server error, try again later.");
-            }
-
-            // if the business doesn't have an associated user with the given
-            // user id, don't let them see this business' candidates
-            const userIdString = userId.toString();
-            if (!company.employerIds.some(function(bizUserId) {
-                return bizUserId.toString() === userIdString;
-            })) {
-                console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
-                return res.status(403).send("You do not have access to this business' pathways.");
-            }
-
-            // if we got to this point it means the user is allowed to see pathways
-
-            let pathwayQuery = { '_id': { $in: company.pathwayIds } }
-
-            // find names of all the pathways associated with the business
-            Pathways.find(pathwayQuery)
-            .select("name")
-            .exec(function(findPathwaysErr, pathways) {
-                if (findPathwaysErr) {
-                    return res.status(500).send("Server error, couldn't get pathways to search by.");
-                } else {
-                    const pathwaysToReturn = pathways.map(function(path) {
-                        return {name: path.name, _id: path._id};
-                    });
-                    return res.json(pathwaysToReturn);
-                }
-            });
-        });
-    })
+    return res.json({logo: business.logo, businessName: business.name, positions: business.positions});
 }
 
 
-function GET_candidateSearch(req, res) {
+async function GET_candidateSearch(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
-    if (!userId || !verificationToken) {
-        return res.status(400).send("Bad request.");
+    // message displayed on miscellaneous errors
+    const SERVER_ERROR = "Server error, try again later.";
+    // message displayed when user doesn't have right permissions
+    const PERMISSIONS_ERROR = "You don't have permission to do that.";
+
+    // get the user who is trying to search for candidates
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting business user while searching for candidates: ", getUserError);
+        return res.status(401).send(PERMISSIONS_ERROR);
     }
 
-    Users.findById(userId, function(findBUserErr, user) {
-        // error finding user in db
-        if (findBUserErr) {
-            console.log("Error finding business user who was trying to see their candidates: ", findBUserErr);
-            return res.status(500).send("Server error, try again later.");
-        }
+    // if the user is not an admin or manager, they can't search for candidates
+    if (!["accountAdmin", "manager"].includes(user.userType)) {
+        console.log("User is type: ", user.userType);
+        return res.status(401).send(PERMISSIONS_ERROR);
+    }
 
-        // couldn't find user in business user db, either they have the wrong
-        // type of account or are trying to pull some dubious shenanigans
-        if (!user) {
-            return res.status(403).send("You do not have permission to access candidate info.");
-        }
+    // if the user doesn't have
+    if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
+        console.log("User doesn't have associated business.");
+        return res.status(401).send(PERMISSIONS_ERROR);
+    }
 
-        // user does not have the right verification token, probably trying to
-        // pull a fast one on us
-        if (user.verificationToken !== verificationToken) {
-            return res.status(403).send("You do not have permission to access candidate info.");
-        }
+    const companyId = user.businessInfo.company.companyId;
 
-        const companyId = user.businessInfo.company.companyId;
-        Businesses.findById(companyId, function(findBizErr, company) {
-            if (findBizErr) {
-                console.log("Error finding business when trying to search for candidates: ", findBizErr);
-                return res.status(500).send("Server error, try again later.");
+    // the restrictions on the search
+    const searchTerm = sanitize(req.query.searchTerm);
+    const hiringStage = sanitize(req.query.hiringStage);
+    // position name is the only required input to the search
+    const positionName = sanitize(req.query.positionName);
+    // the thing we should sort by - default is alphabetical
+    const sortBy = sanitize(req.query.sortBy);
+
+    const businessQuery = {
+        "_id": mongoose.Types.ObjectId(companyId)
+    }
+
+    // get only the position the user is asking for in the positions array
+    const positionQuery = {
+        "positions": {
+            "$elemMatch": {
+                "name": positionName
             }
+        }
+    }
 
-            if (!company) {
-                console.log("Business not found when trying to search for candidates.");
-                return res.status(500).send("Server error, try again later.");
-            }
+    // get the business the user works for
+    let business;
+    try {
+        business = await Businesses
+            .find(businessQuery, positionQuery)
+            .select("positions.name positions.candidates.scores positions.candidates.candidateId positions.candidates.hiringStage positions.candidates.isDismissed positions.candidates.name positions.candidates.archetype positions.candidates.hiringStageChanges.dateChanged positions.candidates.location positions.candidates.profileUrl");
+        // see if there are none found
+        if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
+        // if any are found, only one is found, as we searched by id
+        business = business[0];
+    } catch (findBizError) {
+        console.log("error finding business for user trying to search for candidates: ", findBizError);
+        return res.status(500).send(SERVER_ERROR);
+    }
 
-            // if the business doesn't have an associated user with the given
-            // user id, don't let them see this business' candidates
-            const userIdString = userId.toString();
-            if (!company.employerIds.some(function(bizUserId) {
-                return bizUserId.toString() === userIdString;
-            })) {
-                console.log("User tried to log in to a business with an id that wasn't in the business' id array.");
-                return res.status(403).send("You do not have access to this business' candidates.");
-            }
+    // make sure the user gave a valid position
+    if (!business.positions || business.positions.length === 0) {
+        return res.status(400).send("Invalid position.");
+    }
 
-            // if we got to this point it means the user is allowed to see candidates
+    // should only be one position in the array since names should be unique
+    const position = business.positions[0];
 
-            // all of a company's candidates
-            const allCandidates = company.candidates;
+    // get the list of candidates and sort and filter them by the given parameters
+    // TODO: this could be done with a more complicated query instead, consider
+    // doing that
+    let candidates = position.candidates;
 
-            const searchTerm = sanitize(req.query.searchTerm);
-            const hiringStage = sanitize(req.query.hiringStage);
-            const pathway = sanitize(req.query.pathway);
-
-            let candidatesToReturn = [];
-
-            // go through each candidate, only add them if they match all
-            // the search factors
-            allCandidates.forEach(function(candidate) {
-                if (searchTerm) {
-                    // case insensitive search term regex
-                    const termRegex = new RegExp(searchTerm, "i");
-                    // if neither name nor email match search term, don't add
-                    if (!(termRegex.test(candidate.email) || termRegex.test(candidate.name))) {
-                        return;
-                    }
-                }
-                if (hiringStage || pathway) {
-                    // go through each of the candidates pathways, if they aren't
-                    // at this hiring stage for any, return
-                    const hasStageAndPathway = candidate.pathways.some(function(path) {
-                        // if only looking for a certain pathway, just look for matching pathway
-                        if (!hiringStage) {
-                            return path.name == pathway;
-                        }
-                        // if only looking for certain hiring stage, just look for matching hiring stage
-                        else if (!pathway) {
-                            return path.hiringStage == hiringStage;
-                        }
-                        // otherwise look for a matching pathway name AND hiring stage on the same pathway
-                        else {
-                            return path.hiringStage == hiringStage && path.name == pathway;
-                        }
-                    });
-                    if (!hasStageAndPathway) {
-                        return;
-                    }
-                }
-
-                // if the candidate made it past all the search terms, add them
-                candidatesToReturn.push(candidate);
-            });
-
-            res.json(candidatesToReturn);
+    // filter by name if search term given
+    if (searchTerm && searchTerm !== "") {
+        const nameRegex = new RegExp(searchTerm, "i");
+        candidates = candidates.filter(candidate => {
+            return nameRegex.test(candidate.name);
         });
-    })
+    }
+
+    // filter by hiring stage if hiring stage given
+    if (hiringStage && hiringStage !== "") {
+        candidates = candidates.filter(candidate => {
+            return candidate.hiringStage === hiringStage;
+        });
+    }
+
+    // default sort property is alphabetical, sort by score if that's the given sort by property
+    let sortProperty = "name";
+    if (typeof sortBy === "string" && sortBy.toLowerCase() === "score") { sortProperty = "scores.overall"; }
+
+    // sort the candidates
+    candidates.sort((candA, candB) => {
+        if (candA[sortProperty] < candB[sortProperty]) { return -1; }
+        if (candA[sortProperty] > candB[sortProperty]) { return 1; }
+        return 0;
+    });
+
+    res.json(candidates);
 }
 
 

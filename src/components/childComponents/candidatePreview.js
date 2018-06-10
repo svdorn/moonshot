@@ -11,22 +11,27 @@ import {
     Slider
 } from 'material-ui';
 import axios from 'axios';
-import {browserHistory} from 'react-router';
+import { browserHistory } from 'react-router';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 
 class CandidatePreview extends Component {
     constructor(props) {
         //TODO ONLY SHOW THE CANDIDATE PREVIEW WHEN A PATHWAY HAS BEEN SELECTED
         super(props);
 
-        let isDismissed = props.initialIsDismissed;
+        const candidate = props.candidate;
+
+        let isDismissed = candidate.isDismissed;
         if (isDismissed === undefined) {
             isDismissed = false;
         }
 
         const possibleStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
-        const validStage = possibleStages.includes(props.initialHiringStage);
-        const hiringStage = validStage ? props.initialHiringStage : possibleStages[0];
-        const lastEdited = this.formatDateString(props.lastEdited);
+        const validStage = possibleStages.includes(candidate.hiringStage);
+        const hiringStage = validStage ? candidate.hiringStage : possibleStages[0];
+        const stageChanges = candidate.hiringStageChanges;
+        const lastEdited = Array.isArray(stageChanges) && stageChanges.length > 0 ? this.formatDateString(stageChanges[stageChanges.length - 1].dateChanged) : undefined;
 
         this.state = {
             hiringStage,
@@ -60,21 +65,24 @@ class CandidatePreview extends Component {
     // different people, need to update state when new props are received
     componentWillReceiveProps(nextProps) {
         // make sure the stage we're getting is valid
-        const validStage = this.state.possibleStages.includes(nextProps.initialHiringStage);
+        const validStage = this.state.possibleStages.includes(nextProps.candidate.hiringStage);
         // default to "Not Contacted" if invalid property given
-        const hiringStage = validStage ? nextProps.initialHiringStage : this.state.possibleStages[0];
+        const hiringStage = validStage ? nextProps.candidate.hiringStage : this.state.possibleStages[0];
 
-        let isDismissed = nextProps.initialIsDismissed;
+        let isDismissed = nextProps.candidate.isDismissed;
         // default to not dismissed if invalid property given
         if (typeof isDismissed !== "boolean") {
             isDismissed = false;
         }
 
+        const stageChanges = nextProps.candidate.hiringStageChanges;
+        const lastEdited = Array.isArray(stageChanges) && stageChanges.length > 0 ? this.formatDateString(stageChanges[stageChanges.length - 1].dateChanged) : undefined;
+
         this.setState({
             ...this.state,
-            hiringStage: nextProps.initialHiringStage,
+            hiringStage: nextProps.candidate.hiringStage,
             dismissed: isDismissed,
-            lastEdited: this.formatDateString(nextProps.lastEdited)
+            lastEdited
         });
     }
 
@@ -108,13 +116,12 @@ class CandidatePreview extends Component {
         if (stages.includes(hiringStage) && typeof dismissed === "boolean") {
             const currentUser = this.props.currentUser;
             const hiringStageInfo = {
-                userId: this.props.employerUserId,
-                verificationToken: this.props.employerVerificationToken,
-                companyId: this.props.companyId,
-                candidateId: this.props.candidateId,
+                userId: currentUser._id,
+                verificationToken: currentUser.verificationToken,
+                candidateId: this.props.candidate.candidateId,
                 hiringStage: hiringStage,
                 isDismissed: dismissed,
-                pathwayId: this.props.pathwayId
+                positionName: this.props.positionName
             }
             axios.post("/api/business/updateHiringStage", hiringStageInfo)
             // do nothing on success
@@ -276,8 +283,8 @@ class CandidatePreview extends Component {
             }
         };
 
-        const location = this.props.location ? this.props.location : "No location given";
-        const overallScore = this.props.overallScore ? this.props.overallScore : "N/A";
+        const location = this.props.candidate.location ? this.props.candidate.location : "No location given";
+        const overallScore = this.props.candidate.scores && this.props.candidate.scores.overall ? this.props.candidate.scores.overall : "N/A";
 
         let percent = "25%";
         let topRightStyle = {display: "none"};
@@ -314,11 +321,21 @@ class CandidatePreview extends Component {
             return (<MenuItem key={stage} value={stage} primaryText={stage.toUpperCase()} />)
         });
 
+        let resultsUrl = "/myCandidates";
+        console.log(this.props.currentUser);
+        try {
+            const profileUrl = this.props.candidate && this.props.candidate.profileUrl ? this.props.candidate.profileUrl : "";
+            const positionName = this.props.positionName;
+            resultsUrl = `/results/${profileUrl}/${positionName}`;
+        } catch (e) {
+            console.log("Error getting results url: ", e);
+        }
+
+
         return (
             <div className="candidatePreview center" >
-            {/* onClick={this.goTo("/results?user=Stephen-Dorn-2-9f66bf7eeac18994")} */}
                 <div className="candidateName font18px center">
-                    {this.props.name.toUpperCase()}
+                    {this.props.candidate.name ? this.props.candidate.name.toUpperCase() : ""}
                 </div>
                 <br/>
                 <div className="candidateLocation font16px">
@@ -352,9 +369,9 @@ class CandidatePreview extends Component {
                     {menuItems}
                 </DropDownMenu>
 
-                {this.makePredictiveSection("Predicted", this.props.predicted)}
-                {this.makePredictiveSection("Psychometrics", this.props.archetype)}
-                {this.makePredictiveSection("Skill", this.props.skill)}
+                {this.makePredictiveSection("Predicted", this.props.candidate.scores ? this.props.candidate.scores.predicted : undefined)}
+                {this.makePredictiveSection("Psychometrics", this.props.candidate.archetype)}
+                {this.makePredictiveSection("Skill", this.props.candidate.skill)}
 
                 <div style={style.darkenerStyle} />
 
@@ -367,9 +384,7 @@ class CandidatePreview extends Component {
                     </span>
                 </div>
 
-                {/*<a href={"/results?user=" + this.props.profileUrl}>See Results</a>*/}
-                <a style={{...style.redLink, ...style.seeResults}}
-                   href="/results?user=Stephen-Dorn-2-9f66bf7eeac18994">
+                <a style={{...style.redLink, ...style.seeResults}} href={resultsUrl}>
                     See Results
                 </a>
 
@@ -383,4 +398,14 @@ class CandidatePreview extends Component {
 }
 
 
-export default CandidatePreview;
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({}, dispatch);
+}
+
+function mapStateToProps(state) {
+    return {
+        currentUser: state.users.currentUser
+    };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(CandidatePreview);

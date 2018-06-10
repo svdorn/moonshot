@@ -8,6 +8,7 @@ import {Field, reduxForm} from 'redux-form';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
 
+
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
@@ -212,6 +213,7 @@ class AddUserDialog extends Component {
     }
 
 
+
     //name, email, password, confirm password, signup button
     render() {
         const style = {
@@ -220,11 +222,13 @@ class AddUserDialog extends Component {
                 horizontal: "left"
             },
             menuLabelStyle: {
+
                 fontSize: "18px",
                 color: "rgba(255,255,255,.8)"
             },
             tab: {
                 color: 'white',
+
             }
         };
 
@@ -237,6 +241,7 @@ class AddUserDialog extends Component {
         ];
 
         const positions = this.state.positions;
+
         const positionItems = positions.map(function (position, index) {
             return <MenuItem value={position.name} primaryText={position.name} key={index}/>
         });
@@ -460,6 +465,7 @@ class AddUserDialog extends Component {
         } else {
         if (screen === 1) {
             body = (
+
                 <Dialog
                     actions={actions}
                     modal={false}
@@ -469,6 +475,7 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                 >
+
                     <div className="whiteText font24px font20pxUnder500 marginTop20px">
                         Select a position
                     </div>
@@ -491,6 +498,7 @@ class AddUserDialog extends Component {
             );
         } else if (screen === 2) {
             body = (
+
                 <Dialog
                     actions={actions}
                     modal={false}
@@ -500,6 +508,7 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                 >
+
                     <form className="center">
                         <div
                             className="whiteText font24px font20pxUnder500 marginTop10px">
@@ -573,6 +582,7 @@ class AddUserDialog extends Component {
         return (
             <div>
                 {body}
+
             </div>
         );
     }

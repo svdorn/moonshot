@@ -228,6 +228,7 @@ class Menu extends Component {
         let logoIsLink = true;
         // used for menu divider
         let loggedInClass = " loggedIn";
+
         // if there is no user logged in
         if (!currentUser) {
             loggedInClass = " loggedOut";
@@ -243,8 +244,6 @@ class Menu extends Component {
         else if (currentUser.admin) {
             menuOptions = [
                 {optionType: "url", title: "Admin", url: "/admin"},
-                {optionType: "url", title: "Discover", url: "/discover"},
-                {optionType: "url", title: "My Pathways", url: "/myPathways"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     {optionType: "url", title: "Profile", url: "/profile"},
@@ -316,8 +315,7 @@ class Menu extends Component {
         // if the current user is a candidate who is not onboarding
         else if (currentUser.userType === "candidate") {
             menuOptions = [
-                {optionType: "url", title: "Discover", url: "/discover"},
-                {optionType: "url", title: "My Pathways", url: "/myPathways"},
+                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     {optionType: "url", title: "Profile", url: "/profile"},

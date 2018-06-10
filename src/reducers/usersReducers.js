@@ -131,6 +131,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "UPDATE_ANSWER":
         case "START_POSITION_EVAL":
+        case "CONTINUE_POSITION_EVAL":
         case "NEW_CURRENT_USER":
             return {
                 ...state,
@@ -156,6 +157,7 @@ export function usersReducers(state = initialState, action) {
         case "FORM_ERROR":
         case "ERROR_FINISHED_LOADING":
         case "SUCCESS_FINISHED_LOADING":
+        case "START_PSYCH_EVAL_ERROR":
             return {
                 ...state, notification: action.notification, loadingSomething: false
             };
@@ -196,6 +198,11 @@ export function usersReducers(state = initialState, action) {
                 ...state, currentUser: action.payload
             };
             break;
+        case "START_PSYCH_EVAL":
+            return {
+                ...state, currentUser: action.currentUser, loadingSomething: false
+            }
+            break;
         case "ANSWER_PSYCH_QUESTION":
             return {
                 ...state, currentUser: action.user, finishedPsychTest: action.finishedTest
@@ -221,10 +228,8 @@ export function usersReducers(state = initialState, action) {
                 ...state, currentUser: action.payload, notification: action.notification
             };
             break;
-        case "TURN_HEADER_BLUE":
-            return {
-                ...state, blueHeader: action.shouldBeBlue
-            }
+        default:
+            return {...state};
             break;
     }
 

@@ -28,17 +28,22 @@ class Results extends Component {
 
     componentDidMount() {
         const user = this.props.currentUser;
+
         let profileUrl = "";
+        let businessId = "";
+        let positionName = "";
         try {
-            profileUrl = this.props.location.query.user;
+            console.log("this.props: ", this.props);
+            profileUrl = this.props.params.profileUrl;
+            businessId = this.props.currentUser.businessInfo.company.companyId;
+            positionName = this.props.params.positionName;
         } catch (e) {
+            console.log("error: ", e);
             this.goTo("/myCandidates");
         }
 
-        if (user.userType !== 'employer') {
-            this.goTo("/");
-            return;
-        }
+        // TODO backend call to get results info
+
 
         let self = this;
         let candidate = {}, overallScore = undefined, hardSkills = [], predictiveInsights = [];
@@ -310,6 +315,15 @@ class Results extends Component {
     }
 
 
+    makePsychSection() {
+        return (
+            <div>
+
+            </div>
+        )
+    }
+
+
     makeResponsesSection() {
         let freeResponses = [];
         if (typeof this.state === "object" && Array.isArray(this.state.freeResponses)) {
@@ -347,6 +361,7 @@ class Results extends Component {
 
         const analysisSection = this.makeAnalysisSection();
         const responsesSection = this.makeResponsesSection();
+        const psychSection = this.makePsychSection();
 
         return (
             <div>
@@ -403,6 +418,12 @@ class Results extends Component {
                                                     <div/>
                                                 </div>
                                                 {analysisSection}
+                                            </Tab>
+                                            <Tab label="Psych" style={style.topTab}>
+                                                <div className="tabsShadow" style={{position:"absolute"}}>
+                                                    <div/>
+                                                </div>
+                                                {psychSection}
                                             </Tab>
                                             <Tab label="Responses" style={style.topTab}>
                                                 <div className="tabsShadow">

@@ -17,7 +17,6 @@ import BusinessProfile from './components/pages/businessPages/businessProfile';
 import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import BusinessHome from './components/pages/businessHome';
-import BusinessHomeParts from './components/pages/businessHomeParts';
 import Main from './main';
 import AuthenticatedComponent from './components/AuthenticatedComponent';
 import Home from './components/pages/home';
@@ -27,12 +26,8 @@ import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
 import ChangeTempPassword from './components/pages/changeTempPassword';
-import Discover from './components/pages/discover';
-import Pathway from './components/pages/pathway';
-import PathwayContent from './components/pages/pathwayContent';
 import ResumeAnalysis from './components/pages/resumeAnalysis';
 import ContactUs from './components/pages/contactUs';
-import MyPathways from './components/pages/myPathways';
 import Onboarding from './components/pages/onboarding';
 import Error404 from './components/pages/error404';
 import Unsubscribe from './components/pages/unsubscribe';
@@ -68,56 +63,58 @@ const candidateUserTypes = ["candidate"];
 const adminUserTypes = ["admin", "candidate"];
 
 const routes = (
-  <Router onUpdate={fireTracking} history={browserHistory}>
-    <Route path="/" component={Main}>
-        <IndexRoute component={BusinessHome} />
-        <Route path='login' component={Login} />
-        <Route path="signup" component={Signup} />
-        <Route path="addUser" component={AuthenticatedComponent} page={<AddUser/>} userType={businessUserTypes} />
-        <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType={businessUserTypes} />
-        <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessUserTypes} />
-        <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} userType={businessUserTypes} />
-        <Route path="businessProfile" component={AuthenticatedComponent} page={<BusinessProfile/>} userType={businessUserTypes} />
-        <Route path="results" component={AuthenticatedComponent} page={<Results />} userType={businessUserTypes} />
-        <Route path="employeeResults" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessUserTypes} />
-        <Route path="profile" component={Profile} />
-        <Route path="forCandidates" component={Home} />
-        <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
-        <Route path="verifyEmail" component={VerifyEmail} />
-        <Route path="forgotPassword" component={ForgotPassword} />
-        <Route path="changePassword" component={ChangePassword} />
-        <Route path="changeTempPassword" component={ChangeTempPassword} />
-        <Route path="discover" component={Discover} />
-        <Route path="contactUs" component={ContactUs} />
-        <Route path="resumeAnalysis" component={ResumeAnalysis} />
-        <Route path="myPathways" component={AuthenticatedComponent} page={<MyPathways/>} />
-        <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding/>} userType={candidateUserTypes} />
-        <Route path="pathway" component={Pathway} />
-        <Route path="pathwayContent" component={AuthenticatedComponent} page={<PathwayContent/>} />
-        <Route path="unsubscribe" component={Unsubscribe} />
-        <Route path="referral" component={ReferralCode} />
-        <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
-        <Route path="termsOfUse" com    ponent={TermsOfUse} standalone={true} />
-        <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
+    <Router onUpdate={fireTracking} history={browserHistory}>
+        <Route path="/" component={Main}>
+            <IndexRoute component={BusinessHome} />
+            <Route path='login' component={Login} />
+            <Route path="signup" component={Signup} />
+            <Route path="addUser" component={AuthenticatedComponent} page={<AddUser/>} userType={businessUserTypes} />
+            <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType={businessUserTypes} />
+            <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessUserTypes} />
+            <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} />
+            <Route path="businessProfile" component={AuthenticatedComponent} page={<BusinessProfile/>} userType={businessUserTypes} />
+            <Route path="results/:profileUrl/:positionName" component={AuthenticatedComponent} page={<Results />} userType={businessUserTypes} />
+            <Route path="employeeResults" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessUserTypes} />
+            <Route path="profile" component={Profile} />
+            <Route path="forCandidates" component={Home} />
+            <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
+            <Route path="verifyEmail" component={VerifyEmail} />
+            <Route path="forgotPassword" component={ForgotPassword} />
+            <Route path="changePassword" component={ChangePassword} />
+            <Route path="changeTempPassword" component={ChangeTempPassword} />
+            <Route path="contactUs" component={ContactUs} />
+            <Route path="resumeAnalysis" component={ResumeAnalysis} />
+            <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding/>} userType={candidateUserTypes} />
+            <Route path="unsubscribe" component={Unsubscribe} />
+            <Route path="referral" component={ReferralCode} />
+            <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
+            <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
+            <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
 
-        <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
-        <Route path="analysisResults" component={AuthenticatedComponent} page={<AnalysisResults/>} />
+            <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
+            <Route path="analysisResults" component={AuthenticatedComponent} page={<AnalysisResults/>} />
 
-        <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
-        <Route path="positionSignup" component={PositionSignup} />
-        <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
+            <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
+            <Route path="positionSignup" component={PositionSignup} />
+            <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
 
-        <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} userType={adminUserTypes}>
-            <IndexRoute component={AdminPages} />
-            <Route path="createBusinessAccount" component={CreateBusinessAccount} />
-            <Route path="editBusiness" component={EditBusiness} />
-            <Route path="userResponses" component={UserResponses} />
-            <Route path="viewUser" component={ViewUser} />
+            {/*<Route path="evaluation/:businessId/:positionId" component={}>
+                <Route path="psychAnalysis" component={PsychAnalysis} />
+                <Route path="skillTest/:skillUrl" component={SkillTest} />
+                <Route path="freeResponse" component={FreeResponse} />
+            </Route>*/}
+
+            <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} userType={adminUserTypes}>
+                <IndexRoute component={AdminPages} />
+                <Route path="createBusinessAccount" component={CreateBusinessAccount} />
+                <Route path="editBusiness" component={EditBusiness} />
+                <Route path="userResponses" component={UserResponses} />
+                <Route path="viewUser" component={ViewUser} />
+            </Route>
+
+            <Route path='*' component={Error404} />
         </Route>
-
-        <Route path='*' component={Error404} />
-    </Route>
-  </Router>
+    </Router>
 );
 
 export default routes;

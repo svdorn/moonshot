@@ -10,11 +10,12 @@ const { sanitize,
         getUserByQuery,
         sendEmail,
         safeUser,
-        randomInt
+        randomInt,
+        frontEndUser
 } = require('./helperFunctions.js');
 
 
-const businessApis = {
+const skillApis = {
     //GET_skillByUrl,
     POST_answerSkillQuestion,
     POST_startOrContinueTest
@@ -47,7 +48,7 @@ function POST_answerSkillQuestion(req, res) {
         }
 
         user = foundUser;
-        recordAnswerAndGetNewQuestion();
+        recordAnswer();
     })
     .catch(findUserErr => {
         console.log("Error finding user in the db when trying to get a skill by url: ", findUserErr);
@@ -60,7 +61,7 @@ function POST_answerSkillQuestion(req, res) {
     .then(foundSkill => {
         if (foundSkill) {
             skill = foundSkill;
-            recordAnswerAndGetNewQuestion();
+            recordAnswer();
         }
         else { throw "Couldn't find skill using url as id."; }
     })
@@ -70,7 +71,7 @@ function POST_answerSkillQuestion(req, res) {
         .then(foundSkills => {
             if (foundSkills.length === 0 || !foundSkills[0]) { return res.status(404).send("Invalid skill."); }
             skill = foundSkills[0];
-            recordAnswerAndGetNewQuestion();
+            recordAnswer();
         })
         .catch(findSkillErr => {
             console.log("Error finding skill by url: ", findSkillErr);
@@ -78,7 +79,7 @@ function POST_answerSkillQuestion(req, res) {
         })
     });
 
-    async function recordAnswerAndGetNewQuestion() {
+    async function recordAnswer() {
         if (!user || !skill) { return }
 
         // see if user has already taken this test/is currently taking it
@@ -139,10 +140,10 @@ function POST_answerSkillQuestion(req, res) {
             finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
         }
 
-        else { getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill); }
+        else { getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex); }
     }
 
-    async function getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill ) {
+    async function getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex) {
         // get a new question
         let newUserLevelIndex = userLevelIndex;
         // right answer and more levels exist
@@ -177,7 +178,10 @@ function POST_answerSkillQuestion(req, res) {
         let counter = 0;
         do {
             counter++;
-            if (counter > 100) { return res.status(500).send("Server error, couldn't find a question."); }
+            // if a question could not be found, finish the test
+            if (counter > 100) {
+                return finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
+            }
             questionIndex = randomInt(0, numTotalQuestions - 1);
             question = testLevelQuestions[questionIndex];
             questionId = question._id.toString();
@@ -209,7 +213,7 @@ function POST_answerSkillQuestion(req, res) {
             return res.status(500).send("Server error.");
         }
 
-        res.json({updatedUser: user, question: currentQuestionToReturn, skillName: skill.name, finished: false});
+        res.json({updatedUser: frontEndUser(user), question: currentQuestionToReturn, skillName: skill.name, finished: false});
     }
 
     async function finishTest(userSkill, userSkillIndex, attempt, attemptIndex) {
@@ -233,49 +237,57 @@ function POST_answerSkillQuestion(req, res) {
 
         // see if the user is doing an application to a position
         if (user.positionInProgress) {
-            // mark the next skill as the one that must be completed next
-            user.positionInProgress.testIndex++;
+            // get the position in progress
+            const positionIndex = user.positions.findIndex(pos => {
+                return pos.positionId.toString() === user.positionInProgress.toString();
+            });
+            // if the position in progress is one that the user actually signed up for
+            if (typeof positionIndex === "number" && positionIndex >= 0) {
+                // get the actual user position, not just the id
+                let position = user.positions[positionIndex];
 
-            // if the test index is greater than or equal to the number of tests,
-            // user is done with skills section of the application
-            if (user.positionInProgress.testIndex >= user.positionInProgress.skillTests.length) {
-                // if there are no multiple choice questions, user is finished
-                if (!user.positionInProgress.freeResponseQuestions || user.positionInProgress.freeResponseQuestions.length === 0) {
-                    // user is no longer taking a position evaluation
-                    user.positionInProgress = undefined;
+                // see if the position in progress includes this skill test
+                const skillIdString = userSkill.skillId.toString();
+                const testIndex = position.skillTestIds.findIndex(posSkillTestId => {
+                    return posSkillTestId.toString() === skillIdString;
+                });
+                // if so, advance the progress of the position
+                if (typeof testIndex === "number" && testIndex >= 0) {
+                    // move the skill that was just completed to the beginning
+                    // of the skills array
+                    const completedId = position.skillTestIds.splice(testIndex, 1)[0];
+                    position.skillTestIds.unshift(completedId);
 
-                    let business;
-                    try {
-                        business = await Businesses.findById(positionInProgress.businessId);
+                    // increment the skill index
+                    position.testIndex++;
 
-                        // update the business to say that they have a user who has completed their application
-                        let positionIndex = business.positions.findIndex(bizPos => {
-                            return bizPoz._id.toString() === user.positionId.toString();
-                        });
+                    // make sure the position gets saved with the new info
+                    user.positions[positionIndex] = position;
 
-                        let businessPos = business.positions[positionIndex];
-                        // if the business doesn't contain the current user as an applicant already, add them
-                        if (!businessPos.candidates.some(candidateId => {
-                            return candidateId.toString() === user._id.toString();
-                        })) {
-                            businessPos.candidates.push(user._id);
+                    // if the test index is greater than or equal to the number of tests,
+                    // user is done with skills section of the application
+                    if (position.testIndex >= position.skillTestIds.length) {
+                        // if there are no multiple choice questions, user is finished
+                        if (!position.freeResponseQuestions || position.freeResponseQuestions.length === 0) {
+                            try {
+                                const finishObj = await finishPositionEvaluation(user, positionId, businessId);
+                                // save the business with the new user info
+                                finishObj.business.save();
+                                // update the user
+                                user = finishObj.user;
+                            } catch (finishError) {
+                                console.log("Error finishing eval: ", finishError);
+                                return res.status(500).send("Server error.");
+                            }
                         }
-                        // update the business with new completions and users in progress counts
-                        if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
-                        if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
-                        businessPos.completions++;
-                        businessPos.usersInProgress++;
-                        business.positions[positionIndex] = businessPos;
-
-                        try {
-                            await business.save()
-                        } catch (saveBizError) {
-                            console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", saveBizError);
-                        }
-                    } catch (updateBizWithCompletionError) {
-                        console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", updateBizWithCompletionError);
                     }
                 }
+            }
+
+            // if the position in progress is not included in the user's positions,
+            // something is very wrong; get rid of it
+            else {
+                user.positionInProgress = undefined;
             }
         }
 
@@ -286,7 +298,7 @@ function POST_answerSkillQuestion(req, res) {
             return res.status(500).send("Server error.");
         }
 
-        return res.json({finished: true, updatedUser: removePassword(user)});
+        return res.json({finished: true, updatedUser: frontEndUser(user)});
     }
 }
 
@@ -450,7 +462,7 @@ function POST_startOrContinueTest(req, res) {
                     console.log("Error saving user when starting skill test: ", saveErr);
                 }
 
-                return res.json({question:questionToReturn, skillName: skill.name, finished: false});
+                return res.json({question: questionToReturn, skillName: skill.name, finished: false});
             }
 
             // get the question the user left off on
@@ -580,4 +592,4 @@ function POST_startOrContinueTest(req, res) {
 // ----->> END APIS <<----- //
 
 
-module.exports = businessApis;
+module.exports = skillApis;
