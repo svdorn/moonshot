@@ -454,7 +454,7 @@ class AddUserDialog extends Component {
                             Success!
                         </div>
                         <div className="whiteText font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
-                            Success! Your invites have been sent to the users’ emails with sign up instructions for the Web Developer position!
+                            Success! Your invites have been sent to the users emails with sign up instructions for the Web Developer position!
                         </div>
                         <RaisedButton
                             label="Done"
