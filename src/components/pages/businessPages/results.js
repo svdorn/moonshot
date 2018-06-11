@@ -10,6 +10,7 @@ import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
 import AddUserDialog from '../../childComponents/addUserDialog';
+import PsychBreakdown from '../../childComponents/psychBreakdown';
 
 class Results extends Component {
     constructor(props) {
@@ -22,14 +23,14 @@ class Results extends Component {
             predictivePoints: [],
             freeResponses: [],
             psychScores: [],
-            loading: true
+            archetype: "",
+            loading: true,
+            areaSelected: undefined
         };
     }
 
 
     componentDidMount() {
-        let candidate = {}, overallScore = undefined, hardSkills = [], predictiveInsights = [], freeResponses;
-
         let profileUrl = "";
         let businessId = "";
         let positionId = "";
@@ -94,13 +95,14 @@ class Results extends Component {
             self.setState({
                 ...self.state,
                 loading: false,
-                psychScores: res.data.pyschScores,
+                psychScores: res.data.psychScores,
+                archetype: res.data.archetype,
                 candidate,
                 overallScore,
                 hardSkillPoints,
                 predictivePoints,
                 freeResponses
-            });
+            }, () => {console.log("state is now: ", self.state);});
         })
         .catch(error => {
             console.log("error: ", error);
@@ -122,12 +124,9 @@ class Results extends Component {
 
 
     makeAnalysisSection() {
-        const hardSkillsDataPoints = [
-            {x: "Full Stack", y: 120, confidenceInterval: 13},
-            {x: "Version Control", y: 132, confidenceInterval: 11},
-            {x: "Artificial Intelligence", y: 91, confidenceInterval: 10},
-            {x: "Startup", y: 68, confidenceInterval: 16}
-        ];
+        if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
+
+        const hardSkillsDataPoints = this.state.hardSkillPoints;
 
         return (
             <div className="center aboutMeSection" style={style.tabContent}>
@@ -306,24 +305,15 @@ class Results extends Component {
 
     makePsychSection() {
         const psychScores = this.state.psychScores;
-
-        
-
-        const descriptions = {
-            Dimension: "af paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Temperament: "Temp desc jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Viewpoint: "view desc af paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Methodology: "method paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Experientiality: "exp paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Ethos: "ethos paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Belief: "belief paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa"
-        }
+        if (!Array.isArray(psychScores)) { return null; }
 
         return (
-            <div className="fillScreen">
-
-            </div>
-        )
+            <PsychBreakdown
+                archetype={this.state.archetype}
+                psychScores={psychScores}
+                forCandidate={false}
+            />
+        );
     }
 
 

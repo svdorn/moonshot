@@ -877,7 +877,22 @@ async function GET_evaluationResults(req, res) {
             return posSkill.toString() === skill.skillId.toString();
         });
     }) : [];
-    const psychScores = candidate.psychometricTest.factors;
+    // have to convert the factor names to what they will be displayed as
+    const psychNameConversions = {
+        "Extraversion": "Dimension",
+        "Emotionality": "Temperament",
+        "Honesty-Humility": "Viewpoint",
+        "Conscientiousness": "Methodology",
+        "Openness to Experience": "Experientiality",
+        "Agreeableness": "Ethos",
+        "Altruism": "Belief"
+    };
+    const psychScores = candidate.psychometricTest.factors.map(area => {
+        return {
+            name: psychNameConversions[area.name],
+            score: area.score
+        }
+    });
     const results = {
         title: candidate.title,
         name: candidate.name,
