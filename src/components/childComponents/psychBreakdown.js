@@ -16,6 +16,17 @@ class PsychBreakdown extends Component {
     }
 
 
+    makeLRversion(score) {
+        if (score === 0) {
+            return "0";
+        } else if (score > 0) {
+            return `${score}R`;
+        } else {
+            return `${score * -1}L`
+        }
+    }
+
+
     render() {
         const psychScores = this.props.psychScores;
 
@@ -48,8 +59,16 @@ class PsychBreakdown extends Component {
             return 0;
         });
 
+        let selectedArea = {};
+
         // the actual data
         const personalityAreas = psychScores.map(area => {
+            // if this happens to be the area that's selected, use these stats
+            // for the description area
+            if (this.state.areaSelected === area.name) {
+                selectedArea = area;
+            }
+
             // multiply by 10 to get a value between 0 and 100
             const middle80width = (area.stats.middle80.maximum - area.stats.middle80.minimum) * 10;
             const middle80leftPercentage = (area.stats.middle80.minimum + 5) * 10;
@@ -85,7 +104,7 @@ class PsychBreakdown extends Component {
             }
             return (
                 <div className="areaData center">
-                    <div className="title" onClick={() => this.selectTitle(area.name).bind(this)}>
+                    <div className="title" onClick={() => this.selectTitle(area.name)}>
                         {area.name}
                     </div>
                     <div className="middle80indicator" style={{...middle80style, ...middle80indicatorStyle}} />
@@ -101,18 +120,18 @@ class PsychBreakdown extends Component {
         }
 
         const description = !this.state.areaSelected ?
-            "Select an area to see its description"
+            <div className="center font16px font12pxUnder500" style={{color:"#d0d0d0"}}>{"Select an area to see its description"}</div>
             :
-            <div>
+            <div className="font16px font12pxUnder500">
                 <div className="name font26px center" style={coloredText}>{this.state.areaSelected}</div>
-                <div className="descriptionParts">
+                <div className="descriptionParts" style={{color:"#d0d0d0"}}>
                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.left}</div>
                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.right}</div>
                 </div>
-                <div className="youMedianMiddle">
-                    <div>Your Score: {}</div>
-                    <div>Median: {}</div>
-                    <div>Middle 80%: {} - {}</div>
+                <div className="youMedianMiddle" style={{color:"white"}}>
+                    <div>Your Score: {this.makeLRversion(selectedArea.score)}</div>
+                    <div>Median: {this.makeLRversion(selectedArea.stats.median)}</div>
+                    <div>Middle 80%: {this.makeLRversion(selectedArea.stats.middle80.minimum)} - {this.makeLRversion(selectedArea.stats.middle80.maximum)}</div>
                 </div>
             </div>
 
@@ -125,14 +144,12 @@ class PsychBreakdown extends Component {
                 </div>
                 <div className="statsAndDescription" style={coloredText}>
                     <div className="stats lightBlackBackground">
-                        <div className="legend">
+                        <div className="legend font16px font12pxUnder500 font10pxUnder400">
                             <div className="middle80">
                                 <div
                                     className="middle80indicator"
                                     style={{
-                                        width: "50px",
                                         height: "8px",
-                                        margin: "0 8px 2px 0",
                                         ...middle80indicatorStyle
                                     }}
                                 />
@@ -151,15 +168,12 @@ class PsychBreakdown extends Component {
                             </div>
                             <div className="you">
                                 <div className="youIndicator" style={{
-                                    width: "8px", height: "8px", margin: "0 6px 2px 0"
+                                    width: "8px", height: "8px"
                                 }} />
                                 <div className="description">{"You"}</div>
                             </div>
                             <div className="median">
-                                <div className="medianIndicator" style={{
-                                    position: "absolute",
-                                    height: "24px"
-                                }} />
+                                <div className="medianIndicator" style={{position: "absolute"}} />
                                 <div className="description" style={{paddingLeft:"9px"}}>{"Median Score"}</div>
                             </div>
                         </div>

@@ -1376,17 +1376,23 @@ form > h1 {
     justify-content: space-around;
 }
 .results > .statsAndDescription > div {
-    width: 500px;
+    width: 530px;
     position: relative;
     display: inline-block;
     vertical-align: top;
     -moz-box-shadow:    0px 3px 9px 1px #00000073;
     -webkit-box-shadow: 0px 3px 9px 1px #00000073;
     box-shadow:         0px 3px 9px 1px #00000073;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition:     all 0.5s ease;
+    transition:         all 0.5s ease;
 }
 .results > .statsAndDescription > .stats { padding: 30px; }
 .results > .statsAndDescription > .description { padding: 30px 40px; }
-.results > .statsAndDescription > .description > div > .name { margin-bottom: 20px; }
+.results > .statsAndDescription > .description > div > div,
+.results > .statsAndDescription > .description > div > div > div {
+    margin-bottom: 20px;
+}
 .results > .statsAndDescription > .stats > .legend {
     display: inline-block;
     position: relative;
@@ -1437,6 +1443,19 @@ form > h1 {
     background-color: #575759;
 }
 
+.legend .middle80indicator {
+    width: 50px;
+    margin: 0 8px 2px 0;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition:     all 0.5s ease;
+    transition:         all 0.5s ease;
+}
+.legend .youIndicator {
+    margin: 0 8px 2px 0;
+}
+.legend .medianIndicator {
+    height: 24px;
+}
 .middle80indicator {
     border-radius: 5px;
 }
@@ -1458,7 +1477,12 @@ form > h1 {
     text-decoration: underline;
     cursor: pointer;
 }
-
+.youMedianMiddle {
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+.youMedianMiddle > div { margin: 0 10px; }
 
 
 
@@ -3992,6 +4016,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) {
         grid-column-end: 11;
     }
+    .results > .statsAndDescription > div {
+        width: 430px;
+    }
 }
 
 @media only screen and (max-width: 1095px) {
@@ -4245,6 +4272,18 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 @media only screen and (max-width: 900px) {
     .above900only { display: none; }
+
+    .results > .statsAndDescription > div {
+        width: 650px;
+    }
+    .results > .statsAndDescription {
+        display: inline-block;
+        text-align: center;
+    }
+    .results > .statsAndDescription > div {
+        margin-bottom: 20px;
+    }
+
     .paperBox {
         height: 225px;
         width: 300px;
@@ -4705,6 +4744,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 700px) {
+    .results > .statsAndDescription > div {
+        width: 450px;
+    }
+
     .processHeaderContainer {
         height: 50px;
         width: 144px;
@@ -5141,6 +5184,24 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         min-height: 450px;
     }
 
+    .results > .statsAndDescription > div {
+        width: 90%;
+        min-width: 270px;
+    }
+    .results > .statsAndDescription > .description {
+        padding: 20px;
+    }
+    .legend .middle80indicator {
+        width: 25px;
+        margin: 0 8px 1px 0;
+    }
+    .legend .youIndicator {
+        margin: 0 8px 1px 0;
+    }
+    .legend .medianIndicator {
+        height: 17px;
+    }
+
     .boxStyle {
         margin: 0px 0 50px;
     }
@@ -5502,6 +5563,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .onboardingIconLi {
         margin: 0px 10px;
     }
+
+    .results > .statsAndDescription > .stats { padding: 20px; }
+    .legend .youIndicator { margin: 0 4px 0 0 }
 
     .twoOptionsOr { margin: 40px 8px 0; }
 
