@@ -55,9 +55,6 @@ function POST_emailInvites(req, res) {
     const positionId = sanitize(body.currentUserInfo.positionId);
     const positionName = sanitize(body.currentUserInfo.positionName);
 
-    console.log(userName);
-    console.log(userId);
-
     // if one of the arguments doesn't exist, return with error code
     if (!candidateEmails || !employeeEmails || !adminEmails || !userId || !userName || !companyId || !verificationToken || !positionId || !positionName) {
         return res.status(400).send("Bad request.");
@@ -103,7 +100,7 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [candidateEmails[i]];
-            let subject = businessName + "Invited you to the Next Round";
+            let subject = businessName + " Invited you to the Next Round";
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
