@@ -441,16 +441,16 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                     >
-                        <div className="whiteText font24px font20pxUnder500 marginTop20px">
+                        <div className="blueTextHome font24px font20pxUnder500 marginTop20px">
                             Success!
                         </div>
-                        <div className="whiteText font18px font16pxUnder500" style={{width:"90%", margin:"20px auto"}}>
+                        <div className="whiteText font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
                             Success! Your invites have been sent to the users’ emails with sign up instructions for the Web Developer position!
                         </div>
                         <RaisedButton
                             label="Done"
                             onClick={this.handleClose}
-                            className="raisedButtonBusinessHome"
+                            className="raisedButtonBusinessHome marginTop10px"
                         />
                 </Dialog>
             );
@@ -490,7 +490,7 @@ class AddUserDialog extends Component {
                     contentClassName="center"
                 >
 
-                    <div className="whiteText font24px font20pxUnder500 marginTop20px">
+                    <div className="blueTextHome font24px font20pxUnder500 marginTop20px">
                         Select a position
                     </div>
                     <DropDownMenu value={this.state.position}
@@ -525,7 +525,7 @@ class AddUserDialog extends Component {
 
                     <form className="center">
                         <div
-                            className="whiteText font24px font20pxUnder500 marginTop10px">
+                            className="blueTextHome font24px font20pxUnder500 marginTop10px">
                             Add
                         </div>
                         {this.state.formErrors ?
@@ -565,10 +565,10 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                 >
-                    <div className="whiteText font24px font20pxUnder500 marginTop10px">
+                    <div className="blueTextHome font24px font20pxUnder500 marginTop10px">
                         Last Step
                     </div>
-                    <div className="whiteText font16px font12pxUnder500 marginTop20px">
+                    <div className="whiteText font16px font12pxUnder500" style={{margin:"20px auto", width:"85%"}}>
                         Wait! You have one more step! Click Finish to send the invites to your candidates, employees and/or admins so they can begin!
                     </div>
                     <div className="center marginTop40px">
