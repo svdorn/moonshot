@@ -563,7 +563,7 @@ class BusinessHome extends Component {
                         <Field
                             name="email"
                             component={renderTextField}
-                            label="Work Email*"
+                            label="Work Email"
                             className="marginTop10px"
                         /><br/>
                         <RaisedButton
@@ -590,13 +590,13 @@ class BusinessHome extends Component {
             case 1:
                 dialogBody = (
                     <form onSubmit={this.handleSubmitDialogEmail.bind(this)} className="center">
-                        <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop30px">
-                            Get Started
+                        <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop40px">
+                            Try Moonshot Insights for Free
                         </div>
                         <Field
                             name="email"
                             component={renderTextField}
-                            label="Work Email*"
+                            label="Work Email"
                             validate={[required, emailValidate]}
                             className="marginTop10px"
                         /><br/>
@@ -626,25 +626,25 @@ class BusinessHome extends Component {
                         <Field
                             name="name"
                             component={renderTextField}
-                            label="Full Name*"
+                            label="Full Name"
                             validate={[required]}
                         /><br/>
                         <Field
                             name="company"
                             component={renderTextField}
-                            label="Company*"
+                            label="Company"
                             validate={[required]}
                         /><br/>
                         <Field
                             name="password"
                             component={renderPasswordField}
-                            label="Password*"
+                            label="Password"
                             validate={[required]}
                         /><br/>
                         <Field
                             name="confirmPassword"
                             component={renderPasswordField}
-                            label="Confirm Password*"
+                            label="Confirm Password"
                             validate={[required, passwordsMatch]}
                         /><br/>
                         <div style={{margin: "10px auto 10px"}} className="whiteText font14px">
@@ -674,15 +674,15 @@ class BusinessHome extends Component {
                             Just a few quick things to set up your assessment.
                         </div>
                         <div className="whiteText font14px" style={{width: "90%", margin: "10px auto"}}>
-                            <i>Every position has a psychometric analysis. <div className="above800only noHeight"><br/></div>We already created that for you.</i>
+                            Every position has a psychometric analysis. <div className="above800only noHeight"><br/></div>We already created that for you.
                         </div>
                         <div className="whiteText font14px" style={{width: "90%", margin: "10px auto 10px"}}>
-                            What positions do you want to select for the assessment?
+                            What position do you want to select for the assessment?
                         </div>
                         <Field
                             name="positions"
                             component={renderBlueTextField}
-                            label="Positions* (e.g. Business Analyst)"
+                            label="Position (e.g. Business Analyst)"
                             validate={[required]}
                         /><br/>
                         <RaisedButton
@@ -701,7 +701,7 @@ class BusinessHome extends Component {
                         What skills do you need to be successful in this position?
                     </div>
                     <div className="whiteText font14px" style={{width: "90%", margin: "10px auto 10px"}}>
-                        <i>No research required, we will do that for you. We just want the first three skills that come to mind.</i>
+                        No research required, we will do that for you. We just want the first three skills that come to mind.
                     </div>
                     <Field
                         name="skill1"
@@ -737,11 +737,11 @@ class BusinessHome extends Component {
                         <div className="blueTextHome font22px" style={{width:"90%", margin:"10px auto"}}>
                             Activate your Assessment
                         </div>
-                        <div className="whiteTextImportant font12px font10pxUnder500" style={{width:"97%", margin:"10px auto"}}>
+                        <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"97%", margin:"10px auto"}}>
                             Our team is now hard at work creating your assessment. Before we can activate
                             your account, we need to take a few minutes to ensure we are on the same page
-                            with the assessment and roll out the process. Once you have set and confirmed your meeting,
-                            you can close this window. We&#39;ll be in touch shortly.
+                            with the assessment and roll out the process. Once you have set a time, you can close out.
+                            We will be preparing your position assessment for our demo. See you soon!
                         </div>
                         <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"90%", margin:"10px auto"}}>
                             Find a time below.
@@ -1107,7 +1107,7 @@ class BusinessHome extends Component {
                                 alt="CrystalBall"
                                 className="crystalBall"
                             />
-                            <div className="center" style={{marginTop: "20px"}}>
+                            <div className="center" style={{marginTop: "10px"}}>
                                 <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
                                     Try for Free
                                 </button>
