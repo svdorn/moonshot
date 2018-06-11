@@ -6,40 +6,11 @@ var businessesSchema = mongoose.Schema({
     name: String,
     // logo image name within /images/logos/
     logo: String,
-    pathwayIds: [ mongoose.Schema.Types.ObjectId ],
-    employerIds: [ mongoose.Schema.Types.ObjectId ],
-    employeeIds: [ mongoose.Schema.Types.ObjectId ],
 
     // ---->>> POST-PIVOT <<<---- //
 
     // unique company code, added to position code for user sign up
     code: String,
-
-    employees: [{
-        employeeId: mongoose.Schema.Types.ObjectId,
-        // id of the manager that rated this employee
-        managerId: mongoose.Schema.Types.ObjectId,
-        // employee's name
-        name: String,
-        // position that the employee is associated with
-        position: mongoose.Schema.Types.ObjectId,
-        // whether someone has graded this employee
-        gradingComplete: Boolean,
-        // the questions that will be asked of the
-        answers: [{
-            // question has been answered
-            complete: Boolean,
-            // what the mangager rated the employee (if this was a range question)
-            score: Number,
-            // the index within the option array of the option that was chosen
-            // (if this was a multiple choice question)
-            selectedIndex: Number,
-            // index of the question within employeeQuestions
-            questionIndex: Number
-        }],
-        // the employee's url to see their results
-        employeeUrl: String
-    }],
 
     // the questions that managers have to answer about each employee
     employeeQuestions: [{
@@ -111,6 +82,46 @@ var businessesSchema = mongoose.Schema({
                 // the date/time the hiring stage was changed
                 dateChanged: Date
             }],
+            // user's archetype, found from the psychometric test
+            archetype: String,
+            // the scores the user got for the position; if this is not undefined,
+            // the user has completed the evaluation
+            scores: {
+                // combination of all the scores
+                overall: Number,
+                // how good of a culture fit the candidate has
+                culture: Number,
+                // how much the candidate could grow in the position
+                growth: Number,
+                // if the candidate would stay at the company for a long time
+                longevity: Number,
+                // how well the candidate would do at that specific position
+                performance: Number
+            },
+        }],
+        // Employees related to this position
+        employees: [{
+            employeeId: mongoose.Schema.Types.ObjectId,
+            // id of the manager that rated this employee
+            managerId: mongoose.Schema.Types.ObjectId,
+            // employee's name
+            name: String,
+            // whether someone has graded this employee
+            gradingComplete: Boolean,
+            // the questions that will be asked of the
+            answers: [{
+                // question has been answered
+                complete: Boolean,
+                // what the mangager rated the employee (if this was a range question)
+                score: Number,
+                // the index within the option array of the option that was chosen
+                // (if this was a multiple choice question)
+                selectedIndex: Number,
+                // index of the question within employeeQuestions
+                questionIndex: Number
+            }],
+            // the url to get to the user's results page
+            profileUrl: String,
             // user's archetype, found from the psychometric test
             archetype: String,
             // the scores the user got for the position; if this is not undefined,

@@ -156,20 +156,6 @@ function POST_candidate(req, res) {
         if (userCodeType) {
             // ... remove it from the position from the correct codes array
             business.positions[positionIndex][userCodeType].splice(oneTimeCodeIndex, 1);
-            // TODO: add different user types correctly
-            switch(userCodeType) {
-                case "candidateCodes":
-                    break;
-                case "employeeCodes":
-                    business.employeeIds.push(user._id);
-                    break;
-                case "managerCodes":
-                case "accountAdmin":
-                    business.employerIds.push(user._id);
-                    break;
-                default:
-                    break;
-            }
         }
 
         // save the user's id so that if they click verify email in the same
@@ -180,12 +166,16 @@ function POST_candidate(req, res) {
         })
 
         try {
-            // add the evaluation to the user
-            let evalObj = await addEvaluation(user, business, positionId, startDate);
-            user = evalObj.user;
-            // since the user is just signing up we know that the active
-            // position will be the only one available
-            user.positionInProgress = user.positions[0].positionId;
+            if (user.userType == "candidate" || user.userType == "employee") {
+                // add the evaluation to the user
+                let evalObj = await addEvaluation(user, business, positionId, startDate);
+                user = evalObj.user;
+                // since the user is just signing up we know that the active
+                // position will be the only one available
+                user.positionInProgress = user.positions[0].positionId;
+            } else {
+                // TODO: if user is an admin, add the psych test to them
+            }
 
             // save the user and the business with the new evaluation information
             let [savedUser, savedBusiness] = await Promise.all([user.save(), business.save()]);
@@ -299,9 +289,9 @@ function POST_candidate(req, res) {
                     const employeeIndex = position.employeeCodes.findIndex(employeeCode => {
                         return employeeCode == uniqueCode;
                     });
-                    const managerIndex = position.managerCodes.findIndex(managerCode => {
-                        return managerCode == uniqueCode;
-                    });
+                    // const managerIndex = position.managerCodes.findIndex(managerCode => {
+                    //     return managerCode == uniqueCode;
+                    // });
                     const adminIndex = position.adminCodes.findIndex(adminCode => {
                         return adminCode == uniqueCode;
                     });
@@ -316,14 +306,21 @@ function POST_candidate(req, res) {
                         user.userType = "employee";
                         oneTimeCodeIndex = employeeIndex;
                         userCodeType = "employeeCodes";
-                    } else if (managerIndex !== -1) {
-                        user.userType = "manager";
-                        oneTimeCodeIndex = managerIndex;
-                        userCodeType = "managerCodes";
-                    } else {
+                    // } else if (managerIndex !== -1) {
+                    //     user.userType = "manager";
+                    //     oneTimeCodeIndex = managerIndex;
+                    //     userCodeType = "managerCodes";
+                    // } else {
                         user.userType = "accountAdmin";
                         oneTimeCodeIndex = adminIndex;
                         userCodeType = "accountAdmin";
+                        user.businessInfo = {
+                            company : {
+                                name : foundBusinesses.name,
+                                companyId: foundBusinesses._id
+                            },
+                            title: "Account Admin"
+                        }
                     }
 
                     // if the user does NOT have a valid unique code
