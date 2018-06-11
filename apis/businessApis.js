@@ -793,13 +793,14 @@ async function GET_evaluationResults(req, res) {
     const positionId = sanitize(req.query.positionId);
     const positionIdString = positionId.toString();
 
+    // --->>      GET USER, BUSINESS, AND CANDIDATE FROM DATABASE       <<--- //
     let user, business, candidate;
     try {
         // get the business user, candidate, and business
-        let [foundUser, foundCandidate, foundBusiness] = Promise.all([
+        let [foundUser, foundCandidate, foundBusiness] = await Promise.all([
             getAndVerifyUser(userId, verificationToken),
-            Users.findOne({profileUrl}),
-            Businesses.findById(businessId)
+            Users.findOne({profileUrl}).select("_id archetype positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
+            Businesses.findById(businessId).select("_id positions._id positions.candidates.candidateId positions.candidates.scores positions.skills")
         ]);
 
         // make sure a user, candidate, and business were found
@@ -813,24 +814,76 @@ async function GET_evaluationResults(req, res) {
         console.log("Error getting user or candidate or business: ", dbError);
         res.status(500).send("Invalid operation.");
     }
+    // <<------------------------------------------------------------------>> //
 
+    // --->>           VERIFY LEGITIMACY AND GET NEEDED DATA            <<--- //
     // verify that the business user has the right permissions
     try {
-        if (businessId.toString() !== user.businessInfo.company.companyId()) {
+        if (businessId.toString() !== user.businessInfo.company.companyId.toString()) {
             throw "Doesn't have right business id.";
         }
-    } catch (permissionError) {
+    } catch (permissionsError) {
         console.log("Business user did not have the right business id: ", permissionsError);
         return res.status(403).send(errors.PERMISSIONS_ERROR);
     }
 
-    // TODO: verify that the user applied for this position
-    const userPositionIndex = user.positions.findIndex(pos => {
+    // verify that the position exists within the business ...
+    const bizPositionIndex = business.positions.findIndex(pos => {
+        return pos._id.toString() === positionIdString;
+    })
+    if (typeof bizPositionIndex !== "number" || bizPositionIndex < 0) {
+        console.log(`Position not found within business while trying to get results. userId: ${userId}, candidateId: ${candidate._id}, positionId: ${positionId}`);
+        return res.status(400).send("Candidate has not applied for that position.");
+    }
+    // ... and then get it
+    const bizPosition = business.positions[bizPositionIndex];
+
+    console.log("candidate: ", candidate);
+
+    // verify that the user applied for this position ...
+    const candidatePositionIndex = candidate.positions.findIndex(pos => {
         return pos.positionId.toString() === positionIdString;
     })
+    if (typeof candidatePositionIndex !== "number" || candidatePositionIndex < 0) {
+        console.log(`Position not found within candidate while trying to get results. userId: ${userId}, candidateId: ${candidate._id}, positionId: ${positionId}`);
+        return res.status(400).send("Canidate has not applied for that position.");
+    }
+    // ... and then get the position object within the candidate
+    const candidatePosition = candidate.positions[candidatePositionIndex];
 
-    // TODO: get the needed information for the front end
-    const results = {};
+    // get the candidate object within the position within the business ...
+    const candidateIdString = candidate._id.toString();
+    const bizCandidateIndex = bizPosition.candidates.findIndex(cand => {
+        return cand.candidateId.toString() === candidateIdString;
+    });
+    if (typeof bizCandidateIndex !== "number" || bizCandidateIndex < 0) {
+        console.log(`Candidate not found within business while trying to get results. userId: ${userId}, candidateId: ${candidate._id}, positionId: ${positionId}`);
+        return res.status(400).send("Canidate has not applied for that position.");
+    }
+    // ... and then get the candidate from there
+    const bizCandidate = bizPosition.candidates[bizCandidateIndex];
+    // <<------------------------------------------------------------------>> //
+
+    // --->>              FORMAT THE DATA FOR THE FRONT END             <<--- //
+    // get position-specific free response questions
+    const frqs = candidatePosition.freeResponseQuestions.map(frq => {
+        return {
+            question: frq.body,
+            answer: frq.response
+        }
+    })
+    // get skill test scores for relevant skills
+    const skillScores = candidate.skillTests ? candidate.skillTests.filter(skill => {
+        return bizPosition.skills.some(posSkill => {
+            return posSkill.toString() === skill.skillId.toString();
+        });
+    }) : [];
+    const results = {
+        archetype: candidate.archetype,
+        performanceScores: bizCandidate.scores,
+        frqs, skillScores
+    };
+    // <<------------------------------------------------------------------>> //
 
     // return the information to the front end
     res.json(results);

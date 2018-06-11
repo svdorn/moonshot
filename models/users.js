@@ -166,6 +166,8 @@ var usersSchema = mongoose.Schema({
     skillTests: [{
         // id of the skill
         skillId: mongoose.Schema.Types.ObjectId,
+        // name of the skill
+        name: String,
         // the score the user got on their most recent attempt
         mostRecentScore: Number,
         // the question the user is currently answering, undefined if test not
