@@ -46,7 +46,7 @@ class PsychBreakdown extends Component {
         const personalityAreas = psychScores.map(area => {
             return (
                 <div className="areaData">
-                    <div>
+                    <div className="title">
                         {area.name}
                     </div>
                     <div className="middle80indicator" />
