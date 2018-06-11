@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
-import {Tabs, Tab, Slider} from 'material-ui';
+import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
@@ -21,7 +21,7 @@ class Results extends Component {
             hardSkillPoints: [],
             predictivePoints: [],
             freeResponses: [],
-            loaded: false
+            loading: true
         };
     }
 
@@ -92,7 +92,7 @@ class Results extends Component {
             let self = this;
             self.setState({
                 ...self.state,
-                loaded: true, candidate, overallScore, hardSkillPoints, predictivePoints, freeResponses
+                loading: false, candidate, overallScore, hardSkillPoints, predictivePoints, freeResponses
             });
         })
         .catch(error => {
@@ -124,7 +124,7 @@ class Results extends Component {
 
         return (
             <div className="center aboutMeSection" style={style.tabContent}>
-                <div className="lightBlackBackground" style={style.candidateScore}>
+                <div style={style.candidateScore}>
                     <div className="paddingTop20px">
                         <div
                             className="font24px font20pxUnder700 font16pxUnder500 grayText">
@@ -340,9 +340,11 @@ class Results extends Component {
             mailtoEmail = "mailto:" + candidate.email;
         }
 
-        const analysisSection = this.makeAnalysisSection();
-        const responsesSection = this.makeResponsesSection();
-        const psychSection = this.makePsychSection();
+        const loading = this.state.loading;
+        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress/></div>
+        const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
+        const responsesSection = loading ? loadingArea : this.makeResponsesSection();
+        const psychSection = loading ? loadingArea : this.makePsychSection();
 
         return (
             <div>
