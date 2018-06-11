@@ -137,8 +137,11 @@ class AddUserDialog extends Component {
                     break;
             }
         }
+        console.log("here");
+        console.log(this.props.currentUser);
 
         const currentUser = this.props.currentUser;
+        console.log(this.props.currentUser);
         const currentUserInfo = {
             userId: currentUser._id,
             userName: currentUser.name,
@@ -147,6 +150,8 @@ class AddUserDialog extends Component {
             positionId: position._id,
             positionName: position.name
         }
+
+        console.log(currentUserInfo);
 
         // TODO: add manager emails in here when we do that
         this.props.postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo);
@@ -536,9 +541,6 @@ class AddUserDialog extends Component {
                             <Tab label="Employee" value="Employee" style={style.tab}>
                                 {employeeSection}
                             </Tab>
-                            // <Tab label="Manager" value="Manager" style={style.tab}>
-                            //     {managerSection}
-                            // </Tab>
                             <Tab label="Admin" value="Admin" style={style.tab}>
                                 {adminSection}
                             </Tab>

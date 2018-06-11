@@ -267,11 +267,11 @@ export function postUser(user) {
 }
 
 // POST EMAIL INVITES
-export function postEmailInvites(candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo) {
+export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo) {
     return function(dispatch) {
         dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
 
-        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo})
+        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, adminEmails, currentUserInfo})
             // email invites success
             .then(function(res) {
                 dispatch({type: "POST_EMAIL_INVITES_SUCCESS"});

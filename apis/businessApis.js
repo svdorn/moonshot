@@ -47,7 +47,6 @@ function POST_emailInvites(req, res) {
     const body = req.body;
     const candidateEmails = sanitize(body.candidateEmails);
     const employeeEmails = sanitize(body.employeeEmails);
-    // const managerEmails = sanitize(body.managerEmails);
     const adminEmails = sanitize(body.adminEmails);
     const userId = sanitize(body.currentUserInfo.userId);
     const userName = sanitize(body.currentUserInfo.userName);
@@ -55,6 +54,9 @@ function POST_emailInvites(req, res) {
     const companyId = sanitize(body.currentUserInfo.companyId);
     const positionId = sanitize(body.currentUserInfo.positionId);
     const positionName = sanitize(body.currentUserInfo.positionName);
+
+    console.log(userName);
+    console.log(userId);
 
     // if one of the arguments doesn't exist, return with error code
     if (!candidateEmails || !employeeEmails || !adminEmails || !userId || !userName || !companyId || !verificationToken || !positionId || !positionName) {
