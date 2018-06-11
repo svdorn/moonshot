@@ -1362,17 +1362,30 @@ form > h1 {
 .results > .archetype {
     padding: 20px;
     margin-bottom: 20px;
+    -moz-box-shadow:    0px 3px 9px 1px #00000073;
+    -webkit-box-shadow: 0px 3px 9px 1px #00000073;
+    box-shadow:         0px 3px 9px 1px #00000073;
 }
 .results > .archetype > img {
     height: 60px;
     margin: 10px;
 }
 
-.results > .statsAndDescription > .stats {
-    width: 600px;
-    position: relative;
-    padding: 30px;
+.results > .statsAndDescription {
+    display: flex;
+    justify-content: space-around;
 }
+.results > .statsAndDescription > div {
+    width: 500px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    -moz-box-shadow:    0px 3px 9px 1px #00000073;
+    -webkit-box-shadow: 0px 3px 9px 1px #00000073;
+    box-shadow:         0px 3px 9px 1px #00000073;
+}
+.results > .statsAndDescription > .stats { padding: 30px; }
+.results > .statsAndDescription > .description { padding: 50px; }
 .results > .statsAndDescription > .stats > .legend {
     display: inline-block;
     position: relative;
@@ -1411,6 +1424,9 @@ form > h1 {
     display: inline-block;
 }
 
+.personalityAreas {
+    position: relative;
+}
 /* make a gray line underneath areaDatas */
 .areaData:not(:last-child)::after {
     content: "";
@@ -1426,10 +1442,11 @@ form > h1 {
 .youIndicator {
     border-radius: 100%;
     background-color: white;
+    display: inline-block;
 }
 .medianIndicator {
     width: 2px;
-    background-color: #575759;
+    background-color: #e6e6e6;
 }
 .topNumbers {
     display: flex;

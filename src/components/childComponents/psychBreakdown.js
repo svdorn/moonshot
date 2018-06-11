@@ -44,14 +44,48 @@ class PsychBreakdown extends Component {
 
         // the actual data
         const personalityAreas = psychScores.map(area => {
+            console.log("area: ", area);
+            // multiply by 10 to get a value between 0 and 100
+            const middle80width = (area.stats.middle80.maximum - area.stats.middle80.minimum) * 10;
+            const middle80leftPercentage = (area.stats.middle80.minimum + 5) * 10;
+            const middle80style = {
+                width: `${middle80width}%`,
+                height: "8px",
+                left: `${middle80leftPercentage}%`,
+                position: "absolute",
+                display: "inline-block"
+            }
+
+            // add 5 to get a score from 0 to 10
+            // multiply by 10 to get a percentage 0 to 100
+            const medianLeftPercentage = (area.stats.median + 5) * 10;
+            const medianStyle = {
+                position: "absolute",
+                display: "inline-block",
+                left: `${medianLeftPercentage}%`,
+                transform: `translateX(-${medianLeftPercentage}%)`,
+                height: "8px"
+            }
+
+            // add 5 to get a score from 0 to 10
+            // multiply by 10 to get a percentage 0 to 100
+            const youLeftPercentage = (area.score + 5) * 10;
+            const youIndicatorStyle = {
+                position: "absolute",
+                left: `${youLeftPercentage}%`,
+                // have to translate left because the points have widths
+                transform: `translateX(-${youLeftPercentage}%)`,
+                height: "8px",
+                width: "8px"
+            }
             return (
-                <div className="areaData">
+                <div className="areaData center">
                     <div className="title">
                         {area.name}
                     </div>
-                    <div className="middle80indicator" />
-                    <div className="youIndicator" />
-                    <div className="medianIndicator" />
+                    <div className="middle80indicator" style={{...middle80style, ...middle80indicatorStyle}} />
+                    <div className="medianIndicator" style={medianStyle} />
+                    <div className="youIndicator" style={youIndicatorStyle}/>
                 </div>
             )
         });
