@@ -800,7 +800,7 @@ async function GET_evaluationResults(req, res) {
         // get the business user, candidate, and business
         let [foundUser, foundCandidate, foundBusiness] = await Promise.all([
             getAndVerifyUser(userId, verificationToken),
-            Users.findOne({profileUrl}).select("_id name archetype title email emailToContact positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
+            Users.findOne({profileUrl}).select("_id name archetype title email emailToContact psychometricTest.factors.name psychometricTest.factors.score positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
             Businesses.findById(businessId).select("_id positions._id positions.candidates.candidateId positions.candidates.scores positions.skills")
         ]);
 
@@ -877,13 +877,14 @@ async function GET_evaluationResults(req, res) {
             return posSkill.toString() === skill.skillId.toString();
         });
     }) : [];
+    const psychScores = candidate.psychometricTest.factors;
     const results = {
         title: candidate.title,
         name: candidate.name,
         email: candidate.emailToContact ? candidate.emailToContact : candidate.email,
         archetype: candidate.archetype,
         performanceScores: bizCandidate.scores,
-        frqs, skillScores
+        frqs, skillScores, psychScores
     };
     // <<------------------------------------------------------------------>> //
 
