@@ -58,16 +58,7 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
                 let nextUrl = '/myEvaluations';
-                console.log(returnedUser.userType);
-                if (returnedUser.userType === "manager" || returnedUser.userType === "accountAdmin") {
-                    nextUrl = '/myEvaluations';
-                } else if (returnedUser.userType === "employee") {
-                    // TODO: change this to be the correct link to a landing page of a test
-                    nextUrl = '/test';
-                }
-                else if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
-                    nextUrl = "/onboarding";
-                } else if (navigateBackUrl) {
+                if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
                 }
 
@@ -195,7 +186,7 @@ export function submitFreeResponse(userId, verificationToken, frqs) {
                 currentUser: response.data.updatedUser,
                 nofification: {message: "Application complete!", type: "infoHeader"}
             });
-            browserHistory.push("/");
+            browserHistory.push("/myEvaluations");
             window.scrollTo(0, 0);
         })
         .catch(error => {
@@ -393,19 +384,14 @@ export function verifyEmail(userType, token) {
     return function(dispatch) {
         axios.post("/api/user/verifyEmail", {userType, token})
             .then(function(response) {
-                if (!response.data || response.data === "go to login" || userType == "employer") {
+                if (!response.data || response.data === "go to login") {
                     let nextLocation = "/login";
-                    if (userType == "employer") {
-                        const email = response.data;
-                        nextLocation = "/changeTempPassword?email=" + email;
-                    }
-
                     dispatch({type: "NOTIFICATION", notification:{message: "Account verified!", type: "infoHeader"}});
                     browserHistory.push(nextLocation);
                 } else {
                     // don't show verification notification if going straight to onboarding because it's implied
                     dispatch({type: "LOGIN", payload:response.data});
-                    browserHistory.push('/onboarding');
+                    browserHistory.push('/myEvaluations');
                 }
             })
             .catch(function(err) {
@@ -428,9 +414,6 @@ export function changePasswordForgot(user) {
                 dispatch({type:"LOGIN", payload:foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
                 let nextUrl = "/";
                 let returnedUser = response.data;
-                if (!returnedUser.hasFinishedOnboarding) {
-                    nextUrl = "/onboarding";
-                }
                 browserHistory.push(nextUrl);
             })
             .catch(function(err) {
@@ -446,7 +429,7 @@ export function changeTempPassword(user) {
             const returnedUser = response.data;
 
             dispatch({type: "LOGIN", payload: returnedUser, notification: {message: "Your password was changed, you are now logged in!", type: "infoHeader"}});
-            browserHistory.push('/myCandidates');
+            browserHistory.push('/myEvaluations');
 
             axios.post("/api/user/session", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
             .catch(function(err) {
