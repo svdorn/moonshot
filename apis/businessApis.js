@@ -16,6 +16,7 @@ const { sanitize,
         getFirstName,
         getAndVerifyUser,
         frontEndUser,
+        speedTest,
         FOR_EMPLOYER,
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
@@ -789,16 +790,18 @@ async function GET_evaluationResults(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
     const profileUrl = sanitize(req.query.profileUrl);
-    const positionName = sanitize(req.query.positionName);
     const businessId = sanitize(req.query.businessId);
+    const positionId = sanitize(req.query.positionId);
+    const positionIdString = positionId.toString();
 
+    // --->>      GET USER, BUSINESS, AND CANDIDATE FROM DATABASE       <<--- //
     let user, business, candidate;
     try {
         // get the business user, candidate, and business
-        let [foundUser, foundCandidate, foundBusiness] = Promise.all([
+        let [foundUser, foundCandidate, foundBusiness] = await Promise.all([
             getAndVerifyUser(userId, verificationToken),
-            Users.findOne({profileUrl}),
-            Businesses.findById(businessId)
+            Users.findOne({profileUrl}).select("_id name archetype title email emailToContact psychometricTest.factors.name psychometricTest.factors.score positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
+            Businesses.findById(businessId).select("_id positions._id positions.candidates.candidateId positions.candidates.scores positions.skills")
         ]);
 
         // make sure a user, candidate, and business were found
@@ -812,22 +815,78 @@ async function GET_evaluationResults(req, res) {
         console.log("Error getting user or candidate or business: ", dbError);
         res.status(500).send("Invalid operation.");
     }
+    // <<------------------------------------------------------------------>> //
 
+    // --->>           VERIFY LEGITIMACY AND GET NEEDED DATA            <<--- //
     // verify that the business user has the right permissions
     try {
-        if (businessId.toString() !== user.businessInfo.company.companyId()) {
+        if (businessId.toString() !== user.businessInfo.company.companyId.toString()) {
             throw "Doesn't have right business id.";
         }
-    } catch (permissionError) {
+    } catch (permissionsError) {
         console.log("Business user did not have the right business id: ", permissionsError);
         return res.status(403).send(errors.PERMISSIONS_ERROR);
     }
 
-    // TODO: verify that the user applied for this position
+    // verify that the position exists within the business ...
+    const bizPositionIndex = business.positions.findIndex(pos => {
+        return pos._id.toString() === positionIdString;
+    })
+    if (typeof bizPositionIndex !== "number" || bizPositionIndex < 0) {
+        console.log(`Position not found within business while trying to get results. userId: ${userId}, candidateId: ${candidate._id}, positionId: ${positionId}`);
+        return res.status(400).send("Candidate has not applied for that position.");
+    }
+    // ... and then get it
+    const bizPosition = business.positions[bizPositionIndex];
 
+    // verify that the user applied for this position ...
+    const candidatePositionIndex = candidate.positions.findIndex(pos => {
+        return pos.positionId.toString() === positionIdString;
+    })
+    if (typeof candidatePositionIndex !== "number" || candidatePositionIndex < 0) {
+        console.log(`Position not found within candidate while trying to get results. userId: ${userId}, candidateId: ${candidate._id}, positionId: ${positionId}`);
+        return res.status(400).send("Canidate has not applied for that position.");
+    }
+    // ... and then get the position object within the candidate
+    const candidatePosition = candidate.positions[candidatePositionIndex];
 
-    // TODO: get the needed information for the front end
-    const results = {};
+    // get the candidate object within the position within the business ...
+    const candidateIdString = candidate._id.toString();
+    const bizCandidateIndex = bizPosition.candidates.findIndex(cand => {
+        return cand.candidateId.toString() === candidateIdString;
+    });
+    if (typeof bizCandidateIndex !== "number" || bizCandidateIndex < 0) {
+        console.log(`Candidate not found within business while trying to get results. userId: ${userId}, candidateId: ${candidate._id}, positionId: ${positionId}`);
+        return res.status(400).send("Canidate has not applied for that position.");
+    }
+    // ... and then get the candidate from there
+    const bizCandidate = bizPosition.candidates[bizCandidateIndex];
+    // <<------------------------------------------------------------------>> //
+
+    // --->>              FORMAT THE DATA FOR THE FRONT END             <<--- //
+    // get position-specific free response questions
+    const frqs = candidatePosition.freeResponseQuestions.map(frq => {
+        return {
+            question: frq.body,
+            answer: frq.response
+        }
+    })
+    // get skill test scores for relevant skills
+    const skillScores = candidate.skillTests ? candidate.skillTests.filter(skill => {
+        return bizPosition.skills.some(posSkill => {
+            return posSkill.toString() === skill.skillId.toString();
+        });
+    }) : [];
+    const psychScores = candidate.psychometricTest.factors;
+    const results = {
+        title: candidate.title,
+        name: candidate.name,
+        email: candidate.emailToContact ? candidate.emailToContact : candidate.email,
+        archetype: candidate.archetype,
+        performanceScores: bizCandidate.scores,
+        frqs, skillScores, psychScores
+    };
+    // <<------------------------------------------------------------------>> //
 
     // return the information to the front end
     res.json(results);
@@ -838,30 +897,25 @@ async function GET_candidateSearch(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
-    // message displayed on miscellaneous errors
-    const SERVER_ERROR = "Server error, try again later.";
-    // message displayed when user doesn't have right permissions
-    const PERMISSIONS_ERROR = "You don't have permission to do that.";
-
     // get the user who is trying to search for candidates
     let user;
     try {
         user = await getAndVerifyUser(userId, verificationToken);
     } catch (getUserError) {
         console.log("error getting business user while searching for candidates: ", getUserError);
-        return res.status(401).send(PERMISSIONS_ERROR);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
     // if the user is not an admin or manager, they can't search for candidates
     if (!["accountAdmin", "manager"].includes(user.userType)) {
         console.log("User is type: ", user.userType);
-        return res.status(401).send(PERMISSIONS_ERROR);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
     // if the user doesn't have
     if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
         console.log("User doesn't have associated business.");
-        return res.status(401).send(PERMISSIONS_ERROR);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
     const companyId = user.businessInfo.company.companyId;
@@ -899,7 +953,7 @@ async function GET_candidateSearch(req, res) {
         business = business[0];
     } catch (findBizError) {
         console.log("error finding business for user trying to search for candidates: ", findBizError);
-        return res.status(500).send(SERVER_ERROR);
+        return res.status(500).send(errors.SERVER_ERROR);
     }
 
     // make sure the user gave a valid position

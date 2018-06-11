@@ -357,8 +357,6 @@ function POST_startOrContinueTest(req, res) {
             })
         });
 
-
-
         function checkIfStarted() {
             // haven't yet found either the skill or user from the db
             if (!user || !skill) { return; }
@@ -379,6 +377,7 @@ function POST_startOrContinueTest(req, res) {
             if (!hasEverTakenTest) {
                 let newSkillTest = {
                     skillId: skill._id,
+                    name: skill.name,
                     currentQuestion: {},
                     attempts: []
                 }

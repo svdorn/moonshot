@@ -166,6 +166,8 @@ var usersSchema = mongoose.Schema({
     skillTests: [{
         // id of the skill
         skillId: mongoose.Schema.Types.ObjectId,
+        // name of the skill
+        name: String,
         // the score the user got on their most recent attempt
         mostRecentScore: Number,
         // the question the user is currently answering, undefined if test not
@@ -313,6 +315,8 @@ var usersSchema = mongoose.Schema({
                 responses: [{
                     // the question id of the question that was actually answered
                     answeredId: mongoose.Schema.Types.ObjectId,
+                    // whether the answer for this question should be flipped (e.g. 3 => -3)
+                    invertScore: Boolean,
                     // the answer (-5 to 5) that the user chose
                     answer: Number,
                     // exact date/time the user started the first phrasing of this question

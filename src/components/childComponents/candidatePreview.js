@@ -322,11 +322,10 @@ class CandidatePreview extends Component {
         });
 
         let resultsUrl = "/myCandidates";
-        console.log(this.props.currentUser);
         try {
             const profileUrl = this.props.candidate && this.props.candidate.profileUrl ? this.props.candidate.profileUrl : "";
-            const positionName = this.props.positionName;
-            resultsUrl = `/results/${profileUrl}/${positionName}`;
+            const positionId = this.props.positionId;
+            resultsUrl = `/results/${profileUrl}/${positionId}`;
         } catch (e) {
             console.log("Error getting results url: ", e);
         }

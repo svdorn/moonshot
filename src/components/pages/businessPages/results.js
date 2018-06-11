@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
-import {Tabs, Tab, Slider} from 'material-ui';
+import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
@@ -16,42 +16,91 @@ class Results extends Component {
         super(props);
 
         this.state = {
-            user: undefined,
             candidate: {},
             overallScore: undefined,
-            hardSkills: [],
-            predictiveInsights: [],
-            freeResponses: []
+            hardSkillPoints: [],
+            predictivePoints: [],
+            freeResponses: [],
+            psychScores: [],
+            loading: true
         };
     }
 
 
     componentDidMount() {
-        const user = this.props.currentUser;
+        let candidate = {}, overallScore = undefined, hardSkills = [], predictiveInsights = [], freeResponses;
 
         let profileUrl = "";
         let businessId = "";
-        let positionName = "";
+        let positionId = "";
         try {
-            console.log("this.props: ", this.props);
             profileUrl = this.props.params.profileUrl;
             businessId = this.props.currentUser.businessInfo.company.companyId;
-            positionName = this.props.params.positionName;
+            positionId = this.props.params.positionId;
         } catch (e) {
-            console.log("error: ", e);
             this.goTo("/myCandidates");
         }
 
-        // TODO backend call to get results info
+        // backend call to get results info
         axios.get("/api/business/evaluationResults", {
             params : {
-                userId: user._id,
-                verificationToken: user.verificationToken,
-                profileUrl, businessId, positionName
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken,
+                profileUrl, businessId, positionId
             }
         })
         .then(res => {
             console.log("res.data: ", res.data);
+
+            const candidate = {
+                name: res.data.name,
+                title: res.data.title ? res.data.title : "",
+                email: res.data.email
+            }
+            const hardSkillPoints = res.data.skillScores.map(skill => {
+                return {
+                    x: skill.name,
+                    y: skill.mostRecentScore,
+                    confidenceInterval: 16
+                }
+            });
+            const freeResponses = res.data.frqs;
+            const overallScore = res.data.performanceScores.overall;
+            // they all have a confidence interval of 16 for now
+            const predictivePoints = [
+                {
+                    x: "Growth",
+                    y: res.data.performanceScores.growth,
+                    confidenceInterval: 16
+                },
+                {
+                    x: "Longevity",
+                    y: res.data.performanceScores.longevity,
+                    confidenceInterval: 16
+                },
+                {
+                    x: "Culture",
+                    y: res.data.performanceScores.culture,
+                    confidenceInterval: 16
+                },
+                {
+                    x: "Performance",
+                    y: res.data.performanceScores.performance,
+                    confidenceInterval: 16
+                }
+            ];
+
+            let self = this;
+            self.setState({
+                ...self.state,
+                loading: false,
+                psychScores: res.data.pyschScores,
+                candidate,
+                overallScore,
+                hardSkillPoints,
+                predictivePoints,
+                freeResponses
+            });
         })
         .catch(error => {
             console.log("error: ", error);
@@ -59,76 +108,6 @@ class Results extends Component {
                 console.log(error.response.data);
             }
         });
-
-
-        let self = this;
-        let candidate = {}, overallScore = undefined, hardSkills = [], predictiveInsights = [];
-
-        if (profileUrl === 'Stephen-Dorn-2-9f66bf7eeac18994') {
-            candidate = {
-                name: 'Stephen Dorn',
-                title: 'Software Developer',
-                email: 'stevedorn9@gmail.com',
-            };
-            overallScore = 116;
-            hardSkills = [
-                {
-                    x: "Full Stack",
-                    y: 134,
-                },
-                {
-                    x: "Version Control",
-                    y: 107,
-                },
-                {
-                    x: "Machine Learning",
-                    y: 118,
-                },
-                {
-                    x: "Startup",
-                    y: 68,
-                }
-            ];
-            predictiveInsights = [
-                {
-                    x: "Growth",
-                    y: 134,
-                },
-                {
-                    x: "Performance",
-                    y: 107,
-                },
-                {
-                    x: "Culture Fit",
-                    y: 118,
-                },
-                {
-                    x: "Longevity",
-                    y: 68,
-                }
-            ];
-        }
-
-        const freeResponses = [
-            {
-                question: "What is your vision for Dream Home?",
-                answer: "My vision for Dream Home is that it becomes a company that builds homes that are made through renewable energy technology and can be sustainable without the grid. Dream Home would own a home building company, an electric  machinery equipment company, and an alternative energy company to power the equipment. Though this will not be the only route people can take, we would ensure that the technology investments actually make it cheaper and more sustainable at the same time, what's not to love? These homes would be built to be more reliable and less expensive than conventional homes. I see this spreading literally everywhere. By letting people build homes for free even if they do not buy it, we are building a brand and reputation."
-            },
-            {
-                question: "Dissect the model of a billion dollar startup of your choice. Why and how did they grow?",
-                answer: "Spotify started out with the idea of bridging the gap between owning music and downloading it illegally on the internet. After Napster collapsed, they were frustrated at how hard it was to acquire music digitally.  They decided to create a simple two-tier model for streaming music legally, a free radio-like package, and a paid unlimited streaming package. By offering users a free version, they could test their product without even buying it. You could finally choose the music you wanted to listen to, even somewhat for free. Their logic is that even though 37.5 million users use it for free, they are still using it and that's a potential for a new customer.  On the flip side, they have negotiated with just about every music label and has the largest music collection, as more continue to join Spotify since their base is the largest of any music streaming service. They have kept a loyal fan base from the start, and they continue to do so with the music labels and customers."
-            },
-            {
-                question: "Define the customer (psychographic, behavioral, etc.). New home builder? Consumer?",
-                answer: "The ideal customer is someone that has already owns a home. The reason I say this is because someone who's owned an older home understands the costs that are involved with upkeeping an old home. This is also a customer that is currently selling a home but has not bought one yet, someone who is dissatisfied with their current home, or someone who wants to downsize their home and save money. The customer will be anywhere from age 25 to 100, but more specifically the focus should be on people that are maybe 30-60 and have owned a home for a few years at least. The new home builder will be a younger company that exists in a region where home growth is large. They will have to have an entrepreneurial spirit and work with us to grow one another. The ideal situation is that the home builder integrates vertically with Dream Home."
-            }
-        ];
-
-        self.setState({
-            ...self.state,
-            user, candidate, overallScore, hardSkills, predictiveInsights, freeResponses
-        });
-
     }
 
 
@@ -143,12 +122,6 @@ class Results extends Component {
 
 
     makeAnalysisSection() {
-        const predictiveDataPoints = [
-            {x: "Growth", y: 134, confidenceInterval: 14},
-            {x: "Performance", y: 87, confidenceInterval: 12},
-            {x: "Culture Fit", y: 62, confidenceInterval: 15},
-            {x: "Longevity", y: 113, confidenceInterval: 9}
-        ];
         const hardSkillsDataPoints = [
             {x: "Full Stack", y: 120, confidenceInterval: 13},
             {x: "Version Control", y: 132, confidenceInterval: 11},
@@ -158,7 +131,7 @@ class Results extends Component {
 
         return (
             <div className="center aboutMeSection" style={style.tabContent}>
-                <div className="lightBlackBackground" style={style.candidateScore}>
+                <div style={style.candidateScore}>
                     <div className="paddingTop20px">
                         <div
                             className="font24px font20pxUnder700 font16pxUnder500 grayText">
@@ -222,7 +195,7 @@ class Results extends Component {
                 </div>
                 <div>
                     <PredictiveGraph
-                        dataPoints={predictiveDataPoints}
+                        dataPoints={this.state.predictivePoints}
                         height={400}
                     />
                 </div>
@@ -322,7 +295,7 @@ class Results extends Component {
                 </div>
                 <div>
                     <PredictiveGraph
-                        dataPoints={hardSkillsDataPoints}
+                        dataPoints={this.state.hardSkillPoints}
                         height={400}
                     />
                 </div>
@@ -332,8 +305,22 @@ class Results extends Component {
 
 
     makePsychSection() {
+        const psychScores = this.state.psychScores;
+
+        
+
+        const descriptions = {
+            Dimension: "af paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
+            Temperament: "Temp desc jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
+            Viewpoint: "view desc af paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
+            Methodology: "method paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
+            Experientiality: "exp paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
+            Ethos: "ethos paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
+            Belief: "belief paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa"
+        }
+
         return (
-            <div>
+            <div className="fillScreen">
 
             </div>
         )
@@ -364,20 +351,21 @@ class Results extends Component {
 
 
     render() {
-        const user = this.state.user;
+        const user = this.props.currentUser;
         const candidate = this.state.candidate;
         const hardSkills = this.state.hardSkills;
         const predictiveInsights = this.state.predictiveInsights;
-        const profileUrl = "Stephen-Dorn-2-9f66bf7eeac18994";
 
         let mailtoEmail = undefined;
         if (candidate) {
             mailtoEmail = "mailto:" + candidate.email;
         }
 
-        const analysisSection = this.makeAnalysisSection();
-        const responsesSection = this.makeResponsesSection();
-        const psychSection = this.makePsychSection();
+        const loading = this.state.loading;
+        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress/></div>
+        const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
+        const responsesSection = loading ? loadingArea : this.makeResponsesSection();
+        const psychSection = loading ? loadingArea : this.makePsychSection();
 
         return (
             <div>
@@ -386,80 +374,79 @@ class Results extends Component {
                     <title>{candidate.name} | Moonshot</title>
                     <meta name="description" content="Results user view."/>
                 </MetaTags>
-                {user ?
-                    <div>
-                        {candidate ?
-                            <div>
-                                <div className="blackBackground paddingBottom40px">
-                                    <div className="headerDiv"/>
-                                    <div className="profileInfoSkills">
-                                        <img style={style.leftTriangles} src="images/LeftTriangles.png" />
-                                        <img style={style.rightTriangles} src="images/RightTriangles.png" />
-                                        <div className="center">
-                                            <div style={style.imgContainer}>
-                                                <img
-                                                    src="/images/profilePictures/Steve.png"
-                                                    alt="Profile picture"
-                                                    style={/*style.img*/style.SteveImg}
-                                                />
-                                            </div>
-                                            <div>
-                                                <div
-                                                    className="grayText font26px font14pxUnder700">{candidate.name}
-                                                </div>
-                                                {candidate.title ?
-                                                    <div className="grayText font18px font12pxUnder500">
-                                                        {candidate.title}
-                                                    </div>
-                                                    : null
-                                                }
-                                                {profileUrl ?
-                                                    <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
-                                                       href={`/profile?user=${profileUrl}`}>Profile</a>
-                                                    : null
-                                                }
-                                                <br/>
-                                                <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
-                                                   href={mailtoEmail}>Contact</a>
-                                            </div>
+                <div>
+                    {candidate ?
+                        <div>
+                            <div className="blackBackground paddingBottom40px">
+                                <div className="headerDiv"/>
+                                <div className="profileInfoSkills">
+                                    <img style={style.leftTriangles} src="images/LeftTriangles.png" />
+                                    <img style={style.rightTriangles} src="images/RightTriangles.png" />
+                                    <div className="center">
+                                        <div style={style.imgContainer}>
+                                            <img
+                                                src="/images/profilePictures/Steve.png"
+                                                alt="Profile picture"
+                                                style={/*style.img*/style.SteveImg}
+                                            />
                                         </div>
-                                        <Tabs
-                                            style={style.topTabs}
-                                            inkBarStyle={{background: 'white'}}
-                                            tabItemContainerStyle={{width: '40%'}}
-                                            className="myPathwaysTabs"
-                                        >
-                                            <Tab label="Analysis" style={style.topTab}>
-                                                <div className="tabsShadow" style={{position:"absolute"}}>
-                                                    <div/>
+                                        <div>
+                                            <div
+                                                className="grayText font26px font14pxUnder700">{candidate.name}
+                                            </div>
+                                            {candidate.title ?
+                                                <div className="grayText font18px font12pxUnder500">
+                                                    {candidate.title}
                                                 </div>
-                                                {analysisSection}
-                                            </Tab>
-                                            <Tab label="Psych" style={style.topTab}>
-                                                <div className="tabsShadow" style={{position:"absolute"}}>
-                                                    <div/>
-                                                </div>
-                                                {psychSection}
-                                            </Tab>
-                                            <Tab label="Responses" style={style.topTab}>
-                                                <div className="tabsShadow">
-                                                    <div/>
-                                                </div>
-                                                {responsesSection}
-                                            </Tab>
-                                        </Tabs>
+                                                : null
+                                            }
+                                            {this.props.params.profileUrl ?
+                                                <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
+                                                   href={`/profile?user=${this.props.params.profileUrl}`}>Profile</a>
+                                                : null
+                                            }
+                                            <br/>
+                                            <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
+                                               href={mailtoEmail}>Contact</a>
+                                        </div>
                                     </div>
+                                    <Tabs
+                                        style={style.topTabs}
+                                        inkBarStyle={{background: 'white'}}
+                                        tabItemContainerStyle={{width: '40%'}}
+                                        className="myPathwaysTabs"
+                                    >
+                                        <Tab label="Analysis" style={style.topTab}>
+                                            <div className="tabsShadow" style={{position:"absolute"}}>
+                                                <div/>
+                                            </div>
+                                            {analysisSection}
+                                        </Tab>
+                                        <Tab label="Psych" style={style.topTab}>
+                                            <div className="tabsShadow" style={{position:"absolute"}}>
+                                                <div/>
+                                            </div>
+                                            {psychSection}
+                                        </Tab>
+                                        <Tab label="Responses" style={style.topTab}>
+                                            <div className="tabsShadow">
+                                                <div/>
+                                            </div>
+                                            {responsesSection}
+                                        </Tab>
+                                    </Tabs>
                                 </div>
-
                             </div>
-                            :
-                            <div>
-                                <div className="orangeToYellowGradient halfHeight"/>
-                                <div className="fullHeight"/>
-                                <div className="fullHeight"/>
-                            </div>}
-                    </div>
-                    : null}
+
+                        </div>
+                        :
+                        <div>
+                            <div className="blackBackground halfHeight"/>
+                            <div className="fullHeight"/>
+                            <div className="fullHeight"/>
+                        </div>
+                    }
+                </div>
             </div>
         );
     }

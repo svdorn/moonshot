@@ -2,8 +2,9 @@ const sanitizeHtml = require('sanitize-html');
 const nodemailer = require('nodemailer');
 const credentials = require('../credentials');
 
-var Users = require('../models/users.js');
-var Emailaddresses = require('../models/emailaddresses.js');
+const Users = require('../models/users.js');
+const Emailaddresses = require('../models/emailaddresses.js');
+const Businesses = require('../models/businesses.js');
 
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
@@ -538,6 +539,28 @@ function verifyUser(user, verificationToken) {
 }
 
 
+// test a function for how long it takes
+async function speedTest(trials, functionToTest) {
+    let total = 0;
+    for (let i = 1; i <= trials; i++) {
+        const millisStart = (new Date()).getTime();
+
+        const returnValue = functionToTest();
+
+        if (typeof returnValue === "object" && typeof returnValue.then === "function") {
+            await returnValue;
+        }
+
+        const millisEnd = (new Date()).getTime();
+        console.log(`${(millisEnd - millisStart)} milliseconds`);
+        total += (millisEnd - millisStart);
+    }
+    const average = total / trials;
+
+    console.log(`\nAverage time: ${average} milliseconds`);
+}
+
+
 // DOES NOT WORK FOR REMOVING DUPLICATE OBJECTS, ONLY STRINGS/INTS
 function removeDuplicates(a) {
     // the hash object
@@ -607,6 +630,7 @@ const helperFunctions = {
     randomInt,
     frontEndUser,
     getAndVerifyUser,
+    speedTest,
 
     COMPLETE_CLEAN,
     FOR_EMPLOYER,

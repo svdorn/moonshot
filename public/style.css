@@ -1341,6 +1341,7 @@ form > h1 {
 .pointBox {
     width: 40px;
     border-radius: 8px;
+    z-index: 20;
     /* to vertically center */
     transform: translateY(50%);
 }
@@ -1352,6 +1353,7 @@ form > h1 {
     height: 2px;
     width: 10px;
     transform: translateY(1px);
+    z-index: 10;
 }
 
 
