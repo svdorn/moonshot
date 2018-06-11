@@ -228,14 +228,14 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [adminEmails[i]];
-            let subject = "You've Been Invited!";
+            let subject = businessName + " Invited you to be an Admin on Moonshot";
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:60%; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by ' + userName + ' from ' + businessName + ' to be an account admin!'
+                    + '<p style="width:60%; display:inline-block; text-align:left;">' + userName + ' invited you to be an admin for ' + businessName + '&#39;s predictive candidate evaluations.'
                     + ' Please click the button below to create your account.'
-                    + ' Once you&#39;ve created your account you can begin adding other admins, employees, and candidates, as well as review the results of your evaluations.</p>'
-                    + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
+                    + ' Once you&#39;ve created your account you can begin adding other admins, employees, and candidates, as well as grade employees and review evaluation results.</p>'
+                    + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to Moonshot Insights and candidate predictions!</p><br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode
                     + '">Create Account</a>'
