@@ -1036,12 +1036,10 @@ class BusinessHome extends Component {
                                  style={{marginBottom: '50px'}}>
                                 The New Baseline Evaluation
                                 <div className="infoTextContainer">
-                                    <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
-                                        <div>Free for First Position</div>
+                                    <div className="infoText i flex font18px font16pxUnder700 font10pxUnder400 whiteText" style={{margin: 'auto'}}>
+                                        <div>Free for First Active Position</div>
                                         <div>•</div>
-                                        <div>Unlimited Evaluations</div>
-                                        <div>•</div>
-                                        <div>Unlimited Hires</div>
+                                        <div>Unlimited Evaluations of your Applicants</div>
                                     </div>
                                 </div>
                             </div>
@@ -1060,7 +1058,7 @@ class BusinessHome extends Component {
                                         <span className="whiteText font30px font24pxUnder400">
                                             <br/><span style={{display: "inline-block", marginTop:"3px"}}>FREE</span>
                                             <br/>
-                                            <i className="font12px">for first position</i>
+                                            <i className="font12px">for first active position</i>
                                         </span>
                                     </div>
                                     <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
@@ -1089,7 +1087,7 @@ class BusinessHome extends Component {
                                             <i className="font12px" style={{display: "inline-block", marginBottom:"9px"}}>Starting at</i>
                                             <br/>$79
                                             <br/>
-                                            <i className="font12px">per additional position/month</i>
+                                            <i className="font12px">per active position/month</i>
                                         </span>
                                     </div>
                                     <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
