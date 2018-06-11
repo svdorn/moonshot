@@ -9,7 +9,6 @@ import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-route
 
 import Login from './components/pages/login';
 import Signup from './components/pages/signup';
-import AddUser from './components/pages/addUser';
 import MyCandidates from './components/pages/businessPages/myCandidates';
 import MyEmployees from './components/pages/businessPages/myEmployees';
 import MyEvaluations from './components/pages/businessPages/myEvaluations';
@@ -19,7 +18,6 @@ import EmployeeResults from './components/pages/businessPages/employeeResults';
 import BusinessHome from './components/pages/businessHome';
 import Main from './main';
 import AuthenticatedComponent from './components/AuthenticatedComponent';
-import Home from './components/pages/home';
 import Profile from './components/pages/profile';
 import Settings from './components/pages/settings';
 import VerifyEmail from './components/pages/verifyEmail';
@@ -28,7 +26,6 @@ import ChangePassword from './components/pages/changepasswordforgot';
 import ChangeTempPassword from './components/pages/changeTempPassword';
 import ResumeAnalysis from './components/pages/resumeAnalysis';
 import ContactUs from './components/pages/contactUs';
-import Onboarding from './components/pages/onboarding';
 import Error404 from './components/pages/error404';
 import Unsubscribe from './components/pages/unsubscribe';
 import ReferralCode from './components/pages/referralCode';
@@ -68,7 +65,6 @@ const routes = (
             <IndexRoute component={BusinessHome} />
             <Route path='login' component={Login} />
             <Route path="signup" component={Signup} />
-            <Route path="addUser" component={AuthenticatedComponent} page={<AddUser/>} userType={businessUserTypes} />
             <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType={businessUserTypes} />
             <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessUserTypes} />
             <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} />
@@ -76,7 +72,6 @@ const routes = (
             <Route path="results/:profileUrl/:positionId" component={AuthenticatedComponent} page={<Results />} userType={businessUserTypes} />
             <Route path="employeeResults" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessUserTypes} />
             <Route path="profile" component={Profile} />
-            <Route path="forCandidates" component={Home} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
             <Route path="verifyEmail" component={VerifyEmail} />
             <Route path="forgotPassword" component={ForgotPassword} />
@@ -84,7 +79,6 @@ const routes = (
             <Route path="changeTempPassword" component={ChangeTempPassword} />
             <Route path="contactUs" component={ContactUs} />
             <Route path="resumeAnalysis" component={ResumeAnalysis} />
-            <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding/>} userType={candidateUserTypes} />
             <Route path="unsubscribe" component={Unsubscribe} />
             <Route path="referral" component={ReferralCode} />
             <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
