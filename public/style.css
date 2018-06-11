@@ -1134,6 +1134,14 @@ form > h1 {
 .slightlyRoundedButton:focus {
     outline: none;
 }
+.veryRoundedButton {
+    border-radius: 6px 6px 6px 6px;
+    border: none;
+    cursor: pointer;
+}
+.veryRoundedButton:focus {
+    outline: none;
+}
 .pinkToPurpleButtonGradient {
     background: linear-gradient(to right, #7d22dc, #d45279, #7d22dc);
     background-position-x: -80px;
