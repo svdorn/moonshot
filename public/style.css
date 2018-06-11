@@ -696,7 +696,7 @@ form > h1 {
 .flex { display: flex; }
 .i { font-style: italic; }
 .infoText { margin: 0; }
-.infoText.notFull { max-width: calc(1040px/2 - 150px)}
+.infoText.notFull { max-width: calc(1040px/2 - 100px)}
 .infoText.flex {
     justify-content: space-between;
     flex-direction: row;

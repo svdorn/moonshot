@@ -805,8 +805,8 @@ class BusinessHome extends Component {
                                         See Demo
                                     </div>
                                 </div>
-                                <div className="infoText i flex font12pxUnder400">
-                                    <div>Free for first position</div>
+                                <div className="infoText i flex font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600 font10pxUnder400">
+                                    <div>Free for first active position</div>
                                     <div>•</div>
                                     <div>Unlimited evaluations</div>
                                 </div>
