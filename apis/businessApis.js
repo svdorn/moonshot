@@ -99,7 +99,7 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [candidateEmails[i]];
-            let subject = "You've Been Invited!";
+            let subject = businessName + "Invited you to the Next Round";
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
@@ -141,7 +141,7 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [employeeEmails[i]];
-            let subject = "You've Been Invited!";
+            let subject = businessName + " Invited you as an Employee";
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
