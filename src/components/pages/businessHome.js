@@ -412,6 +412,7 @@ class BusinessHome extends Component {
             {
                 title: (<div>Employee<br/>Completion</div>),
                 info: "Employees complete the evaluation to create a baseline for candidates.",
+                belowInfo: "Not necessary to get started.",
                 list: [
                     "Create Baseline",
                     "Better Understand Employers",
@@ -422,6 +423,7 @@ class BusinessHome extends Component {
             {
                 title: (<div>Manager<br/>Feedback</div>),
                 info: "Managers complete a ~2 minute assessment for each employee so Moonshot can create performance profiles to analyze candidates.",
+                belowInfo: "Not necessary to get started.",
                 list: [
                     "Performance Profiles",
                     "Performance Management"
@@ -502,6 +504,11 @@ class BusinessHome extends Component {
                         <div>
                             <div>
                                 { processObjects[this.state.infoIndex].info }
+                                { processObjects[this.state.infoIndex].belowInfo ?
+                                <div className="font14px font12pxUnder850 font10pxUnder700 font8pxUnder400 marginTop10px">
+                                    <i>{ processObjects[this.state.infoIndex].belowInfo }</i>
+                                </div>
+                                : null }
                             </div>
                         </div>
                         <div/>
@@ -985,7 +992,7 @@ class BusinessHome extends Component {
                                         onClick={this.handleOpen}
                                 >
                                     <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
-                                        {"Learn More"}
+                                        {"Try for Free"}
                                     </div>
                                 </button>
                             </div>
