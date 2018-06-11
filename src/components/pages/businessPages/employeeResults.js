@@ -360,8 +360,8 @@ class EmployeeResults extends Component {
                                 <div className="blackBackground paddingBottom40px">
                                     <div className="headerDiv"/>
                                     <div className="profileInfoSkills">
-                                        <img style={style.leftTriangles} src="images/LeftTriangles.png" />
-                                        <img style={style.rightTriangles} src="images/RightTriangles.png" />
+                                        <img style={style.leftTriangles} src="/images/LeftTriangles.png" />
+                                        <img style={style.rightTriangles} src="/images/RightTriangles.png" />
                                         <div className="center">
                                             <div style={style.imgContainer}>
                                                 <img

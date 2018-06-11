@@ -140,7 +140,7 @@ class PsychBreakdown extends Component {
                 <div className="archetype center lightBlackBackground">
                     <div className="font20px">Psychometric Breakdown</div>
                     <img src={"/icons/archetypes/Innovator.png"} />
-                    <div>{this.state.archetype}</div>
+                    <div>{this.props.archetype}</div>
                 </div>
                 <div className="statsAndDescription" style={coloredText}>
                     <div className="stats lightBlackBackground">
