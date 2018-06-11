@@ -21,6 +21,7 @@ class Results extends Component {
             hardSkillPoints: [],
             predictivePoints: [],
             freeResponses: [],
+            psychScores: [],
             loading: true
         };
     }
@@ -92,7 +93,13 @@ class Results extends Component {
             let self = this;
             self.setState({
                 ...self.state,
-                loading: false, candidate, overallScore, hardSkillPoints, predictivePoints, freeResponses
+                loading: false,
+                psychScores: res.data.pyschScores,
+                candidate,
+                overallScore,
+                hardSkillPoints,
+                predictivePoints,
+                freeResponses
             });
         })
         .catch(error => {
@@ -298,11 +305,9 @@ class Results extends Component {
 
 
     makePsychSection() {
-        const fakeResults = [
-            {
+        const psychScores = this.state.psychScores;
 
-            }
-        ]
+        
 
         const descriptions = {
             Dimension: "af paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
