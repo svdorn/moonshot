@@ -47,16 +47,17 @@ function POST_emailInvites(req, res) {
     const body = req.body;
     const candidateEmails = sanitize(body.candidateEmails);
     const employeeEmails = sanitize(body.employeeEmails);
-    const managerEmails = sanitize(body.managerEmails);
+    // const managerEmails = sanitize(body.managerEmails);
     const adminEmails = sanitize(body.adminEmails);
     const userId = sanitize(body.currentUserInfo.userId);
     const userName = sanitize(body.currentUserInfo.userName);
     const verificationToken = sanitize(body.currentUserInfo.verificationToken);
     const companyId = sanitize(body.currentUserInfo.companyId);
     const positionId = sanitize(body.currentUserInfo.positionId);
+    const positionName = sanitize(body.currentUserInfo.positionName);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!candidateEmails || !employeeEmails || !managerEmails || !adminEmails || !userId || !userName || !companyId || !verificationToken || !positionId) {
+    if (!candidateEmails || !employeeEmails || !adminEmails || !userId || !userName || !companyId || !verificationToken || !positionId || !positionName) {
         return res.status(400).send("Bad request.");
     }
 
@@ -104,10 +105,11 @@ function POST_emailInvites(req, res) {
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:60%; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by ' + userName + ' from ' + businessName + ' as a candidate!'
-                    + ' Please click the button below to create your account.'
-                    + ' Once you&#39;ve created your account you can begin your evaluation!</p>'
-                    + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
+                    + '<p style="width:60%; display:inline-block; text-align:left;">&#09;Congratulations, ' + businessName
+                    + ' advanced you to next step for the ' + positionName + ' position. The next step is completing ' + businessName + '&#39;s evaluation on Moonshot.'
+                    + ' Please click the button below to create your account. Once you&#39;ve created your account, you can begin your evaluation.'
+                    + '</p>'
+                    + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to Moonshot and congrats on advancing to the next steps for ' + positionName + ' at ' + businessName + '!</p><br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode
                     + '">Create Account</a>'
@@ -142,13 +144,13 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [employeeEmails[i]];
-            let subject = businessName + " Invited you as an Employee";
+            let subject = businessName + " Invited you to take " + positionName + " Position Evaluation";
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:60%; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by ' + userName + ' from ' + businessName + ' as an employee!'
-                    + ' Please click the button below to create your account.'
-                    + ' Once you&#39;ve created your account you can begin your evaluation!</p>'
+                    + '<p style="width:60%; display:inline-block; text-align:left;">' + userName + ' invited you to complete an evaluation for ' + businessName + '&#39;s ' + positionName + ' position.'
+                    + ' Your participation will help create a baseline for ' + businessName + '&#39;s predictive candidate evaluations for incoming applicants.'
+                    + ' Please click the button below to create an account. Once you&#39;ve created your account you can begin your evaluation!</p>'
                     + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode
@@ -173,47 +175,47 @@ function POST_emailInvites(req, res) {
             })
         }
         // Send manager emails
-        for (let i = 0; i < managerEmails.length; i++) {
-            // add code to the position
-            const userCode = crypto.randomBytes(64).toString('hex');
-            if (position.managerCodes) {
-                position.managerCodes.push(userCode);
-            } else {
-                position.managerCodes = [];
-                position.managerCodes.push(userCode);
-            }
-            // send email
-            let recipient = [managerEmails[i]];
-            let subject = "You've Been Invited!";
-            let content =
-                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                    + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:60%; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by ' + userName + ' from ' + businessName + ' as a manager!'
-                    + ' Please click the button below to create your account.'
-                    + ' Once you&#39;ve created your account you can begin grading your employees, tracking candidates, and reviewing evaluation results!</p>'
-                    + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
-                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
-                    + code + "&userCode=" + userCode
-                    + '">Create Account</a>'
-                    + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
-                    + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                    + '<div style="text-align:left;width:60%;display:inline-block;">'
-                        + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
-                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
-                        + '</div>'
-                    + '</div>'
-                + '</div>';
-
-            const sendFrom = "Moonshot";
-            sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-                if (!success) {
-                    res.status(500).send(msg);
-                }
-            })
-        }
+        // for (let i = 0; i < managerEmails.length; i++) {
+        //     // add code to the position
+        //     const userCode = crypto.randomBytes(64).toString('hex');
+        //     if (position.managerCodes) {
+        //         position.managerCodes.push(userCode);
+        //     } else {
+        //         position.managerCodes = [];
+        //         position.managerCodes.push(userCode);
+        //     }
+        //     // send email
+        //     let recipient = [managerEmails[i]];
+        //     let subject = "You've Been Invited!";
+        //     let content =
+        //         '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+        //             + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
+        //             + '<p style="width:60%; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by ' + userName + ' from ' + businessName + ' as a manager!'
+        //             + ' Please click the button below to create your account.'
+        //             + ' Once you&#39;ve created your account you can begin grading your employees, tracking candidates, and reviewing evaluation results!</p>'
+        //             + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
+        //             + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
+        //             + code + "&userCode=" + userCode
+        //             + '">Create Account</a>'
+        //             + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
+        //             + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
+        //             + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
+        //             + '<div style="text-align:left;width:60%;display:inline-block;">'
+        //                 + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
+        //                 + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+        //                 + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+        //                 + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
+        //                 + '</div>'
+        //             + '</div>'
+        //         + '</div>';
+        //
+        //     const sendFrom = "Moonshot";
+        //     sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+        //         if (!success) {
+        //             res.status(500).send(msg);
+        //         }
+        //     })
+        // }
         // Send admin emails
         for (let i = 0; i < adminEmails.length; i++) {
             // add code to the position
@@ -232,7 +234,7 @@ function POST_emailInvites(req, res) {
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
                     + '<p style="width:60%; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by ' + userName + ' from ' + businessName + ' to be an account admin!'
                     + ' Please click the button below to create your account.'
-                    + ' Once you&#39;ve created your account you can begin adding other admins, managers, employees, and candidates, as well as review the results of your evaluations.</p>'
+                    + ' Once you&#39;ve created your account you can begin adding other admins, employees, and candidates, as well as review the results of your evaluations.</p>'
                     + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode

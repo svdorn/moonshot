@@ -37,7 +37,7 @@ class AddUserDialog extends Component {
             tab: "Candidate",
             numCandidateEmails: 1,
             numEmployeeEmails: 1,
-            numManagerEmails: 1,
+            //numManagerEmails: 1,
             numAdminEmails: 1,
             formErrors: false,
         }
@@ -88,7 +88,7 @@ class AddUserDialog extends Component {
               position: position,
               numCandidateEmails: 1,
               numEmployeeEmails: 1,
-              numManagerEmails: 1,
+              //numManagerEmails: 1,
               numAdminEmails: 1,
               formErrors: false,
           });
@@ -103,7 +103,7 @@ class AddUserDialog extends Component {
         // Get the email address out of the objects and store in an array
         let candidateEmails = [];
         let employeeEmails = [];
-        let managerEmails = [];
+        //let managerEmails = [];
         let adminEmails = [];
 
         // Find position in positions array
@@ -127,9 +127,9 @@ class AddUserDialog extends Component {
                 case "employeeEmail":
                     employeeEmails.push(emailAddr);
                     break;
-                case "managerEmail":
-                    managerEmails.push(emailAddr);
-                    break;
+                // case "managerEmail":
+                //     managerEmails.push(emailAddr);
+                //     break;
                 case "adminEmail":
                     adminEmails.push(emailAddr);
                     break;
@@ -144,10 +144,12 @@ class AddUserDialog extends Component {
             userName: currentUser.name,
             companyId: currentUser.businessInfo.company.companyId,
             verificationToken: currentUser.verificationToken,
-            positionId: position._id
+            positionId: position._id,
+            positionName: position.name
         }
 
-        this.props.postEmailInvites(candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo);
+        // TODO: add manager emails in here when we do that
+        this.props.postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo);
     }
 
     addAnotherEmail() {
@@ -160,10 +162,10 @@ class AddUserDialog extends Component {
                 const numEmployeeEmails = this.state.numEmployeeEmails + 1;
                 this.setState({numEmployeeEmails})
                 break;
-            case "Manager":
-                const numManagerEmails = this.state.numManagerEmails + 1;
-                this.setState({numManagerEmails});
-                break;
+            // case "Manager":
+            //     const numManagerEmails = this.state.numManagerEmails + 1;
+            //     this.setState({numManagerEmails});
+            //     break;
             case "Admin":
                 const numAdminEmails = this.state.numAdminEmails + 1;
                 break;
@@ -277,20 +279,20 @@ class AddUserDialog extends Component {
             );
         }
 
-        let managerEmailSection = [];
-        for (let i = 0; i < this.state.numManagerEmails; i++) {
-            managerEmailSection.push(
-                <div>
-                    <Field
-                        name={"managerEmail" + i}
-                        component={renderTextField}
-                        label="Add Manager Email"
-                        type="email"
-                        validate={emailValidate}
-                    /><br/>
-                </div>
-            );
-        }
+        // let managerEmailSection = [];
+        // for (let i = 0; i < this.state.numManagerEmails; i++) {
+        //     managerEmailSection.push(
+        //         <div>
+        //             <Field
+        //                 name={"managerEmail" + i}
+        //                 component={renderTextField}
+        //                 label="Add Manager Email"
+        //                 type="email"
+        //                 validate={emailValidate}
+        //             /><br/>
+        //         </div>
+        //     );
+        // }
 
         let adminEmailSection = [];
         for (let i = 0; i < this.state.numAdminEmails; i++) {
@@ -357,30 +359,30 @@ class AddUserDialog extends Component {
             </div>
         );
 
-        const managerSection = (
-            <div className="center marginTop10px">
-                <div>
-                    {managerEmailSection}
-                </div>
-                <div className="marginTop20px">
-                    <i className="font14px underline clickable whiteText"
-                        onClick={this.addAnotherEmail.bind(this)}>
-                        +Add Another Email
-                        </i>
-                </div>
-                <div className="center marginTop10px">
-                    <i className="font14px underline clickable whiteText"
-                        onClick={this.handleScreenPrevious.bind(this)}>
-                        Back
-                    </i>
-                    <RaisedButton
-                        label="Next"
-                        onClick={this.handleScreenNext.bind(this)}
-                        className="raisedButtonBusinessHome marginLeft40px"
-                    />
-                </div>
-            </div>
-        );
+        // const managerSection = (
+        //     <div className="center marginTop10px">
+        //         <div>
+        //             {managerEmailSection}
+        //         </div>
+        //         <div className="marginTop20px">
+        //             <i className="font14px underline clickable whiteText"
+        //                 onClick={this.addAnotherEmail.bind(this)}>
+        //                 +Add Another Email
+        //                 </i>
+        //         </div>
+        //         <div className="center marginTop10px">
+        //             <i className="font14px underline clickable whiteText"
+        //                 onClick={this.handleScreenPrevious.bind(this)}>
+        //                 Back
+        //             </i>
+        //             <RaisedButton
+        //                 label="Next"
+        //                 onClick={this.handleScreenNext.bind(this)}
+        //                 className="raisedButtonBusinessHome marginLeft40px"
+        //             />
+        //         </div>
+        //     </div>
+        // );
 
         const adminSection = (
             <div className="center marginTop10px">
@@ -534,9 +536,9 @@ class AddUserDialog extends Component {
                             <Tab label="Employee" value="Employee" style={style.tab}>
                                 {employeeSection}
                             </Tab>
-                            <Tab label="Manager" value="Manager" style={style.tab}>
-                                {managerSection}
-                            </Tab>
+                            // <Tab label="Manager" value="Manager" style={style.tab}>
+                            //     {managerSection}
+                            // </Tab>
                             <Tab label="Admin" value="Admin" style={style.tab}>
                                 {adminSection}
                             </Tab>
@@ -560,7 +562,7 @@ class AddUserDialog extends Component {
                     </div>
                     <div className="whiteText font16px font12pxUnder500 marginTop20px">
                         Thanks for adding users for this position. Click <b className="blueTextHome font18px">Finish</b> to
-                        send emails to your candidates, employees, and/or managers with links so that they can take
+                        send emails to your candidates, employees, and/or admins with links so that they can take
                         the evaluation.
                     </div>
                     <div className="center marginTop30px">
