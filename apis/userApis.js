@@ -20,7 +20,9 @@ const { sanitize,
         getAndVerifyUser,
         frontEndUser,
         NO_TOKENS
-} = require('./helperFunctions.js');
+} = require('./helperFunctions');
+
+const { calculatePsychScores } = require('./psychApis');
 
 
 const userApis = {
@@ -897,7 +899,6 @@ async function POST_answerPsychQuestion(req, res) {
     }
 
     const answer = sanitize(req.body.answer);
-    //const answer = -4;
 
     // verify that the answer provided is valid
     const MINIMUM_SCORE = -5;
@@ -963,6 +964,7 @@ async function POST_answerPsychQuestion(req, res) {
     let response = facet.responses[facet.responses.length - 1];
     response.answer = currentQuestion.invertScore === true ? answer*(-1) : answer;
     response.answeredId = currentQuestion.questionId;
+    response.invertScore = currentQuestion.invertScore;
     response.endDate = new Date();
     const startDateMillis = (new Date(response.startDate)).getTime();
     // record number of milliseconds between starting and ending the question
@@ -1161,6 +1163,11 @@ async function POST_answerPsychQuestion(req, res) {
     }
 
     user.psychometricTest = psychometricTest;
+
+    // grade the test if it's finished
+    if (finishedTest) {
+        user = calculatePsychScores(user);
+    }
 
     let updatedUser = undefined;
     try {

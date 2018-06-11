@@ -40,6 +40,7 @@ const businessApis = require('./apis/businessApis');
 const adminApis = require('./apis/adminApis');
 const miscApis = require('./apis/miscApis');
 const skillApis = require('./apis/skillApis');
+const psychApis = require('./apis/psychApis');
 const mlFunctions = require('./apis/mlFunctions');
 const helperFunctions = require('./apis/helperFunctions');
 
@@ -62,8 +63,6 @@ app.use(session({
 
 // ----->> START APIS <<----- //
 
-
-//helperFunctions.speedTest(10);
 
 app.post("/user/resetFrizz", userApis.POST_resetFrizz);
 app.post("/user/reset24", userApis.POST_reset24);

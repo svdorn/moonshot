@@ -315,6 +315,8 @@ var usersSchema = mongoose.Schema({
                 responses: [{
                     // the question id of the question that was actually answered
                     answeredId: mongoose.Schema.Types.ObjectId,
+                    // whether the answer for this question should be flipped (e.g. 3 => -3)
+                    invertScore: Boolean,
                     // the answer (-5 to 5) that the user chose
                     answer: Number,
                     // exact date/time the user started the first phrasing of this question
