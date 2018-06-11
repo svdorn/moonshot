@@ -986,14 +986,9 @@ class BusinessHome extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="center">
-                                <button className="blueToDarkPurpleButtonGradient bigButton"
-                                        style={{marginTop: "35px", color: '#72d6f5'}}
-                                        onClick={this.handleOpen}
-                                >
-                                    <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
-                                        {"Try for Free"}
-                                    </div>
+                            <div className="center" style={{marginTop: "35px"}}>
+                                <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                    Try for Free
                                 </button>
                             </div>
                         </div>
@@ -1112,15 +1107,11 @@ class BusinessHome extends Component {
                                 alt="CrystalBall"
                                 className="crystalBall"
                             />
-                            <br/>
-                            <button className="blueToDarkPurpleButtonGradientReverse bigButton"
-                                    style={{marginTop: "25px", color: 'white'}}
-                                    onClick={this.handleOpen}
-                            >
-                                <div className="invertColorOnHover gradientBorderButtonInteriorGradient">
-                                    {"See the Future"}
-                                </div>
-                            </button>
+                            <div className="center" style={{marginTop: "20px"}}>
+                                <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                    Try for Free
+                                </button>
+                            </div>
                         </div>
                     </section>
                 </div>
