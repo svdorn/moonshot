@@ -12,7 +12,7 @@ import axios from 'axios';
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
-        hintStyle={{color: 'white'}}
+        hintStyle={{color: '#72d6f5'}}
         inputStyle={{color: '#72d6f5'}}
         underlineStyle={{color: '#72d6f5'}}
         errorText={touched && error}
@@ -313,14 +313,17 @@ class AddUserDialog extends Component {
         }
 
         const candidateSection = (
-            <div className="center marginTop10px">
+            <div className="center marginTop20px">
+                <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
+                    Candidates are incoming applicants that undergo psychometric and skills evaluations.
+                </div>
                 <div>
                     {candidateEmailSection}
                 </div>
-                <div className="marginTop20px">
+                <div className="marginTop15px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        +Add Another Email
+                        + Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -338,14 +341,17 @@ class AddUserDialog extends Component {
         );
 
         const employeeSection = (
-            <div className="center marginTop10px">
+            <div className="center marginTop20px">
+                <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
+                    Employees undergo psychometric and skill evals to create a baseline for evaluation.
+                </div>
                 <div>
                     {employeeEmailSection}
                 </div>
-                <div className="marginTop20px">
+                <div className="marginTop15px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        +Add Another Email
+                        + Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -388,14 +394,17 @@ class AddUserDialog extends Component {
         // );
 
         const adminSection = (
-            <div className="center marginTop10px">
+            <div className="center marginTop20px">
+                <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
+                    Administrators can add and remove users, grade employees, and view results.
+                </div>
                 <div>
                     {adminEmailSection}
                 </div>
-                <div className="marginTop20px">
+                <div className="marginTop15px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        +Add Another Email
+                        + Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -535,7 +544,6 @@ class AddUserDialog extends Component {
                         </div>
                         : null}
                         <Tabs
-                            style={{marginTop:"10px"}}
                             inkBarStyle={{background: 'white'}}
                             className="addUserTabs"
                             value={this.state.tab}
