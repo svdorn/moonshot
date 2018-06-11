@@ -151,8 +151,6 @@ class AddUserDialog extends Component {
             positionName: position.name
         }
 
-        console.log(currentUserInfo);
-
         // TODO: add manager emails in here when we do that
         this.props.postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo);
     }
@@ -443,9 +441,17 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                     >
-                        <div className="whiteText font18px font16pxUnder500" style={{width:"90%", margin:"40px auto"}}>
-                            Success, emails have been sent to users with instructions for them to sign up for the {this.state.position} position.
+                        <div className="whiteText font24px font20pxUnder500 marginTop20px">
+                            Success!
                         </div>
+                        <div className="whiteText font18px font16pxUnder500" style={{width:"90%", margin:"20px auto"}}>
+                            Success! Your invites have been sent to the users’ emails with sign up instructions for the Web Developer position!
+                        </div>
+                        <RaisedButton
+                            label="Done"
+                            onClick={this.handleClose}
+                            className="raisedButtonBusinessHome"
+                        />
                 </Dialog>
             );
         } else if (this.props.userPostedFailed) {
@@ -560,14 +566,12 @@ class AddUserDialog extends Component {
                     contentClassName="center"
                 >
                     <div className="whiteText font24px font20pxUnder500 marginTop10px">
-                        Finish
+                        Last Step
                     </div>
                     <div className="whiteText font16px font12pxUnder500 marginTop20px">
-                        Thanks for adding users for this position. Click <b className="blueTextHome font18px">Finish</b> to
-                        send emails to your candidates, employees, and/or admins with links so that they can take
-                        the evaluation.
+                        Wait! You have one more step! Click Finish to send the invites to your candidates, employees and/or admins so they can begin!
                     </div>
-                    <div className="center marginTop30px">
+                    <div className="center marginTop40px">
                         <i className="font14px underline clickable whiteText"
                             onClick={this.handleScreenPrevious.bind(this)}>
                             Back

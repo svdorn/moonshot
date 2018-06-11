@@ -104,7 +104,7 @@ function POST_emailInvites(req, res) {
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:60%; display:inline-block; text-align:left;">&#09;Congratulations, ' + businessName
+                    + '<p style="width:95%; display:inline-block; text-align:left;">&#09;Congratulations, ' + businessName
                     + ' advanced you to next step for the ' + positionName + ' position. The next step is completing ' + businessName + '&#39;s evaluation on Moonshot.'
                     + ' Please click the button below to create your account. Once you&#39;ve created your account, you can begin your evaluation.'
                     + '</p>'
@@ -115,7 +115,7 @@ function POST_emailInvites(req, res) {
                     + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
                     + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
                     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                    + '<div style="text-align:left;width:60%;display:inline-block;">'
+                    + '<div style="text-align:left;width:95%;display:inline-block;">'
                         + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
                         + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
                         + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
@@ -146,7 +146,7 @@ function POST_emailInvites(req, res) {
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:60%; display:inline-block; text-align:left;">' + userName + ' invited you to complete an evaluation for ' + businessName + '&#39;s ' + positionName + ' position.'
+                    + '<p style="width:95%; display:inline-block; text-align:left;">' + userName + ' invited you to complete an evaluation for ' + businessName + '&#39;s ' + positionName + ' position.'
                     + ' Your participation will help create a baseline for ' + businessName + '&#39;s predictive candidate evaluations for incoming applicants.'
                     + ' Please click the button below to create an account. Once you&#39;ve created your account you can begin your evaluation!</p>'
                     + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
@@ -156,7 +156,7 @@ function POST_emailInvites(req, res) {
                     + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
                     + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
                     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                    + '<div style="text-align:left;width:60%;display:inline-block;">'
+                    + '<div style="text-align:left;width:95%;display:inline-block;">'
                         + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
                         + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
                         + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
@@ -229,7 +229,7 @@ function POST_emailInvites(req, res) {
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:60%; display:inline-block; text-align:left;">' + userName + ' invited you to be an admin for ' + businessName + '&#39;s predictive candidate evaluations.'
+                    + '<p style="width:95%; display:inline-block; text-align:left;">' + userName + ' invited you to be an admin for ' + businessName + '&#39;s predictive candidate evaluations.'
                     + ' Please click the button below to create your account.'
                     + ' Once you&#39;ve created your account you can begin adding other admins, employees, and candidates, as well as grade employees and review evaluation results.</p>'
                     + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to Moonshot Insights and candidate predictions!</p><br/>'
@@ -239,7 +239,7 @@ function POST_emailInvites(req, res) {
                     + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
                     + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
                     + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                    + '<div style="text-align:left;width:60%;display:inline-block;">'
+                    + '<div style="text-align:left;width:95%;display:inline-block;">'
                         + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
                         + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
                         + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
