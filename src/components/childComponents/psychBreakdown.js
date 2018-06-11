@@ -10,6 +10,12 @@ class PsychBreakdown extends Component {
         }
     }
 
+
+    selectTitle(title) {
+        this.setState({ areaSelected: title });
+    }
+
+
     render() {
         const psychScores = this.props.psychScores;
 
@@ -44,7 +50,6 @@ class PsychBreakdown extends Component {
 
         // the actual data
         const personalityAreas = psychScores.map(area => {
-            console.log("area: ", area);
             // multiply by 10 to get a value between 0 and 100
             const middle80width = (area.stats.middle80.maximum - area.stats.middle80.minimum) * 10;
             const middle80leftPercentage = (area.stats.middle80.minimum + 5) * 10;
@@ -80,7 +85,7 @@ class PsychBreakdown extends Component {
             }
             return (
                 <div className="areaData center">
-                    <div className="title">
+                    <div className="title" onClick={() => this.selectTitle(area.name).bind(this)}>
                         {area.name}
                     </div>
                     <div className="middle80indicator" style={{...middle80style, ...middle80indicatorStyle}} />
@@ -90,7 +95,7 @@ class PsychBreakdown extends Component {
             )
         });
 
-        let areaSelectedInfo = "";
+        let areaSelectedDescription = "";
         if (this.state.areaSelected) {
             areaSelectedDescription = descriptions[this.state.areaSelected];
         }
@@ -99,10 +104,10 @@ class PsychBreakdown extends Component {
             "Select an area to see its description"
             :
             <div>
-                <div className="name" style={coloredText}>{this.state.areaSelected}</div>
-                <div className="description">
-                    <div>{areaSelectedDescription.left}</div>
-                    <div>{areaSelectedDescription.right}</div>
+                <div className="name font26px center" style={coloredText}>{this.state.areaSelected}</div>
+                <div className="descriptionParts">
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.left}</div>
+                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.right}</div>
                 </div>
                 <div className="youMedianMiddle">
                     <div>Your Score: {}</div>
