@@ -97,10 +97,7 @@ class MyEvaluationsPreview extends Component {
         if (editing) {
             clickableArea = (
                 <div className="grayText font16px font14pxUnder800 marginTop10px">
-                    <div className="clickable underline" style={{display: "inline-block"}}>
-                        View Evaluation
-                    </div>
-                    <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
+                    <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className="clickable underline" style={{display: "inline-block"}}>
                         Candidate Results
                     </div>
                     <div onClick={() => this.goTo("/myEmployees")} className="clickable underline marginLeft20px" style={{display: "inline-block"}}>
@@ -134,10 +131,10 @@ class MyEvaluationsPreview extends Component {
                 )
             } else {
                 clickableArea = (
-                    <div className="grayText font16px font14pxUnder800 marginTop10px">
-                        <div onClick={this.continueEval} className="clickable underline" style={{display: "inline-block"}}>
-                            Start/Continue
-                        </div>
+                    <div style={{marginTop: "20px"}}>
+                            <button className="veryRoundedButton mediumLargeButton font16px font14pxUnder800 purpleToBlueAnimate whiteText" onClick={this.continueEval} style={{padding: "5px 17px"}}>
+                                Start/Continue
+                            </button>
                     </div>
                 );
             }
@@ -167,7 +164,7 @@ class MyEvaluationsPreview extends Component {
                     <div className="font18px font16pxUnder800 blueTextHome">{this.props.name}</div>
                     <div className="grayText">{this.props.company} Evaluation</div>
                     {editing ? estimatedLength : null}
-                    {editing ? positionSkills : null}
+                    {editing ? positionSkills : <div className="marginTop20px">{positionSkills}</div>}
                     {clickableArea}
                 </div>
             </div>

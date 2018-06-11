@@ -1134,6 +1134,14 @@ form > h1 {
 .slightlyRoundedButton:focus {
     outline: none;
 }
+.veryRoundedButton {
+    border-radius: 6px 6px 6px 6px;
+    border: none;
+    cursor: pointer;
+}
+.veryRoundedButton:focus {
+    outline: none;
+}
 .pinkToPurpleButtonGradient {
     background: linear-gradient(to right, #7d22dc, #d45279, #7d22dc);
     background-position-x: -80px;
@@ -3161,6 +3169,7 @@ button.link {
 }
 .addUserTabs > div > button {
     font-size: 14px !important;
+    border: 0px !important;
 }
 
 .myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
@@ -3824,12 +3833,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginBottom40px { margin-bottom: 40px; }
 .marginBottom30px { margin-bottom: 30px; }
 .marginBottom20px { margin-bottom: 20px; }
+.marginBottom15px { margin-bottom: 15px; }
 .marginBottom10px { margin-bottom: 10px; }
 .marginBottom30pxImportant { margin-bottom: 30px !important; }
 .marginTop40px { margin-top: 40px; }
 .marginTop30px { margin-top: 30px; }
 .marginTop24px { margin-top: 24px; }
 .marginTop20px { margin-top: 20px; }
+.marginTop15px { margin-top: 15px; }
 .marginTop10px { margin-top: 10px; }
 .marginLeft40px { margin-left: 40px; }
 .marginLeft30px { margin-left: 30px; }

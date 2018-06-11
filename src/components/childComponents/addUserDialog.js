@@ -12,7 +12,7 @@ import axios from 'axios';
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
-        hintStyle={{color: 'white'}}
+        hintStyle={{color: '#72d6f5'}}
         inputStyle={{color: '#72d6f5'}}
         underlineStyle={{color: '#72d6f5'}}
         errorText={touched && error}
@@ -37,7 +37,7 @@ class AddUserDialog extends Component {
             tab: "Candidate",
             numCandidateEmails: 1,
             numEmployeeEmails: 1,
-            numManagerEmails: 1,
+            //numManagerEmails: 1,
             numAdminEmails: 1,
             formErrors: false,
         }
@@ -88,7 +88,7 @@ class AddUserDialog extends Component {
               position: position,
               numCandidateEmails: 1,
               numEmployeeEmails: 1,
-              numManagerEmails: 1,
+              //numManagerEmails: 1,
               numAdminEmails: 1,
               formErrors: false,
           });
@@ -103,7 +103,7 @@ class AddUserDialog extends Component {
         // Get the email address out of the objects and store in an array
         let candidateEmails = [];
         let employeeEmails = [];
-        let managerEmails = [];
+        //let managerEmails = [];
         let adminEmails = [];
 
         // Find position in positions array
@@ -127,9 +127,9 @@ class AddUserDialog extends Component {
                 case "employeeEmail":
                     employeeEmails.push(emailAddr);
                     break;
-                case "managerEmail":
-                    managerEmails.push(emailAddr);
-                    break;
+                // case "managerEmail":
+                //     managerEmails.push(emailAddr);
+                //     break;
                 case "adminEmail":
                     adminEmails.push(emailAddr);
                     break;
@@ -137,17 +137,22 @@ class AddUserDialog extends Component {
                     break;
             }
         }
+        console.log("here");
+        console.log(this.props.currentUser);
 
         const currentUser = this.props.currentUser;
+        console.log(this.props.currentUser);
         const currentUserInfo = {
             userId: currentUser._id,
             userName: currentUser.name,
             companyId: currentUser.businessInfo.company.companyId,
             verificationToken: currentUser.verificationToken,
-            positionId: position._id
+            positionId: position._id,
+            positionName: position.name
         }
 
-        this.props.postEmailInvites(candidateEmails, employeeEmails, managerEmails, adminEmails, currentUserInfo);
+        // TODO: add manager emails in here when we do that
+        this.props.postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo);
     }
 
     addAnotherEmail() {
@@ -160,10 +165,10 @@ class AddUserDialog extends Component {
                 const numEmployeeEmails = this.state.numEmployeeEmails + 1;
                 this.setState({numEmployeeEmails})
                 break;
-            case "Manager":
-                const numManagerEmails = this.state.numManagerEmails + 1;
-                this.setState({numManagerEmails});
-                break;
+            // case "Manager":
+            //     const numManagerEmails = this.state.numManagerEmails + 1;
+            //     this.setState({numManagerEmails});
+            //     break;
             case "Admin":
                 const numAdminEmails = this.state.numAdminEmails + 1;
                 break;
@@ -277,20 +282,20 @@ class AddUserDialog extends Component {
             );
         }
 
-        let managerEmailSection = [];
-        for (let i = 0; i < this.state.numManagerEmails; i++) {
-            managerEmailSection.push(
-                <div>
-                    <Field
-                        name={"managerEmail" + i}
-                        component={renderTextField}
-                        label="Add Manager Email"
-                        type="email"
-                        validate={emailValidate}
-                    /><br/>
-                </div>
-            );
-        }
+        // let managerEmailSection = [];
+        // for (let i = 0; i < this.state.numManagerEmails; i++) {
+        //     managerEmailSection.push(
+        //         <div>
+        //             <Field
+        //                 name={"managerEmail" + i}
+        //                 component={renderTextField}
+        //                 label="Add Manager Email"
+        //                 type="email"
+        //                 validate={emailValidate}
+        //             /><br/>
+        //         </div>
+        //     );
+        // }
 
         let adminEmailSection = [];
         for (let i = 0; i < this.state.numAdminEmails; i++) {
@@ -308,14 +313,17 @@ class AddUserDialog extends Component {
         }
 
         const candidateSection = (
-            <div className="center marginTop10px">
+            <div className="center marginTop20px">
+                <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
+                    Candidates are incoming applicants that undergo psychometric and skills evaluations.
+                </div>
                 <div>
                     {candidateEmailSection}
                 </div>
-                <div className="marginTop20px">
+                <div className="marginTop15px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        +Add Another Email
+                        + Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -333,14 +341,17 @@ class AddUserDialog extends Component {
         );
 
         const employeeSection = (
-            <div className="center marginTop10px">
+            <div className="center marginTop20px">
+                <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
+                    Employees undergo psychometric and skill evals to create a baseline for evaluation.
+                </div>
                 <div>
                     {employeeEmailSection}
                 </div>
-                <div className="marginTop20px">
+                <div className="marginTop15px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        +Add Another Email
+                        + Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -357,40 +368,43 @@ class AddUserDialog extends Component {
             </div>
         );
 
-        const managerSection = (
-            <div className="center marginTop10px">
-                <div>
-                    {managerEmailSection}
-                </div>
-                <div className="marginTop20px">
-                    <i className="font14px underline clickable whiteText"
-                        onClick={this.addAnotherEmail.bind(this)}>
-                        +Add Another Email
-                        </i>
-                </div>
-                <div className="center marginTop10px">
-                    <i className="font14px underline clickable whiteText"
-                        onClick={this.handleScreenPrevious.bind(this)}>
-                        Back
-                    </i>
-                    <RaisedButton
-                        label="Next"
-                        onClick={this.handleScreenNext.bind(this)}
-                        className="raisedButtonBusinessHome marginLeft40px"
-                    />
-                </div>
-            </div>
-        );
+        // const managerSection = (
+        //     <div className="center marginTop10px">
+        //         <div>
+        //             {managerEmailSection}
+        //         </div>
+        //         <div className="marginTop20px">
+        //             <i className="font14px underline clickable whiteText"
+        //                 onClick={this.addAnotherEmail.bind(this)}>
+        //                 +Add Another Email
+        //                 </i>
+        //         </div>
+        //         <div className="center marginTop10px">
+        //             <i className="font14px underline clickable whiteText"
+        //                 onClick={this.handleScreenPrevious.bind(this)}>
+        //                 Back
+        //             </i>
+        //             <RaisedButton
+        //                 label="Next"
+        //                 onClick={this.handleScreenNext.bind(this)}
+        //                 className="raisedButtonBusinessHome marginLeft40px"
+        //             />
+        //         </div>
+        //     </div>
+        // );
 
         const adminSection = (
-            <div className="center marginTop10px">
+            <div className="center marginTop20px">
+                <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
+                    Administrators can add and remove users, grade employees, and view results.
+                </div>
                 <div>
                     {adminEmailSection}
                 </div>
-                <div className="marginTop20px">
+                <div className="marginTop15px">
                     <i className="font14px underline clickable whiteText"
                         onClick={this.addAnotherEmail.bind(this)}>
-                        +Add Another Email
+                        + Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
@@ -436,9 +450,17 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                     >
-                        <div className="whiteText font18px font16pxUnder500" style={{width:"90%", margin:"40px auto"}}>
-                            Success, emails have been sent to users with instructions for them to sign up for the {this.state.position} position.
+                        <div className="blueTextHome font24px font20pxUnder500 marginTop20px">
+                            Success!
                         </div>
+                        <div className="whiteText font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
+                            Success! Your invites have been sent to the users emails with sign up instructions for the Web Developer position!
+                        </div>
+                        <RaisedButton
+                            label="Done"
+                            onClick={this.handleClose}
+                            className="raisedButtonBusinessHome marginTop10px"
+                        />
                 </Dialog>
             );
         } else if (this.props.userPostedFailed) {
@@ -477,7 +499,7 @@ class AddUserDialog extends Component {
                     contentClassName="center"
                 >
 
-                    <div className="whiteText font24px font20pxUnder500 marginTop20px">
+                    <div className="blueTextHome font24px font20pxUnder500 marginTop20px">
                         Select a position
                     </div>
                     <DropDownMenu value={this.state.position}
@@ -512,7 +534,7 @@ class AddUserDialog extends Component {
 
                     <form className="center">
                         <div
-                            className="whiteText font24px font20pxUnder500 marginTop10px">
+                            className="blueTextHome font24px font20pxUnder500 marginTop10px">
                             Add
                         </div>
                         {this.state.formErrors ?
@@ -522,7 +544,6 @@ class AddUserDialog extends Component {
                         </div>
                         : null}
                         <Tabs
-                            style={{marginTop:"10px"}}
                             inkBarStyle={{background: 'white'}}
                             className="addUserTabs"
                             value={this.state.tab}
@@ -533,9 +554,6 @@ class AddUserDialog extends Component {
                             </Tab>
                             <Tab label="Employee" value="Employee" style={style.tab}>
                                 {employeeSection}
-                            </Tab>
-                            <Tab label="Manager" value="Manager" style={style.tab}>
-                                {managerSection}
                             </Tab>
                             <Tab label="Admin" value="Admin" style={style.tab}>
                                 {adminSection}
@@ -555,15 +573,13 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                 >
-                    <div className="whiteText font24px font20pxUnder500 marginTop10px">
-                        Finish
+                    <div className="blueTextHome font24px font20pxUnder500 marginTop10px">
+                        Last Step
                     </div>
-                    <div className="whiteText font16px font12pxUnder500 marginTop20px">
-                        Thanks for adding users for this position. Click <b className="blueTextHome font18px">Finish</b> to
-                        send emails to your candidates, employees, and/or managers with links so that they can take
-                        the evaluation.
+                    <div className="whiteText font16px font12pxUnder500" style={{margin:"20px auto", width:"85%"}}>
+                        Wait! You have one more step! Click Finish to send the invites to your candidates, employees and/or admins so they can begin!
                     </div>
-                    <div className="center marginTop30px">
+                    <div className="center marginTop40px">
                         <i className="font14px underline clickable whiteText"
                             onClick={this.handleScreenPrevious.bind(this)}>
                             Back

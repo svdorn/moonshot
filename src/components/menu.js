@@ -24,7 +24,7 @@ const styles = {
 class Menu extends Component {
     constructor(props) {
         super(props);
-        let dropDownSelected = "Profile";
+        let dropDownSelected = "Account";
         if (this.props.location.pathname === '/settings') {
             dropDownSelected = "Settings";
         } else if (this.props.location.pathname.toLowerCase() === '/adduser') {
@@ -36,6 +36,7 @@ class Menu extends Component {
     }
 
     componentDidUpdate() {
+        console.log("start of update")
         if (this.props.location.pathname === '/settings') {
             if (this.state.dropDownSelected !== "Settings") {
                 this.setState({dropDownSelected: "Settings"});
@@ -49,9 +50,10 @@ class Menu extends Component {
                 this.setState({dropDownSelected: "Name"})
             }
         } else {
+            console.log("here");
             // set dropdown to be on Profile if not on settings or onboarding pages
-            if (this.state.dropDownSelected !== "Profile") {
-                this.setState({dropDownSelected: "Profile"});
+            if (this.state.dropDownSelected !== "Account") {
+                this.setState({dropDownSelected: "Account"});
             }
         }
     }
@@ -182,17 +184,16 @@ class Menu extends Component {
 
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
-        let hoverWidth = "52px";
-        if (pathname === '/profile' || pathname === '/businessprofile') {
-            dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-        }
+        let hoverWidth = "68px";
+        // if (pathname === '/profile' || pathname === '/businessprofile') {
+        //     dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+        // }
         if (pathname === '/settings') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
             // if settings is selected, the underline bar must be bigger
             // because "settings" is a bigger word
             hoverWidth = "67px";
-        }
-        if (pathname === '/adduser') {
+        } else if (pathname === '/adduser') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
             // if settings is selected, the underline bar must be bigger
             // because "settings" is a bigger word
@@ -246,7 +247,7 @@ class Menu extends Component {
                 {optionType: "url", title: "Admin", url: "/admin"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
-                    {optionType: "url", title: "Profile", url: "/profile"},
+                    {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "signOut"}
@@ -262,7 +263,7 @@ class Menu extends Component {
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     //{optionType: "url", title: "Profile", url: "/businessProfile"},
-                    {optionType: "url", title: "Profile", url: "/"},
+                    {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "url", title: "Add User", url: "/addUser"},
@@ -271,21 +272,21 @@ class Menu extends Component {
             ];
         }
         // if the current user is a manager for a business
-        else if (currentUser.userType === "manager") {
-            menuOptions = [
-                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
-                {optionType: "url", title: "Employees", url: "/myEmployees"},
-                {optionType: "separator"},
-                {optionType: "dropDown", components: [
-                    //{optionType: "url", title: "Profile", url: "/businessProfile"},
-                    {optionType: "url", title: "Profile", url: "/"},
-                    {optionType: "divider"},
-                    {optionType: "url", title: "Settings", url: "/settings"},
-                    {optionType: "url", title: "Add User", url: "/addUser"},
-                    {optionType: "signOut"}
-                ]}
-            ];
-        }
+        // else if (currentUser.userType === "manager") {
+        //     menuOptions = [
+        //         {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
+        //         {optionType: "url", title: "Employees", url: "/myEmployees"},
+        //         {optionType: "separator"},
+        //         {optionType: "dropDown", components: [
+        //             //{optionType: "url", title: "Profile", url: "/businessProfile"},
+        //             {optionType: "url", title: "Profile", url: "/"},
+        //             {optionType: "divider"},
+        //             {optionType: "url", title: "Settings", url: "/settings"},
+        //             {optionType: "url", title: "Add User", url: "/addUser"},
+        //             {optionType: "signOut"}
+        //         ]}
+        //     ];
+        // }
         // if the current user is an employee for a business
         else if (currentUser.userType === "employee") {
             menuOptions = [
@@ -293,7 +294,7 @@ class Menu extends Component {
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     //{optionType: "url", title: "Profile", url: "/businessProfile"},
-                    {optionType: "url", title: "Profile", url: "/"},
+                    {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "signOut"}
@@ -318,7 +319,7 @@ class Menu extends Component {
                 {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
-                    {optionType: "url", title: "Profile", url: "/profile"},
+                    {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "signOut"}
@@ -393,14 +394,15 @@ class Menu extends Component {
                                 break;
                             case "text":
                                 // add text to desktop menu
-                                dropDownItems.push(<MenuItem value="Name" primaryText={dropDownOption.title}/>);
+                                dropDownItems.push(<MenuItem value="Name" disabled primaryText={dropDownOption.title}/>);
                                 // add text to mobile menu
-                                mobileMenu.push(<MenuItem style={{color: "#00c3ff"}} primaryText={dropDownOption.title}/>);
+                                mobileMenu.push(<MenuItem style={{color: "#00c3ff"}} disabled primaryText={dropDownOption.title}/>);
                                 break;
                             default:
                                 break;
                         }
                     });
+                    console.log("dropdown selected: ",self.state.dropDownSelected)
                     let desktopDropDown = (
                         <DropDownMenu key={"desktop dropDown"}
                                       value={self.state.dropDownSelected}

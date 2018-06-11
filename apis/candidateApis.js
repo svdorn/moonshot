@@ -68,8 +68,8 @@ function POST_candidate(req, res) {
     user.agreedToTerms = true;
     // user has just signed up
     user.dateSignedUp = new Date();
-    // hasn't had opportunity to do onboarding yet
-    user.hasFinishedOnboarding = false;
+    // hasn't had opportunity to do onboarding yet, but we set it to true cuz people don't have to do onboarding yet
+    user.hasFinishedOnboarding = true;
     // infinite use, used to verify identify when making calls to backend
     user.verificationToken = crypto.randomBytes(64).toString('hex');
     // one-time use, used to verify email address before initial login
