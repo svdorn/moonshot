@@ -13,14 +13,19 @@ class PsychBreakdown extends Component {
     render() {
         const psychScores = this.props.psychScores;
 
+        if (!Array.isArray(psychScores)) { return null }
+
         const forCandidate = this.props.forCandidate;
-        const standardColor = forCandidate ? "#E83C53" : "rgb(117, 220, 252)";
 
-        const coloredText = { color: standardColor }
-
-        if (!Array.isArray(psychScores)) {
-            return null
-        }
+        const blue = "rgb(117, 220, 252)"
+        const purple = "#ae7efc";
+        const red = "#E83C53";
+        const orange = "#FB553A";
+        const standardColor = forCandidate ? red : blue;
+        const coloredText = { color: standardColor };
+        const leftColor = forCandidate ? red : purple;
+        const rightColor = forCandidate ? orange : blue;
+        const middle80indicatorStyle = { background: `linear-gradient(to right, ${leftColor}, ${rightColor})` };
 
         // the numbers that show above the actual data
         const numbers = [5,4,3,2,1,0,1,2,3,4,5].map(number => {
@@ -83,7 +88,15 @@ class PsychBreakdown extends Component {
                     <div className="stats lightBlackBackground">
                         <div className="legend">
                             <div className="middle80">
-                                <div className="middle80indicator" />
+                                <div
+                                    className="middle80indicator"
+                                    style={{
+                                        width: "50px",
+                                        height: "8px",
+                                        margin: "0 8px 2px 0",
+                                        ...middle80indicatorStyle
+                                    }}
+                                />
                                 <div className="description">{"Middle 80%"}</div>
                                 <InfoBubble
                                     iconColor={standardColor}
@@ -98,12 +111,17 @@ class PsychBreakdown extends Component {
                                 />
                             </div>
                             <div className="you">
-                                <div className="youIndicator" />
+                                <div className="youIndicator" style={{
+                                    width: "8px", height: "8px", margin: "0 6px 2px 0"
+                                }} />
                                 <div className="description">{"You"}</div>
                             </div>
                             <div className="median">
-                                <div className="medianIndicator" />
-                                <div className="description">{"Median Score"}</div>
+                                <div className="medianIndicator" style={{
+                                    position: "absolute",
+                                    height: "24px"
+                                }} />
+                                <div className="description" style={{paddingLeft:"9px"}}>{"Median Score"}</div>
                             </div>
                         </div>
                         <div className="data">

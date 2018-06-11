@@ -1419,6 +1419,18 @@ form > h1 {
     background-color: #aaaaaa;
 }
 
+.middle80indicator {
+    border-radius: 5px;
+}
+.youIndicator {
+    border-radius: 100%;
+    background-color: white;
+}
+.medianIndicator {
+    width: 2px;
+    background-color: #575759;
+}
+
 
 
 
