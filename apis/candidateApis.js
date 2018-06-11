@@ -156,6 +156,20 @@ function POST_candidate(req, res) {
         if (userCodeType) {
             // ... remove it from the position from the correct codes array
             business.positions[positionIndex][userCodeType].splice(oneTimeCodeIndex, 1);
+            // TODO: add different user types correctly
+            switch(userCodeType) {
+                case "candidateCodes":
+                    break;
+                case "employeeCodes":
+                    business.employeeIds.push(user._id);
+                    break;
+                case "managerCodes":
+                case "accountAdmin":
+                    business.employerIds.push(user._id);
+                    break;
+                default:
+                    break;
+            }
         }
 
         // save the user's id so that if they click verify email in the same
