@@ -315,8 +315,8 @@ function POST_candidate(req, res) {
                         oneTimeCodeIndex = adminIndex;
                         userCodeType = "adminCodes";
                         company = {
-                            name : foundBusinesses.name,
-                            companyId: foundBusinesses._id
+                            name : business.name,
+                            companyId: business._id
                         }
                         user.businessInfo = {};
                         user.businessInfo.company = company;
