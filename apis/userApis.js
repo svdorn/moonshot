@@ -722,7 +722,8 @@ async function finishPositionEvaluation(user, positionId, businessId) {
                     // status changed to Not Contacted just now
                     dateChanged: new Date(),
                 }],
-                // could be undefined if user hasn't taken psych test yet
+                // could be undefined if user hasn't taken psych test yet (which
+                // shouldn't be possible at this point)
                 archetype: user.archetype
             }
             businessPos.candidates.push(userInfo);
@@ -738,13 +739,58 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         candidate.archetype = user.archetype;
 
         // TODO: actually score the user
-        candidate.scores = {
-            overall: 114,
-            culture: 97,
-            growth: 117,
-            longevity: 115,
-            performance: 110
+        // candidate.scores = {
+        //     overall: 114,
+        //     culture: 97,
+        //     growth: 117,
+        //     longevity: 115,
+        //     performance: 110
+        // }
+
+        // --->> GRADE THE USER ACCORDING TO IDEAL OUTPUTS <<--- //
+        // ensure the candidate has taken the psychometric test and that ideal outputs exist
+        const userPsych = candidate.psychometricTest;
+        if (userPsych && userPsych.endDate && Array.isArray(businessPos.idealFactors)) {
+            // add to the score when a non-zero facet score is ideal
+            // subtract from the score whatever the differences are between the
+            // ideal facets and the actual facets
+            // start at 100 as the baseline
+            let predictiveScore = 100;
+
+            // go through each factor to get to each facet
+            const userFactors = userPsych.factors;
+            businessPos.idealFactors.forEach(idealFactor => {
+                // find the factor within the user's psych test
+                const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
+
+                // go through each facet to find the score compared to the ideal output
+                idealFactor.forEach(idealFacet => {
+                    // find the facet within the user's psych test
+                    const userFacet = userFactor.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+
+                    // the score that the user needs for the max pq
+                    const idealScore = idealFacet.score;
+
+                    // how far off of the ideal score the user got
+                    const difference = Math.abs(idealScore - userFacet.score);
+
+                    // subtract the difference from the predictive score
+                    predictiveScore -= difference;
+
+                    // add the absolute value of the facet score, making the
+                    // potential predictive score higher
+                    predictiveScore += Math.abs(idealScore);
+                })
+            });
+
+            // save the predictive score back to the user
+            if (!candidate.scores) { candidate.scores = {}; }
+            candidate.scores.predicted = predictiveScore;
         }
+        // <<------------------------------------------------->> //
+
+        // save the candidate back to the business
+        businessPos.candidates[candidateIndex] = candidate;
 
         // update the business with new completions and users in progress counts
         if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
