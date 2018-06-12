@@ -105,24 +105,12 @@ class MyEmployees extends Component {
         .catch (function(error) {
             console.log("error getting the positions: ", error);
         })
-            // let employeeData = res.data;
-            // if (Array.isArray(employeeData.employees) && employeeData.employees.length > 0) {
-            //     self.setState({
-            //         employees: employeeData.employees,
-            //         questions: employeeData.employeeQuestions
-            //     })
-            // } else {
-            //     self.setState({
-            //         noEmployees: true,
-            //         questions: employeeData.employeeQuestions
-            //     })
-            // }
     }
 
     search() {
         // need a position to search for
         if (!this.state.noPositions && this.state.position) {
-            axios.get("/api/business/candidateSearch", {
+            axios.get("/api/business/employeeSearch", {
                 params: {
                     searchTerm: this.state.term,
                     // searching by position name right now, could search by id if want to
@@ -134,7 +122,9 @@ class MyEmployees extends Component {
             }).then(res => {
                 console.log("res.data: ", res.data);
                 // make sure component is mounted before changing state
+                console.log(this.refs);
                 if (this.refs.myEmployees) {
+                    console.log("here");
                     this.setState({ employees: res.data });
                 }
             }).catch(function (err) {
@@ -144,23 +134,19 @@ class MyEmployees extends Component {
     }
 
     onSearchChange(term) {
-        // this.setState({...this.state, term: term}, () => {
-        //     if (term !== undefined) {
-        //     }
-        // });
+        this.setState({...this.state, term: term}, () => {
+            if (term !== undefined) {
+                this.search();
+            }
+        });
     }
 
-    handleStageChange = (event, index, stage) => {
-        // this.setState({stage}, () => {
-        //     this.search();
-        // })
+    handleStatusChange = (event, index, status) => {
+        this.setState({status}, this.search);
     };
 
     handlePositionChange = (event, index, position) => {
-        this.setState({position})
-        // this.setState({position}, () => {
-        //     this.search();
-        // })
+        this.setState({position}, this.search);
     };
 
     render() {
@@ -203,9 +189,9 @@ class MyEmployees extends Component {
             }
         }
 
-        const stages = ["Complete", "Incomplete"];
-        const stageItems = stages.map(function (stage) {
-            return <MenuItem value={stage} primaryText={stage} key={stage}/>
+        const statuses = ["Complete", "Incomplete"];
+        const statusItems = statuses.map(function (status) {
+            return <MenuItem value={status} primaryText={status} key={status}/>
         })
 
         // TODO get companies from DB
@@ -242,14 +228,14 @@ class MyEmployees extends Component {
 
                     <ToolbarGroup>
                         <DropDownMenu value={this.state.status}
-                                      onChange={this.handleStageChange}
+                                      onChange={this.handleStatusChange}
                                       labelStyle={style.menuLabelStyle}
                                       anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px"}}
                         >
                             <MenuItem value={""} primaryText="Status"/>
                             <Divider/>
-                            {stageItems}
+                            {statusItems}
                         </DropDownMenu>
                         <DropDownMenu value={this.state.position}
                                       onChange={this.handlePositionChange}
@@ -282,14 +268,14 @@ class MyEmployees extends Component {
                     <br/>
 
                     <DropDownMenu value={this.state.status}
-                                  onChange={this.handleStageChange}
+                                  onChange={this.handleStatusChange}
                                   labelStyle={style.menuLabelStyle}
                                   anchorOrigin={style.anchorOrigin}
                                   style={{fontSize: "20px", marginTop: "11px"}}
                     >
                         <MenuItem value={""} primaryText="Stage"/>
                         <Divider/>
-                        {stageItems}
+                        {statusItems}
                     </DropDownMenu>
                     <div><br/></div>
                     <DropDownMenu value={this.state.position}
@@ -319,6 +305,7 @@ class MyEmployees extends Component {
         if (this.state.employees.length !== 0) {
             employeePreviews = this.state.employees.map(employee => {
                 key++;
+                console.log(employee);
 
                 return (
                     <li style={{marginTop: '15px'}}
@@ -339,7 +326,7 @@ class MyEmployees extends Component {
         }
 
         return (
-            <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
+            <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEmployees'>
                 <AddUserDialog />
                 <MetaTags>
                     <title>My Employees | Moonshot</title>
