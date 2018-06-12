@@ -36,7 +36,8 @@ const businessApis = {
     POST_answerQuestion,
     POST_emailInvites,
     GET_candidateSearch,
-    GET_employees,
+    GET_employeeSearch,
+    GET_employeeQuestions,
     GET_positions,
     GET_evaluationResults
 }
@@ -113,7 +114,7 @@ function POST_emailInvites(req, res) {
                     + ' advanced you to next step for the ' + positionName + ' position. The next step is completing ' + businessName + '&#39;s evaluation on Moonshot.'
                     + ' Please click the button below to create your account. Once you&#39;ve created your account, you can begin your evaluation.'
                     + '</p>'
-                    + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot and congrats on advancing to the next step for the ' + positionName + 'position!</p><br/>'
+                    + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot and congrats on advancing to the next step for the ' + positionName + ' position!</p><br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode
                     + '">Create Account</a>'
@@ -651,7 +652,7 @@ async function verifyEmployerAndReturnBusiness(userId, verificationToken, busine
     })
 }
 
-function GET_employees(req, res) {
+function GET_employeeQuestions(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
@@ -682,7 +683,7 @@ function GET_employees(req, res) {
         let businessQuery = { '_id': companyId }
 
         Businesses.find(businessQuery)
-        .select("employees employeeQuestions")
+        .select("employeeQuestions")
         .exec(function(findEmployeesErr, employees)
         {
             if (findEmployeesErr) {
@@ -961,6 +962,105 @@ async function GET_candidateSearch(req, res) {
 
     res.json(candidates);
 }
+
+async function GET_employeeSearch(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    // get the user who is trying to search for candidates
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting business user while searching for candidates: ", getUserError);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // if the user is not an admin or manager, they can't search for candidates
+    if (!["accountAdmin", "manager"].includes(user.userType)) {
+        console.log("User is type: ", user.userType);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // if the user doesn't have
+    if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
+        console.log("User doesn't have associated business.");
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
+
+    const companyId = user.businessInfo.company.companyId;
+
+    // the restrictions on the search
+    const searchTerm = sanitize(req.query.searchTerm);
+    const status = sanitize(req.query.status);
+    // position name is the only required input to the search
+    const positionName = sanitize(req.query.positionName);
+
+    const businessQuery = {
+        "_id": mongoose.Types.ObjectId(companyId)
+    }
+
+    // get only the position the user is asking for in the positions array
+    const positionQuery = {
+        "positions": {
+            "$elemMatch": {
+                "name": positionName
+            }
+        }
+    }
+
+    // get the business the user works for
+    let business;
+    try {
+        business = await Businesses
+            .find(businessQuery, positionQuery)
+            .select("positions.name positions.employees.answers positions.employees.employeeId positions.employees.managerId positions.employees.gradingComplete positions.employees.name positions.employees.profileUrl positions.employees.archetype positions.employees.score");
+        // see if there are none found
+        if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
+        // if any are found, only one is found, as we searched by id
+        business = business[0];
+    } catch (findBizError) {
+        console.log("error finding business for user trying to search for candidates: ", findBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // make sure the user gave a valid position
+    if (!business.positions || business.positions.length === 0) {
+        return res.status(400).send("Invalid position.");
+    }
+
+    // should only be one position in the array since names should be unique
+    const position = business.positions[0];
+
+    // get the employees from that position
+    let employees = position.employees;
+
+    // filter by name if search term given
+    if (searchTerm && searchTerm !== "") {
+        const nameRegex = new RegExp(searchTerm, "i");
+        employees = employees.filter(employee => {
+            return nameRegex.test(employee.name);
+        });
+    }
+
+    // filter by status if status given
+    if (status && status !== "") {
+        if (status == "Complete") {
+            status = true;
+            employees = employees.filter(employee => {
+                return employee.gradingComplete === status;
+            });
+        } else {
+            status = false;
+            employees = employees.filter(employee => {
+                return employee.status === status;
+            });
+        }
+    }
+
+    res.json(employees);
+}
+
 
 
 module.exports = businessApis;

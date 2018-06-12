@@ -53,7 +53,6 @@ class AddUserDialog extends Component {
         })
         .then(function (res) {
             let positions = res.data.positions;
-            console.log("positions: ", positions);
             if (Array.isArray(positions) && positions.length > 0) {
                 const firstPositionName = positions[0].name;
                 self.setState({
@@ -137,11 +136,9 @@ class AddUserDialog extends Component {
                     break;
             }
         }
-        console.log("here");
-        console.log(this.props.currentUser);
 
         const currentUser = this.props.currentUser;
-        console.log(this.props.currentUser);
+        
         const currentUserInfo = {
             userId: currentUser._id,
             userName: currentUser.name,
@@ -454,7 +451,7 @@ class AddUserDialog extends Component {
                             Success!
                         </div>
                         <div className="whiteText font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
-                            Success! Your invites have been sent to the users emails with sign up instructions for the Web Developer position!
+                            Success! Your invites have been sent to the users emails with sign up instructions for the {this.state.position} position!
                         </div>
                         <RaisedButton
                             label="Done"

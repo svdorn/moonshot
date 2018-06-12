@@ -38,35 +38,109 @@ class MyEmployees extends Component {
             status: "",
             position: "",
             employees: [],
-            quesions: [],
+            questions: [],
             positions: [],
             // true if the business has no positions associated with it
-            noEmployees: false
+            noPositions: false
         }
     }
 
+
+
     componentDidMount() {
         let self = this;
-        axios.get("/api/business/employees", {
+
+        axios.get("/api/business/positions", {
             params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
+                userId: self.props.currentUser._id,
+                verificationToken: self.props.currentUser.verificationToken
             }
         })
         .then(function (res) {
-            let employeeData = res.data;
-            if (Array.isArray(employeeData.employees) && employeeData.employees.length > 0) {
-                self.setState({
-                    employees: employeeData.employees,
-                    questions: employeeData.employeeQuestions
-                })
+            let positions = res.data.positions;
+            let firstPositionName = "";
+            let noPositions = false;
+            if (Array.isArray(positions) && positions.length > 0) {
+                // if the url gave us a position to select first, select that one
+                // otherwise, select the first one available
+                firstPositionName = positions[0].name;
+                if (self.state.positionNameFromUrl && positions.some(position => {
+                    return position.name === self.state.positionNameFromUrl;
+                })) {
+                    firstPositionName = self.state.positionNameFromUrl;
+                }
+
+                // select this position from the dropdown if it is valid
+                if (firstPositionName) {
+                    let selectedPosition = firstPositionName;
+                }
             } else {
-                self.setState({
-                    noEmployees: true,
-                    questions: employeeData.employeeQuestions
-                })
+                noPositions = true;
             }
+
+            axios.get("/api/business/employeeQuestions", {
+                params: {
+                    userId: self.props.currentUser._id,
+                    verificationToken: self.props.currentUser.verificationToken
+                }
+            })
+            .then (function (response) {
+                console.log(response.data);
+                const questions = response.data.employeeQuestions;
+                console.log(questions);
+                self.setState({
+                    positions: positions,
+                    position: firstPositionName,
+                    questions: questions,
+                    noPositions: noPositions
+                },
+                // search for candidates of first position
+                self.search
+            );
+            })
+            .catch(function(err) {
+                console.log("error getting the employee questions: ", err);
+            })
         })
+        .catch (function(error) {
+            console.log("error getting the positions: ", error);
+        })
+            // let employeeData = res.data;
+            // if (Array.isArray(employeeData.employees) && employeeData.employees.length > 0) {
+            //     self.setState({
+            //         employees: employeeData.employees,
+            //         questions: employeeData.employeeQuestions
+            //     })
+            // } else {
+            //     self.setState({
+            //         noEmployees: true,
+            //         questions: employeeData.employeeQuestions
+            //     })
+            // }
+    }
+
+    search() {
+        // need a position to search for
+        if (!this.state.noPositions && this.state.position) {
+            axios.get("/api/business/candidateSearch", {
+                params: {
+                    searchTerm: this.state.term,
+                    // searching by position name right now, could search by id if want to
+                    positionName: this.state.position,
+                    userId: this.props.currentUser._id,
+                    status: this.state.status,
+                    verificationToken: this.props.currentUser.verificationToken
+                }
+            }).then(res => {
+                console.log("res.data: ", res.data);
+                // make sure component is mounted before changing state
+                if (this.refs.myEmployees) {
+                    this.setState({ employees: res.data });
+                }
+            }).catch(function (err) {
+                console.log("ERROR with Employee search: ", err);
+            })
+        }
     }
 
     onSearchChange(term) {
@@ -83,12 +157,14 @@ class MyEmployees extends Component {
     };
 
     handlePositionChange = (event, index, position) => {
+        this.setState({position})
         // this.setState({position}, () => {
         //     this.search();
         // })
     };
 
     render() {
+        console.log("state: ", this.state);
         const style = {
             separator: {
                 width: "70%",
@@ -133,9 +209,9 @@ class MyEmployees extends Component {
         })
 
         // TODO get companies from DB
-        const positions = ["Financial Represenatative", "Web Developer"]
+        const positions = this.state.positions;
         const positionItems = positions.map(function (position) {
-            return <MenuItem value={position} primaryText={position} key={position}/>
+            return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
         })
 
         // the hint that shows up when search bar is in focus
