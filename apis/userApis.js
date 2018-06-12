@@ -502,6 +502,7 @@ async function POST_addPositionEval(req, res) {
 // returns object: {user: userObject, business: businessObject, finished: Boolean, userPositionIndex: Number}
 // DOESN'T SAVE THE TWO, MUST BE SAVED IN CALLING FUNCTION
 async function addEvaluation(user, business, positionId, startDate) {
+    console.log("in here");
     return new Promise(async function(resolve, reject) {
         try {
             // check that all inputs are valid

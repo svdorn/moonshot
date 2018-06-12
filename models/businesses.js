@@ -149,11 +149,19 @@ var businessesSchema = mongoose.Schema({
             startDate: Date
         }],
         // One-time use codes for employees
-        employeeCodes: [String],
-        // One-time use codes for managers
-        managerCodes: [String],
+        employeeCodes: [{
+            // the actual code
+            code: String,
+            // the date that will be shown for this user's evaluation start date
+            startDate: Date
+        }],
         // One-time use codes for admins
-        adminCodes: [String],
+        adminCodes: [{
+            // the actual code
+            code: String,
+            // the date that will be shown for this user's evaluation start date
+            startDate: Date
+        }],
         // Whether the position is open to the public
         open: Boolean
 

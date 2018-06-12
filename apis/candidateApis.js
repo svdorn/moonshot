@@ -287,13 +287,13 @@ function POST_candidate(req, res) {
                         return candidateCode.code == uniqueCode;
                     });
                     const employeeIndex = position.employeeCodes.findIndex(employeeCode => {
-                        return employeeCode == uniqueCode;
+                        return employeeCode.code == uniqueCode;
                     });
                     // const managerIndex = position.managerCodes.findIndex(managerCode => {
                     //     return managerCode == uniqueCode;
                     // });
                     const adminIndex = position.adminCodes.findIndex(adminCode => {
-                        return adminCode == uniqueCode;
+                        return adminCode.code == uniqueCode;
                     });
 
                     if (candidateIndex !== -1) {
@@ -310,7 +310,7 @@ function POST_candidate(req, res) {
                     //     user.userType = "manager";
                     //     oneTimeCodeIndex = managerIndex;
                     //     userCodeType = "managerCodes";
-                    // } else {
+                } else if (adminIndex !== -1) {
                         user.userType = "accountAdmin";
                         oneTimeCodeIndex = adminIndex;
                         userCodeType = "accountAdmin";
