@@ -96,7 +96,9 @@ var businessesSchema = mongoose.Schema({
                 // if the candidate would stay at the company for a long time
                 longevity: Number,
                 // how well the candidate would do at that specific position
-                performance: Number
+                performance: Number,
+                // ideal facet scores minus actual facet scores
+                predicted: Number
             },
         }],
         // Employees related to this position
@@ -163,8 +165,19 @@ var businessesSchema = mongoose.Schema({
             startDate: Date
         }],
         // Whether the position is open to the public
-        open: Boolean
-
+        open: Boolean,
+        // the ideal scores for each facet within each factor to get the maximum pq
+        idealFactors: [{
+            // the id of the factor
+            factorId: mongoose.Schema.Types.ObjectId,
+            // all ideal facet scores
+            idealFacets: [{
+                // id of the facet
+                facetId: mongoose.Schema.Types.ObjectId,
+                // the optimal facet score for this position
+                score: Number
+            }]
+        }]
     }],
 });
 

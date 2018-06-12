@@ -1408,6 +1408,11 @@ form > h1 {
     display: flex;
     justify-content: space-between;
 }
+/* the part that says Middle 80 needs to be aligned with the other words */
+.results > .statsAndDescription > .stats > .legend > div > div:nth-child(2) {
+    vertical-align: top;
+}
+.results > .statsAndDescription > .stats > .legend .medianTitle { padding-left: 9px; }
 .results > .statsAndDescription > .stats > .legend > div > div {
     display: inline-block;
 }
@@ -4031,6 +4036,27 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .results > .statsAndDescription > div {
         width: 430px;
     }
+
+    .legend .medianIndicator { height: 20px; }
+
+    .font40pxUnder1100 { font-size: 40px; }
+    .font38pxUnder1100 { font-size: 38px; }
+    .font36pxUnder1100 { font-size: 36px; }
+    .font34pxUnder1100 { font-size: 34px; }
+    .font32pxUnder1100 { font-size: 32px; }
+    .font30pxUnder1100 { font-size: 30px; }
+    .font28pxUnder1100 { font-size: 28px; }
+    .font26pxUnder1100 { font-size: 26px; }
+    .font24pxUnder1100 { font-size: 24px; }
+    .font22pxUnder1100 { font-size: 22px; }
+    .font20pxUnder1100 { font-size: 20px; }
+    .font18pxUnder1100 { font-size: 18px; }
+    .font16pxUnder1100 { font-size: 16px; }
+    .font14pxUnder1100 { font-size: 14px; }
+    .font12pxUnder1100 { font-size: 12px; }
+    .font10pxUnder1100 { font-size: 10px; }
+    .font8pxUnder1100 { font-size: 8px; }
+    .font6pxUnder1100 { font-size: 6px; }
 }
 
 @media only screen and (max-width: 1095px) {
@@ -5714,6 +5740,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     #crystalBall { margin-top: 110px; }
 
+    .legend .middle80indicator { margin: 0 4px 1px 0; }
+
     .font40pxUnder400 { font-size: 40px; }
     .font38pxUnder400 { font-size: 38px; }
     .font36pxUnder400 { font-size: 36px; }
@@ -5774,6 +5802,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     textarea.multipleChoiceCustomAnswer {
         width: 180px;
     }
+
+    .results > .statsAndDescription > .stats > .legend .medianTitle { padding-left: 4px; }
 
     .font40pxUnder350 { font-size: 40px; }
     .font38pxUnder350 { font-size: 38px; }

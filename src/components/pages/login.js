@@ -85,6 +85,18 @@ class Login extends Component {
 
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser && this.props.currentUser != "no user") {
+            // check if there is a redirect link and redirect there if already logged in
+            const location = this.props.location;
+            if (location.query) {
+                if (location.query.redirect) {
+                    // brings a user to wherever they were trying to go before
+                    const redirectUrl = location.query.redirect;
+                    browserHistory.push(redirectUrl);
+                    return;
+                }
+            }
+
+            // otherwise go home
             this.props.router.push("/");
             return;
         }
