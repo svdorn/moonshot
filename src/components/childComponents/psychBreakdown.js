@@ -129,7 +129,7 @@ class PsychBreakdown extends Component {
                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.right}</div>
                 </div>
                 <div className="youMedianMiddle" style={{color:"white"}}>
-                    <div>Your Score: {this.makeLRversion(selectedArea.score)}</div>
+                    <div>{forCandidate ? "Your" : "Their"} Score: {this.makeLRversion(selectedArea.score)}</div>
                     <div>Median: {this.makeLRversion(selectedArea.stats.median)}</div>
                     <div>Middle 80%: {this.makeLRversion(selectedArea.stats.middle80.minimum)} - {this.makeLRversion(selectedArea.stats.middle80.maximum)}</div>
                 </div>
@@ -144,7 +144,7 @@ class PsychBreakdown extends Component {
                 </div>
                 <div className="statsAndDescription" style={coloredText}>
                     <div className="stats lightBlackBackground">
-                        <div className="legend font16px font12pxUnder500 font10pxUnder400">
+                        <div className="legend font16px font14pxUnder1100 font12pxUnder500 font10pxUnder400">
                             <div className="middle80">
                                 <div
                                     className="middle80indicator"
@@ -170,11 +170,11 @@ class PsychBreakdown extends Component {
                                 <div className="youIndicator" style={{
                                     width: "8px", height: "8px"
                                 }} />
-                                <div className="description">{"You"}</div>
+                                <div className="description">{forCandidate ? "You" : "Candidate"}</div>
                             </div>
                             <div className="median">
                                 <div className="medianIndicator" style={{position: "absolute"}} />
-                                <div className="description" style={{paddingLeft:"9px"}}>{"Median Score"}</div>
+                                <div className="description medianTitle">{"Median Score"}</div>
                             </div>
                         </div>
                         <div className="data">
