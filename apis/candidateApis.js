@@ -313,14 +313,15 @@ function POST_candidate(req, res) {
                 } else if (adminIndex !== -1) {
                         user.userType = "accountAdmin";
                         oneTimeCodeIndex = adminIndex;
-                        userCodeType = "accountAdmin";
-                        user.businessInfo = {
-                            company : {
-                                name : foundBusinesses.name,
-                                companyId: foundBusinesses._id
-                            },
-                            title: "Account Admin"
+                        userCodeType = "adminCodes";
+                        company = {
+                            name : foundBusinesses.name,
+                            companyId: foundBusinesses._id
                         }
+                        user.businessInfo = {};
+                        user.businessInfo.company = company;
+                        console.log(user.businessInfo.company);
+                        user.businessInfo.title = "Account Admin";
                     }
 
                     // if the user does NOT have a valid unique code
