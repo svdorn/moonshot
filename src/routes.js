@@ -12,13 +12,11 @@ import Signup from './components/pages/signup';
 import MyCandidates from './components/pages/businessPages/myCandidates';
 import MyEmployees from './components/pages/businessPages/myEmployees';
 import MyEvaluations from './components/pages/businessPages/myEvaluations';
-import BusinessProfile from './components/pages/businessPages/businessProfile';
 import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import BusinessHome from './components/pages/businessHome';
 import Main from './main';
 import AuthenticatedComponent from './components/AuthenticatedComponent';
-import Profile from './components/pages/profile';
 import Settings from './components/pages/settings';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
@@ -54,9 +52,7 @@ function fireTracking() {
     ReactGA.pageview(window.location.pathname + window.location.search);
 }
 
-const businessUserTypes = ["employee", "manager", "accountAdmin"];
-const candidateUserTypes = ["candidate"];
-// TODO: change people who are admins to a userType of admin
+const businessAdminUserTypes = ["accountAdmin"];
 const adminUserTypes = ["admin", "candidate"];
 
 const routes = (
@@ -65,13 +61,11 @@ const routes = (
             <IndexRoute component={BusinessHome} />
             <Route path='login' component={Login} />
             <Route path="signup" component={Signup} />
-            <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType={businessUserTypes} />
-            <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessUserTypes} />
+            <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType={businessAdminUserTypes} />
+            <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessAdminUserTypes} />
             <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} />
-            <Route path="businessProfile" component={AuthenticatedComponent} page={<BusinessProfile/>} userType={businessUserTypes} />
-            <Route path="results/:profileUrl/:positionId" component={AuthenticatedComponent} page={<Results />} userType={businessUserTypes} />
-            <Route path="employeeResults" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessUserTypes} />
-            <Route path="profile" component={Profile} />
+            <Route path="results/:profileUrl/:positionId" component={AuthenticatedComponent} page={<Results />} userType={businessAdminUserTypes} />
+            <Route path="employeeResults" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
             <Route path="verifyEmail" component={VerifyEmail} />
             <Route path="forgotPassword" component={ForgotPassword} />
