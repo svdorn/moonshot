@@ -44,6 +44,7 @@ class MyEmployees extends Component {
             noPositions: false,
             // true if the position has no employees associated with it
             noEmployees: false,
+            loadingDone: false
         }
     }
 
@@ -92,7 +93,8 @@ class MyEmployees extends Component {
                     positions: positions,
                     position: firstPositionName,
                     questions: questions,
-                    noPositions: noPositions
+                    noPositions: noPositions,
+                    loadingDone: true
                 },
                 // search for candidates of first position
                 self.search
@@ -243,7 +245,7 @@ class MyEmployees extends Component {
                                       anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px"}}
                         >
-                            <MenuItem value={""} primaryText="Position"/>
+                            <MenuItem value="" primaryText="Position"/>
                             <Divider/>
                             {positionItems}
                         </DropDownMenu>
@@ -307,6 +309,21 @@ class MyEmployees extends Component {
                     :null}.
                 </div>
             )
+        }
+
+        if (this.state.noPositions) {
+            employeePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    Create a position to select.
+                </div>
+            );
+        }
+        if (this.state.position == "" && this.state.loadingDone) {
+            employeePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    Must select a position.
+                </div>
+            );
         }
 
         // create the employee previews

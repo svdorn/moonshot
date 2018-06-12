@@ -48,7 +48,8 @@ class MyCandidates extends Component {
             // true if the business has no positions associated with it
             noPositions: false,
             // true if the position has no candidates associated with it
-            noCandidates: false
+            noCandidates: false,
+            loadingDone: false
         }
     }
 
@@ -79,14 +80,16 @@ class MyCandidates extends Component {
 
                 self.setState({
                     positions: positions,
-                    position: firstPositionName
+                    position: firstPositionName,
+                    loadingDone: true
                 },
                     // search for candidates of first position
                     self.search
                 );
             } else {
                 self.setState({
-                    noPositions: true
+                    noPositions: true,
+                    loadingDone: true
                 })
             }
         })
@@ -121,10 +124,9 @@ class MyCandidates extends Component {
     };
 
     handleSortByChange = (event, index, sortBy) => {
-        this.setState({sortBy, candidates: [], noCandidates: false}, () => {
+        this.setState({sortBy}, () => {
             // only search if the user put in a new search term
             if (sortBy !== "") { this.search(); }
-            else { this.setState({noCandidates: true}) }
         });
     };
 
@@ -142,7 +144,6 @@ class MyCandidates extends Component {
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
-                console.log("res.data: ", res.data);
                 // make sure component is mounted before changing state
                 if (this.refs.myCandidates) {
                     if (res.data && res.data.length > 0) {
@@ -222,16 +223,6 @@ class MyCandidates extends Component {
             </div>
         );
 
-        console.log("this.stae.position: ", this.state.position)
-
-        if (this.state.position == "Position") {
-            candidatePreviews = (
-                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                    Must select a position.
-                </div>
-            );
-        }
-
         if (this.state.noCandidates) {
             candidatePreviews = (
                 <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
@@ -242,6 +233,21 @@ class MyCandidates extends Component {
                     :null}.
                 </div>
             )
+        }
+
+        if (this.state.noPositions) {
+            candidatePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    Create a position to select.
+                </div>
+            );
+        }
+        if (this.state.position == "" && this.state.loadingDone) {
+            candidatePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    Must select a position.
+                </div>
+            );
         }
 
         if (this.state.candidates.length !== 0) {
@@ -332,7 +338,7 @@ class MyCandidates extends Component {
                                       anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                         >
-                            <MenuItem value={"Position"} primaryText="Position" key={"Position"}/>
+                            <MenuItem value={""} primaryText="Position"/>
                             <Divider/>
                             {positionItems}
                         </DropDownMenu>
