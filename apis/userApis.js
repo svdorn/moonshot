@@ -502,6 +502,7 @@ async function POST_addPositionEval(req, res) {
 // returns object: {user: userObject, business: businessObject, finished: Boolean, userPositionIndex: Number}
 // DOESN'T SAVE THE TWO, MUST BE SAVED IN CALLING FUNCTION
 async function addEvaluation(user, business, positionId, startDate) {
+    console.log("in here");
     return new Promise(async function(resolve, reject) {
         try {
             // check that all inputs are valid
@@ -526,11 +527,26 @@ async function addEvaluation(user, business, positionId, startDate) {
             // get the actual position from the index
             let position = business.positions[positionIndex];
 
-            // see if candidate is already marked as being a candidate for this position
+            let userAlreadyInPosition = false;
             const userIdString = user._id.toString();
-            const userAlreadyInPosition = position.candidates.some(candidateId => {
-                return candidateId.toString() === userIdString;
-            });
+
+            if (user.userType == "candidate") {
+                // User is a candidate
+                // see if candidate is already marked as being a candidate for this position
+                if (position.candidates) {
+                    userAlreadyInPosition = position.candidates.some(candidateId => {
+                        return candidateId.toString() === userIdString;
+                    });
+                }
+
+            } else {
+                // User is an employee
+                if (position.employees) {
+                    userAlreadyInPosition = position.employees.some(employeeId => {
+                        return employeeId.toString() === userIdString;
+                    });
+                }
+            }
 
             // if so, they already added the position, so they can't add it again
             if (userAlreadyInPosition) {
@@ -549,27 +565,40 @@ async function addEvaluation(user, business, positionId, startDate) {
                 const finishedWithEval = user.positions[userPositionIndex].appliedEndDate != undefined;
                 reject("User has already added that position.");
             }
-
-            // add the information the business will need about the candidate
-            const userInformation = {
-                candidateId: user._id,
-                name: user.name,
-                profileUrl: user.profileUrl,
-                isDismissed: false,
-                location: user.info ? user.info.location : undefined,
-                hiringStage: "Not Contacted",
-                hiringStageChanges: [{
+            if (user.userType == "candidate") {
+                // add the information the business will need about the candidate
+                const userInformation = {
+                    candidateId: user._id,
+                    name: user.name,
+                    profileUrl: user.profileUrl,
+                    isDismissed: false,
+                    location: user.info ? user.info.location : undefined,
                     hiringStage: "Not Contacted",
-                    // status changed to Not Contacted just now
-                    dateChanged: new Date(),
-                }],
-                // could be undefined if user hasn't taken psych test yet
-                archetype: user.archetype
-                // user won't have any scores yet because they haven't done the eval yet
+                    hiringStageChanges: [{
+                        hiringStage: "Not Contacted",
+                        // status changed to Not Contacted just now
+                        dateChanged: new Date(),
+                    }],
+                    // could be undefined if user hasn't taken psych test yet
+                    archetype: user.archetype
+                    // user won't have any scores yet because they haven't done the eval yet
+                }
+                position.candidates.push(userInformation);
+                if (typeof position.usersInProgress !== "number") { position.usersInProgress = 0; }
+                position.usersInProgress++;
+            } else {
+                // add the info the business will need about the employee
+                const userInformation = {
+                    employeeId: user._id,
+                    name: user.name,
+                    gradingComplete: false,
+                    profileUrl: user.profileUrl,
+                    archetype: user.archetype,
+                    // user won't have any scores yet because they haven't done the eval yet
+                    // user won't have any answers yet because managers haven't graded them yet
+                }
+                position.employees.push(userInformation);
             }
-            position.candidates.push(userInformation);
-            if (typeof position.usersInProgress !== "number") { position.usersInProgress = 0; }
-            position.usersInProgress++;
             // make sure the position is saved within the business object
             business.positions[positionIndex] = position;
 
@@ -577,18 +606,20 @@ async function addEvaluation(user, business, positionId, startDate) {
             // the date at this time, will be used a couple times in the newPosition object
             const now = new Date();
 
-            // create the free response objects that will be stored for the user
-            const numFRQs = position.freeResponseQuestions.length;
+            // create the free response objects that will be stored for the user, employees won't need frq's
             let frqsForUser = [];
-            for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
-                const frq = position.freeResponseQuestions[frqIndex];
-                frqsForUser.push({
-                    questionId: frq._id,
-                    questionIndex: frqIndex,
-                    response: undefined,
-                    body: frq.body,
-                    required: frq.required
-                });
+            if (user.userType == "candidate") {
+                const numFRQs = position.freeResponseQuestions.length;
+                for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
+                    const frq = position.freeResponseQuestions[frqIndex];
+                    frqsForUser.push({
+                        questionId: frq._id,
+                        questionIndex: frqIndex,
+                        response: undefined,
+                        body: frq.body,
+                        required: frq.required
+                    });
+                }
             }
 
             // go through the user's skills to see which they have completed already;
@@ -621,7 +652,10 @@ async function addEvaluation(user, business, positionId, startDate) {
             const doneWithSkillTests = testIndex === skillTestIds.length;
 
             // see if there are no frqs in this evaluation
-            const noFrqs = frqsForUser.length === 0;
+            let noFrqs = true;
+            if (user.userType == "candidate") {
+                noFrqs = frqsForUser.length === 0;
+            }
 
             // if the user has finished the psych test and all skill tests
             // and there are no frqs, the user has finished already

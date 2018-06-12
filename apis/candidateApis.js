@@ -156,20 +156,6 @@ function POST_candidate(req, res) {
         if (userCodeType) {
             // ... remove it from the position from the correct codes array
             business.positions[positionIndex][userCodeType].splice(oneTimeCodeIndex, 1);
-            // TODO: add different user types correctly
-            switch(userCodeType) {
-                case "candidateCodes":
-                    break;
-                case "employeeCodes":
-                    business.employeeIds.push(user._id);
-                    break;
-                case "managerCodes":
-                case "accountAdmin":
-                    business.employerIds.push(user._id);
-                    break;
-                default:
-                    break;
-            }
         }
 
         // save the user's id so that if they click verify email in the same
@@ -180,12 +166,16 @@ function POST_candidate(req, res) {
         })
 
         try {
-            // add the evaluation to the user
-            let evalObj = await addEvaluation(user, business, positionId, startDate);
-            user = evalObj.user;
-            // since the user is just signing up we know that the active
-            // position will be the only one available
-            user.positionInProgress = user.positions[0].positionId;
+            if (user.userType == "candidate" || user.userType == "employee") {
+                // add the evaluation to the user
+                let evalObj = await addEvaluation(user, business, positionId, startDate);
+                user = evalObj.user;
+                // since the user is just signing up we know that the active
+                // position will be the only one available
+                user.positionInProgress = user.positions[0].positionId;
+            } else {
+                // TODO: if user is an admin, add the psych test to them
+            }
 
             // save the user and the business with the new evaluation information
             let [savedUser, savedBusiness] = await Promise.all([user.save(), business.save()]);
@@ -297,13 +287,13 @@ function POST_candidate(req, res) {
                         return candidateCode.code == uniqueCode;
                     });
                     const employeeIndex = position.employeeCodes.findIndex(employeeCode => {
-                        return employeeCode == uniqueCode;
+                        return employeeCode.code == uniqueCode;
                     });
-                    const managerIndex = position.managerCodes.findIndex(managerCode => {
-                        return managerCode == uniqueCode;
-                    });
+                    // const managerIndex = position.managerCodes.findIndex(managerCode => {
+                    //     return managerCode == uniqueCode;
+                    // });
                     const adminIndex = position.adminCodes.findIndex(adminCode => {
-                        return adminCode == uniqueCode;
+                        return adminCode.code == uniqueCode;
                     });
 
                     if (candidateIndex !== -1) {
@@ -316,14 +306,22 @@ function POST_candidate(req, res) {
                         user.userType = "employee";
                         oneTimeCodeIndex = employeeIndex;
                         userCodeType = "employeeCodes";
-                    } else if (managerIndex !== -1) {
-                        user.userType = "manager";
-                        oneTimeCodeIndex = managerIndex;
-                        userCodeType = "managerCodes";
-                    } else {
+                    // } else if (managerIndex !== -1) {
+                    //     user.userType = "manager";
+                    //     oneTimeCodeIndex = managerIndex;
+                    //     userCodeType = "managerCodes";
+                } else if (adminIndex !== -1) {
                         user.userType = "accountAdmin";
                         oneTimeCodeIndex = adminIndex;
-                        userCodeType = "accountAdmin";
+                        userCodeType = "adminCodes";
+                        company = {
+                            name : business.name,
+                            companyId: business._id
+                        }
+                        user.businessInfo = {};
+                        user.businessInfo.company = company;
+                        console.log(user.businessInfo.company);
+                        user.businessInfo.title = "Account Admin";
                     }
 
                     // if the user does NOT have a valid unique code
@@ -476,17 +474,17 @@ function POST_sendVerificationEmail(req, res) {
         let recipient = [user.email];
         let subject = 'Verify email';
         let content =
-            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
-                    + '<div style="text-align:justify;width:80%;margin-left:10%;">'
-                    + '<span style="margin-bottom:20px;display:inline-block;">Thank you for joining Moonshot! To get going on your pathways, learning new skills, and building your profile for employers, please <a href="' + moonshotUrl + 'verifyEmail?token=' + user.emailVerificationToken + '">verify your account</a>.</span><br/>'
-                    + '<span style="display:inline-block;">If you have any questions or concerns or if you just want to talk about the weather, please feel free to email us at <a href="mailto:Support@moonshotinsights.io">Support@moonshotinsights.io</a>.</span><br/>'
-                    + '</div>'
-                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:20px;" href="' + moonshotUrl + 'verifyEmail?token='
+            '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                + '<div style="font-size:28px;color:#0c0c0c;">Verify Your Moonshot Account!</div>'
+                + '<p style="width:95%; display:inline-block; text-align:left;">You&#39;re almost there! The last step is to click the button below to verify your account!'
+                + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights.</p><br/>'
+                + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'verifyEmail?token='
                 + user.emailVerificationToken
-                + '">VERIFY ACCOUNT</a>'
-                + '<div style="text-align:left;width:80%;margin-left:10%;">'
-                    + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
+                + '">Verify Account</a>'
+                + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
+                + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
+                + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
+                + '<div style="text-align:left;width:95%;display:inline-block;">'
                     + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
                     + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
                     + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'

@@ -17,20 +17,19 @@ class VerifyEmail extends Component {
     render() {
 
         return(
-            <div className="fillScreen greenToBlue center">
+            <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
                     <title>Verify Email | Moonshot</title>
                     <meta name="description" content="Verify your email to get started on your path to finding the perfect job." />
                 </MetaTags>
-                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
-                <div className="form lightWhiteForm">
-                    <h1>Verify Email</h1>
-                    <button
-                        className="semiOpaqueWhiteBlueButton font20px font14pxUnder700 font10pxUnder400"
-                        onClick={this.onVerifyClick.bind(this)}
-                    >
-                        Verify my account
-                    </button>
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="5" />
+                <div className="form lightBlackForm">
+                    <h1 className="whiteText marginTop20px">Verify Email</h1>
+                    <div className="marginTop20px marginBottom20px">
+                            <button className="veryRoundedButton mediumLargeButton font22px font18pxUnder800 purpleToBlueAnimate whiteText" onClick={this.onVerifyClick.bind(this)} style={{padding: "6px 20px"}}>
+                                Verify my Account
+                            </button>
+                    </div>
                 </div>
             </div>
         );

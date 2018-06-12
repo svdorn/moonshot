@@ -62,6 +62,10 @@ function POST_emailInvites(req, res) {
     }
 
     let moonshotUrl = 'https://www.moonshotinsights.io/';
+    // if we are in development, links are to localhost
+    if (process.env.NODE_ENV === "development") {
+        moonshotUrl = 'http://localhost:8081/';
+    }
 
     // verify the employer is actually a part of this organization
     verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
@@ -135,11 +139,12 @@ function POST_emailInvites(req, res) {
         for (let i = 0; i < employeeEmails.length; i++) {
             // add code to the position
             const userCode = crypto.randomBytes(64).toString('hex');
+            const codeObj = { code: userCode, startDate: now };
             if (position.employeeCodes) {
-                position.employeeCodes.push(userCode);
+                position.employeeCodes.push(codeObj);
             } else {
                 position.employeeCodes = [];
-                position.employeeCodes.push(userCode);
+                position.employeeCodes.push(codeObj);
             }
             // send email
             let recipient = [employeeEmails[i]];
@@ -218,11 +223,12 @@ function POST_emailInvites(req, res) {
         for (let i = 0; i < adminEmails.length; i++) {
             // add code to the position
             const userCode = crypto.randomBytes(64).toString('hex');
+            const codeObj = { code: userCode, startDate: now };
             if (position.adminCodes) {
-                position.adminCodes.push(userCode);
+                position.adminCodes.push(codeObj);
             } else {
                 position.adminCodes = [];
-                position.adminCodes.push(userCode);
+                position.adminCodes.push(codeObj);
             }
             // send email
             let recipient = [adminEmails[i]];
@@ -616,98 +622,33 @@ function POST_answerQuestion(req, res) {
 async function verifyEmployerAndReturnBusiness(userId, verificationToken, businessId) {
     return new Promise(async (resolve, reject) => {
         try {
-            // function to print the info that was given; for when errors occur
-            const printInfo = () => {
-                console.log("Given userId: ", userId);
-                console.log("Given verificationToken: ", verificationToken);
-                console.log("Given businessId: ", businessId);
+            // find the user and business
+            let [user, business] = await Promise.all([
+                Users.findById(userId),
+                Businesses.findById(businessId)
+            ]);
+
+            // check that user and business were found
+            if (!user || !business) { throw "User or business not found."; }
+
+            // check if the user has the right verification token
+            if (user.verificationToken !== verificationToken) {
+                throw "Wrong verification token."
             }
 
-            // if the arguments provided are invalid, cannot validate user
-            if (typeof userId !== "string" || typeof verificationToken !== "string" || typeof businessId !== "string") {
-                console.log("Employer could not be verified.");
-                printInfo();
-                return resolve(undefined);
+            // check that the user is part of the business
+            if (user.businessInfo.company.companyId.toString() !== businessId.toString()) {
+                throw "User not part of that company.";
             }
 
-            // set to true once we've verified the user is real and has the right
-            // verification token
-            let verifiedUser = false;
-            // set to true once we've verified the user is employed by the
-            // business they say they are
-            let verifiedPosition = false;
-            // the business found in the db, returned on success
-            let business = undefined;
-
-            // find the employer by the given id
-            Users.findById(userId)
-            .then(foundEmployer => {
-                // if employer couldn't be found from the given id
-                if (!foundEmployer) {
-                    console.log("Couldn't find employer in the database when trying to verify them.");
-                    printInfo();
-                    return resolve(undefined);
-                }
-                // make sure the employer has the right verification token
-                if (foundEmployer.verificationToken !== verificationToken) {
-                    console.log("Employer gave wrong verification token when trying to be verified.");
-                    printInfo();
-                    return resolve(undefined);
-                }
-                // employer is real, return successfully if position in company verified
-                verifiedUser = true;
-                if (verifiedPosition) {
-                    return resolve(business);
-                }
-            })
-            .catch(findEmployerErr => {
-                console.log("Error finding employer in db when trying to verify employer: ", findEmployerErr);
-                printInfo();
-                return resolve(undefined);
-            })
-
-
-            // make sure the employer is in the business' employer id array
-            Businesses.findById(businessId)
-            .then(foundBusiness => {
-                if (!foundBusiness) {
-                    console.log("Did not find business when trying to verify employer.");
-                    printInfo();
-                    return resolve(undefined);
-                }
-
-                // try to find employer in business' employer id array
-                const employerWorksForBusiness = foundBusiness.employerIds.some(employerId => {
-                    // userId is that of the user we are trying to verify
-                    return employerId.toString() === userId;
-                });
-
-                // employer did not exist within the business' employers array
-                if (!employerWorksForBusiness) {
-                    console.log("Employer did not exist within the business' employers array (they don't work for that company).");
-                    printInfo();
-                    return resolve(undefined);
-                }
-
-                // employer does work for this company, return successfully if they are verified
-                verifiedPosition = true;
-                business = foundBusiness
-                if (verifiedUser) {
-                    return resolve(business);
-                }
-            })
-            .catch(findBusinessErr => {
-                console.log("Error finding business in db when trying to verify employer: ", findBusinessErr);
-                printInfo();
-                return resolve(undefined);
-            });
+            // successful verification
+            resolve(business);
         }
-        // some error, probably in the database, so employer can't be verified
+
         catch (error) {
-            console.log("Error verifying employer: ", error);
-            return resolve(undefined);
+            reject(error);
         }
-    });
+    })
 }
 
 function GET_employees(req, res) {
