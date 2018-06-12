@@ -20,6 +20,38 @@ import axios from "axios";
 
 class MyEvaluationsPreview extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            // names of the skills of this position
+            skills: []
+        }
+    }
+
+    componentWillMount() {
+        const currentUser = this.props.currentUser;
+        console.log(this.props.skills);
+        let self = this;
+        if (this.props.skills) {
+            axios.get("/api/skill/skillNamesByIds", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken,
+                    skillIds: this.props.skills
+                }
+            })
+            .then(res => {
+                console.log(res);
+                self.setState({skills: res.data})
+            })
+            .catch(error => {
+                console.log("error getting skills: ", error);
+                if (error.response) { console.log(error.response.data); }
+            })
+        }
+    }
+
     goTo(route) {
         console.log("route")
         // goes to the wanted page
@@ -52,22 +84,15 @@ class MyEvaluationsPreview extends Component {
 
 
     render() {
-
-        let positionSkills = null;
-        // TODO: hook up skills to database
-        let skills = ["Sales", "Finance", "Networking"];
-        // let skills = ["Sales", "Finance", "Networking"];
-        // if (this.props.variation === 2) {
-        //     skills = ["Python", "Javascript", "Computer Science"];
-        // } else if (this.props.variation === 3) {
-        //     skills = ["Networking", "Sales", "Management"];
-        // }
-
         // variations can be edit or take
         // user is a manager or account admin
         const editing = this.props.variation === "edit"
 
-        if (skills) {
+        const skills = this.state.skills;
+
+        let positionSkills;
+
+        if (skills && skills.length > 0) {
             positionSkills = skills.map(function (skill, index) {
                 let margin = "marginLeft10px";
                 if (index === 0) {
@@ -79,11 +104,11 @@ class MyEvaluationsPreview extends Component {
                 }
 
                 return (
-                    <div key={skill + "Surrounder"} style={{display: 'inline-block'}} className={margin}>
-                        <div key={skill}
+                    <div key={skill.name + "Surrounder"} style={{display: 'inline-block'}} className={margin}>
+                        <div key={skill.name}
                              className="myEvalsSkillChip font14px font12pxUnder500"
                         >
-                            {skill}
+                            {skill.name}
                         </div>
                     </div>
                 );

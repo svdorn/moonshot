@@ -136,7 +136,6 @@ class MyEvaluations extends Component {
 
         const currentUser = this.props.currentUser;
 
-        // TODO: make this work for everybody, not just Curate
         if (currentUser && this.state.positions.length !== 0) {
             const userType = currentUser.userType;
 
@@ -144,6 +143,7 @@ class MyEvaluations extends Component {
                 key++;
 
                 let attributes = {};
+                console.log("position: ", position)
                 attributes.company = position.businessName;
 
                 // if user is manager or account admin, preview will look editable
@@ -166,6 +166,7 @@ class MyEvaluations extends Component {
                     attributes.logo = position.businessLogo;
                     attributes.name = position.positionName;
                     attributes.company = position.businessName;
+                    attributes.skills = position.skills;
                     attributes.businessId = position.businessId.toString();
                     attributes.positionId = position.positionId.toString();
                     attributes.assignedDate = position.assignedDate;
