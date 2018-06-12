@@ -34,28 +34,6 @@ class EmployeePreview extends Component {
             questionAnswer = this.props.answers[0].score;
         }
         this.setState({questionAnswer: questionAnswer});
-        // // Start the test at the last unanswered question
-        // let maxQuestionIndex = 0;
-        //
-        // for (let i = 0; i < this.props.answers.length; i++) {
-        //     const answer = this.props.answers[i];
-        //     if (answer.questionIndex >= maxQuestionIndex) {
-        //         maxQuestionIndex = answer.questionIndex;
-        //     }
-        // }
-        //
-        // if ((maxQuestionIndex) > this.props.answers.length) {
-        //     // Go to the next unanswered question
-        //     maxQuestionIndex = maxQuestionIndex;
-        // } else {
-        //     // Go to the last question, which has already been filled out
-        //     maxQuestionIndex = this.props.answers.length - 1;
-        // }
-        //
-        // this.setState({
-        //     ...this.state,
-        //     questionIndex: maxQuestionIndex
-        // });
     }
 
     goTo(route) {

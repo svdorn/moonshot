@@ -1084,7 +1084,7 @@ async function GET_employeeSearch(req, res) {
     let employees = position.employees;
 
     // filter by name if search term given
-    if (searchTerm && searchTerm !== "") {
+    if (searchTerm && searchTerm !== "" && employees) {
         const nameRegex = new RegExp(searchTerm, "i");
         employees = employees.filter(employee => {
             return nameRegex.test(employee.name);
@@ -1093,7 +1093,7 @@ async function GET_employeeSearch(req, res) {
 
     // filter by status if status given
     let gradingComplete = false;
-    if (status && status !== "") {
+    if (status && status !== "" && employees) {
         if (status.toString() === "Complete") {
             gradingComplete = true;
             employees = employees.filter(employee => {

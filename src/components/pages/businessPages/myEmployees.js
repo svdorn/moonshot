@@ -43,7 +43,7 @@ class MyEmployees extends Component {
             // true if the business has no positions associated with it
             noPositions: false,
             // true if the position has no employees associated with it
-            noEmployees: false
+            noEmployees: false,
         }
     }
 
@@ -122,8 +122,8 @@ class MyEmployees extends Component {
             }).then(res => {
                 // make sure component is mounted before changing state
                 if (this.refs.myEmployees) {
-                    console.log("res.data: ", res.data)
-                    if (res.data) {
+                    console.log(res.data);
+                    if (res.data && res.data.length > 0) {
                         this.setState({ employees: res.data, noEmployees: false });
                     } else {
                         this.setState({noEmployees: true, employees: []})
@@ -144,11 +144,11 @@ class MyEmployees extends Component {
     }
 
     handleStatusChange = (event, index, status) => {
-        this.setState({status}, this.search);
+        this.setState({status, employees: [], noEmployees: false}, this.search);
     };
 
     handlePositionChange = (event, index, position) => {
-        this.setState({position}, this.search);
+        this.setState({position, employees: [], noEmployees: false}, this.search);
     };
 
     render() {
@@ -301,7 +301,10 @@ class MyEmployees extends Component {
         if (this.state.noEmployees) {
             employeePreviews = (
                 <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                    No employees for the {this.state.position} position.
+                    No employees for the {this.state.position} position
+                    {(this.state.status == "Complete" || this.state.status == "Incomplete")
+                    ? <bdi> with {this.state.status.toLowerCase()} status</bdi>
+                    :null}.
                 </div>
             )
         }
