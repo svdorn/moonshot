@@ -1044,16 +1044,17 @@ async function GET_employeeSearch(req, res) {
     }
 
     // filter by status if status given
+    let gradingComplete = false;
     if (status && status !== "") {
         if (status == "Complete") {
-            status = true;
+            gradingComplete = true;
             employees = employees.filter(employee => {
-                return employee.gradingComplete === status;
+                return employee.gradingComplete === gradingComplete;
             });
         } else {
-            status = false;
+            gradingComplete = false;
             employees = employees.filter(employee => {
-                return employee.status === status;
+                return employee.gradingComplete === gradingComplete;
             });
         }
     }

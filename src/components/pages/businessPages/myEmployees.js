@@ -110,6 +110,7 @@ class MyEmployees extends Component {
     search() {
         // need a position to search for
         if (!this.state.noPositions && this.state.position) {
+            console.log("searching");
             axios.get("/api/business/employeeSearch", {
                 params: {
                     searchTerm: this.state.term,
@@ -142,6 +143,7 @@ class MyEmployees extends Component {
     }
 
     handleStatusChange = (event, index, status) => {
+        console.log("here");
         this.setState({status}, this.search);
     };
 
