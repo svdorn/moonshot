@@ -85,9 +85,7 @@ class MyEmployees extends Component {
                 }
             })
             .then (function (response) {
-                console.log(response.data);
                 const questions = response.data.employeeQuestions;
-                console.log(questions);
                 self.setState({
                     positions: positions,
                     position: firstPositionName,
@@ -110,7 +108,6 @@ class MyEmployees extends Component {
     search() {
         // need a position to search for
         if (!this.state.noPositions && this.state.position) {
-            console.log("searching");
             axios.get("/api/business/employeeSearch", {
                 params: {
                     searchTerm: this.state.term,
@@ -121,11 +118,8 @@ class MyEmployees extends Component {
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
-                console.log("res.data: ", res.data);
                 // make sure component is mounted before changing state
-                console.log(this.refs);
                 if (this.refs.myEmployees) {
-                    console.log("here");
                     this.setState({ employees: res.data });
                 }
             }).catch(function (err) {
@@ -143,7 +137,6 @@ class MyEmployees extends Component {
     }
 
     handleStatusChange = (event, index, status) => {
-        console.log("here");
         this.setState({status}, this.search);
     };
 
@@ -152,7 +145,6 @@ class MyEmployees extends Component {
     };
 
     render() {
-        console.log("state: ", this.state);
         const style = {
             separator: {
                 width: "70%",
@@ -307,7 +299,6 @@ class MyEmployees extends Component {
         if (this.state.employees.length !== 0) {
             employeePreviews = this.state.employees.map(employee => {
                 key++;
-                console.log(employee);
 
                 return (
                     <li style={{marginTop: '15px'}}
