@@ -77,7 +77,7 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            companyId: this.props.currentUser.company.companyId,
+            positionName: this.props.position,
             gradingComplete: true
         }
         console.log(user);
@@ -146,7 +146,7 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            companyId: this.props.currentUser.company.companyId,
+            positionName: this.props.position,
             gradingComplete: false
         }
         axios.post("/api/business/answerQuestion", {user})

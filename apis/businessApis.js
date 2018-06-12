@@ -588,25 +588,19 @@ async function POST_answerQuestion(req, res) {
 
     const companyId = user.businessInfo.company.companyId;
 
+    console.log(companyId);
+
     const businessQuery = {
         "_id": mongoose.Types.ObjectId(companyId)
     }
 
-    // get only the position the user is asking for in the positions array
-    const positionQuery = {
-        "positions": {
-            "$elemMatch": {
-                "name": positionName
-            }
-        }
-    }
+    console.log(positionName);
 
     // get the business the user works for
     let business;
     try {
         business = await Businesses
-            .find(businessQuery, positionQuery)
-            .select("positions.name positions.employees.answers positions.employees.employeeId positions.employees.managerId positions.employees.gradingComplete positions.employees.name positions.employees.profileUrl positions.employees.archetype positions.employees.score");
+            .find(businessQuery)
         // see if there are none found
         if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
         // if any are found, only one is found, as we searched by id
@@ -621,8 +615,12 @@ async function POST_answerQuestion(req, res) {
         return res.status(400).send("Invalid position.");
     }
 
+    const positionIndex = business.positions.findIndex(position => {
+        return position.name.toString() === positionName.toString();
+    })
+
     // should only be one position in the array since names should be unique
-    const position = business.positions[0];
+    const position = business.positions[positionIndex];
 
     // get the employees from that position
     let employees = position.employees;
@@ -654,7 +652,7 @@ async function POST_answerQuestion(req, res) {
     employee.gradingComplete = gradingComplete;
 
     // update the employee in the business object
-    business.positions[0].employees[employeeIndex] = employee;
+    business.positions[positionIndex].employees[employeeIndex] = employee;
 
     // save the business
     business.save()
@@ -662,6 +660,7 @@ async function POST_answerQuestion(req, res) {
         return res.json(employee.answers);
     })
     .catch(updateBusinessErr => {
+        console.log("error: ", updateBusinessErr);
         return res.status(500).send("failure!");
     });
 }
