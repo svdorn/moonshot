@@ -122,7 +122,6 @@ class MyEmployees extends Component {
             }).then(res => {
                 // make sure component is mounted before changing state
                 if (this.refs.myEmployees) {
-                    console.log(res.data);
                     if (res.data && res.data.length > 0) {
                         this.setState({ employees: res.data, noEmployees: false });
                     } else {
@@ -301,7 +300,8 @@ class MyEmployees extends Component {
         if (this.state.noEmployees) {
             employeePreviews = (
                 <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                    No employees for the {this.state.position} position
+                    No employees
+                    {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
                     {(this.state.status == "Complete" || this.state.status == "Incomplete")
                     ? <bdi> with {this.state.status.toLowerCase()} status</bdi>
                     :null}.
