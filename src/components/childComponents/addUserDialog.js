@@ -126,9 +126,6 @@ class AddUserDialog extends Component {
                 case "employeeEmail":
                     employeeEmails.push(emailAddr);
                     break;
-                // case "managerEmail":
-                //     managerEmails.push(emailAddr);
-                //     break;
                 case "adminEmail":
                     adminEmails.push(emailAddr);
                     break;
@@ -138,7 +135,7 @@ class AddUserDialog extends Component {
         }
 
         const currentUser = this.props.currentUser;
-        
+
         const currentUserInfo = {
             userId: currentUser._id,
             userName: currentUser.name,
@@ -148,7 +145,6 @@ class AddUserDialog extends Component {
             positionName: position.name
         }
 
-        // TODO: add manager emails in here when we do that
         this.props.postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo);
     }
 
@@ -162,10 +158,6 @@ class AddUserDialog extends Component {
                 const numEmployeeEmails = this.state.numEmployeeEmails + 1;
                 this.setState({numEmployeeEmails})
                 break;
-            // case "Manager":
-            //     const numManagerEmails = this.state.numManagerEmails + 1;
-            //     this.setState({numManagerEmails});
-            //     break;
             case "Admin":
                 const numAdminEmails = this.state.numAdminEmails + 1;
                 break;

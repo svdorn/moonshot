@@ -182,7 +182,7 @@ class MyEvaluations extends Component {
 
         return(
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEvaluations'>
-                <AddUserDialog />
+                {this.props.currentUser.userType === "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>My Evaluations | Moonshot</title>
                     <meta name="description" content="View the evaluations your company is running."/>
