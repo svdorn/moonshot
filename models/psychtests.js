@@ -6,6 +6,18 @@ var psychtestsSchema = mongoose.Schema({
     factors: [{
         // the name of the factor ("Honesty-Humility, Emotionality, Extraversion...")
         name: String,
+        // statistics about results for this factor
+        stats: {
+            // the median score for this factor
+            median: Number,
+            // the scores that the middle 80% of people get
+            middle80: {
+                // what the person farthest negative in the 80% got
+                miminum: Number,
+                // what the person farthest positive in the 80% got
+                maximum: Number
+            },
+        },
         // the facets make up the factors
         facets: [{
             // how important the facet is in calculating factor scores

@@ -1,5 +1,6 @@
-var Businesses = require("../models/businesses.js");
-var Users = require("../models/users.js");
+const Businesses = require("../models/businesses.js");
+const Users = require("../models/users.js");
+const Psychtests = require("../models/psychtests.js");
 const mongoose = require("mongoose");
 
 const crypto = require('crypto');
@@ -730,22 +731,23 @@ async function GET_evaluationResults(req, res) {
     const positionIdString = positionId.toString();
 
     // --->>      GET USER, BUSINESS, AND CANDIDATE FROM DATABASE       <<--- //
-    let user, business, candidate;
+    let user, business, candidate, psychTest;
     try {
         // get the business user, candidate, and business
-        let [foundUser, foundCandidate, foundBusiness] = await Promise.all([
+        let [foundUser, foundCandidate, foundBusiness, foundPsychTest] = await Promise.all([
             getAndVerifyUser(userId, verificationToken),
-            Users.findOne({profileUrl}).select("_id name archetype title email emailToContact psychometricTest.factors.name psychometricTest.factors.score positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
-            Businesses.findById(businessId).select("_id positions._id positions.candidates.candidateId positions.candidates.scores positions.skills")
+            Users.findOne({profileUrl}).select("_id name archetype title email emailToContact psychometricTest.factors.name psychometricTest.factors.score psychometricTest.factors.factorId positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
+            Businesses.findById(businessId).select("_id positions._id positions.candidates.candidateId positions.candidates.scores positions.skills"),
+            Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
 
-        // make sure a user, candidate, and business were found
-        if (!foundUser || !foundCandidate || !foundBusiness) {
+        // make sure a user, candidate, business, and psych test were found
+        if (!foundUser || !foundCandidate || !foundBusiness || !foundPsychTest) {
             throw "User or candidate or business not found.";
         }
 
         // get the three found objects outside of the try/catch
-        user = foundUser; candidate = foundCandidate; business = foundBusiness;
+        user = foundUser; candidate = foundCandidate; business = foundBusiness; psychTest = foundPsychTest;
     } catch (dbError) {
         console.log("Error getting user or candidate or business: ", dbError);
         res.status(500).send("Invalid operation.");
@@ -812,7 +814,30 @@ async function GET_evaluationResults(req, res) {
             return posSkill.toString() === skill.skillId.toString();
         });
     }) : [];
-    const psychScores = candidate.psychometricTest.factors;
+    // have to convert the factor names to what they will be displayed as
+    const psychNameConversions = {
+        "Extraversion": "Dimension",
+        "Emotionality": "Temperament",
+        "Honesty-Humility": "Viewpoint",
+        "Conscientiousness": "Methodology",
+        "Openness to Experience": "Experientiality",
+        "Agreeableness": "Ethos",
+        "Altruism": "Belief"
+    };
+    const psychScores = candidate.psychometricTest.factors.map(area => {
+        // find the factor within the psych test so we can get the middle 80 scores
+        const factorIndex = psychTest.factors.findIndex(fac => {
+            return fac._id.toString() === area.factorId.toString();
+        });
+        const foundFactor = typeof factorIndex === "number" && factorIndex >= 0;
+        stats = foundFactor ? psychTest.factors[factorIndex].stats : undefined;
+
+        return {
+            name: psychNameConversions[area.name],
+            score: area.score,
+            stats
+        }
+    });
     const results = {
         title: candidate.title,
         name: candidate.name,

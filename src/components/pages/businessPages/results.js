@@ -10,6 +10,7 @@ import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
 import AddUserDialog from '../../childComponents/addUserDialog';
+import PsychBreakdown from '../../childComponents/psychBreakdown';
 
 class Results extends Component {
     constructor(props) {
@@ -22,14 +23,14 @@ class Results extends Component {
             predictivePoints: [],
             freeResponses: [],
             psychScores: [],
-            loading: true
+            archetype: "",
+            loading: true,
+            areaSelected: undefined
         };
     }
 
 
     componentDidMount() {
-        let candidate = {}, overallScore = undefined, hardSkills = [], predictiveInsights = [], freeResponses;
-
         let profileUrl = "";
         let businessId = "";
         let positionId = "";
@@ -94,13 +95,14 @@ class Results extends Component {
             self.setState({
                 ...self.state,
                 loading: false,
-                psychScores: res.data.pyschScores,
+                psychScores: res.data.psychScores,
+                archetype: res.data.archetype,
                 candidate,
                 overallScore,
                 hardSkillPoints,
                 predictivePoints,
                 freeResponses
-            });
+            }, () => {console.log("state is now: ", self.state);});
         })
         .catch(error => {
             console.log("error: ", error);
@@ -122,12 +124,9 @@ class Results extends Component {
 
 
     makeAnalysisSection() {
-        const hardSkillsDataPoints = [
-            {x: "Full Stack", y: 120, confidenceInterval: 13},
-            {x: "Version Control", y: 132, confidenceInterval: 11},
-            {x: "Artificial Intelligence", y: 91, confidenceInterval: 10},
-            {x: "Startup", y: 68, confidenceInterval: 16}
-        ];
+        if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
+
+        const hardSkillsDataPoints = this.state.hardSkillPoints;
 
         return (
             <div className="center aboutMeSection" style={style.tabContent}>
@@ -200,94 +199,11 @@ class Results extends Component {
                     />
                 </div>
 
-                <div className="purpleToGreenSpacer"
-                     id="picturesToPathwaysHomepageSpacer"/>
-
-                <div>
-                    <div
-                        className="whiteText center font24px font20pxUnder700 font16pxUnder500">
-                        Psychometric Breakdown
-                    </div>
-                    <div style={{marginTop: '40px'}}>
-                        <img
-                            alt="Atom Icon"
-                            src="/icons/Atom2.png"
-                            style={{height: '70px'}}
-                        /><br/>
-                        <b className="whiteText font24px font20pxUnder700 font16pxUnder500 paddingTop10px">
-                            Innovator
-                        </b>
-                    </div>
-                    <div style={{...style.horizList, overflow:"auto"}}>
-                        <div className="horizListFull">
-                            <div className="horizListSpacer"
-                                 style={{marginLeft: "20%"}}
-                            >
-                                <div
-                                    className="horizListText grayText font24px font20pxUnder700 font16pxUnder500">
-                                    <b style={style.lightBlue}>Social<div className="under500only br"><br/></div> Type</b><br/>
-                                    Authoritative
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="horizListFull">
-                            <div className="horizListSpacer"
-                                 style={{marginLeft: "5%", marginRight: '5%'}}>
-                                <div
-                                    className="horizListText grayText font24px font20pxUnder700 font16pxUnder500">
-                                    <b style={style.lightBlue}>Work<div className="under500only br"><br/></div> Type</b><br/>
-                                    Creative
-                                </div>
-                            </div>
-                        </div>
-                        <div className="horizListFull">
-                            <div className="horizListSpacer"
-                                 style={{marginRight: "20%"}}>
-                                <div
-                                    className="horizListText grayText font24px font20pxUnder700 font16pxUnder500">
-                                    <b style={style.lightBlue}>Key<div className="under500only br"><br/></div> Trait</b><br/>
-                                    Drive
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div style={style.characteristics} className="grayText font24px characteristicsList">
-                    <b className="font24px font20pxUnder700 font16pxUnder500 paddingTop10px" style={style.characteristicsTitle}>
-                        Characteristics
-                    </b>
-                    <div style={style.characteristicsListRow}>
-                        <div>Creative</div>
-                        <div>Success-Oriented</div>
-                        <div>Idea-Generator</div>
-                        <div>Multi-Tasker</div>
-                    </div>
-                    <div style={style.characteristicsListRow}>
-                        <div>Dislike for Routines</div>
-                        <div>Assertive</div>
-                        <div>Outspoken</div>
-                    </div>
-                    <div style={style.characteristicsListRow}>
-                        <div>Individualistic</div>
-                        <div>Perfectionist</div>
-                    </div>
-                </div>
-
-                <div style={style.descriptionBox} className="grayText font24px">
-                    <b className="font24px font20pxUnder700 font16pxUnder500 paddingTop10px" style={style.characteristicsTitle}>
-                        Description
-                    </b>
-                    <div style={style.description}>
-                        {"An out-of-the box thinker - flexible, energetic, and always"}<br/>
-                        {"engaged with their many interests and projects. Always curious, they're"}<br/>
-                        {"highly motivated by challenge and novelty."}<br/>
-                    </div>
-                </div>
-
-                <div className="purpleToGreenSpacer"
-                     id="picturesToPathwaysHomepageSpacer"/>
+                 <PsychBreakdown
+                     archetype={this.state.archetype}
+                     psychScores={this.state.psychScores}
+                     forCandidate={false}
+                 />
 
                 <div
                     className="whiteText center font24px font20pxUnder700 font16pxUnder500">
@@ -301,29 +217,6 @@ class Results extends Component {
                 </div>
             </div>
         );
-    }
-
-
-    makePsychSection() {
-        const psychScores = this.state.psychScores;
-
-        
-
-        const descriptions = {
-            Dimension: "af paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Temperament: "Temp desc jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Viewpoint: "view desc af paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Methodology: "method paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Experientiality: "exp paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Ethos: "ethos paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-            Belief: "belief paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa"
-        }
-
-        return (
-            <div className="fillScreen">
-
-            </div>
-        )
     }
 
 
@@ -365,7 +258,6 @@ class Results extends Component {
         const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress/></div>
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
         const responsesSection = loading ? loadingArea : this.makeResponsesSection();
-        const psychSection = loading ? loadingArea : this.makePsychSection();
 
         return (
             <div>
@@ -380,8 +272,8 @@ class Results extends Component {
                             <div className="blackBackground paddingBottom40px">
                                 <div className="headerDiv"/>
                                 <div className="profileInfoSkills">
-                                    <img style={style.leftTriangles} src="images/LeftTriangles.png" />
-                                    <img style={style.rightTriangles} src="images/RightTriangles.png" />
+                                    {/*<img style={style.leftTriangles} src="/images/LeftTriangles.png" />
+                                    <img style={style.rightTriangles} src="/images/RightTriangles.png" />*/}
                                     <div className="center">
                                         <div style={style.imgContainer}>
                                             <img
@@ -421,12 +313,6 @@ class Results extends Component {
                                                 <div/>
                                             </div>
                                             {analysisSection}
-                                        </Tab>
-                                        <Tab label="Psych" style={style.topTab}>
-                                            <div className="tabsShadow" style={{position:"absolute"}}>
-                                                <div/>
-                                            </div>
-                                            {psychSection}
                                         </Tab>
                                         <Tab label="Responses" style={style.topTab}>
                                             <div className="tabsShadow">
