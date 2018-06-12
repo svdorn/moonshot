@@ -62,6 +62,10 @@ function POST_emailInvites(req, res) {
     }
 
     let moonshotUrl = 'https://www.moonshotinsights.io/';
+    // if we are in development, links are to localhost
+    if (process.env.NODE_ENV === "development") {
+        moonshotUrl = 'http://localhost:8081/';
+    }
 
     // verify the employer is actually a part of this organization
     verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
