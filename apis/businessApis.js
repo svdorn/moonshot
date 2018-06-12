@@ -588,13 +588,9 @@ async function POST_answerQuestion(req, res) {
 
     const companyId = user.businessInfo.company.companyId;
 
-    console.log(companyId);
-
     const businessQuery = {
         "_id": mongoose.Types.ObjectId(companyId)
     }
-
-    console.log(positionName);
 
     // get the business the user works for
     let business;
@@ -618,6 +614,10 @@ async function POST_answerQuestion(req, res) {
     const positionIndex = business.positions.findIndex(position => {
         return position.name.toString() === positionName.toString();
     })
+
+    if (positionIndex <= -1) {
+        return res.status(400).send("Invalid position.");
+    }
 
     // should only be one position in the array since names should be unique
     const position = business.positions[positionIndex];
@@ -1094,7 +1094,7 @@ async function GET_employeeSearch(req, res) {
     // filter by status if status given
     let gradingComplete = false;
     if (status && status !== "") {
-        if (status == "Complete") {
+        if (status.toString() === "Complete") {
             gradingComplete = true;
             employees = employees.filter(employee => {
                 return employee.gradingComplete === gradingComplete;

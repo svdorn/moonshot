@@ -23,13 +23,17 @@ class EmployeePreview extends Component {
             gradingComplete: props.gradingComplete,
             answers: props.answers,
             gradingInProgress: false,
-            questionIndex: 0,
-            questionAnswer: 0
+            questionIndex: 0
         }
     }
 
     // Set the current question when the component mounts
     componentDidMount() {
+        let questionAnswer = 0;
+        if (this.props.answers.length >= 1) {
+            questionAnswer = this.props.answers[0].score;
+        }
+        this.setState({questionAnswer: questionAnswer});
         // // Start the test at the last unanswered question
         // let maxQuestionIndex = 0;
         //
@@ -80,7 +84,6 @@ class EmployeePreview extends Component {
             positionName: this.props.position,
             gradingComplete: true
         }
-        console.log(user);
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
             // TODO: fix the question answer
@@ -106,7 +109,7 @@ class EmployeePreview extends Component {
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
             positionName: this.props.position,
-            gradingComplete: false
+            gradingComplete: this.state.gradingComplete
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
@@ -147,7 +150,7 @@ class EmployeePreview extends Component {
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
             positionName: this.props.position,
-            gradingComplete: false
+            gradingComplete: this.state.gradingComplete
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
