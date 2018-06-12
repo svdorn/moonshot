@@ -466,10 +466,10 @@ class Menu extends Component {
             <header style={{zIndex: "100"}}>
                 <div>
                     <Toolbar id="menu">
-                        <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "30px"}}>
+                        <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "35px"}}>
                             {moonshotLogoHtml}
                         </ToolbarGroup>
-                        <ToolbarGroup>
+                        <ToolbarGroup className="marginTop10px">
                             {desktopMenu}
 
                             <IconMenu
