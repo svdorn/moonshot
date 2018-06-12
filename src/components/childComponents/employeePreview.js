@@ -80,6 +80,7 @@ class EmployeePreview extends Component {
             companyId: this.props.currentUser.company.companyId,
             gradingComplete: true
         }
+        console.log(user);
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
             // TODO: fix the question answer
@@ -104,7 +105,7 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            companyId: this.props.currentUser.company.companyId,
+            positionName: this.props.position,
             gradingComplete: false
         }
         axios.post("/api/business/answerQuestion", {user})

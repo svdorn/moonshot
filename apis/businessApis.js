@@ -550,71 +550,120 @@ async function POST_updateHiringStage(req, res) {
     return res.json("success");
 }
 
-function POST_answerQuestion(req, res) {
+async function POST_answerQuestion(req, res) {
     const body = req.body;
     const userId = sanitize(body.user.userId);
     const employeeId = sanitize(body.user.employeeId);
     const verificationToken = sanitize(body.user.verificationToken);
     const questionIndex = sanitize(body.user.questionIndex);
     const score = sanitize(body.user.score);
-    const companyId = sanitize(body.user.companyId);
     const gradingComplete = sanitize(body.user.gradingComplete);
+    const positionName = sanitize(body.user.positionName);
 
-    if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !companyId) {
+    if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !positionName) {
         return res.status(400).send("Bad request.");
     }
 
     // verify the employer is actually a part of this organization
-    verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
-    .then(business => {
-        // if employer does not have valid credentials
-        if (!business) {
-            console.log("Employer tried to update an answer to a question and didn't have access.");
-            return res.status(403).send("You do not have permission to change an employees answers.");
+    // get the user who is trying to search for candidates
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting business user while searching for candidates: ", getUserError);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // if the user is not an admin or manager, they can't search for candidates
+    if (!["accountAdmin", "manager"].includes(user.userType)) {
+        console.log("User is type: ", user.userType);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // if the user doesn't have
+    if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
+        console.log("User doesn't have associated business.");
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
+
+    const companyId = user.businessInfo.company.companyId;
+
+    const businessQuery = {
+        "_id": mongoose.Types.ObjectId(companyId)
+    }
+
+    // get only the position the user is asking for in the positions array
+    const positionQuery = {
+        "positions": {
+            "$elemMatch": {
+                "name": positionName
+            }
         }
+    }
 
-        // the index of the employee in the employee array
-        const employeeIndex = business.employees.findIndex(currEmployee => {
-            return currEmployee.employeeId.toString() === employeeId.toString();
-        });
+    // get the business the user works for
+    let business;
+    try {
+        business = await Businesses
+            .find(businessQuery, positionQuery)
+            .select("positions.name positions.employees.answers positions.employees.employeeId positions.employees.managerId positions.employees.gradingComplete positions.employees.name positions.employees.profileUrl positions.employees.archetype positions.employees.score");
+        // see if there are none found
+        if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
+        // if any are found, only one is found, as we searched by id
+        business = business[0];
+    } catch (findBizError) {
+        console.log("error finding business for user trying to search for candidates: ", findBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
 
-        let employee = business.employees[employeeIndex];
+    // make sure the user gave a valid position
+    if (!business.positions || business.positions.length === 0) {
+        return res.status(400).send("Invalid position.");
+    }
+
+    // should only be one position in the array since names should be unique
+    const position = business.positions[0];
+
+    // get the employees from that position
+    let employees = position.employees;
+
+    // the index of the employee in the employee array
+    const employeeIndex = employees.findIndex(currEmployee => {
+        return currEmployee.employeeId.toString() === employeeId.toString();
+    });
+
+    let employee = employees[employeeIndex];
 
 
-        // get the index of the answer in the user's answers array
-        const answerIndex = employee.answers.findIndex(answer => {
-            return answer.questionIndex === questionIndex;
-        });
+    // get the index of the answer in the user's answers array
+    const answerIndex = employee.answers.findIndex(answer => {
+        return answer.questionIndex === questionIndex;
+    });
 
-        if (answerIndex === -1) {
-            const newAnswer = {
-                complete: true,
-                score: score,
-                questionIndex: questionIndex
-            };
-            employee.answers.push(newAnswer);
-        } else {
-            employee.answers[answerIndex].score = score;
-        }
+    if (answerIndex === -1) {
+        const newAnswer = {
+            complete: true,
+            score: score,
+            questionIndex: questionIndex
+        };
+        employee.answers.push(newAnswer);
+    } else {
+        employee.answers[answerIndex].score = score;
+    }
 
-        employee.gradingComplete = gradingComplete;
+    employee.gradingComplete = gradingComplete;
 
-        // update the employee in the business object
-        business.employees[employeeIndex] = employee;
+    // update the employee in the business object
+    business.positions[0].employees[employeeIndex] = employee;
 
-        // save the business
-        business.save()
-        .then(updatedBusiness => {
-            return res.json(employee.answers);
-        })
-        .catch(updateBusinessErr => {
-            return res.status(500).send("failure!");
-        });
+    // save the business
+    business.save()
+    .then(updatedBusiness => {
+        return res.json(employee.answers);
     })
-    .catch(verifyEmployerErr => {
-        console.log("Error when trying to verify employer when they were trying to edit an answer for a question: ", verifyEmployerErr);
-        return res.status(500).send("Server error, try again later.");
-    })
+    .catch(updateBusinessErr => {
+        return res.status(500).send("failure!");
+    });
 }
 
 

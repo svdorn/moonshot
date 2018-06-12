@@ -311,6 +311,7 @@ class MyEmployees extends Component {
                             employeeId={employee.employeeId}
                             employeeUrl={employee.employeeUrl}
                             questions={this.state.questions}
+                            position={this.state.position}
                         />
                     </li>
                 );
