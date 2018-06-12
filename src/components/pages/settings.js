@@ -24,7 +24,7 @@ class Settings extends Component {
     render() {
         return (
             <div className="fillScreen lightBlackBackground">
-                {this.props.currentUser.userType === "accountAdmin" ? <AddUserDialog /> : null}
+                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>Settings | Moonshot</title>
                     <meta name="description" content="Change your Moonshot account settings." />

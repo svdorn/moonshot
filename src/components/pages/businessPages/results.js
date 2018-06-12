@@ -261,7 +261,7 @@ class Results extends Component {
 
         return (
             <div>
-                {this.props.currentUser.userType === "accountAdmin" ? <AddUserDialog /> : null}
+                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>{candidate.name} | Moonshot</title>
                     <meta name="description" content="Results user view."/>

@@ -85,6 +85,10 @@ class MyEvaluations extends Component {
         }
     }
 
+    startPsychTest() {
+
+    }
+
 
     render() {
         const style = {
@@ -180,9 +184,26 @@ class MyEvaluations extends Component {
 
         }
 
+        // The section for the account admin to take the psych test if they haven't already
+        let accountAdminTakePsychTest = null;
+        if (currentUser && currentUser.userType == "accountAdmin" && !currentUser.psychometricTest.endDate && (this.state.positions.length !== 0 || this.state.noPositions)) {
+            accountAdminTakePsychTest = (
+                <div className="marginBottom10px center">
+                    <div className="whiteText font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 inlineBlock">
+                        All admins must take a 13 minute psychometric quiz. Take it here!
+                    </div>
+                    <div className="inlineBlock marginLeft10px">
+                            <button className="veryRoundedButton smallMediumButton font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 purpleToBlueAnimate whiteText" onClick={this.startPsychTest} style={{padding: "4px 15px"}}>
+                                Quiz
+                            </button>
+                    </div>
+                </div>
+            );
+        }
+
         return(
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEvaluations'>
-                {this.props.currentUser.userType === "accountAdmin" ? <AddUserDialog /> : null}
+                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>My Evaluations | Moonshot</title>
                     <meta name="description" content="View the evaluations your company is running."/>
@@ -194,6 +215,7 @@ class MyEvaluations extends Component {
                         My Evaluations
                     </div>
                 </div>
+                {accountAdminTakePsychTest}
                 <div className="marginBottom60px">
                     {evaluations}
                 </div>

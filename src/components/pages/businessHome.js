@@ -721,7 +721,7 @@ class BusinessHome extends Component {
 
         return (
             <div className={blurredClass}>
-                {(this.props.currentUser && this.props.currentUser.userType === "accountAdmin") ? <AddUserDialog /> : null}
+                {(this.props.currentUser && this.props.currentUser.userType == "accountAdmin") ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>Moonshot</title>
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />

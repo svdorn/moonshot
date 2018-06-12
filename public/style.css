@@ -751,6 +751,8 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+.smallMediumButton:focus {outline: none}
+.purpleToBlueAnimate.smallMediumButton { background-position-x: -40px; }
 .mediumLargeButton:focus { outline: none; }
 .purpleToBlueAnimate.mediumLargeButton { background-position-x: -112px; }
 .purpleToBlueAnimate:hover {
@@ -5137,6 +5139,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .purpleToBlueAnimate.mediumLargeButton { background-position-x: -80px; }
     .purpleToBlueAnimate.mediumLargeButton:hover { background-position-x: 0px; }
+    .purpleToBlueAnimate.smallMediumButton { background-position-x: -20px; }
+    .purpleToBlueAnimate.smallMediumButton :hover{ background-position-x: 0px; }
+
 
 
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {

@@ -137,7 +137,7 @@ class EmployeeResults extends Component {
 
         return (
             <div className="center aboutMeSection" style={style.tabContent}>
-                {this.state.currentUser.userType === "accountAdmin" ? <AddUserDialog /> : null}
+                {this.state.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <div className="lightBlackBackground" style={style.candidateScore}>
                     <div className="paddingTop20px">
                         <div
