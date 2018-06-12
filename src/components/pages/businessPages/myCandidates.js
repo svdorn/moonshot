@@ -34,13 +34,6 @@ class MyCandidates extends Component {
     constructor(props) {
         super(props);
 
-        const emptyCandidate = {
-            name: "Loading...",
-            hiringStage: "",
-            email: "",
-            disabled: true
-        };
-
         // if a url query is telling us which position should be selected first
         let positionNameFromUrl = props.location.query && props.location.query.position ? props.location.query.position : undefined;
 
@@ -49,11 +42,13 @@ class MyCandidates extends Component {
             hiringStage: "",
             position: "",
             sortBy: "",
-            candidates: [emptyCandidate],
+            candidates: [],
             positions: [],
             positionNameFromUrl,
             // true if the business has no positions associated with it
-            noPositions: false
+            noPositions: false,
+            // true if the position has no candidates associated with it
+            noCandidates: false
         }
     }
 
@@ -118,17 +113,18 @@ class MyCandidates extends Component {
     }
 
     handleHiringStageChange = (event, index, hiringStage) => {
-        this.setState({hiringStage}, this.search);
+        this.setState({hiringStage, candidates: [], noCandidates: false}, this.search);
     };
 
     handlePositionChange = (event, index, position) => {
-        this.setState({position}, this.search);
+        this.setState({position, candidates: [], noCandidates: false}, this.search);
     };
 
     handleSortByChange = (event, index, sortBy) => {
-        this.setState({sortBy}, () => {
+        this.setState({sortBy, candidates: [], noCandidates: false}, () => {
             // only search if the user put in a new search term
             if (sortBy !== "") { this.search(); }
+            else { this.setState({noCandidates: true}) }
         });
     };
 
@@ -149,7 +145,11 @@ class MyCandidates extends Component {
                 console.log("res.data: ", res.data);
                 // make sure component is mounted before changing state
                 if (this.refs.myCandidates) {
-                    this.setState({ candidates: res.data });
+                    if (res.data && res.data.length > 0) {
+                        this.setState({ candidates: res.data, noCandidates: false });
+                    } else {
+                        this.setState({noCandidates: true, candidates: []})
+                    }
                 }
             }).catch(function (err) {
                 console.log("ERROR: ", err);
@@ -218,11 +218,33 @@ class MyCandidates extends Component {
 
         let candidatePreviews = (
             <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                Select a position to see your candidates.
+                Loading candidates...
             </div>
         );
 
-        if (this.state.position != "" || this.state.positions.length === 0) {
+        console.log("this.stae.position: ", this.state.position)
+
+        if (this.state.position == "Position") {
+            candidatePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    Must select a position.
+                </div>
+            );
+        }
+
+        if (this.state.noCandidates) {
+            candidatePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    No candidates
+                    {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
+                    {(this.state.hiringStage == "Not Contacted" || this.state.hiringStage == "Contacted" || this.state.hiringStage == "Interviewing" || this.state.hiringStage == "Hired")
+                    ? <bdi> with {this.state.hiringStage.toLowerCase()} for the hiring stage</bdi>
+                    :null}.
+                </div>
+            )
+        }
+
+        if (this.state.candidates.length !== 0) {
             candidatePreviews = this.state.candidates.map(candidate => {
                 key++;
 
@@ -310,7 +332,7 @@ class MyCandidates extends Component {
                                       anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                         >
-                            <MenuItem value={""} primaryText="Position"/>
+                            <MenuItem value={"Position"} primaryText="Position" key={"Position"}/>
                             <Divider/>
                             {positionItems}
                         </DropDownMenu>

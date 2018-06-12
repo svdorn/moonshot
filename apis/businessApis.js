@@ -983,7 +983,7 @@ async function GET_candidateSearch(req, res) {
     let candidates = position.candidates;
 
     // filter by name if search term given
-    if (searchTerm && searchTerm !== "") {
+    if (searchTerm && searchTerm !== "" && candidates) {
         const nameRegex = new RegExp(searchTerm, "i");
         candidates = candidates.filter(candidate => {
             return nameRegex.test(candidate.name);
@@ -991,7 +991,7 @@ async function GET_candidateSearch(req, res) {
     }
 
     // filter by hiring stage if hiring stage given
-    if (hiringStage && hiringStage !== "") {
+    if (hiringStage && hiringStage !== "" && candidates) {
         candidates = candidates.filter(candidate => {
             return candidate.hiringStage === hiringStage;
         });
@@ -999,14 +999,16 @@ async function GET_candidateSearch(req, res) {
 
     // default sort property is alphabetical, sort by score if that's the given sort by property
     let sortProperty = "name";
-    if (typeof sortBy === "string" && sortBy.toLowerCase() === "score") { sortProperty = "scores.overall"; }
+    if (typeof sortBy === "string" && sortBy.toLowerCase() === "score" && candidates) { sortProperty = "scores.overall"; }
 
     // sort the candidates
-    candidates.sort((candA, candB) => {
-        if (candA[sortProperty] < candB[sortProperty]) { return -1; }
-        if (candA[sortProperty] > candB[sortProperty]) { return 1; }
-        return 0;
-    });
+    if (candidates) {
+        candidates.sort((candA, candB) => {
+            if (candA[sortProperty] < candB[sortProperty]) { return -1; }
+            if (candA[sortProperty] > candB[sortProperty]) { return 1; }
+            return 0;
+        });
+    }
 
     res.json(candidates);
 }
