@@ -55,7 +55,6 @@ class MyEvaluations extends Component {
                 }
             })
             .then(res => {
-                console.log("positions: ", res.data.positions);
                 self.positionsFound(res.data.positions);
             })
             .catch(error => {
@@ -73,7 +72,6 @@ class MyEvaluations extends Component {
                 }
             })
             .then(function (res) {
-                console.log("res.data.positions: ", res.data.positions)
                 self.positionsFound(res.data.positions, res.data.logo, res.data.businessName);
             })
             .catch(function (err) {
@@ -150,7 +148,6 @@ class MyEvaluations extends Component {
                 key++;
 
                 let attributes = {};
-                console.log("position: ", position)
                 attributes.company = position.businessName;
 
                 // if user is manager or account admin, preview will look editable
@@ -158,7 +155,7 @@ class MyEvaluations extends Component {
                     attributes.completions = position.completions;
                     attributes.usersInProgress = position.usersInProgress;
                     attributes.length = position.length;
-                    attributes.skills = position.skills;
+                    attributes.skills = position.skillNames;
                     attributes.timeAllotted = position.timeAllotted;
                     attributes.logo = self.state.logo;
                     attributes.company = self.state.businessName;
@@ -190,14 +187,6 @@ class MyEvaluations extends Component {
                 );
             });
 
-        }
-
-        if (currentUser && this.state.positions.length !== 0 && evaluations[0] == null) {
-            console.log("can change it back");
-        }
-
-        if (currentUser && this.state.positions.length !== 0) {
-            console.log("pos 1: ",evaluations[0]);
         }
 
         // The section for the account admin to take the psych test if they haven't already

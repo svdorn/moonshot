@@ -20,39 +20,6 @@ import axios from "axios";
 
 class MyEvaluationsPreview extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            // names of the skills of this position
-            skills: [],
-        }
-    }
-
-    componentWillMount() {
-        const currentUser = this.props.currentUser;
-        let self = this;
-        if (this.props.skills && this.props.skills.length > 0) {
-            axios.get("/api/skill/skillNamesByIds", {
-                params: {
-                    userId: currentUser._id,
-                    verificationToken: currentUser.verificationToken,
-                    skillIds: this.props.skills
-                }
-            })
-            .then(res => {
-                console.log(res);
-                self.setState({skills: res.data})
-            })
-            .catch(error => {
-                console.log("error getting skills: ", error);
-                if (error.response) { console.log(error.response.data); }
-            })
-        } else {
-            
-        }
-    }
-
     goTo(route) {
         // goes to the wanted page
         browserHistory.push(route);
@@ -88,7 +55,7 @@ class MyEvaluationsPreview extends Component {
         // user is a manager or account admin
         const editing = this.props.variation === "edit"
 
-        const skills = this.state.skills;
+        const skills = this.props.skills;
 
         let positionSkills;
 
@@ -104,11 +71,11 @@ class MyEvaluationsPreview extends Component {
                 }
 
                 return (
-                    <div key={skill.name + "Surrounder"} style={{display: 'inline-block'}} className={margin}>
-                        <div key={skill.name}
+                    <div key={skill + "Surrounder"} style={{display: 'inline-block'}} className={margin}>
+                        <div key={skill}
                              className="myEvalsSkillChip font14px font12pxUnder500"
                         >
-                            {skill.name}
+                            {skill}
                         </div>
                     </div>
                 );
@@ -188,9 +155,6 @@ class MyEvaluationsPreview extends Component {
 
         return(
             <div>
-            {this.state.skillsNotLoaded ?
-                null
-                :
             <div className="myEvalsBox aboutMeLi">
                 <div className="aboutMeLiIconContainer">
                     <img alt="My Evals Company Logo" src={`/logos/${this.props.logo}`}/>
@@ -207,7 +171,6 @@ class MyEvaluationsPreview extends Component {
                     {clickableArea}
                 </div>
             </div>
-            }
             </div>
         );
     }

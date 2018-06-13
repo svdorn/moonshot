@@ -1831,7 +1831,7 @@ async function GET_positions(req, res) {
         try {
             businesses = await Businesses
             .find({ "_id": { "$in": businessIds } })
-            .select("name logo positions.name positions.timeAllotted positions._id positions.skills");
+            .select("name logo positions.name positions.timeAllotted positions._id positions.skillNames");
         } catch (getBusinessesError) {
             console.log("error getting businesses while trying to get positions for user: ", getBusinessesError);
             return res.status(500).send("Server error.");
@@ -1858,7 +1858,7 @@ async function GET_positions(req, res) {
                         businessId: business._id,
                         positionName: bizPosition.name,
                         positionId: bizPosition._id,
-                        skills: validPositions[positionIndex].skills,
+                        skills: bizPosition.skillNames,
                         assignedDate: validPositions[positionIndex].assignedDate,
                         deadline: validPositions[positionIndex].deadline,
                         completedDate: validPositions[positionIndex].completedDate
