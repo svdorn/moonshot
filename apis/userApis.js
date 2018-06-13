@@ -2,6 +2,7 @@ const Users = require('../models/users.js');
 const Psychtests = require('../models/psychtests.js');
 const Skills = require('../models/skills.js');
 const Businesses = require('../models/businesses.js');
+const Adminquestions = require("../models/adminquestions");
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
@@ -23,6 +24,7 @@ const { sanitize,
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require('./psychApis');
+const errors = require('./errors.js');
 
 
 const userApis = {
@@ -43,9 +45,10 @@ const userApis = {
     POST_addPositionEval,
     POST_startPsychEval,
     POST_answerPsychQuestion,
-    GET_printPsychScore,
     POST_submitFreeResponse,
     GET_positions,
+    GET_adminQuestions,
+    POST_answerAdminQuestion,
 
     POST_resetFrizz,
     POST_reset24,
@@ -53,74 +56,6 @@ const userApis = {
     internalStartPsychEval,
     addEvaluation,
     finishPositionEvaluation
-}
-
-
-
-
-async function GET_printPsychScore(req, res) {
-    const userId = "5a4670ec6f3fdb4b92f2a58c";
-    const verificationToken = "727679eb45870e104428f9677fd02b7e69fb68f2032aee46d96820f4406260a6";
-
-    //const userId = sanitize(req.body.userId);
-    //const verificationToken = sanitize(req.body.verificationToken);
-
-    let user = undefined;
-    try {
-        user = await Users.findById(userId);
-    } catch(getUserError) {
-        console.log(getUserError);
-    }
-
-    if (!user) {
-        console.log("User not found when trying to calculate psych score. Id: ", userId);
-        return res.status(404).send("User not found.");
-    }
-
-    if (user.verificationToken !== verificationToken || !verificationToken) {
-        return res.status(403).send("Insufficient permission.");
-    }
-
-    const psych = user.psychometricTest;
-
-    let total = 0.0;
-
-    let factorCounter = 0;
-    let facetCounter = 0;
-
-    let facetTotal = 0;
-    let factorTotal = 0;
-    let responseCounter = 0;
-
-    let factorScoresTotal = 0;
-
-    let currFactor = undefined;
-
-    psych.factors.forEach(factor => {
-        factor.facets.forEach(facet => {
-            facet.responses.forEach(response => {
-                responseCounter++;
-                facetTotal += response.answer;
-            });
-            let facetScore = facetTotal / responseCounter;
-            factorTotal += facetScore;
-            responseCounter = 0;
-            facetCounter++;
-            facetTotal = 0;
-            console.log(`${facet.name} score: `, facetScore);
-
-        });
-
-        let factorScore = factorTotal / facetCounter;
-        factorScoresTotal += factorScore;
-        console.log(`${factor.name.toUpperCase()} SCORE = `, factorScore);
-        facetCounter = 0;
-        factorCounter++;
-        factorTotal = 0;
-    });
-
-    const finalScore = factorScoresTotal / factorCounter;
-    console.log("score: ", finalScore);
 }
 
 
@@ -160,6 +95,77 @@ async function makeMockPsychData() {
     .catch(err => {
         console.log("err: ", err);
     })
+}
+
+
+// get the questions that are shown on the administrative questions portion of an evaluation
+async function GET_adminQuestions(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    let user, adminQuestions;
+    try {
+        let [foundUser, foundQuestions] = await Promise.all([
+            getAndVerifyUser(userId, verificationToken),
+            // there is only one object in this db
+            Adminquestions.findOne({})
+        ]);
+        if (!foundQuestions) {
+            throw "foundQuestions was null";
+        }
+
+        user = foundUser; adminQuestions = foundQuestions;
+    } catch (getUserError) {
+        console.log("error getting user while trying to get admin questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    return res.json(adminQuestions);
+}
+
+
+// get the questions that are shown on the administrative questions portion of an evaluation
+async function POST_answerAdminQuestion(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const questionType = sanitize(req.body.questionType);
+    const questionId = sanitize(req.body.questionId);
+    const sliderAnswer = sanitize(req.body.sliderAnswer);
+    const selectedId = sanitize(req.body.selectedId);
+    const selectedText = sanitize(req.body.selectedText);
+    const finished = sanitize(req.body.finished);
+
+    // make sure the question type is valid
+    if (!["demographics", "selfRating"].includes(questionType)) {
+        return res.status(400).send("Invalid input.");
+    }
+
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user while trying to get admin questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // make sure the user has a place to store the response
+    if (!user.adminQuestions[questionType]) {
+        user.adminQuestions[questionType] = [];
+    }
+    // add the response - works for both slider and mulitpleChoice questions
+    user.adminQuestions[questionType].push({
+        questionId, sliderAnswer, selectedId, selectedText, finishedQuestions: finished
+    });
+
+    // save the user
+    try {
+        await user.save();
+    } catch (saveUserError) {
+        console.log("error saving user while trying to answer admin question");
+        res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    return res.json(frontEndUser(user));
 }
 
 

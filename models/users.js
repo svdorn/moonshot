@@ -241,6 +241,34 @@ var usersSchema = mongoose.Schema({
     // the archetype the user was found to be from the psychometricTest
     archetype: String,
 
+    // questions the user has to answer - only once - before doing a position eval
+    adminQuestions: {
+        // whether the user has finished all the admin questions and no longer needs to do them
+        finishedQuestions: Boolean,
+        // questions user answered about demographics
+        demographics: [{
+            // of the question the user answered
+            questionId: mongoose.Schema.Types.ObjectId,
+            // only applies to slider questions
+            sliderAnswer: Number,
+            // only apply to multiple choice questions - the id of the answer chosen
+            selectedId: mongoose.Schema.Types.ObjectId,
+            // the text of the answer chosen
+            selectedText: String
+        }],
+        // questions user answered about aspects of job performance
+        selfRating: [{
+            // of the question the user answered
+            questionId: mongoose.Schema.Types.ObjectId,
+            // only applies to slider questions
+            sliderAnswer: Number,
+            // only apply to multiple choice questions - the id of the answer chosen
+            selectedId: mongoose.Schema.Types.ObjectId,
+            // the text of the answer chosen
+            selectedText: String
+        }]
+    },
+
     // the user's psychometric test answers and results
     psychometricTest: {
         // whether the user is currently taking the test

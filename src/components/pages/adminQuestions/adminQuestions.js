@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { addNotification, newCurrentUser } from "../../../actions/usersActions";
+import { answerAdminQuestion } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
@@ -16,7 +16,12 @@ class AdminQuestions extends Component {
 
         this.state = {
             selectedId: undefined,
+            selectedText: undefined,
+            demographics: undefined,
+            selfRating: undefined,
+            sliderValue: 1,
             question: undefined,
+            questionType: undefined,
             finished: false,
             skillName: undefined
         };
@@ -24,52 +29,101 @@ class AdminQuestions extends Component {
 
 
     componentDidMount() {
-        try {
-            const skillUrl = this.props.params.skillUrl;
-            this.resetPage(skillUrl);
-        } catch (getSkillUrlError) {
-            console.log(getSkillUrlError);
-            return this.goTo("/myEvaluations");
-        }
-    }
-
-
-    componentWillReceiveProps(newProps) {
-        // new skill url means we have a new skill to test
-        if (this.props.params.skillUrl !== newProps.params.skillUrl) {
-            this.resetPage(newProps.params.skillUrl)
-        }
-    }
-
-
-    resetPage(skillUrl) {
+        // make sure the user actually should be answering the admin questions
         const currentUser = this.props.currentUser;
-        // make sure a user is logged in
-        if (!currentUser) {
-            this.goTo("/login");
+        if (!currentUser || !currentUser.positionInProgress || (currentUser.adminQuestions && currentUser.adminQuestions.finishedQuestions)) {
+            this.setState({finished: true});
         }
 
-        const params = {
-            userId: currentUser._id,
-            verificationToken: currentUser.verificationToken,
-            skillUrl
-        }
+        console.log(currentUser);
 
-        axios.post("/api/skill/startOrContinueTest", params)
-        .then(result => {
-            this.setState({
-                question: {
-                    body: result.data.question.body,
-                    options: this.shuffle(result.data.question.options),
-                    multiSelect: result.data.question.multiSelect
-                },
-                skillName: result.data.skillName,
-                selectedId: undefined,
-                finished: false
-            });
+        const self = this;
+
+        // get the admin questions
+        axios.get("/api/user/adminQuestions", { params:
+            {
+                userId: currentUser._id,
+                verificationToken: currentUser.verificationToken
+            }
+        })
+        .then(response => {
+            console.log("response.data: ", response.data);
+            const questionInfo = response.data;
+
+            if (!Array.isArray(questionInfo.demographics) || questionInfo.demographics.length === 0) {
+                console.log("no demographics questions");
+                return;
+            }
+
+            // set the current question as the first one
+            let question = questionInfo.demographics[0];
+            let questionType = "demographics";
+
+            // see if the user has already done some of the questions
+            if (currentUser.adminQuestions && Array.isArray(currentUser.adminQuestions.demographics) && currentUser.adminQuestions.demographics.length > 0) {
+                // find the index of a question within demographics that is unanswered
+                let questionType = "demographics";
+                let unansweredIndex = self.findUnansweredIndex("demographics", questionInfo.demographics);
+
+                // if the user does have an unanswered question, ask that one
+                if (typeof unansweredIndex === "number" && unansweredIndex >= 0) {
+                    question = questionInfo.demographics[unansweredIndex];
+                }
+
+                // if the user has answered all demographic questions, check if
+                // they should be given self rating questions
+                else {
+                    // if they should, get them a self rating question
+                    if (currentUser.userType === "employee") {
+                        if (!Array.isArray(questionInfo.selfRating) || questionInfo.selfRating.length === 0) {
+                            console.log("no self rating questions");
+                            return;
+                        }
+                        // set the question to be the first self rating question
+                        question = questionInfo.selfRating[0];
+                        // check if the user has already answered some self rating questions
+                        if (currentUser.adminQuestions && Array.isArray(currentUser.adminQuestions.selfRating) && currentUser.adminQuestions.selfRating.length > 0) {
+                            questionType = "selfRating";
+                            unansweredIndex = self.findUnansweredIndex("selfRating", questionInfo.selfRating);
+
+                            // if the user does have an unanswered question, ask that one
+                            if (typeof unansweredIndex === "number" && unansweredIndex >= 0) {
+                                question = questionInfo.selfRating[unansweredIndex];
+                                questionType = "selfRating";
+                            }
+                            // if the user has answered all self rating questions, they're done
+                            else {
+                                self.setState({finished: true});
+                                return;
+                            }
+                        }
+
+                    }
+                    // if they shouldn't, they're done
+                    else {
+                        self.setState({finished: true});
+                        return;
+                    }
+                }
+            }
+
+            // see if the user has already answered some questions
+            this.setState({...questionInfo, question, questionType});
         })
         .catch(error => {
-            console.log("Error getting skill: ", error.response.data);
+            console.log("error getting admin questions: ", error);
+        });
+    }
+
+
+    findUnansweredIndex(questionType, realQuestions, excludeThis) {
+        const currentUser = this.props.currentUser;
+        console.log("finding unansweredIndex");
+        return realQuestions.findIndex(realQ => {
+            // question answered if user's answered questions contain the question
+            return realQ._id.toString() !== excludeThis && !currentUser.adminQuestions[questionType].some(userQ => {
+                return userQ.questionId.toString() === realQ._id.toString();
+            });
         });
     }
 
@@ -82,148 +136,214 @@ class AdminQuestions extends Component {
     }
 
 
-    shuffle(arr) {
-        let array = arr.slice();
-        let currentIndex = array.length,
-            temporaryValue,
-            randomIndex;
-
-        // While there remain elements to shuffle...
-        while (0 !== currentIndex) {
-            // Pick a remaining element...
-            randomIndex = Math.floor(Math.random() * currentIndex);
-            currentIndex -= 1;
-
-            // And swap it with the current element.
-            temporaryValue = array[currentIndex];
-            array[currentIndex] = array[randomIndex];
-            array[randomIndex] = temporaryValue;
-        }
-
-        return array;
+    selectAnswer(selectedId, selectedText) {
+        this.setState({...this.state, selectedId, selectedText});
     }
 
 
-    selectAnswer(selectedId) {
-        this.setState({...this.state, selectedId});
-    }
+    handleSlider = (event, sliderValue) => {
+        this.setState({sliderValue});
+    };
 
 
     nextQuestion() {
-        if (typeof this.state.selectedId !== "undefined") {
-            const currentUser = this.props.currentUser;
-            // don't need to send the question id because the user
-            // has the current question saved
-            const params = {
-                userId: currentUser._id,
-                verificationToken: currentUser.verificationToken,
-                skillUrl: this.props.params.skillUrl,
-                // an array because maybe later we'll have multi select questions
-                answerIds: [ this.state.selectedId ]
-            }
-            axios.post("/api/skill/answerSkillQuestion", params)
-            .then(result => {
-                this.props.newCurrentUser(result.data.updatedUser);
-                let question = undefined;
-                if (result.data.question) {
-                    question = result.data.question;
-                    question.options = this.shuffle(question.options);
-                }
-                this.setState({
-                    selectedId: undefined,
-                    finished: result.data.finished,
-                    question
-                });
-            })
-            .catch(error => {
-                console.log("error saving answer: ", error);
-            })
+        const currentUser = this.props.currentUser;
+
+        const demographics = this.state.demographics;
+        if (!Array.isArray(demographics)) {
+            console.log("No demographics questions!");
+            return;
         }
+        const demographicsLength = demographics.length;
+
+        // check if user is finished with the admin questions
+        let finished = false;
+        let questionType = "demographics";
+        if (currentUser.userType === "employee") {
+            // employees must finish demographics and self rating parts
+            if (Array.isArray(currentUser.adminQuestions.demographics) && currentUser.adminQuestions.demographics.length === demographicsLength) {
+                // check that self rating questions exist
+                const selfRating = this.state.selfRating;
+                if (!Array.isArray(selfRating)) {
+                    console.log("No self rating questions!");
+                    return;
+                }
+
+                questionType = "selfRating";
+
+                // to finish, you have to have finished all but one and currently be answering one
+                if (Array.isArray(currentUser.adminQuestions.selfRating) && currentUser.adminQuestions.selfRating.length === selfRating.length - 1) {
+                    finished = true;
+                }
+            }
+        }
+        else {
+            // everyone besides employees is finished after just finishing demographics
+            if (Array.isArray(currentUser.adminQuestions.demographics) && currentUser.adminQuestions.demographics.length === demographicsLength - 1) {
+                finished = true;
+            }
+        }
+
+        this.props.answerAdminQuestion(
+            currentUser._id,
+            currentUser.verificationToken,
+            this.state.questionType,
+            this.state.question._id,
+            this.state.sliderAnswer,
+            this.state.selectedId,
+            this.state.selectedText,
+            finished
+        );
+
+        // get the next question if not done
+        let question = undefined;
+        if (!finished) {
+            const currentQuestionId = this.state.question._id.toString();
+            const questionIndex = this.findUnansweredIndex(questionType, this.state[questionType], currentQuestionId);
+            question = this.state[questionType][questionIndex];
+        }
+
+        const newState = {
+            ...this.state,
+            finished,
+            questionType,
+            question,
+            selectedId: undefined
+        }
+
+        let self = this;
+        this.setState(newState, ()=>{console.log("state: ", self.state)});
     }
 
 
-    finishTest() {
-        // if the user is taking a position evaluation, go to the next step of that
-        const user = this.props.currentUser;
-        const currentPosition = user.currentPosition;
-        if (currentPosition) {
-            // if there are skill tests the user still has to take, go to that skill test
-            if (currentPosition.skillTests && currentPosition.testIndex < currentPosition.skillTests.length) {
-                this.goTo(`/skillTest/${currentPosition.skillTests[currentPosition.testIndex]}`);
-            }
-            // otherwise, if there are free response questions to answer, go there
-            else if (currentPosition.freeResponseQuestions && currentPosition.freeResponseQuestions.length > 0) {
-                this.goTo("/freeResponse");
-            }
-            // otherwise, the user is done with the test; go home and give them
-            // a notification saying they're done
-            else {
-                this.props.addNotification("Finished application!", "info");
-                this.goTo("/");
-            }
+    finish() {
+        // // if the user is taking a position evaluation, go to the next step of that
+        // const user = this.props.currentUser;
+        // const currentPosition = user.currentPosition;
+        // if (currentPosition) {
+        //     // if there are skill tests the user still has to take, go to that skill test
+        //     if (currentPosition.skillTests && currentPosition.testIndex < currentPosition.skillTests.length) {
+        //         this.goTo(`/skillTest/${currentPosition.skillTests[currentPosition.testIndex]}`);
+        //     }
+        //     // otherwise, if there are free response questions to answer, go there
+        //     else if (currentPosition.freeResponseQuestions && currentPosition.freeResponseQuestions.length > 0) {
+        //         this.goTo("/freeResponse");
+        //     }
+        //     // otherwise, the user is done with the test; go home and give them
+        //     // a notification saying they're done
+        //     else {
+        //         this.props.addNotification("Finished application!", "info");
+        //         this.goTo("/");
+        //     }
+        // }
+        // // otherwise the user took the exam as a one-off thing, so show them results
+        // else {
+        //     // TODO make it go to the actual results page
+        //     this.goTo("/");
+        // }
+    }
+
+
+    makeSliderQuestion() {
+        const question = this.state.question;
+        return (
+            <div>
+
+            </div>
+        );
+    }
+
+
+    makeMultipleChoiceQuestion() {
+        const self = this;
+        const question = this.state.question;
+
+        if (!Array.isArray(question.options)) {
+            console.log("Multiple choice question has no answers!");
+            return null;
         }
-        // otherwise the user took the exam as a one-off thing, so show them results
-        else {
-            // TODO make it go to the actual results page
-            this.goTo("/");
-        }
+
+        let options = question.options.map(option => {
+            const isSelected = this.state.selectedId === option._id;
+            const selectedClass = isSelected ? " selected" : "";
+            return (
+                <div key={option.body}
+                     onClick={() => self.selectAnswer(option._id, option.body)}
+                     className={"skillMultipleChoiceAnswer" + selectedClass}
+                >
+                    <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
+                    <div className="skillMultipleChoiceOptionText">{option.body}</div>
+                </div>
+            );
+        });
+
+        const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
+
+        return (
+            <div>
+                <div>{question.questionText}</div>
+                { options }
+                <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
+            </div>
+        );
     }
 
 
     render() {
         let self = this;
-        const skillName = this.state.skillName ? this.state.skillName : "Skill";
-        const additionalMetaText = this.state.skillName ? " in " + this.state.skillName.toLowerCase() : "";
 
+        let content = null;
         const question = this.state.question;
-        let answers;
-        if (question) {
-            answers = question.options.map(option => {
-                const isSelected = this.state.selectedId === option._id;
-                const selectedClass = isSelected ? " selected" : "";
-                return (
-                    <div key={option.body}
-                         onClick={() => self.selectAnswer(option._id)}
-                         className={"skillMultipleChoiceAnswer" + selectedClass}
-                    >
-                        <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
-                        <div className="skillMultipleChoiceOptionText">{option.body}</div>
-                    </div>
-                );
-            });
-        }
 
-        const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
-
-        let content = <CircularProgress/>;
-        if (question) {
-            content = (
-                <div>
-                    <StyledContent contentArray={question.body} style={{marginBottom:"40px"}} />
-                    { answers }
-                    <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
-                </div>
-            );
-        }
-
+        // if finished with admin questions, show button letting you advance to the next step
         if (this.state.finished) {
             content = (
                 <div>
-                    Test Complete!
-                    <br/>
-                    <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finishTest.bind(this)}>Finish</div>
+                    Finished with the admin questions!
+                    <button className="slightlyRoundedButton pinkToPurpleButtonGradient whiteText font16px clickableNoUnderline"
+                            onClick={this.finish.bind(this)}>
+                        Advance
+                    </button>
                 </div>
+            )
+        }
+
+        else if (!question) {
+            content = (
+                <CircularProgress />
             );
+        }
+
+        else {
+            const questionType = question.questionType;
+
+            if (questionType === "slider") {
+                content = this.makeSliderQuestion();
+            }
+
+            else if (questionType === "multipleChoice") {
+                content = this.makeMultipleChoiceQuestion();
+            }
+
+            if (this.state.finished) {
+                content = (
+                    <div>
+                        Administrative questions complete!
+                        <br/>
+                        <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finish.bind(this)}>Finish</div>
+                    </div>
+                );
+            }
         }
 
         return (
             <div className="blackBackground fillScreen whiteText center">
                 <MetaTags>
-                    <title>{skillName} Test | Moonshot</title>
-                    <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
+                    <title>Admin Questions | Moonshot</title>
+                    <meta name="description" content={"Answer some administrative questions and then you'll be ready for the position evaluation."} />
                 </MetaTags>
                 <div className="employerHeader" />
-                <ProgressBar />
+                {/*<ProgressBar />*/}
                 { content }
             </div>
         );
@@ -233,7 +353,7 @@ class AdminQuestions extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addNotification, newCurrentUser
+        answerAdminQuestion
     }, dispatch);
 }
 
