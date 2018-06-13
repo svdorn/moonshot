@@ -7,7 +7,7 @@ import { answerAdminQuestion } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
-import { CircularProgress } from "material-ui";
+import { CircularProgress, Slider } from "material-ui";
 import ProgressBar from '../../miscComponents/progressBar';
 
 class AdminQuestions extends Component {
@@ -62,7 +62,7 @@ class AdminQuestions extends Component {
             // see if the user has already done some of the questions
             if (currentUser.adminQuestions && Array.isArray(currentUser.adminQuestions.demographics) && currentUser.adminQuestions.demographics.length > 0) {
                 // find the index of a question within demographics that is unanswered
-                let questionType = "demographics";
+                questionType = "demographics";
                 let unansweredIndex = self.findUnansweredIndex("demographics", questionInfo.demographics);
 
                 // if the user does have an unanswered question, ask that one
@@ -79,6 +79,7 @@ class AdminQuestions extends Component {
                             console.log("no self rating questions");
                             return;
                         }
+
                         // set the question to be the first self rating question
                         question = questionInfo.selfRating[0];
                         // check if the user has already answered some self rating questions
@@ -108,7 +109,7 @@ class AdminQuestions extends Component {
             }
 
             // see if the user has already answered some questions
-            this.setState({...questionInfo, question, questionType});
+            self.setState({...questionInfo, question, questionType}, () => { console.log("state: ", self.state)});
         })
         .catch(error => {
             console.log("error getting admin questions: ", error);
@@ -161,7 +162,7 @@ class AdminQuestions extends Component {
         let questionType = "demographics";
         if (currentUser.userType === "employee") {
             // employees must finish demographics and self rating parts
-            if (Array.isArray(currentUser.adminQuestions.demographics) && currentUser.adminQuestions.demographics.length === demographicsLength) {
+            if (Array.isArray(currentUser.adminQuestions.demographics) && currentUser.adminQuestions.demographics.length >= demographicsLength - 1) {
                 // check that self rating questions exist
                 const selfRating = this.state.selfRating;
                 if (!Array.isArray(selfRating)) {
@@ -189,7 +190,7 @@ class AdminQuestions extends Component {
             currentUser.verificationToken,
             this.state.questionType,
             this.state.question._id,
-            this.state.sliderAnswer,
+            this.state.sliderValue,
             this.state.selectedId,
             this.state.selectedText,
             finished
@@ -208,11 +209,12 @@ class AdminQuestions extends Component {
             finished,
             questionType,
             question,
-            selectedId: undefined
+            selectedId: undefined,
+            selectedText: undefined,
+            sliderValue: 1
         }
 
-        let self = this;
-        this.setState(newState, ()=>{console.log("state: ", self.state)});
+        this.setState(newState);
     }
 
 
@@ -251,9 +253,38 @@ class AdminQuestions extends Component {
 
     makeSliderQuestion() {
         const question = this.state.question;
+        let sliderNumbers = [];
+        const lowRange = question.sliderMin;
+        const highRange = question.sliderMax;
+        for (let number = lowRange; number <= highRange; number++) {
+            sliderNumbers.push(
+                <div key={`sliderNumber${number}`} className="adminQuestions sliderNumber">
+                    { number }
+                </div>
+            );
+        }
         return (
             <div>
-
+                <div className="adminQuestions question">{question.questionText}</div>
+                <div className="center">
+                    <div className="center adminQuestions gradingSliderContainer">
+                        <Slider min={question.sliderMin}
+                                max={question.sliderMax}
+                                step={1}
+                                value={this.state.sliderValue}
+                                onChange={this.handleSlider}
+                        />
+                        <div className="adminQuestions sliderNumbers">
+                            { sliderNumbers }
+                        </div>
+                    </div>
+                </div>
+                <div className="skillContinueButton"
+                     onClick={this.nextQuestion.bind(this)}
+                     style={{marginTop:"20px"}}
+                >
+                    Next
+                </div>
             </div>
         );
     }
@@ -286,7 +317,7 @@ class AdminQuestions extends Component {
 
         return (
             <div>
-                <div>{question.questionText}</div>
+                <div className="adminQuestions question">{question.questionText}</div>
                 { options }
                 <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
             </div>
@@ -348,7 +379,7 @@ class AdminQuestions extends Component {
                     <meta name="description" content={"Answer some administrative questions and then you'll be ready for the position evaluation."} />
                 </MetaTags>
                 <div className="employerHeader" />
-                {/*<ProgressBar />*/}
+                <ProgressBar />
                 { content }
             </div>
         );

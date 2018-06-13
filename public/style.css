@@ -2233,16 +2233,23 @@ button.link {
 .employeePreviewGrading > div:nth-child(4) > div:first-child > div > div > div:nth-child(3) {
     background: linear-gradient(to right, #fd0d8b, #ff5d27);
 }
-.myEmployees.sliderNumbers {
+.sliderNumbers {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+.myEmployees.sliderNumbers {
     width: 82%;
     margin-left: 9%;
     margin-top: -20px;
 }
-.myEmployees.sliderNumber {
-
+.adminQuestions.sliderNumbers {
+    width: 104%;
+    margin-left: -2%;
+    margin-top: -30px;
+}
+.adminQuestions.sliderNumber {
+    width: 12px;
 }
 .myEmployeesWidth {
     max-width: 1200px;
@@ -2256,6 +2263,12 @@ button.link {
     position: absolute;
     width: 100%;
     bottom: 50px;
+}
+.adminQuestions.gradingSliderContainer {
+    position: relative;
+    width: 400px;
+    bottom: inherit;
+    display: inline-block;
 }
 .gradingMovementButtons {
     position: absolute;
@@ -3101,6 +3114,10 @@ button.link {
     margin-bottom: 60px;
     list-style: none;
     padding-left: 0px;
+}
+
+.adminQuestions.question {
+    margin: 0 20% 20px;
 }
 
 /* .candidatePreviewLiLeftContainer {
@@ -5220,6 +5237,13 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .aboutMeSection {
         min-height: 450px;
+    }
+
+    .adminQuestions.gradingSliderContainer {
+        position: relative;
+        width: 220px;
+        bottom: inherit;
+        display: inline-block;
     }
 
     .results > .statsAndDescription > div {

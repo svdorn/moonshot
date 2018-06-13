@@ -153,9 +153,17 @@ async function POST_answerAdminQuestion(req, res) {
         user.adminQuestions[questionType] = [];
     }
     // add the response - works for both slider and mulitpleChoice questions
-    user.adminQuestions[questionType].push({
-        questionId, sliderAnswer, selectedId, selectedText
-    });
+    const newAnswer = {
+        questionId,
+        sliderAnswer,
+        selectedId,
+        selectedText
+    }
+    user.adminQuestions[questionType].push(newAnswer);
+
+    console.log("sliderAnswer: ", sliderAnswer);
+    console.log("newAnswer: ", newAnswer);
+    console.log("user.adminQuestions[questionType]: ", user.adminQuestions[questionType]);
 
     user.adminQuestions.finished = finished;
 
@@ -384,8 +392,13 @@ async function POST_continuePositionEval(req, res) {
         // the next url to direct to user to
         let nextUrl = "/";
 
+        // if the user has to answer the admin questions
+        if (!user.adminQuestions || !user.adminQuestions.finished) {
+            nextUrl = "/adminQuestions";
+        }
+
         // if the user has to start or continue the pysch test
-        if (!user.psychometricTest || (user.psychometricTest && !user.psychometricTest.endDate)) {
+        else if (!user.psychometricTest || (user.psychometricTest && !user.psychometricTest.endDate)) {
             nextUrl = "/psychometricAnalysis";
         }
 
