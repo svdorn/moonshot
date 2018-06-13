@@ -193,7 +193,7 @@ class PredictiveGraph extends Component {
         }
 
         return (
-            <div>
+            <div className="marginBottom50px">
                 {title}
                 <div className="predictiveGraph" style={graphStyle}>
                     <div className="predictiveGraphInterior" style={graphInteriorStyle}>

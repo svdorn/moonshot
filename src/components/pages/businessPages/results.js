@@ -160,7 +160,7 @@ class Results extends Component {
         return (
             <div className="analysis center aboutMeSection" style={style.tabContent}>
                 <div style={style.candidateScore}>
-                    <div className="paddingTop20px">
+                    <div className="resultTopShadow center lightBlackBackground paddingTop20px">
                         <div
                             className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore">
                             Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
@@ -204,11 +204,15 @@ class Results extends Component {
                     />
                 </div>
 
+                <div className="resultsPageSpacer" />
+
                  <PsychBreakdown
                      archetype={this.state.archetype}
                      psychScores={this.state.psychScores}
                      forCandidate={false}
                  />
+
+                 <div className="resultsPageSpacer" />
 
                 <div
                     className="whiteText center font24px font20pxUnder700 font16pxUnder500">

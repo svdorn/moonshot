@@ -1380,20 +1380,12 @@ form > h1 {
     z-index: 10;
 }
 
-
-
-
-.results > .archetype {
+.resultTopShadow {
     padding: 20px;
     margin-bottom: 20px;
-    margin-top: 40px;
     -moz-box-shadow:    0px 3px 9px 1px #00000073;
     -webkit-box-shadow: 0px 3px 9px 1px #00000073;
     box-shadow:         0px 3px 9px 1px #00000073;
-}
-.results > .archetype > img {
-    height: 60px;
-    margin: 10px;
 }
 
 .results > .statsAndDescription {
@@ -3327,6 +3319,12 @@ button.link {
     height: 2px;
     margin: 70px 20%;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
+}
+.resultsPageSpacer {
+    width: 40%;
+    height: 2px;
+    margin: 70px auto;
+    background: linear-gradient(to right, #ae7efc, #75dcfc);
 }
 .pinkToOrangeSpacer {
     width: 60%;
