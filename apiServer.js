@@ -12,6 +12,9 @@ const sanitizeHtml = require('sanitize-html');
 const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 
+const Skills = require('./models/skills.js');
+
+
 var app = express();
 
 if (process.env.NODE_ENV !== "test") {
@@ -62,7 +65,41 @@ app.use(session({
 }));
 
 // ----->> START APIS <<----- //
-
+// async function skillQuestionPost(){
+// const skilltest = await Skills.findById("5b2164bcfb6fc033f883e42d");
+//
+// console.log(skilltest);
+//
+// skilltest.levels[0].questions.push({correctAnswers: [],
+// body: [
+//     {
+//         content: [
+//             "Which of the following takes places due to outsourcing or mergers?"
+//         ],
+//         partType: "text",
+//         includeDefaultClasses: true,
+//         shouldBreak: true
+//     }
+// ],
+// options: [
+//     {
+//         body: "Voluntary Leave"
+//     },
+//     {
+//         body: "Involuntary Exit"
+//     },
+//     {
+//         body: "Off Boarding"
+//     },
+//     {
+//         body: "Displacement"
+//     }
+// ]})
+//
+// skilltest.save()
+// }
+//
+// skillQuestionPost();
 
 app.post("/user/resetFrizz", userApis.POST_resetFrizz);
 app.post("/user/reset24", userApis.POST_reset24);
