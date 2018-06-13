@@ -99,6 +99,8 @@ class Results extends Component {
                 archetype: res.data.archetype,
                 candidate,
                 overallScore,
+                predicted: res.data.performanceScores.predicted,
+                skill: res.data.performanceScores.skill,
                 hardSkillPoints,
                 predictivePoints,
                 freeResponses
@@ -110,6 +112,20 @@ class Results extends Component {
                 console.log(error.response.data);
             }
         });
+    }
+
+
+    qualifier(score, scoreType) {
+        const qualifiers = scoreType === "predicted" ?
+            ["BELOW AVERAGE", "AVERAGE", "ABOVE AVERAGE"] :
+            ["NOVICE", "INTERMEDIATE", "EXPERT"]
+        if (score < 80) {
+            return qualifiers[0];
+        } else if (score < 120) {
+            return qualifiers[1];
+        } else {
+            return qualifiers[2];
+        }
     }
 
 
@@ -127,6 +143,14 @@ class Results extends Component {
         const rounded = Math.round(number);
         if (isNaN(rounded)) { return number; }
         return rounded;
+    }
+
+
+    getSliderValue(score) {
+        let value = (score - 50) / 100;
+        if (value > 1) { value = 1; }
+        else if (value < 0) { value = 0; }
+        return value;
     }
 
 
@@ -148,10 +172,10 @@ class Results extends Component {
                                 <div
                                     className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
                                     Predicted Performance<br/>
-                                    <p style={style.lightBlue}>AVERAGE</p>
+                                    <p style={style.lightBlue}>{this.qualifier(this.state.predicted, "predicted")}</p>
                                 </div>
                                 <Slider disabled={true}
-                                        value={0.5}
+                                        value={this.getSliderValue(this.state.predicted)}
                                         className="resultsSlider"
                                 />
                             </div>
@@ -159,23 +183,20 @@ class Results extends Component {
                                 <div
                                     className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
                                     Skill Level<br/>
-                                    <p style={style.lightBlue}>EXPERT</p>
+                                    <p style={style.lightBlue}>{this.qualifier(this.state.skill, "skill")}</p>
                                 </div>
                                 <Slider disabled={true}
-                                        value={0.9}
+                                        value={this.getSliderValue(this.state.skill)}
                                         className="resultsSlider"
                                 />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div
-                    className="whiteText center font24px font20pxUnder700 font16pxUnder500"
-                    style={{marginTop: '40px'}}>
-                    Predicted Performance
-                </div>
+
                 <div>
                     <PredictiveGraph
+                        title={"Predicted Performance"}
                         dataPoints={this.state.predictivePoints}
                         height={400}
                     />

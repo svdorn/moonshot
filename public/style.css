@@ -1262,7 +1262,7 @@ form > h1 {
 
 .resultsSlidersContainer {
     display: flex;
-    margin: 0 auto 30px;
+    margin: 0 auto;
     justify-content: space-between;
     width: 500px;
 }
@@ -1284,6 +1284,9 @@ form > h1 {
 }
 
 
+.predictiveGraphTitle {
+    margin-bottom: 25px;
+}
 .predictiveGraph {
     position: relative;
     color: white;

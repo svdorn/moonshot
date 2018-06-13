@@ -183,23 +183,35 @@ class PredictiveGraph extends Component {
             pointCounter++;
         });
 
+        let title = null;
+        if (this.props.title) {
+            title = (
+                <div className="predictiveGraphTitle whiteText center font24px font20pxUnder700 font16pxUnder500">
+                    Predicted Performance
+                </div>
+            )
+        }
+
         return (
-            <div className="predictiveGraph" style={graphStyle}>
-                <div className="predictiveGraphInterior" style={graphInteriorStyle}>
-                    <div className="yPointMarker" style={yPointMarker120} />
-                    <div className="yPointMarker" style={yPointMarker80} />
-                    <div className="xAxis" style={xAxisStyle} />
-                    <div className="yAxis" style={yAxisStyle} />
-                    <div className="leftYAxisLabelContainer">
-                        { yAxisLabelDivs }
-                    </div>
-                    <div className="rightYAxisLabel" style={yAxisLabel120Style}>120</div>
-                    <div className="rightYAxisLabel" style={yAxisLabel80Style}>80</div>
-                    <div className="pointsList">
-                        { points }
-                    </div>
-                    <div className="xAxisLabelsContainer" style={xAxisLabelsContainerStyle}>
-                        { xAxisLabels }
+            <div>
+                {title}
+                <div className="predictiveGraph" style={graphStyle}>
+                    <div className="predictiveGraphInterior" style={graphInteriorStyle}>
+                        <div className="yPointMarker" style={yPointMarker120} />
+                        <div className="yPointMarker" style={yPointMarker80} />
+                        <div className="xAxis" style={xAxisStyle} />
+                        <div className="yAxis" style={yAxisStyle} />
+                        <div className="leftYAxisLabelContainer">
+                            { yAxisLabelDivs }
+                        </div>
+                        <div className="rightYAxisLabel" style={yAxisLabel120Style}>120</div>
+                        <div className="rightYAxisLabel" style={yAxisLabel80Style}>80</div>
+                        <div className="pointsList">
+                            { points }
+                        </div>
+                        <div className="xAxisLabelsContainer" style={xAxisLabelsContainerStyle}>
+                            { xAxisLabels }
+                        </div>
                     </div>
                 </div>
             </div>
