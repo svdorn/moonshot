@@ -1,7 +1,7 @@
 "use strict"
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
-import {Paper, Menu, MenuItem, Divider, DropDownMenu} from 'material-ui';
+import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
 import PasswordChange from './passwordchange';
 import Account from './account';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
@@ -11,17 +11,23 @@ import AddUserDialog from '../childComponents/addUserDialog';
 class Settings extends Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            value: 1,
-        };
+            tab: "Settings"
+        }
     }
 
-    handleChange = (event, index) => {
-        this.setState({value: index})
-    };
-
+    handleTabChange = (tab) => {
+        this.setState({tab})
+    }
     //name, email, password, confirm password, signup button
     render() {
+        const style = {
+            tab: {
+                color: 'white',
+
+            }
+        };
         return (
             <div className="fillScreen lightBlackBackground">
                 {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
@@ -29,40 +35,25 @@ class Settings extends Component {
                     <title>Settings | Moonshot</title>
                     <meta name="description" content="Change your Moonshot account settings." />
                 </MetaTags>
-                <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="1"/>
-                {this.props.notification !== undefined ?
-                    <Paper className={"messageHeader " + this.props.notification.type}>
-                        {this.props.notification.message}
-                    </Paper>
-                    :
-                    null
-                }
-                <div className="center">
-                    {this.state.value === 1 ?
-                        <Account/>
-                        :
-                        <PasswordChange/>
-                    }
-                    <br/>
-                    <div className="lightBlackForm boxStyle">
-                        <Menu value={this.state.value} onChange={this.handleChange} style={{}}>
-                            <MenuItem primaryText="Account" className="whiteText" disabled={true}/>
-                            <Divider/>
-                            <MenuItem value={1} primaryText="Settings"/>
-                            <MenuItem value={2} primaryText="Change Password"/>
-                        </Menu>
+                <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>
+                <div className="formContainer center">
+                    <div className="form lightBlackForm noBlur">
+                    <div className="font32px font28pxUnder700 blueTextHome">Settings</div>
+                    <Tabs
+                        inkBarStyle={{background: 'white'}}
+                        className="addUserTabs"
+                        style={{width: "70%", margin: "10px auto"}}
+                        value={this.state.tab}
+                        onChange={this.handleTabChange}
+                    >
+                        <Tab label="Change Settings" value="Settings" style={style.tab}>
+                            <Account />
+                        </Tab>
+                        <Tab label="Change Password" value="Change Password" style={style.tab}>
+                            <PasswordChange />
+                        </Tab>
+                    </Tabs>
                     </div>
-                    {/*<div className="center dropDownSettings">*/}
-                        {/*<DropDownMenu value={this.state.value}*/}
-                                      {/*onChange={this.handleChange}*/}
-                                      {/*style={{fontSize: "20px"}}*/}
-                        {/*>*/}
-                            {/*<MenuItem primaryText="Category" disabled={true}/>*/}
-                            {/*<Divider/>*/}
-                            {/*<MenuItem value={1} primaryText="Settings"/>*/}
-                            {/*<MenuItem value={2} primaryText="Change Password"/>*/}
-                        {/*</DropDownMenu>*/}
-                    {/*</div>*/}
                 </div>
             </div>
         );

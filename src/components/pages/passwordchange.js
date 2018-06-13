@@ -91,10 +91,7 @@ class PasswordChange extends Component {
 
     render() {
         return (
-            <div className="formContainer" style={{display:'inline-block'}}>
-                <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Change Password</h1>
                         <div className="inputContainer">
                         <Field
                             name="oldpass"
@@ -115,17 +112,17 @@ class PasswordChange extends Component {
                             component={renderPasswordField}
                             label="Confirm New Password"
                             className="lightBlueInputText"
-                        /></div><br/>
+                        /></div>
+                        <div className="center">
                         <RaisedButton
                             label="Change Password"
                             type="submit"
                             className="raisedButtonBusinessHome"
-                            style={{margin: '30px 0'}}
-                        /><br/>
-                        {this.props.loadingChangePassword ? <CircularProgress color="white" style={{marginTop: "10px"}}/> : null}
+                            style={{margin: '30px auto 0px'}}
+                        />
+                        </div>
+                        {this.props.loadingChangePassword ? <div className="center"><CircularProgress color="white" style={{marginTop: "10px"}}/></div> : null}
                     </form>
-                </div>
-            </div>
         );
     }
 }
