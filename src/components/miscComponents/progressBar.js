@@ -17,11 +17,13 @@ class ProgressBar extends Component {
         const currentUser = this.props.currentUser;
         const currentPosition = currentUser.currentPosition;
 
+        const ADMIN_QUESTIONS = "Administrative Questions";
         const PSYCH_ANALYSIS = "Psychometric Analysis";
         const SKILL_EVAL = "Skill Evaluation";
         const FREE_RESPONSE = "Free Response";
 
-        let numSteps = 1;
+        // will always have admin questions and psych analysis
+        let numSteps = 2;
         if (currentPosition.skillTests) {
             numSteps += currentPosition.skillTests.length;
         }
@@ -31,16 +33,21 @@ class ProgressBar extends Component {
 
         let stepNumber = 0;
         let stepName = "";
-        // if user has not yet taken psych test or if they're currently taking it
-        // they're on the first step
-        if (!currentUser.psychometricTest || (currentUser.psychometricTest && !currentUser.psychometricTest.endDate)) {
+        // if the user has not yet dont the admin questions, they're on the first step
+        if (!currentUser.adminQuestions || !currentUser.adminQuestions.finished) {
             stepNumber = 1;
+            stepName = ADMIN_QUESTIONS;
+        }
+        // if user has not yet taken psych test or if they're currently taking it
+        // they're on the second step
+        else if (!currentUser.psychometricTest || (currentUser.psychometricTest && !currentUser.psychometricTest.endDate)) {
+            stepNumber = 2;
             stepName = PSYCH_ANALYSIS;
         }
-        // if they are on a skills test, add 2 to the current skill test index
-        // (one because index 0 would be the first one and another one because of the psych test)
+        // if they are on a skills test, add 3 to the current skill test index
+        // (one because index 0 would be the first one and another two because of the psych test and admin questions)
         else if (currentPosition.skillTests && parseInt(currentPosition.testIndex, 10) < currentPosition.skillTests.length) {
-            stepNumber = 2 + parseInt(currentPosition.testIndex, 10);
+            stepNumber = 3 + parseInt(currentPosition.testIndex, 10);
             stepName = SKILL_EVAL;
         }
         // otherwise user must be on the free response portion
