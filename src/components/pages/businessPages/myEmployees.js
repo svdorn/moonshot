@@ -33,10 +33,13 @@ class MyEmployees extends Component {
     constructor(props) {
         super(props);
 
+        let positionNameFromUrl = props.location.query && props.location.query.position ? props.location.query.position : undefined;
+
         this.state = {
             searchTerm: "",
             status: "",
             position: "",
+            positionNameFromUrl,
             employees: [],
             questions: [],
             positions: [],
