@@ -3196,6 +3196,18 @@ button.link {
     font-size: 14px !important;
     border: 0px !important;
 }
+.settingsTabs {
+    width: 60%;
+    margin: 10px auto;
+}
+.settingsTabs > div:first-of-type {
+    background-color: transparent !important;
+    display: inline-block !important;
+}
+.settingsTabs > div > button {
+    font-size: 14px !important;
+    border: 0px !important;
+}
 
 .myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
     background-color: transparent !important;
@@ -4933,6 +4945,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 70%;
         padding-top: 40%;
     }
+    .settingsTabs > div > button {
+        font-size: 12px !important;
+        border: 0px !important;
+    }
 
     .pathwayContentTimeText { margin-top: 5px; }
 
@@ -5271,6 +5287,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .boxStyle {
         margin: 0px 0 50px;
+    }
+    .settingsTabs {
+        width: 90%;
     }
 
     #moonshotProcess { margin-top: 100px; }

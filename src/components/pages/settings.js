@@ -41,8 +41,7 @@ class Settings extends Component {
                     <div className="font32px font28pxUnder700 blueTextHome">Settings</div>
                     <Tabs
                         inkBarStyle={{background: 'white'}}
-                        className="addUserTabs"
-                        style={{width: "70%", margin: "10px auto"}}
+                        className="settingsTabs"
                         value={this.state.tab}
                         onChange={this.handleTabChange}
                     >
