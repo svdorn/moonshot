@@ -145,64 +145,64 @@ class CandidatePreview extends Component {
 
         switch (sectionType) {
             case "Predicted":
-                sectionStyle = { left: "1%" };
-                ratings = ["BAD FIT", "AVERAGE FIT", "GOOD FIT"];
+                sectionStyle = { left: "10%" };
+                ratings = ["BELOW AVERAGE", "AVERAGE", "ABOVE AVERAGE"];
                 break;
-            case "Psychometrics":
-                sectionStyle = {
-                    left: "50%",
-                    transform: "translateX(-50%)"
-                }
-                // the score we get will be the archetype of the candidate
-                prediction = score && typeof score === "string" ? score.toUpperCase() : "";
-                let icon = "";
-                let iconStyle = {width: "50%", marginTop: "30px", transform: "translateY(-50%)"}
-                switch (prediction) {
-                    case "INNOVATOR":
-                        icon = "icons/archetypes/Innovator.png";
-                        break;
-                    case "LOVER":
-                        icon = "icons/archetypes/Lover.png";
-                        break;
-                    case "RULER":
-                        icon = "icons/archetypes/Ruler.png";
-                        break;
-                    default:
-                        break;
-                }
-                image = (<img src={icon} style={iconStyle}/>);
-                break;
+            // case "Psychometrics":
+            //     sectionStyle = {
+            //         left: "50%",
+            //         transform: "translateX(-50%)"
+            //     }
+            //     // the score we get will be the archetype of the candidate
+            //     prediction = score && typeof score === "string" ? score.toUpperCase() : "";
+            //     let icon = "";
+            //     let iconStyle = {width: "50%", marginTop: "30px", transform: "translateY(-50%)"}
+            //     switch (prediction) {
+            //         case "INNOVATOR":
+            //             icon = "icons/archetypes/Innovator.png";
+            //             break;
+            //         case "LOVER":
+            //             icon = "icons/archetypes/Lover.png";
+            //             break;
+            //         case "RULER":
+            //             icon = "icons/archetypes/Ruler.png";
+            //             break;
+            //         default:
+            //             break;
+            //     }
+            //     image = (<img src={icon} style={iconStyle}/>);
+            //     break;
             case "Skill":
-                sectionStyle = { right: "1%" };
+                sectionStyle = { right: "10%" };
                 ratings = ["NOVICE", "INTERMEDIATE", "EXPERT"];
                 break;
             default:
                 break;
         }
 
-        if (sectionType === "Skill" || sectionType === "Predicted") {
+        //if (sectionType === "Skill" || sectionType === "Predicted") {
             if (typeof score !== "number") { prediction = "N/A" }
             else {
-                if (score < 85) { prediction = ratings[0]; }
-                else if (score < 115) { prediction = ratings[1]; }
+                if (score < 80) { prediction = ratings[0]; }
+                else if (score < 120) { prediction = ratings[1]; }
                 else { prediction = ratings[2]; }
 
                 let sliderValue = score;
-                // very unlikely someone would get a value under 60 or above 140
-                if (sliderValue < 60) { sliderValue = 60; }
-                else if (sliderValue > 140 ) { sliderValue = 140; }
+                // very unlikely someone would get a value under 50 or above 150
+                if (sliderValue < 50) { sliderValue = 50; }
+                else if (sliderValue > 150 ) { sliderValue = 150; }
 
                 image = (
                     <Slider disabled={true}
-                            min={60}
-                            max={140}
+                            min={50}
+                            max={150}
                             value={sliderValue}
                             style={sliderStyle}
                             className="candidatePreviewSlider"
                     />
                 );
             }
-        }
+        //}
 
         return (
             <div className="candidatePreviewPredictiveSection font14px" style={sectionStyle}>
@@ -344,10 +344,6 @@ class CandidatePreview extends Component {
                     {this.props.candidate.name ? this.props.candidate.name.toUpperCase() : ""}
                 </div>
                 <br/>
-                <div className="candidateLocation font16px">
-                    {location}
-                </div>
-                <br/>
                 <div className="candidateScore font16px">
                     Candidate Score <span className="font16px" style={style.redLink}>{this.round(overallScore)}</span>
                 </div>
@@ -376,8 +372,8 @@ class CandidatePreview extends Component {
                 </DropDownMenu>
 
                 {this.makePredictiveSection("Predicted", this.props.candidate.scores ? this.props.candidate.scores.predicted : undefined)}
-                {this.makePredictiveSection("Psychometrics", this.props.candidate.archetype)}
-                {this.makePredictiveSection("Skill", this.props.candidate.skill)}
+                {/*this.makePredictiveSection("Psychometrics", this.props.candidate.archetype)*/}
+                {this.makePredictiveSection("Skill", this.props.candidate.scores ? this.props.candidate.scores.skill : undefined)}
 
                 <div style={style.darkenerStyle} />
 
