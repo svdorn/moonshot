@@ -147,9 +147,9 @@ class Results extends Component {
 
 
     getSliderValue(score) {
-        let value = (score - 50) / 100;
-        if (value > 1) { value = 1; }
-        else if (value < 0) { value = 0; }
+        let value = score;
+        if (score > 150) { value = 150; }
+        else if (value < 50) { value = 50; }
         return value;
     }
 
@@ -176,6 +176,8 @@ class Results extends Component {
                                 </div>
                                 <Slider disabled={true}
                                         value={this.getSliderValue(this.state.predicted)}
+                                        min={50}
+                                        max={150}
                                         className="resultsSlider"
                                 />
                             </div>
@@ -187,6 +189,8 @@ class Results extends Component {
                                 </div>
                                 <Slider disabled={true}
                                         value={this.getSliderValue(this.state.skill)}
+                                        min={50}
+                                        max={150}
                                         className="resultsSlider"
                                 />
                             </div>

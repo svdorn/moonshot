@@ -127,7 +127,7 @@ class SkillTest extends Component {
                 let question = undefined;
                 if (result.data.question) {
                     question = result.data.question;
-                    question.options = this.shuffle(question.options);
+                    //question.options = this.shuffle(question.options);
                 }
                 this.setState({
                     selectedId: undefined,

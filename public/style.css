@@ -1432,6 +1432,16 @@ form > h1 {
 .results > .statsAndDescription > .stats > .legend > div > div {
     display: inline-block;
 }
+
+.hoverTip {
+    display: none;
+    position: absolute;
+    padding: 5px;
+    margin-top: 5px;
+}
+/* make hoverTip element display when sibling is hovered over */
+*:hover + .hoverTip { display: inline-block; }
+
 .infoBubble > div:first-child {
     border-radius: 100%;
     cursor: pointer;
@@ -2398,7 +2408,7 @@ button.link {
     left: 50%;
 }
 .candidatePreviewPredictiveSection {
-    width: 30%;
+    width: 38%;
     position: absolute;
     display: inline-block;
     height: 110px;
