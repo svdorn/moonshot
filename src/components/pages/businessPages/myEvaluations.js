@@ -13,6 +13,7 @@ import {
     Paper
 } from 'material-ui';
 import {connect} from 'react-redux';
+import { browserHistory } from "react-router";
 import {bindActionCreators} from 'redux';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -32,6 +33,13 @@ class MyEvaluations extends Component {
             // name of the business the user works for - doesn't apply for candidates
             businessName: undefined
         }
+    }
+
+    goTo(route) {
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
     componentDidMount() {
@@ -85,10 +93,9 @@ class MyEvaluations extends Component {
         }
     }
 
-    startPsychTest() {
-
+    startPsychEval() {
+        this.goTo("/psychometricAnalysis");
     }
-
 
     render() {
         const style = {
@@ -194,7 +201,7 @@ class MyEvaluations extends Component {
                         All admins must take a 13 minute psychometric quiz. Take it here!
                     </div>
                     <div className="inlineBlock marginLeft10px">
-                            <button className="veryRoundedButton smallMediumButton font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 purpleToBlueAnimate whiteText" onClick={this.startPsychTest} style={{padding: "4px 15px"}}>
+                            <button className="veryRoundedButton smallMediumButton font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 purpleToBlueAnimate whiteText" onClick={this.startPsychEval.bind(this)} style={{padding: "4px 15px"}}>
                                 Quiz
                             </button>
                     </div>

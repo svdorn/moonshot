@@ -20,40 +20,7 @@ import axios from "axios";
 
 class MyEvaluationsPreview extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-            // names of the skills of this position
-            skills: []
-        }
-    }
-
-    componentWillMount() {
-        const currentUser = this.props.currentUser;
-        console.log(this.props.skills);
-        let self = this;
-        if (this.props.skills) {
-            axios.get("/api/skill/skillNamesByIds", {
-                params: {
-                    userId: currentUser._id,
-                    verificationToken: currentUser.verificationToken,
-                    skillIds: this.props.skills
-                }
-            })
-            .then(res => {
-                console.log(res);
-                self.setState({skills: res.data})
-            })
-            .catch(error => {
-                console.log("error getting skills: ", error);
-                if (error.response) { console.log(error.response.data); }
-            })
-        }
-    }
-
     goTo(route) {
-        console.log("route")
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
@@ -88,7 +55,7 @@ class MyEvaluationsPreview extends Component {
         // user is a manager or account admin
         const editing = this.props.variation === "edit"
 
-        const skills = this.state.skills;
+        const skills = this.props.skills;
 
         let positionSkills;
 
@@ -113,6 +80,16 @@ class MyEvaluationsPreview extends Component {
                     </div>
                 );
             });
+        } else {
+            positionSkills = (
+                <div key={"no skills Surrounder"} style={{display: 'inline-block'}}>
+                    <div key={"No Skills"}
+                         className="myEvalsSkillChip font14px font12pxUnder500"
+                    >
+                        No Skill Tests
+                    </div>
+                </div>
+            );
         }
 
         let infoArea = null;
