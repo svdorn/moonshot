@@ -225,7 +225,7 @@ class SkillTest extends Component {
                     </button>
                 </div>
             );
-        } else if (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate) {
+        } else if (currentUser.positionInProgress && (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate)) {
             content = (
                 <div>
                     You have to complete the psychometric analysis first!

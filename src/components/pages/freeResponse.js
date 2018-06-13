@@ -90,11 +90,34 @@ class FreeResponse extends Component {
     }
 
 
+    // checks if all required skill tests are done
+    skillTestsDone() {
+        const currentPosition = this.props.currentUser.currentPosition;
+        // if there are no skill tests, must be done with them
+        if (!currentPosition.skillTests) { return true; }
+        // if the index of the current test is valid and in bounds, not done with tests
+        return parseInt(currentPosition.testIndex, 10) >= currentPosition.skillTests.length;
+    }
+
+
+    // finds which skill tests still need to be done
+    findNeededSkillTest() {
+        const currentPosition = this.props.currentUser.currentPosition;
+        // make sure there is a test that hasn't been taken
+        if (!currentPosition.skillTests || parseInt(currentPosition.testIndex, 10) >= currentPosition.skillTests.length) {
+            return "/freeResponse";
+        }
+        return `/skillTest/${currentPosition.skillTests[parseInt(currentPosition.testIndex, 10)]}`;
+    }
+
+
     render() {
         const self = this;
         const currentUser = this.props.currentUser;
 
         let content = null;
+
+        console.log("this.skillTestsDone: ", this.skillTestsDone());
 
         if (this.state.submitting) {
             content = (
@@ -116,11 +139,23 @@ class FreeResponse extends Component {
             );
         }
 
-        else if (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate) {
+        else if (currentUser.positionInProgress && (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate)) {
             content = (
                 <div className="center">
                     You have to complete the psychometric analysis first!<br/>
                     <button onClick={() => this.goTo("/psychometricAnalysis")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                        Take me there!
+                    </button>
+                </div>
+            );
+        }
+
+        else if (currentUser.positionInProgress && !this.skillTestsDone()) {
+            const skillTestUrl = this.findNeededSkillTest();
+            content = (
+                <div className="center">
+                    You have to complete all the skill evaluations first!<br/>
+                    <button onClick={() => this.goTo(skillTestUrl)} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
                         Take me there!
                     </button>
                 </div>
