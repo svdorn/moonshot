@@ -1363,8 +1363,8 @@ async function internalStartPsychEval(user) {
             // currently not allowing any rephrases, change later
             rephrase: false,
             numRephrasesAllowed: 0,
-            // around 75 questions
-            questionsPerFacet: 4,
+            // 28 * 2 = 56 questions
+            questionsPerFacet: 2,
             incompleteFactors,
             factors,
             currentQuestion
