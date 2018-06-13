@@ -51,8 +51,6 @@ class Results extends Component {
             }
         })
         .then(res => {
-            console.log("res.data: ", res.data);
-
             const candidate = {
                 name: res.data.name,
                 title: res.data.title ? res.data.title : "",
@@ -262,7 +260,7 @@ class Results extends Component {
         }
 
         const loading = this.state.loading;
-        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress/></div>
+        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="grayText" /></div>
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
         const responsesSection = loading ? loadingArea : this.makeResponsesSection();
 
@@ -295,23 +293,12 @@ class Results extends Component {
                                             />
                                         </div>
                                         <div>
-                                            <div
+                                            {candidate.name ? <div><div
                                                 className="grayText font26px font14pxUnder700">{candidate.name}
                                             </div>
-                                            {candidate.title ?
-                                                <div className="grayText font18px font12pxUnder500">
-                                                    {candidate.title}
-                                                </div>
-                                                : null
-                                            }
-                                            {/*this.props.params.profileUrl ?
-                                                <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
-                                                   href={`/profile?user=${this.props.params.profileUrl}`}>Profile</a>
-                                                : null
-                                            */}
-                                            <br/>
                                             <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
-                                               href={mailtoEmail}>Contact</a>
+                                               href={mailtoEmail}>Contact</a></div>
+                                           : null}
                                         </div>
                                     </div>
                                     <Tabs
