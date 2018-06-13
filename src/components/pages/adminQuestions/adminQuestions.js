@@ -217,30 +217,35 @@ class AdminQuestions extends Component {
 
 
     finish() {
-        // // if the user is taking a position evaluation, go to the next step of that
-        // const user = this.props.currentUser;
-        // const currentPosition = user.currentPosition;
-        // if (currentPosition) {
-        //     // if there are skill tests the user still has to take, go to that skill test
-        //     if (currentPosition.skillTests && currentPosition.testIndex < currentPosition.skillTests.length) {
-        //         this.goTo(`/skillTest/${currentPosition.skillTests[currentPosition.testIndex]}`);
-        //     }
-        //     // otherwise, if there are free response questions to answer, go there
-        //     else if (currentPosition.freeResponseQuestions && currentPosition.freeResponseQuestions.length > 0) {
-        //         this.goTo("/freeResponse");
-        //     }
-        //     // otherwise, the user is done with the test; go home and give them
-        //     // a notification saying they're done
-        //     else {
-        //         this.props.addNotification("Finished application!", "info");
-        //         this.goTo("/");
-        //     }
-        // }
-        // // otherwise the user took the exam as a one-off thing, so show them results
-        // else {
-        //     // TODO make it go to the actual results page
-        //     this.goTo("/");
-        // }
+        // if the user is taking a position evaluation, go to the next step of that
+        const user = this.props.currentUser;
+        const currentPosition = user.currentPosition;
+        if (currentPosition) {
+            console.log("here");
+            // if the user has not taken the psych test, go to that
+            if (!user.psychometricTest || !user.psychometricTest.endDate) {
+                this.goTo(`/psychometricAnalysis`);
+            }
+            // if there are skill tests the user still has to take, go to that skill test
+            else if (currentPosition.skillTests && currentPosition.testIndex < currentPosition.skillTests.length) {
+                this.goTo(`/skillTest/${currentPosition.skillTests[currentPosition.testIndex]}`);
+            }
+            // otherwise, if there are free response questions to answer, go there
+            else if (currentPosition.freeResponseQuestions && currentPosition.freeResponseQuestions.length > 0) {
+                this.goTo("/freeResponse");
+            }
+            // otherwise, the user is done with the test; go home and give them
+            // a notification saying they're done
+            else {
+                this.props.addNotification("Finished application!", "info");
+                this.goTo("/");
+            }
+        }
+        // otherwise the user took the exam as a one-off thing, so show them results
+        else {
+            // TODO make it go to the actual results page
+            this.goTo("/");
+        }
     }
 
 
@@ -299,8 +304,8 @@ class AdminQuestions extends Component {
         if (this.state.finished) {
             content = (
                 <div>
-                    Finished with the admin questions!
-                    <button className="slightlyRoundedButton pinkToPurpleButtonGradient whiteText font16px clickableNoUnderline"
+                    Finished with the admin questions!<br/>
+                    <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
                             onClick={this.finish.bind(this)}>
                         Advance
                     </button>

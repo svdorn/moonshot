@@ -105,6 +105,18 @@ class PsychAnalysis extends Component {
             );
         }
 
+        // check if they're in a position evaluation, and if so if they can do this step yet
+        if (currentUser.positionInProgress && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
+            return (
+                <div className="center">
+                    You have to complete the administrative questions first!<br/>
+                    <button onClick={() => this.goTo("/adminQuestions")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                        Take me there!
+                    </button>
+                </div>
+            );
+        }
+
         const psychometricTest = currentUser.psychometricTest;
 
         // if the user hasn't taken the psych test, ask them if they want to

@@ -154,8 +154,10 @@ async function POST_answerAdminQuestion(req, res) {
     }
     // add the response - works for both slider and mulitpleChoice questions
     user.adminQuestions[questionType].push({
-        questionId, sliderAnswer, selectedId, selectedText, finishedQuestions: finished
+        questionId, sliderAnswer, selectedId, selectedText
     });
+
+    user.adminQuestions.finished = finished;
 
     // save the user
     try {

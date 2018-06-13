@@ -244,7 +244,7 @@ var usersSchema = mongoose.Schema({
     // questions the user has to answer - only once - before doing a position eval
     adminQuestions: {
         // whether the user has finished all the admin questions and no longer needs to do them
-        finishedQuestions: Boolean,
+        finished: Boolean,
         // questions user answered about demographics
         demographics: [{
             // of the question the user answered

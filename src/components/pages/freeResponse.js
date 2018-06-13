@@ -92,9 +92,12 @@ class FreeResponse extends Component {
 
     render() {
         const self = this;
+        const currentUser = this.props.currentUser;
+
+        let content = null;
 
         if (this.state.submitting) {
-            return (
+            content = (
                 <div className="blackBackground fillScreen center">
                     <div className="extraHeaderSpace" />
                     <CircularProgress />
@@ -102,22 +105,63 @@ class FreeResponse extends Component {
             );
         }
 
-        // get the list of questions
-        const frqList = this.props.currentUser.currentPosition.freeResponseQuestions;
-        // make the questions that will show up and can be answered
-        const freeResponseQuestions = frqList.map(frq => {
-            return (
-                <div key={frq.questionId}>
-                    {frq.body}
-                    <textarea
-                        type="text"
-                        value={this.state.frqs[frq.questionId].response}
-                        placeholder="Your answer here"
-                        onChange={(e) => self.handleInputChange(e, frq.questionId)}
-                    />
+        else if (currentUser.positionInProgress && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
+            content = (
+                <div className="center">
+                    You have to complete the administrative questions first!<br/>
+                    <button onClick={() => this.goTo("/adminQuestions")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                        Take me there!
+                    </button>
                 </div>
             );
-        });
+        }
+
+        else if (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate) {
+            content = (
+                <div className="center">
+                    You have to complete the psychometric analysis first!<br/>
+                    <button onClick={() => this.goTo("/psychometricAnalysis")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                        Take me there!
+                    </button>
+                </div>
+            );
+        }
+
+        else {
+            // get the list of questions
+            const frqList = this.props.currentUser.currentPosition.freeResponseQuestions;
+            // make the questions that will show up and can be answered
+            const freeResponseQuestions = frqList.map(frq => {
+                return (
+                    <div key={frq.questionId}>
+                        {frq.body}
+                        <textarea
+                            type="text"
+                            value={this.state.frqs[frq.questionId].response}
+                            placeholder="Your answer here"
+                            onChange={(e) => self.handleInputChange(e, frq.questionId)}
+                        />
+                    </div>
+                );
+            });
+
+            content = (
+                <div>
+                    <div className="freeResponseQuestions">
+                        { freeResponseQuestions }
+                    </div>
+                    <div className="center" style={{width: "100%"}}>
+                        <div className="skillContinueButton"
+                             onClick={this.submit.bind(this)}
+                        >
+                            Submit application
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+
 
         return (
             <div className="blackBackground fillScreen whiteText" style={{paddingBottom: "60px"}}>
@@ -127,16 +171,7 @@ class FreeResponse extends Component {
                 </MetaTags>
                 <div className="employerHeader" />
                 <ProgressBar />
-                <div className="freeResponseQuestions">
-                    { freeResponseQuestions }
-                </div>
-                <div className="center" style={{width: "100%"}}>
-                    <div className="skillContinueButton"
-                         onClick={this.submit.bind(this)}
-                    >
-                        Submit application
-                    </div>
-                </div>
+                { content }
             </div>
         );
     }
