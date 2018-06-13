@@ -101,7 +101,7 @@ class PsychAnalysis extends Component {
         // start, show loading symbol
         if (!currentUser || this.props.startingPsychTest) {
             return (
-                <CircularProgress className="grayText" />
+                <CircularProgress color="#FB553A" />
             );
         }
 

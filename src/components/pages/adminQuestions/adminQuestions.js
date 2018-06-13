@@ -345,7 +345,7 @@ class AdminQuestions extends Component {
 
         else if (!question) {
             content = (
-                <CircularProgress className="grayText" />
+                <CircularProgress color="#FB553A" />
             );
         }
 

@@ -343,7 +343,7 @@ class Signup extends Component {
                                          style={{display: "inline-block"}}>Already have an account?
                                     </div>
                                 </form>
-                                {this.props.loadingCreateUser ? <CircularProgress style={{marginTop: "8px", color: "#72d6f5"}}/> : ""}
+                                {this.props.loadingCreateUser ? <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/> : ""}
                             </div>
                         }
                     </div>

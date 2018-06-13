@@ -205,7 +205,7 @@ class SkillTest extends Component {
 
         const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
 
-        let content = <CircularProgress className="grayText" />;
+        let content = <CircularProgress color="#FB553A" />;
 
         if (this.state.finished) {
             content = (
