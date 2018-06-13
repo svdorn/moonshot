@@ -120,12 +120,6 @@ class Signup extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        window.scroll({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-        });
-
         if (!this.state.agreeingToTerms) {
             this.props.addNotification("Must agree to Terms of Use and Privacy Policy.", "error");
             return;
@@ -240,6 +234,15 @@ class Signup extends Component {
         let blurredClass = '';
         if (this.state.openTOU || this.state.openPP) {
             blurredClass = 'dialogForBizOverlay';
+        }
+
+        // scroll to the top if user posted
+        if (this.state.email != "" && this.props.userPosted) {
+            window.scroll({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
         }
 
         return (

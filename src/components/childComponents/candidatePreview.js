@@ -214,6 +214,13 @@ class CandidatePreview extends Component {
     }
 
 
+    round(number) {
+        const rounded = Math.round(number);
+        if (isNaN(rounded)) { return number; }
+        return rounded;
+    }
+
+
     render() {
         const style = {
             redLink: {
@@ -342,7 +349,7 @@ class CandidatePreview extends Component {
                 </div>
                 <br/>
                 <div className="candidateScore font16px">
-                    Candidate Score <span className="font16px" style={style.redLink}>{overallScore}</span>
+                    Candidate Score <span className="font16px" style={style.redLink}>{this.round(overallScore)}</span>
                 </div>
                 <br/>
                 <div className="hiringStageCircle">

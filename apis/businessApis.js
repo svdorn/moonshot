@@ -873,7 +873,7 @@ async function GET_evaluationResults(req, res) {
         "Emotionality": "Temperament",
         "Honesty-Humility": "Viewpoint",
         "Conscientiousness": "Methodology",
-        "Openness to Experience": "Experientiality",
+        "Openness to Experience": "Perception",
         "Agreeableness": "Ethos",
         "Altruism": "Belief"
     };

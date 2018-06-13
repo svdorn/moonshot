@@ -61,7 +61,7 @@ class Results extends Component {
             const hardSkillPoints = res.data.skillScores.map(skill => {
                 return {
                     x: skill.name,
-                    y: skill.mostRecentScore,
+                    y: this.round(skill.mostRecentScore),
                     confidenceInterval: 16
                 }
             });
@@ -71,22 +71,22 @@ class Results extends Component {
             const predictivePoints = [
                 {
                     x: "Growth",
-                    y: res.data.performanceScores.growth,
+                    y: this.round(res.data.performanceScores.growth),
                     confidenceInterval: 16
                 },
                 {
                     x: "Longevity",
-                    y: res.data.performanceScores.longevity,
+                    y: this.round(res.data.performanceScores.longevity),
                     confidenceInterval: 16
                 },
                 {
                     x: "Culture",
-                    y: res.data.performanceScores.culture,
+                    y: this.round(res.data.performanceScores.culture),
                     confidenceInterval: 16
                 },
                 {
                     x: "Performance",
-                    y: res.data.performanceScores.performance,
+                    y: this.round(res.data.performanceScores.performance),
                     confidenceInterval: 16
                 }
             ];
@@ -99,10 +99,12 @@ class Results extends Component {
                 archetype: res.data.archetype,
                 candidate,
                 overallScore,
+                predicted: res.data.performanceScores.predicted,
+                skill: res.data.performanceScores.skill,
                 hardSkillPoints,
                 predictivePoints,
                 freeResponses
-            }, () => {console.log("state is now: ", self.state);});
+            });
         })
         .catch(error => {
             console.log("error: ", error);
@@ -110,6 +112,20 @@ class Results extends Component {
                 console.log(error.response.data);
             }
         });
+    }
+
+
+    qualifier(score, scoreType) {
+        const qualifiers = scoreType === "predicted" ?
+            ["BELOW AVERAGE", "AVERAGE", "ABOVE AVERAGE"] :
+            ["NOVICE", "INTERMEDIATE", "EXPERT"]
+        if (score < 80) {
+            return qualifiers[0];
+        } else if (score < 120) {
+            return qualifiers[1];
+        } else {
+            return qualifiers[2];
+        }
     }
 
 
@@ -123,77 +139,64 @@ class Results extends Component {
     }
 
 
+    round(number) {
+        const rounded = Math.round(number);
+        if (isNaN(rounded)) { return number; }
+        return rounded;
+    }
+
+
+    getSliderValue(score) {
+        let value = (score - 50) / 100;
+        if (value > 1) { value = 1; }
+        else if (value < 0) { value = 0; }
+        return value;
+    }
+
+
     makeAnalysisSection() {
         if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
 
         const hardSkillsDataPoints = this.state.hardSkillPoints;
 
         return (
-            <div className="center aboutMeSection" style={style.tabContent}>
+            <div className="analysis center aboutMeSection" style={style.tabContent}>
                 <div style={style.candidateScore}>
                     <div className="paddingTop20px">
                         <div
-                            className="font24px font20pxUnder700 font16pxUnder500 grayText">
-                            Candidate Score <b style={style.lightBlue}><u>{this.state.overallScore}</u></b>
+                            className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore">
+                            Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                         </div>
-                        <div style={style.horizList}>
-                            <div className="horizListFull">
-                                <div className="horizListSpacer"
-                                     style={{marginLeft: "20%"}}
-                                >
-                                    <div
-                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                        Predicted<div className="under500only br"><br/></div> Performance<br/>
-                                        <p style={style.lightBlue}>AVERAGE</p>
-                                    </div>
-                                    <Slider disabled={true}
-                                            value={0.5}
-                                            style={{maxWidth: '250px'}}
-                                            className="resultsSlider"
-                                    />
+                        <div className="resultsSlidersContainer">
+                            <div>
+                                <div
+                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    Predicted Performance<br/>
+                                    <p style={style.lightBlue}>{this.qualifier(this.state.predicted, "predicted")}</p>
                                 </div>
+                                <Slider disabled={true}
+                                        value={this.getSliderValue(this.state.predicted)}
+                                        className="resultsSlider"
+                                />
                             </div>
-
-                            <div className="horizListFull">
-                                <div className="horizListSpacer"
-                                     style={{marginLeft: "5%", marginRight: '5%'}}>
-                                    <div
-                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                        Psychometric<div className="under500only br"><br/></div> Archetype<br/>
-                                        <p style={style.lightBlue}>INNOVATOR</p>
-                                        <img
-                                            alt="Atom Icon"
-                                            src="/icons/Atom2.png"
-                                            style={style.horizListIcon}
-                                        />
-                                    </div>
+                            <div>
+                                <div
+                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    Skill Level<br/>
+                                    <p style={style.lightBlue}>{this.qualifier(this.state.skill, "skill")}</p>
                                 </div>
-                            </div>
-                            <div className="horizListFull">
-                                <div className="horizListSpacer"
-                                     style={{marginRight: "20%"}}>
-                                    <div
-                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                        Skill Level<br/>
-                                        <p style={style.lightBlue}>EXPERT</p>
-                                    </div>
-                                    <Slider disabled={true}
-                                            value={0.9}
-                                            style={{maxWidth: '250px'}}
-                                            className="resultsSlider"
-                                    />
-                                </div>
+                                <Slider disabled={true}
+                                        value={this.getSliderValue(this.state.skill)}
+                                        className="resultsSlider"
+                                />
                             </div>
                         </div>
                     </div>
                 </div>
-                <div
-                    className="whiteText center font24px font20pxUnder700 font16pxUnder500"
-                    style={{marginTop: '40px'}}>
-                    Predicted Performance
-                </div>
+
                 <div>
                     <PredictiveGraph
+                        title={"Predicted Performance"}
                         dataPoints={this.state.predictivePoints}
                         height={400}
                     />
@@ -277,9 +280,14 @@ class Results extends Component {
                                     <div className="center">
                                         <div style={style.imgContainer}>
                                             <img
-                                                src="/images/profilePictures/Steve.png"
-                                                alt="Profile picture"
-                                                style={/*style.img*/style.SteveImg}
+                                                alt="Atom Icon"
+                                                src="/icons/Atom2.png"
+                                                style={{
+                                                    height: "100%",
+                                                    transform: "translateX(-50%)",
+                                                    left: "50%",
+                                                    position: "relative"
+                                                }}
                                             />
                                         </div>
                                         <div>
@@ -292,11 +300,11 @@ class Results extends Component {
                                                 </div>
                                                 : null
                                             }
-                                            {this.props.params.profileUrl ?
+                                            {/*this.props.params.profileUrl ?
                                                 <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
                                                    href={`/profile?user=${this.props.params.profileUrl}`}>Profile</a>
                                                 : null
-                                            }
+                                            */}
                                             <br/>
                                             <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
                                                href={mailtoEmail}>Contact</a>
@@ -341,12 +349,13 @@ class Results extends Component {
 
 const style = {
     imgContainer: {
-        height: "150px",
-        width: "150px",
-        borderRadius: '50%',
-        border: "3px solid white",
+        height: "75px",
+        width: "75px",
+        // borderRadius: '50%',
+        // border: "3px solid white",
         display: "inline-block",
-        overflow: "hidden"
+        //overflow: "hidden"
+        marginBottom: "20px"
     },
     img: {
         height: "85px",
@@ -375,9 +384,6 @@ const style = {
     },
     lightBlue: {
         color: '#75dcfc'
-    },
-    horizList: {
-        marginTop: '40px',
     },
     horizListIcon: {
         height: "50px",

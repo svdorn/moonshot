@@ -13,9 +13,12 @@ class ProgressBar extends Component {
     }
 
     render() {
-        console.log("here");
         const currentUser = this.props.currentUser;
         const currentPosition = currentUser.currentPosition;
+
+        if (!currentPosition) {
+            return null;
+        }
 
         const ADMIN_QUESTIONS = "Administrative Questions";
         const PSYCH_ANALYSIS = "Psychometric Analysis";
