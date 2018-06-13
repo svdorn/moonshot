@@ -120,7 +120,7 @@ class PsychBreakdown extends Component {
         }
 
         const description = !this.state.areaSelected ?
-            <div className="center font16px font12pxUnder500" style={{color:"#d0d0d0"}}>{"Select an area to see its description"}</div>
+            <div className="center font14px font12pxUnder500" style={{color:"#d0d0d0"}}>{"Select an area to see its description"}</div>
             :
             <div className="font16px font12pxUnder500">
                 <div className="name font26px center" style={coloredText}>{this.state.areaSelected}</div>
@@ -204,14 +204,14 @@ const descriptions = {
         right: "tmp paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
     },
     Viewpoint: {
-        left: "view paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
-        right: "view paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
+        left: "Those Who score further to the left (L) love to play games. And their favorite one? People. They do what it takes to maintain an edge over others, flattering and conning their way through situations to come out on top.",
+        right: "Individuals who score further to the right (R) on this scales believe in having relationships that are real. They dislike those who are fake, and in turn, dislike being fake themselves. If a friend asks them if they have something in their teeth, they are the type that would tell them without hesitation.",
     },
     Methodology: {
         left: "meth paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
         right: "meth paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
     },
-    Experientiality: {
+    Perception: {
         left: "exp paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
         right: "exp paosidj fapofi jas;lfk jsd;fl kajsfp ijrf ;aljf apsidjf pworifj qpweiofj apsodifj apoifjapoifaspodfj as;dlfkj as;dlfjk asoij spdofvj ;lasfj ;aosijf apdifj alfj as9f paorfj pa",
     },

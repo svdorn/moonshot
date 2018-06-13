@@ -91,6 +91,8 @@ var businessesSchema = mongoose.Schema({
             scores: {
                 // combination of all the scores
                 overall: Number,
+                // average of skill iqs for all relevant skills
+                skill: Number,
                 // how good of a culture fit the candidate has
                 culture: Number,
                 // how much the candidate could grow in the position

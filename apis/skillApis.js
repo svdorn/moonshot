@@ -330,7 +330,40 @@ function POST_answerSkillQuestion(req, res) {
 
         // give the user a score
         // TODO actually score the user
-        score = randomInt(85, 115);
+
+
+        // --->> MVP ONLY <<--- //
+
+        // FOR MVP: 70% = skill iq of 100. Every percentage above or below is another
+        // skill iq point above or below
+
+        let numQuestions = 0;
+        let questionsCorrect = 0;
+
+        // go through each level
+        attempt.levels.forEach(level => {
+            // go through each question
+            level.questions.forEach(question => {
+                // add to the number of total questions
+                numQuestions++;
+                // if the user got the right answer ...
+                if (question.isCorrect) {
+                    // ... add to the number of correct answers
+                    questionsCorrect++;
+                }
+            });
+        });
+
+        // find the percentage
+        const percentCorrect = questionsCorrect / numQuestions;
+
+        // 70% = skill iq of 100
+        const score = (percentCorrect * 100) + 30;
+
+        // <<---------------->> //
+
+        //score = randomInt(85, 115);
+
         userSkill.mostRecentScore = score;
         attempt.score = score;
 

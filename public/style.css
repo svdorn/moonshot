@@ -1688,15 +1688,15 @@ form > h1 {
     padding-bottom: 10px;
     width: 100%;
     z-index: 10;
+    color: white !important;
 }
 
 .errorHeader {
-    background-color: rgba(255, 181, 181, .85) !important;
+    background: linear-gradient(to right, #E83C53, #FB553A)
 }
 
 .infoHeader {
-    background-color: rgba(255,255,255,.5) !important;
-    color: var(--moonshotBlue) !important;
+    background: linear-gradient(to right, #72d6f5, #9A73D9)
 }
 #notificationCloseButton {
     position: absolute !important;
@@ -1709,6 +1709,9 @@ form > h1 {
 }
 #notificationCloseButton > div {
     width: 24px;
+}
+#notificationCloseButton > svg {
+    fill: white !important;
 }
 
 .comingSoonBanner {

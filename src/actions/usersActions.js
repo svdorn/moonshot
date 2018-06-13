@@ -192,12 +192,13 @@ export function startPsychEval(userId, verificationToken) {
 
 export function submitFreeResponse(userId, verificationToken, frqs) {
     return function(dispatch) {
+        dispatch({type: "START_LOADING"});
         axios.post("/api/user/submitFreeResponse", {userId, verificationToken, frqs})
         .then(response => {
             dispatch({
                 type: "SUBMIT_FREE_RESPONSE",
                 currentUser: response.data.updatedUser,
-                nofification: {message: "Application complete!", type: "infoHeader"}
+                notification: {message: "Position evaluation complete!", type: "infoHeader"}
             });
             browserHistory.push("/myEvaluations");
             window.scrollTo(0, 0);

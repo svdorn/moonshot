@@ -118,10 +118,12 @@ export function usersReducers(state = initialState, action) {
             // TODO
             break;
         case "SUBMIT_FREE_RESPONSE":
+            console.log("action.notification: ", action.notification);
             return {
                 ...state,
                 currentUser: action.currentUser,
-                notification: action.notification
+                notification: action.notification,
+                loadingSomething: false
             }
             break;
         case "UPDATE_USER":

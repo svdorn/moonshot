@@ -61,7 +61,7 @@ class Results extends Component {
             const hardSkillPoints = res.data.skillScores.map(skill => {
                 return {
                     x: skill.name,
-                    y: skill.mostRecentScore,
+                    y: this.round(skill.mostRecentScore),
                     confidenceInterval: 16
                 }
             });
@@ -71,22 +71,22 @@ class Results extends Component {
             const predictivePoints = [
                 {
                     x: "Growth",
-                    y: res.data.performanceScores.growth,
+                    y: this.round(res.data.performanceScores.growth),
                     confidenceInterval: 16
                 },
                 {
                     x: "Longevity",
-                    y: res.data.performanceScores.longevity,
+                    y: this.round(res.data.performanceScores.longevity),
                     confidenceInterval: 16
                 },
                 {
                     x: "Culture",
-                    y: res.data.performanceScores.culture,
+                    y: this.round(res.data.performanceScores.culture),
                     confidenceInterval: 16
                 },
                 {
                     x: "Performance",
-                    y: res.data.performanceScores.performance,
+                    y: this.round(res.data.performanceScores.performance),
                     confidenceInterval: 16
                 }
             ];
@@ -102,7 +102,7 @@ class Results extends Component {
                 hardSkillPoints,
                 predictivePoints,
                 freeResponses
-            }, () => {console.log("state is now: ", self.state);});
+            });
         })
         .catch(error => {
             console.log("error: ", error);
@@ -123,6 +123,13 @@ class Results extends Component {
     }
 
 
+    round(number) {
+        const rounded = Math.round(number);
+        if (isNaN(rounded)) { return number; }
+        return rounded;
+    }
+
+
     makeAnalysisSection() {
         if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
 
@@ -134,7 +141,7 @@ class Results extends Component {
                     <div className="paddingTop20px">
                         <div
                             className="font24px font20pxUnder700 font16pxUnder500 grayText">
-                            Candidate Score <b style={style.lightBlue}><u>{this.state.overallScore}</u></b>
+                            Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                         </div>
                         <div style={style.horizList}>
                             <div className="horizListFull">

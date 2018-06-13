@@ -92,7 +92,7 @@ class FreeResponse extends Component {
     skillTestsDone() {
         const currentPosition = this.props.currentUser.currentPosition;
         // if there are no skill tests, must be done with them
-        if (!currentPosition.skillTests) { return true; }
+        if (!currentPosition || !currentPosition.skillTests) { return true; }
         // if the index of the current test is valid and in bounds, not done with tests
         return parseInt(currentPosition.testIndex, 10) >= currentPosition.skillTests.length;
     }
@@ -114,8 +114,6 @@ class FreeResponse extends Component {
         const currentUser = this.props.currentUser;
 
         let content = null;
-
-        console.log("this.skillTestsDone: ", this.skillTestsDone());
 
         if (this.state.submitting) {
             content = (
@@ -187,7 +185,7 @@ class FreeResponse extends Component {
                         <div className="skillContinueButton"
                              onClick={this.submit.bind(this)}
                         >
-                            Submit application
+                            Finish
                         </div>
                     </div>
                 </div>

@@ -231,12 +231,13 @@ class MyEvaluations extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
     };
 }
 
