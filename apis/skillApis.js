@@ -15,6 +15,8 @@ const { sanitize,
         frontEndUser
 } = require('./helperFunctions.js');
 
+const { finishPositionEvaluation } = require('./userApis');
+
 const errors = require('./errors.js');
 
 const skillApis = {
@@ -175,65 +177,127 @@ function POST_answerSkillQuestion(req, res) {
         // see if the user is done with the test
         // TODO make a legit way of seeing if the test is over
         // right now it just finishes if you answer one question
-        if (true) {
-            finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
-        }
+        // if (true) {
+        //     finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
+        // }
 
-        else { getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex); }
+        // else {
+            getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex);
+        // }
     }
 
     async function getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex) {
-        // get a new question
-        let newUserLevelIndex = userLevelIndex;
-        // right answer and more levels exist
-        if (isCorrect && userLevelIndex < attempt.levels.length - 1) {
-            newUserLevelIndex++;
+        // // get a new question
+        // let newUserLevelIndex = userLevelIndex;
+        // // right answer and more levels exist
+        // if (isCorrect && userLevelIndex < attempt.levels.length - 1) {
+        //     newUserLevelIndex++;
+        // }
+        // // wrong answer and lower levels exist
+        // else if (!isCorrect && userLevelIndex > 0) {
+        //     newUserLevelIndex--;
+        // } // level has to stay the same otherwise
+        // let newUserLevel = attempt.levels[newUserLevelIndex];
+        //
+        // // get the test level
+        // const testLevelIndex = skill.levels.findIndex(level => {
+        //     return level.levelNumber === newUserLevel.levelNumber;
+        // });
+        // const testLevel = skill.levels[testLevelIndex];
+        //
+        // // TODO: make this actually test if the percent of questions is small enough,
+        // // and if it is not, make it make a list of unused questions to pick from
+        //
+        // // see if the percent of used questions is small enough that we can just
+        // // get random questions until one has not been used
+        //
+        // const testLevelQuestions = testLevel.questions;
+        // const numTotalQuestions = testLevelQuestions.length;
+        // let questionIndex = 0;
+        // let questionId = undefined;
+        // let question = undefined;
+        // // get random indexes of questions until one of the indexes is of a question
+        // // that has not yet been answered
+        // let counter = 0;
+        // do {
+        //     counter++;
+        //     // if a question could not be found, finish the test
+        //     if (counter > 100) {
+        //         return finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
+        //     }
+        //     questionIndex = randomInt(0, numTotalQuestions - 1);
+        //     question = testLevelQuestions[questionIndex];
+        //     questionId = question._id.toString();
+        // } while (newUserLevel.questions.some(answeredQuestion => answeredQuestion.questionId.toString() === questionId));
+
+
+
+        // --->> MVP ONLY <<--- //
+        const currentUserLevel = attempt.levels[userLevelIndex];
+        // get the number of questions within this level (test sub-part)
+        const currentTestLevel = skill.levels[userLevelIndex];
+        const currentTestLevelQuestions = currentTestLevel.questions;
+        const numQuestionsInCurrentLevel = currentTestLevelQuestions.length;
+        // find out if all the questions at this level are done
+        let finishedLevel = false
+        if (currentUserLevel.questions.length === numQuestionsInCurrentLevel) {
+            finishedLevel = true;
         }
-        // wrong answer and lower levels exist
-        else if (!isCorrect && userLevelIndex > 0) {
-            newUserLevelIndex--;
-        } // level has to stay the same otherwise
-        let newUserLevel = attempt.levels[newUserLevelIndex];
 
-        // get the test level
-        const testLevelIndex = skill.levels.findIndex(level => {
-            return level.levelNumber === newUserLevel.levelNumber;
-        });
-        const testLevel = skill.levels[testLevelIndex];
+        newLevelIndex = userLevelIndex;
 
-        // TODO: make this actually test if the percent of questions is small enough,
-        // and if it is not, make it make a list of unused questions to pick from
-
-        // see if the percent of used questions is small enough that we can just
-        // get random questions until one has not been used
-
-        const testLevelQuestions = testLevel.questions;
-        const numTotalQuestions = testLevelQuestions.length;
-        let questionIndex = 0;
-        let questionId = undefined;
-        let question = undefined;
-        // get random indexes of questions until one of the indexes is of a question
-        // that has not yet been answered
-        let counter = 0;
-        do {
-            counter++;
-            // if a question could not be found, finish the test
-            if (counter > 100) {
+        // if the user finished the level ...
+        if (finishedLevel) {
+            // ... find out if they are done with the test
+            if (userLevelIndex === skill.levels.length - 1) {
+                // user is done with the test, finish it
                 return finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
             }
-            questionIndex = randomInt(0, numTotalQuestions - 1);
+            else {
+                // user isn't finished with the test, set the current level to
+                // the next available one
+                newLevelIndex += 1;
+            }
+        }
+
+        // get the new level from the user object
+        let newUserLevel = attempt.levels[newLevelIndex];
+
+        // get an unanswered question
+        const testLevel = skill.levels[newLevelIndex];
+        const testLevelQuestions = testLevel.questions;
+        let questionIndex = -1;
+        let question;
+        let questionId;
+        do {
+            questionIndex += 1;
             question = testLevelQuestions[questionIndex];
             questionId = question._id.toString();
         } while (newUserLevel.questions.some(answeredQuestion => answeredQuestion.questionId.toString() === questionId));
 
         const currentQuestionToStore = {
             levelNumber: testLevel.levelNumber,
-            levelIndex: testLevelIndex,
+            levelIndex: newLevelIndex,
             questionId,
             questionIndex,
             startDate: new Date(),
             correctAnswers: question.correctAnswers
         }
+
+
+        // <<---------------->> //
+
+
+
+
+        // const currentQuestionToStore = {
+        //     levelNumber: testLevel.levelNumber,
+        //     levelIndex: testLevelIndex,
+        //     questionId,
+        //     questionIndex,
+        //     startDate: new Date(),
+        //     correctAnswers: question.correctAnswers
+        // }
 
         userSkill.currentQuestion = currentQuestionToStore;
         // save this info and the previous new info into the user's current skill
@@ -309,7 +373,9 @@ function POST_answerSkillQuestion(req, res) {
                         // if there are no multiple choice questions, user is finished
                         if (!position.freeResponseQuestions || position.freeResponseQuestions.length === 0) {
                             try {
-                                const finishObj = await finishPositionEvaluation(user, positionId, businessId);
+                                // have to get the business to save the user in it
+
+                                const finishObj = await finishPositionEvaluation(user, position.positionId, position.businessId);
                                 // save the business with the new user info
                                 finishObj.business.save();
                                 // update the user
