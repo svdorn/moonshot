@@ -279,9 +279,8 @@ class AdminQuestions extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="skillContinueButton"
+                <div className="skillContinueButton marginBottom50px marginTop20px"
                      onClick={this.nextQuestion.bind(this)}
-                     style={{marginTop:"20px"}}
                 >
                     Next
                 </div>
@@ -319,7 +318,7 @@ class AdminQuestions extends Component {
             <div>
                 <div className="adminQuestions question">{question.questionText}</div>
                 { options }
-                <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
+                <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
             </div>
         );
     }
@@ -346,7 +345,7 @@ class AdminQuestions extends Component {
 
         else if (!question) {
             content = (
-                <CircularProgress />
+                <CircularProgress className="grayText" />
             );
         }
 

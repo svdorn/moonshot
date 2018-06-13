@@ -205,7 +205,7 @@ class SkillTest extends Component {
 
         const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
 
-        let content = <CircularProgress/>;
+        let content = <CircularProgress className="grayText" />;
 
         if (this.state.finished) {
             content = (
@@ -240,7 +240,7 @@ class SkillTest extends Component {
                 <div>
                     <StyledContent contentArray={question.body} style={{marginBottom:"40px"}} />
                     { answers }
-                    <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
+                    <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
                 </div>
             );
         }

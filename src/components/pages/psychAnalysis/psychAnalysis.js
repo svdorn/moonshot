@@ -101,7 +101,7 @@ class PsychAnalysis extends Component {
         // start, show loading symbol
         if (!currentUser || this.props.startingPsychTest) {
             return (
-                <CircularProgress />
+                <CircularProgress className="grayText" />
             );
         }
 
@@ -225,7 +225,7 @@ class PsychAnalysis extends Component {
                     />
                 </div>
                 <br/>
-                <div className="psychAnalysisButton" onClick={this.nextQuestion.bind(this)}>
+                <div className="psychAnalysisButton marginBottom50px" onClick={this.nextQuestion.bind(this)}>
                     Next
                 </div>
             </div>
