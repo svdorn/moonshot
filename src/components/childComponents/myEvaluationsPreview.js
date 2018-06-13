@@ -20,6 +20,39 @@ import axios from "axios";
 
 class MyEvaluationsPreview extends Component {
 
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            // names of the skills of this position
+            skills: [],
+        }
+    }
+
+    componentWillMount() {
+        const currentUser = this.props.currentUser;
+        let self = this;
+        if (this.props.skills && this.props.skills.length > 0) {
+            axios.get("/api/skill/skillNamesByIds", {
+                params: {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken,
+                    skillIds: this.props.skills
+                }
+            })
+            .then(res => {
+                console.log(res);
+                self.setState({skills: res.data})
+            })
+            .catch(error => {
+                console.log("error getting skills: ", error);
+                if (error.response) { console.log(error.response.data); }
+            })
+        } else {
+            
+        }
+    }
+
     goTo(route) {
         // goes to the wanted page
         browserHistory.push(route);
@@ -55,7 +88,7 @@ class MyEvaluationsPreview extends Component {
         // user is a manager or account admin
         const editing = this.props.variation === "edit"
 
-        const skills = this.props.skills;
+        const skills = this.state.skills;
 
         let positionSkills;
 
@@ -154,6 +187,10 @@ class MyEvaluationsPreview extends Component {
         }
 
         return(
+            <div>
+            {this.state.skillsNotLoaded ?
+                null
+                :
             <div className="myEvalsBox aboutMeLi">
                 <div className="aboutMeLiIconContainer">
                     <img alt="My Evals Company Logo" src={`/logos/${this.props.logo}`}/>
@@ -169,6 +206,8 @@ class MyEvaluationsPreview extends Component {
                     {editing ? positionSkills : <div className="marginTop20px">{positionSkills}</div>}
                     {clickableArea}
                 </div>
+            </div>
+            }
             </div>
         );
     }

@@ -192,6 +192,14 @@ class MyEvaluations extends Component {
 
         }
 
+        if (currentUser && this.state.positions.length !== 0 && evaluations[0] == null) {
+            console.log("can change it back");
+        }
+
+        if (currentUser && this.state.positions.length !== 0) {
+            console.log("pos 1: ",evaluations[0]);
+        }
+
         // The section for the account admin to take the psych test if they haven't already
         let accountAdminTakePsychTest = null;
         if (currentUser && currentUser.userType == "accountAdmin" && !currentUser.psychometricTest.endDate && (this.state.positions.length !== 0 || this.state.noPositions)) {

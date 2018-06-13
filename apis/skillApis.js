@@ -19,12 +19,50 @@ const errors = require('./errors.js');
 
 const skillApis = {
     //GET_skillByUrl,
+    GET_skillNamesByIds,
     POST_answerSkillQuestion,
     POST_startOrContinueTest
 }
 
 
 // ----->> START APIS <<----- //
+
+async function GET_skillNamesByIds(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+    const skillIds = sanitize(req.query.skillIds);
+    console.log(skillIds);
+
+    if (!userId || !verificationToken || !skillIds) {
+        return res.status(400).send("Not enough arguments provided.");
+    }
+
+    // get the user
+    let user;
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (findUserError) {
+        console.log("Error finding businesss user who was trying to see thier positions: ", findUserError);
+        return res.status(500).send("Server error, try again later.");
+    }
+
+    const skillsQuery = {
+        "_id" : {"$in" : skillIds}
+    }
+    // get the business the user works for
+    let skills;
+    try {
+        skills = await Skills
+            .find(skillsQuery)
+            .select("name");
+        // see if there are none found
+        if (!skills || skills.length === 0 ) { throw "No skills found - userId: ", user._id; }
+
+        res.json(skills);
+    } catch (findSkillsErr) {
+        console.log("error finding skills : ", findSkillsErr);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+}
 
 function POST_answerSkillQuestion(req, res) {
     let user = undefined;

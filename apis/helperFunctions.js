@@ -195,39 +195,6 @@ function userForAdmin(user) {
     return newUser;
 }
 
-async function getSkillNamesByIds(skillIds, userId, verificationToken) {
-    return new Promise(async function(resolve, reject) {
-
-    if (!userId || !verificationToken || !skillIds) {
-        return res.status(400).send("Not enough arguments provided.");
-    }
-
-    // get the user
-    let user;
-    try { user = await getAndVerifyUser(userId, verificationToken); }
-    catch (findUserError) {
-        console.log("Error finding businesss user who was trying to see thier positions: ", findUserError);
-        return res.status(500).send("Server error, try again later.");
-    }
-
-    const skillsQuery = {
-        "_id" : {"$in" : skillIds}
-    }
-    // get the business the user works for
-    let skills;
-    try {
-        skills = await Skills
-            .find(skillsQuery)
-            .select("name");
-    } catch (findSkillsErr) {
-        console.log("error finding skills : ", findSkillsErr);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    resolve(skills);
-    })
-}
-
 
 // callback needs to be a function of a success boolean and string to return;
 // takes an ARRAY of recipient emails
