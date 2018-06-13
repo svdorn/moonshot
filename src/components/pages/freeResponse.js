@@ -84,8 +84,6 @@ class FreeResponse extends Component {
 
         self.setState({submitting: true}, () => {
             self.props.submitFreeResponse(this.props.currentUser._id, this.props.currentUser.verificationToken, frqsToSubmit);
-            // TODO REMOVE
-            this.goTo("/");
         });
     }
 
