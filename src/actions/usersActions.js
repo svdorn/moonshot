@@ -542,7 +542,7 @@ export function completePathway(user){
         axios.post("api/candidate/completePathway", user)
             .then(function(response) {
                 dispatch({type:"COMPLETE_PATHWAY", user: response.data.user, notification: {message:response.data.message, type:"infoHeader"}});
-                browserHistory.push('/discover');
+                browserHistory.push('/');
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {

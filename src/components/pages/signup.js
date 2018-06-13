@@ -89,7 +89,7 @@ class Signup extends Component {
     componentWillMount() {
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser && this.props.currentUser != "no user") {
-            this.goTo("/discover");
+            this.goTo("/myEvaluations");
         }
     }
 
