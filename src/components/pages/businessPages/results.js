@@ -136,60 +136,35 @@ class Results extends Component {
         const hardSkillsDataPoints = this.state.hardSkillPoints;
 
         return (
-            <div className="center aboutMeSection" style={style.tabContent}>
+            <div className="analysis center aboutMeSection" style={style.tabContent}>
                 <div style={style.candidateScore}>
                     <div className="paddingTop20px">
                         <div
-                            className="font24px font20pxUnder700 font16pxUnder500 grayText">
+                            className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore">
                             Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                         </div>
-                        <div style={style.horizList}>
-                            <div className="horizListFull">
-                                <div className="horizListSpacer"
-                                     style={{marginLeft: "20%"}}
-                                >
-                                    <div
-                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                        Predicted<div className="under500only br"><br/></div> Performance<br/>
-                                        <p style={style.lightBlue}>AVERAGE</p>
-                                    </div>
-                                    <Slider disabled={true}
-                                            value={0.5}
-                                            style={{maxWidth: '250px'}}
-                                            className="resultsSlider"
-                                    />
+                        <div className="resultsSlidersContainer">
+                            <div>
+                                <div
+                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    Predicted Performance<br/>
+                                    <p style={style.lightBlue}>AVERAGE</p>
                                 </div>
+                                <Slider disabled={true}
+                                        value={0.5}
+                                        className="resultsSlider"
+                                />
                             </div>
-
-                            <div className="horizListFull">
-                                <div className="horizListSpacer"
-                                     style={{marginLeft: "5%", marginRight: '5%'}}>
-                                    <div
-                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                        Psychometric<div className="under500only br"><br/></div> Archetype<br/>
-                                        <p style={style.lightBlue}>INNOVATOR</p>
-                                        <img
-                                            alt="Atom Icon"
-                                            src="/icons/Atom2.png"
-                                            style={style.horizListIcon}
-                                        />
-                                    </div>
+                            <div>
+                                <div
+                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    Skill Level<br/>
+                                    <p style={style.lightBlue}>EXPERT</p>
                                 </div>
-                            </div>
-                            <div className="horizListFull">
-                                <div className="horizListSpacer"
-                                     style={{marginRight: "20%"}}>
-                                    <div
-                                        className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                        Skill Level<br/>
-                                        <p style={style.lightBlue}>EXPERT</p>
-                                    </div>
-                                    <Slider disabled={true}
-                                            value={0.9}
-                                            style={{maxWidth: '250px'}}
-                                            className="resultsSlider"
-                                    />
-                                </div>
+                                <Slider disabled={true}
+                                        value={0.9}
+                                        className="resultsSlider"
+                                />
                             </div>
                         </div>
                     </div>
@@ -284,9 +259,14 @@ class Results extends Component {
                                     <div className="center">
                                         <div style={style.imgContainer}>
                                             <img
-                                                src="/images/profilePictures/Steve.png"
-                                                alt="Profile picture"
-                                                style={/*style.img*/style.SteveImg}
+                                                alt="Atom Icon"
+                                                src="/icons/Atom2.png"
+                                                style={{
+                                                    height: "100%",
+                                                    transform: "translateX(-50%)",
+                                                    left: "50%",
+                                                    position: "relative"
+                                                }}
                                             />
                                         </div>
                                         <div>
@@ -299,11 +279,11 @@ class Results extends Component {
                                                 </div>
                                                 : null
                                             }
-                                            {this.props.params.profileUrl ?
+                                            {/*this.props.params.profileUrl ?
                                                 <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
                                                    href={`/profile?user=${this.props.params.profileUrl}`}>Profile</a>
                                                 : null
-                                            }
+                                            */}
                                             <br/>
                                             <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
                                                href={mailtoEmail}>Contact</a>
@@ -348,12 +328,13 @@ class Results extends Component {
 
 const style = {
     imgContainer: {
-        height: "150px",
-        width: "150px",
-        borderRadius: '50%',
-        border: "3px solid white",
+        height: "75px",
+        width: "75px",
+        // borderRadius: '50%',
+        // border: "3px solid white",
         display: "inline-block",
-        overflow: "hidden"
+        //overflow: "hidden"
+        marginBottom: "20px"
     },
     img: {
         height: "85px",
@@ -382,9 +363,6 @@ const style = {
     },
     lightBlue: {
         color: '#75dcfc'
-    },
-    horizList: {
-        marginTop: '40px',
     },
     horizListIcon: {
         height: "50px",

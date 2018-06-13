@@ -1256,8 +1256,19 @@ form > h1 {
     margin: 0 20px 0 40px;
 }
 
+.analysis .candidateScore {
+    margin-bottom: 30px;
+}
+
+.resultsSlidersContainer {
+    display: flex;
+    margin: 0 auto 30px;
+    justify-content: space-between;
+    width: 500px;
+}
 .resultsSlider {
     margin: auto !important;
+    width: 200px;
 }
 .resultsSlider > div > div > div {
     background: linear-gradient(to right, #ae7efc, #75dcfc) !important;
@@ -4808,6 +4819,13 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 450px;
     }
 
+    .resultsSlidersContainer {
+        width: 350px;
+    }
+    .resultsSlider {
+        width: 150px;
+    }
+
     .processHeaderContainer {
         height: 50px;
         width: 144px;
@@ -5611,6 +5629,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .above400only { display: none; }
     .form {
         max-width: 300px;
+    }
+    .resultsSlidersContainer {
+        width: 260px;
+    }
+    .resultsSlider {
+        width: 110px;
     }
     .infoBoxImage {
         height: 38px;
