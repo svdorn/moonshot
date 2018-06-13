@@ -33,6 +33,7 @@ function calculatePsychScores(user) {
                 // multiply the score by -1 if it's supposed to be inverted
                 if (facet.responses[responseIndex].invertScore) {
                     answer = answer * -1;
+                    console.log("inverting score");
                 }
                 facetTotal += answer;
             }
