@@ -306,11 +306,8 @@ function POST_candidate(req, res) {
                         user.userType = "employee";
                         oneTimeCodeIndex = employeeIndex;
                         userCodeType = "employeeCodes";
-                    // } else if (managerIndex !== -1) {
-                    //     user.userType = "manager";
-                    //     oneTimeCodeIndex = managerIndex;
-                    //     userCodeType = "managerCodes";
-                } else if (adminIndex !== -1) {
+                        startDate = position.employeeCodes[employeeIndex].startDate;
+                    } else if (adminIndex !== -1) {
                         user.userType = "accountAdmin";
                         oneTimeCodeIndex = adminIndex;
                         userCodeType = "adminCodes";

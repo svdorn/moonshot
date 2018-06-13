@@ -5,6 +5,8 @@ const credentials = require('../credentials');
 const Users = require('../models/users.js');
 const Emailaddresses = require('../models/emailaddresses.js');
 const Businesses = require('../models/businesses.js');
+const Skills = require('../models/skills.js');
+
 
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {

@@ -23,35 +23,17 @@ class EmployeePreview extends Component {
             gradingComplete: props.gradingComplete,
             answers: props.answers,
             gradingInProgress: false,
-            questionIndex: 0,
-            questionAnswer: 0
+            questionIndex: 0
         }
     }
 
     // Set the current question when the component mounts
     componentDidMount() {
-        // // Start the test at the last unanswered question
-        // let maxQuestionIndex = 0;
-        //
-        // for (let i = 0; i < this.props.answers.length; i++) {
-        //     const answer = this.props.answers[i];
-        //     if (answer.questionIndex >= maxQuestionIndex) {
-        //         maxQuestionIndex = answer.questionIndex;
-        //     }
-        // }
-        //
-        // if ((maxQuestionIndex) > this.props.answers.length) {
-        //     // Go to the next unanswered question
-        //     maxQuestionIndex = maxQuestionIndex;
-        // } else {
-        //     // Go to the last question, which has already been filled out
-        //     maxQuestionIndex = this.props.answers.length - 1;
-        // }
-        //
-        // this.setState({
-        //     ...this.state,
-        //     questionIndex: maxQuestionIndex
-        // });
+        let questionAnswer = 0;
+        if (this.props.answers.length >= 1) {
+            questionAnswer = this.props.answers[0].score;
+        }
+        this.setState({questionAnswer: questionAnswer});
     }
 
     goTo(route) {
@@ -77,7 +59,7 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            companyId: this.props.currentUser.company.companyId,
+            positionName: this.props.position,
             gradingComplete: true
         }
         axios.post("/api/business/answerQuestion", {user})
@@ -104,8 +86,8 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            companyId: this.props.currentUser.company.companyId,
-            gradingComplete: false
+            positionName: this.props.position,
+            gradingComplete: this.state.gradingComplete
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {
@@ -145,8 +127,8 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            companyId: this.props.currentUser.company.companyId,
-            gradingComplete: false
+            positionName: this.props.position,
+            gradingComplete: this.state.gradingComplete
         }
         axios.post("/api/business/answerQuestion", {user})
         .then(function (res) {

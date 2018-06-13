@@ -106,7 +106,8 @@ app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
-app.get("/business/employees", businessApis.GET_employees);
+app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
+app.get("/business/employeeQuestions", businessApis.GET_employeeQuestions);
 app.get("/business/positions", businessApis.GET_positions);
 app.get("/business/evaluationResults", businessApis.GET_evaluationResults);
 
@@ -117,6 +118,7 @@ app.get("/admin/info", adminApis.GET_info);
 //app.get('/skill/skillByUrl', skillApis.GET_skillByUrl);
 app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);
 app.post('/skill/startOrContinueTest', skillApis.POST_startOrContinueTest);
+app.get('/skill/skillNamesByIds', skillApis.GET_skillNamesByIds);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);

@@ -13,6 +13,7 @@ import {
     Paper
 } from 'material-ui';
 import {connect} from 'react-redux';
+import { browserHistory } from "react-router";
 import {bindActionCreators} from 'redux';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -32,6 +33,13 @@ class MyEvaluations extends Component {
             // name of the business the user works for - doesn't apply for candidates
             businessName: undefined
         }
+    }
+
+    goTo(route) {
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
     }
 
     componentDidMount() {
@@ -85,6 +93,9 @@ class MyEvaluations extends Component {
         }
     }
 
+    startPsychEval() {
+        this.goTo("/psychometricAnalysis");
+    }
 
     render() {
         const style = {
@@ -132,7 +143,6 @@ class MyEvaluations extends Component {
 
         const currentUser = this.props.currentUser;
 
-        // TODO: make this work for everybody, not just Curate
         if (currentUser && this.state.positions.length !== 0) {
             const userType = currentUser.userType;
 
@@ -140,6 +150,7 @@ class MyEvaluations extends Component {
                 key++;
 
                 let attributes = {};
+                console.log("position: ", position)
                 attributes.company = position.businessName;
 
                 // if user is manager or account admin, preview will look editable
@@ -162,6 +173,7 @@ class MyEvaluations extends Component {
                     attributes.logo = position.businessLogo;
                     attributes.name = position.positionName;
                     attributes.company = position.businessName;
+                    attributes.skills = position.skills;
                     attributes.businessId = position.businessId.toString();
                     attributes.positionId = position.positionId.toString();
                     attributes.assignedDate = position.assignedDate;
@@ -180,9 +192,34 @@ class MyEvaluations extends Component {
 
         }
 
+        if (currentUser && this.state.positions.length !== 0 && evaluations[0] == null) {
+            console.log("can change it back");
+        }
+
+        if (currentUser && this.state.positions.length !== 0) {
+            console.log("pos 1: ",evaluations[0]);
+        }
+
+        // The section for the account admin to take the psych test if they haven't already
+        let accountAdminTakePsychTest = null;
+        if (currentUser && currentUser.userType == "accountAdmin" && !currentUser.psychometricTest.endDate && (this.state.positions.length !== 0 || this.state.noPositions)) {
+            accountAdminTakePsychTest = (
+                <div className="marginBottom10px center">
+                    <div className="whiteText font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 inlineBlock">
+                        All admins must take a 13 minute psychometric quiz. Take it here!
+                    </div>
+                    <div className="inlineBlock marginLeft10px">
+                            <button className="veryRoundedButton smallMediumButton font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 purpleToBlueAnimate whiteText" onClick={this.startPsychEval.bind(this)} style={{padding: "4px 15px"}}>
+                                Quiz
+                            </button>
+                    </div>
+                </div>
+            );
+        }
+
         return(
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEvaluations'>
-                <AddUserDialog />
+                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>My Evaluations | Moonshot</title>
                     <meta name="description" content="View the evaluations your company is running."/>
@@ -194,6 +231,7 @@ class MyEvaluations extends Component {
                         My Evaluations
                     </div>
                 </div>
+                {accountAdminTakePsychTest}
                 <div className="marginBottom60px">
                     {evaluations}
                 </div>

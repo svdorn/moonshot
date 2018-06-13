@@ -20,6 +20,7 @@ const { sanitize,
         getFirstName,
         getAndVerifyUser,
         frontEndUser,
+        getSkillNamesByIds,
         NO_TOKENS
 } = require('./helperFunctions');
 
@@ -1285,7 +1286,7 @@ async function POST_answerPsychQuestion(req, res) {
 async function internalStartPsychEval(user) {
     return new Promise(async function(resolve, reject) {
         if (user.psychometricTest.startDate) {
-            reject({statusCode: 400, error: "psych test already taken", msg: "You can't take the exam twice! If you need to take the exam again, contact us."});
+            resolve(user);
         }
 
         let psychTest = undefined;
@@ -1830,7 +1831,7 @@ async function GET_positions(req, res) {
         try {
             businesses = await Businesses
             .find({ "_id": { "$in": businessIds } })
-            .select("name logo positions.name positions.timeAllotted positions._id");
+            .select("name logo positions.name positions.timeAllotted positions._id positions.skills");
         } catch (getBusinessesError) {
             console.log("error getting businesses while trying to get positions for user: ", getBusinessesError);
             return res.status(500).send("Server error.");
@@ -1857,6 +1858,7 @@ async function GET_positions(req, res) {
                         businessId: business._id,
                         positionName: bizPosition.name,
                         positionId: bizPosition._id,
+                        skills: validPositions[positionIndex].skills,
                         assignedDate: validPositions[positionIndex].assignedDate,
                         deadline: validPositions[positionIndex].deadline,
                         completedDate: validPositions[positionIndex].completedDate

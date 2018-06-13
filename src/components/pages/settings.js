@@ -24,7 +24,7 @@ class Settings extends Component {
     render() {
         return (
             <div className="fillScreen lightBlackBackground">
-                <AddUserDialog />
+                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>Settings | Moonshot</title>
                     <meta name="description" content="Change your Moonshot account settings." />
@@ -70,7 +70,9 @@ class Settings extends Component {
 }
 
 function mapStateToProps(state) {
-    return {};
+    return {
+        currentUser: state.users.currentUser
+    };
 }
 
 export default connect(mapStateToProps)(Settings);

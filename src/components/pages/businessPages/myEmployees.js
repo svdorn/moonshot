@@ -38,54 +38,118 @@ class MyEmployees extends Component {
             status: "",
             position: "",
             employees: [],
-            quesions: [],
+            questions: [],
             positions: [],
             // true if the business has no positions associated with it
-            noEmployees: false
+            noPositions: false,
+            // true if the position has no employees associated with it
+            noEmployees: false,
+            loadingDone: false
         }
     }
 
+
+
     componentDidMount() {
         let self = this;
-        axios.get("/api/business/employees", {
+
+        axios.get("/api/business/positions", {
             params: {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken
+                userId: self.props.currentUser._id,
+                verificationToken: self.props.currentUser.verificationToken
             }
         })
         .then(function (res) {
-            let employeeData = res.data;
-            if (Array.isArray(employeeData.employees) && employeeData.employees.length > 0) {
-                self.setState({
-                    employees: employeeData.employees,
-                    questions: employeeData.employeeQuestions
-                })
+            let positions = res.data.positions;
+            let firstPositionName = "";
+            let noPositions = false;
+            if (Array.isArray(positions) && positions.length > 0) {
+                // if the url gave us a position to select first, select that one
+                // otherwise, select the first one available
+                firstPositionName = positions[0].name;
+                if (self.state.positionNameFromUrl && positions.some(position => {
+                    return position.name === self.state.positionNameFromUrl;
+                })) {
+                    firstPositionName = self.state.positionNameFromUrl;
+                }
+
+                // select this position from the dropdown if it is valid
+                if (firstPositionName) {
+                    let selectedPosition = firstPositionName;
+                }
             } else {
-                self.setState({
-                    noEmployees: true,
-                    questions: employeeData.employeeQuestions
-                })
+                noPositions = true;
             }
+
+            axios.get("/api/business/employeeQuestions", {
+                params: {
+                    userId: self.props.currentUser._id,
+                    verificationToken: self.props.currentUser.verificationToken
+                }
+            })
+            .then (function (response) {
+                const questions = response.data.employeeQuestions;
+                self.setState({
+                    positions: positions,
+                    position: firstPositionName,
+                    questions: questions,
+                    noPositions: noPositions,
+                    loadingDone: true
+                },
+                // search for candidates of first position
+                self.search
+            );
+            })
+            .catch(function(err) {
+                console.log("error getting the employee questions: ", err);
+            })
+        })
+        .catch (function(error) {
+            console.log("error getting the positions: ", error);
         })
     }
 
-    onSearchChange(term) {
-        // this.setState({...this.state, term: term}, () => {
-        //     if (term !== undefined) {
-        //     }
-        // });
+    search() {
+        // need a position to search for
+        if (!this.state.noPositions && this.state.position) {
+            axios.get("/api/business/employeeSearch", {
+                params: {
+                    searchTerm: this.state.term,
+                    // searching by position name right now, could search by id if want to
+                    positionName: this.state.position,
+                    userId: this.props.currentUser._id,
+                    status: this.state.status,
+                    verificationToken: this.props.currentUser.verificationToken
+                }
+            }).then(res => {
+                // make sure component is mounted before changing state
+                if (this.refs.myEmployees) {
+                    if (res.data && res.data.length > 0) {
+                        this.setState({ employees: res.data, noEmployees: false });
+                    } else {
+                        this.setState({noEmployees: true, employees: []})
+                    }
+                }
+            }).catch(function (err) {
+                console.log("ERROR with Employee search: ", err);
+            })
+        }
     }
 
-    handleStageChange = (event, index, stage) => {
-        // this.setState({stage}, () => {
-        //     this.search();
-        // })
+    onSearchChange(term) {
+        this.setState({...this.state, term: term}, () => {
+            if (term !== undefined) {
+                this.search();
+            }
+        });
+    }
+
+    handleStatusChange = (event, index, status) => {
+        this.setState({status, employees: [], noEmployees: false}, this.search);
     };
 
     handlePositionChange = (event, index, position) => {
-        // this.setState({position}, () => {
-        //     this.search();
-        // })
+        this.setState({position, employees: [], noEmployees: false}, this.search);
     };
 
     render() {
@@ -127,15 +191,15 @@ class MyEmployees extends Component {
             }
         }
 
-        const stages = ["Complete", "Incomplete"];
-        const stageItems = stages.map(function (stage) {
-            return <MenuItem value={stage} primaryText={stage} key={stage}/>
+        const statuses = ["Complete", "Incomplete"];
+        const statusItems = statuses.map(function (status) {
+            return <MenuItem value={status} primaryText={status} key={status}/>
         })
 
         // TODO get companies from DB
-        const positions = ["Financial Represenatative", "Web Developer"]
+        const positions = this.state.positions;
         const positionItems = positions.map(function (position) {
-            return <MenuItem value={position} primaryText={position} key={position}/>
+            return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
         })
 
         // the hint that shows up when search bar is in focus
@@ -166,14 +230,14 @@ class MyEmployees extends Component {
 
                     <ToolbarGroup>
                         <DropDownMenu value={this.state.status}
-                                      onChange={this.handleStageChange}
+                                      onChange={this.handleStatusChange}
                                       labelStyle={style.menuLabelStyle}
                                       anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px"}}
                         >
                             <MenuItem value={""} primaryText="Status"/>
                             <Divider/>
-                            {stageItems}
+                            {statusItems}
                         </DropDownMenu>
                         <DropDownMenu value={this.state.position}
                                       onChange={this.handlePositionChange}
@@ -181,7 +245,7 @@ class MyEmployees extends Component {
                                       anchorOrigin={style.anchorOrigin}
                                       style={{fontSize: "20px", marginTop: "11px"}}
                         >
-                            <MenuItem value={""} primaryText="Position"/>
+                            <MenuItem value="" primaryText="Position"/>
                             <Divider/>
                             {positionItems}
                         </DropDownMenu>
@@ -206,14 +270,14 @@ class MyEmployees extends Component {
                     <br/>
 
                     <DropDownMenu value={this.state.status}
-                                  onChange={this.handleStageChange}
+                                  onChange={this.handleStatusChange}
                                   labelStyle={style.menuLabelStyle}
                                   anchorOrigin={style.anchorOrigin}
                                   style={{fontSize: "20px", marginTop: "11px"}}
                     >
                         <MenuItem value={""} primaryText="Stage"/>
                         <Divider/>
-                        {stageItems}
+                        {statusItems}
                     </DropDownMenu>
                     <div><br/></div>
                     <DropDownMenu value={this.state.position}
@@ -235,6 +299,32 @@ class MyEmployees extends Component {
                 Loading employees...
             </div>
         )
+        if (this.state.noEmployees) {
+            employeePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    No employees
+                    {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
+                    {(this.state.status == "Complete" || this.state.status == "Incomplete")
+                    ? <bdi> with {this.state.status.toLowerCase()} status</bdi>
+                    :null}.
+                </div>
+            )
+        }
+
+        if (this.state.noPositions) {
+            employeePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    Create a position to select.
+                </div>
+            );
+        }
+        if (this.state.position == "" && this.state.loadingDone) {
+            employeePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    Must select a position.
+                </div>
+            );
+        }
 
         // create the employee previews
         let key = 0;
@@ -255,6 +345,7 @@ class MyEmployees extends Component {
                             employeeId={employee.employeeId}
                             employeeUrl={employee.employeeUrl}
                             questions={this.state.questions}
+                            position={this.state.position}
                         />
                     </li>
                 );
@@ -263,8 +354,8 @@ class MyEmployees extends Component {
         }
 
         return (
-            <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
-                <AddUserDialog />
+            <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEmployees'>
+                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>My Employees | Moonshot</title>
                     <meta name="description" content="Grade your employees and see their results."/>

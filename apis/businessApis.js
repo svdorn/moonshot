@@ -36,7 +36,8 @@ const businessApis = {
     POST_answerQuestion,
     POST_emailInvites,
     GET_candidateSearch,
-    GET_employees,
+    GET_employeeSearch,
+    GET_employeeQuestions,
     GET_positions,
     GET_evaluationResults
 }
@@ -113,7 +114,7 @@ function POST_emailInvites(req, res) {
                     + ' advanced you to next step for the ' + positionName + ' position. The next step is completing ' + businessName + '&#39;s evaluation on Moonshot.'
                     + ' Please click the button below to create your account. Once you&#39;ve created your account, you can begin your evaluation.'
                     + '</p>'
-                    + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot and congrats on advancing to the next step for the ' + positionName + 'position!</p><br/>'
+                    + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot and congrats on advancing to the next step for the ' + positionName + ' position!</p><br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode
                     + '">Create Account</a>'
@@ -549,71 +550,119 @@ async function POST_updateHiringStage(req, res) {
     return res.json("success");
 }
 
-function POST_answerQuestion(req, res) {
+async function POST_answerQuestion(req, res) {
     const body = req.body;
     const userId = sanitize(body.user.userId);
     const employeeId = sanitize(body.user.employeeId);
     const verificationToken = sanitize(body.user.verificationToken);
     const questionIndex = sanitize(body.user.questionIndex);
     const score = sanitize(body.user.score);
-    const companyId = sanitize(body.user.companyId);
     const gradingComplete = sanitize(body.user.gradingComplete);
+    const positionName = sanitize(body.user.positionName);
 
-    if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !companyId) {
+    if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !positionName) {
         return res.status(400).send("Bad request.");
     }
 
     // verify the employer is actually a part of this organization
-    verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
-    .then(business => {
-        // if employer does not have valid credentials
-        if (!business) {
-            console.log("Employer tried to update an answer to a question and didn't have access.");
-            return res.status(403).send("You do not have permission to change an employees answers.");
-        }
+    // get the user who is trying to search for candidates
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting business user while searching for candidates: ", getUserError);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
 
-        // the index of the employee in the employee array
-        const employeeIndex = business.employees.findIndex(currEmployee => {
-            return currEmployee.employeeId.toString() === employeeId.toString();
-        });
+    // if the user is not an admin or manager, they can't search for candidates
+    if (!["accountAdmin", "manager"].includes(user.userType)) {
+        console.log("User is type: ", user.userType);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
 
-        let employee = business.employees[employeeIndex];
+    // if the user doesn't have
+    if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
+        console.log("User doesn't have associated business.");
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
 
+    const companyId = user.businessInfo.company.companyId;
 
-        // get the index of the answer in the user's answers array
-        const answerIndex = employee.answers.findIndex(answer => {
-            return answer.questionIndex === questionIndex;
-        });
+    const businessQuery = {
+        "_id": mongoose.Types.ObjectId(companyId)
+    }
 
-        if (answerIndex === -1) {
-            const newAnswer = {
-                complete: true,
-                score: score,
-                questionIndex: questionIndex
-            };
-            employee.answers.push(newAnswer);
-        } else {
-            employee.answers[answerIndex].score = score;
-        }
+    // get the business the user works for
+    let business;
+    try {
+        business = await Businesses
+            .find(businessQuery)
+        // see if there are none found
+        if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
+        // if any are found, only one is found, as we searched by id
+        business = business[0];
+    } catch (findBizError) {
+        console.log("error finding business for user trying to search for candidates: ", findBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
 
-        employee.gradingComplete = gradingComplete;
+    // make sure the user gave a valid position
+    if (!business.positions || business.positions.length === 0) {
+        return res.status(400).send("Invalid position.");
+    }
 
-        // update the employee in the business object
-        business.employees[employeeIndex] = employee;
-
-        // save the business
-        business.save()
-        .then(updatedBusiness => {
-            return res.json(employee.answers);
-        })
-        .catch(updateBusinessErr => {
-            return res.status(500).send("failure!");
-        });
+    const positionIndex = business.positions.findIndex(position => {
+        return position.name.toString() === positionName.toString();
     })
-    .catch(verifyEmployerErr => {
-        console.log("Error when trying to verify employer when they were trying to edit an answer for a question: ", verifyEmployerErr);
-        return res.status(500).send("Server error, try again later.");
+
+    if (positionIndex <= -1) {
+        return res.status(400).send("Invalid position.");
+    }
+
+    // should only be one position in the array since names should be unique
+    const position = business.positions[positionIndex];
+
+    // get the employees from that position
+    let employees = position.employees;
+
+    // the index of the employee in the employee array
+    const employeeIndex = employees.findIndex(currEmployee => {
+        return currEmployee.employeeId.toString() === employeeId.toString();
+    });
+
+    let employee = employees[employeeIndex];
+
+
+    // get the index of the answer in the user's answers array
+    const answerIndex = employee.answers.findIndex(answer => {
+        return answer.questionIndex === questionIndex;
+    });
+
+    if (answerIndex === -1) {
+        const newAnswer = {
+            complete: true,
+            score: score,
+            questionIndex: questionIndex
+        };
+        employee.answers.push(newAnswer);
+    } else {
+        employee.answers[answerIndex].score = score;
+    }
+
+    employee.gradingComplete = gradingComplete;
+
+    // update the employee in the business object
+    business.positions[positionIndex].employees[employeeIndex] = employee;
+
+    // save the business
+    business.save()
+    .then(updatedBusiness => {
+        return res.json(employee.answers);
     })
+    .catch(updateBusinessErr => {
+        console.log("error: ", updateBusinessErr);
+        return res.status(500).send("failure!");
+    });
 }
 
 
@@ -651,7 +700,7 @@ async function verifyEmployerAndReturnBusiness(userId, verificationToken, busine
     })
 }
 
-function GET_employees(req, res) {
+function GET_employeeQuestions(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
@@ -682,7 +731,7 @@ function GET_employees(req, res) {
         let businessQuery = { '_id': companyId }
 
         Businesses.find(businessQuery)
-        .select("employees employeeQuestions")
+        .select("employeeQuestions")
         .exec(function(findEmployeesErr, employees)
         {
             if (findEmployeesErr) {
@@ -716,10 +765,10 @@ async function GET_positions(req, res) {
     try {
         business = await Businesses
             .findById(companyId)
-            .select("logo name positions._id positions.name positions.completions positions.usersInProgress position.skills positions.timeAllotted");
-        if (!business) {
-            return res.status(400).send("Company not found.")
-        }
+            .select("logo name positions._id positions.name positions.completions positions.usersInProgress positions.skills positions.timeAllotted positions.length");
+            if (!business) {
+                return res.status(400).send("Company not found.")
+            }
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
         return res.status(500).send("Server error, couldn't get positions.");
@@ -937,7 +986,7 @@ async function GET_candidateSearch(req, res) {
     let candidates = position.candidates;
 
     // filter by name if search term given
-    if (searchTerm && searchTerm !== "") {
+    if (searchTerm && searchTerm !== "" && candidates) {
         const nameRegex = new RegExp(searchTerm, "i");
         candidates = candidates.filter(candidate => {
             return nameRegex.test(candidate.name);
@@ -945,7 +994,7 @@ async function GET_candidateSearch(req, res) {
     }
 
     // filter by hiring stage if hiring stage given
-    if (hiringStage && hiringStage !== "") {
+    if (hiringStage && hiringStage !== "" && candidates) {
         candidates = candidates.filter(candidate => {
             return candidate.hiringStage === hiringStage;
         });
@@ -953,17 +1002,119 @@ async function GET_candidateSearch(req, res) {
 
     // default sort property is alphabetical, sort by score if that's the given sort by property
     let sortProperty = "name";
-    if (typeof sortBy === "string" && sortBy.toLowerCase() === "score") { sortProperty = "scores.overall"; }
+    if (typeof sortBy === "string" && sortBy.toLowerCase() === "score" && candidates) { sortProperty = "scores.overall"; }
 
     // sort the candidates
-    candidates.sort((candA, candB) => {
-        if (candA[sortProperty] < candB[sortProperty]) { return -1; }
-        if (candA[sortProperty] > candB[sortProperty]) { return 1; }
-        return 0;
-    });
+    if (candidates) {
+        candidates.sort((candA, candB) => {
+            if (candA[sortProperty] < candB[sortProperty]) { return -1; }
+            if (candA[sortProperty] > candB[sortProperty]) { return 1; }
+            return 0;
+        });
+    }
 
     res.json(candidates);
 }
+
+async function GET_employeeSearch(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    // get the user who is trying to search for candidates
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting business user while searching for candidates: ", getUserError);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // if the user is not an admin or manager, they can't search for candidates
+    if (!["accountAdmin", "manager"].includes(user.userType)) {
+        console.log("User is type: ", user.userType);
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // if the user doesn't have
+    if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
+        console.log("User doesn't have associated business.");
+        return res.status(401).send(errors.PERMISSIONS_ERROR);
+    }
+
+    const companyId = user.businessInfo.company.companyId;
+
+    // the restrictions on the search
+    const searchTerm = sanitize(req.query.searchTerm);
+    const status = sanitize(req.query.status);
+    // position name is the only required input to the search
+    const positionName = sanitize(req.query.positionName);
+
+    const businessQuery = {
+        "_id": mongoose.Types.ObjectId(companyId)
+    }
+
+    // get only the position the user is asking for in the positions array
+    const positionQuery = {
+        "positions": {
+            "$elemMatch": {
+                "name": positionName
+            }
+        }
+    }
+
+    // get the business the user works for
+    let business;
+    try {
+        business = await Businesses
+            .find(businessQuery, positionQuery)
+            .select("positions.name positions.employees.answers positions.employees.employeeId positions.employees.managerId positions.employees.gradingComplete positions.employees.name positions.employees.profileUrl positions.employees.archetype positions.employees.score");
+        // see if there are none found
+        if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
+        // if any are found, only one is found, as we searched by id
+        business = business[0];
+    } catch (findBizError) {
+        console.log("error finding business for user trying to search for candidates: ", findBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // make sure the user gave a valid position
+    if (!business.positions || business.positions.length === 0) {
+        return res.status(400).send("Invalid position.");
+    }
+
+    // should only be one position in the array since names should be unique
+    const position = business.positions[0];
+
+    // get the employees from that position
+    let employees = position.employees;
+
+    // filter by name if search term given
+    if (searchTerm && searchTerm !== "" && employees) {
+        const nameRegex = new RegExp(searchTerm, "i");
+        employees = employees.filter(employee => {
+            return nameRegex.test(employee.name);
+        });
+    }
+
+    // filter by status if status given
+    let gradingComplete = false;
+    if (status && status !== "" && employees) {
+        if (status.toString() === "Complete") {
+            gradingComplete = true;
+            employees = employees.filter(employee => {
+                return employee.gradingComplete === gradingComplete;
+            });
+        } else {
+            gradingComplete = false;
+            employees = employees.filter(employee => {
+                return employee.gradingComplete === gradingComplete;
+            });
+        }
+    }
+
+    res.json(employees);
+}
+
 
 
 module.exports = businessApis;

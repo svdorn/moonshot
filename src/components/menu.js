@@ -36,7 +36,6 @@ class Menu extends Component {
     }
 
     componentDidUpdate() {
-        console.log("start of update")
         if (this.props.location.pathname === '/settings') {
             if (this.state.dropDownSelected !== "Settings") {
                 this.setState({dropDownSelected: "Settings"});
@@ -50,7 +49,6 @@ class Menu extends Component {
                 this.setState({dropDownSelected: "Name"})
             }
         } else {
-            console.log("here");
             // set dropdown to be on Profile if not on settings or onboarding pages
             if (this.state.dropDownSelected !== "Account") {
                 this.setState({dropDownSelected: "Account"});
@@ -402,7 +400,6 @@ class Menu extends Component {
                                 break;
                         }
                     });
-                    console.log("dropdown selected: ",self.state.dropDownSelected)
                     let desktopDropDown = (
                         <DropDownMenu key={"desktop dropDown"}
                                       value={self.state.dropDownSelected}
@@ -469,10 +466,10 @@ class Menu extends Component {
             <header style={{zIndex: "100"}}>
                 <div>
                     <Toolbar id="menu">
-                        <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "30px"}}>
+                        <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "39px"}}>
                             {moonshotLogoHtml}
                         </ToolbarGroup>
-                        <ToolbarGroup>
+                        <ToolbarGroup className="marginTop10px">
                             {desktopMenu}
 
                             <IconMenu
