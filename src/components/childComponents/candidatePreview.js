@@ -14,6 +14,7 @@ import axios from 'axios';
 import { browserHistory } from 'react-router';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
+import HoverTip from "../miscComponents/hoverTip";
 
 class CandidatePreview extends Component {
     constructor(props) {
@@ -293,6 +294,8 @@ class CandidatePreview extends Component {
         const location = this.props.candidate.location ? this.props.candidate.location : "No location given";
         const overallScore = this.props.candidate.scores && this.props.candidate.scores.overall ? this.props.candidate.scores.overall : "N/A";
 
+        const finishedEval = overallScore !== "N/A";
+
         let percent = "25%";
         let topRightStyle = {display: "none"};
         let bottomRightStyle = {display: "inline-block"};
@@ -337,6 +340,28 @@ class CandidatePreview extends Component {
             console.log("Error getting results url: ", e);
         }
 
+        const seeResults = finishedEval ?
+                <a style={{...style.redLink, ...style.seeResults}} href={resultsUrl}>
+                    See Results
+                </a>
+            :
+                <div>
+                    <div style={style.seeResults}>
+                        <div style={{
+                            textDecoration: "underline",
+                            color: "gray",
+                            cursor: "not-allowed",
+                            fontStyle: "italic"
+                        }}>
+                            See Results
+                        </div>
+                        <HoverTip
+                            style={{minWidth: "260px"}}
+                            text="Candidate has not yet finished the position evaluation."
+                        />
+                    </div>
+                </div>
+
 
         return (
             <div className="candidatePreview center" >
@@ -377,6 +402,7 @@ class CandidatePreview extends Component {
 
                 <div style={style.darkenerStyle} />
 
+                { seeResults }
 
                 <div style={style.dismissButton}>
                     <span onClick={this.handleClick.bind(this)}
@@ -385,10 +411,6 @@ class CandidatePreview extends Component {
                         {this.state.dismissed ? "Dismissed" : "Dismiss"}
                     </span>
                 </div>
-
-                <a style={{...style.redLink, ...style.seeResults}} href={resultsUrl}>
-                    See Results
-                </a>
 
                 <div className="font12px" style={style.lastUpdated}>
                     Last Updated<br/>
