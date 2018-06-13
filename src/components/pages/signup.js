@@ -156,9 +156,8 @@ class Signup extends Component {
         const name = values.name;
         const password = values.password;
         const email = values.email;
-        const employerCode = values.employerCode;
         let user = {
-            name, password, email, signUpReferralCode, employerCode
+            name, password, email, signUpReferralCode
         };
 
         // if the user got here from a link, add those links
@@ -166,6 +165,10 @@ class Signup extends Component {
         if (location.query) {
             user.code = location.query.code;
             user.userCode = location.query.userCode;
+        }
+
+        if (!user || !user.code || !user.userCode) {
+            return this.props.addNotification("Must have a unique employer provided link to sign up.", "error");;
         }
 
         this.props.postUser(user);
@@ -312,13 +315,6 @@ class Signup extends Component {
                                             name="password2"
                                             component={renderPasswordField}
                                             label="Confirm Password*"
-                                        /><br/>
-                                    </div>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="employerCode"
-                                            component={renderTextField}
-                                            label="Employer Code"
                                         /><br/>
                                     </div>
 
