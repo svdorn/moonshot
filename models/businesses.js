@@ -143,8 +143,6 @@ var businessesSchema = mongoose.Schema({
                 performance: Number
             },
         }],
-        // Code for the specific position
-        code: String,
         // One-time use codes for candidates
         candidateCodes: [{
             // the actual code
@@ -166,8 +164,6 @@ var businessesSchema = mongoose.Schema({
             // the date that will be shown for this user's evaluation start date
             startDate: Date
         }],
-        // Whether the position is open to the public
-        open: Boolean,
         // the ideal scores for each facet within each factor to get the maximum pq
         idealFactors: [{
             // the id of the factor

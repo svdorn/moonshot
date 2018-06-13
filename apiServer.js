@@ -13,7 +13,7 @@ const fileUpload = require('express-fileupload');
 const mongoose = require('mongoose');
 
 const Skills = require('./models/skills.js');
-
+const Businesses = require('./models/businesses.js');
 
 var app = express();
 
@@ -65,6 +65,188 @@ app.use(session({
 }));
 
 // ----->> START APIS <<----- //
+// async function postPosition() {
+//     const business = await Businesses.findById("5b217952fb6fc033f883fc73");
+//
+//     console.log(business);
+//
+//     business.positions.push({
+//         name: "HR Generalist",
+//         skills: [
+//             mongoose.Types.ObjectId("5b214415fb6fc033f883be25"),
+//             mongoose.Types.ObjectId("5b21600cfb6fc033f883dc9a"),
+//             mongoose.Types.ObjectId("5b2164bcfb6fc033f883e42d")
+//         ],
+//         skillNames: [
+//                 "HR Administration",
+//                 "Employment Law",
+//                 "Organizational Dev"
+//         ],
+//         open: false,
+//         code: "00",
+//         currentlyHiring: false,
+//         timeAllotted: 90,
+//         completions: 0,
+//         usersInProgress: 0,
+//         length: 25,
+//         employees: [],
+//         candidates: [],
+//         freeResponseQuestions: [
+//             {
+//                 body: "How have you effectively used communication to advance a workplace or work environment? Explain the situation.",
+//                 required: true
+//             },
+//             {
+//                 body: "A candidate accepted an offer from your company to start as a Business Analyst next week. Outline the new hire process.",
+//                 required: true
+//             },
+//             {
+//                 body: "Explain a situation when you managed an organizational change. What was the goal of the change and how did you ensure the goal was accomplished?",
+//                 required: true
+//             }
+//         ],
+//         idealFactors: [
+//                 {
+//                     factorId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ff"),
+//                     idealFacets: [
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce30f"),
+//                             score: -5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce30a"),
+//                             score: 0
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce305"),
+//                             score: 0
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce300"),
+//                             score: 0
+//                         }
+//                     ]
+//                 },
+//                 {
+//                     factorId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ea"),
+//                     idealFacets: [
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2fa"),
+//                             score: 0
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f5"),
+//                             score: -5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2f0"),
+//                             score: -5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2eb"),
+//                             score: 0
+//                         }
+//                     ]
+//                 },
+//                 {
+//                     factorId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d0"),
+//                     idealFacets: [
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e5"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2e0"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2db"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d6"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2d1"),
+//                             score: 5
+//                         }
+//                     ]
+//                 },
+//                 {
+//                     factorId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bb"),
+//                     idealFacets: [
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2cb"),
+//                             "score": 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c6"),
+//                             score: 0
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2c1"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2bc"),
+//                             score: 5
+//                         }
+//                     ]
+//                 },
+//                 {
+//                     factorId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a6"),
+//                     idealFacets: [
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b6"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2b1"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2ac"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a7"),
+//                             score: 5
+//                         }
+//                     ]
+//                 },
+//                 {
+//                     factorId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce28b"),
+//                     idealFacets: [
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce2a1"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce29c"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce296"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce291"),
+//                             score: 5
+//                         },
+//                         {
+//                             facetId: mongoose.Types.ObjectId("5aff0b612689cb00e45ce28c"),
+//                             score: 5
+//                         }
+//                     ]
+//                 }
+//             ]
+//     })
+//
+//     business.save();
+// }
+//
+// postPosition();
 // async function skillQuestionPost(){
 // const skilltest = await Skills.findById("5b2164bcfb6fc033f883e42d");
 //
