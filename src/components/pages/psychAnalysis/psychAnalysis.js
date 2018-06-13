@@ -83,7 +83,7 @@ class PsychAnalysis extends Component {
         }
         // otherwise the user took the exam as a one-off thing, so show them results
         else {
-            this.goTo("/analysisResults");
+            this.goTo("/myEvaluations");
         }
     }
 

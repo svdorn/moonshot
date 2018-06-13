@@ -33,7 +33,6 @@ import TermsOfUse from './components/policies/termsOfUse';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
 
 import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
-import AnalysisResults from './components/pages/psychAnalysis/analysisResults';
 
 import SkillTest from './components/pages/skillTest/skillTest';
 import AdminQuestions from './components/pages/adminQuestions/adminQuestions';
@@ -81,7 +80,6 @@ const routes = (
             <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
 
             <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
-            <Route path="analysisResults" component={AuthenticatedComponent} page={<AnalysisResults/>} />
 
             <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
             <Route path="adminQuestions" component={AuthenticatedComponent} page={<AdminQuestions/>} />

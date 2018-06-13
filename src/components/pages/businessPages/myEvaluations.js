@@ -195,7 +195,7 @@ class MyEvaluations extends Component {
             accountAdminTakePsychTest = (
                 <div className="marginBottom10px center">
                     <div className="whiteText font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 inlineBlock">
-                        All admins must take a 13 minute psychometric quiz. Take it here!
+                        All admins must take a 7 minute psychometric quiz. Take it here!
                     </div>
                     <div className="inlineBlock marginLeft10px">
                             <button className="veryRoundedButton smallMediumButton font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 purpleToBlueAnimate whiteText" onClick={this.startPsychEval.bind(this)} style={{padding: "4px 15px"}}>
