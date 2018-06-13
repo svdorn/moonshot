@@ -55,7 +55,6 @@ class MyEvaluations extends Component {
                 }
             })
             .then(res => {
-                console.log("positions: ", res.data.positions);
                 self.positionsFound(res.data.positions);
             })
             .catch(error => {
@@ -73,7 +72,6 @@ class MyEvaluations extends Component {
                 }
             })
             .then(function (res) {
-                console.log("res.data.positions: ", res.data.positions)
                 self.positionsFound(res.data.positions, res.data.logo, res.data.businessName);
             })
             .catch(function (err) {
@@ -150,7 +148,6 @@ class MyEvaluations extends Component {
                 key++;
 
                 let attributes = {};
-                console.log("position: ", position)
                 attributes.company = position.businessName;
 
                 // if user is manager or account admin, preview will look editable

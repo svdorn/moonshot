@@ -1837,7 +1837,7 @@ async function GET_positions(req, res) {
                         businessId: business._id,
                         positionName: bizPosition.name,
                         positionId: bizPosition._id,
-                        skills: validPositions[positionIndex].skillNames,
+                        skills: bizPosition.skillNames,
                         assignedDate: validPositions[positionIndex].assignedDate,
                         deadline: validPositions[positionIndex].deadline,
                         completedDate: validPositions[positionIndex].completedDate
