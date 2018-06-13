@@ -123,7 +123,7 @@ class Account extends Component {
         const isCandidate = this.props.currentUser.userType === "candidate";
 
         return (
-                    <form onSubmit={this.handleSubmit.bind(this)}>
+                    <form onSubmit={this.handleSubmit.bind(this)} className="marginTop10px">
                         <div className="inputContainer">
                             <Field
                                 name="name"
