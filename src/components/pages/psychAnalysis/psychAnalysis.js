@@ -123,7 +123,7 @@ class PsychAnalysis extends Component {
         if (typeof psychometricTest !== "object" || !psychometricTest.startDate) {
             return (
                 <div>
-                    This is a psychometric analysis that will last around 15 minutes. Ready?
+                    This is a psychometric analysis that will last around 10 minutes. Ready?
                     <br/>
                     <div className="psychAnalysisButton" style={{marginTop: "20px"}} onClick={this.startTest.bind(this)}>
                         Start!
