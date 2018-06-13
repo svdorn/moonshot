@@ -47,6 +47,8 @@ var businessesSchema = mongoose.Schema({
         currentlyHiring: Boolean,
         // the skill tests a candidate must complete in order to apply
         skills: [ mongoose.Schema.Types.ObjectId ],
+        // the names of the skills the candidates must complete in order to apply
+        skillNames: [ String ],
         // company- and position-specific questions, shown on responses page
         freeResponseQuestions: [{
             // the text of the question (e.g. "Why do you want to work here?")
