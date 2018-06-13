@@ -29,8 +29,7 @@ class SkillTest extends Component {
             this.resetPage(skillUrl);
         } catch (getSkillUrlError) {
             console.log(getSkillUrlError);
-            // TODO: go to discover skills page or somesuch
-            return this.goTo("/");
+            return this.goTo("/myEvaluations");
         }
     }
 
@@ -172,6 +171,16 @@ class SkillTest extends Component {
 
 
     render() {
+        const currentUser = this.props.currentUser;
+        // make sure user is logged in
+        if (!currentUser) {
+            this.goTo("/login");
+        }
+        // have to have completed the psych test and admin questionsbefore you
+        // can take a skills - but only if you're taking an evaluation right now
+
+
+
         let self = this;
         const skillName = this.state.skillName ? this.state.skillName : "Skill";
         const additionalMetaText = this.state.skillName ? " in " + this.state.skillName.toLowerCase() : "";
@@ -197,15 +206,6 @@ class SkillTest extends Component {
         const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
 
         let content = <CircularProgress/>;
-        if (question) {
-            content = (
-                <div>
-                    <StyledContent contentArray={question.body} style={{marginBottom:"40px"}} />
-                    { answers }
-                    <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
-                </div>
-            );
-        }
 
         if (this.state.finished) {
             content = (
@@ -213,6 +213,34 @@ class SkillTest extends Component {
                     Test Complete!
                     <br/>
                     <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finishTest.bind(this)}>Finish</div>
+                </div>
+            );
+        }
+        else if (currentUser.positionInProgress && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
+            content = (
+                <div className="blackBackground">
+                    You have to complete the administrative questions first!<br/>
+                    <button onClick={() => this.goTo("/adminQuestions")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                        Take me there!
+                    </button>
+                </div>
+            );
+        } else if (currentUser.positionInProgress && (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate)) {
+            content = (
+                <div>
+                    You have to complete the psychometric analysis first!
+                    <button onClick={() => this.goTo("/psychometricAnalysis")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                        Take me there!
+                    </button>
+                </div>
+            );
+        }
+        else if (question) {
+            content = (
+                <div>
+                    <StyledContent contentArray={question.body} style={{marginBottom:"40px"}} />
+                    { answers }
+                    <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
                 </div>
             );
         }

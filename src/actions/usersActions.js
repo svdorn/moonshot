@@ -101,6 +101,19 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
 }
 
 
+export function answerAdminQuestion(userId, verificationToken, questionType, questionId, sliderAnswer, selectedId, selectedText, finished) {
+    return function(dispatch) {
+        axios.post("/api/user/answerAdminQuestion", {userId, verificationToken, questionType, questionId, sliderAnswer, selectedId, selectedText, finished})
+        .then(response => {
+            dispatch({type: "NEW_CURRENT_USER", currentUser: response.data});
+        })
+        .catch(error => {
+            console.log("error answering admin question: ", error);
+        })
+    }
+}
+
+
 // LOG USER OUT
 export function signout() {
     return function(dispatch) {

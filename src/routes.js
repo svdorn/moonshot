@@ -36,6 +36,7 @@ import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
 import AnalysisResults from './components/pages/psychAnalysis/analysisResults';
 
 import SkillTest from './components/pages/skillTest/skillTest';
+import AdminQuestions from './components/pages/adminQuestions/adminQuestions';
 import PositionSignup from './components/pages/positionSignup';
 import FreeResponse from "./components/pages/freeResponse";
 
@@ -83,6 +84,7 @@ const routes = (
             <Route path="analysisResults" component={AuthenticatedComponent} page={<AnalysisResults/>} />
 
             <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
+            <Route path="adminQuestions" component={AuthenticatedComponent} page={<AdminQuestions/>} />
             <Route path="positionSignup" component={PositionSignup} />
             <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
 
