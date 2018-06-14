@@ -22,7 +22,7 @@ class ProgressBar extends Component {
 
         const ADMIN_QUESTIONS = "Administrative Questions";
         const PSYCH_ANALYSIS = "Psychometric Analysis";
-        const SKILL_EVAL = "Skill Evaluation";
+        const SKILL_EVAL = this.props.skillName ? this.props.skillName + " Evaluation" : "Skill Evaluation";
         const FREE_RESPONSE = "Short Answer";
 
         // will always have admin questions and psych analysis
@@ -71,7 +71,6 @@ class ProgressBar extends Component {
             let amountFinished = 100;
             if (stepNumber === stepCounter) {
                 if (stepName === PSYCH_ANALYSIS) {
-                    console.log("currentUser ", currentUser);
                     const psychTest = currentUser.psychometricTest;
                     amountFinished = (psychTest.numQuestionsAnswered / psychTest.numQuestions) * 100;
                 } else {

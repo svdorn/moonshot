@@ -30,7 +30,6 @@ class PredictiveGraph extends Component {
         const props = this.props;
         const dataPoints = props.dataPoints;
         if (!dataPoints) {
-            console.log("no data points given");
             return null;
         }
 
@@ -213,7 +212,7 @@ class PredictiveGraph extends Component {
         }
 
         return (
-            <div>
+            <div className="marginBottom50px">
                 {title}
                 <div className="predictiveGraph" style={graphStyle}>
                     <div className="predictiveGraphInterior" style={graphInteriorStyle}>

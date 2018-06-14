@@ -240,7 +240,6 @@ class ResumeScorer extends Component {
         try {
             resumeFile = this.refs.resumeFile.files[0];
         } catch (getFileError) {
-            console.log("Need a resume.");
             return;
         }
 

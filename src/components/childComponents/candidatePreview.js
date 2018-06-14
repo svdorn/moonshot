@@ -128,7 +128,7 @@ class CandidatePreview extends Component {
             // do nothing on success
             .then(result => {})
             .catch(err => {
-                console.log("error updating hiring stage: ", err);
+                // console.log("error updating hiring stage: ", err);
             });
         }
     }
@@ -337,7 +337,7 @@ class CandidatePreview extends Component {
             const positionId = this.props.positionId;
             resultsUrl = `/results/${profileUrl}/${positionId}`;
         } catch (e) {
-            console.log("Error getting results url: ", e);
+            // console.log("Error getting results url: ", e);
         }
 
         const seeResults = finishedEval ?

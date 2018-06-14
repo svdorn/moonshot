@@ -83,7 +83,6 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                         window.scrollTo(0, 0);
                     })
                     .catch(function(err) {
-                        console.log(err);
                         dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Cannot sign up for pathway more than once. Sign up for pathway failed.", type: "errorHeader"}})
                         browserHistory.push(nextUrl);
                         window.scrollTo(0, 0);
@@ -108,7 +107,7 @@ export function answerAdminQuestion(userId, verificationToken, questionType, que
             dispatch({type: "NEW_CURRENT_USER", currentUser: response.data});
         })
         .catch(error => {
-            console.log("error answering admin question: ", error);
+            // console.log("error answering admin question: ", error);
         })
     }
 }
@@ -137,17 +136,17 @@ export function positionSignup(userId, verificationToken, positionId, businessId
         .then(response => {
             dispatch({type: "START_POSITION_EVAL", currentUser: response.data.updatedUser});
             if (response.data.finished) {
-                console.log("All parts already answered!");
+                // console.log("All parts already answered!");
             } else {
                 browserHistory.push(response.data.nextUrl);
                 window.scrollTo(0, 0);
             }
         })
         .catch(error => {
-            console.log("Error starting position evaluation: ", error);
-            if (error.response && error.response.data) {
-                console.log(error.response.data);
-            }
+            // console.log("Error starting position evaluation: ", error);
+            // if (error.response && error.response.data) {
+            //     console.log(error.response.data);
+            // }
         })
     }
 }
@@ -159,17 +158,17 @@ export function continueEval(userId, verificationToken, positionId, businessId) 
         .then(response => {
             dispatch({type: "CONTINUE_POSITION_EVAL", currentUser: response.data.updatedUser});
             if (response.data.finished) {
-                console.log("All parts already answered!");
+                // console.log("All parts already answered!");
             } else {
                 browserHistory.push(response.data.nextUrl);
                 window.scrollTo(0, 0);
             }
         })
         .catch(error => {
-            console.log("Error starting position evaluation: ", error);
-            if (error.response && error.response.data) {
-                console.log(error.response.data);
-            }
+            // console.log("Error starting position evaluation: ", error);
+            // if (error.response && error.response.data) {
+            //     console.log(error.response.data);
+            // }
         })
     }
 }
@@ -260,7 +259,7 @@ export function submitFreeResponse(userId, verificationToken, frqs) {
             window.scrollTo(0, 0);
         })
         .catch(error => {
-            console.log("Error submitting free response answers: ", error);
+            // console.log("Error submitting free response answers: ", error);
         });
     }
 }
@@ -276,7 +275,7 @@ export function resetFrizz(userId, verificationToken) {
         })
         .catch(error => {
             dispatch({type: "NOTIFICATION", notification:{message: error.response.data, type: "errorHeader"}})
-            console.log("error: ", error);
+            // console.log("error: ", error);
         })
     }
 }
@@ -290,7 +289,7 @@ export function reset24(userId, verificationToken) {
         })
         .catch(error => {
             dispatch({type: "NOTIFICATION", notification:{message: error.response.data, type: "errorHeader"}})
-            console.log("error: ", error);
+            // console.log("error: ", error);
         })
     }
 }
@@ -315,7 +314,6 @@ export function postUser(user) {
                     })
                     // error sending verification email
                     .catch(function(emailError) {
-                        console.log("emailSend fail: ", emailError);
                         dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: emailError.response.data, type: "errorHeader"}});
                         window.scrollTo(0,0);
                     });
@@ -479,7 +477,7 @@ export function changePasswordForgot(user) {
             .then(function(response) {
                 const foundUser = response.data;
                 axios.post("/api/user/session", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
-                .catch(function(err2) { console.log(err2) });
+                .catch(function(err2) {});
 
                 dispatch({type:"LOGIN", payload:foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
                 let nextUrl = "/";
@@ -598,7 +596,7 @@ export function completePathway(user){
         axios.post("api/candidate/completePathway", user)
             .then(function(response) {
                 dispatch({type:"COMPLETE_PATHWAY", user: response.data.user, notification: {message:response.data.message, type:"infoHeader"}});
-                browserHistory.push('/discover');
+                browserHistory.push('/');
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
@@ -690,7 +688,6 @@ export function addPathway(user) {
                 browserHistory.push("/pathwayContent?pathway=" + user.pathwayUrl);
             })
             .catch(function(err) {
-                console.log(err);
                 dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "You can't sign up for a pathway more than once.", type: "errorHeader"}})
                 window.scrollTo(0, 0);
             })
@@ -744,8 +741,8 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
             dispatch({type: "UPDATE_ANSWER", currentUser: response.data});
         })
         .catch(function(error) {
-            console.log("ERROR: ", error);
-            console.log(error.response.data)
+            // console.log("ERROR: ", error);
+            // console.log(error.response.data)
         });
     }
 }
@@ -760,7 +757,7 @@ export function updateAllOnboarding(userId, verificationToken, interests, goals,
             dispatch({type: "UPDATE_USER_ONBOARDING", payload: response.data});
         })
         .catch(function(err) {
-            console.log("Error updating onboarding info: ", err);
+            // console.log("Error updating onboarding info: ", err);
         })
     }
 }
@@ -781,7 +778,7 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
             })
             .catch(function(err) {
                 // onboarding setting not able to be turned off for some reason
-                console.log("onboarding mark complete error: ", err);
+                // console.log("onboarding mark complete error: ", err);
                 dispatch({type: "END_ONBOARDING_REJECTED"});
             })
         } else {
@@ -803,7 +800,7 @@ export function answerPsychQuestion(userId, verificationToken, answer) {
             })
         })
         .catch(err => {
-            console.log("Error answering psych question: ", err);
+            // console.log("Error answering psych question: ", err);
             dispatch({type: "ANSWER_PSYCH_QUESTION_ERROR", notification: { message: err.response.data, type: "errorHeader" } });
         });
     }
@@ -845,7 +842,6 @@ export function postBusiness(business) {
             }
         })
         .catch(function(err) {
-            console.log("error: ", err);
             let msg = "Error creating new business. Try again later.";
             if (err && err.response && typeof err.response.data === "string") {
                 msg = err.response.data;

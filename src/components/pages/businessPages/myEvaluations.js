@@ -58,8 +58,8 @@ class MyEvaluations extends Component {
                 self.positionsFound(res.data.positions);
             })
             .catch(error => {
-                console.log("error getting positions: ", error);
-                if (error.response) { console.log(error.response.data); }
+                // console.log("error getting positions: ", error);
+                // if (error.response) { console.log(error.response.data); }
             })
         }
 
@@ -75,8 +75,8 @@ class MyEvaluations extends Component {
                 self.positionsFound(res.data.positions, res.data.logo, res.data.businessName);
             })
             .catch(function (err) {
-                console.log("error getting positions: ", err);
-                if (err.response && err.response.data) { console.log(err.response.data); }
+                // console.log("error getting positions: ", err);
+                // if (err.response && err.response.data) { console.log(err.response.data); }
             });
         }
     }
@@ -231,7 +231,7 @@ class MyEvaluations extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        
+
     }, dispatch);
 }
 

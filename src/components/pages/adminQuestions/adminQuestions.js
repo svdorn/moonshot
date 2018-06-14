@@ -35,8 +35,6 @@ class AdminQuestions extends Component {
             this.setState({finished: true});
         }
 
-        console.log(currentUser);
-
         const self = this;
 
         // get the admin questions
@@ -47,11 +45,9 @@ class AdminQuestions extends Component {
             }
         })
         .then(response => {
-            console.log("response.data: ", response.data);
             const questionInfo = response.data;
 
             if (!Array.isArray(questionInfo.demographics) || questionInfo.demographics.length === 0) {
-                console.log("no demographics questions");
                 return;
             }
 
@@ -76,7 +72,6 @@ class AdminQuestions extends Component {
                     // if they should, get them a self rating question
                     if (currentUser.userType === "employee") {
                         if (!Array.isArray(questionInfo.selfRating) || questionInfo.selfRating.length === 0) {
-                            console.log("no self rating questions");
                             return;
                         }
 
@@ -109,17 +104,16 @@ class AdminQuestions extends Component {
             }
 
             // see if the user has already answered some questions
-            self.setState({...questionInfo, question, questionType}, () => { console.log("state: ", self.state)});
+            self.setState({...questionInfo, question, questionType});
         })
         .catch(error => {
-            console.log("error getting admin questions: ", error);
+            // console.log("error getting admin questions: ", error);
         });
     }
 
 
     findUnansweredIndex(questionType, realQuestions, excludeThis) {
         const currentUser = this.props.currentUser;
-        console.log("finding unansweredIndex");
         return realQuestions.findIndex(realQ => {
             // question answered if user's answered questions contain the question
             return realQ._id.toString() !== excludeThis && !currentUser.adminQuestions[questionType].some(userQ => {
@@ -152,7 +146,6 @@ class AdminQuestions extends Component {
 
         const demographics = this.state.demographics;
         if (!Array.isArray(demographics)) {
-            console.log("No demographics questions!");
             return;
         }
         const demographicsLength = demographics.length;
@@ -166,7 +159,6 @@ class AdminQuestions extends Component {
                 // check that self rating questions exist
                 const selfRating = this.state.selfRating;
                 if (!Array.isArray(selfRating)) {
-                    console.log("No self rating questions!");
                     return;
                 }
 
@@ -278,9 +270,8 @@ class AdminQuestions extends Component {
                         </div>
                     </div>
                 </div>
-                <div className="skillContinueButton"
+                <div className="skillContinueButton marginBottom50px marginTop20px"
                      onClick={this.nextQuestion.bind(this)}
-                     style={{marginTop:"20px"}}
                 >
                     Next
                 </div>
@@ -294,7 +285,6 @@ class AdminQuestions extends Component {
         const question = this.state.question;
 
         if (!Array.isArray(question.options)) {
-            console.log("Multiple choice question has no answers!");
             return null;
         }
 
@@ -318,7 +308,7 @@ class AdminQuestions extends Component {
             <div>
                 <div className="adminQuestions question">{question.questionText}</div>
                 { options }
-                <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
+                <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
             </div>
         );
     }
@@ -370,7 +360,7 @@ class AdminQuestions extends Component {
 
         else if (!question) {
             content = (
-                <CircularProgress />
+                <CircularProgress color="#FB553A" />
             );
         }
 

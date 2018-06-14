@@ -150,7 +150,7 @@ class Account extends Component {
                             /></div>
                         <br/>
                         {isCandidate ?
-                            <div>
+                            <div className="center">
                                 <div className="checkbox smallCheckbox whiteCheckbox" onClick={this.handleHideProfileClick.bind(this)}>
                                     <img
                                         alt=""

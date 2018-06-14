@@ -29,7 +29,6 @@ class SkillTest extends Component {
             const skillUrl = this.props.params.skillUrl;
             this.resetPage(skillUrl);
         } catch (getSkillUrlError) {
-            console.log(getSkillUrlError);
             return this.goTo("/myEvaluations");
         }
     }
@@ -78,7 +77,7 @@ class SkillTest extends Component {
             });
         })
         .catch(error => {
-            console.log("Error getting skill: ", error.response.data);
+            // console.log("Error getting skill: ", error.response.data);
         });
     }
 
@@ -145,7 +144,7 @@ class SkillTest extends Component {
                 });
             })
             .catch(error => {
-                console.log("error saving answer: ", error);
+                // console.log("error saving answer: ", error);
             })
         }
     }
@@ -262,7 +261,7 @@ class SkillTest extends Component {
 
         const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
 
-        let content = <CircularProgress/>;
+        let content = <CircularProgress color="#FB553A" />;
 
         if (this.state.finished) {
             content = (
@@ -304,7 +303,7 @@ class SkillTest extends Component {
                 <div>
                     <StyledContent contentArray={question.body} style={{marginBottom:"40px"}} />
                     { answers }
-                    <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
+                    <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
                 </div>
             );
         }
@@ -316,7 +315,7 @@ class SkillTest extends Component {
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
                 </MetaTags>
                 <div className="employerHeader" />
-                <ProgressBar />
+                <ProgressBar skillName={skillName}/>
                 { content }
             </div>
         );

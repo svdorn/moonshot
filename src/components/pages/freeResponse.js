@@ -124,7 +124,7 @@ class FreeResponse extends Component {
             content = (
                 <div className="blackBackground fillScreen center">
                     <div className="extraHeaderSpace" />
-                    <CircularProgress />
+                    <CircularProgress color="#FB553A" />
                 </div>
             );
         }

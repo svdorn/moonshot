@@ -136,11 +136,9 @@ class PsychBreakdown extends Component {
             </div>
 
         return (
-            <div className="results psychSection fillScreen blackBackground whiteText">
-                <div className="archetype center lightBlackBackground">
-                    <div className="font20px">Psychometric Breakdown</div>
-                    <img src={"/icons/archetypes/Innovator.png"} />
-                    <div>{this.props.archetype}</div>
+            <div className="results psychSection blackBackground whiteText">
+                <div className="whiteText center font24px font20pxUnder700 font16pxUnder500 marginBottom30px">
+                    Psychometric Analysis
                 </div>
                 <div className="statsAndDescription" style={coloredText}>
                     <div className="stats lightBlackBackground">

@@ -170,10 +170,6 @@ class PsychSlider extends Component {
         // get new answer from -5 to 5
         let newAnswer = (fromLeft*10 / this.state.width) - 5;
 
-        // console.log("xClick: ", xClick);
-        // console.log("xOffset: ", xOffset);
-        // console.log("fromLeft: ", fromLeft);
-
         // set the state for fromLeft and update answer
         this.setState(newState, () => this.props.updateAnswer(newAnswer));
     }

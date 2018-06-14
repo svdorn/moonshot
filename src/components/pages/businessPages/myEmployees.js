@@ -14,6 +14,7 @@ import {
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
+import {openAddUserModal} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -33,10 +34,13 @@ class MyEmployees extends Component {
     constructor(props) {
         super(props);
 
+        let positionNameFromUrl = props.location.query && props.location.query.position ? props.location.query.position : undefined;
+
         this.state = {
             searchTerm: "",
             status: "",
             position: "",
+            positionNameFromUrl,
             employees: [],
             questions: [],
             positions: [],
@@ -101,11 +105,11 @@ class MyEmployees extends Component {
             );
             })
             .catch(function(err) {
-                console.log("error getting the employee questions: ", err);
+                // console.log("error getting the employee questions: ", err);
             })
         })
         .catch (function(error) {
-            console.log("error getting the positions: ", error);
+            // console.log("error getting the positions: ", error);
         })
     }
 
@@ -131,7 +135,7 @@ class MyEmployees extends Component {
                     }
                 }
             }).catch(function (err) {
-                console.log("ERROR with Employee search: ", err);
+                // console.log("ERROR with Employee search: ", err);
             })
         }
     }
@@ -151,6 +155,10 @@ class MyEmployees extends Component {
     handlePositionChange = (event, index, position) => {
         this.setState({position, employees: [], noEmployees: false}, this.search);
     };
+
+    openAddUserModal() {
+        this.props.openAddUserModal();
+    }
 
     render() {
         const style = {
@@ -300,7 +308,12 @@ class MyEmployees extends Component {
             </div>
         )
         if (this.state.noEmployees) {
+            if (this.state.status == "" && (this.state.term == "" || !this.state.term)) {
             employeePreviews = (
+                <div className="center marginTop50px">
+                <div className="marginBottom15px font32px font28pxUnder500 clickable blueTextHome" onClick={this.openAddUserModal.bind(this)}>
+                    + <bdi className="underline">Add Employees</bdi>
+                </div>
                 <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
                     No employees
                     {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
@@ -308,7 +321,22 @@ class MyEmployees extends Component {
                     ? <bdi> with {this.state.status.toLowerCase()} status</bdi>
                     :null}.
                 </div>
-            )
+                <div className="marginTop15px" style={{color: "rgba(255,255,255,.8)"}}>
+                    Add them <bdi className="clickable underline blueTextHome" onClick={this.openAddUserModal.bind(this)}>Here</bdi> so they can get started.
+                </div>
+                </div>
+            );
+            } else {
+                employeePreviews = (
+                    <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                        No employees
+                        {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
+                        {(this.state.status == "Complete" || this.state.status == "Incomplete")
+                        ? <bdi> with {this.state.status.toLowerCase()} status</bdi>
+                        :null}.
+                    </div>
+                );
+            }
         }
 
         if (this.state.noPositions) {
@@ -383,6 +411,7 @@ class MyEmployees extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
+        openAddUserModal
     }, dispatch);
 }
 

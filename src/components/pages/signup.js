@@ -89,7 +89,7 @@ class Signup extends Component {
     componentWillMount() {
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser && this.props.currentUser != "no user") {
-            this.goTo("/discover");
+            this.goTo("/myEvaluations");
         }
     }
 
@@ -156,9 +156,8 @@ class Signup extends Component {
         const name = values.name;
         const password = values.password;
         const email = values.email;
-        const employerCode = values.employerCode;
         let user = {
-            name, password, email, signUpReferralCode, employerCode
+            name, password, email, signUpReferralCode
         };
 
         // if the user got here from a link, add those links
@@ -166,6 +165,10 @@ class Signup extends Component {
         if (location.query) {
             user.code = location.query.code;
             user.userCode = location.query.userCode;
+        }
+
+        if (!user || !user.code || !user.userCode) {
+            return this.props.addNotification("Must have a unique employer provided link to sign up.", "error");;
         }
 
         this.props.postUser(user);
@@ -314,13 +317,6 @@ class Signup extends Component {
                                             label="Confirm Password*"
                                         /><br/>
                                     </div>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="employerCode"
-                                            component={renderTextField}
-                                            label="Employer Code"
-                                        /><br/>
-                                    </div>
 
                                     <div style={{margin: "20px 20px 10px"}}>
                                         <div className="checkbox smallCheckbox whiteCheckbox"
@@ -347,7 +343,7 @@ class Signup extends Component {
                                          style={{display: "inline-block"}}>Already have an account?
                                     </div>
                                 </form>
-                                {this.props.loadingCreateUser ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
+                                {this.props.loadingCreateUser ? <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/> : ""}
                             </div>
                         }
                     </div>

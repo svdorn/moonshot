@@ -1398,20 +1398,12 @@ form > h1 {
     z-index: 10;
 }
 
-
-
-
-.results > .archetype {
+.resultTopShadow {
     padding: 20px;
     margin-bottom: 20px;
-    margin-top: 40px;
     -moz-box-shadow:    0px 3px 9px 1px #00000073;
     -webkit-box-shadow: 0px 3px 9px 1px #00000073;
     box-shadow:         0px 3px 9px 1px #00000073;
-}
-.results > .archetype > img {
-    height: 60px;
-    margin: 10px;
 }
 
 .results > .statsAndDescription {
@@ -3346,6 +3338,12 @@ button.link {
     margin: 70px 20%;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
 }
+.resultsPageSpacer {
+    width: 40%;
+    height: 2px;
+    margin: 70px auto;
+    background: linear-gradient(to right, #ae7efc, #75dcfc);
+}
 .pinkToOrangeSpacer {
     width: 60%;
     height: 2px;
@@ -3912,6 +3910,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .inlineBlock { display: inline-block; }
 .marginSides80px { margin-right: 80px; margin-left: 80px; }
 .marginBottom60px { margin-bottom: 60px; }
+.marginBottom50px { margin-bottom: 50px; }
 .marginBottom40px { margin-bottom: 40px; }
 .marginBottom30px { margin-bottom: 30px; }
 .marginBottom20px { margin-bottom: 20px; }

@@ -83,7 +83,13 @@ function POST_emailInvites(req, res) {
             return currPosition._id.toString() === positionId.toString();
         });
 
+
+
         let position = business.positions[positionIndex];
+
+        if (!position) {
+            return res.status(403).send("Not a valid position.");
+        }
 
         const businessName = business.name;
 

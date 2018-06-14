@@ -34,7 +34,6 @@ async function GET_skillNamesByIds(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
     const skillIds = sanitize(req.query.skillIds);
-    console.log(skillIds);
 
     if (!userId || !verificationToken || !skillIds) {
         return res.status(400).send("Not enough arguments provided.");
@@ -148,7 +147,6 @@ function POST_answerSkillQuestion(req, res) {
         const correctAnswers = userCurrentQuestion.correctAnswers;
         let isCorrect = true;
         const numCorrectAnswers = correctAnswers.length;
-        console.log("correctAnswers: ", correctAnswers);
         for (let correctAnswerIndex = 0; correctAnswerIndex < numCorrectAnswers; correctAnswerIndex++) {
             const correctAnswerId = correctAnswers[correctAnswerIndex].toString();
             console.log("correct answer id: ", correctAnswerId);
