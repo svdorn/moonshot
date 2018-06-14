@@ -133,6 +133,8 @@ class PredictiveGraph extends Component {
                 r = 100; g = 100; b = 100;
             }
 
+            // console.log("r: ", r, ", g: ", g, ", b: ", b);
+
             const color = `rgb(${r},${g},${b})`;
             let colorStyle = { backgroundColor: color };
 
