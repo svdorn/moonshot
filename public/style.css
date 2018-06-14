@@ -185,7 +185,25 @@ form > h1 {
     cursor: pointer;
 }
 
+.evalPortionIntro {
+    text-align: center
+}
+.evalPortionIntro > div:not(:first-child) {
+    text-align: left;
+    width: 700px;
+    display: inline-block;
+}
+.skillsUserAgreement .checkbox {
+    position: absolute;
+    margin-top: 2px;
+}
+.evalPortionIntro span {
+    color: #E83C53;
+}
 
+.psychAnalysisQuestion {
+    margin: 0 100px;
+}
 
 .progressContainer {
     color: white;
@@ -195,7 +213,7 @@ form > h1 {
     width: 60%;
     margin-left: 20%;
     margin-top: 30px;
-    margin-bottom: 70px;
+    margin-bottom: 40px;
     height: 10px;
     --stepCircleWidth: 24px;
     position: relative;
@@ -765,6 +783,8 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
+.smallMediumButton:focus {outline: none}
+.purpleToBlueAnimate.smallMediumButton { background-position-x: -40px; }
 .mediumLargeButton:focus { outline: none; }
 .purpleToBlueAnimate.mediumLargeButton { background-position-x: -112px; }
 .purpleToBlueAnimate:hover {
@@ -1148,6 +1168,14 @@ form > h1 {
 .slightlyRoundedButton:focus {
     outline: none;
 }
+.veryRoundedButton {
+    border-radius: 6px 6px 6px 6px;
+    border: none;
+    cursor: pointer;
+}
+.veryRoundedButton:focus {
+    outline: none;
+}
 .pinkToPurpleButtonGradient {
     background: linear-gradient(to right, #7d22dc, #d45279, #7d22dc);
     background-position-x: -80px;
@@ -1260,8 +1288,19 @@ form > h1 {
     margin: 0 20px 0 40px;
 }
 
+.analysis .candidateScore {
+    margin-bottom: 30px;
+}
+
+.resultsSlidersContainer {
+    display: flex;
+    margin: 0 auto;
+    justify-content: space-between;
+    width: 500px;
+}
 .resultsSlider {
     margin: auto !important;
+    width: 200px;
 }
 .resultsSlider > div > div > div {
     background: linear-gradient(to right, #ae7efc, #75dcfc) !important;
@@ -1277,6 +1316,9 @@ form > h1 {
 }
 
 
+.predictiveGraphTitle {
+    margin-bottom: 25px;
+}
 .predictiveGraph {
     position: relative;
     color: white;
@@ -1355,6 +1397,7 @@ form > h1 {
 .pointBox {
     width: 40px;
     border-radius: 8px;
+    z-index: 20;
     /* to vertically center */
     transform: translateY(50%);
 }
@@ -1366,7 +1409,148 @@ form > h1 {
     height: 2px;
     width: 10px;
     transform: translateY(1px);
+    z-index: 10;
 }
+
+.resultTopShadow {
+    padding: 20px;
+    margin-bottom: 20px;
+    -moz-box-shadow:    0px 3px 9px 1px #00000073;
+    -webkit-box-shadow: 0px 3px 9px 1px #00000073;
+    box-shadow:         0px 3px 9px 1px #00000073;
+}
+
+.results > .statsAndDescription {
+    display: flex;
+    justify-content: space-around;
+}
+.results > .statsAndDescription > div {
+    width: 530px;
+    position: relative;
+    display: inline-block;
+    vertical-align: top;
+    -moz-box-shadow:    0px 3px 9px 1px #00000073;
+    -webkit-box-shadow: 0px 3px 9px 1px #00000073;
+    box-shadow:         0px 3px 9px 1px #00000073;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition:     all 0.5s ease;
+    transition:         all 0.5s ease;
+}
+.results > .statsAndDescription > .stats { padding: 30px; }
+.results > .statsAndDescription > .description { padding: 30px 40px; }
+.results > .statsAndDescription > .description > div > div,
+.results > .statsAndDescription > .description > div > div > div {
+    margin-bottom: 20px;
+}
+.results > .statsAndDescription > .stats > .legend {
+    display: inline-block;
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+}
+/* the part that says Middle 80 needs to be aligned with the other words */
+.results > .statsAndDescription > .stats > .legend > div > div:nth-child(2) {
+    vertical-align: top;
+}
+.results > .statsAndDescription > .stats > .legend .medianTitle { padding-left: 9px; }
+.results > .statsAndDescription > .stats > .legend > div > div {
+    display: inline-block;
+}
+
+.hoverTip {
+    display: none;
+    position: absolute;
+    padding: 5px;
+    margin-top: 5px;
+}
+/* make hoverTip element display when sibling is hovered over */
+*:hover + .hoverTip { display: inline-block; }
+
+.infoBubble > div:first-child {
+    border-radius: 100%;
+    cursor: pointer;
+    position: relative;
+}
+.infoBubble > div:first-child > div {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+.infoBubble > div:nth-child(2) {
+    position: absolute;
+    display: none;
+    margin-top: 10px;
+    margin-left: 5px;
+}
+.infoBubble > div:nth-child(2) > div {
+    position: absolute;
+    left: 0;
+    top: 0;
+    transform: translateY(-100%);
+    height: 0;
+    width: 0;
+}
+.infoBubble > div:first-child:hover + div {
+    display: inline-block;
+}
+
+.personalityAreas {
+    position: relative;
+}
+/* make a gray line underneath areaDatas */
+.areaData:not(:last-child)::after {
+    content: "";
+    width: 100%;
+    height: 1px;
+    display: inline-block;
+    background-color: #575759;
+}
+
+.legend .middle80indicator {
+    width: 50px;
+    margin: 0 8px 2px 0;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition:     all 0.5s ease;
+    transition:         all 0.5s ease;
+}
+.legend .youIndicator {
+    margin: 0 8px 2px 0;
+}
+.legend .medianIndicator {
+    height: 24px;
+}
+.middle80indicator {
+    border-radius: 5px;
+}
+.youIndicator {
+    border-radius: 100%;
+    background-color: white;
+    display: inline-block;
+}
+.medianIndicator {
+    width: 2px;
+    background-color: #e6e6e6;
+}
+.topNumbers {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+.areaData > .title {
+    text-decoration: underline;
+    cursor: pointer;
+}
+.youMedianMiddle {
+    font-weight: bold;
+    display: flex;
+    justify-content: space-between;
+}
+.youMedianMiddle > div { margin: 0 10px; }
+
+
+
+
 
 
 .whiteBlueButton, .semiOpaqueWhiteBlueButton {
@@ -1552,15 +1736,15 @@ form > h1 {
     padding-bottom: 10px;
     width: 100%;
     z-index: 10;
+    color: white !important;
 }
 
 .errorHeader {
-    background-color: rgba(255, 181, 181, .85) !important;
+    background: linear-gradient(to right, #E83C53, #FB553A)
 }
 
 .infoHeader {
-    background-color: rgba(255,255,255,.5) !important;
-    color: var(--moonshotBlue) !important;
+    background: linear-gradient(to right, #72d6f5, #9A73D9)
 }
 #notificationCloseButton {
     position: absolute !important;
@@ -1573,6 +1757,9 @@ form > h1 {
 }
 #notificationCloseButton > div {
     width: 24px;
+}
+#notificationCloseButton > svg {
+    fill: white !important;
 }
 
 .comingSoonBanner {
@@ -2041,19 +2228,28 @@ button.link {
 }
 
 .myEvalsBox {
+    position: relative;
     width: 70%;
     max-width: 1000px;
     height: 210px;
     margin: auto;
     padding: 20px;
     background-color: #333333 !important;
-    border-left: 2px solid #72d6f5;
     -moz-box-shadow:    0px 0px 50px 1px #00000073;
     -webkit-box-shadow: 0px 0px 50px 1px #00000073;
     box-shadow:         0px 0px 50px 1px #00000073;
     -moz-transition: -moz-box-shadow .2s;
     -webkit-transition: -webkit-transition .2s;
     transition: box-shadow .2s;
+}
+.myEvalsBox::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 3px;
+    top: 0;
+    height: 100%;
+    background: linear-gradient(to bottom, #72d6f5, #9A73D9);
 }
 .myEvalsBox:hover {
     -moz-box-shadow:    0px 0px 50px 15px #00000073;
@@ -2090,16 +2286,23 @@ button.link {
 .employeePreviewGrading > div:nth-child(4) > div:first-child > div > div > div:nth-child(3) {
     background: linear-gradient(to right, #fd0d8b, #ff5d27);
 }
-.myEmployees.sliderNumbers {
+.sliderNumbers {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+}
+.myEmployees.sliderNumbers {
     width: 82%;
     margin-left: 9%;
     margin-top: -20px;
 }
-.myEmployees.sliderNumber {
-
+.adminQuestions.sliderNumbers {
+    width: 104%;
+    margin-left: -2%;
+    margin-top: -30px;
+}
+.adminQuestions.sliderNumber {
+    width: 12px;
 }
 .myEmployeesWidth {
     max-width: 1200px;
@@ -2113,6 +2316,12 @@ button.link {
     position: absolute;
     width: 100%;
     bottom: 50px;
+}
+.adminQuestions.gradingSliderContainer {
+    position: relative;
+    width: 400px;
+    bottom: inherit;
+    display: inline-block;
 }
 .gradingMovementButtons {
     position: absolute;
@@ -2223,7 +2432,7 @@ button.link {
     left: 50%;
 }
 .candidatePreviewPredictiveSection {
-    width: 30%;
+    width: 38%;
     position: absolute;
     display: inline-block;
     height: 110px;
@@ -2919,6 +3128,10 @@ button.link {
 .raisedButtonWhiteText > button > div > div > span {
     color: white !important;
 }
+.raisedButtonAddAnotherEmail > button {
+    text-transform: none !important;
+    background-color: white !important;
+}
 .raisedButtonBusinessHome > button {
     background-color: white !important;
 }
@@ -2954,6 +3167,10 @@ button.link {
     margin-bottom: 60px;
     list-style: none;
     padding-left: 0px;
+}
+
+.adminQuestions.question {
+    margin: 0 20% 20px;
 }
 
 /* .candidatePreviewLiLeftContainer {
@@ -3021,6 +3238,27 @@ button.link {
     height: 80px;
 }
 .footer.topSpace { padding-top: 20px; }
+
+.addUserTabs > div:first-of-type {
+    background-color: transparent !important;
+    display: inline-block !important;
+}
+.addUserTabs > div > button {
+    font-size: 14px !important;
+    border: 0px !important;
+}
+.settingsTabs {
+    width: 70%;
+    margin: 10px auto;
+}
+.settingsTabs > div:first-of-type {
+    background-color: transparent !important;
+    display: inline-block !important;
+}
+.settingsTabs > div > button {
+    font-size: 14px !important;
+    border: 0px !important;
+}
 
 .myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
     background-color: transparent !important;
@@ -3099,7 +3337,7 @@ button.link {
 }
 .employerHeader {
     position: relative;
-    height: 100px;
+    height: 95px;
     width: 100%;
     box-shadow:         0px 2px 30px 8px;
     -moz-box-shadow:    0px 2px 30px 8px;
@@ -3113,6 +3351,12 @@ button.link {
     height: 2px;
     margin: 70px 20%;
     background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
+}
+.resultsPageSpacer {
+    width: 40%;
+    height: 2px;
+    margin: 70px auto;
+    background: linear-gradient(to right, #ae7efc, #75dcfc);
 }
 .pinkToOrangeSpacer {
     width: 60%;
@@ -3680,15 +3924,18 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .inlineBlock { display: inline-block; }
 .marginSides80px { margin-right: 80px; margin-left: 80px; }
 .marginBottom60px { margin-bottom: 60px; }
+.marginBottom50px { margin-bottom: 50px; }
 .marginBottom40px { margin-bottom: 40px; }
 .marginBottom30px { margin-bottom: 30px; }
 .marginBottom20px { margin-bottom: 20px; }
+.marginBottom15px { margin-bottom: 15px; }
 .marginBottom10px { margin-bottom: 10px; }
 .marginBottom30pxImportant { margin-bottom: 30px !important; }
 .marginTop40px { margin-top: 40px; }
 .marginTop30px { margin-top: 30px; }
 .marginTop24px { margin-top: 24px; }
 .marginTop20px { margin-top: 20px; }
+.marginTop15px { margin-top: 15px; }
 .marginTop10px { margin-top: 10px; }
 .marginLeft40px { margin-left: 40px; }
 .marginLeft30px { margin-left: 30px; }
@@ -3875,6 +4122,30 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .frontPage > .skewedRectanglesContainer > .skewedRectangles:nth-child(2) > .skewedRectangle:nth-child(1) {
         grid-column-end: 11;
     }
+    .results > .statsAndDescription > div {
+        width: 430px;
+    }
+
+    .legend .medianIndicator { height: 20px; }
+
+    .font40pxUnder1100 { font-size: 40px; }
+    .font38pxUnder1100 { font-size: 38px; }
+    .font36pxUnder1100 { font-size: 36px; }
+    .font34pxUnder1100 { font-size: 34px; }
+    .font32pxUnder1100 { font-size: 32px; }
+    .font30pxUnder1100 { font-size: 30px; }
+    .font28pxUnder1100 { font-size: 28px; }
+    .font26pxUnder1100 { font-size: 26px; }
+    .font24pxUnder1100 { font-size: 24px; }
+    .font22pxUnder1100 { font-size: 22px; }
+    .font20pxUnder1100 { font-size: 20px; }
+    .font18pxUnder1100 { font-size: 18px; }
+    .font16pxUnder1100 { font-size: 16px; }
+    .font14pxUnder1100 { font-size: 14px; }
+    .font12pxUnder1100 { font-size: 12px; }
+    .font10pxUnder1100 { font-size: 10px; }
+    .font8pxUnder1100 { font-size: 8px; }
+    .font6pxUnder1100 { font-size: 6px; }
 }
 
 @media only screen and (max-width: 1095px) {
@@ -4128,6 +4399,18 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 @media only screen and (max-width: 900px) {
     .above900only { display: none; }
+
+    .results > .statsAndDescription > div {
+        width: 650px;
+    }
+    .results > .statsAndDescription {
+        display: inline-block;
+        text-align: center;
+    }
+    .results > .statsAndDescription > div {
+        margin-bottom: 20px;
+    }
+
     .paperBox {
         height: 225px;
         width: 300px;
@@ -4221,6 +4504,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 @media only screen and (max-width: 800px) {
     .above800only {
         display: none;
+    }
+
+    .evalPortionIntro > div:not(:first-child) {
+        width: 400px;
     }
 
     #pathwaySalaryInfo { margin-left: 16%; margin-right: 10%; }
@@ -4588,6 +4875,21 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 700px) {
+    .psychAnalysisQuestion {
+        margin: 0 50px;
+    }
+
+    .results > .statsAndDescription > div {
+        width: 450px;
+    }
+
+    .resultsSlidersContainer {
+        width: 350px;
+    }
+    .resultsSlider {
+        width: 150px;
+    }
+
     .processHeaderContainer {
         height: 50px;
         width: 144px;
@@ -4715,6 +5017,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .pathwayVideoContainer {
         width: 70%;
         padding-top: 40%;
+    }
+    .settingsTabs > div > button {
+        font-size: 12px !important;
+        border: 0px !important;
     }
 
     .pathwayContentTimeText { margin-top: 5px; }
@@ -4896,9 +5202,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: inherit;
         margin-top: -30px;
     }
-    #discoverSearchBarMedScreen > div:nth-child(5) {
-        margin-bottom: 25px;
-    }
     .bigCreateYourFreeAccount {
         font-size: 20px;
         padding: 2px 20px 0px;
@@ -4942,6 +5245,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .purpleToBlueAnimate.mediumLargeButton { background-position-x: -80px; }
     .purpleToBlueAnimate.mediumLargeButton:hover { background-position-x: 0px; }
+    .purpleToBlueAnimate.smallMediumButton { background-position-x: -20px; }
+    .purpleToBlueAnimate.smallMediumButton :hover{ background-position-x: 0px; }
+
 
 
     #businessHomeStatistics > .skewedContainer > .skewedRectanglesContainer > .skewedRectangles:first-child > .skewedRectangle:nth-child(7) {
@@ -5027,8 +5333,36 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         min-height: 450px;
     }
 
+    .adminQuestions.gradingSliderContainer {
+        position: relative;
+        width: 220px;
+        bottom: inherit;
+        display: inline-block;
+    }
+
+    .results > .statsAndDescription > div {
+        width: 90%;
+        min-width: 270px;
+    }
+    .results > .statsAndDescription > .description {
+        padding: 20px;
+    }
+    .legend .middle80indicator {
+        width: 25px;
+        margin: 0 8px 1px 0;
+    }
+    .legend .youIndicator {
+        margin: 0 8px 1px 0;
+    }
+    .legend .medianIndicator {
+        height: 17px;
+    }
+
     .boxStyle {
         margin: 0px 0 50px;
+    }
+    .settingsTabs {
+        width: 90%;
     }
 
     #moonshotProcess { margin-top: 100px; }
@@ -5337,6 +5671,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: -30px 20% 0px;
     }
 
+    .evalPortionIntro > div:not(:first-child) {
+        width: 250px;
+    }
+
     .font40pxUnder450 { font-size: 40px; }
     .font38pxUnder450 { font-size: 38px; }
     .font36pxUnder450 { font-size: 36px; }
@@ -5367,6 +5705,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .form {
         max-width: 300px;
     }
+    .resultsSlidersContainer {
+        width: 260px;
+    }
+    .resultsSlider {
+        width: 110px;
+    }
     .infoBoxImage {
         height: 38px;
         margin: auto -140px auto;
@@ -5388,6 +5732,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .onboardingIconLi {
         margin: 0px 10px;
     }
+
+    .results > .statsAndDescription > .stats { padding: 20px; }
+    .legend .youIndicator { margin: 0 4px 0 0 }
 
     .twoOptionsOr { margin: 40px 8px 0; }
 
@@ -5524,6 +5871,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     #crystalBall { margin-top: 110px; }
 
+    .legend .middle80indicator { margin: 0 4px 1px 0; }
+
     .font40pxUnder400 { font-size: 40px; }
     .font38pxUnder400 { font-size: 38px; }
     .font36pxUnder400 { font-size: 36px; }
@@ -5584,6 +5933,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     textarea.multipleChoiceCustomAnswer {
         width: 180px;
     }
+
+    .results > .statsAndDescription > .stats > .legend .medianTitle { padding-left: 4px; }
 
     .font40pxUnder350 { font-size: 40px; }
     .font38pxUnder350 { font-size: 38px; }

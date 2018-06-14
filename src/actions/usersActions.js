@@ -31,6 +31,24 @@ export function getUserFromSession(callback) {
     };
 }
 
+export function openAddUserModal() {
+    return function(dispatch) {
+        dispatch({type: "OPEN_ADD_USER_MODAL"});
+    }
+}
+
+export function closeAddUserModal() {
+    return function(dispatch) {
+        dispatch({type: "CLOSE_ADD_USER_MODAL"});
+    }
+}
+
+export function emailFailureExitPage() {
+    return function(dispatch) {
+        dispatch({type: "EMAIL_FAILURE_EXIT_PAGE"});
+    }
+}
+
 export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
@@ -39,14 +57,8 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
-                let nextUrl = '/discover';
-                console.log(returnedUser.userType);
-                if (returnedUser.userType === "employer") {
-                    nextUrl = '/myEvaluations';
-                }
-                if (returnedUser.userType === "candidate" && !returnedUser.hasFinishedOnboarding) {
-                    nextUrl = "/onboarding";
-                } else if (navigateBackUrl) {
+                let nextUrl = '/myEvaluations';
+                if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
                 }
 
@@ -65,13 +77,12 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                         dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
                         // navigateBackUrl should be equal to the url for the pathway
                         if (!navigateBackUrl) {
-                            navigateBackUrl = "/discover";
+                            navigateBackUrl = "/myEvaluations";
                         }
                         browserHistory.push(nextUrl);
                         window.scrollTo(0, 0);
                     })
                     .catch(function(err) {
-                        console.log(err);
                         dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Cannot sign up for pathway more than once. Sign up for pathway failed.", type: "errorHeader"}})
                         browserHistory.push(nextUrl);
                         window.scrollTo(0, 0);
@@ -85,6 +96,19 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
             .catch(function(err) {
                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
+    }
+}
+
+
+export function answerAdminQuestion(userId, verificationToken, questionType, questionId, sliderAnswer, selectedId, selectedText, finished) {
+    return function(dispatch) {
+        axios.post("/api/user/answerAdminQuestion", {userId, verificationToken, questionType, questionId, sliderAnswer, selectedId, selectedText, finished})
+        .then(response => {
+            dispatch({type: "NEW_CURRENT_USER", currentUser: response.data});
+        })
+        .catch(error => {
+            // console.log("error answering admin question: ", error);
+        })
     }
 }
 
@@ -112,14 +136,110 @@ export function positionSignup(userId, verificationToken, positionId, businessId
         .then(response => {
             dispatch({type: "START_POSITION_EVAL", currentUser: response.data.updatedUser});
             if (response.data.finished) {
-                console.log("All parts already answered!");
+                // console.log("All parts already answered!");
             } else {
                 browserHistory.push(response.data.nextUrl);
                 window.scrollTo(0, 0);
             }
         })
         .catch(error => {
-            console.log("Error starting position evaluation: ", error);
+            // console.log("Error starting position evaluation: ", error);
+            // if (error.response && error.response.data) {
+            //     console.log(error.response.data);
+            // }
+        })
+    }
+}
+
+
+export function continueEval(userId, verificationToken, positionId, businessId) {
+    return function(dispatch) {
+        axios.post("/api/user/continuePositionEval", {userId, verificationToken, positionId, businessId})
+        .then(response => {
+            dispatch({type: "CONTINUE_POSITION_EVAL", currentUser: response.data.updatedUser});
+            if (response.data.finished) {
+                // console.log("All parts already answered!");
+            } else {
+                browserHistory.push(response.data.nextUrl);
+                window.scrollTo(0, 0);
+            }
+        })
+        .catch(error => {
+            // console.log("Error starting position evaluation: ", error);
+            // if (error.response && error.response.data) {
+            //     console.log(error.response.data);
+            // }
+        })
+    }
+}
+
+
+export function startPsychEval(userId, verificationToken) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+        axios.post("/api/user/startPsychEval", {userId, verificationToken})
+        .then(response => {
+            dispatch({type: "START_PSYCH_EVAL", currentUser: response.data});
+        })
+        .catch(e => {
+            let message = e.response && e.response.data ? e.response.data : "Error starting psych analysis.";
+            dispatch({type: "START_PSYCH_EVAL_ERROR", notification: {message, type: "errorHeader"}});
+        });
+    }
+}
+
+
+export function agreeToSkillTestTerms(userId, verificationToken) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+        axios.post("/api/skill/agreeToTerms", {userId, verificationToken})
+        .then(response => {
+            console.log("got response: ", response);
+            dispatch({type: "USER_UPDATE", currentUser: response.data});
+        })
+        .catch(error => {
+            console.log("error: ", error);
+        })
+    }
+}
+
+
+export function sawEvaluationIntro(userId, verificationToken) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+        axios.post("/api/user/sawEvaluationIntro", {userId, verificationToken})
+        .then(response => {
+            dispatch({type: "USER_UPDATE", currentUser: response.data});
+
+            const currentUser = response.data;
+            const currentPosition = currentUser.currentPosition;
+
+            // if the user doesn't actually have a test in progress
+            if (!currentPosition) {
+                browswerHistory.push("/myEvaluations");
+            }
+
+            // if the user has not yet dont the admin questions, they're on the first step
+            else if (!currentUser.adminQuestions || !currentUser.adminQuestions.finished) {
+                browserHistory.push("/adminQuestions");
+            }
+            // if user has not yet taken psych test or if they're currently taking it
+            // they're on the second step
+            else if (!currentUser.psychometricTest || (currentUser.psychometricTest && !currentUser.psychometricTest.endDate)) {
+                browserHistory.push("/psychometricAnalysis");
+            }
+            // if they are on a skills test, add 3 to the current skill test index
+            // (one because index 0 would be the first one and another two because of the psych test and admin questions)
+            else if (currentPosition.skillTests && parseInt(currentPosition.testIndex, 10) < currentPosition.skillTests.length) {
+                browserHistory.push(`/skillTest/${currentPosition.skillTests[currentPosition.testIndex]}`);
+            }
+            // otherwise user must be on the free response portion
+            else {
+                browswerHistory.push("/freeResponse");
+            }
+        })
+        .catch(error => {
+            console.log("error: ", error);
         })
     }
 }
@@ -127,18 +247,19 @@ export function positionSignup(userId, verificationToken, positionId, businessId
 
 export function submitFreeResponse(userId, verificationToken, frqs) {
     return function(dispatch) {
+        dispatch({type: "START_LOADING"});
         axios.post("/api/user/submitFreeResponse", {userId, verificationToken, frqs})
         .then(response => {
             dispatch({
                 type: "SUBMIT_FREE_RESPONSE",
                 currentUser: response.data.updatedUser,
-                nofification: {message: "Application complete!", type: "infoHeader"}
+                notification: {message: "Position evaluation complete!", type: "infoHeader"}
             });
-            browserHistory.push("/");
+            browserHistory.push("/myEvaluations");
             window.scrollTo(0, 0);
         })
         .catch(error => {
-            console.log("Error submitting free response answers: ", error);
+            // console.log("Error submitting free response answers: ", error);
         });
     }
 }
@@ -154,7 +275,21 @@ export function resetFrizz(userId, verificationToken) {
         })
         .catch(error => {
             dispatch({type: "NOTIFICATION", notification:{message: error.response.data, type: "errorHeader"}})
-            console.log("error: ", error);
+            // console.log("error: ", error);
+        })
+    }
+}
+export function reset24(userId, verificationToken) {
+    return function(dispatch) {
+        axios.post("/api/user/reset24", {userId, verificationToken})
+        .then(response => {
+            dispatch({type: "USER_UPDATE", currentUser: response.data, notification:{message: "24 reset!", type: "infoHeader"}});
+            browserHistory.push("/positionSignup");
+            window.scrollTo(0, 0);
+        })
+        .catch(error => {
+            dispatch({type: "NOTIFICATION", notification:{message: error.response.data, type: "errorHeader"}})
+            // console.log("error: ", error);
         })
     }
 }
@@ -179,7 +314,6 @@ export function postUser(user) {
                     })
                     // error sending verification email
                     .catch(function(emailError) {
-                        console.log("emailSend fail: ", emailError);
                         dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: emailError.response.data, type: "errorHeader"}});
                         window.scrollTo(0,0);
                     });
@@ -187,6 +321,23 @@ export function postUser(user) {
             // error posting user
             .catch(function(err) {
                 dispatch({type: "POST_USER_REJECTED", notification:{message: err.response.data, type: "errorHeader"}});
+            });
+    }
+}
+
+// POST EMAIL INVITES
+export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, currentUserInfo) {
+    return function(dispatch) {
+        dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
+
+        axios.post("/api/business/postEmailInvites", {candidateEmails, employeeEmails, adminEmails, currentUserInfo})
+            // email invites success
+            .then(function(res) {
+                dispatch({type: "POST_EMAIL_INVITES_SUCCESS"});
+            })
+            // error posting email invites
+            .catch(function(err) {
+                dispatch({type: "POST_EMAIL_INVITES_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
     }
 }
@@ -301,19 +452,14 @@ export function verifyEmail(userType, token) {
     return function(dispatch) {
         axios.post("/api/user/verifyEmail", {userType, token})
             .then(function(response) {
-                if (!response.data || response.data === "go to login" || userType == "employer") {
+                if (!response.data || response.data === "go to login") {
                     let nextLocation = "/login";
-                    if (userType == "employer") {
-                        const email = response.data;
-                        nextLocation = "/changeTempPassword?email=" + email;
-                    }
-
                     dispatch({type: "NOTIFICATION", notification:{message: "Account verified!", type: "infoHeader"}});
                     browserHistory.push(nextLocation);
                 } else {
                     // don't show verification notification if going straight to onboarding because it's implied
                     dispatch({type: "LOGIN", payload:response.data});
-                    browserHistory.push('/onboarding');
+                    browserHistory.push('/myEvaluations');
                 }
             })
             .catch(function(err) {
@@ -331,14 +477,11 @@ export function changePasswordForgot(user) {
             .then(function(response) {
                 const foundUser = response.data;
                 axios.post("/api/user/session", {userId: foundUser._id, verificationToken: foundUser.verificationToken})
-                .catch(function(err2) { console.log(err2) });
+                .catch(function(err2) {});
 
                 dispatch({type:"LOGIN", payload:foundUser, notification:{message:"Password changed!", type:"infoHeader"}});
                 let nextUrl = "/";
                 let returnedUser = response.data;
-                if (!returnedUser.hasFinishedOnboarding) {
-                    nextUrl = "/onboarding";
-                }
                 browserHistory.push(nextUrl);
             })
             .catch(function(err) {
@@ -354,7 +497,7 @@ export function changeTempPassword(user) {
             const returnedUser = response.data;
 
             dispatch({type: "LOGIN", payload: returnedUser, notification: {message: "Your password was changed, you are now logged in!", type: "infoHeader"}});
-            browserHistory.push('/myCandidates');
+            browserHistory.push('/myEvaluations');
 
             axios.post("/api/user/session", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
             .catch(function(err) {
@@ -453,7 +596,7 @@ export function completePathway(user){
         axios.post("api/candidate/completePathway", user)
             .then(function(response) {
                 dispatch({type:"COMPLETE_PATHWAY", user: response.data.user, notification: {message:response.data.message, type:"infoHeader"}});
-                browserHistory.push('/discover');
+                browserHistory.push('/');
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
@@ -545,7 +688,6 @@ export function addPathway(user) {
                 browserHistory.push("/pathwayContent?pathway=" + user.pathwayUrl);
             })
             .catch(function(err) {
-                console.log(err);
                 dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "You can't sign up for a pathway more than once.", type: "errorHeader"}})
                 window.scrollTo(0, 0);
             })
@@ -599,8 +741,8 @@ export function updateAnswer(userId, verificationToken, quizId, answer) {
             dispatch({type: "UPDATE_ANSWER", currentUser: response.data});
         })
         .catch(function(error) {
-            console.log("ERROR: ", error);
-            console.log(error.response.data)
+            // console.log("ERROR: ", error);
+            // console.log(error.response.data)
         });
     }
 }
@@ -615,7 +757,7 @@ export function updateAllOnboarding(userId, verificationToken, interests, goals,
             dispatch({type: "UPDATE_USER_ONBOARDING", payload: response.data});
         })
         .catch(function(err) {
-            console.log("Error updating onboarding info: ", err);
+            // console.log("Error updating onboarding info: ", err);
         })
     }
 }
@@ -636,7 +778,7 @@ export function endOnboarding(user, markOnboardingComplete, removeRedirectField)
             })
             .catch(function(err) {
                 // onboarding setting not able to be turned off for some reason
-                console.log("onboarding mark complete error: ", err);
+                // console.log("onboarding mark complete error: ", err);
                 dispatch({type: "END_ONBOARDING_REJECTED"});
             })
         } else {
@@ -658,7 +800,7 @@ export function answerPsychQuestion(userId, verificationToken, answer) {
             })
         })
         .catch(err => {
-            console.log("Error answering psych question: ", err);
+            // console.log("Error answering psych question: ", err);
             dispatch({type: "ANSWER_PSYCH_QUESTION_ERROR", notification: { message: err.response.data, type: "errorHeader" } });
         });
     }
@@ -700,7 +842,6 @@ export function postBusiness(business) {
             }
         })
         .catch(function(err) {
-            console.log("error: ", err);
             let msg = "Error creating new business. Try again later.";
             if (err && err.response && typeof err.response.data === "string") {
                 msg = err.response.data;

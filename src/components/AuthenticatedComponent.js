@@ -11,41 +11,38 @@ class AuthenticatedComponent extends Component {
         super(props);
 
         // if userChecked is true, render the child component
-        this.state = {userChecked: false};
+        this.state = { userChecked: false };
     }
 
 
     componentDidMount() {
-        // if we are in a route that is outside main, we need to get the user
-        // from the session
-        // if (this.props.route.outsideMain) {
-        //     let self = this;
-        //     this.props.getUserFromSession(function(work) {
-        //         self.checkLoggedIn();
-        //     });
-        // } else {
-            this.checkLoggedIn();
-
-            console.log("AuthenticatedComponent props: ", this.props);
-        // }
+        this.checkLoggedIn();
     }
 
 
     checkLoggedIn() {
-        // if there is no user, redirect to home
-        if (   !this.props.currentUser ||  this.props.currentUser == "no user") {
+        // if there is no user, redirect to login page
+        const currentUser = this.props.currentUser;
+        if (!currentUser || currentUser == "no user") {
             const location = this.props.location;
             const redirect = location.pathname + location.search;
 
             this.props.router.push('/login?redirect=' + redirect);
         }
-        // if there is a user but they don't have the right user type
-        else if (this.props.route.userType && this.props.currentUser.userType !== this.props.route.userType) {
-            this.props.router.push('/');
-        }
-
+        // if there is a user see if they are of the right type
         else {
-            this.setState({userChecked: true});
+            const types = this.props.route.userType;
+            let authenticatedType = true;
+            if (types) {
+                authenticatedType = types.includes(currentUser.userType);
+            }
+
+            // if one of the authenticated types matches the current user's type, they are authenticated
+            if (authenticatedType) {
+                this.setState({ userChecked: true });
+            } else {
+                this.props.router.push('/');
+            }
         }
     }
 
@@ -61,8 +58,7 @@ class AuthenticatedComponent extends Component {
         return (
             <div>
                 { this.state.userChecked ?
-                    childElement
-                    : null
+                    childElement : <div className="blackBackground fillScreen"/>
                 }
             </div>
         );

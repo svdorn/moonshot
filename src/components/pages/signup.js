@@ -58,8 +58,7 @@ const validate = values => {
         'name',
         'email',
         'password',
-        'password2',
-        'employerCode'
+        'password2'
     ];
     requiredFields.forEach(field => {
         if (!values[field]) {
@@ -90,7 +89,7 @@ class Signup extends Component {
     componentWillMount() {
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser && this.props.currentUser != "no user") {
-            this.goTo("/discover");
+            this.goTo("/myEvaluations");
         }
     }
 
@@ -121,12 +120,6 @@ class Signup extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        window.scroll({
-            top: 0,
-            left: 0,
-            behavior: 'smooth'
-        });
-
         if (!this.state.agreeingToTerms) {
             this.props.addNotification("Must agree to Terms of Use and Privacy Policy.", "error");
             return;
@@ -140,8 +133,7 @@ class Signup extends Component {
             'name',
             'email',
             'password',
-            'password2',
-            'employerCode'
+            'password2'
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -164,22 +156,19 @@ class Signup extends Component {
         const name = values.name;
         const password = values.password;
         const email = values.email;
-        const employerCode = values.employerCode;
         let user = {
-            name, password, email, signUpReferralCode, employerCode,
-            userType: "candidate"
+            name, password, email, signUpReferralCode
         };
 
-        // if the user got here from a pathway landing page, add the pathway id
-        // and url for redirect after onboarding completion
+        // if the user got here from a link, add those links
         let location = this.props.location;
         if (location.query) {
-            if (location.query.pathway) {
-                user.pathwayId = location.query.pathway;
-                if (location.query.redirect) {
-                    user.redirect = location.query.redirect;
-                }
-            }
+            user.code = location.query.code;
+            user.userCode = location.query.userCode;
+        }
+
+        if (!user || !user.code || !user.userCode) {
+            return this.props.addNotification("Must have a unique employer provided link to sign up.", "error");;
         }
 
         this.props.postUser(user);
@@ -250,6 +239,15 @@ class Signup extends Component {
             blurredClass = 'dialogForBizOverlay';
         }
 
+        // scroll to the top if user posted
+        if (this.state.email != "" && this.props.userPosted) {
+            window.scroll({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
+        }
+
         return (
             <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
@@ -295,35 +293,28 @@ class Signup extends Component {
                                         <Field
                                             name="name"
                                             component={renderTextField}
-                                            label="Full Name"
+                                            label="Full Name*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="email"
                                             component={renderTextField}
-                                            label="Email"
+                                            label="Email*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="password"
                                             component={renderPasswordField}
-                                            label="Password"
+                                            label="Password*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
                                         <Field
                                             name="password2"
                                             component={renderPasswordField}
-                                            label="Confirm Password"
-                                        /><br/>
-                                    </div>
-                                    <div className="inputContainer">
-                                        <Field
-                                            name="employerCode"
-                                            component={renderTextField}
-                                            label="Employer Code"
+                                            label="Confirm Password*"
                                         /><br/>
                                     </div>
 
@@ -336,6 +327,7 @@ class Signup extends Component {
                                                 src="/icons/CheckMarkRoundedWhite.png"
                                             />
                                         </div>
+
                                         I have read and agree to the Moonshot Insights <bdi className="clickable blueTextHome" onClick={this.handleOpenPP}>Privacy
                                         Policy</bdi> and <bdi className="clickable blueTextHome" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
                                     </div>
@@ -352,7 +344,7 @@ class Signup extends Component {
                                          style={{display: "inline-block"}}>Already have an account?
                                     </div>
                                 </form>
-                                {this.props.loadingCreateUser ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
+                                {this.props.loadingCreateUser ? <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/> : ""}
                             </div>
                         }
                     </div>

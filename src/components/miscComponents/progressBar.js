@@ -14,34 +14,50 @@ class ProgressBar extends Component {
 
     render() {
         const currentUser = this.props.currentUser;
-        const positionInProgress = currentUser.positionInProgress;
+        const currentPosition = currentUser.currentPosition;
 
-        let numSteps = 1;
-        if (positionInProgress.skillTests) {
-            numSteps += positionInProgress.skillTests.length;
+        if (!currentPosition) {
+            return null;
         }
-        if (positionInProgress.freeResponseQuestions && positionInProgress.freeResponseQuestions.length) {
+
+        const ADMIN_QUESTIONS = "Administrative Questions";
+        const PSYCH_ANALYSIS = "Psychometric Analysis";
+        const SKILL_EVAL = this.props.skillName ? this.props.skillName + " Evaluation" : "Skill Evaluation";
+        const FREE_RESPONSE = "Short Answer";
+
+        // will always have admin questions and psych analysis
+        let numSteps = 2;
+        if (currentPosition.skillTests) {
+            numSteps += currentPosition.skillTests.length;
+
+        }
+        if (currentPosition.freeResponseQuestions && currentPosition.freeResponseQuestions.length) {
             numSteps++;
         }
 
         let stepNumber = 0;
         let stepName = "";
-        // if user has not yet taken psych test or if they're currently taking it
-        // they're on the first step
-        if (!currentUser.psychometricTest || currentUser.psychometricTest.inProgress) {
+        // if the user has not yet dont the admin questions, they're on the first step
+        if (!currentUser.adminQuestions || !currentUser.adminQuestions.finished) {
             stepNumber = 1;
-            stepName = "Psychometric Analysis";
+            stepName = ADMIN_QUESTIONS;
         }
-        // if they are on a skills test, add 2 to the current skill test index
-        // (one because index 0 would be the first one and another one because of the psych test)
-        else if (positionInProgress.skillTests && parseInt(positionInProgress.testIndex, 10) < positionInProgress.skillTests.length) {
-            stepNumber = 2 + parseInt(positionInProgress.testIndex, 10);
-            stepName = "Skill Evaluation";
+        // if user has not yet taken psych test or if they're currently taking it
+        // they're on the second step
+        else if (!currentUser.psychometricTest || (currentUser.psychometricTest && !currentUser.psychometricTest.endDate)) {
+            stepNumber = 2;
+            stepName = PSYCH_ANALYSIS;
+        }
+        // if they are on a skills test, add 3 to the current skill test index
+        // (one because index 0 would be the first one and another two because of the psych test and admin questions)
+        else if (currentPosition.skillTests && parseInt(currentPosition.testIndex, 10) < currentPosition.skillTests.length) {
+            stepNumber = 3 + parseInt(currentPosition.testIndex, 10);
+            stepName = SKILL_EVAL;
         }
         // otherwise user must be on the free response portion
         else {
             stepNumber = numSteps;
-            stepName = "Free Response";
+            stepName = FREE_RESPONSE;
         }
 
         const rAlways = 255;
@@ -55,8 +71,13 @@ class ProgressBar extends Component {
         for (let stepCounter = 1; stepCounter <= numSteps; stepCounter++) {
             let amountFinished = 100;
             if (stepNumber === stepCounter) {
-                // TODO: MAKE THIS A LEGIT PERCENTAGE OF HOW MUCH IS DONE (0 - 100)
-                amountFinished = 0;
+                if (stepName === PSYCH_ANALYSIS) {
+                    const psychTest = currentUser.psychometricTest;
+                    amountFinished = (psychTest.numQuestionsAnswered / psychTest.numQuestions) * 100;
+                } else {
+                    // TODO: MAKE THIS A LEGIT PERCENTAGE OF HOW MUCH IS DONE (0 - 100)
+                    amountFinished = 0;
+                }
             }
             else if (stepNumber < stepCounter) {
                 amountFinished = 0;

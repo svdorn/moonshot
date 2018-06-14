@@ -123,10 +123,7 @@ class Account extends Component {
         const isCandidate = this.props.currentUser.userType === "candidate";
 
         return (
-            <div className="formContainer" style={{display:'inline-block'}}>
-                <div className="form lightBlackForm noBlur">
-                    <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Settings</h1>
+                    <form onSubmit={this.handleSubmit.bind(this)} className="marginTop10px">
                         <div className="inputContainer">
                             <Field
                                 name="name"
@@ -153,7 +150,7 @@ class Account extends Component {
                             /></div>
                         <br/>
                         {isCandidate ?
-                            <div>
+                            <div className="center">
                                 <div className="checkbox smallCheckbox whiteCheckbox" onClick={this.handleHideProfileClick.bind(this)}>
                                     <img
                                         alt=""
@@ -167,17 +164,16 @@ class Account extends Component {
                             </div>
                             : null
                         }
-                        <br/>
+                        <div className="center">
                         <RaisedButton
                             label="Update Settings"
                             type="submit"
                             className="raisedButtonBusinessHome"
-                            style={{margin: '10px 0'}}
-                        /><br/>
-                        {this.props.loadingUpdateSettings ? <CircularProgress color="white" style={{marginTop: "10px"}}/> : null}
+                            style={{margin: '10px auto'}}
+                        />
+                        </div>
+                        {this.props.loadingUpdateSettings ? <div className="center"><CircularProgress color="white" style={{marginTop: "10px"}}/></div> : null}
                     </form>
-                </div>
-            </div>
         );
     }
 }

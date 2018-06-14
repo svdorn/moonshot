@@ -14,11 +14,12 @@ import {
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
-import {closeNotification} from "../../../actions/usersActions";
+import {closeNotification,openAddUserModal} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import CandidatePreview from '../../childComponents/candidatePreview';
+import AddUserDialog from '../../childComponents/addUserDialog';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -33,54 +34,67 @@ class MyCandidates extends Component {
     constructor(props) {
         super(props);
 
-        const emptyCandidate = {
-            name: "Loading...",
-            hiringStage: "",
-            email: "",
-            disabled: true
-        }
+        // if a url query is telling us which position should be selected first
+        let positionNameFromUrl = props.location.query && props.location.query.position ? props.location.query.position : undefined;
 
         this.state = {
             searchTerm: "",
             hiringStage: "",
-            pathway: "",
-            candidates: [emptyCandidate],
-            pathways: [],
-            // true if the business has no pathways associated with it
-            noPathways: false
+            position: "",
+            sortBy: "",
+            candidates: [],
+            positions: [],
+            positionNameFromUrl,
+            // true if the business has no positions associated with it
+            noPositions: false,
+            // true if the position has no candidates associated with it
+            noCandidates: false,
+            loadingDone: false
         }
     }
 
     componentDidMount() {
         let self = this;
-        axios.get("/api/business/pathways", {
+        axios.get("/api/business/positions", {
             params: {
                 userId: this.props.currentUser._id,
                 verificationToken: this.props.currentUser.verificationToken
             }
         })
         .then(function (res) {
-            let pathways = res.data;
-            if (Array.isArray(pathways) && pathways.length > 0) {
-                const firstPathwayName = pathways[0].name;
-                if (firstPathwayName) {
-                    let selectedPathway = firstPathwayName;
+            let positions = res.data.positions;
+            if (Array.isArray(positions) && positions.length > 0) {
+                // if the url gave us a position to select first, select that one
+                // otherwise, select the first one available
+                let firstPositionName = positions[0].name;
+                if (self.state.positionNameFromUrl && positions.some(position => {
+                    return position.name === self.state.positionNameFromUrl;
+                })) {
+                    firstPositionName = self.state.positionNameFromUrl;
                 }
+
+                // select this position from the dropdown if it is valid
+                if (firstPositionName) {
+                    let selectedPosition = firstPositionName;
+                }
+
                 self.setState({
-                    pathways: pathways,
-                    pathway: firstPathwayName
+                    positions: positions,
+                    position: firstPositionName,
+                    loadingDone: true
                 },
-                    // search for candidates of first pathway
-                    self.search()
+                    // search for candidates of first position
+                    self.search
                 );
             } else {
                 self.setState({
-                    noPathways: true
+                    noPositions: true,
+                    loadingDone: true
                 })
             }
         })
         .catch(function (err) {
-            console.log("error getting pathways: ", err);
+            // console.log("error getting positions: ", err);
         });
     }
 
@@ -102,34 +116,48 @@ class MyCandidates extends Component {
     }
 
     handleHiringStageChange = (event, index, hiringStage) => {
-        this.setState({hiringStage}, () => {
-            this.search();
-        })
+        this.setState({hiringStage, candidates: [], noCandidates: false}, this.search);
     };
 
-    handlePathwayChange = (event, index, pathway) => {
-        this.setState({pathway}, () => {
-            this.search();
-        })
+    handlePositionChange = (event, index, position) => {
+        this.setState({position, candidates: [], noCandidates: false}, this.search);
     };
+
+    handleSortByChange = (event, index, sortBy) => {
+        this.setState({sortBy}, () => {
+            // only search if the user put in a new search term
+            if (sortBy !== "") { this.search(); }
+        });
+    };
+
+    openAddUserModal() {
+        this.props.openAddUserModal();
+    }
 
     search() {
-        if (!this.state.noPathways) {
+        // need a position to search for
+        if (!this.state.noPositions && this.state.position) {
             axios.get("/api/business/candidateSearch", {
                 params: {
                     searchTerm: this.state.term,
                     hiringStage: this.state.hiringStage,
-                    pathway: this.state.pathway,
+                    // searching by position name right now, could search by id if want to
+                    positionName: this.state.position,
+                    sortBy: this.state.sortBy,
                     userId: this.props.currentUser._id,
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
                 // make sure component is mounted before changing state
                 if (this.refs.myCandidates) {
-                    this.setState({candidates: res.data});
+                    if (res.data && res.data.length > 0) {
+                        this.setState({ candidates: res.data, noCandidates: false });
+                    } else {
+                        this.setState({noCandidates: true, candidates: []})
+                    }
                 }
             }).catch(function (err) {
-                console.log("ERROR: ", err);
+                // console.log("ERROR: ", err);
             })
         }
     }
@@ -176,13 +204,18 @@ class MyCandidates extends Component {
 
         const currentUser = this.props.currentUser;
         if (!currentUser) {
-            return null;
+            return (
+                <div className="blackBackground fillScreen" />
+            );
         }
 
-        // find the id of the currently selected pathway
-        const pathwayId = this.state.pathway ? this.state.pathways.find(path => {
-            return path.name === this.state.pathway;
-        })._id : undefined;
+        // find the id of the currently selected position
+        let positionId = "";
+        try {
+            positionId = this.state.positions.find(pos => {
+                return pos.name === this.state.position;
+            })._id;
+        } catch (getPosIdErr) { /* probably just haven't chosen a position yet */ }
 
         // create the candidate previews
         let key = 0;
@@ -190,59 +223,68 @@ class MyCandidates extends Component {
 
         let candidatePreviews = (
             <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                {this.state.pathways.length === 0 ? "Loading pathways..." : "Select a pathway to see your candidates."}
+                Loading candidates...
             </div>
-        )
+        );
 
-        if (this.state.pathway != "") {
+        if (this.state.noCandidates) {
+            if (this.state.hiringStage == "" && (this.state.term == "" || !this.state.term)) {
+            candidatePreviews = (
+                <div className="center marginTop50px">
+                <div className="marginBottom15px font32px font28pxUnder500 clickable blueTextHome" onClick={this.openAddUserModal.bind(this)}>
+                    + <bdi className="underline">Add Candidates</bdi>
+                </div>
+                <div style={{color: "rgba(255,255,255,.8)"}}>
+                    No candidates
+                    {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
+                    {(this.state.hiringStage == "Not Contacted" || this.state.hiringStage == "Contacted" || this.state.hiringStage == "Interviewing" || this.state.hiringStage == "Hired")
+                    ? <bdi> with {this.state.hiringStage.toLowerCase()} for the hiring stage</bdi>
+                    :null}.
+                </div>
+                <div className="marginTop15px" style={{color: "rgba(255,255,255,.8)"}}>
+                    Add them <bdi className="clickable underline blueTextHome" onClick={this.openAddUserModal.bind(this)}>Here</bdi> so they can get started.
+                </div>
+                </div>
+            )
+            } else {
+                candidatePreviews = (
+                    <div style={{color: "rgba(255,255,255,.8)"}}>
+                        No candidates
+                        {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
+                        {(this.state.hiringStage == "Not Contacted" || this.state.hiringStage == "Contacted" || this.state.hiringStage == "Interviewing" || this.state.hiringStage == "Hired")
+                        ? <bdi> with {this.state.hiringStage.toLowerCase()} for the hiring stage</bdi>
+                        :null}.
+                    </div>
+                );
+            }
+        }
+
+        if (this.state.noPositions) {
+            candidatePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    Create a position to select.
+                </div>
+            );
+        }
+        if (this.state.position == "" && this.state.loadingDone) {
+            candidatePreviews = (
+                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                    Must select a position.
+                </div>
+            );
+        }
+
+        if (this.state.candidates.length !== 0) {
             candidatePreviews = this.state.candidates.map(candidate => {
                 key++;
 
-                let candidatePathwayInfo = {
-                    hiringStage: "Not Contacted",
-                    isDismissed: false
-                }
-
-                // if the candidate does not have a pathways list, it is probably
-                // still loading the page; if we get into this if statement, it
-                // is an actual candidate
-                if (Array.isArray(candidate.pathways)) {
-                    const tempPathwayInfo = candidate.pathways.find(path => {
-                        return path._id === pathwayId;
-                    });
-                    // only set the pathway info if any was actually found
-                    if (tempPathwayInfo) {
-                        candidatePathwayInfo = tempPathwayInfo;
-                    }
-                }
-
-                const initialHiringStage = candidatePathwayInfo.hiringStage;
-                const initialIsDismissed = candidatePathwayInfo.isDismissed;
-                const isDisabled = candidate.disabled === true;
-
                 return (
-                    <li style={{marginTop: '15px'}}
-                        key={key}
-                    >
+                    <li style={{marginTop: '15px'}} key={key} >
                         <CandidatePreview
-                            initialHiringStage={initialHiringStage}
-                            initialIsDismissed={initialIsDismissed}
-                            employerUserId={currentUser._id}
-                            employerVerificationToken={currentUser.verificationToken}
-                            companyId={currentUser.company.companyId}
-                            candidateId={candidate.userId}
-                            pathwayId={pathwayId}
+                            candidate={candidate}
+                            positionId={positionId}
                             editHiringStage={true}
-                            name={candidate.name}
-                            email={candidate.email}
-                            disabled={isDisabled}
-                            profileUrl={candidate.profileUrl}
-                            location={candidate.location}
-                            overallScore={candidatePathwayInfo.overallScore}
-                            predicted={candidatePathwayInfo.predicted}
-                            archetype={candidate.archetype}
-                            skill={candidatePathwayInfo.skill}
-                            lastEdited={candidatePathwayInfo.hiringStageEdited}
+                            disabled={candidate.disabled === true}
                         />
                     </li>
                 );
@@ -250,15 +292,19 @@ class MyCandidates extends Component {
 
         }
 
+        const sortByOptions = ["Name", "Score"];
+        const sortByItems = sortByOptions.map(function (sortBy) {
+            return <MenuItem value={sortBy} primaryText={sortBy} key={sortBy}/>
+        })
+
         const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
         const hiringStageItems = hiringStages.map(function (hiringStage) {
             return <MenuItem value={hiringStage} primaryText={hiringStage} key={hiringStage}/>
         })
 
-        // TODO get companies from DB
-        const pathways = this.state.pathways;
-        const pathwayItems = pathways.map(function (pathway) {
-            return <MenuItem value={pathway.name} primaryText={pathway.name} key={pathway.name}/>
+        const positions = this.state.positions;
+        const positionItems = positions.map(function (position) {
+            return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
         })
 
         // the hint that shows up when search bar is in focus
@@ -290,25 +336,35 @@ class MyCandidates extends Component {
                     </ToolbarGroup>
 
                     <ToolbarGroup>
+                        <DropDownMenu value={this.state.sortBy}
+                                      onChange={this.handleSortByChange}
+                                      labelStyle={style.menuLabelStyle}
+                                      anchorOrigin={style.anchorOrigin}
+                                      style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
+                        >
+                            <MenuItem value={""} primaryText="Sort By"/>
+                            <Divider/>
+                            {sortByItems}
+                        </DropDownMenu>
                         <DropDownMenu value={this.state.hiringStage}
                                       onChange={this.handleHiringStageChange}
                                       labelStyle={style.menuLabelStyle}
                                       anchorOrigin={style.anchorOrigin}
-                                      style={{fontSize: "20px", marginTop: "11px"}}
+                                      style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                         >
                             <MenuItem value={""} primaryText="Hiring Stage"/>
                             <Divider/>
                             {hiringStageItems}
                         </DropDownMenu>
-                        <DropDownMenu value={this.state.pathway}
-                                      onChange={this.handlePathwayChange}
+                        <DropDownMenu value={this.state.position}
+                                      onChange={this.handlePositionChange}
                                       labelStyle={style.menuLabelStyle}
                                       anchorOrigin={style.anchorOrigin}
-                                      style={{fontSize: "20px", marginTop: "11px"}}
+                                      style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                         >
-                            <MenuItem value={""} primaryText="Pathway"/>
+                            <MenuItem value={""} primaryText="Position"/>
                             <Divider/>
-                            {pathwayItems}
+                            {positionItems}
                         </DropDownMenu>
                     </ToolbarGroup>
                 </Toolbar>
@@ -330,26 +386,37 @@ class MyCandidates extends Component {
 
                     <br/>
 
+                    <DropDownMenu value={this.state.sortBy}
+                                  onChange={this.handleSortByChange}
+                                  labelStyle={style.menuLabelStyle}
+                                  anchorOrigin={style.anchorOrigin}
+                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
+                    >
+                        <MenuItem value={""} primaryText="Sort By"/>
+                        <Divider/>
+                        {sortByItems}
+                    </DropDownMenu>
+                    <br/>
                     <DropDownMenu value={this.state.hiringStage}
                                   onChange={this.handleHiringStageChange}
                                   labelStyle={style.menuLabelStyle}
                                   anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "20px", marginTop: "11px"}}
+                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                     >
                         <MenuItem value={""} primaryText="Hiring Stage"/>
                         <Divider/>
                         {hiringStageItems}
                     </DropDownMenu>
-                    <div><br/></div>
-                    <DropDownMenu value={this.state.pathway}
-                                  onChange={this.handlePathwayChange}
+                    <br/>
+                    <DropDownMenu value={this.state.position}
+                                  onChange={this.handlePositionChange}
                                   labelStyle={style.menuLabelStyle}
                                   anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "20px", marginTop: "11px"}}
+                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                     >
-                        <MenuItem value={""} primaryText="Pathway"/>
+                        <MenuItem value={""} primaryText="Position"/>
                         <Divider/>
-                        {pathwayItems}
+                        {positionItems}
                     </DropDownMenu>
                 </div>
             </div>
@@ -358,6 +425,7 @@ class MyCandidates extends Component {
 
         return (
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
+                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>My Candidates | Moonshot</title>
                     <meta name="description" content="View analytical breakdowns and manage your candidates."/>
@@ -384,7 +452,8 @@ class MyCandidates extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        closeNotification
+        closeNotification,
+        openAddUserModal
     }, dispatch);
 }
 

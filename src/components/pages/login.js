@@ -85,6 +85,18 @@ class Login extends Component {
 
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser && this.props.currentUser != "no user") {
+            // check if there is a redirect link and redirect there if already logged in
+            const location = this.props.location;
+            if (location.query) {
+                if (location.query.redirect) {
+                    // brings a user to wherever they were trying to go before
+                    const redirectUrl = location.query.redirect;
+                    browserHistory.push(redirectUrl);
+                    return;
+                }
+            }
+
+            // otherwise go home
             this.props.router.push("/");
             return;
         }
@@ -104,7 +116,7 @@ class Login extends Component {
                 })
             })
             .catch(function (err) {
-                console.log("error getting 'keep me logged in' option")
+                // console.log("error getting 'keep me logged in' option")
             });
         }
     }
@@ -188,7 +200,7 @@ class Login extends Component {
 
         axios.post("/api/user/keepMeLoggedIn", { stayLoggedIn: !this.state.keepMeLoggedIn })
         .catch(function(err) {
-            console.log("error posting 'keep me logged in' option: ", err);
+            // console.log("error posting 'keep me logged in' option: ", err);
         });
         this.setState({
             ...this.state,

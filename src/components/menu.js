@@ -5,7 +5,7 @@ import MoreHorizIcon from 'material-ui/svg-icons/image/dehaze'
 import {connect} from 'react-redux';
 import {browserHistory, withRouter} from 'react-router';
 import {bindActionCreators} from 'redux';
-import {signout, closeNotification, endOnboarding} from "../actions/usersActions";
+import {signout, closeNotification, endOnboarding, openAddUserModal} from "../actions/usersActions";
 import {axios} from 'axios';
 
 const styles = {
@@ -24,7 +24,7 @@ const styles = {
 class Menu extends Component {
     constructor(props) {
         super(props);
-        let dropDownSelected = "Profile";
+        let dropDownSelected = "Account";
         if (this.props.location.pathname === '/settings') {
             dropDownSelected = "Settings";
         } else if (this.props.location.pathname.toLowerCase() === '/adduser') {
@@ -50,8 +50,8 @@ class Menu extends Component {
             }
         } else {
             // set dropdown to be on Profile if not on settings or onboarding pages
-            if (this.state.dropDownSelected !== "Profile") {
-                this.setState({dropDownSelected: "Profile"});
+            if (this.state.dropDownSelected !== "Account") {
+                this.setState({dropDownSelected: "Account"});
             }
         }
     }
@@ -76,7 +76,7 @@ class Menu extends Component {
             case "Profile":
                 if (currentUser) {
                     // if user is employer, go to business profile
-                    if (currentUser.userType === "employer") {
+                    if (currentUser.userType === "manager" || currentUser.userType === "employee" || currentUser.userType === "accountAdmin") {
                         //this.goTo("/businessProfile");
                         this.goTo("/");
                     }
@@ -90,7 +90,7 @@ class Menu extends Component {
                 this.goTo("/settings");
                 break;
             case "Add User":
-                this.goTo("/addUser");
+                this.props.openAddUserModal();
                 break;
             default:
                 break;
@@ -144,7 +144,7 @@ class Menu extends Component {
         let isEmployer = false;
         let currentUser = this.props.currentUser;
 
-        if (currentUser && currentUser.userType === "employer") {
+        if (currentUser && (currentUser.userType === "accountAdmin" || currentUser.userType === "manager" || currentUser.userType === "employee")) {
             isEmployer = true;
         }
 
@@ -182,17 +182,16 @@ class Menu extends Component {
 
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
-        let hoverWidth = "52px";
-        if (pathname === '/profile' || pathname === '/businessprofile') {
-            dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-        }
+        let hoverWidth = "68px";
+        // if (pathname === '/profile' || pathname === '/businessprofile') {
+        //     dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+        // }
         if (pathname === '/settings') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
             // if settings is selected, the underline bar must be bigger
             // because "settings" is a bigger word
             hoverWidth = "67px";
-        }
-        if (pathname === '/adduser') {
+        } else if (pathname === '/adduser') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
             // if settings is selected, the underline bar must be bigger
             // because "settings" is a bigger word
@@ -244,19 +243,17 @@ class Menu extends Component {
         else if (currentUser.admin) {
             menuOptions = [
                 {optionType: "url", title: "Admin", url: "/admin"},
-                {optionType: "url", title: "Discover", url: "/discover"},
-                {optionType: "url", title: "My Pathways", url: "/myPathways"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
-                    {optionType: "url", title: "Profile", url: "/profile"},
+                    {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "signOut"}
                 ]}
             ];
         }
-        // if the current user is an employer
-        else if (isEmployer) {
+        // if the current user is an account admin for a business
+        else if (currentUser.userType === "accountAdmin") {
             menuOptions = [
                 {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "url", title: "Employees", url: "/myEmployees"},
@@ -264,10 +261,40 @@ class Menu extends Component {
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
                     //{optionType: "url", title: "Profile", url: "/businessProfile"},
-                    {optionType: "url", title: "Profile", url: "/"},
+                    {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "url", title: "Add User", url: "/addUser"},
+                    {optionType: "signOut"}
+                ]}
+            ];
+        }
+        // if the current user is a manager for a business
+        // else if (currentUser.userType === "manager") {
+        //     menuOptions = [
+        //         {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
+        //         {optionType: "url", title: "Employees", url: "/myEmployees"},
+        //         {optionType: "separator"},
+        //         {optionType: "dropDown", components: [
+        //             //{optionType: "url", title: "Profile", url: "/businessProfile"},
+        //             {optionType: "url", title: "Profile", url: "/"},
+        //             {optionType: "divider"},
+        //             {optionType: "url", title: "Settings", url: "/settings"},
+        //             {optionType: "url", title: "Add User", url: "/addUser"},
+        //             {optionType: "signOut"}
+        //         ]}
+        //     ];
+        // }
+        // if the current user is an employee for a business
+        else if (currentUser.userType === "employee") {
+            menuOptions = [
+                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
+                {optionType: "separator"},
+                {optionType: "dropDown", components: [
+                    //{optionType: "url", title: "Profile", url: "/businessProfile"},
+                    {optionType: "url", title: "Account", url:"/"},
+                    {optionType: "divider"},
+                    {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "signOut"}
                 ]}
             ];
@@ -287,11 +314,10 @@ class Menu extends Component {
         // if the current user is a candidate who is not onboarding
         else if (currentUser.userType === "candidate") {
             menuOptions = [
-                {optionType: "url", title: "Discover", url: "/discover"},
-                {optionType: "url", title: "My Pathways", url: "/myPathways"},
+                {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
-                    {optionType: "url", title: "Profile", url: "/profile"},
+                    {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "signOut"}
@@ -366,9 +392,9 @@ class Menu extends Component {
                                 break;
                             case "text":
                                 // add text to desktop menu
-                                dropDownItems.push(<MenuItem value="Name" primaryText={dropDownOption.title}/>);
+                                dropDownItems.push(<MenuItem value="Name" disabled primaryText={dropDownOption.title}/>);
                                 // add text to mobile menu
-                                mobileMenu.push(<MenuItem style={{color: "#00c3ff"}} primaryText={dropDownOption.title}/>);
+                                mobileMenu.push(<MenuItem style={{color: "#00c3ff"}} disabled primaryText={dropDownOption.title}/>);
                                 break;
                             default:
                                 break;
@@ -440,10 +466,10 @@ class Menu extends Component {
             <header style={{zIndex: "100"}}>
                 <div>
                     <Toolbar id="menu">
-                        <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "30px"}}>
+                        <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "39px"}}>
                             {moonshotLogoHtml}
                         </ToolbarGroup>
-                        <ToolbarGroup>
+                        <ToolbarGroup className="marginTop10px">
                             {desktopMenu}
 
                             <IconMenu
@@ -470,7 +496,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         signout,
         closeNotification,
-        endOnboarding
+        endOnboarding,
+        openAddUserModal
     }, dispatch);
 }
 

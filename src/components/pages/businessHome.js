@@ -9,6 +9,7 @@ import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
+import AddUserDialog from '../childComponents/addUserDialog';
 import YouTube from 'react-youtube';
 import ProgressBarDialog from '../miscComponents/progressBarDialog';
 
@@ -416,7 +417,7 @@ class BusinessHome extends Component {
                 list: [
                     "Create Baseline",
                     "Better Understand Employers",
-                    "Pyschometric Profiles",
+                    "psychometric Profiles",
                     "Skill IQs"
                 ]
             },
@@ -533,6 +534,7 @@ class BusinessHome extends Component {
         if (this.state.open || this.state.demoOpen) {
             blurredClass = 'dialogForBizOverlay';
         }
+
 
         let dialogDemoClass = "dialogForBiz";
         if (this.state.demoScreen === 2 || this.state.dialogScreen === 5) {
@@ -772,6 +774,7 @@ class BusinessHome extends Component {
 
         return (
             <div className={blurredClass}>
+                {(this.props.currentUser && this.props.currentUser.userType == "accountAdmin") ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>Moonshot</title>
                     <meta name="description" content="Moonshot helps you know who to hire. Predict candidate performance based on employees at your company and companies with similar positions." />
@@ -1137,6 +1140,7 @@ function mapStateToProps(state) {
         formData: state.form,
         loadingEmailSend: state.users.loadingSomething,
         notification: state.users.notification,
+        currentUser: state.users.currentUser
     };
 }
 

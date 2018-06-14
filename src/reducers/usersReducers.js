@@ -11,12 +11,32 @@ const initialState = {
 }
 export function usersReducers(state = initialState, action) {
     switch (action.type) {
+        case "OPEN_ADD_USER_MODAL":
+            return {
+                ...state,
+                userModalOpen: true
+            };
+            break;
+        case "CLOSE_ADD_USER_MODAL":
+            return {
+                ...state,
+                userModalOpen: false,
+                userPosted: false,
+                userPostedFailed: false
+            };
+            break;
         case "GET_USER_FROM_SESSION_REQUEST":
         case "GET_USER_FROM_SESSION_REJECTED":
             return {
                 ...state,
                 isFetching: action.isFetching,
                 errorMessage: action.errorMessage
+            };
+            break;
+        case "EMAIL_FAILURE_EXIT_PAGE":
+            return {
+                ...state,
+                userPostedFailed: false
             };
             break;
         case "GET_USER_FROM_SESSION":
@@ -48,11 +68,15 @@ export function usersReducers(state = initialState, action) {
         case "CHANGE_PASSWORD_REJECTED":
             return {...state, notification: action.notification, loadingSomething: false};
             break;
+        case "POST_EMAIL_INVITES_REJECTED":
+            return {...state, loadingSomething:false, userPostedFailed: true}
+            break;
         case "SIGNOUT":
             return {...state, currentUser: undefined};
             break;
         case "FORGOT_PASSWORD_REQUESTED":
         case "POST_USER_REQUESTED":
+        case "POST_EMAIL_INVITES_REQUESTED":
         case "FOR_BUSINESS_REQUESTED":
         case "CONTACT_US_REQUESTED":
         case "COMPLETE_PATHWAY_REQUESTED":
@@ -69,6 +93,7 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         case "POST_USER":
+        case "POST_EMAIL_INVITES_SUCCESS":
             return {
                 ...state,
                 userPosted: true,
@@ -96,7 +121,8 @@ export function usersReducers(state = initialState, action) {
             return {
                 ...state,
                 currentUser: action.currentUser,
-                notification: action.notification
+                notification: action.notification,
+                loadingSomething: false
             }
             break;
         case "UPDATE_USER":
@@ -106,6 +132,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "UPDATE_ANSWER":
         case "START_POSITION_EVAL":
+        case "CONTINUE_POSITION_EVAL":
         case "NEW_CURRENT_USER":
             return {
                 ...state,
@@ -131,6 +158,7 @@ export function usersReducers(state = initialState, action) {
         case "FORM_ERROR":
         case "ERROR_FINISHED_LOADING":
         case "SUCCESS_FINISHED_LOADING":
+        case "START_PSYCH_EVAL_ERROR":
             return {
                 ...state, notification: action.notification, loadingSomething: false
             };
@@ -171,6 +199,12 @@ export function usersReducers(state = initialState, action) {
                 ...state, currentUser: action.payload
             };
             break;
+        case "START_PSYCH_EVAL":
+        case "USER_UPDATE":
+            return {
+                ...state, currentUser: action.currentUser, loadingSomething: false
+            }
+            break;
         case "ANSWER_PSYCH_QUESTION":
             return {
                 ...state, currentUser: action.user, finishedPsychTest: action.finishedTest
@@ -196,10 +230,8 @@ export function usersReducers(state = initialState, action) {
                 ...state, currentUser: action.payload, notification: action.notification
             };
             break;
-        case "TURN_HEADER_BLUE":
-            return {
-                ...state, blueHeader: action.shouldBeBlue
-            }
+        default:
+            return {...state};
             break;
     }
 

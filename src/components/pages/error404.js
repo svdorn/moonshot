@@ -16,7 +16,7 @@ class error404 extends Component {
     render () {
         let route = '/';
         if (this.props.currentUser) {
-            route = '/discover';
+            route = '/myEvaluations';
         }
         return (
             <div className="fillScreen greenToBlue" style={{textAlign:"center"}}>

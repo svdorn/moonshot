@@ -9,7 +9,6 @@ const mlFunctions = {
 }
 
 function calculateKClusters() {
-    console.log("heyyaaaa");
     var spawn = require("child_process").spawn;
     var process = spawn('python', ["./test2.py"]);
     process.stdout.on("data", function(data) {

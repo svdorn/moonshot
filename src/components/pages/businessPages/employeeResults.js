@@ -8,6 +8,7 @@ import {Tabs, Tab, Slider} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
+import AddUserDialog from '../../childComponents/addUserDialog';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
 
 class EmployeeResults extends Component {
@@ -136,6 +137,7 @@ class EmployeeResults extends Component {
 
         return (
             <div className="center aboutMeSection" style={style.tabContent}>
+                {this.state.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <div className="lightBlackBackground" style={style.candidateScore}>
                     <div className="paddingTop20px">
                         <div
@@ -360,8 +362,8 @@ class EmployeeResults extends Component {
                                 <div className="blackBackground paddingBottom40px">
                                     <div className="headerDiv"/>
                                     <div className="profileInfoSkills">
-                                        <img style={style.leftTriangles} src="images/LeftTriangles.png" />
-                                        <img style={style.rightTriangles} src="images/RightTriangles.png" />
+                                        <img style={style.leftTriangles} src="/images/LeftTriangles.png" />
+                                        <img style={style.rightTriangles} src="/images/RightTriangles.png" />
                                         <div className="center">
                                             <div style={style.imgContainer}>
                                                 <img

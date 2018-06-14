@@ -2,9 +2,11 @@ const sanitizeHtml = require('sanitize-html');
 const nodemailer = require('nodemailer');
 const credentials = require('../credentials');
 
-var Users = require('../models/users.js');
-var Employers = require('../models/employers.js');
-var Emailaddresses = require('../models/emailaddresses.js');
+const Users = require('../models/users.js');
+const Emailaddresses = require('../models/emailaddresses.js');
+const Businesses = require('../models/businesses.js');
+const Skills = require('../models/skills.js');
+
 
 // strictly sanitize, only allow bold and italics in input
 const sanitizeOptions = {
@@ -12,60 +14,130 @@ const sanitizeOptions = {
     allowedAttributes: []
 }
 
-const helperFunctions = {
-    sanitize,
-    removeEmptyFields,
-    verifyUser,
-    removePassword,
-    removeIrrelevantInfoKeepToken,
-    printUsersFromPathway,
-    getUserByQuery,
-    sendEmail,
-    safeUser,
-    userForAdmin,
-    getFirstName,
-    sendBizUpdateCandidateErrorEmail,
-    removeDuplicates,
-    randomInt
-}
 
+// removes information from a db user object so that it can be passed for that
+// same user on the front end
+function frontEndUser(dbUser, extraFieldsToRemove) {
+    // copy everything into new user object
+    let newUser = Object.assign({}, dbUser);
 
-// TODO delete this as soon as we have a good way of seeing all users within a pathway
-function printUsersFromPathway(pathwayIdToCheck) {
-    const pathwayUsersQuery = {
-        $or: [
-            {
-                pathways: {
-                    $elemMatch: {
-                        pathwayId: pathwayIdToCheck
-                    }
+    // doing Object.assign with a document from the db can lead to the new object
+    // having a bunch of properties we don't want with the actual object ending
+    // up in newObj._doc, so take the ._doc property if it exists and treat it
+    // as the actual object
+    if (newUser._doc) {
+        newUser = newUser._doc;
+    }
+
+    // clean the psychometric test
+    let cleanPsychTest = undefined;
+    const psychTest = newUser.psychometricTest;
+    if (psychTest) {
+        cleanPsychTest = {};
+        if (psychTest.inProgress) {
+            cleanPsychTest.inProgress = psychTest.inProgress;
+        }
+        if (psychTest.startDate) {
+            cleanPsychTest.startDate = psychTest.startDate;
+        }
+        if (psychTest.endDate) {
+            cleanPsychTest.endDate = psychTest.endDate;
+        }
+
+        if (typeof psychTest.questionsPerFacet === "number" && Array.isArray(psychTest.factors)) {
+            // count the number of questions - questions/facet * number of facets
+            let numFacets = 0;
+            psychTest.factors.forEach(factor => {
+                if (factor && typeof factor === "object" && Array.isArray(factor.facets)) {
+                    numFacets += factor.facets.length;
                 }
-            },
-            {
-                completedPathways: {
-                    $elemMatch: {
-                        pathwayId: pathwayIdToCheck
-                    }
-                }
-            }
-        ]
-    };
-    Users.find(pathwayUsersQuery, function(err, users) {
-        console.log("err is: ", err);
-
-        users.forEach(function(user) {
-            let userPath = user.pathways.find(function(path) {
-                return path.pathwayId == pathwayIdToCheck;
             });
-            let currentStep = userPath ? userPath.currentStep : "completed";
+            cleanPsychTest.numQuestions = psychTest.questionsPerFacet * numFacets;
+        }
 
-            const ourEmails = ["ameyer24@wisc.edu", "austin.thomas.meyer@gmail.com", "frizzkitten@gmail.com", "svdorn@wisc.edu", "treige@wisc.edu", "jye39@wisc.edu", "stevedorn9@gmail.com", "kyle.treige@gmail.com"];
-            if (!ourEmails.includes(user.email)) {
-                console.log("\n\nname: ", user.name, "\nemail: ", user.email, "\ncurrent step: ", currentStep);
+        if (typeof psychTest.numQuestionsAnswered === "number") {
+            cleanPsychTest.numQuestionsAnswered = psychTest.numQuestionsAnswered;
+        }
+
+        const currentQuestion = psychTest.currentQuestion;
+        // only applies if the user is currently taking the test
+        if (currentQuestion && typeof currentQuestion === "object") {
+            cleanPsychTest.currentQuestion = {
+                body: currentQuestion.body,
+                leftOption: currentQuestion.leftOption,
+                rightOption: currentQuestion.rightOption,
+                questionId: currentQuestion.questionId
             }
-        })
-    })
+
+        }
+    }
+
+    // if the user is currently applying for a position
+    let currentPosition = undefined;
+    if (newUser.positionInProgress) {
+        // find the index of the position the user is
+        const positionInProgressString = newUser.positionInProgress.toString();
+        const positionIndex = newUser.positions.findIndex(pos => {
+            return pos.positionId.toString() === positionInProgressString;
+        });
+        position = newUser.positions[positionIndex];
+
+        currentPosition = {
+            inProgress: true,
+            name: position.name,
+            agreedToSkillTestTerms: position.agreedToSkillTestTerms,
+            skillTests: position.skillTestIds,
+            testIndex: position.testIndex,
+            freeResponseQuestions: position.freeResponseQuestions
+        }
+    }
+
+    // default things to remove
+    newUser.password = undefined;
+    newUser.emailVerificationToken = undefined;
+    newUser.passwordToken = undefined;
+    newUser.passwordTokenExpirationTime = undefined;
+    newUser.skillTests = undefined;
+    newUser.positions = undefined;
+    newUser.psychometricTest = cleanPsychTest;
+    newUser.currentPosition = currentPosition;
+
+    // if we are given more than the default fields to remove
+    if (Array.isArray(extraFieldsToRemove)) {
+        // go through each extra field and remove them from the user
+        extraFieldsToRemove.forEach(field => {
+            // make sure the field is a string so it can be an object property
+            if (typeof field === "string") {
+                newUser[field] = undefined;
+            }
+        });
+    }
+
+    // return the updated user, ready for front-end use
+    return newUser;
 }
+
+
+// some options for front-end user
+const COMPLETE_CLEAN = [
+    "_id",
+    "verificationToken",
+    "admin",
+    "agreedToTerms",
+    "employerCode",
+    "hideProfile",
+    "referredByCode",
+    "verified",
+    "redirect",
+    "psychometricTest",
+    "positions",
+    "positionInProgress",
+    "currentPosition",
+    "emailVerificationToken"
+]
+// don't want employers to see which other positions user has applied for
+const FOR_EMPLOYER = [ "verificationToken", "emailVerificationToken" ];
+const NO_TOKENS = [ "verificationToken", "emailVerificationToken" ];
 
 
 function randomInt(lowBound, highBound) {
@@ -270,9 +342,6 @@ function getUserByQuery(query, callback) {
     Users.findOne(query, function (err, foundUser) {
         doCallbackOrWaitForOtherDBCall(err, foundUser);
     });
-    Employers.findOne(query, function(err, foundUser) {
-        doCallbackOrWaitForOtherDBCall(err, foundUser);
-    });
 }
 
 
@@ -282,34 +351,6 @@ function removePassword(user) {
     if (typeof user === "object" && user != null) {
         let newUser = user;
         newUser.password = undefined;
-        return newUser;
-    } else {
-        return undefined;
-    }
-}
-
-
-// used when passing the user object back to the user, still contains sensitive
-// data such as the user id and verification token
-function removeIrrelevantInfoKeepToken(user) {
-    if (typeof user === "object" && user != null) {
-        let newUser = user;
-        // remove the password
-        newUser.password = undefined;
-        // remove everything except the info about the current question
-        if (newUser.psychometricTest) {
-            const currentQuestion = newUser.psychometricTest.currentQuestion;
-            newUser.psychometricTest = {
-                // only need the body of the current question
-                currentQuestion: {
-                    body: currentQuestion.body,
-                    leftOption: currentQuestion.leftOption,
-                    rightOption: currentQuestion.rightOption,
-                    questionId: currentQuestion.questionId
-                },
-                inProgress: newUser.psychometricTest.inProgress
-            }
-        }
         return newUser;
     } else {
         return undefined;
@@ -502,26 +543,25 @@ function verifyUser(user, verificationToken) {
 }
 
 
-// function to send an email to us if the associated businesses were not updated
-function sendBizUpdateCandidateErrorEmail(email, pathwayId, pathwayStatus) {
-    try {
-        console.log("ERROR " + pathwayStatus + " STUDENT AS A BUSINESS' CANDIDATE");
-        // const errorEmailRecipients = ["ameyer24@wisc.edu", "stevedorn9@gmail.com"];
-        const errorEmailRecipients = ["ameyer24@wisc.edu"];
-        const errorEmailSubject = "Error " + pathwayStatus + " User Into Business Candidates Array";
-        const errorEmailContent =
-            "<p>User email: " + email + "</p>"
-            + "<p>PathwayId: " + pathwayId + "</p>";
-        const sendFrom = "Moonshot";
-        // send an email to us saying that the user wasn't added to the business' candidates list
-        sendEmail(errorEmailRecipients, errorEmailSubject, errorEmailContent, sendFrom, undefined, function(errorEmailSucces, errorEmailMsg) {
-            if (errorEmailMsg) {
-                throw "error";
-            }
-        })
-    } catch (e) {
-        console.log("ERROR SENDING EMAIL ALERTING US THAT A STUDENT WAS NOT ADDED AS A BUSINESS CANDIDATE AFTER PATHWAY " + pathwayStatus + ". STUDENT EMAIL: ", email, ". PATHWAY: ", pathwayId);
+// test a function for how long it takes
+async function speedTest(trials, functionToTest) {
+    let total = 0;
+    for (let i = 1; i <= trials; i++) {
+        const millisStart = (new Date()).getTime();
+
+        const returnValue = functionToTest();
+
+        if (typeof returnValue === "object" && typeof returnValue.then === "function") {
+            await returnValue;
+        }
+
+        const millisEnd = (new Date()).getTime();
+        console.log(`${(millisEnd - millisStart)} milliseconds`);
+        total += (millisEnd - millisStart);
     }
+    const average = total / trials;
+
+    console.log(`\nAverage time: ${average} milliseconds`);
 }
 
 
@@ -551,6 +591,55 @@ function removeDuplicates(a) {
     return out;
 }
 
+
+// DANGEROUS, returns user with all fields
+async function getAndVerifyUser(userId, verificationToken) {
+    return new Promise(async function(resolve, reject) {
+        // get the user from the db
+        let user = undefined;
+        try {
+            user = await Users.findById(userId);
+        } catch (getUserError) {
+            console.log("Error getting user from the database: ", getUserError);
+            reject({status: 500, message: "Server error, try again later", error: getUserError});
+        }
+
+        if (!user) {
+            console.log("User not found from id: ", userId);
+            reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
+        }
+
+        // verify user's identity
+        if (!verificationToken && user.verificationToken !== verificationToken) {
+            console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
+            reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
+        }
+
+        resolve(user);
+    })
+}
+
+
+const helperFunctions = {
+    sanitize,
+    removeEmptyFields,
+    verifyUser,
+    removePassword,
+    getUserByQuery,
+    sendEmail,
+    safeUser,
+    userForAdmin,
+    getFirstName,
+    removeDuplicates,
+    randomInt,
+    frontEndUser,
+    getAndVerifyUser,
+    speedTest,
+
+    COMPLETE_CLEAN,
+    FOR_EMPLOYER,
+    NO_TOKENS
+}
 
 
 module.exports = helperFunctions;

@@ -13,7 +13,6 @@ const {
     safeUser,
     userForAdmin,
     getFirstName,
-    sendBizUpdateCandidateErrorEmail,
     removeDuplicates
 } = require('../apis/helperFunctions');
 

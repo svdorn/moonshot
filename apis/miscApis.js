@@ -12,7 +12,8 @@ const { sanitize,
         sendEmail,
         safeUser,
         userForAdmin,
-        getFirstName
+        getFirstName,
+        frontEndUser
 } = require('./helperFunctions.js');
 
 
@@ -24,7 +25,6 @@ const miscApis = {
 
 
 function POST_createReferralCode(req, res) {
-    console.log("creating referral code");
     const name = sanitize(req.body.name);
     // make it to lower case so that it's case insensitive
     const email = sanitize(req.body.email).toLowerCase();
@@ -41,7 +41,7 @@ function POST_createReferralCode(req, res) {
             "<div style='color:black'>"
             +   "<p>Hello " + name + ",</p>"
 
-            +   "<p>Thank you for signing up as a Moonshot referrer! With us, you can shape the future of the workforce and get paid to do it. Moonshot trains and evaluates college students and recent graduates in skills and positions needed by employers. We do this by creating course pathways that evaluate candidates in positions that our employer partners are hiring for. <a href='https://moonshotinsights.io/discover'>Check out all of our live Pathways</a>.</p>"
+            +   "<p>Thank you for signing up as a Moonshot referrer! With us, you can shape the future of the workforce and get paid to do it. Moonshot trains and evaluates college students and recent graduates in skills and positions needed by employers. We do this by creating course pathways that evaluate candidates in positions that our employer partners are hiring for. <a href='https://moonshotinsights.io/'>Check out all of our positions</a>.</p>"
 
             +   "<p>You will earn $300 for everyone you send our way that gets a job through the Moonshot site.</p>"
 
@@ -110,8 +110,7 @@ function POST_createReferralCode(req, res) {
         else {
             // if the user already has a referral code, give them that
             sendReferralEmail(user.referralCode);
-            //res.json(user.referralCode);
-            return res.json("jangus");
+            res.json(user.referralCode);
         }
     });
 }
@@ -156,7 +155,6 @@ function POST_unsubscribeEmail(req, res) {
             optOutError(err);
         }
         else {
-            console.log("adding to opted-out list: ", req.body.email)
             optedOut.emails.push(req.body.email);
             optedOut.save(function(err2, newOptedOut) {
                 if (err2) {

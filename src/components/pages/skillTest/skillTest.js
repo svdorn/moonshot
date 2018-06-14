@@ -3,14 +3,14 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { addNotification, newCurrentUser } from "../../../actions/usersActions";
+import { addNotification, newCurrentUser, agreeToSkillTestTerms } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
 import { CircularProgress } from "material-ui";
 import ProgressBar from '../../miscComponents/progressBar';
 
-class PsychAnalysis extends Component {
+class SkillTest extends Component {
     constructor(props) {
         super(props);
 
@@ -18,7 +18,8 @@ class PsychAnalysis extends Component {
             selectedId: undefined,
             question: undefined,
             finished: false,
-            skillName: undefined
+            skillName: undefined,
+            agreedToTerms: false
         };
     }
 
@@ -28,17 +29,23 @@ class PsychAnalysis extends Component {
             const skillUrl = this.props.params.skillUrl;
             this.resetPage(skillUrl);
         } catch (getSkillUrlError) {
-            console.log(getSkillUrlError);
-            // TODO: go to discover skills page or somesuch
-            return this.goTo("/");
+            return this.goTo("/myEvaluations");
         }
     }
 
 
-    componentWillReceiveProps(newProps) {
+    // componentWillReceiveProps(newProps) {
+    //     // new skill url means we have a new skill to test
+    //     if (this.props.params.skillUrl !== newProps.params.skillUrl) {
+    //         this.resetPage(newProps.params.skillUrl);
+    //     }
+    // }
+
+
+    componentDidUpdate(prevProps, newState) {
         // new skill url means we have a new skill to test
-        if (this.props.params.skillUrl !== newProps.params.skillUrl) {
-            this.resetPage(newProps.params.skillUrl)
+        if (this.props.params.skillUrl !== prevProps.params.skillUrl) {
+            this.resetPage(this.props.params.skillUrl);
         }
     }
 
@@ -70,7 +77,7 @@ class PsychAnalysis extends Component {
             });
         })
         .catch(error => {
-            console.log("Error getting skill: ", error.response.data);
+            // console.log("Error getting skill: ", error.response.data);
         });
     }
 
@@ -125,36 +132,83 @@ class PsychAnalysis extends Component {
             axios.post("/api/skill/answerSkillQuestion", params)
             .then(result => {
                 this.props.newCurrentUser(result.data.updatedUser);
-                console.log("updatedUser: ", result.data.updatedUser);
                 let question = undefined;
                 if (result.data.question) {
                     question = result.data.question;
-                    question.options = this.shuffle(question.options);
+                    //question.options = this.shuffle(question.options);
                 }
                 this.setState({
                     selectedId: undefined,
                     finished: result.data.finished,
                     question
-                }, () => console.log("state is: ", this.state));
+                });
             })
             .catch(error => {
-                console.log("error saving answer: ", error);
+                // console.log("error saving answer: ", error);
             })
         }
+    }
+
+
+    handleCheckMarkClick() {
+        this.setState({ agreedToTerms: !this.state.agreedToTerms });
+    }
+
+
+    agreeToTerms() {
+        if (this.state.agreedToTerms) {
+            const currentUser = this.props.currentUser;
+            this.props.agreeToSkillTestTerms(currentUser._id, currentUser.verificationToken);
+        }
+    }
+
+
+    // rendered if the user is on the first skill test of an eval and hasn't agreed to the test terms
+    userAgreement() {
+        const buttonClass = this.state.agreedToTerms ? "skillContinueButton" : "disabled skillContinueButton";
+
+        return (
+            <div className="evalPortionIntro skillsUserAgreement center">
+                <div className="font24px" style={{marginBottom: "20px"}}><span>Skills</span></div>
+                <div>
+                    <p>This is the skills portion of the evaluation. Here you will be tested on your aptitude in one or more skills.</p>
+                    <p><span>TIME IS A FACTOR.</span> After 20 seconds for each question, your score for that question will decrease as time goes on.</p>
+                    <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
+                    <p>The number of questions in the skills test will change as you go depending on a number of factors. It will end once a score has been determined, but should take no more than 15 minutes.</p>
+                </div>
+                <br/>
+                <div>
+                    <div className="checkbox mediumCheckbox whiteCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                        <img
+                            alt=""
+                            className={"checkMark" + this.state.agreedToTerms}
+                            src="/icons/CheckMarkRoundedWhite.png"
+                        />
+                    </div>
+                    <p style={{padding: "0 40px"}}>By checking this box I agree that I will answer the questions without help from anyone or any external resources and that if I were to be discovered doing so, at any point, all my results are void.</p>
+                </div>
+                <br/>
+                {this.props.agreeingToTerms ?
+                    <CircularProgress style={{marginBottom: "40px"}} />
+                    :
+                    <div style={{marginBottom: "40px", width: "initial"}} className={buttonClass} onClick={this.agreeToTerms.bind(this)}>Begin</div>
+                }
+            </div>
+        );
     }
 
 
     finishTest() {
         // if the user is taking a position evaluation, go to the next step of that
         const user = this.props.currentUser;
-        const positionInProgress = user.positionInProgress;
-        if (positionInProgress) {
+        const currentPosition = user.currentPosition;
+        if (currentPosition) {
             // if there are skill tests the user still has to take, go to that skill test
-            if (positionInProgress.skillTests && positionInProgress.testIndex < positionInProgress.skillTests.length) {
-                this.goTo(`/skillTest/${positionInProgress.skillTests[positionInProgress.testIndex]}`);
+            if (currentPosition.skillTests && currentPosition.testIndex < currentPosition.skillTests.length) {
+                this.goTo(`/skillTest/${currentPosition.skillTests[currentPosition.testIndex]}`);
             }
             // otherwise, if there are free response questions to answer, go there
-            else if (positionInProgress.freeResponseQuestions && positionInProgress.freeResponseQuestions.length > 0) {
+            else if (currentPosition.freeResponseQuestions && currentPosition.freeResponseQuestions.length > 0) {
                 this.goTo("/freeResponse");
             }
             // otherwise, the user is done with the test; go home and give them
@@ -173,6 +227,16 @@ class PsychAnalysis extends Component {
 
 
     render() {
+        const currentUser = this.props.currentUser;
+        // make sure user is logged in
+        if (!currentUser) {
+            this.goTo("/login");
+        }
+        // have to have completed the psych test and admin questionsbefore you
+        // can take a skills - but only if you're taking an evaluation right now
+
+        console.log("RENDERING");
+
         let self = this;
         const skillName = this.state.skillName ? this.state.skillName : "Skill";
         const additionalMetaText = this.state.skillName ? " in " + this.state.skillName.toLowerCase() : "";
@@ -197,23 +261,49 @@ class PsychAnalysis extends Component {
 
         const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
 
-        let content = <CircularProgress/>;
-        if (question) {
-            content = (
-                <div>
-                    <StyledContent contentArray={question.body} style={{marginBottom:"40px"}} />
-                    { answers }
-                    <div className={buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
-                </div>
-            );
-        }
+        let content = <CircularProgress color="#FB553A" />;
 
         if (this.state.finished) {
             content = (
                 <div>
-                    Test Complete!
+                    Skill test complete!
                     <br/>
-                    <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finishTest.bind(this)}>Finish</div>
+                    <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finishTest.bind(this)}>Continue</div>
+                </div>
+            );
+        }
+        else if (currentUser.positionInProgress && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
+            content = (
+                <div className="blackBackground">
+                    You have to complete the administrative questions first!<br/>
+                    <button onClick={() => this.goTo("/adminQuestions")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                        Take me there!
+                    </button>
+                </div>
+            );
+        } else if (currentUser.positionInProgress && (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate)) {
+            content = (
+                <div>
+                    You have to complete the psychometric analysis first!
+                    <button onClick={() => this.goTo("/psychometricAnalysis")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                        Take me there!
+                    </button>
+                </div>
+            );
+        }
+
+        // if the user hasn't agreed to the terms, prompt them to
+        else if (currentUser.currentPosition && !currentUser.currentPosition.agreedToSkillTestTerms) {
+            content = this.userAgreement();
+        }
+
+        // otherwise, good to go - show them the question
+        else if (question) {
+            content = (
+                <div>
+                    <StyledContent contentArray={question.body} style={{marginBottom:"40px"}} />
+                    { answers }
+                    <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
                 </div>
             );
         }
@@ -225,7 +315,7 @@ class PsychAnalysis extends Component {
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
                 </MetaTags>
                 <div className="employerHeader" />
-                <ProgressBar />
+                <ProgressBar skillName={skillName}/>
                 { content }
             </div>
         );
@@ -235,15 +325,16 @@ class PsychAnalysis extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addNotification, newCurrentUser
+        addNotification, newCurrentUser, agreeToSkillTestTerms
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        agreeingToTerms: state.users.loadingSomething
     };
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(PsychAnalysis);
+export default connect(mapStateToProps, mapDispatchToProps)(SkillTest);

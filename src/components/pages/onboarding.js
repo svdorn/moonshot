@@ -430,7 +430,7 @@ class Onboarding extends Component {
         this.saveAllInfo();
         const markOnboardingComplete = true;
         // defaults to going to discover after finishing onboarding
-        let nextUrl = "/discover";
+        let nextUrl = "/myEvaluations";
         let removeRedirectField = false;
         // if the user had somewhere else to redirect to after onboarding, go there
         if (this.props.currentUser.redirect) {
