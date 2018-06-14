@@ -14,7 +14,7 @@ import {
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
-import {closeNotification} from "../../../actions/usersActions";
+import {closeNotification,openAddUserModal} from "../../../actions/usersActions";
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
@@ -130,6 +130,10 @@ class MyCandidates extends Component {
         });
     };
 
+    openAddUserModal() {
+        this.props.openAddUserModal();
+    }
+
     search() {
         // need a position to search for
         if (!this.state.noPositions && this.state.position) {
@@ -224,15 +228,35 @@ class MyCandidates extends Component {
         );
 
         if (this.state.noCandidates) {
+            if (this.state.hiringStage == "" && this.state.term == "") {
             candidatePreviews = (
-                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
+                <div className="center marginTop50px">
+                <div className="marginBottom15px font32px font28pxUnder500 clickable blueTextHome" onClick={this.openAddUserModal.bind(this)}>
+                    + <bdi className="underline">Add Candidates</bdi>
+                </div>
+                <div style={{color: "rgba(255,255,255,.8)"}}>
                     No candidates
                     {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
                     {(this.state.hiringStage == "Not Contacted" || this.state.hiringStage == "Contacted" || this.state.hiringStage == "Interviewing" || this.state.hiringStage == "Hired")
                     ? <bdi> with {this.state.hiringStage.toLowerCase()} for the hiring stage</bdi>
                     :null}.
                 </div>
+                <div className="marginTop15px" style={{color: "rgba(255,255,255,.8)"}}>
+                    Add them <bdi className="clickable underline blueTextHome" onClick={this.openAddUserModal.bind(this)}>Here</bdi> so they can get started.
+                </div>
+                </div>
             )
+            } else {
+                candidatePreviews = (
+                    <div style={{color: "rgba(255,255,255,.8)"}}>
+                        No candidates
+                        {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
+                        {(this.state.hiringStage == "Not Contacted" || this.state.hiringStage == "Contacted" || this.state.hiringStage == "Interviewing" || this.state.hiringStage == "Hired")
+                        ? <bdi> with {this.state.hiringStage.toLowerCase()} for the hiring stage</bdi>
+                        :null}.
+                    </div>
+                );
+            }
         }
 
         if (this.state.noPositions) {
@@ -428,7 +452,8 @@ class MyCandidates extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        closeNotification
+        closeNotification,
+        openAddUserModal
     }, dispatch);
 }
 
