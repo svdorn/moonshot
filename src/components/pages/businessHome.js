@@ -567,6 +567,7 @@ class BusinessHome extends Component {
                             component={renderTextField}
                             label="Work Email"
                             className="marginTop10px"
+                            validate={[required]}
                         /><br/>
                         <RaisedButton
                             label="Watch Demo"
