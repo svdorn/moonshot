@@ -260,7 +260,7 @@ class AdminQuestions extends Component {
             );
         }
         return (
-            <div>
+            <div className="adminQuestionsContainer">
                 <div className="adminQuestions question">{question.questionText}</div>
                 <div className="center">
                     <div className="center adminQuestions gradingSliderContainer">
