@@ -300,9 +300,9 @@ class EmployeePreview extends Component {
                             onClick={this.handleOpen.bind(this)}>
                         Grade
                     </button>
-                    <i className="completionStage clickable underline center font14px marginLeft30px" onClick={this.openEmployeeResults.bind(this)}>
+                    {/*<i className="completionStage clickable underline center font14px marginLeft30px" onClick={this.openEmployeeResults.bind(this)}>
                         See Results
-                    </i>
+                    </i>*/}
                 </div>
             </div>
             }
