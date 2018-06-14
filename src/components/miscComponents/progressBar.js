@@ -29,6 +29,7 @@ class ProgressBar extends Component {
         let numSteps = 2;
         if (currentPosition.skillTests) {
             numSteps += currentPosition.skillTests.length;
+
         }
         if (currentPosition.freeResponseQuestions && currentPosition.freeResponseQuestions.length) {
             numSteps++;

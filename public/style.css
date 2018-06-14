@@ -219,6 +219,16 @@ form > h1 {
     position: relative;
     background-color: #CBCBCB;
 }
+.progressBarDialog {
+    width: 60%;
+    margin-left: 20%;
+    margin-top: 10px;
+    margin-bottom: 15px;
+    height: 6px;
+    --stepCircleWidth: 18px;
+    position: relative;
+    background-color: #CBCBCB;
+}
 .progressStepBars {
     width: 100%;
     display: flex;
@@ -228,6 +238,10 @@ form > h1 {
 .progressStepBar {
     flex: 1;
     height: 100%;
+}
+.progressStepBarDialog {
+    flex: 1;
+    height: 50%;
 }
 .progressStepCircles {
     position: absolute;
@@ -700,7 +714,7 @@ form > h1 {
 .flex { display: flex; }
 .i { font-style: italic; }
 .infoText { margin: 0; }
-.infoText.notFull { max-width: calc(1040px/2 - 150px)}
+.infoText.notFull { max-width: calc(1040px/2 - 100px)}
 .infoText.flex {
     justify-content: space-between;
     flex-direction: row;

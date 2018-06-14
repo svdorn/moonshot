@@ -30,6 +30,7 @@ import ReferralCode from './components/pages/referralCode';
 import Admin from './components/pages/admin';
 import PrivacyPolicy from './components/policies/privacyPolicy';
 import TermsOfUse from './components/policies/termsOfUse';
+import ServiceLevelAgreement from './components/policies/serviceLevelAgreement';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
 
 import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
@@ -87,12 +88,6 @@ const routes = (
             <Route path="positionSignup" component={PositionSignup} />
             <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
             <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
-
-            {/*<Route path="evaluation/:businessId/:positionId" component={}>
-                <Route path="psychAnalysis" component={PsychAnalysis} />
-                <Route path="skillTest/:skillUrl" component={SkillTest} />
-                <Route path="freeResponse" component={FreeResponse} />
-            </Route>*/}
 
             <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} userType={adminUserTypes}>
                 <IndexRoute component={AdminPages} />

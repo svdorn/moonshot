@@ -11,11 +11,24 @@ import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } 
 import {Field, reduxForm} from 'redux-form';
 import AddUserDialog from '../childComponents/addUserDialog';
 import YouTube from 'react-youtube';
+import ProgressBarDialog from '../miscComponents/progressBarDialog';
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
         hintStyle={{color: 'white'}}
+        inputStyle={{color: '#72d6f5'}}
+        underlineStyle={{color: '#72d6f5'}}
+        errorText={touched && error}
+        {...input}
+        {...custom}
+    />
+);
+
+const renderBlueTextField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        hintStyle={{color: '#72d6f5'}}
         inputStyle={{color: '#72d6f5'}}
         underlineStyle={{color: '#72d6f5'}}
         errorText={touched && error}
@@ -56,7 +69,9 @@ class BusinessHome extends Component {
             dialogScreen: 1,
             email: '',
             // initially don't show the rectangles in case the user's browser is old
-            showRectangles: false
+            showRectangles: false,
+            agreeingToTerms: false,
+            error: ''
         }
     }
 
@@ -95,6 +110,12 @@ class BusinessHome extends Component {
         this.setState({open: false, dialogScreen: 1});
     };
 
+    handleCheckMarkClick() {
+        this.setState({
+            agreeingToTerms: !this.state.agreeingToTerms,
+            error: ''
+        })
+    };
 
     handleSubmit(e) {
         e.preventDefault();
@@ -187,6 +208,13 @@ class BusinessHome extends Component {
         e.preventDefault();
         const vals = this.props.formData.forBusiness.values;
 
+        if (!this.state.agreeingToTerms) {
+            this.setState({error: "Must agree to Terms and Conditions to continue."});
+            return;
+        } else {
+            this.setState({error: ''});
+        }
+
         // Form validation before submit
         let notValid = false;
         const requiredFields = [
@@ -209,8 +237,10 @@ class BusinessHome extends Component {
 
         const user = {
             name: this.props.formData.forBusiness.values.name,
+            email: this.props.formData.forBusiness.values.email,
             company: this.props.formData.forBusiness.values.company,
-            password: this.props.formData.forBusiness.values.password
+            password: this.props.formData.forBusiness.values.password,
+            termsAndConditions: this.state.agreeingToTerms
         };
 
         this.props.dialogEmailScreen2(user);
@@ -383,6 +413,7 @@ class BusinessHome extends Component {
             {
                 title: (<div>Employee<br/>Completion</div>),
                 info: "Employees complete the evaluation to create a baseline for candidates.",
+                belowInfo: "Not necessary to get started.",
                 list: [
                     "Create Baseline",
                     "Better Understand Employers",
@@ -393,6 +424,7 @@ class BusinessHome extends Component {
             {
                 title: (<div>Manager<br/>Feedback</div>),
                 info: "Managers complete a ~2 minute assessment for each employee so Moonshot can create performance profiles to analyze candidates.",
+                belowInfo: "Not necessary to get started.",
                 list: [
                     "Performance Profiles",
                     "Performance Management"
@@ -473,6 +505,11 @@ class BusinessHome extends Component {
                         <div>
                             <div>
                                 { processObjects[this.state.infoIndex].info }
+                                { processObjects[this.state.infoIndex].belowInfo ?
+                                <div className="font14px font12pxUnder850 font10pxUnder700 font8pxUnder400 marginTop10px">
+                                    <i>{ processObjects[this.state.infoIndex].belowInfo }</i>
+                                </div>
+                                : null }
                             </div>
                         </div>
                         <div/>
@@ -519,7 +556,7 @@ class BusinessHome extends Component {
                 ?
                 <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
                         <div
-                            className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
+                            className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop30px">
                             See Demo
                         </div>
                         <div className="whiteText font16px font14pxUnder500" style={{width: "85%", margin: "10px auto"}}>
@@ -528,14 +565,13 @@ class BusinessHome extends Component {
                         <Field
                             name="email"
                             component={renderTextField}
-                            label="Work Email*"
-                            validate={[required, emailValidate]}
+                            label="Work Email"
+                            className="marginTop10px"
                         /><br/>
                         <RaisedButton
-                            label="Continue"
+                            label="Watch Demo"
                             type="submit"
-                            className="raisedButtonBusinessHome"
-                            style={{marginTop: '20px'}}
+                            className="raisedButtonBusinessHome marginTop30px"
                         />
                     </form>
                 :
@@ -556,21 +592,20 @@ class BusinessHome extends Component {
             case 1:
                 dialogBody = (
                     <form onSubmit={this.handleSubmitDialogEmail.bind(this)} className="center">
-                        <div
-                            className="whiteTextImportant font22px font20pxUnder700 font18pxUnder500 marginTop10px">
-                            Get Started
+                        <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop40px">
+                            Try Moonshot Insights for Free
                         </div>
                         <Field
                             name="email"
                             component={renderTextField}
-                            label="Work Email*"
+                            label="Work Email"
                             validate={[required, emailValidate]}
+                            className="marginTop10px"
                         /><br/>
                         <RaisedButton
                             label="Continue"
                             type="submit"
-                            className="raisedButtonBusinessHome"
-                            style={{marginTop: '20px'}}
+                            className="raisedButtonBusinessHome marginTop20px"
                             />
                     </form>
                 );
@@ -579,41 +614,57 @@ class BusinessHome extends Component {
                 dialogBody = (
                     <form onSubmit={this.handleSubmitDialogEmailScreen2.bind(this)} className="center">
                         <div
-                            className="whiteTextImportant font28px font24pxUnder700 font20pxUnder500 marginTop10px">
+                            className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop10px">
                             Get Started
                         </div>
-                        <div className="whiteText font14px font12pxUnder500" style={{width: "95%", margin: "10px auto"}}>
+                        <div className="whiteText font14px font12pxUnder500" style={{width: "95%", margin: "7px auto"}}>
                             No credit card required. Customized position assessment.
                         </div>
+                        {this.state.error != ''
+                        ? <div className="redText font14px font12pxUnder500" style={{width:"90%", margin:"7px auto"}}>
+                                {this.state.error}
+                        </div>
+                        : null}
                         <Field
                             name="name"
                             component={renderTextField}
-                            label="Full Name*"
+                            label="Full Name"
                             validate={[required]}
                         /><br/>
                         <Field
                             name="company"
                             component={renderTextField}
-                            label="Company*"
+                            label="Company"
                             validate={[required]}
                         /><br/>
                         <Field
                             name="password"
                             component={renderPasswordField}
-                            label="Password*"
+                            label="Password"
                             validate={[required]}
                         /><br/>
                         <Field
                             name="confirmPassword"
                             component={renderPasswordField}
-                            label="Confirm Password*"
+                            label="Confirm Password"
                             validate={[required, passwordsMatch]}
                         /><br/>
+                        <div style={{margin: "10px auto 10px"}} className="whiteText font14px">
+                            <div className="checkbox smallCheckbox whiteCheckbox"
+                                 onClick={this.handleCheckMarkClick.bind(this)}>
+                                <img
+                                    alt=""
+                                    className={"checkMark" + this.state.agreeingToTerms}
+                                    src="/icons/CheckMarkRoundedWhite.png"
+                                />
+                            </div>
+                            I have read and agree to the Moonshot Insights <a className="blueTextHome" href="/privacyPolicy" target="_blank">Privacy
+                            Policy</a>, <a className="blueTextHome" href="/termsOfUse" target="_blank">Terms of Use</a>, and <a className="blueTextHome" href="/serviceLevelAgreement" target="_blank">Service Level Agreement</a>.
+                        </div>
                         <RaisedButton
                             label="Continue"
                             type="submit"
-                            className="raisedButtonBusinessHome"
-                            style={{marginTop: '20px'}}
+                            className="raisedButtonBusinessHome marginTop10px"
                         />
                     </form>
                 );
@@ -621,19 +672,19 @@ class BusinessHome extends Component {
             case 3:
                 dialogBody = (
                     <form onSubmit={this.handleSubmitDialogEmailScreen3.bind(this)} className="center">
-                        <div className="whiteTextImportant font20px font18pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                        <div className="blueTextHome font22px" style={{width:"90%", margin:"10px auto"}}>
                             Just a few quick things to set up your assessment.
                         </div>
-                        <div className="whiteText font14px font12pxUnder500" style={{width: "90%", margin: "10px auto"}}>
-                            <i>Every position has a psychometric analysis. <div className="above800only noHeight"><br/></div>We already created that for you.</i>
+                        <div className="whiteText font14px" style={{width: "90%", margin: "10px auto"}}>
+                            Every position has a psychometric analysis. <div className="above800only noHeight"><br/></div>We already created that for you.
                         </div>
-                        <div className="whiteText font16px font14pxUnder500" style={{width: "90%", margin: "10px auto 10px"}}>
-                            What positions do you want to select for the assessment?
+                        <div className="whiteText font14px" style={{width: "90%", margin: "10px auto 10px"}}>
+                            What position do you want to select for the assessment?
                         </div>
                         <Field
                             name="positions"
-                            component={renderTextField}
-                            label="Positions*"
+                            component={renderBlueTextField}
+                            label="Position (e.g. Business Analyst)"
                             validate={[required]}
                         /><br/>
                         <RaisedButton
@@ -648,11 +699,11 @@ class BusinessHome extends Component {
             case 4:
             dialogBody = (
                 <form onSubmit={this.handleSubmitDialogEmailScreen4.bind(this)} className="center">
-                    <div className="whiteTextImportant font16px font14pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                    <div className="blueTextHome font22px" style={{width:"90%", margin:"10px auto"}}>
                         What skills do you need to be successful in this position?
                     </div>
-                    <div className="whiteText font14px font12pxUnder500" style={{width: "90%", margin: "10px auto 10px"}}>
-                        <i>No research required, we will do that for you. We just want the first three skills that come to mind.</i>
+                    <div className="whiteText font14px" style={{width: "90%", margin: "10px auto 10px"}}>
+                        No research required, we will do that for you. We just want the first three skills that come to mind.
                     </div>
                     <Field
                         name="skill1"
@@ -685,16 +736,17 @@ class BusinessHome extends Component {
                 const calendly = <div className="calendly-inline-widget" data-url="https://calendly.com/kyle-treige-moonshot/30min" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
                 dialogBody = (
                     <div>
-                        <div className="whiteTextImportant font20px font18pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                        <div className="blueTextHome font22px" style={{width:"90%", margin:"10px auto"}}>
                             Activate your Assessment
                         </div>
-                        <div className="whiteTextImportant font12px font10pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                        <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"97%", margin:"10px auto"}}>
                             Our team is now hard at work creating your assessment. Before we can activate
                             your account, we need to take a few minutes to ensure we are on the same page
-                            with the assessment and roll out the process.
+                            with the assessment and roll out the process. Once you have set a time, you can close out.
+                            We will be preparing your position assessment for our demo. See you soon!
                         </div>
                         <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"90%", margin:"10px auto"}}>
-                            We need to chat. Find a time below.
+                            Find a time below.
                         </div>
                         {calendly}
                     </div>
@@ -715,6 +767,7 @@ class BusinessHome extends Component {
                 contentClassName="center"
                 overlayClassName="dialogOverlay"
             >
+                <ProgressBarDialog stepNumber={this.state.dialogScreen}/>
                 {dialogBody}
             </Dialog>
         );
@@ -762,8 +815,8 @@ class BusinessHome extends Component {
                                         See Demo
                                     </div>
                                 </div>
-                                <div className="infoText i flex font12pxUnder400">
-                                    <div>Free for first position</div>
+                                <div className="infoText i flex font18px font16pxUnder1000 font14pxUnder800 font16pxUnder700 font14pxUnder600 font10pxUnder400">
+                                    <div>Free for first active position</div>
                                     <div>•</div>
                                     <div>Unlimited evaluations</div>
                                 </div>
@@ -936,14 +989,9 @@ class BusinessHome extends Component {
                                     </div>
                                 </div>
                             </div>
-                            <div className="center">
-                                <button className="blueToDarkPurpleButtonGradient bigButton"
-                                        style={{marginTop: "35px", color: '#72d6f5'}}
-                                        onClick={this.handleOpen}
-                                >
-                                    <div className="invertColorOnHover gradientBorderButtonInteriorBlack">
-                                        {"Learn More"}
-                                    </div>
+                            <div className="center" style={{marginTop: "35px"}}>
+                                <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                    Try for Free
                                 </button>
                             </div>
                         </div>
@@ -986,12 +1034,10 @@ class BusinessHome extends Component {
                                  style={{marginBottom: '50px'}}>
                                 The New Baseline Evaluation
                                 <div className="infoTextContainer">
-                                    <div className="infoText i flex font18px font16pxUnder700 font12pxUnder400 whiteText width400px width300pxUnder700 width250pxUnder400" style={{margin: 'auto'}}>
-                                        <div>Unlimited Candidates</div>
+                                    <div className="infoText i flex font18px font16pxUnder700 font10pxUnder400 whiteText" style={{margin: 'auto'}}>
+                                        <div>Free for First Active Position</div>
                                         <div>•</div>
-                                        <div>Unlimited Hires</div>
-                                        <div>•</div>
-                                        <div>Free for First Position</div>
+                                        <div>Unlimited Evaluations of your Applicants</div>
                                     </div>
                                 </div>
                             </div>
@@ -1010,7 +1056,7 @@ class BusinessHome extends Component {
                                         <span className="whiteText font30px font24pxUnder400">
                                             <br/><span style={{display: "inline-block", marginTop:"3px"}}>FREE</span>
                                             <br/>
-                                            <i className="font12px">for first position</i>
+                                            <i className="font12px">for first active position</i>
                                         </span>
                                     </div>
                                     <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
@@ -1039,7 +1085,7 @@ class BusinessHome extends Component {
                                             <i className="font12px" style={{display: "inline-block", marginBottom:"9px"}}>Starting at</i>
                                             <br/>$79
                                             <br/>
-                                            <i className="font12px">per additional position/month</i>
+                                            <i className="font12px">per active position/month</i>
                                         </span>
                                     </div>
                                     <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
@@ -1064,15 +1110,11 @@ class BusinessHome extends Component {
                                 alt="CrystalBall"
                                 className="crystalBall"
                             />
-                            <br/>
-                            <button className="blueToDarkPurpleButtonGradientReverse bigButton"
-                                    style={{marginTop: "25px", color: 'white'}}
-                                    onClick={this.handleOpen}
-                            >
-                                <div className="invertColorOnHover gradientBorderButtonInteriorGradient">
-                                    {"See the Future"}
-                                </div>
-                            </button>
+                            <div className="center" style={{marginTop: "10px"}}>
+                                <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                    Try for Free
+                                </button>
+                            </div>
                         </div>
                     </section>
                 </div>
