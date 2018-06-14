@@ -1322,7 +1322,7 @@ async function POST_answerPsychQuestion(req, res) {
     user.psychometricTest = psychometricTest;
 
     // grade the test if it's finished
-    if (finishedTest) {
+    if (finishedTest && user.userType === "candidate") {
         user = calculatePsychScores(user);
     }
 
