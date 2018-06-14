@@ -233,13 +233,13 @@ class EmployerLogin extends Component {
         return (
             <div className="fillScreen blackBackground formContainer">
                 <MetaTags>
-                    <title>Log In | Moonshot</title>
+                    <title>Activate Account | Moonshot</title>
                     <meta name="description" content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
                 </MetaTags>
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1 style={{marginTop:"15px"}}>Log In</h1>
+                        <h1 style={{marginTop:"15px"}}>Activate Account</h1>
                         <div className="inputContainer">
                             {/* <!-- <div className="fieldWhiteSpace"/> --> */}
                             <Field
