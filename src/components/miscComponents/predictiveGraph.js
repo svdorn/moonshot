@@ -181,7 +181,7 @@ class PredictiveGraph extends Component {
                         {point.unavailable ?
                             <HoverTip
                                 style={{minWidth: `${interiorWidth/2}px`}}
-                                text="Unavailable - not enough candidate data to predict this value."
+                                text="Unavailable - not enough employee data to predict this value."
                             />
                             :
                             null

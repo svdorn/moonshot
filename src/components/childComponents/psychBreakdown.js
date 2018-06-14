@@ -16,14 +16,33 @@ class PsychBreakdown extends Component {
     }
 
 
+    round(number, decimalPlaces) {
+        // get the number version if it's a string
+        let rounded = typeof number === "number" ? number : parseInt(number);
+        // if it can't be converted from a string to int, return the original string
+        if (isNaN(rounded)) { return number; }
+        let tenExponent = 0;
+        // if the user want extra decimal places, have to multiply before rounding
+        if (typeof decimalPlaces === "number") { tenExponent = decimalPlaces; }
+        rounded = rounded * Math.pow(10, tenExponent);
+        rounded = Math.round(rounded);
+        rounded = rounded / Math.pow(10, tenExponent)
+        return rounded;
+    }
+
+
     makeLRversion(score) {
-        if (score === 0) {
+        let rounded = this.round(score, 1);
+
+        if (rounded === 0) {
             return "0";
-        } else if (score > 0) {
-            return `${score}R`;
+        } else if (rounded > 0) {
+            return `${rounded}R`;
         } else {
-            return `${score * -1}L`
+            return `${rounded * -1}L`
         }
+
+        return score
     }
 
 
