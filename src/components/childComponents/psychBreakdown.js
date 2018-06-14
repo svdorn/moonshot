@@ -122,7 +122,7 @@ class PsychBreakdown extends Component {
                 width: "8px"
             }
             return (
-                <div className="areaData center">
+                <div className="areaData center" style={{cursor: "pointer"}} onMouseEnter={() => this.selectTitle(area.name)} >
                     <div className="title" onClick={() => this.selectTitle(area.name)}>
                         {area.name}
                     </div>
@@ -147,7 +147,7 @@ class PsychBreakdown extends Component {
                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.left}</div>
                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.right}</div>
                 </div>
-                <div className="youMedianMiddle" style={{color:"white"}}>
+                <div className="youMedianMiddle" style={{color:"white", marginBottom: "0px"}}>
                     <div>{forCandidate ? "Your" : "Their"} Score: {this.makeLRversion(selectedArea.score)}</div>
                     <div>Median: {this.makeLRversion(selectedArea.stats.median)}</div>
                     <div>Middle 80%: {this.makeLRversion(selectedArea.stats.middle80.minimum)} - {this.makeLRversion(selectedArea.stats.middle80.maximum)}</div>
