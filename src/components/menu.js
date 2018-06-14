@@ -263,8 +263,8 @@ class Menu extends Component {
                     //{optionType: "url", title: "Profile", url: "/businessProfile"},
                     {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
-                    {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "url", title: "Add User", url: "/addUser"},
+                    {optionType: "url", title: "Settings", url: "/settings"},
                     {optionType: "signOut"}
                 ]}
             ];

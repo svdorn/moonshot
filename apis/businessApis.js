@@ -118,7 +118,7 @@ function POST_emailInvites(req, res) {
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
                     + '<p style="width:95%; display:inline-block; text-align:left;">&#09;Congratulations, ' + businessName
-                    + ' advanced you to next step for the ' + positionName + ' position. The next step is completing ' + businessName + '&#39;s evaluation on Moonshot.'
+                    + ' advanced you to the next step for the ' + positionName + ' position. The next step is completing ' + businessName + '&#39;s evaluation on Moonshot.'
                     + ' Please click the button below to create your account. Once you&#39;ve created your account, you can begin your evaluation.'
                     + '</p>'
                     + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot and congrats on advancing to the next step for the ' + positionName + ' position!</p><br/>'
@@ -156,13 +156,13 @@ function POST_emailInvites(req, res) {
             }
             // send email
             let recipient = [employeeEmails[i]];
-            let subject = businessName + " invited you to take " + positionName + " position evaluation";
+            let subject = businessName + " invited you to take the " + positionName + " evaluation";
             let content =
                 '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                     + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
                     + '<p style="width:95%; display:inline-block; text-align:left;">' + userName + ' invited you to complete an evaluation for ' + businessName + '&#39;s ' + positionName + ' position.'
                     + ' Your participation will help create a baseline for ' + businessName + '&#39;s predictive candidate evaluations for incoming applicants.'
-                    + ' Please click the button below to create an account. Once you&#39;ve created your account you can begin your evaluation!</p>'
+                    + ' Please click the button below to create an account. Once you&#39;ve created your account you can begin your evaluation.</p>'
                     + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
                     + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
                     + code + "&userCode=" + userCode

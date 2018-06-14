@@ -304,7 +304,7 @@ class AddUserDialog extends Component {
         const candidateSection = (
             <div className="center marginTop20px">
                 <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
-                    Candidates are incoming applicants that undergo psychometric and skills evaluations.
+                    Candidates are incoming applicants that undergo predictive evaluations.
                 </div>
                 <div>
                     {candidateEmailSection}
@@ -440,10 +440,10 @@ class AddUserDialog extends Component {
                     contentClassName="center"
                     >
                         <div className="blueTextHome font24px font20pxUnder500 marginTop20px">
-                            Success!
+                            Success
                         </div>
                         <div className="whiteText font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
-                            Success! Your invites have been sent to the users emails with sign up instructions for the {this.state.position} position!
+                            Success! Your invites have been sent to the users emails with sign up instructions for the {this.state.position} position
                         </div>
                         <RaisedButton
                             label="Done"
@@ -566,7 +566,7 @@ class AddUserDialog extends Component {
                         Last Step
                     </div>
                     <div className="whiteText font16px font12pxUnder500" style={{margin:"20px auto", width:"85%"}}>
-                        Wait! You have one more step! Click Finish to send the invites to your candidates, employees and/or admins so they can begin!
+                        Wait! You have one more step. Click Finish to send the invites to your candidates, employees and/or admins so they can begin.
                     </div>
                     <div className="center marginTop40px">
                         <i className="font14px underline clickable whiteText"
