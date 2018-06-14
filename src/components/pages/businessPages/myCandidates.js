@@ -445,6 +445,8 @@ class MyCandidates extends Component {
                         {candidatePreviews}
                     </ul>
                 </div>
+
+                <div style={{height: "40px"}} />
             </div>
         );
     }
