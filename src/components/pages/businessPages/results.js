@@ -105,10 +105,10 @@ class Results extends Component {
             });
         })
         .catch(error => {
-            console.log("error: ", error);
-            if (error.response && error.response.data) {
-                console.log(error.response.data);
-            }
+            // console.log("error: ", error);
+            // if (error.response && error.response.data) {
+            //     console.log(error.response.data);
+            // }
         });
     }
 

@@ -146,7 +146,7 @@ class StyledContent extends Component {
                     }
                     break;
                 default:
-                    console.log("content part type unnaccounted for");
+                    // console.log("content part type unnaccounted for");
                     break;
             }
         });

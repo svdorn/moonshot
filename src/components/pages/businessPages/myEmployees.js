@@ -104,11 +104,11 @@ class MyEmployees extends Component {
             );
             })
             .catch(function(err) {
-                console.log("error getting the employee questions: ", err);
+                // console.log("error getting the employee questions: ", err);
             })
         })
         .catch (function(error) {
-            console.log("error getting the positions: ", error);
+            // console.log("error getting the positions: ", error);
         })
     }
 
@@ -134,7 +134,7 @@ class MyEmployees extends Component {
                     }
                 }
             }).catch(function (err) {
-                console.log("ERROR with Employee search: ", err);
+                // console.log("ERROR with Employee search: ", err);
             })
         }
     }

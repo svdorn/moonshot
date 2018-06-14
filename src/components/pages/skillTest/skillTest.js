@@ -28,7 +28,6 @@ class SkillTest extends Component {
             const skillUrl = this.props.params.skillUrl;
             this.resetPage(skillUrl);
         } catch (getSkillUrlError) {
-            console.log(getSkillUrlError);
             return this.goTo("/myEvaluations");
         }
     }
@@ -69,7 +68,7 @@ class SkillTest extends Component {
             });
         })
         .catch(error => {
-            console.log("Error getting skill: ", error.response.data);
+            // console.log("Error getting skill: ", error.response.data);
         });
     }
 
@@ -136,7 +135,7 @@ class SkillTest extends Component {
                 });
             })
             .catch(error => {
-                console.log("error saving answer: ", error);
+                // console.log("error saving answer: ", error);
             })
         }
     }

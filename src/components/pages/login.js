@@ -116,7 +116,7 @@ class Login extends Component {
                 })
             })
             .catch(function (err) {
-                console.log("error getting 'keep me logged in' option")
+                // console.log("error getting 'keep me logged in' option")
             });
         }
     }
@@ -200,7 +200,7 @@ class Login extends Component {
 
         axios.post("/api/user/keepMeLoggedIn", { stayLoggedIn: !this.state.keepMeLoggedIn })
         .catch(function(err) {
-            console.log("error posting 'keep me logged in' option: ", err);
+            // console.log("error posting 'keep me logged in' option: ", err);
         });
         this.setState({
             ...this.state,

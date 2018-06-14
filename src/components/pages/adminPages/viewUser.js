@@ -55,7 +55,7 @@ class ViewUser extends Component {
                 });
             })
             .catch(function (err) {
-                console.log("error with getting info for admin");
+                // console.log("error with getting info for admin");
             })
     }
 

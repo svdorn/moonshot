@@ -25,18 +25,6 @@ class PsychAnalysis extends Component {
         if (!currentUser) {
             this.goTo("/login");
         }
-        // if the user hasn't signed up for the test
-        else if (!currentUser.psychometricTest) {
-            console.log("Have to have started the psych test first!");
-            // TODO: make this go to the psych analysis landing page instead of home
-            this.goTo("/");
-        }
-        // if the user already took the test, can't do it again
-        else if (currentUser.psychometricTest.inProgress === false) {
-            console.log("Can only take the psych test once!");
-            // TODO: make this go to the psych analysis landing page instead of home
-            this.goTo("/");
-        }
     }
 
 
@@ -151,7 +139,6 @@ class PsychAnalysis extends Component {
         // user is taking the psych test currently - get the question
         const currentQuestion = psychometricTest.currentQuestion;
         if (!currentQuestion) {
-            console.log("No question.");
             return (
                 <div>Error</div>
             );
@@ -164,7 +151,6 @@ class PsychAnalysis extends Component {
         const questionId = currentQuestion.questionId;
 
         if (!question || !leftOption || !rightOption) {
-            console.log("Question or left option or right option not available.");
             return (
                 <div>Error</div>
             );

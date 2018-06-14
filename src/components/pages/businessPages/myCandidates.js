@@ -94,7 +94,7 @@ class MyCandidates extends Component {
             }
         })
         .catch(function (err) {
-            console.log("error getting positions: ", err);
+            // console.log("error getting positions: ", err);
         });
     }
 
@@ -153,7 +153,7 @@ class MyCandidates extends Component {
                     }
                 }
             }).catch(function (err) {
-                console.log("ERROR: ", err);
+                // console.log("ERROR: ", err);
             })
         }
     }

@@ -35,8 +35,6 @@ class AdminQuestions extends Component {
             this.setState({finished: true});
         }
 
-        console.log(currentUser);
-
         const self = this;
 
         // get the admin questions
@@ -47,11 +45,9 @@ class AdminQuestions extends Component {
             }
         })
         .then(response => {
-            console.log("response.data: ", response.data);
             const questionInfo = response.data;
 
             if (!Array.isArray(questionInfo.demographics) || questionInfo.demographics.length === 0) {
-                console.log("no demographics questions");
                 return;
             }
 
@@ -76,7 +72,6 @@ class AdminQuestions extends Component {
                     // if they should, get them a self rating question
                     if (currentUser.userType === "employee") {
                         if (!Array.isArray(questionInfo.selfRating) || questionInfo.selfRating.length === 0) {
-                            console.log("no self rating questions");
                             return;
                         }
 
@@ -109,17 +104,16 @@ class AdminQuestions extends Component {
             }
 
             // see if the user has already answered some questions
-            self.setState({...questionInfo, question, questionType}, () => { console.log("state: ", self.state)});
+            self.setState({...questionInfo, question, questionType});
         })
         .catch(error => {
-            console.log("error getting admin questions: ", error);
+            // console.log("error getting admin questions: ", error);
         });
     }
 
 
     findUnansweredIndex(questionType, realQuestions, excludeThis) {
         const currentUser = this.props.currentUser;
-        console.log("finding unansweredIndex");
         return realQuestions.findIndex(realQ => {
             // question answered if user's answered questions contain the question
             return realQ._id.toString() !== excludeThis && !currentUser.adminQuestions[questionType].some(userQ => {
@@ -152,7 +146,6 @@ class AdminQuestions extends Component {
 
         const demographics = this.state.demographics;
         if (!Array.isArray(demographics)) {
-            console.log("No demographics questions!");
             return;
         }
         const demographicsLength = demographics.length;
@@ -166,7 +159,6 @@ class AdminQuestions extends Component {
                 // check that self rating questions exist
                 const selfRating = this.state.selfRating;
                 if (!Array.isArray(selfRating)) {
-                    console.log("No self rating questions!");
                     return;
                 }
 
@@ -223,7 +215,6 @@ class AdminQuestions extends Component {
         const user = this.props.currentUser;
         const currentPosition = user.currentPosition;
         if (currentPosition) {
-            console.log("here");
             // if the user has not taken the psych test, go to that
             if (!user.psychometricTest || !user.psychometricTest.endDate) {
                 this.goTo(`/psychometricAnalysis`);
@@ -294,7 +285,6 @@ class AdminQuestions extends Component {
         const question = this.state.question;
 
         if (!Array.isArray(question.options)) {
-            console.log("Multiple choice question has no answers!");
             return null;
         }
 
