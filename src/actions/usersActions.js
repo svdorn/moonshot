@@ -49,11 +49,11 @@ export function emailFailureExitPage() {
     }
 }
 
-export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName) {
+export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName, employerAgreedToTerms) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
 
-        axios.post("/api/user/login", {user, saveSession})
+        axios.post("/api/user/login", {user, saveSession, employerAgreedToTerms})
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});

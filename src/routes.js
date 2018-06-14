@@ -8,6 +8,7 @@ import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-route
 
 
 import Login from './components/pages/login';
+import EmployerLogin from "./components/pages/employerLogin";
 import Signup from './components/pages/signup';
 import MyCandidates from './components/pages/businessPages/myCandidates';
 import MyEmployees from './components/pages/businessPages/myEmployees';
@@ -63,6 +64,7 @@ const routes = (
             <IndexRoute component={BusinessHome} />
             <Route path='login' component={Login} />
             <Route path="signup" component={Signup} />
+            <Route path='employerLogin' component={EmployerLogin} />
             <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType={businessAdminUserTypes} />
             <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessAdminUserTypes} />
             <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} />
@@ -80,6 +82,7 @@ const routes = (
             <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
             <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
             <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
+            <Route path="serviceLevelAgreement" component={ServiceLevelAgreement} standalone={true} />
 
             <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
 

@@ -1954,9 +1954,10 @@ async function GET_positions(req, res) {
 }
 
 
-function POST_login(req, res) {
+async function POST_login(req, res) {
     const reqUser = sanitize(req.body.user);
     let saveSession = sanitize(req.body.saveSession);
+    const employerAgreedToTerms = sanitize(req.body.employerAgreedToTerms);
 
     if (typeof saveSession !== "boolean") {
         saveSession = false;
@@ -1987,8 +1988,8 @@ function POST_login(req, res) {
     });
 
     // executed once a user is found
-    function tryLoggingIn() {
-        bcrypt.compare(password, user.password, function (passwordError, passwordsMatch) {
+    async function tryLoggingIn() {
+        bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {
             // if hashing password fails
             if (passwordError) {
                 return res.status(500).send("Error logging in, try again later.");
@@ -1997,6 +1998,15 @@ function POST_login(req, res) {
             else if (passwordsMatch) {
                 // check if user verified email address
                 if (user.verified) {
+                    if (typeof employerAgreedToTerms === "boolean") {
+                        user.agreedToTerms = true;
+                        try { user = await user.save(); }
+                        catch (saveUserError) {
+                            console.log("Error saving employer trying to log in!");
+                            return res.status(500).send("Server error.");
+                        }
+                    }
+
                     user = removePassword(user);
                     if (saveSession) {
                         req.session.userId = user._id;
