@@ -193,7 +193,7 @@ class MyEvaluations extends Component {
         let accountAdminTakePsychTest = null;
         if (currentUser && currentUser.userType == "accountAdmin" && !currentUser.psychometricTest.endDate && (this.state.positions.length !== 0 || this.state.noPositions)) {
             accountAdminTakePsychTest = (
-                <div className="marginBottom10px center">
+                <div className="marginBottom30px center">
                     <div className="whiteText font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 inlineBlock">
                         All admins must take a 10 minute psychometric quiz. Take it here!
                     </div>
