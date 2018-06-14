@@ -189,7 +189,7 @@ class SkillTest extends Component {
                 </div>
                 <br/>
                 {this.props.agreeingToTerms ?
-                    <CircularProgress style={{marginBottom: "40px"}} />
+                    <CircularProgress color="#FB553A" style={{marginBottom: "40px"}} />
                     :
                     <div style={{marginBottom: "40px", width: "initial"}} className={buttonClass} onClick={this.agreeToTerms.bind(this)}>Begin</div>
                 }

@@ -48,7 +48,7 @@ class EvaluationIntro extends Component {
                     </div>
                     <br/>
                     {this.props.loadingNextPage ?
-                        <CircularProgress style={{marginBottom: "40px"}} />
+                        <CircularProgress color="#FB553A" style={{marginBottom: "40px"}} />
                         :
                         <div style={{marginBottom: "40px", width: "initial"}} className="skillContinueButton" onClick={this.markSeen.bind(this)}>Begin</div>
                     }
