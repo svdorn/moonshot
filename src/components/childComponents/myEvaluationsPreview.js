@@ -127,8 +127,8 @@ class MyEvaluationsPreview extends Component {
         } else {
             if (this.props.completedDate) {
                 clickableArea = (
-                    <div className="grayText font16px font14pxUnder800 marginTop10px">
-                        Complete
+                    <div className="grayText font16px font14pxUnder800 marginTop15px">
+                        Complete - your results are being reviewed
                     </div>
                 )
             } else {

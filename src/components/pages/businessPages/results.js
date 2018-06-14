@@ -11,6 +11,7 @@ import MetaTags from 'react-meta-tags';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import PsychBreakdown from '../../childComponents/psychBreakdown';
+import HoverTip from "../../miscComponents/hoverTip";
 
 class Results extends Component {
     constructor(props) {
@@ -163,10 +164,10 @@ class Results extends Component {
             <div className="analysis center aboutMeSection" style={style.tabContent}>
                 <div style={style.candidateScore}>
                     <div className="resultTopShadow center lightBlackBackground paddingTop20px">
-                        <div
-                            className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore">
+                        <div className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore inlineBlock">
                             Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                         </div>
+                        <HoverTip style={{marginTop: "35px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
                         <div className="resultsSlidersContainer">
                             <div>
                                 <div

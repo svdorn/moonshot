@@ -169,7 +169,7 @@ class FreeResponse extends Component {
                 <div className="evalPortionIntro center">
                     <div/>
                     <div>
-                        <p>This is the short answer portion of the evaluation. Follow the instructions carefully for each question.</p>
+                        <p>This is the short answer portion of the evaluation. Follow the instructions carefully for each question. Keep your answers brief, try to write fewer than 5 sentences for each response.</p>
                         <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your score will decrease.</p>
                     </div>
                     <br/>
