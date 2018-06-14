@@ -122,7 +122,7 @@ class CandidatePreview extends Component {
                 candidateId: this.props.candidate.candidateId,
                 hiringStage: hiringStage,
                 isDismissed: dismissed,
-                positionName: this.props.positionName
+                positionId: this.props.positionId
             }
             axios.post("/api/business/updateHiringStage", hiringStageInfo)
             // do nothing on success

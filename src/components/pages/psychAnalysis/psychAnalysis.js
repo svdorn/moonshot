@@ -120,8 +120,8 @@ class PsychAnalysis extends Component {
                             <p>Welcome to the Moonshot psychometric analysis! In essence, this is a personality test.</p>
                         }
                         <p>{"You'll be given two choices per question. Drag the slider according to the degree that you agree with a given choice."}</p>
-                        <p><span>{"DON'T OVERTHINK."}</span>{" Each question is mean to be taken at a surface level. Don't overthink it! If you don't understand a question, take your best guess and move on."}</p>
-                        {isAdmin ? null : <p><span>{"YOU CAN"}</span>{" go to other tabs and windows. So if you don't understand something, feel free to look it up."}</p>}
+                        <p><span>{"DON'T OVERTHINK."}</span>{" Each question is meant to be taken at a surface level. Don't overthink it! If you don't understand a question, take your best guess and move on."}</p>
+                        {isAdmin ? null : <p><span>{"YOU CAN"}</span>{" go to other tabs and windows. So if you don't understand something, feel free to look it up. The test should take around ten minutes."}</p>}
                     </div>
                     <br/>
                     <div className="psychAnalysisButton" style={{marginTop: "20px", width: "initial"}} onClick={this.startTest.bind(this)}>

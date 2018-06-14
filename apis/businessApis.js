@@ -554,10 +554,12 @@ async function POST_updateHiringStage(req, res) {
     const candidateId = sanitize(body.candidateId);
     const hiringStage = sanitize(body.hiringStage);
     const isDismissed = sanitize(body.isDismissed);
-    const positionName = sanitize(body.positionName);
+    const positionId = sanitize(body.positionId);
+
+    console.log("req.body: ", req.body);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!userId || !verificationToken || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !positionName) {
+    if (!userId || !verificationToken || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !positionId) {
         return res.status(400).send("Bad request.");
     }
 
@@ -585,7 +587,7 @@ async function POST_updateHiringStage(req, res) {
 
     // get the position index and position
     const positionIndex = business.positions.findIndex(pos => {
-        return pos.name === positionName;
+        return pos._id.toString() === positionId.toString();
     });
     if (typeof positionIndex !== "number" || positionIndex < 0) {
         return res.status(400).send("Invalid position.");

@@ -174,7 +174,7 @@ class SkillTest extends Component {
                     <p>This is the skills portion of the evaluation. Here you will be tested on your aptitude in one or more skills.</p>
                     <p><span>TIME IS A FACTOR.</span> After 20 seconds for each question, your score for that question will decrease as time goes on.</p>
                     <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
-                    <p>The number of questions in the skills test will change as you go depending on a number of factors. It will end once a score has been determined, but should take no more than 15 minutes.</p>
+                    <p>The number of questions in the skills test will change as you go depending on a number of factors. It will end once a score has been determined, but each test should take no more than ten minutes.</p>
                 </div>
                 <br/>
                 <div>
@@ -185,7 +185,7 @@ class SkillTest extends Component {
                             src="/icons/CheckMarkRoundedWhite.png"
                         />
                     </div>
-                    <p style={{padding: "0 40px"}}>By checking this box I agree that I will answer the questions without help from anyone or any external resources and that if I were to be discovered doing so, at any point, all my results are void.</p>
+                    <p style={{padding: "0 40px"}}>By checking this box, I agree that I will answer the questions without help from anyone or any external resources and that if I were to be discovered doing so, at any point, all my results are void.</p>
                 </div>
                 <br/>
                 {this.props.agreeingToTerms ?

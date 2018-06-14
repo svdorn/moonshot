@@ -1462,6 +1462,7 @@ form > h1 {
     position: absolute;
     padding: 5px;
     margin-top: 5px;
+    z-index: 100;
 }
 /* make hoverTip element display when sibling is hovered over */
 *:hover + .hoverTip { display: inline-block; }

@@ -142,6 +142,11 @@ class AdminQuestions extends Component {
 
 
     nextQuestion() {
+        // don't do anything if nothing is selected on a multiple choice question
+        if (!this.state.question || (this.state.question.questionType === "multipleChoice" && this.state.selectedId === undefined)) {
+            return;
+        }
+
         const currentUser = this.props.currentUser;
 
         const demographics = this.state.demographics;
