@@ -66,9 +66,13 @@ class EmployeePreview extends Component {
         .then(function (res) {
             // TODO: fix the question answer
             // Advance to the next questionAnswer and save the answers in state
+            let questionAnswer = 0;
+            if (self.state.answers.length >= 1) {
+                questionAnswer = self.state.answers[0].score;
+            }
             self.setState({
                 ...self.state,
-                questionAnswer: 0,
+                questionAnswer,
                 questionIndex: 0,
                 answers: res.data,
                 gradingInProgress: false,
