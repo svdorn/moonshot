@@ -23,7 +23,8 @@ const skillApis = {
     //GET_skillByUrl,
     GET_skillNamesByIds,
     POST_answerSkillQuestion,
-    POST_startOrContinueTest
+    POST_startOrContinueTest,
+    POST_agreeToTerms
 }
 
 
@@ -666,6 +667,44 @@ function POST_startOrContinueTest(req, res) {
         }
     }
 }
+
+
+async function POST_agreeToTerms(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user when agreeing to skill test terms: ", getUserError);
+        return res.status(500).send("Error getting user.");
+    }
+
+    // TODO: eventually will want to be able to take skill tests without a position eval,
+    // but for now need to be doing an eval
+    if (!user.positionInProgress) {
+        return res.status(400).send("User is not currently taking a position evaluation.");
+    }
+
+    // get the index of the position for which the user agreed to skill test terms
+    const positionIndex = user.positions.findIndex(pos => {
+        return pos.positionId.toString() === user.positionInProgress.toString();
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(500).send("User is not taking a position evaluation.");
+    }
+
+    user.positions[positionIndex].agreedToSkillTestTerms = true;
+    try { user = await user.save(); }
+    catch (saveUserError) {
+        console.log("error saving user when trying to agree to terms: ", saveUserError);
+        return res.status(500).send("Server error.");
+    }
+
+    res.json(frontEndUser(user));
+}
+
 
 // function GET_skillByUrl(req, res) {
 //     try {

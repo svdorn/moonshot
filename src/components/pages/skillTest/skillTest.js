@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import { browserHistory } from "react-router";
 import { bindActionCreators } from "redux";
-import { addNotification, newCurrentUser } from "../../../actions/usersActions";
+import { addNotification, newCurrentUser, agreeToSkillTestTerms } from "../../../actions/usersActions";
 import axios from "axios";
 import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
@@ -18,7 +18,8 @@ class SkillTest extends Component {
             selectedId: undefined,
             question: undefined,
             finished: false,
-            skillName: undefined
+            skillName: undefined,
+            agreedToTerms: false
         };
     }
 
@@ -34,10 +35,18 @@ class SkillTest extends Component {
     }
 
 
-    componentWillReceiveProps(newProps) {
+    // componentWillReceiveProps(newProps) {
+    //     // new skill url means we have a new skill to test
+    //     if (this.props.params.skillUrl !== newProps.params.skillUrl) {
+    //         this.resetPage(newProps.params.skillUrl);
+    //     }
+    // }
+
+
+    componentDidUpdate(prevProps, newState) {
         // new skill url means we have a new skill to test
-        if (this.props.params.skillUrl !== newProps.params.skillUrl) {
-            this.resetPage(newProps.params.skillUrl)
+        if (this.props.params.skillUrl !== prevProps.params.skillUrl) {
+            this.resetPage(this.props.params.skillUrl);
         }
     }
 
@@ -142,6 +151,54 @@ class SkillTest extends Component {
     }
 
 
+    handleCheckMarkClick() {
+        this.setState({ agreedToTerms: !this.state.agreedToTerms });
+    }
+
+
+    agreeToTerms() {
+        if (this.state.agreedToTerms) {
+            const currentUser = this.props.currentUser;
+            this.props.agreeToSkillTestTerms(currentUser._id, currentUser.verificationToken);
+        }
+    }
+
+
+    // rendered if the user is on the first skill test of an eval and hasn't agreed to the test terms
+    userAgreement() {
+        const buttonClass = this.state.agreedToTerms ? "skillContinueButton" : "disabled skillContinueButton";
+
+        return (
+            <div className="skillsUserAgreement center">
+                <div className="font24px" style={{...style.redText, marginBottom: "20px"}}>Skills</div>
+                <div>
+                    <p>This is the skills portion of the evaluation. Here you will be tested on your aptitude in one or more skills.</p>
+                    <p><span style={style.redText}>TIME IS A FACTOR.</span> After 20 seconds for each question, your score for that question will decrease as time goes on.</p>
+                    <p><span style={style.redText}>DO NOT</span> exit this tab, go to another tab, or use any other application. Each time you do, your overall score will decrease.</p>
+                    <p>The number of questions in the skills test will change as you go depending on a number of factors. It will end once a score has been determined, but should take no more than 15 minutes.</p>
+                </div>
+                <br/>
+                <div>
+                    <div className="checkbox mediumCheckbox whiteCheckbox" onClick={this.handleCheckMarkClick.bind(this)}>
+                        <img
+                            alt=""
+                            className={"checkMark" + this.state.agreedToTerms}
+                            src="/icons/CheckMarkRoundedWhite.png"
+                        />
+                    </div>
+                    <p style={{padding: "0 40px"}}>By checking this box I agree that I will answer the questions without help from anyone or any external resources and that if I were to be discovered doing so, at any point, all my results are void.</p>
+                </div>
+                <br/>
+                {this.props.agreeingToTerms ?
+                    <CircularProgress style={{marginBottom: "40px"}} />
+                    :
+                    <div style={{marginBottom: "40px"}} className={buttonClass} onClick={this.agreeToTerms.bind(this)}>Begin</div>
+                }
+            </div>
+        );
+    }
+
+
     finishTest() {
         // if the user is taking a position evaluation, go to the next step of that
         const user = this.props.currentUser;
@@ -179,7 +236,7 @@ class SkillTest extends Component {
         // have to have completed the psych test and admin questionsbefore you
         // can take a skills - but only if you're taking an evaluation right now
 
-
+        console.log("RENDERING");
 
         let self = this;
         const skillName = this.state.skillName ? this.state.skillName : "Skill";
@@ -210,9 +267,9 @@ class SkillTest extends Component {
         if (this.state.finished) {
             content = (
                 <div>
-                    Test Complete!
+                    Skill test complete!
                     <br/>
-                    <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finishTest.bind(this)}>Finish</div>
+                    <div style={{marginTop:"20px"}} className="skillContinueButton" onClick={this.finishTest.bind(this)}>Continue</div>
                 </div>
             );
         }
@@ -235,6 +292,13 @@ class SkillTest extends Component {
                 </div>
             );
         }
+
+        // if the user hasn't agreed to the terms, prompt them to
+        else if (currentUser.currentPosition && !currentUser.currentPosition.agreedToSkillTestTerms) {
+            content = this.userAgreement();
+        }
+
+        // otherwise, good to go - show them the question
         else if (question) {
             content = (
                 <div>
@@ -259,16 +323,21 @@ class SkillTest extends Component {
     }
 }
 
+const style = {
+    redText: {color: "#E83C53"}
+}
+
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addNotification, newCurrentUser
+        addNotification, newCurrentUser, agreeToSkillTestTerms
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        agreeingToTerms: state.users.loadingSomething
     };
 }
 

@@ -185,7 +185,22 @@ form > h1 {
     cursor: pointer;
 }
 
-
+.skillsUserAgreement {
+    text-align: center
+}
+.skillsUserAgreement > div:not(:first-child):not(:last-child) {
+    text-align: left;
+    width: 700px;
+    display: inline-block;
+}
+/* give the text next to the check box extra padding to allow room for the checkbox */
+/* .skillsUserAgreement > div:nth-child(3) p {
+    padding: 0 40px;
+} */
+.skillsUserAgreement .checkbox {
+    position: absolute;
+    margin-top: 2px;
+}
 
 .progressContainer {
     color: white;
@@ -195,7 +210,7 @@ form > h1 {
     width: 60%;
     margin-left: 20%;
     margin-top: 30px;
-    margin-bottom: 70px;
+    margin-bottom: 40px;
     height: 10px;
     --stepCircleWidth: 24px;
     position: relative;
@@ -4475,6 +4490,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: none;
     }
 
+    .skillsUserAgreement > div:not(:first-child):not(:last-child) {
+        width: 400px;
+    }
+
     #pathwaySalaryInfo { margin-left: 16%; margin-right: 10%; }
     #pathwayShortDescription { margin-left: 25%; }
 
@@ -5630,6 +5649,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: inline-block;
         float: right;
         margin: -30px 20% 0px;
+    }
+
+    .skillsUserAgreement > div:not(:first-child):not(:last-child) {
+        width: 250px;
     }
 
     .font40pxUnder450 { font-size: 40px; }

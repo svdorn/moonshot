@@ -201,6 +201,7 @@ export function usersReducers(state = initialState, action) {
             };
             break;
         case "START_PSYCH_EVAL":
+        case "USER_UPDATE":
             return {
                 ...state, currentUser: action.currentUser, loadingSomething: false
             }

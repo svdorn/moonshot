@@ -383,6 +383,8 @@ var usersSchema = mongoose.Schema({
         appliedStartDate: Date,
         // when the user ended and submitted the application
         appliedEndDate: Date,
+        // if the user agreed to not cheat on the skill tests
+        agreedToSkillTestTerms: Boolean,
         // list of ids for the necessary skill tests
         skillTestIds: [ mongoose.Schema.Types.ObjectId ],
         // the index of the current test that the user is taking within
