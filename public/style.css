@@ -2400,7 +2400,7 @@ button.link {
 .candidatePreview > .candidateScore {
     display: inline-block;
 }
-.candidatePreview > .hiringStageCircle {
+.candidatePreview .hiringStageCircle {
     display: inline-block;
     width: 86px;
     height: 86px;
@@ -2409,7 +2409,7 @@ button.link {
     background: linear-gradient(to top left, #983cc9, #e36273);
     margin-top: 20px;
 }
-.hiringStageCircle > .circleCover {
+.hiringStageCircle .circleCover {
     position: absolute;
     width: 50%;
     height: 50%;
