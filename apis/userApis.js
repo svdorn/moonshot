@@ -839,7 +839,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         });
 
         // to get the actual performance score, it is an average between skills and psychPerformance
-        const performance = (pyschPerformance + overallSkill) / 2;
+        const performance = (psychPerformance + overallSkill) / 2;
 
         // PREDICTED SCORE IS AN AVERAGE BETWEEN GROWTH AND PERFORMANCE
         const predicted = (performance + growth) / 2;
