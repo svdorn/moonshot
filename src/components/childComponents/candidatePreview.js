@@ -296,40 +296,75 @@ class CandidatePreview extends Component {
 
         const finishedEval = overallScore !== "N/A";
 
-        let percent = "25%";
-        let topRightStyle = {display: "none"};
-        let bottomRightStyle = {display: "inline-block"};
-        let bottomLeftStyle = {display: "inline-block"};
-        let topLeftStyle = {display: "inline-block"};
-        let possibleStages = this.state.possibleStages;
+        let middlePortion = <div style={{marginTop: "85px", color: "gray", fontStyle: "italic"}}>{"Hasn't finished evaluation yet"}</div>
 
-        // there should only be four possible stages
-        if (Array.isArray(possibleStages) && possibleStages.length === 4) {
-            // determine how much of the circle can be seen based on the hiring stage
-            switch (this.state.hiringStage) {
-                case possibleStages[1]:
-                    percent = "50%";
-                    bottomRightStyle = {display: "none"};
-                    break;
-                case possibleStages[2]:
-                    percent = "75%";
-                    bottomRightStyle = {display: "none"};
-                    bottomLeftStyle = {display: "none"};
-                    break;
-                case possibleStages[3]:
-                    percent = "100%";
-                    bottomRightStyle = {display: "none"};
-                    bottomLeftStyle = {display: "none"};
-                    topLeftStyle = {display: "none"};
-                    break;
-                default:
-                    break;
+
+
+        if (finishedEval) {
+            let percent = "25%";
+            let topRightStyle = {display: "none"};
+            let bottomRightStyle = {display: "inline-block"};
+            let bottomLeftStyle = {display: "inline-block"};
+            let topLeftStyle = {display: "inline-block"};
+            let possibleStages = this.state.possibleStages;
+
+            // there should only be four possible stages
+            if (Array.isArray(possibleStages) && possibleStages.length === 4) {
+                // determine how much of the circle can be seen based on the hiring stage
+                switch (this.state.hiringStage) {
+                    case possibleStages[1]:
+                        percent = "50%";
+                        bottomRightStyle = {display: "none"};
+                        break;
+                    case possibleStages[2]:
+                        percent = "75%";
+                        bottomRightStyle = {display: "none"};
+                        bottomLeftStyle = {display: "none"};
+                        break;
+                    case possibleStages[3]:
+                        percent = "100%";
+                        bottomRightStyle = {display: "none"};
+                        bottomLeftStyle = {display: "none"};
+                        topLeftStyle = {display: "none"};
+                        break;
+                    default:
+                        break;
+                }
             }
+
+            const menuItems = this.state.possibleStages.map(stage => {
+                return (<MenuItem key={stage} value={stage} primaryText={stage.toUpperCase()} />)
+            });
+
+            middlePortion = (
+                <div>
+                    <div className="hiringStageCircle">
+                        <div className="circleCover top right" style={topRightStyle} />
+                        <div className="circleCover bottom right" style={bottomRightStyle} />
+                        <div className="circleCover bottom left" style={bottomLeftStyle} />
+                        <div className="circleCover top left" style={topLeftStyle} />
+
+                        <div className="circleCover interior font16px">
+                            <div>{percent}</div>
+                        </div>
+                    </div>
+                    <br/>
+
+                    <DropDownMenu value={this.state.hiringStage}
+                                  onChange={this.handleHiringStageChange.bind(this)}
+                                  labelStyle={style.menuLabelStyle}
+                                  menuItemStyle={style.menuItemStyle}
+                                  anchorOrigin={style.anchorOrigin}
+                                  underlineStyle={style.menuUnderlineStyle}
+                                  targetOrigin={style.targetOrigin}
+                    >
+                        {menuItems}
+                    </DropDownMenu>
+                </div>
+            );
         }
 
-        const menuItems = this.state.possibleStages.map(stage => {
-            return (<MenuItem key={stage} value={stage} primaryText={stage.toUpperCase()} />)
-        });
+
 
         let resultsUrl = "/myCandidates";
         try {
@@ -373,28 +408,9 @@ class CandidatePreview extends Component {
                     Candidate Score <span className="font16px" style={style.redLink}>{this.round(overallScore)}</span>
                 </div>
                 <br/>
-                <div className="hiringStageCircle">
-                    <div className="circleCover top right" style={topRightStyle} />
-                    <div className="circleCover bottom right" style={bottomRightStyle} />
-                    <div className="circleCover bottom left" style={bottomLeftStyle} />
-                    <div className="circleCover top left" style={topLeftStyle} />
 
-                    <div className="circleCover interior font16px">
-                        <div>{percent}</div>
-                    </div>
-                </div>
-                <br/>
+                { middlePortion }
 
-                <DropDownMenu value={this.state.hiringStage}
-                              onChange={this.handleHiringStageChange.bind(this)}
-                              labelStyle={style.menuLabelStyle}
-                              menuItemStyle={style.menuItemStyle}
-                              anchorOrigin={style.anchorOrigin}
-                              underlineStyle={style.menuUnderlineStyle}
-                              targetOrigin={style.targetOrigin}
-                >
-                    {menuItems}
-                </DropDownMenu>
 
                 {this.makePredictiveSection("Predicted", this.props.candidate.scores ? this.props.candidate.scores.predicted : undefined)}
                 {/*this.makePredictiveSection("Psychometrics", this.props.candidate.archetype)*/}

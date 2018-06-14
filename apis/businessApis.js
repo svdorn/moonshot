@@ -556,8 +556,6 @@ async function POST_updateHiringStage(req, res) {
     const isDismissed = sanitize(body.isDismissed);
     const positionId = sanitize(body.positionId);
 
-    console.log("req.body: ", req.body);
-
     // if one of the arguments doesn't exist, return with error code
     if (!userId || !verificationToken || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !positionId) {
         return res.status(400).send("Bad request.");
