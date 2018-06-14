@@ -42,12 +42,12 @@ class ProgressBarDialog extends Component {
 
 
             stepCircles.push(
-                <div key={"circle" + stepCounter} className="progressStepCircle" style={{backgroundColor: `rgb(${r},${g},${b})`}}>
+                <div key={"circle" + stepCounter} className="progressStepCircle" style={{backgroundColor: `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`}}>
                     {stepNumber >= stepCounter ? null : <div></div>}
                 </div>
             );
 
-            const interiorStyle = { width: `${amountFinished}%`, background: `linear-gradient(to right, rgb(${r},${g}, ${b}), rgb(${rRight},${gRight}, ${bRight}))` };
+            const interiorStyle = { width: `${amountFinished}%`, background: `linear-gradient(to right, rgb(${Math.round(r)},${Math.round(g)}, ${Math.round(b)}), rgb(${Math.round(rRight)},${Math.round(gRight)}, ${Math.round(bRight)}))` };
             stepBars.push(
                 <div key={"bar" + stepCounter} className="progressStepBar">
                     <div className="progressStepBarInterior" style={interiorStyle} />
@@ -56,7 +56,7 @@ class ProgressBarDialog extends Component {
         }
 
         stepCircles.push(
-            <div key="endCircle" className="progressStepCircle" style={{backgroundColor: `rgb(${rEnd},${gEnd},${bEnd})`}}>
+            <div key="endCircle" className="progressStepCircle" style={{backgroundColor: `rgb(${Math.round(rEnd)},${Math.round(gEnd)},${Math.round(bEnd)})`}}>
                 {stepNumber >= 5 ? null : <div></div>}
             </div>
         );

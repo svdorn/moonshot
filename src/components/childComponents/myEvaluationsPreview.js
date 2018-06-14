@@ -155,22 +155,22 @@ class MyEvaluationsPreview extends Component {
 
         return(
             <div>
-            <div className="myEvalsBox aboutMeLi">
-                <div className="aboutMeLiIconContainer">
-                    <img alt="My Evals Company Logo" src={`/logos/${this.props.logo}`}/>
-                </div>
+                <div className="myEvalsBox aboutMeLi">
+                    <div className="aboutMeLiIconContainer">
+                        <img alt="My Evals Company Logo" src={`/logos/${this.props.logo}`}/>
+                    </div>
 
-                <div className="verticalDivider"/>
+                    <div className="verticalDivider"/>
 
-                <div className="myEvalsInfo" style={{display: 'inline-block'}}>
-                    {infoArea}
-                    <div className="font18px font16pxUnder800 blueTextHome">{this.props.name}</div>
-                    <div className="grayText">{this.props.company} Evaluation</div>
-                    {editing ? estimatedLength : null}
-                    {editing ? positionSkills : <div className="marginTop20px">{positionSkills}</div>}
-                    {clickableArea}
+                    <div className="myEvalsInfo" style={{display: 'inline-block'}}>
+                        {infoArea}
+                        <div className="font18px font16pxUnder800 blueTextHome">{this.props.name}</div>
+                        <div className="grayText">{this.props.company} Evaluation</div>
+                        {editing ? estimatedLength : null}
+                        {editing ? positionSkills : <div className="marginTop20px">{positionSkills}</div>}
+                        {clickableArea}
+                    </div>
                 </div>
-            </div>
             </div>
         );
     }

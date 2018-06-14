@@ -93,7 +93,7 @@ class PredictiveGraph extends Component {
             const b = 252;
 
             const labelStyle = {
-                color: `rgb(${r},${g},${b})`,
+                color: `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`,
                 height: `${labelHeight}%`,
                 bottom: `${fromBottom}%`
             }
@@ -133,7 +133,7 @@ class PredictiveGraph extends Component {
                 r = 100; g = 100; b = 100;
             }
 
-            const color = `rgb(${r},${g},${b})`;
+            const color = `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
             let colorStyle = { backgroundColor: color };
 
 

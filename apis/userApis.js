@@ -810,7 +810,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         // subtract from the score whatever the differences are between the
         // ideal facets and the actual facets
         // start at 100 as the baseline
-        let performance = 100;
+        let psychPerformance = 100;
 
         // go through each factor to get to each facet
         const userFactors = userPsych.factors;
@@ -830,13 +830,16 @@ async function finishPositionEvaluation(user, positionId, businessId) {
                 const difference = Math.abs(idealScore - userFacet.score);
 
                 // subtract the difference from the predictive score
-                performance -= difference;
+                psychPerformance -= difference;
 
                 // add the absolute value of the facet score, making the
                 // potential predictive score higher
-                performance += Math.abs(idealScore);
+                psychPerformance += Math.abs(idealScore);
             })
         });
+
+        // to get the actual performance score, it is an average between skills and psychPerformance
+        const performance = (psychPerformance + overallSkill) / 2;
 
         // PREDICTED SCORE IS AN AVERAGE BETWEEN GROWTH AND PERFORMANCE
         const predicted = (performance + growth) / 2;
