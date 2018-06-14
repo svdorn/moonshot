@@ -38,6 +38,7 @@ import SkillTest from './components/pages/skillTest/skillTest';
 import AdminQuestions from './components/pages/adminQuestions/adminQuestions';
 import PositionSignup from './components/pages/positionSignup';
 import FreeResponse from "./components/pages/freeResponse";
+import EvaluationIntro from "./components/pages/evaluationIntro";
 
 import AdminPages from './components/pages/adminPages/adminPages'
 import ViewUser from './components/pages/adminPages/viewUser';
@@ -85,6 +86,7 @@ const routes = (
             <Route path="adminQuestions" component={AuthenticatedComponent} page={<AdminQuestions/>} />
             <Route path="positionSignup" component={PositionSignup} />
             <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
+            <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
 
             {/*<Route path="evaluation/:businessId/:positionId" component={}>
                 <Route path="psychAnalysis" component={PsychAnalysis} />

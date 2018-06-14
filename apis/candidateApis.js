@@ -194,7 +194,7 @@ function POST_candidate(req, res) {
         //     user = await internalStartPsychEval(user);
         //     user = await user.save();
         // } catch (psychEvalSignupError) {
-        //     console.log("pyschEvalSignupError: ", psychEvalSignupError);
+        //     console.log("psychEvalSignupError: ", psychEvalSignupError);
         // }
 
         // add the user to the referrer's list of referred users

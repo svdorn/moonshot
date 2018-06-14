@@ -201,6 +201,10 @@ form > h1 {
     color: #E83C53;
 }
 
+.psychAnalysisQuestion {
+    margin: 0 100px;
+}
+
 .progressContainer {
     color: white;
     text-align: center;
@@ -4858,6 +4862,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 700px) {
+    .psychAnalysisQuestion {
+        margin: 0 50px;
+    }
+
     .results > .statsAndDescription > div {
         width: 450px;
     }

@@ -88,6 +88,7 @@ app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 app.get('/user/positions', userApis.GET_positions);
 app.get("/user/adminQuestions", userApis.GET_adminQuestions);
 app.post("/user/answerAdminQuestion", userApis.POST_answerAdminQuestion);
+app.post("/user/sawEvaluationIntro", userApis.POST_sawEvaluationIntro);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);

@@ -170,7 +170,7 @@ class SkillTest extends Component {
 
         return (
             <div className="evalPortionIntro skillsUserAgreement center">
-                <div className="font24px" style={{marginBottom: "20px"}}>Skills</div>
+                <div className="font24px" style={{marginBottom: "20px"}}><span>Skills</span></div>
                 <div>
                     <p>This is the skills portion of the evaluation. Here you will be tested on your aptitude in one or more skills.</p>
                     <p><span>TIME IS A FACTOR.</span> After 20 seconds for each question, your score for that question will decrease as time goes on.</p>

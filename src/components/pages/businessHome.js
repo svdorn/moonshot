@@ -386,7 +386,7 @@ class BusinessHome extends Component {
                 list: [
                     "Create Baseline",
                     "Better Understand Employers",
-                    "Pyschometric Profiles",
+                    "psychometric Profiles",
                     "Skill IQs"
                 ]
             },

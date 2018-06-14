@@ -50,6 +50,7 @@ const userApis = {
     GET_positions,
     GET_adminQuestions,
     POST_answerAdminQuestion,
+    POST_sawEvaluationIntro,
 
     POST_resetFrizz,
     POST_reset24,
@@ -393,12 +394,17 @@ async function POST_continuePositionEval(req, res) {
         // the next url to direct to user to
         let nextUrl = "/";
 
+        // if user has not seen introduction to this evaluation
+        if (!user.positions[userPositionIndex].hasSeenIntro) {
+            nextUrl = "/evaluationIntro";
+        }
+
         // if the user has to answer the admin questions
-        if (!user.adminQuestions || !user.adminQuestions.finished) {
+        else if (!user.adminQuestions || !user.adminQuestions.finished) {
             nextUrl = "/adminQuestions";
         }
 
-        // if the user has to start or continue the pysch test
+        // if the user has to start or continue the psych test
         else if (!user.psychometricTest || (user.psychometricTest && !user.psychometricTest.endDate)) {
             nextUrl = "/psychometricAnalysis";
         }
@@ -706,6 +712,7 @@ async function addEvaluation(user, business, positionId, startDate) {
             const newPosition = {
                 businessId: business._id,
                 positionId: position._id,
+                name: position.name,
                 appliedStartDate: now,
                 appliedEndDate,
                 assignedDate,
@@ -893,6 +900,41 @@ async function finishPositionEvaluation(user, positionId, businessId) {
 }
 
 
+async function POST_sawEvaluationIntro(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user when agreeing to skill test terms: ", getUserError);
+        return res.status(500).send("Error getting user.");
+    }
+
+    if (!user.positionInProgress) {
+        return res.status(400).send("User is not currently taking a position evaluation.");
+    }
+
+    // get the index of the position for which the user agreed to skill test terms
+    const positionIndex = user.positions.findIndex(pos => {
+        return pos.positionId.toString() === user.positionInProgress.toString();
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(500).send("User is not taking a position evaluation.");
+    }
+
+    user.positions[positionIndex].hasSeenIntro = true;
+    try { user = await user.save(); }
+    catch (saveUserError) {
+        console.log("error saving user when trying to mark intro as seen: ", saveUserError);
+        return res.status(500).send("Server error.");
+    }
+
+    res.json(frontEndUser(user));
+}
+
+
 async function POST_startPositionEval(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
@@ -968,8 +1010,13 @@ async function POST_startPositionEval(req, res) {
             // have, we must be done with all the skill tests
             const doneWithSkillTests = userPosition.testIndex === userPosition.skillTestIds.length;
 
-            // if the user hasn't taken the psychometric exam before, have them do that first
-            if (!hasTakenPsychTest) {
+            // if the user has to answer the admin questions
+            if (!user.adminQuestions || !user.adminQuestions.finished) {
+                nextUrl = "/adminQuestions";
+            }
+
+            // if the user hasn't taken the psychometric exam before, have them do that
+            else if (!hasTakenPsychTest) {
                 // sign up for the psych test
                 user = await internalStartPsychEval(user);
                 // get the user to the psych eval page
@@ -1016,6 +1063,9 @@ async function POST_startPositionEval(req, res) {
 
         // when the business and user have both been saved, return successfully
         function finish() {
+            // TODO: this removes the old nextUrl stuff, assuming the user should
+            // alwsays go to the intro part when starting an eval
+            nextUrl = "/evaluationIntro"
             if (userSaved && businessSaved) { res.json({updatedUser: frontEndUser(user), finished, nextUrl}); }
         }
     }

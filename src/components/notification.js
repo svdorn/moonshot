@@ -17,9 +17,6 @@ class Notification extends Component {
     }
 
     render() {
-        console.log("rendering notification");
-        console.log("this.props.notification: ", this.props.notification);
-
         const messageStyle = {
             display: "inline-block",
             verticalAlign: "top",

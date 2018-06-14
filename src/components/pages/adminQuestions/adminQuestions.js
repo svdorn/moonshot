@@ -23,7 +23,7 @@ class AdminQuestions extends Component {
             question: undefined,
             questionType: undefined,
             finished: false,
-            skillName: undefined
+            clickedBegin: false
         };
     }
 
@@ -223,7 +223,6 @@ class AdminQuestions extends Component {
         const user = this.props.currentUser;
         const currentPosition = user.currentPosition;
         if (currentPosition) {
-            console.log("here");
             // if the user has not taken the psych test, go to that
             if (!user.psychometricTest || !user.psychometricTest.endDate) {
                 this.goTo(`/psychometricAnalysis`);
@@ -325,6 +324,27 @@ class AdminQuestions extends Component {
     }
 
 
+    makeIntroPage() {
+        return (
+            <div className="evalPortionIntro center">
+                <div/>
+                <div>
+                    <p>You will be asked a series of short questions for legal and administrative purposes.</p>
+                    <p>None of your answers will be shown to employers, nor will they affect your candidacy or employment status.</p>
+                    <p>Once again, your answers are collected for legal purposes only.</p>
+                </div>
+                <br/>
+                <div style={{marginBottom: "40px", width: "initial"}} className={"skillContinueButton"} onClick={this.begin.bind(this)}>Begin</div>
+            </div>
+        )
+    }
+
+
+    begin() {
+        this.setState({ clickedBegin: true });
+    }
+
+
     render() {
         let self = this;
 
@@ -342,6 +362,10 @@ class AdminQuestions extends Component {
                     </button>
                 </div>
             )
+        }
+
+        else if (!this.state.clickedBegin) {
+            content = this.makeIntroPage();
         }
 
         else if (!question) {

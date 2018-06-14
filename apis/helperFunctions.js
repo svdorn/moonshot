@@ -84,6 +84,7 @@ function frontEndUser(dbUser, extraFieldsToRemove) {
 
         currentPosition = {
             inProgress: true,
+            name: position.name,
             agreedToSkillTestTerms: position.agreedToSkillTestTerms,
             skillTests: position.skillTestIds,
             testIndex: position.testIndex,

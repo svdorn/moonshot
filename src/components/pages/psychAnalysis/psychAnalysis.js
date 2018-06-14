@@ -122,10 +122,20 @@ class PsychAnalysis extends Component {
         // if the user hasn't taken the psych test, ask them if they want to
         if (typeof psychometricTest !== "object" || !psychometricTest.startDate) {
             return (
-                <div>
-                    This is a psychometric analysis that will last around 15 minutes. Ready?
+                <div className="evalPortionIntro skillsUserAgreement center">
+                    <div/>
+                    <div>
+                        {this.props.currentUser.currentPosition ?
+                            <p>This is the psychomentrics portion of the evaluation. In essence, this is a personality test.</p>
+                            :
+                            <p>Welcome to the Moonshot psychometric analysis! In essence, this is a personality test.</p>
+                        }
+                        <p>{"You'll be given two choices per question. Drag the slider according to the degree that you agree with a given choice."}</p>
+                        <p><span>{"DON'T OVERTHINK."}</span>{" Each question is mean to be taken at a surface level. Don't overthink it! If you don't understand a question, take your best guess and move on."}</p>
+                        <p><span>{"YOU CAN"}</span>{" go to other tabs and windows. So if you don't understand something, feel free to look it up."}</p>
+                    </div>
                     <br/>
-                    <div className="psychAnalysisButton" style={{marginTop: "20px"}} onClick={this.startTest.bind(this)}>
+                    <div className="psychAnalysisButton" style={{marginTop: "20px", width: "initial"}} onClick={this.startTest.bind(this)}>
                         Start!
                     </div>
                 </div>
@@ -203,7 +213,7 @@ class PsychAnalysis extends Component {
 
         return (
             <div>
-                <div className="center">
+                <div className="center psychAnalysisQuestion">
                     {question}
                 </div>
 

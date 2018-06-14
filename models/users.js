@@ -375,6 +375,8 @@ var usersSchema = mongoose.Schema({
         businessId: mongoose.Schema.Types.ObjectId,
         // the id of the position within that company
         positionId: mongoose.Schema.Types.ObjectId,
+        // name of the position
+        name: String,
         // the date the company has assigned the evaluation to the user
         assignedDate: Date,
         // the date the company has set as a deadline to finish
@@ -385,6 +387,8 @@ var usersSchema = mongoose.Schema({
         appliedEndDate: Date,
         // if the user agreed to not cheat on the skill tests
         agreedToSkillTestTerms: Boolean,
+        // if the user has seen the page introducing the skill test
+        hasSeenIntro: Boolean,
         // list of ids for the necessary skill tests
         skillTestIds: [ mongoose.Schema.Types.ObjectId ],
         // the index of the current test that the user is taking within
