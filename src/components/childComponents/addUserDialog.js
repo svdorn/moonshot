@@ -332,7 +332,7 @@ class AddUserDialog extends Component {
         const employeeSection = (
             <div className="center marginTop20px">
                 <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
-                    Employees undergo psychometric and skill evals to create a baseline for evaluation.
+                    Employees undergo psychometric and skill evaluations to create a baseline for candidate predictions.
                 </div>
                 <div>
                     {employeeEmailSection}
