@@ -251,7 +251,7 @@ class SkillTest extends Component {
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
                 </MetaTags>
                 <div className="employerHeader" />
-                <ProgressBar />
+                <ProgressBar skillName={skillName}/>
                 { content }
             </div>
         );
