@@ -75,19 +75,21 @@ class Results extends Component {
                     confidenceInterval: 16
                 },
                 {
+                    x: "Performance",
+                    y: this.round(res.data.performanceScores.performance),
+                    confidenceInterval: 16
+                },
+                {
                     x: "Longevity",
                     y: this.round(res.data.performanceScores.longevity),
-                    confidenceInterval: 16
+                    confidenceInterval: 0,
+                    unavailable: true
                 },
                 {
                     x: "Culture",
                     y: this.round(res.data.performanceScores.culture),
-                    confidenceInterval: 16
-                },
-                {
-                    x: "Performance",
-                    y: this.round(res.data.performanceScores.performance),
-                    confidenceInterval: 16
+                    confidenceInterval: 0,
+                    unavailable: true
                 }
             ];
 

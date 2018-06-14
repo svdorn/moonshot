@@ -1,4 +1,5 @@
-import React, { Component } from 'react';
+import React, { Component } from "react";
+import HoverTip from "./hoverTip";
 
 class PredictiveGraph extends Component {
     constructor(props) {
@@ -110,8 +111,10 @@ class PredictiveGraph extends Component {
 
         // add each point and x axis label to their respective arrays
         dataPoints.forEach(point => {
-            const label = point.x;
-            const yValue = point.y;
+            let label = point.x;
+            let yValue = point.y;
+
+            if (point.unavailable) { yValue = 100; }
 
             // 160 is the top of the graph, 40 is the bottom
             // 160 corresponds to 100%, 100 corresponds to 50%, 40 corresponds to 0%
@@ -123,9 +126,13 @@ class PredictiveGraph extends Component {
             // get the rgb values of the point
             // start at purple and go up to green
             let percentToGreen = fromBottom / 100;
-            const r = 174 - (57 * percentToGreen);
-            const g = 126 + (94 * percentToGreen);
-            const b = 252;
+            let r = 174 - (57 * percentToGreen);
+            let g = 126 + (94 * percentToGreen);
+            let b = 252;
+
+            if (point.unavailable) {
+                r = 100; g = 100; b = 100;
+            }
 
             const color = `rgb(${r},${g},${b})`;
             let colorStyle = { backgroundColor: color };
@@ -170,7 +177,17 @@ class PredictiveGraph extends Component {
                 <div className="pointContainer" style={pointContainerStyle}>
                     <div className="confidenceIntervalLine" style={{...colorStyle, ...confidenceIntervalStyle}} />
                     <div className="confidenceIntervalBorder" style={{...colorStyle, ...topBorderStyle}} />
-                    <div className="pointBox" style={{...colorStyle, ...pointBoxStyle}}>{yValue}</div>
+                    <div className="pointBox" style={{...colorStyle, ...pointBoxStyle}}>
+                        <div style={{position: "relative"}}>{point.unavailable ? "N/A" : yValue}</div>
+                        {point.unavailable ?
+                            <HoverTip
+                                style={{minWidth: `${interiorWidth/2}px`}}
+                                text="Unavailable - not enough candidate data to predict this value."
+                            />
+                            :
+                            null
+                        }
+                    </div>
                     <div className="confidenceIntervalBorder" style={{...colorStyle, ...bottomBorderStyle}} />
                 </div>
             );
