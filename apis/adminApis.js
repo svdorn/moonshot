@@ -158,7 +158,6 @@ async function POST_business(req, res) {
 
                     try {
                         // save the business with the new user in it
-                        console.log("saving...");
                         await createdBusiness.save();
                         // everything succeeded
                         return res.json("Success!");

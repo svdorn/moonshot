@@ -317,7 +317,6 @@ function POST_candidate(req, res) {
                         }
                         user.businessInfo = {};
                         user.businessInfo.company = company;
-                        console.log(user.businessInfo.company);
                         user.businessInfo.title = "Account Admin";
                     }
 
@@ -395,7 +394,6 @@ function POST_updateAllOnboarding(req, res) {
                 for (const prop in fullInfo) {
                     // only use properties that are not inherent to all objects
                     if (info.hasOwnProperty(prop)) {
-                        console.log("updating " + prop + " to ", fullInfo[prop]);
                         user.info[prop] = fullInfo[prop];
                     }
                 }

@@ -25,7 +25,6 @@ const miscApis = {
 
 
 function POST_createReferralCode(req, res) {
-    console.log("creating referral code");
     const name = sanitize(req.body.name);
     // make it to lower case so that it's case insensitive
     const email = sanitize(req.body.email).toLowerCase();
@@ -156,7 +155,6 @@ function POST_unsubscribeEmail(req, res) {
             optOutError(err);
         }
         else {
-            console.log("adding to opted-out list: ", req.body.email)
             optedOut.emails.push(req.body.email);
             optedOut.save(function(err2, newOptedOut) {
                 if (err2) {

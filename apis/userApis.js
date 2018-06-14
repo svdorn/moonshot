@@ -162,10 +162,6 @@ async function POST_answerAdminQuestion(req, res) {
     }
     user.adminQuestions[questionType].push(newAnswer);
 
-    console.log("sliderAnswer: ", sliderAnswer);
-    console.log("newAnswer: ", newAnswer);
-    console.log("user.adminQuestions[questionType]: ", user.adminQuestions[questionType]);
-
     user.adminQuestions.finished = finished;
 
     // save the user
@@ -427,7 +423,6 @@ async function POST_continuePositionEval(req, res) {
         else {
             finished = true;
             nextUrl = "/myEvaluations";
-            console.log("user finished eval!");
 
             // mark this position as completed
             try {
@@ -524,7 +519,6 @@ async function POST_addPositionEval(req, res) {
 // returns object: {user: userObject, business: businessObject, finished: Boolean, userPositionIndex: Number}
 // DOESN'T SAVE THE TWO, MUST BE SAVED IN CALLING FUNCTION
 async function addEvaluation(user, business, positionId, startDate) {
-    console.log("in here");
     return new Promise(async function(resolve, reject) {
         try {
             // check that all inputs are valid

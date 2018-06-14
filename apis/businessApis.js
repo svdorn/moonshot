@@ -86,13 +86,10 @@ function POST_emailInvites(req, res) {
 
 
         let position = business.positions[positionIndex];
-        console.log(position);
 
         if (!position) {
             return res.status(403).send("Not a valid position.");
         }
-
-        console.log(position);
 
         const businessName = business.name;
 
