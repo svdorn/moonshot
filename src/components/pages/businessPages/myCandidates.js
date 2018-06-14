@@ -228,7 +228,7 @@ class MyCandidates extends Component {
         );
 
         if (this.state.noCandidates) {
-            if (this.state.hiringStage == "" && this.state.term == "") {
+            if (this.state.hiringStage == "" && (this.state.term == "" || !this.state.term)) {
             candidatePreviews = (
                 <div className="center marginTop50px">
                 <div className="marginBottom15px font32px font28pxUnder500 clickable blueTextHome" onClick={this.openAddUserModal.bind(this)}>
