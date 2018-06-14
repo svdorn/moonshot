@@ -11,6 +11,10 @@ git clone https://github.com/MoonshotLearning/moonshot.git
 cd moonshot
 npm install
 ```
+Tell Node that you are going to be working on a development server by exporting NODE_ENV wherever your PATH is set. If you don't know where that is and are working on a Mac, it may be in .bash_profile
+```
+export NODE_ENV=development
+```
 Have the prerequisites installed and do the steps under installing, after completing that, do these steps:
 ```
 cd /moonshot

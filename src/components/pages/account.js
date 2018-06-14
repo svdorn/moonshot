@@ -3,35 +3,48 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {updateUser} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper} from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm, change} from 'redux-form';
+import axios from 'axios';
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
+
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
 };
-
-const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
-        {...input}
-        {...custom}
-        type="password"
-    />
-);
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
+    />
+);
+
+const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
+        {...input}
+        {...custom}
+        type="password"
     />
 );
 
@@ -54,6 +67,19 @@ const validate = values => {
 };
 
 class Account extends Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            hideProfile: props.currentUser.hideProfile === true
+        };
+    }
+
+
+    handleHideProfileClick() {
+        this.setState({ hideProfile: !this.state.hideProfile });
+    }
+
 
     handleSubmit(e) {
         e.preventDefault();
@@ -80,7 +106,8 @@ class Account extends Component {
             name: this.props.formData.settings.values.name,
             email: this.props.formData.settings.values.email,
             password: this.props.formData.settings.values.password,
-            _id: this.props.currentUser._id
+            _id: this.props.currentUser._id,
+            hideProfile: this.state.hideProfile
         };
 
         this.props.updateUser(user);
@@ -90,15 +117,14 @@ class Account extends Component {
         this.props.untouch("password");
     }
 
+
     //name, email, password, confirm password, signup button
     render() {
+        const isCandidate = this.props.currentUser.userType === "candidate";
+
         return (
-            <div className="formContainer" style={{display:'inline-block'}}>
-                <div className="form lightWhiteForm">
-                    <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Settings</h1>
+                    <form onSubmit={this.handleSubmit.bind(this)} className="marginTop10px">
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="name"
                                 component={renderTextField}
@@ -107,7 +133,6 @@ class Account extends Component {
                             /></div>
                         <br/>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="email"
                                 component={renderTextField}
@@ -116,24 +141,39 @@ class Account extends Component {
                             /></div>
                         <br/>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="password"
                                 component={renderPasswordField}
-                                label="Password"
+                                label="Verify Password"
                                 className="lightBlueInputText"
                                 autoComplete="new-password"
                             /></div>
                         <br/>
-                        <button
+                        {isCandidate ?
+                            <div className="center">
+                                <div className="checkbox smallCheckbox whiteCheckbox" onClick={this.handleHideProfileClick.bind(this)}>
+                                    <img
+                                        alt=""
+                                        className={"checkMark" + this.state.hideProfile}
+                                        src="/icons/CheckMarkRoundedWhite.png"
+                                    />
+                                </div>
+                                <div className="whiteText" style={{display:"inline-block"}}>
+                                    Hide Profile From Employers
+                                </div>
+                            </div>
+                            : null
+                        }
+                        <div className="center">
+                        <RaisedButton
+                            label="Update Settings"
                             type="submit"
-                            className="formSubmitButton font24px font16pxUnder600"
-                        >
-                            Update Settings
-                        </button>
+                            className="raisedButtonBusinessHome"
+                            style={{margin: '10px auto'}}
+                        />
+                        </div>
+                        {this.props.loadingUpdateSettings ? <div className="center"><CircularProgress color="white" style={{marginTop: "10px"}}/></div> : null}
                     </form>
-                </div>
-            </div>
         );
     }
 }
@@ -150,6 +190,7 @@ function mapStateToProps(state) {
         initialValues: state.users.currentUser,
         formData: state.form,
         currentUser: state.users.currentUser,
+        loadingUpdateSettings: state.users.loadingSomething
     };
 }
 

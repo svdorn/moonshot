@@ -3,13 +3,17 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {changePassword} from '../../actions/usersActions';
-import {TextField, RaisedButton, Paper} from 'material-ui';
+import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
+
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
 };
 
 const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -17,7 +21,11 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
         type="password"
@@ -83,12 +91,8 @@ class PasswordChange extends Component {
 
     render() {
         return (
-            <div className="formContainer" style={{display:'inline-block'}}>
-                <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Change Password</h1>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                         <Field
                             name="oldpass"
                             component={renderPasswordField}
@@ -96,7 +100,6 @@ class PasswordChange extends Component {
                             className="lightBlueInputText"
                         /></div><br/>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                         <Field
                             name="password"
                             component={renderPasswordField}
@@ -104,22 +107,22 @@ class PasswordChange extends Component {
                             className="lightBlueInputText"
                         /></div><br/>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                         <Field
                             name="password2"
                             component={renderPasswordField}
                             label="Confirm New Password"
                             className="lightBlueInputText"
-                        /></div><br/>
-                        <button
+                        /></div>
+                        <div className="center">
+                        <RaisedButton
+                            label="Change Password"
                             type="submit"
-                            className="formSubmitButton font24px font16pxUnder600"
-                        >
-                            Change Password
-                        </button>
+                            className="raisedButtonBusinessHome"
+                            style={{margin: '30px auto 0px'}}
+                        />
+                        </div>
+                        {this.props.loadingChangePassword ? <div className="center"><CircularProgress color="white" style={{marginTop: "10px"}}/></div> : null}
                     </form>
-                </div>
-            </div>
         );
     }
 }
@@ -134,6 +137,7 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         currentUser: state.users.currentUser,
+        loadingChangePassword: state.users.loadingSomething
     };
 }
 

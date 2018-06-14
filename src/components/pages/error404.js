@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Paper } from 'material-ui';
 import { browserHistory } from 'react-router';
 import {connect} from 'react-redux';
+import MetaTags from 'react-meta-tags';
 
 class error404 extends Component {
     goTo (route)  {
@@ -15,12 +16,17 @@ class error404 extends Component {
     render () {
         let route = '/';
         if (this.props.currentUser) {
-            route = '/discover';
+            route = '/myEvaluations';
         }
         return (
             <div className="fillScreen greenToBlue" style={{textAlign:"center"}}>
+                <MetaTags>
+                    <title>404 | Moonshot</title>
+                    <meta name="description" content="You are lost but we can show you the way." />
+                </MetaTags>
                 <Paper className="form bigForm semiOpaquePaper blueTextImportant font20px font14pxUnder700 font10pxUnder400" zDepth={2}>
                     <img
+                        alt="404 Image - Rocket Doing Loops"
                         src="/images/404.png"
                         id="image404"
                     /><br/>

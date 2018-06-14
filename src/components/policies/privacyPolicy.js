@@ -18,101 +18,81 @@ class PrivacyPolicy extends Component {
         return (
             <div>
                 {standalone ?
-                    <div className="greenToBlue headerDiv" />
+                    <div className="lightBlackBackground headerDiv" />
                     : null
                 }
 
                 <div style={containerStyle}>
-                    <b className="font20px font18pxUnder700">Moonshot’s Privacy Policy</b>
+                    <b className="font20px font18pxUnder700">Privacy Policy</b>
 
-                    <br/><br/>Last updated: 3/2/2018
+                    <br/><br/>Last updated: 6/10/2018
 
-                    <br/><br/>Moonshot Learning, Inc. ("us", "we", or "our") operates moonshotlearning.org ("website",
-                    "site"). This Privacy Policy informs you of our policies regarding the collection, use and disclosure of
-                    Personal Information we receive from users of the site.
+                    <br/><br/><b>Introduction</b>
 
-                    <br/><br/>By using this site, you agree to the collection and use of information in accordance with this
-                    policy.
+                    <br/><br/>Moonshot Learning, Inc. (“Moonshot”, “Moonshot Insights”, “we”, “us”) takes your privacy seriously. At Moonshot we pledge to follow the provisions of this privacy policy in order to protect your privacy rights.
 
-                    <br/><br/><b>Information Collection and Use</b>
+                    <br/><br/>This privacy policy (the “Policy”) outlines our general policy and practices for protecting your private information.  It includes the types of information we gather, how we use it, and the choices individuals have regarding our use of their information. Private information can broadly be broken down into two categories: information which cannot be used to identify you (“Non-Personal Information”) and information which can be used to identify you (“Personal Information”). This Policy applies to all Personal and Non-Personal Information received by us whether in electronic, written, or verbal format.
 
-                    <br/><br/>While using our site, we may ask you to provide us with certain personally identifiable
-                    information that can be used to contact or identify you. Personally identifiable information may
-                    include, but is not limited to your name, email address and phone number.
+                    <br/><br/>Moonshot reserves the right to modify this Policy at any time and will do so from time to time.  Each modification shall be effective upon making use of MoonshotInsights.io (the “Website”). Your continued use of the Website following any such modification constitutes your acceptance of any changes to this Policy. It is therefore important that you review this Policy regularly. If you have any questions concerning this Policy, please contact us at support@MoonshotInsights.io.
 
-                    <br/><br/><b>Log Data</b>
+                    <br/><br/><b>1. Scope.</b>
 
-                    <br/><br/>Like many site operators, we collect information that your browser sends whenever you visit
-                    our site (“Log Data”). This Log Data may include information such as your computer’s Internet Protocol
-                    (“IP”) address, browser type, browser version, the pages of our site that you visit, the time and date
-                    you visit, the time spent on those pages and other statistics.
+                    <br/><br/>This Policy covers all of MoonshotInsights.io. However, it does not apply to entities that we do not own or control including advertisers or developers of content.  It also does not cover sites with posted links on the Website. These entities are governed by their own privacy policies and not this Policy. Please check the privacy policy of any entity you interact with on or off the Website.   .
 
-                    <br/><br/><b>Communications</b>
+                    <br/><br/><b>2. Non-Personal Information.</b>
 
-                    <br/><br/>We may use your Personal Information to contact you with newsletters, marketing or promotional
-                    materials and other information.
+                    <br/><br/>1. 	When you access the Website from a computer, mobile phone, or other device, we may collect information from that device about your browser type, location, and IP address, as well as the pages you visit.
+                    <br/>2.     We may collect information from postings or links you click on when using the Website.  We may also keep track of links you click on in emails you receive from us. This is done to increase the relevancy of the posts or advertisements you see.
 
-                    <br/><br/><b>Cookies</b>
 
-                    <br/><br/>Cookies are files with small amount of data, which may include an anonymous unique identifier.
-                    Cookies are sent to your browser from a web site and stored on your computer{"'"}s hard drive.
+                    <br/><br/><b>3. Personal Information.</b>
 
-                    <br/><br/>Like many sites, we use "cookies" to collect information. You can instruct your browser to
-                    refuse all cookies or to indicate when a cookie is being sent. However, if you do not accept cookies,
-                    you may not be able to use some portions of our Site.
+                    <br/><br/>1.     As part of the process to become a User, we require you provide your name, age, gender, and email address. You may also be prompted to input your address, phone number, and other contact information.
+                    <br/>2.     While using the Website you may provide text, files, images, photos, video, or any other materials (collectively "Content") to the Website by uploading, posting, or publishing the Content on the Website.
+                    <br/>3.     When you interact with others on the Website you may provide other information about yourself such as personal information, or any relevant business information. Please use care when disclosing private information to other Users.
+                    <br/>4.     We may retain the details of connections or transactions you make with us on the Website.
+                    <br/>5.     We may collect information about you derived from information other Users provide to us in their Content. Some of this information may contain Personal Information.
 
-                    <br/><br/><b>Security</b>
+                    <br/><br/><b>4. How Moonshot Uses Your Personal Information.</b>
 
-                    <br/><br/>The security of your Personal Information is important to us. We are responsible for the
-                    accuracy and security of your personally identifiable data. We use commercially acceptable means to
-                    protect your Personal Information to ensure unauthorized parties cannot access your data.
+                    <br/><br/>1.     Moonshot uses the information you are required to provide to become a registered User in order to ensure you are over the age of 18. MoonshotInsights.io is not meant to be used by anyone under the age of 18.
+                    <br/>2.     We may contact you with service-related announcements from time to time. You may opt-out of all communications except essential updates. We may include Content from the Website in the emails we send to you.
+                    <br/>3.     We may allow other Users to use contact information they have about you, such as your email address, to find you.
+                    <br/>4.     We may, at the request of Employers, aggregate, compile, and analyze anonymized data of Users affiliated with such Employers in order to provide Employers with statistical data regarding employment in certain fields and professions.
+                    <br/>5.     Certain software applications and applets transmit data to us.  We may not make a formal disclosure if we believe our collection of and use of the information is the obvious purpose of the application.  If it is not obvious that we are collecting or using such information, we will disclose our collection to you the first time you provide us with the information.
+                    <br/>6.     Moonshot does not share or disclose any financial information related to you or to any business or entity whose presence on the Website you represent. We do not take responsibility for any such information you choose to display on your profile or choose to share with other Users in the course of your use of the Website or communications with such Users.
 
-                    <br/><br/><b>Changes To This Privacy Policy</b>
+                    <br/><br/><b>5. How Moonshot Uses Your Non-Personal Information.</b>
 
-                    <br/><br/>This Privacy Policy will remain in effect except with respect to any changes in its provisions
-                    in the future, which will be in effect immediately after being posted on this page.
+                    <br/><br/>1.     Moonshot will use the information we collect to provide services and features to you.  Moonshot will also use the information to measure and improve the Website, and to provide you with customer support.
+                    <br/>2.     We can use the information we collect to prevent potential illegal activities. We also use a variety of methods to detect and address anomalous activity and screen content to prevent abuse.
+                    <br/>3.     We may use your information to serve you personalized advertising.  We don’t share your information with advertisers without your consent. We allow advertisers to choose the characteristics of Users who will see their advertisements. We may use any of the non-personally identifiable attributes we have collected in any fashion to select the appropriate audience. Any advertisement posted on the Website will only refer to other Users of the Website.
 
-                    <br/><br/>We reserve the right to update or change our Privacy Policy at any time and you should check
-                    this Privacy Policy periodically. Your continued use of our Site after we post any modifications to the
-                    Privacy Policy on this page will constitute your acknowledgment of the modifications and your consent to
-                    abide and be bound by the modified Privacy Policy.
+                    <br/><br/><b>6. How Moonshot Shares Your Information. </b>
 
-                    <br/><br/>If we make any material changes to this Privacy Policy, we will notify you either through the
-                    email address you have provided us, or by placing a prominent notice on our website.
+                    <br/><br/>Moonshot shares your Personal and Non-Personal Information with third-parties when we believe the sharing is permitted by you, is reasonably necessary to offer our services, or when we are legally required to do so. We will not share your information with third-parties in a way we think violates your privacy. The following are examples of the ways we share your information; however, this list is informative not exhaustive.
 
-                    <br/><br/><b>Links</b>
+                    <br/><br/>1.     When you invite or refer another User to join the Website, the invitation will contain information which will allow the User to identify you. The invitation or referral may contain information about other Users.
+                    <br/>2.     Certain information you provide to us will be shared by using the Website’s search function. This allows other Users to locate your profile, and any postings or Content you have posted on the Website.
+                    <br/>3.     We provide some public information to search engines. This information allows search engines to locate MoonshotInsights.io. This does not mean all information you post on the Website can be accessed using a search engine.
+                    <br/>4.     We may provide information to third-parties based on your interaction with them on the Website. This access will only be sufficient to conduct the interaction and will only be done in the event the interaction provides a possible networking opportunity. We will not disclose any financial information to other Users or third-parties.
+                    <br/>5.     We may also share information when we have a good faith belief it is necessary to prevent fraud or other illegal activity, to prevent imminent bodily harm, or to protect ourselves and you from people violating the Terms of Use Agreement of MoonshotInsights.io. This may include sharing information with other companies, lawyers, and courts or other government entities.
+                    <br/>6.     We may disclose information pursuant to subpoenas, court orders, or other requests (including criminal and civil matters) if we have a good faith belief that such a response is required by law. This may include requests from jurisdictions outside of the United States if we have a good faith belief that the response is required by law under the local laws in that jurisdiction, is applicable to users from that jurisdiction, and is consistent with generally accepted international standards.
 
-                    <br/><br/>This website contains links to other sites. Please be aware that we are not responsible for
-                    the content or privacy practices of such other sites. We encourage our users to be aware when they leave
-                    our site and to read the privacy statements of any other site that collects personally identifiable
-                    information.
+                    <br/><br/><b>7. Sharing Your Information on MoonshotInsights.io.</b>
 
-                    <br/><br/><b>Data Collection and Use</b>
+                    <br/><br/>Use of MoonshotInsights.io is based on you posting information about yourself, your completed Pathways, business or company on the Website. Personal details such as contact information is not viewable to anyone who is not a registered User of the Website. In addition, any information contained in private messages is not made available to any party not involved in a certain conversation.
 
-                    <br/><br/>We collect your name, phone number, email, other personally identifiable information and data
-                    collected through commission of you completing Moonshot pathways. Data is protected by being stored on
-                    secure servers and databases.
+                    <br/><br/><b>8. Collection of Information from Children and COPPA.</b>
 
-                    <br/><br/>We collect this information through your submission on our site and by completing pathways,
-                    engaging with other content and sources through our site. By accepting this agreement, you allow us to
-                    collect your data as you engage with content on and linked to our site.
+                    <br/><br/>MoonshotInsights.io is not targeted toward children. We do not knowingly collect or retain any Personal Information from children under the age of thirteen. If you believe some person or User has submitted information about an individual under the age of thirteen, contact us and we will remove the information as soon as possible.
 
-                    <br/><br/>All of this data will only be used, in our sole discretion, to advance the chances of you and
-                    other users on the site to receive employment opportunities with our existing and potential hiring
-                    partners. The purpose of the data is employment so you allow us to share your data with various
-                    employers, organizations and other stakeholders to technology and the workforce.
+                    <br/><br/><b>9. Miscellaneous.</b>
 
-                    <br/><br/><b>Control Over Your Data</b>
-
-                    <br/><br/>You can control your basic data in profile settings, exercise choice over what data we
-                    collect, contact us to see and contest all of the personally identifiable data that Moonshot has
-                    collected from you and request for all of your data on Moonshot to be deleted, at any time, by
-                    contacting support@moonshotlearning.org.
-
-                    <br/><br/><b>Contact Us</b>
-
-                    <br/><br/>If you have any questions about this Privacy Policy, please contact us at
-                    support@moonshotlearning.org.
+                    <br/><br/>1.     Unless stated otherwise, our current Policy applies to all information which we have about you and your account.
+                    <br/>2.     By using MoonshotInsights.io, you consent to having your personal data transferred to and processed in the United States.
+                    <br/>3.     You may obtain a copy of the information we have collected about you by contacting us at support@MoonshotInsights.io
+                    <br/>4.     All terms used in this document have the same meaning as in the Terms of Use Agreement unless obviously limited by context. If any term is unclear, please refer to the Terms of Use Agreement.
                 </div>
 
                 {standalone ?

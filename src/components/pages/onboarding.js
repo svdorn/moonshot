@@ -1,15 +1,16 @@
 "use strict"
-import React, {Component} from 'react';
-import {connect} from 'react-redux';
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import {
     updateAllOnboarding,
     startOnboarding,
     endOnboarding,
     closeNotification
 } from "../../actions/usersActions";
-import {DatePicker, RaisedButton} from 'material-ui';
-import {bindActionCreators} from 'redux';
-import {browserHistory} from 'react-router';
+import { DatePicker, RaisedButton } from 'material-ui';
+import { bindActionCreators } from 'redux';
+import { browserHistory } from 'react-router';
+import MetaTags from 'react-meta-tags';
 
 class Onboarding extends Component {
     constructor(props) {
@@ -429,7 +430,7 @@ class Onboarding extends Component {
         this.saveAllInfo();
         const markOnboardingComplete = true;
         // defaults to going to discover after finishing onboarding
-        let nextUrl = "/discover";
+        let nextUrl = "/myEvaluations";
         let removeRedirectField = false;
         // if the user had somewhere else to redirect to after onboarding, go there
         if (this.props.currentUser.redirect) {
@@ -636,7 +637,7 @@ class Onboarding extends Component {
                         {goal.selected ?
                             <div className="clickableNoUnderline onboardingPage2Text2Background center"
                                  onClick={() => self.handleGoalClick(goal)}>
-                                <div className="font16px font12pxUnder500 onboardingPage1Text2">
+                                <div className="font16px font12pxUnder500 onboardingPage2Text2">
                                     {goal.title}
                                 </div>
                             </div>
@@ -743,14 +744,17 @@ class Onboarding extends Component {
         if (!tabValue || tabValue == "interests") {
             const interestTypes1 = [
                 {interestArea: this.state.designAndDevInterests,
+                 imageAltTag: "Product Design And Development",
                  pictureSrc: "/icons/Cube.png",
                  iconNumber: 1,
                  title: <b>Product Design<br/>and Development</b> },
                 {interestArea: this.state.dataInterests,
+                 imageAltTag: "Data",
                  pictureSrc: "/icons/Data.png",
                  iconNumber: 2,
                  title: <b>Data</b> },
                 {interestArea: this.state.softwareDevInterests,
+                 imageAltTag: "Software Development",
                  pictureSrc: "/icons/Computer.png",
                  iconNumber: 3,
                  title: <b>Software<br/>Development</b> }
@@ -758,10 +762,12 @@ class Onboarding extends Component {
 
             const interestTypes2 = [
                 {interestArea: this.state.creationAndMarketingInterests,
+                 imageAltTag: "Creation and Marketing",
                  pictureSrc: "/icons/Creation.png",
                  iconNumber: 4,
                  title: <b>Creation and<br/>Marketing</b>},
                 {interestArea: this.state.businessInterests,
+                 imageAltTag: "Business",
                  pictureSrc: "/icons/Business.png",
                  iconNumber: 5,
                  title: <b>Business</b> }
@@ -777,7 +783,7 @@ class Onboarding extends Component {
                             onClick={() => self.handleIconClick(interest.iconNumber)}>
                             <div className={self.state.currInterestArea === interest.interestArea ? "gradientBorderBlue center" : "transparentBorder center"}>
                                 <div style={{padding: '5px'}}>
-                                    <img src={interest.pictureSrc} className="onboardingIcons"/>
+                                    <img alt={interest.imageAltTag} src={interest.pictureSrc} className="onboardingIcons"/>
                                     <div className="font16px font12pxUnder500 center">
                                         {interest.title}
                                     </div>
@@ -1011,6 +1017,7 @@ class Onboarding extends Component {
                         <div className="checkbox mediumCheckbox purpleCheckbox"
                              onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
+                                alt="Checkmark Icon"
                                 className={"checkMark" + this.state.inSchool.toString()}
                                 src="/icons/CheckMark.png"
                             />
@@ -1042,6 +1049,13 @@ class Onboarding extends Component {
 
         return (
             <div>
+                <MetaTags>
+                    <title>Onboarding | Moonshot</title>
+                    <meta name="description" content="Tell us a bit about yourself so we can help you find the perfect job." />
+                </MetaTags>
+
+                <div style={{height:"65px"}}/>
+
                 {onBoardingHtml}
 
                 <div className={"onboardingDots center onboardingDots" + this.state.tabValue}>

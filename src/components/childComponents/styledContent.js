@@ -9,13 +9,19 @@ class StyledContent extends Component {
         let contentHtml = [];
         contentArray.forEach(function(part) {
             // default classNames; if className provided, give the part that className instead
-            let defaultClassNames = "inlineBlock font20px font14pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
+            let defaultClassNames = part.includeDefaultClasses === false ? "" : "inlineBlock marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
+            let fontSizes = "font20px font14pxUnder600";
+            // code looks smaller
             if (part.partType === "code") {
-                defaultClassNames = "inlineBlock font16px font12pxUnder600 marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
+                fontSizes = "font16px font12pxUnder600";
             }
-            let className = part.className ? part.className : defaultClassNames;
+            let className = part.className ? part.className : defaultClassNames + " " + fontSizes;
             // if className isn't default but we want to include default classes, add them
             if (part.className && part.includeDefaultClasses) {
+                className = className + " " + defaultClassNames + " " + fontSizes;
+            }
+            // if should include default classes but want custom font sizes
+            if (part.className && part.includeDefaultClassesNotFontSizes) {
                 className = className + " " + defaultClassNames;
             }
             const content = part.content;
@@ -36,8 +42,10 @@ class StyledContent extends Component {
                     break;
                 case "img":
                     if (content.length > 0) {
+                        const altTag = part.altTag ? part.altTag : "";
                         contentHtml.push(
-                            <img src={"/images/" + content[0]}
+                            <img alt={altTag}
+                                 src={"/images/" + content[0]}
                                  className={className}
                                  key={"contentPart" + keyCounter} />
                         );
@@ -50,9 +58,9 @@ class StyledContent extends Component {
                         return (
                             <div key={skill + "div"}
                                  style={{display: 'inline-block', marginTop: '15px'}}
-                                 className="gradientBorderPurpleToPinkChip"
+                                 className="lightBlueChip"
                             >
-                                <div key={skill} className="purpleText">
+                                <div key={skill} className="blueText">
                                     {skill}
                                 </div>
                             </div>
@@ -66,10 +74,15 @@ class StyledContent extends Component {
                     break;
                 case "link":
                     if (content.length > 0) {
-                        const linkText = content.linkText ? content.linkText : content[0];
-                        const target = content.newTab === false ? "_self" : "_blank";
-                        return (
-                            <a target={target} href={content[0]}>{linkText}</a>
+                        const linkText = part.linkText ? part.linkText : content[0];
+                        const target = part.newTab === false ? "_self" : "_blank";
+                        contentHtml.push(
+                            <a key={++keyCounter + " link"}
+                               target={target}
+                               className={className}
+                               href={content[0]}>
+                                {linkText}
+                            </a>
                         );
                     }
                     break;
@@ -133,15 +146,16 @@ class StyledContent extends Component {
                     }
                     break;
                 default:
-                    console.log("content part type unnaccounted for");
+                    // console.log("content part type unnaccounted for");
                     break;
             }
         });
 
         const className = this.props.className ? this.props.className : "noStyle";
+        const style = this.props.style ? this.props.style : {};
 
         return (
-            <div className={className}>
+            <div className={className} style={style}>
                 {contentHtml}
             </div>
         );

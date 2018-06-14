@@ -28,6 +28,8 @@ var quizzesSchema = mongoose.Schema({
         linkText: String,
         // if the question part is a link, should the link open a new tab? (optional, defaults to true)
         newTab: Boolean,
+        // alt text for the image if the part is an image
+        altTag: String,
         // if you should put a break after the part
         shouldBreak: Boolean
     }],

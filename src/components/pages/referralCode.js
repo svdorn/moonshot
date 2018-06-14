@@ -11,7 +11,7 @@ import axios from 'axios';
 import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
 import AffiliateAgreement from '../policies/affiliateAgreement';
-
+import MetaTags from 'react-meta-tags';
 
 const styles = {
     floatingLabelStyle: {
@@ -129,7 +129,7 @@ class ReferralCode extends Component {
 
         // make the loading bar show up
         self.setState({...this.state, loading: true});
-        axios.post("api/createReferralCode", {name, email})
+        axios.post("api/misc/createReferralCode", {name, email})
         .then(function(response) {
             // stop the loading bar, show the referral code
             const referralCode = response.data;
@@ -179,6 +179,11 @@ class ReferralCode extends Component {
 
         return (
             <div className="fillScreen greenToBlue formContainer">
+                <MetaTags>
+                    <title>Referral Code | Moonshot</title>
+                    <meta name="description" content="Become a Moonshot referrer and get $300 for every friend that gets a job through us!" />
+                </MetaTags>
+
                 <div className={blurredClass}>
                     <Dialog
                         actions={actionsPP}
@@ -223,7 +228,7 @@ class ReferralCode extends Component {
                                 <br/>
                                 <span className="font20px">Your referral url is:</span>
                                 <br/>
-                                <span className="font16px" style={{marginBottom: "20px", display:"inline-block"}}>{"https://moonshotlearning.org/?referralCode="}{this.state.referralCode}</span>
+                                <span className="font16px" style={{marginBottom: "20px", display:"inline-block"}}>{"https://moonshotinsights.io/?referralCode="}{this.state.referralCode}</span>
                                 <br/>
                                 <span className="font16px">
                                     Have your friend enter this code when they
@@ -259,6 +264,7 @@ class ReferralCode extends Component {
                                     <div className="checkbox smallCheckbox blueCheckbox"
                                          onClick={this.handleCheckMarkClick.bind(this)}>
                                         <img
+                                            alt=""
                                             className={"checkMark" + this.state.agreeingToTerms}
                                             src="/icons/CheckMarkBlue.png"
                                         />

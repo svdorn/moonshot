@@ -16,15 +16,39 @@ class Footer extends Component {
         if (this.props.isOnboarding) {
             return null;
         }
-        let footerColor = "purpleToBlue";
-        if (this.props.location.pathname === '/myPathways' || this.props.location.pathname === '/pathway') {
-            footerColor = "purpleToRedLightGradientOpacity";
-        } else if (this.props.location.pathname === '/profile') {
-            footerColor = "orangeToYellowGradientOpacity";
+        let shadowDivClass = "tabsShadow";
+        let extraSpace = " topSpace";
+        let footerColor = "blackBackgroundOpacity";
+        // get the path from the url
+        let pathname = undefined;
+        // try to get the path
+        try {
+            pathname = this.props.location.pathname.toLowerCase();
         }
+        // if the pathname is not yet defined, don't do anything, this will be executed again later
+        catch (e) {
+            pathname = "";
+        }
+        if ((pathname === '/mypathways') || (pathname === '/pathway')) {
+            footerColor = "purpleToRedLightGradientOpacity";
+            extraSpace = "";
+            shadowDivClass = "";
+        } else if ((pathname === '/profile') || (pathname === '/businessprofile')) {
+            footerColor = "orangeToYellowGradientOpacity";
+            extraSpace = "";
+            shadowDivClass = "";
+        } else if (pathname === '/resumeanalysis') {
+            footerColor = "redToLightRedUpGradientOpacity";
+        } else if (pathname === '/results' || pathname === '/mycandidates' || pathname === '/' || pathname === '/myemployees' || pathname === '/myevaluations') {
+            shadowDivClass = "tabsShadow";
+            extraSpace = " topSpace";
+            footerColor = "blackBackgroundOpacity";
+        }
+
         return (
             <div className="jsxWrapper">
-                <footer className={"footer " + footerColor}>
+                <div className={shadowDivClass} style={{position:"absolute"}}><div/></div>
+                <footer className={"footer " + footerColor + extraSpace}>
                     <ul className="horizCenteredList">
                         <li className="center">
                             <img
@@ -38,6 +62,7 @@ class Footer extends Component {
                             <div style={{marginTop: "10px"}}>
                                 <a href="https://www.facebook.com/MoonshotLearning/" target="_blank">
                                     <img
+                                        alt="Facebook Logo"
                                         width={13}
                                         height={20}
                                         src="/logos/Facebook.png"/>
@@ -45,6 +70,7 @@ class Footer extends Component {
                                 <a href="https://twitter.com/moonshotteched" target="_blank"
                                    style={{marginLeft: "20px"}}>
                                     <img
+                                        alt="Twitter Logo"
                                         width={20}
                                         height={20}
                                         src="/logos/Twitter.png"/>
@@ -52,6 +78,7 @@ class Footer extends Component {
                                 <a href="https://www.linkedin.com/company/18233111/" target="_blank"
                                    style={{marginLeft: "20px"}}>
                                     <img
+                                        alt="LinkedIn Logo"
                                         width={20}
                                         height={20}
                                         src="/logos/LinkedIn.png"/>

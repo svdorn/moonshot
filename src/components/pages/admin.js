@@ -5,6 +5,7 @@ import {browserHistory} from 'react-router';
 import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class Admin extends Component {
     constructor(props) {
@@ -23,23 +24,6 @@ class Admin extends Component {
             this.goTo("/");
             return;
         }
-
-        let self = this;
-
-        axios.get("/api/infoForAdmin", {params: {
-            userId: user._id,
-            verificationToken: user.verificationToken
-        }})
-        .then(function(response) {
-            const usersArray = response.data;
-            self.setState({
-                ...self.state,
-                users: usersArray
-            })
-        })
-        .catch(function(err) {
-            console.log("error with getting info for admin");
-        })
     }
 
 
@@ -54,23 +38,18 @@ class Admin extends Component {
 
 
     render() {
-        const users = this.state.users;
-        let userLis = !users || users.length === 0 ? null : users.map(function(user) {
-            return (
-                <li>
-                    <a href={"/adminUserView?user=" + user.profileUrl}>{user.name}</a> with email: {user.email}
-                </li>
-            );
-        });
-
-        const userList = <ul>{userLis}</ul>;
-
         return (
             <div>
+                <MetaTags>
+                    <title>Admin | Moonshot</title>
+                    <meta name="description" content="Moonshot admin page." />
+                </MetaTags>
+
                 {this.props.currentUser.admin === true ?
                     <div>
                         <div className="headerDiv greenToBlue" />
-                        {userList}
+
+                        {this.props.children}
                     </div>
 
                     : null

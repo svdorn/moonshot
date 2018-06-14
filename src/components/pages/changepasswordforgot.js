@@ -3,9 +3,10 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {changePasswordForgot} from '../../actions/usersActions';
-import {TextField} from 'material-ui';
+import {TextField, CircularProgress} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
+import MetaTags from 'react-meta-tags';
 
 const styles = {
     floatingLabelStyle: {
@@ -76,6 +77,10 @@ class PasswordChange extends Component {
     render() {
         return (
             <div className="fillScreen greenToBlue formContainer">
+                <MetaTags>
+                    <title>New Password | Moonshot</title>
+                    <meta name="description" content="Reset your Moonshot password. It's okay - we all forget things sometimes." />
+                </MetaTags>
                 <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
                 <div className="form lightWhiteForm">
                     <form onSubmit={this.handleSubmit.bind(this)}>
@@ -104,6 +109,11 @@ class PasswordChange extends Component {
                         >
                             Change Password
                         </button>
+                        <br/>
+                        {this.props.loadingChangePassword ?
+                            <CircularProgress />
+                            : null
+                        }
                     </form>
                 </div>
             </div>
@@ -120,7 +130,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         formData: state.form,
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        loadingChangePassword: state.users.loadingSomething
     };
 }
 

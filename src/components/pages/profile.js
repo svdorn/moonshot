@@ -3,10 +3,11 @@ import React, {Component} from 'react';
 import {Tabs, Tab, CircularProgress, Paper, Divider} from 'material-ui';
 import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
-import {closeNotification, setHeaderBlue} from "../../actions/usersActions";
+import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
 import PathwayPreview from '../childComponents/pathwayPreview';
 import axios from 'axios';
+import MetaTags from 'react-meta-tags';
 
 class Profile extends Component {
     constructor(props) {
@@ -31,8 +32,20 @@ class Profile extends Component {
         }
 
         const currentUser = this.props.currentUser;
+        if (!profileUrl) {
+            // if there is no profile url and no user, there is nothing to look at here,
+            // since there is no profile, so navigate home
+            if (!currentUser) {
+                this.goTo("/");
+            }
+            // also applies if there is no profile url and the user is an employer,
+            // so they would have no profile of their own to see
+            else if (currentUser.userType === "employer") {
+                this.goTo("/businessProfile");
+            }
+        }
         // looking at your own profile
-        if ((!profileUrl) || (currentUser && currentUser.profileUrl == profileUrl)) {
+        if (!profileUrl || (currentUser && currentUser.profileUrl == profileUrl)) {
             this.setState({
                 ...this.state,
                 onOwnProfile: true,
@@ -44,8 +57,8 @@ class Profile extends Component {
 
         // looking at someone else's profile
         else {
-            axios.post("/api/getUserByProfileUrl", {profileUrl}
-            ).then(res => {
+            axios.get("/api/user/userByProfileUrl", {params: {profileUrl}})
+            .then(res => {
                 const user = res.data;
 
                 this.setState({
@@ -57,10 +70,6 @@ class Profile extends Component {
                 })
             })
         }
-
-        // this.props.setHeaderBlue(true);
-
-
     }
 
     makePathways() {
@@ -81,7 +90,7 @@ class Profile extends Component {
 
                 for (let i = 0; i < user.pathways.length; i++) {
                     let id = user.pathways[i].pathwayId;
-                    axios.get("/api/pathwayByIdNoContent", {
+                    axios.get("/api/pathway/pathwayByIdNoContent", {
                         params: {
                             _id: id
                         }
@@ -101,18 +110,29 @@ class Profile extends Component {
                                 formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                             }
 
+                            const pathwayName = pathway.name ? pathway.name : "";
+                            const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
+                            const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
+                            const pathwayLogo = pathway.sponsor && pathway.sponsor.logo ? pathway.sponsor.logo : "";
+                            const pathwaySponsorName = pathway.sponsor && pathway.sponsor.name ? pathway.sponsor.name : "";
+                            const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
+                            const pathwayPrice = pathway.price ? pathway.price : "";
+                            const pathwayId = pathway._id ? pathway._id : undefined;
+
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
                                     onClick={() => self.goTo('/pathwayContent?pathway=' + pathway.url)}>
                                     <PathwayPreview
-                                        name={pathway.name}
-                                        image={pathway.previewImage}
-                                        logo={pathway.sponsor.logo}
-                                        sponsorName={pathway.sponsor.name}
-                                        completionTime={pathway.estimatedCompletionTime}
+                                        name={pathwayName}
+                                        image={pathwayImage}
+                                        imageAltTag={pathwayAltTag}
+                                        logo = {pathwayLogo}
+                                        sponsorName = {pathwaySponsorName}
+                                        completionTime={pathwayCompletionTime}
                                         deadline={formattedDeadline}
-                                        price={pathway.price}
-                                        _id={pathway._id}
+                                        price={pathwayPrice}
+                                        _id={pathwayId}
+                                        comingSoon={false}
                                         variation="4"
                                     />
                                 </li>
@@ -130,7 +150,7 @@ class Profile extends Component {
             if (user.completedPathways) {
                 for (let i = 0; i < user.completedPathways.length; i++) {
                     let id = user.completedPathways[i].pathwayId;
-                    axios.get("/api/pathwayByIdNoContent", {
+                    axios.get("/api/pathway/pathwayByIdNoContent", {
                         params: {
                             _id: id
                         }
@@ -150,18 +170,29 @@ class Profile extends Component {
                                 formattedDeadline = deadline.getMonth() + "/" + deadline.getDate() + "/" + deadline.getYear();
                             }
 
+                            const pathwayName = pathway.name ? pathway.name : "";
+                            const pathwayImage = pathway.previewImage ? pathway.previewImage : "";
+                            const pathwayAltTag = pathway.imageAltTag ? pathway.imageAltTag : pathwayName + " Preview Image";
+                            const pathwayLogo = pathway.sponsor && pathway.sponsor.logo ? pathway.sponsor.logo : "";
+                            const pathwaySponsorName = pathway.sponsor && pathway.sponsor.name ? pathway.sponsor.name : "";
+                            const pathwayCompletionTime = pathway.estimatedCompletionTime ? pathway.estimatedCompletionTime : "";
+                            const pathwayPrice = pathway.price ? pathway.price : "";
+                            const pathwayId = pathway._id ? pathway._id : undefined;
+
                             return (
                                 <li key={key} style={{verticalAlign: "top"}}
                                     onClick={() => self.goTo('/pathway?pathway=' + pathway.url)}>
                                     <PathwayPreview
-                                        name={pathway.name}
-                                        image={pathway.previewImage}
-                                        logo={pathway.sponsor.logoForLightBackground}
-                                        sponsorName={pathway.sponsor.name}
-                                        completionTime={pathway.estimatedCompletionTime}
+                                        name={pathwayName}
+                                        image={pathwayImage}
+                                        imageAltTag={pathwayAltTag}
+                                        logo = {pathwayLogo}
+                                        sponsorName = {pathwaySponsorName}
+                                        completionTime={pathwayCompletionTime}
                                         deadline={formattedDeadline}
-                                        price={pathway.price}
-                                        _id={pathway._id}
+                                        price={pathwayPrice}
+                                        _id={pathwayId}
+                                        comingSoon={false}
                                         variation="4"
                                     />
                                 </li>
@@ -185,8 +216,6 @@ class Profile extends Component {
     goTo(route) {
         // closes any notification
         this.props.closeNotification();
-        // sets header back to normal
-        // this.props.setHeaderBlue(false);
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
@@ -322,6 +351,7 @@ class Profile extends Component {
                     </div>;
                 aboutMeItems.push({
                     icon: "SpeechBubble2.png",
+                    iconAltTag: "Speech Bubble Icon",
                     title: "Biography",
                     content: content
                 });
@@ -353,6 +383,7 @@ class Profile extends Component {
                 });
                 aboutMeItems.push({
                     icon: "Education2.png",
+                    iconAltTag: "Book Icon",
                     title: "Education",
                     content: schools
                 });
@@ -368,6 +399,7 @@ class Profile extends Component {
                 });
                 aboutMeItems.push({
                     icon: "Star2.png",
+                    iconAltTag: "Star Icon",
                     title: "Interests",
                     content: <div>{interestsSpans}</div>
                 });
@@ -391,6 +423,7 @@ class Profile extends Component {
                 if (links.length > 0) {
                     aboutMeItems.push({
                         icon: "Links3.png",
+                        iconAltTag: "Links Icon",
                         title: "Links",
                         content: linkOuts
                     });
@@ -418,7 +451,9 @@ class Profile extends Component {
                     <li style={{marginTop: '30px'}}>
                         <Paper className="profileAboutPaper aboutMeLi font20px font font16pxUnder700 font14pxUnder400"
                                zDepth={3}>
-                            <div className="aboutMeLiIconContainer"><img src={"/icons/" + item.icon}/></div>
+                            <div className="aboutMeLiIconContainer">
+                                <img alt={item.iconAltTag} src={"/icons/" + item.icon}/>
+                            </div>
 
                             <div className="verticalDivider"/>
 
@@ -432,8 +467,22 @@ class Profile extends Component {
             });
         }
 
+        let metaDescription = "See profile.";
+        // if (user) {
+            // TODO check for userType and set the metaDescription to be applicable
+            // if (user.userType === "candidate") {
+            //      metaDescription = "View and edit your profile."
+            // } else if (user.userType === "employer") {
+            //      metaDescription = "See a candidate's profile."
+            // }
+        // }
+
         return (
             <div className='jsxWrapper' ref='discover'>
+                <MetaTags>
+                    <title>Profile | Moonshot</title>
+                    <meta name="description" content={metaDescription} />
+                </MetaTags>
                 {user ?
                     <div>
                         <div>
@@ -604,7 +653,6 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        setHeaderBlue,
     }, dispatch);
 }
 

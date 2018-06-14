@@ -3,17 +3,22 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {postUser, onSignUpPage, closeNotification, addNotification} from '../../actions/usersActions';
-import {TextField, CircularProgress, FlatButton, Dialog} from 'material-ui';
+import {TextField, CircularProgress, FlatButton, Dialog, RaisedButton} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {browserHistory} from 'react-router';
 import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
+import MetaTags from 'react-meta-tags';
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
+
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -21,7 +26,11 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
     />
@@ -32,7 +41,11 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
         type="password"
@@ -45,7 +58,7 @@ const validate = values => {
         'name',
         'email',
         'password',
-        'password2',
+        'password2'
     ];
     requiredFields.forEach(field => {
         if (!values[field]) {
@@ -76,13 +89,33 @@ class Signup extends Component {
     componentWillMount() {
         // shouldn't be able to be on sign up page if logged in
         if (this.props.currentUser && this.props.currentUser != "no user") {
-            this.goTo("/discover");
+            this.goTo("/myEvaluations");
         }
     }
 
     componentDidMount() {
+        // add listener for keyboard enter key
+        const self = this;
+        document.addEventListener('keypress', self.handleKeyPress.bind(self));
+
         this.props.onSignUpPage();
     }
+
+
+    componentWillUnmount() {
+        // remove listener for keyboard enter key
+        const self = this;
+        document.removeEventListener('keypress', self.handleKeyPress.bind(self));
+    }
+
+
+    handleKeyPress(e) {
+        var key = e.which || e.keyCode;
+        if (key === 13) { // 13 is enter
+            this.handleSubmit();
+        }
+    }
+
 
     handleSubmit(e) {
         e.preventDefault();
@@ -100,7 +133,7 @@ class Signup extends Component {
             'name',
             'email',
             'password',
-            'password2',
+            'password2'
         ];
         requiredFields.forEach(field => {
             if (!vals || !vals[field]) {
@@ -108,35 +141,34 @@ class Signup extends Component {
                 notValid = true;
             }
         });
-        if (notValid) return;
+        if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
 
         if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
-            return;
+            return this.props.addNotification("Invalid email.", "error");
         }
         if (vals.password != vals.password2) {
-            return;
+            return this.props.addNotification("Passwords must match.", "error");
         }
 
         // get referral code from cookie, if it exists
         const signUpReferralCode = this.getCode();
-        const name = this.props.formData.signup.values.name;
-        const password = this.props.formData.signup.values.password;
-        const email = this.props.formData.signup.values.email;
-        let user = [{
-            name, password, email, signUpReferralCode,
-            userType: "student"
-        }];
+        const values = this.props.formData.signup.values;
+        const name = values.name;
+        const password = values.password;
+        const email = values.email;
+        let user = {
+            name, password, email, signUpReferralCode
+        };
 
-        // if the user got here from a pathway landing page, add the pathway id
-        // and url for redirect after onboarding completion
+        // if the user got here from a link, add those links
         let location = this.props.location;
         if (location.query) {
-            if (location.query.pathway) {
-                user[0].pathwayId = location.query.pathway;
-                if (location.query.redirect) {
-                    user[0].redirect = location.query.redirect;
-                }
-            }
+            user.code = location.query.code;
+            user.userCode = location.query.userCode;
+        }
+
+        if (!user || !user.code || !user.userCode) {
+            return this.props.addNotification("Must have a unique employer provided link to sign up.", "error");;
         }
 
         this.props.postUser(user);
@@ -207,8 +239,21 @@ class Signup extends Component {
             blurredClass = 'dialogForBizOverlay';
         }
 
+        // scroll to the top if user posted
+        if (this.state.email != "" && this.props.userPosted) {
+            window.scroll({
+                top: 0,
+                left: 0,
+                behavior: 'smooth'
+            });
+        }
+
         return (
-            <div className="fillScreen greenToBlue formContainer">
+            <div className="fillScreen blackBackground formContainer">
+                <MetaTags>
+                    <title>Sign Up | Moonshot</title>
+                    <meta name="description" content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
+                </MetaTags>
                 <div className={blurredClass}>
                     <Dialog
                         actions={actionsPP}
@@ -233,7 +278,7 @@ class Signup extends Component {
                         <TermsOfUse/>
                     </Dialog>
                     <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>
-                    <div className="form lightWhiteForm">
+                    <div className="form lightBlackForm">
                         {this.state.email != "" && this.props.userPosted ?
                             <div className="center">
                                 <h1>Verify your email address</h1>
@@ -244,69 +289,62 @@ class Signup extends Component {
                             <div>
                                 <form onSubmit={this.handleSubmit.bind(this)}>
                                     <h1 style={{marginTop: "15px"}}>Sign Up</h1>
-                                    <div><i>{"Don't panic, it's free."}</i></div>
                                     <div className="inputContainer">
-                                        <div className="fieldWhiteSpace"/>
                                         <Field
                                             name="name"
                                             component={renderTextField}
-                                            label="Full Name"
-                                            className="lightBlueInputText"
+                                            label="Full Name*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
-                                        <div className="fieldWhiteSpace"/>
                                         <Field
                                             name="email"
                                             component={renderTextField}
-                                            label="Email"
-                                            className="lightBlueInputText"
+                                            label="Email*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
-                                        <div className="fieldWhiteSpace"/>
                                         <Field
                                             name="password"
                                             component={renderPasswordField}
-                                            label="Password"
-                                            className="lightBlueInputText"
+                                            label="Password*"
                                         /><br/>
                                     </div>
                                     <div className="inputContainer">
-                                        <div className="fieldWhiteSpace"/>
                                         <Field
                                             name="password2"
                                             component={renderPasswordField}
-                                            label="Confirm Password"
-                                            className="lightBlueInputText"
+                                            label="Confirm Password*"
                                         /><br/>
                                     </div>
 
-                                    <div style={{margin: "20px 20px 10px"}} className="darkBlueText">
-                                        <div className="checkbox smallCheckbox blueCheckbox"
+                                    <div style={{margin: "20px 20px 10px"}}>
+                                        <div className="checkbox smallCheckbox whiteCheckbox"
                                              onClick={this.handleCheckMarkClick.bind(this)}>
                                             <img
+                                                alt=""
                                                 className={"checkMark" + this.state.agreeingToTerms}
-                                                src="/icons/CheckMarkBlue.png"
+                                                src="/icons/CheckMarkRoundedWhite.png"
                                             />
                                         </div>
-                                        I understand and agree to the <bdi className="clickable blueText" onClick={this.handleOpenPP}>Privacy
-                                        Policy</bdi> and <bdi className="clickable blueText" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
-                                    </div>
 
-                                    <button
-                                        type="submit"
-                                        className="formSubmitButton font24px font16pxUnder600"
-                                    >
-                                        Sign Up
-                                    </button>
+                                        I have read and agree to the Moonshot Insights <bdi className="clickable blueTextHome" onClick={this.handleOpenPP}>Privacy
+                                        Policy</bdi> and <bdi className="clickable blueTextHome" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
+                                    </div>
                                     <br/>
-                                    <div className="clickable blueText"
+                                    <RaisedButton
+                                        label="Sign Up"
+                                        type="submit"
+                                        className="raisedButtonBusinessHome"
+                                        style={{margin: '-10px 0 10px'}}
+                                    />
+                                    <br/>
+                                    <div className="clickable"
                                          onClick={() => this.goTo({pathname: '/login', query: urlQuery})}
                                          style={{display: "inline-block"}}>Already have an account?
                                     </div>
                                 </form>
-                                {this.props.loadingCreateUser ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
+                                {this.props.loadingCreateUser ? <CircularProgress color="#72d6f5" style={{marginTop: "8px"}}/> : ""}
                             </div>
                         }
                     </div>
