@@ -167,7 +167,7 @@ class FreeResponse extends Component {
         else if (!this.state.clickedBegin) {
             content = (
                 <div className="evalPortionIntro center">
-                    <div className="font24px" style={{marginBottom: "20px"}}>Short Answer</div>
+                    <div/>
                     <div>
                         <p>This is the short answer portion of the evaluation. Follow the instructions carefully for each question.</p>
                         <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your score will decrease.</p>

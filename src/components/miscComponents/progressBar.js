@@ -23,7 +23,7 @@ class ProgressBar extends Component {
         const ADMIN_QUESTIONS = "Administrative Questions";
         const PSYCH_ANALYSIS = "Psychometric Analysis";
         const SKILL_EVAL = "Skill Evaluation";
-        const FREE_RESPONSE = "Free Response";
+        const FREE_RESPONSE = "Short Answer";
 
         // will always have admin questions and psych analysis
         let numSteps = 2;
