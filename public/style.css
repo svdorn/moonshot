@@ -185,21 +185,20 @@ form > h1 {
     cursor: pointer;
 }
 
-.skillsUserAgreement {
+.evalPortionIntro {
     text-align: center
 }
-.skillsUserAgreement > div:not(:first-child):not(:last-child) {
+.evalPortionIntro > div:not(:first-child) {
     text-align: left;
     width: 700px;
     display: inline-block;
 }
-/* give the text next to the check box extra padding to allow room for the checkbox */
-/* .skillsUserAgreement > div:nth-child(3) p {
-    padding: 0 40px;
-} */
 .skillsUserAgreement .checkbox {
     position: absolute;
     margin-top: 2px;
+}
+.evalPortionIntro span {
+    color: #E83C53;
 }
 
 .progressContainer {
@@ -4490,7 +4489,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: none;
     }
 
-    .skillsUserAgreement > div:not(:first-child):not(:last-child) {
+    .evalPortionIntro > div:not(:first-child) {
         width: 400px;
     }
 
@@ -5651,7 +5650,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: -30px 20% 0px;
     }
 
-    .skillsUserAgreement > div:not(:first-child):not(:last-child) {
+    .evalPortionIntro > div:not(:first-child) {
         width: 250px;
     }
 

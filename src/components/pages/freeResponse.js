@@ -40,7 +40,7 @@ class FreeResponse extends Component {
         // not currently submitting the free response questions
         const submitting = false;
 
-        this.state = { frqs, submitting };
+        this.state = { frqs, submitting, clickedBegin: false };
     }
 
     goTo(route) {
@@ -109,6 +109,11 @@ class FreeResponse extends Component {
     }
 
 
+    begin() {
+        this.setState({ clickedBegin: true });
+    }
+
+
     render() {
         const self = this;
         const currentUser = this.props.currentUser;
@@ -156,6 +161,21 @@ class FreeResponse extends Component {
                     </button>
                 </div>
             );
+        }
+
+        // have the user read about the free response section before doing it
+        else if (!this.state.clickedBegin) {
+            content = (
+                <div className="evalPortionIntro center">
+                    <div className="font24px" style={{marginBottom: "20px"}}>Short Answer</div>
+                    <div>
+                        <p>This is the short answer portion of the evaluation. Follow the instructions carefully for each question.</p>
+                        <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your score will decrease.</p>
+                    </div>
+                    <br/>
+                    <div style={{marginBottom: "40px", width: "initial"}} className={"skillContinueButton"} onClick={this.begin.bind(this)}>Begin</div>
+                </div>
+            )
         }
 
         else {

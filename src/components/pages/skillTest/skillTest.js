@@ -169,12 +169,12 @@ class SkillTest extends Component {
         const buttonClass = this.state.agreedToTerms ? "skillContinueButton" : "disabled skillContinueButton";
 
         return (
-            <div className="skillsUserAgreement center">
-                <div className="font24px" style={{...style.redText, marginBottom: "20px"}}>Skills</div>
+            <div className="evalPortionIntro skillsUserAgreement center">
+                <div className="font24px" style={{marginBottom: "20px"}}>Skills</div>
                 <div>
                     <p>This is the skills portion of the evaluation. Here you will be tested on your aptitude in one or more skills.</p>
-                    <p><span style={style.redText}>TIME IS A FACTOR.</span> After 20 seconds for each question, your score for that question will decrease as time goes on.</p>
-                    <p><span style={style.redText}>DO NOT</span> exit this tab, go to another tab, or use any other application. Each time you do, your overall score will decrease.</p>
+                    <p><span>TIME IS A FACTOR.</span> After 20 seconds for each question, your score for that question will decrease as time goes on.</p>
+                    <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
                     <p>The number of questions in the skills test will change as you go depending on a number of factors. It will end once a score has been determined, but should take no more than 15 minutes.</p>
                 </div>
                 <br/>
@@ -192,7 +192,7 @@ class SkillTest extends Component {
                 {this.props.agreeingToTerms ?
                     <CircularProgress style={{marginBottom: "40px"}} />
                     :
-                    <div style={{marginBottom: "40px"}} className={buttonClass} onClick={this.agreeToTerms.bind(this)}>Begin</div>
+                    <div style={{marginBottom: "40px", width: "initial"}} className={buttonClass} onClick={this.agreeToTerms.bind(this)}>Begin</div>
                 }
             </div>
         );
@@ -321,10 +321,6 @@ class SkillTest extends Component {
             </div>
         );
     }
-}
-
-const style = {
-    redText: {color: "#E83C53"}
 }
 
 
