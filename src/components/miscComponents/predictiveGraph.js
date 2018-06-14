@@ -115,7 +115,10 @@ class PredictiveGraph extends Component {
 
             // 160 is the top of the graph, 40 is the bottom
             // 160 corresponds to 100%, 100 corresponds to 50%, 40 corresponds to 0%
-            const fromBottom = (yValue - 40) * 5 / 6;
+            let fromBottomScore = yValue;
+            if (yValue > 150) { fromBottomScore = 150; }
+            if (yValue < 50 ) { fromBottomScore = 50; }
+            const fromBottom = (fromBottomScore - 40) * 5 / 6;
 
             // get the rgb values of the point
             // start at purple and go up to green

@@ -292,37 +292,12 @@ async function POST_submitFreeResponse(req, res) {
         return res.status(500).send("Server error.");
     }
 
-    // these will be set to true once the user and business are saved in the db
-    let userSaved = false;
-    let businessSaved = false;
-
-    // save the user
-    user.save()
-    .then(response => {
-        userSaved = true;
-        returnToUser();
-    })
-    .catch(saveUserError => {
-        res.status(500).send("Error saving responses.");
-    })
-
-    business.save()
-    .then(response => {
-        returnToUser();
-        businessSaved = true;
-    })
-    .catch(error => {
-        console.log("ERROR SAVING BUSINESS WHEN USER FINISHED APPLICATION: ", error);
-        // return to the user even if there is an error so the user doesn't
-        // know anything is wrong
-        businessSaved = true;
-        returnToUser();
-    });
-
-    function returnToUser() {
-        if (userSaved && businessSaved) {
-            res.json({updatedUser: frontEndUser(user)});
-        }
+    try {
+        let [savedUser, savedBusiness] = await Promise.all([user.save(), business.save()]);
+        return res.json({updatedUser: frontEndUser(savedUser)})
+    } catch (saveError) {
+        console.log("error saving user or business after submitting frq: ", saveError);
+        return res.status(500).send("Server error.");
     }
 }
 
