@@ -12,9 +12,16 @@ class Billing extends Component {
         this.state = {};
     }
 
+    componentDidMount() {
+        const script = document.createElement("script");
+        script.src = "https://js.stripe.com/v3/";
+        document.body.appendChild(script);
+    }
+
     render() {
         return (
-            <div>
+            <div className="fillScreen lightBlackBackground">
+                <div className="headerDiv"/>
             </div>
         );
     }

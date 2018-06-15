@@ -29,8 +29,8 @@ class Menu extends Component {
             dropDownSelected = "Settings";
         } else if (this.props.location.pathname.toLowerCase() === '/adduser') {
             dropDownSelected = "Add User";
-        } else if (this.props.location.pathname === '/onboarding') {
-            dropDownSelected = "Name";
+        } else if (this.props.location.pathname === '/billing') {
+            dropDownSelected = "Billing";
         }
         this.state = {dropDownSelected};
     }
@@ -44,9 +44,9 @@ class Menu extends Component {
             if (this.state.dropDownSelected !== "Add User") {
                 this.setState({dropDownSelected: "Add User"});
             }
-        } else if (this.props.location.pathname === '/onboarding') {
-            if (this.state.dropDownSelected !== "Name") {
-                this.setState({dropDownSelected: "Name"})
+        } else if (this.props.location.pathname === '/billing') {
+            if (this.state.dropDownSelected !== "Billing") {
+                this.setState({dropDownSelected: "Billing"})
             }
         } else {
             // set dropdown to be on Profile if not on settings or onboarding pages
@@ -91,6 +91,9 @@ class Menu extends Component {
                 break;
             case "Add User":
                 this.props.openAddUserModal();
+                break;
+            case "Billing":
+                this.goTo("/billing");
                 break;
             default:
                 break;
@@ -265,6 +268,7 @@ class Menu extends Component {
                     {optionType: "divider"},
                     {optionType: "url", title: "Add User", url: "/addUser"},
                     {optionType: "url", title: "Settings", url: "/settings"},
+                    {optionType: "url", title: "Billing", url: "/billing"},
                     {optionType: "signOut"}
                 ]}
             ];
