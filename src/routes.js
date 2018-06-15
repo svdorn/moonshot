@@ -17,7 +17,7 @@ import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import BusinessHome from './components/pages/businessHome';
 import Main from './main';
-import AuthenticatedComponent from './components/AuthenticatedComponent';
+import AuthenticatedComponent from './components/authenticatedComponent/authenticatedComponent';
 import Settings from './components/pages/settings';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';

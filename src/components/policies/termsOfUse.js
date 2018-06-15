@@ -22,7 +22,7 @@ class TermsOfUse extends Component {
                     : null
                 }
 
-                <div style={containerStyle}>
+                <div style={containerStyle} className="whiteText">
 
                     <b className="font20px font18pxUnder700px">Terms of Use Agreement</b>
 

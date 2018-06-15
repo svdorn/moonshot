@@ -22,7 +22,7 @@ class PrivacyPolicy extends Component {
                     : null
                 }
 
-                <div style={containerStyle}>
+                <div style={containerStyle} className="whiteText">
                     <b className="font20px font18pxUnder700">Privacy Policy</b>
 
                     <br/><br/>Last updated: 6/10/2018

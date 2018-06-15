@@ -48,38 +48,45 @@ let muiTheme = getMuiTheme(theme);
 class Main extends Component {
     constructor(props) {
         super(props);
-        this.state = {load: false};
+        this.state = {
+            loadedUser: false,
+            agreedToTerms: false,
+            agreeingToTerms: false
+        };
     }
 
     componentDidMount() {
         const self = this;
-            this.props.getUserFromSession(function (work) {
-                if (work) {
-                    self.setState({load: true});
-                }
-            })
+        // get the user from the session - if there is no user, just marks screen ready to display
+        this.props.getUserFromSession(function (work) {
+            if (work) {
+                self.setState({ loadedUser: true });
+            }
+        })
     }
 
+
     render() {
-        if (!this.state.load) {
-            return (
-                <MuiThemeProvider muiTheme={muiTheme}>
-                    <div>
-                    </div>
-                </MuiThemeProvider>
-            );
-        } else {
-            return (
-                <MuiThemeProvider muiTheme={muiTheme}>
-                    <div>
-                        <Menu/>
-                        <Notification/>
-                        {this.props.children}
-                        <Footer/>
-                    </div>
-                </MuiThemeProvider>
+        let content = null;
+        if (!this.state.loadedUser) {
+            content = <div className="fillScreen"/>
+        }
+        else {
+            content = (
+                <div>
+                    <Menu/>
+                    <Notification/>
+                    {this.props.children}
+                    <Footer/>
+                </div>
             );
         }
+
+        return (
+            <MuiThemeProvider muiTheme={muiTheme}>
+                { content }
+            </MuiThemeProvider>
+        )
     }
 }
 

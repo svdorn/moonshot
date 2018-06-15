@@ -22,7 +22,7 @@ class PrivacyPolicy extends Component {
                     : null
                 }
 
-                <div style={containerStyle}>
+                <div style={containerStyle} className="whiteText">
                     <b className="font20px font18pxUnder700">MOONSHOT AFFILIATE AGREEMENT</b>
 
                     <br/><br/>Last updated: 3/12/2018
