@@ -410,7 +410,24 @@ function POST_dialogEmailScreen2(req, res) {
                         const randomNumber = crypto.randomBytes(8).toString('hex');
                         user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
                         user.admin = false;
-                        user.agreedToTerms = true;
+                        const NOW = new Date();
+                        user.termsAndConditions = [
+                            {
+                                name: "Privacy Policy",
+                                date: NOW,
+                                agreed: true
+                            },
+                            {
+                                name: "Terms of Use",
+                                date: NOW,
+                                agreed: true
+                            },
+                            {
+                                name: "Service Level Agreement",
+                                date: NOW,
+                                agreed: true
+                            }
+                        ];
                         user.dateSignedUp = new Date();
 
                         // store the user in the db

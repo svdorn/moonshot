@@ -1999,7 +1999,24 @@ async function POST_login(req, res) {
                 // check if user verified email address
                 if (user.verified) {
                     if (typeof employerAgreedToTerms === "boolean") {
-                        user.agreedToTerms = true;
+                        const NOW = new Date();
+                        user.termsAndConditions = [
+                            {
+                                name: "Privacy Policy",
+                                date: NOW,
+                                agreed: true
+                            },
+                            {
+                                name: "Terms of Use",
+                                date: NOW,
+                                agreed: true
+                            },
+                            {
+                                name: "Service Level Agreement",
+                                date: NOW,
+                                agreed: true
+                            }
+                        ]
                         try { user = await user.save(); }
                         catch (saveUserError) {
                             console.log("Error saving employer trying to log in!");

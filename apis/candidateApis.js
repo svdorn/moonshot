@@ -60,14 +60,26 @@ function POST_candidate(req, res) {
     // <<-------------------------------------------------------->> //
 
     // --->>> THINGS WE CAN SET FOR USER WITHOUT ASYNC CALLS <<<--- //
+    const NOW = new Date();
     // admin status must be changed in the db directly
     user.admin = false;
     // user has not yet verified email
     user.verified = false;
     // had to select that they agreed to the terms to sign up so must be true
-    user.agreedToTerms = true;
+    user.termsAndConditions = [
+        {
+            name: "Privacy Policy",
+            date: NOW,
+            agreed: true
+        },
+        {
+            name: "Terms of Use",
+            date: NOW,
+            agreed: true
+        }
+    ];
     // user has just signed up
-    user.dateSignedUp = new Date();
+    user.dateSignedUp = NOW;
     // hasn't had opportunity to do onboarding yet, but we set it to true cuz people don't have to do onboarding yet
     user.hasFinishedOnboarding = true;
     // infinite use, used to verify identify when making calls to backend

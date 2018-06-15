@@ -123,7 +123,7 @@ const COMPLETE_CLEAN = [
     "_id",
     "verificationToken",
     "admin",
-    "agreedToTerms",
+    "termsAndConditions",
     "employerCode",
     "hideProfile",
     "referredByCode",

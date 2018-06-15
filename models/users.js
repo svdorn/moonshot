@@ -17,6 +17,15 @@ var usersSchema = mongoose.Schema({
     admin: Boolean,
     // agreed to privacy policy and terms of use
     agreedToTerms: Boolean,
+    // there are various terms that can be agreed to, depending on the user type
+    termsAndConditions: [{
+        // the name of the terms [e.g. Privacy Policy, Terms of Use, etc...]
+        name: String,
+        // whether the user agreed to the terms
+        agreed: Boolean,
+        // the most recent date the terms were agreed to
+        date: Date
+    }],
     // the code the user used to sign up with to get to their first evaluation
     employerCode: String,
     // whether the user's profile is hidden from employers
@@ -94,73 +103,6 @@ var usersSchema = mongoose.Schema({
     pathwayName: String,
     // location to redirect to after signing up
     redirect: String,
-    // pathways the user is signed up for
-    pathways: [{
-        dateAdded: Date,
-        pathwayId: mongoose.Schema.Types.ObjectId,
-        currentStep: {
-            step: Number,
-            subStep: Number
-        },
-        complete: Boolean
-    }],
-    // pathways the user has finished
-    completedPathways: [{
-        dateAdded: Date,
-        dateCompleted: Date,
-        pathwayId: mongoose.Schema.Types.ObjectId,
-        currentStep: {
-            step: Number,
-            subStep: Number
-        },
-    }],
-    /*
-        // --->> IMPORTANT: <<--- //
-        // IN ORDER FOR MONGOOSE TO SAVE answers, MUST CALL   //
-        // .markModified('answers') ON THE USER, FOR EXAMPLE: //
-        //      user.answers["8uijhyuj"] = {...};             //
-        //      user.markModified('answers');                 //
-        //      user.save();                                  //
-        to eliminate the need to search when getting answers, answers are all
-        stored outside of the pathways that contain them
-        answers object will look like:
-        "answers": {
-            "67890k3i339ik3i": {
-                "answerType": "sliderValue",
-                "value": "8"
-                "correct": undefined //should be undefined if there is objectively correct answer
-            },
-            "[another quiz id]": {
-                "answerType": "multipleChoice",
-                "value": "3" //the answerValue of the chosen answer,
-                "correct": true,
-                "isCustomAnswer": false
-            },
-            "[another quiz id]": {
-                "answerType": "multiSelect",
-                "value": ["3", "5", "6"] //the answerValues of the chosen answers,
-                "optionalCustomAnswer": "gymnastics"
-            },
-            "[another quiz id]": {
-                "answerType": "freeResponseAndSliderOnSelect",
-                "value": {
-                    "4(answerNumber)": {
-                        "skill": 6,
-                        "answerText": "this is my answer about this thing"
-                    }, ...
-                }
-
-            },
-            "---another quiz id---": {
-                "answerType": "datePicker",
-                "dateValue": "1996-11-19T06:00:00.000Z"
-            }
-        }
-    */
-    answers: mongoose.Schema.Types.Mixed,
-
-
-    // ---->>> POST-PIVOT <<<---- //
 
     // skills tests the user has taken
     skillTests: [{
@@ -410,11 +352,6 @@ var usersSchema = mongoose.Schema({
     }],
 
     positionInProgress: mongoose.Schema.Types.ObjectId,
-
-    // FOR EMPLOYEES ONLY
-
-
-    // ---->>> END POST-PIVOT <<<---- //
 });
 
 // 'Users' means we will use the 'users' collection. if 'Books' was in there

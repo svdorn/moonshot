@@ -179,7 +179,7 @@ class MyEvaluations extends Component {
                 }
 
                 return (
-                    <li style={{marginTop: '15px', listStyleType:"none"}}
+                    <li style={{marginTop: '25px', listStyleType:"none"}}
                         key={key}
                     >
                         <MyEvaluationsPreview {...attributes} />
