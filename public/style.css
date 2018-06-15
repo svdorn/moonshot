@@ -6,7 +6,7 @@ html {
 body {
     font-family: 'Muli', sans-serif;
     min-width: 300px;
-    /* do this eventually background-color: #2e2e2e; */
+    background-color: #2e2e2e;
 }
 
 :root {
@@ -3245,7 +3245,10 @@ button.link {
     width: 170px;
     height: 80px;
 }
-.footer.topSpace { padding-top: 20px; }
+.footer {
+    background-color: #3c3c3c;
+    padding-top: 20px;
+}
 
 .addUserTabs > div:first-of-type {
     background-color: transparent !important;

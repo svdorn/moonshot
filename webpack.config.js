@@ -8,7 +8,7 @@ module.exports = {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'public')
   },
-  plugins: [new webpack.IgnorePlugin(/credentials.js/)],
+  plugins: [new webpack.IgnorePlugin(/credentials.js|node_modules/)],
   watch: true,
   mode: 'development',
   module: {

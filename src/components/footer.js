@@ -4,7 +4,6 @@ import {browserHistory, withRouter} from 'react-router';
 import { connect } from 'react-redux';
 
 class Footer extends Component {
-
     goTo(route) {
         // goes to the wanted page
         browserHistory.push(route);
@@ -16,39 +15,11 @@ class Footer extends Component {
         if (this.props.isOnboarding) {
             return null;
         }
-        let shadowDivClass = "tabsShadow";
-        let extraSpace = " topSpace";
-        let footerColor = "blackBackgroundOpacity";
-        // get the path from the url
-        let pathname = undefined;
-        // try to get the path
-        try {
-            pathname = this.props.location.pathname.toLowerCase();
-        }
-        // if the pathname is not yet defined, don't do anything, this will be executed again later
-        catch (e) {
-            pathname = "";
-        }
-        if ((pathname === '/mypathways') || (pathname === '/pathway')) {
-            footerColor = "purpleToRedLightGradientOpacity";
-            extraSpace = "";
-            shadowDivClass = "";
-        } else if ((pathname === '/profile') || (pathname === '/businessprofile')) {
-            footerColor = "orangeToYellowGradientOpacity";
-            extraSpace = "";
-            shadowDivClass = "";
-        } else if (pathname === '/resumeanalysis') {
-            footerColor = "redToLightRedUpGradientOpacity";
-        } else if (pathname === '/results' || pathname === '/mycandidates' || pathname === '/' || pathname === '/myemployees' || pathname === '/myevaluations') {
-            shadowDivClass = "tabsShadow";
-            extraSpace = " topSpace";
-            footerColor = "blackBackgroundOpacity";
-        }
 
         return (
             <div className="jsxWrapper">
-                <div className={shadowDivClass} style={{position:"absolute"}}><div/></div>
-                <footer className={"footer " + footerColor + extraSpace}>
+                <div className="tabsShadow" style={{position:"absolute", zIndex: "100"}}><div/></div>
+                <footer className={"footer"}>
                     <ul className="horizCenteredList">
                         <li className="center">
                             <img
