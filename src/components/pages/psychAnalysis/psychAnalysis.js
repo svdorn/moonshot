@@ -220,7 +220,7 @@ class PsychAnalysis extends Component {
         const nextButtonClass = this.state.loadingQuestion ? " disabled" : "";
 
         return (
-            <div>
+            <div className="noselect">
                 <div className="center psychAnalysisQuestion">
                     {question}
                 </div>
