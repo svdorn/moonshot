@@ -189,6 +189,20 @@ export function startPsychEval(userId, verificationToken) {
 }
 
 
+export function agreeToTerms(userId, verificationToken, agreements) {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+        axios.post("/api/user/agreeToTerms", {userId, verificationToken, termsAndConditions: agreements})
+        .then(response => {
+            dispatch({type: "USER_UPDATE", currentUser: response.data});
+        })
+        .catch(error => {
+            console.log("error: ", error);
+        })
+    }
+}
+
+
 export function agreeToSkillTestTerms(userId, verificationToken) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});

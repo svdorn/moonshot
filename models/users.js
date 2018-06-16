@@ -26,6 +26,8 @@ var usersSchema = mongoose.Schema({
         // the most recent date the terms were agreed to
         date: Date
     }],
+    // if the user is an account admin and was the first at the company
+    firstBusinessUser: Boolean,
     // the code the user used to sign up with to get to their first evaluation
     employerCode: String,
     // whether the user's profile is hidden from employers

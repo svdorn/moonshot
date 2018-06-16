@@ -17,12 +17,24 @@ class AuthenticatedComponent extends Component {
 
 
     componentDidMount() {
+        this.reCheck();
+    }
+
+
+    componentDidUpdate(prevProps, newProps) {
+        this.reCheck();
+    }
+
+
+    reCheck() {
         // check if the user is logged in
         let userChecked = this.checkLoggedIn();
         // check if the user has agreed to the necessary terms and conditions
         let agreedToTerms = this.checkAgreedToTerms();
 
-        this.setState({ userChecked, agreedToTerms });
+        if (this.state.userChecked !== userChecked || this.state.agreedToTerms !== agreedToTerms) {
+            this.setState({ userChecked, agreedToTerms });
+        }
     }
 
 
@@ -33,7 +45,6 @@ class AuthenticatedComponent extends Component {
             agreedToTerms = false;
             const acceptedAgreements = this.props.currentUser ? this.props.currentUser.termsAndConditions : undefined;
 
-            console.log("acceptedAgreements: ", acceptedAgreements);
             // if the user has some terms they have agreed to
             if (Array.isArray(acceptedAgreements)) {
                 // everyone has to agree to the privacy policy and terms of use

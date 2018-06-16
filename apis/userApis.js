@@ -51,6 +51,7 @@ const userApis = {
     GET_adminQuestions,
     POST_answerAdminQuestion,
     POST_sawEvaluationIntro,
+    POST_agreeToTerms,
 
     POST_resetFrizz,
     POST_reset24,
@@ -1950,6 +1951,58 @@ async function GET_positions(req, res) {
     catch (miscError) {
         console.log("error getting position for evaluations page: ", miscError);
         return res.status(500).send("Server error while getting evaluations.");
+    }
+}
+
+
+async function POST_agreeToTerms(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const termsAndConditions = sanitize(req.body.termsAndConditions);
+    if (!Array.isArray(termsAndConditions)) {
+        console.log("user tried to agree to terms and conditions with termsAndConditions value that was not an array");
+        return res.status(400).send("Bad request.");
+    }
+
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+
+        // make sure the terms and conditions being agreed to are valid
+        const validAgreements = ["Privacy Policy", "Terms of Use", "Affiliate Agreement", "Service Level Agreement"];
+        const agreeingTo = termsAndConditions.filter(agreement => {
+            return validAgreements.includes(agreement.name);
+        });
+
+        // agree to those terms
+        const NOW = new Date();
+        // go through each of these agreements that are being agreed to
+        agreeingTo.forEach(agreement => {
+            // find the index of the agreement in the user object
+            const agreementIndex = user.termsAndConditions.findIndex(agr => {
+                return agr.name === agreement.name;
+            })
+            // if the user didn't already have the agreement, create it
+            if (typeof agreementIndex !== "number" || agreementIndex < 0) {
+                user.termsAndConditions.push({
+                    name: agreement.name,
+                    date: NOW,
+                    agreed: true
+                });
+            }
+            // otherwise, mark its date as right now and mark it agreed
+            else {
+                user.termsAndConditions[agreementIndex].date = NOW;
+                user.termsAndConditions[agreementIndex].agreed = true;
+            }
+        })
+
+        // save and return the user
+        user = await user.save();
+        return res.json(frontEndUser(user));
+    } catch (getUserError) {
+        console.log("error agreeing to terms and conditions: ", getUserError);
+        return res.status(500).send("Error agreeing to terms and conditions.");
     }
 }
 

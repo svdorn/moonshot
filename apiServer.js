@@ -63,6 +63,38 @@ app.use(session({
 
 // ----->> START APIS <<----- //
 
+
+const Users = require("./models/users");
+
+// update();
+
+function update() {
+    const NOW = new Date();
+    Users.find({})
+    .then(users => {
+        users.forEach(user => {
+            if (user.agreedToTerms) {
+                user.termsAndConditions = [
+                    {
+                        name: "Privacy Policy",
+                        date: NOW,
+                        agreed: true
+                    },
+                    {
+                        name: "Terms of Use",
+                        date: NOW,
+                        agreed: true
+                    },
+                ]
+                user.save();
+            }
+        })
+    })
+}
+
+
+
+
 app.post("/user/resetFrizz", userApis.POST_resetFrizz);
 app.post("/user/reset24", userApis.POST_reset24);
 
@@ -89,6 +121,7 @@ app.get('/user/positions', userApis.GET_positions);
 app.get("/user/adminQuestions", userApis.GET_adminQuestions);
 app.post("/user/answerAdminQuestion", userApis.POST_answerAdminQuestion);
 app.post("/user/sawEvaluationIntro", userApis.POST_sawEvaluationIntro);
+app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
