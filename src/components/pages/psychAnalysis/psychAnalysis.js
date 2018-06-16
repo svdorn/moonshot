@@ -15,7 +15,10 @@ class PsychAnalysis extends Component {
         super(props);
 
         // start out with the slider in the middle
-        this.state = { answer: 0 };
+        this.state = {
+            answer: 0,
+            loadingQuestion: false
+         };
     }
 
 
@@ -24,6 +27,19 @@ class PsychAnalysis extends Component {
         // make sure a user is logged in
         if (!currentUser) {
             this.goTo("/login");
+        }
+    }
+
+    // makes the button be not disabled
+    componentDidUpdate(prevProps, prevState) {
+        try {
+            const currentQuestionId = this.props.currentUser.psychometricTest.currentQuestion.questionId;
+            const prevQuestionId = prevProps.currentUser.psychometricTest.currentQuestion.questionId;
+            if (currentQuestionId !== prevQuestionId) {
+                this.setState({ loadingQuestion: false });
+            }
+        } catch (e) {
+            console.log(e);
         }
     }
 
@@ -40,7 +56,10 @@ class PsychAnalysis extends Component {
 
     // move on to the next psych question
     nextQuestion() {
-        this.props.answerPsychQuestion(this.props.currentUser._id, this.props.currentUser.verificationToken, this.state.answer);
+        this.setState({ loadingQuestion: true });
+        if (!this.state.loadingQuestion) {
+            this.props.answerPsychQuestion(this.props.currentUser._id, this.props.currentUser.verificationToken, this.state.answer);
+        }
     }
 
 
@@ -198,6 +217,8 @@ class PsychAnalysis extends Component {
             marginTop: `${topMargin}px`
         }
 
+        const nextButtonClass = this.state.loadingQuestion ? " disabled" : "";
+
         return (
             <div>
                 <div className="center psychAnalysisQuestion">
@@ -222,7 +243,7 @@ class PsychAnalysis extends Component {
                     />
                 </div>
                 <br/>
-                <div className="psychAnalysisButton marginBottom50px" onClick={this.nextQuestion.bind(this)}>
+                <div className={"psychAnalysisButton marginBottom50px" + nextButtonClass} onClick={this.nextQuestion.bind(this)}>
                     Next
                 </div>
             </div>

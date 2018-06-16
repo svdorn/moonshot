@@ -173,7 +173,7 @@ form > h1 {
 }
 
 
-.skillContinueButton.disabled {
+.skillContinueButton.disabled, .psychAnalysisButton.disabled {
     background: linear-gradient(to left, #3a3a3a, #afafaf);
     cursor: not-allowed;
 }
@@ -309,7 +309,10 @@ form > h1 {
     --contentColumnWidth: calc(1040px / var(--contentColumns));
     --gutterColumnWidth: var(--contentColumnWidth);
 }
-.businessHome.blackBackground { overflow-x: hidden; }
+.businessHome.blackBackground {
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
 .skewedRectanglesContainer {
     display: -webkit-box;
     display: -ms-flexbox;
