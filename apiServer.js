@@ -25,8 +25,13 @@ app.use(cookieParser());
 // trust the first proxy encountered because we run through a proxy
 app.set('trust proxy', 1);
 
+// this is the testing database
+let dbConnectLink = 'mongodb://' + credentials.dbDevUsername + ':' + credentials.dbDevPassword + '@ds125146.mlab.com:25146/testmoonshot';
+// this is the real database
+if (process.env.NODE_ENV === "production") {
+    const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
+}
 // connect to mLab
-const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
 mongoose.connect(dbConnectLink);
 
 var db = mongoose.connection;
@@ -62,37 +67,6 @@ app.use(session({
 }));
 
 // ----->> START APIS <<----- //
-
-
-const Users = require("./models/users");
-
-// update();
-
-function update() {
-    const NOW = new Date();
-    Users.find({})
-    .then(users => {
-        users.forEach(user => {
-            if (user.agreedToTerms) {
-                user.termsAndConditions = [
-                    {
-                        name: "Privacy Policy",
-                        date: NOW,
-                        agreed: true
-                    },
-                    {
-                        name: "Terms of Use",
-                        date: NOW,
-                        agreed: true
-                    },
-                ]
-                user.save();
-            }
-        })
-    })
-}
-
-
 
 
 app.post("/user/resetFrizz", userApis.POST_resetFrizz);
