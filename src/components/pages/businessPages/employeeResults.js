@@ -384,7 +384,7 @@ class EmployeeResults extends Component {
                                                 }
                                                 {profileUrl ?
                                                     <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
-                                                       href={`/profile?user=${profileUrl}`}>Profile</a>
+                                                        onClick={() => this.goTo(`/profile?user=${profileUrl}`)}>Profile</a>
                                                     : null
                                                 }
                                                 <br/>

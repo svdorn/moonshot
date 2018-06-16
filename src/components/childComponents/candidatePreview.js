@@ -376,9 +376,9 @@ class CandidatePreview extends Component {
         }
 
         const seeResults = finishedEval ?
-                <a style={{...style.redLink, ...style.seeResults}} href={resultsUrl}>
+                <div style={{...style.redLink, ...style.seeResults, cursor: "pointer"}} onClick={() => this.goTo(resultsUrl)}>
                     See Results
-                </a>
+                </div>
             :
                 <div>
                     <div style={style.seeResults}>
