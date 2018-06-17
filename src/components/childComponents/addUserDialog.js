@@ -252,7 +252,7 @@ class AddUserDialog extends Component {
                         type="email"
                         validate={emailValidate}
                         id={"candidateEmail" + i}
-                        autocomplete="new-password"
+                        autoComplete="new-password"
                     /><br/>
                 </div>
             );
@@ -269,7 +269,7 @@ class AddUserDialog extends Component {
                         type="email"
                         validate={emailValidate}
                         id={"employeeEmail" + i}
-                        autocomplete="new-password"
+                        autoComplete="new-password"
                     /><br/>
                 </div>
             );
@@ -286,7 +286,7 @@ class AddUserDialog extends Component {
         //                 type="email"
         //                 validate={emailValidate}
         //                 id={"managerEmail" + i}
-        //                 autocomplete="new-password"
+        //                 autoComplete="new-password"
         //             /><br/>
         //         </div>
         //     );
@@ -303,7 +303,7 @@ class AddUserDialog extends Component {
                         type="email"
                         validate={emailValidate}
                         id={"adminEmail" + i}
-                        autocomplete="new-password"
+                        autoComplete="new-password"
                     /><br/>
                 </div>
             );
