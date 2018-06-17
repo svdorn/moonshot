@@ -112,6 +112,20 @@ export function answerAdminQuestion(userId, verificationToken, questionType, que
     }
 }
 
+export function setupBillingCustomer(source) {
+    return function(dispatch) {
+        dispatch({type: "BILLING_CUSTOMER_LOADING"})
+        axios.post("/api/billing/customer", {source})
+        .then(response => {
+            dispatch({type: "SUCCESS_BILLING_CUSTOMER", notification: "Success adding credit card information."});
+        })
+        .catch(error => {
+            dispatch({type: "FAILURE_BILLING_CUSTOMER", notification: response.data});
+            // console.log("error answering admin question: ", error);
+        })
+    }
+}
+
 
 // LOG USER OUT
 export function signout() {

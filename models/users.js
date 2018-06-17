@@ -45,8 +45,6 @@ var usersSchema = mongoose.Schema({
     verified: Boolean,
     // list of skills the user has received from completing pathways
     skills: [ String ],
-    // if the user has their billing info set up or not
-    hasBillingInfo: Boolean,
     // general info about the user, can be edited on onboarding or profile
     info: {
         // title of the job they want

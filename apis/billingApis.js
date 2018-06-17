@@ -25,6 +25,13 @@ const billingApis = {
 }
 
 async function POST_customer(req, res) {
+    // get info
+
+    const stripe = require("stripe")("sk_test_lJ6Gk1lWmEsMLoLGEKJCYFq8");
+
+    // give business object the Stripe source
+
+    // send source to Stripe to create person
 
 }
 

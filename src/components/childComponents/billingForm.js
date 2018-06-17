@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { TextField, CircularProgress, RaisedButton } from 'material-ui';
-import {  } from '../../actions/usersActions';
+import { setupBillingCustomer } from '../../actions/usersActions';
 import {injectStripe, CardElement} from 'react-stripe-elements';
 
 class BillingForm extends Component {
@@ -21,19 +21,10 @@ class BillingForm extends Component {
 
         // Within the context of `Elements`, this call to createToken knows which Element to
         // tokenize, since there's only one in this group.
-        this.props.stripe.createToken({name: currentUser.name, email: currentUser.email}).then(({token}) => {
-            console.log('Received Stripe token:', token);
-            
+        this.props.stripe.createSource({type: 'card', name: currentUser.name, email: currentUser.email}).then(({source}) => {
+            console.log('Received Stripe source:', source);
+            this.props.setupBillingCustomer(source);
         });
-
-        // However, this line of code will do the same thing:
-        //
-        // this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});
-
-        // You can also use createSource to create Sources. See our Sources
-        // documentation for more: https://stripe.com/docs/stripe-js/reference#stripe-create-source
-        //
-        // this.props.stripe.createSource({type: 'card', name: 'Jenny Rosen'});
     };
 
     render() {
@@ -70,7 +61,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        setupBillingCustomer
     }, dispatch);
 }
 
