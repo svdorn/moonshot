@@ -199,6 +199,9 @@ class Menu extends Component {
             // if settings is selected, the underline bar must be bigger
             // because "settings" is a bigger word
             hoverWidth = "77px";
+        } else if (pathname === '/billing') {
+            dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+            hoverWidth = "51px";
         }
 
 
