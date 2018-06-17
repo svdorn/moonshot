@@ -19,7 +19,8 @@ class SkillTest extends Component {
             question: undefined,
             finished: false,
             skillName: undefined,
-            agreedToTerms: false
+            agreedToTerms: false,
+            canContinue: true
         };
     }
 
@@ -118,34 +119,39 @@ class SkillTest extends Component {
 
 
     nextQuestion() {
-        if (typeof this.state.selectedId !== "undefined") {
-            const currentUser = this.props.currentUser;
-            // don't need to send the question id because the user
-            // has the current question saved
-            const params = {
-                userId: currentUser._id,
-                verificationToken: currentUser.verificationToken,
-                skillUrl: this.props.params.skillUrl,
-                // an array because maybe later we'll have multi select questions
-                answerIds: [ this.state.selectedId ]
-            }
-            axios.post("/api/skill/answerSkillQuestion", params)
-            .then(result => {
-                this.props.newCurrentUser(result.data.updatedUser);
-                let question = undefined;
-                if (result.data.question) {
-                    question = result.data.question;
-                    //question.options = this.shuffle(question.options);
+        if (typeof this.state.selectedId !== "undefined" && this.state.canContinue) {
+            this.setState({
+                canContinue: false
+            }, () => {
+                const currentUser = this.props.currentUser;
+                // don't need to send the question id because the user
+                // has the current question saved
+                const params = {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken,
+                    skillUrl: this.props.params.skillUrl,
+                    // an array because maybe later we'll have multi select questions
+                    answerIds: [ this.state.selectedId ]
                 }
-                this.setState({
-                    selectedId: undefined,
-                    finished: result.data.finished,
-                    question
-                });
-            })
-            .catch(error => {
-                // console.log("error saving answer: ", error);
-            })
+                axios.post("/api/skill/answerSkillQuestion", params)
+                .then(result => {
+                    this.props.newCurrentUser(result.data.updatedUser);
+                    let question = undefined;
+                    if (result.data.question) {
+                        question = result.data.question;
+                        //question.options = this.shuffle(question.options);
+                    }
+                    this.setState({
+                        finished: result.data.finished,
+                        selectedId: undefined,
+                        question,
+                        canContinue: true
+                    });
+                })
+                .catch(error => {
+                    // console.log("error saving answer: ", error);
+                })
+            });
         }
     }
 
@@ -235,8 +241,6 @@ class SkillTest extends Component {
         // have to have completed the psych test and admin questionsbefore you
         // can take a skills - but only if you're taking an evaluation right now
 
-        console.log("RENDERING");
-
         let self = this;
         const skillName = this.state.skillName ? this.state.skillName : "Skill";
         const additionalMetaText = this.state.skillName ? " in " + this.state.skillName.toLowerCase() : "";
@@ -259,7 +263,7 @@ class SkillTest extends Component {
             });
         }
 
-        const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
+        const buttonClass = !this.state.canContinue || this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
 
         let content = <CircularProgress color="#FB553A" />;
 
