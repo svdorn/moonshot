@@ -16,7 +16,6 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => {
         inputStyle={{color: '#72d6f5'}}
         underlineStyle={{color: '#72d6f5'}}
         errorText={touched && error}
-        inputProps={{autocomplete: "new-password"}}
         {...input}
         {...custom}
     />);
@@ -253,6 +252,7 @@ class AddUserDialog extends Component {
                         type="email"
                         validate={emailValidate}
                         id={"candidateEmail" + i}
+                        autocomplete="new-password"
                     /><br/>
                 </div>
             );
@@ -269,6 +269,7 @@ class AddUserDialog extends Component {
                         type="email"
                         validate={emailValidate}
                         id={"employeeEmail" + i}
+                        autocomplete="new-password"
                     /><br/>
                 </div>
             );
@@ -285,6 +286,7 @@ class AddUserDialog extends Component {
         //                 type="email"
         //                 validate={emailValidate}
         //                 id={"managerEmail" + i}
+        //                 autocomplete="new-password"
         //             /><br/>
         //         </div>
         //     );
@@ -301,6 +303,7 @@ class AddUserDialog extends Component {
                         type="email"
                         validate={emailValidate}
                         id={"adminEmail" + i}
+                        autocomplete="new-password"
                     /><br/>
                 </div>
             );
