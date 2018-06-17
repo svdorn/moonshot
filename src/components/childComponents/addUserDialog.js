@@ -9,17 +9,18 @@ import { browserHistory } from 'react-router';
 import axios from 'axios';
 
 
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
+const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => {
+    return (<TextField
         hintText={label}
         hintStyle={{color: '#72d6f5'}}
         inputStyle={{color: '#72d6f5'}}
         underlineStyle={{color: '#72d6f5'}}
         errorText={touched && error}
+        inputProps={{autocomplete: "new-password"}}
         {...input}
         {...custom}
-    />
-);
+    />);
+};
 
 const emailValidate = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined
 
@@ -251,6 +252,7 @@ class AddUserDialog extends Component {
                         label="Add Candidate Email"
                         type="email"
                         validate={emailValidate}
+                        id={"candidateEmail" + i}
                     /><br/>
                 </div>
             );
@@ -266,6 +268,7 @@ class AddUserDialog extends Component {
                         label="Add Employee Email"
                         type="email"
                         validate={emailValidate}
+                        id={"employeeEmail" + i}
                     /><br/>
                 </div>
             );
@@ -281,6 +284,7 @@ class AddUserDialog extends Component {
         //                 label="Add Manager Email"
         //                 type="email"
         //                 validate={emailValidate}
+        //                 id={"managerEmail" + i}
         //             /><br/>
         //         </div>
         //     );
@@ -296,6 +300,7 @@ class AddUserDialog extends Component {
                         label="Add Admin Email"
                         type="email"
                         validate={emailValidate}
+                        id={"adminEmail" + i}
                     /><br/>
                 </div>
             );
