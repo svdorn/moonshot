@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { TextField, CircularProgress, RaisedButton } from 'material-ui';
-import { setupBillingCustomer } from '../../actions/usersActions';
+import { setupBillingCustomer, startLoading } from '../../actions/usersActions';
 import {injectStripe, CardElement} from 'react-stripe-elements';
 
 class BillingForm extends Component {
@@ -16,6 +16,7 @@ class BillingForm extends Component {
     handleSubmit = (e) => {
         // We don't want to let default form submission happen here, which would refresh the page.
         e.preventDefault();
+        this.props.startLoading();
 
         let self = this;
         const currentUser = this.props.currentUser;
@@ -54,6 +55,8 @@ class BillingForm extends Component {
                             className="raisedButtonBusinessHome"
                             style={{margin: '30px 0'}}
                         />
+                        <br/>
+                        {this.props.loading ? <CircularProgress color="white"/> : null}
                     </form>
                 </div>
             </div>
@@ -64,13 +67,15 @@ class BillingForm extends Component {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        loading: state.users.loadingSomething
     };
 }
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        setupBillingCustomer
+        setupBillingCustomer,
+        startLoading
     }, dispatch);
 }
 

@@ -112,9 +112,14 @@ export function answerAdminQuestion(userId, verificationToken, questionType, que
     }
 }
 
+export function startLoading() {
+    return function(dispatch) {
+        dispatch({type: "START_LOADING"});
+    }
+}
+
 export function setupBillingCustomer(source, email, userId, verificationToken) {
     return function(dispatch) {
-        dispatch({type: "BILLING_CUSTOMER_LOADING"})
         axios.post("/api/billing/customer", {source, email, userId, verificationToken})
         .then(response => {
             dispatch({type: "SUCCESS_BILLING_CUSTOMER", notification: {message: "Success adding credit card to company.", type: "infoHeader"}});
