@@ -17,15 +17,24 @@ class BillingForm extends Component {
         // We don't want to let default form submission happen here, which would refresh the page.
         e.preventDefault();
 
+        let self = this;
         const currentUser = this.props.currentUser;
 
         // Within the context of `Elements`, this call to createToken knows which Element to
         // tokenize, since there's only one in this group.
-        this.props.stripe.createSource({type: 'card', name: currentUser.name, email: currentUser.email}).then(({source}) => {
-            console.log('Received Stripe source:', source);
-            this.props.setupBillingCustomer(source);
-        });
-    };
+        const email = currentUser.email;
+        const verificationToken = currentUser.verificationToken;
+        const userId = currentUser._id;
+
+        this.props.stripe.createSource({type: 'card', owner: { name: currentUser.name}}).then(function(result) {
+            // Handle result.error or result.source
+            if (result.error) {
+                console.log("error");
+            } else {
+                self.props.setupBillingCustomer(result.source, email, userId, verificationToken);
+            }
+        })
+    }
 
     render() {
         return (
