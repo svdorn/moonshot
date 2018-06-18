@@ -47,6 +47,7 @@ const miscApis = require('./apis/miscApis');
 const skillApis = require('./apis/skillApis');
 const psychApis = require('./apis/psychApis');
 const mlFunctions = require('./apis/mlFunctions');
+const billingApis = require('./apis/billingApis');
 const helperFunctions = require('./apis/helperFunctions');
 
 
@@ -127,6 +128,8 @@ app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);
 app.post('/skill/startOrContinueTest', skillApis.POST_startOrContinueTest);
 app.get('/skill/skillNamesByIds', skillApis.GET_skillNamesByIds);
 app.post("/skill/agreeToTerms", skillApis.POST_agreeToTerms);
+
+app.post('/billing/customer', billingApis.POST_customer);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);

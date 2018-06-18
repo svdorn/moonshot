@@ -11,6 +11,8 @@ var businessesSchema = mongoose.Schema({
 
     // unique company code, added to position code for user sign up
     code: String,
+    // if they've set up their billing
+    billingCustomerId: String,
 
     // the questions that managers have to answer about each employee
     employeeQuestions: [{

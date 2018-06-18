@@ -81,6 +81,7 @@ export function usersReducers(state = initialState, action) {
         case "CONTACT_US_REQUESTED":
         case "COMPLETE_PATHWAY_REQUESTED":
         case "START_LOADING":
+        case "BILLING_CUSTOMER_LOADING":
             return {
                 ...state,
                 loadingSomething: true
@@ -159,6 +160,8 @@ export function usersReducers(state = initialState, action) {
         case "ERROR_FINISHED_LOADING":
         case "SUCCESS_FINISHED_LOADING":
         case "START_PSYCH_EVAL_ERROR":
+        case "SUCCESS_BILLING_CUSTOMER":
+        case "FAILURE_BILLING_CUSTOMER":
             return {
                 ...state, notification: action.notification, loadingSomething: false
             };
