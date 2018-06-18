@@ -120,9 +120,9 @@ class Results extends Component {
         const qualifiers = scoreType === "predicted" ?
             ["BELOW AVERAGE", "AVERAGE", "ABOVE AVERAGE"] :
             ["NOVICE", "INTERMEDIATE", "EXPERT"]
-        if (score < 80) {
+        if (score < 90) {
             return qualifiers[0];
-        } else if (score < 120) {
+        } else if (score < 110) {
             return qualifiers[1];
         } else {
             return qualifiers[2];
