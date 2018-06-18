@@ -174,7 +174,7 @@ class SkillTest extends Component {
         const buttonClass = this.state.agreedToTerms ? "skillContinueButton" : "disabled skillContinueButton";
 
         return (
-            <div className="evalPortionIntro skillsUserAgreement center">
+            <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
                 <div className="font24px" style={{marginBottom: "20px"}}><span>Skills</span></div>
                 <div>
                     <p>This is the skills portion of the evaluation. Here you will be tested on your aptitude in one or more skills.</p>
@@ -304,7 +304,7 @@ class SkillTest extends Component {
         // otherwise, good to go - show them the question
         else if (question) {
             content = (
-                <div>
+                <div className="font16px font14pxUnder600 font12pxUnder450">
                     <StyledContent contentArray={question.body} style={{marginBottom:"40px"}} />
                     { answers }
                     <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
