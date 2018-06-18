@@ -30,6 +30,7 @@ class BillingForm extends Component {
         this.props.stripe.createSource({type: 'card', owner: { name: currentUser.name}}).then(function(result) {
             // Handle result.error or result.source
             if (result.error) {
+                console.log(result.error);
                 console.log("error");
             } else {
                 self.props.setupBillingCustomer(result.source, email, userId, verificationToken);
