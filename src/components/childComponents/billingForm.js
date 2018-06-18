@@ -31,8 +31,8 @@ class BillingForm extends Component {
             // Handle result.error or result.source
             if (result.error) {
                 console.log(result.error);
-                this.props.stopLoading();
-                this.props.addNotification("Error adding card, please review credit card information and retry.", "error");
+                self.props.stopLoading();
+                self.props.addNotification("Error adding card, please review credit card information and retry.", "error");
                 console.log(result);
                 console.log("error");
             } else {
