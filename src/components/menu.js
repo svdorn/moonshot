@@ -271,7 +271,7 @@ class Menu extends Component {
                     {optionType: "divider"},
                     {optionType: "url", title: "Add User", url: "/addUser"},
                     {optionType: "url", title: "Settings", url: "/settings"},
-                    {optionType: "url", title: "Billing", url: "/billing"},
+                    //{optionType: "url", title: "Billing", url: "/billing"},
                     {optionType: "signOut"}
                 ]}
             ];
