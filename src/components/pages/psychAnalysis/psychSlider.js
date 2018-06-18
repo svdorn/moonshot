@@ -51,21 +51,54 @@ class PsychSlider extends Component {
     }
 
     // the return value of this is set as state
-    static getDerivedStateFromProps(newProps, prevState) {
-        if (newProps.questionId.toString() !== prevState.questionId) {
-            // new question, update current answer to be 0
-            newProps.updateAnswer(0);
+    // static getDerivedStateFromProps(newProps, prevState) {
+    //     if (newProps.questionId.toString() !== prevState.questionId) {
+    //         // new question, update current answer to be 0
+    //         newProps.updateAnswer(0);
+    //
+    //         return {
+    //             // record the question id so we know next time if we need to reset
+    //             questionId: newProps.questionId.toString(),
+    //             // reset the slider
+    //             fromLeft: prevState.width/2,
+    //         }
+    //     }
+    //
+    //     // don't need to update state
+    //     else { return null; }
+    // }
 
-            return {
-                // record the question id so we know next time if we need to reset
-                questionId: newProps.questionId.toString(),
-                // reset the slider
-                fromLeft: prevState.width/2,
-            }
+
+    componentDidUpdate(prevProps, prevState) {
+        let shouldUpdateState = false;
+        let newState = {};
+
+        if (this.props.questionId.toString() !== prevState.questionId) {
+            // need to update state with the new question id info
+            shouldUpdateState = true;
+            // new question, update current answer to be 0
+            this.props.updateAnswer(0);
+            // record the question id so we know next time if we need to reset
+            newState.questionId = this.props.questionId.toString();
+            // reset the slider
+            newState.fromLeft = prevState.width/2;
         }
 
-        // don't need to update state
-        else { return null; }
+        // if the slider dimensions need to be changed ...
+        if (prevProps.width !== this.props.width || prevProps.height !== this.props.height) {
+            // ... update state with the new dimensions
+            shouldUpdateState = true;
+            // new slider width
+            newState.width = this.props.width;
+            // new slider height
+            newState.height = this.props.height;
+            // calculate the new position of the circle
+            newState.fromLeft = prevState.fromLeft * (this.props.width / prevState.width);
+        }
+
+        if (shouldUpdateState) {
+            this.setState(newState);
+        }
     }
 
 

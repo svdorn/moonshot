@@ -17,7 +17,8 @@ class PsychAnalysis extends Component {
         // start out with the slider in the middle
         this.state = {
             answer: 0,
-            loadingQuestion: false
+            loadingQuestion: false,
+            windowWidth: window.innerWidth
          };
     }
 
@@ -28,7 +29,15 @@ class PsychAnalysis extends Component {
         if (!currentUser) {
             this.goTo("/login");
         }
+
+        window.addEventListener("resize", this.resized.bind(this));
     }
+
+
+    componentWillUnmount() {
+        window.removeEventListener("resize", this.resized.bind(this));
+    }
+
 
     // makes the button be not disabled
     componentDidUpdate(prevProps, prevState) {
@@ -41,6 +50,11 @@ class PsychAnalysis extends Component {
         } catch (e) {
             console.log(e);
         }
+    }
+
+
+    resized() {
+        this.setState({ windowWidth: window.innerWidth });
     }
 
 
@@ -187,7 +201,21 @@ class PsychAnalysis extends Component {
         }
 
         // all is good, create styles for slider and options
-        const sliderWidth = "350px";
+        let sliderWidth, sliderHeight;
+        let windowWidth = this.state.windowWidth;
+        if (windowWidth < 300) {
+            windowWidth = 300;
+        }
+        if (windowWidth > 600) {
+            let sliderWidth = 350;
+            let sliderHeight = 200;
+        } else if (windowWidth > 450) {
+            sliderWidth = 250;
+            sliderHeight = 120;
+        } else {
+            sliderWidth = 150;
+            sliderHeight = 80;
+        }
         const topMargin = 110;
         const sliderAndAnswerContainerStyle = {
             width: sliderWidth,
@@ -210,7 +238,8 @@ class PsychAnalysis extends Component {
 
         const optionTextStyle = {
             display: "table-cell",
-            verticalAlign: "middle"
+            verticalAlign: "middle",
+            maxWidth: `${windowWidth/4}px`
         }
 
         const sliderStyle = {
@@ -235,7 +264,7 @@ class PsychAnalysis extends Component {
 
                     <PsychSlider
                         width={sliderWidth}
-                        height="200px"
+                        height={sliderHeight}
                         className="center"
                         style={sliderStyle}
                         updateAnswer={this.updateAnswer.bind(this)}
