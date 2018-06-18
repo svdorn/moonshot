@@ -74,8 +74,21 @@ class AddUserDialog extends Component {
     }
 
     componentDidUpdate() {
+        let newState = {};
+        let shouldSetState = false;
+        // make sure the props defining whether the modal is open matches the state for that
         if (this.props.modalOpen != this.state.open && this.props.modalOpen != undefined) {
-            this.setState({open: this.props.modalOpen})
+            shouldSetState = true;
+            newState.open = this.props.modalOpen;
+        }
+        // if the user sets a position - such as in My Candidates - default to adding that position
+        if (!this.props.modalOpen && this.props.position && this.state.position != this.props.position) {
+            shouldSetState = true;
+            newState.position = this.props.position;
+        }
+        // set the state if needed
+        if (shouldSetState) {
+            this.setState(newState);
         }
     }
 

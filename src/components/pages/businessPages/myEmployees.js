@@ -383,7 +383,10 @@ class MyEmployees extends Component {
 
         return (
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEmployees'>
-                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
+                {this.props.currentUser.userType == "accountAdmin" ?
+                    <AddUserDialog position={this.state.position}/>
+                    : null
+                }
                 <MetaTags>
                     <title>My Employees | Moonshot</title>
                     <meta name="description" content="Grade your employees and see their results."/>
