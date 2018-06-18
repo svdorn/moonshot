@@ -1,8 +1,9 @@
 const Users = require('../models/users.js');
 const Businesses = require('../models/businesses.js');
+const credentials = require('../credentials');
 
 const mongoose = require("mongoose");
-const stripe = require("stripe")("sk_test_lJ6Gk1lWmEsMLoLGEKJCYFq8");
+const stripe = require("stripe")(credentials.stripeSk);
 
 // get helper functions
 const { sanitize,
