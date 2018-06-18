@@ -3,7 +3,7 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { TextField, CircularProgress, RaisedButton } from 'material-ui';
-import { setupBillingCustomer, startLoading } from '../../actions/usersActions';
+import { setupBillingCustomer, startLoading, addNotification, stopLoading } from '../../actions/usersActions';
 import {injectStripe, CardElement} from 'react-stripe-elements';
 
 class BillingForm extends Component {
@@ -31,6 +31,8 @@ class BillingForm extends Component {
             // Handle result.error or result.source
             if (result.error) {
                 console.log(result.error);
+                this.props.stopLoading();
+                this.props.addNotification("Error adding card, please review credit card information and retry.", "error");
                 console.log(result);
                 console.log("error");
             } else {
@@ -77,7 +79,9 @@ function mapStateToProps(state) {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         setupBillingCustomer,
-        startLoading
+        startLoading,
+        stopLoading,
+        addNotification
     }, dispatch);
 }
 

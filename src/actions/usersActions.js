@@ -118,6 +118,12 @@ export function startLoading() {
     }
 }
 
+export function stopLoading() {
+    return function(dispatch) {
+        dispatch({type: "STOP_LOADING"});
+    }
+}
+
 export function setupBillingCustomer(source, email, userId, verificationToken) {
     return function(dispatch) {
         axios.post("/api/billing/customer", {source, email, userId, verificationToken})
