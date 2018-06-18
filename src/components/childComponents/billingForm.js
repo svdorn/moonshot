@@ -31,6 +31,7 @@ class BillingForm extends Component {
             // Handle result.error or result.source
             if (result.error) {
                 console.log(result.error);
+                console.log(result);
                 console.log("error");
             } else {
                 self.props.setupBillingCustomer(result.source, email, userId, verificationToken);
