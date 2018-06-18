@@ -41,6 +41,6 @@ if (!shouldRedirectToHttps) {
     )
 
     hydrate(
-      <StripeProvider apiKey="pk_test_7AHdmETWVxOeyDARcZfeWuZl">{Routes}</StripeProvider>, document.getElementById('app')
+      <StripeProvider apiKey="pk_live_UC72NJ4kPiHRmMM5c7cc7U63">{Routes}</StripeProvider>, document.getElementById('app')
     );
 }
