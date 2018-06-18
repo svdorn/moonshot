@@ -29,7 +29,7 @@ app.set('trust proxy', 1);
 let dbConnectLink = 'mongodb://' + credentials.dbDevUsername + ':' + credentials.dbDevPassword + '@ds125146.mlab.com:25146/testmoonshot';
 // this is the real database
 if (process.env.NODE_ENV === "production") {
-    const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
+    dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
 }
 // connect to mLab
 mongoose.connect(dbConnectLink);
