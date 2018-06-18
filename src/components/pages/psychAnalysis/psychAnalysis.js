@@ -207,8 +207,8 @@ class PsychAnalysis extends Component {
             windowWidth = 300;
         }
         if (windowWidth > 600) {
-            let sliderWidth = 350;
-            let sliderHeight = 200;
+            sliderWidth = 350;
+            sliderHeight = 200;
         } else if (windowWidth > 450) {
             sliderWidth = 250;
             sliderHeight = 120;
@@ -249,7 +249,7 @@ class PsychAnalysis extends Component {
         const nextButtonClass = this.state.loadingQuestion ? " disabled" : "";
 
         return (
-            <div className="noselect">
+            <div className="noselect font16px font14pxUnder600 font12pxUnder450">
                 <div className="center psychAnalysisQuestion">
                     {question}
                 </div>
