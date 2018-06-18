@@ -26,12 +26,16 @@ class Results extends Component {
             psychScores: [],
             archetype: "",
             loading: true,
-            areaSelected: undefined
+            areaSelected: undefined,
+            windowWidth: window.innerWidth
         };
     }
 
 
     componentDidMount() {
+        // set resize listener
+        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+
         let profileUrl = "";
         let businessId = "";
         let positionId = "";
@@ -104,7 +108,8 @@ class Results extends Component {
                 skill: res.data.performanceScores.skill,
                 hardSkillPoints,
                 predictivePoints,
-                freeResponses
+                freeResponses,
+                windowWidth: window.innerWidth
             });
         })
         .catch(error => {
@@ -113,6 +118,16 @@ class Results extends Component {
             //     console.log(error.response.data);
             // }
         });
+    }
+
+
+    componentWillUnmount() {
+        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+    }
+
+
+    updateWindowDimensions() {
+        this.setState({ windowWidth: window.innerWidth });
     }
 
 
@@ -160,6 +175,18 @@ class Results extends Component {
 
         const hardSkillsDataPoints = this.state.hardSkillPoints;
 
+        const windowWidth = window.innerWidth;
+        let graphHeight;
+        if (windowWidth > 800) {
+            graphHeight = 400;
+        } else if (windowWidth > 600) {
+            graphHeight = 350;
+        } else if (windowWidth > 400) {
+            graphHeight = 300;
+        } else {
+            graphHeight = 250;
+        }
+
         return (
             <div className="analysis center aboutMeSection" style={style.tabContent}>
                 <div style={style.candidateScore}>
@@ -203,7 +230,7 @@ class Results extends Component {
                     <PredictiveGraph
                         title={"Predicted Performance"}
                         dataPoints={this.state.predictivePoints}
-                        height={400}
+                        height={graphHeight}
                     />
                 </div>
 
@@ -224,7 +251,7 @@ class Results extends Component {
                 <div>
                     <PredictiveGraph
                         dataPoints={this.state.hardSkillPoints}
-                        height={400}
+                        height={graphHeight}
                     />
                 </div>
             </div>

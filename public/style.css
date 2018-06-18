@@ -62,6 +62,12 @@ footer {
 
 .underline { text-decoration: underline; }
 
+.transitionAll {
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+
 #toolIconExtraInfo {
     width: 25px;
     display: inline;
@@ -1362,7 +1368,7 @@ form > h1 {
 .leftYAxisLabelContainer {
     height: 100%;
     position: absolute;
-    left: -15%;
+    left: -45px;
 }
 .leftYAxisLabel {
     display: inline-block;
@@ -5347,6 +5353,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         min-height: 450px;
     }
 
+    .leftYAxisLabelContainer {
+        left: -35px;
+    }
+
     .adminQuestions.gradingSliderContainer {
         position: relative;
         width: 220px;
@@ -5719,6 +5729,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .form {
         max-width: 300px;
     }
+    .pointBox { width: 27px; }
     .resultsSlidersContainer {
         width: 260px;
     }
