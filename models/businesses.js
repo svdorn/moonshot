@@ -179,6 +179,20 @@ var businessesSchema = mongoose.Schema({
                 // the optimal facet score for this position
                 score: Number
             }]
+        }],
+        // maximum growth score allowed (default is 190)
+        maxGrowth: Number,
+        // the factors and facets that contribute to the growth prediction
+        growthFactors: [{
+            // id of the factor involved in growth
+            factorId: mongoose.Schema.Types.ObjectId,
+            // ideal facet scores for growth
+            idealFacets: [{
+                // id of the facet to score
+                facetId: mongoose.Schema.Types.ObjectId,
+                // best score for growth for this facet in this position
+                score: Number
+            }]
         }]
     }],
 });

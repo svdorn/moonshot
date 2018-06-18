@@ -803,21 +803,57 @@ async function finishPositionEvaluation(user, positionId, businessId) {
                 overallSkill += (skillScore.mostRecentScore / numScores);
             });
 
-            // IDEAL GROWTH IS 5 FOR EVERY FACET OF CONSCIENTIOUSNESS AND OPENNESS TO EXPERIENCE;
+            // IDEAL GROWTH CALCULATION IS SIMILAR TO PERFORMANCE CALCULATION
+            // BUT ONLY FOR CERTAIN FACETS
             const userPsych = user.psychometricTest;
-            // start at a score of 100
-            let growth = 100;
-            // go through each factor
-            userPsych.factors.forEach(factor => {
-                // if the skill is one of the ones involved in growth ...
-                if (factor.name === "Conscientiousness" || factor.name === "Openness to Experience") {
-                    // ... go through each facet ...
-                    factor.facets.forEach(facet => {
-                        // .. and add the facet score times 2
-                        growth += (facet.score * 2);
-                    });
-                }
-            })
+
+            // start at a score of 0, 100 will be added after scaling
+            let growth = 0;
+
+            // how many facets are involved in the growth calculation
+            let numGrowthFacets = 0;
+
+            // go through each factor to get to each facet
+            const userFactors = userPsych.factors;
+            businessPos.growthFactors.forEach(growthFactor => {
+                // find the factor within the user's psych test
+                const userFactor = userFactors.find(factor => { return factor.factorId.toString() === growthFactor.factorId.toString(); });
+
+                // add the number of facets in this factor to the total number of growth facets
+                numGrowthFacets += growthFactor.idealFacets.length;
+
+                // go through each facet to find the score compared to the ideal output
+                growthFactor.idealFacets.forEach(idealFacet => {
+                    // find the facet within the user's psych test
+                    const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+
+                    // the score that the user needs for the max pq
+                    const idealScore = idealFacet.score;
+
+                    // how far off of the ideal score the user got
+                    const difference = Math.abs(idealScore - userFacet.score);
+
+                    // subtract the difference from the predictive score
+                    growth -= difference;
+
+                    // add the absolute value of the facet score, making the
+                    // potential predictive score higher
+                    growth += Math.abs(idealScore);
+                })
+            });
+
+            // the max pq for growth in this position
+            const maxGrowth = businessPos.maxGrowth ? businessPos.maxGrowth : 190;
+
+            // growth multiplier is highest growth score divided by number of growth
+            // facets divided by 5 (since each growth facet has a max score in either direction of 5)
+            const growthMultiplier = ((maxGrowth - 100) / numGrowthFacets) / 5;
+
+            // to get to the potential max score, multiply by the multiplier
+            growth *= growthMultiplier;
+
+            // add the starting growth pq
+            growth += 100;
 
             // PERFORMANCE IS BASED ON IDEAL OUTPUTS
             // add to the score when a non-zero facet score is ideal
@@ -827,7 +863,6 @@ async function finishPositionEvaluation(user, positionId, businessId) {
             let psychPerformance = 100;
 
             // go through each factor to get to each facet
-            const userFactors = userPsych.factors;
             businessPos.idealFactors.forEach(idealFactor => {
                 // find the factor within the user's psych test
                 const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
