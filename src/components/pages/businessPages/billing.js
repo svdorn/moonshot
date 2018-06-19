@@ -18,7 +18,7 @@ class Billing extends Component {
 
     render() {
         return (
-            <div className="fillScreen lightBlackBackground formContainer">
+            <div className="fillScreen formContainer">
                 <MetaTags>
                     <title>Billing | Moonshot</title>
                     <meta name="description" content="Manage your current bills and enter credit card information to pay bills." />

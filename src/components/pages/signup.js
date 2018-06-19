@@ -249,7 +249,7 @@ class Signup extends Component {
         }
 
         return (
-            <div className="fillScreen blackBackground formContainer">
+            <div className="fillScreen formContainer">
                 <MetaTags>
                     <title>Sign Up | Moonshot</title>
                     <meta name="description" content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
@@ -282,7 +282,7 @@ class Signup extends Component {
                         {this.state.email != "" && this.props.userPosted ?
                             <div className="center">
                                 <h1>Verify your email address</h1>
-                                <p>We sent {this.state.email} a verification link. Check your junk folder if you
+                                <p style={{margin: "20px"}}>We sent {this.state.email} a verification link. Check your junk folder if you
                                     can{"'"}t find our email.</p>
                             </div>
                             :

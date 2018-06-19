@@ -318,7 +318,6 @@ class SkillTest extends Component {
                     <title>{skillName} Test | Moonshot</title>
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
                 </MetaTags>
-                <div className="employerHeader" />
                 <ProgressBar skillName={skillName}/>
                 { content }
             </div>

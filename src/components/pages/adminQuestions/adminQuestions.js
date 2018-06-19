@@ -397,7 +397,6 @@ class AdminQuestions extends Component {
                     <title>Admin Questions | Moonshot</title>
                     <meta name="description" content={"Answer some administrative questions and then you'll be ready for the position evaluation."} />
                 </MetaTags>
-                <div className="employerHeader" />
                 <ProgressBar />
                 { content }
             </div>

@@ -219,7 +219,6 @@ class FreeResponse extends Component {
                     <title>Free Response | Moonshot</title>
                     <meta name="description" content={"Answer some free response questions to finish your position evaluation."} />
                 </MetaTags>
-                <div className="employerHeader" />
                 <ProgressBar />
                 { content }
             </div>

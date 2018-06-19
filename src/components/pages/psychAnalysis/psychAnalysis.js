@@ -295,7 +295,6 @@ class PsychAnalysis extends Component {
                     <title>Psychometric Analysis | Moonshot</title>
                     <meta name="description" content={"Find out what personality type you have! This will let us know how to best help you in getting the perfect job."} />
                 </MetaTags>
-                <div className="employerHeader" />
                 { progressBar }
                 { content }
             </div>
