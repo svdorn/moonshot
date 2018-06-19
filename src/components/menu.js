@@ -179,13 +179,13 @@ class Menu extends Component {
         // class of any dropdown menu
         let dropdownClass = isOnboarding ? "headerDropdownBlack wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
         // class of any menu item that is NOT currently selected
-        let menuItemClass = "menuItem font18px borderBottomClickable noWrap whiteText wideScreenMenuItem";
+        let menuItemClass = "menuItem font16px borderBottomClickable noWrap whiteText wideScreenMenuItem";
         // class of any menu item that IS currently selected
         const selectedMenuItemClass = menuItemClass + " currentRoute";
 
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
-        let hoverWidth = "68px";
+        let hoverWidth = "61px";
         // if (pathname === '/profile' || pathname === '/businessprofile') {
         //     dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
         // }
@@ -193,15 +193,15 @@ class Menu extends Component {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
             // if settings is selected, the underline bar must be bigger
             // because "settings" is a bigger word
-            hoverWidth = "67px";
+            hoverWidth = "60px";
         } else if (pathname === '/adduser') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
             // if settings is selected, the underline bar must be bigger
             // because "settings" is a bigger word
-            hoverWidth = "77px";
+            hoverWidth = "69px";
         } else if (pathname === '/billing') {
             dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-            hoverWidth = "51px";
+            hoverWidth = "46px";
         }
 
 
@@ -212,8 +212,8 @@ class Menu extends Component {
                     <Toolbar id="menu" style={{marginTop: "10px"}}>
                         <ToolbarGroup>
                             <img
-                                width={180}
-                                height={56}
+                                width={136}
+                                height={64}
                                 alt="Moonshot Logo"
                                 title="Moonshot Logo"
                                 className="clickable moonshotMenuLogo"
@@ -413,7 +413,7 @@ class Menu extends Component {
                                       onChange={self.handleDropDownItemClick}
                                       underlineStyle={styles.underlineStyle}
                                       anchorOrigin={styles.anchorOrigin}
-                                      style={{fontSize: "18px", marginTop: "21px"}}
+                                      style={{fontSize: "16px", marginTop: "21px"}}
                                       className={dropdownClass}
                                       id="menuDropdown"
                         >
@@ -459,8 +459,8 @@ class Menu extends Component {
         }
         let moonshotLogoHtml = (
             <img
-                width={170}
-                height={80}
+                width={136}
+                height={64}
                 alt="Moonshot"
                 className={logoClassName}
                 id="moonshotLogo"
@@ -472,7 +472,7 @@ class Menu extends Component {
         let menu = (
             <header style={{zIndex: "100"}}>
                 <div>
-                    <Toolbar id="menu">
+                    <Toolbar id="menu" style={{height: "35px"}}>
                         <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "39px"}}>
                             {moonshotLogoHtml}
                         </ToolbarGroup>

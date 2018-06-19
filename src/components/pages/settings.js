@@ -29,7 +29,7 @@ class Settings extends Component {
             }
         };
         return (
-            <div className="fillScreen lightBlackBackground">
+            <div className="fillScreen">
                 {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>Settings | Moonshot</title>

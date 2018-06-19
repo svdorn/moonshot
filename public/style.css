@@ -32,19 +32,28 @@ body {
 }
 
 header {
-  position: absolute;
-  top: 0;
-  width: 100%;
+    position: fixed;
+    height: 72px;
+    top: 0;
+    width: 100%;
+    color: rgb(32,32,32);
+    box-shadow:         0px 2px 30px 8px;
+    -moz-box-shadow:    0px 2px 30px 8px;
+    -webkit-box-shadow: 0px 2px 30px 8px;
+    background-color: #2e2e2e;
+    font-size: 12px;
+}
+
+.headerSpace {
+    width: 100%;
+    height: 90px;
 }
 
 section {
     display: block;
 }
 
-.headerSpace {
-    width: 100%;
-    height: 80px;
-}
+
 
 .extraHeaderSpace {
     height: 200px;
@@ -154,7 +163,7 @@ footer {
 }
 .form{
     text-align: center;
-    margin-top: 140px;
+    margin-top: 40px;
     margin-bottom: 100px;
     padding-bottom: 20px;
     padding-top: 10px;
@@ -1669,7 +1678,7 @@ form > h1 {
     background-color: white;
     position: absolute;
     right: 80px;
-    top: 56px;
+    top: 39px;
     pointer-events: none;
 }
 
@@ -4895,6 +4904,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 
 @media only screen and (max-width: 700px) {
+    header {
+        position: relative;
+    }
+    .headerSpace {
+        width: 100%;
+        height: 18px;
+    }
+
     .psychAnalysisQuestion {
         margin: 0 50px;
     }
