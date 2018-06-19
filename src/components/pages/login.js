@@ -218,7 +218,7 @@ class Login extends Component {
         if (redirect) { signUpQuery.redirect = redirect; }
 
         return (
-            <div className="fillScreen blackBackground formContainer">
+            <div className="fillScreen formContainer">
                 <MetaTags>
                     <title>Log In | Moonshot</title>
                     <meta name="description" content="Log in or create account. Moonshot helps you find the perfect career - for free. Prove your skill to multiple companies with each pathway completion." />
@@ -228,7 +228,6 @@ class Login extends Component {
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1 style={{marginTop:"15px"}}>Log In</h1>
                         <div className="inputContainer">
-                            {/* <!-- <div className="fieldWhiteSpace"/> --> */}
                             <Field
                                 name="email"
                                 component={renderTextField}
@@ -236,7 +235,6 @@ class Login extends Component {
                             /><br/>
                         </div>
                         <div className="inputContainer">
-                            {/* <!-- <div className="fieldWhiteSpace"/> --> */}
                             <Field
                                 name="password"
                                 component={renderPasswordField}
