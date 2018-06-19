@@ -309,7 +309,6 @@ class Results extends Component {
                     {candidate ?
                         <div>
                             <div className="blackBackground paddingBottom40px">
-                                <div className="headerDiv"/>
                                 <div className="profileInfoSkills">
                                     {/*<img style={style.leftTriangles} src="/images/LeftTriangles.png" />
                                     <img style={style.rightTriangles} src="/images/RightTriangles.png" />*/}
