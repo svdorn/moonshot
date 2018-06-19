@@ -698,7 +698,7 @@ form > h1 {
 
 .businessHome.frontPage {
     position: relative;
-    padding-top: 135px;
+    padding-top: 120px;
     /* padding-bottom: 200px; */
     padding-bottom: 75px;
 }
@@ -5054,7 +5054,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .pathwayContentTimeText { margin-top: 5px; }
 
     /* HOME PAGE */
-    .businessHome.frontPage { padding-top: 120px; }
+    .businessHome.frontPage { padding-top: 40px; }
     .businessHome > .infoContainer {
         flex-direction: column;
         padding: 0 30px;
@@ -5737,6 +5737,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .form {
         max-width: 300px;
     }
+    .businessHome.frontPage { padding-top: 20px; }
     .pointBox { width: 27px; }
     .resultsSlidersContainer {
         width: 260px;
