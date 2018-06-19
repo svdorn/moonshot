@@ -855,7 +855,7 @@ export function contactUs(user){
         axios.post("/api/business/contactUsEmail", user)
             .then(function(response) {
                 dispatch({type:"CONTACT_US", notification: {message:response.data, type:"infoHeader"}});
-                browserHistory.push('/myPathways');
+                browserHistory.push('/myEvaluations');
                 window.scrollTo(0, 0);
             })
             .catch(function(err) {
