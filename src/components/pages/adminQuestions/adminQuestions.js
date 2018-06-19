@@ -270,7 +270,7 @@ class AdminQuestions extends Component {
                                 value={this.state.sliderValue}
                                 onChange={this.handleSlider}
                         />
-                        <div className="adminQuestions sliderNumbers">
+                        <div className="adminQuestions sliderNumbers noselect">
                             { sliderNumbers }
                         </div>
                     </div>

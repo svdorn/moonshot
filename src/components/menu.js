@@ -154,12 +154,6 @@ class Menu extends Component {
             } else if (!(widthWantsShadow && scrollWantsShadow) && this.state.headerClass === "") {
                 this.setState({ headerClass: "noShadow" });
             }
-
-            // if (heightRequirement && widthRequirement && this.state.headerClass !== "noShadow") {
-            //     this.setState({ headerClass: "noShadow" });
-            // } else if ((!heightRequirement || !widthRequirement) && this.state.headerClass === "noShadow") {
-            //     this.setState({ headerClass: "" });
-            // }
         }
     }
 
