@@ -32,7 +32,10 @@ class Menu extends Component {
         } else if (this.props.location.pathname === '/billing') {
             dropDownSelected = "Billing";
         }
-        this.state = {dropDownSelected};
+        // class for the header, only needed for pages with unusual menus
+        const headerClass = props.location.pathname === "/" && window.scrollY === 0 ? "noShadow" : "";
+        // set the initial state
+        this.state = {dropDownSelected, headerClass};
     }
 
     componentDidUpdate() {
@@ -141,6 +144,18 @@ class Menu extends Component {
     }
 
 
+    checkForHeaderClassUpdate(event) {
+        if (this.props.location.pathname === "/") {
+            console.log(window.scrollY);
+            if (window.scrollY === 0 && this.state.headerClass !== "noShadow") {
+                this.setState({ headerClass: "noShadow" });
+            } else if (window.scrollY !== 0 && this.state.headerClass === "noShadow") {
+                this.setState({ headerClass: "" });
+            }
+        }
+    }
+
+
     render() {
         let self = this;
 
@@ -189,20 +204,46 @@ class Menu extends Component {
         // if (pathname === '/profile' || pathname === '/businessprofile') {
         //     dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
         // }
-        if (pathname === '/settings') {
-            dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-            // if settings is selected, the underline bar must be bigger
-            // because "settings" is a bigger word
-            hoverWidth = "60px";
-        } else if (pathname === '/adduser') {
-            dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-            // if settings is selected, the underline bar must be bigger
-            // because "settings" is a bigger word
-            hoverWidth = "69px";
-        } else if (pathname === '/billing') {
-            dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-            hoverWidth = "46px";
+
+        console.log(pathname);
+        if (pathname === "/") {
+            // make sure there isn't already an event listener on scroll ...
+            window.removeEventListener("scroll", this.checkForHeaderClassUpdate.bind(this));
+            // ... then add an event listener for adding the shadow to the menu
+            window.addEventListener("scroll", this.checkForHeaderClassUpdate.bind(this));
+            // if the user has not scrolled and the menu has a shadow, get rid of the shadow
+            if (this.state.headerClass !== "noShadow" && window.scrollY === 0) {
+                this.setState({ headerClass: "noShadow" });
+            }
+            // if the user has scrolled and there is no shadow, add a shadow
+            else if (this.state.headerClass === "noShadow" && window.scrollY !== 0) {
+                this.setState({ headerClass: "" });
+            }
+        } else {
+            // if there is an event listener for scrolling, get rid of it
+            window.removeEventListener("scroll", this.checkForHeaderClassUpdate.bind(this));
+            // make sure the menu has a shadow
+            if (this.state.headerClass === "noShadow") {
+                this.setState({ headerClass: "" });
+            }
+
+            if (pathname === '/settings') {
+                dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+                // if settings is selected, the underline bar must be bigger
+                // because "settings" is a bigger word
+                hoverWidth = "60px";
+            } else if (pathname === '/adduser') {
+                dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+                // if settings is selected, the underline bar must be bigger
+                // because "Add User" is a bigger
+                hoverWidth = "69px";
+            } else if (pathname === '/billing') {
+                dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
+                hoverWidth = "46px";
+            }
+
         }
+
 
 
         // show only the Moonshot logo if currently loading
@@ -470,7 +511,7 @@ class Menu extends Component {
         );
 
         let menu = (
-            <header style={{zIndex: "100"}}>
+            <header className={this.state.headerClass} style={{zIndex: "100"}}>
                 <div>
                     <Toolbar id="menu" style={{height: "35px"}}>
                         <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "39px"}}>

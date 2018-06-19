@@ -37,11 +37,14 @@ header {
     top: 0;
     width: 100%;
     color: rgb(32,32,32);
-    box-shadow:         0px 2px 30px 8px;
-    -moz-box-shadow:    0px 2px 30px 8px;
-    -webkit-box-shadow: 0px 2px 30px 8px;
+    box-shadow: 0px 13px 17px 0px;
+    transition: box-shadow 0.2s ease-in-out;
     background-color: #2e2e2eed;
     font-size: 12px;
+}
+
+header.noShadow {
+    box-shadow: none;
 }
 
 .headerSpace {
