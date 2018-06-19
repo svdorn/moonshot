@@ -23,7 +23,6 @@ import Settings from './components/pages/settings';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
-import ChangeTempPassword from './components/pages/changeTempPassword';
 import ResumeAnalysis from './components/pages/resumeAnalysis';
 import ContactUs from './components/pages/contactUs';
 import Error404 from './components/pages/error404';
@@ -75,7 +74,6 @@ const routes = (
             <Route path="verifyEmail" component={VerifyEmail} />
             <Route path="forgotPassword" component={ForgotPassword} />
             <Route path="changePassword" component={ChangePassword} />
-            <Route path="changeTempPassword" component={ChangeTempPassword} />
             <Route path="contactUs" component={ContactUs} />
             <Route path="resumeAnalysis" component={ResumeAnalysis} />
             <Route path="unsubscribe" component={Unsubscribe} />
