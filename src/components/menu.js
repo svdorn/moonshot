@@ -146,7 +146,6 @@ class Menu extends Component {
 
     checkForHeaderClassUpdate(event) {
         if (this.props.location.pathname === "/") {
-            console.log(window.scrollY);
             if (window.scrollY === 0 && this.state.headerClass !== "noShadow") {
                 this.setState({ headerClass: "noShadow" });
             } else if (window.scrollY !== 0 && this.state.headerClass === "noShadow") {
@@ -204,8 +203,8 @@ class Menu extends Component {
         // if (pathname === '/profile' || pathname === '/businessprofile') {
         //     dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
         // }
+        let additionalHeaderClass = "";
 
-        console.log(pathname);
         if (pathname === "/") {
             // make sure there isn't already an event listener on scroll ...
             window.removeEventListener("scroll", this.checkForHeaderClassUpdate.bind(this));
@@ -227,6 +226,11 @@ class Menu extends Component {
                 this.setState({ headerClass: "" });
             }
 
+            // get the different parts of the pathname ([skillTest, 1234945543])
+            const pathnameParts = pathname.split("/").slice(1);
+            // get the first, most important part of the path first
+            const pathFirstPart = pathnameParts[0];
+
             if (pathname === '/settings') {
                 dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
                 // if settings is selected, the underline bar must be bigger
@@ -240,8 +244,9 @@ class Menu extends Component {
             } else if (pathname === '/billing') {
                 dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
                 hoverWidth = "46px";
+            } else if (["evaluationintro", "psychometricanalysis", "skilltest", "freeresponse", "adminquestions"].includes(pathFirstPart)){
+                additionalHeaderClass = " notFixed";
             }
-
         }
 
 
@@ -511,7 +516,7 @@ class Menu extends Component {
         );
 
         let menu = (
-            <header className={this.state.headerClass} style={{zIndex: "100"}}>
+            <header className={this.state.headerClass + additionalHeaderClass} style={{zIndex: "100"}}>
                 <div>
                     <Toolbar id="menu" style={{height: "35px"}}>
                         <ToolbarGroup className="logoToolbarGroup" style={{marginTop: "39px"}}>
