@@ -184,8 +184,8 @@ class CandidatePreview extends Component {
         //if (sectionType === "Skill" || sectionType === "Predicted") {
             if (typeof score !== "number") { prediction = "N/A" }
             else {
-                if (score < 80) { prediction = ratings[0]; }
-                else if (score < 120) { prediction = ratings[1]; }
+                if (score < 90) { prediction = ratings[0]; }
+                else if (score < 110) { prediction = ratings[1]; }
                 else { prediction = ratings[2]; }
 
                 let sliderValue = score;
