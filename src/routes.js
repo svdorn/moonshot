@@ -28,7 +28,6 @@ import ResumeAnalysis from './components/pages/resumeAnalysis';
 import ContactUs from './components/pages/contactUs';
 import Error404 from './components/pages/error404';
 import Unsubscribe from './components/pages/unsubscribe';
-import ReferralCode from './components/pages/referralCode';
 import Admin from './components/pages/admin';
 import PrivacyPolicy from './components/policies/privacyPolicy';
 import TermsOfUse from './components/policies/termsOfUse';
@@ -80,7 +79,6 @@ const routes = (
             <Route path="contactUs" component={ContactUs} />
             <Route path="resumeAnalysis" component={ResumeAnalysis} />
             <Route path="unsubscribe" component={Unsubscribe} />
-            <Route path="referral" component={ReferralCode} />
             <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
             <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
             <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
