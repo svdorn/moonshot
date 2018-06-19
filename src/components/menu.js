@@ -146,11 +146,20 @@ class Menu extends Component {
 
     checkForHeaderClassUpdate(event) {
         if (this.props.location.pathname === "/") {
-            if (window.scrollY === 0 && this.state.headerClass !== "noShadow") {
-                this.setState({ headerClass: "noShadow" });
-            } else if (window.scrollY !== 0 && this.state.headerClass === "noShadow") {
+            // on homepage, only give a shadow if wanted by both width and height
+            const widthWantsShadow = window.innerWidth > 700;
+            const scrollWantsShadow = window.scrollY !== 0;
+            if (widthWantsShadow && scrollWantsShadow && this.state.headerClass === "noShadow") {
                 this.setState({ headerClass: "" });
+            } else if (!(widthWantsShadow && scrollWantsShadow) && this.state.headerClass === "") {
+                this.setState({ headerClass: "noShadow" });
             }
+
+            // if (heightRequirement && widthRequirement && this.state.headerClass !== "noShadow") {
+            //     this.setState({ headerClass: "noShadow" });
+            // } else if ((!heightRequirement || !widthRequirement) && this.state.headerClass === "noShadow") {
+            //     this.setState({ headerClass: "" });
+            // }
         }
     }
 
@@ -206,10 +215,12 @@ class Menu extends Component {
         let additionalHeaderClass = "";
 
         if (pathname === "/") {
-            // make sure there isn't already an event listener on scroll ...
+            // make sure there aren't already event listeners on scroll/resize ...
             window.removeEventListener("scroll", this.checkForHeaderClassUpdate.bind(this));
-            // ... then add an event listener for adding the shadow to the menu
+            window.removeEventListener("resize", this.checkForHeaderClassUpdate.bind(this));
+            // ... then add event listeners for adding the shadow to the menu
             window.addEventListener("scroll", this.checkForHeaderClassUpdate.bind(this));
+            window.addEventListener("resize", this.checkForHeaderClassUpdate.bind(this));
             // if the user has not scrolled and the menu has a shadow, get rid of the shadow
             if (this.state.headerClass !== "noShadow" && window.scrollY === 0) {
                 this.setState({ headerClass: "noShadow" });
@@ -219,8 +230,9 @@ class Menu extends Component {
                 this.setState({ headerClass: "" });
             }
         } else {
-            // if there is an event listener for scrolling, get rid of it
+            // if there are event listeners for scrolling/resizing, get rid of them
             window.removeEventListener("scroll", this.checkForHeaderClassUpdate.bind(this));
+            window.removeEventListener("resize", this.checkForHeaderClassUpdate.bind(this));
             // make sure the menu has a shadow
             if (this.state.headerClass === "noShadow") {
                 this.setState({ headerClass: "" });
