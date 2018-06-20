@@ -117,37 +117,6 @@ class BusinessHome extends Component {
         })
     };
 
-    handleSubmit(e) {
-        e.preventDefault();
-        const vals = this.props.formData.forBusiness.values;
-
-        // Form validation before submit
-        let notValid = false;
-        const requiredFields = [
-            'name',
-            'email',
-        ];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return;
-
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) return;
-
-        const user = {
-            name: this.props.formData.forBusiness.values.name,
-            email: this.props.formData.forBusiness.values.email,
-            company: this.props.formData.forBusiness.values.company,
-            phone: this.props.formData.forBusiness.values.phone,
-        };
-
-        this.props.forBusiness(user);
-    }
-
-
     handleEmailFormSubmit(e) {
         e.preventDefault();
         const vals = this.props.formData.forBusiness.values;
@@ -173,34 +142,6 @@ class BusinessHome extends Component {
 
         this.props.demoEmail(user);
         this.handleDemoScreenChange();
-    }
-
-
-    handleSubmitDialogEmail(e) {
-        e.preventDefault();
-        const vals = this.props.formData.forBusiness.values;
-
-        // Form validation before submit
-        let notValid = false;
-        const requiredFields = [
-            'email',
-        ];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return;
-
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) return;
-
-        const user = {
-            email: this.props.formData.forBusiness.values.email,
-        };
-
-        this.props.dialogEmail(user);
-        this.handleNextScreen();
     }
 
     handleSubmitForm(e) {
@@ -233,106 +174,6 @@ class BusinessHome extends Component {
         this.props.dialogEmail(user);
         this.handleNextScreen();
     }
-
-    handleSubmitDialogEmailScreen2(e) {
-        e.preventDefault();
-        const vals = this.props.formData.forBusiness.values;
-
-        if (!this.state.agreeingToTerms) {
-            this.setState({error: "Must agree to Terms and Conditions to continue."});
-            return;
-        } else {
-            this.setState({error: ''});
-        }
-
-        // Form validation before submit
-        let notValid = false;
-        const requiredFields = [
-            'name',
-            'company',
-            'password',
-            'confirmPassword'
-        ];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return;
-
-        if (vals.password != vals.confirmPassword) {
-            return;
-        }
-
-        const user = {
-            name: this.props.formData.forBusiness.values.name,
-            email: this.props.formData.forBusiness.values.email,
-            company: this.props.formData.forBusiness.values.company,
-            password: this.props.formData.forBusiness.values.password,
-            termsAndConditions: this.state.agreeingToTerms
-        };
-
-        this.props.dialogEmailScreen2(user);
-        this.handleNextScreen();
-    }
-
-
-    handleSubmitDialogEmailScreen3(e) {
-        e.preventDefault();
-        const vals = this.props.formData.forBusiness.values;
-
-        // Form validation before submit
-        let notValid = false;
-        const requiredFields = [
-            'positions'
-        ];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return;
-
-        const user = {
-            positions: this.props.formData.forBusiness.values.positions
-        };
-
-        this.props.dialogEmailScreen3(user);
-        this.handleNextScreen();
-    }
-
-
-    handleSubmitDialogEmailScreen4(e) {
-        e.preventDefault();
-        const vals = this.props.formData.forBusiness.values;
-
-        // Form validation before submit
-        let notValid = false;
-        const requiredFields = [
-            'skill1',
-            'skill2',
-            'skill3'
-        ];
-        requiredFields.forEach(field => {
-            if (!vals || !vals[field]) {
-                this.props.touch(field);
-                notValid = true;
-            }
-        });
-        if (notValid) return;
-
-        const user = {
-            skill1: this.props.formData.forBusiness.values.skill1,
-            skill2: this.props.formData.forBusiness.values.skill2,
-            skill3: this.props.formData.forBusiness.values.skill3
-        };
-
-        this.props.dialogEmailScreen4(user);
-        this.handleNextScreen();
-    }
-
 
     onChange(e) {
         this.setState({
