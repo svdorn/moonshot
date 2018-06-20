@@ -536,7 +536,6 @@ async function addEvaluation(user, business, positionId, startDate) {
                         return candidateId.toString() === userIdString;
                     });
                 }
-
             } else {
                 // User is an employee
                 if (position.employees) {
@@ -606,7 +605,7 @@ async function addEvaluation(user, business, positionId, startDate) {
 
             // create the free response objects that will be stored for the user, employees won't need frq's
             let frqsForUser = [];
-            if (user.userType == "candidate") {
+            if (user.userType == "candidate" || position.employeesGetFrqs) {
                 const numFRQs = position.freeResponseQuestions.length;
                 for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
                     const frq = position.freeResponseQuestions[frqIndex];
@@ -787,94 +786,45 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         // update the archetype now that the user is sure to have taken the psych test
         candidate.archetype = user.archetype;
 
-        if (user.userType === "candidate") {
-            // --->> SCORE THE USER <<--- //
-            // GET THE TOTAL SKILL SCORE BY AVERAGING ALL SKILL SCORES FOR THIS POSITION
-            // get all relevant skills (ignore this part justin)
-            const skillScores = user.skillTests ? user.skillTests.filter(skill => {
-                return businessPos.skills.some(posSkill => {
-                    return posSkill.toString() === skill.skillId.toString();
-                });
-            }) : [];
-            let overallSkill = 0;
-            const numScores = skillScores.length;
-            // add every skill score divided by how many skills there are - same result as averaging
-            skillScores.forEach(skillScore => {
-                overallSkill += (skillScore.mostRecentScore / numScores);
+        // --->> SCORE THE USER <<--- //
+        // GET THE TOTAL SKILL SCORE BY AVERAGING ALL SKILL SCORES FOR THIS POSITION
+        // get all relevant skills
+        const skillScores = user.skillTests ? user.skillTests.filter(skill => {
+            return businessPos.skills.some(posSkill => {
+                return posSkill.toString() === skill.skillId.toString();
             });
+        }) : [];
+        let overallSkill = 0;
+        const numScores = skillScores.length;
+        // add every skill score divided by how many skills there are - same result as averaging
+        skillScores.forEach(skillScore => {
+            overallSkill += (skillScore.mostRecentScore / numScores);
+        });
 
-            // IDEAL GROWTH CALCULATION IS SIMILAR TO PERFORMANCE CALCULATION
-            // BUT ONLY FOR CERTAIN FACETS
-            const userPsych = user.psychometricTest;
+        // IDEAL GROWTH CALCULATION IS SIMILAR TO PERFORMANCE CALCULATION
+        // BUT ONLY FOR CERTAIN FACETS
+        const userPsych = user.psychometricTest;
 
-            // start at a score of 0, 100 will be added after scaling
-            let growth = 0;
+        // start at a score of 0, 100 will be added after scaling
+        let growth = 0;
 
-            // how many facets are involved in the growth calculation
-            let numGrowthFacets = 0;
+        // how many facets are involved in the growth calculation
+        let numGrowthFacets = 0;
 
-            // go through each factor to get to each facet
-            const userFactors = userPsych.factors;
-            // make sure there are factors used in growth - otherwise growth will be 100
-            if (Array.isArray(businessPos.growthFactors)) {
-                // go through each factor that affects growth
-                businessPos.growthFactors.forEach(growthFactor => {
-                    // find the factor within the user's psych test
-                    const userFactor = userFactors.find(factor => { return factor.factorId.toString() === growthFactor.factorId.toString(); });
-
-                    // add the number of facets in this factor to the total number of growth facets
-                    numGrowthFacets += growthFactor.idealFacets.length;
-
-                    // go through each facet to find the score compared to the ideal output
-                    growthFactor.idealFacets.forEach(idealFacet => {
-                        // find the facet within the user's psych test
-                        const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
-
-                        // the score that the user needs for the max pq
-                        const idealScore = idealFacet.score;
-
-                        // how far off of the ideal score the user got
-                        const difference = Math.abs(idealScore - userFacet.score);
-
-                        // subtract the difference from the predictive score
-                        growth -= difference;
-
-                        // add the absolute value of the facet score, making the
-                        // potential predictive score higher
-                        growth += Math.abs(idealScore);
-                    })
-                });
-            }
-
-            // the max pq for growth in this position
-            const maxGrowth = businessPos.maxGrowth ? businessPos.maxGrowth : 190;
-
-            // growth multiplier is highest growth score divided by number of growth
-            // facets divided by 5 (since each growth facet has a max score in either direction of 5)
-            // can only have a growth multiplier if there are growth facets, so if
-            // there are no growth facets, set multiplier to 1
-            const growthMultiplier = numGrowthFacets > 0 ? ((maxGrowth - 100) / numGrowthFacets) / 5 : 1;
-
-            // to get to the potential max score, multiply by the multiplier
-            growth *= growthMultiplier;
-
-            // add the starting growth pq
-            growth += 100;
-
-            // PERFORMANCE IS BASED ON IDEAL OUTPUTS
-            // add to the score when a non-zero facet score is ideal
-            // subtract from the score whatever the differences are between the
-            // ideal facets and the actual facets
-            // start at 100 as the baseline
-            let psychPerformance = 100;
-
-            // go through each factor to get to each facet
-            businessPos.idealFactors.forEach(idealFactor => {
+        // go through each factor to get to each facet
+        const userFactors = userPsych.factors;
+        // make sure there are factors used in growth - otherwise growth will be 100
+        if (Array.isArray(businessPos.growthFactors)) {
+            // go through each factor that affects growth
+            businessPos.growthFactors.forEach(growthFactor => {
                 // find the factor within the user's psych test
-                const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
+                const userFactor = userFactors.find(factor => { return factor.factorId.toString() === growthFactor.factorId.toString(); });
+
+                // add the number of facets in this factor to the total number of growth facets
+                numGrowthFacets += growthFactor.idealFacets.length;
 
                 // go through each facet to find the score compared to the ideal output
-                idealFactor.idealFacets.forEach(idealFacet => {
+                growthFactor.idealFacets.forEach(idealFacet => {
                     // find the facet within the user's psych test
                     const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
 
@@ -885,30 +835,77 @@ async function finishPositionEvaluation(user, positionId, businessId) {
                     const difference = Math.abs(idealScore - userFacet.score);
 
                     // subtract the difference from the predictive score
-                    psychPerformance -= difference;
+                    growth -= difference;
 
                     // add the absolute value of the facet score, making the
                     // potential predictive score higher
-                    psychPerformance += Math.abs(idealScore);
+                    growth += Math.abs(idealScore);
                 })
             });
+        }
 
-            // to get the actual performance score, it is an average between skills and psychPerformance
-            const performance = (psychPerformance + overallSkill) / 2;
+        // the max pq for growth in this position
+        const maxGrowth = businessPos.maxGrowth ? businessPos.maxGrowth : 190;
 
-            // PREDICTED SCORE IS AN AVERAGE BETWEEN GROWTH AND PERFORMANCE
-            const predicted = (performance + growth) / 2;
+        // growth multiplier is highest growth score divided by number of growth
+        // facets divided by 5 (since each growth facet has a max score in either direction of 5)
+        // can only have a growth multiplier if there are growth facets, so if
+        // there are no growth facets, set multiplier to 1
+        const growthMultiplier = numGrowthFacets > 0 ? ((maxGrowth - 100) / numGrowthFacets) / 5 : 1;
 
-            // OVERALL SCORE IS AN AVERAGE BETWEEN OVERALL SKILL AND PREDICTED
-            const overall = (predicted + overallSkill) / 2;
+        // to get to the potential max score, multiply by the multiplier
+        growth *= growthMultiplier;
 
-            candidate.scores = {
-                skill: overallSkill,
-                growth,
-                performance,
-                predicted,
-                overall
-            }
+        // add the starting growth pq
+        growth += 100;
+
+        // PERFORMANCE IS BASED ON IDEAL OUTPUTS
+        // add to the score when a non-zero facet score is ideal
+        // subtract from the score whatever the differences are between the
+        // ideal facets and the actual facets
+        // start at 100 as the baseline
+        let psychPerformance = 100;
+
+        // go through each factor to get to each facet
+        businessPos.idealFactors.forEach(idealFactor => {
+            // find the factor within the user's psych test
+            const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
+
+            // go through each facet to find the score compared to the ideal output
+            idealFactor.idealFacets.forEach(idealFacet => {
+                // find the facet within the user's psych test
+                const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+
+                // the score that the user needs for the max pq
+                const idealScore = idealFacet.score;
+
+                // how far off of the ideal score the user got
+                const difference = Math.abs(idealScore - userFacet.score);
+
+                // subtract the difference from the predictive score
+                psychPerformance -= difference;
+
+                // add the absolute value of the facet score, making the
+                // potential predictive score higher
+                psychPerformance += Math.abs(idealScore);
+            })
+        });
+
+        // to get the actual performance score, it is an average between skills and psychPerformance
+        const performance = (psychPerformance + overallSkill) / 2;
+
+        // PREDICTED SCORE IS AN AVERAGE BETWEEN GROWTH AND PERFORMANCE
+        const predicted = (performance + growth) / 2;
+
+        // OVERALL SCORE IS AN AVERAGE BETWEEN OVERALL SKILL AND PREDICTED
+        const overall = (predicted + overallSkill) / 2;
+
+        candidate.scores = {
+            skill: overallSkill,
+            growth,
+            performance,
+            predicted,
+            overall
         }
 
         // <<---------------------->> //
@@ -1386,7 +1383,7 @@ async function POST_answerPsychQuestion(req, res) {
     user.psychometricTest = psychometricTest;
 
     // grade the test if it's finished
-    if (finishedTest && user.userType === "candidate") {
+    if (finishedTest) {
         user = calculatePsychScores(user);
     }
 

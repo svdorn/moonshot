@@ -406,7 +406,7 @@ function POST_answerSkillQuestion(req, res) {
                         if (!position.freeResponseQuestions || position.freeResponseQuestions.length === 0) {
                             try {
                                 // have to get the business to save the user in it
-
+                                console.log("finishing position eval");
                                 const finishObj = await finishPositionEvaluation(user, position.positionId, position.businessId);
                                 // save the business with the new user info
                                 finishObj.business.save();

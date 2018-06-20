@@ -58,6 +58,8 @@ var businessesSchema = mongoose.Schema({
             // if you have to answer this question to finish applying
             required: Boolean
         }],
+        // whether employees should be asked the above free response questions
+        employeesGetFrqs: Boolean,
         // how long the position test is projected to take
         length: Number,
         // the number of days that the position is designated to be open
@@ -105,7 +107,7 @@ var businessesSchema = mongoose.Schema({
                 performance: Number,
                 // ideal facet scores minus actual facet scores
                 predicted: Number
-            },
+            }
         }],
         // Employees related to this position
         employees: [{
@@ -137,6 +139,8 @@ var businessesSchema = mongoose.Schema({
             scores: {
                 // combination of all the scores
                 overall: Number,
+                // average of skill iqs for all relevant skills
+                skill: Number,
                 // how good of a culture fit the candidate has
                 culture: Number,
                 // how much the candidate could grow in the position
@@ -144,8 +148,10 @@ var businessesSchema = mongoose.Schema({
                 // if the candidate would stay at the company for a long time
                 longevity: Number,
                 // how well the candidate would do at that specific position
-                performance: Number
-            },
+                performance: Number,
+                // ideal facet scores minus actual facet scores
+                predicted: Number
+            }
         }],
         // One-time use codes for candidates
         candidateCodes: [{
