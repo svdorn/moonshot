@@ -233,6 +233,11 @@ export function usersReducers(state = initialState, action) {
                 ...state, incompleteSteps: undefined
             }
             break;
+        case "SET_WEBP_SUPPORT":
+            return {
+                ...state, webpSupportChecked: true, webpSupported: action.webpSupported
+            }
+            break;
         case "ADD_PATHWAY":
             return {
                 ...state, currentUser: action.payload, notification: action.notification

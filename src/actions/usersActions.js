@@ -31,6 +31,15 @@ export function getUserFromSession(callback) {
     };
 }
 
+
+// set whether the webp image format is supported
+export function setWebpSupport(webpSupported) {
+    return function(dispatch) {
+        dispatch({type: "SET_WEBP_SUPPORT", webpSupported})
+    }
+}
+
+
 export function openAddUserModal() {
     return function(dispatch) {
         dispatch({type: "OPEN_ADD_USER_MODAL"});
