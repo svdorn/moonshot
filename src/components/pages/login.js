@@ -209,6 +209,7 @@ class Login extends Component {
     }
 
     render() {
+        console.log('hyello?');
         // the query that will be passed to "sign up" if that is clicked
         let location = this.props.location;
         const pathway = location.query.pathway;

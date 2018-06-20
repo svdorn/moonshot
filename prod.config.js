@@ -26,6 +26,9 @@ module.exports = merge(baseConfig, {
     // mark us as in production mode
     mode: 'production',
 
+    // don't hot reload for production since things won't get saved
+    watch: false,
+
     // minimize JS
     optimization: {
         minimizer: [
