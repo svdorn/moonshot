@@ -1167,7 +1167,7 @@ async function GET_employeeSearch(req, res) {
     try {
         business = await Businesses
             .find(businessQuery, positionQuery)
-            .select("positions.name positions.employees.answers positions.employees.employeeId positions.employees.managerId positions.employees.gradingComplete positions.employees.name positions.employees.profileUrl positions.employees.archetype positions.employees.score");
+            .select("positions.name positions.employees.answers positions.employees.employeeId positions.employees.managerId positions.employees.scores.overall positions.employees.gradingComplete positions.employees.name positions.employees.profileUrl positions.employees.archetype positions.employees.score");
         // see if there are none found
         if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
         // if any are found, only one is found, as we searched by id
@@ -1201,16 +1201,13 @@ async function GET_employeeSearch(req, res) {
     if (status && status !== "" && employees) {
         if (status.toString() === "Complete") {
             gradingComplete = true;
-            employees = employees.filter(employee => {
-                return employee.gradingComplete === gradingComplete;
-            });
-        } else {
-            gradingComplete = false;
-            employees = employees.filter(employee => {
-                return employee.gradingComplete === gradingComplete;
-            });
         }
+        employees = employees.filter(employee => {
+            return employee.gradingComplete === gradingComplete;
+        });
     }
+
+    console.log("employees: ", employees);
 
     res.json(employees);
 }

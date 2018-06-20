@@ -370,6 +370,9 @@ class MyEmployees extends Component {
             employeePreviews = this.state.employees.map(employee => {
                 key++;
 
+                console.log(employee);
+                const score = employee.scores && employee.scores.overall ? employee.scores.overall : undefined;
+
                 return (
                     <li style={{marginTop: '15px'}}
                         key={key}
@@ -378,6 +381,7 @@ class MyEmployees extends Component {
                             gradingComplete={employee.gradingComplete}
                             answers={employee.answers}
                             name={employee.name}
+                            score={score}
                             employeeId={employee.employeeId}
                             profileUrl={employee.profileUrl}
                             questions={this.state.questions}

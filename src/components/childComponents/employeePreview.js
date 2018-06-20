@@ -227,6 +227,24 @@ class EmployeePreview extends Component {
             );
         }
 
+        let seeResults = null;
+        // if the candidate has been graded, allow results to be seen
+        if (this.props.score) {
+            seeResults = (
+                <i className="completionStage clickable underline center font14px marginLeft30px" onClick={() => this.goTo(resultsUrl)}>
+                    See Results
+                </i>
+            )
+        }
+        // otherwise, don't let user see results
+        else {
+            seeResults = (
+                <i className="completionStage underline center font14px marginLeft30px" style={{color: "gray", cursor: "not-allowed"}}>
+                    See Results
+                </i>
+            )
+        }
+
         let resultsUrl = "/myEmployees";
         try {
             const profileUrl = this.props.profileUrl;
@@ -308,9 +326,7 @@ class EmployeePreview extends Component {
                             onClick={this.handleOpen.bind(this)}>
                         Grade
                     </button>
-                    <i className="completionStage clickable underline center font14px marginLeft30px" onClick={() => this.goTo(resultsUrl)}>
-                        See Results
-                    </i>
+                    {seeResults}
                 </div>
             </div>
             }
