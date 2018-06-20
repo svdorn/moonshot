@@ -357,7 +357,6 @@ class BusinessHome extends Component {
 
 
     render() {
-        console.log("in this environment");
         const opts = {
             height: '320',
             width: '525',
