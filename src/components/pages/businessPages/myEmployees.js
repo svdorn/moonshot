@@ -370,7 +370,6 @@ class MyEmployees extends Component {
             employeePreviews = this.state.employees.map(employee => {
                 key++;
 
-                console.log(employee);
                 const score = employee.scores && employee.scores.overall ? employee.scores.overall : undefined;
 
                 return (
