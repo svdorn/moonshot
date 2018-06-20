@@ -274,6 +274,11 @@ class EmployeeResults extends Component {
             )
         });
 
+        // if there are no frqs for this position eval
+        if (responses.length === 0) {
+            responses = <div className="whiteText center">No responses for this position.</div>;
+        }
+
         return (
             <div className="fillScreen candidateResponses">
                 {responses}

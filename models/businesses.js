@@ -58,6 +58,8 @@ var businessesSchema = mongoose.Schema({
             // if you have to answer this question to finish applying
             required: Boolean
         }],
+        // whether employees should be asked the above free response questions
+        employeesGetFrqs: Boolean,
         // how long the position test is projected to take
         length: Number,
         // the number of days that the position is designated to be open
