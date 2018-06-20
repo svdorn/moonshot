@@ -465,8 +465,8 @@ class BusinessHome extends Component {
                             <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop40px">
                                 Try Moonshot Insights for Free
                             </div>
-                            <div className="whiteText font16px font14pxUnder700 font12pxUnder400 marginTop20px">
-                                Book a demo to active your first free evaluation.
+                            <div className="whiteText font16px font14pxUnder700 font12pxUnder400 marginTop10px">
+                                Book a demo to activate your first free evaluation.
                             </div>
                             <Field
                                 name="name"
