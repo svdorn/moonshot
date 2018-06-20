@@ -5,7 +5,7 @@ module.exports = {
     entry: './src/client.js',
     output: {
         filename: 'bundle.js',
-        path: path.resolve(__dirname, 'public')
+        path: path.resolve(__dirname, '../public')
     },
     plugins: [
         new webpack.IgnorePlugin(/credentials.js|node_modules/)
