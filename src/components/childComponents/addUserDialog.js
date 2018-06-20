@@ -86,6 +86,11 @@ class AddUserDialog extends Component {
             shouldSetState = true;
             newState.position = this.props.position;
         }
+        // if the user sets a tab - Candidate or Employee or Admin - default to adding that user
+        if (!this.props.modalOpen && this.props.tab && this.state.tab !== this.props.tab) {
+            shouldSetState = true;
+            newState.tab = this.props.tab;
+        }
         // set the state if needed
         if (shouldSetState) {
             this.setState(newState);

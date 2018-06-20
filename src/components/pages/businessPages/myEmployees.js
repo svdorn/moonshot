@@ -397,7 +397,7 @@ class MyEmployees extends Component {
         return (
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEmployees'>
                 {this.props.currentUser.userType == "accountAdmin" ?
-                    <AddUserDialog position={this.state.position}/>
+                    <AddUserDialog position={this.state.position} tab="Employee" />
                     : null
                 }
                 <MetaTags>
