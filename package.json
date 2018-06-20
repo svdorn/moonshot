@@ -5,6 +5,7 @@
     "scripts": {
         "dev": "webpack --config ./dev.config.js --watch",
         "start": "node ./bin/www & node apiServer.js",
+        "deploy": "webpack --config ./prod.config.js && eb deploy",
         "test": "mocha --timeout 120000"
     },
     "directories": {
