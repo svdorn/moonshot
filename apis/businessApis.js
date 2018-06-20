@@ -355,12 +355,21 @@ function POST_demoEmail(req, res) {
 
 function POST_dialogEmail(req, res) {
     let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'Moonshot - Somebody filled out email on Homepage';
+    let subject = 'ACTION REQUIRED - Somebody filled out form on homepage';
 
     let content = "<div>"
-        + "<h3>Email of someone who filled out first page on homepage: </h3>"
-        + "<p>Email: "
+        + "<h2>Lead from Moonshot Insights homepage</h2>"
+        + "<h3>Name</h3>"
+        + "<p>"
+        + sanitize(req.body.name)
+        + "</p>"
+        + "<h3>Email</h3>"
+        + "<p>"
         + sanitize(req.body.email)
+        + "</p>"
+        + "<h3>Company</h3>"
+        + "<p>"
+        + sanitize(req.body.company)
         + "</p>"
         + "</div>";
 
