@@ -3,6 +3,7 @@
     "version": "0.0.0",
     "private": true,
     "scripts": {
+        "dev": "webpack --config ./dev.config.js --watch",
         "start": "node ./bin/www & node apiServer.js",
         "test": "mocha --timeout 120000"
     },

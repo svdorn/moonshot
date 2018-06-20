@@ -227,7 +227,7 @@ class Login extends Component {
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1 style={{marginTop:"15px"}}>Log In</h1>
+                        <h1 style={{marginTop:"15px"}}>BLAM</h1>
                         <div className="inputContainer">
                             {/* <!-- <div className="fieldWhiteSpace"/> --> */}
                             <Field
