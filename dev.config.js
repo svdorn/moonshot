@@ -7,12 +7,6 @@ module.exports = merge(baseConfig, {
 
     mode: 'development',
 
-    // devServer: {
-    //     inline: true,
-    //     contentBase: 'src',
-    //     port: '3001',
-    // },
-
     // module: {
     //     rules: [
     //         {
