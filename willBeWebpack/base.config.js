@@ -1,6 +1,6 @@
 var path = require('path');
+
 const webpack = require('webpack');
-const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
     entry: './src/client.js',
@@ -11,16 +11,7 @@ module.exports = {
     plugins: [
         new webpack.IgnorePlugin(/credentials.js|node_modules/)
     ],
-    optimization: {
-        minimizer: [
-            new UglifyJsPlugin({
-                cache: true,
-                parallel: true
-            })
-        ]
-    },
     watch: true,
-    mode: 'production',
     module: {
         rules: [
             {
