@@ -354,13 +354,23 @@ class MyEmployees extends Component {
             );
         }
 
-        // create the employee previews
-        let key = 0;
         let self = this;
 
+        // find the id of the currently selected position
+        let positionId = "";
+        try {
+            positionId = this.state.positions.find(pos => {
+                return pos.name === this.state.position;
+            })._id;
+        } catch (getPosIdErr) { /* probably just haven't chosen a position yet */ }
+
+        // create the employee previews
+        let key = 0;
         if (this.state.employees.length !== 0) {
             employeePreviews = this.state.employees.map(employee => {
                 key++;
+
+                const score = employee.scores && employee.scores.overall ? employee.scores.overall : undefined;
 
                 return (
                     <li style={{marginTop: '15px'}}
@@ -370,10 +380,12 @@ class MyEmployees extends Component {
                             gradingComplete={employee.gradingComplete}
                             answers={employee.answers}
                             name={employee.name}
+                            score={score}
                             employeeId={employee.employeeId}
-                            employeeUrl={employee.employeeUrl}
+                            profileUrl={employee.profileUrl}
                             questions={this.state.questions}
                             position={this.state.position}
+                            positionId={positionId}
                         />
                     </li>
                 );
@@ -383,12 +395,14 @@ class MyEmployees extends Component {
 
         return (
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEmployees'>
-                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
+                {this.props.currentUser.userType == "accountAdmin" ?
+                    <AddUserDialog position={this.state.position} tab="Employee" />
+                    : null
+                }
                 <MetaTags>
                     <title>My Employees | Moonshot</title>
                     <meta name="description" content="Grade your employees and see their results."/>
                 </MetaTags>
-                <div className="employerHeader"/>
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>

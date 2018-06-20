@@ -1,6 +1,6 @@
 "use strict"
 import React, {Component} from 'react';
-import {TextField, CircularProgress} from 'material-ui';
+import {TextField, CircularProgress, RaisedButton} from 'material-ui';
 import {contactUs, formError} from '../../actions/usersActions';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import {connect} from 'react-redux';
@@ -8,18 +8,25 @@ import {bindActionCreators} from 'redux';
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 
-const styles = {
-    hintStyle: {
-        color: '#00c3ff',
-    },
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
 };
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
-        errorText={touched && error}
-        multiLine={true}
-        hintStyle={styles.hintStyle}
         hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
     />
@@ -69,16 +76,15 @@ class ContactUs extends Component {
 
     render() {
         return (
-            <div className="fillScreen greenToBlue center">
+            <div className="fillScreen formContainer">
                 <MetaTags>
-                    <title>Contact Us | Moonshot</title>
-                    <meta name="description" content="Questions? Comments? New sushi restaurant we should try? Contact Moonshot here!" />
+                <title>Contact Us | Moonshot</title>
+                <meta name="description" content="Questions? Comments? New sushi restaurant we should try? Contact Moonshot here!" />
                 </MetaTags>
-                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
-
-                <div className="form lightWhiteForm">
-                    <h1>Contact Us</h1>
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
+                        <h1 style={{marginTop:"15px"}}>Contact Us</h1>
                         <div className="inputContainer">
                             <Field
                                 name="message"
@@ -87,14 +93,16 @@ class ContactUs extends Component {
                                 className="lightBlueInputText"
                             /><br/>
                         </div>
-                        <button
+                        <br/>
+                        <RaisedButton
+                            label="Contact Us"
                             type="submit"
-                            className="formSubmitButton font24px font16pxUnder600"
-                        >
-                            Contact Us
-                        </button>
+                            className="raisedButtonBusinessHome"
+                            style={{margin: '10px 0'}}
+                        />
+                        <br/>
+                        {this.props.loading ? <CircularProgress style={{marginTop: "20px"}}/> : null}
                     </form>
-                    {this.props.loading ? <CircularProgress style={{marginTop: "20px"}}/> : ""}
                 </div>
 
             </div>

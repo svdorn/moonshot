@@ -29,7 +29,7 @@ app.set('trust proxy', 1);
 let dbConnectLink = 'mongodb://' + credentials.dbDevUsername + ':' + credentials.dbDevPassword + '@ds125146.mlab.com:25146/testmoonshot';
 // this is the real database
 if (process.env.NODE_ENV === "production") {
-    const dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
+    dbConnectLink = 'mongodb://' + credentials.dbUsername + ':' + credentials.dbPassword + '@ds141159-a0.mlab.com:41159,ds141159-a1.mlab.com:41159/moonshot?replicaSet=rs-ds141159';
 }
 // connect to mLab
 mongoose.connect(dbConnectLink);
@@ -47,6 +47,7 @@ const miscApis = require('./apis/miscApis');
 const skillApis = require('./apis/skillApis');
 const psychApis = require('./apis/psychApis');
 const mlFunctions = require('./apis/mlFunctions');
+const billingApis = require('./apis/billingApis');
 const helperFunctions = require('./apis/helperFunctions');
 
 
@@ -127,6 +128,8 @@ app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);
 app.post('/skill/startOrContinueTest', skillApis.POST_startOrContinueTest);
 app.get('/skill/skillNamesByIds', skillApis.GET_skillNamesByIds);
 app.post("/skill/agreeToTerms", skillApis.POST_agreeToTerms);
+
+app.post('/billing/customer', billingApis.POST_customer);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);

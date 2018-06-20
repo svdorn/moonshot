@@ -13,7 +13,7 @@ import {
 import {fade} from 'material-ui/utils/colorManipulator';
 import spacing from 'material-ui/styles/spacing';
 import {Paper, CircularProgress} from 'material-ui';
-import {getUserFromSession} from './actions/usersActions';
+import {getUserFromSession, setWebpSupport} from './actions/usersActions';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 // so that axios works in IE < 11
@@ -55,6 +55,7 @@ class Main extends Component {
         };
     }
 
+
     componentDidMount() {
         const self = this;
         // get the user from the session - if there is no user, just marks screen ready to display
@@ -62,19 +63,47 @@ class Main extends Component {
             if (work) {
                 self.setState({ loadedUser: true });
             }
+        });
+
+        this.checkWebpFeature("lossy", (feature, result) => {
+            console.log("webp supported: ", result);
+            this.props.setWebpSupport(result);
         })
+    }
+
+
+    // check_webp_feature:
+    //   'feature' can be one of 'lossy', 'lossless', 'alpha' or 'animation'.
+    //   'callback(feature, result)' will be passed back the detection result (in an asynchronous way!)
+    checkWebpFeature(feature, callback) {
+        var kTestImages = {
+            lossy: "UklGRiIAAABXRUJQVlA4IBYAAAAwAQCdASoBAAEADsD+JaQAA3AAAAAA",
+            //lossless: "UklGRhoAAABXRUJQVlA4TA0AAAAvAAAAEAcQERGIiP4HAA==",
+            //alpha: "UklGRkoAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAwAAAARBxAR/Q9ERP8DAABWUDggGAAAABQBAJ0BKgEAAQAAAP4AAA3AAP7mtQAAAA==",
+            //animation: "UklGRlIAAABXRUJQVlA4WAoAAAASAAAAAAAAAAAAQU5JTQYAAAD/////AABBTk1GJgAAAAAAAAAAAAAAAAAAAGQAAABWUDhMDQAAAC8AAAAQBxAREYiI/gcA"
+        };
+        var img = new Image();
+        img.onload = function () {
+            var result = (img.width > 0) && (img.height > 0);
+            callback(feature, result);
+        };
+        img.onerror = function () {
+            callback(feature, false);
+        };
+        img.src = "data:image/webp;base64," + kTestImages[feature];
     }
 
 
     render() {
         let content = null;
-        if (!this.state.loadedUser) {
+        if (!this.state.loadedUser || !this.props.webpSupportChecked) {
             content = <div className="fillScreen"/>
         }
         else {
             content = (
                 <div>
                     <Menu/>
+                    <div className="headerSpace" />
                     <Notification/>
                     {this.props.children}
                     <Footer/>
@@ -92,7 +121,8 @@ class Main extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        getUserFromSession
+        getUserFromSession,
+        setWebpSupport
     }, dispatch);
 }
 
@@ -101,6 +131,7 @@ function mapStateToProps(state) {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
         notification: state.users.notification,
+        webpSupportChecked: state.users.webpSupportChecked
     };
 }
 

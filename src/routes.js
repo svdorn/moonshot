@@ -15,6 +15,7 @@ import MyEmployees from './components/pages/businessPages/myEmployees';
 import MyEvaluations from './components/pages/businessPages/myEvaluations';
 import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
+import Billing from './components/pages/businessPages/billing';
 import BusinessHome from './components/pages/businessHome';
 import Main from './main';
 import AuthenticatedComponent from './components/authenticatedComponent/authenticatedComponent';
@@ -22,12 +23,9 @@ import Settings from './components/pages/settings';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';
-import ChangeTempPassword from './components/pages/changeTempPassword';
-import ResumeAnalysis from './components/pages/resumeAnalysis';
 import ContactUs from './components/pages/contactUs';
 import Error404 from './components/pages/error404';
 import Unsubscribe from './components/pages/unsubscribe';
-import ReferralCode from './components/pages/referralCode';
 import Admin from './components/pages/admin';
 import PrivacyPolicy from './components/policies/privacyPolicy';
 import TermsOfUse from './components/policies/termsOfUse';
@@ -69,16 +67,14 @@ const routes = (
             <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessAdminUserTypes} />
             <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} />
             <Route path="results/:profileUrl/:positionId" component={AuthenticatedComponent} page={<Results />} userType={businessAdminUserTypes} />
-            <Route path="employeeResults" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
+            <Route path="employeeResults/:profileUrl/:positionId" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
+            <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
             <Route path="verifyEmail" component={VerifyEmail} />
             <Route path="forgotPassword" component={ForgotPassword} />
             <Route path="changePassword" component={ChangePassword} />
-            <Route path="changeTempPassword" component={ChangeTempPassword} />
             <Route path="contactUs" component={ContactUs} />
-            <Route path="resumeAnalysis" component={ResumeAnalysis} />
             <Route path="unsubscribe" component={Unsubscribe} />
-            <Route path="referral" component={ReferralCode} />
             <Route path="privacyPolicy" component={PrivacyPolicy} standalone={true} />
             <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
             <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />

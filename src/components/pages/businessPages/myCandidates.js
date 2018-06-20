@@ -425,12 +425,14 @@ class MyCandidates extends Component {
 
         return (
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
-                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
+                {this.props.currentUser.userType == "accountAdmin" ?
+                    <AddUserDialog position={this.state.position} tab={"Candidate"}/>
+                    : null
+                }
                 <MetaTags>
                     <title>My Candidates | Moonshot</title>
                     <meta name="description" content="View analytical breakdowns and manage your candidates."/>
                 </MetaTags>
-                <div className="employerHeader"/>
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>

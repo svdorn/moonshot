@@ -213,7 +213,6 @@ class MyEvaluations extends Component {
                     <title>My Evaluations | Moonshot</title>
                     <meta name="description" content="View the evaluations your company is running."/>
                 </MetaTags>
-                <div className="employerHeader"/>
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>

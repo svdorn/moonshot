@@ -123,7 +123,6 @@ class FreeResponse extends Component {
         if (this.state.submitting) {
             content = (
                 <div className="blackBackground fillScreen center">
-                    <div className="extraHeaderSpace" />
                     <CircularProgress color="#FB553A" />
                 </div>
             );
@@ -166,7 +165,7 @@ class FreeResponse extends Component {
         // have the user read about the free response section before doing it
         else if (!this.state.clickedBegin) {
             content = (
-                <div className="evalPortionIntro center">
+                <div className="evalPortionIntro center font16px font14pxUnder600 font12pxUnder450">
                     <div/>
                     <div>
                         <p>This is the short answer portion of the evaluation. Follow the instructions carefully for each question. Keep your answers brief, try to write fewer than 5 sentences for each response.</p>
@@ -197,7 +196,7 @@ class FreeResponse extends Component {
             });
 
             content = (
-                <div>
+                <div className="font16px font14pxUnder600 font12pxUnder450">
                     <div className="freeResponseQuestions">
                         { freeResponseQuestions }
                     </div>
@@ -220,7 +219,6 @@ class FreeResponse extends Component {
                     <title>Free Response | Moonshot</title>
                     <meta name="description" content={"Answer some free response questions to finish your position evaluation."} />
                 </MetaTags>
-                <div className="employerHeader" />
                 <ProgressBar />
                 { content }
             </div>

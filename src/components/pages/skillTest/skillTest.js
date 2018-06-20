@@ -19,7 +19,8 @@ class SkillTest extends Component {
             question: undefined,
             finished: false,
             skillName: undefined,
-            agreedToTerms: false
+            agreedToTerms: false,
+            canContinue: true
         };
     }
 
@@ -118,34 +119,39 @@ class SkillTest extends Component {
 
 
     nextQuestion() {
-        if (typeof this.state.selectedId !== "undefined") {
-            const currentUser = this.props.currentUser;
-            // don't need to send the question id because the user
-            // has the current question saved
-            const params = {
-                userId: currentUser._id,
-                verificationToken: currentUser.verificationToken,
-                skillUrl: this.props.params.skillUrl,
-                // an array because maybe later we'll have multi select questions
-                answerIds: [ this.state.selectedId ]
-            }
-            axios.post("/api/skill/answerSkillQuestion", params)
-            .then(result => {
-                this.props.newCurrentUser(result.data.updatedUser);
-                let question = undefined;
-                if (result.data.question) {
-                    question = result.data.question;
-                    //question.options = this.shuffle(question.options);
+        if (typeof this.state.selectedId !== "undefined" && this.state.canContinue) {
+            this.setState({
+                canContinue: false
+            }, () => {
+                const currentUser = this.props.currentUser;
+                // don't need to send the question id because the user
+                // has the current question saved
+                const params = {
+                    userId: currentUser._id,
+                    verificationToken: currentUser.verificationToken,
+                    skillUrl: this.props.params.skillUrl,
+                    // an array because maybe later we'll have multi select questions
+                    answerIds: [ this.state.selectedId ]
                 }
-                this.setState({
-                    selectedId: undefined,
-                    finished: result.data.finished,
-                    question
-                });
-            })
-            .catch(error => {
-                // console.log("error saving answer: ", error);
-            })
+                axios.post("/api/skill/answerSkillQuestion", params)
+                .then(result => {
+                    this.props.newCurrentUser(result.data.updatedUser);
+                    let question = undefined;
+                    if (result.data.question) {
+                        question = result.data.question;
+                        //question.options = this.shuffle(question.options);
+                    }
+                    this.setState({
+                        finished: result.data.finished,
+                        selectedId: undefined,
+                        question,
+                        canContinue: true
+                    });
+                })
+                .catch(error => {
+                    // console.log("error saving answer: ", error);
+                })
+            });
         }
     }
 
@@ -168,7 +174,7 @@ class SkillTest extends Component {
         const buttonClass = this.state.agreedToTerms ? "skillContinueButton" : "disabled skillContinueButton";
 
         return (
-            <div className="evalPortionIntro skillsUserAgreement center">
+            <div className="evalPortionIntro skillsUserAgreement center font16px font14pxUnder600 font12pxUnder450">
                 <div className="font24px" style={{marginBottom: "20px"}}><span>Skills</span></div>
                 <div>
                     <p>This is the skills portion of the evaluation. Here you will be tested on your aptitude in one or more skills.</p>
@@ -235,8 +241,6 @@ class SkillTest extends Component {
         // have to have completed the psych test and admin questionsbefore you
         // can take a skills - but only if you're taking an evaluation right now
 
-        console.log("RENDERING");
-
         let self = this;
         const skillName = this.state.skillName ? this.state.skillName : "Skill";
         const additionalMetaText = this.state.skillName ? " in " + this.state.skillName.toLowerCase() : "";
@@ -259,7 +263,7 @@ class SkillTest extends Component {
             });
         }
 
-        const buttonClass = this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
+        const buttonClass = !this.state.canContinue || this.state.selectedId === undefined ? "disabled skillContinueButton" : "skillContinueButton"
 
         let content = <CircularProgress color="#FB553A" />;
 
@@ -300,7 +304,7 @@ class SkillTest extends Component {
         // otherwise, good to go - show them the question
         else if (question) {
             content = (
-                <div>
+                <div className="font16px font14pxUnder600 font12pxUnder450">
                     <StyledContent contentArray={question.body} style={{marginBottom:"40px"}} />
                     { answers }
                     <div className={"marginBottom50px " + buttonClass} onClick={this.nextQuestion.bind(this)}>Next</div>
@@ -314,7 +318,6 @@ class SkillTest extends Component {
                     <title>{skillName} Test | Moonshot</title>
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />
                 </MetaTags>
-                <div className="employerHeader" />
                 <ProgressBar skillName={skillName}/>
                 { content }
             </div>

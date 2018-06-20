@@ -81,6 +81,7 @@ export function usersReducers(state = initialState, action) {
         case "CONTACT_US_REQUESTED":
         case "COMPLETE_PATHWAY_REQUESTED":
         case "START_LOADING":
+        case "BILLING_CUSTOMER_LOADING":
             return {
                 ...state,
                 loadingSomething: true
@@ -159,8 +160,15 @@ export function usersReducers(state = initialState, action) {
         case "ERROR_FINISHED_LOADING":
         case "SUCCESS_FINISHED_LOADING":
         case "START_PSYCH_EVAL_ERROR":
+        case "SUCCESS_BILLING_CUSTOMER":
+        case "FAILURE_BILLING_CUSTOMER":
             return {
                 ...state, notification: action.notification, loadingSomething: false
+            };
+            break;
+        case "STOP_LOADING":
+            return {
+                ...state, loadingSomething: false
             };
             break;
         case "UPDATE_CURRENT_SUBSTEP":
@@ -223,6 +231,11 @@ export function usersReducers(state = initialState, action) {
         case "RESET_INCOMPLETE_STEPS":
             return {
                 ...state, incompleteSteps: undefined
+            }
+            break;
+        case "SET_WEBP_SUPPORT":
+            return {
+                ...state, webpSupportChecked: true, webpSupported: action.webpSupported
             }
             break;
         case "ADD_PATHWAY":

@@ -19,6 +19,7 @@ import { Provider } from 'react-redux';
 import { applyMiddleware, createStore } from 'redux';
 //import logger from 'redux-logger';
 import thunk from 'redux-thunk';
+import {StripeProvider} from 'react-stripe-elements';
 
 
 // import combined reducers
@@ -40,6 +41,6 @@ if (!shouldRedirectToHttps) {
     )
 
     hydrate(
-      Routes, document.getElementById('app')
+      <StripeProvider apiKey="pk_live_UC72NJ4kPiHRmMM5c7cc7U63">{Routes}</StripeProvider>, document.getElementById('app')
     );
 }

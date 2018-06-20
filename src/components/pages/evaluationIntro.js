@@ -36,7 +36,6 @@ class EvaluationIntro extends Component {
                     <title>{currentUser.currentPosition.name} | Moonshot</title>
                     <meta name="description" content={"Show an employer your personality and skills."} />
                 </MetaTags>
-                <div className="employerHeader" />
                 <div className="evalPortionIntro skillsUserAgreement center">
                     <div className="font24px" style={{marginBottom: "20px"}}><span>{currentUser.currentPosition.name}</span></div>
                     <div>

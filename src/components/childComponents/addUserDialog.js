@@ -9,8 +9,8 @@ import { browserHistory } from 'react-router';
 import axios from 'axios';
 
 
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
+const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => {
+    return (<TextField
         hintText={label}
         hintStyle={{color: '#72d6f5'}}
         inputStyle={{color: '#72d6f5'}}
@@ -18,10 +18,12 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
         errorText={touched && error}
         {...input}
         {...custom}
-    />
-);
+    />);
+};
 
-const emailValidate = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined
+const emailValidate = (value) => (
+    value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined
+)
 
 class AddUserDialog extends Component {
     constructor(props) {
@@ -40,8 +42,10 @@ class AddUserDialog extends Component {
             //numManagerEmails: 1,
             numAdminEmails: 1,
             formErrors: false,
+            duplicateEmails: false
         }
     }
+
 
     componentDidMount() {
         let self = this;
@@ -70,8 +74,26 @@ class AddUserDialog extends Component {
     }
 
     componentDidUpdate() {
+        let newState = {};
+        let shouldSetState = false;
+        // make sure the props defining whether the modal is open matches the state for that
         if (this.props.modalOpen != this.state.open && this.props.modalOpen != undefined) {
-            this.setState({open: this.props.modalOpen})
+            shouldSetState = true;
+            newState.open = this.props.modalOpen;
+        }
+        // if the user sets a position - such as in My Candidates - default to adding that position
+        if (!this.props.modalOpen && this.props.position && this.state.position != this.props.position) {
+            shouldSetState = true;
+            newState.position = this.props.position;
+        }
+        // if the user sets a tab - Candidate or Employee or Admin - default to adding that user
+        if (!this.props.modalOpen && this.props.tab && this.state.tab !== this.props.tab) {
+            shouldSetState = true;
+            newState.tab = this.props.tab;
+        }
+        // set the state if needed
+        if (shouldSetState) {
+            this.setState(newState);
         }
     }
 
@@ -90,9 +112,13 @@ class AddUserDialog extends Component {
               //numManagerEmails: 1,
               numAdminEmails: 1,
               formErrors: false,
+              duplicateEmails: false
           });
         this.props.closeAddUserModal();
     };
+
+
+
 
     handleSubmit(e) {
         e.preventDefault();
@@ -115,9 +141,20 @@ class AddUserDialog extends Component {
             }
         }
 
+        // keeps track of emails to make sure none are duplicates
+        let usedEmails = {};
+
         for (let email in vals) {
             const emailAddr = vals[email];
             const emailString = email.replace(new RegExp("[0-9]", "g"),"");
+
+            // if this email has already been seen, show an error message
+            if (usedEmails[emailAddr] === true) {
+                console.log("no dupes!");
+                return;
+            }
+            // otherwise add this email to the list of emails already seen
+            else { usedEmails[emailAddr] = true; }
 
             switch(emailString) {
                 case "candidateEmail":
@@ -169,9 +206,40 @@ class AddUserDialog extends Component {
         this.setState({position})
     };
 
+
+    duplicatesExist() {
+        const vals = this.props.formData.addUser.values;
+        // keeps track of emails to make sure none are duplicates
+        let usedEmails = {};
+
+        for (let email in vals) {
+            const emailAddr = vals[email];
+
+            // if this email has already been seen, show an error message
+            if (usedEmails[emailAddr] === true) {
+                return true;
+            }
+            // otherwise add this email to the list of emails already seen
+            else { usedEmails[emailAddr] = true; }
+        }
+
+        return false;
+    }
+
+
     handleScreenNext() {
         let advanceScreen = true;
         if (this.state.screen === 2) {
+            // check for duplicates
+            if (this.duplicatesExist()) {
+                advanceScreen = false;
+                this.setState({duplicateEmails: true});
+                return;
+            } else {
+                this.setState({duplicateEmails: false});
+            }
+
+            // check for invalid emails
             if (this.props.formData.addUser.syncErrors) {
                 advanceScreen = false;
                 this.setState({formErrors: true});
@@ -206,7 +274,6 @@ class AddUserDialog extends Component {
     handleTabChange = (tab) => {
         this.setState({tab})
     }
-
 
 
     //name, email, password, confirm password, signup button
@@ -251,6 +318,8 @@ class AddUserDialog extends Component {
                         label="Add Candidate Email"
                         type="email"
                         validate={emailValidate}
+                        id={"candidateEmail" + i}
+                        autoComplete="new-password"
                     /><br/>
                 </div>
             );
@@ -266,6 +335,8 @@ class AddUserDialog extends Component {
                         label="Add Employee Email"
                         type="email"
                         validate={emailValidate}
+                        id={"employeeEmail" + i}
+                        autoComplete="new-password"
                     /><br/>
                 </div>
             );
@@ -281,6 +352,8 @@ class AddUserDialog extends Component {
         //                 label="Add Manager Email"
         //                 type="email"
         //                 validate={emailValidate}
+        //                 id={"managerEmail" + i}
+        //                 autoComplete="new-password"
         //             /><br/>
         //         </div>
         //     );
@@ -296,6 +369,8 @@ class AddUserDialog extends Component {
                         label="Add Admin Email"
                         type="email"
                         validate={emailValidate}
+                        id={"adminEmail" + i}
+                        autoComplete="new-password"
                     /><br/>
                 </div>
             );
@@ -510,7 +585,6 @@ class AddUserDialog extends Component {
             );
         } else if (screen === 2) {
             body = (
-
                 <Dialog
                     actions={actions}
                     modal={false}
@@ -530,6 +604,12 @@ class AddUserDialog extends Component {
                         <div
                             className="redText font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
                             Some emails invalid, please enter valid emails before continuing.
+                        </div>
+                        : null}
+                        {this.state.duplicateEmails ?
+                        <div
+                            className="redText font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
+                            Duplicate emails not allowed.
                         </div>
                         : null}
                         <Tabs

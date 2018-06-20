@@ -3,15 +3,19 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {changePasswordForgot} from '../../actions/usersActions';
-import {TextField, CircularProgress} from 'material-ui';
+import {TextField, CircularProgress, RaisedButton} from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
+
+    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
+    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
+    searchUnderlineFocusStyle: { color: "green" }
 };
 
 const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
@@ -19,7 +23,11 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
         hintText={label}
         floatingLabelText={label}
         errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
         {...input}
         {...custom}
         type="password"
@@ -76,39 +84,35 @@ class PasswordChange extends Component {
     //name, email, password, confirm password, signup button
     render() {
         return (
-            <div className="fillScreen greenToBlue formContainer">
+            <div className="fillScreen formContainer">
                 <MetaTags>
                     <title>New Password | Moonshot</title>
                     <meta name="description" content="Reset your Moonshot password. It's okay - we all forget things sometimes." />
                 </MetaTags>
-                <HomepageTriangles style={{pointerEvents: "none"}} variation="1"/>
-                <div className="form lightWhiteForm">
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightBlackForm noBlur">
                     <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Change Password</h1>
+                        <h1 style={{marginTop:"15px"}}>Change Password</h1>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="password"
                                 component={renderPasswordField}
                                 label="New Password"
-                                className="lightBlueInputText"
                             /><br/>
                         </div>
                         <div className="inputContainer">
-                            <div className="fieldWhiteSpace"/>
                             <Field
                                 name="password2"
                                 component={renderPasswordField}
                                 label="Confirm New Password"
-                                className="lightBlueInputText"
                             /><br/>
                         </div>
-                        <button
+                        <RaisedButton
+                            label="Change Password"
                             type="submit"
-                            className="formSubmitButton font24px font16pxUnder600"
-                        >
-                            Change Password
-                        </button>
+                            className="raisedButtonBusinessHome"
+                            style={{margin: '10px 0'}}
+                        />
                         <br/>
                         {this.props.loadingChangePassword ?
                             <CircularProgress />

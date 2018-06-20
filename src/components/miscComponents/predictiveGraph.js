@@ -23,7 +23,9 @@ class PredictiveGraph extends Component {
 
 
     updateWindowDimensions() {
-        this.setState({ width: window.innerWidth });
+        if (window.innerWidth > 300) {
+            this.setState({ width: window.innerWidth });
+        }
     }
 
     render() {
@@ -50,9 +52,7 @@ class PredictiveGraph extends Component {
         };
 
         // yAxisHeight is the height of the graph - the text on the x axis
-        const yAxisStyle = {
-
-        }
+        const yAxisStyle = {}
 
         const xAxisStyle = {};
 
@@ -106,6 +106,23 @@ class PredictiveGraph extends Component {
                 </div>
             )
         })
+
+        // figure out how rotated the x axis labels should be
+        const windowWidth = window.innerWidth > 300 ? window.innerWidth : 300;
+        const labelTransform = {};
+        if (windowWidth < 800) {
+            let rotateAngle, yTranslation, xTranslation;
+            if (windowWidth > 600) {
+                rotateAngle = 20;
+                yTranslation = 10;
+                xTranslation = 20;
+            } else {
+                rotateAngle = 30;
+                yTranslation = 12;
+                xTranslation = 15;
+            }
+            labelTransform.transform = `translate(${xTranslation}px, ${yTranslation}px) rotate(${rotateAngle}deg)`
+        }
 
 
         // add each point and x axis label to their respective arrays
@@ -193,7 +210,7 @@ class PredictiveGraph extends Component {
 
             // add the label for the x axis
             xAxisLabels.push(
-                <div className="xAxisLabel" style={labelStyle}>
+                <div className="xAxisLabel" style={{...labelStyle, ...labelTransform}}>
                     {label}
                 </div>
             );
@@ -212,7 +229,7 @@ class PredictiveGraph extends Component {
         }
 
         return (
-            <div className="marginBottom50px">
+            <div className="marginBottom50px font16px font14pxUnder500 font12pxUnder400 transitionAll">
                 {title}
                 <div className="predictiveGraph" style={graphStyle}>
                     <div className="predictiveGraphInterior" style={graphInteriorStyle}>

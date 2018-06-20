@@ -111,7 +111,7 @@ class ProgressBar extends Component {
 
         return (
             <div className="progressContainer">
-                <div className="font26px">
+                <div className="font26px font22pxUnder600">
                     { stepNumber }. { stepName }
                 </div>
                 <div className="progressBar font14px">

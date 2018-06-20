@@ -16,6 +16,13 @@ class PsychBreakdown extends Component {
     }
 
 
+    mouseEnter(title) {
+        if (window.innerWidth > 900) {
+            this.selectTitle(title);
+        }
+    }
+
+
     round(number, decimalPlaces) {
         // get the number version if it's a string
         let rounded = typeof number === "number" ? number : parseInt(number);
@@ -122,8 +129,8 @@ class PsychBreakdown extends Component {
                 width: "8px"
             }
             return (
-                <div className="areaData center" style={{cursor: "pointer"}} onMouseEnter={() => this.selectTitle(area.name)} >
-                    <div className="title" onClick={() => this.selectTitle(area.name)}>
+                <div className="areaData center" style={{cursor: "pointer"}} onMouseEnter={() => this.mouseEnter(area.name)} onClick={() => this.selectTitle(area.name)} >
+                    <div className="title">
                         {area.name}
                     </div>
                     <div className="middle80indicator" style={{...middle80style, ...middle80indicatorStyle}} />

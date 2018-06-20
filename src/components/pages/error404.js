@@ -1,6 +1,5 @@
 "use strict"
 import React, { Component } from 'react';
-import { Paper } from 'material-ui';
 import { browserHistory } from 'react-router';
 import {connect} from 'react-redux';
 import MetaTags from 'react-meta-tags';
@@ -19,23 +18,26 @@ class error404 extends Component {
             route = '/myEvaluations';
         }
         return (
-            <div className="fillScreen greenToBlue" style={{textAlign:"center"}}>
+            <div className="fillScreen formContainer" style={{textAlign:"center"}}>
                 <MetaTags>
                     <title>404 | Moonshot</title>
                     <meta name="description" content="You are lost but we can show you the way." />
                 </MetaTags>
-                <Paper className="form bigForm semiOpaquePaper blueTextImportant font20px font14pxUnder700 font10pxUnder400" zDepth={2}>
-                    <img
-                        alt="404 Image - Rocket Doing Loops"
-                        src="/images/404.png"
-                        id="image404"
-                    /><br/>
-                    You seem a little lost,<br/> but we can show you the way!
-                    <p  className="clickable blueText underline"
-                        onClick={() => this.goTo(route)}>
-                        Follow Me
-                    </p>
-                </Paper>
+
+                <div className="form lightBlackForm noBlur">
+                    <form>
+                        <img
+                            alt="404 Image - Rocket Doing Loops"
+                            src="/images/404.png"
+                            id="image404"
+                        /><br/>
+                        You seem a little lost,<br/> but we can show you the way!
+                        <p  className="clickable blueText underline"
+                            onClick={() => this.goTo(route)}>
+                            Follow Me
+                        </p>
+                    </form>
+                </div>
             </div>
         );
     }
