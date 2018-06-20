@@ -354,10 +354,18 @@ class MyEmployees extends Component {
             );
         }
 
-        // create the employee previews
-        let key = 0;
         let self = this;
 
+        // find the id of the currently selected position
+        let positionId = "";
+        try {
+            positionId = this.state.positions.find(pos => {
+                return pos.name === this.state.position;
+            })._id;
+        } catch (getPosIdErr) { /* probably just haven't chosen a position yet */ }
+
+        // create the employee previews
+        let key = 0;
         if (this.state.employees.length !== 0) {
             employeePreviews = this.state.employees.map(employee => {
                 key++;
@@ -371,9 +379,10 @@ class MyEmployees extends Component {
                             answers={employee.answers}
                             name={employee.name}
                             employeeId={employee.employeeId}
-                            employeeUrl={employee.employeeUrl}
+                            profileUrl={employee.profileUrl}
                             questions={this.state.questions}
                             position={this.state.position}
+                            positionId={positionId}
                         />
                     </li>
                 );

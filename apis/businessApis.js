@@ -870,6 +870,8 @@ async function GET_evaluationResults(req, res) {
     const positionId = sanitize(req.query.positionId);
     const positionIdString = positionId.toString();
 
+    //console.log("userId: ", userId, "profileUrl: ", profileUrl, "businessId: ", businessId, "positionId: ", positionId);
+
     // --->>      GET USER, BUSINESS, AND CANDIDATE FROM DATABASE       <<--- //
     let user, business, candidate, psychTest;
     try {
@@ -877,7 +879,7 @@ async function GET_evaluationResults(req, res) {
         let [foundUser, foundCandidate, foundBusiness, foundPsychTest] = await Promise.all([
             getAndVerifyUser(userId, verificationToken),
             Users.findOne({profileUrl}).select("_id name archetype title email emailToContact psychometricTest.factors.name psychometricTest.factors.score psychometricTest.factors.factorId positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
-            Businesses.findById(businessId).select("_id positions._id positions.candidates.candidateId positions.candidates.scores positions.skills"),
+            Businesses.findById(businessId).select("_id positions._id positions.employees.employeeId positions.employees.scores positions.candidates.candidateId positions.candidates.scores positions.skills"),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
 
@@ -895,6 +897,19 @@ async function GET_evaluationResults(req, res) {
     // <<------------------------------------------------------------------>> //
 
     // --->>           VERIFY LEGITIMACY AND GET NEEDED DATA            <<--- //
+    // set variables that depend on user type
+    let userArray;
+    // if the user is a candidate
+    if (candidate.userType === "candidate") {
+        userArray = "candidates";
+        idType = "candidateId";
+    }
+    // if the user is an employee
+    else {
+        userArray = "employees";
+        idType = "employeeId";
+    }
+
     // verify that the business user has the right permissions
     try {
         if (businessId.toString() !== user.businessInfo.company.companyId.toString()) {
@@ -929,15 +944,16 @@ async function GET_evaluationResults(req, res) {
 
     // get the candidate object within the position within the business ...
     const candidateIdString = candidate._id.toString();
-    const bizCandidateIndex = bizPosition.candidates.findIndex(cand => {
-        return cand.candidateId.toString() === candidateIdString;
+    console.log("bizPosition: ", bizPosition);
+    const bizCandidateIndex = bizPosition[userArray].findIndex(cand => {
+        return cand[idType].toString() === candidateIdString;
     });
     if (typeof bizCandidateIndex !== "number" || bizCandidateIndex < 0) {
         console.log(`Candidate not found within business while trying to get results. userId: ${userId}, candidateId: ${candidate._id}, positionId: ${positionId}`);
         return res.status(400).send("Canidate has not applied for that position.");
     }
     // ... and then get the candidate from there
-    const bizCandidate = bizPosition.candidates[bizCandidateIndex];
+    const bizCandidate = bizPosition[userArray][bizCandidateIndex];
     // <<------------------------------------------------------------------>> //
 
     // --->>              FORMAT THE DATA FOR THE FRONT END             <<--- //

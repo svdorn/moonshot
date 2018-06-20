@@ -787,21 +787,24 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         // update the archetype now that the user is sure to have taken the psych test
         candidate.archetype = user.archetype;
 
-        if (user.userType === "candidate") {
+        //if (user.userType === "candidate") {
             // --->> SCORE THE USER <<--- //
             // GET THE TOTAL SKILL SCORE BY AVERAGING ALL SKILL SCORES FOR THIS POSITION
-            // get all relevant skills (ignore this part justin)
+            // get all relevant skills
+            console.log("user: ", user);
             const skillScores = user.skillTests ? user.skillTests.filter(skill => {
                 return businessPos.skills.some(posSkill => {
                     return posSkill.toString() === skill.skillId.toString();
                 });
             }) : [];
+            console.log("skillScores: ", skillScores);
             let overallSkill = 0;
             const numScores = skillScores.length;
             // add every skill score divided by how many skills there are - same result as averaging
             skillScores.forEach(skillScore => {
                 overallSkill += (skillScore.mostRecentScore / numScores);
             });
+            console.log("overallSkill: ", overallSkill);
 
             // IDEAL GROWTH CALCULATION IS SIMILAR TO PERFORMANCE CALCULATION
             // BUT ONLY FOR CERTAIN FACETS
@@ -909,7 +912,9 @@ async function finishPositionEvaluation(user, positionId, businessId) {
                 predicted,
                 overall
             }
-        }
+
+            console.log("candidate.scores: ", candidate.scores);
+        // }
 
         // <<---------------------->> //
 
@@ -1386,7 +1391,7 @@ async function POST_answerPsychQuestion(req, res) {
     user.psychometricTest = psychometricTest;
 
     // grade the test if it's finished
-    if (finishedTest && user.userType === "candidate") {
+    if (finishedTest) {
         user = calculatePsychScores(user);
     }
 
