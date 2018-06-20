@@ -358,16 +358,17 @@ function POST_dialogEmail(req, res) {
     let subject = 'ACTION REQUIRED - Somebody filled out form on homepage';
 
     let content = "<div>"
+        + "<h2>Lead from Moonshot Insights homepage</h2>"
         + "<h3>Name</h3>"
-        + "<p>Name: "
+        + "<p>"
         + sanitize(req.body.name)
         + "</p>"
         + "<h3>Email</h3>"
-        + "<p>Email: "
+        + "<p>"
         + sanitize(req.body.email)
         + "</p>"
         + "<h3>Company</h3>"
-        + "<p>Company: "
+        + "<p>"
         + sanitize(req.body.company)
         + "</p>"
         + "</div>";
