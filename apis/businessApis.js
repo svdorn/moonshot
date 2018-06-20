@@ -878,7 +878,7 @@ async function GET_evaluationResults(req, res) {
         // get the business user, candidate, and business
         let [foundUser, foundCandidate, foundBusiness, foundPsychTest] = await Promise.all([
             getAndVerifyUser(userId, verificationToken),
-            Users.findOne({profileUrl}).select("_id name archetype title email emailToContact psychometricTest.factors.name psychometricTest.factors.score psychometricTest.factors.factorId positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
+            Users.findOne({profileUrl}).select("_id name userType archetype title email emailToContact psychometricTest.factors.name psychometricTest.factors.score psychometricTest.factors.factorId positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
             Businesses.findById(businessId).select("_id positions._id positions.employees.employeeId positions.employees.scores positions.candidates.candidateId positions.candidates.scores positions.skills"),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
@@ -944,7 +944,6 @@ async function GET_evaluationResults(req, res) {
 
     // get the candidate object within the position within the business ...
     const candidateIdString = candidate._id.toString();
-    console.log("bizPosition: ", bizPosition);
     const bizCandidateIndex = bizPosition[userArray].findIndex(cand => {
         return cand[idType].toString() === candidateIdString;
     });
