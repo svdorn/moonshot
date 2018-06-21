@@ -185,16 +185,12 @@ class Menu extends Component {
             homeUrl = "/myEvaluations";
         }
 
-        let isOnboarding = false;
-        if (pathname === '/onboarding') {
-            isOnboarding = true;
-        }
         // color of the dropDown menu icon
-        let iconMenuColor = isOnboarding ? "black" : "white";
+        let iconMenuColor = "white";
         // source for the moonshot logo; will be black when onboarding
-        let moonshotLogo = isOnboarding ? "/images/OfficialLogoBlack.png" : "/images/OfficialLogoWhite.png";
+        let moonshotLogo = "/logos/MoonshotWhite" + this.props.png;
         // class of any dropdown menu
-        let dropdownClass = isOnboarding ? "headerDropdownBlack wideScreenMenuItem" : "headerDropdownWhite wideScreenMenuItem";
+        let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
         // class of any menu item that is NOT currently selected
         let menuItemClass = "menuItem font16px borderBottomClickable noWrap whiteText wideScreenMenuItem";
         // class of any menu item that IS currently selected
@@ -354,18 +350,6 @@ class Menu extends Component {
                     {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
-                    {optionType: "signOut"}
-                ]}
-            ];
-        }
-        // if the current user is onboarding (must be a candidate)
-        else if (isOnboarding) {
-            // moonshot logo should not redirect to homepage during onboarding
-            logoIsLink = false;
-            menuOptions = [
-                {optionType: "dropDown", components: [
-                    {optionType: "text", title: currentUser.name},
-                    {optionType: "divider"},
                     {optionType: "signOut"}
                 ]}
             ];
@@ -564,8 +548,8 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         isFetching: state.users.isFetching,
-        isOnboarding: state.users.isOnboarding,
-        blueHeader: state.users.blueHeader
+        blueHeader: state.users.blueHeader,
+        png: state.users.png
     };
 }
 

@@ -12,10 +12,6 @@ class Footer extends Component {
     }
 
     render() {
-        if (this.props.isOnboarding) {
-            return null;
-        }
-
         return (
             <div className="jsxWrapper">
                 <div className="tabsShadow" style={{position:"absolute", zIndex: "100"}}><div/></div>
@@ -26,7 +22,7 @@ class Footer extends Component {
                                 className="footerMoonshotLogo"
                                 alt="Moonshot Logo"
                                 title="Moonshot Logo"
-                                src="/images/OfficialLogoWhite.png"/>
+                                src={"/logos/MoonshotWhite" + this.props.png}/>
                             <div className="whiteText font12px font10pxUnder400">
                                 &copy; 2018 Moonshot Learning Inc. All rights reserved.
                             </div>
@@ -36,7 +32,7 @@ class Footer extends Component {
                                         alt="Facebook Logo"
                                         width={13}
                                         height={20}
-                                        src="/logos/Facebook.png"/>
+                                        src={"/logos/Facebook" + this.props.png}/>
                                 </a>
                                 <a href="https://twitter.com/moonshotteched" target="_blank"
                                    style={{marginLeft: "20px"}}>
@@ -44,7 +40,7 @@ class Footer extends Component {
                                         alt="Twitter Logo"
                                         width={20}
                                         height={20}
-                                        src="/logos/Twitter.png"/>
+                                        src={"/logos/Twitter" + this.props.png}/>
                                 </a>
                                 <a href="https://www.linkedin.com/company/18233111/" target="_blank"
                                    style={{marginLeft: "20px"}}>
@@ -52,7 +48,7 @@ class Footer extends Component {
                                         alt="LinkedIn Logo"
                                         width={20}
                                         height={20}
-                                        src="/logos/LinkedIn.png"/>
+                                        src={"/logos/LinkedIn" + this.props.png}/>
                                 </a>
                             </div>
                         </li>
@@ -65,7 +61,7 @@ class Footer extends Component {
 
 function mapStateToProps(state) {
     return {
-        isOnboarding: state.users.isOnboarding
+        png: state.users.png
     };
 }
 
