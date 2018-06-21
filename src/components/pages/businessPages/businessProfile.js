@@ -133,11 +133,11 @@ class BusinessProfile extends Component {
                                                     Edit Profile
                                                 </div>*/}
                                 <div style={style.imgContainer}>
-                                    <img
+                                    {/*<img
                                         src="/icons/ProfilePicture.png"
                                         alt="Profile picture"
                                         style={style.img}
-                                    />
+                                    />*/}
                                 </div>
                                 <div>
                                     <div
