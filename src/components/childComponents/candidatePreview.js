@@ -149,30 +149,6 @@ class CandidatePreview extends Component {
                 sectionStyle = { left: "10%" };
                 ratings = ["BELOW AVERAGE", "AVERAGE", "ABOVE AVERAGE"];
                 break;
-            // case "Psychometrics":
-            //     sectionStyle = {
-            //         left: "50%",
-            //         transform: "translateX(-50%)"
-            //     }
-            //     // the score we get will be the archetype of the candidate
-            //     prediction = score && typeof score === "string" ? score.toUpperCase() : "";
-            //     let icon = "";
-            //     let iconStyle = {width: "50%", marginTop: "30px", transform: "translateY(-50%)"}
-            //     switch (prediction) {
-            //         case "INNOVATOR":
-            //             icon = "icons/archetypes/Innovator.png";
-            //             break;
-            //         case "LOVER":
-            //             icon = "icons/archetypes/Lover.png";
-            //             break;
-            //         case "RULER":
-            //             icon = "icons/archetypes/Ruler.png";
-            //             break;
-            //         default:
-            //             break;
-            //     }
-            //     image = (<img src={icon} style={iconStyle}/>);
-            //     break;
             case "Skill":
                 sectionStyle = { right: "10%" };
                 ratings = ["NOVICE", "INTERMEDIATE", "EXPERT"];
@@ -181,29 +157,27 @@ class CandidatePreview extends Component {
                 break;
         }
 
-        //if (sectionType === "Skill" || sectionType === "Predicted") {
-            if (typeof score !== "number") { prediction = "N/A" }
-            else {
-                if (score < 90) { prediction = ratings[0]; }
-                else if (score < 110) { prediction = ratings[1]; }
-                else { prediction = ratings[2]; }
+        if (typeof score !== "number") { prediction = "N/A" }
+        else {
+            if (score < 90) { prediction = ratings[0]; }
+            else if (score < 110) { prediction = ratings[1]; }
+            else { prediction = ratings[2]; }
 
-                let sliderValue = score;
-                // very unlikely someone would get a value under 50 or above 150
-                if (sliderValue < 50) { sliderValue = 50; }
-                else if (sliderValue > 150 ) { sliderValue = 150; }
+            let sliderValue = score;
+            // very unlikely someone would get a value under 50 or above 150
+            if (sliderValue < 50) { sliderValue = 50; }
+            else if (sliderValue > 150 ) { sliderValue = 150; }
 
-                image = (
-                    <Slider disabled={true}
-                            min={50}
-                            max={150}
-                            value={sliderValue}
-                            style={sliderStyle}
-                            className="candidatePreviewSlider"
-                    />
-                );
-            }
-        //}
+            image = (
+                <Slider disabled={true}
+                        min={50}
+                        max={150}
+                        value={sliderValue}
+                        style={sliderStyle}
+                        className="candidatePreviewSlider"
+                />
+            );
+        }
 
         return (
             <div className="candidatePreviewPredictiveSection font14px" style={sectionStyle}>

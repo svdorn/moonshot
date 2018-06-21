@@ -310,8 +310,6 @@ class Results extends Component {
                         <div>
                             <div className="blackBackground paddingBottom40px">
                                 <div className="profileInfoSkills">
-                                    {/*<img style={style.leftTriangles} src="/images/LeftTriangles.png" />
-                                    <img style={style.rightTriangles} src="/images/RightTriangles.png" />*/}
                                     <div className="center">
                                         <div style={style.imgContainer}>
                                             <img
@@ -412,18 +410,6 @@ const style = {
     horizListIcon: {
         height: "50px",
         marginTop: "-5px"
-    },
-    leftTriangles: {
-        position: "absolute",
-        left: "100px",
-        height: "300px",
-        top: "100px"
-    },
-    rightTriangles: {
-        position: "absolute",
-        right: "100px",
-        height: "300px",
-        top: "100px"
     },
     candidateScore: {
         minHeight: '200px',

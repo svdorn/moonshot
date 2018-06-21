@@ -539,25 +539,6 @@ export function changePasswordForgot(user) {
     }
 }
 
-export function changeTempPassword(user) {
-    return function(dispatch) {
-        axios.post("/api/employer/changeTempPassword", user)
-        .then(function(response) {
-            const returnedUser = response.data;
-
-            dispatch({type: "LOGIN", payload: returnedUser, notification: {message: "Your password was changed, you are now logged in!", type: "infoHeader"}});
-            browserHistory.push('/myEvaluations');
-
-            axios.post("/api/user/session", {userId: returnedUser._id, verificationToken: returnedUser.verificationToken})
-            .catch(function(err) {
-                // what to do if session couldn't be saved for some reason
-            });
-        })
-        .catch(function(err) {
-            dispatch({type:"CHANGE_TEMP_PASS_REJECTED", notification: {message: err.response.data, type: "errorHeader"}})
-        })
-    }
-}
 
 // Send an email when form filled out on forBusiness page
 export function demoEmail(user){

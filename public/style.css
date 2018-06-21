@@ -1858,14 +1858,6 @@ form > h1 {
 }
 
 
-.resumeAnalysisUploadStep {
-    display: none;
-}
-.resumeAnalysisUploadStep.inFrame {
-    display: initial;
-}
-
-
 
 #pathwayDescriptionAndSalary {
     position: relative;
@@ -2228,10 +2220,6 @@ button.link {
 }
 .imgBorder {
     padding: 3px;
-}
-.doubleArrowIcon {
-    height: 50px;
-    margin-bottom: 10px;
 }
 
 .profileAboutPaper {
@@ -4941,11 +4929,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .homePathwaysDesc {
         padding: 0;
     }
-    .doubleArrowIcon {
-        height: 30px;
-        margin-top: 10px;
-    }
-
+    
     .profileSeparatorRect {
         width: 200px;
         padding-left: 45px;

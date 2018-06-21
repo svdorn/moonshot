@@ -28,7 +28,7 @@ class error404 extends Component {
                     <form>
                         <img
                             alt="404 Image - Rocket Doing Loops"
-                            src="/images/404.png"
+                            src={this.props.webpSupported ? "/images/404.webp" : "/images/404.png"}
                             id="image404"
                         /><br/>
                         You seem a little lost,<br/> but we can show you the way!
@@ -46,6 +46,7 @@ class error404 extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        webpSupported: state.users.webpSupported
     };
 }
 
