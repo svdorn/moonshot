@@ -266,7 +266,7 @@ class ReferralCode extends Component {
                                         <img
                                             alt=""
                                             className={"checkMark" + this.state.agreeingToTerms}
-                                            src="/icons/CheckMarkBlue.png"
+                                            src={"/icons/CheckMarkBlue" + this.props.png}
                                         />
                                     </div>
                                     I understand and agree to
@@ -302,7 +302,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        formData: state.form
+        formData: state.form,
+        png: state.users.png
     };
 }
 

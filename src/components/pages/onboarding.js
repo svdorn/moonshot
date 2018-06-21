@@ -745,17 +745,17 @@ class Onboarding extends Component {
             const interestTypes1 = [
                 {interestArea: this.state.designAndDevInterests,
                  imageAltTag: "Product Design And Development",
-                 pictureSrc: "/icons/Cube.png",
+                 pictureSrc:{ "/icons/Cube" + this.props.png},
                  iconNumber: 1,
                  title: <b>Product Design<br/>and Development</b> },
                 {interestArea: this.state.dataInterests,
                  imageAltTag: "Data",
-                 pictureSrc: "/icons/Data.png",
+                 pictureSrc: {"/icons/Data" + this.props.png},
                  iconNumber: 2,
                  title: <b>Data</b> },
                 {interestArea: this.state.softwareDevInterests,
                  imageAltTag: "Software Development",
-                 pictureSrc: "/icons/Computer.png",
+                 pictureSrc: {"/icons/Computer" + this.props.png},
                  iconNumber: 3,
                  title: <b>Software<br/>Development</b> }
             ]
@@ -763,12 +763,12 @@ class Onboarding extends Component {
             const interestTypes2 = [
                 {interestArea: this.state.creationAndMarketingInterests,
                  imageAltTag: "Creation and Marketing",
-                 pictureSrc: "/icons/Creation.png",
+                 pictureSrc: {"/icons/Creation" + this.props.png},
                  iconNumber: 4,
                  title: <b>Creation and<br/>Marketing</b>},
                 {interestArea: this.state.businessInterests,
                  imageAltTag: "Business",
-                 pictureSrc: "/icons/Business.png",
+                 pictureSrc: {"/icons/Business" + this.props.png},
                  iconNumber: 5,
                  title: <b>Business</b> }
             ]
@@ -1019,7 +1019,7 @@ class Onboarding extends Component {
                             <img
                                 alt="Checkmark Icon"
                                 className={"checkMark" + this.state.inSchool.toString()}
-                                src="/icons/CheckMark.png"
+                                src={"/icons/CheckMark" + this.props.png}
                             />
                         </div>
                         I am currently in school<br/>
@@ -1088,6 +1088,7 @@ class Onboarding extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 

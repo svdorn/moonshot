@@ -234,8 +234,11 @@ export function usersReducers(state = initialState, action) {
             }
             break;
         case "SET_WEBP_SUPPORT":
+            // set image file types
+            const png = action.webpSupported ? ".webp" : ".png"
+            const jpg = action.webpSupported ? ".webp" : ".jpg";
             return {
-                ...state, webpSupportChecked: true, webpSupported: action.webpSupported
+                ...state, webpSupportChecked: true, png, jpg
             }
             break;
         case "ADD_PATHWAY":

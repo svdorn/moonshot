@@ -262,7 +262,7 @@ class EmployerLogin extends Component {
                                 <img
                                     alt=""
                                     className={"checkMark" + this.state.agreeingToTerms}
-                                    src="/icons/CheckMarkRoundedWhite.png"
+                                    src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                                 />
                             </div>
                             I have read and agree to the Moonshot Insights <a className="blueTextHome" href="/privacyPolicy" target="_blank">Privacy
@@ -273,7 +273,7 @@ class EmployerLogin extends Component {
                             <img
                                 alt="Checkmark icon"
                                 className={"checkMark" + this.state.keepMeLoggedIn}
-                                src="/icons/CheckMarkRoundedWhite.png"
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             />
                         </div>
                         <div style={{display:"inline-block"}}>
@@ -312,7 +312,8 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
-        loadingLogin: state.users.loadingSomething
+        loadingLogin: state.users.loadingSomething,
+        png: state.users.png
     };
 }
 

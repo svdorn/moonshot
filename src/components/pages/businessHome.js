@@ -516,7 +516,7 @@ class BusinessHome extends Component {
         const processList = processObjects[this.state.infoIndex].list.map(infoListText => {
             return (
                 <div className="processListItem" key={infoListText}>
-                    <img src="/icons/CheckMarkRoundedWhite.png" />
+                    <img src={"/icons/CheckMarkRoundedWhite" + this.props.png} />
                     <div>{ infoListText }</div>
                 </div>
             );
@@ -548,8 +548,8 @@ class BusinessHome extends Component {
                             </div>
                         </div>
                     </div>
-                    { this.state.infoIndex > 0 ? <img src="/icons/Arrow3.png" className="leftArrow" onClick={() => this.selectProcess(this.state.infoIndex - 1)} /> : null }
-                    { this.state.infoIndex < 3 ? <img src={this.props.webpSupported ? "/icons/Arrow2.webp" : "/icons/Arrow2.png"} className="rightArrow" onClick={() => this.selectProcess(this.state.infoIndex + 1)} /> : null }
+                    { this.state.infoIndex > 0 ? <img src={"/icons/Arrow3" + this.props.png} className="leftArrow" onClick={() => this.selectProcess(this.state.infoIndex - 1)} /> : null }
+                    { this.state.infoIndex < 3 ? <img src={"/icons/Arrow2" + this.props.png} className="rightArrow" onClick={() => this.selectProcess(this.state.infoIndex + 1)} /> : null }
                 </div>
                 <div className="center" style={{marginTop: "20px"}}>
                     <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleDemoOpen}>
@@ -747,7 +747,7 @@ class BusinessHome extends Component {
         //                         <img
         //                             alt=""
         //                             className={"checkMark" + this.state.agreeingToTerms}
-        //                             src="/icons/CheckMarkRoundedWhite.png"
+        //                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
         //                         />
         //                     </div>
         //                     I have read and agree to the Moonshot Insights <a className="blueTextHome" href="/privacyPolicy" target="_blank">Privacy
@@ -1197,7 +1197,7 @@ class BusinessHome extends Component {
                                 {"Your crystal ball to identify"}<div className="above800only noHeight"><br/></div>{" good and bad hires before it's too late."}
                             </div>
                             <img
-                                src={this.props.webpSupported ? "/images/businessHome/CrystalBall.webp" : "/images/businessHome/CrystalBall.png"}
+                                src={"/images/businessHome/CrystalBall" + this.props.png}
                                 alt="CrystalBall"
                                 className="crystalBall"
                             />
@@ -1232,7 +1232,8 @@ function mapStateToProps(state) {
         loadingEmailSend: state.users.loadingSomething,
         notification: state.users.notification,
         currentUser: state.users.currentUser,
-        webpSupported: state.users.webpSupported
+        png: state.users.png,
+        jpg: state.users.jpg
     };
 }
 

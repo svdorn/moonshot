@@ -155,7 +155,7 @@ class Account extends Component {
                                     <img
                                         alt=""
                                         className={"checkMark" + this.state.hideProfile}
-                                        src="/icons/CheckMarkRoundedWhite.png"
+                                        src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                                     />
                                 </div>
                                 <div className="whiteText" style={{display:"inline-block"}}>
@@ -190,7 +190,8 @@ function mapStateToProps(state) {
         initialValues: state.users.currentUser,
         formData: state.form,
         currentUser: state.users.currentUser,
-        loadingUpdateSettings: state.users.loadingSomething
+        loadingUpdateSettings: state.users.loadingSomething,
+        png: state.users.png
     };
 }
 

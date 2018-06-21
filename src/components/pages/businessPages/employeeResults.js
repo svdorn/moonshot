@@ -319,7 +319,7 @@ class EmployeeResults extends Component {
                                         <div style={style.imgContainer}>
                                             <img
                                                 alt="Atom Icon"
-                                                src="/icons/Atom2.png"
+                                                src={"/icons/Atom2" + this.props.png}
                                                 style={{
                                                     height: "100%",
                                                     transform: "translateX(-50%)",
@@ -445,7 +445,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 

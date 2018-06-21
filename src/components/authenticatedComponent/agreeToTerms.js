@@ -70,7 +70,7 @@ class AgreeToTerms extends Component {
                             <img
                                 alt=""
                                 className={"checkMark" + this.state.agreedToTerms}
-                                src="/icons/CheckMarkRoundedWhite.png"
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                             />
                         </div>
                         I have read and agree to the Moonshot Insights {this.createAgreementLinks()}.
@@ -97,7 +97,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        loading: state.users.loadingSomething
+        loading: state.users.loadingSomething,
+        png: state.users.png
     };
 }
 

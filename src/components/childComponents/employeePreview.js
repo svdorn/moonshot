@@ -254,6 +254,14 @@ class EmployeePreview extends Component {
             // console.log("Error getting results url: ", e);
         }
 
+        let completionImage;
+        const gradingComplete = this.state.gradingComplete;
+        if (gradingComplete) {
+            completionImage = "/icons/CheckMarkEmployeePreview" + this.props.png;
+        } else {
+            completionImage = "/icons/X" + this.props.png;
+        }
+
         return (
             <div>
             {this.state.gradingInProgress ?
@@ -314,7 +322,7 @@ class EmployeePreview extends Component {
                 <br/>
                 <img
                     className="completionImage marginBottom10px"
-                    src={this.state.gradingComplete ? "/icons/CheckMarkEmployeePreview.png" : "/icons/X.png"}
+                    src={completionImage}
                 />
                 <br />
                 <i className={"completionStage center font14px " + (this.state.gradingComplete ? "" : "redPinkText")}>
@@ -342,7 +350,8 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 

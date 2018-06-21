@@ -188,7 +188,7 @@ class SkillTest extends Component {
                         <img
                             alt=""
                             className={"checkMark" + this.state.agreedToTerms}
-                            src="/icons/CheckMarkRoundedWhite.png"
+                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                         />
                     </div>
                     <p style={{padding: "0 40px"}}>By checking this box, I agree that I will answer the questions without help from anyone or any external resources and that if I were to be discovered doing so, at any point, all my results are void.</p>
@@ -335,7 +335,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        agreeingToTerms: state.users.loadingSomething
+        agreeingToTerms: state.users.loadingSomething,
+        png: state.users.png
     };
 }
 

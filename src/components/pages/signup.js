@@ -324,7 +324,7 @@ class Signup extends Component {
                                             <img
                                                 alt=""
                                                 className={"checkMark" + this.state.agreeingToTerms}
-                                                src="/icons/CheckMarkRoundedWhite.png"
+                                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                                             />
                                         </div>
 
@@ -397,7 +397,8 @@ function mapStateToProps(state) {
         formData: state.form,
         loadingCreateUser: state.users.loadingSomething,
         userPosted: state.users.userPosted,
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 
