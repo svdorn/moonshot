@@ -549,7 +549,7 @@ class BusinessHome extends Component {
                         </div>
                     </div>
                     { this.state.infoIndex > 0 ? <img src="/icons/Arrow3.png" className="leftArrow" onClick={() => this.selectProcess(this.state.infoIndex - 1)} /> : null }
-                    { this.state.infoIndex < 3 ? <img src="/icons/Arrow2.png" className="rightArrow" onClick={() => this.selectProcess(this.state.infoIndex + 1)} /> : null }
+                    { this.state.infoIndex < 3 ? <img src={this.props.webpSupported ? "/icons/Arrow2.webp" : "/icons/Arrow2.png"} className="rightArrow" onClick={() => this.selectProcess(this.state.infoIndex + 1)} /> : null }
                 </div>
                 <div className="center" style={{marginTop: "20px"}}>
                     <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleDemoOpen}>
