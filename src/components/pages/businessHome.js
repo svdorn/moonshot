@@ -396,10 +396,10 @@ class BusinessHome extends Component {
         };
 
         const logoImages = [
-            {src: "NWMLogoWhite.png", partner: "Northwestern Mutual"},
-            {src: "DreamHomeLogoWhite.png", partner: "Dream Home"},
-            {src: "SinglewireLogoWhite.png", partner: "Singlewire Software"},
-            {src: "CurateLogoWhite.png", partner: "Curate Solutions"}
+            {src: "NWMLogoWhite" + this.props.png, partner: "Northwestern Mutual"},
+            {src: "DreamHomeLogoWhite" + this.props.png, partner: "Dream Home"},
+            {src: "SinglewireLogoWhite" + this.props.png, partner: "Singlewire Software"},
+            {src: "CurateLogoWhite" + this.props.png, partner: "Curate Solutions"}
         ];
         const logos = logoImages.map(img => {
             return (<img alt={`${img.partner} Logo`} key={img.partner+"logo"} className="partnerLogo" src={`/logos/${img.src}`} />);
@@ -914,10 +914,10 @@ class BusinessHome extends Component {
                             </div>
                             <figure className="productScreenshots">
                                 <div id="myCandidatesScreenshot">
-                                    <img src="images/businessHome/MyCandidatesScreenshot.jpg" alt="My Candidates Page Screenshot"/>
+                                    <img src={"images/businessHome/MyCandidatesScreenshot" + this.props.jpg} alt="My Candidates Page Screenshot"/>
                                 </div>
                                 <div id="resultsScreenshot">
-                                    <img src="images/businessHome/CandidateResultsScreenshot.jpg" alt="Candidate Results Page Screenshot" />
+                                    <img src={"images/businessHome/CandidateResultsScreenshot" + this.props.jpg} alt="Candidate Results Page Screenshot" />
                                 </div>
                             </figure>
                         </div>
@@ -959,7 +959,7 @@ class BusinessHome extends Component {
                             <div className="businessHomeTrajectoryImageRightNoBorder forBusiness">
                                 <img
                                     alt="My Candidates Management"
-                                    src="/images/businessHome/MyCandidatesMagnifyScreenshot.png"
+                                    src={"/images/businessHome/MyCandidatesMagnifyScreenshot" + this.props.png}
                                 />
                                 </div>
                         </div>
@@ -983,7 +983,7 @@ class BusinessHome extends Component {
                             <div className="businessHomeTrajectoryImagesLeft businessHomeTrajectoryImagesShadow forBusiness">
                                 <img
                                     alt="Predictive Insights"
-                                    src="/images/businessHome/PredictiveInsights.jpg"
+                                    src={"/images/businessHome/PredictiveInsights" + this.props.jpg}
                                 />
                             </div>
                         </div>
@@ -1006,7 +1006,7 @@ class BusinessHome extends Component {
                             <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
                                 <img
                                     alt="Analysis Text"
-                                    src="/images/businessHome/PsychTestScreenshot.jpg"
+                                    src={"/images/businessHome/PsychTestScreenshot" + this.props.jpg}
                                 />
                             </div>
                         </div>
@@ -1043,7 +1043,7 @@ class BusinessHome extends Component {
                                 </div>
                                 <div>
                                     <div style={bottomListItem}>
-                                        <img src="/images/businessHome/Hourglass.png"
+                                        <img src={"/images/businessHome/Hourglass" + this.props.png}
                                              alt="Hourglass Icon"
                                              className="forBusinessIcon"
                                              style={{marginRight: '10px'}}/>
@@ -1052,7 +1052,7 @@ class BusinessHome extends Component {
                                         </div>
                                     </div>
                                     <div style={bottomListItem}>
-                                        <img src="/images/businessHome/Diamond.png"
+                                        <img src={"/images/businessHome/Diamond" + this.props.png}
                                              alt="Diamond Icon"
                                              className="forBusinessIcon"
                                              style={{marginLeft: '10px'}}/>
@@ -1063,7 +1063,7 @@ class BusinessHome extends Component {
                                 </div>
                                 <div style={{marginTop: '40px'}}>
                                     <div style={bottomListItem}>
-                                        <img src="/images/businessHome/Turnover.png"
+                                        <img src={"/images/businessHome/Turnover" + this.props.png}
                                              alt="Turnover Icon"
                                              className="forBusinessIcon"/>
                                         <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
@@ -1071,7 +1071,7 @@ class BusinessHome extends Component {
                                         </div>
                                     </div>
                                     <div style={bottomListItem}>
-                                        <img src="/images/businessHome/Lightbulb.png"
+                                        <img src={"/images/businessHome/Lightbulb" + this.props.png}
                                              alt="Lightbulb Icon"
                                              className="forBusinessIcon"/>
                                         <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
@@ -1136,7 +1136,7 @@ class BusinessHome extends Component {
                                 zDepth={2}>
                                 <div style={{textAlign: "center", position: "relative"}}>
                                     <img
-                                        src="/images/businessHome/PaperAirplane.png"
+                                        src={"/images/businessHome/PaperAirplane" + this.props.png}
                                         alt="Paper Airplane Icon"
                                         className="businessHomeBoxIcons"
                                     />
@@ -1164,7 +1164,7 @@ class BusinessHome extends Component {
                                    zDepth={2}>
                                 <div style={{textAlign: "center", position: "relative"}}>
                                     <img
-                                        src="/images/businessHome/EnterpriseRocket.png"
+                                        src={"/images/businessHome/EnterpriseRocket" + this.props.png}
                                         alt="Enterprise Rocket Icon"
                                         className="businessHomeBoxIcons"
                                     />
