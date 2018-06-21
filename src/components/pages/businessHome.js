@@ -914,10 +914,10 @@ class BusinessHome extends Component {
                             </div>
                             <figure className="productScreenshots">
                                 <div id="myCandidatesScreenshot">
-                                    <img src="images/businessHome/ProductScreenshot1.jpg" alt="My Candidates Page Screenshot"/>
+                                    <img src="images/businessHome/MyCandidatesScreenshot.jpg" alt="My Candidates Page Screenshot"/>
                                 </div>
                                 <div id="resultsScreenshot">
-                                    <img src="images/businessHome/ProductScreenshot2.jpg" alt="Candidate Results Page Screenshot" />
+                                    <img src="images/businessHome/CandidateResultsScreenshot.jpg" alt="Candidate Results Page Screenshot" />
                                 </div>
                             </figure>
                         </div>
@@ -959,7 +959,7 @@ class BusinessHome extends Component {
                             <div className="businessHomeTrajectoryImageRightNoBorder forBusiness">
                                 <img
                                     alt="My Candidates Management"
-                                    src="/images/businessHome/ProductScreenshot3v6.png"
+                                    src="/images/businessHome/MyCandidatesMagnifyScreenshot.png"
                                 />
                                 </div>
                         </div>
@@ -1006,7 +1006,7 @@ class BusinessHome extends Component {
                             <div className="businessHomeTrajectoryImagesRight businessHomeTrajectoryImagesShadow forBusiness">
                                 <img
                                     alt="Analysis Text"
-                                    src="/images/businessHome/ProductScreenshot5.jpg"
+                                    src="/images/businessHome/PsychTestScreenshot.jpg"
                                 />
                             </div>
                         </div>
@@ -1071,7 +1071,7 @@ class BusinessHome extends Component {
                                         </div>
                                     </div>
                                     <div style={bottomListItem}>
-                                        <img src="/images/businessHome/Lightbulb4.png"
+                                        <img src="/images/businessHome/Lightbulb.png"
                                              alt="Lightbulb Icon"
                                              className="forBusinessIcon"/>
                                         <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
@@ -1197,7 +1197,7 @@ class BusinessHome extends Component {
                                 {"Your crystal ball to identify"}<div className="above800only noHeight"><br/></div>{" good and bad hires before it's too late."}
                             </div>
                             <img
-                                src="/images/businessHome/CrystalBall.png"
+                                src={this.props.webpSupported ? "/images/businessHome/CrystalBall.webp" : "/images/businessHome/CrystalBall.png"}
                                 alt="CrystalBall"
                                 className="crystalBall"
                             />
@@ -1231,7 +1231,8 @@ function mapStateToProps(state) {
         formData: state.form,
         loadingEmailSend: state.users.loadingSomething,
         notification: state.users.notification,
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        webpSupported: state.users.webpSupported
     };
 }
 
