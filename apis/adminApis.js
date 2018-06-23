@@ -4,6 +4,7 @@ var Users = require('../models/users.js');
 var Quizzes = require('../models/quizzes.js');
 const Skills = require('../models/skills');
 
+const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
 const errors = require('./errors');
@@ -28,7 +29,57 @@ const adminApis = {
     POST_business,
     GET_info,
     GET_allSkills,
-    GET_skill
+    GET_skill,
+    POST_saveSkill
+}
+
+
+async function POST_saveSkill(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const skill = sanitize(req.body.skill);
+
+    // get the user and the requested skill
+    let dbSkill;
+    try {
+        // get the user
+        const user = await getAndVerifyUser(userId, verificationToken);
+        // if the user isn't an admin, don't let them see all the skills
+        if (user.admin !== true) {
+            return res.status(403).send(errors.PERMISSIONS_ERROR);
+        }
+
+        // if it's a new skill, create and return the new skill
+        if (!skill._id) {
+            // count all the skills with the same name ...
+            const skillCount = await Skills.count({name: skill.name});
+            // ... and generate a random number ...
+            const randomNumber = crypto.randomBytes(4).toString('hex');
+            // ... so that we can make the skill url
+            skill.url = `${skill.name}-${skillCount}-${randomNumber}`;
+            // create skill and return its id
+            return res.json(await Skills.create(skill));
+        }
+
+        // otherwise update the old skill
+        else {
+            // find the skill by id
+            const findQuery = { "_id": mongoose.Types.ObjectId(skill._id) };
+            // update all admin-changeable aspects of the skill
+            const updateQuery = {
+                "name": skill.name,
+                "levels": skill.levels
+            }
+            // return the new document after update
+            const options = { returnNewDocument: true };
+
+            // update skill and return its id
+            return res.json(await Skills.findOneAndUpdate(findQuery, updateQuery, options));
+        }
+    } catch (getUserOrUpdateSkillError) {
+        console.log("Error updating skill for admin: ", getUserOrUpdateSkillError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
 }
 
 
@@ -37,6 +88,8 @@ async function GET_skill(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
     const skillId = sanitize(req.query.skillId);
+
+    console.log("skillId: ", skillId);
 
     // get the user and the requested skill
     try {

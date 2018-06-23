@@ -586,9 +586,14 @@ function POST_startOrContinueTest(req, res) {
                 // set the current question for the user
                 user.skillTests[testIndex].currentQuestion = currentQuestionForDB;
 
+                // remove correctness indicator from options
+                const options = testQuestion.options.map(option => {
+                    return { body: option.body };
+                });
+
                 const questionToReturn = {
                     body: testQuestion.body,
-                    options: testQuestion.options,
+                    options,
                     multiSelect: testQuestion.multiSelect
                 }
 

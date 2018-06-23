@@ -13,7 +13,9 @@ class SkillEditor extends Component {
         super(props);
 
         this.state = {
-            loading: true
+            loading: true,
+            saving: false,
+            error: false
         };
     }
 
@@ -57,12 +59,11 @@ class SkillEditor extends Component {
                 // map the skill to the format this page expects
                 let skill = response.data;
 
-                console.log("skill: ", skill);
-
                 this.setState({ skill, loading: false });
             })
             .catch(error => {
                 console.log("Error getting skill: ", error);
+                this.setState({ loading: false, error: true });
                 this.props.addNotification("Error getting skill.", "error")
             })
         }
@@ -70,8 +71,6 @@ class SkillEditor extends Component {
 
 
     goTo(route) {
-        // closes any notification
-        this.props.closeNotification();
         // goes to the wanted page
         browserHistory.push(route);
         // goes to the top of the new page
@@ -82,7 +81,26 @@ class SkillEditor extends Component {
     handleSubmit(e) {
         e.preventDefault();
 
-        this.props.postSkill(this.props.currentUser._id, this.props.currentUser.verificationToken, this.state.skill);
+        const self = this;
+
+        // set save-loading spinner to go
+        this.setState({ saving: true });
+
+        axios.post("/api/admin/saveSkill", {
+            userId: this.props.currentUser._id,
+            verificationToken: this.props.currentUser.verificationToken,
+            skill: this.state.skill
+        })
+        .then(response => {
+            self.setState({ saving: false }, () => {
+                // go to the new/updated skill's edit page
+                self.goTo(`/admin/skillEditor/${response.data._id}`);
+            })
+        })
+        .catch(error => {
+            console.log("error updating skill: ", error);
+            self.props.addNotification("Error updating skill.", "error");
+        })
     }
 
 
@@ -170,7 +188,11 @@ class SkillEditor extends Component {
 
         // if loading the skill
         if (self.state.loading) {
-            return <CircularProgress />;
+            return <div className="fillScreen whiteText"><CircularProgress /></div>;
+        }
+
+        if (self.state.error) {
+            return <div className="fillScreen whiteText">{"Error"}</div>;
         }
 
         let nameInput = (
@@ -261,6 +283,8 @@ class SkillEditor extends Component {
                     className="raisedButtonBusinessHome"
                     style={{margin: '10px 0'}}
                 />
+                <br/>
+                {this.state.saving ? <CircularProgress/> : null}
             </div>
         );
     }
