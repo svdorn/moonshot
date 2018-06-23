@@ -42,7 +42,8 @@ import EvaluationIntro from "./components/pages/evaluationIntro";
 
 import AdminPages from './components/pages/adminPages/adminPages'
 import ViewUser from './components/pages/adminPages/viewUser';
-import UserResponses from './components/pages/adminPages/userResponses';
+import SkillEditor from './components/pages/adminPages/skillEditor';
+import SkillPicker from './components/pages/adminPages/skillPicker';
 import CreateBusinessAccount from './components/pages/adminPages/createBusinessAccount';
 import EditBusiness from './components/pages/adminPages/editBusiness';
 
@@ -92,7 +93,8 @@ const routes = (
                 <IndexRoute component={AdminPages} />
                 <Route path="createBusinessAccount" component={CreateBusinessAccount} />
                 <Route path="editBusiness" component={EditBusiness} />
-                <Route path="userResponses" component={UserResponses} />
+                <Route path="skillPicker" component={SkillPicker} />
+                <Route path="skillEditor/:skillId" component={SkillEditor} />
                 <Route path="viewUser" component={ViewUser} />
             </Route>
 

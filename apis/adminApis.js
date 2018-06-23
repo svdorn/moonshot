@@ -2,9 +2,11 @@ var Businesses = require('../models/businesses.js');
 var Employers = require('../models/employers.js');
 var Users = require('../models/users.js');
 var Quizzes = require('../models/quizzes.js');
+const Skills = require('../models/skills');
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const errors = require('./errors');
 
 // get helper functions
 const { sanitize,
@@ -16,14 +18,74 @@ const { sanitize,
         safeUser,
         userForAdmin,
         getFirstName,
-        frontEndUser
+        frontEndUser,
+        getAndVerifyUser
 } = require('./helperFunctions.js');
 
 
 const adminApis = {
     POST_alertLinkClicked,
     POST_business,
-    GET_info
+    GET_info,
+    GET_allSkills,
+    GET_skill
+}
+
+
+// get one skill so the admin can edit it
+async function GET_skill(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+    const skillId = sanitize(req.query.skillId);
+
+    // get the user and the requested skill
+    try {
+        const [user, skill] = await Promise.all([
+            // get user
+            getAndVerifyUser(userId, verificationToken),
+            // get all skills
+            Skills.findById(skillId)
+        ]);
+
+        // if the user isn't an admin, don't let them see all the skills
+        if (user.admin !== true) {
+            return res.status(403).send(errors.PERMISSIONS_ERROR);
+        }
+
+        // return the skill to the admin
+        return res.json(skill);
+    } catch (getUserOrSkillsError) {
+        console.log("Error getting skill for admin: ", getUserOrSkillsError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+}
+
+
+// get all the skills so the admin can get to the edit pages for them
+async function GET_allSkills(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    // get the user and all the skills
+    try {
+        const [user, skills] = await Promise.all([
+            // get user
+            getAndVerifyUser(userId, verificationToken),
+            // get all skills
+            Skills.find({}).select("name _id")
+        ]);
+
+        // if the user isn't an admin, don't let them see all the skills
+        if (user.admin !== true) {
+            return res.status(403).send(errors.PERMISSIONS_ERROR);
+        }
+
+        // return all the skills to the admin
+        return res.json(skills);
+    } catch (getUserOrSkillsError) {
+        console.log("Error getting skills for admin: ", getUserOrSkillsError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
 }
 
 

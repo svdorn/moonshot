@@ -3039,6 +3039,21 @@ button.link {
      margin-left: 80px;
  }
 
+.skillEditor .correctIndicator {
+    width: 30px;
+    height: 30px;
+    margin: 5px;
+    cursor: pointer;
+    display: inline-block;
+    vertical-align: top;
+}
+.skillEditor .correctIndicator.correct { background-color: green; }
+.skillEditor .correctIndicator.incorrect { background-color: red; }
+.skillEditor textarea {
+    width: 85%;
+    height: 40px;
+}
+
 .invertColorOnHover.gradientBorderButtonInterior:hover,
 .invertColorOnHover.gradientBorderButtonInteriorBlack:hover {
     color: white;
@@ -4929,7 +4944,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .homePathwaysDesc {
         padding: 0;
     }
-    
+
     .profileSeparatorRect {
         width: 200px;
         padding-left: 45px;

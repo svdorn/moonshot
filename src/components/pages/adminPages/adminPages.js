@@ -20,7 +20,8 @@ class AdminPages extends Component {
         return (
             <div className="fullHeight">
                 <a href={"/admin/createBusinessAccount"}>Create Business Account</a><br/>
-                <a href={"/admin/userResponses"}>See User Responses</a>
+                <a href={"/admin/skillPicker"}>Skills</a><br/>
+                <a href={"/admin/businessPicker"}>Businesses</a>
             </div>
         );
     }

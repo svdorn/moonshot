@@ -66,7 +66,6 @@ class Main extends Component {
         });
 
         this.checkWebpFeature("lossy", (feature, result) => {
-            console.log("webp supported: ", result);
             this.props.setWebpSupport(result);
         })
     }

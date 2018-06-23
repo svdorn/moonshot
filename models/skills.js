@@ -35,7 +35,9 @@ var skillsSchema = mongoose.Schema({
             options: [{
                 // the text of the option. for now only doing multiple choice questions
                 // with text-only answers
-                body: String
+                body: String,
+                // whether this answer is the correct one
+                isCorrect: Boolean,
                 // // the type of this part of the question, e.g. "ul" or "ol" or "text" or "image"
                 // partType: String,
                 // // className of part
