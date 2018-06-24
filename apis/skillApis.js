@@ -43,7 +43,7 @@ async function GET_skillNamesByIds(req, res) {
     let user;
     try { user = await getAndVerifyUser(userId, verificationToken); }
     catch (findUserError) {
-        console.log("Error finding businesss user who was trying to see thier positions: ", findUserError);
+        console.log("Error finding business user who was trying to see thier positions: ", findUserError);
         return res.status(500).send("Server error, try again later.");
     }
 

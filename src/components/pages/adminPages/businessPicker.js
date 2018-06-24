@@ -13,27 +13,27 @@ class BusinessPicker extends Component {
         super(props);
 
         this.state = {
-            skills: undefined
+            businesses: undefined
         };
     }
 
 
     componentDidMount() {
         const self = this;
-        axios.get("/api/admin/allSkills", {
+        axios.get("/api/admin/allBusinesses", {
             params: {
                 userId: this.props.currentUser._id,
                 verificationToken: this.props.currentUser.verificationToken
             }
         })
         .then(response => {
-            self.setState({ skills: response.data });
+            self.setState({ businesses: response.data });
         })
         .catch(error => {
             console.log("error: ", error);
-            // set skills to empty array to get rid of loader
-            self.setState({ skills: [] });
-            self.props.addNotification("Error getting skills.", "error");
+            // set businesses to empty array to get rid of loader
+            self.setState({ businesses: [] });
+            self.props.addNotification("Error getting businesses.", "error");
         });
     }
 
@@ -53,37 +53,37 @@ class BusinessPicker extends Component {
             return null;
         }
 
-        if (!Array.isArray(this.state.skills)) {
+        if (!Array.isArray(this.state.businesses)) {
             return (<div className="fillScreen"><CircularProgress /></div>);
         }
 
-        // show all the current skills
-        const skills = this.state.skills.map(skill => {
+        // show all the current businesses
+        const businesses = this.state.businesses.map(business => {
             return (
                 <div
-                    key={skill._id}
-                    onClick={() => this.goTo(`/admin/skillEditor/${skill._id}`)}
+                    key={business._id}
+                    onClick={() => this.goTo(`/admin/businessEditor/${business._id}`)}
                     className="clickable whiteText"
                 >
-                    {skill.name}
+                    {business.name}
                 </div>
             );
         });
 
-        // show option to create a new skill
-        skills.push(
+        // show option to create a new business
+        businesses.push(
             <div
-                key={"new skill"}
-                onClick={() => this.goTo(`/admin/skillEditor/new`)}
+                key={"new business"}
+                onClick={() => this.goTo(`/admin/businessEditor/new`)}
                 className="clickable whiteText"
             >
-                {"+ New Skill"}
+                {"+ New Business"}
             </div>
         );
 
         return (
             <div className="fillScreen whiteText" style={{margin: "30px"}}>
-                {skills}
+                {businesses}
             </div>
         );
     }
@@ -98,8 +98,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
-        loadingCreateSkill: state.users.loadingSomething
+        currentUser: state.users.currentUser
     };
 }
 

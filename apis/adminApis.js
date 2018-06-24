@@ -29,7 +29,10 @@ const adminApis = {
     GET_info,
     GET_allSkills,
     GET_skill,
-    POST_saveSkill
+    POST_saveSkill,
+    GET_allBusinesses,
+    GET_business,
+    POST_saveBusiness
 }
 
 
@@ -138,6 +141,116 @@ async function GET_allSkills(req, res) {
         return res.json(skills);
     } catch (getUserOrSkillsError) {
         console.log("Error getting skills for admin: ", getUserOrSkillsError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+}
+
+
+async function POST_saveBusiness(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const skill = sanitize(req.body.skill);
+
+    // get the user and the requested skill
+    let dbSkill;
+    try {
+        // get the user
+        const user = await getAndVerifyUser(userId, verificationToken);
+        // if the user isn't an admin, don't let them see all the skills
+        if (user.admin !== true) {
+            return res.status(403).send(errors.PERMISSIONS_ERROR);
+        }
+
+        // if it's a new skill, create and return the new skill
+        if (!skill._id) {
+            // count all the skills with the same name ...
+            const skillCount = await Skills.count({name: skill.name});
+            // ... and generate a random number ...
+            const randomNumber = crypto.randomBytes(4).toString('hex');
+            // ... so that we can make the skill url
+            skill.url = `${skill.name}-${skillCount}-${randomNumber}`;
+            // create skill and return its id
+            return res.json(await Skills.create(skill));
+        }
+
+        // otherwise update the old skill
+        else {
+            // find the skill by id
+            const findQuery = { "_id": mongoose.Types.ObjectId(skill._id) };
+            // update all admin-changeable aspects of the skill
+            const updateQuery = {
+                $set: {
+                    "name": skill.name,
+                    "levels": skill.levels
+                }
+            }
+            // return the new document after update
+            const options = { returnNewDocument: true };
+
+            // update skill and return its id
+            return res.json(await Skills.findOneAndUpdate(findQuery, updateQuery, options));
+        }
+    } catch (getUserOrUpdateSkillError) {
+        console.log("Error updating skill for admin: ", getUserOrUpdateSkillError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+}
+
+
+// get one skill so the admin can edit it
+async function GET_business(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+    const skillId = sanitize(req.query.skillId);
+
+    console.log("skillId: ", skillId);
+
+    // get the user and the requested skill
+    try {
+        const [user, skill] = await Promise.all([
+            // get user
+            getAndVerifyUser(userId, verificationToken),
+            // get all skills
+            Skills.findById(skillId)
+        ]);
+
+        // if the user isn't an admin, don't let them see all the skills
+        if (user.admin !== true) {
+            return res.status(403).send(errors.PERMISSIONS_ERROR);
+        }
+
+        // return the skill to the admin
+        return res.json(skill);
+    } catch (getUserOrSkillsError) {
+        console.log("Error getting skill for admin: ", getUserOrSkillsError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+}
+
+
+// get all the businesses so the admin can get to the edit pages for them
+async function GET_allBusinesses(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    // get the user and all the businesses
+    try {
+        const [user, businesses] = await Promise.all([
+            // get user
+            getAndVerifyUser(userId, verificationToken),
+            // get all businesses
+            Businesses.find({}).select("name _id")
+        ]);
+
+        // if the user isn't an admin, don't let them see all the businesses
+        if (user.admin !== true) {
+            return res.status(403).send(errors.PERMISSIONS_ERROR);
+        }
+
+        // return all the businesses to the admin
+        return res.json(businesses);
+    } catch (getUserOrBusinessesError) {
+        console.log("Error getting businesses for admin: ", getUserOrBusinessesError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 }

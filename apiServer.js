@@ -125,6 +125,9 @@ app.get("/admin/info", adminApis.GET_info);
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);
 app.post("/admin/saveSkill", adminApis.POST_saveSkill);
+app.get("/admin/allBusinesses", adminApis.GET_allBusinesses);
+app.get("/admin/business", adminApis.GET_business);
+app.post("/admin/saveBusiness", adminApis.POST_saveBusiness);
 
 //app.get('/skill/skillByUrl', skillApis.GET_skillByUrl);
 app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);

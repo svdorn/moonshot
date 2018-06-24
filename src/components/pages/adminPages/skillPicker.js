@@ -98,8 +98,7 @@ function mapDispatchToProps(dispatch) {
 
 function mapStateToProps(state) {
     return {
-        currentUser: state.users.currentUser,
-        loadingCreateSkill: state.users.loadingSomething
+        currentUser: state.users.currentUser
     };
 }
 
