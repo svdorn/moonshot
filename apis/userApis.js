@@ -1479,8 +1479,8 @@ async function internalStartPsychEval(user) {
             // currently not allowing any rephrases, change later
             rephrase: false,
             numRephrasesAllowed: 0,
-            // 28 * 2 = 56 questions
-            questionsPerFacet: 3,
+            // 1 question per facet in development mode, 3 in production
+            questionsPerFacet: process.env.NODE_ENV === "development" ? 1 : 3,
             incompleteFactors,
             factors,
             currentQuestion

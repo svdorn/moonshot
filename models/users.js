@@ -129,7 +129,9 @@ var usersSchema = mongoose.Schema({
             startDate: Date,
             // the correct answers so that we don't have to re-find the question
             // when getting the next question and grading this one
-            correctAnswers: [ mongoose.Schema.Types.ObjectId ]
+            //correctAnswers: [ mongoose.Schema.Types.ObjectId ],
+            // similar premise but with the new way skills are done
+            correctAnswer: mongoose.Schema.Types.ObjectId
         },
         // the list of times the candidate has taken the skill test
         attempts: [{
@@ -159,7 +161,9 @@ var usersSchema = mongoose.Schema({
                     // if the candidate chose the correct answers
                     isCorrect: Boolean,
                     // the ids of answers that the user chose
-                    answerIds: [ mongoose.Schema.Types.ObjectId ],
+                    //answerIds: [ mongoose.Schema.Types.ObjectId ],
+                    // the id of the answer that the user chose
+                    answerId: mongoose.Schema.Types.ObjectId,
                     // the date and time the user started the question
                     startDate: Date,
                     // the date and time the user finished the question

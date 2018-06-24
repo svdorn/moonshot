@@ -1,7 +1,6 @@
 var Businesses = require('../models/businesses.js');
 var Employers = require('../models/employers.js');
 var Users = require('../models/users.js');
-var Quizzes = require('../models/quizzes.js');
 const Skills = require('../models/skills');
 
 const mongoose = require('mongoose');
@@ -67,8 +66,10 @@ async function POST_saveSkill(req, res) {
             const findQuery = { "_id": mongoose.Types.ObjectId(skill._id) };
             // update all admin-changeable aspects of the skill
             const updateQuery = {
-                "name": skill.name,
-                "levels": skill.levels
+                $set: {
+                    "name": skill.name,
+                    "levels": skill.levels
+                }
             }
             // return the new document after update
             const options = { returnNewDocument: true };

@@ -73,7 +73,8 @@ function POST_answerSkillQuestion(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
     const skillUrl = sanitize(req.body.skillUrl);
-    const answerIds = sanitize(req.body.answerIds);
+    // const answerIds = sanitize(req.body.answerIds);
+    const answerId = sanitize(req.body.answerId);
 
     if (!userId || !verificationToken || !skillUrl) {
         return res.status(400).send("Not enough arguments provided.");
@@ -144,21 +145,26 @@ function POST_answerSkillQuestion(req, res) {
             userLevel = attempt.levels[userLevelIndex];
         }
 
-        const correctAnswers = userCurrentQuestion.correctAnswers;
-        let isCorrect = true;
-        const numCorrectAnswers = correctAnswers.length;
-        for (let correctAnswerIndex = 0; correctAnswerIndex < numCorrectAnswers; correctAnswerIndex++) {
-            const correctAnswerId = correctAnswers[correctAnswerIndex].toString();
-            console.log("correct answer id: ", correctAnswerId);
-            // if this correct answer isn't included within the user's list of answers,
-            // mark them as incorrect
-            if (!answerIds.some(answerId => {
-                return answerId.toString() === correctAnswerId.toString();
-            })) {
-                isCorrect = false;
-                break;
-            }
-        }
+        // // OLD WAY - multiple answers can be correct
+        // const correctAnswers = userCurrentQuestion.correctAnswers;
+        // let isCorrect = true;
+        // const numCorrectAnswers = correctAnswers.length;
+        // for (let correctAnswerIndex = 0; correctAnswerIndex < numCorrectAnswers; correctAnswerIndex++) {
+        //     const correctAnswerId = correctAnswers[correctAnswerIndex].toString();
+        //     // if this correct answer isn't included within the user's list of answers,
+        //     // mark them as incorrect
+        //     if (!answerIds.some(answerId => {
+        //         return answerId.toString() === correctAnswerId.toString();
+        //     })) {
+        //         isCorrect = false;
+        //         break;
+        //     }
+        // }
+
+        // NEW WAY - only one answer can be correct
+        // see if the answer is correct
+        const isCorrect = userCurrentQuestion.correctAnswer.toString() === answerId.toString();
+        console.log("isCorrect: ", isCorrect);
 
         const startDate = userCurrentQuestion.startDate;
         const endDate = new Date();
@@ -166,7 +172,12 @@ function POST_answerSkillQuestion(req, res) {
 
         userLevel.questions.push({
             questionId: userCurrentQuestion.questionId,
-            isCorrect, answerIds, startDate, endDate, totalTime
+            isCorrect,
+            //answerIds,
+            answerId,
+            startDate,
+            endDate,
+            totalTime
         });
         // save this info back to the user object
         attempt.levels[userLevelIndex] = userLevel;
@@ -274,13 +285,16 @@ function POST_answerSkillQuestion(req, res) {
             questionId = question._id.toString();
         } while (newUserLevel.questions.some(answeredQuestion => answeredQuestion.questionId.toString() === questionId));
 
+        const correctAnswer = question.options.find(option => { return option.isCorrect });
+
         const currentQuestionToStore = {
             levelNumber: testLevel.levelNumber,
             levelIndex: newLevelIndex,
             questionId,
             questionIndex,
             startDate: new Date(),
-            correctAnswers: question.correctAnswers
+            //correctAnswers: question.correctAnswers,
+            correctAnswer: correctAnswer ? correctAnswer._id : undefined
         }
 
 
@@ -570,9 +584,11 @@ function POST_startOrContinueTest(req, res) {
                 const firstLevel = skill.levels[0];
                 const testQuestions = firstLevel.questions;
 
+
                 // get a random question from the firt level
                 testQuestionIndex = Math.floor(Math.random() * testQuestions.length);
                 testQuestion = testQuestions[testQuestionIndex];
+                const correctAnswer = testQuestion.options.find(option => { return option.isCorrect });
                 const currentQuestionForDB = {
                     levelNumber: firstLevel.levelNumber,
                     levelIndex: 0,
@@ -580,7 +596,8 @@ function POST_startOrContinueTest(req, res) {
                     questionIndex: testQuestionIndex,
                     // starting this question right now
                     startDate: new Date(),
-                    correctAnswers: testQuestion.correctAnswers
+                    // correctAnswers: testQuestion.correctAnswers,
+                    correctAnswer: correctAnswer ? correctAnswer._id : undefined
                 }
 
                 // set the current question for the user
@@ -588,7 +605,7 @@ function POST_startOrContinueTest(req, res) {
 
                 // remove correctness indicator from options
                 const options = testQuestion.options.map(option => {
-                    return { body: option.body };
+                    return { body: option.body, _id: option._id };
                 });
 
                 const questionToReturn = {
@@ -654,10 +671,15 @@ function POST_startOrContinueTest(req, res) {
                     else { currentTestQuestion = testLevels[currentTestQuestionIndex]; }
                 }
 
+                // remove correctness indicator from options
+                const options = currentTestQuestion.options.map(option => {
+                    return { body: option.body, _id: option._id };
+                });
+
                 // the info that is actually needed by the front end for the user to answer the question
                 const currentQuestionToReturn = {
                     body: currentTestQuestion.body,
-                    options: currentTestQuestion.options,
+                    options,
                     multiSelect: currentTestQuestion.multiSelect
                 }
                 return res.json({question: currentQuestionToReturn, skillName: skill.name, finished: false});

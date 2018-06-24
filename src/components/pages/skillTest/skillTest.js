@@ -69,7 +69,7 @@ class SkillTest extends Component {
             this.setState({
                 question: {
                     body: result.data.question.body,
-                    options: this.shuffle(result.data.question.options),
+                    options: result.data.question.options,
                     multiSelect: result.data.question.multiSelect
                 },
                 skillName: result.data.skillName,
@@ -131,7 +131,9 @@ class SkillTest extends Component {
                     verificationToken: currentUser.verificationToken,
                     skillUrl: this.props.params.skillUrl,
                     // an array because maybe later we'll have multi select questions
-                    answerIds: [ this.state.selectedId ]
+                    //answerIds: [ this.state.selectedId ]
+                    // only one answer for now
+                    answerId: this.state.selectedId
                 }
                 axios.post("/api/skill/answerSkillQuestion", params)
                 .then(result => {
