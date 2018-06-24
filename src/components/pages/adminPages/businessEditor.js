@@ -21,50 +21,42 @@ class BusinessEditor extends Component {
 
 
     componentDidMount() {
-        // get the skill id from the url
-        const skillId = this.props.params.skillId;
-        // if user is creating a new skill
-        if (skillId === "new") {
+        // get the business id from the url
+        const businessId = this.props.params.businessId;
+        // if user is creating a new business
+        if (businessId === "new") {
             this.setState({
-                skill: {
+                business: {
                     name: "",
-                    levels: [{
-                        levelNumber: 1,
-                        questions: [{
-                            // questions are stored in a weird format so that
-                            // they are compatible with the db
-                            body: [{content: [""], shouldBreak: true}],
-                            options: [
-                                {body: "", isCorrect: false},
-                                {body: "", isCorrect: false}
-                            ]
-                        }]
-                    }]
+                    skills: [],
+                    positions: []
                 },
                 loading: false
             })
         }
 
-        // if user is editing an existing skill
+        // if user is editing an existing business
         else {
-            // get the skill
-            axios.get("/api/admin/skill", {params:
+            // get the business
+            axios.get("/api/admin/business", {params:
                 {
                     userId: this.props.currentUser._id,
                     verificationToken: this.props.currentUser.verificationToken,
-                    skillId
+                    businessId
                 }
             })
             .then(response => {
-                // map the skill to the format this page expects
-                let skill = response.data;
+                // map the business to the format this page expects
+                let business = response.data;
 
-                this.setState({ skill, loading: false });
+                console.log(business);
+
+                this.setState({ business, loading: false });
             })
             .catch(error => {
-                console.log("Error getting skill: ", error);
+                console.log("Error getting business: ", error);
                 this.setState({ loading: false, error: true });
-                this.props.addNotification("Error getting skill.", "error")
+                this.props.addNotification("Error getting business.", "error")
             })
         }
     }
@@ -86,87 +78,87 @@ class BusinessEditor extends Component {
         // set save-loading spinner to go
         this.setState({ saving: true });
 
-        axios.post("/api/admin/saveSkill", {
+        axios.post("/api/admin/saveBusiness", {
             userId: this.props.currentUser._id,
             verificationToken: this.props.currentUser.verificationToken,
-            skill: this.state.skill
+            business: this.state.business
         })
         .then(response => {
             self.setState({ saving: false }, () => {
-                // go to the new/updated skill's edit page
-                self.goTo(`/admin/skillEditor/${response.data._id}`);
+                // go to the new/updated business's edit page
+                self.goTo(`/admin/businessEditor/${response.data._id}`);
             })
         })
         .catch(error => {
-            console.log("error updating skill: ", error);
-            self.props.addNotification("Error updating skill.", "error");
+            console.log("error updating business: ", error);
+            self.props.addNotification("Error updating business.", "error");
         })
     }
 
 
     nameChange(e) {
-        let skill = Object.assign({}, this.state.skill);
-        skill.name = e.target.value;
-        this.setState({ skill });
+        let business = Object.assign({}, this.state.business);
+        business.name = e.target.value;
+        this.setState({ business });
     }
 
 
     questionTextChange(e, levelIndex, questionIndex, questionTextIndex) {
-        let skill = Object.assign({}, this.state.skill);
-        skill.levels[levelIndex].questions[questionIndex].body[questionTextIndex].content[0] = e.target.value;
-        this.setState({ skill });
+        let business = Object.assign({}, this.state.business);
+        business.levels[levelIndex].questions[questionIndex].body[questionTextIndex].content[0] = e.target.value;
+        this.setState({ business });
     }
 
 
     optionChange(e, levelIndex, questionIndex, optionIndex) {
-        let skill = Object.assign({}, this.state.skill);
-        skill.levels[levelIndex].questions[questionIndex].options[optionIndex].body = e.target.value;
-        this.setState({ skill });
+        let business = Object.assign({}, this.state.business);
+        business.levels[levelIndex].questions[questionIndex].options[optionIndex].body = e.target.value;
+        this.setState({ business });
     }
 
 
     markCorrect(levelIndex, questionIndex, optionIndex) {
-        let skill = Object.assign({}, this.state.skill);
+        let business = Object.assign({}, this.state.business);
         // mark all options incorrect
-        for (let i = 0; i < skill.levels[levelIndex].questions[questionIndex].options.length; i++) {
-            skill.levels[levelIndex].questions[questionIndex].options[i].isCorrect = false;
+        for (let i = 0; i < business.levels[levelIndex].questions[questionIndex].options.length; i++) {
+            business.levels[levelIndex].questions[questionIndex].options[i].isCorrect = false;
         }
-        skill.levels[levelIndex].questions[questionIndex].options[optionIndex].isCorrect = true;
-        this.setState({ skill });
+        business.levels[levelIndex].questions[questionIndex].options[optionIndex].isCorrect = true;
+        this.setState({ business });
     }
 
 
     addQuestionText(levelIndex, questionIndex) {
-        let skill = Object.assign({}, this.state.skill);
-        skill.levels[levelIndex].questions[questionIndex].body.push({ content: [""], shouldBreak: true });
-        this.setState({ skill });
+        let business = Object.assign({}, this.state.business);
+        business.levels[levelIndex].questions[questionIndex].body.push({ content: [""], shouldBreak: true });
+        this.setState({ business });
     }
 
 
     addOption(levelIndex, questionIndex) {
-        let skill = Object.assign({}, this.state.skill);
-        skill.levels[levelIndex].questions[questionIndex].options.push({body: "", isCorrect: false});
-        this.setState({ skill });
+        let business = Object.assign({}, this.state.business);
+        business.levels[levelIndex].questions[questionIndex].options.push({body: "", isCorrect: false});
+        this.setState({ business });
     }
 
 
     addQuestion(levelIndex) {
-        let skill = Object.assign({}, this.state.skill);
-        skill.levels[levelIndex].questions.push({
+        let business = Object.assign({}, this.state.business);
+        business.levels[levelIndex].questions.push({
             body: [{ content: [""], shouldBreak: true }],
             options: [
                 {body: "", isCorrect: false},
                 {body: "", isCorrect: false}
             ]
         });
-        this.setState({ skill });
+        this.setState({ business });
     }
 
     addLevel() {
         const self = this;
-        let skill = Object.assign({}, this.state.skill);
-        skill.levels.push({
-            levelNumber: self.state.skill.levels.length + 1,
+        let business = Object.assign({}, this.state.business);
+        business.levels.push({
+            levelNumber: self.state.business.levels.length + 1,
             questions: [{
                 body: [{ content: [""], shouldBreak: true }],
                 options: [
@@ -175,39 +167,39 @@ class BusinessEditor extends Component {
                 ]
             }]
         });
-        this.setState({ skill });
+        this.setState({ business });
     }
 
 
     deleteLevel(levelIndex) {
         const self = this;
-        let skill = Object.assign({}, this.state.skill);
-        skill.levels.splice(levelIndex, 1);
-        this.setState({ skill });
+        let business = Object.assign({}, this.state.business);
+        business.levels.splice(levelIndex, 1);
+        this.setState({ business });
     }
 
 
     deleteQuestion(levelIndex, questionIndex) {
         const self = this;
-        let skill = Object.assign({}, this.state.skill);
-        skill.levels[levelIndex].questions.splice(questionIndex, 1);
-        this.setState({ skill });
+        let business = Object.assign({}, this.state.business);
+        business.levels[levelIndex].questions.splice(questionIndex, 1);
+        this.setState({ business });
     }
 
 
     deleteQuestionText (levelIndex, questionIndex, questionTextIndex) {
         const self = this;
-        let skill = Object.assign({}, this.state.skill);
-        skill.levels[levelIndex].questions[questionIndex].body.splice(questionTextIndex, 1);
-        this.setState({ skill });
+        let business = Object.assign({}, this.state.business);
+        business.levels[levelIndex].questions[questionIndex].body.splice(questionTextIndex, 1);
+        this.setState({ business });
     }
 
 
     deleteOption(levelIndex, questionIndex, optionIndex) {
         const self = this;
-        let skill = Object.assign({}, this.state.skill);
-        skill.levels[levelIndex].questions[questionIndex].options.splice(optionIndex, 1);
-        this.setState({ skill });
+        let business = Object.assign({}, this.state.business);
+        business.levels[levelIndex].questions[questionIndex].options.splice(optionIndex, 1);
+        this.setState({ business });
     }
 
 
@@ -218,7 +210,7 @@ class BusinessEditor extends Component {
             return null;
         }
 
-        // if loading the skill
+        // if loading the business
         if (self.state.loading) {
             return <div className="fillScreen whiteText"><CircularProgress /></div>;
         }
@@ -229,18 +221,18 @@ class BusinessEditor extends Component {
 
         let nameInput = (
             <input
-                value={self.state.skill.name}
+                value={self.state.business.name}
                 onChange={(e) => self.nameChange(e)}
-                placeholder="Skill Name"
+                placeholder="Business Name"
             />
         );
         let levels = [];
 
-        const skill = self.state.skill;
-        const numLevels = skill.levels.length;
+        const business = self.state.business;
+        const numLevels = business.levels.length;
         // go through every current level
         for (let levelIndex = 0; levelIndex < numLevels; levelIndex++) {
-            const level = skill.levels[levelIndex];
+            const level = business.levels[levelIndex];
 
             let questions = [];
 
@@ -315,7 +307,7 @@ class BusinessEditor extends Component {
         }
 
         return (
-            <div className="fillScreen whiteText skillEditor" style={{margin: "30px"}}>
+            <div className="fillScreen whiteText businessEditor" style={{margin: "30px"}}>
                 {nameInput}
                 {levels}
                 <button onClick={() => self.addLevel()}>Add level</button><br/>
@@ -342,7 +334,7 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        loadingCreateSkill: state.users.loadingSomething
+        loadingCreateBusiness: state.users.loadingSomething
     };
 }
 

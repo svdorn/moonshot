@@ -1,7 +1,8 @@
-var Businesses = require('../models/businesses.js');
-var Employers = require('../models/employers.js');
-var Users = require('../models/users.js');
+const Businesses = require('../models/businesses.js');
+const Employers = require('../models/employers.js');
+const Users = require('../models/users.js');
 const Skills = require('../models/skills');
+const Psychtests = require('../models/psychtests');
 
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
@@ -197,32 +198,80 @@ async function POST_saveBusiness(req, res) {
 }
 
 
-// get one skill so the admin can edit it
+// get one business so the admin can edit it
 async function GET_business(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
-    const skillId = sanitize(req.query.skillId);
-
-    console.log("skillId: ", skillId);
+    const businessId = sanitize(req.query.businessId);
 
     // get the user and the requested skill
     try {
-        const [user, skill] = await Promise.all([
+        let [user, foundBusiness, psychTest] = await Promise.all([
             // get user
             getAndVerifyUser(userId, verificationToken),
             // get all skills
-            Skills.findById(skillId)
+            Businesses.findById(businessId).select("name positions.name positions.skills positions.skillNames positions.freeResponseQuestions positions.employeesGetFrqs positions.length positions.timeAllotted positions.idealFactors positions.growthFactors"),
+            Psychtests.findOne({})
         ]);
 
-        // if the user isn't an admin, don't let them see all the skills
+        // if the user isn't an admin, don't let them see the business
         if (user.admin !== true) {
             return res.status(403).send(errors.PERMISSIONS_ERROR);
         }
 
-        // return the skill to the admin
-        return res.json(skill);
-    } catch (getUserOrSkillsError) {
-        console.log("Error getting skill for admin: ", getUserOrSkillsError);
+        let business = foundBusiness.toObject();
+
+        // create an object that will allow us to map factor and facet ids to names
+        let names = {};
+        // for every factor ...
+        psychTest.factors.forEach(factor => {
+            // ... tell the names object that that factor's id correlates to its name
+            names[factor._id] = factor.name;
+            // for every facet within that factor ...
+            factor.facets.forEach(facet => {
+                // ... tell the names object that that facet's id correlates to its name
+                names[facet._id] = facet.name;
+            });
+        });
+
+        console.log("names: ", names);
+
+        // go through every position in the business
+        for (let positionIndex = 0; positionIndex < business.positions.length; positionIndex++) {
+            let position = business.positions[positionIndex];
+            let idealFactors = position.idealFactors;
+            let growthFactors = position.growthFactors;
+            // go through every ideal factor
+            for (let idealFactorIndex = 0; idealFactorIndex < idealFactors.length; idealFactorIndex++) {
+                let idealFactor = idealFactors[idealFactorIndex];
+                let idealFacets = idealFactor.idealFacets;
+                // add the name of the factor to the ideal factor
+                business.positions[positionIndex].idealFactors[idealFactorIndex].name = names[idealFactor.factorId];
+                for (let idealFacetIndex = 0; idealFacetIndex < idealFacets.length; idealFacetIndex++) {
+                    let idealFacet = idealFacets[idealFacetIndex];
+                    // add the name of the facet to the ideal facet
+                    business.positions[positionIndex].idealFactors[idealFactorIndex].idealFacets[idealFacetIndex].name = names[idealFacet.facetId];
+                }
+            }
+
+            // go through every ideal growth factor
+            for (let growthFactorIndex = 0; growthFactorIndex < growthFactors.length; growthFactorIndex++) {
+                let growthFactor = idealFactors[growthFactorIndex];
+                let idealFacets = growthFactor.idealFacets;
+                // add the name of the factor to the ideal factor
+                business.positions[positionIndex].growthFactors[growthFactorIndex].name = names[growthFactor.factorId];
+                for (let idealFacetIndex = 0; idealFacetIndex < idealFacets.length; idealFacetIndex++) {
+                    let idealFacet = idealFacets[idealFacetIndex];
+                    // add the name of the facet to the ideal facet
+                    business.positions[positionIndex].growthFactors[growthFactorIndex].idealFacets[idealFacetIndex].name = names[idealFacet.facetId];
+                }
+            }
+        }
+
+        // return the business to the admin
+        return res.json(business);
+    } catch (getUserOrBusinessError) {
+        console.log("Error getting skill for admin: ", getUserOrBusinessError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 }
