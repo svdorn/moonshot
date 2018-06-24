@@ -164,7 +164,6 @@ function POST_answerSkillQuestion(req, res) {
         // NEW WAY - only one answer can be correct
         // see if the answer is correct
         const isCorrect = userCurrentQuestion.correctAnswer.toString() === answerId.toString();
-        console.log("isCorrect: ", isCorrect);
 
         const startDate = userCurrentQuestion.startDate;
         const endDate = new Date();

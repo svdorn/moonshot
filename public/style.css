@@ -3050,8 +3050,16 @@ button.link {
 .skillEditor .correctIndicator.correct { background-color: green; }
 .skillEditor .correctIndicator.incorrect { background-color: red; }
 .skillEditor textarea {
-    width: 85%;
+    width: 75%;
     height: 40px;
+}
+.skillEditor .deleteButton {
+    display: inline-block;
+    color: red;
+    cursor: pointer;
+    text-decoration: underline;
+    margin-left: 50px;
+    vertical-align: top;
 }
 
 .invertColorOnHover.gradientBorderButtonInterior:hover,

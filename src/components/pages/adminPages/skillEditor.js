@@ -179,6 +179,38 @@ class SkillEditor extends Component {
     }
 
 
+    deleteLevel(levelIndex) {
+        const self = this;
+        let skill = Object.assign({}, this.state.skill);
+        skill.levels.splice(levelIndex, 1);
+        this.setState({ skill });
+    }
+
+
+    deleteQuestion(levelIndex, questionIndex) {
+        const self = this;
+        let skill = Object.assign({}, this.state.skill);
+        skill.levels[levelIndex].questions.splice(questionIndex, 1);
+        this.setState({ skill });
+    }
+
+
+    deleteQuestionText (levelIndex, questionIndex, questionTextIndex) {
+        const self = this;
+        let skill = Object.assign({}, this.state.skill);
+        skill.levels[levelIndex].questions[questionIndex].body.splice(questionTextIndex, 1);
+        this.setState({ skill });
+    }
+
+
+    deleteOption(levelIndex, questionIndex, optionIndex) {
+        const self = this;
+        let skill = Object.assign({}, this.state.skill);
+        skill.levels[levelIndex].questions[questionIndex].options.splice(optionIndex, 1);
+        this.setState({ skill });
+    }
+
+
     render() {
         const self = this;
 
@@ -229,6 +261,9 @@ class SkillEditor extends Component {
                             key={"level"+levelIndex+"question"+questionIndex+"part"+questionTextIndex}
                         />
                     );
+                    if (questionTextIndex > 0) {
+                        questionBody.push(<div key={"level"+levelIndex+"question"+questionIndex+"part"+questionTextIndex+"delete"} className="deleteButton" onClick={() => self.deleteQuestionText(levelIndex, questionIndex, questionTextIndex)}>X</div>)
+                    }
                     questionBody.push(<br key={"level"+levelIndex+"question"+questionIndex+"part"+questionTextIndex+"br"} />)
                 }
 
@@ -236,6 +271,7 @@ class SkillEditor extends Component {
                 const numOptions = question.options.length;
                 for (let optionIndex = 0; optionIndex < numOptions; optionIndex++) {
                     const correctnessClass = question.options[optionIndex].isCorrect ? "correct" : "incorrect";
+                    const deleteOptionButton = optionIndex === 0 ? null : <div className="deleteButton" onClick={() => self.deleteOption(levelIndex, questionIndex, optionIndex)}>X</div>;
                     options.push(
                         <div key={"level"+levelIndex+"question"+questionIndex+"option"+optionIndex}>
                             <div
@@ -247,13 +283,17 @@ class SkillEditor extends Component {
                                 value={question.options[optionIndex].body}
                                 onChange={(e) => self.optionChange(e, levelIndex, questionIndex, optionIndex)}
                             />
+                            {deleteOptionButton}
                         </div>
                     );
                 }
 
+                const deleteQuestionButton = questionIndex === 0 ? null : <div className="deleteButton" onClick={() => self.deleteQuestion(levelIndex, questionIndex)}>X</div>;
+
                 questions.push(
                     <div key={"level"+levelIndex+"question"+questionIndex} style={{marginBottom: "5px"}}>
-                        {`Question ${questionIndex+1}:`}<br/>
+                        {`Question ${questionIndex+1}:`} {deleteQuestionButton}
+                        <br/>
                         {questionBody}
                         <button onClick={() => self.addQuestionText(levelIndex, questionIndex)} style={{marginBottom:"10px"}}>Add line to question</button><br/>
                         {options}
@@ -262,10 +302,12 @@ class SkillEditor extends Component {
                 )
             }
 
+            const deleteLevelButton = levelIndex === 0 ? null : <div className="deleteButton" onClick={() => self.deleteLevel(levelIndex)}>X</div>;
+
             // add the questions and button to add another question to the level
             levels.push(
                 <div key={"level"+levelIndex} style={{margin: "20px 0px"}}>
-                    {"Level " + level.levelNumber}
+                    {"Level " + level.levelNumber} {deleteLevelButton}
                     <div style={{margin: "10px 20px"}}>{questions}</div>
                     <button onClick={() => self.addQuestion(levelIndex)}>Add question</button>
                 </div>
