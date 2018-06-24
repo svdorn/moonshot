@@ -40,12 +40,11 @@ import PositionSignup from './components/pages/positionSignup';
 import FreeResponse from "./components/pages/freeResponse";
 import EvaluationIntro from "./components/pages/evaluationIntro";
 
-import AdminPages from './components/pages/adminPages/adminPages'
-import ViewUser from './components/pages/adminPages/viewUser';
+import AdminPages from './components/pages/adminPages/adminPages';
+import BusinessEditor from './components/pages/adminPages/businessEditor';
+import BusinessPicker from './components/pages/adminPages/businessPicker';
 import SkillEditor from './components/pages/adminPages/skillEditor';
 import SkillPicker from './components/pages/adminPages/skillPicker';
-import CreateBusinessAccount from './components/pages/adminPages/createBusinessAccount';
-import EditBusiness from './components/pages/adminPages/editBusiness';
 
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-105560654-1');
@@ -91,11 +90,10 @@ const routes = (
 
             <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} userType={adminUserTypes}>
                 <IndexRoute component={AdminPages} />
-                <Route path="createBusinessAccount" component={CreateBusinessAccount} />
-                <Route path="editBusiness" component={EditBusiness} />
+                <Route path="businessPicker" component={BusinessPicker} />
+                <Route path="businessEditor/:businessId" component={BusinessEditor} />
                 <Route path="skillPicker" component={SkillPicker} />
                 <Route path="skillEditor/:skillId" component={SkillEditor} />
-                <Route path="viewUser" component={ViewUser} />
             </Route>
 
             <Route path='*' component={Error404} />
