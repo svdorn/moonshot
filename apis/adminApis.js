@@ -256,7 +256,7 @@ async function GET_business(req, res) {
 
             // go through every ideal growth factor
             for (let growthFactorIndex = 0; growthFactorIndex < growthFactors.length; growthFactorIndex++) {
-                let growthFactor = idealFactors[growthFactorIndex];
+                let growthFactor = growthFactors[growthFactorIndex];
                 let idealFacets = growthFactor.idealFacets;
                 // add the name of the factor to the ideal factor
                 business.positions[positionIndex].growthFactors[growthFactorIndex].name = names[growthFactor.factorId];

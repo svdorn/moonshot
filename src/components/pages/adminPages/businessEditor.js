@@ -96,21 +96,24 @@ class BusinessEditor extends Component {
         // set save-loading spinner to go
         this.setState({ saving: true });
 
-        axios.post("/api/admin/saveBusiness", {
-            userId: this.props.currentUser._id,
-            verificationToken: this.props.currentUser.verificationToken,
-            business: this.state.business
-        })
-        .then(response => {
-            self.setState({ saving: false }, () => {
-                // go to the new/updated business's edit page
-                self.goTo(`/admin/businessEditor/${response.data._id}`);
-            })
-        })
-        .catch(error => {
-            console.log("error updating business: ", error);
-            self.props.addNotification("Error updating business.", "error");
-        })
+        // TODO: make sure to make all of the facet scores into numbers
+
+
+        // axios.post("/api/admin/saveBusiness", {
+        //     userId: this.props.currentUser._id,
+        //     verificationToken: this.props.currentUser.verificationToken,
+        //     business: this.state.business
+        // })
+        // .then(response => {
+        //     self.setState({ saving: false }, () => {
+        //         // go to the new/updated business's edit page
+        //         self.goTo(`/admin/businessEditor/${response.data._id}`);
+        //     })
+        // })
+        // .catch(error => {
+        //     console.log("error updating business: ", error);
+        //     self.props.addNotification("Error updating business.", "error");
+        // })
     }
 
 
@@ -180,6 +183,20 @@ class BusinessEditor extends Component {
         let business = Object.assign({}, this.state.business);
         const parsed = parseInt(e.target.value, 10);
         business.positions[positionIndex].timeAllotted = isNaN(parsed) ? 0 : parsed;
+        this.setState({ business });
+    }
+
+
+    idealFacetChange(e, positionIndex, factorIndex, facetIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].idealFactors[factorIndex].idealFacets[facetIndex].score = e.target.value;
+        this.setState({ business });
+    }
+
+
+    growthFacetChange(e, positionIndex, factorIndex, facetIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].growthFactors[factorIndex].idealFacets[facetIndex].score = e.target.value;
         this.setState({ business });
     }
 
@@ -329,17 +346,85 @@ class BusinessEditor extends Component {
                 />
             );
 
+            // create ideal-output inputs
+            let idealFactors = [];
+            // go through every ideal factor
+            for (let factorIndex = 0; factorIndex < position.idealFactors.length; factorIndex++) {
+                const factor = position.idealFactors[factorIndex];
+                let idealFacets = [];
+                // go through every ideal facet
+                for (let facetIndex = 0; facetIndex < factor.idealFacets.length; facetIndex++) {
+                    const facet = factor.idealFacets[facetIndex];
+                    idealFacets.push(
+                        <div
+                            key={`position${positionIndex}idealFactor${factorIndex}facet${facetIndex}`}
+                            className="idealFacet"
+                        >
+                            {facet.name}:
+                            <input
+                                className="idealFacetInput"
+                                value={facet.score.toString()}
+                                onChange={(e) => self.idealFacetChange(e, positionIndex, factorIndex, facetIndex)}
+                                placeholder=""
+                            />
+                        </div>
+                    );
+                }
+                idealFactors.push(
+                    <div
+                        key={`position${positionIndex}idealFactor${factorIndex}`}
+                        className="idealFactorInput"
+                    >
+                        {factor.name} {idealFacets}
+                    </div>
+                )
+            }
+
+            // create ideal-output inputs
+            let growthFactors = [];
+            // go through every ideal factor
+            for (let factorIndex = 0; factorIndex < position.growthFactors.length; factorIndex++) {
+                const factor = position.growthFactors[factorIndex];
+                console.log("factor: ", factor);
+                let idealFacets = [];
+                // go through every ideal facet
+                for (let facetIndex = 0; facetIndex < factor.idealFacets.length; facetIndex++) {
+                    const facet = factor.idealFacets[facetIndex];
+                    idealFacets.push(
+                        <div
+                            key={`position${positionIndex}growthFactor${factorIndex}facet${facetIndex}`}
+                            className="idealFacet"
+                        >
+                            {facet.name}:
+                            <input
+                                className="idealFacetInput"
+                                value={facet.score.toString()}
+                                onChange={(e) => self.growthFacetChange(e, positionIndex, factorIndex, facetIndex)}
+                                placeholder="NEEDED"
+                            />
+                        </div>
+                    );
+                }
+                growthFactors.push(
+                    <div
+                        key={`position${positionIndex}growthFactor${factorIndex}`}
+                        className="idealFactorInput"
+                    >
+                        {factor.name} {idealFacets}
+                    </div>
+                )
+            }
 
             positions.push(
-                <div key={`position${positionIndex}`}>
+                <div key={`position${positionIndex}`} style={{marginTop: "50px"}}>
                     {"Position:"} {positionNameInput}<br/>
                     {"Skills:"} {skills}<br/>
                     {"Free Response Questions: "} {frqs}<br/>
                     {employeeFrqRequirement}<br/>
                     {"Estimated evaluation length (in minutes): "} {lengthInput}<br/>
                     {"Time allowed to candidates for this position (in days): "} {timeAllottedInput}<br/>
-                    {"Ideal psych results: "} <br/>
-                    {"Ideal growth results: "}
+                    {"Ideal psych results: "} {idealFactors}<br/>
+                    {"Ideal growth results: "} {growthFactors}
                 </div>
             );
         }

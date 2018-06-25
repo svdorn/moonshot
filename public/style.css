@@ -3061,6 +3061,15 @@ button.link {
     margin-left: 50px;
     vertical-align: top;
 }
+.businessEditor .idealFactorInput { margin-left: 20px; }
+.businessEditor .idealFacet { margin-left: 20px; }
+.businessEditor .idealFacetInput {
+    width: 50px;
+    margin-left: 10px;
+}
+.businessEditor .idealFacetInput::placeholder {
+    color: red;
+}
 
 .invertColorOnHover.gradientBorderButtonInterior:hover,
 .invertColorOnHover.gradientBorderButtonInteriorBlack:hover {
