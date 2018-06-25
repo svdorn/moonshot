@@ -43,7 +43,7 @@ class SkillTest extends Component {
     // }
 
 
-    componentDidUpdate(prevProps, newState) {
+    componentDidUpdate(prevProps, prevState) {
         // new skill url means we have a new skill to test
         if (this.props.params.skillUrl !== prevProps.params.skillUrl) {
             this.resetPage(this.props.params.skillUrl);

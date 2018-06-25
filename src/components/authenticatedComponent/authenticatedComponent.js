@@ -21,7 +21,7 @@ class AuthenticatedComponent extends Component {
     }
 
 
-    componentDidUpdate(prevProps, newProps) {
+    componentDidUpdate(prevProps, prevState) {
         this.reCheck();
     }
 

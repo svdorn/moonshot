@@ -41,7 +41,7 @@ const adminApis = {
 async function POST_saveSkill(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
-    const skill = sanitize(req.body.skill);
+    let skill = sanitize(req.body.skill);
 
     // get the user and the requested skill
     let dbSkill;
@@ -94,8 +94,6 @@ async function GET_skill(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
     const skillId = sanitize(req.query.skillId);
-
-    console.log("skillId: ", skillId);
 
     // get the user and the requested skill
     try {
@@ -197,17 +195,14 @@ async function GET_blankPosition(req, res) {
     }
 
     return res.json(position);
-    // name positions.name positions.skills positions.skillNames positions.freeResponseQuestions positions.employeesGetFrqs positions.length positions.timeAllotted positions.idealFactors positions.growthFactors
 }
 
 
 async function POST_saveBusiness(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
-    const skill = sanitize(req.body.skill);
+    let business = sanitize(req.body.business);
 
-    // get the user and the requested skill
-    let dbSkill;
     try {
         // get the user
         const user = await getAndVerifyUser(userId, verificationToken);
@@ -216,34 +211,119 @@ async function POST_saveBusiness(req, res) {
             return res.status(403).send(errors.PERMISSIONS_ERROR);
         }
 
-        // if it's a new skill, create and return the new skill
-        if (!skill._id) {
-            // count all the skills with the same name ...
-            const skillCount = await Skills.count({name: skill.name});
-            // ... and generate a random number ...
-            const randomNumber = crypto.randomBytes(4).toString('hex');
-            // ... so that we can make the skill url
-            skill.url = `${skill.name}-${skillCount}-${randomNumber}`;
+        // position attributes that can be updated in this function
+        const newAttributes = ["name", "skills", "skillNames", "freeResponseQuestions", "employeesGetFrqs", "length", "timeAllotted", "idealFactors", "growthFactors"];
+        // defaults for a new position
+        const blankPosition = {
+            open: false,
+            currentlyHiring: false,
+            completions: 0,
+            usersInProgress: 0,
+            candidates: [],
+            employees: [],
+            candidatCodes: [],
+            employeeCodes: [],
+            adminCodes: []
+        }
+
+        // if it's a new business, create and return the new business
+        if (!business._id) {
+            // count all the businesses
+            let code = (await Businesses.count({})).toString();
+            // add 0s onto the businessCount until the code is 8 characters long
+            while (code.length < 8) {
+                code = "0" + code;
+            }
+            // if there are any other businesses with the same code, increment the
+            // code until this is no longer the case
+            while ((await Businesses.count({ code })) !== 0) {
+                code = parseInt(code, 10);
+                code++;
+                while (code.length < 8) { code = "0" + code; }
+            }
+            let newBusiness = {};
+            // add this final code as the business code
+            newBusiness.code = code;
+            newBusiness.name = business.name;
+            newBusiness.emailNotifications = {
+                time: "1 week",
+                numCandidates: 0
+            };
+
+            let counter = 0;
+            newBusiness.positions = business.positions.map(position => {
+                let newPosition = Object.assign({}, blankPosition);
+
+                let positionCode = counter.toString();
+                if (positionCode.length === 1) { positionCode = "0" + positionCode; }
+                newPosition.code = positionCode;
+
+                newAttributes.forEach(attribute => {
+                    newPosition[attribute] = position[attribute];
+                });
+
+                counter++;
+                return newPosition;
+            })
+
             // create skill and return its id
-            return res.json(await Skills.create(skill));
+            return res.json((await Businesses.create(newBusiness))._id);
         }
 
         // otherwise update the old skill
         else {
-            // find the skill by id
-            const findQuery = { "_id": mongoose.Types.ObjectId(skill._id) };
-            // update all admin-changeable aspects of the skill
-            const updateQuery = {
-                $set: {
-                    "name": skill.name,
-                    "levels": skill.levels
-                }
+            let foundBusiness;
+            try {
+                foundBusiness = await Businesses.findById(business._id);
+            } catch (findBizErr) {
+                console.log("error finding business to update: ", findBizErr);
+                return res.status(500).send(errors.SERVER_ERROR);
             }
-            // return the new document after update
-            const options = { returnNewDocument: true };
 
-            // update skill and return its id
-            return res.json(await Skills.findOneAndUpdate(findQuery, updateQuery, options));
+            // update every position
+            business.positions.forEach(position => {
+                let oldPositionIndex = 0;
+                // if this is a position that already existed
+                if (position._id) {
+                    oldPositionIndex = foundBusiness.positions.findIndex(oldPosition => { return oldPosition._id.toString() === position._id.toString()})
+                }
+                // if this is a new position, add it
+                else {
+                    // index will be the index of the newly added position
+                    oldPositionIndex = foundBusiness.positions.length;
+                    // make a code for the new position
+                    let positionCode = foundBusiness.positions.length.toString();
+                    if (positionCode.length === 1) { positionCode = "0" + positionCode; }
+                    // find out if this code has already been used, and if so, change the new code
+                    while (foundBusiness.positions.findIndex(otherPosition => { return otherPosition.code == positionCode}) > -1) {
+                        positionCode = (parseInt(positionCode, 10) + 1).toString();
+                        if (positionCode.length === 1) { positionCode = "0" + positionCode; }
+                    }
+                    // create a new position
+                    foundBusiness.positions.push(Object.assign({}, blankPosition));
+                    foundBusiness.positions[oldPositionIndex].code = positionCode;
+                }
+
+                // update the position with all the valid new attribute values
+                let updatedPosition = foundBusiness.positions[oldPositionIndex];
+                newAttributes.forEach(attribute => {
+                    updatedPosition[attribute] = position[attribute];
+                });
+
+                foundBusiness.positions[oldPositionIndex] = updatedPosition;
+            })
+
+            // save the business
+            let savedBiz;
+            try {
+                savedBiz = await foundBusiness.save();
+            } catch (saveError) {
+                console.log("error saving business: ", saveError);
+                return res.status(500).send(errors.SERVER_ERROR);
+            }
+
+            // update business and return its id
+            return res.json(savedBiz._id);
         }
     } catch (getUserOrUpdateSkillError) {
         console.log("Error updating skill for admin: ", getUserOrUpdateSkillError);
@@ -264,7 +344,7 @@ async function GET_business(req, res) {
             // get user
             getAndVerifyUser(userId, verificationToken),
             // get all skills
-            Businesses.findById(businessId).select("name positions.name positions.skills positions.skillNames positions.freeResponseQuestions positions.employeesGetFrqs positions.length positions.timeAllotted positions.idealFactors positions.growthFactors"),
+            Businesses.findById(businessId).select("name positions._id positions.name positions.skills positions.skillNames positions.freeResponseQuestions positions.employeesGetFrqs positions.length positions.timeAllotted positions.idealFactors positions.growthFactors"),
             Psychtests.findOne({})
         ]);
 
@@ -287,8 +367,6 @@ async function GET_business(req, res) {
                 names[facet._id] = facet.name;
             });
         });
-
-        console.log("names: ", names);
 
         // go through every position in the business
         for (let positionIndex = 0; positionIndex < business.positions.length; positionIndex++) {

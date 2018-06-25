@@ -23,6 +23,18 @@ class BusinessEditor extends Component {
 
 
     componentDidMount() {
+        this.load();
+    }
+
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.params.businessId !== prevProps.params.businessId) {
+            this.load();
+        }
+    }
+
+
+    load() {
         const self = this;
         // get the business id from the url
         const businessId = self.props.params.businessId;
@@ -59,7 +71,7 @@ class BusinessEditor extends Component {
                 self.setState({
                     business: {
                         name: "",
-                        positions: [ blankPosition ]
+                        positions: [ JSON.parse(JSON.stringify(blankPosition)) ]
                     },
                     loading: false
                 })
@@ -93,6 +105,8 @@ class BusinessEditor extends Component {
     }
 
 
+
+
     goTo(route) {
         // goes to the wanted page
         browserHistory.push(route);
@@ -106,27 +120,74 @@ class BusinessEditor extends Component {
 
         const self = this;
 
+        let bizToSave = Object.assign({}, self.state.business);
+
+        // make all of the facet scores into numbers
+        for (let positionIndex = 0; positionIndex < bizToSave.positions.length; positionIndex++) {
+            let position = bizToSave.positions[positionIndex];
+            // go through every ideal factor
+            for (let idealFactorIndex = 0; idealFactorIndex < position.idealFactors.length; idealFactorIndex++) {
+                let idealFactor = position.idealFactors[idealFactorIndex];
+                for (let idealFacetIndex = 0; idealFacetIndex < idealFactor.idealFacets.length; idealFacetIndex++) {
+                    idealFactor.idealFacets[idealFacetIndex].score = parseInt(idealFactor.idealFacets[idealFacetIndex].score, 10);
+                    // if a score was not given for this facet, show an error
+                    if (isNaN(idealFactor.idealFacets[idealFacetIndex].score)) {
+                        this.props.addNotification(`'${idealFactor.idealFacets[idealFacetIndex].name}' needs an ideal score`, "error");
+                        return;
+                    }
+                    // otherwise, get rid of the name of the facet for ease of saving in the backend
+                    else {
+                        idealFactor.idealFacets[idealFacetIndex].name = undefined;
+                    }
+                }
+                // save the factor into the position
+                position.idealFactors[idealFactorIndex] = idealFactor;
+            }
+
+            // go through every growth factor
+            for (let growthFactorIndex = 0; growthFactorIndex < position.growthFactors.length; growthFactorIndex++) {
+                let growthFactor = position.growthFactors[growthFactorIndex];
+                for (let idealFacetIndex = 0; idealFacetIndex < growthFactor.idealFacets.length; idealFacetIndex++) {
+                    growthFactor.idealFacets[idealFacetIndex].score = parseInt(growthFactor.idealFacets[idealFacetIndex].score, 10);
+                    // if a score was not given for this facet, show an error
+                    if (isNaN(growthFactor.idealFacets[idealFacetIndex].score)) {
+                        this.props.addNotification(`'${growthFactor.idealFacets[idealFacetIndex].name}' needs a growth ideal score`, "error");
+                        return;
+                    }
+                    // otherwise, get rid of the name of the facet for ease of saving in the backend
+                    else {
+                        growthFactor.idealFacets[idealFacetIndex].name = undefined;
+                    }
+                }
+                // save the factor into the position
+                position.growthFactors[growthFactorIndex] = growthFactor;
+            }
+            bizToSave.positions[positionIndex] = position;
+        }
+
         // set save-loading spinner to go
         this.setState({ saving: true });
 
-        // TODO: make sure to make all of the facet scores into numbers
-
-
-        // axios.post("/api/admin/saveBusiness", {
-        //     userId: this.props.currentUser._id,
-        //     verificationToken: this.props.currentUser.verificationToken,
-        //     business: this.state.business
-        // })
-        // .then(response => {
-        //     self.setState({ saving: false }, () => {
-        //         // go to the new/updated business's edit page
-        //         self.goTo(`/admin/businessEditor/${response.data._id}`);
-        //     })
-        // })
-        // .catch(error => {
-        //     console.log("error updating business: ", error);
-        //     self.props.addNotification("Error updating business.", "error");
-        // })
+        axios.post("/api/admin/saveBusiness", {
+            userId: this.props.currentUser._id,
+            verificationToken: this.props.currentUser.verificationToken,
+            business: bizToSave
+        })
+        .then(response => {
+            console.log("response.data: ", response.data);
+            self.setState({ saving: false }, () => {
+                // reload the page
+                if (self.props.params.businessId.toString() === response.data.toString()) {
+                    self.load();
+                } else {
+                    self.goTo(`/admin/businessEditor/${response.data}`);
+                }
+            })
+        })
+        .catch(error => {
+            console.log("error updating business: ", error);
+            self.props.addNotification("Error updating business.", "error");
+        })
     }
 
 
@@ -139,7 +200,14 @@ class BusinessEditor extends Component {
 
     addPosition() {
         let business = Object.assign({}, this.state.business);
-        business.positions.push( this.state.blankPosition );
+        business.positions.push( JSON.parse(JSON.stringify(this.state.blankPosition)) );
+        this.setState({ business });
+    }
+
+
+    deletePosition(positionIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions.splice(positionIndex, 1);
         this.setState({ business });
     }
 
@@ -161,7 +229,7 @@ class BusinessEditor extends Component {
 
     frqChange(e, positionIndex, frqIndex) {
         let business = Object.assign({}, this.state.business);
-        business.positions[positionIndex].freeResponseQuestions[frqIndex] = e.target.value;
+        business.positions[positionIndex].freeResponseQuestions[frqIndex].body = e.target.value;
         this.setState({ business });
     }
 
@@ -581,9 +649,11 @@ class BusinessEditor extends Component {
             <div className="fillScreen whiteText businessEditor" style={{margin: "30px"}}>
                 {nameInput}
                 {positions}
-                <button onClick={() => self.addPosition()}>Add position</button><br/>
+                <button onClick={() => self.addPosition()} style={{marginTop: "40px"}}>
+                    Add position
+                </button><br/>
                 <RaisedButton
-                    onClick={() => self.handleSubmit.bind(self)}
+                    onClick={self.handleSubmit.bind(self)}
                     label="Save"
                     className="raisedButtonBusinessHome"
                     style={{margin: '10px 0'}}
