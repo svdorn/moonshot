@@ -201,6 +201,72 @@ class BusinessEditor extends Component {
     }
 
 
+    addSkill(positionIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].skills.push("");
+        business.positions[positionIndex].skillNames.push("");
+        this.setState({ business });
+    }
+
+
+    deleteSkill(positionIndex, skillIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].skills.splice(skillIndex, 1);
+        business.positions[positionIndex].skillNames.splice(skillIndex, 1);
+        this.setState({ business });
+    }
+
+
+    addFrq(positionIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].freeResponseQuestions.push({body: "", required: true});
+        this.setState({ business });
+    }
+
+
+    deleteFrq(positionIndex, frqIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].freeResponseQuestions.splice(frqIndex, 1);
+        this.setState({ business });
+    }
+
+
+    deleteIdealFactor(positionIndex, factorIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].idealFactors.splice(factorIndex, 1);
+        this.setState({ business });
+    }
+
+
+    deleteIdealFacet(positionIndex, factorIndex, facetIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].idealFactors[factorIndex].idealFacets.splice(facetIndex, 1);
+        // delete the containing factor too if all its facets are gone
+        if (business.positions[positionIndex].idealFactors[factorIndex].idealFacets.length === 0) {
+            business.positions[positionIndex].idealFactors.splice(factorIndex, 1);
+        }
+        this.setState({ business });
+    }
+
+
+    deleteGrowthFactor(positionIndex, factorIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].growthFactors.splice(factorIndex, 1);
+        this.setState({ business });
+    }
+
+
+    deleteGrowthFacet(positionIndex, factorIndex, facetIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].growthFactors[factorIndex].idealFacets.splice(facetIndex, 1);
+        // delete the containing factor too if all its facets are gone
+        if (business.positions[positionIndex].growthFactors[factorIndex].idealFacets.length === 0) {
+            business.positions[positionIndex].growthFactors.splice(factorIndex, 1);
+        }
+        this.setState({ business });
+    }
+
+
     render() {
         const self = this;
 
@@ -235,7 +301,13 @@ class BusinessEditor extends Component {
         let positions = [];
 
         // create the skills that will be shown for every dropdown
-        let skillMenuItems = [];
+        let skillMenuItems = [
+            <MenuItem
+                value={-1}
+                primaryText={"Choose a skill"}
+                key={`Choose a skill`}
+            />
+        ];
         for (let skillIndex = 0; skillIndex < self.state.allSkills.length; skillIndex++) {
             skillMenuItems.push(
                 <MenuItem
@@ -275,9 +347,26 @@ class BusinessEditor extends Component {
                         >
                             {skillMenuItems}
                         </DropDownMenu>
+                        <div
+                            className="deleteButton"
+                            style={{margin:"18px 0 0 0"}}
+                            onClick={() => self.deleteSkill(positionIndex, skillIndex)}
+                        >
+                            X
+                        </div>
                     </div>
                 )
             }
+            // button to add a new skill
+            skills.push(
+                <button
+                    style={{marginLeft:"20px",marginBottom:"10px"}}
+                    onClick={() => self.addSkill(positionIndex)}
+                    key={`position${positionIndex}addSkill`}
+                >
+                    + Skill
+                </button>
+            )
 
             // create the frqs
             let frqs = [];
@@ -303,10 +392,26 @@ class BusinessEditor extends Component {
                         </div>
                         <div style={{display: "inline-block", verticalAlign: "top"}}>
                             {"Question is required"}
-                        </div><br/>
+                        </div>
+                        <div
+                            className="deleteButton"
+                            style={{margin:"0 0 0 8px"}}
+                            onClick={() => self.deleteFrq(positionIndex, frqIndex)}
+                        >
+                            X
+                        </div>
                     </div>
                 )
             }
+            frqs.push(
+                <button
+                    style={{marginLeft:"20px",marginBottom:"10px"}}
+                    onClick={() => self.addFrq(positionIndex)}
+                    key={`position${positionIndex}addSkill`}
+                >
+                    + FRQ
+                </button>
+            )
 
             // create the checkmark determining whether employees should answer frqs
             const employeeFrqRequirement = (
@@ -367,6 +472,13 @@ class BusinessEditor extends Component {
                                 onChange={(e) => self.idealFacetChange(e, positionIndex, factorIndex, facetIndex)}
                                 placeholder=""
                             />
+                            <div
+                                className="deleteButton"
+                                style={{marginLeft:"8px"}}
+                                onClick={() => self.deleteIdealFacet(positionIndex, factorIndex, facetIndex)}
+                            >
+                                X
+                            </div>
                         </div>
                     );
                 }
@@ -375,7 +487,15 @@ class BusinessEditor extends Component {
                         key={`position${positionIndex}idealFactor${factorIndex}`}
                         className="idealFactorInput"
                     >
-                        {factor.name} {idealFacets}
+                        {factor.name}
+                        <div
+                            className="deleteButton"
+                            style={{marginLeft:"8px"}}
+                            onClick={() => self.deleteIdealFactor(positionIndex, factorIndex)}
+                        >
+                            X
+                        </div>
+                        {idealFacets}
                     </div>
                 )
             }
@@ -385,7 +505,6 @@ class BusinessEditor extends Component {
             // go through every ideal factor
             for (let factorIndex = 0; factorIndex < position.growthFactors.length; factorIndex++) {
                 const factor = position.growthFactors[factorIndex];
-                console.log("factor: ", factor);
                 let idealFacets = [];
                 // go through every ideal facet
                 for (let facetIndex = 0; facetIndex < factor.idealFacets.length; facetIndex++) {
@@ -402,6 +521,13 @@ class BusinessEditor extends Component {
                                 onChange={(e) => self.growthFacetChange(e, positionIndex, factorIndex, facetIndex)}
                                 placeholder="NEEDED"
                             />
+                            <div
+                                className="deleteButton"
+                                style={{marginLeft:"8px"}}
+                                onClick={() => self.deleteGrowthFacet(positionIndex, factorIndex, facetIndex)}
+                            >
+                                X
+                            </div>
                         </div>
                     );
                 }
@@ -410,13 +536,22 @@ class BusinessEditor extends Component {
                         key={`position${positionIndex}growthFactor${factorIndex}`}
                         className="idealFactorInput"
                     >
-                        {factor.name} {idealFacets}
+                        {factor.name}
+                        <div
+                            className="deleteButton"
+                            style={{marginLeft:"8px"}}
+                            onClick={() => self.deleteGrowthFactor(positionIndex, factorIndex)}
+                        >
+                            X
+                        </div>
+                        {idealFacets}
                     </div>
                 )
             }
 
             positions.push(
                 <div key={`position${positionIndex}`} style={{marginTop: "50px"}}>
+                    <div style={{width:"100%",height:"20px",backgroundColor:"gray",margin:"0 0 50px -30px"}} />
                     {"Position:"} {positionNameInput}<br/>
                     {"Skills:"} {skills}<br/>
                     {"Free Response Questions: "} {frqs}<br/>
