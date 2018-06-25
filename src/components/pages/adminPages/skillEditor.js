@@ -279,7 +279,7 @@ class SkillEditor extends Component {
                                 onClick={() => self.markCorrect(levelIndex, questionIndex, optionIndex)}
                             />
                             <textarea
-                                placeholder={"option option " + (optionIndex+1)}
+                                placeholder={"Option " + (optionIndex+1)}
                                 value={question.options[optionIndex].body}
                                 onChange={(e) => self.optionChange(e, levelIndex, questionIndex, optionIndex)}
                             />

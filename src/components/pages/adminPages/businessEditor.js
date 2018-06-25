@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { addNotification } from "../../../actions/usersActions";
 import { bindActionCreators } from 'redux';
-import { CircularProgress, RaisedButton } from 'material-ui';
+import { CircularProgress, RaisedButton, DropDownMenu, MenuItem } from 'material-ui';
 import axios from 'axios';
 
 
@@ -15,20 +15,38 @@ class BusinessEditor extends Component {
         this.state = {
             loading: true,
             saving: false,
+            allSkills: [],
             error: false
         };
     }
 
 
     componentDidMount() {
+        const self = this;
         // get the business id from the url
-        const businessId = this.props.params.businessId;
+        const businessId = self.props.params.businessId;
+
+        // get every skill
+        axios.get("/api/admin/allSkills", {
+            params: {
+                userId: self.props.currentUser._id,
+                verificationToken: self.props.currentUser.verificationToken
+            }
+        })
+        .then(response => {
+            console.log("allSkills: ", response.data);
+            self.setState({ allSkills: response.data });
+        })
+        .catch(error => {
+            console.log("error: ", error);
+            self.props.addNotification("Error getting skills.", "error");
+        });
+
         // if user is creating a new business
         if (businessId === "new") {
-            this.setState({
+            self.setState({
                 business: {
                     name: "",
-                    skills: [],
                     positions: []
                 },
                 loading: false
@@ -40,8 +58,8 @@ class BusinessEditor extends Component {
             // get the business
             axios.get("/api/admin/business", {params:
                 {
-                    userId: this.props.currentUser._id,
-                    verificationToken: this.props.currentUser.verificationToken,
+                    userId: self.props.currentUser._id,
+                    verificationToken: self.props.currentUser.verificationToken,
                     businessId
                 }
             })
@@ -51,12 +69,12 @@ class BusinessEditor extends Component {
 
                 console.log(business);
 
-                this.setState({ business, loading: false });
+                self.setState({ business, loading: false });
             })
             .catch(error => {
                 console.log("Error getting business: ", error);
-                this.setState({ loading: false, error: true });
-                this.props.addNotification("Error getting business.", "error")
+                self.setState({ loading: false, error: true });
+                self.props.addNotification("Error getting business.", "error")
             })
         }
     }
@@ -103,102 +121,41 @@ class BusinessEditor extends Component {
     }
 
 
-    questionTextChange(e, levelIndex, questionIndex, questionTextIndex) {
+    addPosition() {
         let business = Object.assign({}, this.state.business);
-        business.levels[levelIndex].questions[questionIndex].body[questionTextIndex].content[0] = e.target.value;
+        // business.positions.push({
+        //
+        // })
         this.setState({ business });
     }
 
 
-    optionChange(e, levelIndex, questionIndex, optionIndex) {
+    positionNameChange(e, positionIndex) {
         let business = Object.assign({}, this.state.business);
-        business.levels[levelIndex].questions[questionIndex].options[optionIndex].body = e.target.value;
+        business.positions[positionIndex].name = e.target.value;
         this.setState({ business });
     }
 
 
-    markCorrect(levelIndex, questionIndex, optionIndex) {
+    handleSkillChange(e, index, allSkillsIndex, positionIndex, currentSkillIndex) {
         let business = Object.assign({}, this.state.business);
-        // mark all options incorrect
-        for (let i = 0; i < business.levels[levelIndex].questions[questionIndex].options.length; i++) {
-            business.levels[levelIndex].questions[questionIndex].options[i].isCorrect = false;
-        }
-        business.levels[levelIndex].questions[questionIndex].options[optionIndex].isCorrect = true;
+        business.positions[positionIndex].skills[currentSkillIndex] = this.state.allSkills[allSkillsIndex]._id;
+        business.positions[positionIndex].skillNames[currentSkillIndex] = this.state.allSkills[allSkillsIndex].name;
         this.setState({ business });
     }
 
 
-    addQuestionText(levelIndex, questionIndex) {
+    frqChange(e, positionIndex, frqIndex) {
         let business = Object.assign({}, this.state.business);
-        business.levels[levelIndex].questions[questionIndex].body.push({ content: [""], shouldBreak: true });
+        business.positions[positionIndex].freeResponseQuestions[frqIndex] = e.target.value;
         this.setState({ business });
     }
 
 
-    addOption(levelIndex, questionIndex) {
+    handleFrqRequiredChange(positionIndex, frqIndex) {
         let business = Object.assign({}, this.state.business);
-        business.levels[levelIndex].questions[questionIndex].options.push({body: "", isCorrect: false});
-        this.setState({ business });
-    }
-
-
-    addQuestion(levelIndex) {
-        let business = Object.assign({}, this.state.business);
-        business.levels[levelIndex].questions.push({
-            body: [{ content: [""], shouldBreak: true }],
-            options: [
-                {body: "", isCorrect: false},
-                {body: "", isCorrect: false}
-            ]
-        });
-        this.setState({ business });
-    }
-
-    addLevel() {
-        const self = this;
-        let business = Object.assign({}, this.state.business);
-        business.levels.push({
-            levelNumber: self.state.business.levels.length + 1,
-            questions: [{
-                body: [{ content: [""], shouldBreak: true }],
-                options: [
-                    {body: "", isCorrect: false},
-                    {body: "", isCorrect: false}
-                ]
-            }]
-        });
-        this.setState({ business });
-    }
-
-
-    deleteLevel(levelIndex) {
-        const self = this;
-        let business = Object.assign({}, this.state.business);
-        business.levels.splice(levelIndex, 1);
-        this.setState({ business });
-    }
-
-
-    deleteQuestion(levelIndex, questionIndex) {
-        const self = this;
-        let business = Object.assign({}, this.state.business);
-        business.levels[levelIndex].questions.splice(questionIndex, 1);
-        this.setState({ business });
-    }
-
-
-    deleteQuestionText (levelIndex, questionIndex, questionTextIndex) {
-        const self = this;
-        let business = Object.assign({}, this.state.business);
-        business.levels[levelIndex].questions[questionIndex].body.splice(questionTextIndex, 1);
-        this.setState({ business });
-    }
-
-
-    deleteOption(levelIndex, questionIndex, optionIndex) {
-        const self = this;
-        let business = Object.assign({}, this.state.business);
-        business.levels[levelIndex].questions[questionIndex].options.splice(optionIndex, 1);
+        // flip the required status
+        business.positions[positionIndex].freeResponseQuestions[frqIndex].required = !business.positions[positionIndex].freeResponseQuestions[frqIndex].required;
         this.setState({ business });
     }
 
@@ -206,6 +163,7 @@ class BusinessEditor extends Component {
     render() {
         const self = this;
 
+        // if you're not an admin, get up on outta here
         if (!self.props.currentUser.admin === true) {
             return null;
         }
@@ -215,104 +173,124 @@ class BusinessEditor extends Component {
             return <div className="fillScreen whiteText"><CircularProgress /></div>;
         }
 
+        // if there's an error, don't show all the business info
         if (self.state.error) {
             return <div className="fillScreen whiteText">{"Error"}</div>;
         }
 
+        // get the current state of the business
+        const business = self.state.business;
+
+        // create input for name of business
         let nameInput = (
             <input
-                value={self.state.business.name}
+                value={business.name}
                 onChange={(e) => self.nameChange(e)}
                 placeholder="Business Name"
             />
         );
-        let levels = [];
 
-        const business = self.state.business;
-        const numLevels = business.levels.length;
-        // go through every current level
-        for (let levelIndex = 0; levelIndex < numLevels; levelIndex++) {
-            const level = business.levels[levelIndex];
+        // all positions
+        let positions = [];
 
-            let questions = [];
+        // create the skills that will be shown for every dropdown
+        let skillMenuItems = [];
+        for (let skillIndex = 0; skillIndex < self.state.allSkills.length; skillIndex++) {
+            skillMenuItems.push(
+                <MenuItem
+                    value={skillIndex}
+                    primaryText={self.state.allSkills[skillIndex].name}
+                    key={`skill${skillIndex}`}
+                />
+            );
+        }
 
-            const numQuestions = level.questions.length;
-            // go through every question
-            for (let questionIndex = 0; questionIndex < numQuestions; questionIndex++) {
-                const question = level.questions[questionIndex];
+        // create everything needed for each position
+        for (let positionIndex = 0; positionIndex < business.positions.length; positionIndex++) {
+            // get the current state of the position
+            const position = business.positions[positionIndex];
 
-                let questionBody = [];
+            // create name input
+            const positionNameInput = (
+                <input
+                    value={business.positions[positionIndex].name}
+                    onChange={(e) => self.positionNameChange(e, positionIndex)}
+                    placeholder="Position Name"
+                />
+            );
 
-                const numQuestionParts = question.body.length;
-                for (let questionTextIndex = 0; questionTextIndex < numQuestionParts; questionTextIndex++) {
-                    questionBody.push(
-                        <textarea
-                            value={question.body[questionTextIndex].content[0]}
-                            placeholder={"Question line " + (questionTextIndex+1)}
-                            onChange={(e) => self.questionTextChange(e, levelIndex, questionIndex, questionTextIndex)}
-                            key={"level"+levelIndex+"question"+questionIndex+"part"+questionTextIndex}
-                        />
-                    );
-                    if (questionTextIndex > 0) {
-                        questionBody.push(<div key={"level"+levelIndex+"question"+questionIndex+"part"+questionTextIndex+"delete"} className="deleteButton" onClick={() => self.deleteQuestionText(levelIndex, questionIndex, questionTextIndex)}>X</div>)
-                    }
-                    questionBody.push(<br key={"level"+levelIndex+"question"+questionIndex+"part"+questionTextIndex+"br"} />)
-                }
-
-                let options = [];
-                const numOptions = question.options.length;
-                for (let optionIndex = 0; optionIndex < numOptions; optionIndex++) {
-                    const correctnessClass = question.options[optionIndex].isCorrect ? "correct" : "incorrect";
-                    const deleteOptionButton = optionIndex === 0 ? null : <div className="deleteButton" onClick={() => self.deleteOption(levelIndex, questionIndex, optionIndex)}>X</div>;
-                    options.push(
-                        <div key={"level"+levelIndex+"question"+questionIndex+"option"+optionIndex}>
-                            <div
-                                className={"correctIndicator " + correctnessClass}
-                                onClick={() => self.markCorrect(levelIndex, questionIndex, optionIndex)}
-                            />
-                            <textarea
-                                placeholder={"option option " + (optionIndex+1)}
-                                value={question.options[optionIndex].body}
-                                onChange={(e) => self.optionChange(e, levelIndex, questionIndex, optionIndex)}
-                            />
-                            {deleteOptionButton}
-                        </div>
-                    );
-                }
-
-                const deleteQuestionButton = questionIndex === 0 ? null : <div className="deleteButton" onClick={() => self.deleteQuestion(levelIndex, questionIndex)}>X</div>;
-
-                questions.push(
-                    <div key={"level"+levelIndex+"question"+questionIndex} style={{marginBottom: "5px"}}>
-                        {`Question ${questionIndex+1}:`} {deleteQuestionButton}
-                        <br/>
-                        {questionBody}
-                        <button onClick={() => self.addQuestionText(levelIndex, questionIndex)} style={{marginBottom:"10px"}}>Add line to question</button><br/>
-                        {options}
-                        <button onClick={() => self.addOption(levelIndex, questionIndex)}>Add option</button>
+            // create skills dropdown menus
+            let skills = [];
+            for (let skillIndex = 0; skillIndex < position.skills.length; skillIndex++) {
+                let skill = position.skills[skillIndex];
+                // the value of the dropdown menu is the index of the
+                // skill within the allSkills array in state
+                skills.push(
+                    <div key={`position${positionIndex}skill${skillIndex}`}>
+                        <DropDownMenu
+                            value={self.state.allSkills.findIndex(s => {return s._id.toString() === skill.toString()})}
+                            onChange={(e, index, allSkillsIndex) => this.handleSkillChange(e, index, allSkillsIndex, positionIndex, skillIndex)}
+                            labelStyle={{color: "rgba(255,255,255,.8)"}}
+                        >
+                            {skillMenuItems}
+                        </DropDownMenu>
                     </div>
                 )
             }
 
-            const deleteLevelButton = levelIndex === 0 ? null : <div className="deleteButton" onClick={() => self.deleteLevel(levelIndex)}>X</div>;
+            // create the frqs
+            let frqs = [];
+            for (let frqIndex = 0; frqIndex < position.freeResponseQuestions.length; frqIndex++) {
+                const frq = position.freeResponseQuestions[frqIndex];
+                frqs.push(
+                    <div key={`position${positionIndex}frq${frqIndex}`}>
+                        <textarea
+                            placeholder={"Frq " + (frqIndex+1)}
+                            value={frq.body}
+                            onChange={(e) => self.frqChange(e, positionIndex, frqIndex)}
+                        />
+                        <div
+                            className="checkbox smallCheckbox whiteCheckbox"
+                            onClick={() => this.handleFrqRequiredChange(positionIndex, frqIndex)}
+                            style={{verticalAlign: "top", marginLeft: "20px", marginTop: "10px"}}
+                        >
+                            <img
+                                alt="Checkmark icon"
+                                className={"checkMark" + frq.required}
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                            />
+                        </div>
+                        <div style={{display: "inline-block", verticalAlign: "top"}}>
+                            {"Question is required."}
+                        </div><br/>
+                    </div>
+                )
+            }
 
-            // add the questions and button to add another question to the level
-            levels.push(
-                <div key={"level"+levelIndex} style={{margin: "20px 0px"}}>
-                    {"Level " + level.levelNumber} {deleteLevelButton}
-                    <div style={{margin: "10px 20px"}}>{questions}</div>
-                    <button onClick={() => self.addQuestion(levelIndex)}>Add question</button>
+
+            positions.push(
+                <div key={`position${positionIndex}`}>
+                    {"Position:"} {positionNameInput}<br/>
+                    {"Skills:"} {skills}<br/>
+                    {"Free Response Questions: "} {frqs}<br/>
+                    {"Should employees answer frqs? "}<br/>
+                    {"Estimated evaluation length (in minutes): "}<br/>
+                    {"Time allowed for this position (in days): "}<br/>
+                    {"Ideal psych results: "} <br/>
+                    {"Ideal growth results: "}
                 </div>
             );
         }
 
+
+
         return (
             <div className="fillScreen whiteText businessEditor" style={{margin: "30px"}}>
                 {nameInput}
-                {levels}
-                <button onClick={() => self.addLevel()}>Add level</button><br/>
+                {positions}
+                <button onClick={() => self.addPosition()}>Add position</button><br/>
                 <RaisedButton
-                    onClick={this.handleSubmit.bind(this)}
+                    onClick={() => self.handleSubmit.bind(self)}
                     label="Save"
                     className="raisedButtonBusinessHome"
                     style={{margin: '10px 0'}}
@@ -334,7 +312,8 @@ function mapDispatchToProps(dispatch) {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        loadingCreateBusiness: state.users.loadingSomething
+        loadingCreateBusiness: state.users.loadingSomething,
+        png: state.users.png
     };
 }
 

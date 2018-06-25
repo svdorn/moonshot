@@ -3049,11 +3049,11 @@ button.link {
 }
 .skillEditor .correctIndicator.correct { background-color: green; }
 .skillEditor .correctIndicator.incorrect { background-color: red; }
-.skillEditor textarea {
+.skillEditor textarea, .businessEditor textarea {
     width: 75%;
     height: 40px;
 }
-.skillEditor .deleteButton {
+.skillEditor .deleteButton, .businessEditor .deleteButton {
     display: inline-block;
     color: red;
     cursor: pointer;
