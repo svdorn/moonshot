@@ -33,7 +33,8 @@ const adminApis = {
     POST_saveSkill,
     GET_allBusinesses,
     GET_business,
-    POST_saveBusiness
+    POST_saveBusiness,
+    GET_blankPosition
 }
 
 
@@ -144,6 +145,59 @@ async function GET_allSkills(req, res) {
         console.log("Error getting skills for admin: ", getUserOrSkillsError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
+}
+
+
+async function GET_blankPosition(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    let user, psychTest;
+    try {
+        const [foundUser, foundTest] = await Promise.all([
+            getAndVerifyUser(userId, verificationToken),
+            Psychtests.findOne({})
+        ])
+        user = foundUser; psychTest = foundTest;
+    } catch(getUserOrPsychError) {
+        console.log("error getting user or psych test: ", getUserOrPsychError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    if (user.admin !== true) {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    const idealFactors = psychTest.factors.map(factor => {
+        const idealFacets = factor.facets.map(facet => {
+            return {
+                name: facet.name,
+                facetId: facet._id,
+                score: ""
+            }
+        });
+        return {
+            name: factor.name,
+            factorId: factor._id,
+            idealFacets
+        };
+    });
+
+    // defaults for all position values
+    const position = {
+        name: "",
+        skills: [],
+        skillNames: [],
+        freeResponseQuestions: [],
+        employeesGetFrqs: false,
+        length: 60,
+        timeAllotted: 14,
+        idealFactors,
+        growthFactors: idealFactors
+    }
+
+    return res.json(position);
+    // name positions.name positions.skills positions.skillNames positions.freeResponseQuestions positions.employeesGetFrqs positions.length positions.timeAllotted positions.idealFactors positions.growthFactors
 }
 
 

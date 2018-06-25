@@ -16,7 +16,8 @@ class BusinessEditor extends Component {
             loading: true,
             saving: false,
             allSkills: [],
-            error: false
+            error: false,
+            blankPosition: {}
         };
     }
 
@@ -26,57 +27,69 @@ class BusinessEditor extends Component {
         // get the business id from the url
         const businessId = self.props.params.businessId;
 
-        // get every skill
-        axios.get("/api/admin/allSkills", {
+        // get a blank business object - need to do this because psych test could change
+        axios.get("/api/admin/blankPosition", {
             params: {
                 userId: self.props.currentUser._id,
                 verificationToken: self.props.currentUser.verificationToken
             }
         })
         .then(response => {
-            console.log("allSkills: ", response.data);
-            self.setState({ allSkills: response.data });
-        })
-        .catch(error => {
-            console.log("error: ", error);
-            self.props.addNotification("Error getting skills.", "error");
-        });
+            console.log("response.data: ", response.data);
+            const blankPosition = response.data;
+            self.setState({ blankPosition })
 
-        // if user is creating a new business
-        if (businessId === "new") {
-            self.setState({
-                business: {
-                    name: "",
-                    positions: []
-                },
-                loading: false
-            })
-        }
-
-        // if user is editing an existing business
-        else {
-            // get the business
-            axios.get("/api/admin/business", {params:
-                {
+            // get every skill
+            axios.get("/api/admin/allSkills", {
+                params: {
                     userId: self.props.currentUser._id,
-                    verificationToken: self.props.currentUser.verificationToken,
-                    businessId
+                    verificationToken: self.props.currentUser.verificationToken
                 }
             })
             .then(response => {
-                // map the business to the format this page expects
-                let business = response.data;
-
-                console.log(business);
-
-                self.setState({ business, loading: false });
+                self.setState({ allSkills: response.data });
             })
             .catch(error => {
-                console.log("Error getting business: ", error);
-                self.setState({ loading: false, error: true });
-                self.props.addNotification("Error getting business.", "error")
-            })
-        }
+                console.log("error: ", error);
+                self.props.addNotification("Error getting skills.", "error");
+            });
+
+            // if user is creating a new business
+            if (businessId === "new") {
+                self.setState({
+                    business: {
+                        name: "",
+                        positions: [ blankPosition ]
+                    },
+                    loading: false
+                })
+            }
+
+            // if user is editing an existing business
+            else {
+                // get the business
+                axios.get("/api/admin/business", {params:
+                    {
+                        userId: self.props.currentUser._id,
+                        verificationToken: self.props.currentUser.verificationToken,
+                        businessId
+                    }
+                })
+                .then(response => {
+                    // map the business to the format this page expects
+                    let business = response.data;
+
+                    console.log(business);
+
+                    self.setState({ business, loading: false });
+                })
+                .catch(error => {
+                    console.log("Error getting business: ", error);
+                    self.setState({ loading: false, error: true });
+                    self.props.addNotification("Error getting business.", "error")
+                })
+            }
+        })
     }
 
 
@@ -126,9 +139,7 @@ class BusinessEditor extends Component {
 
     addPosition() {
         let business = Object.assign({}, this.state.business);
-        // business.positions.push({
-        //
-        // })
+        business.positions.push( this.state.blankPosition );
         this.setState({ business });
     }
 
@@ -470,7 +481,7 @@ class BusinessEditor extends Component {
                                 className="idealFacetInput"
                                 value={facet.score.toString()}
                                 onChange={(e) => self.idealFacetChange(e, positionIndex, factorIndex, facetIndex)}
-                                placeholder=""
+                                placeholder="NEED"
                             />
                             <div
                                 className="deleteButton"
@@ -519,7 +530,7 @@ class BusinessEditor extends Component {
                                 className="idealFacetInput"
                                 value={facet.score.toString()}
                                 onChange={(e) => self.growthFacetChange(e, positionIndex, factorIndex, facetIndex)}
-                                placeholder="NEEDED"
+                                placeholder="NEED"
                             />
                             <div
                                 className="deleteButton"
