@@ -160,6 +160,30 @@ class BusinessEditor extends Component {
     }
 
 
+    handleEmployeeFrqsChange(positionIndex) {
+        let business = Object.assign({}, this.state.business);
+        // flip the required status
+        business.positions[positionIndex].employeesGetFrqs = !business.positions[positionIndex].employeesGetFrqs;
+        this.setState({ business });
+    }
+
+
+    lengthChange(e, positionIndex) {
+        let business = Object.assign({}, this.state.business);
+        const parsed = parseInt(e.target.value, 10);
+        business.positions[positionIndex].length = isNaN(parsed) ? 0 : parsed;
+        this.setState({ business });
+    }
+
+
+    timeAllottedChange(e, positionIndex) {
+        let business = Object.assign({}, this.state.business);
+        const parsed = parseInt(e.target.value, 10);
+        business.positions[positionIndex].timeAllotted = isNaN(parsed) ? 0 : parsed;
+        this.setState({ business });
+    }
+
+
     render() {
         const self = this;
 
@@ -252,7 +276,7 @@ class BusinessEditor extends Component {
                         <div
                             className="checkbox smallCheckbox whiteCheckbox"
                             onClick={() => this.handleFrqRequiredChange(positionIndex, frqIndex)}
-                            style={{verticalAlign: "top", marginLeft: "20px", marginTop: "10px"}}
+                            style={{verticalAlign: "top", marginLeft: "20px", marginTop: "6px"}}
                         >
                             <img
                                 alt="Checkmark icon"
@@ -261,11 +285,49 @@ class BusinessEditor extends Component {
                             />
                         </div>
                         <div style={{display: "inline-block", verticalAlign: "top"}}>
-                            {"Question is required."}
+                            {"Question is required"}
                         </div><br/>
                     </div>
                 )
             }
+
+            // create the checkmark determining whether employees should answer frqs
+            const employeeFrqRequirement = (
+                <div>
+                    <div
+                        className="checkbox smallCheckbox whiteCheckbox"
+                        onClick={() => this.handleEmployeeFrqsChange(positionIndex)}
+                        style={{verticalAlign: "top", marginLeft: "20px", marginTop: "6px"}}
+                    >
+                        <img
+                            alt="Checkmark icon"
+                            className={"checkMark" + position.employeesGetFrqs}
+                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                        />
+                    </div>
+                    <div style={{display: "inline-block", verticalAlign: "top"}}>
+                        {"Employees must answer frqs"}
+                    </div><br/>
+                </div>
+            )
+
+            // create input for estimated length of evaluation
+            let lengthInput = (
+                <input
+                    value={position.length.toString()}
+                    onChange={(e) => self.lengthChange(e, positionIndex)}
+                    placeholder="Length in minutes"
+                />
+            );
+
+            // create input for how much time candidates get to finish the eval
+            let timeAllottedInput = (
+                <input
+                    value={position.timeAllotted.toString()}
+                    onChange={(e) => self.timeAllottedChange(e, positionIndex)}
+                    placeholder="Length in minutes"
+                />
+            );
 
 
             positions.push(
@@ -273,9 +335,9 @@ class BusinessEditor extends Component {
                     {"Position:"} {positionNameInput}<br/>
                     {"Skills:"} {skills}<br/>
                     {"Free Response Questions: "} {frqs}<br/>
-                    {"Should employees answer frqs? "}<br/>
-                    {"Estimated evaluation length (in minutes): "}<br/>
-                    {"Time allowed for this position (in days): "}<br/>
+                    {employeeFrqRequirement}<br/>
+                    {"Estimated evaluation length (in minutes): "} {lengthInput}<br/>
+                    {"Time allowed to candidates for this position (in days): "} {timeAllottedInput}<br/>
                     {"Ideal psych results: "} <br/>
                     {"Ideal growth results: "}
                 </div>
