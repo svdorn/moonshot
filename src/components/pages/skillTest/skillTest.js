@@ -52,6 +52,7 @@ class SkillTest extends Component {
 
 
     resetPage(skillUrl) {
+        const self = this;
         const currentUser = this.props.currentUser;
         // make sure a user is logged in
         if (!currentUser) {
@@ -75,7 +76,7 @@ class SkillTest extends Component {
                 skillName: result.data.skillName,
                 selectedId: undefined,
                 finished: false
-            });
+            }, () => { console.log("state: ", self.state); });
         })
         .catch(error => {
             // console.log("Error getting skill: ", error.response.data);

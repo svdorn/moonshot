@@ -17,11 +17,6 @@ class TermsOfUse extends Component {
 
         return (
             <div>
-                {standalone ?
-                    <div className="lightBlackBackground headerDiv" />
-                    : null
-                }
-
                 <div style={containerStyle} className="whiteText">
 
                     <b className="font20px font18pxUnder700px">Terms of Use Agreement</b>

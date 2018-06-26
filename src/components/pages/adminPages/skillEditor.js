@@ -33,7 +33,7 @@ class SkillEditor extends Component {
                         questions: [{
                             // questions are stored in a weird format so that
                             // they are compatible with the db
-                            body: [{content: [""], shouldBreak: true}],
+                            body: [{content: [""], partType: "text", shouldBreak: true}],
                             options: [
                                 {body: "", isCorrect: false},
                                 {body: "", isCorrect: false}
@@ -138,7 +138,7 @@ class SkillEditor extends Component {
 
     addQuestionText(levelIndex, questionIndex) {
         let skill = Object.assign({}, this.state.skill);
-        skill.levels[levelIndex].questions[questionIndex].body.push({ content: [""], shouldBreak: true });
+        skill.levels[levelIndex].questions[questionIndex].body.push({ content: [""], partType: "text", shouldBreak: true });
         this.setState({ skill });
     }
 
@@ -153,7 +153,7 @@ class SkillEditor extends Component {
     addQuestion(levelIndex) {
         let skill = Object.assign({}, this.state.skill);
         skill.levels[levelIndex].questions.push({
-            body: [{ content: [""], shouldBreak: true }],
+            body: [{ content: [""], partType: "text", shouldBreak: true }],
             options: [
                 {body: "", isCorrect: false},
                 {body: "", isCorrect: false}
@@ -168,7 +168,7 @@ class SkillEditor extends Component {
         skill.levels.push({
             levelNumber: self.state.skill.levels.length + 1,
             questions: [{
-                body: [{ content: [""], shouldBreak: true }],
+                body: [{ content: [""], partType: "text", shouldBreak: true }],
                 options: [
                     {body: "", isCorrect: false},
                     {body: "", isCorrect: false}

@@ -250,6 +250,96 @@ async function POST_saveBusiness(req, res) {
                 time: "1 week",
                 numCandidates: 0
             };
+            newBusiness.employeeQuestions = [
+                {
+                    questionBody: "How long have they been at the company? (in years)",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 7
+                    }
+                },
+                {
+                    questionBody: "How much longer do you expect them to remain at the company? (in years)",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 7
+                    }
+                },
+                {
+                    questionBody: "How often are they late for work per week? (in days)",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 5
+                    }
+                },
+                {
+                    questionBody: "How would you rate their job performance?",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 10
+                    }
+                },
+                {
+                    questionBody: "How efficient are they at getting tasks done?",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 10
+                    }
+                },
+                {
+                    questionBody: "How often do they take employee leave days for illness or holiday, per year?",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 10
+                    }
+                },
+                {
+                    questionBody: "How would you rate their quality of work?",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 10
+                    }
+                },
+                {
+                    questionBody: "How much have they improved or grown since your first day together?",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 10
+                    }
+                },
+                {
+                    questionBody: "How much more responsibility have they been given since your first day together?",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 10
+                    }
+                },
+                {
+                    questionBody: "How likely are you to recommend them for a promotion in the next year?",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 10
+                    }
+                },
+                {
+                    questionBody: "How would you rate their potential for improvement and growth?",
+                    questionType: "range",
+                    range: {
+                        lowRange: 0,
+                        highRange: 10
+                    }
+                }
+            ]
 
             let counter = 0;
             newBusiness.positions = business.positions.map(position => {
@@ -327,12 +417,14 @@ async function POST_saveBusiness(req, res) {
 
         // now that we are sure to have the business id, create any admins that were added
         let promises = [];
-        business.adminsToAdd.forEach(adminToAdd => {
-            try { promises.push(createAdmin(adminToAdd.name, adminToAdd.email, adminToAdd.password, adminToAdd.title, businessId, business.name)); }
-            catch(addAdminError) { console.log("error adding admin: ", addAdminError); }
-        });
-        // wait for all the users to get created
-        await Promise.all(promises);
+        if (Array.isArray(business.adminsToAdd)) {
+            business.adminsToAdd.forEach(adminToAdd => {
+                try { promises.push(createAdmin(adminToAdd.name, adminToAdd.email, adminToAdd.password, adminToAdd.title, businessId, business.name)); }
+                catch(addAdminError) { console.log("error adding admin: ", addAdminError); }
+            });
+            // wait for all the users to get created
+            await Promise.all(promises);
+        }
 
         // return the business id
         return res.json(businessId);
