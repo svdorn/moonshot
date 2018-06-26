@@ -14,6 +14,12 @@ var businessesSchema = mongoose.Schema({
     // if they've set up their billing
     billingCustomerId: String,
 
+    emailNotifications: {
+        time: String,
+        numCandidates: Number,
+        lastSent: Date
+    },
+
     // the questions that managers have to answer about each employee
     employeeQuestions: [{
         // the text of the question
