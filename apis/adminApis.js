@@ -202,6 +202,7 @@ async function POST_saveBusiness(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
     let business = sanitize(req.body.business);
+    let businessId;
 
     try {
         // get the user
@@ -226,7 +227,7 @@ async function POST_saveBusiness(req, res) {
             adminCodes: []
         }
 
-        // if it's a new business, create and return the new business
+        // if it's a new business, create the new business
         if (!business._id) {
             // count all the businesses
             let code = (await Businesses.count({})).toString();
@@ -266,15 +267,16 @@ async function POST_saveBusiness(req, res) {
                 return newPosition;
             })
 
-            // create skill and return its id
-            return res.json((await Businesses.create(newBusiness))._id);
+            // create the business and get its id
+            businessId = (await Businesses.create(newBusiness))._id;
         }
 
         // otherwise update the old skill
         else {
+            businessId = business._id;
             let foundBusiness;
             try {
-                foundBusiness = await Businesses.findById(business._id);
+                foundBusiness = await Businesses.findById(businessId);
             } catch (findBizErr) {
                 console.log("error finding business to update: ", findBizErr);
                 return res.status(500).send(errors.SERVER_ERROR);
@@ -321,14 +323,125 @@ async function POST_saveBusiness(req, res) {
                 console.log("error saving business: ", saveError);
                 return res.status(500).send(errors.SERVER_ERROR);
             }
-
-            // update business and return its id
-            return res.json(savedBiz._id);
         }
+
+        // now that we are sure to have the business id, create any admins that were added
+        let promises = [];
+        business.adminsToAdd.forEach(adminToAdd => {
+            try { promises.push(createAdmin(adminToAdd.name, adminToAdd.email, adminToAdd.password, adminToAdd.title, businessId, business.name)); }
+            catch(addAdminError) { console.log("error adding admin: ", addAdminError); }
+        });
+        // wait for all the users to get created
+        await Promise.all(promises);
+
+        // return the business id
+        return res.json(businessId);
     } catch (getUserOrUpdateSkillError) {
         console.log("Error updating skill for admin: ", getUserOrUpdateSkillError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
+}
+
+
+async function createAdmin(name, email, password, title, businessId, businessName) {
+    return new Promise(async function(resolve, reject) {
+        let user = {name, email, password};
+
+        // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
+        // if the user has an email address no one else has used before
+        let verifiedUniqueEmail = false;
+        // if password was set up
+        let createdLoginInfo = false;
+        // whether we counted the users and created a profile url
+        let madeProfileUrl = false;
+        // <<-------------------------------------------------------->> //
+
+        // --->>> THINGS WE CAN SET FOR USER WITHOUT ASYNC CALLS <<<--- //
+        const NOW = new Date();
+        // admin status must be changed in the db directly
+        user.admin = false;
+        // account admins added this way can log in without verifying email
+        user.verified = true;
+        // user has just signed up
+        user.dateSignedUp = NOW;
+        // hasn't had opportunity to do onboarding yet, but we set it to true cuz people don't have to do onboarding yet
+        user.hasFinishedOnboarding = true;
+        // infinite use, used to verify identify when making calls to backend
+        user.verificationToken = crypto.randomBytes(64).toString('hex');
+        // due to this being the create admin function we know they are an account admin
+        user.userType = "accountAdmin";
+        // assuming that this will be the first admin
+        user.firstBusinessUser = true;
+        // the company that was just created/updated
+        user.businessInfo = {
+            company: {
+                name: businessName,
+                companyId: businessId
+            },
+            title
+        }
+        // <<-------------------------------------------------------->> //
+
+        // --->>       VERIFY THAT USER HAS UNIQUE EMAIL          <<--- //
+        Users.find({email: user.email})
+        .then(foundUsers => {
+            if (foundUsers.length > 0) {
+                return reject("An account with that email address already exists.");
+            } else {
+                // mark that we are good to make this user, then try to do it
+                verifiedUniqueEmail = true;
+                makeUser();
+            }
+        })
+        .catch(findUserError => {
+            console.log("error finding user by email: ", findUserError);
+            return reject("error seeing if there were any users with that email");
+        });
+        // <<-------------------------------------------------------->> //
+
+        // --->> COUNT THE USERS WITH THIS NAME TO ALLOW PROFILE URL CREATION <<--- //
+        Users.count({name: user.name})
+        .then(count => {
+            // create the user's profile url with the count after their name
+            const randomNumber = crypto.randomBytes(8).toString('hex');
+            user.profileUrl = user.name.split(' ').join('-') + "-" + (count + 1) + "-" + randomNumber;
+            madeProfileUrl = true;
+            makeUser();
+        }).catch (countError => {
+            console.log("Couldn't count the number of users: ", countError);
+            return reject("Couldn't count the number of users with that name.");
+        })
+        // <<-------------------------------------------------------->> //
+
+        // --->>            HASH THE USER'S PASSWORD              <<--- //
+        const saltRounds = 10;
+        bcrypt.hash(user.password, saltRounds, function(hashError, hash) {
+            if (hashError) { console.log("hash error: ", hashError); return reject("Error hashing password."); }
+
+            // change the stored password to be the hash
+            user.password = hash;
+            // mark that we have created verification token and password, then make the user
+            createdLoginInfo = true;
+            makeUser();
+        });
+        // <<-------------------------------------------------------->> //
+
+        // --->>           CREATE AND UPDATE THE USER             <<--- //
+        async function makeUser() {
+            // make sure all pre-reqs to creating user are met
+            if (!verifiedUniqueEmail || !createdLoginInfo || !madeProfileUrl) { return; }
+
+            // make the user db object
+            try {
+                await Users.create(user);
+                return resolve(true);
+            } catch (createUserError) {
+                console.log("Error creating user: ", createUserError);
+                return reject("Error creating user.");
+            }
+        }
+        // <<-------------------------------------------------------->> //
+    });
 }
 
 
@@ -340,12 +453,19 @@ async function GET_business(req, res) {
 
     // get the user and the requested skill
     try {
-        let [user, foundBusiness, psychTest] = await Promise.all([
+        const businessUserQuery = {
+            "$and": [
+                { "businessInfo.company.companyId": businessId },
+                { "userType": "accountAdmin" }
+            ]
+        }
+        let [user, foundBusiness, psychTest, accountAdmins] = await Promise.all([
             // get user
             getAndVerifyUser(userId, verificationToken),
             // get all skills
             Businesses.findById(businessId).select("name positions._id positions.name positions.skills positions.skillNames positions.freeResponseQuestions positions.employeesGetFrqs positions.length positions.timeAllotted positions.idealFactors positions.growthFactors"),
-            Psychtests.findOne({})
+            Psychtests.findOne({}),
+            Users.find(businessUserQuery).select("name email")
         ]);
 
         // if the user isn't an admin, don't let them see the business
@@ -354,6 +474,9 @@ async function GET_business(req, res) {
         }
 
         let business = foundBusiness.toObject();
+
+        // attach all the admins to the business
+        business.accountAdmins = accountAdmins;
 
         // create an object that will allow us to map factor and facet ids to names
         let names = {};

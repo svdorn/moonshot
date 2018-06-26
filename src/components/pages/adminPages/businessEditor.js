@@ -346,6 +346,33 @@ class BusinessEditor extends Component {
     }
 
 
+    addAdmin() {
+        let business = Object.assign({}, this.state.business);
+        if (!Array.isArray(business.adminsToAdd)) { business.adminsToAdd = []; }
+        business.adminsToAdd.push({
+            name: "",
+            email: "",
+            password: "",
+            title: ""
+        });
+        this.setState({ business });
+    }
+
+
+    deleteAdmin(adminIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.adminsToAdd.splice(adminIndex, 1);
+        this.setState({ business });
+    }
+
+
+    adminFieldChange(e, field, adminIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.adminsToAdd[adminIndex][field] = e.target.value;
+        this.setState({ business });
+    }
+
+
     render() {
         const self = this;
 
@@ -373,6 +400,7 @@ class BusinessEditor extends Component {
                 value={business.name}
                 onChange={(e) => self.nameChange(e)}
                 placeholder="Business Name"
+                style={{marginBottom: "20px"}}
             />
         );
 
@@ -643,11 +671,68 @@ class BusinessEditor extends Component {
             );
         }
 
+        // area to add new admins
+        const addAdminButton = (
+            <button onClick={() => self.addAdmin()} style={{marginBottom:"20px"}}>
+                Add admin
+            </button>
+        );
+
+        // new admins that will be added
+        let adminIndex = -1;
+        const adminsToAdd = Array.isArray(business.adminsToAdd) ? business.adminsToAdd.map(admin => {
+            adminIndex++;
+            return (
+                <div key={`admin${adminIndex}`}>
+                    <input
+                        value={admin.name}
+                        onChange={(e) => self.adminFieldChange(e, "name", adminIndex)}
+                        placeholder="Admin Name"
+                    />
+                    <input
+                        value={admin.email}
+                        onChange={(e) => self.adminFieldChange(e, "email", adminIndex)}
+                        placeholder="Admin Email"
+                    />
+                    <input
+                        value={admin.password}
+                        onChange={(e) => self.adminFieldChange(e, "password", adminIndex)}
+                        placeholder="Admin Password"
+                    />
+                    <input
+                        value={admin.title}
+                        onChange={(e) => self.adminFieldChange(e, "title", adminIndex)}
+                        placeholder="Admin Title"
+                    />
+                    <div
+                        className="deleteButton"
+                        style={{marginLeft:"8px"}}
+                        onClick={() => self.deleteAdmin(adminIndex)}
+                    >
+                        X
+                    </div>
+                </div>
+            )
+        }) : null;
+
+        // admins that already existed
+        const admins = Array.isArray(business.accountAdmins) ? business.accountAdmins.map(admin => {
+            return (
+                <div key={`oldAdmin${admin.email}`}>
+                    <input value={admin.name} disabled />
+                    <input value={admin.email} disabled />
+                </div>
+            )
+        }) : null;
 
 
         return (
             <div className="fillScreen whiteText businessEditor" style={{margin: "30px"}}>
-                {nameInput}
+                {nameInput}<br/>
+                {adminsToAdd}
+                {addAdminButton}<br/>
+                {"Existing admins: "}<br/>
+                {admins}
                 {positions}
                 <button onClick={() => self.addPosition()} style={{marginTop: "40px"}}>
                     Add position
