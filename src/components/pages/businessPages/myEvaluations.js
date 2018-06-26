@@ -146,45 +146,54 @@ class MyEvaluations extends Component {
 
             evaluations = this.state.positions.map(position => {
                 key++;
-
-                let attributes = {};
-                attributes.company = position.businessName;
-
-                // if user is manager or account admin, preview will look editable
-                if (["accountAdmin", "manager"].includes(currentUser.userType)) {
-                    attributes.completions = position.completions;
-                    attributes.usersInProgress = position.usersInProgress;
-                    attributes.length = position.length;
-                    attributes.skills = position.skillNames;
-                    attributes.timeAllotted = position.timeAllotted;
-                    attributes.logo = self.state.logo;
-                    attributes.company = self.state.businessName;
-                    attributes.name = position.name;
-
-                    attributes.variation = "edit";
-                }
-
-                // otherwise the preview will look like you can take it
-                else {
-                    attributes.variation = "take";
-                    attributes.logo = position.businessLogo;
-                    attributes.name = position.positionName;
+                // make sure position is the right type
+                if (position && typeof position === "object") {
+                    let attributes = {};
                     attributes.company = position.businessName;
-                    attributes.skills = position.skills;
-                    attributes.businessId = position.businessId.toString();
-                    attributes.positionId = position.positionId.toString();
-                    attributes.assignedDate = position.assignedDate;
-                    attributes.deadline = position.deadline;
-                    attributes.completedDate = position.completedDate;
-                }
 
-                return (
-                    <li style={{marginTop: '25px', listStyleType:"none"}}
-                        key={key}
-                    >
-                        <MyEvaluationsPreview {...attributes} />
-                    </li>
-                );
+                    // if user is manager or account admin, preview will look editable
+                    if (["accountAdmin", "manager"].includes(currentUser.userType)) {
+                        attributes.variation = "edit";
+                        attributes.name = position.name;
+                        attributes.logo = self.state.logo;
+                        attributes.length = position.length;
+                        attributes.skills = position.skillNames;
+                        attributes.company = self.state.businessName;
+                        attributes.completions = position.completions;
+                        attributes.timeAllotted = position.timeAllotted;
+                        attributes.usersInProgress = position.usersInProgress;
+                    }
+
+                    // otherwise the preview will look like you can take it
+                    else {
+                        attributes.variation = "take";
+                        attributes.skills = position.skills;
+                        attributes.deadline = position.deadline;
+                        attributes.logo = position.businessLogo;
+                        attributes.name = position.positionName;
+                        attributes.company = position.businessName;
+                        attributes.assignedDate = position.assignedDate;
+                        attributes.completedDate = position.completedDate;
+                        try {
+                            attributes.businessId = position.businessId.toString();
+                            attributes.positionId = position.positionId.toString();
+                        } catch (attributeError) {
+                            console.log(attributeError);
+                        }
+                    }
+
+                    return (
+                        <li style={{marginTop: '25px', listStyleType:"none"}}
+                            key={key}
+                        >
+                            <MyEvaluationsPreview {...attributes} />
+                        </li>
+                    );
+                }
+                // if position is not the right type, don't show a position preview
+                else {
+                    return null;
+                }
             });
 
         }
