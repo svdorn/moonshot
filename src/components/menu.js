@@ -293,19 +293,6 @@ class Menu extends Component {
                 {optionType: "url", title: "Log In", url: "/login"},
             ];
         }
-        // if the current user is an admin
-        else if (currentUser.admin) {
-            menuOptions = [
-                {optionType: "url", title: "Admin", url: "/admin"},
-                {optionType: "separator"},
-                {optionType: "dropDown", components: [
-                    {optionType: "url", title: "Account", url:"/"},
-                    {optionType: "divider"},
-                    {optionType: "url", title: "Settings", url: "/settings"},
-                    {optionType: "signOut"}
-                ]}
-            ];
-        }
         // if the current user is an account admin for a business
         else if (currentUser.userType === "accountAdmin") {
             menuOptions = [
@@ -366,6 +353,11 @@ class Menu extends Component {
                     {optionType: "signOut"}
                 ]}
             ];
+        }
+
+        // if the user is a site admin, give them the admin tab
+        if (currentUser.admin) {
+            menuOptions.unshift({optionType: "url", title: "Admin", url: "/admin"});
         }
 
         // construct the menu's tabs
