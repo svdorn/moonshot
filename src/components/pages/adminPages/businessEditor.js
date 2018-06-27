@@ -47,7 +47,6 @@ class BusinessEditor extends Component {
             }
         })
         .then(response => {
-            console.log("response.data: ", response.data);
             const blankPosition = response.data;
             self.setState({ blankPosition })
 
@@ -656,10 +655,21 @@ class BusinessEditor extends Component {
                 )
             }
 
+            const deletePositionButton = (
+                position._id ? null :
+                <div
+                    className="deleteButton"
+                    style={{marginLeft:"8px"}}
+                    onClick={() => self.deletePosition(positionIndex)}
+                >
+                    X
+                </div>
+            );
+
             positions.push(
                 <div key={`position${positionIndex}`} style={{marginTop: "50px"}}>
                     <div style={{width:"100%",height:"20px",backgroundColor:"gray",margin:"0 0 50px -30px"}} />
-                    {"Position:"} {positionNameInput}<br/>
+                    {"Position:"} {positionNameInput} {deletePositionButton}<br/>
                     {"Skills:"} {skills}<br/>
                     {"Free Response Questions: "} {frqs}<br/>
                     {employeeFrqRequirement}<br/>
