@@ -114,7 +114,7 @@ class BusinessEditor extends Component {
     }
 
 
-    handleSubmit(e) {
+    handleSave(e) {
         e.preventDefault();
 
         const self = this;
@@ -748,7 +748,7 @@ class BusinessEditor extends Component {
                     Add position
                 </button><br/>
                 <RaisedButton
-                    onClick={self.handleSubmit.bind(self)}
+                    onClick={self.handleSave.bind(self)}
                     label="Save"
                     className="raisedButtonBusinessHome"
                     style={{margin: '10px 0'}}

@@ -78,7 +78,7 @@ class SkillEditor extends Component {
     }
 
 
-    handleSubmit(e) {
+    handleSave(e) {
         e.preventDefault();
 
         const self = this;
@@ -320,7 +320,7 @@ class SkillEditor extends Component {
                 {levels}
                 <button onClick={() => self.addLevel()}>Add level</button><br/>
                 <RaisedButton
-                    onClick={this.handleSubmit.bind(this)}
+                    onClick={this.handleSave.bind(this)}
                     label="Save"
                     className="raisedButtonBusinessHome"
                     style={{margin: '10px 0'}}
