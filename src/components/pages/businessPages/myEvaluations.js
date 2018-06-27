@@ -198,6 +198,37 @@ class MyEvaluations extends Component {
 
         }
 
+        console.log("evaluations: ", evaluations);
+
+        if (currentUser && currentUser.userType == "accountAdmin" && this.state.positions.length !== 0) {
+            let attributes = {};
+            attributes.variation = "edit";
+            attributes.name = "Web Developer";
+            attributes.logo = this.state.logo;
+            attributes.length = 25;
+            attributes.skills = ["HTML", "Javascript"];
+            attributes.company = this.state.businessName;
+            attributes.completions = 0;
+            attributes.timeAllotted = 30;
+            attributes.usersInProgress = 0;
+
+            evaluations.push (
+                <li style={{marginTop: '25px', listStyleType:"none"}}
+                    key={key}
+                >
+                    <div style={{filter:"blur(5px)"}}>
+                        <MyEvaluationsPreview {...attributes} />
+                    </div>
+                    <div className="font28px font26pxUnder700 font22pxUnder500 whiteText underline clickable center addEval">
+                        + Add Evaluation
+                    </div>
+                </li>
+            );
+        }
+
+        console.log(evaluations);
+
+
         // The section for the account admin to take the psych test if they haven't already
         let accountAdminTakePsychTest = null;
         if (currentUser && currentUser.userType == "accountAdmin" && !currentUser.psychometricTest.endDate && (this.state.positions.length !== 0 || this.state.noPositions)) {
