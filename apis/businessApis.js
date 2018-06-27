@@ -19,7 +19,6 @@ const { sanitize,
         getAndVerifyUser,
         frontEndUser,
         speedTest,
-        FOR_EMPLOYER,
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -887,7 +886,7 @@ async function GET_evaluationResults(req, res) {
         // get the business user, candidate, and business
         let [foundUser, foundCandidate, foundBusiness, foundPsychTest] = await Promise.all([
             getAndVerifyUser(userId, verificationToken),
-            Users.findOne({profileUrl}).select("_id name userType archetype title email emailToContact psychometricTest.factors.name psychometricTest.factors.score psychometricTest.factors.factorId positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
+            Users.findOne({profileUrl}).select("_id name userType title email emailToContact psychometricTest.factors.name psychometricTest.factors.score psychometricTest.factors.factorId positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
             Businesses.findById(businessId).select("_id positions._id positions.employees.employeeId positions.employees.scores positions.candidates.candidateId positions.candidates.scores positions.skills"),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
@@ -1006,7 +1005,6 @@ async function GET_evaluationResults(req, res) {
         title: candidate.title,
         name: candidate.name,
         email: candidate.emailToContact ? candidate.emailToContact : candidate.email,
-        archetype: candidate.archetype,
         performanceScores: bizCandidate.scores,
         frqs, skillScores, psychScores
     };
@@ -1070,7 +1068,7 @@ async function GET_candidateSearch(req, res) {
     try {
         business = await Businesses
             .find(businessQuery, positionQuery)
-            .select("positions.name positions.candidates.scores positions.candidates.candidateId positions.candidates.hiringStage positions.candidates.isDismissed positions.candidates.name positions.candidates.archetype positions.candidates.hiringStageChanges.dateChanged positions.candidates.location positions.candidates.profileUrl");
+            .select("positions.name positions.candidates.scores positions.candidates.candidateId positions.candidates.hiringStage positions.candidates.isDismissed positions.candidates.name positions.candidates.hiringStageChanges.dateChanged positions.candidates.location positions.candidates.profileUrl");
         // see if there are none found
         if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
         // if any are found, only one is found, as we searched by id
@@ -1175,7 +1173,7 @@ async function GET_employeeSearch(req, res) {
     try {
         business = await Businesses
             .find(businessQuery, positionQuery)
-            .select("positions.name positions.employees.answers positions.employees.employeeId positions.employees.managerId positions.employees.scores.overall positions.employees.gradingComplete positions.employees.name positions.employees.profileUrl positions.employees.archetype positions.employees.score");
+            .select("positions.name positions.employees.answers positions.employees.employeeId positions.employees.managerId positions.employees.scores.overall positions.employees.gradingComplete positions.employees.name positions.employees.profileUrl positions.employees.score");
         // see if there are none found
         if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
         // if any are found, only one is found, as we searched by id

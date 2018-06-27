@@ -24,7 +24,6 @@ class EmployeeResults extends Component {
             predictivePoints: [],
             freeResponses: [],
             psychScores: [],
-            archetype: "",
             loading: true,
             areaSelected: undefined,
             windowWidth: window.innerWidth
@@ -101,7 +100,6 @@ class EmployeeResults extends Component {
                 ...self.state,
                 loading: false,
                 psychScores: res.data.psychScores,
-                archetype: res.data.archetype,
                 candidate,
                 overallScore,
                 predicted: res.data.performanceScores.predicted,
@@ -237,7 +235,6 @@ class EmployeeResults extends Component {
                 <div className="resultsPageSpacer" />
 
                  <PsychBreakdown
-                     archetype={this.state.archetype}
                      psychScores={this.state.psychScores}
                      forCandidate={false}
                  />

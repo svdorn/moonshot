@@ -80,7 +80,6 @@ class Menu extends Component {
                 if (currentUser) {
                     // if user is employer, go to business profile
                     if (currentUser.userType === "manager" || currentUser.userType === "employee" || currentUser.userType === "accountAdmin") {
-                        //this.goTo("/businessProfile");
                         this.goTo("/");
                     }
                     // otherwise go to normal profile
@@ -199,9 +198,6 @@ class Menu extends Component {
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
         let hoverWidth = "61px";
-        // if (pathname === '/profile' || pathname === '/businessprofile') {
-        //     dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-        // }
         let additionalHeaderClass = "";
 
         if (pathname === "/") {
@@ -301,7 +297,6 @@ class Menu extends Component {
                 {optionType: "url", title: "Candidates", url: "/myCandidates"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
-                    //{optionType: "url", title: "Profile", url: "/businessProfile"},
                     {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Add User", url: "/addUser"},
@@ -318,7 +313,6 @@ class Menu extends Component {
         //         {optionType: "url", title: "Employees", url: "/myEmployees"},
         //         {optionType: "separator"},
         //         {optionType: "dropDown", components: [
-        //             //{optionType: "url", title: "Profile", url: "/businessProfile"},
         //             {optionType: "url", title: "Profile", url: "/"},
         //             {optionType: "divider"},
         //             {optionType: "url", title: "Settings", url: "/settings"},
@@ -333,7 +327,6 @@ class Menu extends Component {
                 {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
-                    //{optionType: "url", title: "Profile", url: "/businessProfile"},
                     {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},

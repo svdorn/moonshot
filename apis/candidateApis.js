@@ -1,6 +1,5 @@
 var Users = require('../models/users.js');
 var Referrals = require('../models/referrals.js');
-var Pathways = require('../models/pathways.js');
 var Businesses = require('../models/businesses.js');
 
 const bcrypt = require('bcryptjs');
@@ -16,8 +15,7 @@ const { sanitize,
         safeUser,
         userForAdmin,
         getFirstName,
-        frontEndUser,
-        NO_TOKENS
+        frontEndUser
 } = require('./helperFunctions.js');
 
 // get function to start position evaluation
@@ -185,29 +183,18 @@ function POST_candidate(req, res) {
                 // since the user is just signing up we know that the active
                 // position will be the only one available
                 user.positionInProgress = user.positions[0].positionId;
-            } else {
-                // TODO: if user is an admin, add the psych test to them
             }
 
             // save the user and the business with the new evaluation information
             let [savedUser, savedBusiness] = await Promise.all([user.save(), business.save()]);
 
-            // no reason to return the user with tokens because they will have to
-            // verify themselves before they can do anything anyway
-            return res.json(frontEndUser(savedUser, NO_TOKENS));
+            // user was successfully created
+            return res.json(true);
         }
         catch (addEvalOrSaveError) {
             console.log("Couldn't add evaluation to user: ", addEvalOrSaveError);
             return res.status(500).send(SERVER_ERROR);
         }
-
-        // sign up for the psych test
-        // try {
-        //     user = await internalStartPsychEval(user);
-        //     user = await user.save();
-        // } catch (psychEvalSignupError) {
-        //     console.log("psychEvalSignupError: ", psychEvalSignupError);
-        // }
 
         // add the user to the referrer's list of referred users
         creditReferrer().catch(referralError => { console.log(referralError); });

@@ -16,128 +16,230 @@ const sanitizeOptions = {
 
 
 // removes information from a db user object so that it can be passed for that
-// same user on the front end
-function frontEndUser(dbUser, extraFieldsToRemove) {
-    // copy everything into new user object
-    let newUser = Object.assign({}, dbUser);
+// same user on the front end; second argument is array of fields to include
+function frontEndUser(dbUser, fieldsToInclude) {
+    // create a new empty user
+    let newUser = {};
+    let userProperties;
 
-    // doing Object.assign with a document from the db can lead to the new object
-    // having a bunch of properties we don't want with the actual object ending
-    // up in newObj._doc, so take the ._doc property if it exists and treat it
-    // as the actual object
-    if (newUser._doc) {
-        newUser = newUser._doc;
+    // if toObject is a function, that means dbUser is a Mongoose object, so we
+    // have to use toObject to make it into a normal object
+    if (typeof dbUser.toObject === "function") {
+        userProperties = dbUser.toObject();
     }
+    // otherwise it is already a normal object
+    else { userProperties = dbUser; }
 
-    // clean the psychometric test
-    let cleanPsychTest = undefined;
-    const psychTest = newUser.psychometricTest;
-    if (psychTest) {
-        cleanPsychTest = {};
-        if (psychTest.inProgress) {
-            cleanPsychTest.inProgress = psychTest.inProgress;
-        }
-        if (psychTest.startDate) {
-            cleanPsychTest.startDate = psychTest.startDate;
-        }
-        if (psychTest.endDate) {
-            cleanPsychTest.endDate = psychTest.endDate;
-        }
+    if (!Array.isArray(fieldsToInclude)) { return undefined; }
 
-        if (typeof psychTest.questionsPerFacet === "number" && Array.isArray(psychTest.factors)) {
-            // count the number of questions - questions/facet * number of facets
-            let numFacets = 0;
-            psychTest.factors.forEach(factor => {
-                if (factor && typeof factor === "object" && Array.isArray(factor.facets)) {
-                    numFacets += factor.facets.length;
-                }
-            });
-            cleanPsychTest.numQuestions = psychTest.questionsPerFacet * numFacets;
-        }
+    // go through every property that should be included; if it has any special
+    // requirements, deal with them, otherwise just take the wanted property
+    fieldsToInclude.forEach(field => {
+        // has to be a string to be a valid user object attribute
+        if (typeof field === "string") {
+            switch (field) {
+                // if we need to return the psych test
+                case "psychometricTest":
+                    // see if the user has anything for the psych test
+                    const psychTest = userProperties.psychometricTest;
+                    if (psychTest && typeof psychTest === "object") {
+                        // create a clean test
+                        let cleanPsychTest = {};
+                        // copy in the easy fields
+                        cleanPsychTest.numQuestionsAnswered = psychTest.numQuestionsAnswered;
+                        cleanPsychTest.inProgress = psychTest.inProgress;
+                        cleanPsychTest.startDate = psychTest.startDate;
+                        cleanPsychTest.endDate = psychTest.endDate;
 
-        if (typeof psychTest.numQuestionsAnswered === "number") {
-            cleanPsychTest.numQuestionsAnswered = psychTest.numQuestionsAnswered;
-        }
+                        // find out how many questions there are total for the progress bar
+                        if (typeof psychTest.questionsPerFacet === "number" && Array.isArray(psychTest.factors)) {
+                            // count the number of questions - questions/facet * number of facets
+                            let numFacets = 0;
+                            psychTest.factors.forEach(factor => {
+                                if (factor && typeof factor === "object" && Array.isArray(factor.facets)) {
+                                    numFacets += factor.facets.length;
+                                }
+                            });
+                            cleanPsychTest.numQuestions = psychTest.questionsPerFacet * numFacets;
+                        }
 
-        const currentQuestion = psychTest.currentQuestion;
-        // only applies if the user is currently taking the test
-        if (currentQuestion && typeof currentQuestion === "object") {
-            cleanPsychTest.currentQuestion = {
-                body: currentQuestion.body,
-                leftOption: currentQuestion.leftOption,
-                rightOption: currentQuestion.rightOption,
-                questionId: currentQuestion.questionId
+                        // only applies if the user is currently taking the test
+                        const currentQuestion = psychTest.currentQuestion;
+                        if (currentQuestion && typeof currentQuestion === "object") {
+                            cleanPsychTest.currentQuestion = {
+                                body: currentQuestion.body,
+                                leftOption: currentQuestion.leftOption,
+                                rightOption: currentQuestion.rightOption,
+                                questionId: currentQuestion.questionId
+                            }
+                        }
+                    }
+                    // save the psych test to the front-end user
+                    newUser.psychometricTest = cleanPsychTest;
+                    break;
+                // both of these will give you the same thing; it's called positionInProgress
+                // in the backend but currentPosition in the front end
+                case "positionInProgress":
+                case "currentPosition":
+                    // make sure the field exists
+                    if (userProperties.positionInProgress) {
+                        // find the index of the position the user is applying to
+                        const positionInProgressString = newUser.positionInProgress.toString();
+                        const positionIndex = newUser.positions.findIndex(pos => {
+                            return pos.positionId.toString() === positionInProgressString;
+                        });
+                        position = newUser.positions[positionIndex];
+                        // give the user the current position info
+                        newUser.currentPosition = {
+                            inProgress: true,
+                            name: position.name,
+                            agreedToSkillTestTerms: position.agreedToSkillTestTerms,
+                            skillTests: position.skillTestIds,
+                            testIndex: position.testIndex,
+                            freeResponseQuestions: position.freeResponseQuestions
+                        }
+                    }
+                    break;
+                default:
+                    // by default just include the field
+                    newUser[field] = userProperties[field];
+                    break;
             }
-
         }
-    }
 
-    // if the user is currently applying for a position
-    let currentPosition = undefined;
-    if (newUser.positionInProgress) {
-        // find the index of the position the user is
-        const positionInProgressString = newUser.positionInProgress.toString();
-        const positionIndex = newUser.positions.findIndex(pos => {
-            return pos.positionId.toString() === positionInProgressString;
-        });
-        position = newUser.positions[positionIndex];
-
-        currentPosition = {
-            inProgress: true,
-            name: position.name,
-            agreedToSkillTestTerms: position.agreedToSkillTestTerms,
-            skillTests: position.skillTestIds,
-            testIndex: position.testIndex,
-            freeResponseQuestions: position.freeResponseQuestions
-        }
-    }
-
-    // default things to remove
-    newUser.password = undefined;
-    newUser.emailVerificationToken = undefined;
-    newUser.passwordToken = undefined;
-    newUser.passwordTokenExpirationTime = undefined;
-    newUser.skillTests = undefined;
-    newUser.positions = undefined;
-    newUser.psychometricTest = cleanPsychTest;
-    newUser.currentPosition = currentPosition;
-
-    // if we are given more than the default fields to remove
-    if (Array.isArray(extraFieldsToRemove)) {
-        // go through each extra field and remove them from the user
-        extraFieldsToRemove.forEach(field => {
-            // make sure the field is a string so it can be an object property
-            if (typeof field === "string") {
-                newUser[field] = undefined;
-            }
-        });
-    }
+    })
 
     // return the updated user, ready for front-end use
     return newUser;
 }
 
-
-// some options for front-end user
-const COMPLETE_CLEAN = [
-    "_id",
-    "verificationToken",
+const FOR_USER = [
+    "name",
+    "email",
+    "emailToContact",
+    "phoneNumber",
+    "userType",
     "admin",
     "termsAndConditions",
-    "employerCode",
+    "firstBusinessUser",
     "hideProfile",
+    "profileUrl",
+    "dateSignedUp",
+    "hasFinishedOnboarding",
+    "verificationToken",
     "referredByCode",
     "verified",
+    "skills",
+    "info",
     "redirect",
+    "businessInfo",
     "psychometricTest",
-    "positions",
-    "positionInProgress",
-    "currentPosition",
-    "emailVerificationToken"
+    "currentPosition"
 ]
-// don't want employers to see which other positions user has applied for
-const FOR_EMPLOYER = [ "verificationToken", "emailVerificationToken" ];
-const NO_TOKENS = [ "verificationToken", "emailVerificationToken" ];
+
+
+
+// // removes information from a db user object so that it can be passed for that
+// // same user on the front end
+// function frontEndUser(dbUser, extraFieldsToRemove) {
+//     // copy everything into new user object
+//     let newUser = Object.assign({}, dbUser);
+//
+//     // doing Object.assign with a document from the db can lead to the new object
+//     // having a bunch of properties we don't want with the actual object ending
+//     // up in newObj._doc, so take the ._doc property if it exists and treat it
+//     // as the actual object
+//     if (newUser._doc) {
+//         newUser = newUser._doc;
+//     }
+//
+//     // clean the psychometric test
+//     let cleanPsychTest = undefined;
+//     const psychTest = newUser.psychometricTest;
+//     if (psychTest) {
+//         cleanPsychTest = {};
+//         if (psychTest.inProgress) {
+//             cleanPsychTest.inProgress = psychTest.inProgress;
+//         }
+//         if (psychTest.startDate) {
+//             cleanPsychTest.startDate = psychTest.startDate;
+//         }
+//         if (psychTest.endDate) {
+//             cleanPsychTest.endDate = psychTest.endDate;
+//         }
+//
+//         if (typeof psychTest.questionsPerFacet === "number" && Array.isArray(psychTest.factors)) {
+//             // count the number of questions - questions/facet * number of facets
+//             let numFacets = 0;
+//             psychTest.factors.forEach(factor => {
+//                 if (factor && typeof factor === "object" && Array.isArray(factor.facets)) {
+//                     numFacets += factor.facets.length;
+//                 }
+//             });
+//             cleanPsychTest.numQuestions = psychTest.questionsPerFacet * numFacets;
+//         }
+//
+//         if (typeof psychTest.numQuestionsAnswered === "number") {
+//             cleanPsychTest.numQuestionsAnswered = psychTest.numQuestionsAnswered;
+//         }
+//
+//         const currentQuestion = psychTest.currentQuestion;
+//         // only applies if the user is currently taking the test
+//         if (currentQuestion && typeof currentQuestion === "object") {
+//             cleanPsychTest.currentQuestion = {
+//                 body: currentQuestion.body,
+//                 leftOption: currentQuestion.leftOption,
+//                 rightOption: currentQuestion.rightOption,
+//                 questionId: currentQuestion.questionId
+//             }
+//
+//         }
+//     }
+//
+//     // if the user is currently applying for a position
+//     let currentPosition = undefined;
+//     if (newUser.positionInProgress) {
+//         // find the index of the position the user is
+//         const positionInProgressString = newUser.positionInProgress.toString();
+//         const positionIndex = newUser.positions.findIndex(pos => {
+//             return pos.positionId.toString() === positionInProgressString;
+//         });
+//         position = newUser.positions[positionIndex];
+//
+//         currentPosition = {
+//             inProgress: true,
+//             name: position.name,
+//             agreedToSkillTestTerms: position.agreedToSkillTestTerms,
+//             skillTests: position.skillTestIds,
+//             testIndex: position.testIndex,
+//             freeResponseQuestions: position.freeResponseQuestions
+//         }
+//     }
+//
+//     // default things to remove
+//     newUser.password = undefined;
+//     newUser.emailVerificationToken = undefined;
+//     newUser.passwordToken = undefined;
+//     newUser.passwordTokenExpirationTime = undefined;
+//     newUser.skillTests = undefined;
+//     newUser.positions = undefined;
+//     newUser.psychometricTest = cleanPsychTest;
+//     newUser.currentPosition = currentPosition;
+//
+//     // if we are given more than the default fields to remove
+//     if (Array.isArray(extraFieldsToRemove)) {
+//         // go through each extra field and remove them from the user
+//         extraFieldsToRemove.forEach(field => {
+//             // make sure the field is a string so it can be an object property
+//             if (typeof field === "string") {
+//                 newUser[field] = undefined;
+//             }
+//         });
+//     }
+//
+//     // return the updated user, ready for front-end use
+//     return newUser;
+// }
 
 
 function randomInt(lowBound, highBound) {
@@ -636,9 +738,7 @@ const helperFunctions = {
     getAndVerifyUser,
     speedTest,
 
-    COMPLETE_CLEAN,
-    FOR_EMPLOYER,
-    NO_TOKENS
+    FOR_USER
 }
 
 

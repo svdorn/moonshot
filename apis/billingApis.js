@@ -16,8 +16,7 @@ const { sanitize,
         getFirstName,
         getAndVerifyUser,
         frontEndUser,
-        getSkillNamesByIds,
-        NO_TOKENS
+        getSkillNamesByIds
 } = require('./helperFunctions');
 
 const errors = require('./errors.js');

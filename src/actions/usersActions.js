@@ -58,11 +58,11 @@ export function emailFailureExitPage() {
     }
 }
 
-export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName, employerAgreedToTerms) {
+export function login(user, saveSession, navigateBackUrl, pathwayId) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
 
-        axios.post("/api/user/login", {user, saveSession, employerAgreedToTerms})
+        axios.post("/api/user/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
@@ -70,37 +70,9 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
                 }
-
-                // should add pathway to user if pathway id exists and user
-                // doesn't already have that pathway
-                const shouldAddPathwayToUser = pathwayId !== undefined && !returnedUser.pathways.some(function(path) {
-                    return path.pathwayId === pathwayId;
-                });
-
-                // add pathway if user came here from trying to sign up for a pathway
-                if (shouldAddPathwayToUser) {
-                    // if the user doesn't already have this pathway, give it
-                    // to them, then redirect to the pathway content page
-                    axios.post("/api/candidate/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayName})
-                    .then(function(response) {
-                        dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
-                        // navigateBackUrl should be equal to the url for the pathway
-                        if (!navigateBackUrl) {
-                            navigateBackUrl = "/myEvaluations";
-                        }
-                        browserHistory.push(nextUrl);
-                        window.scrollTo(0, 0);
-                    })
-                    .catch(function(err) {
-                        dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Cannot sign up for pathway more than once. Sign up for pathway failed.", type: "errorHeader"}})
-                        browserHistory.push(nextUrl);
-                        window.scrollTo(0, 0);
-                    })
-                } else {
-                    // otherwise go to the next screen
-                    browserHistory.push(nextUrl);
-                    window.scrollTo(0, 0);
-                }
+                // go to the next screen
+                browserHistory.push(nextUrl);
+                window.scrollTo(0, 0);
             })
             .catch(function(err) {
                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
@@ -708,21 +680,6 @@ export function comingSoon(user, signedIn){
     }
 }
 
-// ADD a pathway to a user
-export function addPathway(user) {
-    return function(dispatch) {
-        axios.post("/api/candidate/addPathway", user)
-            .then(function(response) {
-                dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
-                window.scrollTo(0, 0);
-                browserHistory.push("/pathwayContent?pathway=" + user.pathwayUrl);
-            })
-            .catch(function(err) {
-                dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "You can't sign up for a pathway more than once.", type: "errorHeader"}})
-                window.scrollTo(0, 0);
-            })
-    }
-}
 
 // DELETE A USER
 export function deleteUser(id) {

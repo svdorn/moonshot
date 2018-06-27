@@ -87,7 +87,6 @@ app.post('/user/session', userApis.POST_session);
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
 app.post('/user/login', userApis.POST_login);
-app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
 app.post('/user/changePassword', userApis.POST_changePassword);
 app.post('/user/forgotPassword', userApis.POST_forgotPassword);
 app.post('/user/changeSettings', userApis.POST_changeSettings);

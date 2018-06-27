@@ -20,8 +20,7 @@ const { sanitize,
         getFirstName,
         getAndVerifyUser,
         frontEndUser,
-        getSkillNamesByIds,
-        NO_TOKENS
+        getSkillNamesByIds
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require('./psychApis');
@@ -39,7 +38,6 @@ const userApis = {
     POST_forgotPassword,
     POST_changePassword,
     POST_changeSettings,
-    GET_userByProfileUrl,
     POST_login,
     POST_startPositionEval,
     POST_continuePositionEval,
@@ -575,9 +573,7 @@ async function addEvaluation(user, business, positionId, startDate) {
                         hiringStage: "Not Contacted",
                         // status changed to Not Contacted just now
                         dateChanged: new Date(),
-                    }],
-                    // could be undefined if user hasn't taken psych test yet
-                    archetype: user.archetype
+                    }]
                     // user won't have any scores yet because they haven't done the eval yet
                 }
                 position.candidates.push(userInformation);
@@ -589,8 +585,7 @@ async function addEvaluation(user, business, positionId, startDate) {
                     employeeId: user._id,
                     name: user.name,
                     gradingComplete: false,
-                    profileUrl: user.profileUrl,
-                    archetype: user.archetype,
+                    profileUrl: user.profileUrl
                     // user won't have any scores yet because they haven't done the eval yet
                     // user won't have any answers yet because managers haven't graded them yet
                 }
@@ -769,10 +764,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
                     hiringStage: "Not Contacted",
                     // status changed to Not Contacted just now
                     dateChanged: new Date(),
-                }],
-                // could be undefined if user hasn't taken psych test yet (which
-                // shouldn't be possible at this point)
-                archetype: user.archetype
+                }]
             }
             businessPos[userArray].push(userInfo);
 
@@ -782,9 +774,6 @@ async function finishPositionEvaluation(user, positionId, businessId) {
 
         // update the candidate saying they're done
         let candidate = businessPos[userArray][candidateIndex];
-
-        // update the archetype now that the user is sure to have taken the psych test
-        candidate.archetype = user.archetype;
 
         // --->> SCORE THE USER <<--- //
         // GET THE TOTAL SKILL SCORE BY AVERAGING ALL SKILL SCORES FOR THIS POSITION
@@ -1882,18 +1871,6 @@ function POST_forgotPassword(req, res) {
 }
 
 
-function GET_userByProfileUrl(req, res) {
-    if (typeof req.query !== "object") { return res.status(400).send("Bad url."); }
-
-    const profileUrl = sanitize(req.query.profileUrl);
-    const query = { profileUrl };
-    getUserByQuery(query, function (err, user) {
-        if (err) { return res.status(400).send("Bad url"); }
-        return res.json(frontEndUser(user, FOR_EMPLOYER));
-    });
-}
-
-
 // get positions for evaluations page
 async function GET_positions(req, res) {
     try {
@@ -2048,7 +2025,6 @@ async function POST_agreeToTerms(req, res) {
 async function POST_login(req, res) {
     const reqUser = sanitize(req.body.user);
     let saveSession = sanitize(req.body.saveSession);
-    const employerAgreedToTerms = sanitize(req.body.employerAgreedToTerms);
 
     if (typeof saveSession !== "boolean") {
         saveSession = false;
@@ -2089,32 +2065,6 @@ async function POST_login(req, res) {
             else if (passwordsMatch) {
                 // check if user verified email address
                 if (user.verified) {
-                    if (typeof employerAgreedToTerms === "boolean") {
-                        const NOW = new Date();
-                        user.termsAndConditions = [
-                            {
-                                name: "Privacy Policy",
-                                date: NOW,
-                                agreed: true
-                            },
-                            {
-                                name: "Terms of Use",
-                                date: NOW,
-                                agreed: true
-                            },
-                            {
-                                name: "Service Level Agreement",
-                                date: NOW,
-                                agreed: true
-                            }
-                        ]
-                        try { user = await user.save(); }
-                        catch (saveUserError) {
-                            console.log("Error saving employer trying to log in!");
-                            return res.status(500).send("Server error.");
-                        }
-                    }
-
                     user = removePassword(user);
                     if (saveSession) {
                         req.session.userId = user._id;

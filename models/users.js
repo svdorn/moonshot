@@ -15,8 +15,6 @@ const usersSchema = mongoose.Schema({
     userType: String,
     // has admin rights on the site, able to create business accounts and see all results
     admin: Boolean,
-    // agreed to privacy policy and terms of use
-    agreedToTerms: Boolean,
     // there are various terms that can be agreed to, depending on the user type
     termsAndConditions: [{
         // the name of the terms [e.g. Privacy Policy, Terms of Use, etc...]
@@ -54,8 +52,6 @@ const usersSchema = mongoose.Schema({
     passwordTokenExpirationTime: Number,
     // if the use has verified their account via email
     verified: Boolean,
-    // list of skills the user has received from completing pathways
-    skills: [ String ],
     // general info about the user, can be edited on onboarding or profile
     info: {
         // title of the job they want
@@ -99,10 +95,6 @@ const usersSchema = mongoose.Schema({
         // languages the user speaks (not currently editable)
         languages: [ String ]
     },
-    // the pathway that the user will be redirected to after onboarding
-    // only exists if the user tries to sign up for a pathway before having
-    // an account
-    pathwayName: String,
     // location to redirect to after signing up
     redirect: String,
 
@@ -185,9 +177,6 @@ const usersSchema = mongoose.Schema({
         },
         title: String
     },
-
-    // the archetype the user was found to be from the psychometricTest
-    archetype: String,
 
     // questions the user has to answer - only once - before doing a position eval
     adminQuestions: {

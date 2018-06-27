@@ -1,7 +1,7 @@
 "use strict"
 const mongoose = require('mongoose');
 
-const positionSchema = new Schema({
+const positionSchema = mongoose.Schema({
     // name of the position (such as "Machine Learning Developer")
     name: String,
     // whether the position can be applied to by anyone or if they need a unique
@@ -182,8 +182,6 @@ const businessesSchema = mongoose.Schema({
 //                 // the date/time the hiring stage was changed
 //                 dateChanged: Date
 //             }],
-//             // user's archetype, found from the psychometric test
-//             archetype: String,
 //             // the scores the user got for the position; if this is not undefined,
 //             // the user has completed the evaluation
 //             scores: {
@@ -226,8 +224,6 @@ const businessesSchema = mongoose.Schema({
 //             }],
 //             // the url to get to the user's results page
 //             profileUrl: String,
-//             // user's archetype, found from the psychometric test
-//             archetype: String,
 //             // the scores the user got for the position; if this is not undefined,
 //             // the user has completed the evaluation
 //             scores: {

@@ -387,7 +387,6 @@ class CandidatePreview extends Component {
 
 
                 {this.makePredictiveSection("Predicted", this.props.candidate.scores ? this.props.candidate.scores.predicted : undefined)}
-                {/*this.makePredictiveSection("Psychometrics", this.props.candidate.archetype)*/}
                 {this.makePredictiveSection("Skill", this.props.candidate.scores ? this.props.candidate.scores.skill : undefined)}
 
                 <div style={style.darkenerStyle} />
