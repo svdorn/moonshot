@@ -28,6 +28,7 @@ const errors = require('./errors.js');
 const businessApis = {
     POST_forBusinessEmail,
     POST_demoEmail,
+    POST_addEvaluationEmail,
     POST_dialogEmail,
     POST_dialogEmailScreen2,
     POST_dialogEmailScreen3,
@@ -340,6 +341,34 @@ function POST_demoEmail(req, res) {
         + "<h3>Email of someone who watched demo: </h3>"
         + "<p>Email: "
         + sanitize(req.body.email)
+        + "</p>"
+        + "</div>";
+
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) {
+            res.json("Thank you for contacting us, our team will get back to you shortly.");
+        } else {
+            res.status(500).send(msg);
+        }
+    })
+}
+
+function POST_addEvaluationEmail(req, res) {
+    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
+    const business = sanitize(req.body.business);
+    const position = sanitize(req.body.position);
+    let subject = 'ACTION REQUIRED - ' + business + ' requested new position';
+
+    let content = "<div>"
+        + "<h2>" + business + " requested new position</h2>"
+        + "<h3>Business</h3>"
+        + "<p>"
+        + business
+        + "</p>"
+        + "<h3>Position</h3>"
+        + "<p>"
+        + position
         + "</p>"
         + "</div>";
 
