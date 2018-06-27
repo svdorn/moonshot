@@ -287,7 +287,7 @@ class MyEvaluations extends Component {
                     <div style={{filter:"blur(5px)"}}>
                         <MyEvaluationsPreview {...attributes} />
                     </div>
-                    <div className="font28px font26pxUnder700 font22pxUnder500 whiteText underline clickable center addEval" onClick={this.handleOpen}>
+                    <div className="font28px font26pxUnder700 font22pxUnder500 grayText underline clickable center addEval" onClick={this.handleOpen}>
                         + Add Evaluation
                     </div>
                 </li>
