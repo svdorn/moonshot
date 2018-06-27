@@ -372,6 +372,20 @@ class BusinessEditor extends Component {
     }
 
 
+    resetIdealFactors(positionIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].idealFactors = JSON.parse(JSON.stringify(this.state.blankPosition.idealFactors));
+        this.setState({ business });
+    }
+
+
+    resetGrowthFactors(positionIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].growthFactors = JSON.parse(JSON.stringify(this.state.blankPosition.growthFactors));
+        this.setState({ business });
+    }
+
+
     render() {
         const self = this;
 
@@ -655,6 +669,18 @@ class BusinessEditor extends Component {
                 )
             }
 
+            const resetIdealFactorsButton = (
+                <button onClick={() => self.resetIdealFactors(positionIndex)} style={{marginTop: "40px"}}>
+                    Reset Ideal Factors
+                </button>
+            );
+
+            const resetGrowthFactorsButton = (
+                <button onClick={() => self.resetGrowthFactors(positionIndex)} style={{marginTop: "40px"}}>
+                    Reset Growth Factors
+                </button>
+            );
+
             const deletePositionButton = (
                 position._id ? null :
                 <div
@@ -675,8 +701,8 @@ class BusinessEditor extends Component {
                     {employeeFrqRequirement}<br/>
                     {"Estimated evaluation length (in minutes): "} {lengthInput}<br/>
                     {"Time allowed to candidates for this position (in days): "} {timeAllottedInput}<br/>
-                    {"Ideal psych results: "} {idealFactors}<br/>
-                    {"Ideal growth results: "} {growthFactors}
+                    {"Ideal psych results: "} {resetIdealFactorsButton} {idealFactors}<br/>
+                    {"Ideal growth results: "} {resetGrowthFactorsButton} {growthFactors}
                 </div>
             );
         }
