@@ -1,7 +1,7 @@
 "use strict"
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var usersSchema = mongoose.Schema({
+const usersSchema = mongoose.Schema({
     // user's full name
     name: String,
     // user's email address, used for log in
@@ -340,7 +340,7 @@ var usersSchema = mongoose.Schema({
         // list of ids for the necessary skill tests
         skillTestIds: [ mongoose.Schema.Types.ObjectId ],
         // the index of the current test that the user is taking within
-        // skillTests array; the tests below the index have alreday been taken
+        // skillTests array; the tests below the index have already been taken
         testIndex: Number,
         // the free response questions specific to this position
         freeResponseQuestions: [{
@@ -354,13 +354,60 @@ var usersSchema = mongoose.Schema({
             body: String,
             // if the question is required in order to finish the evaluation
             required: Boolean
-        }]
+        }],
+        // the predictive scores the user got for the position
+        scores: {
+            // weighted combination of all the scores
+            overall: Number,
+            // average of skill iqs for all relevant skills
+            skill: Number,
+            // a summary of the four predictive scores
+            predicted: Number,
+            // how good of a culture fit the candidate has
+            culture: Number,
+            // how much the candidate could grow in the position
+            growth: Number,
+            // if the candidate would stay at the company for a long time
+            longevity: Number,
+            // how well the candidate would do at that specific position
+            performance: Number
+        },
+        // --->>                    CANDIDATES ONLY                     <<--- //
+        // the hiring stage of the candidate, which the company has determined
+        // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
+        hiringStage: String,
+        // if the candidate is no longer being considered for the role
+        isDismissed: Boolean,
+        // dates/times the hiring stage of the candidate was changed for this position
+        hiringStageChanges: [{
+           // what the hiring stage was changed to
+           hiringStage: String,
+           // the date/time the hiring stage was changed
+           dateChanged: Date
+        }],
+        // <<-------------------------------------------------------------->> //
+        // --->>                     EMPLOYEES ONLY                     <<--- //
+        // id of the manager that rated this employee
+        managerId: mongoose.Schema.Types.ObjectId,
+        // whether someone has graded this employee
+        gradingComplete: Boolean,
+        // the questions that will be asked of the manager about the employee
+        answers: [{
+            // question has been answered
+            complete: Boolean,
+            // what the mangager rated the employee (if this was a range question)
+            score: Number,
+            // the index within the option array of the option that was chosen
+            // (if this was a multiple choice question)
+            selectedIndex: Number,
+            // index of the question within employeeQuestions
+            questionIndex: Number
+        }],
+        // <<-------------------------------------------------------------->> //
     }],
-
+    // the position evaluation the user is currently taking
     positionInProgress: mongoose.Schema.Types.ObjectId,
 });
 
-// 'Users' means we will use the 'users' collection. if 'Books' was in there
-// it would be using the books collection from the db
 var Users = mongoose.model('Users', usersSchema);
 module.exports = Users;
