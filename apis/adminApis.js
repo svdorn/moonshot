@@ -224,7 +224,8 @@ async function POST_saveBusiness(req, res) {
             employees: [],
             candidatCodes: [],
             employeeCodes: [],
-            adminCodes: []
+            adminCodes: [],
+            logo: "hr.png"
         }
 
         // if it's a new business, create the new business
