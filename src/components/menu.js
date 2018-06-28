@@ -133,7 +133,9 @@ class Menu extends Component {
 
 
     handleAnchorClick(anchor, wantedPath) {
-        this.goTo(wantedPath);
+        if (this.props.location.pathname != wantedPath) {
+            this.goTo(wantedPath);
+        }
         setTimeout(() => {
             const element = document.getElementById(anchor);
             if (element) {
