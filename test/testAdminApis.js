@@ -17,12 +17,5 @@ before(function(done) {
 });
 
 const {
-    POST_alertLinkClicked,
     GET_info
 } = require('../apis/userApis');
-
-describe('POST_alertLinkClicked()', function() {
-    it('should send an email to the founders telling them to contact Northwestern Mutual', function() {
-        //POST_alertLinkClicked();
-    });
-});
