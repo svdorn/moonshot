@@ -1739,60 +1739,55 @@ function POST_changePasswordForgot(req, res) {
 }
 
 
-function POST_changePassword(req, res) {
-    var user = sanitize(req.body);
-    var query = {_id: user._id};
+async function POST_changePassword(req, res) {
+    const userId = sanitize(req.body._id);
+    const oldPassword = sanitize(req.body.oldpass);
+    const newPassword = sanitize(req.body.password);
+    const COULD_NOT_CHANGE = "Server error. Couldn't change password.";
 
-    // if the field doesn't exist, $set will set a new field
-    const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function (saltErr, salt) {
-        if (saltErr) {
-            console.log("Error generating salt for resetting password: ", saltErr);
-            return res.status(500).send("Server error. Could not change password.");
+    // get the user from db
+    let user;
+    try { user = await Users.findById(userId); }
+    catch (findUserError) {
+        console.log("");
+        return res.status(500).send(COULD_NOT_CHANGE);
+    }
+
+    // if no user was found, can't change password
+    if (!user) { return res.status(400).send("Invalid credentials."); }
+
+    // see if the old password is correct
+    bcrypt.compare(oldPassword, user.password, function (passwordError, passwordsMatch) {
+        // if there was an error comparing the passwords
+        if (passwordError) {
+            console.log("error comparing passwords when trying to create new password: ", passwordError);
+            return res.status(500).send(COULD_NOT_CHANGE);
         }
-        bcrypt.hash(user.password, salt, function (hashErr, hash) {
-            // error encrypting the new password
-            if (hashErr) {
-                console.log("Error hashing user's new password when trying to reset password: ", hashErr);
-                return res.status(500).send("Server error. Couldn't change password.");
+
+        // if the wrong old password was given
+        if (passwordsMatch !== true) {
+            return res.status(400).send("Old password is incorrect.");
+        }
+
+        // user gave correct old password, hash the new one
+        const saltRounds = 10;
+        bcrypt.hash(user.password, saltRounds, async function (hashError, hash) {
+            // if there was an error hashing the new password
+            if (hashError) {
+                console.log("error hashing new password: ", hashError);
+                return res.status(500).send(COULD_NOT_CHANGE);
             }
 
-            Users.findOne(query, function (dbFindErr, userFromDB) {
-                if (dbFindErr) {
-                    console.log("Error finding the user that is trying to reset their password: ", dbFindErr);
-                    return res.status(500).send("Server error. Couldn't change password.");
-                }
+            // all is good, set the new password and save the user
+            user.password = hash;
+            try { user = await user.save() }
+            catch (saveUserError) {
+                console.log("error saving user with new password: ", saveUserError);
+                return res.status(500).send(COULD_NOT_CHANGE);
+            }
 
-                // CHECK IF A USER WAS FOUND
-                if (!userFromDB) {
-                    return res.status(404).send("Server error. Couldn't change password.");
-                }
-
-                bcrypt.compare(user.oldpass, userFromDB.password, function (passwordError, passwordsMatch) {
-                    // error comparing passwords, not necessarily that the passwords don't match
-                    if (passwordError) {
-                        console.log("Error comparing passwords when trying to reset password: ", passwordError);
-                        return res.status(500).send("Server error. Couldn't change password.");
-                    }
-                    // user gave the correct old password
-                    else if (passwordsMatch) {
-                        // update the user's password
-                        userFromDB.password = hash;
-                        // save the user in the db
-                        userFromDB.save(function(saveErr, newUser) {
-                            if (saveErr) {
-                                console.log("Error saving user's new password when resetting: ", saveErr);
-                                return res.status(500).send("Server error. Couldn't change password.");
-                            } else {
-                                //successfully changed user's password
-                                return res.json(frontEndUser(newUser));
-                            }
-                        });
-                    } else {
-                        return res.status(400).send("Old password is incorrect.");
-                    }
-                });
-            });
+            // return the new user
+            return res.json(frontEndUser(user));
         });
     });
 }
