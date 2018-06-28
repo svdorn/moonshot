@@ -13,7 +13,6 @@ const mongoose = require("mongoose");
 const { sanitize,
         removeEmptyFields,
         verifyUser,
-        getUserByQuery,
         sendEmail,
         getFirstName,
         getAndVerifyUser,
@@ -1804,7 +1803,7 @@ function POST_forgotPassword(req, res) {
     let email = sanitize(req.body.email);
     let query = {email: email};
 
-    const user = getUserByQuery(query, function (err, user) {
+    const user = Users.findOne(query, function (err, user) {
         if (!user) {
             console.log("Couldn't find user to set their password change token.");
             return res.status(401).send("Cannot find user");

@@ -177,13 +177,11 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
     }
     // otherwise return unsuccessfully
     else {
-        callback(false, "Invalid argument. Recipients should be a list of strings.");
-        return;
+        return callback(false, "Invalid argument. Recipients should be a list of strings.");
     }
 
     if (recipientArray.length === 0) {
-        callback(false, "Couldn't send email. No recipient.")
-        return;
+        return callback(false, "Couldn't send email. No recipient.")
     }
 
     // get the list of email addresses that have been opted out
@@ -210,8 +208,7 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
 
         // don't send an email if it's not going to be sent to anyone
         if (recipientList === "") {
-            callback(false, "Couldn't send email. Recipients are on the opt-out list or no valid emails were given.")
-            return;
+            return callback(false, "Couldn't send email. Recipients are on the opt-out list or no valid emails were given.")
         }
 
         // the default email account to send emails from
@@ -261,48 +258,11 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
         transporter.sendMail(mailOptions, (error, info) => {
             if (error) {
                 console.log(error);
-                callback(false, "Error sending email to user");
-                return;
+                return callback(false, "Error sending email to user");
             }
-            callback(true, "Email sent! Check your email.");
-            return;
+            return callback(true, "Email sent! Check your email.");
         });
     })
-}
-
-
-// dangerous, returns user with verification token
-function getUserByQuery(query, callback) {
-    let finishedOneCall = false;
-
-    // if user found in one of the DBs, performs the callback
-    // if user not found, check if the other DB is already done
-    //     if so, callback with no user, otherwise, wait for the other DB call
-    let doCallbackOrWaitForOtherDBCall = function(err, foundUser) {
-        // if a user was found, return it
-        if (foundUser && foundUser != null) {
-            const NO_ERRORS = undefined;
-            callback(NO_ERRORS, foundUser);
-            return;
-        }
-        // no user found in one of the dbs
-        else {
-            // if this is the second db we've checked, no user was found in
-            // either db, so return undefined and an error if one exists
-            if (finishedOneCall) {
-                const NO_USER_FOUND = undefined;
-                callback(err, NO_USER_FOUND);
-            }
-            // if this is the first db we've checkd, mark that a db was checked
-            else {
-                finishedOneCall = true;
-            }
-        }
-    }
-
-    Users.findOne(query, function (err, foundUser) {
-        doCallbackOrWaitForOtherDBCall(err, foundUser);
-    });
 }
 
 
@@ -572,7 +532,6 @@ const helperFunctions = {
     sanitize,
     removeEmptyFields,
     verifyUser,
-    getUserByQuery,
     sendEmail,
     getFirstName,
     removeDuplicates,
