@@ -102,7 +102,6 @@ app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 
-app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
 app.post('/business/demoEmail', businessApis.POST_demoEmail);
 app.post('/business/dialogEmail', businessApis.POST_dialogEmail);
 app.post('/business/dialogEmailScreen2', businessApis.POST_dialogEmailScreen2);

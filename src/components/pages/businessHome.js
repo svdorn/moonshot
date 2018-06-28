@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
 import { closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
-import {forBusiness, demoEmail, dialogEmail, dialogEmailScreen2,dialogEmailScreen3,dialogEmailScreen4} from '../../actions/usersActions';
+import {demoEmail, dialogEmail, dialogEmailScreen2,dialogEmailScreen3,dialogEmailScreen4} from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
@@ -887,7 +887,6 @@ class BusinessHome extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        forBusiness,
         demoEmail,
         dialogEmail,
         dialogEmailScreen2,

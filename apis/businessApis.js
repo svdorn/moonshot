@@ -8,20 +8,16 @@ const crypto = require('crypto');
 
 // get helper functions
 const { sanitize,
-        removeEmptyFields,
-        verifyUser,
         sendEmail,
-        getFirstName,
         getAndVerifyUser,
         frontEndUser,
-        speedTest,
+        speedTest
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
 
 
 const businessApis = {
-    POST_forBusinessEmail,
     POST_demoEmail,
     POST_dialogEmail,
     POST_dialogEmailScreen2,
@@ -289,43 +285,6 @@ function POST_emailInvites(req, res) {
 
 }
 
-function POST_forBusinessEmail(req, res) {
-    let phone = "None given";
-    if (req.body.phone) {
-        phone = sanitize(req.body.phone);
-    }
-    let company = "None given";
-    if (req.body.company) {
-        company = sanitize(req.body.company);
-    }
-    let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
-    let subject = 'Moonshot Sales Lead - From Home Page';
-
-    let content = "<div>"
-        + "<h3>Sales Lead from Home Page:</h3>"
-        + "<p>Name: "
-        + sanitize(req.body.name)
-        + "</p>"
-        + "<p>Email: "
-        + sanitize(req.body.email)
-        + "</p>"
-        + "<p>Company: "
-        + company
-        + "</p>"
-        + "<p>Phone Number: "
-        + phone
-        + "</p>"
-        + "</div>";
-
-    const sendFrom = "Moonshot";
-    sendEmail(recipients, subject, content, sendFrom, undefined, function (success, msg) {
-        if (success) {
-            res.json("Thank you for contacting us, our team will get back to you shortly.");
-        } else {
-            res.status(500).send(msg);
-        }
-    })
-}
 
 function POST_demoEmail(req, res) {
     let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "stevedorn9@gmail.com"];
