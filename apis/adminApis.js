@@ -12,7 +12,6 @@ const errors = require('./errors');
 const { sanitize,
         removeEmptyFields,
         verifyUser,
-        removePassword,
         sendEmail,
         getFirstName,
         frontEndUser,

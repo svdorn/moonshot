@@ -9,7 +9,6 @@ const crypto = require('crypto');
 const { sanitize,
         removeEmptyFields,
         verifyUser,
-        removePassword,
         sendEmail,
         getFirstName,
         frontEndUser
@@ -411,7 +410,7 @@ function POST_updateAllOnboarding(req, res) {
                     res.status(500).send("Server error, couldn't save information.");
                     return;
                 }
-                res.send(removePassword(updatedUser));
+                res.send(frontEndUser(updatedUser));
             });
         })
     } else {

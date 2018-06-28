@@ -16,6 +16,8 @@ const sanitizeOptions = {
 
 
 const FOR_USER = [
+    "_id",
+    "verificationToken",
     "name",
     "email",
     "emailToContact",
@@ -28,7 +30,6 @@ const FOR_USER = [
     "profileUrl",
     "dateSignedUp",
     "hasFinishedOnboarding",
-    "verificationToken",
     "referredByCode",
     "verified",
     "skills",
@@ -281,7 +282,7 @@ function getUserByQuery(query, callback) {
         // if a user was found, return it
         if (foundUser && foundUser != null) {
             const NO_ERRORS = undefined;
-            callback(NO_ERRORS, removePassword(foundUser));
+            callback(NO_ERRORS, foundUser);
             return;
         }
         // no user found in one of the dbs
@@ -302,19 +303,6 @@ function getUserByQuery(query, callback) {
     Users.findOne(query, function (err, foundUser) {
         doCallbackOrWaitForOtherDBCall(err, foundUser);
     });
-}
-
-
-// used when passing the user object back to the user, still contains sensitive
-// data such as the user id and verification token
-function removePassword(user) {
-    if (typeof user === "object" && user != null) {
-        let newUser = user;
-        newUser.password = undefined;
-        return newUser;
-    } else {
-        return undefined;
-    }
 }
 
 
@@ -584,7 +572,6 @@ const helperFunctions = {
     sanitize,
     removeEmptyFields,
     verifyUser,
-    removePassword,
     getUserByQuery,
     sendEmail,
     getFirstName,

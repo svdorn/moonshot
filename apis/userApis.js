@@ -13,7 +13,6 @@ const mongoose = require("mongoose");
 const { sanitize,
         removeEmptyFields,
         verifyUser,
-        removePassword,
         getUserByQuery,
         sendEmail,
         getFirstName,
@@ -1521,20 +1520,25 @@ async function GET_session(req, res) {
         const user = await Users.findById(userId);
 
         // if no user found, the user was probably deleted. remove the
-        // user from the session and don't log in
-        if (!user) {
+        // user from the session and don't log in; do the same if the session
+        // has the wrong verification token
+        if (!user || user.verificationToken !== sanitize(req.session.verificationToken)) {
             req.session.userId = undefined;
-            req.session.save();
-            return res.json(undefined);
+            req.session.verificationToken = undefined;
+            req.session.save(function(saveSessionError) {
+                if (saveSessionError) { console.log("error saving session: ", saveSessionError); }
+                return res.json(undefined);
+            });
         }
 
         // otherwise return the user that is logged in
         else { res.json(frontEndUser(user)); }
     }
 
+    // on error, print the error and return as if there was no user in the session
     catch (getUserError) {
         console.log("error getting user: ", getUserError);
-        res.json(undefined);
+        return res.json(undefined);
     }
 }
 
@@ -1553,21 +1557,22 @@ async function POST_session(req, res) {
 
     // get the user from the id, check the verification token to ensure they
     // have the right credentials to stay logged in
-    //getUserByQuery({_id: userId}, function(error, foundUser) {
     let foundUser;
-    try { foundUser = await getAndVerifyUser(userId, verificationToken); }
+    try { foundUser = await getAndVerifyUser(userId, verificationToken) }
     catch (findUserError) {
         console.log("Error getting user when trying to save session: ", findUserError);
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
 
-    // put user id in session
+    // put user id and verification token in session
     req.session.userId = userId;
+    req.session.verificationToken = verificationToken;
 
-    // save session with user id
+    // save updated session
     req.session.save(function(sessionSaveError) {
         if (sessionSaveError) {
             console.log("error saving user id to session: ", sessionSaveError);
+            return res.status(500).send("Error saving session.");
         } else {
             return res.json(true);
         }
@@ -1575,15 +1580,16 @@ async function POST_session(req, res) {
 }
 
 
-// signs the user out by marking their session id as undefined
+// signs the user out by marking their session id and verification token as undefined
 function POST_signOut(req, res) {
-    // remove the user id from the session
+    // remove the user id and verification token from the session
     req.session.userId = undefined;
+    req.session.verificationToken = undefined;
     // save the updated session
     req.session.save(function (err) {
         if (err) {
             console.log("error removing user session: ", err);
-            return res.status(500).send("Failure removing user session");
+            return res.status(500).send("Error logging out.");
         } else {
             res.json("success");
         }
@@ -1626,25 +1632,22 @@ function POST_verifyEmail(req, res) {
     const token = sanitize(req.body.token);
     const userType = sanitize(req.body.userType);
 
-    // query form business user database if the user is a business user
-    const DB = (userType === "employer") ? Employers : Users;
-
+    // if url doesn't provide token, can't verify
     if (!token) {
-        res.status(400).send("Url not in the right format");
-        return;
+        return res.status(400).send("Url not in the right format");
     }
 
     var query = {emailVerificationToken: token};
-    DB.findOne(query, function (err, user) {
+    Users.findOne(query, function (err, user) {
         if (err) {
             console.log("Error trying to find user from verification token");
             return res.status(500).send("Server error, try again later");
         }
 
-        if (!user) {
-            return res.status(404).send("User not found from url");
-        }
+        // if no user found from token, can't verify
+        if (!user) { return res.status(404).send("User not found from url"); }
 
+        // if a user was found from the token, verify them and get rid of the token
         user.verified = true;
         user.emailVerificationToken = undefined;
 
@@ -1654,31 +1657,26 @@ function POST_verifyEmail(req, res) {
                 return res.status(500).send("Server error, try again later");
             }
 
-            // we don't save the user session if logging in as business user
-            // because it is likely the account was created on a different computer
-            if (userType === "employer") {
-                return res.json(updatedUser.email);
-            }
-
             // if the session has the user's id, can immediately log them in
             sessionUserId = sanitize(req.session.unverifiedUserId);
+            // get rid of the unverified id as it won't be needed anymore
             req.session.unverifiedUserId = undefined;
 
-            req.session.userId = sessionUserId;
-
-            req.session.save(function (err) {
-                if (err) {
-                    console.log("Error saving session after verifying user: ", err);
-                }
-            });
-
-            if (sessionUserId && sessionUserId == updatedUser._id) {
-                return res.json(frontEndUser(updatedUser));
+            // if the session had the correct user id, log the user in
+            if (sessionUserId.toString() === user._id.toString()) {
+                req.session.userId = user._id.toString();
+                req.session.verificationToken = user.verificationToken;
+                req.session.save(function(saveSessionError) {
+                    if (saveSessionError) {
+                        console.log("Error saving user session: ", saveSessionError);
+                    }
+                    // return the user object even if session saving didn't work
+                    return res.json(frontEndUser(user));
+                });
             }
-            // otherwise, bring the user to the login page
-            else {
-                return res.json("go to login");
-            }
+
+            // otherwise bring the user to the login page
+            else { return res.json("go to login"); }
         });
     });
 }
@@ -2024,71 +2022,58 @@ async function POST_agreeToTerms(req, res) {
 
 async function POST_login(req, res) {
     const reqUser = sanitize(req.body.user);
+    const email = reqUser.email;
+    const password = reqUser.password;
+    // the setting for whether the user wants to stay logged in
     let saveSession = sanitize(req.body.saveSession);
 
+    // if the stay logged in session is not the right type, assume we shouldn't
+    // stay logged in
     if (typeof saveSession !== "boolean") {
         saveSession = false;
     }
-    var email = reqUser.email;
-    var password = reqUser.password;
 
-    let user = null;
 
     // searches for user by case-insensitive email
     const emailRegex = new RegExp(email, "i");
     var query = {email: emailRegex};
-    Users.findOne(query, function (err, foundUser) {
-        if (err) {
-            return res.status(500).send("Error performing query to find user in db. ", err);
-        }
+    let user;
+    // find the user by email
+    try { user = await Users.findOne(query); }
+    catch (findUserError) {
+        console.log("Couldn't find user: ", findUserError);
+        return res.status(404).send("No user with that email was found.");
+    }
 
-        // CHECK IF A USER WAS FOUND
-        if (!foundUser || foundUser == null) {
-            return res.status(404).send("No user with that email was found.");
+    // see if the given password is correct
+    bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {
+        // if comparing passwords fails, don't log in
+        if (passwordError) {
+            return res.status(500).send("Error logging in, try again later.");
         }
-        // USER FOUND IN USER DB
-        else {
-            user = foundUser;
-            tryLoggingIn();
-            return;
+        // wrong password, don't log in
+        if (passwordsMatch !== true) {
+            return res.status(400).send("Password is incorrect.");
+        }
+        // user has not yet verified email, don't log in
+        if (user.verified !== true) {
+            return res.status(401).send("Email not yet verified");
+        }
+        // all login info is correct
+        // if user wants to stay logged in, save the session
+        if (saveSession) {
+            req.session.userId = user._id;
+            req.session.verificationToken = user.verificationToken;
+            req.session.save(function (err) {
+                console.log("saved session, user is: ", frontEndUser(user));
+                // if there is an error saving session, print it, but still log in
+                if (err) { console.log("error saving user session", err); }
+                return res.json(frontEndUser(user));
+            });
+        } else {
+            return res.json(frontEndUser(user));
         }
     });
-
-    // executed once a user is found
-    async function tryLoggingIn() {
-        bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {
-            // if hashing password fails
-            if (passwordError) {
-                return res.status(500).send("Error logging in, try again later.");
-            }
-            // passwords match
-            else if (passwordsMatch) {
-                // check if user verified email address
-                if (user.verified) {
-                    user = removePassword(user);
-                    if (saveSession) {
-                        req.session.userId = user._id;
-                        req.session.save(function (err) {
-                            if (err) {
-                                console.log("error saving user session", err);
-                            }
-                            return res.json(frontEndUser(user));
-                        });
-                    } else {
-                        return res.json(frontEndUser(user));
-                    }
-                }
-                // if user has not yet verified email address, don't log in
-                else {
-                    return res.status(401).send("Email not yet verified");
-                }
-            }
-            // wrong password
-            else {
-                return res.status(400).send("Password is incorrect.");
-            }
-        });
-    }
 }
 
 

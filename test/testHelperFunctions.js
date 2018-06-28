@@ -6,7 +6,6 @@ const {
     sanitize,
     removeEmptyFields,
     verifyUser,
-    removePassword,
     printUsersFromPathway,
     sendEmail,
     getFirstName,

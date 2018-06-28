@@ -9,7 +9,6 @@ const stripe = require("stripe")(credentials.stripeSk);
 const { sanitize,
         removeEmptyFields,
         verifyUser,
-        removePassword,
         sendEmail,
         getFirstName,
         getAndVerifyUser,

@@ -7,7 +7,6 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         getAndVerifyUser,
-        removePassword,
         sendEmail,
         randomInt,
         frontEndUser
