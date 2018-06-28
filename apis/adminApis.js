@@ -458,13 +458,7 @@ async function createAdmin(name, email, password, title, businessId, businessNam
         // assuming that this will be the first admin
         user.firstBusinessUser = true;
         // the company that was just created/updated
-        user.businessInfo = {
-            company: {
-                name: businessName,
-                companyId: businessId
-            },
-            title
-        }
+        user.businessInfo = { businessId, title }
         // <<-------------------------------------------------------->> //
 
         // --->>       VERIFY THAT USER HAS UNIQUE EMAIL          <<--- //
@@ -540,7 +534,7 @@ async function GET_business(req, res) {
     try {
         const businessUserQuery = {
             "$and": [
-                { "businessInfo.company.companyId": businessId },
+                { "businessInfo.businessId": businessId },
                 { "userType": "accountAdmin" }
             ]
         }

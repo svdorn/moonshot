@@ -51,9 +51,9 @@ async function POST_customer(req, res) {
     let business;
     try {
         user = await getAndVerifyUser(userId, verificationToken);
-        business = await Businesses.findById(user.businessInfo.company.companyId);
+        business = await Businesses.findById(user.businessInfo.businessId);
         if (!business) {
-            console.log("No business found with id: ", user.businessInfo.company.companyId);
+            console.log("No business found with id: ", user.businessInfo.businessId);
             throw "No business.";
         }
     } catch (getUserError) {

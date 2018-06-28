@@ -171,10 +171,11 @@ const usersSchema = mongoose.Schema({
     // if the user is any type of employer, here is info about the business they work for
     // and their role at that business
     businessInfo: {
-        company: {
-            name: String,
-            companyId: mongoose.Schema.Types.ObjectId
-        },
+        // company: {
+        //     name: String,
+        //     companyId: mongoose.Schema.Types.ObjectId
+        // },
+        businessId: mongoose.Schema.Types.ObjectId,
         title: String
     },
 

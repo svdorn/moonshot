@@ -40,7 +40,7 @@ class Results extends Component {
         let positionId = "";
         try {
             profileUrl = this.props.params.profileUrl;
-            businessId = this.props.currentUser.businessInfo.company.companyId;
+            businessId = this.props.currentUser.businessInfo.businessId;
             positionId = this.props.params.positionId;
         } catch (e) {
             this.goTo("/myCandidates");

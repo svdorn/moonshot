@@ -1,9 +1,11 @@
-var Users = require('../models/users.js');
-var Referrals = require('../models/referrals.js');
-var Businesses = require('../models/businesses.js');
+const Users = require('../models/users.js');
+const Referrals = require('../models/referrals.js');
+const Businesses = require('../models/businesses.js');
+const Signupcodes = require('../models/signupcodes.js');
 
 const bcrypt = require('bcryptjs');
 const crypto = require('crypto');
+const errors = require('./errors.js');
 
 // get helper functions
 const { sanitize,
@@ -28,21 +30,29 @@ const candidateApis = {
 
 function POST_candidate(req, res) {
     const SERVER_ERROR = "Server error, try again later.";
-    let user = sanitize(req.body);
+    //let user = sanitize(req.body);
+    const name = sanitize(req.body.name);
+    const email = sanitize(req.body.email);
+    const password = sanitize(req.body.password);
+
+    let user = { name, email };
 
     // --->>  THINGS WE NEED BEFORE THE USER CAN BE CREATED <<---   //
     // the db business document for the business offering the position the user signed up for
-    let business = undefined;
+    //let business = undefined;
+    // id of the business offering the position
+    let businessId = undefined;
     // the name of the array of codes within the position within the business
-    let userCodeType = undefined;
+    //let userCodeType = undefined;
     // the index of the unique position-related code the user used to sign up
-    let oneTimeCodeIndex = -1;
     // id of the position within the business
     let positionId = undefined;
     // the index of the position and actual position within the business
-    let positionIndex = undefined;
+    //let positionIndex = undefined;
     // if the position the user applying for was found in the business db
     let positionFound = undefined;
+    // the id of the code the user used to sign up
+    let codeId = undefined;
     // if the user has an email address no one else has used before
     let verifiedUniqueEmail = false;
     // if password was set up
@@ -87,7 +97,7 @@ function POST_candidate(req, res) {
     // <<-------------------------------------------------------->> //
 
     // --->>       VERIFY THAT USER HAS UNIQUE EMAIL          <<--- //
-    Users.find({email: user.email})
+    Users.find({ email })
     .then(foundUsers => {
         if (foundUsers.length > 0) {
             return res.status(400).send("An account with that email address already exists.");
@@ -134,7 +144,7 @@ function POST_candidate(req, res) {
 
     // --->>            HASH THE USER'S PASSWORD              <<--- //
     const saltRounds = 10;
-    bcrypt.hash(user.password, saltRounds, function(hashError, hash) {
+    bcrypt.hash(password, saltRounds, function(hashError, hash) {
         if (hashError) { console.log("hash error: ", hashError); return res.status(500).send(SERVER_ERROR); }
 
         // change the stored password to be the hash
@@ -159,9 +169,14 @@ function POST_candidate(req, res) {
         }
 
         // if the user used a unique code that has to get deleted now ...
-        if (userCodeType) {
-            // ... remove it from the position from the correct codes array
-            business.positions[positionIndex][userCodeType].splice(oneTimeCodeIndex, 1);
+        // if (userCodeType) {
+        //     // ... remove it from the position from the correct codes array
+        //     business.positions[positionIndex][userCodeType].splice(oneTimeCodeIndex, 1);
+        // }
+        try { await Signupcodes.deleteOne({ _id: codeId }); }
+        catch (deleteCodeError) {
+            console.log("error deleting sign up code: ", deleteCodeError);
+            // don't stop execution since the user has already been created
         }
 
         // save the user's id so that if they click verify email in the same
@@ -174,15 +189,18 @@ function POST_candidate(req, res) {
         try {
             if (user.userType == "candidate" || user.userType == "employee") {
                 // add the evaluation to the user
-                let evalObj = await addEvaluation(user, business, positionId, startDate);
-                user = evalObj.user;
+                //let evalObj = await addEvaluation(user, business, positionId, startDate);
+                //user = evalObj.user;
+                user = await addEvaluation(user, businessId, positionId, startDate);
                 // since the user is just signing up we know that the active
                 // position will be the only one available
                 user.positionInProgress = user.positions[0].positionId;
             }
 
             // save the user and the business with the new evaluation information
-            let [savedUser, savedBusiness] = await Promise.all([user.save(), business.save()]);
+            //let [savedUser, savedBusiness] = await Promise.all([user.save(), business.save()]);
+            // save the user with the new evaluation information
+            await user.save();
 
             // user was successfully created
             return res.json(true);
@@ -230,9 +248,9 @@ function POST_candidate(req, res) {
     }
 
     function verifyPositionCode() {
-        return new Promise(function(resolve, reject) {
+        return new Promise(async function(resolve, reject) {
             // message shown to users with bad employer code
-            const INVALID_CODE = "Invalid employer code."
+            const INVALID_CODE = "Invalid sign-up code."
             // get the position from the employer code
             let code = user.code;
             // if the user did not provide a code, they can't sign up
@@ -243,91 +261,44 @@ function POST_candidate(req, res) {
                 }
             }
             // see if the code is a valid length
-            if (code.length < 10 || !user.code && code.length < 11) {
-                return reject({status: 400, message: INVALID_CODE, error: `code not long enough, was ${code.length} characters`});
+            if (code.length !== 10) {
+                return reject({status: 400, message: INVALID_CODE, error: `invalid code length, was ${code.length} characters`});
             }
-            // business identifier
-            const employerCode = code.substring(0, 8);
-            // position identifier
-            const positionCode = code.substring(8, 10);
-            // user identifier
-            const uniqueCode = user.userCode ? user.userCode : code.substring(10);
 
-            // find the business corresponding to that employer code
-            Businesses.find({code: employerCode})
-            .then(foundBusinesses => {
-                if (!foundBusinesses || foundBusinesses.length == 0) {
-                    return reject({status: 400, message: INVALID_CODE, error: `no business found with employer code: ${employerCode}`})
-                }
+            // find the code in the db
+            let dbCode;
+            try { dbCode = await Signupcodes.find({ code }); }
+            catch (findCodeError) {
+                return reject({status: 500, message: "Error signing up. Try again later or ask employer for a new code.", error: findCodeError});
+            }
 
-                business = foundBusinesses[0];
+            // check if the code has expired
+            if ((new Date()).getTime() > dbCode.expirationDate.getTime()) {
+                // if it has expired, delete the code
+                await Signupcodes.deleteOne({ _id: dbCode._id });
+                // and tell the user that their code expired
+                return reject({status: 400, message: "That code has expired. Ask the employer to send a new one.", error: "code expired"});
+            }
 
-                // find the position the candidate is applying to
-                positionIndex = business.positions.findIndex(pos => { return pos.code === positionCode; })
-                let position = business.positions[positionIndex];
-                positionId = position._id;
-                if (!position) {
-                    return reject({status: 400, message: INVALID_CODE, error: `no position found with position code: ${positionCode}`});
-                }
+            // set the code's id so it can be deleted after user creation
+            codeId = dbCode._id;
 
-                // if the position requires a special code because it is closed to the public
-                if (position.open === false) {
-                    // user needs a unique code; if doesn't have one, reject
-                    if (!uniqueCode) {
-                        return reject({status: 400, message: INVALID_CODE, error: "no unique code"});
-                    }
+            // get the ids for business and position so the user can be immediately
+            // signed up for the position
+            businessId = dbCode.businessId;
+            positionId = dbCode.positionId;
+            // the user's type is the type of code they got
+            user.userType = dbCode.userType;
+            // if the user is an account admin, add business info
+            if (user.userType === "accountAdmin") {
+                user.businessInfo = { businessId, title: "Account Admin" };
+            }
+            // otherwise the user is a candidate or employee and will have a
+            // start date for their position eval, same as when code was created
+            else { startDate = dbCode.created; }
 
-                    // find the index of the candidate-specific code within the position
-                    const candidateIndex = position.candidateCodes.findIndex(candidateCode => {
-                        return candidateCode.code == uniqueCode;
-                    });
-                    const employeeIndex = position.employeeCodes.findIndex(employeeCode => {
-                        return employeeCode.code == uniqueCode;
-                    });
-                    // const managerIndex = position.managerCodes.findIndex(managerCode => {
-                    //     return managerCode == uniqueCode;
-                    // });
-                    const adminIndex = position.adminCodes.findIndex(adminCode => {
-                        return adminCode.code == uniqueCode;
-                    });
-
-                    if (candidateIndex !== -1) {
-                        user.userType = "candidate";
-                        oneTimeCodeIndex = candidateIndex;
-                        userCodeType = "candidateCodes";
-                        // get the date the evaluation was assigned
-                        startDate = position.candidateCodes[candidateIndex].startDate;
-                    } else if (employeeIndex !== -1) {
-                        user.userType = "employee";
-                        oneTimeCodeIndex = employeeIndex;
-                        userCodeType = "employeeCodes";
-                        startDate = position.employeeCodes[employeeIndex].startDate;
-                    } else if (adminIndex !== -1) {
-                        user.userType = "accountAdmin";
-                        oneTimeCodeIndex = adminIndex;
-                        userCodeType = "adminCodes";
-                        company = {
-                            name : business.name,
-                            companyId: business._id
-                        }
-                        user.businessInfo = {};
-                        user.businessInfo.company = company;
-                        user.businessInfo.title = "Account Admin";
-                    }
-
-                    // if the user does NOT have a valid unique code
-                    if (typeof oneTimeCodeIndex !== "number" || oneTimeCodeIndex < 0){
-                        return reject({status: 400, message: INVALID_CODE, error: "invalid unique code"});
-                    }
-                }
-
-                // the code is legit, resolve
-                return resolve(true);
-            })
-            .catch(findBizError => {
-                console.log("error finding business by employer code");
-                return reject({status: 500, message: SERVER_ERROR, error: findBizError})
-            })
+            // code is legit and all properties using it are set; resolve
+            resolve(true);
         });
     }
 

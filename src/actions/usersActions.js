@@ -363,35 +363,6 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
     }
 }
 
-// POST BUSINESS USER
-export function postEmployer(newUser, currentUser) {
-    return function(dispatch) {
-        dispatch({type: "POST_USER_REQUESTED"});
-
-        // post user to database
-        axios.post("/api/employer/newEmployer", {newUser, currentUser})
-            // user successfully posted
-            .then(function(companyName) {
-                // send verification email
-                axios.post("/api/employer/sendVerificationEmail", {email: newUser.email, companyName})
-                    // successfully sent verification email
-                    .then(function(emailResponse) {
-                        dispatch({type:"POST_USER"});
-                        window.scrollTo(0,0);
-                    })
-                    // error sending verification email
-                    .catch(function(emailError) {
-                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: emailError.response.data, type: "errorHeader"}});
-                        window.scrollTo(0,0);
-                    });
-            })
-            // error posting user
-            .catch(function(err) {
-                dispatch({type: "POST_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
-            });
-    }
-}
-
 
 export function addNotification(message, notificationType) {
     return function(dispatch) {

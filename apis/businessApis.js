@@ -49,12 +49,12 @@ function POST_emailInvites(req, res) {
     const userId = sanitize(body.currentUserInfo.userId);
     const userName = sanitize(body.currentUserInfo.userName);
     const verificationToken = sanitize(body.currentUserInfo.verificationToken);
-    const companyId = sanitize(body.currentUserInfo.companyId);
+    const businessId = sanitize(body.currentUserInfo.businessId);
     const positionId = sanitize(body.currentUserInfo.positionId);
     const positionName = sanitize(body.currentUserInfo.positionName);
 
     // if one of the arguments doesn't exist, return with error code
-    if (!candidateEmails || !employeeEmails || !adminEmails || !userId || !userName || !companyId || !verificationToken || !positionId || !positionName) {
+    if (!candidateEmails || !employeeEmails || !adminEmails || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
         return res.status(400).send("Bad request.");
     }
 
@@ -65,7 +65,7 @@ function POST_emailInvites(req, res) {
     }
 
     // verify the employer is actually a part of this organization
-    verifyEmployerAndReturnBusiness(userId, verificationToken, companyId)
+    verifyEmployerAndReturnBusiness(userId, verificationToken, businessId)
     .then(business => {
         // if employer does not have valid credentials
         if (!business) {
@@ -594,9 +594,9 @@ async function POST_updateHiringStage(req, res) {
     let business;
     try {
         user = await getAndVerifyUser(userId, verificationToken);
-        business = await Businesses.findById(user.businessInfo.company.companyId);
+        business = await Businesses.findById(user.businessInfo.businessId);
         if (!business) {
-            console.log("No business found with id: ", user.businessInfo.company.companyId);
+            console.log("No business found with id: ", user.businessInfo.businessId);
             throw "No business.";
         }
     } catch (getUserError) {
@@ -672,15 +672,15 @@ async function POST_answerQuestion(req, res) {
     }
 
     // if the user doesn't have
-    if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
+    if (!user.businessInfo || !user.businessInfo.businessId) {
         console.log("User doesn't have associated business.");
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
-    const companyId = user.businessInfo.company.companyId;
+    const businessId = user.businessInfo.businessId;
 
     const businessQuery = {
-        "_id": mongoose.Types.ObjectId(companyId)
+        "_id": mongoose.Types.ObjectId(businessId)
     }
 
     // get the business the user works for
@@ -777,7 +777,7 @@ async function verifyEmployerAndReturnBusiness(userId, verificationToken, busine
             }
 
             // check that the user is part of the business
-            if (user.businessInfo.company.companyId.toString() !== businessId.toString()) {
+            if (user.businessInfo.businessId.toString() !== businessId.toString()) {
                 throw "User not part of that company.";
             }
 
@@ -818,8 +818,8 @@ function GET_employeeQuestions(req, res) {
             return res.status(403).send("You do not have permission to access employee info.");
         }
 
-        const companyId = user.businessInfo.company.companyId;
-        let businessQuery = { '_id': companyId }
+        const businessId = user.businessInfo.businessId;
+        let businessQuery = { '_id': businessId }
 
         Businesses.find(businessQuery)
         .select("employeeQuestions")
@@ -851,11 +851,11 @@ async function GET_positions(req, res) {
     }
 
     // get the business the user works for
-    const companyId = user.businessInfo.company.companyId;
+    const businessId = user.businessInfo.businessId;
     let business;
     try {
         business = await Businesses
-            .findById(companyId)
+            .findById(businessId)
             .select("logo name positions._id positions.name positions.completions positions.usersInProgress positions.skillNames positions.timeAllotted positions.length");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
@@ -916,7 +916,7 @@ async function GET_evaluationResults(req, res) {
 
     // verify that the business user has the right permissions
     try {
-        if (businessId.toString() !== user.businessInfo.company.companyId.toString()) {
+        if (businessId.toString() !== user.businessInfo.businessId.toString()) {
             throw "Doesn't have right business id.";
         }
     } catch (permissionsError) {
@@ -1031,12 +1031,12 @@ async function GET_candidateSearch(req, res) {
     }
 
     // if the user doesn't have
-    if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
+    if (!user.businessInfo || !user.businessInfo.businessId) {
         console.log("User doesn't have associated business.");
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
-    const companyId = user.businessInfo.company.companyId;
+    const businessId = user.businessInfo.businessId;
 
     // the restrictions on the search
     const searchTerm = sanitize(req.query.searchTerm);
@@ -1047,7 +1047,7 @@ async function GET_candidateSearch(req, res) {
     const sortBy = sanitize(req.query.sortBy);
 
     const businessQuery = {
-        "_id": mongoose.Types.ObjectId(companyId)
+        "_id": mongoose.Types.ObjectId(businessId)
     }
 
     // get only the position the user is asking for in the positions array
@@ -1138,12 +1138,12 @@ async function GET_employeeSearch(req, res) {
     }
 
     // if the user doesn't have
-    if (!user.businessInfo || !user.businessInfo.company || !user.businessInfo.company.companyId) {
+    if (!user.businessInfo || !user.businessInfo.businessId) {
         console.log("User doesn't have associated business.");
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
-    const companyId = user.businessInfo.company.companyId;
+    const businessId = user.businessInfo.businessId;
 
     // the restrictions on the search
     const searchTerm = sanitize(req.query.searchTerm);
@@ -1152,7 +1152,7 @@ async function GET_employeeSearch(req, res) {
     const positionName = sanitize(req.query.positionName);
 
     const businessQuery = {
-        "_id": mongoose.Types.ObjectId(companyId)
+        "_id": mongoose.Types.ObjectId(businessId)
     }
 
     // get only the position the user is asking for in the positions array
