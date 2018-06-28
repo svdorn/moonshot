@@ -185,9 +185,7 @@ function POST_candidate(req, res) {
         try {
             if (user.userType == "candidate" || user.userType == "employee") {
                 // add the evaluation to the user
-                //let evalObj = await addEvaluation(user, business, positionId, startDate);
-                //user = evalObj.user;
-                user = await addEvaluation(user, businessId, positionId, startDate);
+                user = (await addEvaluation(user, businessId, positionId, startDate)).user;
                 // since the user is just signing up we know that the active
                 // position will be the only one available
                 user.positionInProgress = user.positions[0].positionId;
