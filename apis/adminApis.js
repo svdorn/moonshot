@@ -142,6 +142,7 @@ async function GET_blankPosition(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
+    // get the user and questions for the psych test
     let user, psychTest;
     try {
         const [foundUser, foundTest] = await Promise.all([
@@ -154,10 +155,13 @@ async function GET_blankPosition(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    // user has to be an admin to get a blank position
     if (user.admin !== true) {
         return res.status(403).send(errors.PERMISSIONS_ERROR);
     }
 
+    // create an array of factors and facets with their names so that the position
+    // can have ideal performance and growth factors
     const idealFactors = psychTest.factors.map(factor => {
         const idealFacets = factor.facets.map(facet => {
             return {
@@ -204,40 +208,36 @@ async function POST_saveBusiness(req, res) {
             return res.status(403).send(errors.PERMISSIONS_ERROR);
         }
 
+        let promises = [];
+        if (Array.isArray(business.adminsToAdd)) {
+            business.adminsToAdd.forEach(adminToAdd => {
+                try { promises.push(createAdmin(adminToAdd.name, adminToAdd.email, adminToAdd.password, adminToAdd.title, businessId, business.name)); }
+                catch(addAdminError) { console.log("error adding admin: ", addAdminError); }
+            });
+            // wait for all the users to get created
+            await Promise.all(promises);
+        }
+
+        // TODO: make sure none of the emails provided have already been used for accounts
+        // const adminEmails = business.adminsToAdd.map(accAdmin => {
+        //
+        // });
+        // Users.findOne()
+
         // position attributes that can be updated in this function
         const newAttributes = ["name", "skills", "skillNames", "freeResponseQuestions", "employeesGetFrqs", "length", "timeAllotted", "idealFactors", "growthFactors"];
         // defaults for a new position
         const blankPosition = {
             open: false,
             currentlyHiring: false,
-            completions: 0,
-            usersInProgress: 0,
             candidates: [],
             employees: [],
-            candidatCodes: [],
-            employeeCodes: [],
-            adminCodes: [],
             logo: "hr.png"
         }
 
         // if it's a new business, create the new business
         if (!business._id) {
-            // count all the businesses
-            let code = (await Businesses.count({})).toString();
-            // add 0s onto the businessCount until the code is 8 characters long
-            while (code.length < 8) {
-                code = "0" + code;
-            }
-            // if there are any other businesses with the same code, increment the
-            // code until this is no longer the case
-            while ((await Businesses.count({ code })) !== 0) {
-                code = parseInt(code, 10);
-                code++;
-                while (code.length < 8) { code = "0" + code; }
-            }
             let newBusiness = {};
-            // add this final code as the business code
-            newBusiness.code = code;
             newBusiness.name = business.name;
             newBusiness.emailNotifications = {
                 time: "1 week",
@@ -334,19 +334,13 @@ async function POST_saveBusiness(req, res) {
                 }
             ]
 
-            let counter = 0;
             newBusiness.positions = business.positions.map(position => {
-                let newPosition = Object.assign({}, blankPosition);
-
-                let positionCode = counter.toString();
-                if (positionCode.length === 1) { positionCode = "0" + positionCode; }
-                newPosition.code = positionCode;
+                let newPosition = JSON.parse(JSON.stringify(blankPosition));
 
                 newAttributes.forEach(attribute => {
                     newPosition[attribute] = position[attribute];
                 });
 
-                counter++;
                 return newPosition;
             })
 
@@ -376,17 +370,8 @@ async function POST_saveBusiness(req, res) {
                 else {
                     // index will be the index of the newly added position
                     oldPositionIndex = foundBusiness.positions.length;
-                    // make a code for the new position
-                    let positionCode = foundBusiness.positions.length.toString();
-                    if (positionCode.length === 1) { positionCode = "0" + positionCode; }
-                    // find out if this code has already been used, and if so, change the new code
-                    while (foundBusiness.positions.findIndex(otherPosition => { return otherPosition.code == positionCode}) > -1) {
-                        positionCode = (parseInt(positionCode, 10) + 1).toString();
-                        if (positionCode.length === 1) { positionCode = "0" + positionCode; }
-                    }
                     // create a new position
-                    foundBusiness.positions.push(Object.assign({}, blankPosition));
-                    foundBusiness.positions[oldPositionIndex].code = positionCode;
+                    foundBusiness.positions.push(JSON.parse(JSON.stringify(blankPosition)));
                 }
 
                 // update the position with all the valid new attribute values
@@ -395,14 +380,16 @@ async function POST_saveBusiness(req, res) {
                     updatedPosition[attribute] = position[attribute];
                 });
 
-                foundBusiness.positions[oldPositionIndex] = updatedPosition;
-            })
+                // go through each updateable position attribute and update it
+                newAttributes.forEach(attribute => {
+                    foundBusiness.positions[oldPositionIndex][attribute] = updatedPosition[attribute];
+                });
+            });
 
             // save the business
             let savedBiz;
-            try {
-                savedBiz = await foundBusiness.save();
-            } catch (saveError) {
+            try { savedBiz = await foundBusiness.save(); }
+            catch (saveError) {
                 console.log("error saving business: ", saveError);
                 return res.status(500).send(errors.SERVER_ERROR);
             }
@@ -636,37 +623,6 @@ async function GET_allBusinesses(req, res) {
         console.log("Error getting businesses for admin: ", getUserOrBusinessesError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
-}
-
-
-// VERIFY THAT THE GIVEN USER IS AN ADMIN FROM USER ID AND VERIFICATION TOKEN
-function verifyAdmin(userId, verificationToken) {
-    // async call, lets us use await
-    return new Promise((resolve, reject) => {
-        Users.findById(userId, function(findUserErr, foundUser) {
-            // db error finding the user
-            if (findUserErr) {
-                console.log("Error finding admin user by id: ", findUserErr);
-                resolve(false);
-            }
-            // no user found with that id, so can't be an admin user
-            else if (!foundUser) {
-                resolve(false);
-            }
-            // user found
-            else {
-                // wrong verification token, user does not have valid credentials
-                if (foundUser.verificationToken != verificationToken) {
-                    console.log("Someone tried to get verify an admin user with the wrong verification token. User is: ", foundUser);
-                    resolve(false);
-                }
-                // return whether the user is an admin
-                else {
-                    resolve(foundUser.admin);
-                }
-            }
-        });
-    });
 }
 
 
