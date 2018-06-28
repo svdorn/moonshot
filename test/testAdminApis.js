@@ -16,6 +16,6 @@ before(function(done) {
 	});
 });
 
-const {
-    GET_info
-} = require('../apis/userApis');
+// const {
+//
+// } = require('../apis/userApis');

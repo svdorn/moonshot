@@ -20,7 +20,6 @@ const { sanitize,
 
 
 const adminApis = {
-    GET_info,
     GET_allSkills,
     GET_skill,
     POST_saveSkill,
@@ -643,42 +642,6 @@ async function GET_allBusinesses(req, res) {
         console.log("Error getting businesses for admin: ", getUserOrBusinessesError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
-}
-
-
-function GET_info(req, res) {
-    const query = sanitize(req.query);
-    const _id = query.userId;
-    const verificationToken = query.verificationToken;
-
-    if (!_id || !verificationToken) {
-        console.log("No user id or verification token for user trying to get admin info.");
-        return res.status(403).send("User does not have valid credentials.");
-    }
-
-    const adminQuery = { _id, verificationToken };
-
-    Users.findOne(adminQuery, function(err, user) {
-        if (err) {
-            console.log("Error finding admin user: ", err);
-            return res.status(500).send("Error finding current user in db.");
-        } else if (!user || !user.admin || !(user.admin === "true" || user.admin === true) ) {
-            return res.status(403).send("User does not have valid credentials.");
-        } else {
-            Users.find()
-            .sort({name: 1})
-            .select("name email profileUrl")
-            .exec(function (err2, users) {
-                if (err2) {
-                    return res.status(500).send("Not able to get users for admin.");
-                } else if (users.length == 0) {
-                    return res.status(500).send("No users found for admin.");
-                } else {
-                    return res.json(users);
-                }
-            });
-        }
-    });
 }
 
 
