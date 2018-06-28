@@ -168,11 +168,7 @@ function POST_candidate(req, res) {
             return res.status(500).send("Server error.");
         }
 
-        // if the user used a unique code that has to get deleted now ...
-        // if (userCodeType) {
-        //     // ... remove it from the position from the correct codes array
-        //     business.positions[positionIndex][userCodeType].splice(oneTimeCodeIndex, 1);
-        // }
+        // delete the used sign up code
         try { await Signupcodes.deleteOne({ _id: codeId }); }
         catch (deleteCodeError) {
             console.log("error deleting sign up code: ", deleteCodeError);

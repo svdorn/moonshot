@@ -493,13 +493,6 @@ async function POST_addPositionEval(req, res) {
 }
 
 
-async function addEvaluation(user, businessId, positionId) {
-    // TODO
-    console.log("adding evaluation");
-    return;
-}
-
-
 async function getPosition(businessId, positionId) {
     return new Promise(async function(resolve, reject) {
         try {
@@ -526,6 +519,140 @@ async function getPosition(businessId, positionId) {
         catch (findBusinessError) {
             return reject("error finding business: ", findBusinessError);
         }
+    });
+}
+
+
+async function addEvaluation(user, businessId, positionId) {
+    return new Promise(async function(resolve, reject) {
+        // check if the user already has the position
+        const alreadyHasPosition = user.positions.some(userPosition => {
+            return userPosition.businessId.toString() === businessId.toString && userPosition.positionId.toString() === positionId.toString();
+        });
+        if (alreadyHasPosition) {
+            return reject(`user already had position with id ${positionId} in their positions array`);
+        }
+
+        // get the position object
+        let position;
+        try { position = await getPosition(businessId, positionId); }
+        catch (getPositionError) { return reject(getPositionError); }
+
+        // create the free response objects that will be stored for the user;
+        // employees only get frqs if the position specifies that they should
+        let frqsForUser = [];
+        if (user.userType == "candidate" || position.employeesGetFrqs) {
+            const numFRQs = position.freeResponseQuestions.length;
+            for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
+                const frq = position.freeResponseQuestions[frqIndex];
+                frqsForUser.push({
+                    questionId: frq._id,
+                    questionIndex: frqIndex,
+                    response: undefined,
+                    body: frq.body,
+                    required: frq.required
+                });
+            }
+        }
+
+        // go through the user's skills to see which they have completed already;
+        // this assumes the user won't have any in-progress skill tests when they
+        // start a position evaluation
+        let testIndex = 0;
+        let skillTestIds = [];
+        let userSkillTests = user.skillTests;
+        position.skills.forEach(skillId => {
+            // if the user has already completed this skill test ...
+            if (userSkillTests.some(completedSkill => {
+                return completedSkill.skillId.toString() === skillId.toString();
+            })) {
+                // ... add it to the front of the list and increase test index so we
+                // know to skip it
+                skillTestIds.unshift(skillId);
+                testIndex++;
+            }
+
+            // if the user hasn't already completed this skill test, just add it
+            // to the end of the array
+            else { skillTestIds.push(skillId); }
+        });
+
+        // see if the user has already finished the psych analysis
+        const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.endDate;
+
+        // if we're trying to take a test that is past the number of tests we
+        // have, we must be done with all the skill tests
+        const doneWithSkillTests = testIndex >= skillTestIds.length;
+
+        // see if there are no frqs in this evaluation
+        let noFrqs = frqsForUser.length === 0;
+
+        // if the user has finished the psych test and all skill tests
+        // and there are no frqs, the user has finished already
+        const finished = hasTakenPsychTest && doneWithSkillTests && noFrqs;
+        const appliedEndDate = finished ? now : undefined;
+
+        // get the assigned date from the function call
+        const assignedDate = startDate;
+        let deadline = undefined;
+        // if a start date was assigned, figure out the deadline
+        if (assignedDate) {
+            const daysAllowed = position.timeAllotted;
+            if (daysAllowed != undefined) {
+                const year = assignedDate.getFullYear();
+                const month = assignedDate.getMonth();
+                const day = assignedDate.getDate() + daysAllowed;
+                // always sets the due date to be 11:59pm the day it's due
+                const hour = 23;
+                const minute = 59;
+                const second = 59;
+                deadline = new Date(year, month, day, hour, minute, second);
+            }
+        }
+
+        // this information will change depending on whether it's a candidate or employee
+        let userTypeSpecificInfo = {};
+        if (user.userType === "candidate") {
+            userTypeSpecificInfo = {
+                isDismissed: false,
+                hiringStage: "Not Contacted",
+                hiringStageChanges: [{
+                    hiringStage: "Not Contacted",
+                    // status changed to Not Contacted just now
+                    dateChanged: new Date()
+                }]
+            }
+        } else if (user.userType === "employee") {
+            userTypeSpecificInfo.gradingComplete = false
+        }
+
+
+
+        // starting info about the position
+        const typeAgnosticInfo = {
+            businessId: business._id,
+            positionId: position._id,
+            name: position.name,
+            appliedStartDate: now,
+            appliedEndDate,
+            assignedDate,
+            deadline,
+            // no scores have been calculated yet
+            scores: undefined,
+            skillTestIds,
+            testIndex,
+            freeResponseQuestions: frqsForUser
+        }
+
+        const newPosition = Object.assign(userTypeSpecificInfo, typeAgnosticInfo);
+
+        // add the starting info to the user
+        user.positions.push(newPosition);
+        // position must be last in the array
+        userPositionIndex = user.positions.length - 1;
+
+        // return successfully
+        resolve({ user, business, finished, userPositionIndex });
     });
 }
 
