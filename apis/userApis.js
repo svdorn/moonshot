@@ -2065,7 +2065,6 @@ async function POST_login(req, res) {
             req.session.userId = user._id;
             req.session.verificationToken = user.verificationToken;
             req.session.save(function (err) {
-                console.log("saved session, user is: ", frontEndUser(user));
                 // if there is an error saving session, print it, but still log in
                 if (err) { console.log("error saving user session", err); }
                 return res.json(frontEndUser(user));

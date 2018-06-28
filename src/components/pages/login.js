@@ -83,8 +83,8 @@ class Login extends Component {
         const self = this;
         document.addEventListener('keypress', self.handleKeyPress.bind(self));
 
-        // shouldn't be able to be on sign up page if logged in
-        if (this.props.currentUser && this.props.currentUser != "no user") {
+        // shouldn't be able to be on login page if logged in
+        if (this.props.currentUser) {
             // check if there is a redirect link and redirect there if already logged in
             const location = this.props.location;
             if (location.query) {
