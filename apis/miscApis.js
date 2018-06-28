@@ -8,10 +8,7 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         removePassword,
-        getUserByQuery,
         sendEmail,
-        safeUser,
-        userForAdmin,
         getFirstName,
         frontEndUser
 } = require('./helperFunctions.js');

@@ -13,10 +13,7 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         removePassword,
-        getUserByQuery,
         sendEmail,
-        safeUser,
-        userForAdmin,
         getFirstName,
         frontEndUser,
         getAndVerifyUser
@@ -25,7 +22,6 @@ const { sanitize,
 
 const adminApis = {
     POST_alertLinkClicked,
-    POST_business,
     GET_info,
     GET_allSkills,
     GET_skill,
@@ -682,135 +678,6 @@ function POST_alertLinkClicked(req, res) {
         }
     });
 }
-
-
-// async function POST_business(req, res) {
-//     const body = req.body;
-//     const userId = sanitize(body.userId);
-//     const verificationToken = sanitize(body.verificationToken);
-//     const businessName = sanitize(body.businessName);
-//     const initialUserName = sanitize(body.initialUserName);
-//     const initialUserPassword = sanitize(body.initialUserPassword);
-//     const initialUserEmail = sanitize(body.initialUserEmail);
-//
-//     // validate admin is admin user
-//     const isAdmin = await verifyAdmin(userId, verificationToken);
-//     if (!isAdmin) {
-//         return res.status(403).send("You do not have permission to add businesses.");
-//     }
-//
-//     try {
-//         // check if another business with that name already exists
-//         const businessNameQuery = {name: businessName};
-//         const foundBiz = await Businesses.findOne(businessNameQuery);
-//
-//         // business already exists with that name
-//         if (foundBiz) {
-//             return res.status(400).send("A business already exists with that name. Try a different name.");
-//         }
-//
-//         // count the businesses so we can make a unique business code
-//         let businessCount = 0;
-//         try {
-//             businessCount = await Businesses.count({});
-//         } catch (countError) {
-//             console.log("error counting businesses: ", countError);
-//             return res.status(500).send("Error counting businesses.");
-//         }
-//
-//         // make the unique code
-//         const HEX = 16;
-//         let code = businessCount.toString(HEX);
-//         // add extra zeroes to the beginning so all codes are the same length
-//         const END_CODE_LENGTH = 6;
-//         while (code.length < END_CODE_LENGTH) {
-//             code = "0" + code;
-//         }
-//         // add some randomness to the code
-//         code = crypto.randomBytes(1).toString('hex') + code;
-//
-//         // no business exists with that name, can go ahead and make new business
-//         const newBusiness = {
-//             name: businessName,
-//             code
-//         };
-//
-//         // make the business in the db
-//         let createdBusiness = await Businesses.create(newBusiness);
-//
-//         // check if a user (business- or non-business-) with the email provided
-//         // already exists
-//         const userEmailQuery = {email: initialUserEmail};
-//         getUserByQuery(userEmailQuery, function(findUserErr, foundUser) {
-//             // error looking for user by email
-//             if (findUserErr) {
-//                 console.log("Error looking for a user by email: ", findUserErr);
-//                 return res.json("Successful business creation, but couldn't create initial user.");
-//             }
-//             // user found with that email so can't create it
-//             else if (foundUser) {
-//                 return res.json("Successful business creation, but user with that email already exists.");
-//             }
-//
-//             // can create the initial user
-//
-//             // function that will create employer and save them to the business
-//             // once the business has been created
-//             // executes right after creation once hash as been made
-//             const createEmployerWithPassword = async (createHashErr, hash) => {
-//                 const newEmployer = {
-//                     name: initialUserName,
-//                     email: initialUserEmail,
-//                     password: hash,
-//                     userType: "employer",
-//                     verificationToken: crypto.randomBytes(64).toString('hex'),
-//                     verified: true,
-//                     company: {
-//                         name: createdBusiness.name,
-//                         companyId: createdBusiness._id
-//                     }
-//                 };
-//                 // create the employer
-//                 try {
-//                     let createdEmployer = await Employers.create(newEmployer);
-//
-//                     // ensure the business has a list of business user ids
-//                     if (!Array.isArray(createdBusiness.businessUserIds)) {
-//                         createdBusiness.employerIds = [];
-//                     }
-//                     // add the employer to the business' list of recruiters
-//                     createdBusiness.employerIds.push(createdEmployer._id);
-//
-//                     try {
-//                         // save the business with the new user in it
-//                         await createdBusiness.save();
-//                         // everything succeeded
-//                         return res.json("Success!");
-//                     }
-//                     // error saving employer to business' array of business user ids
-//                     catch (saveBizUserIdsErr) {
-//                         console.log("error saving employer to business' array of business user ids: ", saveBizUserIdsErr);
-//                         return res.json("Successful business creation but error associating new business user with business.");
-//                     }
-//                 }
-//                 // error creating the new user
-//                 catch (createEmployerErr) {
-//                     console.log("Error creating new employer: ", createEmployerErr);
-//                     return res.json("Successful business creation, but could not create initial user.");
-//                 }
-//             }
-//
-//             // hash password and create the employer
-//             const SALT_ROUNDS = 10;
-//             bcrypt.hash(initialUserPassword, SALT_ROUNDS, createEmployerWithPassword);
-//         });
-//     }
-//     // error at some point in business creation
-//     catch (dbError) {
-//         console.log("Database error during creation: ", dbError);
-//         return res.status(500).send("Server error, try again later.");
-//     }
-// }
 
 
 function GET_info(req, res) {

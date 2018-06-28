@@ -16,7 +16,6 @@ const { sanitize,
         removePassword,
         getUserByQuery,
         sendEmail,
-        userForAdmin,
         getFirstName,
         getAndVerifyUser,
         frontEndUser,
@@ -1540,39 +1539,37 @@ async function GET_session(req, res) {
 }
 
 
-function POST_session(req, res) {
+async function POST_session(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
 
     // check if option to stay logged in is true
     const saveSession = sanitize(req.session.stayLoggedIn);
-    if (!saveSession) {
-        return;
-    }
+    if (!saveSession) { return; }
 
     if (!userId || !verificationToken) {
-        res.json("either no userId or no verification token");
-        return;
+        return res.json("either no userId or no verification token");
     }
 
     // get the user from the id, check the verification token to ensure they
     // have the right credentials to stay logged in
-    getUserByQuery({_id: userId}, function(error, foundUser) {
-        if (foundUser.verificationToken == verificationToken) {
-            req.session.userId = userId;
+    //getUserByQuery({_id: userId}, function(error, foundUser) {
+    let foundUser;
+    try { foundUser = await getAndVerifyUser(userId, verificationToken); }
+    catch (findUserError) {
+        console.log("Error getting user when trying to save session: ", findUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
 
-            // save user id to session
-            req.session.save(function(err) {
-                if (err) {
-                    console.log("error saving user id to session: ", err2);
-                } else {
-                    res.json(true);
-                    return;
-                }
-            });
+    // put user id in session
+    req.session.userId = userId;
+
+    // save session with user id
+    req.session.save(function(sessionSaveError) {
+        if (sessionSaveError) {
+            console.log("error saving user id to session: ", sessionSaveError);
         } else {
-            res.json("incorrect user credentials");
-            return;
+            return res.json(true);
         }
     });
 }
@@ -1580,11 +1577,13 @@ function POST_session(req, res) {
 
 // signs the user out by marking their session id as undefined
 function POST_signOut(req, res) {
+    // remove the user id from the session
     req.session.userId = undefined;
+    // save the updated session
     req.session.save(function (err) {
         if (err) {
             console.log("error removing user session: ", err);
-            res.json("failure removing user session");
+            return res.status(500).send("Failure removing user session");
         } else {
             res.json("success");
         }
@@ -1601,9 +1600,9 @@ function POST_keepMeLoggedIn(req, res) {
         req.session.stayLoggedIn = false;
     }
     req.session.save(function (err) {
-        if (err) {
-            console.log("error saving 'keep me logged in' setting: ", err);
-            res.json("error saving 'keep me logged in' setting");
+        if (saveSessionError) {
+            console.log("error saving 'keep me logged in' setting: ", saveSessionError);
+            return res.status(500).send("Error saving 'keep me logged in' setting.");
         } else {
             res.json("success");
         }
@@ -1613,10 +1612,11 @@ function POST_keepMeLoggedIn(req, res) {
 
 // get the setting to stay logged in or out
 function GET_keepMeLoggedIn(req, res) {
+    // get the setting
     let setting = sanitize(req.session.stayLoggedIn);
-    if (typeof setting !== "boolean") {
-        setting = false;
-    }
+    // if it's not of the right form, assume you shouldn't stay logged in
+    if (typeof setting !== "boolean") { setting = false; }
+    // return the found setting
     res.json(setting);
 }
 

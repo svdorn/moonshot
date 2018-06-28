@@ -18,7 +18,6 @@ before(function(done) {
 
 const {
     POST_alertLinkClicked,
-    POST_business,
     GET_info
 } = require('../apis/userApis');
 

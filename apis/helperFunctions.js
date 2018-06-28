@@ -15,6 +15,30 @@ const sanitizeOptions = {
 }
 
 
+const FOR_USER = [
+    "name",
+    "email",
+    "emailToContact",
+    "phoneNumber",
+    "userType",
+    "admin",
+    "termsAndConditions",
+    "firstBusinessUser",
+    "hideProfile",
+    "profileUrl",
+    "dateSignedUp",
+    "hasFinishedOnboarding",
+    "verificationToken",
+    "referredByCode",
+    "verified",
+    "skills",
+    "info",
+    "redirect",
+    "businessInfo",
+    "psychometricTest",
+    "currentPosition"
+]
+
 // removes information from a db user object so that it can be passed for that
 // same user on the front end; second argument is array of fields to include
 function frontEndUser(dbUser, fieldsToInclude) {
@@ -30,7 +54,8 @@ function frontEndUser(dbUser, fieldsToInclude) {
     // otherwise it is already a normal object
     else { userProperties = dbUser; }
 
-    if (!Array.isArray(fieldsToInclude)) { return undefined; }
+    // if no fields are included, assume it's for the user
+    if (!Array.isArray(fieldsToInclude)) { fieldsToInclude = FOR_USER; }
 
     // go through every property that should be included; if it has any special
     // requirements, deal with them, otherwise just take the wanted property
@@ -73,9 +98,10 @@ function frontEndUser(dbUser, fieldsToInclude) {
                                 questionId: currentQuestion.questionId
                             }
                         }
+
+                        // save the psych test to the front-end user
+                        newUser.psychometricTest = cleanPsychTest;
                     }
-                    // save the psych test to the front-end user
-                    newUser.psychometricTest = cleanPsychTest;
                     break;
                 // both of these will give you the same thing; it's called positionInProgress
                 // in the backend but currentPosition in the front end
@@ -113,134 +139,6 @@ function frontEndUser(dbUser, fieldsToInclude) {
     return newUser;
 }
 
-const FOR_USER = [
-    "name",
-    "email",
-    "emailToContact",
-    "phoneNumber",
-    "userType",
-    "admin",
-    "termsAndConditions",
-    "firstBusinessUser",
-    "hideProfile",
-    "profileUrl",
-    "dateSignedUp",
-    "hasFinishedOnboarding",
-    "verificationToken",
-    "referredByCode",
-    "verified",
-    "skills",
-    "info",
-    "redirect",
-    "businessInfo",
-    "psychometricTest",
-    "currentPosition"
-]
-
-
-
-// // removes information from a db user object so that it can be passed for that
-// // same user on the front end
-// function frontEndUser(dbUser, extraFieldsToRemove) {
-//     // copy everything into new user object
-//     let newUser = Object.assign({}, dbUser);
-//
-//     // doing Object.assign with a document from the db can lead to the new object
-//     // having a bunch of properties we don't want with the actual object ending
-//     // up in newObj._doc, so take the ._doc property if it exists and treat it
-//     // as the actual object
-//     if (newUser._doc) {
-//         newUser = newUser._doc;
-//     }
-//
-//     // clean the psychometric test
-//     let cleanPsychTest = undefined;
-//     const psychTest = newUser.psychometricTest;
-//     if (psychTest) {
-//         cleanPsychTest = {};
-//         if (psychTest.inProgress) {
-//             cleanPsychTest.inProgress = psychTest.inProgress;
-//         }
-//         if (psychTest.startDate) {
-//             cleanPsychTest.startDate = psychTest.startDate;
-//         }
-//         if (psychTest.endDate) {
-//             cleanPsychTest.endDate = psychTest.endDate;
-//         }
-//
-//         if (typeof psychTest.questionsPerFacet === "number" && Array.isArray(psychTest.factors)) {
-//             // count the number of questions - questions/facet * number of facets
-//             let numFacets = 0;
-//             psychTest.factors.forEach(factor => {
-//                 if (factor && typeof factor === "object" && Array.isArray(factor.facets)) {
-//                     numFacets += factor.facets.length;
-//                 }
-//             });
-//             cleanPsychTest.numQuestions = psychTest.questionsPerFacet * numFacets;
-//         }
-//
-//         if (typeof psychTest.numQuestionsAnswered === "number") {
-//             cleanPsychTest.numQuestionsAnswered = psychTest.numQuestionsAnswered;
-//         }
-//
-//         const currentQuestion = psychTest.currentQuestion;
-//         // only applies if the user is currently taking the test
-//         if (currentQuestion && typeof currentQuestion === "object") {
-//             cleanPsychTest.currentQuestion = {
-//                 body: currentQuestion.body,
-//                 leftOption: currentQuestion.leftOption,
-//                 rightOption: currentQuestion.rightOption,
-//                 questionId: currentQuestion.questionId
-//             }
-//
-//         }
-//     }
-//
-//     // if the user is currently applying for a position
-//     let currentPosition = undefined;
-//     if (newUser.positionInProgress) {
-//         // find the index of the position the user is
-//         const positionInProgressString = newUser.positionInProgress.toString();
-//         const positionIndex = newUser.positions.findIndex(pos => {
-//             return pos.positionId.toString() === positionInProgressString;
-//         });
-//         position = newUser.positions[positionIndex];
-//
-//         currentPosition = {
-//             inProgress: true,
-//             name: position.name,
-//             agreedToSkillTestTerms: position.agreedToSkillTestTerms,
-//             skillTests: position.skillTestIds,
-//             testIndex: position.testIndex,
-//             freeResponseQuestions: position.freeResponseQuestions
-//         }
-//     }
-//
-//     // default things to remove
-//     newUser.password = undefined;
-//     newUser.emailVerificationToken = undefined;
-//     newUser.passwordToken = undefined;
-//     newUser.passwordTokenExpirationTime = undefined;
-//     newUser.skillTests = undefined;
-//     newUser.positions = undefined;
-//     newUser.psychometricTest = cleanPsychTest;
-//     newUser.currentPosition = currentPosition;
-//
-//     // if we are given more than the default fields to remove
-//     if (Array.isArray(extraFieldsToRemove)) {
-//         // go through each extra field and remove them from the user
-//         extraFieldsToRemove.forEach(field => {
-//             // make sure the field is a string so it can be an object property
-//             if (typeof field === "string") {
-//                 newUser[field] = undefined;
-//             }
-//         });
-//     }
-//
-//     // return the updated user, ready for front-end use
-//     return newUser;
-// }
-
 
 function randomInt(lowBound, highBound) {
     const range = highBound - lowBound;
@@ -257,46 +155,6 @@ function getFirstName(name) {
         firstName = "";
     }
     return firstName;
-}
-
-
-// this user object can now safely be seen by anyone
-function safeUser(user) {
-    let newUser = Object.assign({}, user);
-
-    // doing Object.assign with a document from the db can lead to the new object
-    // having a bunch of properties we don't want with the actual object ending
-    // up in newObj._doc, so take the ._doc property if it exists and treat it
-    // as the actual object
-    if (newUser._doc) {
-        newUser = newUser._doc;
-    }
-
-    newUser.password = undefined;
-    newUser._id = undefined;
-    newUser.verificationToken = undefined;
-    newUser.emailVerificationToken = undefined;
-    newUser.passwordToken = undefined;
-    newUser.answers = undefined;
-
-    return newUser;
-}
-
-// same as safe user except it has the user's answers to questions
-function userForAdmin(user) {
-    let newUser = Object.assign({}, user);
-
-    if (newUser._doc) {
-        newUser = newUser._doc;
-    }
-
-    newUser.password = undefined;
-    newUser._id = undefined;
-    newUser.verificationToken = undefined;
-    newUser.emailVerificationToken = undefined;
-    newUser.passwordToken = undefined;
-
-    return newUser;
 }
 
 
@@ -729,8 +587,6 @@ const helperFunctions = {
     removePassword,
     getUserByQuery,
     sendEmail,
-    safeUser,
-    userForAdmin,
     getFirstName,
     removeDuplicates,
     randomInt,

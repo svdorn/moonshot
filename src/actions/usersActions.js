@@ -58,7 +58,7 @@ export function emailFailureExitPage() {
     }
 }
 
-export function login(user, saveSession, navigateBackUrl, pathwayId) {
+export function login(user, saveSession, navigateBackUrl) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
 
@@ -694,30 +694,6 @@ export function deleteUser(id) {
   }
 }
 
-export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
-    return function(dispatch) {
-        let currentUser = Object.assign({}, user);
-        // set the current step for the user in redux state
-        currentUser.pathways.find(function(path) {
-            return path.pathwayId == pathwayId
-        }).currentStep = {subStep: subStep.order, step: stepNumber};
-        dispatch({type: "UPDATE_CURRENT_SUBSTEP", payload: subStep, pathwayId, currentUser});
-
-        axios.post("/api/candidate/currentPathwayStep", {
-            params: {
-                userId: user._id,
-                pathwayId: pathwayId,
-                stepNumber: stepNumber,
-                subStepNumber: subStep.order,
-                verificationToken: user.verificationToken
-            }
-        })
-        .then(function(response) {
-        })
-        .catch(function(err) {
-        });
-    }
-}
 
 export function updateAnswer(userId, verificationToken, quizId, answer) {
     return function(dispatch) {
@@ -808,34 +784,6 @@ export function contactUs(user){
             .catch(function(err) {
                 dispatch({type:"CONTACT_US", notification: {message: "Error sending email", type: "errorHeader"}})
             })
-    }
-}
-
-
-// POST A NEW BUSINESS
-export function postBusiness(business) {
-    return function(dispatch) {
-        // show loading bar
-        dispatch({type:"START_LOADING"});
-
-        axios.post("/api/admin/business", business)
-        .then(function(response) {
-            dispatch({type: "SUCCESS_FINISHED_LOADING", notification: {message: response.data, type: "infoHeader"}});
-            // redirect to edit business page
-            if (typeof business.businessName === "string") {
-                const editBusinessUrl = '/admin/editBusiness?' + business.businessName;
-                browserHistory.push(editBusinessUrl);
-                window.scrollTo(0,0);
-            }
-        })
-        .catch(function(err) {
-            let msg = "Error creating new business. Try again later.";
-            if (err && err.response && typeof err.response.data === "string") {
-                msg = err.response.data;
-            }
-            dispatch({type: "ERROR_FINISHED_LOADING", notification: {message: msg, type: "errorHeader"}});
-            window.scrollTo(0,0);
-        })
     }
 }
 

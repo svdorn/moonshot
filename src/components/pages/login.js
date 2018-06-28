@@ -175,7 +175,7 @@ class Login extends Component {
             navigateBackUrl = location.query.redirect;
         }
 
-        this.props.login(user, saveSession, navigateBackUrl, pathwayId)
+        this.props.login(user, saveSession, navigateBackUrl)
 
     }
 
