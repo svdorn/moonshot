@@ -7,13 +7,9 @@ const stripe = require("stripe")(credentials.stripeSk);
 
 // get helper functions
 const { sanitize,
-        removeEmptyFields,
-        verifyUser,
         sendEmail,
-        getFirstName,
         getAndVerifyUser,
-        frontEndUser,
-        getSkillNamesByIds
+        frontEndUser
 } = require('./helperFunctions');
 
 const errors = require('./errors.js');
@@ -32,8 +28,6 @@ async function POST_customer(req, res) {
     if (!email || !source || !userId || !verificationToken) {
         return res.status(400).send("Bad request.");
     }
-
-    console.log("in here");
 
     // send source to Stripe to create person
     let customer;
