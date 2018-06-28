@@ -449,11 +449,8 @@ function POST_sendVerificationEmail(req, res) {
 
         const sendFrom = "Moonshot";
         sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-            if (success) {
-                res.json(msg);
-            } else {
-                res.status(500).send(msg);
-            }
+            if (success) { return res.json(msg); }
+            else { return res.status(500).send(msg); }
         })
     });
 }
