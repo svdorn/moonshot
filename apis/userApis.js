@@ -1769,9 +1769,11 @@ async function POST_changePassword(req, res) {
             return res.status(400).send("Old password is incorrect.");
         }
 
+        console.log("new password: ", newPassword);
+
         // user gave correct old password, hash the new one
         const saltRounds = 10;
-        bcrypt.hash(user.password, saltRounds, async function (hashError, hash) {
+        bcrypt.hash(newPassword, saltRounds, async function (hashError, hash) {
             // if there was an error hashing the new password
             if (hashError) {
                 console.log("error hashing new password: ", hashError);
