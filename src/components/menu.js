@@ -356,7 +356,7 @@ class Menu extends Component {
         }
 
         // if the user is a site admin, give them the admin tab
-        if (currentUser.admin) {
+        if (currentUser && typeof currrentUser === "object" && currentUser.admin === true) {
             menuOptions.unshift({optionType: "url", title: "Admin", url: "/admin"});
         }
 
