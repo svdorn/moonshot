@@ -1447,56 +1447,39 @@ function POST_changePasswordForgot(req, res) {
     let token = sanitize(req.body.token).toString();
     let password = sanitize(req.body.password);
 
-    var query = {passwordToken: token};
-    Users.findOne(query, function (err, user) {
-        if (err) {
-            console.log("Error trying to find user from password token: ", err);
-            return res.status(500).send("Server error, try again later");
+    const query = {passwordToken: token};
+
+    // get the user from the password token
+    let user;
+    try { user = await Users.findOne(query); }
+    catch (findUserError) {
+        console.log("Error finding user from password token: ", findUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // if user was not found from the url
+    if (!user) { return res.status(404).send("User not found from link"); }
+
+    // if the token is expired, tell the user to try again with a new token
+    const currentTime = Date.now();
+    if (currentTime > user.passwordTokenExpirationTime) {
+        return res.status(401).send("Time ran out, try sending reset password email again.");
+    }
+
+    // hash the new password
+    const saltRounds = 10;
+    bcrypt.hash(password, saltRounds, function(hashError, hash) {
+        // set the new password
+        user.password = hash;
+        // save the user
+        try { user = await user.save(); }
+        catch (saveUserError) {
+            console.log("Error saving user with new updated password: ", saveUserError);
+            return res.status(500).send(errors.SERVER_ERROR);
         }
 
-        if (!user) {
-            return res.status(404).send("User not found from link");
-        }
-
-        const currentTime = Date.now();
-        if (currentTime > user.passwordTokenExpirationTime) {
-            return res.status(401).send("Time ran out, try sending email again");
-        }
-
-        let query = {_id: user._id};
-        const saltRounds = 10;
-        bcrypt.genSalt(saltRounds, function (err, salt) {
-            bcrypt.hash(password, salt, function (err, hash) {
-                // change the stored password to be the hash
-                const newPassword = hash;
-                // if the field doesn't exist, $set will set a new field
-                // can be verified because the user had to go to their email
-                // to get to this page
-                var update = {
-                    '$set': {
-                        password: newPassword,
-                        verified: true
-                    },
-                    '$unset': {
-                        passwordToken: "",
-                        passwordTokenExpirationTime: "",
-                    }
-                };
-
-                // When true returns the updated document
-                var options = {new: true};
-
-                Users.findOneAndUpdate(query, update, options, function (err, newUser) {
-                    if (err) {
-                        console.log(err);
-                        return res.status(500).send("Error saving new password");
-                    }
-
-                    // successfully created new password
-                    return res.json(frontEndUser(newUser));
-                });
-            })
-        })
+        // successfully created new password, log the user in
+        return res.json(frontEndUser(newUser));
     });
 }
 
