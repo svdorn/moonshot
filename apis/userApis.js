@@ -1809,81 +1809,76 @@ async function POST_login(req, res) {
 }
 
 
-function POST_changeSettings(req, res) {
-    const user = sanitize(req.body);
-    const password = user.password;
+// change name or email
+async function POST_changeSettings(req, res) {
+    const name = sanitize(req.body.name);
+    const email = sanitize(req.body.email);
+    const password = sanitize(req.body.password);
+    const userId = sanitize(req.body._id);
+    const hideProfile = sanitize(req.body.hideProfile);
 
-    if (!user.password || !user.name || !user.email) {
+    // error if proper arguments not provided
+    if (!password || !name || !email || !userId) {
         console.log("Not all arguments provided for settings change.");
         return res.status(400).send("No fields can be empty.");
     }
 
-    const userQuery = {_id: user._id}
+    // general error message to show
+    const CANNOT_UPDATE = "Settings couldn't be updated. Try again later.";
 
-    Users.findOne(userQuery, function(findUserErr, foundUser) {
-        // if error while trying to find current user
-        if (findUserErr) {
-            console.log("Error finding user in db when trying to update settings: ", findUserErr);
-            return res.status(500).send("Settings couldn't be updated. Try again later.");
+    // find the user by id
+    let user;
+    try { user = await Users.findById(userId); }
+    catch (findUserError) {
+        console.log("Error finding user by id when trying to update settings: ", findUserError);
+        return res.status(500).send(CANNOT_UPDATE);
+    }
+
+    // make sure a user was found with this id
+    if (!user) {
+        console.log("Didn't find a user with given id when trying to update settings.");
+        return res.status(500).send(CANNOT_UPDATE);
+    }
+
+    bcrypt.compare(password, foundUser.password, async function (passwordError, passwordsMatch) {
+        // error comparing password to user's password, doesn't necessarily
+        // mean that the password is wrong
+        if (passwordError) {
+            console.log("Error comparing passwords when trying to update settings: ", passwordError);
+            return res.status(500).send(CANNOT_UPDATE);
         }
 
-        if (!foundUser) {
-            console.log("Didn't find a user with given id when trying to update settings.");
-            return res.status(500).send("Settings couldn't be updated. Try again later.");
+        // user entered wrong password
+        if (!passwordsMatch) { return res.status(400).send("Incorrect password."); }
+
+        // see if there's another user with the new email
+        const emailQuery = {email: user.email};
+        try {
+            const userWithSameEmail = await Users.findOne(emailQuery);
+            // if there is a user who already used that email, can't let this user have it too
+            if (userWithSameEmail && userWithEmail._id.toString() != foundUser._id.toString()) {
+                return res.status(400).send("That email address is already taken.");
+            }
+        } catch (findUserWithSameEmailError) {
+            console.log("Error trying to find users with the same email when trying to update settings: ", findUserWithSameEmailError);
+            return res.status(500).send(CANNOT_UPDATE)
         }
 
-        bcrypt.compare(password, foundUser.password, function (passwordError, passwordsMatch) {
-            // error comparing password to user's password, doesn't necessarily
-            // mean that the password is wrong
-            if (passwordError) {
-                console.log("Error comparing passwords when trying to update settings: ", passwordError);
-                return res.status(500).send("Settings couldn't be updated. Try again later.");
-            }
+        // all is good, update the user (as long as email and name are not blank)
+        user.email = email;
+        user.name = name;
+        if (typeof hideProfile === "boolean") { user.hideProfile = hideProfile; }
 
-            // user entered wrong password
-            if (!passwordsMatch) {
-                return res.status(400).send("Incorrect password");
-            }
+        // save the user
+        try { user = await user.save(); }
+        catch (saveUserError) {
+            console.log("Error saving user when trying to update settings: ", saveUserError);
+            return res.status(500).send(CANNOT_UPDATE);
+        }
 
-            // see if there's another user with the new email
-            const emailQuery = {email: user.email};
-            Users.findOne(emailQuery, function(emailQueryErr, userWithEmail) {
-                // don't want two users with the same email, so in case of db search
-                // failure, return unsuccessfully
-                if (emailQueryErr) {
-                    console.log("Error trying to find a user with the same email address as the one provided by user trying to change settings: ", emailQueryErr);
-                    return res.status(500).send("Settings couldn't be updated. Try again later.");
-                }
-
-                // someone else already has that email
-                if (userWithEmail && userWithEmail._id.toString() != foundUser._id.toString()) {
-                    return res.status(400).send("That email address is already taken.");
-                }
-
-                // all is good, update the user (as long as email and name are not blank)
-                if (user.email) {
-                    foundUser.email = user.email;
-                }
-                if (user.name) {
-                    foundUser.name = user.name;
-                }
-                if (typeof user.hideProfile === "boolean") {
-                    foundUser.hideProfile = user.hideProfile;
-                }
-
-                foundUser.save(function(saveErr, newUser) {
-                    // if there is an error saving the user's info
-                    if (saveErr) {
-                        console.log("Error when saving user's changed info: ", saveErr);
-                        return res.status(500).send("Settings couldn't be updated. Try again later.");
-                    }
-
-                    // settings change successful
-                    return res.json(frontEndUser(newUser));
-                })
-            });
-        });
-    })
+        // settings change successful
+        return res.json(frontEndUser(newUser));
+    });
 }
 
 
