@@ -1251,16 +1251,14 @@ async function POST_startPsychEval(req, res) {
 
     // get the user from the db
     let user = undefined;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
         console.log("Error getting user from the database: ", getUserError);
         return res.status(500).send("Server error, try again later.");
     }
 
-    try {
-        user = await internalStartPsychEval(user);
-    } catch (startEvalError) {
+    try { user = await internalStartPsychEval(user); }
+    catch (startEvalError) {
         console.log("Error starting psych eval: ", startEvalError.error);
         res.status(startEvalError.statusCode).send(startEvalError.msg);
     }
@@ -1357,7 +1355,7 @@ function POST_signOut(req, res) {
             console.log("error removing user session: ", err);
             return res.status(500).send("Error logging out.");
         } else {
-            res.json("success");
+            return res.json("success");
         }
     })
 }
@@ -1376,7 +1374,7 @@ function POST_keepMeLoggedIn(req, res) {
             console.log("error saving 'keep me logged in' setting: ", saveSessionError);
             return res.status(500).send("Error saving 'keep me logged in' setting.");
         } else {
-            res.json("success");
+            return res.json("success");
         }
     })
 }
@@ -1389,7 +1387,7 @@ function GET_keepMeLoggedIn(req, res) {
     // if it's not of the right form, assume you shouldn't stay logged in
     if (typeof setting !== "boolean") { setting = false; }
     // return the found setting
-    res.json(setting);
+    return res.json(setting);
 }
 
 
@@ -1399,52 +1397,49 @@ function POST_verifyEmail(req, res) {
     const userType = sanitize(req.body.userType);
 
     // if url doesn't provide token, can't verify
-    if (!token) {
-        return res.status(400).send("Url not in the right format");
+    if (!token) { return res.status(400).send("Url not in the right format"); }
+
+    var query = { emailVerificationToken: token };
+    let user;
+    try { user = await findOne(query); }
+    catch (findUserError) {
+        console.log("Error trying to find user from verification token");
+        return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    var query = {emailVerificationToken: token};
-    Users.findOne(query, function (err, user) {
-        if (err) {
-            console.log("Error trying to find user from verification token");
-            return res.status(500).send("Server error, try again later");
-        }
+    // if no user found from token, can't verify
+    if (!user) { return res.status(404).send("User not found from url"); }
 
-        // if no user found from token, can't verify
-        if (!user) { return res.status(404).send("User not found from url"); }
+    // if a user was found from the token, verify them and get rid of the token
+    user.verified = true;
+    user.emailVerificationToken = undefined;
 
-        // if a user was found from the token, verify them and get rid of the token
-        user.verified = true;
-        user.emailVerificationToken = undefined;
+    // save the verified user
+    try { user = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user when verifying email: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
 
-        user.save(function(updateErr, updatedUser) {
-            if (updateErr) {
-                console.log("Error saving user's verified status to true: ", updateErr);
-                return res.status(500).send("Server error, try again later");
+    // if the session has the user's id, can immediately log them in
+    sessionUserId = sanitize(req.session.unverifiedUserId);
+    // get rid of the unverified id as it won't be needed anymore
+    req.session.unverifiedUserId = undefined;
+    // if the session had the correct user id, log the user in
+    if (sessionUserId && sessionUserId.toString() === user._id.toString()) {
+        req.session.userId = user._id.toString();
+        req.session.verificationToken = user.verificationToken;
+        req.session.save(function(saveSessionError) {
+            if (saveSessionError) {
+                console.log("Error saving user session: ", saveSessionError);
             }
-
-            // if the session has the user's id, can immediately log them in
-            sessionUserId = sanitize(req.session.unverifiedUserId);
-            // get rid of the unverified id as it won't be needed anymore
-            req.session.unverifiedUserId = undefined;
-
-            // if the session had the correct user id, log the user in
-            if (sessionUserId.toString() === user._id.toString()) {
-                req.session.userId = user._id.toString();
-                req.session.verificationToken = user.verificationToken;
-                req.session.save(function(saveSessionError) {
-                    if (saveSessionError) {
-                        console.log("Error saving user session: ", saveSessionError);
-                    }
-                    // return the user object even if session saving didn't work
-                    return res.json(frontEndUser(user));
-                });
-            }
-
-            // otherwise bring the user to the login page
-            else { return res.json("go to login"); }
+            // return the user object even if session saving didn't work
+            return res.json(frontEndUser(user));
         });
-    });
+    }
+
+    // otherwise bring the user to the login page
+    else { return res.json("go to login"); }
 }
 
 
