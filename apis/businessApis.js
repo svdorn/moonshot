@@ -783,7 +783,7 @@ async function GET_positions(req, res) {
     let user;
     try { user = await getAndVerifyUser(userId, verificationToken); }
     catch (findUserError) {
-        console.log("Error finding business user who was trying to see thier positions: ", findUserError);
+        console.log("Error finding business user who was trying to see their positions: ", findUserError);
         return res.status(500).send("Server error, try again later.");
     }
 
@@ -793,13 +793,74 @@ async function GET_positions(req, res) {
     try {
         business = await Businesses
             .findById(businessId)
-            .select("logo name positions._id positions.name positions.completions positions.usersInProgress positions.skillNames positions.timeAllotted positions.length");
+            .select("logo name positions._id positions.name positions.skillNames positions.timeAllotted positions.length");
     } catch (findBizError) {
         console.log("Error finding business when getting positions: ", findBizError);
         return res.status(500).send("Server error, couldn't get positions.");
     }
 
-    return res.json({logo: business.logo, businessName: business.name, positions: business.positions});
+    let positionPromises = business.positions.map(position => {
+        return addCompletionsAndInProgress(position);
+    });
+
+    let positions;
+    try { positions = await Promise.all(positionPromises); }
+    catch (awaitPositionError) {
+        console.log("Error getting completions and inProgress: ", awaitPositionError);
+        res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    return res.json({ logo: business.logo, businessName: business.name, positions });
+}
+
+
+async function addCompletionsAndInProgress(position) {
+    return new Promise(async function(resolve, reject) {
+        try {
+            const positionId = position._id;
+            // all users with this position id in their positions array who have an end date
+            completionsQuery = {
+                "positions": {
+                    "$elemMatch": {
+                        "$and": [
+                            { "positionId": mongoose.Types.ObjectId(positionId) },
+                            { "appliedEndDate": { "$exists": true } }
+                        ]
+                    }
+                }
+            }
+            // all users with this position id in their positions array who have a start
+            // date but NOT an end date
+            inProgressQuery = {
+                "positions": {
+                    "$elemMatch": {
+                        "$and": [
+                            { "positionId": mongoose.Types.ObjectId(positionId) },
+                            { "appliedStartDate": { "$exists": true } },
+                            { "appliedEndDate": { "$exists": false } }
+                        ]
+                    }
+                }
+            }
+
+            const [ completions, usersInProgress ] = await Promise.all([
+                Users.count(completionsQuery),
+                Users.count(inProgressQuery)
+            ]);
+
+            if (typeof position.toObject === "function") {
+                position = position.toObject();
+            }
+
+            resolve ({
+                ...position,
+                completions,
+                usersInProgress
+            });
+        }
+
+        catch (error) { reject(error); }
+    });
 }
 
 
