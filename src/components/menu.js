@@ -284,7 +284,7 @@ class Menu extends Component {
         if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
-                {optionType: "url", title: "Home", url: "/"},
+                {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
                 {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
                 {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
                 {optionType: "separator"},

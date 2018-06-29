@@ -543,7 +543,7 @@ class BusinessHome extends Component {
                 {demoDialog}
                 {dialog}
                 <div className="blackBackground businessHome">
-
+                    <a id="homeTop" name="homeTop" className="anchor" />
                     <div className="businessHome frontPage">
                         {this.state.showRectangles ?
                             <div className="skewedRectanglesContainer">
