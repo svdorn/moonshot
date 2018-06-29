@@ -208,16 +208,6 @@ async function POST_saveBusiness(req, res) {
             return res.status(403).send(errors.PERMISSIONS_ERROR);
         }
 
-        let promises = [];
-        if (Array.isArray(business.adminsToAdd)) {
-            business.adminsToAdd.forEach(adminToAdd => {
-                try { promises.push(createAdmin(adminToAdd.name, adminToAdd.email, adminToAdd.password, adminToAdd.title, businessId, business.name)); }
-                catch(addAdminError) { console.log("error adding admin: ", addAdminError); }
-            });
-            // wait for all the users to get created
-            await Promise.all(promises);
-        }
-
         // TODO: make sure none of the emails provided have already been used for accounts
         // const adminEmails = business.adminsToAdd.map(accAdmin => {
         //
@@ -229,16 +219,14 @@ async function POST_saveBusiness(req, res) {
         // defaults for a new position
         const blankPosition = {
             open: false,
-            currentlyHiring: false,
-            candidates: [],
-            employees: [],
-            logo: "hr.png"
+            currentlyHiring: false
         }
 
         // if it's a new business, create the new business
         if (!business._id) {
             let newBusiness = {};
             newBusiness.name = business.name;
+            newBusiness.logo = "hr.png";
             newBusiness.emailNotifications = {
                 time: "1 week",
                 numCandidates: 0
@@ -396,14 +384,14 @@ async function POST_saveBusiness(req, res) {
         }
 
         // now that we are sure to have the business id, create any admins that were added
-        let promises = [];
+        let createAdminPromises = [];
         if (Array.isArray(business.adminsToAdd)) {
             business.adminsToAdd.forEach(adminToAdd => {
-                try { promises.push(createAdmin(adminToAdd.name, adminToAdd.email, adminToAdd.password, adminToAdd.title, businessId, business.name)); }
+                try { createAdminPromises.push(createAdmin(adminToAdd.name, adminToAdd.email, adminToAdd.password, adminToAdd.title, businessId, business.name)); }
                 catch(addAdminError) { console.log("error adding admin: ", addAdminError); }
             });
             // wait for all the users to get created
-            await Promise.all(promises);
+            await Promise.all(createAdminPromises);
         }
 
         // return the business id
