@@ -244,10 +244,6 @@ function POST_answerSkillQuestion(req, res) {
         // 70% = skill iq of 100
         const score = (percentCorrect * 100) + 30;
 
-        // <<---------------->> //
-
-        //score = randomInt(85, 115);
-
         userSkill.mostRecentScore = score;
         attempt.score = score;
 
@@ -570,9 +566,8 @@ async function POST_agreeToTerms(req, res) {
     const verificationToken = sanitize(req.body.verificationToken);
 
     let user;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
         console.log("error getting user when agreeing to skill test terms: ", getUserError);
         return res.status(500).send("Error getting user.");
     }
