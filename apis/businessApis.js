@@ -771,6 +771,8 @@ function GET_employeeQuestions(req, res) {
     })
 }
 
+
+// get all positions for a business
 async function GET_positions(req, res) {
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
@@ -814,6 +816,8 @@ async function GET_positions(req, res) {
 }
 
 
+// get the number of users who have completed and are in progress for a certain position
+// return the position object but with two additional properties - completions and usersInProgress
 async function addCompletionsAndInProgress(position) {
     return new Promise(async function(resolve, reject) {
         try {
@@ -852,11 +856,7 @@ async function addCompletionsAndInProgress(position) {
                 position = position.toObject();
             }
 
-            resolve ({
-                ...position,
-                completions,
-                usersInProgress
-            });
+            resolve ({ ...position, completions, usersInProgress });
         }
 
         catch (error) { reject(error); }
