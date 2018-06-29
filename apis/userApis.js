@@ -1392,7 +1392,7 @@ function GET_keepMeLoggedIn(req, res) {
 
 
 // verify user's email so they can log in
-function POST_verifyEmail(req, res) {
+async function POST_verifyEmail(req, res) {
     const token = sanitize(req.body.token);
     const userType = sanitize(req.body.userType);
 
@@ -1443,7 +1443,7 @@ function POST_verifyEmail(req, res) {
 }
 
 
-function POST_changePasswordForgot(req, res) {
+async function POST_changePasswordForgot(req, res) {
     let token = sanitize(req.body.token).toString();
     let password = sanitize(req.body.password);
 
@@ -1468,7 +1468,7 @@ function POST_changePasswordForgot(req, res) {
 
     // hash the new password
     const saltRounds = 10;
-    bcrypt.hash(password, saltRounds, function(hashError, hash) {
+    bcrypt.hash(password, saltRounds, async function(hashError, hash) {
         // set the new password
         user.password = hash;
         // save the user
