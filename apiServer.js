@@ -125,10 +125,8 @@ app.get("/admin/business", adminApis.GET_business);
 app.post("/admin/saveBusiness", adminApis.POST_saveBusiness);
 app.get("/admin/blankPosition", adminApis.GET_blankPosition);
 
-//app.get('/skill/skillByUrl', skillApis.GET_skillByUrl);
 app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);
 app.post('/skill/startOrContinueTest', skillApis.POST_startOrContinueTest);
-app.get('/skill/skillNamesByIds', skillApis.GET_skillNamesByIds);
 app.post("/skill/agreeToTerms", skillApis.POST_agreeToTerms);
 
 app.post('/billing/customer', billingApis.POST_customer);

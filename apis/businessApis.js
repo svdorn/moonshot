@@ -1015,9 +1015,8 @@ async function GET_candidateSearch(req, res) {
 
     // get the user who is trying to search for candidates
     let user;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
         console.log("error getting business user while searching for candidates: ", getUserError);
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
@@ -1028,12 +1027,13 @@ async function GET_candidateSearch(req, res) {
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
-    // if the user doesn't have
+    // if the user doesn't have an associated business, error
     if (!user.businessInfo || !user.businessInfo.businessId) {
         console.log("User doesn't have associated business.");
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
+    // the id of the business that the user works for
     const businessId = user.businessInfo.businessId;
 
     // the restrictions on the search

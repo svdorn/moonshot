@@ -17,8 +17,6 @@ const { finishPositionEvaluation } = require('./userApis');
 const errors = require('./errors.js');
 
 const skillApis = {
-    //GET_skillByUrl,
-    GET_skillNamesByIds,
     POST_answerSkillQuestion,
     POST_startOrContinueTest,
     POST_agreeToTerms
@@ -27,41 +25,6 @@ const skillApis = {
 
 // ----->> START APIS <<----- //
 
-async function GET_skillNamesByIds(req, res) {
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
-    const skillIds = sanitize(req.query.skillIds);
-
-    if (!userId || !verificationToken || !skillIds) {
-        return res.status(400).send("Not enough arguments provided.");
-    }
-
-    // get the user
-    let user;
-    try { user = await getAndVerifyUser(userId, verificationToken); }
-    catch (findUserError) {
-        console.log("Error finding business user who was trying to see thier positions: ", findUserError);
-        return res.status(500).send("Server error, try again later.");
-    }
-
-    const skillsQuery = {
-        "_id" : {"$in" : skillIds}
-    }
-    // get the business the user works for
-    let skills;
-    try {
-        skills = await Skills
-            .find(skillsQuery)
-            .select("name");
-        // see if there are none found
-        if (!skills || skills.length === 0 ) { throw "No skills found - userId: ", user._id; }
-
-        res.json(skills);
-    } catch (findSkillsErr) {
-        console.log("error finding skills : ", findSkillsErr);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-}
 
 function POST_answerSkillQuestion(req, res) {
     let user = undefined;
@@ -725,65 +688,6 @@ async function POST_agreeToTerms(req, res) {
 
     res.json(frontEndUser(user));
 }
-
-
-// function GET_skillByUrl(req, res) {
-//     try {
-//         let user = undefined;
-//         let skill = undefined;
-//
-//         const userId = sanitize(req.query.userId);
-//         const verificationToken = sanitize(req.query.verificationToken);
-//         const skillUrl = sanitize(req.query.skillUrl);
-//
-//         if (!userId || !verificationToken || !skillUrl) {
-//             console.log("userId: ", userId);
-//             return res.status(400).send("Not enough arguments provided.");
-//         }
-//
-//         // get the user
-//         Users.findById(userId)
-//         .then(foundUser => {
-//             // ensure correct user was found and that they have permissions
-//             if (!foundUser) { return res.status(404).send("Could not find current user."); }
-//             if (foundUser.verificationToken !== verificationToken) {
-//                 return res.status(403).send("Invalid user credentials.");
-//             }
-//
-//             user = foundUser;
-//             returnSkill();
-//         })
-//         .catch(findUserErr => {
-//             console.log("Error finding user in the db when trying to get a skill by url: ", findUserErr);
-//             return res.status(500).send("Server error, try again later.");
-//         })
-//
-//         // get the skill
-//         Skills.find({url: skillUrl})
-//         .then(foundSkills => {
-//             if (foundSkills.length === 0) { return res.status(404).send("Invalid skill."); }
-//             skill = foundSkills[0];
-//             returnSkill();
-//         })
-//         .catch(findSkillErr => {
-//             console.log("Error finding skill by url: ", findSkillErr);
-//             return res.status(500).send("Server error, try again later.");
-//         })
-//
-//         function returnSkill() {
-//             // haven't yet found either the skill or user from the db
-//             if (!user || !skill) { return; }
-//
-//             return res.json(skill);
-//         }
-//     } catch(miscError) {
-//         console.log("Error getting skill by url: ", miscError);
-//         if (typeof res === "object" && typeof res.status === "function") {
-//             return res.status(500).send("Server error");
-//         }
-//     }
-// }
-
 
 // ----->> END APIS <<----- //
 
