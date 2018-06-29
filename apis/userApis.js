@@ -300,8 +300,6 @@ async function POST_continuePositionEval(req, res) {
             try {
                 finishEvalObj = await finishPositionEvaluation(user, position.positionId, position.businessId);
                 user = finishEvalObj.user;
-                // save the business with the updated finished user info
-                await finishEvalObj.business.save();
             } catch(finishEvalError) {
                 console.log("error finishing eval: ", finishEvalError);
                 return res.status(500).send("Server error.");
@@ -518,7 +516,7 @@ async function addEvaluation(user, businessId, positionId, startDate) {
 }
 
 
-// doesn't save the user or business objects, caller has to do that
+// doesn't save the user object, caller has to do that
 async function finishPositionEvaluation(user, positionId, businessId) {
     return new Promise(async function(resolve, reject) {
         let idType = "";
@@ -533,30 +531,24 @@ async function finishPositionEvaluation(user, positionId, businessId) {
             reject("Non-candidate or employee tried to finish position evaluation.");
         }
 
-        // user is no longer taking a position evaluation
-        user.positionInProgress = undefined;
-
+        // every position evaluation has a psychometric portion, so it must be done
         if (!user.psychometricTest || !user.psychometricTest.endDate) {
             return reject("user has not yet completed the psychometric test");
         }
 
-        // user finished the evaluation
-        user.positions[user.positions.findIndex(pos => { return pos.positionId.toString() === positionId.toString(); })].appliedEndDate = new Date();
+        // user is no longer taking a position evaluation
+        user.positionInProgress = undefined;
 
-        let business;
-        try {
-            business = await Businesses.findById(position.businessId);
-        } catch (findBusinessError) {
-            console.log("Error getting business: ", findBusinessError);
-            reject(findBusinessError);
+        // find the index of the position within the user's positions array
+        const positionIndex = user.positions.findIndex(pos => {
+            return pos.positionId.toString() === positionId.toString();
+        });
+        if (typeof positionIndex !== "number" || positionIndex < 0) {
+            return reject("Couldn't find position that user tried to complete within user's positions array.")
         }
 
-        // update the business to say that they have a user who has completed their application
-        let positionIndex = business.positions.findIndex(bizPos => {
-            return bizPos._id.toString() === positionId.toString();
-        });
-
-        let businessPos = business.positions[positionIndex];
+        // user finished the evaluation, give it an end date
+        user.positions[positionIndex].appliedEndDate = new Date();
 
         // find the candidate within the business' position
         const userId = user._id.toString();
@@ -733,10 +725,18 @@ async function POST_sawEvaluationIntro(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
 
+    // // TODO: do all this with one query
+    // const findAndUpdateQuery = {
+    //
+    // }
+    // Users.findOneAndUpdate(findAndUpdateQuery);
+
+
+
+
     let user;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
         console.log("error getting user when agreeing to skill test terms: ", getUserError);
         return res.status(500).send("Error getting user.");
     }
@@ -866,9 +866,8 @@ async function POST_answerPsychQuestion(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
     let user = undefined;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserErrorObj) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserErrorObj) {
         console.log("error getting user: ", getUserErrorObj);
         return res.status(getUserErrorObj.status).send(getUserErrorObj.message);
     }
@@ -898,7 +897,6 @@ async function POST_answerPsychQuestion(req, res) {
     const factorIndex = currentQuestion.factorIndex;
     const facetId = currentQuestion.facetId;
     const facetIndex = currentQuestion.facetIndex;
-
 
     // find out how many questions have already been answered for this facet
     // get the factor of the question that was answered
@@ -1023,10 +1021,7 @@ async function POST_answerPsychQuestion(req, res) {
                 let business;
                 try {
                     finishedPositionObj = await finishPositionEvaluation(user, positionId, userPosition.businessId);
-                    business = finishedPositionObj.business;
                     user = finishedPositionObj.user;
-
-                    await business.save();
                 } catch (finishPositionError) {
                     console.log("error finishing position: ", finishPositionError);
                     return res.status(500).send("Server error.");
@@ -1048,9 +1043,8 @@ async function POST_answerPsychQuestion(req, res) {
 
         // the actual psych test with all its questions
         let psychTest = undefined;
-        try {
-            psychTest = await Psychtests.findOne({});
-        } catch (getPsychTestError) {
+        try { psychTest = await Psychtests.findOne({}); }
+        catch (getPsychTestError) {
             console.log("Error getting the psych test: ", getPsychTestError);
             return res.status(500).send("Server error.");
         }
@@ -1146,19 +1140,15 @@ async function POST_answerPsychQuestion(req, res) {
     user.psychometricTest = psychometricTest;
 
     // grade the test if it's finished
-    if (finishedTest) {
-        user = calculatePsychScores(user);
-    }
+    if (finishedTest) { user = calculatePsychScores(user); }
 
-    let updatedUser = undefined;
-    try {
-        updatedUser = await user.save();
-    } catch(saveUserErr) {
+    try { user = await user.save(); }
+    catch(saveUserErr) {
         console.log("Error saving user that was trying to save a psych question answer: ", saveUserErr);
         return res.status(500).send("Server error.");
     }
 
-    res.json({user: frontEndUser(updatedUser), finishedTest});
+    res.json({user: frontEndUser(user), finishedTest});
 }
 
 
