@@ -80,7 +80,7 @@ async function GET_adminQuestions(req, res) {
 }
 
 
-// get the questions that are shown on the administrative questions portion of an evaluation
+// answer a question that is shown on the administrative questions portion of an evaluation
 async function POST_answerAdminQuestion(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
@@ -97,9 +97,8 @@ async function POST_answerAdminQuestion(req, res) {
     }
 
     let user;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
         console.log("error getting user while trying to get admin questions: ", getUserError);
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
@@ -120,9 +119,8 @@ async function POST_answerAdminQuestion(req, res) {
     user.adminQuestions.finished = finished;
 
     // save the user
-    try {
-        await user.save();
-    } catch (saveUserError) {
+    try { await user.save(); }
+    catch (saveUserError) {
         console.log("error saving user while trying to answer admin question");
         res.status(500).send(errors.SERVER_ERROR);
     }
