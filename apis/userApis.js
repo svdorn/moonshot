@@ -48,52 +48,10 @@ const userApis = {
     POST_sawEvaluationIntro,
     POST_agreeToTerms,
 
-    POST_resetFrizz,
-    POST_reset24,
-
     internalStartPsychEval,
     addEvaluation,
     finishPositionEvaluation
 }
-
-
-// async function makeMockPsychData() {
-//     let user = await Users.findById("5a95fed783705f7be1f7c158");
-//     let psychometricTest = user.psychometricTest;
-//     for (let factorIndex = 0; factorIndex < psychometricTest.factors.length; factorIndex++) {
-//         let factor = psychometricTest.factors[factorIndex];
-//
-//         factor.incompleteFacets = [];
-//
-//         let facetTotal = 0;
-//
-//         for (let facetIndex = 0; facetIndex < factor.facets.length; facetIndex++) {
-//             let facet = factor.facets[facetIndex];
-//
-//             facet.score = Math.floor(Math.random() * 11) - 5;
-//
-//             facetTotal += facet.score;
-//
-//             factor.facets[facetIndex] = facet;
-//         }
-//
-//         factor.score = facetTotal / factor.facets.length;
-//
-//         psychometricTest.factors[factorIndex] = factor;
-//     }
-//
-//     user.psychometricTest = psychometricTest;
-//
-//     user.psychometricTest.endDate = new Date();
-//
-//     user.save()
-//     .then(result => {
-//         console.log("result: ", result);
-//     })
-//     .catch(err => {
-//         console.log("err: ", err);
-//     })
-// }
 
 
 // get the questions that are shown on the administrative questions portion of an evaluation
@@ -170,68 +128,6 @@ async function POST_answerAdminQuestion(req, res) {
     }
 
     return res.json(frontEndUser(user));
-}
-
-
-async function POST_resetFrizz(req, res) {
-    const userId = sanitize(req.body.userId);
-    const verificationToken = sanitize(req.body.verificationToken);
-
-    let frizz;
-    try {
-        frizz = await getAndVerifyUser(userId, verificationToken);
-    } catch (frizzError) {
-        console.log("error getting frizz: ", frizzError);
-        return res.status(500).send("Error getting user.");
-    }
-
-    if (frizz.email != "frizzkitten@gmail.com") {
-        return res.status(403).send("Not logged in with right account.");
-    }
-
-    frizz.skillTests = undefined;
-    frizz.psychometricTest = undefined;
-    frizz.positions = undefined;
-    frizz.positionInProgress = undefined;
-
-    frizz.save()
-    .then(newFrizz => {
-        return res.json(frontEndUser(newFrizz));
-    })
-    .catch(error => {
-        console.log("error resetting frizz: ", error);
-        return res.status(500).send("ERROR");
-    })
-}
-async function POST_reset24(req, res) {
-    const userId = sanitize(req.body.userId);
-    const verificationToken = sanitize(req.body.verificationToken);
-
-    let frizz;
-    try {
-        frizz = await getAndVerifyUser(userId, verificationToken);
-    } catch (frizzError) {
-        console.log("error getting 24: ", frizzError);
-        return res.status(500).send("Error getting user.");
-    }
-
-    if (frizz.email != "ameyer24@wisc.edu") {
-        return res.status(403).send("Not logged in with right account.");
-    }
-
-    frizz.skillTests = undefined;
-    frizz.psychometricTest = undefined;
-    frizz.positions = undefined;
-    frizz.positionInProgress = undefined;
-
-    frizz.save()
-    .then(newFrizz => {
-        return res.json(frontEndUser(newFrizz));
-    })
-    .catch(error => {
-        console.log("error resetting 24: ", error);
-        return res.status(500).send("ERROR");
-    })
 }
 
 

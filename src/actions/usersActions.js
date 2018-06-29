@@ -286,36 +286,6 @@ export function submitFreeResponse(userId, verificationToken, frqs) {
 }
 
 
-export function resetFrizz(userId, verificationToken) {
-    return function(dispatch) {
-        axios.post("/api/user/resetFrizz", {userId, verificationToken})
-        .then(response => {
-            dispatch({type: "USER_UPDATE", currentUser: response.data, notification:{message: "Frizz reset!", type: "infoHeader"}});
-            browserHistory.push("/positionSignup");
-            window.scrollTo(0, 0);
-        })
-        .catch(error => {
-            dispatch({type: "NOTIFICATION", notification:{message: error.response.data, type: "errorHeader"}})
-            // console.log("error: ", error);
-        })
-    }
-}
-export function reset24(userId, verificationToken) {
-    return function(dispatch) {
-        axios.post("/api/user/reset24", {userId, verificationToken})
-        .then(response => {
-            dispatch({type: "USER_UPDATE", currentUser: response.data, notification:{message: "24 reset!", type: "infoHeader"}});
-            browserHistory.push("/positionSignup");
-            window.scrollTo(0, 0);
-        })
-        .catch(error => {
-            dispatch({type: "NOTIFICATION", notification:{message: error.response.data, type: "errorHeader"}})
-            // console.log("error: ", error);
-        })
-    }
-}
-
-
 // POST USER
 export function postUser(user) {
     return function(dispatch) {
