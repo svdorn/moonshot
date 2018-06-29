@@ -8,6 +8,8 @@ const signupcodesSchema = mongoose.Schema({
     businessId: mongoose.Schema.Types.ObjectId,
     // the position this code is for
     positionId: mongoose.Schema.Types.ObjectId,
+    // the type of user this code is meant for
+    userType: String,
     // the time this code was created
     created: Date,
     // when this code expires and is no longer valid and should be deleted

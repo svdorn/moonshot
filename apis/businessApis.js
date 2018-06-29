@@ -1,6 +1,7 @@
 const Businesses = require("../models/businesses.js");
 const Users = require("../models/users.js");
 const Psychtests = require("../models/psychtests.js");
+const Signupcodes = require("../models/signupcodes.js");
 const mongoose = require("mongoose");
 
 const bcrypt = require('bcryptjs');
@@ -11,7 +12,8 @@ const { sanitize,
         sendEmail,
         getAndVerifyUser,
         frontEndUser,
-        speedTest
+        speedTest,
+        lastPossibleSecond
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -37,7 +39,155 @@ const businessApis = {
 
 // ----->> START APIS <<----- //
 
-function POST_emailInvites(req, res) {
+// create a signup code for a user
+function createCode(businessId, positionId, userType) {
+    return new Promise(async function(resolve, reject) {
+        // initialize random characters string
+        let randomChars;
+        // see if this code already exists
+        try {
+            // will contain any code that has the same random characters
+            let foundCode;
+            // if this gets up to 8 something is super weird
+            let counter = 0;
+            do {
+                if (counter >= 8) { throw "Too many codes found that had already been used." }
+                counter++;
+                // assign randomChars 10 random hex characters
+                randomChars = crypto.randomBytes(5).toString('hex');
+                // try to find another code with the same random characters
+                const foundCode = Signupcodes.findOne({ code: randomChars });
+            } while (foundCode);
+        } catch (findCodeError) {
+            return reject("Error looking for code with same characters: ", findCodeError);
+        }
+        // we are now guaranteed to have a unique code
+        const NOW = new Date();
+        const TWO_WEEKS = 14;
+        // create the code
+        const code = {
+            code: randomChars,
+            created: NOW,
+            expirationDate: lastPossibleSecond(NOW, TWO_WEEKS),
+            businessId, positionId, userType
+        }
+        // make the code in the db
+        try { code = await Signupcodes.create(code) }
+        catch (createCodeError) { reject("error creating signup code: ", createCodeError); }
+        // return the code
+        return resolve(code);
+    });
+}
+
+
+// returns an object with the email, userType, and new code for a user
+function createEmailInfo(businessId, positionId, userType, email) {
+    return new Promise(async function(resolve, reject) {
+        try {
+            const codeObj = await createCode(businessId, positionId, userType);
+            resolve({
+                code: codeObj.code,
+                email, userType
+            });
+        }
+        // catch whatever random error comes up
+        catch (error) {
+            reject(error);
+        }
+    });
+}
+
+
+// sends email to the user with email info provided
+async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUrl) {
+    return new Promise(async function(resolve, reject) {
+        const code = emailInfo.code;
+        const email = emailInfo.email;
+        const userType = emailInfo.userType;
+
+        // recipient of the email
+        const recipient = [ email ];
+        // sender of the email
+        const sendFrom = "Moonshot";
+        // the content of the email
+        let content = "";
+        // subject of the email
+        let subject = "";
+
+        // the button linking to the signup page with the signup code in the url
+        const createAccontButton =
+              '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="'
+            + moonshotUrl + 'signup?code=' + code
+            + '">Create Account</a>';
+
+        // at the end of every user's email
+        const emailFooter =
+              '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
+            + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
+            + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
+            + '<div style="text-align:left;width:95%;display:inline-block;">'
+                + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + email + '">Opt-out of future messages.</a></i>'
+                + '</div>'
+            + '</div>';
+
+        switch (userType) {
+            case "candidate":
+                subject = businessName + " invited you to the next round";
+                content =
+                    '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                        + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
+                        + '<p style="width:95%; display:inline-block; text-align:left;">&#09;Congratulations, ' + businessName
+                        + ' advanced you to the next step for the ' + positionName + ' position. The next step is completing ' + businessName + '&#39;s evaluation on Moonshot.'
+                        + ' Please click the button below to create your account. Once you&#39;ve created your account, you can begin your evaluation.'
+                        + '</p>'
+                        + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot and congrats on advancing to the next step for the ' + positionName + ' position!</p><br/>'
+                        + createAccountButton
+                        + emailFooter
+                    + '</div>';
+                break;
+            case "employee":
+                subject = businessName + " invited you to take the " + positionName + " evaluation";
+                content =
+                    '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                        + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
+                        + '<p style="width:95%; display:inline-block; text-align:left;">' + userName + ' invited you to complete an evaluation for ' + businessName + '&#39;s ' + positionName + ' position.'
+                        + ' Your participation will help create a baseline for ' + businessName + '&#39;s predictive candidate evaluations for incoming applicants.'
+                        + ' Please click the button below to create an account. Once you&#39;ve created your account you can begin your evaluation.</p>'
+                        + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
+                        + createAccontButton
+                        + emailFooter
+                    + '</div>';
+                break;
+            case "accountAdmin":
+                subject = businessName + " invited you to be an admin on Moonshot";
+                content =
+                    '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                        + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
+                        + '<p style="width:95%; display:inline-block; text-align:left;">' + userName + ' invited you to be an admin for ' + businessName + '&#39;s predictive candidate evaluations.'
+                        + ' Please click the button below to create your account.'
+                        + ' Once you&#39;ve created your account you can begin adding other admins, employees, and candidates, as well as grade employees and review evaluation results.</p>'
+                        + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights and candidate predictions!</p><br/>'
+                        + createAccountButton
+                        + emailFooter
+                    + '</div>';
+                break;
+            default:
+                return reject("Invalid user type");
+        }
+
+        // send the email
+        sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+            if (!success) { reject(msg); }
+            else { resolve(); }
+        })
+    });
+}
+
+
+// send email invites to multiple email addresses with varying user types
+async function POST_emailInvites(req, res) {
     const body = req.body;
     const candidateEmails = sanitize(body.candidateEmails);
     const employeeEmails = sanitize(body.employeeEmails);
@@ -54,235 +204,68 @@ function POST_emailInvites(req, res) {
         return res.status(400).send("Bad request.");
     }
 
+    // where links in the email will go
     let moonshotUrl = 'https://www.moonshotinsights.io/';
     // if we are in development, links are to localhost
     if (process.env.NODE_ENV === "development") {
         moonshotUrl = 'http://localhost:8081/';
     }
 
-    // verify the employer is actually a part of this organization
-    verifyEmployerAndReturnBusiness(userId, verificationToken, businessId)
-    .then(business => {
-        // if employer does not have valid credentials
-        if (!business) {
-            console.log("Employer tried to send verification links");
-            return res.status(403).send("You do not have permission to send verification links.");
-        }
+    // get the business and ensure the user has access to send invite emails
+    let business;
+    try { business = verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId); }
+    catch (verifyUserError) {
+        console.log("error verifying user or getting business when sending invite emails: ", verifyUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
 
-        let code = business.code;
+    // find the position within the business
+    const positionIndex = business.positions.findIndex(currPosition => {
+        return currPosition._id.toString() === positionId.toString();
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(403).send("Not a valid position.");
+    }
+    const position = business.positions[positionIndex];
+    if (!position) { return res.status(403).send("Not a valid position."); }
+    const businessName = business.name;
 
-        const positionIndex = business.positions.findIndex(currPosition => {
-            return currPosition._id.toString() === positionId.toString();
-        });
+    // a list of promises that will resolve to objects containing new codes
+    // as well as all user-specific info needed to send the invite email
+    let emailPromises = [];
+    candidateEmails.forEach(email => {
+        emailPromises.push(createEmailInfo(businessId, positionId, "candidate", email));
+    });
+    employeeEmails.forEach(email => {
+        emailPromises.push(createEmailInfo(businessId, positionId, "employee", email));
+    });
+    adminEmails.forEach(email => {
+        emailPromises.push(createEmailInfo(businessId, positionId, "accountAdmin", email));
+    });
 
+    // wait for all the email object promises to resolve
+    let emailInfoObjects;
+    try { emailInfoObjects = await Promise.all(emailPromises); }
+    catch (emailInfoObjectsError) {
+        console.log("error creating email info objects: ", emailInfoObjectsError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
 
-
-        let position = business.positions[positionIndex];
-
-        if (!position) {
-            return res.status(403).send("Not a valid position.");
-        }
-
-        const businessName = business.name;
-
-        // Add the position code onto the end of the code
-        code = code.toString().concat(position.code);
-
-        // get current date - used for candidate code start dates
-        const now = new Date();
-
-        // Send candidate emails
-        for (let i = 0; i < candidateEmails.length; i++) {
-            // add code to the position
-            const userCode = crypto.randomBytes(64).toString('hex');
-            const codeObj = { code: userCode, startDate: now };
-            if (position.candidateCodes) {
-                position.candidateCodes.push(codeObj);
-            } else {
-                position.candidateCodes = [];
-                position.candidateCodes.push(codeObj);
-            }
-            // send email
-            let recipient = [candidateEmails[i]];
-            let subject = businessName + " invited you to the next round";
-            let content =
-                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                    + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:95%; display:inline-block; text-align:left;">&#09;Congratulations, ' + businessName
-                    + ' advanced you to the next step for the ' + positionName + ' position. The next step is completing ' + businessName + '&#39;s evaluation on Moonshot.'
-                    + ' Please click the button below to create your account. Once you&#39;ve created your account, you can begin your evaluation.'
-                    + '</p>'
-                    + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot and congrats on advancing to the next step for the ' + positionName + ' position!</p><br/>'
-                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
-                    + code + "&userCode=" + userCode
-                    + '">Create Account</a>'
-                    + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
-                    + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                    + '<div style="text-align:left;width:95%;display:inline-block;">'
-                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
-                        + '</div>'
-                    + '</div>'
-                + '</div>';
-
-            const sendFrom = "Moonshot";
-            sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-                if (!success) {
-                    res.status(500).send(msg);
-                }
-            })
-        }
-        // Send employee emails
-        for (let i = 0; i < employeeEmails.length; i++) {
-            // add code to the position
-            const userCode = crypto.randomBytes(64).toString('hex');
-            const codeObj = { code: userCode, startDate: now };
-            if (position.employeeCodes) {
-                position.employeeCodes.push(codeObj);
-            } else {
-                position.employeeCodes = [];
-                position.employeeCodes.push(codeObj);
-            }
-            // send email
-            let recipient = [employeeEmails[i]];
-            let subject = businessName + " invited you to take the " + positionName + " evaluation";
-            let content =
-                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                    + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:95%; display:inline-block; text-align:left;">' + userName + ' invited you to complete an evaluation for ' + businessName + '&#39;s ' + positionName + ' position.'
-                    + ' Your participation will help create a baseline for ' + businessName + '&#39;s predictive candidate evaluations for incoming applicants.'
-                    + ' Please click the button below to create an account. Once you&#39;ve created your account you can begin your evaluation.</p>'
-                    + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
-                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
-                    + code + "&userCode=" + userCode
-                    + '">Create Account</a>'
-                    + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
-                    + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                    + '<div style="text-align:left;width:95%;display:inline-block;">'
-                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
-                        + '</div>'
-                    + '</div>'
-                + '</div>';
-
-            const sendFrom = "Moonshot";
-            sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-                if (!success) {
-                    res.status(500).send(msg);
-                }
-            })
-        }
-        // Send manager emails
-        // for (let i = 0; i < managerEmails.length; i++) {
-        //     // add code to the position
-        //     const userCode = crypto.randomBytes(64).toString('hex');
-        //     if (position.managerCodes) {
-        //         position.managerCodes.push(userCode);
-        //     } else {
-        //         position.managerCodes = [];
-        //         position.managerCodes.push(userCode);
-        //     }
-        //     // send email
-        //     let recipient = [managerEmails[i]];
-        //     let subject = "You've Been Invited!";
-        //     let content =
-        //         '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-        //             + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-        //             + '<p style="width:60%; display:inline-block; text-align:left;">&#09;You&#39;ve been invited by ' + userName + ' from ' + businessName + ' as a manager!'
-        //             + ' Please click the button below to create your account.'
-        //             + ' Once you&#39;ve created your account you can begin grading your employees, tracking candidates, and reviewing evaluation results!</p>'
-        //             + '<br/><p style="width:60%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
-        //             + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
-        //             + code + "&userCode=" + userCode
-        //             + '">Create Account</a>'
-        //             + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
-        //             + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-        //             + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-        //             + '<div style="text-align:left;width:60%;display:inline-block;">'
-        //                 + '<span style="margin-bottom:20px;display:inline-block;">On behalf of the Moonshot Team, we welcome you to our family and look forward to helping you pave your future and shoot for the stars.</span><br/>'
-        //                 + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-        //                 + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-        //                 + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
-        //                 + '</div>'
-        //             + '</div>'
-        //         + '</div>';
-        //
-        //     const sendFrom = "Moonshot";
-        //     sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-        //         if (!success) {
-        //             res.status(500).send(msg);
-        //         }
-        //     })
-        // }
-        // Send admin emails
-        for (let i = 0; i < adminEmails.length; i++) {
-            // add code to the position
-            const userCode = crypto.randomBytes(64).toString('hex');
-            const codeObj = { code: userCode, startDate: now };
-            if (position.adminCodes) {
-                position.adminCodes.push(codeObj);
-            } else {
-                position.adminCodes = [];
-                position.adminCodes.push(codeObj);
-            }
-            // send email
-            let recipient = [adminEmails[i]];
-            let subject = businessName + " invited you to be an admin on Moonshot";
-            let content =
-                '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                    + '<div style="font-size:28px;color:#0c0c0c;">You&#39;ve Been Invited to Moonshot!</div>'
-                    + '<p style="width:95%; display:inline-block; text-align:left;">' + userName + ' invited you to be an admin for ' + businessName + '&#39;s predictive candidate evaluations.'
-                    + ' Please click the button below to create your account.'
-                    + ' Once you&#39;ve created your account you can begin adding other admins, employees, and candidates, as well as grade employees and review evaluation results.</p>'
-                    + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to Moonshot Insights and candidate predictions!</p><br/>'
-                    + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'signup?code='
-                    + code + "&userCode=" + userCode
-                    + '">Create Account</a>'
-                    + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
-                    + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-                    + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                    + '<div style="text-align:left;width:95%;display:inline-block;">'
-                        + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                        + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                        + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + candidateEmails[i] + '">Opt-out of future messages.</a></i>'
-                        + '</div>'
-                    + '</div>'
-                + '</div>';
-
-            const sendFrom = "Moonshot";
-            sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-                if (!success) {
-                    res.status(500).send(msg);
-                }
-            })
-        }
-        // Save the new business object with updated positions array
-        // update the employee in the business object
-        business.positions[positionIndex] = position;
-
-        // save the business
-        business.save()
-        .then(updatedBusiness => {
-            return res.json(position);
-        })
-        .catch(updateBusinessErr => {
-            return res.status(500).send("failure!");
-        });
-
-
-
-
-    })
-    .catch(verifyEmployerErr => {
-        console.log("Error when trying to verify employer when they were trying to send verification links: ", verifyEmployerErr);
-        return res.status(500).send("Server error, try again later.");
+    // send all the emails
+    let sendEmailPromises = [];
+    emailInfoObjects.forEach(emailInfoObject => {
+        sendEmailPromises.push(sendEmailInvite(emailInfoObject, positionName, businessName, moonshotUrl));
     })
 
+    // wait for all the emails to be sent
+    try { await Promise.all(sendEmailPromises); }
+    catch (sendEmailsError) {
+        console.log("error sending invite emails: ", sendEmailsError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
 
+    // successfully sent all the emails
+    return res.json(true);
 }
 
 
@@ -403,16 +386,6 @@ async function POST_dialogEmailScreen2(req, res) {
                     if (err) {
                         console.log(err);
                     }
-
-                    req.session.unverifiedUserId = newUser._id;
-                    req.session.save(function (err) {
-                        if (err) {
-                            console.log("error saving unverifiedUserId to session: ", err);
-                        }
-                    })
-
-                    business.employerIds = [];
-                    business.employerIds.push(newUser._id);
 
                     // Create business
                     Businesses.create(business, function(err, newBusiness) {
@@ -600,6 +573,7 @@ async function POST_updateHiringStage(req, res) {
     return res.json("success");
 }
 
+
 async function POST_answerQuestion(req, res) {
     const body = req.body;
     const userId = sanitize(body.user.userId);
@@ -718,7 +692,7 @@ async function POST_answerQuestion(req, res) {
 
 // VERIFY THAT THE GIVEN USER IS LEGIT AND PART OF THE GIVEN BUSINESS
 // RETURNS THE BUSINESS THAT THE EMPLOYER WORKS FOR ON SUCCESS, UNDEFINED ON FAIL
-async function verifyEmployerAndReturnBusiness(userId, verificationToken, businessId) {
+async function verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId) {
     return new Promise(async (resolve, reject) => {
         try {
             // find the user and business
@@ -733,6 +707,10 @@ async function verifyEmployerAndReturnBusiness(userId, verificationToken, busine
             // check if the user has the right verification token
             if (user.verificationToken !== verificationToken) {
                 throw "Wrong verification token."
+            }
+
+            if (user.userType !== "accountAdmin") {
+                throw `User was supposed to be an account admin, but was: ${user.userType}`;
             }
 
             // check that the user is part of the business

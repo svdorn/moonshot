@@ -528,6 +528,18 @@ async function getAndVerifyUser(userId, verificationToken) {
 }
 
 
+// always sets the due date to be 11:59pm
+function lastPossibleSecond(date, daysToAdd) {
+    const year = date.getFullYear();
+    const month = date.getMonth();
+    const day = date.getDate() + daysToAdd;
+    const hour = 23;
+    const minute = 59;
+    const second = 59;
+    return (new Date(year, month, day, hour, minute, second));
+}
+
+
 const helperFunctions = {
     sanitize,
     removeEmptyFields,
@@ -539,6 +551,7 @@ const helperFunctions = {
     frontEndUser,
     getAndVerifyUser,
     speedTest,
+    lastPossibleSecond,
 
     FOR_USER
 }
