@@ -33,7 +33,6 @@ function POST_answerSkillQuestion(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
     const skillUrl = sanitize(req.body.skillUrl);
-    // const answerIds = sanitize(req.body.answerIds);
     const answerId = sanitize(req.body.answerId);
 
     if (!userId || !verificationToken || !skillUrl) {
@@ -105,24 +104,7 @@ function POST_answerSkillQuestion(req, res) {
             userLevel = attempt.levels[userLevelIndex];
         }
 
-        // // OLD WAY - multiple answers can be correct
-        // const correctAnswers = userCurrentQuestion.correctAnswers;
-        // let isCorrect = true;
-        // const numCorrectAnswers = correctAnswers.length;
-        // for (let correctAnswerIndex = 0; correctAnswerIndex < numCorrectAnswers; correctAnswerIndex++) {
-        //     const correctAnswerId = correctAnswers[correctAnswerIndex].toString();
-        //     // if this correct answer isn't included within the user's list of answers,
-        //     // mark them as incorrect
-        //     if (!answerIds.some(answerId => {
-        //         return answerId.toString() === correctAnswerId.toString();
-        //     })) {
-        //         isCorrect = false;
-        //         break;
-        //     }
-        // }
-
-        // NEW WAY - only one answer can be correct
-        // see if the answer is correct
+        // only one answer can be correct, see if the answer is correct
         const isCorrect = userCurrentQuestion.correctAnswer.toString() === answerId.toString();
 
         const startDate = userCurrentQuestion.startDate;
@@ -132,7 +114,6 @@ function POST_answerSkillQuestion(req, res) {
         userLevel.questions.push({
             questionId: userCurrentQuestion.questionId,
             isCorrect,
-            //answerIds,
             answerId,
             startDate,
             endDate,
@@ -143,64 +124,10 @@ function POST_answerSkillQuestion(req, res) {
         userSkill.attempts[attemptIndex] = attempt;
         user.skillTests[userSkillIndex] = userSkill;
 
-        // see if the user is done with the test
-        // TODO make a legit way of seeing if the test is over
-        // right now it just finishes if you answer one question
-        // if (true) {
-        //     finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
-        // }
-
-        // else {
-            getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex);
-        // }
+        getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex);
     }
 
     async function getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex) {
-        // // get a new question
-        // let newUserLevelIndex = userLevelIndex;
-        // // right answer and more levels exist
-        // if (isCorrect && userLevelIndex < attempt.levels.length - 1) {
-        //     newUserLevelIndex++;
-        // }
-        // // wrong answer and lower levels exist
-        // else if (!isCorrect && userLevelIndex > 0) {
-        //     newUserLevelIndex--;
-        // } // level has to stay the same otherwise
-        // let newUserLevel = attempt.levels[newUserLevelIndex];
-        //
-        // // get the test level
-        // const testLevelIndex = skill.levels.findIndex(level => {
-        //     return level.levelNumber === newUserLevel.levelNumber;
-        // });
-        // const testLevel = skill.levels[testLevelIndex];
-        //
-        // // TODO: make this actually test if the percent of questions is small enough,
-        // // and if it is not, make it make a list of unused questions to pick from
-        //
-        // // see if the percent of used questions is small enough that we can just
-        // // get random questions until one has not been used
-        //
-        // const testLevelQuestions = testLevel.questions;
-        // const numTotalQuestions = testLevelQuestions.length;
-        // let questionIndex = 0;
-        // let questionId = undefined;
-        // let question = undefined;
-        // // get random indexes of questions until one of the indexes is of a question
-        // // that has not yet been answered
-        // let counter = 0;
-        // do {
-        //     counter++;
-        //     // if a question could not be found, finish the test
-        //     if (counter > 100) {
-        //         return finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
-        //     }
-        //     questionIndex = randomInt(0, numTotalQuestions - 1);
-        //     question = testLevelQuestions[questionIndex];
-        //     questionId = question._id.toString();
-        // } while (newUserLevel.questions.some(answeredQuestion => answeredQuestion.questionId.toString() === questionId));
-
-
-
         // --->> MVP ONLY <<--- //
         const currentUserLevel = attempt.levels[userLevelIndex];
         // get the number of questions within this level (test sub-part)
@@ -252,24 +179,9 @@ function POST_answerSkillQuestion(req, res) {
             questionId,
             questionIndex,
             startDate: new Date(),
-            //correctAnswers: question.correctAnswers,
             correctAnswer: correctAnswer ? correctAnswer._id : undefined
         }
-
-
         // <<---------------->> //
-
-
-
-
-        // const currentQuestionToStore = {
-        //     levelNumber: testLevel.levelNumber,
-        //     levelIndex: testLevelIndex,
-        //     questionId,
-        //     questionIndex,
-        //     startDate: new Date(),
-        //     correctAnswers: question.correctAnswers
-        // }
 
         userSkill.currentQuestion = currentQuestionToStore;
         // save this info and the previous new info into the user's current skill
