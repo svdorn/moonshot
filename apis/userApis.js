@@ -17,7 +17,8 @@ const { sanitize,
         getFirstName,
         getAndVerifyUser,
         frontEndUser,
-        getSkillNamesByIds
+        getSkillNamesByIds,
+        lastPossibleSecond
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require('./psychApis');
@@ -344,7 +345,7 @@ async function POST_addPositionEval(req, res) {
     // add the evaluation to the user
     try {
         const startDate = new Date();
-        let { newUser, newBusiness, finished } = await addEvaluation(user, businessId, positionId, startDate);
+        let { newUser, finished, positionIndex } = await addEvaluation(user, businessId, positionId, startDate);
         user = newUser;
     } catch (addEvaluationError) {
         console.log(addEvaluationError);
@@ -468,14 +469,7 @@ async function addEvaluation(user, businessId, positionId, startDate) {
         if (assignedDate) {
             const daysAllowed = position.timeAllotted;
             if (daysAllowed != undefined) {
-                const year = assignedDate.getFullYear();
-                const month = assignedDate.getMonth();
-                const day = assignedDate.getDate() + daysAllowed;
-                // always sets the due date to be 11:59pm the day it's due
-                const hour = 23;
-                const minute = 59;
-                const second = 59;
-                deadline = new Date(year, month, day, hour, minute, second);
+                deadline = lastPossibleSecond(assignedDate, daysAllowed);
             }
         }
 
