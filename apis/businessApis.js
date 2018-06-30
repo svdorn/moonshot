@@ -59,21 +59,26 @@ function createCode(businessId, positionId, userType) {
                 const foundCode = Signupcodes.findOne({ code: randomChars });
             } while (foundCode);
         } catch (findCodeError) {
-            return reject("Error looking for code with same characters: ", findCodeError);
+            console.log("Error looking for code with same characters.");
+            return reject(findCodeError);
         }
         // we are now guaranteed to have a unique code
         const NOW = new Date();
         const TWO_WEEKS = 14;
         // create the code
-        const code = {
+        let code = {
             code: randomChars,
             created: NOW,
             expirationDate: lastPossibleSecond(NOW, TWO_WEEKS),
             businessId, positionId, userType
         }
+        console.log("code: ", code);
         // make the code in the db
         try { code = await Signupcodes.create(code) }
-        catch (createCodeError) { reject("error creating signup code: ", createCodeError); }
+        catch (createCodeError) {
+            console.log("here");
+            return reject(createCodeError);
+        }
         // return the code
         return resolve(code);
     });
@@ -213,7 +218,7 @@ async function POST_emailInvites(req, res) {
 
     // get the business and ensure the user has access to send invite emails
     let business;
-    try { business = verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId); }
+    try { business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId); }
     catch (verifyUserError) {
         console.log("error verifying user or getting business when sending invite emails: ", verifyUserError);
         return res.status(500).send(errors.SERVER_ERROR);

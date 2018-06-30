@@ -384,9 +384,7 @@ async function getPosition(businessId, positionId) {
             const position = business.positions[0];
             return resolve(position);
         }
-        catch (findBusinessError) {
-            return reject("error finding business: ", findBusinessError);
-        }
+        catch (findBusinessError) { return reject(findBusinessError); }
     });
 }
 

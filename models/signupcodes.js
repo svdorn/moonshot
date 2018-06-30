@@ -1,7 +1,7 @@
 "use strict"
-const mongoose = require('mongoose');
+var mongoose = require('mongoose');
 
-const signupcodesSchema = mongoose.Schema({
+var signupcodesSchema = mongoose.Schema({
     // the actual code that is used in the url. should be 16 hex characters long
     code: String,
     // the business this code is for
@@ -16,5 +16,5 @@ const signupcodesSchema = mongoose.Schema({
     expirationDate: Date
 })
 
-const Signupcodes = mongoose.model('Signupcodes', signupcodesSchema);
+var Signupcodes = mongoose.model('Signupcodes', signupcodesSchema);
 module.exports = Signupcodes;
