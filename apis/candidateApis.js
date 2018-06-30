@@ -30,7 +30,7 @@ const candidateApis = {
 
 function POST_candidate(req, res) {
     const SERVER_ERROR = "Server error, try again later.";
-    //let user = sanitize(req.body);
+    const code = sanitize(req.body.code);
     const name = sanitize(req.body.name);
     const email = sanitize(req.body.email);
     const password = sanitize(req.body.password);
@@ -42,9 +42,6 @@ function POST_candidate(req, res) {
     //let business = undefined;
     // id of the business offering the position
     let businessId = undefined;
-    // the name of the array of codes within the position within the business
-    //let userCodeType = undefined;
-    // the index of the unique position-related code the user used to sign up
     // id of the position within the business
     let positionId = undefined;
     // the index of the position and actual position within the business
@@ -245,14 +242,9 @@ function POST_candidate(req, res) {
         return new Promise(async function(resolve, reject) {
             // message shown to users with bad employer code
             const INVALID_CODE = "Invalid sign-up code."
-            // get the position from the employer code
-            let code = user.code;
-            // if the user did not provide a code, they can't sign up
+            // if the user did not provide a signup code, they can't sign up
             if (!code) {
-                code = user.employerCode;
-                if (!code) {
-                    return reject({status: 403, message: "Need an employer referral.", error: "No employer referral."});
-                }
+                return reject({status: 403, message: "Need an employer referral.", error: "No employer referral."});
             }
             // see if the code is a valid length
             if (code.length !== 10) {
@@ -261,9 +253,13 @@ function POST_candidate(req, res) {
 
             // find the code in the db
             let dbCode;
-            try { dbCode = await Signupcodes.find({ code }); }
+            try { dbCode = await Signupcodes.findOne({ code }); }
             catch (findCodeError) {
                 return reject({status: 500, message: "Error signing up. Try again later or ask employer for a new code.", error: findCodeError});
+            }
+
+            if (!dbCode) {
+                return reject({status: 400, message: INVALID_CODE, error: "Signup code not found in the database"});
             }
 
             // check if the code has expired

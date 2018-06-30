@@ -164,10 +164,9 @@ class Signup extends Component {
         let location = this.props.location;
         if (location.query) {
             user.code = location.query.code;
-            user.userCode = location.query.userCode;
         }
 
-        if (!user || !user.code || !user.userCode) {
+        if (!user.code) {
             return this.props.addNotification("Must have a unique employer provided link to sign up.", "error");;
         }
 

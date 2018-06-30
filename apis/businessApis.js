@@ -120,7 +120,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         let subject = "";
 
         // the button linking to the signup page with the signup code in the url
-        const createAccontButton =
+        const createAccountButton =
               '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="'
             + moonshotUrl + 'signup?code=' + code
             + '">Create Account</a>';
@@ -161,7 +161,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
                         + ' Your participation will help create a baseline for ' + businessName + '&#39;s predictive candidate evaluations for incoming applicants.'
                         + ' Please click the button below to create an account. Once you&#39;ve created your account you can begin your evaluation.</p>'
                         + '<br/><p style="width:95%; display:inline-block; text-align:left;">Welcome to the Moonshot process!</p><br/>'
-                        + createAccontButton
+                        + createAccountButton
                         + emailFooter
                     + '</div>';
                 break;

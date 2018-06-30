@@ -26,8 +26,6 @@ const usersSchema = mongoose.Schema({
     }],
     // if the user is an account admin and was the first at the company
     firstBusinessUser: Boolean,
-    // the code the user used to sign up with to get to their first evaluation
-    employerCode: String,
     // whether the user's profile is hidden from employers
     hideProfile: Boolean,
     // special url used to access this user's profile
