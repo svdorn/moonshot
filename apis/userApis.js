@@ -374,7 +374,7 @@ async function getPosition(businessId, positionId) {
                     }
                 }
             }
-            const business = await Businesses.find(findById, correctPositionOnly);
+            const business = await Businesses.findOne(findById, correctPositionOnly);
             // make sure the position exists
             if (!Array.isArray(business.positions) || business.positions.length === 0) {
                 return reject("Business found but position didn't exist.");
@@ -456,6 +456,7 @@ async function addEvaluation(user, businessId, positionId, startDate) {
         // if the user has finished the psych test and all skill tests
         // and there are no frqs, the user has finished already
         const finished = hasTakenPsychTest && doneWithSkillTests && noFrqs;
+        const now = new Date();
         const appliedEndDate = finished ? now : undefined;
 
         // get the assigned date from the function call
@@ -478,7 +479,7 @@ async function addEvaluation(user, businessId, positionId, startDate) {
                 hiringStageChanges: [{
                     hiringStage: "Not Contacted",
                     // status changed to Not Contacted just now
-                    dateChanged: new Date()
+                    dateChanged: now
                 }]
             }
         } else if (user.userType === "employee") {
@@ -487,7 +488,7 @@ async function addEvaluation(user, businessId, positionId, startDate) {
 
         // starting info about the position
         const typeAgnosticInfo = {
-            businessId: business._id,
+            businessId: businessId,
             positionId: position._id,
             name: position.name,
             appliedStartDate: now,
