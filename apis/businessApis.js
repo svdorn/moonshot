@@ -988,6 +988,7 @@ async function GET_candidateSearch(req, res) {
 
     // only get the position that was asked for
     let query = {
+        "userType": "candidate",
         "positions": {
             "$elemMatch": {
                 "$and": positionRequirements
@@ -1033,9 +1034,8 @@ async function GET_employeeSearch(req, res) {
 
     // get the user who is trying to search for candidates
     let user;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
         console.log("error getting business user while searching for candidates: ", getUserError);
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
@@ -1046,81 +1046,80 @@ async function GET_employeeSearch(req, res) {
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
-    // if the user doesn't have
+    // if the user doesn't have an associated business, error
     if (!user.businessInfo || !user.businessInfo.businessId) {
         console.log("User doesn't have associated business.");
         return res.status(401).send(errors.PERMISSIONS_ERROR);
     }
 
+    // the id of the business that the user works for
     const businessId = user.businessInfo.businessId;
-
     // the restrictions on the search
     const searchTerm = sanitize(req.query.searchTerm);
+    // if a specific hiring stage is wanted
     const status = sanitize(req.query.status);
     // position name is the only required input to the search
     const positionName = sanitize(req.query.positionName);
+    // the thing we should sort by - default is alphabetical
+    const sortBy = sanitize(req.query.sortBy);
 
-    const businessQuery = {
-        "_id": mongoose.Types.ObjectId(businessId)
+
+    // sort by overall score by default
+    // let sort = { }
+    // if (sortBy) {
+    //
+    // }
+
+    let positionRequirements = [
+        { "businessId": mongoose.Types.ObjectId(businessId) },
+        { "name": positionName }
+    ];
+    // filter by hiring stage if requested
+    if (status) {
+        const gradingComplete = status === "Complete";
+        positionRequirements.push({ "gradingComplete": gradingComplete });
     }
 
-    // get only the position the user is asking for in the positions array
-    const positionQuery = {
+    // only get the position that was asked for
+    let query = {
+        "userType": "employee",
         "positions": {
             "$elemMatch": {
-                "name": positionName
+                "$and": positionRequirements
             }
         }
     }
 
-    // get the business the user works for
-    let business;
-    try {
-        business = await Businesses
-            .find(businessQuery, positionQuery)
-            .select("positions.name positions.employees.answers positions.employees.employeeId positions.employees.managerId positions.employees.scores.overall positions.employees.gradingComplete positions.employees.name positions.employees.profileUrl positions.employees.score");
-        // see if there are none found
-        if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
-        // if any are found, only one is found, as we searched by id
-        business = business[0];
-    } catch (findBizError) {
-        console.log("error finding business for user trying to search for candidates: ", findBizError);
+    // search by name too if search term exists
+    if (searchTerm) {
+        const nameRegex = new RegExp(searchTerm, "i");
+        query["name"] = nameRegex;
+    }
+
+    // the user attributes that we want to keep
+    const attributes = "_id name profileUrl positions.answers positions.gradingComplete positions.scores";
+
+    // perform the search
+    let employees = [];
+    try { employees = await Users.find(query).select(attributes); }
+    catch (employeeSearchError) {
+        console.log("Error searching for employees: ", employeeSearchError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    // make sure the user gave a valid position
-    if (!business.positions || business.positions.length === 0) {
-        return res.status(400).send("Invalid position.");
-    }
+    // format the employees for the front end
+    const formattedEmployees = employees.map(employee => {
+        const employeeObj = employee.toObject();
+        return {
+            name: employeeObj.name,
+            _id: employeeObj._id,
+            profileUrl: employeeObj.profileUrl,
+            ...(employeeObj.positions[0])
+        };
+    })
 
-    // should only be one position in the array since names should be unique
-    const position = business.positions[0];
-
-    // get the employees from that position
-    let employees = position.employees;
-
-    // filter by name if search term given
-    if (searchTerm && searchTerm !== "" && employees) {
-        const nameRegex = new RegExp(searchTerm, "i");
-        employees = employees.filter(employee => {
-            return nameRegex.test(employee.name);
-        });
-    }
-
-    // filter by status if status given
-    let gradingComplete = false;
-    if (status && status !== "" && employees) {
-        if (status.toString() === "Complete") {
-            gradingComplete = true;
-        }
-        employees = employees.filter(employee => {
-            return employee.gradingComplete === gradingComplete;
-        });
-    }
-
-    console.log("employees: ", employees);
-
-    res.json(employees);
+    // successfully return the employees
+    return res.json(formattedEmployees);
 }
 
 

@@ -381,7 +381,7 @@ class MyEmployees extends Component {
                             answers={employee.answers}
                             name={employee.name}
                             score={score}
-                            employeeId={employee.employeeId}
+                            employeeId={employee._id}
                             profileUrl={employee.profileUrl}
                             questions={this.state.questions}
                             position={this.state.position}
