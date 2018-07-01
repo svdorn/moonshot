@@ -1017,85 +1017,67 @@ async function GET_candidateSearch(req, res) {
 
     // the id of the business that the user works for
     const businessId = user.businessInfo.businessId;
-
     // the restrictions on the search
     const searchTerm = sanitize(req.query.searchTerm);
+    // if a specific hiring stage is wanted
     const hiringStage = sanitize(req.query.hiringStage);
     // position name is the only required input to the search
     const positionName = sanitize(req.query.positionName);
     // the thing we should sort by - default is alphabetical
     const sortBy = sanitize(req.query.sortBy);
 
-    const businessQuery = {
-        "_id": mongoose.Types.ObjectId(businessId)
+
+    let searchQuery = {};
+    if (searchTerm) {
+        const nameRegex = new RegExp(searchTerm, "i");
+        var query = { name: nameRegex };
     }
 
-    // get only the position the user is asking for in the positions array
+    // sort by overall score by default
+    // let sort = { }
+    // if (sortBy) {
+    //
+    // }
+
+    let positionRequirements = [
+        { "businessId": mongoose.Types.ObjectId(businessId) },
+        { "name": positionName }
+    ];
+    // filter by hiring stage if requested
+    if (hiringStage) {
+        positionRequirements.push({ "hiringStage": hiringStage });
+    }
+
+    // only get the position that was asked for
     const positionQuery = {
         "positions": {
             "$elemMatch": {
-                "name": positionName
+                "$and": positionRequirements
             }
         }
     }
 
-    // get the business the user works for
-    let business;
-    try {
-        business = await Businesses
-            .find(businessQuery, positionQuery)
-            .select("positions.name positions.candidates.scores positions.candidates.candidateId positions.candidates.hiringStage positions.candidates.isDismissed positions.candidates.name positions.candidates.hiringStageChanges.dateChanged positions.candidates.location positions.candidates.profileUrl");
-        // see if there are none found
-        if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
-        // if any are found, only one is found, as we searched by id
-        business = business[0];
-    } catch (findBizError) {
-        console.log("error finding business for user trying to search for candidates: ", findBizError);
+    const attributes = "_id name profileUrl position.isDismissed position.hiringStage position.isDismissed position.hiringStageChanges position.scores";
+
+    // perform the search
+    let candidates = [];
+    try { candidates = await Users.find(searchQuery, positionQuery).select(attributes); }
+    catch (candidateSearchError) {
+        console.log("Error searching for candidates: ", candidateSearchError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    // make sure the user gave a valid position
-    if (!business.positions || business.positions.length === 0) {
-        return res.status(400).send("Invalid position.");
-    }
+    // format the candidates for the front end
+    candidates = candidates.map(candidate => {
+        return {
+            name: candidate.name,
+            profileUrl: candidate.profileUrl,
+            _id: candidate._id,
+            ...(candidate.positions[0])
+        }
+    })
 
-    // should only be one position in the array since names should be unique
-    const position = business.positions[0];
-
-    // get the list of candidates and sort and filter them by the given parameters
-    // TODO: this could be done with a more complicated query instead, consider
-    // doing that
-    let candidates = position.candidates;
-
-    // filter by name if search term given
-    if (searchTerm && searchTerm !== "" && candidates) {
-        const nameRegex = new RegExp(searchTerm, "i");
-        candidates = candidates.filter(candidate => {
-            return nameRegex.test(candidate.name);
-        });
-    }
-
-    // filter by hiring stage if hiring stage given
-    if (hiringStage && hiringStage !== "" && candidates) {
-        candidates = candidates.filter(candidate => {
-            return candidate.hiringStage === hiringStage;
-        });
-    }
-
-    // default sort property is alphabetical, sort by score if that's the given sort by property
-    let sortProperty = "name";
-    if (typeof sortBy === "string" && sortBy.toLowerCase() === "score" && candidates) { sortProperty = "scores.overall"; }
-
-    // sort the candidates
-    if (candidates) {
-        candidates.sort((candA, candB) => {
-            if (candA[sortProperty] < candB[sortProperty]) { return -1; }
-            if (candA[sortProperty] > candB[sortProperty]) { return 1; }
-            return 0;
-        });
-    }
-
-    res.json(candidates);
+    return res.json(candidates);
 }
 
 async function GET_employeeSearch(req, res) {
