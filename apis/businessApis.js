@@ -506,48 +506,49 @@ function POST_contactUsEmail(req, res) {
 // updates a candidate for a business as Contacted, Interviewing, Dismissed, etc
 async function POST_updateHiringStage(req, res) {
     const body = req.body;
-    const userId = sanitize(body.userId);
+    const bizUserId = sanitize(body.userId);
     const verificationToken = sanitize(body.verificationToken);
-    const candidateId = sanitize(body.candidateId);
+    const userId = sanitize(body.candidateId);
     const hiringStage = sanitize(body.hiringStage);
     const isDismissed = sanitize(body.isDismissed);
     const positionId = sanitize(body.positionId);
 
     // verify biz user, get candidate, find and verify candidate's position
-    let user, candidate, candidatePositionIndex;
+    let bizUser, user, userPositionIndex;
+    const profileUrl = undefined;
     try {
         let {
+            foundBizUser,
             foundUser,
-            foundCandidate,
             foundPositionIndex
-        } = await verifyBizUserAndFindCandidatePosition(userId, verificationToken, candidateId, positionId);
-        user = foundUser; candidate = foundCandidate; candidatePositionIndex = foundPositionIndex;
+        } = await verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl);
+        bizUser = foundBizUser; user = foundUser; userPositionIndex = foundPositionIndex;
     } catch(error) {
-        console.log("Error verifying business user or getting candidate position index: ", error);
+        console.log("Error verifying business user or getting user position index: ", error);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    let candidatePosition = candidate.positions[candidatePositionIndex];
+    let userPosition = user.positions[userPositionIndex];
 
     // update all new hiring stage info
-    candidatePosition.hiringStage = hiringStage;
-    candidatePosition.isDismissed = isDismissed;
+    userPosition.hiringStage = hiringStage;
+    userPosition.isDismissed = isDismissed;
     // make sure hiring stage changes array exists
-    if (!Array.isArray(candidatePosition.hiringStageChanges)) {
-        candidatePosition.hiringStageChanges = [];
+    if (!Array.isArray(userPosition.hiringStageChanges)) {
+        userPosition.hiringStageChanges = [];
     }
-    candidatePosition.hiringStageChanges.push({
+    userPosition.hiringStageChanges.push({
         hiringStage, isDismissed,
         dateChanged: new Date()
     });
 
     // save the new info into the candidate object
-    candidate.positions[candidatePositionIndex] = candidatePosition;
+    user.positions[userPositionIndex] = userPosition;
 
-    // save the candidate
-    try { candidate = await candidate.save(); }
-    catch (saveCandidateError) {
-        console.log("Error saving candidate while trying to update hiring stage: ", saveCandidateError);
+    // save the user
+    try { user = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user while trying to update hiring stage: ", saveUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
@@ -557,46 +558,48 @@ async function POST_updateHiringStage(req, res) {
 
 // returns the business user object, the candidate/employee, and the index of
 // the position within the positions array of the candidate/employee
-async function verifyBizUserAndFindCandidatePosition(userId, verificationToken, candidateId, positionId) {
+async function verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl) {
     return new Promise(async function(resolve, reject) {
         // find the user and the candidate
-        let user, candidate;
+        let bizUser, user;
+        // search by id if possible, profile url otherwise
+        const userQuery = userId ? { _id: userId } : { profileUrl };
         try {
-            const [foundUser, foundCandidate] = await Promise.all([
-                getAndVerifyUser(userId, verificationToken),
-                Users.findById(candidateId)
+            const [foundBizUser, foundUser] = await Promise.all([
+                getAndVerifyUser(bizUserId, verificationToken),
+                Users.findOne(userQuery)
             ])
+            bizUser = foundBizUser;
             user = foundUser;
-            candidate = foundCandidate;
-            if (!candidate) { return reject("Invalid candidate id."); }
+            if (!user) { return reject("Invalid user id."); }
         }
         catch (findUserError) { return reject(findUserError); }
 
         // make sure the user has an associated business
-        if (!user.businessInfo || !user.businessInfo.businessId) {
-            return reject("User does not have associated business.");
+        if (!bizUser.businessInfo || !bizUser.businessInfo.businessId) {
+            return reject("Business user does not have associated business.");
         }
 
         // if the user is not an admin or manager, they can't edit other users' info
-        if (!["accountAdmin", "manager"].includes(user.userType)) {
-            reject("User does not have permission. User is type: ", user.userType);
+        if (!["accountAdmin", "manager"].includes(bizUser.userType)) {
+            reject("User does not have permission. User is type: ", bizUser.userType);
         }
 
-        if (!Array.isArray(candidate.positions)) {
-            return reject("That candidate did not apply for this position.");
+        if (!Array.isArray(user.positions)) {
+            return reject("That user did not apply for this position.");
         }
 
         // get the candidate's position with this position id
-        const candidatePositionIndex = candidate.positions.findIndex(position => {
+        const userPositionIndex = user.positions.findIndex(position => {
             // index is correct if it has the right position id and the business id
             // for the business that the user works for
-            return position.positionId.toString() === positionId.toString() && user.businessInfo.businessId.toString() === position.businessId.toString();
+            return position.positionId.toString() === positionId.toString() && bizUser.businessInfo.businessId.toString() === position.businessId.toString();
         });
-        if (typeof candidatePositionIndex !== "number" || candidatePositionIndex < 0) {
-            return reject("Candidate did not apply for this position.");
+        if (typeof userPositionIndex !== "number" || userPositionIndex < 0) {
+            return reject("User did not apply for this position.");
         }
 
-        resolve({ user, candidate, candidatePositionIndex })
+        resolve({ bizUser, user, userPositionIndex })
     });
 }
 
@@ -604,9 +607,9 @@ async function verifyBizUserAndFindCandidatePosition(userId, verificationToken, 
 // have a manager or account admin answer a question about an employee
 async function POST_answerQuestion(req, res) {
     const body = req.body;
-    const userId = sanitize(body.userId);
+    const bizUserId = sanitize(body.userId);
     const verificationToken = sanitize(body.verificationToken);
-    const employeeId = sanitize(body.employeeId);
+    const userId = sanitize(body.employeeId);
     const positionId = sanitize(body.positionId);
     const questionIndex = sanitize(body.questionIndex);
     const score = sanitize(body.score);
@@ -619,25 +622,26 @@ async function POST_answerQuestion(req, res) {
 
     // verify biz user, get candidate, find and verify candidate's position
     let user, employee, employeePositionIndex;
+    const profileUrl = undefined;
     try {
         let {
+            foundBizUser,
             foundUser,
-            foundEmployee,
             foundPositionIndex
-        } = await verifyBizUserAndFindCandidatePosition(userId, verificationToken, employeeId, positionId);
-        user = foundUser; employee = foundEmployee; candidatePositionIndex = foundPositionIndex;
+        } = await verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl);
+        bizUser = foundBizUser; user = foundUser; userPositionIndex = foundPositionIndex;
     } catch(error) {
-        console.log("Error verifying business user or getting employee position index: ", error);
+        console.log("Error verifying business user or getting user position index: ", error);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
     // if the answers array doesn't exist, make it
-    if (!Array.isArray(employee.positions[employeePositionIndex].answers)) {
-        employee.positions[employeePositionIndex].answers = [];
+    if (!Array.isArray(user.positions[userPositionIndex].answers)) {
+        user.positions[userPositionIndex].answers = [];
     }
 
     // get the index of the answer in the user's answers array
-    const answerIndex = employee.positions[employeePositionIndex].answers.findIndex(answer => {
+    const answerIndex = user.positions[userPositionIndex].answers.findIndex(answer => {
         return answer.questionIndex === questionIndex;
     });
 
@@ -647,28 +651,28 @@ async function POST_answerQuestion(req, res) {
             score: score,
             questionIndex: questionIndex
         };
-        employee.positions[employeePositionIndex].answers.push(newAnswer);
+        user.positions[userPositionIndex].answers.push(newAnswer);
     } else {
-        employee.positions[employeePositionIndex].answers[answerIndex].score = score;
+        user.positions[suerPositionIndex].answers[answerIndex].score = score;
     }
 
     // mark whether the manager is finished grading the employee
-    employee.positions[employeePositionIndex].gradingComplete = gradingComplete;
+    user.positions[userPositionIndex].gradingComplete = gradingComplete;
 
     // if no manager is marked as being the grader, add the current user
-    if (!employee.positions[employeePositionIndex].managerId) {
-        employee.positions[employeePositionIndex].managerId = user._id;
+    if (!user.positions[userPositionIndex].managerId) {
+        user.positions[userPositionIndex].managerId = user._id;
     }
 
     // save the employee
-    try { employee = employee.save(); }
+    try { user = user.save(); }
     catch (updateEmployeeError) {
-        console.log("Error saving employee during grading: ", updateEmployeeError);
+        console.log("Error saving user during grading: ", updateUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
     // return successfully
-    res.json(employee.positions[employeePositionIndex].answers);
+    res.json(user.positions[userPositionIndex].answers);
 }
 
 
@@ -847,7 +851,7 @@ async function addCompletionsAndInProgress(position) {
 
 
 async function GET_evaluationResults(req, res) {
-    const userId = sanitize(req.query.userId);
+    const bizUserId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
     const profileUrl = sanitize(req.query.profileUrl);
     const businessId = sanitize(req.query.businessId);
@@ -858,23 +862,24 @@ async function GET_evaluationResults(req, res) {
 
     // verify biz user, get candidate/employee, find and verify candidate's/employee's position
     let bizUser, user, userPositionIndex, psychTest;
+    const userId = undefined;
     try {
-        let [{
-            foundBizUser,
-            foundUser,
-            foundPositionIndex
-        },
+        let [
+            results,
             foundPsychTest
         ] = await Promise.all([
-            verifyBizUserAndFindCandidatePosition(userId, verificationToken, candidateId, positionId),
+            verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
-        bizUser = foundBizUser; user = foundUser; psychTest = foundPsychTest;
-        userPositionIndex = foundPositionIndex;
+        console.log("results: ", results);
+        bizUser = results.bizUser; user = results.user; psychTest = foundPsychTest;
+        userPositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting candidate position index: ", error);
         return res.status(500).send(errors.SERVER_ERROR);
     }
+
+    console.log("user: ", user);
 
     let userPosition = user.positions[userPositionIndex];
 

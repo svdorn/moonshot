@@ -265,7 +265,6 @@ class CandidatePreview extends Component {
             }
         };
 
-        const location = this.props.candidate.location ? this.props.candidate.location : "No location given";
         const overallScore = this.props.candidate.scores && this.props.candidate.scores.overall ? this.props.candidate.scores.overall : "N/A";
 
         const finishedEval = overallScore !== "N/A";
