@@ -523,7 +523,7 @@ async function POST_updateHiringStage(req, res) {
     let bizUser, user, userPositionIndex;
     const profileUrl = undefined;
     try {
-        let results = await verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl);
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl);
         bizUser = results.bizUser; user = results.user; userPositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting user position index: ", error);
@@ -560,11 +560,10 @@ async function POST_updateHiringStage(req, res) {
 
 // returns the business user object, the candidate/employee, and the index of
 // the position within the positions array of the candidate/employee
-async function verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl) {
+async function verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl) {
     return new Promise(async function(resolve, reject) {
         // find the user and the candidate
         let bizUser, user;
-        console.log("userId: ", userId);
         // search by id if possible, profile url otherwise
         const userQuery = userId ? { _id: userId } : { profileUrl };
         try {
@@ -619,15 +618,15 @@ async function POST_answerQuestion(req, res) {
     const gradingComplete = sanitize(body.gradingComplete);
 
     // make sure all necessary params are here
-    if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !positionId) {
+    if (!bizUserId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !userId || !positionId) {
         return res.status(400).send("Bad request.");
     }
 
     // verify biz user, get candidate, find and verify candidate's position
-    let user, employee, employeePositionIndex;
+    let bizUser, user, userPositionIndex;
     const profileUrl = undefined;
     try {
-        let results = await verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl);
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl);
         bizUser = results.bizUser; user = results.user; userPositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting user position index: ", error);
@@ -652,10 +651,10 @@ async function POST_answerQuestion(req, res) {
         };
         user.positions[userPositionIndex].answers.push(newAnswer);
     } else {
-        user.positions[suerPositionIndex].answers[answerIndex].score = score;
+        user.positions[userPositionIndex].answers[answerIndex].score = score;
     }
 
-    // mark whether the manager is finished grading the employee
+    // mark whether the manager is finished grading the user
     user.positions[userPositionIndex].gradingComplete = gradingComplete;
 
     // if no manager is marked as being the grader, add the current user
@@ -663,9 +662,9 @@ async function POST_answerQuestion(req, res) {
         user.positions[userPositionIndex].managerId = user._id;
     }
 
-    // save the employee
-    try { user = user.save(); }
-    catch (updateEmployeeError) {
+    // save the user
+    try { user = await user.save(); }
+    catch (updateUserError) {
         console.log("Error saving user during grading: ", updateUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
@@ -857,8 +856,6 @@ async function GET_evaluationResults(req, res) {
     const positionId = sanitize(req.query.positionId);
     const positionIdString = positionId.toString();
 
-    //console.log("userId: ", userId, "profileUrl: ", profileUrl, "businessId: ", businessId, "positionId: ", positionId);
-
     // verify biz user, get candidate/employee, find and verify candidate's/employee's position
     let bizUser, user, userPositionIndex, psychTest;
     const userId = undefined;
@@ -867,7 +864,7 @@ async function GET_evaluationResults(req, res) {
             results,
             foundPsychTest
         ] = await Promise.all([
-            verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl),
+            verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
         bizUser = results.bizUser; user = results.user; psychTest = foundPsychTest;
