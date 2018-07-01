@@ -856,101 +856,40 @@ async function GET_evaluationResults(req, res) {
 
     //console.log("userId: ", userId, "profileUrl: ", profileUrl, "businessId: ", businessId, "positionId: ", positionId);
 
-    // --->>      GET USER, BUSINESS, AND CANDIDATE FROM DATABASE       <<--- //
-    let user, business, candidate, psychTest;
+    // verify biz user, get candidate/employee, find and verify candidate's/employee's position
+    let bizUser, user, userPositionIndex, psychTest;
     try {
-        // get the business user, candidate, and business
-        let [foundUser, foundCandidate, foundBusiness, foundPsychTest] = await Promise.all([
-            getAndVerifyUser(userId, verificationToken),
-            Users.findOne({profileUrl}).select("_id name userType title email emailToContact psychometricTest.factors.name psychometricTest.factors.score psychometricTest.factors.factorId positions.positionId positions.freeResponseQuestions skillTests.skillId skillTests.name skillTests.mostRecentScore"),
-            Businesses.findById(businessId).select("_id positions._id positions.employees.employeeId positions.employees.scores positions.candidates.candidateId positions.candidates.scores positions.skills"),
+        let [{
+            foundBizUser,
+            foundUser,
+            foundPositionIndex
+        },
+            foundPsychTest
+        ] = await Promise.all([
+            verifyBizUserAndFindCandidatePosition(userId, verificationToken, candidateId, positionId),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
-
-        // make sure a user, candidate, business, and psych test were found
-        if (!foundUser || !foundCandidate || !foundBusiness || !foundPsychTest) {
-            throw "User or candidate or business not found.";
-        }
-
-        // get the three found objects outside of the try/catch
-        user = foundUser; candidate = foundCandidate; business = foundBusiness; psychTest = foundPsychTest;
-    } catch (dbError) {
-        console.log("Error getting user or candidate or business: ", dbError);
-        res.status(500).send("Invalid operation.");
-    }
-    // <<------------------------------------------------------------------>> //
-
-    // --->>           VERIFY LEGITIMACY AND GET NEEDED DATA            <<--- //
-    // set variables that depend on user type
-    let userArray;
-    // if the user is a candidate
-    if (candidate.userType === "candidate") {
-        userArray = "candidates";
-        idType = "candidateId";
-    }
-    // if the user is an employee
-    else {
-        userArray = "employees";
-        idType = "employeeId";
+        bizUser = foundBizUser; user = foundUser; psychTest = foundPsychTest;
+        userPositionIndex = foundPositionIndex;
+    } catch(error) {
+        console.log("Error verifying business user or getting candidate position index: ", error);
+        return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    // verify that the business user has the right permissions
-    try {
-        if (businessId.toString() !== user.businessInfo.businessId.toString()) {
-            throw "Doesn't have right business id.";
-        }
-    } catch (permissionsError) {
-        console.log("Business user did not have the right business id: ", permissionsError);
-        return res.status(403).send(errors.PERMISSIONS_ERROR);
-    }
-
-    // verify that the position exists within the business ...
-    const bizPositionIndex = business.positions.findIndex(pos => {
-        return pos._id.toString() === positionIdString;
-    })
-    if (typeof bizPositionIndex !== "number" || bizPositionIndex < 0) {
-        console.log(`Position not found within business while trying to get results. userId: ${userId}, candidateId: ${candidate._id}, positionId: ${positionId}`);
-        return res.status(400).send("Candidate has not applied for that position.");
-    }
-    // ... and then get it
-    const bizPosition = business.positions[bizPositionIndex];
-
-    // verify that the user applied for this position ...
-    const candidatePositionIndex = candidate.positions.findIndex(pos => {
-        return pos.positionId.toString() === positionIdString;
-    })
-    if (typeof candidatePositionIndex !== "number" || candidatePositionIndex < 0) {
-        console.log(`Position not found within candidate while trying to get results. userId: ${userId}, candidateId: ${candidate._id}, positionId: ${positionId}`);
-        return res.status(400).send("Canidate has not applied for that position.");
-    }
-    // ... and then get the position object within the candidate
-    const candidatePosition = candidate.positions[candidatePositionIndex];
-
-    // get the candidate object within the position within the business ...
-    const candidateIdString = candidate._id.toString();
-    const bizCandidateIndex = bizPosition[userArray].findIndex(cand => {
-        return cand[idType].toString() === candidateIdString;
-    });
-    if (typeof bizCandidateIndex !== "number" || bizCandidateIndex < 0) {
-        console.log(`Candidate not found within business while trying to get results. userId: ${userId}, candidateId: ${candidate._id}, positionId: ${positionId}`);
-        return res.status(400).send("Canidate has not applied for that position.");
-    }
-    // ... and then get the candidate from there
-    const bizCandidate = bizPosition[userArray][bizCandidateIndex];
-    // <<------------------------------------------------------------------>> //
+    let userPosition = user.positions[userPositionIndex];
 
     // --->>              FORMAT THE DATA FOR THE FRONT END             <<--- //
     // get position-specific free response questions
-    const frqs = candidatePosition.freeResponseQuestions.map(frq => {
+    const frqs = userPosition.freeResponseQuestions.map(frq => {
         return {
             question: frq.body,
             answer: frq.response
         }
     })
     // get skill test scores for relevant skills
-    const skillScores = candidate.skillTests ? candidate.skillTests.filter(skill => {
-        return bizPosition.skills.some(posSkill => {
-            return posSkill.toString() === skill.skillId.toString();
+    const skillScores = Array.isArray(user.skillTests) ? user.skillTests.filter(skill => {
+        return userPosition.skillTestIds.some(posSkillId => {
+            return posSkillId.toString() === skill.skillId.toString();
         });
     }) : [];
     // have to convert the factor names to what they will be displayed as
@@ -963,7 +902,7 @@ async function GET_evaluationResults(req, res) {
         "Agreeableness": "Ethos",
         "Altruism": "Belief"
     };
-    const psychScores = candidate.psychometricTest.factors.map(area => {
+    const psychScores = user.psychometricTest.factors.map(area => {
         // find the factor within the psych test so we can get the middle 80 scores
         const factorIndex = psychTest.factors.findIndex(fac => {
             return fac._id.toString() === area.factorId.toString();
@@ -978,10 +917,10 @@ async function GET_evaluationResults(req, res) {
         }
     });
     const results = {
-        title: candidate.title,
-        name: candidate.name,
-        email: candidate.emailToContact ? candidate.emailToContact : candidate.email,
-        performanceScores: bizCandidate.scores,
+        title: user.title,
+        name: user.name,
+        email: user.emailToContact ? user.emailToContact : user.email,
+        performanceScores: userPosition.scores,
         frqs, skillScores, psychScores
     };
     // <<------------------------------------------------------------------>> //
@@ -992,8 +931,6 @@ async function GET_evaluationResults(req, res) {
 
 
 async function GET_candidateSearch(req, res) {
-    console.log("searching for candidates");
-
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
@@ -1059,6 +996,7 @@ async function GET_candidateSearch(req, res) {
         query["name"] = nameRegex;
     }
 
+    // the user attributes that we want to keep
     const attributes = "_id name profileUrl positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
 
     // perform the search
@@ -1069,12 +1007,9 @@ async function GET_candidateSearch(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    console.log("candidates before alteration: ", candidates);
-
     // format the candidates for the front end
     const formattedCandidates = candidates.map(candidate => {
         const candidateObj = candidate.toObject();
-        console.log("candidateObj: ", candidateObj);
         return {
             name: candidateObj.name,
             profileUrl: candidateObj.profileUrl,
@@ -1083,8 +1018,7 @@ async function GET_candidateSearch(req, res) {
         }
     })
 
-    console.log("candidates after alteration: ", formattedCandidates);
-
+    // successfully return the candidates
     return res.json(formattedCandidates);
 }
 
