@@ -40,7 +40,7 @@ function POST_answerSkillQuestion(req, res) {
     }
 
     // get the user
-    Users.getAndVerifyUser(userId, verificationToken)
+    getAndVerifyUser(userId, verificationToken)
     .then(foundUser => {
         user = foundUser;
         recordAnswer();
@@ -246,7 +246,7 @@ function POST_answerSkillQuestion(req, res) {
 
         // save all the new info
         userSkill.attempts[attemptIndex] = attempt;
-        user.skills[userSkillIndex] = userSkill;
+        user.skillTests[userSkillIndex] = userSkill;
 
         // see if the user is doing an application to a position
         if (user.positionInProgress) {
@@ -330,7 +330,7 @@ function POST_startOrContinueTest(req, res) {
         }
 
         // get the user
-        Users.getAndVerifyUser(userId, verificationToken)
+        getAndVerifyUser(userId, verificationToken)
         .then(foundUser => {
             user = foundUser;
             checkIfStarted();
