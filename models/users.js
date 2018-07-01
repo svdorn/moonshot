@@ -96,7 +96,7 @@ const usersSchema = mongoose.Schema({
     // location to redirect to after signing up
     redirect: String,
 
-    // skills tests the user has taken
+    // skill tests the user has taken
     skillTests: [{
         // id of the skill
         skillId: mongoose.Schema.Types.ObjectId,
