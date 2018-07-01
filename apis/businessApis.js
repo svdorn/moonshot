@@ -104,11 +104,13 @@ function createEmailInfo(businessId, positionId, userType, email) {
 
 
 // sends email to the user with email info provided
-async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUrl) {
+async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUrl, userName) {
     return new Promise(async function(resolve, reject) {
         const code = emailInfo.code;
         const email = emailInfo.email;
         const userType = emailInfo.userType;
+
+        console.log("userName: ", userName);
 
         // recipient of the email
         const recipient = [ email ];
@@ -124,6 +126,8 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
               '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="'
             + moonshotUrl + 'signup?code=' + code
             + '">Create Account</a>';
+
+        console.log("createAccountButton: ", createAccountButton);
 
         // at the end of every user's email
         const emailFooter =
@@ -204,6 +208,8 @@ async function POST_emailInvites(req, res) {
     const positionId = sanitize(body.currentUserInfo.positionId);
     const positionName = sanitize(body.currentUserInfo.positionName);
 
+    console.log("userName is: ", userName);
+
     // if one of the arguments doesn't exist, return with error code
     if (!candidateEmails || !employeeEmails || !adminEmails || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
         return res.status(400).send("Bad request.");
@@ -259,7 +265,7 @@ async function POST_emailInvites(req, res) {
     // send all the emails
     let sendEmailPromises = [];
     emailInfoObjects.forEach(emailInfoObject => {
-        sendEmailPromises.push(sendEmailInvite(emailInfoObject, positionName, businessName, moonshotUrl));
+        sendEmailPromises.push(sendEmailInvite(emailInfoObject, positionName, businessName, moonshotUrl, userName));
     })
 
     // wait for all the emails to be sent
