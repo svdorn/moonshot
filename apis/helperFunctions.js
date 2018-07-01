@@ -36,6 +36,7 @@ const FOR_USER = [
     "info",
     "redirect",
     "businessInfo",
+    "adminQuestions",
     "psychometricTest",
     "currentPosition"
 ]

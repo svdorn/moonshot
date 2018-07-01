@@ -127,7 +127,7 @@ class PsychAnalysis extends Component {
         }
 
         // check if they're in a position evaluation, and if so if they can do this step yet
-        if (currentUser.positionInProgress && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
+        if (currentUser.currentPosition && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
             return (
                 <div className="center">
                     You have to complete the administrative questions first!<br/>
@@ -285,7 +285,9 @@ class PsychAnalysis extends Component {
         const currentUser = this.props.currentUser;
         let content = this.createContent(currentUser);
 
-        const progressBar = currentUser && currentUser.positionInProgress ?
+        console.log("in psychAnalysis");
+
+        const progressBar = currentUser && currentUser.currentPosition ?
             <ProgressBar /> : null;
 
 
