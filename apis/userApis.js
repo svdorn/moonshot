@@ -170,8 +170,7 @@ async function POST_submitFreeResponse(req, res) {
 
     // mark the position as complete, as answering frqs is always the last step
     try {
-        finishEvalObj = await finishPositionEvaluation(user, userPosition.positionId, userPosition.businessId);
-        user = finishEvalObj.user;
+        user = await finishPositionEvaluation(user, userPosition.positionId, userPosition.businessId);
     } catch (finishEvalError) {
         console.log("error finish position evaluation: ", finishEvalError);
         return res.status(500).send("Server error.");
@@ -676,7 +675,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         // OVERALL SCORE IS AN AVERAGE BETWEEN OVERALL SKILL AND PREDICTED
         const overall = (predicted + overallSkill) / 2;
 
-        candidate.scores = {
+        user.positions[positionIndex].scores = {
             skill: overallSkill,
             growth,
             performance,
