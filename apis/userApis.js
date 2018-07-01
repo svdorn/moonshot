@@ -1400,9 +1400,9 @@ async function POST_verifyEmail(req, res) {
 
     var query = { emailVerificationToken: token };
     let user;
-    try { user = await findOne(query); }
+    try { user = await Users.findOne(query); }
     catch (findUserError) {
-        console.log("Error trying to find user from verification token");
+        console.log("Error trying to find user from verification token: ", findUserError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 

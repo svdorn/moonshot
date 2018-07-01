@@ -111,11 +111,11 @@ function frontEndUser(dbUser, fieldsToInclude) {
                     // make sure the field exists
                     if (userProperties.positionInProgress) {
                         // find the index of the position the user is applying to
-                        const positionInProgressString = newUser.positionInProgress.toString();
-                        const positionIndex = newUser.positions.findIndex(pos => {
+                        const positionInProgressString = userProperties.positionInProgress.toString();
+                        const positionIndex = userProperties.positions.findIndex(pos => {
                             return pos.positionId.toString() === positionInProgressString;
                         });
-                        position = newUser.positions[positionIndex];
+                        position = userProperties.positions[positionIndex];
                         // give the user the current position info
                         newUser.currentPosition = {
                             inProgress: true,
