@@ -1029,12 +1029,6 @@ async function GET_candidateSearch(req, res) {
     const sortBy = sanitize(req.query.sortBy);
 
 
-    let searchQuery = {};
-    if (searchTerm) {
-        const nameRegex = new RegExp(searchTerm, "i");
-        var query = { name: nameRegex };
-    }
-
     // sort by overall score by default
     // let sort = { }
     // if (sortBy) {
@@ -1051,7 +1045,7 @@ async function GET_candidateSearch(req, res) {
     }
 
     // only get the position that was asked for
-    const positionQuery = {
+    let query = {
         "positions": {
             "$elemMatch": {
                 "$and": positionRequirements
@@ -1059,11 +1053,17 @@ async function GET_candidateSearch(req, res) {
         }
     }
 
+    // search by name too if search term exists
+    if (searchTerm) {
+        const nameRegex = new RegExp(searchTerm, "i");
+        query["name"] = nameRegex;
+    }
+
     const attributes = "_id name profileUrl positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
 
     // perform the search
     let candidates = [];
-    try { candidates = await Users.find(positionQuery).select(attributes); }
+    try { candidates = await Users.find(query).select(attributes); }
     catch (candidateSearchError) {
         console.log("Error searching for candidates: ", candidateSearchError);
         return res.status(500).send(errors.SERVER_ERROR);
