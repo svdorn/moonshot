@@ -1765,6 +1765,7 @@ async function POST_login(req, res) {
         saveSession = false;
     }
 
+    const INVALID_EMAIL = "No user with that email was found.";
 
     // searches for user by case-insensitive email
     const emailRegex = new RegExp(email, "i");
@@ -1774,8 +1775,11 @@ async function POST_login(req, res) {
     try { user = await Users.findOne(query); }
     catch (findUserError) {
         console.log("Couldn't find user: ", findUserError);
-        return res.status(404).send("No user with that email was found.");
+        return res.status(404).send(INVALID_EMAIL);
     }
+
+    // if no user with that email is found
+    if (!user) { return res.status(401).send(INVALID_EMAIL); }
 
     // see if the given password is correct
     bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {
@@ -1839,7 +1843,7 @@ async function POST_changeSettings(req, res) {
         return res.status(500).send(CANNOT_UPDATE);
     }
 
-    bcrypt.compare(password, foundUser.password, async function (passwordError, passwordsMatch) {
+    bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {
         // error comparing password to user's password, doesn't necessarily
         // mean that the password is wrong
         if (passwordError) {
@@ -1851,11 +1855,11 @@ async function POST_changeSettings(req, res) {
         if (!passwordsMatch) { return res.status(400).send("Incorrect password."); }
 
         // see if there's another user with the new email
-        const emailQuery = {email: user.email};
+        const emailQuery = {email: email};
         try {
             const userWithSameEmail = await Users.findOne(emailQuery);
             // if there is a user who already used that email, can't let this user have it too
-            if (userWithSameEmail && userWithEmail._id.toString() != foundUser._id.toString()) {
+            if (userWithSameEmail && userWithSameEmail._id.toString() != user._id.toString()) {
                 return res.status(400).send("That email address is already taken.");
             }
         } catch (findUserWithSameEmailError) {
@@ -1876,7 +1880,7 @@ async function POST_changeSettings(req, res) {
         }
 
         // settings change successful
-        return res.json(frontEndUser(newUser));
+        return res.json(frontEndUser(user));
     });
 }
 
