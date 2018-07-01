@@ -138,9 +138,8 @@ async function POST_submitFreeResponse(req, res) {
     let user;
     let business;
 
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch(getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch(getUserError) {
         console.log("Error getting user when trying to start position eval: ", getUserError.error);
         return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
     }
@@ -173,15 +172,14 @@ async function POST_submitFreeResponse(req, res) {
     try {
         finishEvalObj = await finishPositionEvaluation(user, userPosition.positionId, userPosition.businessId);
         user = finishEvalObj.user;
-        business = finishEvalObj.business;
     } catch (finishEvalError) {
         console.log("error finish position evaluation: ", finishEvalError);
         return res.status(500).send("Server error.");
     }
 
     try {
-        let [savedUser, savedBusiness] = await Promise.all([user.save(), business.save()]);
-        return res.json({updatedUser: frontEndUser(savedUser)})
+        user = await user.save();
+        return res.json({updatedUser: frontEndUser(user)})
     } catch (saveError) {
         console.log("error saving user or business after submitting frq: ", saveError);
         return res.status(500).send("Server error.");
