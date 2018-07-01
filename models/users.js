@@ -370,6 +370,8 @@ const usersSchema = mongoose.Schema({
         hiringStageChanges: [{
            // what the hiring stage was changed to
            hiringStage: String,
+           // whether the candidate is no longer under consideration
+           isDismissed: Boolean,
            // the date/time the hiring stage was changed
            dateChanged: Date
         }],

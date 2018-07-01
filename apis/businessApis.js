@@ -504,7 +504,6 @@ function POST_contactUsEmail(req, res) {
 
 
 // updates a candidate for a business as Contacted, Interviewing, Dismissed, etc
-// TODO: this whole thing could probably be done with one query
 async function POST_updateHiringStage(req, res) {
     const body = req.body;
     const userId = sanitize(body.userId);
@@ -514,68 +513,66 @@ async function POST_updateHiringStage(req, res) {
     const isDismissed = sanitize(body.isDismissed);
     const positionId = sanitize(body.positionId);
 
-    // if one of the arguments doesn't exist, return with error code
-    if (!userId || !verificationToken || !candidateId || !hiringStage || typeof isDismissed !== "boolean" || !positionId) {
-        return res.status(400).send("Bad request.");
-    }
-
-    // ensure the hiring stage provided is valid
-    const validHiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
-    if (!validHiringStages.includes(hiringStage)) {
-        console.log("Invalid hiring stage provided.");
-        return res.status(400).send("Invalid hiring stage provided.");
-    }
-
-    // get the user and the business
-    let user;
-    let business;
+    // find the user and the candidate
+    let user, candidate;
     try {
-        user = await getAndVerifyUser(userId, verificationToken);
-        business = await Businesses.findById(user.businessInfo.businessId);
-        if (!business) {
-            console.log("No business found with id: ", user.businessInfo.businessId);
-            throw "No business.";
-        }
-    } catch (getUserError) {
-        console.log("Error getting user or business from user: ", getUserError);
-        return res.status(403).send("You do not have permission to do that.");
+        const [foundUser, foundCandidate] = await Promise.all([
+            getAndVerifyUser(userId, verificationToken),
+            Users.findById(candidateId)
+        ])
+        user = foundUser;
+        candidate = foundCandidate;
+        if (!candidate) { return res.status(400).send("Invalid candidate."); }
+    }
+    catch (findUserError) {
+        console.log("Error finding user by id when updating hiring stage: ", findUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    // get the position index and position
-    const positionIndex = business.positions.findIndex(pos => {
-        return pos._id.toString() === positionId.toString();
+    // make sure the user has an associated business
+    if (!user.businessInfo || !user.businessInfo.businessId) {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    if (!Array.isArray(candidate.positions)) {
+        return res.status(400).send("That candidate did not apply for this position.");
+    }
+
+    // get the candidate's position with this position id
+    const candidatePositionIndex = candidate.positions.findIndex(position => {
+        // index is correct if it has the right position id and the business id
+        // for the business that the user works for
+        return position.positionId.toString() === positionId.toString() && user.businessInfo.businessId.toString() === position.businessId.toString();
     });
-    if (typeof positionIndex !== "number" || positionIndex < 0) {
-        return res.status(400).send("Invalid position.");
-    }
-    let position = business.positions[positionIndex];
-
-    // get the candidate index and candidate
-    const candidateIdString = candidateId.toString();
-    const candidateIndex = position.candidates.findIndex(cand => {
-        return cand.candidateId.toString() === candidateIdString;
-    });
-    if (typeof candidateIndex !== "number" || candidateIndex < 0) {
-        return res.status(400).send("Candidate has not applied for that position.");
+    if (typeof candidatePositionIndex !== "number" || candidatePositionIndex < 0) {
+        return res.status(400).send("Candidate did not apply for this position.");
     }
 
-    // update the candidate info
-    position.candidates[candidateIndex].hiringStage = hiringStage;
-    position.candidates[candidateIndex].isDismissed = isDismissed;
-    position.candidates[candidateIndex].hiringStageChanges.push({
-        hiringStage,
+    let candidatePosition = candidate.positions[candidatePositionIndex];
+
+    // update all new hiring stage info
+    candidatePosition.hiringStage = hiringStage;
+    candidatePosition.isDismissed = isDismissed;
+    // make sure hiring stage changes array exists
+    if (!Array.isArray(candidatePosition.hiringStageChanges)) {
+        candidatePosition.hiringStageChanges = [];
+    }
+    candidatePosition.hiringStageChanges.push({
+        hiringStage, isDismissed,
         dateChanged: new Date()
-    })
-    business.positions[positionIndex] = position;
+    });
 
-    // save the business
-    try { await business.save(); }
-    catch (bizSaveError) {
-        console.log("Error saving business with candidate with updated hiring stage: ", bizSaveError);
-        return res.status(500).send("Server error, try again later.");
+    // save the new info into the candidate object
+    candidate.positions[candidatePositionIndex] = candidatePosition;
+
+    // save the candidate
+    try { candidate = await candidate.save(); }
+    catch (saveCandidateError) {
+        console.log("Error saving candidate while trying to update hiring stage: ", saveCandidateError);
+        return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    return res.json("success");
+    res.json(true);
 }
 
 

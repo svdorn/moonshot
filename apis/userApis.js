@@ -470,6 +470,7 @@ async function addEvaluation(user, businessId, positionId, startDate) {
                 hiringStage: "Not Contacted",
                 hiringStageChanges: [{
                     hiringStage: "Not Contacted",
+                    isDismissed: false,
                     // status changed to Not Contacted just now
                     dateChanged: now
                 }]
@@ -556,6 +557,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         // add this most recent change to hiring stage changes
         user.hiringStageChanges.push({
             hiringStage: "Not Contacted",
+            isDismissed: false,
             dateChanged: new Date()
         })
 
