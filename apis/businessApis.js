@@ -513,39 +513,18 @@ async function POST_updateHiringStage(req, res) {
     const isDismissed = sanitize(body.isDismissed);
     const positionId = sanitize(body.positionId);
 
-    // find the user and the candidate
-    let user, candidate;
+    // verify biz user, get candidate, find and verify candidate's position
+    let user, candidate, candidatePositionIndex;
     try {
-        const [foundUser, foundCandidate] = await Promise.all([
-            getAndVerifyUser(userId, verificationToken),
-            Users.findById(candidateId)
-        ])
-        user = foundUser;
-        candidate = foundCandidate;
-        if (!candidate) { return res.status(400).send("Invalid candidate."); }
-    }
-    catch (findUserError) {
-        console.log("Error finding user by id when updating hiring stage: ", findUserError);
+        let {
+            foundUser,
+            foundCandidate,
+            foundPositionIndex
+        } = await verifyBizUserAndFindCandidatePosition(userId, verificationToken, candidateId, positionId);
+        user = foundUser; candidate = foundCandidate; candidatePositionIndex = foundPositionIndex;
+    } catch(error) {
+        console.log("Error verifying business user or getting candidate position index: ", error);
         return res.status(500).send(errors.SERVER_ERROR);
-    }
-
-    // make sure the user has an associated business
-    if (!user.businessInfo || !user.businessInfo.businessId) {
-        return res.status(403).send(errors.PERMISSIONS_ERROR);
-    }
-
-    if (!Array.isArray(candidate.positions)) {
-        return res.status(400).send("That candidate did not apply for this position.");
-    }
-
-    // get the candidate's position with this position id
-    const candidatePositionIndex = candidate.positions.findIndex(position => {
-        // index is correct if it has the right position id and the business id
-        // for the business that the user works for
-        return position.positionId.toString() === positionId.toString() && user.businessInfo.businessId.toString() === position.businessId.toString();
-    });
-    if (typeof candidatePositionIndex !== "number" || candidatePositionIndex < 0) {
-        return res.status(400).send("Candidate did not apply for this position.");
     }
 
     let candidatePosition = candidate.positions[candidatePositionIndex];
@@ -576,91 +555,89 @@ async function POST_updateHiringStage(req, res) {
 }
 
 
+// returns the business user object, the candidate/employee, and the index of
+// the position within the positions array of the candidate/employee
+async function verifyBizUserAndFindCandidatePosition(userId, verificationToken, candidateId, positionId) {
+    return new Promise(async function(resolve, reject) {
+        // find the user and the candidate
+        let user, candidate;
+        try {
+            const [foundUser, foundCandidate] = await Promise.all([
+                getAndVerifyUser(userId, verificationToken),
+                Users.findById(candidateId)
+            ])
+            user = foundUser;
+            candidate = foundCandidate;
+            if (!candidate) { return reject("Invalid candidate id."); }
+        }
+        catch (findUserError) { return reject(findUserError); }
+
+        // make sure the user has an associated business
+        if (!user.businessInfo || !user.businessInfo.businessId) {
+            return reject("User does not have associated business.");
+        }
+
+        // if the user is not an admin or manager, they can't edit other users' info
+        if (!["accountAdmin", "manager"].includes(user.userType)) {
+            reject("User does not have permission. User is type: ", user.userType);
+        }
+
+        if (!Array.isArray(candidate.positions)) {
+            return reject("That candidate did not apply for this position.");
+        }
+
+        // get the candidate's position with this position id
+        const candidatePositionIndex = candidate.positions.findIndex(position => {
+            // index is correct if it has the right position id and the business id
+            // for the business that the user works for
+            return position.positionId.toString() === positionId.toString() && user.businessInfo.businessId.toString() === position.businessId.toString();
+        });
+        if (typeof candidatePositionIndex !== "number" || candidatePositionIndex < 0) {
+            return reject("Candidate did not apply for this position.");
+        }
+
+        resolve({ user, candidate, candidatePositionIndex })
+    });
+}
+
+
+// have a manager or account admin answer a question about an employee
 async function POST_answerQuestion(req, res) {
     const body = req.body;
-    const userId = sanitize(body.user.userId);
-    const employeeId = sanitize(body.user.employeeId);
-    const verificationToken = sanitize(body.user.verificationToken);
-    const questionIndex = sanitize(body.user.questionIndex);
-    const score = sanitize(body.user.score);
-    const gradingComplete = sanitize(body.user.gradingComplete);
-    const positionName = sanitize(body.user.positionName);
+    const userId = sanitize(body.userId);
+    const verificationToken = sanitize(body.verificationToken);
+    const employeeId = sanitize(body.employeeId);
+    const positionId = sanitize(body.positionId);
+    const questionIndex = sanitize(body.questionIndex);
+    const score = sanitize(body.score);
+    const gradingComplete = sanitize(body.gradingComplete);
 
-    if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !positionName) {
+    // make sure all necessary params are here
+    if (!userId || !verificationToken || !(typeof questionIndex === 'number') || !(typeof score === 'number') || !employeeId || !positionId) {
         return res.status(400).send("Bad request.");
     }
 
-    // verify the employer is actually a part of this organization
-    // get the user who is trying to search for candidates
-    let user;
+    // verify biz user, get candidate, find and verify candidate's position
+    let user, employee, employeePositionIndex;
     try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
-        console.log("error getting business user while searching for candidates: ", getUserError);
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
-    }
-
-    // if the user is not an admin or manager, they can't search for candidates
-    if (!["accountAdmin", "manager"].includes(user.userType)) {
-        console.log("User is type: ", user.userType);
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
-    }
-
-    // if the user doesn't have
-    if (!user.businessInfo || !user.businessInfo.businessId) {
-        console.log("User doesn't have associated business.");
-        return res.status(401).send(errors.PERMISSIONS_ERROR);
-    }
-
-    const businessId = user.businessInfo.businessId;
-
-    const businessQuery = {
-        "_id": mongoose.Types.ObjectId(businessId)
-    }
-
-    // get the business the user works for
-    let business;
-    try {
-        business = await Businesses
-            .find(businessQuery)
-        // see if there are none found
-        if (!business || business.length === 0 ) { throw "No business found - userId: ", user._id; }
-        // if any are found, only one is found, as we searched by id
-        business = business[0];
-    } catch (findBizError) {
-        console.log("error finding business for user trying to search for candidates: ", findBizError);
+        let {
+            foundUser,
+            foundEmployee,
+            foundPositionIndex
+        } = await verifyBizUserAndFindCandidatePosition(userId, verificationToken, employeeId, positionId);
+        user = foundUser; employee = foundEmployee; candidatePositionIndex = foundPositionIndex;
+    } catch(error) {
+        console.log("Error verifying business user or getting employee position index: ", error);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    // make sure the user gave a valid position
-    if (!business.positions || business.positions.length === 0) {
-        return res.status(400).send("Invalid position.");
+    // if the answers array doesn't exist, make it
+    if (!Array.isArray(employee.positions[employeePositionIndex].answers)) {
+        employee.positions[employeePositionIndex].answers = [];
     }
-
-    const positionIndex = business.positions.findIndex(position => {
-        return position.name.toString() === positionName.toString();
-    })
-
-    if (positionIndex <= -1) {
-        return res.status(400).send("Invalid position.");
-    }
-
-    // should only be one position in the array since names should be unique
-    const position = business.positions[positionIndex];
-
-    // get the employees from that position
-    let employees = position.employees;
-
-    // the index of the employee in the employee array
-    const employeeIndex = employees.findIndex(currEmployee => {
-        return currEmployee.employeeId.toString() === employeeId.toString();
-    });
-
-    let employee = employees[employeeIndex];
-
 
     // get the index of the answer in the user's answers array
-    const answerIndex = employee.answers.findIndex(answer => {
+    const answerIndex = employee.positions[employeePositionIndex].answers.findIndex(answer => {
         return answer.questionIndex === questionIndex;
     });
 
@@ -670,25 +647,28 @@ async function POST_answerQuestion(req, res) {
             score: score,
             questionIndex: questionIndex
         };
-        employee.answers.push(newAnswer);
+        employee.positions[employeePositionIndex].answers.push(newAnswer);
     } else {
-        employee.answers[answerIndex].score = score;
+        employee.positions[employeePositionIndex].answers[answerIndex].score = score;
     }
 
-    employee.gradingComplete = gradingComplete;
+    // mark whether the manager is finished grading the employee
+    employee.positions[employeePositionIndex].gradingComplete = gradingComplete;
 
-    // update the employee in the business object
-    business.positions[positionIndex].employees[employeeIndex] = employee;
+    // if no manager is marked as being the grader, add the current user
+    if (!employee.positions[employeePositionIndex].managerId) {
+        employee.positions[employeePositionIndex].managerId = user._id;
+    }
 
-    // save the business
-    business.save()
-    .then(updatedBusiness => {
-        return res.json(employee.answers);
-    })
-    .catch(updateBusinessErr => {
-        console.log("error: ", updateBusinessErr);
-        return res.status(500).send("failure!");
-    });
+    // save the employee
+    try { employee = employee.save(); }
+    catch (updateEmployeeError) {
+        console.log("Error saving employee during grading: ", updateEmployeeError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // return successfully
+    res.json(employee.positions[employeePositionIndex].answers);
 }
 
 
