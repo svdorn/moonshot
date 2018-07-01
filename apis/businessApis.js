@@ -992,6 +992,8 @@ async function GET_evaluationResults(req, res) {
 
 
 async function GET_candidateSearch(req, res) {
+    console.log("searching for candidates");
+
     const userId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
 
@@ -1057,27 +1059,33 @@ async function GET_candidateSearch(req, res) {
         }
     }
 
-    const attributes = "_id name profileUrl position.isDismissed position.hiringStage position.isDismissed position.hiringStageChanges position.scores";
+    const attributes = "_id name profileUrl positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
 
     // perform the search
     let candidates = [];
-    try { candidates = await Users.find(searchQuery, positionQuery).select(attributes); }
+    try { candidates = await Users.find(positionQuery).select(attributes); }
     catch (candidateSearchError) {
         console.log("Error searching for candidates: ", candidateSearchError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
+    console.log("candidates before alteration: ", candidates);
+
     // format the candidates for the front end
-    candidates = candidates.map(candidate => {
+    const formattedCandidates = candidates.map(candidate => {
+        const candidateObj = candidate.toObject();
+        console.log("candidateObj: ", candidateObj);
         return {
-            name: candidate.name,
-            profileUrl: candidate.profileUrl,
-            _id: candidate._id,
-            ...(candidate.positions[0])
+            name: candidateObj.name,
+            profileUrl: candidateObj.profileUrl,
+            _id: candidateObj._id,
+            ...(candidateObj.positions[0])
         }
     })
 
-    return res.json(candidates);
+    console.log("candidates after alteration: ", formattedCandidates);
+
+    return res.json(formattedCandidates);
 }
 
 async function GET_employeeSearch(req, res) {
