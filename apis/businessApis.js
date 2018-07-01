@@ -523,12 +523,8 @@ async function POST_updateHiringStage(req, res) {
     let bizUser, user, userPositionIndex;
     const profileUrl = undefined;
     try {
-        let {
-            foundBizUser,
-            foundUser,
-            foundPositionIndex
-        } = await verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl);
-        bizUser = foundBizUser; user = foundUser; userPositionIndex = foundPositionIndex;
+        let results = await verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl);
+        bizUser = results.bizUser; user = results.user; userPositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting user position index: ", error);
         return res.status(500).send(errors.SERVER_ERROR);
@@ -568,6 +564,7 @@ async function verifyBizUserAndFindCandidatePosition(bizUserId, verificationToke
     return new Promise(async function(resolve, reject) {
         // find the user and the candidate
         let bizUser, user;
+        console.log("userId: ", userId);
         // search by id if possible, profile url otherwise
         const userQuery = userId ? { _id: userId } : { profileUrl };
         try {
@@ -630,12 +627,8 @@ async function POST_answerQuestion(req, res) {
     let user, employee, employeePositionIndex;
     const profileUrl = undefined;
     try {
-        let {
-            foundBizUser,
-            foundUser,
-            foundPositionIndex
-        } = await verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl);
-        bizUser = foundBizUser; user = foundUser; userPositionIndex = foundPositionIndex;
+        let results = await verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl);
+        bizUser = results.bizUser; user = results.user; userPositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting user position index: ", error);
         return res.status(500).send(errors.SERVER_ERROR);
@@ -877,7 +870,6 @@ async function GET_evaluationResults(req, res) {
             verifyBizUserAndFindCandidatePosition(bizUserId, verificationToken, positionId, userId, profileUrl),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
-        console.log("results: ", results);
         bizUser = results.bizUser; user = results.user; psychTest = foundPsychTest;
         userPositionIndex = results.userPositionIndex;
     } catch(error) {

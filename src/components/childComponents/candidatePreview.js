@@ -119,7 +119,7 @@ class CandidatePreview extends Component {
             const hiringStageInfo = {
                 userId: currentUser._id,
                 verificationToken: currentUser.verificationToken,
-                candidateId: this.props.candidate.candidateId,
+                candidateId: this.props.candidate._id,
                 hiringStage: hiringStage,
                 isDismissed: dismissed,
                 positionId: this.props.positionId
