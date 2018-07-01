@@ -39,7 +39,7 @@ const FOR_USER = [
     "adminQuestions",
     "psychometricTest",
     "currentPosition"
-]
+];
 
 // removes information from a db user object so that it can be passed for that
 // same user on the front end; second argument is array of fields to include
