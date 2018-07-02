@@ -127,8 +127,6 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
             + moonshotUrl + 'signup?code=' + code
             + '">Create Account</a>';
 
-        console.log("createAccountButton: ", createAccountButton);
-
         // at the end of every user's email
         const emailFooter =
               '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
@@ -207,8 +205,6 @@ async function POST_emailInvites(req, res) {
     const businessId = sanitize(body.currentUserInfo.businessId);
     const positionId = sanitize(body.currentUserInfo.positionId);
     const positionName = sanitize(body.currentUserInfo.positionName);
-
-    console.log("userName is: ", userName);
 
     // if one of the arguments doesn't exist, return with error code
     if (!candidateEmails || !employeeEmails || !adminEmails || !userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
