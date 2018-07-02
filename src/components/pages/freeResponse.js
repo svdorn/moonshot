@@ -128,7 +128,7 @@ class FreeResponse extends Component {
             );
         }
 
-        else if (currentUser.positionInProgress && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
+        else if (currentUser.currentPosition && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
             content = (
                 <div className="center">
                     You have to complete the administrative questions first!<br/>
@@ -139,7 +139,7 @@ class FreeResponse extends Component {
             );
         }
 
-        else if (currentUser.positionInProgress && (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate)) {
+        else if (currentUser.currentPosition && (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate)) {
             content = (
                 <div className="center">
                     You have to complete the psychometric analysis first!<br/>
@@ -150,7 +150,7 @@ class FreeResponse extends Component {
             );
         }
 
-        else if (currentUser.positionInProgress && !this.skillTestsDone()) {
+        else if (currentUser.currentPosition && !this.skillTestsDone()) {
             const skillTestUrl = this.findNeededSkillTest();
             content = (
                 <div className="center">

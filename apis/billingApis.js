@@ -7,17 +7,9 @@ const stripe = require("stripe")(credentials.stripeSk);
 
 // get helper functions
 const { sanitize,
-        removeEmptyFields,
-        verifyUser,
-        removePassword,
-        getUserByQuery,
         sendEmail,
-        userForAdmin,
-        getFirstName,
         getAndVerifyUser,
-        frontEndUser,
-        getSkillNamesByIds,
-        NO_TOKENS
+        frontEndUser
 } = require('./helperFunctions');
 
 const errors = require('./errors.js');
@@ -37,8 +29,6 @@ async function POST_customer(req, res) {
         return res.status(400).send("Bad request.");
     }
 
-    console.log("in here");
-
     // send source to Stripe to create person
     let customer;
     try {
@@ -55,9 +45,9 @@ async function POST_customer(req, res) {
     let business;
     try {
         user = await getAndVerifyUser(userId, verificationToken);
-        business = await Businesses.findById(user.businessInfo.company.companyId);
+        business = await Businesses.findById(user.businessInfo.businessId);
         if (!business) {
-            console.log("No business found with id: ", user.businessInfo.company.companyId);
+            console.log("No business found with id: ", user.businessInfo.businessId);
             throw "No business.";
         }
     } catch (getUserError) {

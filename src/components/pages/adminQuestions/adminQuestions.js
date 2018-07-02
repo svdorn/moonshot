@@ -31,7 +31,7 @@ class AdminQuestions extends Component {
     componentDidMount() {
         // make sure the user actually should be answering the admin questions
         const currentUser = this.props.currentUser;
-        if (!currentUser || !currentUser.positionInProgress || (currentUser.adminQuestions && currentUser.adminQuestions.finishedQuestions)) {
+        if (!currentUser || !currentUser.currentPosition || (currentUser.adminQuestions && currentUser.adminQuestions.finishedQuestions)) {
             this.setState({finished: true});
         }
 

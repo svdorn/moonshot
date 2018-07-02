@@ -73,7 +73,7 @@ class AuthenticatedComponent extends Component {
     checkLoggedIn() {
         // if there is no user, redirect to login page
         const currentUser = this.props.currentUser;
-        if (!currentUser || currentUser == "no user") {
+        if (!currentUser) {
             const location = this.props.location;
             const redirect = location.pathname + location.search;
 

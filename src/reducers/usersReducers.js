@@ -171,12 +171,6 @@ export function usersReducers(state = initialState, action) {
                 ...state, loadingSomething: false
             };
             break;
-        case "UPDATE_CURRENT_SUBSTEP":
-            const subStep = {...action.payload, pathwayId: action.pathwayId}
-            return {
-                ...state, currentSubStep: subStep, currentUser: action.currentUser
-            }
-            break;
         case "CLOSE_NOTIFICATION":
             return {
                 ...state, notification: undefined

@@ -58,11 +58,11 @@ export function emailFailureExitPage() {
     }
 }
 
-export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName, employerAgreedToTerms) {
+export function login(user, saveSession, navigateBackUrl) {
     return function(dispatch) {
         dispatch({type: "START_LOADING"});
 
-        axios.post("/api/user/login", {user, saveSession, employerAgreedToTerms})
+        axios.post("/api/user/login", {user, saveSession})
             .then(function(response) {
                 const returnedUser = response.data;
                 dispatch({type:"LOGIN", payload: returnedUser});
@@ -70,37 +70,9 @@ export function login(user, saveSession, navigateBackUrl, pathwayId, pathwayName
                 if (navigateBackUrl) {
                     nextUrl = navigateBackUrl;
                 }
-
-                // should add pathway to user if pathway id exists and user
-                // doesn't already have that pathway
-                const shouldAddPathwayToUser = pathwayId !== undefined && !returnedUser.pathways.some(function(path) {
-                    return path.pathwayId === pathwayId;
-                });
-
-                // add pathway if user came here from trying to sign up for a pathway
-                if (shouldAddPathwayToUser) {
-                    // if the user doesn't already have this pathway, give it
-                    // to them, then redirect to the pathway content page
-                    axios.post("/api/candidate/addPathway", {_id: returnedUser._id, verificationToken: returnedUser.verificationToken, pathwayId: pathwayId, pathwayName: pathwayName})
-                    .then(function(response) {
-                        dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
-                        // navigateBackUrl should be equal to the url for the pathway
-                        if (!navigateBackUrl) {
-                            navigateBackUrl = "/myEvaluations";
-                        }
-                        browserHistory.push(nextUrl);
-                        window.scrollTo(0, 0);
-                    })
-                    .catch(function(err) {
-                        dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "Cannot sign up for pathway more than once. Sign up for pathway failed.", type: "errorHeader"}})
-                        browserHistory.push(nextUrl);
-                        window.scrollTo(0, 0);
-                    })
-                } else {
-                    // otherwise go to the next screen
-                    browserHistory.push(nextUrl);
-                    window.scrollTo(0, 0);
-                }
+                // go to the next screen
+                browserHistory.push(nextUrl);
+                window.scrollTo(0, 0);
             })
             .catch(function(err) {
                 dispatch({type: "LOGIN_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
@@ -314,36 +286,6 @@ export function submitFreeResponse(userId, verificationToken, frqs) {
 }
 
 
-export function resetFrizz(userId, verificationToken) {
-    return function(dispatch) {
-        axios.post("/api/user/resetFrizz", {userId, verificationToken})
-        .then(response => {
-            dispatch({type: "USER_UPDATE", currentUser: response.data, notification:{message: "Frizz reset!", type: "infoHeader"}});
-            browserHistory.push("/positionSignup");
-            window.scrollTo(0, 0);
-        })
-        .catch(error => {
-            dispatch({type: "NOTIFICATION", notification:{message: error.response.data, type: "errorHeader"}})
-            // console.log("error: ", error);
-        })
-    }
-}
-export function reset24(userId, verificationToken) {
-    return function(dispatch) {
-        axios.post("/api/user/reset24", {userId, verificationToken})
-        .then(response => {
-            dispatch({type: "USER_UPDATE", currentUser: response.data, notification:{message: "24 reset!", type: "infoHeader"}});
-            browserHistory.push("/positionSignup");
-            window.scrollTo(0, 0);
-        })
-        .catch(error => {
-            dispatch({type: "NOTIFICATION", notification:{message: error.response.data, type: "errorHeader"}})
-            // console.log("error: ", error);
-        })
-    }
-}
-
-
 // POST USER
 export function postUser(user) {
     return function(dispatch) {
@@ -387,35 +329,6 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
             // error posting email invites
             .catch(function(err) {
                 dispatch({type: "POST_EMAIL_INVITES_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
-            });
-    }
-}
-
-// POST BUSINESS USER
-export function postEmployer(newUser, currentUser) {
-    return function(dispatch) {
-        dispatch({type: "POST_USER_REQUESTED"});
-
-        // post user to database
-        axios.post("/api/employer/newEmployer", {newUser, currentUser})
-            // user successfully posted
-            .then(function(companyName) {
-                // send verification email
-                axios.post("/api/employer/sendVerificationEmail", {email: newUser.email, companyName})
-                    // successfully sent verification email
-                    .then(function(emailResponse) {
-                        dispatch({type:"POST_USER"});
-                        window.scrollTo(0,0);
-                    })
-                    // error sending verification email
-                    .catch(function(emailError) {
-                        dispatch({type:"POST_USER_SUCCESS_EMAIL_FAIL", notification:{message: emailError.response.data, type: "errorHeader"}});
-                        window.scrollTo(0,0);
-                    });
-            })
-            // error posting user
-            .catch(function(err) {
-                dispatch({type: "POST_USER_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
             });
     }
 }
@@ -612,23 +525,6 @@ export function dialogEmailScreen4(user){
     }
 }
 
-// Send an email when form filled out on forBusiness page
-export function forBusiness(user){
-    return function(dispatch) {
-        dispatch({type: "FOR_BUSINESS_REQUESTED"});
-
-        axios.post("api/business/forBusinessEmail", user)
-            .then(function(response) {
-                dispatch({type:"FOR_BUSINESS", notification: {message:response.data, type:"infoHeader"}});
-                browserHistory.push('/');
-                window.scrollTo(0, 0);
-            })
-            .catch(function(err) {
-                dispatch({type:"FOR_BUSINESS", notification: {message: "Error sending email", type: "errorHeader"}})
-            })
-    }
-}
-
 
 // Send an email when somebody completes a pathway
 export function completePathway(user){
@@ -720,21 +616,6 @@ export function comingSoon(user, signedIn){
     }
 }
 
-// ADD a pathway to a user
-export function addPathway(user) {
-    return function(dispatch) {
-        axios.post("/api/candidate/addPathway", user)
-            .then(function(response) {
-                dispatch({type:"ADD_PATHWAY", payload:response.data, notification:{message:"Pathway added to My Pathways. Thanks for signing up!", type:"infoHeader"}});
-                window.scrollTo(0, 0);
-                browserHistory.push("/pathwayContent?pathway=" + user.pathwayUrl);
-            })
-            .catch(function(err) {
-                dispatch({type:"ADD_PATHWAY_REJECTED", notification: {message: "You can't sign up for a pathway more than once.", type: "errorHeader"}})
-                window.scrollTo(0, 0);
-            })
-    }
-}
 
 // DELETE A USER
 export function deleteUser(id) {
@@ -749,30 +630,6 @@ export function deleteUser(id) {
   }
 }
 
-export function updateCurrentSubStep(user, pathwayId, stepNumber, subStep) {
-    return function(dispatch) {
-        let currentUser = Object.assign({}, user);
-        // set the current step for the user in redux state
-        currentUser.pathways.find(function(path) {
-            return path.pathwayId == pathwayId
-        }).currentStep = {subStep: subStep.order, step: stepNumber};
-        dispatch({type: "UPDATE_CURRENT_SUBSTEP", payload: subStep, pathwayId, currentUser});
-
-        axios.post("/api/candidate/currentPathwayStep", {
-            params: {
-                userId: user._id,
-                pathwayId: pathwayId,
-                stepNumber: stepNumber,
-                subStepNumber: subStep.order,
-                verificationToken: user.verificationToken
-            }
-        })
-        .then(function(response) {
-        })
-        .catch(function(err) {
-        });
-    }
-}
 
 export function updateAnswer(userId, verificationToken, quizId, answer) {
     return function(dispatch) {
@@ -863,34 +720,6 @@ export function contactUs(user){
             .catch(function(err) {
                 dispatch({type:"CONTACT_US", notification: {message: "Error sending email", type: "errorHeader"}})
             })
-    }
-}
-
-
-// POST A NEW BUSINESS
-export function postBusiness(business) {
-    return function(dispatch) {
-        // show loading bar
-        dispatch({type:"START_LOADING"});
-
-        axios.post("/api/admin/business", business)
-        .then(function(response) {
-            dispatch({type: "SUCCESS_FINISHED_LOADING", notification: {message: response.data, type: "infoHeader"}});
-            // redirect to edit business page
-            if (typeof business.businessName === "string") {
-                const editBusinessUrl = '/admin/editBusiness?' + business.businessName;
-                browserHistory.push(editBusinessUrl);
-                window.scrollTo(0,0);
-            }
-        })
-        .catch(function(err) {
-            let msg = "Error creating new business. Try again later.";
-            if (err && err.response && typeof err.response.data === "string") {
-                msg = err.response.data;
-            }
-            dispatch({type: "ERROR_FINISHED_LOADING", notification: {message: msg, type: "errorHeader"}});
-            window.scrollTo(0,0);
-        })
     }
 }
 
