@@ -208,18 +208,20 @@ async function POST_saveBusiness(req, res) {
             return res.status(403).send(errors.PERMISSIONS_ERROR);
         }
 
-        // TODO: make sure none of the emails provided have already been used for accounts
-        const adminEmails = business.adminsToAdd.map(accAdmin => {
-            return accAdmin.email;
-        });
-        try {
-            const admin = await Users.findOne({ "email": { "$in": adminEmails } });
-            if (admin) {
-                return res.status(400).send("An account with that email address already exists.");
+        // make sure none of the emails provided have already been used for accounts
+        if (Array.isArray(business.adminsToAdd) && business.adminsToAdd.length > 0) {
+            const adminEmails = business.adminsToAdd.map(accAdmin => {
+                return accAdmin.email;
+            });
+            try {
+                const admin = await Users.findOne({ "email": { "$in": adminEmails } });
+                if (admin) {
+                    return res.status(400).send("An account with that email address already exists.");
+                }
+            } catch (findAdminError) {
+                console.log(findAdminError);
+                return res.status(500).send(errors.SERVER_ERROR);
             }
-        } catch (findAdminError) {
-            console.log(findAdminError);
-            return res.status(500).send(errors.SERVER_ERROR);
         }
 
         // position attributes that can be updated in this function
