@@ -10,16 +10,32 @@ import {
     Dialog,
     FlatButton,
     CircularProgress,
+    RaisedButton,
     Paper
 } from 'material-ui';
 import {connect} from 'react-redux';
 import { browserHistory } from "react-router";
 import {bindActionCreators} from 'redux';
+import { addEvaluationEmail, addNotification } from '../../../actions/usersActions';
+import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
 import AddUserDialog from '../../childComponents/addUserDialog';
-import { addNotification } from "../../../actions/usersActions";
+
+const required = value => (value ? undefined : 'This field is required.');
+
+const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        hintStyle={{color: 'white'}}
+        inputStyle={{color: '#72d6f5'}}
+        underlineStyle={{color: '#72d6f5'}}
+        errorText={touched && error}
+        {...input}
+        {...custom}
+    />
+);
 
 class MyEvaluations extends Component {
     constructor(props) {
@@ -32,7 +48,9 @@ class MyEvaluations extends Component {
             // logo of the company - doesn't apply for candidates
             logo: undefined,
             // name of the business the user works for - doesn't apply for candidates
-            businessName: undefined
+            businessName: undefined,
+            open: false,
+            screen: 1
         }
     }
 
@@ -41,6 +59,48 @@ class MyEvaluations extends Component {
         browserHistory.push(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
+    }
+
+    handleOpen = () => {
+        this.setState({open: true});
+    };
+
+
+    handleClose = () => {
+        this.setState({open: false, screen: 1});
+    };
+
+    handleNextScreen = () => {
+        const screen = this.state.screen + 1;
+        if (screen > 0 && screen < 3) {
+            this.setState({screen})
+        }
+    }
+
+    handleSubmit(e) {
+        e.preventDefault();
+        const vals = this.props.formData.addEval.values;
+
+        // Form validation before submit
+        let notValid = false;
+        const requiredFields = [
+            'position',
+        ];
+        requiredFields.forEach(field => {
+            if (!vals || !vals[field]) {
+                this.props.touch(field);
+                notValid = true;
+            }
+        });
+        if (notValid) return;
+
+        const user = {
+            position: vals.position,
+            business: this.props.currentUser.businessInfo.company.name
+        };
+
+        this.props.addEvaluationEmail(user);
+        this.handleNextScreen();
     }
 
     componentDidMount() {
@@ -122,6 +182,14 @@ class MyEvaluations extends Component {
             }
         }
 
+        const actions = [
+            <FlatButton
+                label="Close"
+                onClick={this.handleClose}
+                className="whiteTextImportant"
+            />,
+        ];
+
         let evaluations = (
             <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
                 Loading evaluations...
@@ -201,6 +269,33 @@ class MyEvaluations extends Component {
 
         }
 
+        if (currentUser && currentUser.userType == "accountAdmin" && this.state.positions.length !== 0) {
+            let attributes = {};
+            attributes.variation = "edit";
+            attributes.name = "Web Developer";
+            attributes.logo = this.state.logo;
+            attributes.length = 25;
+            attributes.skills = ["HTML", "Javascript"];
+            attributes.company = this.state.businessName;
+            attributes.completions = 0;
+            attributes.timeAllotted = 30;
+            attributes.usersInProgress = 0;
+            key++;
+
+            evaluations.push (
+                <li style={{marginTop: '25px', listStyleType:"none"}}
+                    key={key}
+                >
+                    <div style={{filter:"blur(5px)"}}>
+                        <MyEvaluationsPreview {...attributes} />
+                    </div>
+                    <div className="font28px font26pxUnder700 font22pxUnder500 grayText underline clickable center addEval" onClick={this.handleOpen}>
+                        + Add Evaluation
+                    </div>
+                </li>
+            );
+        }
+
         // The section for the account admin to take the psych test if they haven't already
         let accountAdminTakePsychTest = null;
         if (currentUser && currentUser.userType == "accountAdmin" && !currentUser.psychometricTest.endDate && (this.state.positions.length !== 0 || this.state.noPositions)) {
@@ -218,6 +313,59 @@ class MyEvaluations extends Component {
             );
         }
 
+        // Dialog for adding evaluation
+        const screen = this.state.screen;
+        let dialogBody = <div></div>;
+        if (screen === 1) {
+                    dialogBody = (
+                        <form onSubmit={this.handleSubmit.bind(this)} className="center">
+                            <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop40px">
+                                Add Evaluation
+                            </div>
+                            <div className="whiteText font16px font14pxUnder700 font12pxUnder400 marginTop10px">
+                                Let us know the position you&#39;d like to add an evaluation for and we&#39;ll contact you within 24 hours confirming next steps.
+                            </div>
+                            <Field
+                                name="position"
+                                component={renderTextField}
+                                label="Position"
+                                validate={[required]}
+                                className="marginTop10px"
+                            /><br/>
+                            <RaisedButton
+                                label="Continue"
+                                type="submit"
+                                className="raisedButtonBusinessHome marginTop20px"
+                                /><br/>
+                        </form>
+                    );
+        } else if (screen === 2) {
+                    dialogBody = (
+                        <div>
+                            <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                                We&#39;ll get back to your shortly!
+                            </div>
+                            <div className="whiteTextImportant font16px font14pxUnder700 font12pxUnder400" style={{width:"90%", margin:"10px auto 0"}}>
+                                Thanks for adding an evaluation, we&#39;ll get back to you shortly with next steps.
+                            </div>
+                        </div>
+                    );
+        }
+
+        const dialog = (
+            <Dialog
+                actions={actions}
+                modal={false}
+                open={this.state.open}
+                onRequestClose={this.handleClose}
+                autoScrollBodyContent={true}
+                paperClassName="dialogForBiz"
+                contentClassName="center"
+            >
+                {dialogBody}
+            </Dialog>
+        );
+
         return(
             <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEvaluations'>
                 {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
@@ -225,6 +373,7 @@ class MyEvaluations extends Component {
                     <title>My Evaluations | Moonshot</title>
                     <meta name="description" content="View the evaluations your company is running."/>
                 </MetaTags>
+                {dialog}
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
                     <div style={style.separatorText}>
@@ -242,14 +391,21 @@ class MyEvaluations extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        addNotification
+        addNotification,
+        addEvaluationEmail
     }, dispatch);
 }
 
 function mapStateToProps(state) {
     return {
+        formData: state.form,
         currentUser: state.users.currentUser,
+        loading: state.users.loadingSomething
     };
 }
+
+MyEvaluations = reduxForm({
+    form: 'addEval',
+})(MyEvaluations);
 
 export default connect(mapStateToProps, mapDispatchToProps)(MyEvaluations);
