@@ -131,7 +131,7 @@ class Login extends Component {
 
     handleKeyPress(e) {
         var key = e.which || e.keyCode;
-        if (key === 13) { // 13 is enter
+        if (key === 13 && this.props.router.location.pathname === "/login") { // 13 is enter
             this.handleSubmit();
         }
     }
