@@ -1339,7 +1339,7 @@ function POST_keepMeLoggedIn(req, res) {
     } else {
         req.session.stayLoggedIn = false;
     }
-    req.session.save(function (err) {
+    req.session.save(function (saveSessionError) {
         if (saveSessionError) {
             console.log("error saving 'keep me logged in' setting: ", saveSessionError);
             return res.status(500).send("Error saving 'keep me logged in' setting.");
