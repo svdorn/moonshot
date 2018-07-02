@@ -185,7 +185,7 @@ class BusinessEditor extends Component {
         })
         .catch(error => {
             console.log("error updating business: ", error);
-            self.props.addNotification("Error updating business.", "error");
+            self.props.addNotification(error.response.data + " Please reload the page.", "error");
         })
     }
 
