@@ -119,7 +119,7 @@ class CandidatePreview extends Component {
             const hiringStageInfo = {
                 userId: currentUser._id,
                 verificationToken: currentUser.verificationToken,
-                candidateId: this.props.candidate.candidateId,
+                candidateId: this.props.candidate._id,
                 hiringStage: hiringStage,
                 isDismissed: dismissed,
                 positionId: this.props.positionId
@@ -265,7 +265,6 @@ class CandidatePreview extends Component {
             }
         };
 
-        const location = this.props.candidate.location ? this.props.candidate.location : "No location given";
         const overallScore = this.props.candidate.scores && this.props.candidate.scores.overall ? this.props.candidate.scores.overall : "N/A";
 
         const finishedEval = overallScore !== "N/A";
@@ -387,7 +386,6 @@ class CandidatePreview extends Component {
 
 
                 {this.makePredictiveSection("Predicted", this.props.candidate.scores ? this.props.candidate.scores.predicted : undefined)}
-                {/*this.makePredictiveSection("Psychometrics", this.props.candidate.archetype)*/}
                 {this.makePredictiveSection("Skill", this.props.candidate.scores ? this.props.candidate.scores.skill : undefined)}
 
                 <div style={style.darkenerStyle} />

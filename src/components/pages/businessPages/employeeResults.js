@@ -24,7 +24,6 @@ class EmployeeResults extends Component {
             predictivePoints: [],
             freeResponses: [],
             psychScores: [],
-            archetype: "",
             loading: true,
             areaSelected: undefined,
             windowWidth: window.innerWidth
@@ -41,7 +40,7 @@ class EmployeeResults extends Component {
         let positionId = "";
         try {
             profileUrl = this.props.params.profileUrl;
-            businessId = this.props.currentUser.businessInfo.company.companyId;
+            businessId = this.props.currentUser.businessInfo.businessId;
             positionId = this.props.params.positionId;
         } catch (e) {
             this.goTo("/myCandidates");
@@ -101,7 +100,6 @@ class EmployeeResults extends Component {
                 ...self.state,
                 loading: false,
                 psychScores: res.data.psychScores,
-                archetype: res.data.archetype,
                 candidate,
                 overallScore,
                 predicted: res.data.performanceScores.predicted,
@@ -237,7 +235,6 @@ class EmployeeResults extends Component {
                 <div className="resultsPageSpacer" />
 
                  <PsychBreakdown
-                     archetype={this.state.archetype}
                      psychScores={this.state.psychScores}
                      forCandidate={false}
                  />

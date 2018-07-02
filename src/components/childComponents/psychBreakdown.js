@@ -157,7 +157,7 @@ class PsychBreakdown extends Component {
                 <div className="youMedianMiddle" style={{color:"white", marginBottom: "0px"}}>
                     <div>{forCandidate ? "Your" : "Their"} Score: {this.makeLRversion(selectedArea.score)}</div>
                     <div>Median: {this.makeLRversion(selectedArea.stats.median)}</div>
-                    <div>Middle 80%: {this.makeLRversion(selectedArea.stats.middle80.minimum)} - {this.makeLRversion(selectedArea.stats.middle80.maximum)}</div>
+                    <div>Middle 80%: {this.makeLRversion(selectedArea.stats.middle80.minimum)}&nbsp;-&nbsp;{this.makeLRversion(selectedArea.stats.middle80.maximum)}</div>
                 </div>
             </div>
 

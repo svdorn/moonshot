@@ -279,7 +279,7 @@ class SkillTest extends Component {
                 </div>
             );
         }
-        else if (currentUser.positionInProgress && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
+        else if (currentUser.currentPosition && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
             content = (
                 <div className="blackBackground">
                     You have to complete the administrative questions first!<br/>
@@ -288,7 +288,7 @@ class SkillTest extends Component {
                     </button>
                 </div>
             );
-        } else if (currentUser.positionInProgress && (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate)) {
+        } else if (currentUser.currentPosition && (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate)) {
             content = (
                 <div>
                     You have to complete the psychometric analysis first!
