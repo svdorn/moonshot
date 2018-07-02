@@ -19,6 +19,7 @@ import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import MyEvaluationsPreview from '../../childComponents/myEvaluationsPreview';
 import AddUserDialog from '../../childComponents/addUserDialog';
+import { addNotification } from "../../../actions/usersActions";
 
 class MyEvaluations extends Component {
     constructor(props) {
@@ -166,19 +167,21 @@ class MyEvaluations extends Component {
 
                     // otherwise the preview will look like you can take it
                     else {
-                        attributes.variation = "take";
-                        attributes.skills = position.skills;
-                        attributes.deadline = position.deadline;
-                        attributes.logo = position.businessLogo;
-                        attributes.name = position.positionName;
-                        attributes.company = position.businessName;
-                        attributes.assignedDate = position.assignedDate;
-                        attributes.completedDate = position.completedDate;
                         try {
+                            attributes.variation = "take";
+                            attributes.skills = position.skills;
+                            attributes.deadline = position.deadline;
+                            attributes.logo = position.businessLogo;
+                            attributes.name = position.positionName;
+                            attributes.company = position.businessName;
+                            attributes.assignedDate = position.assignedDate;
+                            attributes.completedDate = position.completedDate;
                             attributes.businessId = position.businessId.toString();
                             attributes.positionId = position.positionId.toString();
                         } catch (attributeError) {
                             console.log(attributeError);
+                            this.props.addNotification("Server error, try again later.", "error");
+                            return "";
                         }
                     }
 
@@ -239,7 +242,7 @@ class MyEvaluations extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        addNotification
     }, dispatch);
 }
 
