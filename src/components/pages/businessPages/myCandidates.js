@@ -200,8 +200,8 @@ class MyCandidates extends Component {
         // sort the array
         sortedCandidates.sort(this.compareCandidates.bind(this));
 
-        // flip the array if sorting in descending order
-        if (!this.state.sortAscending) {
+        // flip the array if sorting in ascending order
+        if (this.state.sortAscending) {
             sortedCandidates.reverse();
         }
 
