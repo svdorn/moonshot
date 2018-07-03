@@ -175,6 +175,14 @@ class MyCandidates extends Component {
     }
 
 
+    // change hide dismissed or hide hired
+    handleCheckMarkClick(checkMarkField) {
+        let state = JSON.parse(JSON.stringify(this.state));
+        state[checkMarkField] = !state[checkMarkField];
+        this.setState(state, this.reorder);
+    }
+
+
     render() {
         const style = {
             searchBar: {
@@ -257,24 +265,6 @@ class MyCandidates extends Component {
         const searchFloatingLabelStyle = searchHintStyle;
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
-
-        const topOptions = (
-            <div>
-                <Field
-                    name="search"
-                    component={renderTextField}
-                    inputStyle={searchInputStyle}
-                    hintStyle={searchHintStyle}
-                    floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
-                    floatingLabelStyle={searchFloatingLabelStyle}
-                    underlineFocusStyle = {searchUnderlineFocusStyle}
-                    label="Search"
-                    onChange={event => this.onSearchChange(event.target.value)}
-                    value={this.state.searchTerm}
-                />
-            </div>
-        );
-
         const tabs = (
             <Tabs
                 inkBarStyle={{background: 'white'}}
@@ -288,6 +278,51 @@ class MyCandidates extends Component {
             </Tabs>
         );
 
+        // the top options such as search and hide hired candidates
+        const topOptions = (
+            <div className="topOptions">
+                <Field
+                    name="search"
+                    component={renderTextField}
+                    inputStyle={searchInputStyle}
+                    hintStyle={searchHintStyle}
+                    floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
+                    floatingLabelStyle={searchFloatingLabelStyle}
+                    underlineFocusStyle = {searchUnderlineFocusStyle}
+                    label="Search"
+                    onChange={event => this.onSearchChange(event.target.value)}
+                    value={this.state.searchTerm}
+                />
+                <div className="inlineBlock">
+                    {"Move to Not Reviewed"}
+                </div>
+                <div className="inlineBlock">
+                    <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleCheckMarkClick("hideDismissed")}>
+                        <img
+                            alt="Checkmark icon"
+                            className={"checkMark" + this.state.keepMeLoggedIn}
+                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                        />
+                    </div>
+                    <div className="inlineBlock">
+                        Hide <i>Dismissed</i> Candidates
+                    </div><br/>
+                </div>
+                <div className="inlineBlock">
+                    <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleCheckMarkClick("hideHired")}>
+                        <img
+                            alt="Checkmark icon"
+                            className={"checkMark" + this.state.keepMeLoggedIn}
+                            src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                        />
+                    </div>
+                    <div style={{display:"inline-block"}}>
+                        Hide <i>Hired</i> Candidates
+                    </div><br/>
+                </div>
+            </div>
+        );
+
         const candidatesContainer = (
             <div className="candidatesContainer">
 
@@ -295,7 +330,7 @@ class MyCandidates extends Component {
         )
 
         return (
-            <div className="jsxWrapper blackBackground fillScreen myCandidates" style={{paddingBottom: "20px"}} ref='myCandidates'>
+            <div className="jsxWrapper blackBackground fillScreen myCandidates whiteText" style={{paddingBottom: "20px"}} ref='myCandidates'>
                 {this.props.currentUser.userType == "accountAdmin" ?
                     <AddUserDialog position={this.state.position} tab={"Candidate"}/>
                     : null
@@ -307,10 +342,11 @@ class MyCandidates extends Component {
 
                 { tabs }
 
-                { topOptions }
-
                 <div className="center">
-                    { candidatesContainer }
+                    <div className="candidatesAndOptions">
+                        { topOptions }
+                        { candidatesContainer }
+                    </div>
                 </div>
 
                 <div style={{height: "40px"}} />
@@ -330,7 +366,8 @@ function mapStateToProps(state) {
     return {
         formData: state.form,
         notification: state.users.notification,
-        currentUser: state.users.currentUser
+        currentUser: state.users.currentUser,
+        png: state.users.png
     };
 }
 

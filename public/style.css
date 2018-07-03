@@ -2488,8 +2488,14 @@ button.link {
 
 
 
-.myCandidates .candidatesContainer {
+.myCandidates .candidatesAndOptions {
     width: 1000px;
+    position: relative;
+    display: inline-block;
+}
+
+.myCandidates .candidatesContainer {
+    width: 100%;
     height: calc(100vh - 176px);
     min-height: 300px;
     display: inline-block;
@@ -2498,6 +2504,15 @@ button.link {
     box-shadow:         0px 0px 6px 3px #00000073;
 }
 
+.topOptions > div:nth-child(1) {
+    margin-right: 50px;
+}
+.topOptions > div:nth-child(2) {
+    margin-right: 50px;
+}
+.topOptions > div:nth-child(3) {
+    margin-right: 20px;
+}
 
 
 
