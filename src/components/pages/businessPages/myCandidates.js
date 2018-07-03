@@ -9,7 +9,9 @@ import {
     ToolbarGroup,
     Dialog,
     FlatButton,
-    CircularProgress
+    CircularProgress,
+    Tabs,
+    Tab
 } from 'material-ui';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
@@ -39,11 +41,14 @@ class MyCandidates extends Component {
 
         this.state = {
             searchTerm: "",
-            hiringStage: "",
             position: "",
             sortBy: "",
+            sortAscending: true,
+            hideDismissed: false,
+            hideHired: false,
             candidates: [],
             positions: [],
+            tab: "All",
             positionNameFromUrl,
             // true if the business has no positions associated with it
             noPositions: false,
@@ -115,19 +120,19 @@ class MyCandidates extends Component {
         });
     }
 
-    handleHiringStageChange = (event, index, hiringStage) => {
-        this.setState({hiringStage, candidates: [], noCandidates: false}, this.search);
-    };
-
     handlePositionChange = (event, index, position) => {
         this.setState({position, candidates: [], noCandidates: false}, this.search);
     };
 
     handleSortByChange = (event, index, sortBy) => {
-        this.setState({sortBy}, () => {
-            // only search if the user put in a new search term
-            if (sortBy !== "") { this.search(); }
-        });
+        // if the user is changing the sort by value
+        if (this.state.sortBy !== sortBy) {
+            this.setState({ sortBy }, this.search);
+        }
+        // if the user is flipping the direction of the sort
+        else {
+            this.setState({ sortAscending: !this.state.sortAscending }, this.search);
+        }
     };
 
     openAddUserModal() {
@@ -140,10 +145,10 @@ class MyCandidates extends Component {
             axios.get("/api/business/candidateSearch", {
                 params: {
                     searchTerm: this.state.term,
-                    hiringStage: this.state.hiringStage,
                     // searching by position name right now, could search by id if want to
                     positionName: this.state.position,
                     sortBy: this.state.sortBy,
+                    sortAscending: this.state.sortAscending,
                     userId: this.props.currentUser._id,
                     verificationToken: this.props.currentUser.verificationToken
                 }
@@ -162,31 +167,16 @@ class MyCandidates extends Component {
         }
     }
 
+    handleTabChange = (tab) => {
+        // only switch tabs and re-search if not on the tab that should be switched to
+        if (this.state.tab !== tab) {
+            this.setState({tab}. this.search);
+        }
+    }
+
 
     render() {
         const style = {
-            separator: {
-                width: "70%",
-                margin: "25px auto 0px",
-                position: "relative",
-                height: "40px",
-                textAlign: "center"
-            },
-            separatorText: {
-                padding: "0px 40px",
-                backgroundColor: "#2e2e2e",
-                display: "inline-block",
-                position: "relative",
-                fontSize: "23px",
-                color: "white"
-            },
-            separatorLine: {
-                width: "100%",
-                height: "3px",
-                backgroundColor: "white",
-                position: "absolute",
-                top: "12px"
-            },
             searchBar: {
                 width: "80%",
                 margin: "auto",
@@ -221,43 +211,6 @@ class MyCandidates extends Component {
         let key = 0;
         let self = this;
 
-        let candidatePreviews = (
-            <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                Loading candidates...
-            </div>
-        );
-
-        if (this.state.noCandidates) {
-            if (this.state.hiringStage == "" && (this.state.term == "" || !this.state.term)) {
-            candidatePreviews = (
-                <div className="center marginTop50px">
-                <div className="marginBottom15px font32px font28pxUnder500 clickable blueTextHome" onClick={this.openAddUserModal.bind(this)}>
-                    + <bdi className="underline">Add Candidates</bdi>
-                </div>
-                <div style={{color: "rgba(255,255,255,.8)"}}>
-                    No candidates
-                    {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
-                    {(this.state.hiringStage == "Not Contacted" || this.state.hiringStage == "Contacted" || this.state.hiringStage == "Interviewing" || this.state.hiringStage == "Hired")
-                    ? <bdi> with {this.state.hiringStage.toLowerCase()} for the hiring stage</bdi>
-                    :null}.
-                </div>
-                <div className="marginTop15px" style={{color: "rgba(255,255,255,.8)"}}>
-                    Add them <bdi className="clickable underline blueTextHome" onClick={this.openAddUserModal.bind(this)}>Here</bdi> so they can get started.
-                </div>
-                </div>
-            )
-            } else {
-                candidatePreviews = (
-                    <div style={{color: "rgba(255,255,255,.8)"}}>
-                        No candidates
-                        {this.state.term ? <bdi> with the given search term</bdi> : null} for the {this.state.position} position
-                        {(this.state.hiringStage == "Not Contacted" || this.state.hiringStage == "Contacted" || this.state.hiringStage == "Interviewing" || this.state.hiringStage == "Hired")
-                        ? <bdi> with {this.state.hiringStage.toLowerCase()} for the hiring stage</bdi>
-                        :null}.
-                    </div>
-                );
-            }
-        }
 
         if (this.state.noPositions) {
             candidatePreviews = (
@@ -274,32 +227,21 @@ class MyCandidates extends Component {
             );
         }
 
-        if (this.state.candidates.length !== 0) {
-            candidatePreviews = this.state.candidates.map(candidate => {
-                key++;
+        let candidateLis = [];
 
+        if (this.state.candidates.length !== 0) {
+            candidateLis = this.state.candidates.map(candidate => {
                 return (
-                    <li style={{marginTop: '15px'}} key={key} >
-                        <CandidatePreview
-                            candidate={candidate}
-                            positionId={positionId}
-                            editHiringStage={true}
-                            disabled={candidate.disabled === true}
-                        />
+                    <li>
+                        {candidate.name}
                     </li>
                 );
-            });
-
+            })
         }
 
         const sortByOptions = ["Name", "Score"];
         const sortByItems = sortByOptions.map(function (sortBy) {
             return <MenuItem value={sortBy} primaryText={sortBy} key={sortBy}/>
-        })
-
-        const hiringStages = ["Not Contacted", "Contacted", "Interviewing", "Hired"];
-        const hiringStageItems = hiringStages.map(function (hiringStage) {
-            return <MenuItem value={hiringStage} primaryText={hiringStage} key={hiringStage}/>
         })
 
         const positions = this.state.positions;
@@ -315,116 +257,45 @@ class MyCandidates extends Component {
         const searchFloatingLabelStyle = searchHintStyle;
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
-        //TODO to change the menu style, use menuStyle prop
 
-        const searchBar = (
+        const topOptions = (
             <div>
-                <Toolbar style={style.searchBar} id="discoverSearchBarWideScreen">
-                    <ToolbarGroup>
-                        <Field
-                            name="search"
-                            component={renderTextField}
-                            inputStyle={searchInputStyle}
-                            hintStyle={searchHintStyle}
-                            floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
-                            floatingLabelStyle={searchFloatingLabelStyle}
-                            underlineFocusStyle = {searchUnderlineFocusStyle}
-                            label="Search"
-                            onChange={event => this.onSearchChange(event.target.value)}
-                            value={this.state.searchTerm}
-                        />
-                    </ToolbarGroup>
-
-                    <ToolbarGroup>
-                        <DropDownMenu value={this.state.sortBy}
-                                      onChange={this.handleSortByChange}
-                                      labelStyle={style.menuLabelStyle}
-                                      anchorOrigin={style.anchorOrigin}
-                                      style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
-                        >
-                            <MenuItem value={""} primaryText="Sort By"/>
-                            <Divider/>
-                            {sortByItems}
-                        </DropDownMenu>
-                        <DropDownMenu value={this.state.hiringStage}
-                                      onChange={this.handleHiringStageChange}
-                                      labelStyle={style.menuLabelStyle}
-                                      anchorOrigin={style.anchorOrigin}
-                                      style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
-                        >
-                            <MenuItem value={""} primaryText="Hiring Stage"/>
-                            <Divider/>
-                            {hiringStageItems}
-                        </DropDownMenu>
-                        <DropDownMenu value={this.state.position}
-                                      onChange={this.handlePositionChange}
-                                      labelStyle={style.menuLabelStyle}
-                                      anchorOrigin={style.anchorOrigin}
-                                      style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
-                        >
-                            <MenuItem value={""} primaryText="Position"/>
-                            <Divider/>
-                            {positionItems}
-                        </DropDownMenu>
-                    </ToolbarGroup>
-                </Toolbar>
-
-
-                <div id="discoverSearchBarMedScreen">
-                    <Field
-                        name="search"
-                        inputStyle={searchInputStyle}
-                        hintStyle={searchHintStyle}
-                        floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
-                        floatingLabelStyle={searchFloatingLabelStyle}
-                        underlineFocusStyle = {searchUnderlineFocusStyle}
-                        component={renderTextField}
-                        label="Search"
-                        onChange={event => this.onSearchChange(event.target.value)}
-                        value={this.state.searchTerm}
-                    />
-
-                    <br/>
-
-                    <DropDownMenu value={this.state.sortBy}
-                                  onChange={this.handleSortByChange}
-                                  labelStyle={style.menuLabelStyle}
-                                  anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
-                    >
-                        <MenuItem value={""} primaryText="Sort By"/>
-                        <Divider/>
-                        {sortByItems}
-                    </DropDownMenu>
-                    <br/>
-                    <DropDownMenu value={this.state.hiringStage}
-                                  onChange={this.handleHiringStageChange}
-                                  labelStyle={style.menuLabelStyle}
-                                  anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
-                    >
-                        <MenuItem value={""} primaryText="Hiring Stage"/>
-                        <Divider/>
-                        {hiringStageItems}
-                    </DropDownMenu>
-                    <br/>
-                    <DropDownMenu value={this.state.position}
-                                  onChange={this.handlePositionChange}
-                                  labelStyle={style.menuLabelStyle}
-                                  anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
-                    >
-                        <MenuItem value={""} primaryText="Position"/>
-                        <Divider/>
-                        {positionItems}
-                    </DropDownMenu>
-                </div>
+                <Field
+                    name="search"
+                    component={renderTextField}
+                    inputStyle={searchInputStyle}
+                    hintStyle={searchHintStyle}
+                    floatingLabelFocusStyle={searchFloatingLabelFocusStyle}
+                    floatingLabelStyle={searchFloatingLabelStyle}
+                    underlineFocusStyle = {searchUnderlineFocusStyle}
+                    label="Search"
+                    onChange={event => this.onSearchChange(event.target.value)}
+                    value={this.state.searchTerm}
+                />
             </div>
         );
 
+        const tabs = (
+            <Tabs
+                inkBarStyle={{background: 'white'}}
+                className="settingsTabs"
+                value={this.state.tab}
+                onChange={this.handleTabChange}
+            >
+                <Tab label="All" value="All" style={{color:"white"}} />
+                <Tab label="Reviewed" value="Reviewed" style={{color:"white"}} />
+                <Tab label="Not Reviewed" value="Not Reviewed" style={{color:"white"}} />
+            </Tabs>
+        );
+
+        const candidatesContainer = (
+            <div className="candidatesContainer">
+
+            </div>
+        )
 
         return (
-            <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myCandidates'>
+            <div className="jsxWrapper blackBackground fillScreen myCandidates" style={{paddingBottom: "20px"}} ref='myCandidates'>
                 {this.props.currentUser.userType == "accountAdmin" ?
                     <AddUserDialog position={this.state.position} tab={"Candidate"}/>
                     : null
@@ -433,19 +304,13 @@ class MyCandidates extends Component {
                     <title>My Candidates | Moonshot</title>
                     <meta name="description" content="View analytical breakdowns and manage your candidates."/>
                 </MetaTags>
-                <div style={style.separator}>
-                    <div style={style.separatorLine}/>
-                    <div style={style.separatorText}>
-                        My Candidates
-                    </div>
-                </div>
 
-                {searchBar}
+                { tabs }
 
-                <div>
-                    <ul className="horizCenteredList myCandidatesWidth">
-                        {candidatePreviews}
-                    </ul>
+                { topOptions }
+
+                <div className="center">
+                    { candidatesContainer }
                 </div>
 
                 <div style={{height: "40px"}} />
