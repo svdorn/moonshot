@@ -981,30 +981,21 @@ async function GET_candidateSearch(req, res) {
 
     // the id of the business that the user works for
     const businessId = user.businessInfo.businessId;
-    // the restrictions on the search
-    const searchTerm = sanitize(req.query.searchTerm);
-    // if a specific hiring stage is wanted
-    const hiringStage = sanitize(req.query.hiringStage);
+    // // the restrictions on the search
+    // const searchTerm = sanitize(req.query.searchTerm);
+    // // if a specific hiring stage is wanted
+    // const hiringStage = sanitize(req.query.hiringStage);
     // position name is the only required input to the search
     const positionName = sanitize(req.query.positionName);
-    // the thing we should sort by - default is alphabetical
-    const sortBy = sanitize(req.query.sortBy);
-
-
-    // sort by overall score by default
-    // let sort = { }
-    // if (sortBy) {
-    //
-    // }
 
     let positionRequirements = [
         { "businessId": mongoose.Types.ObjectId(businessId) },
         { "name": positionName }
     ];
-    // filter by hiring stage if requested
-    if (hiringStage) {
-        positionRequirements.push({ "hiringStage": hiringStage });
-    }
+    // // filter by hiring stage if requested
+    // if (hiringStage) {
+    //     positionRequirements.push({ "hiringStage": hiringStage });
+    // }
 
     // only get the position that was asked for
     let query = {
@@ -1016,14 +1007,14 @@ async function GET_candidateSearch(req, res) {
         }
     }
 
-    // search by name too if search term exists
-    if (searchTerm) {
-        const nameRegex = new RegExp(searchTerm, "i");
-        query["name"] = nameRegex;
-    }
+    // // search by name too if search term exists
+    // if (searchTerm) {
+    //     const nameRegex = new RegExp(searchTerm, "i");
+    //     query["name"] = nameRegex;
+    // }
 
     // the user attributes that we want to keep
-    const attributes = "_id name profileUrl positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
+    const attributes = "_id name profileUrl positions.reviewed positions.interest positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
 
     // perform the search
     let candidates = [];

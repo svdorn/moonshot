@@ -118,12 +118,10 @@ class MyCandidates extends Component {
         window.scrollTo(0, 0);
     }
 
-    onSearchChange(term) {
-        this.setState({...this.state, term: term}, () => {
-            if (term !== undefined) {
-                this.search();
-            }
-        });
+    onSearchChange(searchTerm) {
+        if (this.state.searchTerm !== searchTerm) {
+            this.setState({ searchTerm }, this.reorder);
+        }
     }
 
     handlePositionChange = (event, index, position) => {
@@ -133,11 +131,11 @@ class MyCandidates extends Component {
     handleSortByChange = (event, index, sortBy) => {
         // if the user is changing the sort by value
         if (this.state.sortBy !== sortBy) {
-            this.setState({ sortBy }, this.search);
+            this.setState({ sortBy }, this.reorder);
         }
         // if the user is flipping the direction of the sort
         else {
-            this.setState({ sortAscending: !this.state.sortAscending }, this.search);
+            this.setState({ sortAscending: !this.state.sortAscending }, this.reorder);
         }
     };
 
@@ -162,13 +160,13 @@ class MyCandidates extends Component {
                 // make sure component is mounted before changing state
                 if (this.refs.myCandidates) {
                     if (res.data && res.data.length > 0) {
-                        this.setState({ candidates: res.data, noCandidates: false });
+                        this.setState({ candidates: res.data, noCandidates: false }, this.reorder);
                     } else {
                         this.setState({noCandidates: true, candidates: []})
                     }
                 }
             }).catch(function (err) {
-                // console.log("ERROR: ", err);
+                console.log("ERROR: ", err);
             })
         }
     }
@@ -176,14 +174,13 @@ class MyCandidates extends Component {
     handleTabChange = (tab) => {
         // only switch tabs and re-search if not on the tab that should be switched to
         if (this.state.tab !== tab) {
-            this.setState({tab}. this.search);
+            this.setState({tab}, this.reorder);
         }
     }
 
 
     // change hide dismissed or hide hired
     handleCheckMarkClick(checkMarkField) {
-        console.log("clicked");
         let state = JSON.parse(JSON.stringify(this.state));
         state[checkMarkField] = !state[checkMarkField];
         this.setState(state, this.reorder);
@@ -198,10 +195,10 @@ class MyCandidates extends Component {
         let sortedCandidates = this.state.candidates.slice(0);
 
         // remove candidates that don't match filtering criteria
-        sortedArray.filter(filterCandidates);
+        sortedCandidates = sortedCandidates.filter(this.filterCandidates.bind(this));
 
         // sort the array
-        sortedArray.sort(compareCandidates);
+        sortedCandidates.sort(this.compareCandidates.bind(this));
 
         // flip the array if sorting in descending order
         if (!this.state.sortAscending) {
@@ -214,10 +211,10 @@ class MyCandidates extends Component {
 
 
     // filter candidates by given user-given filters
-    filterCandidate(cand) {
+    filterCandidates(cand) {
         // filter by tab if not on "All"
-        if (tab === "Reviewed" && cand.reviewed !== true) { return false; }
-        else if (tab === "Not Reviewed" && cand.reviewed !== false) { return false; }
+        if (this.state.tab === "Reviewed" && cand.reviewed !== true) { return false; }
+        else if (this.state.tab === "Not Reviewed" && cand.reviewed !== false) { return false; }
 
         // filter by dismissed and hired status if wanted
         if (this.state.hideDismissed && cand.isDismissed) { return false; }
@@ -250,7 +247,7 @@ class MyCandidates extends Component {
                 break;
             case "score": return compareByScore(candA, candB, "overall"); break;
             case "predicted": return compareByScore(candA, candB, "predicted"); break;
-            case "skill": return compareByScore(candA, candB, "overallSkill"); break;
+            case "skill": return compareByScore(candA, candB, "skill"); break;
             case "stage": return compareByStage(candA, candB); break;
             // if an invalid sort criteria is given, all candidates are of equal sorting value
             default: return 0; break;
@@ -346,10 +343,10 @@ class MyCandidates extends Component {
 
         let candidateLis = [];
 
-        if (this.state.candidates.length !== 0) {
+        if (this.state.sortedCandidates.length !== 0) {
             candidateLis = this.state.sortedCandidates.map(candidate => {
                 return (
-                    <li className="candidate">
+                    <li className="candidate" key={candidate._id}>
                         {candidate.name}
                     </li>
                 );
