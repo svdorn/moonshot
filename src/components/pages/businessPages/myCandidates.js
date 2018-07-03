@@ -128,7 +128,7 @@ class MyCandidates extends Component {
         this.setState({position, candidates: [], noCandidates: false}, this.search);
     };
 
-    handleSortByChange = (event, index, sortBy) => {
+    handleSortByChange(sortBy) {
         // if the user is changing the sort by value
         if (this.state.sortBy !== sortBy) {
             this.setState({ sortBy }, this.reorder);
@@ -245,10 +245,10 @@ class MyCandidates extends Component {
                 else if (!candB.interest || candA.interest > candB.interest) { return 1; }
                 else { return 0; }
                 break;
-            case "score": return compareByScore(candA, candB, "overall"); break;
-            case "predicted": return compareByScore(candA, candB, "predicted"); break;
-            case "skill": return compareByScore(candA, candB, "skill"); break;
-            case "stage": return compareByStage(candA, candB); break;
+            case "score": return this.compareByScore(candA, candB, "overall"); break;
+            case "predicted": return this.compareByScore(candA, candB, "predicted"); break;
+            case "skill": return this.compareByScore(candA, candB, "skill"); break;
+            case "stage": return this.compareByStage(candA, candB); break;
             // if an invalid sort criteria is given, all candidates are of equal sorting value
             default: return 0; break;
         }
@@ -268,8 +268,8 @@ class MyCandidates extends Component {
         else if (candA.isDismissed) { return -1; }
         else if (candB.isDismissed) { return 1; }
         // both candidates have a hiring stage
-        const candAstageVal = hiringStageValues(candA.hiringStage);
-        const candBstageVal = hiringStageValues(candB.hiringStage);
+        const candAstageVal = hiringStageValues[candA.hiringStage];
+        const candBstageVal = hiringStageValues[candB.hiringStage];
         if (candAstageVal < candBstageVal) { return -1; }
         else if (candAstageVal > candBstageVal) { return 1; }
         else { return 0; }
@@ -364,11 +364,14 @@ class MyCandidates extends Component {
             let headers = ["name", "score", "interest", "stage", "predicted", "skill"].map(sortTerm => {
                 return (
                     <td className={sortTerm}>
-                        {sortTerm.toUpperCase()}
-                        <UpDownArrows
-                            selected={this.state.sortBy===sortTerm}
-                            sortAscending={this.state.sortAscending}
-                        />
+                        <div className="inlineBlock clickableNoUnderline" onClick={() => this.handleSortByChange(sortTerm)}>
+                            {sortTerm.toUpperCase()}
+                            <UpDownArrows
+                                selected={this.state.sortBy===sortTerm}
+                                sortAscending={this.state.sortAscending}
+                                style={{marginLeft: "12px"}}
+                            />
+                        </div>
                     </td>
                 );
             });

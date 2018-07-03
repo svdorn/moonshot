@@ -2613,6 +2613,9 @@ button.link {
     transform: rotate(50deg);
     border-radius: 1px;
 }
+.sortArrow.hidden:before, .sortArrow.hidden:after {
+    display: none;
+}
 
 
 
