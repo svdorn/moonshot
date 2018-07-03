@@ -25,6 +25,7 @@ import AddUserDialog from '../../childComponents/addUserDialog';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
+        style={{width: "150px"}}
         hintText={label}
         floatingLabelText={label}
         {...input}
@@ -334,6 +335,7 @@ class MyCandidates extends Component {
                 <div
                     className={"inlineBlock clickableNoUnderline star " + colorClass}
                     onClick={() => this.rateInterest(candidateId, starNumber)}
+                    style={{marginRight: "5px"}}
                 />
             );
         }
@@ -356,12 +358,7 @@ class MyCandidates extends Component {
             candidateId, interest
         }
         axios.post("/api/business/rateInterest", params)
-        .then(result => {
-            console.log("saved! result.data: ", result.data);
-        })
-        .catch(error => {
-            console.log("error: ", error);
-        });
+        .catch(error => { console.log("error: ", error); });
 
         // set the state so that the result is immediately visible
         let candidates = this.state.candidates.slice(0);
@@ -373,22 +370,6 @@ class MyCandidates extends Component {
 
 
     render() {
-        const style = {
-            searchBar: {
-                width: "80%",
-                margin: "auto",
-                marginTop: "0px",
-                marginBottom: "30px"
-            },
-            anchorOrigin: {
-                vertical: "top",
-                horizontal: "left"
-            },
-            menuLabelStyle: {
-                color: "rgba(255,255,255,.8)"
-            }
-        }
-
         const currentUser = this.props.currentUser;
         if (!currentUser) {
             return (
