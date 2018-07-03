@@ -2518,11 +2518,68 @@ button.link {
     list-style-type: none;
 }
 
+/* gray line before each candidate */
 .myCandidates .candidate::before {
     content: "";
-    width: 80%;
+    width: 80px;
     height: 1px;
     background-color: gray;
+    display: inline-block;
+    position: absolute;
+}
+
+.myCandidates .candidate > div {
+    display: inline-block;
+}
+
+.star {
+   margin: 5px 0;
+   position: relative;
+   display: block;
+   color: red;
+   width: 0px;
+   height: 0px;
+   border-right:  10px solid transparent;
+   border-bottom: 7px  solid white;
+   border-left:   10px solid transparent;
+   -moz-transform:    rotate(35deg);
+   -webkit-transform: rotate(35deg);
+   -ms-transform:     rotate(35deg);
+   -o-transform:      rotate(35deg);
+}
+.star:before {
+   border-bottom: 8px solid white;
+   border-left: 3px solid transparent;
+   border-right: 3px solid transparent;
+   position: absolute;
+   height: 0;
+   width: 0;
+   top: -4.5px;
+   left: -6.5px;
+   display: block;
+   content: '';
+   -webkit-transform: rotate(-35deg);
+   -moz-transform:    rotate(-35deg);
+   -ms-transform:     rotate(-35deg);
+   -o-transform:      rotate(-35deg);
+
+}
+.star:after {
+   position: absolute;
+   display: block;
+   color: red;
+   top: .3px;
+   left: -10.5px;
+   width: 0px;
+   height: 0px;
+   border-right: 10px solid transparent;
+   border-bottom: 7px solid white;
+   border-left: 10px solid transparent;
+   -webkit-transform: rotate(-70deg);
+   -moz-transform:    rotate(-70deg);
+   -ms-transform:     rotate(-70deg);
+   -o-transform:      rotate(-70deg);
+   content: '';
 }
 
 

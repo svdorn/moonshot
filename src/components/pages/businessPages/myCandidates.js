@@ -345,9 +345,29 @@ class MyCandidates extends Component {
 
         if (this.state.sortedCandidates.length !== 0) {
             candidateLis = this.state.sortedCandidates.map(candidate => {
+                let score = null;
+                let predicted = null;
+                let skill = null;
+                if (typeof candidate.scores === "object") {
+                    if (candidate.scores.overall) { score = candidate.scores.overall; }
+                    if (candidate.scores.predicted) { predicted = candidate.scores.predicted; }
+                    if (candidate.scores.skill) { predicted = candidate.scores.skill; }
+                }
                 return (
                     <li className="candidate" key={candidate._id}>
-                        {candidate.name}
+                        <div className="selectCandidateBox" />
+                        <div className="name">{candidate.name}</div>
+                        <div className="score">
+                            {score}
+                        </div>
+                        <div className="interest"></div>
+                        <div className="stage"></div>
+                        <div className="predicted">
+                            {predicted}
+                        </div>
+                        <div className="skill">
+                            {skill}
+                        </div>
                     </li>
                 );
             })
@@ -449,6 +469,8 @@ class MyCandidates extends Component {
                 </MetaTags>
 
                 { tabs }
+
+                <div className="star"/>
 
                 <div className="center">
                     <div className="candidatesAndOptions">
