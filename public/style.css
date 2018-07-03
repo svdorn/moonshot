@@ -2514,18 +2514,18 @@ button.link {
     margin-right: 20px;
 }
 
-.myCandidates .candidateList {
-    list-style-type: none;
+.myCandidates .candidateTable {
+    width: 100%;
+    text-align: left;
+    margin: 15px 20px 10px 10px;
 }
 
-/* gray line before each candidate */
-.myCandidates .candidate::before {
-    content: "";
-    width: 80px;
-    height: 1px;
-    background-color: gray;
-    display: inline-block;
-    position: absolute;
+.myCandidates .candidateTable tr {
+    height: 30px;
+}
+
+.myCandidates .candidateTable td:nth-child(1) {
+    width: 40px;
 }
 
 .myCandidates .candidate > div {
@@ -2582,7 +2582,37 @@ button.link {
    content: '';
 }
 
-
+.upDownArrows {
+    display: inline-block;
+}
+.sortArrow {
+    position: relative;
+    width: 11px;
+    height: 5px;
+}
+.sortArrow.down {
+    transform: rotate(180deg);
+}
+.sortArrow:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    width: 61%;
+    height: 1px;
+    background-color: white;
+    transform: rotate(-50deg);
+    border-radius: 1px;
+}
+.sortArrow:after {
+    content: "";
+    position: absolute;
+    right: 0;
+    width: 62%;
+    height: 1px;
+    background-color: white;
+    transform: rotate(50deg);
+    border-radius: 1px;
+}
 
 
 

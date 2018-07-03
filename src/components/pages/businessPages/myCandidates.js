@@ -20,7 +20,7 @@ import {closeNotification,openAddUserModal} from "../../../actions/usersActions"
 import {Field, reduxForm} from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
-import CandidatePreview from '../../childComponents/candidatePreview';
+import UpDownArrows from "./upDownArrows";
 import AddUserDialog from '../../childComponents/addUserDialog';
 
 const renderTextField = ({input, label, ...custom}) => (
@@ -321,30 +321,19 @@ class MyCandidates extends Component {
             })._id;
         } catch (getPosIdErr) { /* probably just haven't chosen a position yet */ }
 
-        // create the candidate previews
-        let key = 0;
         let self = this;
 
-
         if (this.state.noPositions) {
-            candidatePreviews = (
-                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                    Create a position to select.
-                </div>
-            );
+            // TODO: tell them they have no positions, they have to create one
         }
         if (this.state.position == "" && this.state.loadingDone) {
-            candidatePreviews = (
-                <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
-                    Must select a position.
-                </div>
-            );
+            // TODO: somehow tell them they have to select a position
         }
 
-        let candidateLis = [];
+        let candidateRows = [];
 
         if (this.state.sortedCandidates.length !== 0) {
-            candidateLis = this.state.sortedCandidates.map(candidate => {
+            candidateRows = this.state.sortedCandidates.map(candidate => {
                 let score = null;
                 let predicted = null;
                 let skill = null;
@@ -354,24 +343,50 @@ class MyCandidates extends Component {
                     if (candidate.scores.skill) { predicted = candidate.scores.skill; }
                 }
                 return (
-                    <li className="candidate" key={candidate._id}>
-                        <div className="selectCandidateBox" />
-                        <div className="name">{candidate.name}</div>
-                        <div className="score">
+                    <tr className="candidate" key={candidate._id}>
+                        <td className="selectCandidateBox" />
+                        <td className="name">{candidate.name}</td>
+                        <td className="score">
                             {score}
-                        </div>
-                        <div className="interest"></div>
-                        <div className="stage"></div>
-                        <div className="predicted">
+                        </td>
+                        <td className="interest"></td>
+                        <td className="stage"></td>
+                        <td className="predicted">
                             {predicted}
-                        </div>
-                        <div className="skill">
+                        </td>
+                        <td className="skill">
                             {skill}
-                        </div>
-                    </li>
+                        </td>
+                    </tr>
                 );
-            })
+            });
+
+            let headers = ["name", "score", "interest", "stage", "predicted", "skill"].map(sortTerm => {
+                return (
+                    <td className={sortTerm}>
+                        {sortTerm.toUpperCase()}
+                        <UpDownArrows
+                            selected={this.state.sortBy===sortTerm}
+                            sortAscending={this.state.sortAscending}
+                        />
+                    </td>
+                );
+            });
+
+            // add in the extra area for selecting a candidate
+            headers.unshift(
+                <td className="selectCandidateBox" />
+            )
+
+            // add in the column headers
+            candidateRows.unshift(
+                <tr className="candidate">
+                    { headers }
+                </tr>
+            )
         }
+
+
 
         const sortByOptions = ["Name", "Score"];
         const sortByItems = sortByOptions.map(function (sortBy) {
@@ -451,9 +466,9 @@ class MyCandidates extends Component {
 
         const candidatesContainer = (
             <div className="candidatesContainer">
-                <ul className="candidateList">
-                    {candidateLis}
-                </ul>
+                <table className="candidateTable">
+                    {candidateRows}
+                </table>
             </div>
         )
 
