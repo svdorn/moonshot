@@ -190,7 +190,6 @@ class MyCandidates extends Component {
     // reorder the candidates that are shown and hide/show any that need to be
     // hidden/shown based on options given
     reorder() {
-        console.log("reordering");
         // get a shallow copy of the candidates array
         let sortedCandidates = this.state.candidates.slice(0);
 
@@ -347,7 +346,7 @@ class MyCandidates extends Component {
                         <td className="selectCandidateBox" />
                         <td className="name">{candidate.name}</td>
                         <td className="score">
-                            {score}
+                            {Math.round(score)}
                         </td>
                         <td className="interest"></td>
                         <td className="stage"></td>
