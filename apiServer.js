@@ -114,6 +114,7 @@ app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/employeeQuestions", businessApis.GET_employeeQuestions);
 app.get("/business/positions", businessApis.GET_positions);
 app.get("/business/evaluationResults", businessApis.GET_evaluationResults);
+app.post("/business/rateInterest", businessApis.POST_rateInterest);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);

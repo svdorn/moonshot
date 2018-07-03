@@ -87,13 +87,20 @@ class MyCandidates extends Component {
                 }
 
                 // select this position from the dropdown if it is valid
+                let positionId = undefined;
                 if (firstPositionName) {
-                    let selectedPosition = firstPositionName;
+                    // find the position id from the given name
+                    try {
+                        positionId = positions.find(pos => {
+                            return pos.name === firstPositionName;
+                        })._id;
+                    } catch (getPosIdErr) { /* probably chose the dropdown header */ }
                 }
 
                 self.setState({
-                    positions: positions,
+                    positions,
                     position: firstPositionName,
+                    positionId,
                     loadingDone: true
                 },
                     // search for candidates of first position
@@ -127,7 +134,14 @@ class MyCandidates extends Component {
     }
 
     handlePositionChange = (event, index, position) => {
-        this.setState({position, candidates: [], noCandidates: false}, this.search);
+        // find the position id from the given name
+        let positionId = undefined;
+        try {
+            positionId = this.state.positions.find(pos => {
+                return pos.name === position
+            })._id;
+        } catch (getPosIdErr) { /* probably chose the dropdown header */ }
+        this.setState({position, positionId, candidates: [], noCandidates: false}, this.search);
     };
 
     handleSortByChange(sortBy) {
@@ -305,6 +319,59 @@ class MyCandidates extends Component {
     }
 
 
+    makeStars(candidateId, interest) {
+        // if interest in a candidate is not valid, set to 0 stars
+        if (typeof interest !== "number" || interest < 0 || interest > 5) {
+            interest = 0;
+        }
+        // make sure we have an integer
+        interest = Math.round(interest);
+        // create 5 stars
+        let stars = [];
+        for (let starNumber = 1; starNumber <= 5; starNumber++) {
+            const colorClass = starNumber <= interest ? "white" : "gray";
+            stars.push(
+                <div
+                    className={"inlineBlock clickableNoUnderline star " + colorClass}
+                    onClick={() => this.rateInterest(candidateId, starNumber)}
+                />
+            );
+        }
+        return (
+            <div>
+                {stars}
+            </div>
+        );
+    }
+
+
+    // change how interested the user is in the candidate (number of stars 1-5)
+    rateInterest(candidateId, interest) {
+        console.log("this.state: ", this.state);
+        // set the result in the database
+        const params = {
+            userId: this.props.currentUser._id,
+            verificationToken: this.props.currentUser.verificationToken,
+            positionId: this.state.positionId,
+            candidateId, interest
+        }
+        axios.post("/api/business/rateInterest", params)
+        .then(result => {
+            console.log("saved! result.data: ", result.data);
+        })
+        .catch(error => {
+            console.log("error: ", error);
+        });
+
+        // set the state so that the result is immediately visible
+        let candidates = this.state.candidates.slice(0);
+        const candIndex = candidates.findIndex(cand => { return cand._id.toString() === candidateId.toString() });
+        if (candIndex < 0) { return console.log("Cannot set interest value for candidate that doesn't exist."); }
+        candidates[candIndex].interest = interest;
+        this.setState({ candidates });
+    }
+
+
     render() {
         const style = {
             searchBar: {
@@ -373,7 +440,7 @@ class MyCandidates extends Component {
                         <td className="score">
                             {Math.round(score)}
                         </td>
-                        <td className="interest"></td>
+                        <td className="interest">{this.makeStars(candidate._id, candidate.interest)}</td>
                         <td className="stage"></td>
                         <td className="predicted">
                             {Math.round(predicted)}
@@ -493,9 +560,9 @@ class MyCandidates extends Component {
 
         const candidatesContainer = (
             <div className="candidatesContainer">
-                <table className="candidateTable">
+                <table className="candidateTable"><tbody>
                     {candidateRows}
-                </table>
+                </tbody></table>
             </div>
         )
 
@@ -511,8 +578,6 @@ class MyCandidates extends Component {
                 </MetaTags>
 
                 { tabs }
-
-                <div className="star"/>
 
                 <div className="center">
                     <div className="candidatesAndOptions">

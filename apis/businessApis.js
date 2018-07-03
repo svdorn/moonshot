@@ -30,6 +30,7 @@ const businessApis = {
     POST_updateHiringStage,
     POST_answerQuestion,
     POST_emailInvites,
+    POST_rateInterest,
     GET_candidateSearch,
     GET_employeeSearch,
     GET_employeeQuestions,
@@ -273,6 +274,45 @@ async function POST_emailInvites(req, res) {
     }
 
     // successfully sent all the emails
+    return res.json(true);
+}
+
+
+// rates how interested the business is in the candidate (number of stars 1-5)
+async function POST_rateInterest(req, res) {
+    const bizUserId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const candidateId = sanitize(req.body.candidateId);
+    const interest = sanitize(req.body.interest);
+    const positionId = sanitize(req.body.positionId);
+
+    // make sure the interest value is valid
+    if (typeof interest !== "number" || interest < 1 || interest > 5) {
+        return res.status(400).send("Invalid interest level.");
+    }
+
+    // verify biz user, get candidate, find and verify candidate's position
+    let bizUser, candidate, userPositionIndex;
+    const profileUrl = undefined;
+    try {
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, candidateId, profileUrl);
+        bizUser = results.bizUser; candidate = results.user; candidatePositionIndex = results.userPositionIndex;
+    } catch(error) {
+        console.log("Error verifying business user or getting candidate position index: ", error);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // update the business' interest in the candidate, making sure it is an integer
+    candidate.positions[candidatePositionIndex].interest = Math.round(interest);
+
+    // save the user with the new info
+    try { await candidate.save() }
+    catch (saveCandidateError) {
+        console.log("Error saving candidate with new interest level: ", saveCandidateError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // return successfully
     return res.json(true);
 }
 
@@ -587,6 +627,11 @@ async function POST_updateHiringStage(req, res) {
 // the position within the positions array of the candidate/employee
 async function verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl) {
     return new Promise(async function(resolve, reject) {
+        if (!bizUserId) { return reject("No bizUserId."); }
+        else if (!verificationToken) { return reject("No business user verificationToken."); }
+        else if (!positionId) { return reject("No positionId."); }
+        else if (!userId && !profileUrl) { return reject("Can't be missing both userId and profileUrl."); }
+
         // find the user and the candidate
         let bizUser, user;
         // search by id if possible, profile url otherwise
