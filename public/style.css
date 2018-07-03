@@ -2504,14 +2504,25 @@ button.link {
     box-shadow:         0px 0px 6px 3px #00000073;
 }
 
-.topOptions > div:nth-child(1) {
+.myCandidates .topOptions > div:nth-child(1) {
     margin-right: 50px;
 }
-.topOptions > div:nth-child(2) {
+.myCandidates .topOptions > div:nth-child(2) {
     margin-right: 50px;
 }
-.topOptions > div:nth-child(3) {
+.myCandidates .topOptions > div:nth-child(3) {
     margin-right: 20px;
+}
+
+.myCandidates .candidateList {
+    list-style-type: none;
+}
+
+.myCandidates .candidate::before {
+    content: "";
+    width: 80%;
+    height: 1px;
+    background-color: gray;
 }
 
 

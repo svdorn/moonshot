@@ -46,14 +46,20 @@ class MyCandidates extends Component {
             sortAscending: true,
             hideDismissed: false,
             hideHired: false,
+            // unordered candidates list
             candidates: [],
+            // the candidates ordered by the user
+            sortedCandidates: [],
+            // the positions the company has
             positions: [],
+            // can be All, Reviewed, Not Reviewed
             tab: "All",
             positionNameFromUrl,
             // true if the business has no positions associated with it
             noPositions: false,
             // true if the position has no candidates associated with it
             noCandidates: false,
+            // finished loading in the positions
             loadingDone: false
         }
     }
@@ -177,9 +183,112 @@ class MyCandidates extends Component {
 
     // change hide dismissed or hide hired
     handleCheckMarkClick(checkMarkField) {
+        console.log("clicked");
         let state = JSON.parse(JSON.stringify(this.state));
         state[checkMarkField] = !state[checkMarkField];
         this.setState(state, this.reorder);
+    }
+
+
+    // reorder the candidates that are shown and hide/show any that need to be
+    // hidden/shown based on options given
+    reorder() {
+        console.log("reordering");
+        // get a shallow copy of the candidates array
+        let sortedCandidates = this.state.candidates.slice(0);
+
+        // remove candidates that don't match filtering criteria
+        sortedArray.filter(filterCandidates);
+
+        // sort the array
+        sortedArray.sort(compareCandidates);
+
+        // flip the array if sorting in descending order
+        if (!this.state.sortAscending) {
+            sortedCandidates.reverse();
+        }
+
+        // set the state so the candidates can be displayed in order
+        this.setState({ sortedCandidates });
+    }
+
+
+    // filter candidates by given user-given filters
+    filterCandidate(cand) {
+        // filter by tab if not on "All"
+        if (tab === "Reviewed" && cand.reviewed !== true) { return false; }
+        else if (tab === "Not Reviewed" && cand.reviewed !== false) { return false; }
+
+        // filter by dismissed and hired status if wanted
+        if (this.state.hideDismissed && cand.isDismissed) { return false; }
+        if (this.state.hideHired && cand.hiringStage === "Hired") { return false; }
+
+        // filter by name if name search term provided
+        if (this.state.searchTerm) {
+            const nameRegExp = new RegExp(this.state.searchTerm, "i");
+            if (!nameRegExp.test(cand.name)) { return false; }
+        }
+
+        // candidate matches all filters
+        return true;
+    }
+
+
+    // function to compare two candidates based on the sorting options
+    compareCandidates(candA, candB) {
+        switch (this.state.sortBy) {
+            case "name":
+                if (candA.name < candB.name) { return -1; }
+                else if (candA.name > candB.name) { return 1; }
+                else { return 0; }
+                break;
+            case "interest":
+                if (!candA.interest && !candB.interest) { return 0; }
+                else if (!candA.interest || candA.interest < candB.interest) { return -1; }
+                else if (!candB.interest || candA.interest > candB.interest) { return 1; }
+                else { return 0; }
+                break;
+            case "score": return compareByScore(candA, candB, "overall"); break;
+            case "predicted": return compareByScore(candA, candB, "predicted"); break;
+            case "skill": return compareByScore(candA, candB, "overallSkill"); break;
+            case "stage": return compareByStage(candA, candB); break;
+            // if an invalid sort criteria is given, all candidates are of equal sorting value
+            default: return 0; break;
+        }
+    }
+
+
+    // compare two candidates by their stage in the hiring process
+    compareByStage(candA, candB) {
+        // lack of hiring stage < hiring stage exists
+        const candAhasHiringStage = !!candA.hiringStage;
+        const candBhasHiringStage = !!candB.hiringStage;
+        if (!candAhasHiringStage && !candBhasHiringStage) { return 0; }
+        else if (!candAhasHiringStage) { return -1; }
+        else if (!candBhasHiringStage) { return 1; }
+        // dismissed < any hiring stage
+        if (candA.isDismissed && candB.isDismissed) { return 0; }
+        else if (candA.isDismissed) { return -1; }
+        else if (candB.isDismissed) { return 1; }
+        // both candidates have a hiring stage
+        const candAstageVal = hiringStageValues(candA.hiringStage);
+        const candBstageVal = hiringStageValues(candB.hiringStage);
+        if (candAstageVal < candBstageVal) { return -1; }
+        else if (candAstageVal > candBstageVal) { return 1; }
+        else { return 0; }
+    }
+
+
+    // compare two candidates by one of the scores they recieved for the evaluation
+    compareByScore(candA, candB, scoreType) {
+        const candAhasScore = typeof candA.scores === "object" && typeof candA.scores[scoreType] === "number";
+        const candBhasScore = typeof candB.scores === "object" && typeof candB.scores[scoreType] === "number";
+        if (!candAhasScore && !candBhasScore) { return 0; }
+        else if (!candAhasScore) { return -1; }
+        else if (!candBhasScore) { return 1; }
+        if (candA.scores[scoreType] < candB.scores[scoreType]) { return -1; }
+        else if (candA.scores[scoreType] > candB.scores[scoreType]) { return 1; }
+        else { return 0; }
     }
 
 
@@ -238,9 +347,9 @@ class MyCandidates extends Component {
         let candidateLis = [];
 
         if (this.state.candidates.length !== 0) {
-            candidateLis = this.state.candidates.map(candidate => {
+            candidateLis = this.state.sortedCandidates.map(candidate => {
                 return (
-                    <li>
+                    <li className="candidate">
                         {candidate.name}
                     </li>
                 );
@@ -300,7 +409,7 @@ class MyCandidates extends Component {
                     <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleCheckMarkClick("hideDismissed")}>
                         <img
                             alt="Checkmark icon"
-                            className={"checkMark" + this.state.keepMeLoggedIn}
+                            className={"checkMark" + this.state.hideDismissed}
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                         />
                     </div>
@@ -312,7 +421,7 @@ class MyCandidates extends Component {
                     <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleCheckMarkClick("hideHired")}>
                         <img
                             alt="Checkmark icon"
-                            className={"checkMark" + this.state.keepMeLoggedIn}
+                            className={"checkMark" + this.state.hideHired}
                             src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                         />
                     </div>
@@ -325,7 +434,9 @@ class MyCandidates extends Component {
 
         const candidatesContainer = (
             <div className="candidatesContainer">
-
+                <ul className="candidateList">
+                    {candidateLis}
+                </ul>
             </div>
         )
 
@@ -354,6 +465,18 @@ class MyCandidates extends Component {
         );
     }
 }
+
+
+// how far along in the hiring process each of the hiring stages is relative to the others
+const hiringStageValues = {
+    "Dismissed": 0,
+    "Uncontacted": 1,
+    "Contacted": 2,
+    "Interviewing": 3,
+    "Offered": 4,
+    "Hired": 5
+}
+
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({

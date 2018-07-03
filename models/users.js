@@ -364,6 +364,8 @@ const usersSchema = mongoose.Schema({
         hiringStage: String,
         // if the candidate is no longer being considered for the role
         isDismissed: Boolean,
+        // whether the candidate has been reviewed by an account admin or manager
+        reviewed: Boolean,
         // dates/times the hiring stage of the candidate was changed for this position
         hiringStageChanges: [{
            // what the hiring stage was changed to
