@@ -60,7 +60,9 @@ class MyCandidates extends Component {
             // true if the position has no candidates associated with it
             noCandidates: false,
             // finished loading in the positions
-            loadingDone: false
+            loadingDone: false,
+            // candidates that have been selected to be moved
+            selectedCandidates: {}
         }
     }
 
@@ -288,6 +290,21 @@ class MyCandidates extends Component {
     }
 
 
+    // select or deselect a candidate to be moved to a different tab
+    handleSelectCandidate(candidateId) {
+        // what the candidate's selected status should be set to
+        let setTo = true;
+        // if the candidate has already been selected, set their selected status to undefined
+        if (this.state.selectedCandidates[candidateId] === true) { setTo = undefined; }
+        // create a shallow copy of the selected candidates object
+        let selectedCandidates = Object.assign({}, this.state.selectedCandidates);
+        // set the candidate's selected status
+        selectedCandidates[candidateId] = setTo;
+        // set the state to update the checkmarks
+        this.setState({ selectedCandidates });
+    }
+
+
     render() {
         const style = {
             searchBar: {
@@ -343,7 +360,15 @@ class MyCandidates extends Component {
                 }
                 return (
                     <tr className="candidate" key={candidate._id}>
-                        <td className="selectCandidateBox" />
+                        <td className="selectCandidateBox inlineBlock" >
+                            <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleSelectCandidate(candidate._id)}>
+                                <img
+                                    alt="Checkmark icon"
+                                    className={"checkMark" + !!this.state.selectedCandidates[candidate._id]}
+                                    src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                                />
+                            </div>
+                        </td>
                         <td className="name">{candidate.name}</td>
                         <td className="score">
                             {Math.round(score)}
