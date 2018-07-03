@@ -351,10 +351,10 @@ class MyCandidates extends Component {
                         <td className="interest"></td>
                         <td className="stage"></td>
                         <td className="predicted">
-                            {predicted}
+                            {Math.round(predicted)}
                         </td>
                         <td className="skill">
-                            {skill}
+                            {Math.round(skill)}
                         </td>
                     </tr>
                 );
