@@ -31,6 +31,7 @@ const businessApis = {
     POST_answerQuestion,
     POST_emailInvites,
     POST_rateInterest,
+    POST_changeHiringStage,
     POST_moveCandidate,
     POST_sawMyCandidatesInfoBox,
     GET_candidateSearch,
@@ -313,6 +314,76 @@ async function POST_rateInterest(req, res) {
         console.log("Error saving candidate with new interest level: ", saveCandidateError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
+
+    // return successfully
+    return res.json(true);
+}
+
+
+// changes hiring stage of a candidate
+async function POST_changeHiringStage(req, res) {
+    const bizUserId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const candidateId = sanitize(req.body.candidateId);
+    const hiringStage = sanitize(req.body.hiringStage);
+    const positionId = sanitize(req.body.positionId);
+
+    // make sure the interest value is valid
+    if (!["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Hired"].includes(hiringStage)) {
+        return res.status(400).send("Invalid hiring stage.");
+    }
+
+    // verify biz user, get candidate, find and verify candidate's position
+    let bizUser, candidate, userPositionIndex;
+    const profileUrl = undefined;
+    try {
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, candidateId, profileUrl);
+        bizUser = results.bizUser; candidate = results.user; candidatePositionIndex = results.userPositionIndex;
+    } catch(error) {
+        console.log("Error verifying business user or getting candidate position index: ", error);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // if dismissing a candidate
+    let hiringStageChanges = candidate.positions[candidatePositionIndex].hiringStageChanges;
+    // the hiring stage before it was changed
+    let mostRecentHiringStage;
+    // if there isn't a history of hiring stage changes, make one
+    if (!Array.isArray(hiringStageChanges) || hiringStageChanges.length === 0) {
+        hiringStageChanges = [];
+        mostRecentHiringStage = "Not Contacted";
+    }
+    // otherwise we can know what the most recent stage was
+    else { mostRecentHiringStage = hiringStageChanges[hiringStageChanges.length - 1].hiringStage; }
+    // process is a bit different for dismissing candidates
+    if (hiringStage === "Dismissed") {
+        candidate.positions[candidatePositionIndex].isDismissed = true;
+        hiringStageChanges.push({
+            isDismissed: true,
+            hiringStage: hiringStageChanges[hiringStageChanges.length - 1].hiringStage,
+            dateChanged: new Date()
+        });
+    }
+    // not dismissing the candidate
+    else {
+        console.log("changing to ", hiringStage);
+        candidate.positions[candidatePositionIndex].hiringStage = hiringStage;
+        hiringStageChanges.push({
+            isDismissed: false,
+            hiringStage,
+            dateChanged: new Date()
+        });
+    }
+    // update the business' interest in the candidate, making sure it is an integer
+    candidate.positions[candidatePositionIndex].hiringStageChanges = hiringStageChanges;
+
+    // save the user with the new info
+    try { console.log(await candidate.save()); }
+    catch (saveCandidateError) {
+        console.log("Error saving candidate with new interest level: ", saveCandidateError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
 
     // return successfully
     return res.json(true);

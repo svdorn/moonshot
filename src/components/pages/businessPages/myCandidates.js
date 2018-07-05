@@ -370,6 +370,49 @@ class MyCandidates extends Component {
     }
 
 
+    // creat the dropdown for a candidate's hiring stage
+    makeHiringStage(candidateId, hiringStage, isDismissed) {
+        const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Hired"];
+        if (isDismissed) { hiringStage = "Dismissed"; }
+
+        const stages = stageNames.map(stage => {
+            return <MenuItem value={stage} primaryText={stage} />
+        });
+
+        return (
+            <DropDownMenu value={hiringStage}
+                          onChange={(event, index, newHiringStage) => this.handleChangeHiringStage(candidateId, newHiringStage)}
+                          labelStyle={style.labelStyle}
+                          anchorOrigin={style.anchorOrigin}
+                          style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
+            >
+                {stages}
+            </DropDownMenu>
+        );
+    }
+
+
+    // change a candidate's hiring stage
+    handleChangeHiringStage(candidateId, hiringStage) {
+        // CHANGE HIRING STAGE IN BACK END
+        const params = {
+            userId: this.props.currentUser._id,
+            verificationToken: this.props.currentUser.verificationToken,
+            positionId: this.state.positionId,
+            candidateId, hiringStage
+        }
+        axios.post("/api/business/changeHiringStage", params)
+        .catch(error => { console.log("error: ", error); });
+
+        // CHANGE HIRING STAGE IN FRONT END
+        let candidates = this.state.candidates.slice(0);
+        const candIndex = candidates.findIndex(cand => { return cand._id.toString() === candidateId.toString() });
+        if (candIndex < 0) { return console.log("Cannot set interest value for candidate that doesn't exist."); }
+        candidates[candIndex].hiringStage = hiringStage;
+        this.setState({ candidates });
+    }
+
+
     // move the candidate to Reviewed, Favorites, or Not Reviewed
     handleMoveTo = (event, index, moveTo) => {
         // check for valid input
@@ -510,7 +553,7 @@ class MyCandidates extends Component {
                             {Math.round(score)}
                         </td>
                         <td className="interest">{this.makeStars(candidate._id, candidate.interest)}</td>
-                        <td className="stage"></td>
+                        <td className="stage">{this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}</td>
                         <td className="predicted">
                             {Math.round(predicted)}
                         </td>
@@ -581,14 +624,7 @@ class MyCandidates extends Component {
             </Tabs>
         );
 
-        // the top options such as search and hide hired candidates
-        const anchorOrigin = {
-            vertical: "top",
-            horizontal: "left"
-        };
-        const labelStyle = {
-            color: "rgba(255,255,255,.8)"
-        };
+
         const topOptions = (
             <div className="topOptions">
                 <Field
@@ -606,8 +642,8 @@ class MyCandidates extends Component {
                 <div className="inlineBlock">
                     <DropDownMenu value={"Move To"}
                                   onChange={this.handleMoveTo}
-                                  labelStyle={labelStyle}
-                                  anchorOrigin={anchorOrigin}
+                                  labelStyle={style.labelStyle}
+                                  anchorOrigin={style.anchorOrigin}
                                   style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
                     >
                         <MenuItem value={"Move To"} primaryText="Move To"/>
@@ -650,7 +686,10 @@ class MyCandidates extends Component {
                     {candidateRows}
                 </tbody></table>
             </div>
-        )
+        );
+
+
+        console.log("candidates: ", this.state.candidates);
 
         return (
             <div className="jsxWrapper blackBackground fillScreen myCandidates whiteText" style={{paddingBottom: "20px"}} ref='myCandidates'>
@@ -689,6 +728,18 @@ const hiringStageValues = {
     "Interviewing": 3,
     "Offered": 4,
     "Hired": 5
+}
+
+
+const style = {
+    // the top options such as search and hide hired candidates
+    anchorOrigin: {
+        vertical: "top",
+        horizontal: "left"
+    },
+    labelStyle: {
+        color: "rgba(255,255,255,.8)"
+    }
 }
 
 
