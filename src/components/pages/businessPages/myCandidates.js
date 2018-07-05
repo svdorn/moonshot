@@ -60,8 +60,10 @@ class MyCandidates extends Component {
             noPositions: false,
             // true if the position has no candidates associated with it
             noCandidates: false,
-            // finished loading in the positions
-            loadingDone: false,
+            // if we are currently loading the positions
+            loadingPositions: true,
+            // if we are currently loading candidates
+            loadingCandidates: true,
             // candidates that have been selected to be moved
             selectedCandidates: {}
         }
@@ -102,15 +104,17 @@ class MyCandidates extends Component {
                     positions,
                     position: firstPositionName,
                     positionId,
-                    loadingDone: true
+                    loadingPositions: false,
+                    loadingCandidates: true
                 },
                     // search for candidates of first position
-                    self.search
+                    self.findCandidates
                 );
             } else {
                 self.setState({
                     noPositions: true,
-                    loadingDone: true
+                    loadingPositions: false,
+                    loadingCandidates: false
                 })
             }
         })
@@ -142,7 +146,13 @@ class MyCandidates extends Component {
                 return pos.name === position
             })._id;
         } catch (getPosIdErr) { /* probably chose the dropdown header */ }
-        this.setState({position, positionId, candidates: [], noCandidates: false}, this.search);
+        this.setState({
+            position,
+            positionId,
+            candidates: [],
+            noCandidates: false,
+            loadingCandidates: true
+        }, this.findCandidates);
     };
 
     handleSortByChange(sortBy) {
@@ -160,7 +170,7 @@ class MyCandidates extends Component {
         this.props.openAddUserModal();
     }
 
-    search() {
+    findCandidates() {
         // need a position to search for
         if (!this.state.noPositions && this.state.position) {
             axios.get("/api/business/candidateSearch", {
@@ -177,9 +187,17 @@ class MyCandidates extends Component {
                 // make sure component is mounted before changing state
                 if (this.refs.myCandidates) {
                     if (res.data && res.data.length > 0) {
-                        this.setState({ candidates: res.data, noCandidates: false }, this.reorder);
+                        this.setState({
+                            candidates: res.data,
+                            noCandidates: false,
+                            loadingCandidates: false
+                        }, this.reorder);
                     } else {
-                        this.setState({noCandidates: true, candidates: []})
+                        this.setState({
+                            noCandidates: true,
+                            candidates: [],
+                            loadingCandidates: false
+                        })
                     }
                 }
             }).catch(function (err) {
@@ -252,8 +270,8 @@ class MyCandidates extends Component {
     compareCandidates(candA, candB) {
         switch (this.state.sortBy) {
             case "name":
-                if (candA.name < candB.name) { return -1; }
-                else if (candA.name > candB.name) { return 1; }
+                if (candA.name > candB.name) { return -1; }
+                else if (candA.name < candB.name) { return 1; }
                 else { return 0; }
                 break;
             case "interest":
@@ -491,19 +509,136 @@ class MyCandidates extends Component {
     }
 
 
+    // record that the user has seen the information box at the top of the screen
     seeInfoBox() {
         this.props.sawMyCandidatesInfoBox(this.props.currentUser._id, this.props.currentUser.verificationToken);
     }
 
 
-    render() {
-        const currentUser = this.props.currentUser;
-        if (!currentUser) {
+    // creates the table with all the candidates
+    createCandidatesTable(positionId) {
+        // copy this
+        const self = this;
+
+        // will contain the table of candidates
+        let candidatesContainer = null;
+
+        // loading in positions or candidates
+        if (this.state.loadingPositions || this.state.loadingCandidates) {
             return (
-                <div className="blackBackground fillScreen" />
-            );
+                <div>
+                    <CircularProgress color="#FB553A" style={style.circularProgress} />
+                </div>
+            )
         }
 
+        else if (this.state.noPositions) {
+            return (
+                <div>
+                    Your business has no open evaluations.<br/>
+                    Contact us at support@moonshotinsights.io to get your first one set up.
+                </div>
+            );
+        }
+        else if (this.state.position == "" && !this.state.loadingPositions) {
+            return (
+                <div>
+                    Select a position.
+                </div>
+            );
+        }
+        else if (this.state.candidates.length === 0) {
+            return (
+                <div>
+                    No candidates have started this evaluation.
+                </div>
+            )
+        }
+        // if there are candidates in this position, but none meet the criteria
+        else if (this.state.sortedCandidates.length === 0) {
+            return (
+                <div>
+                    No candidates meet these criteria.
+                </div>
+            )
+        }
+
+        // there are candidates that meet these criteria, make them
+        let candidateRows = [];
+
+        candidateRows = this.state.sortedCandidates.map(candidate => {
+            let score = null;
+            let predicted = null;
+            let skill = null;
+            if (typeof candidate.scores === "object") {
+                if (candidate.scores.overall) { score = candidate.scores.overall; }
+                if (candidate.scores.predicted) { predicted = candidate.scores.predicted; }
+                if (candidate.scores.skill) { skill = candidate.scores.skill; }
+            }
+            return (
+                <tr className="candidate" key={candidate._id}>
+                    <td className="selectCandidateBox inlineBlock" >
+                        <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleSelectCandidate(candidate._id)}>
+                            <img
+                                alt="Checkmark icon"
+                                className={"checkMark" + !!this.state.selectedCandidates[candidate._id]}
+                                src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                            />
+                        </div>
+                    </td>
+                    <td className="name">{candidate.name}</td>
+                    <td className="score">
+                        {Math.round(score)}
+                    </td>
+                    <td className="interest">{this.makeStars(candidate._id, candidate.interest)}</td>
+                    <td className="stage">{this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}</td>
+                    <td className="predicted">
+                        {Math.round(predicted)}
+                    </td>
+                    <td className="skill">
+                        {Math.round(skill)}
+                    </td>
+                </tr>
+            );
+        });
+
+        let headers = ["name", "score", "interest", "stage", "predicted", "skill"].map(sortTerm => {
+            return (
+                <td className={sortTerm} key={"tableHeader" + sortTerm}>
+                    <div className="inlineBlock clickableNoUnderline" onClick={() => this.handleSortByChange(sortTerm)}>
+                        {sortTerm.toUpperCase()}
+                        <UpDownArrows
+                            selected={this.state.sortBy===sortTerm}
+                            sortAscending={this.state.sortAscending}
+                            style={{marginLeft: "12px"}}
+                        />
+                    </div>
+                </td>
+            );
+        });
+
+        // add in the extra area for selecting a candidate
+        headers.unshift(
+            <td className="selectCandidateBox" key={`selectAreaBlankHeader`}/>
+        )
+
+        // add in the column headers
+        candidateRows.unshift(
+            <tr className="candidate" key={`tableHeaders`}>
+                { headers }
+            </tr>
+        );
+
+        return (
+            <table className="candidateTable"><tbody>
+                {candidateRows}
+            </tbody></table>
+        );
+    }
+
+
+    render() {
+        const currentUser = this.props.currentUser;
         // find the id of the currently selected position
         let positionId = "";
         try {
@@ -513,111 +648,6 @@ class MyCandidates extends Component {
         } catch (getPosIdErr) { /* probably just haven't chosen a position yet */ }
 
         let self = this;
-
-        if (this.state.noPositions) {
-            // TODO: tell them they have no positions, they have to create one
-        }
-        if (this.state.position == "" && this.state.loadingDone) {
-            // TODO: somehow tell them they have to select a position
-        }
-
-        let infoBox = null;
-        if (!this.props.currentUser.sawMyCandidatesInfoBox) {
-            infoBox = (
-                <div className="center">
-                    <div className="myCandidatesInfoBox font16px font12pxUnder500">
-                        Click any candidate name to see results.<br/>
-                        Hover over any category for a description.
-                        <div className="x" onClick={this.seeInfoBox.bind(this)}>x</div>
-                    </div>
-                </div>
-            )
-        }
-
-        let candidateRows = [];
-
-        if (this.state.sortedCandidates.length !== 0) {
-            candidateRows = this.state.sortedCandidates.map(candidate => {
-                let score = null;
-                let predicted = null;
-                let skill = null;
-                if (typeof candidate.scores === "object") {
-                    if (candidate.scores.overall) { score = candidate.scores.overall; }
-                    if (candidate.scores.predicted) { predicted = candidate.scores.predicted; }
-                    if (candidate.scores.skill) { skill = candidate.scores.skill; }
-                }
-                return (
-                    <tr className="candidate" key={candidate._id}>
-                        <td className="selectCandidateBox inlineBlock" >
-                            <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleSelectCandidate(candidate._id)}>
-                                <img
-                                    alt="Checkmark icon"
-                                    className={"checkMark" + !!this.state.selectedCandidates[candidate._id]}
-                                    src={"/icons/CheckMarkRoundedWhite" + this.props.png}
-                                />
-                            </div>
-                        </td>
-                        <td className="name">{candidate.name}</td>
-                        <td className="score">
-                            {Math.round(score)}
-                        </td>
-                        <td className="interest">{this.makeStars(candidate._id, candidate.interest)}</td>
-                        <td className="stage">{this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}</td>
-                        <td className="predicted">
-                            {Math.round(predicted)}
-                        </td>
-                        <td className="skill">
-                            {Math.round(skill)}
-                        </td>
-                    </tr>
-                );
-            });
-
-            let headers = ["name", "score", "interest", "stage", "predicted", "skill"].map(sortTerm => {
-                return (
-                    <td className={sortTerm} key={"tableHeader" + sortTerm}>
-                        <div className="inlineBlock clickableNoUnderline" onClick={() => this.handleSortByChange(sortTerm)}>
-                            {sortTerm.toUpperCase()}
-                            <UpDownArrows
-                                selected={this.state.sortBy===sortTerm}
-                                sortAscending={this.state.sortAscending}
-                                style={{marginLeft: "12px"}}
-                            />
-                        </div>
-                    </td>
-                );
-            });
-
-            // add in the extra area for selecting a candidate
-            headers.unshift(
-                <td className="selectCandidateBox" key={`selectAreaBlankHeader`}/>
-            )
-
-            // add in the column headers
-            candidateRows.unshift(
-                <tr className="candidate" key={`tableHeaders`}>
-                    { headers }
-                </tr>
-            )
-        }
-
-        const sortByOptions = ["Name", "Score"];
-        const sortByItems = sortByOptions.map(function (sortBy) {
-            return <MenuItem value={sortBy} primaryText={sortBy} key={sortBy}/>
-        })
-
-        const positions = this.state.positions;
-        const positionItems = positions.map(function (position) {
-            return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
-        })
-
-        // the hint that shows up when search bar is in focus
-        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
-        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" }
-
-        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" }
-        const searchFloatingLabelStyle = searchHintStyle;
-        const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
         const tabs = (
             <Tabs
@@ -633,6 +663,45 @@ class MyCandidates extends Component {
             </Tabs>
         );
 
+        // lets the user switch between positions
+        const positions = this.state.positions;
+        const positionItems = positions.map(function (position) {
+            return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
+        });
+        const positionSelector = (
+            <DropDownMenu value={this.state.position}
+                          onChange={this.handlePositionChange}
+                          labelStyle={style.labelStyle}
+                          anchorOrigin={style.anchorOrigin}
+                          style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
+            >
+                <MenuItem value={""} primaryText="Position"/>
+                <Divider/>
+                {positionItems}
+            </DropDownMenu>
+        );
+
+        // create the box at the top of the screen that shows only for new users
+        // and tells them how to see candidate results
+        let infoBox = null;
+        if (!this.props.currentUser.sawMyCandidatesInfoBox) {
+            infoBox = (
+                <div className="center">
+                    <div className="myCandidatesInfoBox font16px font12pxUnder500">
+                        Click any candidate name to see results.<br/>
+                        Hover over any category for a description.
+                        <div className="x" onClick={this.seeInfoBox.bind(this)}>x</div>
+                    </div>
+                </div>
+            )
+        }
+
+        // the hint that shows up when search bar is in focus
+        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
+        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" }
+        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" }
+        const searchFloatingLabelStyle = searchHintStyle;
+        const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
         const topOptions = (
             <div className="topOptions">
@@ -689,17 +758,6 @@ class MyCandidates extends Component {
             </div>
         );
 
-        const candidatesContainer = (
-            <div className="candidatesContainer">
-                <table className="candidateTable"><tbody>
-                    {candidateRows}
-                </tbody></table>
-            </div>
-        );
-
-
-        console.log("candidates: ", this.state.candidates);
-
         return (
             <div className="jsxWrapper blackBackground fillScreen myCandidates whiteText" style={{paddingBottom: "20px"}} ref='myCandidates'>
                 {this.props.currentUser.userType == "accountAdmin" ?
@@ -713,12 +771,16 @@ class MyCandidates extends Component {
 
                 { tabs }
 
+                { positionSelector }
+
                 { infoBox }
 
                 <div className="center">
                     <div className="candidatesAndOptions">
                         { topOptions }
-                        { candidatesContainer }
+                        <div className="candidatesContainer">
+                            { this.createCandidatesTable(positionId) }
+                        </div>
                     </div>
                 </div>
 
@@ -748,7 +810,8 @@ const style = {
     },
     labelStyle: {
         color: "rgba(255,255,255,.8)"
-    }
+    },
+    circularProgress: {marginTop: "20px"}
 }
 
 
