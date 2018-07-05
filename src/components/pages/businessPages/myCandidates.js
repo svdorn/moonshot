@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import {
     TextField,
     DropDownMenu,
+    //Select,
     MenuItem,
     Divider,
     Toolbar,
@@ -188,19 +189,18 @@ class MyCandidates extends Component {
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
-                // make sure component is mounted before changing state
-                if (this.refs.myCandidates) {
-                    if (res.data && res.data.length > 0) {
-                        this.setState({
-                            candidates: res.data,
-                            loadingCandidates: false
-                        }, this.reorder);
-                    } else {
-                        this.setState({
-                            candidates: [],
-                            loadingCandidates: false
-                        })
-                    }
+                if (res.data && res.data.length > 0) {
+                    this.setState({
+                        candidates: res.data,
+                        loadingCandidates: false
+                    }, () => {
+                        this.reorder()
+                    });
+                } else {
+                    this.setState({
+                        candidates: [],
+                        loadingCandidates: false
+                    })
                 }
             }).catch(function (err) {
                 console.log("ERROR: ", err);
@@ -391,28 +391,71 @@ class MyCandidates extends Component {
 
 
     // creat the dropdown for a candidate's hiring stage
+    // makeHiringStage(candidateId, hiringStage, isDismissed) {
+    //     const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"];
+    //     // if no stage is recorded, assume the candidate has not been contacted
+    //     if (!hiringStage) { hiringStage = "Not Contacted" }
+    //     // if the candidate is dismissed, show that
+    //     if (isDismissed) { hiringStage = "Dismissed"; }
+    //
+    //     // create the stage name menu items
+    //     const stages = stageNames.map(stage => {
+    //         return <option value={stage} key={`${candidateId}hiringStage${stage}`} >{ stage }</option>
+    //     });
+    //
+    //     // return (
+    //     //     <Select value={hiringStage}
+    //     //         onChange={(event, index, newHiringStage) => this.handleChangeHiringStage(candidateId, newHiringStage)}
+    //     //     >
+    //     //         {stages}
+    //     //     </Select>
+    //     // );
+    //     return (
+    //         <Select
+    //             native
+    //             value={hiringStage}
+    //             onChange={this.testFunc}
+    //             inputProps={{
+    //                 name: `hiringStage${candidateId}`,
+    //                 id: `hiringStage${candidateId}`
+    //             }}
+    //         >
+    //             { stages }
+    //         </Select>
+    //     );
+    // }
+
+
     makeHiringStage(candidateId, hiringStage, isDismissed) {
-        const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"];
-        // if no stage is recorded, assume the candidate has not been contacted
-        if (!hiringStage) { hiringStage = "Not Contacted" }
-        // if the candidate is dismissed, show that
-        if (isDismissed) { hiringStage = "Dismissed"; }
-
-        // create the stage name menu items
-        const stages = stageNames.map(stage => {
-            return <MenuItem value={stage} primaryText={stage} key={`${candidateId}hiringStage${stage}`} />
-        });
-
+        // return (
+        //     <Select
+        //         value={this.state.age}
+        //         onChange={this.handleChange}
+        //         displayEmpty
+        //         name="age"
+        //     >
+        //         <MenuItem value="">
+        //             <em>None</em>
+        //         </MenuItem>
+        //         <MenuItem value={10}>Ten</MenuItem>
+        //         <MenuItem value={20}>Twenty</MenuItem>
+        //         <MenuItem value={30}>Thirty</MenuItem>
+        //   </Select>
+        // )
         return (
-            <DropDownMenu value={hiringStage}
-                          onChange={(event, index, newHiringStage) => this.handleChangeHiringStage(candidateId, newHiringStage)}
-                          labelStyle={style.labelStyle}
-                          anchorOrigin={style.anchorOrigin}
-                          style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
-            >
-                {stages}
-            </DropDownMenu>
+            null
         );
+    }
+
+
+    handleChange = event => {
+    //this.setState({ [event.target.name]: event.target.value });
+        console.log("event.target.name: ", event.target.value);
+    };
+
+
+    testFunc = name => event => {
+        console.log("name: ", name, "event.target.value: ", event.target.value);
     }
 
 
@@ -651,18 +694,38 @@ class MyCandidates extends Component {
 
         let self = this;
 
+        // const tabs = (
+        //     <Tabs
+        //         inkBarStyle={{background: 'white'}}
+        //         className="settingsTabs"
+        //         value={this.state.tab}
+        //         onChange={this.handleTabChange}
+        //     >
+        //         <Tab label="All" value="All" style={{color:"white"}} />
+        //         <Tab label="Favorites" value="Favorites" style={{color:"white"}} />
+        //         <Tab label="Reviewed" value="Reviewed" style={{color:"white"}} />
+        //         <Tab label="Not Reviewed" value="Not Reviewed" style={{color:"white"}} />
+        //     </Tabs>
+        // );
+
+        const tabNames = ["All", "Favorites", "Reviewed", "Not Reviewed"];
+        const tabParts = tabNames.map(tabName => {
+            const isSelected = tabName === this.state.tab;
+            return (
+                <div
+                    onClick={() => this.handleTabChange(tabName)}
+                    className={"myCandidatesTab" + (isSelected ? " selected" : "")}
+                >
+                    { tabName.toUpperCase() }
+                </div>
+            );
+        });
         const tabs = (
-            <Tabs
-                inkBarStyle={{background: 'white'}}
-                className="settingsTabs"
-                value={this.state.tab}
-                onChange={this.handleTabChange}
-            >
-                <Tab label="All" value="All" style={{color:"white"}} />
-                <Tab label="Favorites" value="Favorites" style={{color:"white"}} />
-                <Tab label="Reviewed" value="Reviewed" style={{color:"white"}} />
-                <Tab label="Not Reviewed" value="Not Reviewed" style={{color:"white"}} />
-            </Tabs>
+            <div className="center">
+                <div className="myCandidatesTabs">
+                    { tabParts }
+                </div>
+            </div>
         );
 
         // lets the user switch between positions
