@@ -1173,7 +1173,7 @@ async function GET_candidateSearch(req, res) {
     // }
 
     // the user attributes that we want to keep
-    const attributes = "_id name profileUrl positions.reviewed positions.interest positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
+    const attributes = "_id name profileUrl positions.reviewed positions.favorite positions.interest positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
 
     // perform the search
     let candidates = [];

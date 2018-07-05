@@ -230,7 +230,8 @@ class MyCandidates extends Component {
     filterCandidates(cand) {
         // filter by tab if not on "All"
         if (this.state.tab === "Reviewed" && cand.reviewed !== true) { return false; }
-        else if (this.state.tab === "Not Reviewed" && cand.reviewed !== false) { return false; }
+        else if (this.state.tab === "Not Reviewed" && cand.reviewed === true) { return false; }
+        else if (this.state.tab === "Favorites" && cand.favorite !== true) { return false; }
 
         // filter by dismissed and hired status if wanted
         if (this.state.hideDismissed && cand.isDismissed) { return false; }
@@ -336,6 +337,7 @@ class MyCandidates extends Component {
                     className={"inlineBlock clickableNoUnderline star " + colorClass}
                     onClick={() => this.rateInterest(candidateId, starNumber)}
                     style={{marginRight: "5px"}}
+                    key={`${candidateId}star${starNumber}`}
                 />
             );
         }
@@ -503,7 +505,7 @@ class MyCandidates extends Component {
 
             let headers = ["name", "score", "interest", "stage", "predicted", "skill"].map(sortTerm => {
                 return (
-                    <td className={sortTerm}>
+                    <td className={sortTerm} key={"tableHeader" + sortTerm}>
                         <div className="inlineBlock clickableNoUnderline" onClick={() => this.handleSortByChange(sortTerm)}>
                             {sortTerm.toUpperCase()}
                             <UpDownArrows
@@ -518,12 +520,12 @@ class MyCandidates extends Component {
 
             // add in the extra area for selecting a candidate
             headers.unshift(
-                <td className="selectCandidateBox" />
+                <td className="selectCandidateBox" key={`selectAreaBlankHeader`}/>
             )
 
             // add in the column headers
             candidateRows.unshift(
-                <tr className="candidate">
+                <tr className="candidate" key={`tableHeaders`}>
                     { headers }
                 </tr>
             )
@@ -555,6 +557,7 @@ class MyCandidates extends Component {
                 onChange={this.handleTabChange}
             >
                 <Tab label="All" value="All" style={{color:"white"}} />
+                <Tab label="Favorites" value="Favorites" style={{color:"white"}} />
                 <Tab label="Reviewed" value="Reviewed" style={{color:"white"}} />
                 <Tab label="Not Reviewed" value="Not Reviewed" style={{color:"white"}} />
             </Tabs>
