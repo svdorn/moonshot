@@ -383,16 +383,16 @@ class MyCandidates extends Component {
                 candidateIds.push(candidateId);
             }
 
-            // move the candidate in the back end
-            // const params = {
-            //     userId: this.props.currentUser._id,
-            //     verificationToken: this.props.currentUser.verificationToken,
-            //     positionId: this.state.positionId,
-            //     candidateIds, moveTo
-            // }
-            // axios.post("/api/business/moveCandidate", params)
-            // .then(result => { console.log(result.data); })
-            // .catch(error => { console.log(error); });
+            // MOVE THE CANDIDATE IN THE BACK END
+            const params = {
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken,
+                positionId: this.state.positionId,
+                candidateIds, moveTo
+            }
+            axios.post("/api/business/moveCandidate", params)
+            .then(result => { console.log(result.data); })
+            .catch(error => { console.log(error); });
 
             // MOVE THE CANDIDATES IN THE FRONT END
             // get a shallow editable copy of the candidates array

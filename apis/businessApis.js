@@ -31,6 +31,7 @@ const businessApis = {
     POST_answerQuestion,
     POST_emailInvites,
     POST_rateInterest,
+    POST_moveCandidate,
     GET_candidateSearch,
     GET_employeeSearch,
     GET_employeeQuestions,
@@ -314,6 +315,119 @@ async function POST_rateInterest(req, res) {
 
     // return successfully
     return res.json(true);
+}
+
+
+async function POST_moveCandidate(req, res) {
+    const bizUserId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const candidateIds = sanitize(req.body.candidateIds);
+    const moveTo = sanitize(req.body.moveTo);
+    const positionId = sanitize(req.body.positionId);
+
+    // make sure input is valid
+    if (!["Reviewed", "Not Reviewed", "Favorites"].includes(moveTo)) {
+        console.log("moveTo invalid, was: ", moveTo);
+        return res.status(400).send("Bad request.");
+    }
+
+    // verify the business user
+    let bizUser;
+    try { bizUser = await getAndVerifyUser(bizUserId, verificationToken); }
+    catch (getBizUserError) {
+        console.log("Error getting/verifying biz user: ", getBizUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // get the business id that the biz user works for
+    let businessId;
+    try { businessId = bizUser.businessInfo.businessId; }
+    catch(noBizIdError) { return res.status(403).send(errors.PERMISSIONS_ERROR); }
+    if (!businessId) { return res.status(403).send(errors.PERMISSIONS_ERROR); }
+
+    // find all candidates that should be altered
+    const findQuery = {
+        "_id" : {
+            "$in": candidateIds
+        }
+    }
+
+    // TODO: SWITCH TO THIS AS SOON AS SANDBOX DB IS SWITCHED TO 3.6 (JULY 20th)
+    // // find which property is being modified and what to set it to
+    // // default to reviewed = true
+    // let property = "positions.$[elem].reviewed";
+    // let value = true;
+    // if (moveTo === "Not Reviewed") {
+    //     value = false;
+    // } else if (moveTo === "Favorites") {
+    //     property = "positions.$[elem].favorite";
+    // }
+    //
+    // // mark their reviewed or favorited status
+    // let updateQuery = {
+    //     "$set": {}
+    // };
+    // updateQuery["$set"][property] = value;
+    //
+    //
+    // // update only the correct position within the user
+    // const options = {
+    //     // can match multiple candidates
+    //     "multi": true,
+    //     // business and position id must match
+    //     "arrayFilters": [
+    //         { "_id": mongoose.Types.ObjectId(positionId) },
+    //         { "businessId": mongoose.Types.ObjectId(businessId) }
+    //     ],
+    //     // do NOT create a new position if no position matches
+    //     "upsert": false
+    // }
+    //
+    //
+    // try { await Users.update(findQuery, updateQuery, options); }
+    // catch (findAndUpdateError) {
+    //     console.log("Error finding/updating users with favorite/reviewed status: ", findAndUpdateError);
+    //     return res.status(500).send(errors.SERVER_ERROR);
+    // }
+
+    let users = [];
+    try { users = await Users.find(findQuery) }
+    catch (findUsersError) {
+        console.log("Error finding matching users when trying to update reviewed/favorited status: ", findUsersError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // find which property is being modified and what to set it to
+    // default to reviewed = true
+    let property = "reviewed";
+    let value = true;
+    if (moveTo === "Not Reviewed") {
+        value = false;
+    } else if (moveTo === "Favorites") {
+        property = "favorite";
+    }
+
+    // a list of promises, when it's done all users have been saved
+    let saveUserPromises = [];
+    // go through each affected user
+    users.forEach(user => {
+        // find the index of the position
+        const positionIndex = user.positions.findIndex(position => {
+            return position.positionId.toString() === positionId.toString() && position.businessId.toString() === businessId.toString();
+        });
+        // if the position is valid ...
+        if (positionIndex >= 0) {
+            // ... alter the value
+            user.positions[positionIndex][property] = value;
+        }
+        // save the user
+        saveUserPromises.push(user.save());
+    });
+
+    // wait for all users to get saved
+    await Promise.all(saveUserPromises);
+
+    res.json(true);
 }
 
 
