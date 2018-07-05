@@ -109,13 +109,14 @@ app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
+app.post("/business/rateInterest", businessApis.POST_rateInterest);
+app.post("/business/moveCandidate", businessApis.POST_moveCandidate);
+app.post("/business/sawMyCandidatesInfoBox", businessApis.POST_sawMyCandidatesInfoBox);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/employeeQuestions", businessApis.GET_employeeQuestions);
 app.get("/business/positions", businessApis.GET_positions);
 app.get("/business/evaluationResults", businessApis.GET_evaluationResults);
-app.post("/business/rateInterest", businessApis.POST_rateInterest);
-app.post("/business/moveCandidate", businessApis.POST_moveCandidate);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);

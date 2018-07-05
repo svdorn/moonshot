@@ -32,6 +32,7 @@ const businessApis = {
     POST_emailInvites,
     POST_rateInterest,
     POST_moveCandidate,
+    POST_sawMyCandidatesInfoBox,
     GET_candidateSearch,
     GET_employeeSearch,
     GET_employeeQuestions,
@@ -1290,6 +1291,28 @@ async function GET_employeeSearch(req, res) {
 
     // successfully return the employees
     return res.json(formattedEmployees);
+}
+
+
+// mark that a user has seen the info box shown at the top of my candidates
+async function POST_sawMyCandidatesInfoBox(req, res) {
+    const find = {
+        "_id": sanitize(req.body.userId),
+        "verificationToken": sanitize(req.body.verificationToken)
+    };
+    const update = { "sawMyCandidatesInfoBox": true };
+    const options = { "upsert": false, "new": true };
+
+    let user;
+    try { user = await Users.findOneAndUpdate(find, update, options) }
+    catch (updateError) {
+        console.log("Error updating user while trying to see my candidates info box: ", updateError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    console.log("new user: ", user);
+
+    return res.json(frontEndUser(user));
 }
 
 

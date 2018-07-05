@@ -2488,6 +2488,25 @@ button.link {
 
 
 
+
+
+.myCandidatesInfoBox {
+    display: inline-block;
+    position: relative;
+    width: 400px;
+    padding: 10px;
+    color: var(--moonshotLightBlue);
+    -moz-box-shadow:    0px 2px 20px 0px #00000073;
+    -webkit-box-shadow: 0px 2px 20px 0px #00000073;
+    box-shadow:         0px 2px 20px 0px #00000073;
+}
+.myCandidatesInfoBox > .x {
+    position: absolute;
+    top: 2px;
+    right: 10px;
+    cursor: pointer;
+}
+
 .myCandidates .candidatesAndOptions {
     width: 1000px;
     position: relative;
@@ -5524,6 +5543,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .aboutMeSection {
         min-height: 450px;
+    }
+
+    .myCandidatesInfoBox {
+        width: 280px;
     }
 
     .leftYAxisLabelContainer {

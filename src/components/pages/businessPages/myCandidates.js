@@ -1,5 +1,5 @@
 "use strict"
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import {
     TextField,
     DropDownMenu,
@@ -13,11 +13,11 @@ import {
     Tabs,
     Tab
 } from 'material-ui';
-import {connect} from 'react-redux';
-import {bindActionCreators} from 'redux';
-import {browserHistory} from 'react-router';
-import {closeNotification,openAddUserModal} from "../../../actions/usersActions";
-import {Field, reduxForm} from 'redux-form';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
+import { browserHistory } from 'react-router';
+import { closeNotification, openAddUserModal, sawMyCandidatesInfoBox } from "../../../actions/usersActions";
+import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import UpDownArrows from "./upDownArrows";
@@ -439,6 +439,11 @@ class MyCandidates extends Component {
     }
 
 
+    seeInfoBox() {
+        this.props.sawMyCandidatesInfoBox(this.props.currentUser._id, this.props.currentUser.verificationToken);
+    }
+
+
     render() {
         const currentUser = this.props.currentUser;
         if (!currentUser) {
@@ -462,6 +467,19 @@ class MyCandidates extends Component {
         }
         if (this.state.position == "" && this.state.loadingDone) {
             // TODO: somehow tell them they have to select a position
+        }
+
+        let infoBox = null;
+        if (!this.props.currentUser.sawMyCandidatesInfoBox) {
+            infoBox = (
+                <div className="center">
+                    <div className="myCandidatesInfoBox font16px font12pxUnder500">
+                        Click any candidate name to see results.<br/>
+                        Hover over any category for a description.
+                        <div className="x" onClick={this.seeInfoBox.bind(this)}>x</div>
+                    </div>
+                </div>
+            )
         }
 
         let candidateRows = [];
@@ -647,6 +665,8 @@ class MyCandidates extends Component {
 
                 { tabs }
 
+                { infoBox }
+
                 <div className="center">
                     <div className="candidatesAndOptions">
                         { topOptions }
@@ -675,7 +695,8 @@ const hiringStageValues = {
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         closeNotification,
-        openAddUserModal
+        openAddUserModal,
+        sawMyCandidatesInfoBox
     }, dispatch);
 }
 
