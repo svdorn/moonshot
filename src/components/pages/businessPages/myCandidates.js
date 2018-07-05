@@ -58,8 +58,6 @@ class MyCandidates extends Component {
             positionNameFromUrl,
             // true if the business has no positions associated with it
             noPositions: false,
-            // true if the position has no candidates associated with it
-            noCandidates: false,
             // if we are currently loading the positions
             loadingPositions: true,
             // if we are currently loading candidates
@@ -145,12 +143,18 @@ class MyCandidates extends Component {
             positionId = this.state.positions.find(pos => {
                 return pos.name === position
             })._id;
-        } catch (getPosIdErr) { /* probably chose the dropdown header */ }
+        } catch (getPosIdErr) {
+            // chose the dropdown header
+            return this.setState({
+                position,
+                positionId: undefined,
+                candidates: []
+            });
+        }
         this.setState({
             position,
             positionId,
             candidates: [],
-            noCandidates: false,
             loadingCandidates: true
         }, this.findCandidates);
     };
@@ -189,12 +193,10 @@ class MyCandidates extends Component {
                     if (res.data && res.data.length > 0) {
                         this.setState({
                             candidates: res.data,
-                            noCandidates: false,
                             loadingCandidates: false
                         }, this.reorder);
                     } else {
                         this.setState({
-                            noCandidates: true,
                             candidates: [],
                             loadingCandidates: false
                         })
@@ -527,7 +529,7 @@ class MyCandidates extends Component {
         if (this.state.loadingPositions || this.state.loadingCandidates) {
             return (
                 <div>
-                    <CircularProgress color="#FB553A" style={style.circularProgress} />
+                    <CircularProgress color="#FB553A" style={style.noCandidatesMessage} />
                 </div>
             )
         }
@@ -542,14 +544,14 @@ class MyCandidates extends Component {
         }
         else if (this.state.position == "" && !this.state.loadingPositions) {
             return (
-                <div>
+                <div style={style.noCandidatesMessage}>
                     Select a position.
                 </div>
             );
         }
         else if (this.state.candidates.length === 0) {
             return (
-                <div>
+                <div style={style.noCandidatesMessage}>
                     No candidates have started this evaluation.
                 </div>
             )
@@ -557,7 +559,7 @@ class MyCandidates extends Component {
         // if there are candidates in this position, but none meet the criteria
         else if (this.state.sortedCandidates.length === 0) {
             return (
-                <div>
+                <div style={style.noCandidatesMessage}>
                     No candidates meet these criteria.
                 </div>
             )
@@ -811,7 +813,7 @@ const style = {
     labelStyle: {
         color: "rgba(255,255,255,.8)"
     },
-    circularProgress: {marginTop: "20px"}
+    noCandidatesMessage: {marginTop: "20px"}
 }
 
 
