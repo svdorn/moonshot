@@ -372,11 +372,15 @@ class MyCandidates extends Component {
 
     // creat the dropdown for a candidate's hiring stage
     makeHiringStage(candidateId, hiringStage, isDismissed) {
-        const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Hired"];
+        const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"];
+        // if no stage is recorded, assume the candidate has not been contacted
+        if (!hiringStage) { hiringStage = "Not Contacted" }
+        // if the candidate is dismissed, show that
         if (isDismissed) { hiringStage = "Dismissed"; }
 
+        // create the stage name menu items
         const stages = stageNames.map(stage => {
-            return <MenuItem value={stage} primaryText={stage} />
+            return <MenuItem value={stage} primaryText={stage} key={`${candidateId}hiringStage${stage}`} />
         });
 
         return (
@@ -408,7 +412,12 @@ class MyCandidates extends Component {
         let candidates = this.state.candidates.slice(0);
         const candIndex = candidates.findIndex(cand => { return cand._id.toString() === candidateId.toString() });
         if (candIndex < 0) { return console.log("Cannot set interest value for candidate that doesn't exist."); }
-        candidates[candIndex].hiringStage = hiringStage;
+        if (hiringStage === "Dismissed") {
+            candidates[candIndex].isDismissed = true;
+        } else {
+            candidates[candIndex].isDismissed = false;
+            candidates[candIndex].hiringStage = hiringStage;
+        }
         this.setState({ candidates });
     }
 
@@ -535,7 +544,7 @@ class MyCandidates extends Component {
                 if (typeof candidate.scores === "object") {
                     if (candidate.scores.overall) { score = candidate.scores.overall; }
                     if (candidate.scores.predicted) { predicted = candidate.scores.predicted; }
-                    if (candidate.scores.skill) { predicted = candidate.scores.skill; }
+                    if (candidate.scores.skill) { skill = candidate.scores.skill; }
                 }
                 return (
                     <tr className="candidate" key={candidate._id}>
@@ -723,7 +732,7 @@ class MyCandidates extends Component {
 // how far along in the hiring process each of the hiring stages is relative to the others
 const hiringStageValues = {
     "Dismissed": 0,
-    "Uncontacted": 1,
+    "Not Contacted": 1,
     "Contacted": 2,
     "Interviewing": 3,
     "Offered": 4,

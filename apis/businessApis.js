@@ -329,7 +329,7 @@ async function POST_changeHiringStage(req, res) {
     const positionId = sanitize(req.body.positionId);
 
     // make sure the interest value is valid
-    if (!["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Hired"].includes(hiringStage)) {
+    if (!["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"].includes(hiringStage)) {
         return res.status(400).send("Invalid hiring stage.");
     }
 
@@ -368,6 +368,7 @@ async function POST_changeHiringStage(req, res) {
     else {
         console.log("changing to ", hiringStage);
         candidate.positions[candidatePositionIndex].hiringStage = hiringStage;
+        candidate.positions[candidatePositionIndex].isDismissed = false;
         hiringStageChanges.push({
             isDismissed: false,
             hiringStage,
