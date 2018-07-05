@@ -391,78 +391,45 @@ class MyCandidates extends Component {
     }
 
 
-    // creat the dropdown for a candidate's hiring stage
-    // makeHiringStage(candidateId, hiringStage, isDismissed) {
-    //     const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"];
-    //     // if no stage is recorded, assume the candidate has not been contacted
-    //     if (!hiringStage) { hiringStage = "Not Contacted" }
-    //     // if the candidate is dismissed, show that
-    //     if (isDismissed) { hiringStage = "Dismissed"; }
-    //
-    //     // create the stage name menu items
-    //     const stages = stageNames.map(stage => {
-    //         return <option value={stage} key={`${candidateId}hiringStage${stage}`} >{ stage }</option>
-    //     });
-    //
-    //     // return (
-    //     //     <Select value={hiringStage}
-    //     //         onChange={(event, index, newHiringStage) => this.handleChangeHiringStage(candidateId, newHiringStage)}
-    //     //     >
-    //     //         {stages}
-    //     //     </Select>
-    //     // );
-    //     return (
-    //         <Select
-    //             native
-    //             value={hiringStage}
-    //             onChange={this.testFunc}
-    //             inputProps={{
-    //                 name: `hiringStage${candidateId}`,
-    //                 id: `hiringStage${candidateId}`
-    //             }}
-    //         >
-    //             { stages }
-    //         </Select>
-    //     );
-    // }
-
-
+    // create the dropdown for a candidate's hiring stage
     makeHiringStage(candidateId, hiringStage, isDismissed) {
+        const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"];
+        // if no stage is recorded, assume the candidate has not been contacted
+        if (!hiringStage) { hiringStage = "Not Contacted" }
+        // if the candidate is dismissed, show that
+        if (isDismissed) { hiringStage = "Dismissed"; }
+
+        // create the stage name menu items
+        const stages = stageNames.map(stage => {
+            return (
+                <NewMenuItem
+                    value={stage}
+                    key={`${candidateId}hiringStage${stage}`}
+                >
+                    { stage }
+                </NewMenuItem>
+            )
+        });
+
         return (
             <Select
-                value={this.state.age}
-                onChange={this.handleChange}
-                displayEmpty
-                name="age"
+                disableUnderline={true}
+                classes={{
+                    root: "selectRootWhite",
+                    icon: "selectIconWhiteImportant"
+                }}
+                value={hiringStage}
+                onChange={this.handleChangeHiringStage(candidateId)}
             >
-                <NewMenuItem value="">
-                    <em>None</em>
-                </NewMenuItem>
-                <NewMenuItem value={10}>Ten</NewMenuItem>
-                <NewMenuItem value={20}>Twenty</NewMenuItem>
-                <NewMenuItem value={30}>Thirty</NewMenuItem>
+                { stages }
             </Select>
-        )
-
-        return (
-            null
         );
     }
 
 
-    handleChange = event => {
-    //this.setState({ [event.target.name]: event.target.value });
-        console.log("event.target.value: ", event.target.value);
-    };
-
-
-    testFunc = name => event => {
-        console.log("name: ", name, "event.target.value: ", event.target.value);
-    }
-
-
     // change a candidate's hiring stage
-    handleChangeHiringStage(candidateId, hiringStage) {
+    handleChangeHiringStage = candidateId => event => {
+        const hiringStage = event.target.value;
         // CHANGE HIRING STAGE IN BACK END
         const params = {
             userId: this.props.currentUser._id,
