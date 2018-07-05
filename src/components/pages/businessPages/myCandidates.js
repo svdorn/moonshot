@@ -349,7 +349,6 @@ class MyCandidates extends Component {
 
     // change how interested the user is in the candidate (number of stars 1-5)
     rateInterest(candidateId, interest) {
-        console.log("this.state: ", this.state);
         // set the result in the database
         const params = {
             userId: this.props.currentUser._id,
@@ -366,6 +365,75 @@ class MyCandidates extends Component {
         if (candIndex < 0) { return console.log("Cannot set interest value for candidate that doesn't exist."); }
         candidates[candIndex].interest = interest;
         this.setState({ candidates });
+    }
+
+
+    // move the candidate to Reviewed, Favorites, or Not Reviewed
+    handleMoveTo = (event, index, moveTo) => {
+        // check for valid input
+        if (["Reviewed", "Not Reviewed", "Favorites"].includes(moveTo)) {
+            // copy "this"
+            const self = this;
+            // get the ids of every selected candidate
+            const selectedCandidates = this.state.selectedCandidates;
+            // loop through the candidate ids to make it into an array
+            let candidateIds = [];
+            for (let candidateId in selectedCandidates) {
+                if (!selectedCandidates.hasOwnProperty(candidateId)) continue;
+                candidateIds.push(candidateId);
+            }
+
+            // move the candidate in the back end
+            // const params = {
+            //     userId: this.props.currentUser._id,
+            //     verificationToken: this.props.currentUser.verificationToken,
+            //     positionId: this.state.positionId,
+            //     candidateIds, moveTo
+            // }
+            // axios.post("/api/business/moveCandidate", params)
+            // .then(result => { console.log(result.data); })
+            // .catch(error => { console.log(error); });
+
+            // MOVE THE CANDIDATES IN THE FRONT END
+            // get a shallow editable copy of the candidates array
+            let allCandidates = this.state.candidates.slice(0);
+            let candidateIndexes = [];
+            // find the index of every candidate that is selected within the array
+            for (let candIndex = 0; candIndex < allCandidates.length; candIndex++) {
+                // if the array of selected ids contains the id of the candidate at the current index ...
+                if (candidateIds.includes(allCandidates[candIndex]._id)) {
+                    // ... add the current index as a candidate that is selected
+                    candidateIndexes.push(candIndex);
+                }
+            }
+
+            // assume moving to reviewed ...
+            let property = "reviewed";
+            // ... so the value of reviewed will be true
+            let value = true;
+            if (moveTo === "Not Reviewed") {
+                // if moving to not reviewed, value of reviewed is false
+                value = false;
+            } else if (moveTo === "Favorites") {
+                // if moving to favorites, value of favorite will be true
+                property = "favorite";
+            }
+
+            // mark these values for every marked candidate
+            candidateIndexes.forEach(candIndex => {
+                allCandidates[candIndex][property] = value;
+            });
+
+            // set the state so the candidates can be reordered
+            self.setState({ candidates: allCandidates }, function() {
+                // reorder the candidates
+                self.reorder();
+                // uncheck all checked candidates
+                const selectedCandidates = {};
+                // save that unchecked-ness
+                self.setState({ selectedCandidates });
+            });
+        }
     }
 
 
@@ -461,8 +529,6 @@ class MyCandidates extends Component {
             )
         }
 
-
-
         const sortByOptions = ["Name", "Score"];
         const sortByItems = sortByOptions.map(function (sortBy) {
             return <MenuItem value={sortBy} primaryText={sortBy} key={sortBy}/>
@@ -495,6 +561,13 @@ class MyCandidates extends Component {
         );
 
         // the top options such as search and hide hired candidates
+        const anchorOrigin = {
+            vertical: "top",
+            horizontal: "left"
+        };
+        const labelStyle = {
+            color: "rgba(255,255,255,.8)"
+        };
         const topOptions = (
             <div className="topOptions">
                 <Field
@@ -510,7 +583,18 @@ class MyCandidates extends Component {
                     value={this.state.searchTerm}
                 />
                 <div className="inlineBlock">
-                    {"Move to Not Reviewed"}
+                    <DropDownMenu value={"Move To"}
+                                  onChange={this.handleMoveTo}
+                                  labelStyle={labelStyle}
+                                  anchorOrigin={anchorOrigin}
+                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
+                    >
+                        <MenuItem value={"Move To"} primaryText="Move To"/>
+                        <Divider/>
+                        <MenuItem value={"Reviewed"} primaryText="Reviewed" />
+                        <MenuItem value={"Not Reviewed"} primaryText="Not Reviewed" />
+                        <MenuItem value={"Favorites"} primaryText="Favorites" />
+                    </DropDownMenu>
                 </div>
                 <div className="inlineBlock">
                     <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleCheckMarkClick("hideDismissed")}>
