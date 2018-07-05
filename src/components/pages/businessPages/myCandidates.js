@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import {
     TextField,
     DropDownMenu,
-    //Select,
     MenuItem,
     Divider,
     Toolbar,
@@ -14,6 +13,8 @@ import {
     Tabs,
     Tab
 } from 'material-ui';
+import Select from '@material-ui/core/Select';
+import NewMenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -427,21 +428,22 @@ class MyCandidates extends Component {
 
 
     makeHiringStage(candidateId, hiringStage, isDismissed) {
-        // return (
-        //     <Select
-        //         value={this.state.age}
-        //         onChange={this.handleChange}
-        //         displayEmpty
-        //         name="age"
-        //     >
-        //         <MenuItem value="">
-        //             <em>None</em>
-        //         </MenuItem>
-        //         <MenuItem value={10}>Ten</MenuItem>
-        //         <MenuItem value={20}>Twenty</MenuItem>
-        //         <MenuItem value={30}>Thirty</MenuItem>
-        //   </Select>
-        // )
+        return (
+            <Select
+                value={this.state.age}
+                onChange={this.handleChange}
+                displayEmpty
+                name="age"
+            >
+                <NewMenuItem value="">
+                    <em>None</em>
+                </NewMenuItem>
+                <NewMenuItem value={10}>Ten</NewMenuItem>
+                <NewMenuItem value={20}>Twenty</NewMenuItem>
+                <NewMenuItem value={30}>Thirty</NewMenuItem>
+            </Select>
+        )
+
         return (
             null
         );
@@ -450,7 +452,7 @@ class MyCandidates extends Component {
 
     handleChange = event => {
     //this.setState({ [event.target.name]: event.target.value });
-        console.log("event.target.name: ", event.target.value);
+        console.log("event.target.value: ", event.target.value);
     };
 
 
