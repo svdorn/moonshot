@@ -163,7 +163,8 @@ class MyCandidates extends Component {
     handleSortByChange(sortBy) {
         // if the user is changing the sort by value
         if (this.state.sortBy !== sortBy) {
-            this.setState({ sortBy }, this.reorder);
+            // will always switch to sorting ascending if switching sorting value
+            this.setState({ sortBy, sortAscending: true }, this.reorder);
         }
         // if the user is flipping the direction of the sort
         else {
