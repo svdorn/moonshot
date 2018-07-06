@@ -244,6 +244,8 @@ class MyCandidates extends Component {
 
         // set the state so the candidates can be displayed in order
         this.setState({ sortedCandidates });
+
+        console.log(sortedCandidates);
     }
 
 
@@ -479,7 +481,6 @@ class MyCandidates extends Component {
             candidateIds, moveTo
         }
         axios.post("/api/business/moveCandidates", params)
-        .then(result => { console.log(result.data); })
         .catch(error => { console.log(error); });
 
         // MOVE THE CANDIDATES IN THE FRONT END
