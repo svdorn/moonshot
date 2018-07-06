@@ -454,46 +454,51 @@ class MyCandidates extends Component {
     }
 
 
-    // move the candidate to Reviewed, Favorites, or Not Reviewed
-    handleMoveTo = event => {
-        const moveTo = event.target.value;
-        // check for valid input
-        if (["Reviewed", "Not Reviewed", "Favorites"].includes(moveTo)) {
-            // copy "this"
-            const self = this;
-            // get the ids of every selected candidate
-            const selectedCandidates = this.state.selectedCandidates;
-            // loop through the candidate ids to make it into an array
-            let candidateIds = [];
-            for (let candidateId in selectedCandidates) {
-                if (!selectedCandidates.hasOwnProperty(candidateId)) continue;
-                candidateIds.push(candidateId);
-            }
+    moveCandidates(moveTo) {
+        // copy "this"
+        const self = this;
+        // get the ids of every selected candidate
+        const selectedCandidates = this.state.selectedCandidates;
+        // loop through the candidate ids to make it into an array
+        let candidateIds = [];
+        for (let candidateId in selectedCandidates) {
+            if (!selectedCandidates.hasOwnProperty(candidateId)) continue;
+            candidateIds.push(candidateId);
+        }
 
-            // MOVE THE CANDIDATE IN THE BACK END
-            const params = {
-                userId: this.props.currentUser._id,
-                verificationToken: this.props.currentUser.verificationToken,
-                positionId: this.state.positionId,
-                candidateIds, moveTo
-            }
-            axios.post("/api/business/moveCandidate", params)
-            .then(result => { console.log(result.data); })
-            .catch(error => { console.log(error); });
+        // MOVE THE CANDIDATE IN THE BACK END
+        const params = {
+            userId: this.props.currentUser._id,
+            verificationToken: this.props.currentUser.verificationToken,
+            positionId: this.state.positionId,
+            candidateIds, moveTo
+        }
+        axios.post("/api/business/moveCandidates", params)
+        .then(result => { console.log(result.data); })
+        .catch(error => { console.log(error); });
 
-            // MOVE THE CANDIDATES IN THE FRONT END
-            // get a shallow editable copy of the candidates array
-            let allCandidates = this.state.candidates.slice(0);
-            let candidateIndexes = [];
-            // find the index of every candidate that is selected within the array
-            for (let candIndex = 0; candIndex < allCandidates.length; candIndex++) {
-                // if the array of selected ids contains the id of the candidate at the current index ...
-                if (candidateIds.includes(allCandidates[candIndex]._id)) {
-                    // ... add the current index as a candidate that is selected
-                    candidateIndexes.push(candIndex);
-                }
+        // MOVE THE CANDIDATES IN THE FRONT END
+        // get a shallow editable copy of the candidates array
+        let allCandidates = this.state.candidates.slice(0);
+        let candidateIndexes = [];
+        // find the index of every candidate that is selected within the array
+        for (let candIndex = 0; candIndex < allCandidates.length; candIndex++) {
+            // if the array of selected ids contains the id of the candidate at the current index ...
+            if (candidateIds.includes(allCandidates[candIndex]._id)) {
+                // ... add the current index as a candidate that is selected
+                candidateIndexes.push(candIndex);
             }
+        }
 
+        // dismissing candidate
+        if (moveTo === "Dismissed") {
+            // dismiss every marked candidate
+            candidateIndexes.forEach(candIndex => {
+                allCandidates[candIndex].isDismissed = true;
+            });
+        }
+        // changing reviewed or favorited status
+        else {
             // assume moving to reviewed ...
             let property = "reviewed";
             // ... so the value of reviewed will be true
@@ -510,16 +515,26 @@ class MyCandidates extends Component {
             candidateIndexes.forEach(candIndex => {
                 allCandidates[candIndex][property] = value;
             });
+        }
 
-            // set the state so the candidates can be reordered
-            self.setState({ candidates: allCandidates }, function() {
-                // reorder the candidates
-                self.reorder();
-                // uncheck all checked candidates
-                const selectedCandidates = {};
-                // save that unchecked-ness
-                self.setState({ selectedCandidates });
-            });
+        // set the state so the candidates can be reordered
+        self.setState({ candidates: allCandidates }, function() {
+            // reorder the candidates
+            self.reorder();
+            // uncheck all checked candidates
+            const selectedCandidates = {};
+            // save that unchecked-ness
+            self.setState({ selectedCandidates });
+        });
+    }
+
+
+    // move the candidate to Reviewed, Favorites, or Not Reviewed
+    handleMoveTo = event => {
+        const moveTo = event.target.value;
+        // check for valid input
+        if (["Reviewed", "Not Reviewed", "Favorites"].includes(moveTo)) {
+            this.moveCandidates(moveTo);
         }
     }
 
@@ -766,6 +781,12 @@ class MyCandidates extends Component {
                         <Divider/>
                         {menuItems}
                     </Select>
+                </div>
+                <div className="inlineBlock clickableNoUnderline" onClick={() => this.moveCandidates("Dismissed")}>
+                    {"Dismiss"}
+                </div>
+                <div className="inlineBlock">
+                    {"Contact"}
                 </div>
                 <div className="inlineBlock">
                     <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleCheckMarkClick("hideDismissed")}>

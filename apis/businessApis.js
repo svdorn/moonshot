@@ -32,7 +32,7 @@ const businessApis = {
     POST_emailInvites,
     POST_rateInterest,
     POST_changeHiringStage,
-    POST_moveCandidate,
+    POST_moveCandidates,
     POST_sawMyCandidatesInfoBox,
     GET_candidateSearch,
     GET_employeeSearch,
@@ -391,7 +391,7 @@ async function POST_changeHiringStage(req, res) {
 }
 
 
-async function POST_moveCandidate(req, res) {
+async function POST_moveCandidates(req, res) {
     const bizUserId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
     const candidateIds = sanitize(req.body.candidateIds);
@@ -399,7 +399,7 @@ async function POST_moveCandidate(req, res) {
     const positionId = sanitize(req.body.positionId);
 
     // make sure input is valid
-    if (!["Reviewed", "Not Reviewed", "Favorites"].includes(moveTo)) {
+    if (!["Reviewed", "Not Reviewed", "Favorites", "Dismissed"].includes(moveTo)) {
         console.log("moveTo invalid, was: ", moveTo);
         return res.status(400).send("Bad request.");
     }
@@ -480,6 +480,9 @@ async function POST_moveCandidate(req, res) {
         property = "favorite";
     }
 
+    // the current date
+    const NOW = new Date();
+
     // a list of promises, when it's done all users have been saved
     let saveUserPromises = [];
     // go through each affected user
@@ -490,11 +493,34 @@ async function POST_moveCandidate(req, res) {
         });
         // if the position is valid ...
         if (positionIndex >= 0) {
-            // ... alter the value
-            user.positions[positionIndex][property] = value;
+            // ... copy the poisition ...
+            let userPosition = user.positions[positionIndex];
+            // ... and if dismissing the candidates ...
+            if (moveTo === "Dismissed") {
+                // ... dismiss the candidate ...
+                userPosition.isDismissed = true;
+                // ... and add this to the history of changes
+                let mostRecentStage = "Not Contacted";
+                if (!Array.isArray(userPosition.hiringStageChanges) || userPosition.hiringStageChanges.length === 0) {
+                    userPosition.hiringStageChanges = [];
+                } else {
+                    mostRecentStage = userPosition.hiringStageChanges[userPosition.hiringStageChanges.length - 1].hiringStage;
+                }
+                user.positions[positionIndex].hiringStageChanges.push({
+                    hiringStage: mostRecentStage,
+                    isDismissed: true,
+                    dateChanged: NOW
+                });
+            } else {
+                // ... or alter the value
+                userPosition[property] = value;
+            }
+
+            // save the position
+            user.positions[positionIndex] = userPosition;
+            // save the user
+            saveUserPromises.push(user.save());
         }
-        // save the user
-        saveUserPromises.push(user.save());
     });
 
     // wait for all users to get saved
