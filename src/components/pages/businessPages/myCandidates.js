@@ -733,6 +733,21 @@ class MyCandidates extends Component {
     }
 
 
+    candidatesSelected() {
+        const selections = this.state.selectedCandidates;
+        // go through every property
+        for (let candidateId in selections) {
+            // if it's a custom property, check if the candidate is selected
+            if (selections.hasOwnProperty(candidateId) && selections[candidateId]) {
+                // if so, at least one candidate has been selected
+                return true;
+            }
+        }
+        // no candidates have been selected
+        return false;
+    }
+
+
     topOptions() {
         // the hint that shows up when search bar is in focus
         const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
@@ -742,7 +757,7 @@ class MyCandidates extends Component {
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
 
-        const menuItems = ["Reviewed", "Not Reviewed", "Favorites"].map(menuItem => {
+        let menuItems = ["Reviewed", "Not Reviewed", "Favorites"].map(menuItem => {
             return (
                 <MenuItem
                     value={menuItem}
@@ -752,6 +767,21 @@ class MyCandidates extends Component {
                 </MenuItem>
             );
         });
+        menuItems.unshift( <Divider key="moveToDivider"/> );
+        menuItems.unshift( <MenuItem key="moveToName" value={"Move To"}>{"Move To"}</MenuItem> );
+
+
+        let selectionsExist = this.candidatesSelected();
+
+        let selectAttributes = {
+            disableUnderline: true,
+            classes: {
+                root: selectionsExist ? "selectRootWhite" : "selectRootGray",
+                icon: selectionsExist ? "selectIconWhiteImportant" : "selectIconGrayImportant"
+            },
+            value: "Move To",
+            onChange: this.handleMoveTo
+        };
 
         return (
             <div className="topOptions">
@@ -768,19 +798,11 @@ class MyCandidates extends Component {
                     value={this.state.searchTerm}
                 />
                 <div className="inlineBlock">
-                    <Select
-                        disableUnderline={true}
-                        classes={{
-                            root: "selectRootWhite",
-                            icon: "selectIconWhiteImportant"
-                        }}
-                        value={"Move To"}
-                        onChange={this.handleMoveTo}
-                    >
-                        <MenuItem value={"Move To"}>{"Move To"}</MenuItem>
-                        <Divider/>
-                        {menuItems}
-                    </Select>
+                    {selectionsExist ?
+                        <Select {...selectAttributes}>{menuItems}</Select>
+                        : <Select disabled {...selectAttributes}>{menuItems}</Select>
+                    }
+
                 </div>
                 <div className="inlineBlock clickableNoUnderline" onClick={() => this.moveCandidates("Dismissed")}>
                     {"Dismiss"}
@@ -822,7 +844,7 @@ class MyCandidates extends Component {
         let positionId = this.state.positionId;
 
         const tabs = (
-            <div className="center" style={{position:"relative"}}>
+            <div className="center" style={{position:"relative", marginTop:"10px"}}>
                 <div className="myCandidatesTabs">
                     { this.tabParts() }
                 </div>
