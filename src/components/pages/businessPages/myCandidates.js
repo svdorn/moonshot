@@ -21,6 +21,7 @@ import { Field, reduxForm } from 'redux-form';
 import MetaTags from 'react-meta-tags';
 import axios from 'axios';
 import UpDownArrows from "./upDownArrows";
+import CandidateResults from "./candidateResults";
 import AddUserDialog from '../../childComponents/addUserDialog';
 
 const renderTextField = ({input, label, ...custom}) => (
@@ -63,7 +64,13 @@ class MyCandidates extends Component {
             // if we are currently loading candidates
             loadingCandidates: true,
             // candidates that have been selected to be moved
-            selectedCandidates: {}
+            selectedCandidates: {},
+            // whether the results page on the right should be shown
+            showResults: false,
+            // the id of the candidate we want to see results for
+            resultsCandidateId: undefined,
+            // if the results component shoud take up the entire candidates table
+            fullScreenResults: false
         }
     }
 
@@ -622,7 +629,9 @@ class MyCandidates extends Component {
                             />
                         </div>
                     </td>
-                    <td className="name">{candidate.name}</td>
+                    <td className="name pointer" onClick={() => this.showResults(candidate._id)}>
+                        {candidate.name}
+                    </td>
                     <td className="score">
                         {Math.round(score)}
                     </td>
@@ -670,6 +679,15 @@ class MyCandidates extends Component {
                 {candidateRows}
             </tbody></table>
         );
+    }
+
+
+    // show a candidate's results
+    showResults(candidateId) {
+        this.setState({
+            showResults: true,
+            resultsCandidateId: candidateId
+        });
     }
 
 
@@ -865,6 +883,8 @@ class MyCandidates extends Component {
             </div>
         );
 
+        const candidateResultsClass = "candidateResults " + (this.state.fullScreenResults ? "fullScreen" : "halfScreen");
+
         return (
             <div className="jsxWrapper blackBackground fillScreen myCandidates whiteText" style={{paddingBottom: "20px"}} ref='myCandidates'>
                 {this.props.currentUser.userType == "accountAdmin" ?
@@ -885,6 +905,14 @@ class MyCandidates extends Component {
                         { this.topOptions() }
                         <div className="candidatesContainer">
                             { this.createCandidatesTable(positionId) }
+                            { this.state.showResults ?
+                                <CandidateResults
+                                    className={candidateResultsClass}
+                                    candidateId={this.state.resultsCandidateId}
+                                    positionId={this.state.positionId}
+                                />
+                                : null
+                            }
                         </div>
                     </div>
                 </div>

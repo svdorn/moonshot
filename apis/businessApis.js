@@ -296,9 +296,8 @@ async function POST_rateInterest(req, res) {
 
     // verify biz user, get candidate, find and verify candidate's position
     let bizUser, candidate, userPositionIndex;
-    const profileUrl = undefined;
     try {
-        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, candidateId, profileUrl);
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, candidateId);
         bizUser = results.bizUser; candidate = results.user; candidatePositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting candidate position index: ", error);
@@ -335,9 +334,8 @@ async function POST_changeHiringStage(req, res) {
 
     // verify biz user, get candidate, find and verify candidate's position
     let bizUser, candidate, userPositionIndex;
-    const profileUrl = undefined;
     try {
-        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, candidateId, profileUrl);
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, candidateId);
         bizUser = results.bizUser; candidate = results.user; candidatePositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting candidate position index: ", error);
@@ -799,9 +797,8 @@ async function POST_updateHiringStage(req, res) {
 
     // verify biz user, get candidate, find and verify candidate's position
     let bizUser, user, userPositionIndex;
-    const profileUrl = undefined;
     try {
-        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl);
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId);
         bizUser = results.bizUser; user = results.user; userPositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting user position index: ", error);
@@ -843,16 +840,15 @@ async function verifyBizUserAndFindUserPosition(bizUserId, verificationToken, po
         if (!bizUserId) { return reject("No bizUserId."); }
         else if (!verificationToken) { return reject("No business user verificationToken."); }
         else if (!positionId) { return reject("No positionId."); }
-        else if (!userId && !profileUrl) { return reject("Can't be missing both userId and profileUrl."); }
+        else if (!userId) { return reject("No userId"); }
 
         // find the user and the candidate
         let bizUser, user;
         // search by id if possible, profile url otherwise
-        const userQuery = userId ? { _id: userId } : { profileUrl };
         try {
             const [foundBizUser, foundUser] = await Promise.all([
                 getAndVerifyUser(bizUserId, verificationToken),
-                Users.findOne(userQuery)
+                Users.findById(userId)
             ])
             bizUser = foundBizUser;
             user = foundUser;
@@ -907,9 +903,8 @@ async function POST_answerQuestion(req, res) {
 
     // verify biz user, get candidate, find and verify candidate's position
     let bizUser, user, userPositionIndex;
-    const profileUrl = undefined;
     try {
-        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl);
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId);
         bizUser = results.bizUser; user = results.user; userPositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting user position index: ", error);
@@ -1134,20 +1129,18 @@ async function addCompletionsAndInProgress(position) {
 async function GET_evaluationResults(req, res) {
     const bizUserId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
-    const profileUrl = sanitize(req.query.profileUrl);
-    const businessId = sanitize(req.query.businessId);
+    const userId = sanitize(req.query.candidateId);
     const positionId = sanitize(req.query.positionId);
     const positionIdString = positionId.toString();
 
     // verify biz user, get candidate/employee, find and verify candidate's/employee's position
     let bizUser, user, userPositionIndex, psychTest;
-    const userId = undefined;
     try {
         let [
             results,
             foundPsychTest
         ] = await Promise.all([
-            verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl),
+            verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
         bizUser = results.bizUser; user = results.user; psychTest = foundPsychTest;

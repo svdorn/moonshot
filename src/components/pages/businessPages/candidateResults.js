@@ -7,9 +7,7 @@ import {bindActionCreators} from 'redux';
 import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
-import MetaTags from 'react-meta-tags';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
-import AddUserDialog from '../../childComponents/addUserDialog';
 import PsychBreakdown from '../../childComponents/psychBreakdown';
 import HoverTip from "../../miscComponents/hoverTip";
 
@@ -26,32 +24,40 @@ class Results extends Component {
             psychScores: [],
             loading: true,
             areaSelected: undefined,
-            windowWidth: window.innerWidth
+            windowWidth: window.innerWidth,
+            // if this is true, didn't get enough props, so can't display results
+            invalidProps: false
         };
+    }
+
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.props.candidateId !== prevProps.candidateId) {
+            this.reset();
+        }
     }
 
 
     componentDidMount() {
         // set resize listener
         window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+        // get the candidate's results
+        this.reset();
+    }
 
-        let profileUrl = "";
-        let businessId = "";
-        let positionId = "";
-        try {
-            profileUrl = this.props.params.profileUrl;
-            businessId = this.props.currentUser.businessInfo.businessId;
-            positionId = this.props.params.positionId;
-        } catch (e) {
-            this.goTo("/myCandidates");
-        }
+
+    // load a new candidate's info and reset the component
+    reset() {
+        const userId = this.props.currentUser._id;
+        const positionId = this.props.positionId;
+        const candidateId = this.props.candidateId;
 
         // backend call to get results info
         axios.get("/api/business/evaluationResults", {
-            params : {
+            params: {
                 userId: this.props.currentUser._id,
                 verificationToken: this.props.currentUser.verificationToken,
-                profileUrl, businessId, positionId
+                positionId, candidateId
             }
         })
         .then(res => {
@@ -296,70 +302,58 @@ class Results extends Component {
         const responsesSection = loading ? loadingArea : this.makeResponsesSection();
 
         return (
-            <div>
-                {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
-                <MetaTags>
-                    <title>{candidate.name} | Moonshot</title>
-                    <meta name="description" content="Results user view."/>
-                </MetaTags>
-                <div>
-                    {candidate ?
-                        <div>
-                            <div className="blackBackground paddingBottom40px">
-                                <div className="profileInfoSkills">
-                                    <div className="center">
-                                        <div style={style.imgContainer}>
-                                            <img
-                                                alt="Atom Icon"
-                                                src={"/icons/Atom2" + this.props.png}
-                                                style={{
-                                                    height: "100%",
-                                                    transform: "translateX(-50%)",
-                                                    left: "50%",
-                                                    position: "relative"
-                                                }}
-                                            />
-                                        </div>
-                                        <div>
-                                            {candidate.name ? <div><div
-                                                className="grayText font26px font14pxUnder700">{candidate.name}
+            <div className={"candidateEvalResults " + this.props.className}>
+                {candidate ?
+                    <div>
+                        <div className="blackBackground paddingBottom40px">
+                            <div className="profileInfoSkills">
+                                <div className="center">
+                                    <div>
+                                        {candidate.name ?
+                                            <div>
+                                                <div className="grayText font26px font14pxUnder700 candidateName">
+                                                    {candidate.name}
+                                                </div>
+                                                <a  className="font18px font12pxUnder500 grayText grayTextOnHover underline"
+                                                    href={mailtoEmail}
+                                                >
+                                                    Contact
+                                                </a>
                                             </div>
-                                            <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
-                                               href={mailtoEmail}>Contact</a></div>
-                                           : null}
-                                        </div>
+                                            : null
+                                        }
                                     </div>
-                                    <Tabs
-                                        style={style.topTabs}
-                                        inkBarStyle={{background: 'white'}}
-                                        tabItemContainerStyle={{width: '40%'}}
-                                        className="myPathwaysTabs"
-                                    >
-                                        <Tab label="Analysis" style={style.topTab}>
-                                            <div className="tabsShadow" style={{position:"absolute"}}>
-                                                <div/>
-                                            </div>
-                                            {analysisSection}
-                                        </Tab>
-                                        <Tab label="Responses" style={style.topTab}>
-                                            <div className="tabsShadow">
-                                                <div/>
-                                            </div>
-                                            {responsesSection}
-                                        </Tab>
-                                    </Tabs>
                                 </div>
+                                <Tabs
+                                    style={style.topTabs}
+                                    inkBarStyle={{background: 'white'}}
+                                    tabItemContainerStyle={{width: '40%'}}
+                                    className="myPathwaysTabs"
+                                >
+                                    <Tab label="Analysis" style={style.topTab}>
+                                        <div className="tabsShadow" style={{position:"absolute"}}>
+                                            <div/>
+                                        </div>
+                                        {analysisSection}
+                                    </Tab>
+                                    <Tab label="Responses" style={style.topTab}>
+                                        <div className="tabsShadow">
+                                            <div/>
+                                        </div>
+                                        {responsesSection}
+                                    </Tab>
+                                </Tabs>
                             </div>
+                        </div>
 
-                        </div>
-                        :
-                        <div>
-                            <div className="blackBackground halfHeight"/>
-                            <div className="fullHeight"/>
-                            <div className="fullHeight"/>
-                        </div>
-                    }
-                </div>
+                    </div>
+                    :
+                    <div>
+                        <div className="blackBackground halfHeight"/>
+                        <div className="fullHeight"/>
+                        <div className="fullHeight"/>
+                    </div>
+                }
             </div>
         );
     }

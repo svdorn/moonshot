@@ -2476,9 +2476,9 @@ button.link {
     margin: 40px 2%;
     padding: 15px;
     color: white;
-    box-shadow:         0px 5px 6px 3px #00000073;
     -moz-box-shadow:    0px 5px 6px 3px #00000073;
     -webkit-box-shadow: 0px 5px 6px 3px #00000073;
+    box-shadow:         0px 5px 6px 3px #00000073;
 }
 .freeResponse > .answer {
     border: 2px solid rgb(117, 220, 252);
@@ -2490,6 +2490,28 @@ button.link {
 
 
 
+
+
+.candidateEvalResults .candidateName {
+    margin-top: 12px;
+}
+
+.candidateResults {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    overflow-y: scroll;
+    -moz-box-shadow:    0px 0px 6px 3px #00000073;
+    -webkit-box-shadow: 0px 0px 6px 3px #00000073;
+    box-shadow:         0px 0px 6px 3px #00000073;
+}
+.candidateResults.fullScreen {
+    width: 100%;
+}
+.candidateResults.halfScreen {
+    width: 650px;
+}
 .myCandidatesTabs {
     display: flex;
     justify-content: space-between;
@@ -2537,9 +2559,10 @@ button.link {
 
 .myCandidates .candidatesContainer {
     width: 100%;
-    height: calc(100vh - 176px);
+    height: calc(100vh - 218px);
     min-height: 300px;
     display: inline-block;
+    position: relative;
     -moz-box-shadow:    0px 0px 6px 3px #00000073;
     -webkit-box-shadow: 0px 0px 6px 3px #00000073;
     box-shadow:         0px 0px 6px 3px #00000073;
@@ -2905,7 +2928,6 @@ button.link {
 }
 
 .profileInfoSkills {
-    margin-top: 35px;
     text-align: center;
 }
 .profileInfoSkillsLeft {
