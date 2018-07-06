@@ -455,6 +455,11 @@ class MyCandidates extends Component {
 
 
     moveCandidates(moveTo) {
+        // check if there are any candidates to move
+        if (!this.candidatesSelected()) {
+            return;
+        }
+
         // copy "this"
         const self = this;
         // get the ids of every selected candidate
@@ -770,13 +775,15 @@ class MyCandidates extends Component {
         menuItems.unshift( <Divider key="moveToDivider"/> );
         menuItems.unshift( <MenuItem key="moveToName" value={"Move To"}>{"Move To"}</MenuItem> );
 
+        const selectionsExist = this.candidatesSelected();
 
-        let selectionsExist = this.candidatesSelected();
+        const colorClass = selectionsExist ? " topOptionWhite" : " topOptionGray";
+        const cursorClass = selectionsExist ? " pointer" : " defaultCursor";
 
         let selectAttributes = {
             disableUnderline: true,
             classes: {
-                root: selectionsExist ? "selectRootWhite" : "selectRootGray",
+                root: colorClass,
                 icon: selectionsExist ? "selectIconWhiteImportant" : "selectIconGrayImportant"
             },
             value: "Move To",
@@ -804,10 +811,13 @@ class MyCandidates extends Component {
                     }
 
                 </div>
-                <div className="inlineBlock clickableNoUnderline" onClick={() => this.moveCandidates("Dismissed")}>
+                <div
+                    className={"inlineBlock" + colorClass + cursorClass}
+                    onClick={() => this.moveCandidates("Dismissed")}
+                >
                     {"Dismiss"}
                 </div>
-                <div className="inlineBlock">
+                <div className={"inlineBlock" + colorClass + cursorClass}>
                     {"Contact"}
                 </div>
                 <div className="inlineBlock">

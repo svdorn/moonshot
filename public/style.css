@@ -2687,11 +2687,11 @@ button.link {
     display: none;
 }
 
-
 .selectRootWhite { color: white; }
 .selectIconWhiteImportant { color: white !important; }
-.selectRootGray { color: #5E5E5E; }
 .selectIconGrayImportant { color: #5E5E5E !important; }
+.topOptionWhite { color: white; }
+.topOptionGray { color: #5E5E5E; }
 
 
 
@@ -4071,6 +4071,9 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     cursor:      -o-grab;
     cursor:         grab;
 }
+.pointer { cursor: pointer; }
+.notAllowed { cursor: not-allowed; }
+.defaultCursor { cursor: default; }
 
 
 .twoOptionsBox {
