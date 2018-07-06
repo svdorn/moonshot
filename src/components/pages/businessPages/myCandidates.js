@@ -138,9 +138,10 @@ class MyCandidates extends Component {
         }
     }
 
-    handlePositionChange = (event, index, position) => {
+    handlePositionChange = event => {
         // find the position id from the given name
         let positionId = undefined;
+        const position = event.target.value;
         try {
             positionId = this.state.positions.find(pos => {
                 return pos.name === position
@@ -651,34 +652,10 @@ class MyCandidates extends Component {
     }
 
 
-    render() {
-        const currentUser = this.props.currentUser;
-        // find the id of the currently selected position
-        let positionId = "";
-        try {
-            positionId = this.state.positions.find(pos => {
-                return pos.name === this.state.position;
-            })._id;
-        } catch (getPosIdErr) { /* probably just haven't chosen a position yet */ }
-
-        let self = this;
-
-        // const tabs = (
-        //     <Tabs
-        //         inkBarStyle={{background: 'white'}}
-        //         className="settingsTabs"
-        //         value={this.state.tab}
-        //         onChange={this.handleTabChange}
-        //     >
-        //         <Tab label="All" value="All" style={{color:"white"}} />
-        //         <Tab label="Favorites" value="Favorites" style={{color:"white"}} />
-        //         <Tab label="Reviewed" value="Reviewed" style={{color:"white"}} />
-        //         <Tab label="Not Reviewed" value="Not Reviewed" style={{color:"white"}} />
-        //     </Tabs>
-        // );
-
+    // the tabs at the top that say All, Favorites, etc...
+    tabParts() {
         const tabNames = ["All", "Favorites", "Reviewed", "Not Reviewed"];
-        const tabParts = tabNames.map(tabName => {
+        return tabNames.map(tabName => {
             const isSelected = tabName === this.state.tab;
             return (
                 <div
@@ -689,37 +666,44 @@ class MyCandidates extends Component {
                 </div>
             );
         });
-        const tabs = (
-            <div className="center">
-                <div className="myCandidatesTabs">
-                    { tabParts }
-                </div>
-            </div>
-        );
+    }
 
-        // lets the user switch between positions
+
+
+    // lets the user switch between positions
+    positionSelector() {
         const positions = this.state.positions;
-        const positionItems = positions.map(function (position) {
-            return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
-        });
-        const positionSelector = (
-            <DropDownMenu value={this.state.position}
-                          onChange={this.handlePositionChange}
-                          labelStyle={style.labelStyle}
-                          anchorOrigin={style.anchorOrigin}
-                          style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
+        const positionItems = positions.map(position => {
+            return (
+                <NewMenuItem
+                    value={position.name}
+                    key={`position${position.name}`}
+                >
+                    { position.name }
+                </NewMenuItem>
+            );
+        })
+        return (
+            <Select
+                disableUnderline={true}
+                classes={{
+                    root: "selectRootWhite",
+                    icon: "selectIconWhiteImportant"
+                }}
+                value={this.state.position}
+                onChange={this.handlePositionChange}
             >
-                <MenuItem value={""} primaryText="Position"/>
-                <Divider/>
-                {positionItems}
-            </DropDownMenu>
+                { positionItems }
+            </Select>
         );
+    }
 
-        // create the box at the top of the screen that shows only for new users
-        // and tells them how to see candidate results
-        let infoBox = null;
+
+    // create the box at the top of the screen that shows only for new users
+    // and tells them how to see candidate results
+    infoBox() {
         if (!this.props.currentUser.sawMyCandidatesInfoBox) {
-            infoBox = (
+            return (
                 <div className="center">
                     <div className="myCandidatesInfoBox font16px font12pxUnder500">
                         Click any candidate name to see results.<br/>
@@ -727,9 +711,14 @@ class MyCandidates extends Component {
                         <div className="x" onClick={this.seeInfoBox.bind(this)}>x</div>
                     </div>
                 </div>
-            )
+            );
+        } else {
+            return null;
         }
+    }
 
+
+    topOptions() {
         // the hint that shows up when search bar is in focus
         const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
         const searchInputStyle = { color: "rgba(255, 255, 255, .8)" }
@@ -737,7 +726,7 @@ class MyCandidates extends Component {
         const searchFloatingLabelStyle = searchHintStyle;
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
-        const topOptions = (
+        return (
             <div className="topOptions">
                 <Field
                     name="search"
@@ -791,6 +780,21 @@ class MyCandidates extends Component {
                 </div>
             </div>
         );
+    }
+
+
+    render() {
+        const currentUser = this.props.currentUser;
+        let positionId = this.state.positionId;
+
+        const tabs = (
+            <div className="center">
+                <div className="myCandidatesTabs">
+                    { this.tabParts() }
+                </div>
+                { this.positionSelector() }
+            </div>
+        );
 
         return (
             <div className="jsxWrapper blackBackground fillScreen myCandidates whiteText" style={{paddingBottom: "20px"}} ref='myCandidates'>
@@ -805,13 +809,11 @@ class MyCandidates extends Component {
 
                 { tabs }
 
-                { positionSelector }
-
-                { infoBox }
+                { this.infoBox() }
 
                 <div className="center">
                     <div className="candidatesAndOptions">
-                        { topOptions }
+                        { this.topOptions() }
                         <div className="candidatesContainer">
                             { this.createCandidatesTable(positionId) }
                         </div>
