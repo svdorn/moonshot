@@ -2,8 +2,6 @@
 import React, { Component } from 'react';
 import {
     TextField,
-    DropDownMenu,
-    MenuItem,
     Divider,
     Toolbar,
     ToolbarGroup,
@@ -14,7 +12,7 @@ import {
     Tab
 } from 'material-ui';
 import Select from '@material-ui/core/Select';
-import NewMenuItem from '@material-ui/core/MenuItem';
+import MenuItem from '@material-ui/core/MenuItem';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import { browserHistory } from 'react-router';
@@ -403,12 +401,12 @@ class MyCandidates extends Component {
         // create the stage name menu items
         const stages = stageNames.map(stage => {
             return (
-                <NewMenuItem
+                <MenuItem
                     value={stage}
                     key={`${candidateId}hiringStage${stage}`}
                 >
                     { stage }
-                </NewMenuItem>
+                </MenuItem>
             )
         });
 
@@ -456,7 +454,8 @@ class MyCandidates extends Component {
 
 
     // move the candidate to Reviewed, Favorites, or Not Reviewed
-    handleMoveTo = (event, index, moveTo) => {
+    handleMoveTo = event => {
+        const moveTo = event.target.value;
         // check for valid input
         if (["Reviewed", "Not Reviewed", "Favorites"].includes(moveTo)) {
             // copy "this"
@@ -675,12 +674,12 @@ class MyCandidates extends Component {
         const positions = this.state.positions;
         const positionItems = positions.map(position => {
             return (
-                <NewMenuItem
+                <MenuItem
                     value={position.name}
                     key={`position${position.name}`}
                 >
                     { position.name }
-                </NewMenuItem>
+                </MenuItem>
             );
         })
         return (
@@ -726,6 +725,18 @@ class MyCandidates extends Component {
         const searchFloatingLabelStyle = searchHintStyle;
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
+
+        const menuItems = ["Reviewed", "Not Reviewed", "Favorites"].map(menuItem => {
+            return (
+                <MenuItem
+                    value={menuItem}
+                    key={`moveTo${menuItem}`}
+                >
+                    { menuItem }
+                </MenuItem>
+            );
+        });
+
         return (
             <div className="topOptions">
                 <Field
@@ -741,18 +752,19 @@ class MyCandidates extends Component {
                     value={this.state.searchTerm}
                 />
                 <div className="inlineBlock">
-                    <DropDownMenu value={"Move To"}
-                                  onChange={this.handleMoveTo}
-                                  labelStyle={style.labelStyle}
-                                  anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "20px", marginTop: "11px", marginRight: "0"}}
+                    <Select
+                        disableUnderline={true}
+                        classes={{
+                            root: "selectRootWhite",
+                            icon: "selectIconWhiteImportant"
+                        }}
+                        value={"Move To"}
+                        onChange={this.handleMoveTo}
                     >
-                        <MenuItem value={"Move To"} primaryText="Move To"/>
+                        <MenuItem value={"Move To"}>{"Move To"}</MenuItem>
                         <Divider/>
-                        <MenuItem value={"Reviewed"} primaryText="Reviewed" />
-                        <MenuItem value={"Not Reviewed"} primaryText="Not Reviewed" />
-                        <MenuItem value={"Favorites"} primaryText="Favorites" />
-                    </DropDownMenu>
+                        {menuItems}
+                    </Select>
                 </div>
                 <div className="inlineBlock">
                     <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleCheckMarkClick("hideDismissed")}>
