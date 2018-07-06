@@ -2564,9 +2564,22 @@ button.link {
 .myCandidates .candidateTable tr {
     height: 30px;
 }
-
+.myCandidates .candidateTable td {
+    padding: 5px 0;
+}
+/* select boxes need to be moved down a bit since they aren't as tall */
 .myCandidates .candidateTable td:nth-child(1) {
     width: 40px;
+    padding-top: 9px;
+}
+/* interest stars need to be moved down a bit too */
+.myCandidates .candidateTable td:nth-child(4) {
+    padding-bottom: 0;
+}
+
+/* separator line between candidates */
+.myCandidates .candidateTable tr:not(:first-child) > td:not(:first-child) {
+    border-top: 1px solid gray;
 }
 
 .myCandidates .candidate > div {
