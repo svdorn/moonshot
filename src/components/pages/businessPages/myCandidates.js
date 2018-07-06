@@ -800,11 +800,13 @@ class MyCandidates extends Component {
         let positionId = this.state.positionId;
 
         const tabs = (
-            <div className="center">
+            <div className="center" style={{position:"relative"}}>
                 <div className="myCandidatesTabs">
                     { this.tabParts() }
                 </div>
-                { this.positionSelector() }
+                <div className="myCandidatesPositionSelector">
+                    { this.positionSelector() }
+                </div>
             </div>
         );
 

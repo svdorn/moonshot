@@ -2573,6 +2573,11 @@ button.link {
     display: inline-block;
 }
 
+.myCandidatesPositionSelector {
+    position: absolute;
+    top: -2px;
+    right: calc(50% - 500px);
+}
 
 .star.white { --starColor: white; }
 .star.gray { --starColor: gray; }
