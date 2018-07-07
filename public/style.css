@@ -2492,8 +2492,63 @@ button.link {
 
 
 
+
+.candidateEvalResults {
+    position: relative;
+}
 .candidateEvalResults .candidateName {
     margin-top: 12px;
+
+}
+
+.candidateEvalResults .fullScreenIconContainer {
+    position: absolute;
+    left: 20px;
+    top: 15px;
+}
+.expandIcon, .collapseIcon {
+    position: relative;
+    cursor: pointer;
+}
+.expandIcon:before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 6px;
+    width: 6px;
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+}
+.expandIcon:after {
+    content: "";
+    position: absolute;
+    top: 3px;
+    left: 3px;
+    height: 6px;
+    width: 6px;
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
+}
+.collapseIcon:before {
+    content: "";
+    position: absolute;
+    top: 5px;
+    left: 5px;
+    height: 6px;
+    width: 6px;
+    border-left: 1px solid white;
+    border-top: 1px solid white;
+}
+.collapseIcon:after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    height: 6px;
+    width: 6px;
+    border-bottom: 1px solid white;
+    border-right: 1px solid white;
 }
 
 .candidateResults {

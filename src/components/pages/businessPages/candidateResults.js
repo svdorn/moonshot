@@ -301,59 +301,60 @@ class Results extends Component {
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
         const responsesSection = loading ? loadingArea : this.makeResponsesSection();
 
+        let content = null;
+
+        // populate the results if the candidate exists
+        if (candidate) {
+            const iconClass = this.props.fullScreen ? "collapseIcon" : "expandIcon";
+
+            content = (
+                <div className="profileInfoSkills blackBackground">
+                    <div className="fullScreenIconContainer">
+                        <div className={iconClass} onClick={() => this.props.toggleFullScreen()}/>
+                    </div>
+                    <div className="center">
+                        <div>
+                            {candidate.name ?
+                                <div>
+                                    <div className="grayText font26px font14pxUnder700 candidateName">
+                                        {candidate.name}
+                                    </div>
+                                    <a  className="font18px font12pxUnder500 grayText grayTextOnHover underline"
+                                        href={mailtoEmail}
+                                    >
+                                        Contact
+                                    </a>
+                                </div>
+                                : null
+                            }
+                        </div>
+                    </div>
+                    <Tabs
+                        style={style.topTabs}
+                        inkBarStyle={{background: 'white'}}
+                        tabItemContainerStyle={{width: '40%'}}
+                        className="myPathwaysTabs"
+                    >
+                        <Tab label="Analysis" style={style.topTab}>
+                            <div className="tabsShadow" style={{position:"absolute"}}>
+                                <div/>
+                            </div>
+                            {analysisSection}
+                        </Tab>
+                        <Tab label="Responses" style={style.topTab}>
+                            <div className="tabsShadow">
+                                <div/>
+                            </div>
+                            {responsesSection}
+                        </Tab>
+                    </Tabs>
+                </div>
+            );
+        }
+
         return (
             <div className={"candidateEvalResults " + this.props.className}>
-                {candidate ?
-                    <div>
-                        <div className="blackBackground paddingBottom40px">
-                            <div className="profileInfoSkills">
-                                <div className="center">
-                                    <div>
-                                        {candidate.name ?
-                                            <div>
-                                                <div className="grayText font26px font14pxUnder700 candidateName">
-                                                    {candidate.name}
-                                                </div>
-                                                <a  className="font18px font12pxUnder500 grayText grayTextOnHover underline"
-                                                    href={mailtoEmail}
-                                                >
-                                                    Contact
-                                                </a>
-                                            </div>
-                                            : null
-                                        }
-                                    </div>
-                                </div>
-                                <Tabs
-                                    style={style.topTabs}
-                                    inkBarStyle={{background: 'white'}}
-                                    tabItemContainerStyle={{width: '40%'}}
-                                    className="myPathwaysTabs"
-                                >
-                                    <Tab label="Analysis" style={style.topTab}>
-                                        <div className="tabsShadow" style={{position:"absolute"}}>
-                                            <div/>
-                                        </div>
-                                        {analysisSection}
-                                    </Tab>
-                                    <Tab label="Responses" style={style.topTab}>
-                                        <div className="tabsShadow">
-                                            <div/>
-                                        </div>
-                                        {responsesSection}
-                                    </Tab>
-                                </Tabs>
-                            </div>
-                        </div>
-
-                    </div>
-                    :
-                    <div>
-                        <div className="blackBackground halfHeight"/>
-                        <div className="fullHeight"/>
-                        <div className="fullHeight"/>
-                    </div>
-                }
+                { content }
             </div>
         );
     }

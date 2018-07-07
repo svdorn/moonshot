@@ -868,6 +868,17 @@ class MyCandidates extends Component {
     }
 
 
+    // set the results page to be full screen
+    // pass in an activate boolean if you want to set full screen to true or false,
+    // or pass in nothing to set it to its opposite state
+    toggleFullScreen(fullScreen) {
+        if (typeof activate !== "boolean") {
+            fullScreen = !this.state.fullScreenResults;
+        }
+        this.setState({ fullScreenResults: fullScreen });
+    }
+
+
     render() {
         const currentUser = this.props.currentUser;
         let positionId = this.state.positionId;
@@ -910,6 +921,8 @@ class MyCandidates extends Component {
                                     className={candidateResultsClass}
                                     candidateId={this.state.resultsCandidateId}
                                     positionId={this.state.positionId}
+                                    toggleFullScreen={this.toggleFullScreen.bind(this)}
+                                    fullScreen={this.state.fullScreenResults}
                                 />
                                 : null
                             }
