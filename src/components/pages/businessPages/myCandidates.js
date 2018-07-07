@@ -879,6 +879,12 @@ class MyCandidates extends Component {
     }
 
 
+    // exits the candidate results popover
+    exitResults() {
+        this.setState({ showResults: false });
+    }
+
+
     render() {
         const currentUser = this.props.currentUser;
         let positionId = this.state.positionId;
@@ -922,6 +928,7 @@ class MyCandidates extends Component {
                                     candidateId={this.state.resultsCandidateId}
                                     positionId={this.state.positionId}
                                     toggleFullScreen={this.toggleFullScreen.bind(this)}
+                                    exitResults={this.exitResults.bind(this)}
                                     fullScreen={this.state.fullScreenResults}
                                 />
                                 : null

@@ -2498,13 +2498,17 @@ button.link {
 }
 .candidateEvalResults .candidateName {
     margin-top: 12px;
-
 }
 
 .candidateEvalResults .fullScreenIconContainer {
     position: absolute;
-    left: 20px;
+    left: 24px;
     top: 15px;
+}
+.candidateEvalResults .exitIconContainer {
+    position: absolute;
+    right: 25px;
+    top: 6px;
 }
 .expandIcon, .collapseIcon {
     position: relative;
@@ -2535,18 +2539,18 @@ button.link {
     position: absolute;
     top: 5px;
     left: 5px;
-    height: 6px;
-    width: 6px;
+    height: 5px;
+    width: 5px;
     border-left: 1px solid white;
     border-top: 1px solid white;
 }
 .collapseIcon:after {
     content: "";
     position: absolute;
-    top: 0px;
-    left: 0px;
-    height: 6px;
-    width: 6px;
+    top: -2px;
+    left: -2px;
+    height: 5px;
+    width: 5px;
     border-bottom: 1px solid white;
     border-right: 1px solid white;
 }

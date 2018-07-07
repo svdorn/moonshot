@@ -312,6 +312,9 @@ class Results extends Component {
                     <div className="fullScreenIconContainer">
                         <div className={iconClass} onClick={() => this.props.toggleFullScreen()}/>
                     </div>
+                    <div className="exitIconContainer">
+                        <div className="pointer" onClick={() => this.props.exitResults()}>x</div>
+                    </div>
                     <div className="center">
                         <div>
                             {candidate.name ?
