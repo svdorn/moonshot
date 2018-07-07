@@ -2513,6 +2513,8 @@ button.link {
 .expandIcon, .collapseIcon {
     position: relative;
     cursor: pointer;
+    width: 12px;
+    height: 12px;
 }
 .expandIcon:before {
     content: "";
@@ -2567,9 +2569,15 @@ button.link {
 }
 .candidateResults.fullScreen {
     width: 100%;
+    -webkit-transition: width 0.5s ease;
+    -ms-transition: width 0.5s ease;
+    transition: width 0.5s ease;
 }
 .candidateResults.halfScreen {
     width: 650px;
+    -webkit-transition: width 0.5s ease;
+    -ms-transition: width 0.5s ease;
+    transition: width 0.5s ease;
 }
 .myCandidatesTabs {
     display: flex;
