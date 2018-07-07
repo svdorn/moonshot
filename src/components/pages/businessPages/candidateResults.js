@@ -26,7 +26,9 @@ class Results extends Component {
             areaSelected: undefined,
             windowWidth: window.innerWidth,
             // if this is true, didn't get enough props, so can't display results
-            invalidProps: false
+            invalidProps: false,
+            // the currently selected tab
+            tab: "Analysis"
         };
     }
 
@@ -285,6 +287,11 @@ class Results extends Component {
     }
 
 
+    handleTabChange = (value) => {
+        this.setState({ tab: value });
+    }
+
+
     render() {
         const user = this.props.currentUser;
         const candidate = this.state.candidate;
@@ -308,49 +315,57 @@ class Results extends Component {
             const iconClass = this.props.fullScreen ? "collapseIcon" : "expandIcon";
 
             content = (
-                <div className="profileInfoSkills blackBackground">
-                    <div className="fullScreenIconContainer">
-                        <div className={iconClass} onClick={() => this.props.toggleFullScreen()}/>
-                    </div>
-                    <div className="exitIconContainer">
-                        <div className="pointer" onClick={() => this.props.exitResults()}>x</div>
-                    </div>
-                    <div className="center">
-                        <div>
-                            {candidate.name ?
-                                <div>
-                                    <div className="grayText font26px font14pxUnder700 candidateName">
-                                        {candidate.name}
-                                    </div>
-                                    <a  className="font18px font12pxUnder500 grayText grayTextOnHover underline"
-                                        href={mailtoEmail}
-                                    >
-                                        Contact
-                                    </a>
-                                </div>
-                                : null
-                            }
+                <div className="profileInfoSkills blackBackground" style={{position:"relative"}}>
+                    <div className="resultsHeader">
+                        <div className="fullScreenIconContainer">
+                            <div className={iconClass} onClick={() => this.props.toggleFullScreen()}/>
                         </div>
+                        <div className="exitIconContainer">
+                            <div className="pointer" onClick={() => this.props.exitResults()}>x</div>
+                        </div>
+                        <div className="center">
+                            <div>
+                                {candidate.name ?
+                                    <div>
+                                        <div className="grayText font26px font14pxUnder700 candidateName">
+                                            {candidate.name}
+                                        </div>
+                                        <a  className="font18px font12pxUnder500 grayText grayTextOnHover underline"
+                                            href={mailtoEmail}
+                                        >
+                                            Contact
+                                        </a>
+                                    </div>
+                                    : null
+                                }
+                            </div>
+                        </div>
+                        <Tabs
+                            style={style.topTabs}
+                            inkBarStyle={{background: 'white'}}
+                            tabItemContainerStyle={{width: '40%'}}
+                            className="myPathwaysTabs"
+                            onChange={this.handleTabChange.bind(this)}
+                        >
+                            <Tab label="Analysis" style={style.topTab} value="Analysis">
+                                <div className="tabsShadow" style={{position:"absolute"}}>
+                                    <div/>
+                                </div>
+                            </Tab>
+                            <Tab label="Responses" style={style.topTab} value="Responses">
+                                <div className="tabsShadow">
+                                    <div/>
+                                </div>
+                            </Tab>
+                        </Tabs>
                     </div>
-                    <Tabs
-                        style={style.topTabs}
-                        inkBarStyle={{background: 'white'}}
-                        tabItemContainerStyle={{width: '40%'}}
-                        className="myPathwaysTabs"
-                    >
-                        <Tab label="Analysis" style={style.topTab}>
-                            <div className="tabsShadow" style={{position:"absolute"}}>
-                                <div/>
-                            </div>
-                            {analysisSection}
-                        </Tab>
-                        <Tab label="Responses" style={style.topTab}>
-                            <div className="tabsShadow">
-                                <div/>
-                            </div>
-                            {responsesSection}
-                        </Tab>
-                    </Tabs>
+                    <div className="resultsContent">
+                        {this.state.tab === "Analysis" ?
+                            analysisSection
+                            :
+                            responsesSection
+                        }
+                    </div>
                 </div>
             );
         }
