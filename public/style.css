@@ -2576,6 +2576,18 @@ button.link {
     top: 8px;
     left: 10px;
 }
+.myCandidates .arrowContainer {
+    position: absolute;
+    top: 96px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.myCandidates .left.arrowContainer.halfScreen { left: 334px; }
+.myCandidates .left.arrowContainer.fullScreen { left: -16px; }
+.myCandidates .right.arrowContainer {
+    right: -16px;
+}
 
 .candidateResults {
     position: absolute;

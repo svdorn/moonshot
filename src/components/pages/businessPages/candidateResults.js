@@ -309,12 +309,6 @@ class Results extends Component {
 
             content = (
                 <div className="profileInfoSkills blackBackground">
-                    <div className="leftArrowContainer">
-                        <div className="left circleArrowIcon" />
-                    </div>
-                    <div className="rightArrowContainer">
-                        <div className="right circleArrowIcon" />
-                    </div>
                     <div className="fullScreenIconContainer">
                         <div className={iconClass} onClick={() => this.props.toggleFullScreen()}/>
                     </div>

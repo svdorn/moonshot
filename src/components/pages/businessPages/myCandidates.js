@@ -900,7 +900,10 @@ class MyCandidates extends Component {
             </div>
         );
 
-        const candidateResultsClass = "candidateResults " + (this.state.fullScreenResults ? "fullScreen" : "halfScreen");
+        let resultsWidthClass = this.state.fullScreenResults ? "fullScreen" : "halfScreen";
+        let candidateResultsClass = "candidateResults " + resultsWidthClass;
+        let leftArrowClass = "left arrowContainer " + resultsWidthClass;
+        let rightArrowClass = "right arrowContainer " + resultsWidthClass;
 
         return (
             <div className="jsxWrapper blackBackground fillScreen myCandidates whiteText" style={{paddingBottom: "20px"}} ref='myCandidates'>
@@ -923,14 +926,22 @@ class MyCandidates extends Component {
                         <div className="candidatesContainer">
                             { this.createCandidatesTable(positionId) }
                             { this.state.showResults ?
-                                <CandidateResults
-                                    className={candidateResultsClass}
-                                    candidateId={this.state.resultsCandidateId}
-                                    positionId={this.state.positionId}
-                                    toggleFullScreen={this.toggleFullScreen.bind(this)}
-                                    exitResults={this.exitResults.bind(this)}
-                                    fullScreen={this.state.fullScreenResults}
-                                />
+                                <div>
+                                    <CandidateResults
+                                        className={candidateResultsClass}
+                                        candidateId={this.state.resultsCandidateId}
+                                        positionId={this.state.positionId}
+                                        toggleFullScreen={this.toggleFullScreen.bind(this)}
+                                        exitResults={this.exitResults.bind(this)}
+                                        fullScreen={this.state.fullScreenResults}
+                                    />
+                                    <div className={leftArrowClass}>
+                                        <div className="left circleArrowIcon" />
+                                    </div>
+                                    <div className={rightArrowClass}>
+                                        <div className="right circleArrowIcon" />
+                                    </div>
+                                </div>
                                 : null
                             }
                         </div>
