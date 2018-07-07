@@ -311,7 +311,7 @@ class AddUserDialog extends Component {
         let candidateEmailSection = [];
         for (let i = 0; i < this.state.numCandidateEmails; i++) {
             candidateEmailSection.push(
-                <div>
+                <div key={`candidateEmail${i}`}>
                     <Field
                         name={"candidateEmail" + i}
                         component={renderTextField}
@@ -328,7 +328,7 @@ class AddUserDialog extends Component {
         let employeeEmailSection = [];
         for (let i = 0; i < this.state.numEmployeeEmails; i++) {
             employeeEmailSection.push(
-                <div>
+                <div key={`employeeEmail${i}`}>
                     <Field
                         name={"employeeEmail" + i}
                         component={renderTextField}
@@ -362,7 +362,7 @@ class AddUserDialog extends Component {
         let adminEmailSection = [];
         for (let i = 0; i < this.state.numAdminEmails; i++) {
             adminEmailSection.push(
-                <div>
+                <div key={`adminEmail${i}`}>
                     <Field
                         name={"adminEmail" + i}
                         component={renderTextField}
