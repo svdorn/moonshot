@@ -69,6 +69,9 @@ class MyCandidates extends Component {
             showResults: false,
             // the id of the candidate we want to see results for
             resultsCandidateId: undefined,
+            // the index within the sorted array of candidates; used for going
+            // to the results of the next or previous candidate
+            resultsCandidateIndex: undefined,
             // if the results component shoud take up the entire candidates table
             fullScreenResults: false
         }
@@ -249,8 +252,19 @@ class MyCandidates extends Component {
             sortedCandidates.reverse();
         }
 
+        // find the index of the selected candidate
+        let resultsCandidateIndex = undefined;
+        if (this.state.resultsCandidateId) {
+            resultsCandidateIndex = this.state.sortedCandidates.findIndex(candidate => {
+                return candidate._id === this.state.resultsCandidateId;
+            });
+        }
+
         // set the state so the candidates can be displayed in order
-        this.setState({ sortedCandidates });
+        this.setState({
+            sortedCandidates,
+            resultsCandidateIndex
+        });
 
         console.log(sortedCandidates);
     }
@@ -609,7 +623,10 @@ class MyCandidates extends Component {
         // there are candidates that meet these criteria, make them
         let candidateRows = [];
 
+        // the position of the candidate within the sorted/filtered candidates array
+        let candidateIndex = -1;
         candidateRows = this.state.sortedCandidates.map(candidate => {
+            candidateIndex++;
             let score = null;
             let predicted = null;
             let skill = null;
@@ -620,7 +637,7 @@ class MyCandidates extends Component {
             }
             return (
                 <tr className="candidate" key={candidate._id}>
-                    <td className="selectCandidateBox inlineBlock" >
+                    <td className="selectCandidateBox inlineBlock">
                         <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleSelectCandidate(candidate._id)}>
                             <img
                                 alt="Checkmark icon"
@@ -629,14 +646,18 @@ class MyCandidates extends Component {
                             />
                         </div>
                     </td>
-                    <td className="name pointer" onClick={() => this.showResults(candidate._id)}>
+                    <td className="name pointer" onClick={() => this.showResults(candidate._id, candidateIndex)}>
                         {candidate.name}
                     </td>
                     <td className="score">
                         {Math.round(score)}
                     </td>
-                    <td className="interest">{this.makeStars(candidate._id, candidate.interest)}</td>
-                    <td className="stage">{this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}</td>
+                    <td className="interest">
+                        {this.makeStars(candidate._id, candidate.interest)}
+                    </td>
+                    <td className="stage">
+                        {this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}
+                    </td>
                     <td className="predicted">
                         {Math.round(predicted)}
                     </td>
@@ -683,10 +704,11 @@ class MyCandidates extends Component {
 
 
     // show a candidate's results
-    showResults(candidateId) {
+    showResults(candidateId, candidateIndex) {
         this.setState({
             showResults: true,
-            resultsCandidateId: candidateId
+            resultsCandidateId: candidateId,
+            resultsCandidateIndex: candidateIndex
         });
     }
 
@@ -885,7 +907,36 @@ class MyCandidates extends Component {
     }
 
 
+    // go to the next or previous candidate
+    nextPreviousResults(next) {
+        let newIndex = 0;
+        // if the candidate whose results we are seeing is within the current
+        // page sorted candidates ...
+        if (this.state.resultsCandidateIndex !== undefined) {
+            // ... get the index of the candidate whose results we want to see
+            newIndex = next ? this.state.resultsCandidateIndex + 1 : this.state.resultsCandidateIndex - 1;
+        } else {
+            // if there are no candidates, do nothing
+            if (this.state.sortedCandidates.length === 0) { return console.log("no candidates here!"); }
+            // if there are candidates, select the first one (so keep the default)
+        }
+
+        // make sure the new index is valid
+        if (newIndex < 0 || newIndex >= this.state.sortedCandidates.length) {
+            return console.log("invalid index");
+        }
+
+        console.log("new candidate index: ", newIndex);
+
+        this.setState({
+            resultsCandidateId: this.state.sortedCandidates[newIndex]._id,
+            resultsCandidateIndex: newIndex
+        });
+    }
+
+
     render() {
+        console.log("rendering with candidate index: ", this.state.resultsCandidateId);
         const currentUser = this.props.currentUser;
         let positionId = this.state.positionId;
 
@@ -902,8 +953,8 @@ class MyCandidates extends Component {
 
         let resultsWidthClass = this.state.fullScreenResults ? "fullScreen" : "halfScreen";
         let candidateResultsClass = "candidateResults " + resultsWidthClass;
-        let leftArrowClass = "left arrowContainer " + resultsWidthClass;
-        let rightArrowClass = "right arrowContainer " + resultsWidthClass;
+        let leftArrowClass = "left clickable arrowContainer " + resultsWidthClass;
+        let rightArrowClass = "right clickable arrowContainer " + resultsWidthClass;
 
         return (
             <div className="jsxWrapper blackBackground fillScreen myCandidates whiteText" style={{paddingBottom: "20px"}} ref='myCandidates'>
@@ -935,10 +986,10 @@ class MyCandidates extends Component {
                                         exitResults={this.exitResults.bind(this)}
                                         fullScreen={this.state.fullScreenResults}
                                     />
-                                    <div className={leftArrowClass}>
+                                    <div className={leftArrowClass} onClick={() => this.nextPreviousResults(false)}>
                                         <div className="left circleArrowIcon" />
                                     </div>
-                                    <div className={rightArrowClass}>
+                                    <div className={rightArrowClass} onClick={() => this.nextPreviousResults(true)}>
                                         <div className="right circleArrowIcon" />
                                     </div>
                                 </div>

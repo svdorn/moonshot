@@ -28,12 +28,15 @@ class Results extends Component {
             // if this is true, didn't get enough props, so can't display results
             invalidProps: false,
             // the currently selected tab
-            tab: "Analysis"
+            tab: "Analysis",
+            // if there was an error loading in results
+            error: false
         };
     }
 
 
     componentDidUpdate(prevProps, prevState) {
+        console.log("id: ", this.props.candidateId);
         if (this.props.candidateId !== prevProps.candidateId) {
             this.reset();
         }
@@ -50,6 +53,8 @@ class Results extends Component {
 
     // load a new candidate's info and reset the component
     reset() {
+        this.setState({ loading: true });
+
         const userId = this.props.currentUser._id;
         const positionId = this.props.positionId;
         const candidateId = this.props.candidateId;
@@ -119,10 +124,10 @@ class Results extends Component {
             });
         })
         .catch(error => {
-            // console.log("error: ", error);
-            // if (error.response && error.response.data) {
-            //     console.log(error.response.data);
-            // }
+            this.setState({
+                error: true,
+                loading: false
+            });
         });
     }
 
@@ -310,8 +315,18 @@ class Results extends Component {
 
         let content = null;
 
+        // if there was an error getting the user's results
+        if (this.state.error) {
+            content = "Error getting results.";
+        }
+
+        // if loading the user's results
+        else if (this.state.loading) {
+            content = <CircularProgress color="#FB553A" />;
+        }
+
         // populate the results if the candidate exists
-        if (candidate) {
+        else if (candidate) {
             const iconClass = this.props.fullScreen ? "collapseIcon" : "expandIcon";
 
             content = (
@@ -371,7 +386,7 @@ class Results extends Component {
         }
 
         return (
-            <div className={"candidateEvalResults " + this.props.className}>
+            <div className={"blackBackground candidateEvalResults " + this.props.className}>
                 { content }
             </div>
         );
