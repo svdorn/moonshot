@@ -11,7 +11,7 @@ import PredictiveGraph from '../../miscComponents/predictiveGraph';
 import PsychBreakdown from '../../childComponents/psychBreakdown';
 import HoverTip from "../../miscComponents/hoverTip";
 
-class Results extends Component {
+class CandidateResults extends Component {
     constructor(props) {
         super(props);
 
@@ -277,7 +277,7 @@ class Results extends Component {
 
         let responses = freeResponses.map(freeResponse => {
             return (
-                <div className="employerDiv freeResponse">
+                <div className="employerDiv freeResponse" key={freeResponse.question}>
                     <span className="lightBlueText">{freeResponse.question}</span>
                     <div className="answer">{freeResponse.answer}</div>
                 </div>
@@ -470,4 +470,4 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(Results);
+export default connect(mapStateToProps, mapDispatchToProps)(CandidateResults);

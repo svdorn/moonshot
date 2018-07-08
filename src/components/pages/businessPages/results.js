@@ -171,8 +171,6 @@ class Results extends Component {
     makeAnalysisSection() {
         if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
 
-        const hardSkillsDataPoints = this.state.hardSkillPoints;
-
         const windowWidth = window.innerWidth;
         let graphHeight;
         if (windowWidth > 800) {
@@ -186,7 +184,7 @@ class Results extends Component {
         }
 
         return (
-            <div className="analysis center aboutMeSection" style={style.tabContent}>
+            <div className="analysis center aboutMeSection" style={style.tabContent} key={"analysisSection"}>
                 <div style={style.candidateScore}>
                     <div className="resultTopShadow center lightBlackBackground paddingTop20px">
                         <div className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore inlineBlock">
@@ -264,7 +262,7 @@ class Results extends Component {
 
         let responses = freeResponses.map(freeResponse => {
             return (
-                <div className="employerDiv freeResponse">
+                <div className="employerDiv freeResponse" key={freeResponse.question}>
                     <span className="lightBlueText">{freeResponse.question}</span>
                     <div className="answer">{freeResponse.answer}</div>
                 </div>
@@ -272,7 +270,7 @@ class Results extends Component {
         });
 
         return (
-            <div className="fillScreen candidateResponses">
+            <div className="fillScreen candidateResponses" key={"candidateResponses"}>
                 {responses}
             </div>
         )
@@ -291,12 +289,12 @@ class Results extends Component {
         }
 
         const loading = this.state.loading;
-        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="grayText" /></div>
+        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}} key="loadingArea"><CircularProgress color="grayText" /></div>
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
         const responsesSection = loading ? loadingArea : this.makeResponsesSection();
 
         return (
-            <div>
+            <div key="results">
                 {this.props.currentUser.userType == "accountAdmin" ? <AddUserDialog /> : null}
                 <MetaTags>
                     <title>{candidate.name} | Moonshot</title>

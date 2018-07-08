@@ -42,11 +42,17 @@ class MyCandidates extends Component {
         let positionNameFromUrl = props.location.query && props.location.query.position ? props.location.query.position : undefined;
 
         this.state = {
+            // what is entered in the name search bar
             searchTerm: "",
+            // which position we should see candidates for
             position: "",
+            // can sort by Name, Score, Hiring Stage, etc...
             sortBy: "",
+            // the direction to sort in
             sortAscending: true,
+            // hide candidates that have been dismissed?
             hideDismissed: false,
+            // hide candidates that have been hired?
             hideHired: false,
             // unordered candidates list
             candidates: [],
@@ -56,6 +62,7 @@ class MyCandidates extends Component {
             positions: [],
             // can be All, Reviewed, Not Reviewed
             tab: "All",
+            // if the url already has a position name
             positionNameFromUrl,
             // true if the business has no positions associated with it
             noPositions: false,
@@ -140,12 +147,16 @@ class MyCandidates extends Component {
         window.scrollTo(0, 0);
     }
 
+
+    // when user types into the search bar
     onSearchChange(searchTerm) {
         if (this.state.searchTerm !== searchTerm) {
             this.setState({ searchTerm }, this.reorder);
         }
     }
 
+
+    // change the position whose candidates are being viewed
     handlePositionChange = event => {
         // find the position id from the given name
         let positionId = undefined;
@@ -170,6 +181,8 @@ class MyCandidates extends Component {
         }, this.findCandidates);
     };
 
+
+    // change what is being sorted by
     handleSortByChange(sortBy) {
         // if the user is changing the sort by value
         if (this.state.sortBy !== sortBy) {
@@ -186,6 +199,8 @@ class MyCandidates extends Component {
         this.props.openAddUserModal();
     }
 
+
+    // get candidates for the current position from the back end
     findCandidates() {
         // need a position to search for
         if (!this.state.noPositions && this.state.position) {
@@ -219,6 +234,8 @@ class MyCandidates extends Component {
         }
     }
 
+
+    // switch between All, Reviewed, Not Reviewed, Favorites
     handleTabChange = (tab) => {
         // only switch tabs and re-search if not on the tab that should be switched to
         if (this.state.tab !== tab) {
@@ -386,7 +403,7 @@ class MyCandidates extends Component {
             );
         }
         return (
-            <div>
+            <div key={`${candidateId}stars`}>
                 {stars}
             </div>
         );
@@ -443,6 +460,7 @@ class MyCandidates extends Component {
                 }}
                 value={hiringStage}
                 onChange={this.handleChangeHiringStage(candidateId)}
+                key={`${candidateId}hiringStage`}
             >
                 { stages }
             </Select>
@@ -583,7 +601,7 @@ class MyCandidates extends Component {
         // loading in positions or candidates
         if (this.state.loadingPositions || this.state.loadingCandidates) {
             return (
-                <div>
+                <div key="candidatesTable">
                     <CircularProgress color="#FB553A" style={style.noCandidatesMessage} />
                 </div>
             )
@@ -591,7 +609,7 @@ class MyCandidates extends Component {
 
         else if (this.state.noPositions) {
             return (
-                <div>
+                <div key="no open evals">
                     Your business has no open evaluations.<br/>
                     Contact us at support@moonshotinsights.io to get your first one set up.
                 </div>
@@ -599,14 +617,14 @@ class MyCandidates extends Component {
         }
         else if (this.state.position == "" && !this.state.loadingPositions) {
             return (
-                <div style={style.noCandidatesMessage}>
+                <div style={style.noCandidatesMessage} key="select a position">
                     Select a position.
                 </div>
             );
         }
         else if (this.state.candidates.length === 0) {
             return (
-                <div style={style.noCandidatesMessage}>
+                <div style={style.noCandidatesMessage} key="no candidates started">
                     No candidates have started this evaluation.
                 </div>
             )
@@ -614,7 +632,7 @@ class MyCandidates extends Component {
         // if there are candidates in this position, but none meet the criteria
         else if (this.state.sortedCandidates.length === 0) {
             return (
-                <div style={style.noCandidatesMessage}>
+                <div style={style.noCandidatesMessage} key="none meet criteria">
                     No candidates meet these criteria.
                 </div>
             )
@@ -697,7 +715,7 @@ class MyCandidates extends Component {
         );
 
         return (
-            <table className="candidateTable"><tbody>
+            <table className="candidateTable" key="candidateTable"><tbody>
                 {candidateRows}
             </tbody></table>
         );
@@ -723,6 +741,7 @@ class MyCandidates extends Component {
                 <div
                     onClick={() => this.handleTabChange(tabName)}
                     className={"myCandidatesTab" + (isSelected ? " selected" : "")}
+                    key={`${tabName}tab`}
                 >
                     { tabName.toUpperCase() }
                 </div>
@@ -754,6 +773,7 @@ class MyCandidates extends Component {
                 }}
                 value={this.state.position}
                 onChange={this.handlePositionChange}
+                key="position selector"
             >
                 { positionItems }
             </Select>
@@ -766,7 +786,7 @@ class MyCandidates extends Component {
     infoBox() {
         if (!this.props.currentUser.sawMyCandidatesInfoBox) {
             return (
-                <div className="center">
+                <div className="center" key="info box">
                     <div className="myCandidatesInfoBox font16px font12pxUnder500">
                         Click any candidate name to see results.<br/>
                         Hover over any category for a description.
@@ -833,7 +853,7 @@ class MyCandidates extends Component {
         };
 
         return (
-            <div className="topOptions">
+            <div className="topOptions" key="top options">
                 <Field
                     name="search"
                     component={renderTextField}

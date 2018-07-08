@@ -71,8 +71,8 @@ class PsychBreakdown extends Component {
         const middle80indicatorStyle = { background: `linear-gradient(to right, ${leftColor}, ${rightColor})` };
 
         // the numbers that show above the actual data
-        const numbers = [5,4,3,2,1,0,1,2,3,4,5].map(number => {
-            return <div className="number" style={{color:"white"}}>{number}</div>
+        const numbers = [-5,-4,-3,-2,-1,0,1,2,3,4,5].map(number => {
+            return <div className="number" style={{color:"white"}} key={`number${number}`}>{Math.abs(number)}</div>
         })
         const topNumbers = (
             <div className="topNumbers">{numbers}</div>
@@ -129,7 +129,13 @@ class PsychBreakdown extends Component {
                 width: "8px"
             }
             return (
-                <div className="areaData center" style={{cursor: "pointer"}} onMouseEnter={() => this.mouseEnter(area.name)} onClick={() => this.selectTitle(area.name)} >
+                <div
+                    className="areaData center"
+                    style={{cursor: "pointer"}}
+                    onMouseEnter={() => this.mouseEnter(area.name)}
+                    onClick={() => this.selectTitle(area.name)}
+                    key={area.name}
+                >
                     <div className="title">
                         {area.name}
                     </div>

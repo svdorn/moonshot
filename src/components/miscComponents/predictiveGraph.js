@@ -101,7 +101,7 @@ class PredictiveGraph extends Component {
             labelCounter++;
 
             return (
-                <div className="leftYAxisLabel" style={labelStyle}>
+                <div className="leftYAxisLabel" style={labelStyle} key={`yAxis${label}`}>
                     <div>{label}</div>
                 </div>
             )
@@ -190,7 +190,7 @@ class PredictiveGraph extends Component {
             }
 
             points.push(
-                <div className="pointContainer" style={pointContainerStyle}>
+                <div className="pointContainer" style={pointContainerStyle} key={`points${label}`}>
                     <div className="confidenceIntervalLine" style={{...colorStyle, ...confidenceIntervalStyle}} />
                     <div className="confidenceIntervalBorder" style={{...colorStyle, ...topBorderStyle}} />
                     <div className="pointBox" style={{...colorStyle, ...pointBoxStyle}}>
@@ -210,7 +210,7 @@ class PredictiveGraph extends Component {
 
             // add the label for the x axis
             xAxisLabels.push(
-                <div className="xAxisLabel" style={{...labelStyle, ...labelTransform}}>
+                <div className="xAxisLabel" style={{...labelStyle, ...labelTransform}} key={`xAxis${label}`}>
                     {label}
                 </div>
             );
