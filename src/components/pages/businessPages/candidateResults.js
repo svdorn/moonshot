@@ -322,7 +322,7 @@ class Results extends Component {
 
         // if loading the user's results
         else if (this.state.loading) {
-            content = <CircularProgress color="#FB553A" />;
+            content = <CircularProgress color="#FB553A" style={{marginTop: "20px"}}/>;
         }
 
         // populate the results if the candidate exists

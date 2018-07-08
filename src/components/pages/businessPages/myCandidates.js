@@ -627,6 +627,7 @@ class MyCandidates extends Component {
         let candidateIndex = -1;
         candidateRows = this.state.sortedCandidates.map(candidate => {
             candidateIndex++;
+            const isSelected = this.state.resultsCandidateId === candidate._id;
             let score = null;
             let predicted = null;
             let skill = null;
@@ -636,7 +637,7 @@ class MyCandidates extends Component {
                 if (candidate.scores.skill) { skill = candidate.scores.skill; }
             }
             return (
-                <tr className="candidate" key={candidate._id}>
+                <tr className={"candidate"  + (isSelected ? " selected" : "")} key={candidate._id}>
                     <td className="selectCandidateBox inlineBlock">
                         <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleSelectCandidate(candidate._id)}>
                             <img
@@ -646,10 +647,10 @@ class MyCandidates extends Component {
                             />
                         </div>
                     </td>
-                    <td className="name pointer" onClick={() => this.showResults(candidate._id, candidateIndex)}>
+                    <td className={"name pointer"} onClick={() => this.showResults(candidate._id, candidateIndex)}>
                         {candidate.name}
                     </td>
-                    <td className="score">
+                    <td className={"score"}>
                         {Math.round(score)}
                     </td>
                     <td className="interest">
@@ -936,7 +937,7 @@ class MyCandidates extends Component {
 
 
     render() {
-        console.log("rendering with candidate index: ", this.state.resultsCandidateId);
+        console.log("rendering with candidate id: ", this.state.resultsCandidateId);
         const currentUser = this.props.currentUser;
         let positionId = this.state.positionId;
 
