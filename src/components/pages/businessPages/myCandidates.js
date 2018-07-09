@@ -272,7 +272,7 @@ class MyCandidates extends Component {
         // find the index of the selected candidate
         let resultsCandidateIndex = undefined;
         if (this.state.resultsCandidateId) {
-            resultsCandidateIndex = this.state.sortedCandidates.findIndex(candidate => {
+            resultsCandidateIndex = sortedCandidates.findIndex(candidate => {
                 return candidate._id === this.state.resultsCandidateId;
             });
         }
@@ -642,9 +642,7 @@ class MyCandidates extends Component {
         let candidateRows = [];
 
         // the position of the candidate within the sorted/filtered candidates array
-        let candidateIndex = -1;
         candidateRows = this.state.sortedCandidates.map(candidate => {
-            candidateIndex++;
             const isSelected = this.state.resultsCandidateId === candidate._id;
             let score = null;
             let predicted = null;
@@ -665,7 +663,7 @@ class MyCandidates extends Component {
                             />
                         </div>
                     </td>
-                    <td className={"name pointer"} onClick={() => this.showResults(candidate._id, candidateIndex)}>
+                    <td className={"name pointer"} onClick={() => this.showResults(candidate._id)}>
                         {candidate.name}
                     </td>
                     <td className={"score"}>
@@ -723,7 +721,12 @@ class MyCandidates extends Component {
 
 
     // show a candidate's results
-    showResults(candidateId, candidateIndex) {
+    showResults(candidateId) {
+        let candidateIndex = this.state.sortedCandidates.findIndex(candidate => {
+            return candidate._id === candidateId;
+        });
+        if (candidateIndex < 0) { candidateIndex = undefined; }
+        console.log("candidate index: ", candidateIndex);
         this.setState({
             showResults: true,
             resultsCandidateId: candidateId,
@@ -972,10 +975,15 @@ class MyCandidates extends Component {
             </div>
         );
 
-        let resultsWidthClass = this.state.fullScreenResults ? "fullScreen" : "halfScreen";
-        let candidateResultsClass = "candidateResults " + resultsWidthClass;
-        let leftArrowClass = "left clickable arrowContainer " + resultsWidthClass;
-        let rightArrowClass = "right clickable arrowContainer " + resultsWidthClass;
+        const resultsWidthClass = this.state.fullScreenResults ? "fullScreen" : "halfScreen";
+        const candidateResultsClass = "candidateResults " + resultsWidthClass;
+        const leftArrowContainerClass = "left arrowContainer " + resultsWidthClass;
+        const rightArrowContainerClass = "right arrowContainer " + resultsWidthClass;
+        // if the candidate is at the top of the list or not in the current list, disable the left arrow
+        const leftArrowClass = "left circleArrowIcon" + (typeof this.state.resultsCandidateIndex === "number" && this.state.resultsCandidateIndex > 0 ? "" : " disabled");
+        // if the candidate is in the list but is the last candidate OR if there
+        // are no candidates that meet the criteria, disable the right button
+        const rightArrowClass = "right circleArrowIcon" + (this.state.sortedCandidates.length === 0 || (typeof this.state.resultsCandidateIndex === "number" && this.state.resultsCandidateIndex >= this.state.sortedCandidates.length - 1) ? " disabled" : "");
 
         return (
             <div className="jsxWrapper blackBackground fillScreen myCandidates whiteText" style={{paddingBottom: "20px"}} ref='myCandidates'>
@@ -1005,13 +1013,14 @@ class MyCandidates extends Component {
                                         positionId={this.state.positionId}
                                         toggleFullScreen={this.toggleFullScreen.bind(this)}
                                         exitResults={this.exitResults.bind(this)}
+                                        rateInterest={this.rateInterest.bind(this)}
                                         fullScreen={this.state.fullScreenResults}
                                     />
-                                    <div className={leftArrowClass} onClick={() => this.nextPreviousResults(false)}>
-                                        <div className="left circleArrowIcon" />
+                                    <div className={leftArrowContainerClass} onClick={() => this.nextPreviousResults(false)}>
+                                        <div className={leftArrowClass} />
                                     </div>
-                                    <div className={rightArrowClass} onClick={() => this.nextPreviousResults(true)}>
-                                        <div className="right circleArrowIcon" />
+                                    <div className={rightArrowContainerClass} onClick={() => this.nextPreviousResults(true)}>
+                                        <div className={rightArrowClass} />
                                     </div>
                                 </div>
                                 : null

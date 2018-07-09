@@ -2525,6 +2525,9 @@ button.link {
     width: 6px;
     border-left: 1px solid white;
     border-top: 1px solid white;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .expandIcon:after {
     content: "";
@@ -2535,6 +2538,9 @@ button.link {
     width: 6px;
     border-bottom: 1px solid white;
     border-right: 1px solid white;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .collapseIcon:before {
     content: "";
@@ -2545,6 +2551,9 @@ button.link {
     width: 5px;
     border-left: 1px solid white;
     border-top: 1px solid white;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .collapseIcon:after {
     content: "";
@@ -2555,6 +2564,9 @@ button.link {
     width: 5px;
     border-bottom: 1px solid white;
     border-right: 1px solid white;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
 }
 .circleArrowIcon {
     width: 32px;
@@ -2562,6 +2574,11 @@ button.link {
     position: relative;
     background-color: #d6d6d6;
     border-radius: 16px;
+    cursor: pointer;
+}
+.circleArrowIcon.disabled {
+    background-color: #5a5a5a;
+    cursor: default;
 }
 .circleArrowIcon.right { transform: rotate(-90deg); }
 .circleArrowIcon.left { transform: rotate(90deg); }
@@ -2731,7 +2748,7 @@ button.link {
 }
 
 .myCandidates tr.candidate.selected {
-    background-color: gray;
+    background-color: #525252;
 }
 
 .myCandidates .candidate > div {
@@ -4327,8 +4344,15 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     transform: translateX(-50%);
 }
 
+.candidateResults .interestArea {
+    position: absolute;
+    top: 50px;
+    left: 8%;
+}
+
 
 .inlineBlock { display: inline-block; }
+.relative { position: relative; }
 .marginSides80px { margin-right: 80px; margin-left: 80px; }
 .marginBottom60px { margin-bottom: 60px; }
 .marginBottom50px { margin-bottom: 50px; }

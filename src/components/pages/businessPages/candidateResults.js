@@ -71,7 +71,9 @@ class CandidateResults extends Component {
             const candidate = {
                 name: res.data.name,
                 title: res.data.title ? res.data.title : "",
-                email: res.data.email
+                email: res.data.email,
+                interest: res.data.interest,
+                hiringStage: res.data.hiringStage
             }
             const hardSkillPoints = res.data.skillScores.map(skill => {
                 return {
@@ -297,6 +299,49 @@ class CandidateResults extends Component {
     }
 
 
+    // rate how interested the company is in the candidate
+    rateInterest(candidateId, interest) {
+        // rate the interest in the db and in the list view
+        this.props.rateInterest(candidateId, interest);
+        // change the interest in the results view
+        let candidate = Object.assign({}, this.state.candidate);
+        candidate.interest = interest;
+        this.setState({ candidate });
+    }
+
+
+    // create the stars for the interest section
+    makeStars() {
+        const candidateId = this.props.candidateId;
+        let interest = this.state.candidate.interest;
+
+        // if interest in a candidate is not valid, set to 0 stars
+        if (typeof interest !== "number" || interest < 0 || interest > 5) {
+            interest = 0;
+        }
+        // make sure we have an integer
+        interest = Math.round(interest);
+        // create 5 stars
+        let stars = [];
+        for (let starNumber = 1; starNumber <= 5; starNumber++) {
+            const colorClass = starNumber <= interest ? "white" : "gray";
+            stars.push(
+                <div
+                    className={"inlineBlock clickableNoUnderline star " + colorClass}
+                    onClick={() => this.rateInterest(candidateId, starNumber)}
+                    style={{marginRight: "5px"}}
+                    key={`${candidateId}star${starNumber}`}
+                />
+            );
+        }
+        return (
+            <div className="starsArea">
+                {stars}
+            </div>
+        );
+    }
+
+
     render() {
         const user = this.props.currentUser;
         const candidate = this.state.candidate;
@@ -304,8 +349,11 @@ class CandidateResults extends Component {
         const predictiveInsights = this.state.predictiveInsights;
 
         let mailtoEmail = undefined;
-        if (candidate) {
-            mailtoEmail = "mailto:" + candidate.email;
+        if (typeof candidate === "object") {
+            // use the email meant for contacting if available
+            if (candidate.emailToContact) { mailtoEmail = candidate.emailToContact; }
+            // otherwise use the default email
+            else { mailtoEmail = "mailto:" + candidate.email; }
         }
 
         const loading = this.state.loading;
@@ -330,15 +378,9 @@ class CandidateResults extends Component {
             const iconClass = this.props.fullScreen ? "collapseIcon" : "expandIcon";
 
             content = (
-                <div className="profileInfoSkills blackBackground" style={{position:"relative"}}>
+                <div className="profileInfoSkills blackBackground candidateResults" style={{position:"relative"}}>
                     <div className="resultsHeader">
-                        <div className="fullScreenIconContainer">
-                            <div className={iconClass} onClick={() => this.props.toggleFullScreen()}/>
-                        </div>
-                        <div className="exitIconContainer">
-                            <div className="pointer" onClick={() => this.props.exitResults()}>x</div>
-                        </div>
-                        <div className="center">
+                        <div className="center relative">
                             <div>
                                 {candidate.name ?
                                     <div>
@@ -353,6 +395,16 @@ class CandidateResults extends Component {
                                     </div>
                                     : null
                                 }
+                            </div>
+                            <div className="interestArea">
+                                <div>{"Interest"}</div>
+                                { this.makeStars() }
+                            </div>
+                            <div className="fullScreenIconContainer">
+                                <div className={iconClass} onClick={() => this.props.toggleFullScreen()}/>
+                            </div>
+                            <div className="exitIconContainer">
+                                <div className="pointer" onClick={() => this.props.exitResults()}>x</div>
                             </div>
                         </div>
                         <Tabs

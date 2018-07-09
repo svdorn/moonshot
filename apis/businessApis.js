@@ -1150,8 +1150,6 @@ async function GET_evaluationResults(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    console.log("user: ", user);
-
     let userPosition = user.positions[userPositionIndex];
 
     // --->>              FORMAT THE DATA FOR THE FRONT END             <<--- //
@@ -1196,6 +1194,8 @@ async function GET_evaluationResults(req, res) {
         title: user.title,
         name: user.name,
         email: user.emailToContact ? user.emailToContact : user.email,
+        interest: userPosition.interest,
+        hiringStage: userPosition.hiringStage,
         performanceScores: userPosition.scores,
         frqs, skillScores, psychScores
     };
