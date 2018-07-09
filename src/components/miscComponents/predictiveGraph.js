@@ -5,8 +5,25 @@ class PredictiveGraph extends Component {
     constructor(props) {
         super(props);
 
+        // if width prop is given, be that width; otherwise adjust to the page width
+        let width = window.innerWidth;
+        if (this.props.width) {
+            width = this.props.width;
+            if (typeof width !== "number") {
+                width = parseInt(width, 10);
+            }
+        }
+        // get the interior width, if given
+        let interiorWidth = undefined;
+        if (this.props.interiorWidth) {
+            interiorWidth = this.props.interiorWidth;
+            if (typeof interiorWidth !== "number") {
+                interiorWidth = parseInt(interiorWidth, 10);
+            }
+        }
+
         // need to keep track of width because this will change where the points are
-        this.state = { width: window.innerWidth };
+        this.state = { width, interiorWidth };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
 
@@ -23,7 +40,7 @@ class PredictiveGraph extends Component {
 
 
     updateWindowDimensions() {
-        if (window.innerWidth > 300) {
+        if (!this.props.width && window.innerWidth > 300) {
             this.setState({ width: window.innerWidth });
         }
     }
@@ -40,8 +57,8 @@ class PredictiveGraph extends Component {
         // the height of the actual graph where points can be plotted
         const interiorHeight = fullHeight - 30;
 
-        const interiorWidth = this.state.width / 2;
-        const interiorMarginLeft = this.state.width / 4;
+        const interiorWidth = this.state.interiorWidth ? this.state.interiorWidth : this.state.width / 2;
+        const interiorMarginLeft = (this.state.width - interiorWidth) / 2;
 
 
         const graphStyle = { height: fullHeight };
@@ -108,20 +125,22 @@ class PredictiveGraph extends Component {
         })
 
         // figure out how rotated the x axis labels should be
-        const windowWidth = window.innerWidth > 300 ? window.innerWidth : 300;
         const labelTransform = {};
-        if (windowWidth < 800) {
-            let rotateAngle, yTranslation, xTranslation;
-            if (windowWidth > 600) {
+        if (interiorWidth < 500) {
+            let rotateAngle,
+                yTranslation,
+                xTranslation;
+
+            if (interiorWidth > 250) {
                 rotateAngle = 20;
-                yTranslation = 10;
-                xTranslation = 20;
+                yTranslation = 5;
+                xTranslation = 50;
             } else {
                 rotateAngle = 30;
-                yTranslation = 12;
-                xTranslation = 15;
+                yTranslation = 5;
+                xTranslation = 50;
             }
-            labelTransform.transform = `translate(${xTranslation}px, ${yTranslation}px) rotate(${rotateAngle}deg)`
+            labelTransform.transform = `translate(${xTranslation}%, ${yTranslation}px) rotate(${rotateAngle}deg)`
         }
 
 
@@ -210,8 +229,10 @@ class PredictiveGraph extends Component {
 
             // add the label for the x axis
             xAxisLabels.push(
-                <div className="xAxisLabel" style={{...labelStyle, ...labelTransform}} key={`xAxis${label}`}>
-                    {label}
+                <div className="xAxisLabel" style={labelStyle} key={`xAxis${label}`}>
+                    <div style={labelTransform}>
+                        {label}
+                    </div>
                 </div>
             );
 

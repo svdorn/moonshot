@@ -194,11 +194,11 @@ class CandidateResults extends Component {
         const windowWidth = window.innerWidth;
         let graphHeight;
         if (windowWidth > 800) {
-            graphHeight = 400;
+            graphHeight = 250;
         } else if (windowWidth > 600) {
-            graphHeight = 350;
+            graphHeight = 280;
         } else if (windowWidth > 400) {
-            graphHeight = 300;
+            graphHeight = 265;
         } else {
             graphHeight = 250;
         }
@@ -209,7 +209,7 @@ class CandidateResults extends Component {
                     <div className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore inlineBlock">
                         Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                     </div>
-                    <HoverTip style={{marginTop: "35px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
+                    <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
                     <div className="resultsSlidersContainer">
                         <div>
                             <div
@@ -245,6 +245,8 @@ class CandidateResults extends Component {
                         title={"Predicted Performance"}
                         dataPoints={this.state.predictivePoints}
                         height={graphHeight}
+                        width={650}
+                        interiorWidth={350}
                     />
                 </div>
 
@@ -265,6 +267,8 @@ class CandidateResults extends Component {
                     <PredictiveGraph
                         dataPoints={this.state.hardSkillPoints}
                         height={graphHeight}
+                        width={650}
+                        interiorWidth={350}
                     />
                 </div>
             </div>

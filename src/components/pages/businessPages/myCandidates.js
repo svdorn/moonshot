@@ -397,7 +397,6 @@ class MyCandidates extends Component {
         if (!this.state.showResults) { return; }
         // get the code of the key that was pressed
         var key = e.which || e.keyCode;
-        console.log("key: ", key);
         // if escape key was pressed ...
         if (key === 27) {
             // ... get rid of the results popover

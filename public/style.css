@@ -1366,9 +1366,9 @@ form > h1 {
     display: inline-block;
     text-align: center;
 }
-.xAxisLabelsContainer {
-    /* width: 50%;
-    margin-left: 25%; */
+.xAxisLabelsContainer > .xAxisLabel > div {
+    display: inline-block;
+    transform-origin: top left;
 }
 .rightYAxisLabel {
     color: white;
