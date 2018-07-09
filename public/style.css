@@ -2717,6 +2717,10 @@ button.link {
     margin-right: 30px;
 } */
 
+.myCandidates .resultsOpenNoCandidates {
+    position: absolute;
+    left: 114px;
+}
 
 .myCandidates .candidateTable {
     width: calc(100% - 35px);
@@ -4570,6 +4574,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .myCandidates .candidateTable td:nth-child(2) {
         max-width: 112px;
     }
+    .myCandidates .resultsOpenNoCandidates {
+        left: 27px;
+    }
 }
 @media only screen and (max-width: 1175px) {
     .boxStyle {
@@ -4740,6 +4747,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .myCandidatesTabs { width: 400px; }
     .myCandidatesPositionSelector { right: calc(50% - 450px); }
+    .myCandidates .resultsOpenNoCandidates {
+        left: 46px;
+        width: 150px;
+    }
 
     .boxStyle {
         display: inline-block;

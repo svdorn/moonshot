@@ -670,8 +670,13 @@ class MyCandidates extends Component {
         }
         // if there are candidates in this position, but none meet the criteria
         else if (this.state.sortedCandidates.length === 0) {
+            const noCandidatesClass = this.state.showResults ? "resultsOpenNoCandidates" : "";
             return (
-                <div style={style.noCandidatesMessage} key="none meet criteria">
+                <div
+                    style={style.noCandidatesMessage}
+                    className={noCandidatesClass}
+                    key="none meet criteria"
+                >
                     No candidates meet these criteria.
                 </div>
             )
