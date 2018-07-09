@@ -86,7 +86,7 @@ class MyCandidates extends Component {
 
     componentDidMount() {
         let self = this;
-        // set an event listener so that when ESCAPE is pressed, the results page is exited
+        // set an event listener for key presses
         document.addEventListener('keyup', this.handleKeyPress.bind(this));
         // get the open positions that this business has
         axios.get("/api/business/positions", {
@@ -393,11 +393,25 @@ class MyCandidates extends Component {
 
     // escape out of a results page if escape button pressed
     handleKeyPress(e) {
+        // only do any of these actions if the results popover is showing
+        if (!this.state.showResults) { return; }
+        // get the code of the key that was pressed
         var key = e.which || e.keyCode;
-        // if escape key was pressed and results page is active ...
+        console.log("key: ", key);
+        // if escape key was pressed ...
         if (key === 27) {
             // ... get rid of the results popover
             this.exitResults();
+        }
+        // if right key was pressed ...
+        else if (key === 39) {
+            // go to the next candidate's results
+            this.nextPreviousResults(true)
+        }
+        // if the left key was pressed ...
+        else if (key === 37) {
+            // go to the previous candidate's results
+            this.nextPreviousResults(false);
         }
     }
 
@@ -964,6 +978,8 @@ class MyCandidates extends Component {
 
     // go to the next or previous candidate
     nextPreviousResults(next) {
+        if (!this.state.showResults) { return; }
+
         let newIndex = 0;
         // if the candidate whose results we are seeing is within the current
         // page sorted candidates ...
