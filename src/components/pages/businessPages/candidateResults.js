@@ -204,39 +204,37 @@ class CandidateResults extends Component {
 
         return (
             <div className="analysis center aboutMeSection" style={style.tabContent}>
-                <div style={style.candidateScore}>
-                    <div className="resultTopShadow center lightBlackBackground paddingTop20px">
-                        <div className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore inlineBlock">
-                            Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
+                <div className="center">
+                    <div className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore inlineBlock">
+                        Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
+                    </div>
+                    <HoverTip style={{marginTop: "35px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
+                    <div className="resultsSlidersContainer">
+                        <div>
+                            <div
+                                className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                Predicted Performance<br/>
+                                <p style={style.lightBlue}>{this.qualifier(this.state.predicted, "predicted")}</p>
+                            </div>
+                            <Slider disabled={true}
+                                    value={this.getSliderValue(this.state.predicted)}
+                                    min={50}
+                                    max={150}
+                                    className="resultsSlider"
+                            />
                         </div>
-                        <HoverTip style={{marginTop: "35px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
-                        <div className="resultsSlidersContainer">
-                            <div>
-                                <div
-                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                    Predicted Performance<br/>
-                                    <p style={style.lightBlue}>{this.qualifier(this.state.predicted, "predicted")}</p>
-                                </div>
-                                <Slider disabled={true}
-                                        value={this.getSliderValue(this.state.predicted)}
-                                        min={50}
-                                        max={150}
-                                        className="resultsSlider"
-                                />
+                        <div>
+                            <div
+                                className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                Skill Level<br/>
+                                <p style={style.lightBlue}>{this.qualifier(this.state.skill, "skill")}</p>
                             </div>
-                            <div>
-                                <div
-                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
-                                    Skill Level<br/>
-                                    <p style={style.lightBlue}>{this.qualifier(this.state.skill, "skill")}</p>
-                                </div>
-                                <Slider disabled={true}
-                                        value={this.getSliderValue(this.state.skill)}
-                                        min={50}
-                                        max={150}
-                                        className="resultsSlider"
-                                />
-                            </div>
+                            <Slider disabled={true}
+                                    value={this.getSliderValue(this.state.skill)}
+                                    min={50}
+                                    max={150}
+                                    className="resultsSlider"
+                            />
                         </div>
                     </div>
                 </div>
@@ -479,16 +477,8 @@ class CandidateResults extends Component {
                             className="myPathwaysTabs"
                             onChange={this.handleTabChange.bind(this)}
                         >
-                            <Tab label="Analysis" style={style.topTab} value="Analysis">
-                                <div className="tabsShadow" style={{position:"absolute"}}>
-                                    <div/>
-                                </div>
-                            </Tab>
-                            <Tab label="Responses" style={style.topTab} value="Responses">
-                                <div className="tabsShadow">
-                                    <div/>
-                                </div>
-                            </Tab>
+                            <Tab label="Analysis" style={style.topTab} value="Analysis" />
+                            <Tab label="Responses" style={style.topTab} value="Responses" />
                         </Tabs>
                     </div>
                     <div className="resultsContent">
@@ -523,11 +513,6 @@ const style = {
     },
     lightBlue: {
         color: '#75dcfc'
-    },
-    candidateScore: {
-        minHeight: '200px',
-        padding: "20px",
-        overflow: "auto"
     }
 };
 

@@ -1309,6 +1309,7 @@ form > h1 {
 
 .analysis .candidateScore {
     margin-bottom: 30px;
+    margin-top: 25px;
 }
 
 .resultsSlidersContainer {
@@ -1429,14 +1430,6 @@ form > h1 {
     width: 10px;
     transform: translateY(1px);
     z-index: 10;
-}
-
-.resultTopShadow {
-    padding: 20px;
-    margin-bottom: 20px;
-    -moz-box-shadow:    0px 3px 9px 1px #00000073;
-    -webkit-box-shadow: 0px 3px 9px 1px #00000073;
-    box-shadow:         0px 3px 9px 1px #00000073;
 }
 
 .results > .statsAndDescription {
@@ -2633,6 +2626,7 @@ button.link {
 .candidateResults .resultsContent {
     overflow: scroll;
     height: calc(100vh - 364px);
+    background-color: #383838;
 }
 .myCandidatesTabs {
     display: flex;
