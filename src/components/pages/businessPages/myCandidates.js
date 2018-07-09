@@ -86,6 +86,9 @@ class MyCandidates extends Component {
 
     componentDidMount() {
         let self = this;
+        // set an event listener so that when ESCAPE is pressed, the results page is exited
+        document.addEventListener('keyup', this.handleKeyPress.bind(this));
+        // get the open positions that this business has
         axios.get("/api/business/positions", {
             params: {
                 userId: this.props.currentUser._id,
@@ -137,6 +140,12 @@ class MyCandidates extends Component {
             // console.log("error getting positions: ", err);
         });
     }
+
+
+    componentWillUnmount() {
+        document.removeEventListener('keyup', this.handleKeyPress.bind(this));
+    }
+
 
     goTo(route) {
         // closes any notification
@@ -379,6 +388,17 @@ class MyCandidates extends Component {
         selectedCandidates[candidateId] = setTo;
         // set the state to update the checkmarks
         this.setState({ selectedCandidates });
+    }
+
+
+    // escape out of a results page if escape button pressed
+    handleKeyPress(e) {
+        var key = e.which || e.keyCode;
+        // if escape key was pressed and results page is active ...
+        if (key === 27) {
+            // ... get rid of the results popover
+            this.exitResults();
+        }
     }
 
 
