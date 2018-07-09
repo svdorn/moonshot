@@ -488,7 +488,7 @@ class MyCandidates extends Component {
             <Select
                 disableUnderline={true}
                 classes={{
-                    root: "selectRootWhite",
+                    root: "selectRootWhite myCandidatesSelect",
                     icon: "selectIconWhiteImportant"
                 }}
                 value={hiringStage}
@@ -810,7 +810,7 @@ class MyCandidates extends Component {
             <Select
                 disableUnderline={true}
                 classes={{
-                    root: "selectRootWhite",
+                    root: "selectRootWhite myCandidatesSelect",
                     icon: "selectIconWhiteImportant"
                 }}
                 value={this.state.position}
@@ -887,7 +887,7 @@ class MyCandidates extends Component {
         let selectAttributes = {
             disableUnderline: true,
             classes: {
-                root: colorClass,
+                root: "myCandidatesSelect" + colorClass,
                 icon: selectionsExist ? "selectIconWhiteImportant" : "selectIconGrayImportant"
             },
             value: "Move To",
@@ -933,7 +933,7 @@ class MyCandidates extends Component {
                         />
                     </div>
                     <div className="inlineBlock">
-                        Hide <i>Dismissed</i> Candidates
+                        {"Hide "}<i>{"Dismissed"}</i><span className="above1000only">{" Candidates"}</span>
                     </div><br/>
                 </div>
                 <div className="inlineBlock">
@@ -945,7 +945,7 @@ class MyCandidates extends Component {
                         />
                     </div>
                     <div style={{display:"inline-block"}}>
-                        Hide <i>Hired</i> Candidates
+                        {"Hide "}<i>{"Hired"}</i><span className="above1000only">{" Candidates"}</span>
                     </div><br/>
                 </div>
             </div>

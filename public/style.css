@@ -2593,8 +2593,8 @@ button.link {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-.myCandidates .left.arrowContainer.halfScreen { left: 334px; }
-.myCandidates .left.arrowContainer.fullScreen { left: -16px; }
+.myCandidates .left.arrowContainer.halfScreen { right: 635px; }
+.myCandidates .left.arrowContainer.fullScreen { right: calc(100% - 16px); }
 .myCandidates .right.arrowContainer {
     right: -16px;
 }
@@ -2626,6 +2626,7 @@ button.link {
 .candidateResults .resultsContent {
     overflow: scroll;
     height: calc(100vh - 364px);
+    min-height: 154px;
     background-color: #383838;
 }
 .myCandidatesTabs {
@@ -2668,9 +2669,12 @@ button.link {
 }
 
 .myCandidates .candidatesAndOptions {
-    width: 1000px;
+    width: 1150px;
     position: relative;
     display: inline-block;
+    -webkit-transition: width 0.5s ease;
+    -ms-transition: width 0.5s ease;
+    transition: width 0.5s ease;
 }
 
 .myCandidates .candidatesContainer {
@@ -2684,8 +2688,20 @@ button.link {
     box-shadow:         0px 0px 6px 3px #00000073;
 }
 
-.myCandidates .topOptions { margin-bottom: 10px; }
-.myCandidates .topOptions > div:nth-child(1) {
+.myCandidates .topOptions {
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    flex-direction: row;
+    align-items: flex-end;
+}
+.myCandidates .topOptions > div:nth-child(2) {
+    margin-bottom: 8px;
+}
+.myCandidates .topOptions > div:nth-child(n+3) {
+    margin-bottom: 10px;
+}
+/* .myCandidates .topOptions > div:nth-child(1) {
     margin-right: 45px;
 }
 .myCandidates .topOptions > div:nth-child(2) {
@@ -2699,7 +2715,7 @@ button.link {
 }
 .myCandidates .topOptions > div:nth-child(5) {
     margin-right: 30px;
-}
+} */
 
 
 .myCandidates .candidateTable {
@@ -2724,8 +2740,7 @@ button.link {
 }
 /* width for name */
 .myCandidates .candidateTable td:nth-child(2) {
-    width: 200px;
-    max-width: 200px;
+    max-width: 125px;
 }
 /* width for score */
 .myCandidates .candidateTable td:nth-child(3) {
@@ -2847,6 +2862,7 @@ button.link {
 .selectIconGrayImportant { color: #5E5E5E !important; }
 .topOptionWhite { color: white; }
 .topOptionGray { color: #5E5E5E; }
+.myCandidatesSelect > div { margin-bottom: -4px; }
 
 
 
@@ -4547,6 +4563,14 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: none;
     }
 }
+@media only screen and (max-width: 1200px) {
+    .myCandidates .candidatesAndOptions {
+        width: 950px;
+    }
+    .myCandidates .candidateTable td:nth-child(2) {
+        max-width: 112px;
+    }
+}
 @media only screen and (max-width: 1175px) {
     .boxStyle {
         margin: 200px auto 0 50px;
@@ -4698,6 +4722,25 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         opacity: 0;
         transition: visibility 0s .5s, opacity .5s linear;
     }
+
+    .myCandidates .candidatesAndOptions {
+        width: 750px;
+    }
+    .candidateResults.halfScreen {
+        width: 494px;
+    }
+    .myCandidates .left.arrowContainer.halfScreen {
+        right: 478px;
+    }
+    .candidateResults .interestArea {
+        left: 4%;
+    }
+    .candidateResults .hiringStageArea {
+        right: 3%;
+    }
+    .myCandidatesTabs { width: 400px; }
+    .myCandidatesPositionSelector { right: calc(50% - 450px); }
+
     .boxStyle {
         display: inline-block;
         position: relative;
