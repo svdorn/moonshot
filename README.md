@@ -17,12 +17,12 @@ export NODE_ENV=development
 ```
 Have the prerequisites installed and do the steps under installing, after completing that, do these steps:
 ```
-cd /moonshot
+cd moonshot
 npm run dev
 ```
 Open new terminal
 ```
-cd /moonshot
+cd moonshot
 nodemon
 ```
 Go to localhost:8081 and the site will be up.
@@ -31,6 +31,7 @@ Go to localhost:8081 and the site will be up.
 
 * [Node](https://nodejs.org/en/) - Javascript runtime
 * [npm](https://www.npmjs.com/) - Installs automatically when you intall node
+* [Git](https://git-scm.com/downloads) - Version control system
 
 ### Installing
 
