@@ -7,7 +7,7 @@ Moonshot Learning is a website that will allow students to get credentialed in t
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 ```
 cd to a directory where you want the repo placed on your local machine
-git clone https://github.com/MoonshotLearning/moonshot.git
+git clone https://moonshotinsights@bitbucket.org/moonshotinsights/moonshot.git
 cd moonshot
 npm install
 ```
@@ -18,14 +18,14 @@ export NODE_ENV=development
 Have the prerequisites installed and do the steps under installing, after completing that, do these steps:
 ```
 cd /moonshot
-webpack
+npm run dev
 ```
 Open new terminal
 ```
 cd /moonshot
 nodemon
 ```
-Go to localhost:3000 and the site will be up.
+Go to localhost:8081 and the site will be up.
 
 ### Prerequisites
 
@@ -37,13 +37,9 @@ Go to localhost:3000 and the site will be up.
 Software that you need to install.
 
 * [MongoDB](https://docs.mongodb.com/manual/installation/) - Database management, install it globally
-* [Webpack](https://www.npmjs.com/package/webpack) - Module bundler - install it globally
 ```
 npm install -g mongodb
-npm install -g webpack
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 ```
