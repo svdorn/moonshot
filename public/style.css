@@ -776,13 +776,13 @@ form > h1 {
 }
 .disabled.mediumButton {
     background: linear-gradient(to right, #111111, #afafaf, #111111);
-    background-position-x: -64px;
+    background-position-x: 100%;
     background-size: 150%;
     cursor: not-allowed;
 }
 .mediumButton.getStarted.blueToPurple {
     background: linear-gradient(to right, #b172fe, #7ad6fe, #b172fe);
-    background-position-x: -64px;
+    background-position-x: 100%;
     background-size: 150%;
     -webkit-transition: all 0.5s ease;
     -ms-transition: all 0.5s ease;
@@ -2703,16 +2703,16 @@ button.link {
 
 
 .myCandidates .candidateTable {
-    width: calc(100% - 40px);
+    width: calc(100% - 35px);
     text-align: left;
-    margin: 15px 20px 10px 20px;
+    margin: 15px 20px 10px 15px;
 }
 
 .myCandidates .candidateTable tr {
     height: 30px;
 }
 .myCandidates .candidateTable td {
-    padding: 5px 0;
+    padding: 5px 0 5px 5px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
@@ -2741,7 +2741,7 @@ button.link {
     border-top: 1px solid gray;
 }
 
-.myCandidates tr.candidate.selected {
+.myCandidates tr.candidate.selected > td:not(:first-child) {
     background-color: #525252;
 }
 
@@ -4348,6 +4348,19 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     position: absolute;
     top: 50px;
     right: 8%;
+}
+.candidateResults .dismiss {
+    text-decoration: underline;
+    color: white;
+}
+.candidateResults .dismissed {
+    color: red;
+    font-style: italic;
+}
+.candidateResults .dismiss, .candidateResults .dismissed {
+    display: inline-block;
+    margin-right: 30px;
+    cursor: pointer;
 }
 
 

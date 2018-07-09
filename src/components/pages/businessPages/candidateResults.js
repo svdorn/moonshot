@@ -75,7 +75,8 @@ class CandidateResults extends Component {
                 title: res.data.title ? res.data.title : "",
                 email: res.data.email,
                 interest: res.data.interest,
-                hiringStage: res.data.hiringStage
+                hiringStage: res.data.hiringStage,
+                isDismissed: res.data.isDismissed
             }
             const hardSkillPoints = res.data.skillScores.map(skill => {
                 return {
@@ -351,8 +352,6 @@ class CandidateResults extends Component {
         const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"];
         // if no stage is recorded, assume the candidate has not been contacted
         if (!hiringStage) { hiringStage = "Not Contacted"; }
-        // if the candidate is dismissed, show that
-        if (isDismissed) { hiringStage = "Dismissed"; }
 
         // create the stage name menu items
         const stages = stageNames.map(stage => {
@@ -401,6 +400,26 @@ class CandidateResults extends Component {
     }
 
 
+    contact = () => {
+        console.log("not actually contacting yet");
+    }
+
+
+    toggleDismissed = () => {
+        // get a copy of the candidate
+        let candidate = Object.assign({}, this.state.candidate);
+        const dismissingCandidate = !candidate.isDismissed;
+
+        // toggle dismissed in db and list view
+        const newHiringStage = dismissingCandidate ? "Dismissed" : candidate.hiringStage;
+        this.props.hiringStageChange(this.props.candidateId, newHiringStage);
+
+        // toggle dismissed in results view
+        candidate.isDismissed = dismissingCandidate;
+        this.setState({ candidate });
+    }
+
+
     render() {
         const user = this.props.currentUser;
         const candidate = this.state.candidate;
@@ -435,6 +454,12 @@ class CandidateResults extends Component {
         // populate the results if the candidate exists
         else if (candidate) {
             const iconClass = this.props.fullScreen ? "collapseIcon" : "expandIcon";
+            console.log("candidate: ", candidate);
+            const dismissDiv = (
+                <div onClick={this.toggleDismissed} className={candidate.isDismissed ? "dismissed" : "dismiss"}>
+                    { candidate.isDismissed ? "Dismissed" : "Dismiss" }
+                </div>
+            )
 
             content = (
                 <div className="profileInfoSkills blackBackground candidateResults" style={{position:"relative"}}>
@@ -446,11 +471,15 @@ class CandidateResults extends Component {
                                         <div className="grayText font26px font14pxUnder700 candidateName">
                                             {candidate.name}
                                         </div>
-                                        <a  className="font18px font12pxUnder500 grayText grayTextOnHover underline"
-                                            href={mailtoEmail}
-                                        >
-                                            Contact
-                                        </a>
+                                        <div style={{marginTop: "8px"}}>
+                                            { dismissDiv }
+                                            <div
+                                                className="mediumButton getStarted blueToPurple inlineBlock"
+                                                onClick={this.contact}
+                                            >
+                                                {"Contact"}
+                                            </div>
+                                        </div>
                                     </div>
                                     : null
                                 }
@@ -503,7 +532,7 @@ class CandidateResults extends Component {
 
 const style = {
     topTabs: {
-        marginTop: '20px',
+        marginTop: '9px',
     },
     topTab: {
         color: 'white',
