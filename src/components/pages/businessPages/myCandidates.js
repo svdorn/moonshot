@@ -469,8 +469,7 @@ class MyCandidates extends Component {
 
 
     // change a candidate's hiring stage
-    handleChangeHiringStage = candidateId => event => {
-        const hiringStage = event.target.value;
+    hiringStageChange(candidateId, hiringStage) {
         // CHANGE HIRING STAGE IN BACK END
         const params = {
             userId: this.props.currentUser._id,
@@ -492,6 +491,13 @@ class MyCandidates extends Component {
             candidates[candIndex].hiringStage = hiringStage;
         }
         this.setState({ candidates });
+    }
+
+
+    // handle a click on a hiring stage
+    handleChangeHiringStage = candidateId => event => {
+        const hiringStage = event.target.value;
+        this.hiringStageChange(candidateId, hiringStage);
     }
 
 
@@ -1019,6 +1025,7 @@ class MyCandidates extends Component {
                                         toggleFullScreen={this.toggleFullScreen.bind(this)}
                                         exitResults={this.exitResults.bind(this)}
                                         rateInterest={this.rateInterest.bind(this)}
+                                        hiringStageChange={this.hiringStageChange.bind(this)}
                                         fullScreen={this.state.fullScreenResults}
                                     />
                                     <div className={leftArrowContainerClass} onClick={() => this.nextPreviousResults(false)}>

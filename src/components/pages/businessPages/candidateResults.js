@@ -4,6 +4,8 @@ import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../../actions/usersActions";
 import {bindActionCreators} from 'redux';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
@@ -342,6 +344,65 @@ class CandidateResults extends Component {
     }
 
 
+    // create the dropdown for a candidate's hiring stage
+    makeHiringStage() {
+        const candidateId = this.props.candidateId;
+        let hiringStage = this.state.candidate.hiringStage;
+        const isDismissed = this.state.candidate.isDismissed;
+
+        const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"];
+        // if no stage is recorded, assume the candidate has not been contacted
+        if (!hiringStage) { hiringStage = "Not Contacted"; }
+        // if the candidate is dismissed, show that
+        if (isDismissed) { hiringStage = "Dismissed"; }
+
+        // create the stage name menu items
+        const stages = stageNames.map(stage => {
+            return (
+                <MenuItem
+                    value={stage}
+                    key={`${candidateId}hiringStage${stage}`}
+                >
+                    { stage }
+                </MenuItem>
+            )
+        });
+
+        return (
+            <Select
+                style={{paddingLeft: "32px"}}
+                disableUnderline={true}
+                classes={{
+                    root: "selectRootWhite",
+                    icon: "selectIconWhiteImportant"
+                }}
+                value={hiringStage}
+                onChange={this.handleChangeHiringStage(candidateId)}
+            >
+                { stages }
+            </Select>
+        );
+    }
+
+
+    // change a candidate's hiring stage
+    handleChangeHiringStage = candidateId => event => {
+        const hiringStage = event.target.value;
+        // CHANGE HIRING STAGE IN BACK END AND LIST VIEW
+        this.props.hiringStageChange(this.props.candidateId, hiringStage);
+
+        // CHANGE HIRING STAGE IN RESULTS VIEW
+        let candidate = this.state.candidate;
+        if (hiringStage === "Dismissed") {
+            candidate.isDismissed = true;
+        } else {
+            candidate.isDismissed = false;
+            candidate.hiringStage = hiringStage;
+        }
+        this.setState({ candidate });
+    }
+
+
     render() {
         const user = this.props.currentUser;
         const candidate = this.state.candidate;
@@ -400,6 +461,10 @@ class CandidateResults extends Component {
                                 <div>{"Interest"}</div>
                                 { this.makeStars() }
                             </div>
+                            <div className="hiringStageArea">
+                                <div>{"Stage"}</div>
+                                { this.makeHiringStage() }
+                            </div>
                             <div className="fullScreenIconContainer">
                                 <div className={iconClass} onClick={() => this.props.toggleFullScreen()}/>
                             </div>
@@ -447,31 +512,6 @@ class CandidateResults extends Component {
 
 
 const style = {
-    imgContainer: {
-        height: "75px",
-        width: "75px",
-        // borderRadius: '50%',
-        // border: "3px solid white",
-        display: "inline-block",
-        //overflow: "hidden"
-        marginBottom: "20px"
-    },
-    img: {
-        height: "85px",
-        marginTop: "13px"
-    },
-    SteveImg: {
-        height: "100%"
-    },
-    locationImg: {
-        display: 'inline-block',
-        height: '15px',
-        marginBottom: '5px',
-        marginRight: '5px'
-    },
-    tabs: {
-        marginTop: '20px',
-    },
     topTabs: {
         marginTop: '20px',
     },
@@ -484,27 +524,10 @@ const style = {
     lightBlue: {
         color: '#75dcfc'
     },
-    horizListIcon: {
-        height: "50px",
-        marginTop: "-5px"
-    },
     candidateScore: {
         minHeight: '200px',
         padding: "20px",
         overflow: "auto"
-    },
-    characteristics: {
-        paddingTop: "40px"
-    },
-    characteristicsTitle: {
-        color: "#96ADFC"
-    },
-    characteristicsListRow: {
-        display: "flex",
-        justifyContent: "center"
-    },
-    descriptionBox: {
-        paddingTop: "40px"
     }
 };
 

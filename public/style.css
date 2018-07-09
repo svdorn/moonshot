@@ -4349,6 +4349,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     top: 50px;
     left: 8%;
 }
+.candidateResults .interestArea > div:first-child { margin-bottom: 4px; }
+.candidateResults .hiringStageArea {
+    position: absolute;
+    top: 50px;
+    right: 8%;
+}
 
 
 .inlineBlock { display: inline-block; }

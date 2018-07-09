@@ -1196,6 +1196,7 @@ async function GET_evaluationResults(req, res) {
         email: user.emailToContact ? user.emailToContact : user.email,
         interest: userPosition.interest,
         hiringStage: userPosition.hiringStage,
+        isDismissed: userPosition.isDismissed,
         performanceScores: userPosition.scores,
         frqs, skillScores, psychScores
     };
