@@ -927,7 +927,12 @@ class MyCandidates extends Component {
 
     // exits the candidate results popover
     exitResults() {
-        this.setState({ showResults: false });
+        this.setState({
+            showResults: false,
+            fullScreenResults: false,
+            resultsCandidateId: undefined,
+            resultsCandidateIndex: undefined
+        });
     }
 
 
