@@ -27,7 +27,7 @@ class CandidateResults extends Component {
             psychScores: [],
             loading: true,
             areaSelected: undefined,
-            windowWidth: window.innerWidth,
+            windowWidth: 0,
             // if this is true, didn't get enough props, so can't display results
             invalidProps: false,
             // the currently selected tab
@@ -39,7 +39,6 @@ class CandidateResults extends Component {
 
 
     componentDidUpdate(prevProps, prevState) {
-        console.log("id: ", this.props.candidateId);
         if (this.props.candidateId !== prevProps.candidateId) {
             this.reset();
         }
@@ -48,7 +47,7 @@ class CandidateResults extends Component {
 
     componentDidMount() {
         // set resize listener
-        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+        window.addEventListener('resize', this.updateContainerDimensions.bind(this));
         // get the candidate's results
         this.reset();
     }
@@ -139,12 +138,13 @@ class CandidateResults extends Component {
 
 
     componentWillUnmount() {
-        window.addEventListener('resize', this.updateWindowDimensions.bind(this));
+        window.addEventListener('resize', this.updateContainerDimensions.bind(this));
     }
 
 
-    updateWindowDimensions() {
-        this.setState({ windowWidth: window.innerWidth });
+    updateContainerDimensions() {
+        console.log("width: ", document.getElementById("candidateResults").offsetWidth);
+        this.setState({ windowWidth: document.getElementById("candidateResults").offsetWidth });
     }
 
 
@@ -155,6 +155,13 @@ class CandidateResults extends Component {
         browserHistory.push(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
+    }
+
+
+    // make it full screen then update the
+    toggleFullScreen() {
+        this.props.toggleFullScreen();
+        this.updateContainerDimensions();
     }
 
 
@@ -232,7 +239,7 @@ class CandidateResults extends Component {
                         title={"Predicted Performance"}
                         dataPoints={this.state.predictivePoints}
                         height={graphHeight}
-                        width={650}
+                        width={this.state.width}
                         interiorWidth={350}
                     />
                 </div>
@@ -254,7 +261,7 @@ class CandidateResults extends Component {
                     <PredictiveGraph
                         dataPoints={this.state.hardSkillPoints}
                         height={graphHeight}
-                        width={650}
+                        width={this.state.width}
                         interiorWidth={350}
                     />
                 </div>
@@ -445,7 +452,6 @@ class CandidateResults extends Component {
         // populate the results if the candidate exists
         else if (candidate) {
             const iconClass = this.props.fullScreen ? "collapseIcon" : "expandIcon";
-            console.log("candidate: ", candidate);
             const dismissDiv = (
                 <div onClick={this.toggleDismissed} className={"noselect " + (candidate.isDismissed ? "dismissed" : "dismiss")}>
                     { candidate.isDismissed ? "Dismissed" : "Dismiss" }
@@ -453,13 +459,17 @@ class CandidateResults extends Component {
             )
 
             content = (
-                <div className="profileInfoSkills blackBackground candidateResults" style={{position:"relative"}}>
+                <div
+                    id="candidateResults"
+                    className="profileInfoSkills blackBackground candidateResults"
+                    style={{position:"relative"}}
+                >
                     <div className="resultsHeader">
                         <div className="center relative">
                             <div>
                                 {candidate.name ?
                                     <div>
-                                        <div className="grayText font26px font14pxUnder700 candidateName">
+                                        <div className="grayText font26px font18pxUnder700 candidateName">
                                             {candidate.name}
                                         </div>
                                         <div style={{marginTop: "8px"}}>
@@ -476,16 +486,18 @@ class CandidateResults extends Component {
                                 }
                             </div>
                             <div className="interestArea">
-                                <div>{"Interest"}</div>
+                                <div className="label">{"Interest"}</div>
                                 { this.makeStars() }
                             </div>
                             <div className="hiringStageArea">
-                                <div>{"Stage"}</div>
+                                <div className="label">{"Stage"}</div>
                                 { this.makeHiringStage() }
                             </div>
-                            <div className="fullScreenIconContainer">
-                                <div className={iconClass} onClick={() => this.props.toggleFullScreen()}/>
-                            </div>
+                            {this.props.mobile ? null :
+                                <div className="fullScreenIconContainer">
+                                    <div className={iconClass} onClick={() => this.toggleFullScreen()}/>
+                                </div>
+                            }
                             <div className="exitIconContainer">
                                 <div className="pointer" onClick={() => this.props.exitResults()}>x</div>
                             </div>
@@ -493,7 +505,7 @@ class CandidateResults extends Component {
                         <Tabs
                             style={style.topTabs}
                             inkBarStyle={{background: 'white'}}
-                            tabItemContainerStyle={{width: '40%'}}
+                            tabItemContainerStyle={{width: this.props.mobile ? "60%" : "40%"}}
                             className="myPathwaysTabs"
                             onChange={this.handleTabChange.bind(this)}
                         >
@@ -512,8 +524,10 @@ class CandidateResults extends Component {
             );
         }
 
+        const mobileClass = this.props.mobile ? "mobile " : "";
+
         return (
-            <div className={"blackBackground candidateEvalResults " + this.props.className}>
+            <div className={"blackBackground candidateEvalResults " + mobileClass + this.props.className}>
                 { content }
             </div>
         );

@@ -727,7 +727,11 @@ class MyCandidates extends Component {
                 return (
                     <tr className={"mobileCandidate"  + (isSelected ? " selected" : "")} key={candidate._id}>
                         <td>
-                            <div style={{marginBottom: "8px"}}>
+                            <div
+                                style={{marginBottom: "8px"}}
+                                onClick={() => this.showResults(candidate._id)}
+                                className="pointer"
+                            >
                                 {candidate.name}
                             </div>
                             <br/>
@@ -1188,13 +1192,19 @@ class MyCandidates extends Component {
                                         rateInterest={this.rateInterest.bind(this)}
                                         hiringStageChange={this.hiringStageChange.bind(this)}
                                         fullScreen={this.state.fullScreenResults}
+                                        mobile={this.state.mobile}
                                     />
-                                    <div className={leftArrowContainerClass} onClick={() => this.nextPreviousResults(false)}>
-                                        <div className={leftArrowClass} />
-                                    </div>
-                                    <div className={rightArrowContainerClass} onClick={() => this.nextPreviousResults(true)}>
-                                        <div className={rightArrowClass} />
-                                    </div>
+                                    {this.state.mobile ? null :
+                                            <div className={leftArrowContainerClass} onClick={() => this.nextPreviousResults(false)}>
+                                                <div className={leftArrowClass} />
+                                            </div>
+                                    }
+                                    {this.state.mobile ? null :
+                                            <div className={rightArrowContainerClass} onClick={() => this.nextPreviousResults(true)}>
+                                                <div className={rightArrowClass} />
+                                            </div>
+                                    }
+
                                 </div>
                                 : null
                             }

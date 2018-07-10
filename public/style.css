@@ -2620,6 +2620,9 @@ button.link {
     -ms-transition: width 0.5s ease;
     transition: width 0.5s ease;
 }
+.mobile .candidateResults.halfScreen {
+    width: 100%;
+}
 .candidateResults .resultsHeader {
     height: 146px;
 }
@@ -3732,7 +3735,7 @@ button.link {
     display: inline-block !important;
 }
 .myPathwaysTabs > div:nth-of-type(2) {
-    margin-left: 30% !important;
+    margin-left: 30%;
 }
 .myPathwaysTabs > div > button {
     font-size: 14px !important;
@@ -4404,7 +4407,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .candidateResults .dismissed {
     margin-right: 21px;
     margin-left: -9px;
-    color: red;
+    color: #eb394f;
     font-style: italic;
 }
 .candidateResults .dismiss, .candidateResults .dismissed {
@@ -5035,9 +5038,11 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 
     .myCandidates .candidatesAndOptions {
-        width: 450px;
+        width: 650px;
     }
-
+    .myPathwaysTabs > div:nth-of-type(2) {
+        margin-left: 20%;
+    }
 
     .evalPortionIntro > div:not(:first-child) {
         width: 400px;
@@ -5415,6 +5420,31 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .messageHeader { margin-top: -70px; }
 
+    .myCandidates .candidatesAndOptions {
+        width: 450px;
+    }
+    .mobile.candidateResults {
+        font-size: 14px;
+    }
+    .mobile.candidateResults .starsArea {
+        transform: scale(.8);
+    }
+    .mobile.candidateResults .selectRootWhite {
+        font-size: 14px;
+    }
+    .mobile.candidateResults .interestArea,
+    .mobile.candidateResults .hiringStageArea {
+        top: 42px;
+    }
+    .mobile.candidateResults .resultsHeader {
+        height: 131px;
+    }
+    .myCandidates .candidatesContainer {
+        height: calc(100vh - 194px);
+    }
+    .candidateResults .resultsContent {
+        height: calc(100vh - 325px);
+    }
 
     .psychAnalysisQuestion {
         margin: 0 50px;
@@ -5502,7 +5532,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-left: 50px;
     }
     .myPathwaysTabs > div > button {
-        font-size: 10px !important;
+        font-size: 12px !important;
     }
     .aboutMeLi > div:nth-child(3) {
         width: 100%;
@@ -5877,7 +5907,23 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .myCandidates .selectRootWhite {
         font-size: 14px;
     }
-
+    .myCandidates .label {
+        display: none;
+    }
+    .mobile.myCandidates .interestArea, .mobile.myCandidates .hiringStageArea {
+        position: relative;
+        top: 0;
+        left: 0;
+        right: 0;
+        margin-top: 5px;
+        display: inline-block;
+    }
+    .candidateResults .resultsContent {
+        height: calc(100vh - 362px);
+    }
+    .mobile.candidateResults .resultsHeader {
+        height: 168px;
+    }
     .myCandidates .candidatesAndOptions {
         width: 400px;
     }
@@ -6301,7 +6347,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: auto -140px auto;
     }
     .myPathwaysTabs > div > button {
-        font-size: 8px !important;
+        font-size: 12px !important;
     }
     .infoBoxPortfolioImage {
         height: 38px;
