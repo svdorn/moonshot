@@ -23,6 +23,7 @@ import axios from 'axios';
 import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
 import AddUserDialog from '../../childComponents/addUserDialog';
+import { qualifierFromScore } from '../../../miscFunctions';
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -739,7 +740,7 @@ class MyCandidates extends Component {
                             <br/>
                             <div className="predicted">
                                 {"Predicted"}<br/>
-                                {Math.round(predicted)}
+                                {qualifierFromScore(predicted, "predicted")}
                             </div>
                             <div className={"score"}>
                                 {"Score"}<br/>
@@ -747,7 +748,7 @@ class MyCandidates extends Component {
                             </div>
                             <div className="skill">
                                 {"Skill"}<br/>
-                                {Math.round(skill)}
+                                {qualifierFromScore(skill, "skill")}
                             </div>
                         </td>
                     </tr>

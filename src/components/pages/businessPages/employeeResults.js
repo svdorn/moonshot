@@ -12,6 +12,7 @@ import PredictiveGraph from '../../miscComponents/predictiveGraph';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import PsychBreakdown from '../../childComponents/psychBreakdown';
 import HoverTip from "../../miscComponents/hoverTip";
+import { qualifierFromScore } from "../../../miscFunctions";
 
 class EmployeeResults extends Component {
     constructor(props) {
@@ -129,20 +130,6 @@ class EmployeeResults extends Component {
     }
 
 
-    qualifier(score, scoreType) {
-        const qualifiers = scoreType === "predicted" ?
-            ["BELOW AVERAGE", "AVERAGE", "ABOVE AVERAGE"] :
-            ["NOVICE", "INTERMEDIATE", "EXPERT"]
-        if (score < 90) {
-            return qualifiers[0];
-        } else if (score < 110) {
-            return qualifiers[1];
-        } else {
-            return qualifiers[2];
-        }
-    }
-
-
     goTo(route) {
         // closes any notification
         this.props.closeNotification();
@@ -198,7 +185,7 @@ class EmployeeResults extends Component {
                                 <div
                                     className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
                                     Predicted Performance<br/>
-                                    <p style={style.lightBlue}>{this.qualifier(this.state.predicted, "predicted")}</p>
+                                    <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted, "predicted")}</p>
                                 </div>
                                 <Slider disabled={true}
                                         value={this.getSliderValue(this.state.predicted)}
@@ -211,7 +198,7 @@ class EmployeeResults extends Component {
                                 <div
                                     className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
                                     Skill Level<br/>
-                                    <p style={style.lightBlue}>{this.qualifier(this.state.skill, "skill")}</p>
+                                    <p style={style.lightBlue}>{qualifierFromScore(this.state.skill, "skill")}</p>
                                 </div>
                                 <Slider disabled={true}
                                         value={this.getSliderValue(this.state.skill)}
