@@ -1086,6 +1086,7 @@ async function addCompletionsAndInProgress(position) {
             const positionId = position._id;
             // all users with this position id in their positions array who have an end date
             completionsQuery = {
+                "userType": "candidate",
                 "positions": {
                     "$elemMatch": {
                         "$and": [
@@ -1098,6 +1099,7 @@ async function addCompletionsAndInProgress(position) {
             // all users with this position id in their positions array who have a start
             // date but NOT an end date
             inProgressQuery = {
+                "userType": "candidate",
                 "positions": {
                     "$elemMatch": {
                         "$and": [

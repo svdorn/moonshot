@@ -2768,6 +2768,15 @@ button.link {
     display: inline-block;
 }
 
+.myCandidates tr.mobileCandidate > td {
+    border-top: 1px solid gray;
+    text-align: center;
+}
+.myCandidates tr.mobileCandidate > td > .interest,
+.myCandidates tr.mobileCandidate > td > div {
+    display: inline-block;
+}
+
 .myCandidatesPositionSelector {
     position: absolute;
     top: -2px;

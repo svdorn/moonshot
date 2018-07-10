@@ -724,9 +724,33 @@ class MyCandidates extends Component {
             // mobile view
             if (this.state.mobile) {
                 return (
-                    <div>
-                        Mobile user!
-                    </div>
+                    <tr className={"mobileCandidate"  + (isSelected ? " selected" : "")} key={candidate._id}>
+                        <td>
+                            <div>
+                                {candidate.name}
+                            </div>
+                            <br/>
+                            <div className="interest">
+                                {this.makeStars(candidate._id, candidate.interest)}
+                            </div>
+                            <div className="stage">
+                                {this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}
+                            </div>
+                            <br/>
+                            <div className="predicted">
+                                {"Predicted"}<br/>
+                                {Math.round(predicted)}
+                            </div>
+                            <div className={"score"}>
+                                {"Score"}<br/>
+                                {Math.round(score)}
+                            </div>
+                            <div className="skill">
+                                {"Skill"}<br/>
+                                {Math.round(skill)}
+                            </div>
+                        </td>
+                    </tr>
                 )
             }
 
@@ -782,14 +806,17 @@ class MyCandidates extends Component {
         // add in the extra area for selecting a candidate
         headers.unshift(
             <td className="selectCandidateBox" key={`selectAreaBlankHeader`}/>
-        )
-
-        // add in the column headers
-        candidateRows.unshift(
-            <tr className="candidate" key={`tableHeaders`}>
-                { headers }
-            </tr>
         );
+
+
+        // add in the column headers on desktop view
+        if (!this.state.mobile) {
+            candidateRows.unshift(
+                <tr className="candidate" key={`tableHeaders`}>
+                    { headers }
+                </tr>
+            );
+        }
 
         return (
             <table className="candidateTable" key="candidateTable"><tbody>
