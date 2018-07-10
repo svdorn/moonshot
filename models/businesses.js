@@ -68,6 +68,15 @@ const businessesSchema = mongoose.Schema({
         numCandidates: Number,
         lastSent: Date
     },
+    // number of positions to charge for billing
+   billing: {
+       positions: Number,
+       length: String,
+       amount: Number
+   },
+
+    // the positions that the company is (or was) hiring for
+    positions: [ positionSchema ],
 
     // the questions that managers have to answer about each employee
     employeeQuestions: [{
