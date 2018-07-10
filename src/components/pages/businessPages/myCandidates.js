@@ -1033,55 +1033,44 @@ class MyCandidates extends Component {
 
     // lets you choose the filters for the candidates you see on mobile
     mobileSortByDropdown() {
-        return "Sort by";
-        // let headers = ["name", "score", "interest", "stage", "predicted", "skill"].map(sortTerm => {
-        //     return (
-        //         <MenuItem
-        //             value={sortTerm}
-        //             key={`position${sortTerm}`}
-        //         >
-        //             { sortTerm }
-        //         </MenuItem>
-        //
-        //
-        //         <td className={sortTerm} key={"tableHeader" + sortTerm}>
-        //             <div className="inlineBlock clickableNoUnderline" onClick={() => this.handleSortByChange(sortTerm)}>
-        //                 {sortTerm.toUpperCase()}
-        //                 <UpDownArrows
-        //                     selected={this.state.sortBy===sortTerm}
-        //                     sortAscending={this.state.sortAscending}
-        //                     style={{marginLeft: "12px"}}
-        //                 />
-        //             </div>
-        //         </td>
-        //     );
-        // });
-        //
-        // const positions = this.state.positions;
-        // const positionItems = positions.map(position => {
-        //     return (
-        //         <MenuItem
-        //             value={position.name}
-        //             key={`position${position.name}`}
-        //         >
-        //             { position.name }
-        //         </MenuItem>
-        //     );
-        // })
-        // return (
-        //     <Select
-        //         disableUnderline={true}
-        //         classes={{
-        //             root: "selectRootWhite myCandidatesSelect",
-        //             icon: "selectIconWhiteImportant"
-        //         }}
-        //         value={this.state.position}
-        //         onChange={this.handlePositionChange}
-        //         key="position selector"
-        //     >
-        //         { positionItems }
-        //     </Select>
-        // );
+        let sortItems = ["name", "score", "interest", "stage", "predicted", "skill"].map(sortTerm => {
+            return (
+                <MenuItem
+                    value={sortTerm}
+                    key={`position${sortTerm}`}
+                >
+                    { sortTerm }
+                    <UpDownArrows
+                        selected={this.state.sortBy===sortTerm}
+                        sortAscending={this.state.sortAscending}
+                        style={{marginLeft: "12px"}}
+                    />
+                </MenuItem>
+            );
+        });
+
+        return (
+            <Select
+                disableUnderline={true}
+                classes={{
+                    root: "selectRootWhite myCandidatesSelect",
+                    icon: "selectIconWhiteImportant"
+                }}
+                value={this.state.sortBy}
+                onChange={this.handleMobileSortByChange}
+                key="sort selector"
+            >
+                { sortItems }
+            </Select>
+        );
+    }
+
+
+    // handle a click on a hiring stage
+    handleMobileSortByChange = event => {
+        const sortTerm = event.target.value;
+        console.log("sortTerm: ", sortTerm);
+        this.handleSortByChange(sortTerm)
     }
 
 

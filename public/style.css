@@ -2772,9 +2772,6 @@ button.link {
     display: inline-block;
 }
 
-.myCandidates .mobileCandidate, .myCandidates .mobileCandidate .selectRootWhite {
-    font-size: 14px;
-}
 .myCandidates .mobileCandidate .interest {
     transform: scale(.8);
     vertical-align: middle;
@@ -5876,9 +5873,22 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .myCandidatesInfoBox {
         width: 280px;
     }
+    .myCandidates .mobileCandidate,
+    .myCandidates .selectRootWhite {
+        font-size: 14px;
+    }
 
     .myCandidates .candidatesAndOptions {
+        width: 400px;
+    }
+    .myCandidates tr.mobileCandidate > td > .predicted,
+    .myCandidates tr.mobileCandidate > td > .score,
+    .myCandidates tr.mobileCandidate > td > .skill {
+        width: 100px;
+    }
+    .myCandidatesTabs {
         width: 350px;
+        font-size: 14px;
     }
 
     .leftYAxisLabelContainer {
@@ -6257,6 +6267,27 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .form {
         max-width: 300px;
     }
+
+
+    .myCandidatesTabs {
+        width: 280px;
+        font-size: 12px;
+    }
+
+    .myCandidates .candidatesAndOptions {
+        width: 100%;
+    }
+    .myCandidates .mobileCandidate,
+    .myCandidates .selectRootWhite {
+        font-size: 12px;
+    }
+    .myCandidates tr.mobileCandidate > td > .predicted,
+    .myCandidates tr.mobileCandidate > td > .score,
+    .myCandidates tr.mobileCandidate > td > .skill {
+        width: 88px;
+    }
+
+
     .businessHome.frontPage { padding-top: 20px; }
     .pointBox { width: 27px; }
     .resultsSlidersContainer {
