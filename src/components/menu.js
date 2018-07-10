@@ -80,7 +80,6 @@ class Menu extends Component {
                 if (currentUser) {
                     // if user is employer, go to business profile
                     if (currentUser.userType === "manager" || currentUser.userType === "employee" || currentUser.userType === "accountAdmin") {
-                        //this.goTo("/businessProfile");
                         this.goTo("/");
                     }
                     // otherwise go to normal profile
@@ -134,7 +133,9 @@ class Menu extends Component {
 
 
     handleAnchorClick(anchor, wantedPath) {
-        this.goTo(wantedPath);
+        if (this.props.location.pathname != wantedPath) {
+            this.goTo(wantedPath);
+        }
         setTimeout(() => {
             const element = document.getElementById(anchor);
             if (element) {
@@ -199,9 +200,6 @@ class Menu extends Component {
         // width of the bar that is only shown under the dropDown menu when
         // some element from the dropDown menu is selected
         let hoverWidth = "61px";
-        // if (pathname === '/profile' || pathname === '/businessprofile') {
-        //     dropdownClass = "headerDropdownWhite wideScreenMenuItem currentRoute";
-        // }
         let additionalHeaderClass = "";
 
         if (pathname === "/") {
@@ -286,24 +284,11 @@ class Menu extends Component {
         if (!currentUser) {
             loggedInClass = " loggedOut";
             menuOptions = [
-                {optionType: "url", title: "Home", url: "/"},
+                {optionType: "anchor", title: "Home", url: "/", anchor: "homeTop"},
                 {optionType: "anchor", title: "Our Process", url: "/", anchor: "ourProcess"},
                 {optionType: "anchor", title: "Pricing", url: "/", anchor: "pricing"},
                 {optionType: "separator"},
                 {optionType: "url", title: "Log In", url: "/login"},
-            ];
-        }
-        // if the current user is an admin
-        else if (currentUser.admin) {
-            menuOptions = [
-                {optionType: "url", title: "Admin", url: "/admin"},
-                {optionType: "separator"},
-                {optionType: "dropDown", components: [
-                    {optionType: "url", title: "Account", url:"/"},
-                    {optionType: "divider"},
-                    {optionType: "url", title: "Settings", url: "/settings"},
-                    {optionType: "signOut"}
-                ]}
             ];
         }
         // if the current user is an account admin for a business
@@ -314,7 +299,6 @@ class Menu extends Component {
                 {optionType: "url", title: "Candidates", url: "/myCandidates"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
-                    //{optionType: "url", title: "Profile", url: "/businessProfile"},
                     {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Add User", url: "/addUser"},
@@ -331,7 +315,6 @@ class Menu extends Component {
         //         {optionType: "url", title: "Employees", url: "/myEmployees"},
         //         {optionType: "separator"},
         //         {optionType: "dropDown", components: [
-        //             //{optionType: "url", title: "Profile", url: "/businessProfile"},
         //             {optionType: "url", title: "Profile", url: "/"},
         //             {optionType: "divider"},
         //             {optionType: "url", title: "Settings", url: "/settings"},
@@ -346,7 +329,6 @@ class Menu extends Component {
                 {optionType: "url", title: "Evaluations", url: "/myEvaluations"},
                 {optionType: "separator"},
                 {optionType: "dropDown", components: [
-                    //{optionType: "url", title: "Profile", url: "/businessProfile"},
                     {optionType: "url", title: "Account", url:"/"},
                     {optionType: "divider"},
                     {optionType: "url", title: "Settings", url: "/settings"},
@@ -366,6 +348,11 @@ class Menu extends Component {
                     {optionType: "signOut"}
                 ]}
             ];
+        }
+
+        // if the user is a site admin, give them the admin tab
+        if (currentUser && typeof currentUser === "object" && currentUser.admin === true) {
+            menuOptions.unshift({optionType: "url", title: "Admin", url: "/admin"});
         }
 
         // construct the menu's tabs

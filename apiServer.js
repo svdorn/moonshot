@@ -70,9 +70,6 @@ app.use(session({
 // ----->> START APIS <<----- //
 
 
-app.post("/user/resetFrizz", userApis.POST_resetFrizz);
-app.post("/user/reset24", userApis.POST_reset24);
-
 app.post('/user/submitFreeResponse', userApis.POST_submitFreeResponse);
 app.post("/user/addPositionEval", userApis.POST_addPositionEval);
 app.post('/user/startPositionEval', userApis.POST_startPositionEval);
@@ -87,7 +84,6 @@ app.post('/user/session', userApis.POST_session);
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
 app.post('/user/login', userApis.POST_login);
-app.get('/user/userByProfileUrl', userApis.GET_userByProfileUrl);
 app.post('/user/changePassword', userApis.POST_changePassword);
 app.post('/user/forgotPassword', userApis.POST_forgotPassword);
 app.post('/user/changeSettings', userApis.POST_changeSettings);
@@ -103,9 +99,9 @@ app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
 app.post('/candidate/sendVerificationEmail', candidateApis.POST_sendVerificationEmail);
 app.post("/candidate/updateAllOnboarding", candidateApis.POST_updateAllOnboarding);
 
-app.post('/business/forBusinessEmail', businessApis.POST_forBusinessEmail);
 app.post('/business/demoEmail', businessApis.POST_demoEmail);
 app.post('/business/dialogEmail', businessApis.POST_dialogEmail);
+app.post('/business/addEvaluationEmail', businessApis.POST_addEvaluationEmail);
 app.post('/business/dialogEmailScreen2', businessApis.POST_dialogEmailScreen2);
 app.post('/business/dialogEmailScreen3', businessApis.POST_dialogEmailScreen3);
 app.post('/business/dialogEmailScreen4', businessApis.POST_dialogEmailScreen4);
@@ -115,18 +111,21 @@ app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
+app.get("/business/business", businessApis.GET_business);
 app.get("/business/employeeQuestions", businessApis.GET_employeeQuestions);
 app.get("/business/positions", businessApis.GET_positions);
 app.get("/business/evaluationResults", businessApis.GET_evaluationResults);
 
-app.post("/admin/alertLinkClicked", adminApis.POST_alertLinkClicked);
-app.post("/admin/business", adminApis.POST_business);
-app.get("/admin/info", adminApis.GET_info);
+app.get("/admin/allSkills", adminApis.GET_allSkills);
+app.get("/admin/skill", adminApis.GET_skill);
+app.post("/admin/saveSkill", adminApis.POST_saveSkill);
+app.get("/admin/allBusinesses", adminApis.GET_allBusinesses);
+app.get("/admin/business", adminApis.GET_business);
+app.post("/admin/saveBusiness", adminApis.POST_saveBusiness);
+app.get("/admin/blankPosition", adminApis.GET_blankPosition);
 
-//app.get('/skill/skillByUrl', skillApis.GET_skillByUrl);
 app.post('/skill/answerSkillQuestion', skillApis.POST_answerSkillQuestion);
 app.post('/skill/startOrContinueTest', skillApis.POST_startOrContinueTest);
-app.get('/skill/skillNamesByIds', skillApis.GET_skillNamesByIds);
 app.post("/skill/agreeToTerms", skillApis.POST_agreeToTerms);
 
 app.post('/billing/customer', billingApis.POST_customer);

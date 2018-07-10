@@ -47,8 +47,6 @@ class Admin extends Component {
 
                 {this.props.currentUser.admin === true ?
                     <div>
-                        <div className="headerDiv greenToBlue" />
-
                         {this.props.children}
                     </div>
 

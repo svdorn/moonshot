@@ -59,10 +59,10 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            positionName: this.props.position,
+            positionId: this.props.positionId,
             gradingComplete: true
         }
-        axios.post("/api/business/answerQuestion", {user})
+        axios.post("/api/business/answerQuestion", user)
         .then(function (res) {
             // TODO: fix the question answer
             // Advance to the next questionAnswer and save the answers in state
@@ -90,10 +90,10 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            positionName: this.props.position,
+            positionId: this.props.positionId,
             gradingComplete: this.state.gradingComplete
         }
-        axios.post("/api/business/answerQuestion", {user})
+        axios.post("/api/business/answerQuestion", user)
         .then(function (res) {
             // Advance to the next questionAnswer and save the answers in state
             const newQuestionIndex = self.state.questionIndex + 1;
@@ -131,10 +131,10 @@ class EmployeePreview extends Component {
             verificationToken: this.props.currentUser.verificationToken,
             score: this.state.questionAnswer,
             questionIndex: this.state.questionIndex,
-            positionName: this.props.position,
+            positionId: this.props.positionId,
             gradingComplete: this.state.gradingComplete
         }
-        axios.post("/api/business/answerQuestion", {user})
+        axios.post("/api/business/answerQuestion", user)
         .then(function (res) {
             // Go to the previous questionAnswer and save the answers in state
             const newQuestionIndex = self.state.questionIndex - 1;

@@ -176,7 +176,7 @@ class AddUserDialog extends Component {
         const currentUserInfo = {
             userId: currentUser._id,
             userName: currentUser.name,
-            companyId: currentUser.businessInfo.company.companyId,
+            businessId: currentUser.businessInfo.businessId,
             verificationToken: currentUser.verificationToken,
             positionId: position._id,
             positionName: position.name

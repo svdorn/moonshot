@@ -13,15 +13,12 @@ const mongoose = require("mongoose");
 const { sanitize,
         removeEmptyFields,
         verifyUser,
-        removePassword,
-        getUserByQuery,
         sendEmail,
-        userForAdmin,
         getFirstName,
         getAndVerifyUser,
         frontEndUser,
         getSkillNamesByIds,
-        NO_TOKENS
+        lastPossibleSecond
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require('./psychApis');
@@ -39,7 +36,6 @@ const userApis = {
     POST_forgotPassword,
     POST_changePassword,
     POST_changeSettings,
-    GET_userByProfileUrl,
     POST_login,
     POST_startPositionEval,
     POST_continuePositionEval,
@@ -53,52 +49,10 @@ const userApis = {
     POST_sawEvaluationIntro,
     POST_agreeToTerms,
 
-    POST_resetFrizz,
-    POST_reset24,
-
     internalStartPsychEval,
     addEvaluation,
     finishPositionEvaluation
 }
-
-
-// async function makeMockPsychData() {
-//     let user = await Users.findById("5a95fed783705f7be1f7c158");
-//     let psychometricTest = user.psychometricTest;
-//     for (let factorIndex = 0; factorIndex < psychometricTest.factors.length; factorIndex++) {
-//         let factor = psychometricTest.factors[factorIndex];
-//
-//         factor.incompleteFacets = [];
-//
-//         let facetTotal = 0;
-//
-//         for (let facetIndex = 0; facetIndex < factor.facets.length; facetIndex++) {
-//             let facet = factor.facets[facetIndex];
-//
-//             facet.score = Math.floor(Math.random() * 11) - 5;
-//
-//             facetTotal += facet.score;
-//
-//             factor.facets[facetIndex] = facet;
-//         }
-//
-//         factor.score = facetTotal / factor.facets.length;
-//
-//         psychometricTest.factors[factorIndex] = factor;
-//     }
-//
-//     user.psychometricTest = psychometricTest;
-//
-//     user.psychometricTest.endDate = new Date();
-//
-//     user.save()
-//     .then(result => {
-//         console.log("result: ", result);
-//     })
-//     .catch(err => {
-//         console.log("err: ", err);
-//     })
-// }
 
 
 // get the questions that are shown on the administrative questions portion of an evaluation
@@ -127,7 +81,7 @@ async function GET_adminQuestions(req, res) {
 }
 
 
-// get the questions that are shown on the administrative questions portion of an evaluation
+// answer a question that is shown on the administrative questions portion of an evaluation
 async function POST_answerAdminQuestion(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
@@ -144,9 +98,8 @@ async function POST_answerAdminQuestion(req, res) {
     }
 
     let user;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
         console.log("error getting user while trying to get admin questions: ", getUserError);
         return res.status(500).send(errors.PERMISSIONS_ERROR);
     }
@@ -167,76 +120,13 @@ async function POST_answerAdminQuestion(req, res) {
     user.adminQuestions.finished = finished;
 
     // save the user
-    try {
-        await user.save();
-    } catch (saveUserError) {
+    try { await user.save(); }
+    catch (saveUserError) {
         console.log("error saving user while trying to answer admin question");
         res.status(500).send(errors.SERVER_ERROR);
     }
 
     return res.json(frontEndUser(user));
-}
-
-
-async function POST_resetFrizz(req, res) {
-    const userId = sanitize(req.body.userId);
-    const verificationToken = sanitize(req.body.verificationToken);
-
-    let frizz;
-    try {
-        frizz = await getAndVerifyUser(userId, verificationToken);
-    } catch (frizzError) {
-        console.log("error getting frizz: ", frizzError);
-        return res.status(500).send("Error getting user.");
-    }
-
-    if (frizz.email != "frizzkitten@gmail.com") {
-        return res.status(403).send("Not logged in with right account.");
-    }
-
-    frizz.skillTests = undefined;
-    frizz.psychometricTest = undefined;
-    frizz.positions = undefined;
-    frizz.positionInProgress = undefined;
-
-    frizz.save()
-    .then(newFrizz => {
-        return res.json(frontEndUser(newFrizz));
-    })
-    .catch(error => {
-        console.log("error resetting frizz: ", error);
-        return res.status(500).send("ERROR");
-    })
-}
-async function POST_reset24(req, res) {
-    const userId = sanitize(req.body.userId);
-    const verificationToken = sanitize(req.body.verificationToken);
-
-    let frizz;
-    try {
-        frizz = await getAndVerifyUser(userId, verificationToken);
-    } catch (frizzError) {
-        console.log("error getting 24: ", frizzError);
-        return res.status(500).send("Error getting user.");
-    }
-
-    if (frizz.email != "ameyer24@wisc.edu") {
-        return res.status(403).send("Not logged in with right account.");
-    }
-
-    frizz.skillTests = undefined;
-    frizz.psychometricTest = undefined;
-    frizz.positions = undefined;
-    frizz.positionInProgress = undefined;
-
-    frizz.save()
-    .then(newFrizz => {
-        return res.json(frontEndUser(newFrizz));
-    })
-    .catch(error => {
-        console.log("error resetting 24: ", error);
-        return res.status(500).send("ERROR");
-    })
 }
 
 
@@ -248,9 +138,8 @@ async function POST_submitFreeResponse(req, res) {
     let user;
     let business;
 
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch(getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch(getUserError) {
         console.log("Error getting user when trying to start position eval: ", getUserError.error);
         return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
     }
@@ -281,17 +170,15 @@ async function POST_submitFreeResponse(req, res) {
 
     // mark the position as complete, as answering frqs is always the last step
     try {
-        finishEvalObj = await finishPositionEvaluation(user, userPosition.positionId, userPosition.businessId);
-        user = finishEvalObj.user;
-        business = finishEvalObj.business;
+        user = await finishPositionEvaluation(user, userPosition.positionId, userPosition.businessId);
     } catch (finishEvalError) {
         console.log("error finish position evaluation: ", finishEvalError);
         return res.status(500).send("Server error.");
     }
 
     try {
-        let [savedUser, savedBusiness] = await Promise.all([user.save(), business.save()]);
-        return res.json({updatedUser: frontEndUser(savedUser)})
+        user = await user.save();
+        return res.json({updatedUser: frontEndUser(user)})
     } catch (saveError) {
         console.log("error saving user or business after submitting frq: ", saveError);
         return res.status(500).send("Server error.");
@@ -308,9 +195,8 @@ async function POST_continuePositionEval(req, res) {
         const positionIdString = positionId.toString();
 
         let user = undefined;
-        try {
-            user = await getAndVerifyUser(userId, verificationToken);
-        } catch (getUserError) {
+        try { user = await getAndVerifyUser(userId, verificationToken); }
+        catch (getUserError) {
             console.log("Error getting user when trying to continue position eval: ", getUserError.error);
             return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
         }
@@ -388,8 +274,6 @@ async function POST_continuePositionEval(req, res) {
 
         // if the user has to do the FRQs
         else if (
-            // only candidates have to answer frqs
-            user.userType === "candidate" &&
             // there must be at least one frq
             Array.isArray(position.freeResponseQuestions) &&
             position.freeResponseQuestions.length > 0 &&
@@ -408,10 +292,7 @@ async function POST_continuePositionEval(req, res) {
 
             // mark this position as completed
             try {
-                finishEvalObj = await finishPositionEvaluation(user, position.positionId, position.businessId);
-                user = finishEvalObj.user;
-                // save the business with the updated finished user info
-                await finishEvalObj.business.save();
+                user = await finishPositionEvaluation(user, position.positionId, position.businessId);
             } catch(finishEvalError) {
                 console.log("error finishing eval: ", finishEvalError);
                 return res.status(500).send("Server error.");
@@ -419,9 +300,8 @@ async function POST_continuePositionEval(req, res) {
         }
 
         // save the user's new info
-        try {
-            await user.save();
-        } catch (saveUserError) {
+        try { await user.save(); }
+        catch (saveUserError) {
             console.log("error saving user who is continuing an eval: ", saveUserError);
             return res.status(500).send("Server error.");
         }
@@ -444,273 +324,191 @@ async function POST_addPositionEval(req, res) {
     const businessId = sanitize(req.body.businessId);
     const positionId = sanitize(req.body.positionId);
 
+    // get the user
     let user;
-    getAndVerifyUser(userId, verificationToken)
-    .then(foundUser => {
-        // mark that we've found the user
-        user = foundUser;
-        addEval();
-    })
-    .catch(getUserError => {
-        console.log("Error getting user when trying to start position eval: ", getUserError.error);
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("error getting user while adding position eval: ", getUserError);
         return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
-    })
+    }
 
-    let business;
-    Businesses.findById(businessId)
-    .then(foundBiz => {
-        business = foundBiz;
-        if (!business) { return res.status(500).send("No position found."); }
-        addEval();
-    })
-    .catch(findBizErr => {
-        console.log("Error getting business when trying to start position eval: ", findBizErr);
-        return res.status(500).send("Server error.");
-    });
+    // add the evaluation to the user
+    try {
+        const startDate = new Date();
+        let { newUser, finished, positionIndex } = await addEvaluation(user, businessId, positionId, startDate);
+        user = newUser;
+    } catch (addEvaluationError) {
+        console.log(addEvaluationError);
+        return res.status(500).send("Couldn't add position.");
+    }
 
-    async function addEval() {
-        // add the evaluation to the user and tell the business the user is in
-        try {
-            let { newUser, newBusiness, finished } = await addEvaluation(user, business, positionId);
-            user = newUser;
-            business = newBusiness;
-        } catch (addEvaluationError) {
-            console.log(addEvaluationError);
-            return res.status(500).send("Server error.");
-        }
-
-        // save the user and business and return on success
-        let savedUser = false;
-        let savedBusiness = false;
-        try {
-            user.save().then(savedUser => { userSaved = true; finish(); }).catch(e => { throw e });
-            business.save().then(savedBiz => { businessSaved = true; finish(); }).catch(e => { throw e });
-        } catch (saveError) {
-            console.log("Error saving user or business when adding a position evaluation.");
-            return res.status(500).send("Server error.")
-        }
-
-        // when the business and user have both been saved, return successfully
-        function finish() {
-            if (userSaved && businessSaved) { res.json("success"); }
-        }
+    // save the user and return on success
+    try {
+        await user.save();
+        return res.json(true);
+    } catch (saveError) {
+        console.log("error saving user with new eval: ", saveError);
+        return res.status(500).send(errors.SERVER_ERROR);
     }
 }
 
 
-// returns object: {user: userObject, business: businessObject, finished: Boolean, userPositionIndex: Number}
-// DOESN'T SAVE THE TWO, MUST BE SAVED IN CALLING FUNCTION
-async function addEvaluation(user, business, positionId, startDate) {
+async function getPosition(businessId, positionId) {
     return new Promise(async function(resolve, reject) {
         try {
-            // check that all inputs are valid
-            if (!user || !business || !positionId) {
-                // return with error saying which input is invalid
-                reject("Inputs to addEvaluation not correct. User: ", user, "\nbusiness: ", business, "\npositionId: ", positionId);
-            }
-
-            // find the index of the position within the business from the positionId
-            const positionIdString = positionId.toString();
-            const positionIndex = business.positions.findIndex(pos => {
-                // if the id of the position matches, we found the right index
-                return pos._id.toString() === positionIdString;
-            });
-
-            // check that the position is valid
-            if (typeof positionIndex !== "number" || positionIndex < 0) {
-                console.log("Coudln't find position within business.\npositionId: ", positionId, "\nbusiness: ", business);
-                reject("Invalid position.");
-            }
-
-            // get the actual position from the index
-            let position = business.positions[positionIndex];
-
-            let userAlreadyInPosition = false;
-            const userIdString = user._id.toString();
-
-            if (user.userType == "candidate") {
-                // User is a candidate
-                // see if candidate is already marked as being a candidate for this position
-                if (position.candidates) {
-                    userAlreadyInPosition = position.candidates.some(candidateId => {
-                        return candidateId.toString() === userIdString;
-                    });
-                }
-            } else {
-                // User is an employee
-                if (position.employees) {
-                    userAlreadyInPosition = position.employees.some(employeeId => {
-                        return employeeId.toString() === userIdString;
-                    });
+            // find business by business id
+            const findById = { _id: businessId };
+            // only return the position we want
+            const correctPositionOnly = {
+                "positions": {
+                    "$elemMatch": {
+                        "_id": positionId
+                    }
                 }
             }
-
-            // if so, they already added the position, so they can't add it again
-            if (userAlreadyInPosition) {
-                reject("That position already knows about the user.");
+            const business = await Businesses.findOne(findById, correctPositionOnly);
+            // make sure the position exists
+            if (!Array.isArray(business.positions) || business.positions.length === 0) {
+                return reject("Business found but position didn't exist.");
             }
-
-            // check if the user already has this position in their positions array
-            const businessIdString = business._id.toString();
-            let userPositionIndex = user.positions.findIndex(pos => {
-                return pos.businessId.toString() === businessIdString && pos.positionId.toString() === positionIdString;
-            })
-            const userHasPosition = typeof userPositionIndex === "number" && userPositionIndex >= 0;
-            // if so, return successfully because the evaluation has already been added
-            if (userHasPosition) {
-                // find out if the user finished the position by seeing if there's an end date
-                const finishedWithEval = user.positions[userPositionIndex].appliedEndDate != undefined;
-                reject("User has already added that position.");
-            }
-            if (user.userType == "candidate") {
-                // add the information the business will need about the candidate
-                const userInformation = {
-                    candidateId: user._id,
-                    name: user.name,
-                    profileUrl: user.profileUrl,
-                    isDismissed: false,
-                    location: user.info ? user.info.location : undefined,
-                    hiringStage: "Not Contacted",
-                    hiringStageChanges: [{
-                        hiringStage: "Not Contacted",
-                        // status changed to Not Contacted just now
-                        dateChanged: new Date(),
-                    }],
-                    // could be undefined if user hasn't taken psych test yet
-                    archetype: user.archetype
-                    // user won't have any scores yet because they haven't done the eval yet
-                }
-                position.candidates.push(userInformation);
-                if (typeof position.usersInProgress !== "number") { position.usersInProgress = 0; }
-                position.usersInProgress++;
-            } else {
-                // add the info the business will need about the employee
-                const userInformation = {
-                    employeeId: user._id,
-                    name: user.name,
-                    gradingComplete: false,
-                    profileUrl: user.profileUrl,
-                    archetype: user.archetype,
-                    // user won't have any scores yet because they haven't done the eval yet
-                    // user won't have any answers yet because managers haven't graded them yet
-                }
-                position.employees.push(userInformation);
-            }
-            // make sure the position is saved within the business object
-            business.positions[positionIndex] = position;
-
-            // give user the position with all starting info
-            // the date at this time, will be used a couple times in the newPosition object
-            const now = new Date();
-
-            // create the free response objects that will be stored for the user, employees won't need frq's
-            let frqsForUser = [];
-            if (user.userType == "candidate" || position.employeesGetFrqs) {
-                const numFRQs = position.freeResponseQuestions.length;
-                for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
-                    const frq = position.freeResponseQuestions[frqIndex];
-                    frqsForUser.push({
-                        questionId: frq._id,
-                        questionIndex: frqIndex,
-                        response: undefined,
-                        body: frq.body,
-                        required: frq.required
-                    });
-                }
-            }
-
-            // go through the user's skills to see which they have completed already;
-            // this assumes the user won't have any in-progress skill tests when they
-            // start a position evaluation
-            let testIndex = 0;
-            let skillTestIds = [];
-            let userSkillTests = user.skillTests;
-            position.skills.forEach(skillId => {
-                // if the user has already completed this skill test ...
-                if (userSkillTests.some(completedSkill => {
-                    return completedSkill.skillId.toString() === skillId.toString();
-                })) {
-                    // ... add it to the front of the list and increase test index so we
-                    // know to skip it
-                    skillTestIds.unshift(skillId);
-                    testIndex++;
-                }
-
-                // if the user hasn't already completed this skill test, just add it
-                // to the end of the array
-                else { console.log("did not complete skill: ", skillId); skillTestIds.push(skillId); }
-            });
-
-            // see if the user has already finished the psych analysis
-            const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.endDate;
-
-            // if we're trying to take a test that is past the number of tests we
-            // have, we must be done with all the skill tests
-            const doneWithSkillTests = testIndex === skillTestIds.length;
-
-            // see if there are no frqs in this evaluation
-            let noFrqs = true;
-            if (user.userType == "candidate") {
-                noFrqs = frqsForUser.length === 0;
-            }
-
-            // if the user has finished the psych test and all skill tests
-            // and there are no frqs, the user has finished already
-            const finished = hasTakenPsychTest && doneWithSkillTests && noFrqs;
-            const appliedEndDate = finished ? now : undefined;
-
-            // get the assigned date from the function call
-            const assignedDate = startDate;
-            let deadline = undefined;
-            // if a start date was assigned, figure out the deadline
-            if (assignedDate) {
-                const daysAllowed = position.timeAllotted;
-                if (daysAllowed != undefined) {
-                    const year = assignedDate.getFullYear();
-                    const month = assignedDate.getMonth();
-                    const day = assignedDate.getDate() + daysAllowed;
-                    // always sets the due date to be 11:59pm the day it's due
-                    const hour = 23;
-                    const minute = 59;
-                    const second = 59;
-                    deadline = new Date(year, month, day, hour, minute, second);
-                }
-            }
-
-            // starting info about the position
-            const newPosition = {
-                businessId: business._id,
-                positionId: position._id,
-                name: position.name,
-                appliedStartDate: now,
-                appliedEndDate,
-                assignedDate,
-                deadline,
-                // no scores have been calculated yet
-                scores: undefined,
-                skillTestIds,
-                testIndex,
-                freeResponseQuestions: frqsForUser
-            }
-
-            // add the starting info to the user
-            user.positions.push(newPosition);
-            // position must be last in the array
-            userPositionIndex = user.positions.length - 1;
-
-            // return successfully
-            resolve({ user, business, finished, userPositionIndex });
+            // get the object version of the mongoose position object
+            //const position = business.positions[0].toObject();
+            const position = business.positions[0];
+            return resolve(position);
         }
-
-        // if there is some random error, return unsuccessfully
-        catch (someError) {
-            reject(someError);
-        }
+        catch (findBusinessError) { return reject(findBusinessError); }
     });
 }
 
 
-// doesn't save the user or business objects, caller has to do that
+async function addEvaluation(user, businessId, positionId, startDate) {
+    return new Promise(async function(resolve, reject) {
+        // check if the user already has the position
+        const alreadyHasPosition = user.positions.some(userPosition => {
+            return userPosition.businessId.toString() === businessId.toString && userPosition.positionId.toString() === positionId.toString();
+        });
+        if (alreadyHasPosition) {
+            return reject(`user already had position with id ${positionId} in their positions array`);
+        }
+
+        // get the position object
+        let position;
+        try { position = await getPosition(businessId, positionId); }
+        catch (getPositionError) { return reject(getPositionError); }
+
+        // create the free response objects that will be stored for the user;
+        // employees only get frqs if the position specifies that they should
+        let frqsForUser = [];
+        if (user.userType == "candidate" || position.employeesGetFrqs) {
+            const numFRQs = position.freeResponseQuestions.length;
+            for (let frqIndex = 0; frqIndex < numFRQs; frqIndex++) {
+                const frq = position.freeResponseQuestions[frqIndex];
+                frqsForUser.push({
+                    questionId: frq._id,
+                    questionIndex: frqIndex,
+                    response: undefined,
+                    body: frq.body,
+                    required: frq.required
+                });
+            }
+        }
+
+        // go through the user's skills to see which they have completed already;
+        // this assumes the user won't have any in-progress skill tests when they
+        // start a position evaluation
+        let testIndex = 0;
+        let skillTestIds = [];
+        let userSkillTests = user.skillTests;
+        position.skills.forEach(skillId => {
+            // if the user has already completed this skill test ...
+            if (userSkillTests.some(completedSkill => {
+                return completedSkill.skillId.toString() === skillId.toString();
+            })) {
+                // ... add it to the front of the list and increase test index so we
+                // know to skip it
+                skillTestIds.unshift(skillId);
+                testIndex++;
+            }
+
+            // if the user hasn't already completed this skill test, just add it
+            // to the end of the array
+            else { skillTestIds.push(skillId); }
+        });
+
+        // see if the user has already finished the psych analysis
+        const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.endDate;
+
+        // if we're trying to take a test that is past the number of tests we
+        // have, we must be done with all the skill tests
+        const doneWithSkillTests = testIndex >= skillTestIds.length;
+
+        // see if there are no frqs in this evaluation
+        let noFrqs = frqsForUser.length === 0;
+
+        // if the user has finished the psych test and all skill tests
+        // and there are no frqs, the user has finished already
+        const finished = hasTakenPsychTest && doneWithSkillTests && noFrqs;
+        const now = new Date();
+        const appliedEndDate = finished ? now : undefined;
+
+        // get the assigned date from the function call
+        const assignedDate = startDate;
+        let deadline = undefined;
+        // if a start date was assigned, figure out the deadline
+        if (assignedDate) {
+            const daysAllowed = position.timeAllotted;
+            if (daysAllowed != undefined) {
+                deadline = lastPossibleSecond(assignedDate, daysAllowed);
+            }
+        }
+
+        // this information will change depending on whether it's a candidate or employee
+        let userTypeSpecificInfo = {};
+        if (user.userType === "candidate") {
+            userTypeSpecificInfo = {
+                isDismissed: false,
+                hiringStage: "Not Contacted",
+                hiringStageChanges: [{
+                    hiringStage: "Not Contacted",
+                    isDismissed: false,
+                    // status changed to Not Contacted just now
+                    dateChanged: now
+                }]
+            }
+        } else if (user.userType === "employee") {
+            userTypeSpecificInfo.gradingComplete = false
+        }
+
+        // starting info about the position
+        const typeAgnosticInfo = {
+            businessId: businessId,
+            positionId: position._id,
+            name: position.name,
+            appliedStartDate: now,
+            appliedEndDate,
+            assignedDate,
+            deadline,
+            // no scores have been calculated yet
+            scores: undefined,
+            skillTestIds,
+            testIndex,
+            freeResponseQuestions: frqsForUser
+        }
+
+        const newPosition = Object.assign(userTypeSpecificInfo, typeAgnosticInfo);
+
+        // add the starting info to the user
+        user.positions.push(newPosition);
+        // position must be last in the array
+        userPositionIndex = user.positions.length - 1;
+
+        // return successfully
+        return resolve({ user, finished, userPositionIndex });
+    });
+}
+
+
+// doesn't save the user object, caller has to do that
 async function finishPositionEvaluation(user, positionId, businessId) {
     return new Promise(async function(resolve, reject) {
         let idType = "";
@@ -725,72 +523,51 @@ async function finishPositionEvaluation(user, positionId, businessId) {
             reject("Non-candidate or employee tried to finish position evaluation.");
         }
 
-        // user is no longer taking a position evaluation
-        user.positionInProgress = undefined;
-
+        // every position evaluation has a psychometric portion, so it must be done
         if (!user.psychometricTest || !user.psychometricTest.endDate) {
             return reject("user has not yet completed the psychometric test");
         }
 
-        // user finished the evaluation
-        user.positions[user.positions.findIndex(pos => { return pos.positionId.toString() === positionId.toString(); })].appliedEndDate = new Date();
+        // find the position within the business
+        let businessPos;
+        try { businessPos = await getPosition(businessId, positionId); }
+        catch (getPositionError) { reject(getPositionError); }
 
-        let business;
-        try {
-            business = await Businesses.findById(position.businessId);
-        } catch (findBusinessError) {
-            console.log("Error getting business: ", findBusinessError);
-            reject(findBusinessError);
-        }
+        // user is no longer taking a position evaluation
+        user.positionInProgress = undefined;
 
-        // update the business to say that they have a user who has completed their application
-        let positionIndex = business.positions.findIndex(bizPos => {
-            return bizPos._id.toString() === positionId.toString();
+        // find the index of the position within the user's positions array
+        const positionIndex = user.positions.findIndex(pos => {
+            return pos.positionId.toString() === positionId.toString();
         });
-
-        let businessPos = business.positions[positionIndex];
-
-        // find the candidate within the business' position
-        const userId = user._id.toString();
-        let candidateIndex = businessPos[userArray].findIndex(candInfo => {
-            return candInfo[idType].toString() === userId;
-        })
-        // if the business didn't already have the candidate ...
-        if (candidateIndex < 0) {
-            // ... add the candidate to the position
-            const userInfo = {
-                candidateId: user._id,
-                profileUrl: user.profileUrl,
-                name: user.name,
-                location: user.info ? user.info.location : "",
-                isDismissed: false,
-                hiringStage: "Not Contacted",
-                hiringStageChanges: [{
-                    hiringStage: "Not Contacted",
-                    // status changed to Not Contacted just now
-                    dateChanged: new Date(),
-                }],
-                // could be undefined if user hasn't taken psych test yet (which
-                // shouldn't be possible at this point)
-                archetype: user.archetype
-            }
-            businessPos[userArray].push(userInfo);
-
-            // set the candidate index as the most recently added candidate
-            candidateIndex = businessPos.candidates.length - 1;
+        if (typeof positionIndex !== "number" || positionIndex < 0) {
+            return reject("Couldn't find position that user tried to complete within user's positions array.")
         }
 
-        // update the candidate saying they're done
-        let candidate = businessPos[userArray][candidateIndex];
+        // user finished the evaluation, give it an end date
+        user.positions[positionIndex].appliedEndDate = new Date();
+        // make sure the user has a hiring stage
+        user.hiringStage = "Not Contacted";
+        // user can't be dismissed yet because they just finished the eval to determine scores
+        user.isDismissed = false;
+        // if the user didn't have a hiring stages array, add it
+        if (!Array.isArray(user.hiringStageChanges)) {
+            user.hiringStageChanges = [];
+        }
+        // add this most recent change to hiring stage changes
+        user.hiringStageChanges.push({
+            hiringStage: "Not Contacted",
+            isDismissed: false,
+            dateChanged: new Date()
+        })
 
-        // update the archetype now that the user is sure to have taken the psych test
-        candidate.archetype = user.archetype;
+        let userPosition = user.positions[positionIndex];
 
         // --->> SCORE THE USER <<--- //
         // GET THE TOTAL SKILL SCORE BY AVERAGING ALL SKILL SCORES FOR THIS POSITION
-        // get all relevant skills
+        // get all skills that were tested for in this eval
         const skillScores = user.skillTests ? user.skillTests.filter(skill => {
-            return businessPos.skills.some(posSkill => {
+            return userPosition.skillTestIds.some(posSkill => {
                 return posSkill.toString() === skill.skillId.toString();
             });
         }) : [];
@@ -900,7 +677,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         // OVERALL SCORE IS AN AVERAGE BETWEEN OVERALL SKILL AND PREDICTED
         const overall = (predicted + overallSkill) / 2;
 
-        candidate.scores = {
+        user.positions[positionIndex].scores = {
             skill: overallSkill,
             growth,
             performance,
@@ -1059,10 +836,18 @@ async function POST_sawEvaluationIntro(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
 
+    // // TODO: do all this with one query
+    // const findAndUpdateQuery = {
+    //
+    // }
+    // Users.findOneAndUpdate(findAndUpdateQuery);
+
+
+
+
     let user;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
         console.log("error getting user when agreeing to skill test terms: ", getUserError);
         return res.status(500).send("Error getting user.");
     }
@@ -1098,132 +883,93 @@ async function POST_startPositionEval(req, res) {
     const positionIdString = positionId.toString();
 
     let user;
-    getAndVerifyUser(userId, verificationToken)
-    .then(foundUser => {
-        user = foundUser;
-        startEval();
-    })
-    .catch(getUserError => {
-        console.log("getUserError: ", getUserError);
-        console.log("Error getting user when trying to start position eval: ", getUserError.error);
-        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Server error.");
-    })
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
+        console.log("error getting user when starting eval: ", user);
+        return res.status(getUserError.status ? getUserError.status : 500).send(getUserError.message ? getUserError.message : "Couldn't start position evaluation.");
+    }
 
-    let business;
-    Businesses.findById(businessId)
-    .then(foundBiz => {
-        business = foundBiz;
-        if (!business) { return res.status(500).send("No position found."); }
-        startEval();
-    })
-    .catch(findBizErr => {
-        console.log("Error getting business when trying to start position eval: ", findBizErr);
+    // add the evaluation to the user
+    let userPositionIndex = undefined;
+    let finished = false;
+    try {
+        let addEvalObj = await addEvaluation(user, business, positionId);
+        user = addEvalObj.user;
+        userPositionIndex = addEvalObj.userPositionIndex;
+        finished = addEvalObj.finished;
+    } catch (addEvaluationError) {
+        console.log(addEvaluationError);
         return res.status(500).send("Server error.");
-    });
+    }
 
+    // where the user should be redirected
+    let nextUrl;
 
-    async function startEval() {
-        // need both to be found before running through this
-        if (!user || !business) { return; }
+    // if the user has finished the evaluation just by hitting apply
+    if (finished) {
+        // go home if the evaluation is done
+        nextUrl = "/";
+        console.log("Evaluation already finished!");
+    }
 
-        // add the evaluation to the user and tell the business the user is in
-        let userPositionIndex = undefined;
-        let finished = false;
-        try {
-            let addEvalObj = await addEvaluation(user, business, positionId);
-            user = addEvalObj.user;
-            business = addEvalObj.business;
-            userPositionIndex = addEvalObj.userPositionIndex;
-            finished = addEvalObj.finished;
-        } catch (addEvaluationError) {
-            console.log(addEvaluationError);
-            return res.status(500).send("Server error.");
+    // if the user has to do some steps in the evaluation still
+    else {
+        // start the evaluation by setting the position in progress to this one
+        user.positionInProgress = positionId;
+
+        // the position that was just added to the user object
+        let userPosition = user.positions[userPositionIndex];
+
+        // see if the user ahs already taken the psych analysis
+        const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.endDate === false;
+
+        // if we're trying to take a test that is past the number of tests we
+        // have, we must be done with all the skill tests
+        const doneWithSkillTests = userPosition.testIndex === userPosition.skillTestIds.length;
+
+        // if the user has to answer the admin questions
+        if (!user.adminQuestions || !user.adminQuestions.finished) {
+            nextUrl = "/adminQuestions";
         }
 
-        // where the user should be redirected
-        let nextUrl;
-
-        // if the user has finished the evaluation just by hitting apply
-        if (finished) {
-            // go home if the evaluation is done
-            nextUrl = "/";
-            console.log("Evaluation already finished!");
+        // if the user hasn't taken the psychometric exam before, have them do that
+        else if (!hasTakenPsychTest) {
+            // sign up for the psych test
+            user = await internalStartPsychEval(user);
+            // get the user to the psych eval page
+            nextUrl = "/psychometricAnalysis";
         }
-
-        // if the user has to do some steps in the evaluation still
+        // otherwise, if the user hasn't done all the skills tests, have the
+        // first incomplete skill test be first up
+        else if (!doneWithSkillTests) {
+            // get the url of the first test
+            try {
+                const skillTest = await Skills.findById(userPosition.skillTestIds[userPosition.testIndex]).select("url");
+                nextUrl = `/skillTest/${skillTest.url}`;
+            } catch (getSkillTestError) {
+                console.log("Error getting skill test: ", getSkillTestError);
+                return res.status(500).send("Server error.");
+            }
+        }
+        // if the user has finished all skill and psych tests, give them the
+        // free response questions they have to answer
         else {
-            // start the evaluation by setting the position in progress to this one
-            user.positionInProgress = positionId;
-
-            // the position that was just added to the user object
-            let userPosition = user.positions[userPositionIndex];
-
-            // see if the user ahs already taken the psych analysis
-            const hasTakenPsychTest = user.psychometricTest && user.psychometricTest.endDate === false;
-
-            // if we're trying to take a test that is past the number of tests we
-            // have, we must be done with all the skill tests
-            const doneWithSkillTests = userPosition.testIndex === userPosition.skillTestIds.length;
-
-            // if the user has to answer the admin questions
-            if (!user.adminQuestions || !user.adminQuestions.finished) {
-                nextUrl = "/adminQuestions";
-            }
-
-            // if the user hasn't taken the psychometric exam before, have them do that
-            else if (!hasTakenPsychTest) {
-                // sign up for the psych test
-                user = await internalStartPsychEval(user);
-                // get the user to the psych eval page
-                nextUrl = "/psychometricAnalysis";
-            }
-            // otherwise, if the user hasn't done all the skills tests, have the
-            // first incomplete skill test be first up
-            else if (!doneWithSkillTests) {
-                // get the url of the first test
-                try {
-                    const skillTest = await Skills.findById(userPosition.skillTestIds[userPosition.testIndex]).select("url");
-                    nextUrl = `/skillTest/${skillTest.url}`;
-                } catch (getSkillTestError) {
-                    console.log("Error getting skill test: ", getSkillTestError);
-                    return res.status(500).send("Server error.");
-                }
-            }
-            // if the user has finished all skill and psych tests, give them the
-            // free response questions they have to answer
-            else {
-                // uses the user's positionInProgress object to get the questions
-                nextUrl = "/freeResponse";
-            }
-        }
-
-        // save the user and business and return on success
-        let userSaved = false;
-        let businessSaved = false;
-        try {
-            user.save().then(savedUser => {
-                user = savedUser;
-                userSaved = true;
-                finish();
-            }).catch(e => { throw e });
-
-            business.save().then(savedBiz => {
-                businessSaved = true;
-                finish();
-            }).catch(e => { throw e });
-        } catch (saveError) {
-            console.log("Error saving user or business when adding a position evaluation.");
-            return res.status(500).send("Server error.")
-        }
-
-        // when the business and user have both been saved, return successfully
-        function finish() {
-            // TODO: this removes the old nextUrl stuff, assuming the user should
-            // alwsays go to the intro part when starting an eval
-            nextUrl = "/evaluationIntro"
-            if (userSaved && businessSaved) { res.json({updatedUser: frontEndUser(user), finished, nextUrl}); }
+            // uses the user's positionInProgress object to get the questions
+            nextUrl = "/freeResponse";
         }
     }
+
+    // save the user
+    try { user = user.save(); }
+    catch (saveUserError) {
+        console.log("error saving user with new evaluation: ", saveUserError);
+        return res.status(500).send("Error starting position evaluation.");
+    }
+
+    // TODO: this removes the old nextUrl stuff, assuming the user should
+    // always go to the intro part when starting an eval
+    nextUrl = "/evaluationIntro"
+    res.json({updatedUser: frontEndUser(user), finished, nextUrl});
 }
 
 
@@ -1231,9 +977,8 @@ async function POST_answerPsychQuestion(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
     let user = undefined;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserErrorObj) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserErrorObj) {
         console.log("error getting user: ", getUserErrorObj);
         return res.status(getUserErrorObj.status).send(getUserErrorObj.message);
     }
@@ -1263,7 +1008,6 @@ async function POST_answerPsychQuestion(req, res) {
     const factorIndex = currentQuestion.factorIndex;
     const facetId = currentQuestion.facetId;
     const facetIndex = currentQuestion.facetIndex;
-
 
     // find out how many questions have already been answered for this facet
     // get the factor of the question that was answered
@@ -1387,11 +1131,7 @@ async function POST_answerPsychQuestion(req, res) {
             if (applicationComplete) {
                 let business;
                 try {
-                    finishedPositionObj = await finishPositionEvaluation(user, positionId, userPosition.businessId);
-                    business = finishedPositionObj.business;
-                    user = finishedPositionObj.user;
-
-                    await business.save();
+                    user = await finishPositionEvaluation(user, positionId, userPosition.businessId);
                 } catch (finishPositionError) {
                     console.log("error finishing position: ", finishPositionError);
                     return res.status(500).send("Server error.");
@@ -1413,9 +1153,8 @@ async function POST_answerPsychQuestion(req, res) {
 
         // the actual psych test with all its questions
         let psychTest = undefined;
-        try {
-            psychTest = await Psychtests.findOne({});
-        } catch (getPsychTestError) {
+        try { psychTest = await Psychtests.findOne({}); }
+        catch (getPsychTestError) {
             console.log("Error getting the psych test: ", getPsychTestError);
             return res.status(500).send("Server error.");
         }
@@ -1511,19 +1250,15 @@ async function POST_answerPsychQuestion(req, res) {
     user.psychometricTest = psychometricTest;
 
     // grade the test if it's finished
-    if (finishedTest) {
-        user = calculatePsychScores(user);
-    }
+    if (finishedTest) { user = calculatePsychScores(user); }
 
-    let updatedUser = undefined;
-    try {
-        updatedUser = await user.save();
-    } catch(saveUserErr) {
+    try { user = await user.save(); }
+    catch(saveUserErr) {
         console.log("Error saving user that was trying to save a psych question answer: ", saveUserErr);
         return res.status(500).send("Server error.");
     }
 
-    res.json({user: frontEndUser(updatedUser), finishedTest});
+    res.json({user: frontEndUser(user), finishedTest});
 }
 
 
@@ -1607,8 +1342,8 @@ async function internalStartPsychEval(user) {
             // currently not allowing any rephrases, change later
             rephrase: false,
             numRephrasesAllowed: 0,
-            // 28 * 2 = 56 questions
-            questionsPerFacet: 3,
+            // 1 question per facet in development mode, 3 in production
+            questionsPerFacet: process.env.NODE_ENV === "development" ? 1 : 3,
             incompleteFactors,
             factors,
             currentQuestion
@@ -1626,16 +1361,14 @@ async function POST_startPsychEval(req, res) {
 
     // get the user from the db
     let user = undefined;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
         console.log("Error getting user from the database: ", getUserError);
         return res.status(500).send("Server error, try again later.");
     }
 
-    try {
-        user = await internalStartPsychEval(user);
-    } catch (startEvalError) {
+    try { user = await internalStartPsychEval(user); }
+    catch (startEvalError) {
         console.log("Error starting psych eval: ", startEvalError.error);
         res.status(startEvalError.statusCode).send(startEvalError.msg);
     }
@@ -1661,71 +1394,78 @@ async function GET_session(req, res) {
         const user = await Users.findById(userId);
 
         // if no user found, the user was probably deleted. remove the
-        // user from the session and don't log in
-        if (!user) {
+        // user from the session and don't log in; do the same if the session
+        // has the wrong verification token
+        if (!user || user.verificationToken !== sanitize(req.session.verificationToken)) {
             req.session.userId = undefined;
-            req.session.save();
-            return res.json(undefined);
+            req.session.verificationToken = undefined;
+            req.session.save(function(saveSessionError) {
+                if (saveSessionError) { console.log("error saving session: ", saveSessionError); }
+                return res.json(undefined);
+            });
         }
 
         // otherwise return the user that is logged in
         else { res.json(frontEndUser(user)); }
     }
 
+    // on error, print the error and return as if there was no user in the session
     catch (getUserError) {
         console.log("error getting user: ", getUserError);
-        res.json(undefined);
+        return res.json(undefined);
     }
 }
 
 
-function POST_session(req, res) {
+async function POST_session(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
 
     // check if option to stay logged in is true
     const saveSession = sanitize(req.session.stayLoggedIn);
-    if (!saveSession) {
-        return;
-    }
+    if (!saveSession) { return; }
 
     if (!userId || !verificationToken) {
-        res.json("either no userId or no verification token");
-        return;
+        return res.json("either no userId or no verification token");
     }
 
     // get the user from the id, check the verification token to ensure they
     // have the right credentials to stay logged in
-    getUserByQuery({_id: userId}, function(error, foundUser) {
-        if (foundUser.verificationToken == verificationToken) {
-            req.session.userId = userId;
+    let foundUser;
+    try { foundUser = await getAndVerifyUser(userId, verificationToken) }
+    catch (findUserError) {
+        console.log("Error getting user when trying to save session: ", findUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
 
-            // save user id to session
-            req.session.save(function(err) {
-                if (err) {
-                    console.log("error saving user id to session: ", err2);
-                } else {
-                    res.json(true);
-                    return;
-                }
-            });
+    // put user id and verification token in session
+    req.session.userId = userId;
+    req.session.verificationToken = verificationToken;
+
+    // save updated session
+    req.session.save(function(sessionSaveError) {
+        if (sessionSaveError) {
+            console.log("error saving user id to session: ", sessionSaveError);
+            return res.status(500).send("Error saving session.");
         } else {
-            res.json("incorrect user credentials");
-            return;
+            return res.json(true);
         }
     });
 }
 
 
-// signs the user out by marking their session id as undefined
+// signs the user out by marking their session id and verification token as undefined
 function POST_signOut(req, res) {
+    // remove the user id and verification token from the session
     req.session.userId = undefined;
+    req.session.verificationToken = undefined;
+    // save the updated session
     req.session.save(function (err) {
         if (err) {
             console.log("error removing user session: ", err);
-            res.json("failure removing user session");
+            return res.status(500).send("Error logging out.");
         } else {
-            res.json("success");
+            return res.json("success");
         }
     })
 }
@@ -1739,12 +1479,12 @@ function POST_keepMeLoggedIn(req, res) {
     } else {
         req.session.stayLoggedIn = false;
     }
-    req.session.save(function (err) {
-        if (err) {
-            console.log("error saving 'keep me logged in' setting: ", err);
-            res.json("error saving 'keep me logged in' setting");
+    req.session.save(function (saveSessionError) {
+        if (saveSessionError) {
+            console.log("error saving 'keep me logged in' setting: ", saveSessionError);
+            return res.status(500).send("Error saving 'keep me logged in' setting.");
         } else {
-            res.json("success");
+            return res.json("success");
         }
     })
 }
@@ -1752,272 +1492,222 @@ function POST_keepMeLoggedIn(req, res) {
 
 // get the setting to stay logged in or out
 function GET_keepMeLoggedIn(req, res) {
+    // get the setting
     let setting = sanitize(req.session.stayLoggedIn);
-    if (typeof setting !== "boolean") {
-        setting = false;
-    }
-    res.json(setting);
+    // if it's not of the right form, assume you shouldn't stay logged in
+    if (typeof setting !== "boolean") { setting = false; }
+    // return the found setting
+    return res.json(setting);
 }
 
 
 // verify user's email so they can log in
-function POST_verifyEmail(req, res) {
+async function POST_verifyEmail(req, res) {
     const token = sanitize(req.body.token);
     const userType = sanitize(req.body.userType);
 
-    // query form business user database if the user is a business user
-    const DB = (userType === "employer") ? Employers : Users;
+    // if url doesn't provide token, can't verify
+    if (!token) { return res.status(400).send("Url not in the right format"); }
 
-    if (!token) {
-        res.status(400).send("Url not in the right format");
-        return;
+    var query = { emailVerificationToken: token };
+    let user;
+    try { user = await Users.findOne(query); }
+    catch (findUserError) {
+        console.log("Error trying to find user from verification token: ", findUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    var query = {emailVerificationToken: token};
-    DB.findOne(query, function (err, user) {
-        if (err) {
-            console.log("Error trying to find user from verification token");
-            return res.status(500).send("Server error, try again later");
-        }
+    // if no user found from token, can't verify
+    if (!user) { return res.status(404).send("User not found from url"); }
 
-        if (!user) {
-            return res.status(404).send("User not found from url");
-        }
+    // if a user was found from the token, verify them and get rid of the token
+    user.verified = true;
+    user.emailVerificationToken = undefined;
 
-        user.verified = true;
-        user.emailVerificationToken = undefined;
+    // save the verified user
+    try { user = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user when verifying email: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
 
-        user.save(function(updateErr, updatedUser) {
-            if (updateErr) {
-                console.log("Error saving user's verified status to true: ", updateErr);
-                return res.status(500).send("Server error, try again later");
+    // if the session has the user's id, can immediately log them in
+    sessionUserId = sanitize(req.session.unverifiedUserId);
+    // get rid of the unverified id as it won't be needed anymore
+    req.session.unverifiedUserId = undefined;
+    // if the session had the correct user id, log the user in
+    if (sessionUserId && sessionUserId.toString() === user._id.toString()) {
+        req.session.userId = user._id.toString();
+        req.session.verificationToken = user.verificationToken;
+        req.session.save(function(saveSessionError) {
+            if (saveSessionError) {
+                console.log("Error saving user session: ", saveSessionError);
             }
-
-            // we don't save the user session if logging in as business user
-            // because it is likely the account was created on a different computer
-            if (userType === "employer") {
-                return res.json(updatedUser.email);
-            }
-
-            // if the session has the user's id, can immediately log them in
-            sessionUserId = sanitize(req.session.unverifiedUserId);
-            req.session.unverifiedUserId = undefined;
-
-            req.session.userId = sessionUserId;
-
-            req.session.save(function (err) {
-                if (err) {
-                    console.log("Error saving session after verifying user: ", err);
-                }
-            });
-
-            if (sessionUserId && sessionUserId == updatedUser._id) {
-                return res.json(frontEndUser(updatedUser));
-            }
-            // otherwise, bring the user to the login page
-            else {
-                return res.json("go to login");
-            }
+            // return the user object even if session saving didn't work
+            return res.json(frontEndUser(user));
         });
-    });
+    }
+
+    // otherwise bring the user to the login page
+    else { return res.json("go to login"); }
 }
 
 
-function POST_changePasswordForgot(req, res) {
+async function POST_changePasswordForgot(req, res) {
     let token = sanitize(req.body.token).toString();
     let password = sanitize(req.body.password);
 
-    var query = {passwordToken: token};
-    Users.findOne(query, function (err, user) {
-        if (err) {
-            console.log("Error trying to find user from password token: ", err);
-            return res.status(500).send("Server error, try again later");
+    const query = {passwordToken: token};
+
+    // get the user from the password token
+    let user;
+    try { user = await Users.findOne(query); }
+    catch (findUserError) {
+        console.log("Error finding user from password token: ", findUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // if user was not found from the url
+    if (!user) { return res.status(404).send("User not found from link"); }
+
+    // if the token is expired, tell the user to try again with a new token
+    const currentTime = Date.now();
+    if (currentTime > user.passwordTokenExpirationTime) {
+        return res.status(401).send("Time ran out, try sending reset password email again.");
+    }
+
+    // hash the new password
+    const saltRounds = 10;
+    bcrypt.hash(password, saltRounds, async function(hashError, hash) {
+        // set the new password
+        user.password = hash;
+        // save the user
+        try { user = await user.save(); }
+        catch (saveUserError) {
+            console.log("Error saving user with new updated password: ", saveUserError);
+            return res.status(500).send(errors.SERVER_ERROR);
         }
 
-        if (!user) {
-            return res.status(404).send("User not found from link");
-        }
-
-        const currentTime = Date.now();
-        if (currentTime > user.passwordTokenExpirationTime) {
-            return res.status(401).send("Time ran out, try sending email again");
-        }
-
-        let query = {_id: user._id};
-        const saltRounds = 10;
-        bcrypt.genSalt(saltRounds, function (err, salt) {
-            bcrypt.hash(password, salt, function (err, hash) {
-                // change the stored password to be the hash
-                const newPassword = hash;
-                // if the field doesn't exist, $set will set a new field
-                // can be verified because the user had to go to their email
-                // to get to this page
-                var update = {
-                    '$set': {
-                        password: newPassword,
-                        verified: true
-                    },
-                    '$unset': {
-                        passwordToken: "",
-                        passwordTokenExpirationTime: "",
-                    }
-                };
-
-                // When true returns the updated document
-                var options = {new: true};
-
-                Users.findOneAndUpdate(query, update, options, function (err, newUser) {
-                    if (err) {
-                        console.log(err);
-                        return res.status(500).send("Error saving new password");
-                    }
-
-                    // successfully created new password
-                    return res.json(frontEndUser(newUser));
-                });
-            })
-        })
+        // successfully created new password, log the user in
+        return res.json(frontEndUser(newUser));
     });
 }
 
 
-function POST_changePassword(req, res) {
-    var user = sanitize(req.body);
-    var query = {_id: user._id};
+async function POST_changePassword(req, res) {
+    const userId = sanitize(req.body._id);
+    const oldPassword = sanitize(req.body.oldpass);
+    const newPassword = sanitize(req.body.password);
+    const COULD_NOT_CHANGE = "Server error. Couldn't change password.";
 
-    // if the field doesn't exist, $set will set a new field
-    const saltRounds = 10;
-    bcrypt.genSalt(saltRounds, function (saltErr, salt) {
-        if (saltErr) {
-            console.log("Error generating salt for resetting password: ", saltErr);
-            return res.status(500).send("Server error. Could not change password.");
+    // get the user from db
+    let user;
+    try { user = await Users.findById(userId); }
+    catch (findUserError) {
+        console.log("");
+        return res.status(500).send(COULD_NOT_CHANGE);
+    }
+
+    // if no user was found, can't change password
+    if (!user) { return res.status(400).send("Invalid credentials."); }
+
+    // see if the old password is correct
+    bcrypt.compare(oldPassword, user.password, function (passwordError, passwordsMatch) {
+        // if there was an error comparing the passwords
+        if (passwordError) {
+            console.log("error comparing passwords when trying to create new password: ", passwordError);
+            return res.status(500).send(COULD_NOT_CHANGE);
         }
-        bcrypt.hash(user.password, salt, function (hashErr, hash) {
-            // error encrypting the new password
-            if (hashErr) {
-                console.log("Error hashing user's new password when trying to reset password: ", hashErr);
-                return res.status(500).send("Server error. Couldn't change password.");
+
+        // if the wrong old password was given
+        if (passwordsMatch !== true) {
+            return res.status(400).send("Old password is incorrect.");
+        }
+
+        // user gave correct old password, hash the new one
+        const saltRounds = 10;
+        bcrypt.hash(newPassword, saltRounds, async function (hashError, hash) {
+            // if there was an error hashing the new password
+            if (hashError) {
+                console.log("error hashing new password: ", hashError);
+                return res.status(500).send(COULD_NOT_CHANGE);
             }
 
-            Users.findOne(query, function (dbFindErr, userFromDB) {
-                if (dbFindErr) {
-                    console.log("Error finding the user that is trying to reset their password: ", dbFindErr);
-                    return res.status(500).send("Server error. Couldn't change password.");
-                }
+            // all is good, set the new password and save the user
+            user.password = hash;
+            try { user = await user.save() }
+            catch (saveUserError) {
+                console.log("error saving user with new password: ", saveUserError);
+                return res.status(500).send(COULD_NOT_CHANGE);
+            }
 
-                // CHECK IF A USER WAS FOUND
-                if (!userFromDB) {
-                    return res.status(404).send("Server error. Couldn't change password.");
-                }
-
-                bcrypt.compare(user.oldpass, userFromDB.password, function (passwordError, passwordsMatch) {
-                    // error comparing passwords, not necessarily that the passwords don't match
-                    if (passwordError) {
-                        console.log("Error comparing passwords when trying to reset password: ", passwordError);
-                        return res.status(500).send("Server error. Couldn't change password.");
-                    }
-                    // user gave the correct old password
-                    else if (passwordsMatch) {
-                        // update the user's password
-                        userFromDB.password = hash;
-                        // save the user in the db
-                        userFromDB.save(function(saveErr, newUser) {
-                            if (saveErr) {
-                                console.log("Error saving user's new password when resetting: ", saveErr);
-                                return res.status(500).send("Server error. Couldn't change password.");
-                            } else {
-                                //successfully changed user's password
-                                return res.json(frontEndUser(newUser));
-                            }
-                        });
-                    } else {
-                        return res.status(400).send("Old password is incorrect.");
-                    }
-                });
-            });
+            // return the new user
+            return res.json(frontEndUser(user));
         });
     });
 }
 
 
 // send email for password reset
-function POST_forgotPassword(req, res) {
+async function POST_forgotPassword(req, res) {
     let email = sanitize(req.body.email);
-    let query = {email: email};
+    let query = { email: email };
 
-    const user = getUserByQuery(query, function (err, user) {
-        if (!user) {
-            console.log("Couldn't find user to set their password change token.");
-            return res.status(401).send("Cannot find user");
-        } else {
-            // token that will go in the url
-            const newPasswordToken = crypto.randomBytes(64).toString('hex');
-            // password token expires in one hour (minutes * seconds * milliseconds)
-            const newTime = Date.now() + (60 * 60 * 1000);
+    let user;
+    try { user = await Users.findOne(query); }
+    catch (getUserError) {
+        console.log("Error getting user by email for sending forgot password reset email: ", getUserError);
+        return res.status(500).send("Cannot find user.");
+    }
 
-            const query2 = {_id: user._id};
-            const update = {
-                '$set': {
-                    passwordToken: newPasswordToken,
-                    passwordTokenExpirationTime: newTime,
-                }
-            };
+    // token that will go in the url
+    const newPasswordToken = crypto.randomBytes(64).toString('hex');
+    // password token expires in one hour (minutes * seconds * milliseconds)
+    const expirationDate = Date.now() + (60 * 60 * 1000);
 
-            const options = {new: true};
+    // give the user the password token and expiration time
+    user.passwordToken = newPasswordToken;
+    user.passwordTokenExpirationTime = expirationDate;
 
-            Users.findOneAndUpdate(query2, update, options, function (err, foundUser) {
-                if (err) {
-                    console.log("Error giving user reset-password token: ", err);
-                    return res.status(500).send("Server error, try again later.");
-                }
+    // save the user
+    try { user = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user when giving them a token for resetting password: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
 
-                // if we're in development (on localhost) navigate to localhost
-                let moonshotUrl = "https://www.moonshotinsights.io/";
-                if ( process.env.NODE_ENV === "development") {
-                    moonshotUrl = "http://localhost:8081/";
-                }
-                const recipient = [user.email];
-                const subject = 'Change Password';
+    // if we're in development (on localhost), links go to localhost
+    let moonshotUrl = "https://www.moonshotinsights.io/";
+    if ( process.env.NODE_ENV === "development") {
+        moonshotUrl = "http://localhost:8081/";
+    }
+    const recipient = [ email ];
+    const subject = 'Change Password';
 
-                const content =
-                    '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
-                        + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
-                            + '<div style="text-align:justify;width:80%;margin-left:10%;">'
-                            + "<span style='margin-bottom:20px;display:inline-block;'>Hello! We got a request to change your password. If that wasn't from you, you can ignore this email and your password will stay the same. Otherwise click here:</span><br/>"
-                            + '</div>'
-                        + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:5px 20px 20px;" href="' + moonshotUrl + 'changePassword?token='
-                        + newPasswordToken
-                        + '">Change Password</a>'
-                        + '<div style="text-align:left;width:80%;margin-left:10%;">'
-                            + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                                + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                                + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
-                            + '</div>'
-                        + '</div>'
-                    + '</div>';
+    const content =
+        '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#686868">'
+            + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;margin-bottom:20px"src="https://image.ibb.co/iAchLn/Official_Logo_Blue.png"/></a><br/>'
+                + '<div style="text-align:justify;width:80%;margin-left:10%;">'
+                + "<span style='margin-bottom:20px;display:inline-block;'>Hello! We got a request to change your password. If that wasn't from you, you can ignore this email and your password will stay the same. Otherwise click here:</span><br/>"
+                + '</div>'
+            + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border:2px solid #00d2ff;color:#00d2ff;padding:10px 5px 0px;text-decoration:none;margin:5px 20px 20px;" href="' + moonshotUrl + 'changePassword?token='
+            + newPasswordToken
+            + '">Change Password</a>'
+            + '<div style="text-align:left;width:80%;margin-left:10%;">'
+                + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                    + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                    + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe?email=' + user.email + '">Opt-out of future messages.</a></i>'
+                + '</div>'
+            + '</div>'
+        + '</div>';
 
-                const sendFrom = "Moonshot";
-                sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-                    if (success) {
-                        res.json(msg);
-                    } else {
-                        res.status(500).send(msg);
-                    }
-                })
-            });
+    const sendFrom = "Moonshot";
+    sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+        if (success) { return res.json(msg); }
+        else {
+            console.log("Error sending reset password email: ", msg);
+            return res.status(500).send(errors.SERVER_ERROR);
         }
-    })
-}
-
-
-function GET_userByProfileUrl(req, res) {
-    if (typeof req.query !== "object") { return res.status(400).send("Bad url."); }
-
-    const profileUrl = sanitize(req.query.profileUrl);
-    const query = { profileUrl };
-    getUserByQuery(query, function (err, user) {
-        if (err) { return res.status(400).send("Bad url"); }
-        return res.json(frontEndUser(user, FOR_EMPLOYER));
     });
 }
 
@@ -2175,176 +1865,134 @@ async function POST_agreeToTerms(req, res) {
 
 async function POST_login(req, res) {
     const reqUser = sanitize(req.body.user);
+    const email = reqUser.email;
+    const password = reqUser.password;
+    // the setting for whether the user wants to stay logged in
     let saveSession = sanitize(req.body.saveSession);
-    const employerAgreedToTerms = sanitize(req.body.employerAgreedToTerms);
 
+    // if the stay logged in session is not the right type, assume we shouldn't
+    // stay logged in
     if (typeof saveSession !== "boolean") {
         saveSession = false;
     }
-    var email = reqUser.email;
-    var password = reqUser.password;
 
-    let user = null;
+    const INVALID_EMAIL = "No user with that email was found.";
 
     // searches for user by case-insensitive email
     const emailRegex = new RegExp(email, "i");
     var query = {email: emailRegex};
-    Users.findOne(query, function (err, foundUser) {
-        if (err) {
-            return res.status(500).send("Error performing query to find user in db. ", err);
-        }
+    let user;
+    // find the user by email
+    try { user = await Users.findOne(query); }
+    catch (findUserError) {
+        console.log("Couldn't find user: ", findUserError);
+        return res.status(404).send(INVALID_EMAIL);
+    }
 
-        // CHECK IF A USER WAS FOUND
-        if (!foundUser || foundUser == null) {
-            return res.status(404).send("No user with that email was found.");
+    // if no user with that email is found
+    if (!user) { return res.status(401).send(INVALID_EMAIL); }
+
+    // see if the given password is correct
+    bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {
+        // if comparing passwords fails, don't log in
+        if (passwordError) {
+            return res.status(500).send("Error logging in, try again later.");
         }
-        // USER FOUND IN USER DB
-        else {
-            user = foundUser;
-            tryLoggingIn();
-            return;
+        // wrong password, don't log in
+        if (passwordsMatch !== true) {
+            return res.status(400).send("Password is incorrect.");
+        }
+        // user has not yet verified email, don't log in
+        if (user.verified !== true) {
+            return res.status(401).send("Email not yet verified");
+        }
+        // all login info is correct
+        // if user wants to stay logged in, save the session
+        if (saveSession) {
+            req.session.userId = user._id;
+            req.session.verificationToken = user.verificationToken;
+            req.session.save(function (err) {
+                // if there is an error saving session, print it, but still log in
+                if (err) { console.log("error saving user session", err); }
+                return res.json(frontEndUser(user));
+            });
+        } else {
+            return res.json(frontEndUser(user));
         }
     });
-
-    // executed once a user is found
-    async function tryLoggingIn() {
-        bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {
-            // if hashing password fails
-            if (passwordError) {
-                return res.status(500).send("Error logging in, try again later.");
-            }
-            // passwords match
-            else if (passwordsMatch) {
-                // check if user verified email address
-                if (user.verified) {
-                    if (typeof employerAgreedToTerms === "boolean") {
-                        const NOW = new Date();
-                        user.termsAndConditions = [
-                            {
-                                name: "Privacy Policy",
-                                date: NOW,
-                                agreed: true
-                            },
-                            {
-                                name: "Terms of Use",
-                                date: NOW,
-                                agreed: true
-                            },
-                            {
-                                name: "Service Level Agreement",
-                                date: NOW,
-                                agreed: true
-                            }
-                        ]
-                        try { user = await user.save(); }
-                        catch (saveUserError) {
-                            console.log("Error saving employer trying to log in!");
-                            return res.status(500).send("Server error.");
-                        }
-                    }
-
-                    user = removePassword(user);
-                    if (saveSession) {
-                        req.session.userId = user._id;
-                        req.session.save(function (err) {
-                            if (err) {
-                                console.log("error saving user session", err);
-                            }
-                            return res.json(frontEndUser(user));
-                        });
-                    } else {
-                        return res.json(frontEndUser(user));
-                    }
-                }
-                // if user has not yet verified email address, don't log in
-                else {
-                    return res.status(401).send("Email not yet verified");
-                }
-            }
-            // wrong password
-            else {
-                return res.status(400).send("Password is incorrect.");
-            }
-        });
-    }
 }
 
 
-function POST_changeSettings(req, res) {
-    const user = sanitize(req.body);
-    const password = user.password;
+// change name or email
+async function POST_changeSettings(req, res) {
+    const name = sanitize(req.body.name);
+    const email = sanitize(req.body.email);
+    const password = sanitize(req.body.password);
+    const userId = sanitize(req.body._id);
+    const hideProfile = sanitize(req.body.hideProfile);
 
-    if (!user.password || !user.name || !user.email) {
+    // error if proper arguments not provided
+    if (!password || !name || !email || !userId) {
         console.log("Not all arguments provided for settings change.");
         return res.status(400).send("No fields can be empty.");
     }
 
-    const userQuery = {_id: user._id}
+    // general error message to show
+    const CANNOT_UPDATE = "Settings couldn't be updated. Try again later.";
 
-    Users.findOne(userQuery, function(findUserErr, foundUser) {
-        // if error while trying to find current user
-        if (findUserErr) {
-            console.log("Error finding user in db when trying to update settings: ", findUserErr);
-            return res.status(500).send("Settings couldn't be updated. Try again later.");
+    // find the user by id
+    let user;
+    try { user = await Users.findById(userId); }
+    catch (findUserError) {
+        console.log("Error finding user by id when trying to update settings: ", findUserError);
+        return res.status(500).send(CANNOT_UPDATE);
+    }
+
+    // make sure a user was found with this id
+    if (!user) {
+        console.log("Didn't find a user with given id when trying to update settings.");
+        return res.status(500).send(CANNOT_UPDATE);
+    }
+
+    bcrypt.compare(password, user.password, async function (passwordError, passwordsMatch) {
+        // error comparing password to user's password, doesn't necessarily
+        // mean that the password is wrong
+        if (passwordError) {
+            console.log("Error comparing passwords when trying to update settings: ", passwordError);
+            return res.status(500).send(CANNOT_UPDATE);
         }
 
-        if (!foundUser) {
-            console.log("Didn't find a user with given id when trying to update settings.");
-            return res.status(500).send("Settings couldn't be updated. Try again later.");
+        // user entered wrong password
+        if (!passwordsMatch) { return res.status(400).send("Incorrect password."); }
+
+        // see if there's another user with the new email
+        const emailQuery = {email: email};
+        try {
+            const userWithSameEmail = await Users.findOne(emailQuery);
+            // if there is a user who already used that email, can't let this user have it too
+            if (userWithSameEmail && userWithSameEmail._id.toString() != user._id.toString()) {
+                return res.status(400).send("That email address is already taken.");
+            }
+        } catch (findUserWithSameEmailError) {
+            console.log("Error trying to find users with the same email when trying to update settings: ", findUserWithSameEmailError);
+            return res.status(500).send(CANNOT_UPDATE)
         }
 
-        bcrypt.compare(password, foundUser.password, function (passwordError, passwordsMatch) {
-            // error comparing password to user's password, doesn't necessarily
-            // mean that the password is wrong
-            if (passwordError) {
-                console.log("Error comparing passwords when trying to update settings: ", passwordError);
-                return res.status(500).send("Settings couldn't be updated. Try again later.");
-            }
+        // all is good, update the user (as long as email and name are not blank)
+        user.email = email;
+        user.name = name;
+        if (typeof hideProfile === "boolean") { user.hideProfile = hideProfile; }
 
-            // user entered wrong password
-            if (!passwordsMatch) {
-                return res.status(400).send("Incorrect password");
-            }
+        // save the user
+        try { user = await user.save(); }
+        catch (saveUserError) {
+            console.log("Error saving user when trying to update settings: ", saveUserError);
+            return res.status(500).send(CANNOT_UPDATE);
+        }
 
-            // see if there's another user with the new email
-            const emailQuery = {email: user.email};
-            Users.findOne(emailQuery, function(emailQueryErr, userWithEmail) {
-                // don't want two users with the same email, so in case of db search
-                // failure, return unsuccessfully
-                if (emailQueryErr) {
-                    console.log("Error trying to find a user with the same email address as the one provided by user trying to change settings: ", emailQueryErr);
-                    return res.status(500).send("Settings couldn't be updated. Try again later.");
-                }
-
-                // someone else already has that email
-                if (userWithEmail && userWithEmail._id.toString() != foundUser._id.toString()) {
-                    return res.status(400).send("That email address is already taken.");
-                }
-
-                // all is good, update the user (as long as email and name are not blank)
-                if (user.email) {
-                    foundUser.email = user.email;
-                }
-                if (user.name) {
-                    foundUser.name = user.name;
-                }
-                if (typeof user.hideProfile === "boolean") {
-                    foundUser.hideProfile = user.hideProfile;
-                }
-
-                foundUser.save(function(saveErr, newUser) {
-                    // if there is an error saving the user's info
-                    if (saveErr) {
-                        console.log("Error when saving user's changed info: ", saveErr);
-                        return res.status(500).send("Settings couldn't be updated. Try again later.");
-                    }
-
-                    // settings change successful
-                    return res.json(frontEndUser(newUser));
-                })
-            });
-        });
-    })
+        // settings change successful
+        return res.json(frontEndUser(user));
+    });
 }
 
 

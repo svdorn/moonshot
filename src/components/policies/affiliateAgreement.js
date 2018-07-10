@@ -17,11 +17,6 @@ class PrivacyPolicy extends Component {
 
         return (
             <div>
-                {standalone ?
-                    <div className="lightBlackBackground headerDiv" />
-                    : null
-                }
-
                 <div style={containerStyle} className="whiteText">
                     <b className="font20px font18pxUnder700">MOONSHOT AFFILIATE AGREEMENT</b>
 

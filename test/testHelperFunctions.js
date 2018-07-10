@@ -6,12 +6,8 @@ const {
     sanitize,
     removeEmptyFields,
     verifyUser,
-    removePassword,
     printUsersFromPathway,
-    getUserByQuery,
     sendEmail,
-    safeUser,
-    userForAdmin,
     getFirstName,
     removeDuplicates
 } = require('../apis/helperFunctions');

@@ -1,7 +1,7 @@
 "use strict"
-var mongoose = require('mongoose');
+const mongoose = require('mongoose');
 
-var usersSchema = mongoose.Schema({
+const usersSchema = mongoose.Schema({
     // user's full name
     name: String,
     // user's email address, used for log in
@@ -15,8 +15,6 @@ var usersSchema = mongoose.Schema({
     userType: String,
     // has admin rights on the site, able to create business accounts and see all results
     admin: Boolean,
-    // agreed to privacy policy and terms of use
-    agreedToTerms: Boolean,
     // there are various terms that can be agreed to, depending on the user type
     termsAndConditions: [{
         // the name of the terms [e.g. Privacy Policy, Terms of Use, etc...]
@@ -28,8 +26,6 @@ var usersSchema = mongoose.Schema({
     }],
     // if the user is an account admin and was the first at the company
     firstBusinessUser: Boolean,
-    // the code the user used to sign up with to get to their first evaluation
-    employerCode: String,
     // whether the user's profile is hidden from employers
     hideProfile: Boolean,
     // special url used to access this user's profile
@@ -54,8 +50,6 @@ var usersSchema = mongoose.Schema({
     passwordTokenExpirationTime: Number,
     // if the use has verified their account via email
     verified: Boolean,
-    // list of skills the user has received from completing pathways
-    skills: [ String ],
     // general info about the user, can be edited on onboarding or profile
     info: {
         // title of the job they want
@@ -99,14 +93,10 @@ var usersSchema = mongoose.Schema({
         // languages the user speaks (not currently editable)
         languages: [ String ]
     },
-    // the pathway that the user will be redirected to after onboarding
-    // only exists if the user tries to sign up for a pathway before having
-    // an account
-    pathwayName: String,
     // location to redirect to after signing up
     redirect: String,
 
-    // skills tests the user has taken
+    // skill tests the user has taken
     skillTests: [{
         // id of the skill
         skillId: mongoose.Schema.Types.ObjectId,
@@ -129,7 +119,9 @@ var usersSchema = mongoose.Schema({
             startDate: Date,
             // the correct answers so that we don't have to re-find the question
             // when getting the next question and grading this one
-            correctAnswers: [ mongoose.Schema.Types.ObjectId ]
+            //correctAnswers: [ mongoose.Schema.Types.ObjectId ],
+            // similar premise but with the new way skills are done
+            correctAnswer: mongoose.Schema.Types.ObjectId
         },
         // the list of times the candidate has taken the skill test
         attempts: [{
@@ -159,7 +151,9 @@ var usersSchema = mongoose.Schema({
                     // if the candidate chose the correct answers
                     isCorrect: Boolean,
                     // the ids of answers that the user chose
-                    answerIds: [ mongoose.Schema.Types.ObjectId ],
+                    //answerIds: [ mongoose.Schema.Types.ObjectId ],
+                    // the id of the answer that the user chose
+                    answerId: mongoose.Schema.Types.ObjectId,
                     // the date and time the user started the question
                     startDate: Date,
                     // the date and time the user finished the question
@@ -175,15 +169,11 @@ var usersSchema = mongoose.Schema({
     // if the user is any type of employer, here is info about the business they work for
     // and their role at that business
     businessInfo: {
-        company: {
-            name: String,
-            companyId: mongoose.Schema.Types.ObjectId
-        },
+        // id of the business they work for
+        businessId: mongoose.Schema.Types.ObjectId,
+        // their title at the company
         title: String
     },
-
-    // the archetype the user was found to be from the psychometricTest
-    archetype: String,
 
     // questions the user has to answer - only once - before doing a position eval
     adminQuestions: {
@@ -336,7 +326,7 @@ var usersSchema = mongoose.Schema({
         // list of ids for the necessary skill tests
         skillTestIds: [ mongoose.Schema.Types.ObjectId ],
         // the index of the current test that the user is taking within
-        // skillTests array; the tests below the index have alreday been taken
+        // skillTests array; the tests below the index have already been taken
         testIndex: Number,
         // the free response questions specific to this position
         freeResponseQuestions: [{
@@ -350,13 +340,62 @@ var usersSchema = mongoose.Schema({
             body: String,
             // if the question is required in order to finish the evaluation
             required: Boolean
-        }]
+        }],
+        // the predictive scores the user got for the position
+        scores: {
+            // weighted combination of all the scores
+            overall: Number,
+            // average of skill iqs for all relevant skills
+            skill: Number,
+            // a summary of the four predictive scores
+            predicted: Number,
+            // how good of a culture fit the candidate has
+            culture: Number,
+            // how much the candidate could grow in the position
+            growth: Number,
+            // if the candidate would stay at the company for a long time
+            longevity: Number,
+            // how well the candidate would do at that specific position
+            performance: Number
+        },
+        // --->>                    CANDIDATES ONLY                     <<--- //
+        // the hiring stage of the candidate, which the company has determined
+        // e.g. "Not Contacted", "Contacted", "Interviewing", "Hired"
+        hiringStage: String,
+        // if the candidate is no longer being considered for the role
+        isDismissed: Boolean,
+        // dates/times the hiring stage of the candidate was changed for this position
+        hiringStageChanges: [{
+           // what the hiring stage was changed to
+           hiringStage: String,
+           // whether the candidate is no longer under consideration
+           isDismissed: Boolean,
+           // the date/time the hiring stage was changed
+           dateChanged: Date
+        }],
+        // <<-------------------------------------------------------------->> //
+        // --->>                     EMPLOYEES ONLY                     <<--- //
+        // id of the manager that rated this employee
+        managerId: mongoose.Schema.Types.ObjectId,
+        // whether someone has graded this employee
+        gradingComplete: Boolean,
+        // the questions that will be asked of the manager about the employee
+        answers: [{
+            // question has been answered
+            complete: Boolean,
+            // what the mangager rated the employee (if this was a range question)
+            score: Number,
+            // the index within the option array of the option that was chosen
+            // (if this was a multiple choice question)
+            selectedIndex: Number,
+            // index of the question within employeeQuestions
+            questionIndex: Number
+        }],
+        // <<-------------------------------------------------------------->> //
     }],
-
+    // the position evaluation the user is currently taking
     positionInProgress: mongoose.Schema.Types.ObjectId,
 });
 
-// 'Users' means we will use the 'users' collection. if 'Books' was in there
-// it would be using the books collection from the db
 var Users = mongoose.model('Users', usersSchema);
 module.exports = Users;

@@ -7,10 +7,7 @@ const { sanitize,
         removeEmptyFields,
         verifyUser,
         getAndVerifyUser,
-        removePassword,
-        getUserByQuery,
         sendEmail,
-        safeUser,
         randomInt,
         frontEndUser
 } = require('./helperFunctions.js');
@@ -20,8 +17,6 @@ const { finishPositionEvaluation } = require('./userApis');
 const errors = require('./errors.js');
 
 const skillApis = {
-    //GET_skillByUrl,
-    GET_skillNamesByIds,
     POST_answerSkillQuestion,
     POST_startOrContinueTest,
     POST_agreeToTerms
@@ -30,41 +25,6 @@ const skillApis = {
 
 // ----->> START APIS <<----- //
 
-async function GET_skillNamesByIds(req, res) {
-    const userId = sanitize(req.query.userId);
-    const verificationToken = sanitize(req.query.verificationToken);
-    const skillIds = sanitize(req.query.skillIds);
-
-    if (!userId || !verificationToken || !skillIds) {
-        return res.status(400).send("Not enough arguments provided.");
-    }
-
-    // get the user
-    let user;
-    try { user = await getAndVerifyUser(userId, verificationToken); }
-    catch (findUserError) {
-        console.log("Error finding businesss user who was trying to see thier positions: ", findUserError);
-        return res.status(500).send("Server error, try again later.");
-    }
-
-    const skillsQuery = {
-        "_id" : {"$in" : skillIds}
-    }
-    // get the business the user works for
-    let skills;
-    try {
-        skills = await Skills
-            .find(skillsQuery)
-            .select("name");
-        // see if there are none found
-        if (!skills || skills.length === 0 ) { throw "No skills found - userId: ", user._id; }
-
-        res.json(skills);
-    } catch (findSkillsErr) {
-        console.log("error finding skills : ", findSkillsErr);
-        return res.status(500).send(errors.SERVER_ERROR);
-    }
-}
 
 function POST_answerSkillQuestion(req, res) {
     let user = undefined;
@@ -73,21 +33,15 @@ function POST_answerSkillQuestion(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
     const skillUrl = sanitize(req.body.skillUrl);
-    const answerIds = sanitize(req.body.answerIds);
+    const answerId = sanitize(req.body.answerId);
 
     if (!userId || !verificationToken || !skillUrl) {
         return res.status(400).send("Not enough arguments provided.");
     }
 
     // get the user
-    Users.findById(userId)
+    getAndVerifyUser(userId, verificationToken)
     .then(foundUser => {
-        // ensure correct user was found and that they have permissions
-        if (!foundUser) { return res.status(404).send("Could not find current user."); }
-        if (foundUser.verificationToken !== verificationToken) {
-            return res.status(403).send("Invalid user credentials.");
-        }
-
         user = foundUser;
         recordAnswer();
     })
@@ -121,7 +75,7 @@ function POST_answerSkillQuestion(req, res) {
     });
 
     async function recordAnswer() {
-        if (!user || !skill) { return }
+        if (!user || !skill) { return; }
 
         // see if user has already taken this test/is currently taking it
         let userSkillIndex = user.skillTests.findIndex(skillTest => {
@@ -144,21 +98,8 @@ function POST_answerSkillQuestion(req, res) {
             userLevel = attempt.levels[userLevelIndex];
         }
 
-        const correctAnswers = userCurrentQuestion.correctAnswers;
-        let isCorrect = true;
-        const numCorrectAnswers = correctAnswers.length;
-        for (let correctAnswerIndex = 0; correctAnswerIndex < numCorrectAnswers; correctAnswerIndex++) {
-            const correctAnswerId = correctAnswers[correctAnswerIndex].toString();
-            console.log("correct answer id: ", correctAnswerId);
-            // if this correct answer isn't included within the user's list of answers,
-            // mark them as incorrect
-            if (!answerIds.some(answerId => {
-                return answerId.toString() === correctAnswerId.toString();
-            })) {
-                isCorrect = false;
-                break;
-            }
-        }
+        // only one answer can be correct, see if the answer is correct
+        const isCorrect = userCurrentQuestion.correctAnswer.toString() === answerId.toString();
 
         const startDate = userCurrentQuestion.startDate;
         const endDate = new Date();
@@ -166,71 +107,21 @@ function POST_answerSkillQuestion(req, res) {
 
         userLevel.questions.push({
             questionId: userCurrentQuestion.questionId,
-            isCorrect, answerIds, startDate, endDate, totalTime
+            isCorrect,
+            answerId,
+            startDate,
+            endDate,
+            totalTime
         });
         // save this info back to the user object
         attempt.levels[userLevelIndex] = userLevel;
         userSkill.attempts[attemptIndex] = attempt;
         user.skillTests[userSkillIndex] = userSkill;
 
-        // see if the user is done with the test
-        // TODO make a legit way of seeing if the test is over
-        // right now it just finishes if you answer one question
-        // if (true) {
-        //     finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
-        // }
-
-        // else {
-            getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex);
-        // }
+        getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex);
     }
 
     async function getNewQuestion(userSkillIndex, userLevelIndex, attempt, isCorrect, userSkill, attemptIndex) {
-        // // get a new question
-        // let newUserLevelIndex = userLevelIndex;
-        // // right answer and more levels exist
-        // if (isCorrect && userLevelIndex < attempt.levels.length - 1) {
-        //     newUserLevelIndex++;
-        // }
-        // // wrong answer and lower levels exist
-        // else if (!isCorrect && userLevelIndex > 0) {
-        //     newUserLevelIndex--;
-        // } // level has to stay the same otherwise
-        // let newUserLevel = attempt.levels[newUserLevelIndex];
-        //
-        // // get the test level
-        // const testLevelIndex = skill.levels.findIndex(level => {
-        //     return level.levelNumber === newUserLevel.levelNumber;
-        // });
-        // const testLevel = skill.levels[testLevelIndex];
-        //
-        // // TODO: make this actually test if the percent of questions is small enough,
-        // // and if it is not, make it make a list of unused questions to pick from
-        //
-        // // see if the percent of used questions is small enough that we can just
-        // // get random questions until one has not been used
-        //
-        // const testLevelQuestions = testLevel.questions;
-        // const numTotalQuestions = testLevelQuestions.length;
-        // let questionIndex = 0;
-        // let questionId = undefined;
-        // let question = undefined;
-        // // get random indexes of questions until one of the indexes is of a question
-        // // that has not yet been answered
-        // let counter = 0;
-        // do {
-        //     counter++;
-        //     // if a question could not be found, finish the test
-        //     if (counter > 100) {
-        //         return finishTest(userSkill, userSkillIndex, attempt, attemptIndex);
-        //     }
-        //     questionIndex = randomInt(0, numTotalQuestions - 1);
-        //     question = testLevelQuestions[questionIndex];
-        //     questionId = question._id.toString();
-        // } while (newUserLevel.questions.some(answeredQuestion => answeredQuestion.questionId.toString() === questionId));
-
-
-
         // --->> MVP ONLY <<--- //
         const currentUserLevel = attempt.levels[userLevelIndex];
         // get the number of questions within this level (test sub-part)
@@ -255,7 +146,7 @@ function POST_answerSkillQuestion(req, res) {
             else {
                 // user isn't finished with the test, set the current level to
                 // the next available one
-                newLevelIndex += 1;
+                newLevelIndex++;
             }
         }
 
@@ -274,43 +165,36 @@ function POST_answerSkillQuestion(req, res) {
             questionId = question._id.toString();
         } while (newUserLevel.questions.some(answeredQuestion => answeredQuestion.questionId.toString() === questionId));
 
+        const correctAnswer = question.options.find(option => { return option.isCorrect });
+
         const currentQuestionToStore = {
             levelNumber: testLevel.levelNumber,
             levelIndex: newLevelIndex,
             questionId,
             questionIndex,
             startDate: new Date(),
-            correctAnswers: question.correctAnswers
+            correctAnswer: correctAnswer ? correctAnswer._id : undefined
         }
-
-
         // <<---------------->> //
-
-
-
-
-        // const currentQuestionToStore = {
-        //     levelNumber: testLevel.levelNumber,
-        //     levelIndex: testLevelIndex,
-        //     questionId,
-        //     questionIndex,
-        //     startDate: new Date(),
-        //     correctAnswers: question.correctAnswers
-        // }
 
         userSkill.currentQuestion = currentQuestionToStore;
         // save this info and the previous new info into the user's current skill
         user.skillTests[userSkillIndex] = userSkill;
 
+        // remove correctness indicator from options
+        const options = question.options.map(option => {
+            return { body: option.body, _id: option._id };
+        });
+
         const currentQuestionToReturn = {
             body: question.body,
-            options: question.options,
+            options,
             multiSelect: question.multiSelect
         }
 
-        try {
-            await user.save();
-        } catch (saveUserErr) {
+        // save the user
+        try { await user.save(); }
+        catch (saveUserErr) {
             console.log("Error saving user when answering skill question: ", saveUserErr);
             return res.status(500).send("Server error.");
         }
@@ -328,8 +212,6 @@ function POST_answerSkillQuestion(req, res) {
         userSkill.currentQuestion = undefined;
 
         // give the user a score
-        // TODO actually score the user
-
 
         // --->> MVP ONLY <<--- //
 
@@ -359,16 +241,12 @@ function POST_answerSkillQuestion(req, res) {
         // 70% = skill iq of 100
         const score = (percentCorrect * 100) + 30;
 
-        // <<---------------->> //
-
-        //score = randomInt(85, 115);
-
         userSkill.mostRecentScore = score;
         attempt.score = score;
 
         // save all the new info
         userSkill.attempts[attemptIndex] = attempt;
-        user.skills[userSkillIndex] = userSkill;
+        user.skillTests[userSkillIndex] = userSkill;
 
         // see if the user is doing an application to a position
         if (user.positionInProgress) {
@@ -405,13 +283,9 @@ function POST_answerSkillQuestion(req, res) {
                         // if there are no multiple choice questions, user is finished
                         if (!position.freeResponseQuestions || position.freeResponseQuestions.length === 0) {
                             try {
-                                // have to get the business to save the user in it
+                                // finish the eval
                                 console.log("finishing position eval");
-                                const finishObj = await finishPositionEvaluation(user, position.positionId, position.businessId);
-                                // save the business with the new user info
-                                finishObj.business.save();
-                                // update the user
-                                user = finishObj.user;
+                                user = await finishPositionEvaluation(user, position.positionId, position.businessId);
                             } catch (finishError) {
                                 console.log("Error finishing eval: ", finishError);
                                 return res.status(500).send("Server error.");
@@ -428,9 +302,9 @@ function POST_answerSkillQuestion(req, res) {
             }
         }
 
-        try {
-            await user.save();
-        } catch (saveUserError) {
+        // save the user
+        try { await user.save(); }
+        catch (saveUserError) {
             console.log("Error saving user when trying to finish test: ", saveUserError);
             return res.status(500).send("Server error.");
         }
@@ -442,6 +316,7 @@ function POST_answerSkillQuestion(req, res) {
 
 function POST_startOrContinueTest(req, res) {
     try {
+        // the two things that need to be found before anything else happens
         let user = undefined;
         let skill = undefined;
 
@@ -449,19 +324,14 @@ function POST_startOrContinueTest(req, res) {
         const verificationToken = sanitize(req.body.verificationToken);
         const skillUrl = sanitize(req.body.skillUrl);
 
+        // make sure all necessary arguments are provided
         if (!userId || !verificationToken || !skillUrl) {
             return res.status(400).send("Not enough arguments provided.");
         }
 
         // get the user
-        Users.findById(userId)
+        getAndVerifyUser(userId, verificationToken)
         .then(foundUser => {
-            // ensure correct user was found and that they have permissions
-            if (!foundUser) { return res.status(404).send("Could not find current user."); }
-            if (foundUser.verificationToken !== verificationToken) {
-                return res.status(403).send("Invalid user credentials.");
-            }
-
             user = foundUser;
             checkIfStarted();
         })
@@ -510,7 +380,7 @@ function POST_startOrContinueTest(req, res) {
 
             const hasEverTakenTest = typeof testIndex === "number" && testIndex >= 0;
 
-            // if the user has never taken this test before, start it for em
+            // if the user has never taken this test before, start it for them
             if (!hasEverTakenTest) {
                 let newSkillTest = {
                     skillId: skill._id,
@@ -573,6 +443,7 @@ function POST_startOrContinueTest(req, res) {
                 // get a random question from the firt level
                 testQuestionIndex = Math.floor(Math.random() * testQuestions.length);
                 testQuestion = testQuestions[testQuestionIndex];
+                const correctAnswer = testQuestion.options.find(option => { return option.isCorrect });
                 const currentQuestionForDB = {
                     levelNumber: firstLevel.levelNumber,
                     levelIndex: 0,
@@ -580,22 +451,30 @@ function POST_startOrContinueTest(req, res) {
                     questionIndex: testQuestionIndex,
                     // starting this question right now
                     startDate: new Date(),
-                    correctAnswers: testQuestion.correctAnswers
+                    // correctAnswers: testQuestion.correctAnswers,
+                    correctAnswer: correctAnswer ? correctAnswer._id : undefined
                 }
 
                 // set the current question for the user
                 user.skillTests[testIndex].currentQuestion = currentQuestionForDB;
 
+                // remove correctness indicator from options
+                const options = testQuestion.options.map(option => {
+                    return { body: option.body, _id: option._id };
+                });
+
+                // what is seen in the front end
                 const questionToReturn = {
                     body: testQuestion.body,
-                    options: testQuestion.options,
+                    options,
                     multiSelect: testQuestion.multiSelect
                 }
 
-                try {
-                    const updatedUser = await user.save();
-                } catch(saveErr) {
+                // save the user
+                try { const updatedUser = await user.save(); }
+                catch(saveErr) {
                     console.log("Error saving user when starting skill test: ", saveErr);
+                    return res.status(500).send(errors.SERVER_ERROR);
                 }
 
                 return res.json({question: questionToReturn, skillName: skill.name, finished: false});
@@ -630,11 +509,8 @@ function POST_startOrContinueTest(req, res) {
                 // get the current question
                 let currentTestQuestionIndex = userCurrentQuestion.questionIndex;
                 let currentTestQuestion;
-                try {
-                    currentTestQuestion = testQuestions[currentTestQuestionIndex];
-                } catch (err) {
-                    currentTestQuestion = {_id: "-1" }
-                }
+                try { currentTestQuestion = testQuestions[currentTestQuestionIndex]; }
+                catch (err) { currentTestQuestion = {_id: "-1" }; }
                 // make sure we actually have the right test level
                 if (currentTestQuestion._id.toString() !== userCurrentQuestion.questionId.toString()) {
                     currentTestQuestionIndex = testQuestions.findIndex(q => {
@@ -649,10 +525,15 @@ function POST_startOrContinueTest(req, res) {
                     else { currentTestQuestion = testLevels[currentTestQuestionIndex]; }
                 }
 
+                // remove correctness indicator from options
+                const options = currentTestQuestion.options.map(option => {
+                    return { body: option.body, _id: option._id };
+                });
+
                 // the info that is actually needed by the front end for the user to answer the question
                 const currentQuestionToReturn = {
                     body: currentTestQuestion.body,
-                    options: currentTestQuestion.options,
+                    options,
                     multiSelect: currentTestQuestion.multiSelect
                 }
                 return res.json({question: currentQuestionToReturn, skillName: skill.name, finished: false});
@@ -672,9 +553,8 @@ async function POST_agreeToTerms(req, res) {
     const verificationToken = sanitize(req.body.verificationToken);
 
     let user;
-    try {
-        user = await getAndVerifyUser(userId, verificationToken);
-    } catch (getUserError) {
+    try { user = await getAndVerifyUser(userId, verificationToken); }
+    catch (getUserError) {
         console.log("error getting user when agreeing to skill test terms: ", getUserError);
         return res.status(500).send("Error getting user.");
     }
@@ -702,65 +582,6 @@ async function POST_agreeToTerms(req, res) {
 
     res.json(frontEndUser(user));
 }
-
-
-// function GET_skillByUrl(req, res) {
-//     try {
-//         let user = undefined;
-//         let skill = undefined;
-//
-//         const userId = sanitize(req.query.userId);
-//         const verificationToken = sanitize(req.query.verificationToken);
-//         const skillUrl = sanitize(req.query.skillUrl);
-//
-//         if (!userId || !verificationToken || !skillUrl) {
-//             console.log("userId: ", userId);
-//             return res.status(400).send("Not enough arguments provided.");
-//         }
-//
-//         // get the user
-//         Users.findById(userId)
-//         .then(foundUser => {
-//             // ensure correct user was found and that they have permissions
-//             if (!foundUser) { return res.status(404).send("Could not find current user."); }
-//             if (foundUser.verificationToken !== verificationToken) {
-//                 return res.status(403).send("Invalid user credentials.");
-//             }
-//
-//             user = foundUser;
-//             returnSkill();
-//         })
-//         .catch(findUserErr => {
-//             console.log("Error finding user in the db when trying to get a skill by url: ", findUserErr);
-//             return res.status(500).send("Server error, try again later.");
-//         })
-//
-//         // get the skill
-//         Skills.find({url: skillUrl})
-//         .then(foundSkills => {
-//             if (foundSkills.length === 0) { return res.status(404).send("Invalid skill."); }
-//             skill = foundSkills[0];
-//             returnSkill();
-//         })
-//         .catch(findSkillErr => {
-//             console.log("Error finding skill by url: ", findSkillErr);
-//             return res.status(500).send("Server error, try again later.");
-//         })
-//
-//         function returnSkill() {
-//             // haven't yet found either the skill or user from the db
-//             if (!user || !skill) { return; }
-//
-//             return res.json(skill);
-//         }
-//     } catch(miscError) {
-//         console.log("Error getting skill by url: ", miscError);
-//         if (typeof res === "object" && typeof res.status === "function") {
-//             return res.status(500).send("Server error");
-//         }
-//     }
-// }
-
 
 // ----->> END APIS <<----- //
 

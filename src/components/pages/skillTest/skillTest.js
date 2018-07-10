@@ -43,7 +43,7 @@ class SkillTest extends Component {
     // }
 
 
-    componentDidUpdate(prevProps, newState) {
+    componentDidUpdate(prevProps, prevState) {
         // new skill url means we have a new skill to test
         if (this.props.params.skillUrl !== prevProps.params.skillUrl) {
             this.resetPage(this.props.params.skillUrl);
@@ -52,6 +52,7 @@ class SkillTest extends Component {
 
 
     resetPage(skillUrl) {
+        const self = this;
         const currentUser = this.props.currentUser;
         // make sure a user is logged in
         if (!currentUser) {
@@ -69,13 +70,13 @@ class SkillTest extends Component {
             this.setState({
                 question: {
                     body: result.data.question.body,
-                    options: this.shuffle(result.data.question.options),
+                    options: result.data.question.options,
                     multiSelect: result.data.question.multiSelect
                 },
                 skillName: result.data.skillName,
                 selectedId: undefined,
                 finished: false
-            });
+            }, () => { console.log("state: ", self.state); });
         })
         .catch(error => {
             // console.log("Error getting skill: ", error.response.data);
@@ -131,7 +132,9 @@ class SkillTest extends Component {
                     verificationToken: currentUser.verificationToken,
                     skillUrl: this.props.params.skillUrl,
                     // an array because maybe later we'll have multi select questions
-                    answerIds: [ this.state.selectedId ]
+                    //answerIds: [ this.state.selectedId ]
+                    // only one answer for now
+                    answerId: this.state.selectedId
                 }
                 axios.post("/api/skill/answerSkillQuestion", params)
                 .then(result => {
@@ -276,7 +279,7 @@ class SkillTest extends Component {
                 </div>
             );
         }
-        else if (currentUser.positionInProgress && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
+        else if (currentUser.currentPosition && (!currentUser.adminQuestions || !currentUser.adminQuestions.finished)) {
             content = (
                 <div className="blackBackground">
                     You have to complete the administrative questions first!<br/>
@@ -285,7 +288,7 @@ class SkillTest extends Component {
                     </button>
                 </div>
             );
-        } else if (currentUser.positionInProgress && (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate)) {
+        } else if (currentUser.currentPosition && (!currentUser.psychometricTest || !currentUser.psychometricTest.endDate)) {
             content = (
                 <div>
                     You have to complete the psychometric analysis first!

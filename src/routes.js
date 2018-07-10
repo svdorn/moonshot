@@ -8,7 +8,6 @@ import { Router, Route, IndexRoute, browserHistory, Redirect } from 'react-route
 
 
 import Login from './components/pages/login';
-import EmployerLogin from "./components/pages/employerLogin";
 import Signup from './components/pages/signup';
 import MyCandidates from './components/pages/businessPages/myCandidates';
 import MyEmployees from './components/pages/businessPages/myEmployees';
@@ -40,11 +39,11 @@ import PositionSignup from './components/pages/positionSignup';
 import FreeResponse from "./components/pages/freeResponse";
 import EvaluationIntro from "./components/pages/evaluationIntro";
 
-import AdminPages from './components/pages/adminPages/adminPages'
-import ViewUser from './components/pages/adminPages/viewUser';
-import UserResponses from './components/pages/adminPages/userResponses';
-import CreateBusinessAccount from './components/pages/adminPages/createBusinessAccount';
-import EditBusiness from './components/pages/adminPages/editBusiness';
+import AdminPages from './components/pages/adminPages/adminPages';
+import BusinessEditor from './components/pages/adminPages/businessEditor';
+import BusinessPicker from './components/pages/adminPages/businessPicker';
+import SkillEditor from './components/pages/adminPages/skillEditor';
+import SkillPicker from './components/pages/adminPages/skillPicker';
 
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-105560654-1');
@@ -61,8 +60,8 @@ const routes = (
         <Route path="/" component={Main}>
             <IndexRoute component={BusinessHome} />
             <Route path='login' component={Login} />
+            <Route path='employerLogin' component={Login} />
             <Route path="signup" component={Signup} />
-            <Route path='employerLogin' component={EmployerLogin} />
             <Route path="myCandidates" component={AuthenticatedComponent} page={<MyCandidates/>} userType={businessAdminUserTypes} />
             <Route path="myEmployees" component={AuthenticatedComponent} page={<MyEmployees/>} userType={businessAdminUserTypes} />
             <Route path="myEvaluations" component={AuthenticatedComponent} page={<MyEvaluations/>} />
@@ -90,10 +89,10 @@ const routes = (
 
             <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} userType={adminUserTypes}>
                 <IndexRoute component={AdminPages} />
-                <Route path="createBusinessAccount" component={CreateBusinessAccount} />
-                <Route path="editBusiness" component={EditBusiness} />
-                <Route path="userResponses" component={UserResponses} />
-                <Route path="viewUser" component={ViewUser} />
+                <Route path="businessPicker" component={BusinessPicker} />
+                <Route path="businessEditor/:businessId" component={BusinessEditor} />
+                <Route path="skillPicker" component={SkillPicker} />
+                <Route path="skillEditor/:skillId" component={SkillEditor} />
             </Route>
 
             <Route path='*' component={Error404} />
