@@ -80,7 +80,9 @@ class MyCandidates extends Component {
             // to the results of the next or previous candidate
             resultsCandidateIndex: undefined,
             // if the results component shoud take up the entire candidates table
-            fullScreenResults: false
+            fullScreenResults: false,
+            // if the user should see the mobile version instead of the desktop version
+            mobile: window.innerWidth <= 800
         }
     }
 
@@ -88,6 +90,9 @@ class MyCandidates extends Component {
         let self = this;
         // set an event listener for key presses
         document.addEventListener('keyup', this.handleKeyPress.bind(this));
+        // set an event listener for window resizing to see if mobile or desktop
+        // view should be shown
+        window.addEventListener("resize", this.handleResize.bind(this));
         // get the open positions that this business has
         axios.get("/api/business/positions", {
             params: {
@@ -142,8 +147,10 @@ class MyCandidates extends Component {
     }
 
 
+    // remove all event listeners
     componentWillUnmount() {
         document.removeEventListener('keyup', this.handleKeyPress.bind(this));
+        window.removeEventListener("resize", this.handleResize.bind(this));
     }
 
 
@@ -154,6 +161,19 @@ class MyCandidates extends Component {
         browserHistory.push(route);
         // goes to the top of the new page
         window.scrollTo(0, 0);
+    }
+
+
+    // switch between mobile and desktop views if necessary
+    handleResize() {
+        // mobile view at and under 800px
+        if (window.innerWidth <= 800) {
+            if (!this.state.mobile) { this.setState({ mobile: true }); }
+        }
+        // desktop view above 800px
+        else {
+            if (this.state.mobile) { this.setState({ mobile: false }); }
+        }
     }
 
 
@@ -700,6 +720,17 @@ class MyCandidates extends Component {
                 if (candidate.scores.predicted) { predicted = candidate.scores.predicted; }
                 if (candidate.scores.skill) { skill = candidate.scores.skill; }
             }
+
+            // mobile view
+            if (this.state.mobile) {
+                return (
+                    <div>
+                        Mobile user!
+                    </div>
+                )
+            }
+
+            // desktop view
             return (
                 <tr className={"candidate"  + (isSelected ? " selected" : "")} key={candidate._id}>
                     <td className="selectCandidateBox inlineBlock">

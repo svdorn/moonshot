@@ -5006,6 +5006,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: none;
     }
 
+
+    .myCandidates .candidatesAndOptions {
+        width: 450px;
+    }
+
+
     .evalPortionIntro > div:not(:first-child) {
         width: 400px;
     }
