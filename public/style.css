@@ -2728,7 +2728,8 @@ button.link {
     margin: 15px 20px 10px 15px;
 }
 .myCandidates.mobile .candidateTable {
-    margin-top: 0px;
+    margin: 0 15px 15px 15px;
+    width: calc(100% - 30px);
 }
 
 .myCandidates .candidateTable tr {
@@ -5874,6 +5875,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .myCandidatesInfoBox {
         width: 280px;
+    }
+
+    .myCandidates .candidatesAndOptions {
+        width: 350px;
     }
 
     .leftYAxisLabelContainer {
