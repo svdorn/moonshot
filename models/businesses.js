@@ -62,6 +62,12 @@ const businessesSchema = mongoose.Schema({
     logo: String,
     // if they've set up their billing
     billingCustomerId: String,
+    // number of positions to charge for billing
+    billing: {
+        positions: Number,
+        length: String,
+        amount: Number
+    },
     // the positions that the company is (or was) hiring for
     positions: [ positionSchema ],
     // the questions that managers have to answer about each employee

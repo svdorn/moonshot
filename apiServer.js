@@ -111,6 +111,7 @@ app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
+app.get("/business/business", businessApis.GET_business);
 app.get("/business/employeeQuestions", businessApis.GET_employeeQuestions);
 app.get("/business/positions", businessApis.GET_positions);
 app.get("/business/evaluationResults", businessApis.GET_evaluationResults);
