@@ -685,27 +685,11 @@ async function finishPositionEvaluation(user, positionId, businessId) {
             overall
         }
 
-        // <<---------------------->> //
-
-        // save the candidate back to the business
-        businessPos[userArray][candidateIndex] = candidate;
-
         if (user.userType === "candidate") {
-            // update the business with new completions and users in progress counts
-            if (typeof businessPos.completions !== "number") { businessPos.completions = 0; }
-            if (typeof businessPos.usersInProgress !== "number") { businessPos.usersInProgress = 1; }
-            businessPos.completions++;
-            businessPos.usersInProgress--;
-            console.log(business);
-            if (typeof business.emailNotifications.numCandidates !== "number") { business.emailNotifications.numCandidates = 0; }
-            business.emailNotifications.numCandidates++;
-            console.log("business after: ", business);
-            // Send emails to candidate and employer in here
             sendNotificationEmails(business, user);
         }
-        business.positions[positionIndex] = businessPos;
 
-        resolve({user, business});
+        resolve(user);
     });
 }
 
@@ -713,40 +697,6 @@ async function sendNotificationEmails(business, user) {
     return new Promise(function(resolve, reject) {
         const ONE_DAY = 1000 * 60 * 60 * 24;
         let time = ONE_DAY;
-        const notifications = business.emailNotifications;
-        let numCandidates = 0;
-        if (notifications) {
-            let timeDiff = Math.abs(new Date() - notifications.lastSent);
-            numCandidates = notifications.numCandidates;
-            switch(notifications.time) {
-                case "1 week":
-                    //time = ONE_DAY * 7;
-                    time = 10;
-                    console.log("in one week");
-                    if (timeDiff < time) {
-                        return;
-                    }
-                    break;
-                case "2 days":
-                    //time = ONE_DAY * 2;
-                    console.log("in 2 days");
-                    time = 5;
-                    if (timeDiff < time) {
-                        return;
-                    }
-                    break;
-                case "now":
-                    console.log("in now");
-                    time = 0;
-                    break;
-                default:
-                    time = 0;
-                    break;
-            }
-        } else {
-            return;
-        }
-
 
         let moonshotUrl = 'https://www.moonshotinsights.io/';
         // if we are in development, links are to localhost
@@ -796,38 +746,71 @@ async function sendNotificationEmails(business, user) {
                 let recipient = [];
                 console.log("users: ", users);
                 for (let i = 0; i < users.length; i++) {
-                    console.log(users);
+                    const notifications = users[i].notifications;
+                    let numCandidates = 0;
+                    if (notifications) {
+                        let timeDiff = Math.abs(new Date() - notifications.lastSent);
+                        switch(notifications.time) {
+                            case "1 week":
+                                //time = ONE_DAY * 7;
+                                time = 10;
+                                console.log("in one week");
+                                if (timeDiff < time) {
+                                    continue;
+                                }
+                                break;
+                            case "2 days":
+                                //time = ONE_DAY * 2;
+                                console.log("in 2 days");
+                                time = 5;
+                                if (timeDiff < time) {
+                                    continue;
+                                }
+                                break;
+                            case "now":
+                                console.log("in now");
+                                time = 0;
+                                break;
+                            default:
+                                time = 0;
+                                break;
+                        }
+                    } else {
+                        continue;
+                    }
+                    console.log("user: ", users[i]);
+                    // get num candidates
                     recipient.push(users[i].email);
-                }
-                let subject = numCandidates+ ' Candidates Completed Your Evaluation';
-                let content =
-                    '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                        + '<div style="font-size:28px;color:#0c0c0c;">Evaluation Update!</div>'
-                        + '<p style="width:95%; display:inline-block; text-align:left;">' +numCandidates + ' candidates have completed your evaluation.'
-                        + '<br/><p style="width:95%; display:inline-block; text-align:left;">See their results.</p><br/>'
-                        + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'myCandidates'
-                        + '">See Results</a>'
-                        + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
-                        + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
-                        + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
-                        + '<div style="text-align:left;width:95%;display:inline-block;">'
-                            + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
-                            + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
-                            + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe>Opt-out of future messages.</a></i>'
+                    let subject = numCandidates + ' Candidates Completed Your Evaluation';
+                    let content =
+                        '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
+                            + '<div style="font-size:28px;color:#0c0c0c;">Evaluation Update!</div>'
+                            + '<p style="width:95%; display:inline-block; text-align:left;">' +numCandidates + ' candidates have completed your evaluation.'
+                            + '<br/><p style="width:95%; display:inline-block; text-align:left;">See their results.</p><br/>'
+                            + '<a style="display:inline-block;height:28px;width:170px;font-size:18px;border-radius:14px 14px 14px 14px;color:white;padding:10px 5px 0px;text-decoration:none;margin:20px;background:#494b4d;" href="' + moonshotUrl + 'myCandidates'
+                            + '">See Results</a>'
+                            + '<p><b style="color:#0c0c0c">Questions?</b> Shoot an email to <b style="color:#0c0c0c">support@moonshotinsights.io</b></p>'
+                            + '<div style="background:#7d7d7d;height:2px;width:40%;margin:25px auto 25px;"></div>'
+                            + '<a href="' + moonshotUrl + '" style="color:#00c3ff"><img alt="Moonshot Logo" style="height:100px;"src="https://image.ibb.co/kXQHso/Moonshot_Insights.png"/></a><br/>'
+                            + '<div style="text-align:left;width:95%;display:inline-block;">'
+                                + '<div style="font-size:10px; text-align:center; color:#C8C8C8; margin-bottom:30px;">'
+                                + '<i>Moonshot Learning, Inc.<br/><a href="" style="text-decoration:none;color:#D8D8D8;">1261 Meadow Sweet Dr<br/>Madison, WI 53719</a>.<br/>'
+                                + '<a style="color:#C8C8C8; margin-top:20px;" href="' + moonshotUrl + 'unsubscribe>Opt-out of future messages.</a></i>'
+                                + '</div>'
                             + '</div>'
-                        + '</div>'
-                    + '</div>';
+                        + '</div>';
 
-                const sendFrom = "Moonshot";
-                sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
-                    console.log("success: ", success);
-                    console.log("msg" ,msg);
-                })
-            } catch (getUserError) {
-                console.log("error getting user when agreeing to skill test terms: ", getUserError);
-                return res.status(500).send("Error getting user.");
-            }
-        }, time);
+                    const sendFrom = "Moonshot";
+                    sendEmail(recipient, subject, content, sendFrom, undefined, function (success, msg) {
+                        console.log("success: ", success);
+                        console.log("msg" ,msg);
+                    })
+                    recipient = [];
+                }
+        } catch (getUserError) {
+            console.log("error getting user when agreeing to skill test terms: ", getUserError);
+            return res.status(500).send("Error getting user.");
+        }}, time);
     });
 }
 

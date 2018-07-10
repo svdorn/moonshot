@@ -175,6 +175,11 @@ const usersSchema = mongoose.Schema({
         title: String
     },
 
+    notifications: {
+        lastSent: Date,
+        time: String
+    },
+
     // questions the user has to answer - only once - before doing a position eval
     adminQuestions: {
         // whether the user has finished all the admin questions and no longer needs to do them
