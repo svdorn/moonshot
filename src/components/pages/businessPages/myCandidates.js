@@ -186,7 +186,11 @@ class MyCandidates extends Component {
             position,
             positionId,
             candidates: [],
-            loadingCandidates: true
+            loadingCandidates: true,
+            showResults: false,
+            resultsCandidateId: undefined,
+            resultsCandidateIndex: undefined,
+            fullScreenResults: false
         }, this.findCandidates);
     };
 

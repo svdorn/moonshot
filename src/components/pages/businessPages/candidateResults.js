@@ -460,7 +460,7 @@ class CandidateResults extends Component {
             const iconClass = this.props.fullScreen ? "collapseIcon" : "expandIcon";
             console.log("candidate: ", candidate);
             const dismissDiv = (
-                <div onClick={this.toggleDismissed} className={candidate.isDismissed ? "dismissed" : "dismiss"}>
+                <div onClick={this.toggleDismissed} className={"noselect " + (candidate.isDismissed ? "dismissed" : "dismiss")}>
                     { candidate.isDismissed ? "Dismissed" : "Dismiss" }
                 </div>
             )
@@ -478,7 +478,7 @@ class CandidateResults extends Component {
                                         <div style={{marginTop: "8px"}}>
                                             { dismissDiv }
                                             <div
-                                                className="mediumButton getStarted blueToPurple inlineBlock"
+                                                className="mediumButton getStarted blueToPurple inlineBlock noselect"
                                                 onClick={this.contact}
                                             >
                                                 {"Contact"}

@@ -4370,16 +4370,18 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     right: 8%;
 }
 .candidateResults .dismiss {
-    text-decoration: underline;
+    margin-right: 30px;
     color: white;
+    text-decoration: underline;
 }
 .candidateResults .dismissed {
+    margin-right: 21px;
+    margin-left: -9px;
     color: red;
     font-style: italic;
 }
 .candidateResults .dismiss, .candidateResults .dismissed {
     display: inline-block;
-    margin-right: 30px;
     cursor: pointer;
 }
 
