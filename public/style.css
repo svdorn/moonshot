@@ -2778,6 +2778,11 @@ button.link {
     transform: scale(.8);
     vertical-align: middle;
 }
+.mobileTopOptions {
+    display: flex;
+    justify-content: space-around;
+    margin: 20px auto 10px;
+}
 
 /* line above all candidates but the first on mobile */
 .myCandidates tr.mobileCandidate:not(:first-child) > td { border-top: 1px solid gray; }

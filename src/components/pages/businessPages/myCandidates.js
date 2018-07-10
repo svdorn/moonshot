@@ -1021,6 +1021,26 @@ class MyCandidates extends Component {
     }
 
 
+    mobileTopOptions() {
+        return (
+            <div className="mobileTopOptions">
+                { this.positionSelector() }
+                { this.mobileFilterDropdown() }
+            </div>
+        );
+    }
+
+
+    // lets you choose the filters for the candidates you see on mobile
+    mobileFilterDropdown() {
+        return (
+            <div>
+                Filter By
+            </div>
+        )
+    }
+
+
     // set the results page to be full screen
     // pass in an activate boolean if you want to set full screen to true or false,
     // or pass in nothing to set it to its opposite state
@@ -1083,9 +1103,12 @@ class MyCandidates extends Component {
                 <div className="myCandidatesTabs">
                     { this.tabParts() }
                 </div>
-                <div className="myCandidatesPositionSelector">
-                    { this.positionSelector() }
-                </div>
+                {this.state.mobile ? null :
+                    <div className="myCandidatesPositionSelector">
+                        { this.positionSelector() }
+                    </div>
+                }
+
             </div>
         );
 
@@ -1118,7 +1141,7 @@ class MyCandidates extends Component {
 
                 <div className="center">
                     <div className="candidatesAndOptions">
-                        { this.topOptions() }
+                        { this.state.mobile ? this.mobileTopOptions() : this.topOptions() }
                         <div className="candidatesContainer">
                             { this.createCandidatesTable(positionId) }
                             { this.state.showResults ?
