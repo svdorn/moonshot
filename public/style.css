@@ -2727,6 +2727,9 @@ button.link {
     text-align: left;
     margin: 15px 20px 10px 15px;
 }
+.myCandidates.mobile .candidateTable {
+    margin-top: 0px;
+}
 
 .myCandidates .candidateTable tr {
     height: 30px;
@@ -2768,13 +2771,24 @@ button.link {
     display: inline-block;
 }
 
-.myCandidates tr.mobileCandidate > td {
-    border-top: 1px solid gray;
-    text-align: center;
+.myCandidates .mobileCandidate, .myCandidates .mobileCandidate .selectRootWhite {
+    font-size: 14px;
 }
-.myCandidates tr.mobileCandidate > td > .interest,
+.myCandidates .mobileCandidate .interest {
+    transform: scale(.8);
+    vertical-align: middle;
+}
+
+/* line above all candidates but the first on mobile */
+.myCandidates tr.mobileCandidate:not(:first-child) > td { border-top: 1px solid gray; }
+.myCandidates tr.mobileCandidate > td { text-align: center; }
 .myCandidates tr.mobileCandidate > td > div {
     display: inline-block;
+}
+.myCandidates tr.mobileCandidate > td > .predicted,
+.myCandidates tr.mobileCandidate > td > .score,
+.myCandidates tr.mobileCandidate > td > .skill {
+    width: 120px;
 }
 
 .myCandidatesPositionSelector {
@@ -2875,6 +2889,7 @@ button.link {
 .selectIconGrayImportant { color: #5E5E5E !important; }
 .topOptionWhite { color: white; }
 .topOptionGray { color: #5E5E5E; }
+.mobile .myCandidatesSelect > div { margin-bottom: 0; }
 .myCandidatesSelect > div { margin-bottom: -4px; }
 
 

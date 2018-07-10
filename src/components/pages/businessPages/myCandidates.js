@@ -727,7 +727,7 @@ class MyCandidates extends Component {
                 return (
                     <tr className={"mobileCandidate"  + (isSelected ? " selected" : "")} key={candidate._id}>
                         <td>
-                            <div>
+                            <div style={{marginBottom: "8px"}}>
                                 {candidate.name}
                             </div>
                             <br/>
@@ -737,7 +737,7 @@ class MyCandidates extends Component {
                             <div className="stage">
                                 {this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}
                             </div>
-                            <br/>
+                            <br/><div style={{height:"8px",display:"block"}}/>
                             <div className="predicted">
                                 {"Predicted"}<br/>
                                 {qualifierFromScore(predicted, "predicted")}
@@ -1098,9 +1098,11 @@ class MyCandidates extends Component {
         // if the candidate is in the list but is the last candidate OR if there
         // are no candidates that meet the criteria, disable the right button
         const rightArrowClass = "right circleArrowIcon" + (this.state.sortedCandidates.length === 0 || (typeof this.state.resultsCandidateIndex === "number" && this.state.resultsCandidateIndex >= this.state.sortedCandidates.length - 1) ? " disabled" : "");
+        // adds a 'mobile' class if on mobile
+        const mobileClass = this.state.mobile ? " mobile" : ""
 
         return (
-            <div className="jsxWrapper blackBackground fillScreen myCandidates whiteText" style={{paddingBottom: "20px"}} ref='myCandidates'>
+            <div className={"jsxWrapper blackBackground fillScreen myCandidates whiteText" + mobileClass} style={{paddingBottom: "20px"}} ref='myCandidates'>
                 {this.props.currentUser.userType == "accountAdmin" ?
                     <AddUserDialog position={this.state.position} tab={"Candidate"}/>
                     : null
