@@ -2,6 +2,7 @@ var Referrals = require('../models/referrals.js');
 var Emailaddresses = require('../models/emailaddresses.js');
 
 const crypto = require('crypto');
+const errors = require("./errors");
 
 // get helper functions
 const { sanitize,
@@ -9,14 +10,16 @@ const { sanitize,
         verifyUser,
         sendEmail,
         getFirstName,
-        frontEndUser
+        frontEndUser,
+        getAndVerifyUser
 } = require('./helperFunctions.js');
 
 
 const miscApis = {
     POST_createReferralCode,
     POST_unsubscribeEmail,
-    POST_resumeScorer_uploadResume
+    POST_resumeScorer_uploadResume,
+    POST_resetAlan
 }
 
 
@@ -213,6 +216,53 @@ function POST_resumeScorer_uploadResume(req, res) {
         console.log("Error sending resume to Kyle: ", error);
         return res.status(500).send("Error uploading, try again later.");
     }
+}
+
+
+// reset the Alan demo account
+async function POST_resetAlan(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("Error getting user: ", getUserError);
+        return res.status(401).send(errors.PERMISSIONS_ERROR)
+    }
+
+    if (user.email !== "alan.alanson@email.com") {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    user.skillTests = [];
+    user.adminQuestions = undefined;
+    user.psychometricTest = undefined;
+    user.positions[0].appliedEndDate = undefined;
+    user.positions[0].agreedToSkillTestTerms = undefined;
+    user.positions[0].hasSeenIntro = undefined;
+    user.positions[0].testIndex = 0;
+    if (Array.isArray(user.positions[0].freeResponseQuestions)) {
+        for (let i = 0; i < user.positions[0].freeResponseQuestions.length; i++) {
+            user.positions[0].freeResponseQuestions[i].response = "";
+        }
+    }
+    user.positions[0].scores = undefined;
+    user.positions[0].hiringStage = "Not Contacted";
+    user.positions[0].hiringStageChanges = [{
+        hiringStage: "Not Contacted",
+        isDismissed: false,
+        dateChanged: new Date()
+    }];
+
+    try { await user.save(); }
+    catch (saveError) {
+        console.log("Error saving Alan: ", saveError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    return res.json(true);
 }
 
 

@@ -131,6 +131,7 @@ app.post("/skill/agreeToTerms", skillApis.POST_agreeToTerms);
 app.post('/billing/customer', billingApis.POST_customer);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
+app.post("/misc/resetAlan", miscApis.POST_resetAlan);
 app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
 
 

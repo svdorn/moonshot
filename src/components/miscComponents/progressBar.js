@@ -13,8 +13,6 @@ class ProgressBar extends Component {
     }
 
     render() {
-        console.log("here");
-
         const currentUser = this.props.currentUser;
         const currentPosition = currentUser.currentPosition;
 

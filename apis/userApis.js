@@ -1203,7 +1203,7 @@ async function internalStartPsychEval(user) {
             rephrase: false,
             numRephrasesAllowed: 0,
             // 1 question per facet in development mode, 3 in production
-            questionsPerFacet: process.env.NODE_ENV === "development" ? 1 : 3,
+            questionsPerFacet: process.env.NODE_ENV === "development" || user.email === "alan.alanson@email.com" ? 1 : 3,
             incompleteFactors,
             factors,
             currentQuestion

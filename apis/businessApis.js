@@ -78,7 +78,6 @@ function createCode(businessId, positionId, userType) {
         // make the code in the db
         try { code = await Signupcodes.create(code) }
         catch (createCodeError) {
-            console.log("here");
             return reject(createCodeError);
         }
         // return the code
