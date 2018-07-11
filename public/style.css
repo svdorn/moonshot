@@ -2593,7 +2593,7 @@ button.link {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-.myCandidates .left.arrowContainer.halfScreen { right: 635px; }
+.myCandidates .left.arrowContainer.halfScreen { right: 780px; }
 .myCandidates .left.arrowContainer.fullScreen { right: calc(100% - 16px); }
 .myCandidates .right.arrowContainer {
     right: -16px;
@@ -2615,7 +2615,7 @@ button.link {
     transition: width 0.5s ease;
 }
 .candidateResults.halfScreen {
-    width: 650px;
+    width: 795px;
     -webkit-transition: width 0.5s ease;
     -ms-transition: width 0.5s ease;
     transition: width 0.5s ease;
