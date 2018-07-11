@@ -861,7 +861,7 @@ async function sendDelayedEmail(recipient, time) {
         reciever.push(recipient.email);
         let subject = numCandidates + ' Candidates Completed Your Evaluation';
         if (multipleEvals) {
-            subject.append("s");
+            subject = subject.concat("s");
         }
         let content =
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
