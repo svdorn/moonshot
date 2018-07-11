@@ -713,8 +713,8 @@ async function sendNotificationEmails(businessId, user) {
         let subject = "You've Finished Your Evaluation!";
         let content =
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
-                + '<p style="width:95%; display:inline-block; text-align:left;">Hi' + getFirstName(user.name) + ',</p>'
-                + '<p style="width:95%; display:inline-block; text-align:left;">My name is Justin and I am the Chief Product Officer at Moonshot Insights. I saw that you finished your evaluation for ' + business.name +
+                + '<p style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(user.name) + ',</p>'
+                + '<p style="width:95%; display:inline-block; text-align:left;">My name is Justin and I am the Chief Product Officer at Moonshot Insights. I saw that you finished your evaluation for ' + business.name
                 + '. I just wanted to let you know your results have been sent to the employer, just sit tight and we will let you know the next steps moving forward. I wish you the best of luck!</p><br/>'
                 + '<p style="width:95%; display:inline-block; text-align:left;">If you have any questions at all, please feel free to shoot me an email at <b style="color:#0c0c0c">Justin@MoonshotInsights.io</b> and I&#39;ll get back to you within 24 hours or I&#39;ll buy you a pizza!</p>'
                 + '<p style="width:95%; display:inline-block; text-align:left;">Sincerely,<br/><br/>Justin Ye<br/><i>Chief Product Officer</i><br/><b style="color:#0c0c0c">Justin@MoonshotInsights.io</b></p>'
@@ -750,10 +750,13 @@ async function sendNotificationEmails(businessId, user) {
             for (let i = 0; i < users.length; i++) {
                 recipient = users[i];
                 const notifications = users[i].notifications;
+                console.log("notifications: ", notifications);
                 if (notifications) {
                     let timeDiff = Math.abs(new Date() - notifications.lastSent);
+                    console.log("timeDiff: ", timeDiff);
+                    console.log("notifications.time: ", notifications.time);
                     switch(notifications.time) {
-                        case "1 week":
+                        case "one week":
                             //time = ONE_DAY * 7;
                             time = 10;
                             console.log("in one week");

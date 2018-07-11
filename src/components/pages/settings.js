@@ -3,6 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
 import PasswordChange from './passwordchange';
+import Notifications from './notifications';
 import Account from './account';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
@@ -45,12 +46,19 @@ class Settings extends Component {
                         value={this.state.tab}
                         onChange={this.handleTabChange}
                     >
-                        <Tab label="Change Settings" value="Settings" style={style.tab}>
+                        <Tab label="Settings" value="Settings" style={style.tab}>
                             <Account />
                         </Tab>
                         <Tab label="Change Password" value="Change Password" style={style.tab}>
                             <PasswordChange />
                         </Tab>
+                        {this.props.currentUser.userType
+                            ?
+                            <Tab label="Notifications" value="Notifications" style={style.tab}>
+                                <Notifications />
+                            </Tab>
+                            : null
+                        }
                     </Tabs>
                     </div>
                 </div>

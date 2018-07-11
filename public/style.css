@@ -3306,7 +3306,7 @@ button.link {
     border: 0px !important;
 }
 .settingsTabs {
-    width: 70%;
+    width: 80%;
     margin: 10px auto;
 }
 .settingsTabs > div:first-of-type {
@@ -3314,7 +3314,6 @@ button.link {
     display: inline-block !important;
 }
 .settingsTabs > div > button {
-    font-size: 14px !important;
     border: 0px !important;
 }
 
@@ -5423,7 +5422,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin: 0px 0 50px;
     }
     .settingsTabs {
-        width: 90%;
+        width: 95%;
+    }
+    .settingsTabs > div > button {
+        font-size: 10px !important;
     }
 
     #moonshotProcess { margin-top: 100px; }
