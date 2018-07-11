@@ -87,7 +87,7 @@ class Notifications extends Component {
     };
 
     render() {
-        const dropDownOptions = ["Daily", "Weekly", "Every 2 Days"]
+        const dropDownOptions = ["Daily", "Every 2 Days", "Every 5 Days", "Weekly"];
         let dropDownItems = [];
         dropDownItems = dropDownOptions.map(item => {
             return (

@@ -52,7 +52,7 @@ class Settings extends Component {
                         <Tab label="Change Password" value="Change Password" style={style.tab}>
                             <PasswordChange />
                         </Tab>
-                        {this.props.currentUser.userType
+                        {this.props.currentUser.userType === "accountAdmin"
                             ?
                             <Tab label="Notifications" value="Notifications" style={style.tab}>
                                 <Notifications />

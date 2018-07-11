@@ -753,7 +753,7 @@ async function sendNotificationEmails(businessId, user) {
 
         const findById = { _id: businessId };
 
-        const business = await Businesses.findOne(findById).select("name");
+        const business = await Businesses.findOne(findById).select("name positions");
 
         // send email to candidate
         let recipient = [user.email];
@@ -789,41 +789,47 @@ async function sendNotificationEmails(businessId, user) {
         try {
             let users  = await Users.find(businessUserQuery).select("name email notifications")
             if (!users) {
-                return;
+                resolve("No users found.");
             }
             let recipient = {};
+            let promises = [];
             for (let i = 0; i < users.length; i++) {
                 recipient = users[i];
                 const notifications = users[i].notifications;
                 if (notifications) {
                     let timeDiff = Math.abs(new Date() - notifications.lastSent);
-                    console.log("timeDiff: ", timeDiff);
-                    console.log("notifications.time: ", notifications.time);
+
                     switch(notifications.time) {
                         case "Weekly":
                             //time = ONE_DAY * 7;
-                            time = 10;
-                            console.log("in one week");
+                            console.log("weekly");
+                            time = 100;
                             if (timeDiff < time) {
                                 continue;
                             }
                             break;
                         case "Every 2 Days":
+                            console.log('2 days');
+                            time = 10;
                             //time = ONE_DAY * 2;
-                            console.log("in 2 days");
-                            time = 5;
+                            if (timeDiff < time) {
+                                continue;
+                            }
+                            break;
+                        case "Every 5 Days":
+                            //time = ONE_DAY * 5;
                             if (timeDiff < time) {
                                 continue;
                             }
                             break;
                         case "Daily":
-                            console.log("in now");
-                            time = ONE_DAY;
+                            //time = ONE_DAY;
                             if (timeDiff < time) {
                                 continue;
                             }
                             break;
                         case "never":
+                            time = 0;
                             continue;
                             break;
                         default:
@@ -834,35 +840,78 @@ async function sendNotificationEmails(businessId, user) {
                     continue;
                 }
 
-                sendDelayedEmail(recipient, time);
+                promises.push(sendDelayedEmail(recipient, time, notifications.lastSent, business.positions));
                 recipient = {};
                 time = 0;
             }
+            try {
+                const sendingEmails = await Promise.all(promises);
+            } catch (err) {
+                console.log("error sending emails to businesses after date: ", err);
+                reject("Error sending emails to businesses after date.")
+            }
         } catch (getUserError) {
-            console.log("error getting user when agreeing to skill test terms: ", getUserError);
-            return res.status(500).send("Error getting user.");
+            console.log("error getting user when sending emails: ", getUserError);
+            return reject("Error getting user.");
         }
     });
 }
 
-async function sendDelayedEmail(recipient, time) {
-    setTimeout(function() {
+async function sendDelayedEmail(recipient, time, lastSent, positions) {
+    return new Promise(async function(resolve, reject) {
+
+    setTimeout(async function() {
         let moonshotUrl = 'https://www.moonshotinsights.io/';
         // if we are in development, links are to localhost
         if (!process.env.NODE_ENV) {
             moonshotUrl = 'http://localhost:8081/';
         }
+
+        // Set the reciever of the email
         let reciever = [];
-        console.log("in send delayed email: ", recipient);
-        console.log("time: ", time);
-        // get the number of candidates for each position in the correct time
-        let numCandidates = 0;
-        let multipleEvals = false;
         reciever.push(recipient.email);
+
+        let positionCounts = [];
+
+        let promises = [];
+        let names = [];
+
+        // TODO: get the number of candidates for each position in the correct time
+        for (let i = 0; i < positions.length; i++) {
+            const completionsQuery = {
+               "userType": "candidate",
+               "positions": {
+                   "$elemMatch": {
+                       "$and": [
+                           { "positionId": mongoose.Types.ObjectId(positions[i]._id) },
+                           { "appliedEndDate": { "$gte" : lastSent  } }
+                       ]
+                   }
+               }
+            }
+            names.push(positions[i].name);
+            promises.push(Users.count(completionsQuery));
+        }
+
+        const counts = await Promise.all(promises);
+        // Number of overall candidates
+        let numCandidates = 0;
+        for (let i = 0; i < counts.length; i++) {
+            numCandidates += counts[i];
+        }
+        // If there are multiple position evaluations going on at once
+        const multipleEvals = counts.length > 1;
+
+        // Create the emails
         let subject = numCandidates + ' Candidates Completed Your Evaluation';
+        if (numCandidates < 2) {
+            subject = numCandidates + ' Candidate Completed Your Evaluation';
+        }
         if (multipleEvals) {
             subject = subject.concat("s");
         }
+        console.log("counts: ", counts);
+        console.log("names: ", names)
         let content =
             '<div style="font-size:15px;text-align:center;font-family: Arial, sans-serif;color:#7d7d7d">'
                 + '<p style="width:95%; display:inline-block; text-align:left;">Hi ' + getFirstName(recipient.name) + ',</p>'
@@ -887,8 +936,23 @@ async function sendDelayedEmail(recipient, time) {
                 console.log("success: ", success);
                 console.log("msg" ,msg);
             })
+            // TODO: Update the lastSent day of the user to new Date()
+            const idQuery = {
+                "_id" : recipient._id
+            }
+            const updateQuery = {
+                "notifications.lastSent" : new Date()
+            }
+            try {
+                await Users.findOneAndUpdate(idQuery, updateQuery);
+            } catch(err) {
+                console.log("error updating lastSent date for user email notifications: ", err);
+                reject("Error updating lastSent date for user email notifications.")
+            }
+            resolve(true);
         }
     , time);
+});
 }
 
 
