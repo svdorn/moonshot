@@ -100,7 +100,7 @@ class BillingForm extends Component {
                                 ?
                                 <div className="whiteText font14px marginBottom30px">
                                     You have an {this.state.subscriptionTerm} subscription plan that includes up to {this.state.numPositions} active positions for
-                                    ${this.state.amount} per month. Please enter your payment information below and we will bill your card according to the agreed upon <a className="blueTextHome" option="_blank" href="/SLA.pdf">terms and conditions</a> of your subscription plan.
+                                    ${this.state.amount} per month. Please enter your payment information below and we will bill your card according to the agreed upon <a className="blueTextHome" target="_blank" href="https://view.publitas.com/moonshot-insights/moonshot-insights_terms-of-service/">terms and conditions</a> of your subscription plan.
                                 </div>
                             :<div className="whiteText font14px marginBottom30px">Please enter your payment information below and we will
                             bill your card with our agreed upon terms for your active positions.</div>
@@ -117,7 +117,7 @@ class BillingForm extends Component {
                                 />
                             </div>
 
-                            I have read and accept the <a className="blueTextHome" option="_blank" href="/SLA.pdf">Terms and Conditions</a>.
+                            I have read and accept the <a className="blueTextHome" target="_blank" href="https://view.publitas.com/moonshot-insights/moonshot-insights_terms-of-service/">Terms and Conditions</a>.
                         </div>
                         <RaisedButton
                             label="Submit"
