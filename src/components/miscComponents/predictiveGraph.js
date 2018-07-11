@@ -110,7 +110,6 @@ class PredictiveGraph extends Component {
         const interiorWidth = this.state.interiorWidth ? this.state.interiorWidth : this.state.width / 2;
         const interiorMarginLeft = (this.state.width - interiorWidth) / 2;
 
-
         const graphStyle = { height: fullHeight };
         const graphInteriorStyle = {
             height: interiorHeight,
@@ -159,7 +158,7 @@ class PredictiveGraph extends Component {
             const g = 126 + (94 * percentToGreen);
             const b = 252;
 
-            const labelStyle = {
+            const yLabelStyle = {
                 color: `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`,
                 height: `${labelHeight}%`,
                 bottom: `${fromBottom}%`
@@ -168,14 +167,16 @@ class PredictiveGraph extends Component {
             labelCounter++;
 
             return (
-                <div className="leftYAxisLabel" style={labelStyle} key={`yAxis${label}`}>
+                <div className="leftYAxisLabel" style={yLabelStyle} key={`yAxis${label}`}>
                     <div>{label}</div>
                 </div>
             )
         })
 
         // figure out how rotated the x axis labels should be
-        const labelTransform = {};
+        let labelContainerTransform = {};
+        let labelTransform = {};
+        let xLabelLeftAlign = false;
         if (interiorWidth < 500) {
             let rotateAngle,
                 yTranslation,
@@ -190,7 +191,9 @@ class PredictiveGraph extends Component {
                 yTranslation = 5;
                 xTranslation = 50;
             }
-            labelTransform.transform = `translate(${xTranslation}%, ${yTranslation}px) rotate(${rotateAngle}deg)`
+            labelTransform.transform = `rotate(${rotateAngle}deg)`;
+            labelContainerTransform.transform = "translateX(50%)";
+            xLabelLeftAlign = true;
         }
 
 
@@ -254,9 +257,9 @@ class PredictiveGraph extends Component {
             }
 
             // labels will be at the same position as the points
-            const labelStyle = {
-                width: `${pointContainerWidth}%`
-            }
+            let xLabelStyle = { width: `${pointContainerWidth}%` }
+            // align text left if being rotated
+            if (xLabelLeftAlign) { xLabelStyle.textAlign = "left"; }
 
             points.push(
                 <div className="pointContainer" style={pointContainerStyle} key={`points${label}`}>
@@ -279,7 +282,7 @@ class PredictiveGraph extends Component {
 
             // add the label for the x axis
             xAxisLabels.push(
-                <div className="xAxisLabel" style={labelStyle} key={`xAxis${label}`}>
+                <div className="xAxisLabel" style={{...xLabelStyle, ...labelContainerTransform}} key={`xAxis${label}`}>
                     <div style={labelTransform}>
                         {label}
                     </div>
