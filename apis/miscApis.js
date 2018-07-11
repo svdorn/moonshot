@@ -237,11 +237,901 @@ async function POST_resetAlan(req, res) {
     }
 
     user.skillTests = [];
-    user.adminQuestions = undefined;
-    user.psychometricTest = undefined;
+    user.psychometricTest = {
+        "currentQuestion": {
+            "factorIndex": 2,
+            "factorId": {
+                _id: "5aff0b612689cb00e45ce2d0"
+            },
+            "facetIndex": 0,
+            "facetId": {
+                _id: "5aff0b612689cb00e45ce2e5"
+            },
+            "questionId": {
+                _id: "5aff0b612689cb00e45ce2e7"
+            },
+            "responseIndex": 0,
+            "body": "You get pulled over and forgot your license:",
+            "leftOption": "You\u2019re so unlucky!",
+            "rightOption": "It\u2019s just a bad day!",
+            "invertScore": null
+        },
+        "incompleteFactors": [
+            2,
+            3,
+            5
+        ],
+        "inProgress": true,
+        "startDate": "2018-07-11T19:18:17.085Z",
+        "rephrase": false,
+        "numRephrasesAllowed": 0,
+        "questionsPerFacet": 1,
+        "factors": [
+            {
+                "incompleteFacets": [],
+                "_id": {
+                    _id: "5b4657f9d03371a0c17cc62b"
+                },
+                "facets": [
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce313"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc62f"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b46580ad03371a0c17cc7fe"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:34.166Z",
+                                "answer": -0.08571428571428541,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce313"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:35.462Z",
+                                "totalTime": 1296
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce30f"
+                        },
+                        "name": "Sincerity"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce30e"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc62e"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465803d03371a0c17cc71d"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:27.820Z",
+                                "answer": -3.314285714285714,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce30e"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:29.013Z",
+                                "totalTime": 1193
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce30a"
+                        },
+                        "name": "Fairness"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce307"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc62d"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465800d03371a0c17cc6ca"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:24.980Z",
+                                "answer": 5,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce307"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:26.374Z",
+                                "totalTime": 1394
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce305"
+                        },
+                        "name": "Greed-Avoidance"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce302"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc62c"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465818d03371a0c17cca0b"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:48.097Z",
+                                "answer": -2.914285714285714,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce302"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:49.797Z",
+                                "totalTime": 1700
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce300"
+                        },
+                        "name": "Modesty"
+                    }
+                ],
+                "factorId": {
+                    _id: "5aff0b612689cb00e45ce2ff"
+                },
+                "name": "Honesty-Humility"
+            },
+            {
+                "incompleteFacets": [],
+                "_id": {
+                    _id: "5b4657f9d03371a0c17cc626"
+                },
+                "facets": [
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2fe"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc62a"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465815d03371a0c17cc99a"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:45.247Z",
+                                "answer": 3.142857142857143,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2fe"
+                                },
+                                "invertScore": true,
+                                "endDate": "2018-07-11T19:18:46.558Z",
+                                "totalTime": 1311
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2fa"
+                        },
+                        "name": "Fearfulness"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2f9"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc629"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465813d03371a0c17cc963"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:43.486Z",
+                                "answer": -3.314285714285714,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2f9"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:45.165Z",
+                                "totalTime": 1679
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2f5"
+                        },
+                        "name": "Anxiety"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2f3"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc628"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b46580fd03371a0c17cc8c4"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:39.806Z",
+                                "answer": 0.3428571428571425,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2f3"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:41.027Z",
+                                "totalTime": 1221
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2f0"
+                        },
+                        "name": "Dependence"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2ec"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc627"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b46580ed03371a0c17cc891"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:38.471Z",
+                                "answer": 2.0285714285714285,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2ec"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:39.667Z",
+                                "totalTime": 1196
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2eb"
+                        },
+                        "name": "Sentimentality"
+                    }
+                ],
+                "factorId": {
+                    _id: "5aff0b612689cb00e45ce2ea"
+                },
+                "name": "Emotionality"
+            },
+            {
+                "incompleteFacets": [
+                    0
+                ],
+                "_id": {
+                    _id: "5b4657f9d03371a0c17cc620"
+                },
+                "facets": [
+                    {
+                        "usedQuestions": [],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc625"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465819d03371a0c17cca45"
+                                },
+                                "startDate": "2018-07-11T19:18:49.876Z",
+                                "skips": []
+                            }
+                        ],
+                        "weight": 0.2,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2e5"
+                        },
+                        "name": "Liveliness"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2e2"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc624"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465806d03371a0c17cc774"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:30.587Z",
+                                "answer": -3.8285714285714283,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2e2"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:31.814Z",
+                                "totalTime": 1227
+                            }
+                        ],
+                        "weight": 0.2,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2e0"
+                        },
+                        "name": "Social Boldness"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2de"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc623"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465816d03371a0c17cc9d2"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:46.673Z",
+                                "answer": -2.914285714285714,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2de"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:48.001Z",
+                                "totalTime": 1328
+                            }
+                        ],
+                        "weight": 0.2,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2db"
+                        },
+                        "name": "Sociability:"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2d7"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc622"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b4657fcd03371a0c17cc655"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:20.742Z",
+                                "answer": -5,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2d7"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:21.907Z",
+                                "totalTime": 1165
+                            }
+                        ],
+                        "weight": 0.2,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2d6"
+                        },
+                        "name": "Social Self Esteem"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2d2"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc621"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b46580bd03371a0c17cc82e"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:35.564Z",
+                                "answer": -4.6,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2d2"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:36.899Z",
+                                "totalTime": 1335
+                            }
+                        ],
+                        "weight": 0.2,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2d1"
+                        },
+                        "name": "Ability Confidence"
+                    }
+                ],
+                "factorId": {
+                    _id: "5aff0b612689cb00e45ce2d0"
+                },
+                "name": "Extraversion"
+            },
+            {
+                "incompleteFacets": [
+                    0,
+                    2
+                ],
+                "_id": {
+                    _id: "5b4657f9d03371a0c17cc61b"
+                },
+                "facets": [
+                    {
+                        "usedQuestions": [],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc61f"
+                        },
+                        "responses": [],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2cb"
+                        },
+                        "name": "Forgiveness"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2c8"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc61e"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465809d03371a0c17cc7cf"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:33.067Z",
+                                "answer": -3.742857142857143,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2c8"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:34.092Z",
+                                "totalTime": 1025
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2c6"
+                        },
+                        "name": "Gentleness"
+                    },
+                    {
+                        "usedQuestions": [],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc61d"
+                        },
+                        "responses": [],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2c1"
+                        },
+                        "name": "Flexibility"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2bd"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc61c"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b4657fbd03371a0c17cc630"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:19.394Z",
+                                "answer": -5,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2bd"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:20.631Z",
+                                "totalTime": 1237
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2bc"
+                        },
+                        "name": "Patience"
+                    }
+                ],
+                "factorId": {
+                    _id: "5aff0b612689cb00e45ce2bb"
+                },
+                "name": "Agreeableness"
+            },
+            {
+                "incompleteFacets": [],
+                "_id": {
+                    _id: "5b4657f9d03371a0c17cc615"
+                },
+                "facets": [
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2b8"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc61a"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465807d03371a0c17cc7a1"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:31.912Z",
+                                "answer": -4.0285714285714285,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2b8"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:33.002Z",
+                                "totalTime": 1090
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2b6"
+                        },
+                        "name": "Organization"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2b4"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc619"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465802d03371a0c17cc6f3"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:26.451Z",
+                                "answer": 3.057142857142857,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2b4"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:27.742Z",
+                                "totalTime": 1291
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2b1"
+                        },
+                        "name": "Diligence"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2ad"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc617"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b4657f9d03371a0c17cc618"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:17.085Z",
+                                "answer": -5,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2ad"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:19.288Z",
+                                "totalTime": 2203
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2ac"
+                        },
+                        "name": "Perfectionism"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2a8"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc616"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b4657fdd03371a0c17cc67b"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:21.989Z",
+                                "answer": -5,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2a8"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:23.191Z",
+                                "totalTime": 1202
+                            }
+                        ],
+                        "weight": 0.25,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2a7"
+                        },
+                        "name": "Prudence"
+                    }
+                ],
+                "factorId": {
+                    _id: "5aff0b612689cb00e45ce2a6"
+                },
+                "name": "Conscientiousness"
+            },
+            {
+                "incompleteFacets": [
+                    4
+                ],
+                "_id": {
+                    _id: "5b4657f9d03371a0c17cc60f"
+                },
+                "facets": [
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2a5"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc614"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465812d03371a0c17cc92d"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:42.358Z",
+                                "answer": -1.2857142857142856,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2a5"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:43.383Z",
+                                "totalTime": 1025
+                            }
+                        ],
+                        "weight": 0.2,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce2a1"
+                        },
+                        "name": "Aesthetic Appreciation"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce2a0"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc613"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b46580dd03371a0c17cc85f"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:37.002Z",
+                                "answer": 3.685714285714285,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce2a0"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:38.365Z",
+                                "totalTime": 1363
+                            }
+                        ],
+                        "weight": 0.2,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce29c"
+                        },
+                        "name": "Inquisitiveness"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce298"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc612"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465811d03371a0c17cc8f8"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:41.140Z",
+                                "answer": -0.40000000000000036,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce298"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:42.282Z",
+                                "totalTime": 1142
+                            }
+                        ],
+                        "weight": 0.2,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce296"
+                        },
+                        "name": "Creativity"
+                    },
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce295"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc611"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b465805d03371a0c17cc748"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:29.114Z",
+                                "answer": 4.571428571428571,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce295"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:30.502Z",
+                                "totalTime": 1388
+                            }
+                        ],
+                        "weight": 0.2,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce291"
+                        },
+                        "name": "Unconventionality"
+                    },
+                    {
+                        "usedQuestions": [],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc610"
+                        },
+                        "responses": [],
+                        "weight": 0.2,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce28c"
+                        },
+                        "name": "Exploration"
+                    }
+                ],
+                "factorId": {
+                    _id: "5aff0b612689cb00e45ce28b"
+                },
+                "name": "Openness to Experience"
+            },
+            {
+                "incompleteFacets": [],
+                "_id": {
+                    _id: "5b4657f9d03371a0c17cc60d"
+                },
+                "facets": [
+                    {
+                        "usedQuestions": [
+                            {
+                                _id: "5aff0b612689cb00e45ce288"
+                            }
+                        ],
+                        "_id": {
+                            _id: "5b4657f9d03371a0c17cc60e"
+                        },
+                        "responses": [
+                            {
+                                "_id": {
+                                    _id: "5b4657ffd03371a0c17cc6a2"
+                                },
+                                "skips": [],
+                                "startDate": "2018-07-11T19:18:23.344Z",
+                                "answer": -5,
+                                "answeredId": {
+                                    _id: "5aff0b612689cb00e45ce288"
+                                },
+                                "invertScore": null,
+                                "endDate": "2018-07-11T19:18:24.891Z",
+                                "totalTime": 1547
+                            }
+                        ],
+                        "weight": 1,
+                        "facetId": {
+                            _id: "5aff0b612689cb00e45ce285"
+                        },
+                        "name": "Wholesomeness"
+                    }
+                ],
+                "factorId": {
+                    _id: "5aff0b612689cb00e45ce275"
+                },
+                "name": "Altruism"
+            }
+        ],
+        "numQuestionsAnswered": 23
+    };
     user.positions[0].appliedEndDate = undefined;
     user.positions[0].agreedToSkillTestTerms = undefined;
-    user.positions[0].hasSeenIntro = undefined;
     user.positions[0].testIndex = 0;
     if (Array.isArray(user.positions[0].freeResponseQuestions)) {
         for (let i = 0; i < user.positions[0].freeResponseQuestions.length; i++) {
