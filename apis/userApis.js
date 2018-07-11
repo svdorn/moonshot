@@ -776,6 +776,9 @@ async function sendNotificationEmails(businessId, user) {
                             console.log("in now");
                             time = 0;
                             break;
+                        case "never":
+                            continue;
+                            break;
                         default:
                             time = 0;
                             break;
