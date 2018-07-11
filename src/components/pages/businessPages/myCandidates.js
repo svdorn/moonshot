@@ -1131,7 +1131,6 @@ class MyCandidates extends Component {
 
 
     render() {
-        console.log("rendering with candidate id: ", this.state.resultsCandidateId);
         const currentUser = this.props.currentUser;
         let positionId = this.state.positionId;
 
@@ -1160,6 +1159,17 @@ class MyCandidates extends Component {
         const rightArrowClass = "right circleArrowIcon" + (this.state.sortedCandidates.length === 0 || (typeof this.state.resultsCandidateIndex === "number" && this.state.resultsCandidateIndex >= this.state.sortedCandidates.length - 1) ? " disabled" : "");
         // adds a 'mobile' class if on mobile
         const mobileClass = this.state.mobile ? " mobile" : ""
+        // // how wide the results screen is
+        // let resultsWidth = window.innerWidth;
+        // if (window.innerWidth > 400) {
+        //     if (window.innerWidth > 1200) {
+        //         resultsWidth = this.state.fullScreen ? 795;
+        //     } else if (window.innerWidth > 1000) {
+        //         resultsWidth = 650;
+        //     } else if (window.innerWidth > 800) {
+        //         resultsWidth = 494;
+        //     } else
+        // }
 
         return (
             <div className={"jsxWrapper blackBackground fillScreen myCandidates whiteText" + mobileClass} style={{paddingBottom: "20px"}} ref='myCandidates'>

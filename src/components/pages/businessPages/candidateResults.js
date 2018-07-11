@@ -27,7 +27,7 @@ class CandidateResults extends Component {
             psychScores: [],
             loading: true,
             areaSelected: undefined,
-            windowWidth: 0,
+            windowWidth: undefined,
             // if this is true, didn't get enough props, so can't display results
             invalidProps: false,
             // the currently selected tab
@@ -47,7 +47,7 @@ class CandidateResults extends Component {
 
     componentDidMount() {
         // set resize listener
-        window.addEventListener('resize', this.updateContainerDimensions.bind(this));
+        // window.addEventListener('resize', this.updateContainerDimensions.bind(this));
         // get the candidate's results
         this.reset();
     }
@@ -138,7 +138,7 @@ class CandidateResults extends Component {
 
 
     componentWillUnmount() {
-        window.addEventListener('resize', this.updateContainerDimensions.bind(this));
+        //window.addEventListener('resize', this.updateContainerDimensions.bind(this));
     }
 
 
@@ -161,7 +161,7 @@ class CandidateResults extends Component {
     // make it full screen then update the
     toggleFullScreen() {
         this.props.toggleFullScreen();
-        this.updateContainerDimensions();
+        //this.updateContainerDimensions();
     }
 
 
@@ -234,37 +234,40 @@ class CandidateResults extends Component {
                     </div>
                 </div>
 
-                <div>
-                    <PredictiveGraph
-                        title={"Predicted Performance"}
-                        dataPoints={this.state.predictivePoints}
-                        height={graphHeight}
-                        width={this.state.width}
-                        interiorWidth={350}
-                    />
-                </div>
+                {this.state.windowWidth ?
+                    <div>
+                        <PredictiveGraph
+                            title={"Predicted Performance"}
+                            dataPoints={this.state.predictivePoints}
+                            height={graphHeight}
+                            containerName={"candidateResults"}
+                            ref={ instance => { this.child1 = instance; } }
+                        />
+                    </div>
+                    : null
+                }
 
-                <div className="resultsPageSpacer" />
 
                  <PsychBreakdown
                      psychScores={this.state.psychScores}
                      forCandidate={false}
                  />
 
-                 <div className="resultsPageSpacer" />
-
                 <div
                     className="whiteText center font24px font20pxUnder700 font16pxUnder500">
                     Skills Evaluation
                 </div>
-                <div>
-                    <PredictiveGraph
-                        dataPoints={this.state.hardSkillPoints}
-                        height={graphHeight}
-                        width={this.state.width}
-                        interiorWidth={350}
-                    />
-                </div>
+                {this.state.windowWidth ?
+                    <div>
+                        <PredictiveGraph
+                            dataPoints={this.state.hardSkillPoints}
+                            height={graphHeight}
+                            containerName={"candidateResults"}
+                            ref={ instance => { this.child2 = instance; } }
+                        />
+                    </div>
+                    : null
+                }
             </div>
         );
     }
@@ -527,7 +530,9 @@ class CandidateResults extends Component {
         const mobileClass = this.props.mobile ? "mobile " : "";
 
         return (
-            <div className={"blackBackground candidateEvalResults " + mobileClass + this.props.className}>
+            <div className={"blackBackground candidateEvalResults " + mobileClass + this.props.className}
+                onTransitionEnd={() => { this.child1.parentTransitioned(); this.child2.parentTransitioned(); }}
+            >
                 { content }
             </div>
         );

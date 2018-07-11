@@ -28,8 +28,44 @@ class PredictiveGraph extends Component {
     }
 
 
+    // figures out which transition-end event should be used for the user's browser
+    whichTransitionEvent() {
+        let t;
+        let el = document.createElement('fakeelement');
+        const transitions = {
+          'transition':'transitionend',
+          'OTransition':'oTransitionEnd',
+          'MozTransition':'transitionend',
+          'WebkitTransition':'webkitTransitionEnd'
+        }
+
+        for (t in transitions) {
+            if (el.style[t] !== undefined) {
+                return transitions[t];
+            }
+        }
+    }
+
+
     componentDidMount() {
-        this.updateWindowDimensions();
+        // if the graph is contained in another div, use that div's width
+        if (this.props.containerName) {
+            // get the container element
+            let container = document.getElementById(this.props.containerName);
+            // get its current width
+            const width = container.offsetWidth;
+            // set current width in state
+            this.setState({ width });
+            // get the event that fires on transition end
+            const transitionEnd = this.whichTransitionEvent();
+            // listen for a transition on it; this will make it so the graph can
+            // update immediately on container resize intead of 1px later
+            container.addEventListener(transitionEnd, this.updateWindowDimensions)
+        }
+        // otherwise, update the width according to the window's width
+        else {
+            this.updateWindowDimensions();
+        }
         window.addEventListener('resize', this.updateWindowDimensions);
     }
 
@@ -39,8 +75,22 @@ class PredictiveGraph extends Component {
     }
 
 
+    // when a parent div transitions, resize to fit its new size
+    parentTransitioned() {
+        this.updateWindowDimensions();
+    }
+
+
     updateWindowDimensions() {
-        if (!this.props.width && window.innerWidth > 300) {
+        // if there is a container, find its width
+        if (this.props.containerName) {
+                        // TODO: this is v hacky, but I don't know how to make it work otherwise
+                        // this makes it wait a fraction of a second after resize so that the
+                        // container div can update, then it checks the container div
+            this.setState({ width: document.getElementById(this.props.containerName).offsetWidth });
+        }
+        // if there is not container, width is the width of the window
+        else if (!this.props.width && window.innerWidth > 300) {
             this.setState({ width: window.innerWidth });
         }
     }
