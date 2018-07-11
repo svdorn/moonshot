@@ -31,6 +31,7 @@ const businessApis = {
     POST_answerQuestion,
     POST_emailInvites,
     GET_candidateSearch,
+    GET_business,
     GET_employeeSearch,
     GET_employeeQuestions,
     GET_positions,
@@ -696,6 +697,25 @@ async function POST_answerQuestion(req, res) {
 
     // return successfully
     res.json(user.positions[userPositionIndex].answers);
+}
+
+async function GET_business(req, res) {
+    console.log(req.query);
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+    const businessId = sanitize(req.query.businessId);
+
+    let business;
+    try {
+        business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId);
+    } catch(err) {
+        console.log("error getting business: ", err);
+        return res.status(500).send("Server error.");
+    }
+
+    console.log("business, ", business);
+
+    return res.json(business);
 }
 
 
