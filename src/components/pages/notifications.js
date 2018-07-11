@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import {ToolbarGroup, DropDownMenu, RaisedButton, MenuItem, Divider, Toolbar, IconMenu, IconButton} from 'material-ui';
 import { bindActionCreators } from 'redux';
-import {  } from '../../actions/usersActions';
+import axios from 'axios';
+import { addNotification } from '../../actions/usersActions';
 
 const styles = {
     underlineStyle: {
@@ -20,13 +21,56 @@ class Notifications extends Component {
         super(props);
 
         this.state = {
-            preference: "Daily",
+            preference: "",
             checkMark: false,
         };
     }
 
-    componentWillMount() {
+    componentDidMount() {
+        let self = this;
         // get current notification preferences and set state
+        axios.get("/api/user/notificationPreferences", {
+            params: {
+                userId: this.props.currentUser._id,
+                verificationToken: this.props.currentUser.verificationToken
+            }
+        })
+        .then(function (res) {
+            if (res.data && res.data.time) {
+                if (res.data.time === "never") {
+                    self.setState({preference: "Daily", checkMark: true})
+                } else {
+                    self.setState({preference: res.data.time})
+                }
+            } else {
+                self.setState({preference: "Daily"})
+            }
+        })
+        .catch(function (err) {
+            self.setState({preference: "Daily"})
+            console.log("error: ". err);
+        });
+    }
+
+    handleUpdatePreferences() {
+        let self = this;
+        let preference = this.state.preference;
+        if (this.state.checkMark) {
+            preference = "never";
+        }
+        // get current notification preferences and set state
+        axios.post("/api/user/postNotificationPreferences", {
+            userId: this.props.currentUser._id,
+            verificationToken: this.props.currentUser.verificationToken,
+            preference: preference
+        })
+        .then(function (res) {
+            self.props.addNotification("Notification preferences updated successfully.", "info");
+        })
+        .catch(function (err) {
+            console.log("error: ". err);
+            self.props.addNotification("Error updating preferences.", "error");
+        });
     }
 
     handleCheckMarkClick() {
@@ -85,7 +129,7 @@ class Notifications extends Component {
                 </div>
                 <RaisedButton
                     label="Update Preferences"
-                    type="submit"
+                    onClick={this.handleUpdatePreferences.bind(this)}
                     className="raisedButtonBusinessHome"
                     style={{margin: '20px auto'}}
                 />
@@ -105,7 +149,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        addNotification
     }, dispatch);
 }
 

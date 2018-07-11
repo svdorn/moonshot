@@ -45,6 +45,8 @@ const userApis = {
     POST_submitFreeResponse,
     GET_positions,
     GET_adminQuestions,
+    GET_notificationPreferences,
+    POST_notificationPreferences,
     POST_answerAdminQuestion,
     POST_sawEvaluationIntro,
     POST_agreeToTerms,
@@ -127,6 +129,51 @@ async function POST_answerAdminQuestion(req, res) {
     }
 
     return res.json(frontEndUser(user));
+}
+
+async function GET_notificationPreferences(req, res) {
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user while trying to get admin questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    return res.json(user.notifications);
+}
+
+async function POST_notificationPreferences(req, res) {
+    console.log("body: ",req.body);
+    console.log("query: ",req.query);
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const preference = sanitize(req.body.preference);
+
+    console.log(userId);
+    console.log(verificationToken);
+    console.log(preference);
+
+    let user;
+    try {
+        user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user while trying to get admin questions: ", getUserError);
+        return res.status(500).send(errors.PERMISSIONS_ERROR);
+    }
+
+    user.notifications.time = preference;
+
+    try {
+        user = await user.save();
+        return res.json({updatedUser: frontEndUser(user)})
+    } catch (saveError) {
+        console.log("error saving user or business after submitting frq: ", saveError);
+        return res.status(500).send("Server error.");
+    }
 }
 
 
@@ -756,7 +803,7 @@ async function sendNotificationEmails(businessId, user) {
                     console.log("timeDiff: ", timeDiff);
                     console.log("notifications.time: ", notifications.time);
                     switch(notifications.time) {
-                        case "one week":
+                        case "Weekly":
                             //time = ONE_DAY * 7;
                             time = 10;
                             console.log("in one week");
@@ -764,7 +811,7 @@ async function sendNotificationEmails(businessId, user) {
                                 continue;
                             }
                             break;
-                        case "2 days":
+                        case "Every 2 Days":
                             //time = ONE_DAY * 2;
                             console.log("in 2 days");
                             time = 5;
@@ -772,9 +819,12 @@ async function sendNotificationEmails(businessId, user) {
                                 continue;
                             }
                             break;
-                        case "now":
+                        case "Daily":
                             console.log("in now");
-                            time = 0;
+                            time = ONE_DAY;
+                            if (timeDiff < time) {
+                                continue;
+                            }
                             break;
                         case "never":
                             continue;
