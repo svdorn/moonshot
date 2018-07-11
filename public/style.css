@@ -4609,6 +4609,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .myCandidates .resultsOpenNoCandidates {
         left: 27px;
     }
+    .myCandidates .left.arrowContainer.halfScreen { right: 635px; }
+    .candidateResults.halfScreen { width: 650px;}
 }
 @media only screen and (max-width: 1175px) {
     .boxStyle {
