@@ -15,7 +15,8 @@ class BillingForm extends Component {
             business: undefined,
             numPositions: 0,
             subscriptionTerm: undefined,
-            amount: 0
+            amount: 0,
+            agreeingToTerms: false,
         };
     }
 
@@ -26,7 +27,7 @@ class BillingForm extends Component {
             params: {
                 userId: self.props.currentUser._id,
                 verificationToken: self.props.currentUser.verificationToken,
-                businessId: self.props.currentUser.businessInfo.company.companyId
+                businessId: self.props.currentUser.businessInfo.businessId
             }
         })
         .then(function (res) {
@@ -53,6 +54,10 @@ class BillingForm extends Component {
     handleSubmit = (e) => {
         // We don't want to let default form submission happen here, which would refresh the page.
         e.preventDefault();
+        if (!this.state.agreeingToTerms) {
+            this.props.addNotification("Must agree to terms and conditions to update billing info.", "error");
+            return;
+        }
         this.props.startLoading();
 
         let self = this;
@@ -75,6 +80,13 @@ class BillingForm extends Component {
         })
     }
 
+    handleCheckMarkClick() {
+        this.setState({
+            ...this.state,
+            agreeingToTerms: !this.state.agreeingToTerms
+        })
+    }
+
     render() {
         return (
             <div>
@@ -88,18 +100,30 @@ class BillingForm extends Component {
                                 ?
                                 <div className="whiteText font14px marginBottom30px">
                                     You have an {this.state.subscriptionTerm} subscription plan that includes up to {this.state.numPositions} active positions for
-                                    ${this.state.amount} per month. Please enter your payment information below and we will bill your card according to these agreed upon terms and conditions.
+                                    ${this.state.amount} per month. Please enter your payment information below and we will bill your card according to the agreed upon <a className="blueTextHome" option="_blank" href="/SLA.pdf">terms and conditions</a> of your subscription plan.
                                 </div>
                             :<div className="whiteText font14px marginBottom30px">Please enter your payment information below and we will
                             bill your card with our agreed upon terms for your active positions.</div>
                             }
                             <CardElement style={{base: {fontSize: '16px', color:'white'}}} />
                         </div>
+                        <div style={{margin: "30px 20px 10px"}}>
+                            <div className="checkbox smallCheckbox whiteCheckbox"
+                                 onClick={this.handleCheckMarkClick.bind(this)}>
+                                <img
+                                    alt=""
+                                    className={"checkMark" + this.state.agreeingToTerms}
+                                    src={"/icons/CheckMarkRoundedWhite" + this.props.png}
+                                />
+                            </div>
+
+                            I have read and accept the <a className="blueTextHome" option="_blank" href="/SLA.pdf">Terms and Conditions</a>.
+                        </div>
                         <RaisedButton
                             label="Submit"
                             type="submit"
                             className="raisedButtonBusinessHome"
-                            style={{margin: '30px 0'}}
+                            style={{margin: '15px 0'}}
                         />
                         <br/>
                         {this.props.loading ? <CircularProgress color="white"/> : null}
@@ -117,7 +141,8 @@ class BillingForm extends Component {
 function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
-        loading: state.users.loadingSomething
+        loading: state.users.loadingSomething,
+        png: state.users.png
     };
 }
 
