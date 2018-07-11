@@ -1449,7 +1449,7 @@ form > h1 {
     transition:         all 0.5s ease;
 }
 .results > .statsAndDescription > .stats { padding: 30px; }
-.results > .statsAndDescription > .description { padding: 30px 40px; }
+.results > .statsAndDescription > .description { padding: 10px 15px; }
 .results > .statsAndDescription > .description > div > div,
 .results > .statsAndDescription > .description > div > div > div {
     margin-bottom: 20px;
@@ -5953,9 +5953,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .results > .statsAndDescription > div {
         width: 90%;
         min-width: 270px;
-    }
-    .results > .statsAndDescription > .description {
-        padding: 20px;
     }
     .legend .middle80indicator {
         width: 25px;

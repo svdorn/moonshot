@@ -72,7 +72,7 @@ class PsychBreakdown extends Component {
 
         // the numbers that show above the actual data
         const numbers = [-5,-4,-3,-2,-1,0,1,2,3,4,5].map(number => {
-            return <div className="number" style={{color:"white"}} key={`number${number}`}>{Math.abs(number)}</div>
+            return <div className="number font12px" style={{color:"white"}} key={`number${number}`}>{Math.abs(number)}</div>
         })
         const topNumbers = (
             <div className="topNumbers">{numbers}</div>
@@ -136,7 +136,7 @@ class PsychBreakdown extends Component {
                     onClick={() => this.selectTitle(area.name)}
                     key={area.name}
                 >
-                    <div className="title">
+                    <div className="title font12px">
                         {area.name}
                     </div>
                     <div className="middle80indicator" style={{...middle80style, ...middle80indicatorStyle}} />
@@ -152,9 +152,9 @@ class PsychBreakdown extends Component {
         }
 
         const description = !this.state.areaSelected ?
-            <div className="center font14px font12pxUnder500" style={{color:"#d0d0d0"}}>{"Select an area to see its description"}</div>
+            <div className="center font12px" style={{color:"#d0d0d0"}}>{"Select an area to see its description"}</div>
             :
-            <div className="font16px font12pxUnder500">
+            <div className="font12px">
                 <div className="name font26px center" style={coloredText}>{this.state.areaSelected}</div>
                 <div className="descriptionParts" style={{color:"#d0d0d0"}}>
                     <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.left}</div>
@@ -174,7 +174,7 @@ class PsychBreakdown extends Component {
                 </div>
                 <div className="statsAndDescription" style={coloredText}>
                     <div className="stats lightBlackBackground">
-                        <div className="legend font16px font14pxUnder1100 font12pxUnder500 font10pxUnder400">
+                        <div className="legend font12px">
                             <div className="middle80">
                                 <div
                                     className="middle80indicator"
@@ -190,7 +190,7 @@ class PsychBreakdown extends Component {
                                     infoTextColor={"white"}
                                     bubbleColor={"#252525"}
                                     iconFontClasses={"font10px"}
-                                    bubbleFontClasses={"font14px"}
+                                    bubbleFontClasses={"font12px"}
                                     iconHeight={"12px"}
                                     bubbleText={"80% of people score within these ranges"}
                                     style={{marginLeft: "5px"}}
@@ -251,7 +251,7 @@ const descriptions = {
     },
     Belief: {
         left: `Those who score further to the left (L) love to play games. They will do what needs to be done to maintain an edge over others. They are adept at playing people, winning conversations without the other person even realizing they lost. They play chess while others play checkers; they’re the most cunning people.`,
-        right: `Those who score further to the right (R) are often seen as brutally honesty. They will say what needs to be said, even if others don’t want to hear it. They are real will with people and will always follow the rules. They dislike individuals who are fake and those who take advantage of others.`,
+        right: `Those who score further to the right (R) are often seen as brutally honest. They will say what needs to be said, even if others don’t want to hear it. They are real will with people and will always follow the rules. They dislike individuals who are fake and those who take advantage of others.`,
     }
 }
 

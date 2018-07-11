@@ -247,11 +247,10 @@ class CandidateResults extends Component {
                     : null
                 }
 
-
-                 <PsychBreakdown
+                <PsychBreakdown
                      psychScores={this.state.psychScores}
                      forCandidate={false}
-                 />
+                />
 
                 <div
                     className="whiteText center font24px font20pxUnder700 font16pxUnder500">
