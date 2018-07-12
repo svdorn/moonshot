@@ -1738,6 +1738,9 @@ form > h1 {
     background: linear-gradient(to top right, #e24794, #f76740);
     opacity: 0.7;
 }
+.lightGrayText {
+    color: var(--secondary-gray)
+}
 .blackBackground {
     background: var(--primary-black-dark);
 }
@@ -2476,7 +2479,6 @@ button.link {
     -moz-box-shadow:    0px 0px 20px 12px #00000073;
     -webkit-box-shadow: 0px 0px 20px 12px #00000073;
 }
-
 
 .freeResponse {
     width: 96%;

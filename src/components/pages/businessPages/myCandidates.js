@@ -736,7 +736,7 @@ class MyCandidates extends Component {
                                 onClick={() => this.showResults(candidate._id)}
                                 className="pointer"
                             >
-                                {candidate.name}
+                                <span className={candidate.reviewed ? "lightGrayText" : "bold"}>{candidate.name}</span>
                             </div>
                             <br/>
                             <div className="interest">
@@ -776,7 +776,7 @@ class MyCandidates extends Component {
                         </div>
                     </td>
                     <td className={"name pointer"} onClick={() => this.showResults(candidate._id)}>
-                        {candidate.name}
+                        <span className={candidate.reviewed ? "lightGrayText" : "bold"}>{candidate.name}</span>
                     </td>
                     <td className={"score"}>
                         {Math.round(score)}
