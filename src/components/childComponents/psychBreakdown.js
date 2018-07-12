@@ -167,9 +167,11 @@ class PsychBreakdown extends Component {
                 </div>
             </div>
 
+        const extraClass = this.props.className ? " " + this.props.className : "";
+
         return (
-            <div className="results psychSection blackBackground whiteText">
-                <div className="whiteText center font24px font20pxUnder700 font16pxUnder500 marginBottom30px">
+            <div className={"results psychSection blackBackground whiteText" + extraClass}>
+                <div className="title whiteText center font24px font20pxUnder700 font16pxUnder500">
                     Psychometric Analysis
                 </div>
                 <div className="statsAndDescription" style={coloredText}>
@@ -205,7 +207,7 @@ class PsychBreakdown extends Component {
                                 <div className="description">{forCandidate ? "You" : "Candidate"}</div>
                             </div>
                             <div className="median">
-                                <div className="medianIndicator" style={{position: "absolute"}} />
+                                <div className="medianIndicator" />
                                 <br/>
                                 <div className="description medianTitle">{"Median Score"}</div>
                             </div>

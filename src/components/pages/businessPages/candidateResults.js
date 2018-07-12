@@ -236,10 +236,11 @@ class CandidateResults extends Component {
 
                 {this.state.windowWidth ?
                     <div>
+                        <div className="graphTitle whiteText center font24px font20pxUnder700 font16pxUnder500">{"Predicted Performance"}</div>
                         <PredictiveGraph
-                            title={"Predicted Performance"}
                             dataPoints={this.state.predictivePoints}
                             height={graphHeight}
+                            className="graph"
                             containerName={"candidateResults"}
                             ref={ instance => { this.child1 = instance; } }
                         />
@@ -248,12 +249,13 @@ class CandidateResults extends Component {
                 }
 
                 <PsychBreakdown
-                     psychScores={this.state.psychScores}
-                     forCandidate={false}
+                    className="candidateResultsPsychBreakdown"
+                    psychScores={this.state.psychScores}
+                    forCandidate={false}
                 />
 
                 <div
-                    className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                    className="graphTitle whiteText center font24px font20pxUnder700 font16pxUnder500">
                     Skills Evaluation
                 </div>
                 {this.state.windowWidth ?
@@ -261,6 +263,7 @@ class CandidateResults extends Component {
                         <PredictiveGraph
                             dataPoints={this.state.hardSkillPoints}
                             height={graphHeight}
+                            className="graph"
                             containerName={"candidateResults"}
                             ref={ instance => { this.child2 = instance; } }
                         />
@@ -435,7 +438,7 @@ class CandidateResults extends Component {
         }
 
         const loading = this.state.loading;
-        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="grayText" /></div>
+        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="#76defe" /></div>
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
         const responsesSection = loading ? loadingArea : this.makeResponsesSection();
 
@@ -448,7 +451,7 @@ class CandidateResults extends Component {
 
         // if loading the user's results
         else if (this.state.loading) {
-            content = <CircularProgress color="#FB553A" style={{marginTop: "20px"}}/>;
+            content = <CircularProgress color="#76defe" style={{marginTop: "20px"}}/>;
         }
 
         // populate the results if the candidate exists

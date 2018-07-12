@@ -666,7 +666,7 @@ class MyCandidates extends Component {
         if (this.state.loadingPositions || this.state.loadingCandidates) {
             return (
                 <div key="candidatesTable">
-                    <CircularProgress color="#FB553A" style={style.noCandidatesMessage} />
+                    <CircularProgress color="#76defe" style={style.noCandidatesMessage} />
                 </div>
             )
         }
