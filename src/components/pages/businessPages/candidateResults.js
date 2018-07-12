@@ -208,8 +208,8 @@ class CandidateResults extends Component {
         }
 
         return (
-            <div className="analysis center aboutMeSection" style={style.tabContent}>
-                <div className="center">
+            <div className="analysis center aboutMeSection blackBackground" style={style.tabContent}>
+                <div className="center" style={{backgroundColor:"#393939"}}>
                     <div className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore inlineBlock">
                         Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                     </div>
@@ -362,7 +362,7 @@ class CandidateResults extends Component {
         let hiringStage = this.state.candidate.hiringStage;
         const isDismissed = this.state.candidate.isDismissed;
 
-        const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"];
+        const stageNames = ["Not Contacted", "Contacted", "Interviewing", "Offered", "Hired", "Dismissed"];
         // if no stage is recorded, assume the candidate has not been contacted
         if (!hiringStage) { hiringStage = "Not Contacted"; }
 
