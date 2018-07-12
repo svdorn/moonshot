@@ -787,33 +787,21 @@ form > h1 {
     cursor: pointer;
     display: inline-block;
 }
-.button.medium {
-    padding: 3px 10px;
-}
-.button.xs-round {
-    border-radius: 2px;
-}
-.button.s-round {
-    border-radius: 4px;
-}
-.button.m-round {
-    border-radius: 8px;
-}
-.button.l-round {
-    border-radius: 12px;
-}
-.button.xl-round {
-    border-radius: 16px;
-}
-.button.xxl-round {
-    border-radius: 20px;
-}
-.button.xxxl-round {
-    border-radius: 26px;
-}
-.button.disabled {
-    cursor: not-allowed;
-}
+.button.medium { padding: 3px 10px; }
+
+.button.round-2px { border-radius: 2px; }
+.button.round-4px { border-radius: 4px; }
+.button.round-6px { border-radius: 6px; }
+.button.round-8px { border-radius: 8px; }
+.button.round-10px { border-radius: 10px; }
+.button.round-12px { border-radius: 12px; }
+.button.round-14px { border-radius: 14px; }
+.button.round-16px { border-radius: 16px; }
+.button.round-18px { border-radius: 18px; }
+.button.round-20px { border-radius: 20px; }
+
+.button.disabled { cursor: not-allowed; }
+
 .button.gradient {
     background: linear-gradient(to right, var(--gradient-color-1), var(--gradient-color-2), var(--gradient-color-1));
     background-position-x: 100%;
@@ -832,6 +820,9 @@ form > h1 {
     background: linear-gradient(to right, #111111, #afafaf, #111111);
     background-position-x: 100%;
     background-size: 150%;
+}
+.button.disabled.gradient:hover {
+    background-position-x: 100%;
 }
 
 .gradient-1-orange { --gradient-color-1: var(--primary-orange); }
@@ -896,7 +887,7 @@ form > h1 {
     transition: all 0.5s ease;
 }
 
-.frontPage .infoContainer .content .buttonArea .mediumButton.getStarted {
+.frontPage .infoContainer .content .buttonArea .button.getStarted {
     margin-left: 10%;
 }
 
@@ -2213,7 +2204,6 @@ button.link {
     cursor: pointer;
 }
 .bigButton > div { padding: 4px 15px 5px; }
-.mediumButton > div { padding: 2px 8px 3px; }
 .paperBox {
     height: 300px;
     width: 400px;
@@ -6503,7 +6493,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-bottom: 12px;
         width: 70%;
     }
-    .frontPage .infoContainer .content .buttonArea .mediumButton.getStarted {
+    .frontPage .infoContainer .content .buttonArea .button.getStarted {
         margin-left: 0;
         width: 98px;
     }

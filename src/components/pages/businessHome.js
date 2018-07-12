@@ -572,7 +572,7 @@ class BusinessHome extends Component {
                                 <div className="buttonArea font18px font14pxUnder900">
                                     <input className="blackInput getStarted" type="text" placeholder="Email Address" name="email"
                                     value={this.state.email} onChange={this.onChange.bind(this)}/>
-                                    <div className="mediumButton getStarted blueToPurple" onClick={this.handleOpen}>
+                                    <div className="getStarted button medium round-10px gradient gradient-1-purple-light gradient-2-cyan" onClick={this.handleOpen}>
                                         Try for Free
                                     </div>
                                 </div>

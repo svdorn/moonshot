@@ -498,7 +498,7 @@ class CandidateResults extends Component {
                                         <div style={{marginTop: "8px"}}>
                                             { dismissDiv }
                                             <div
-                                                className="button medium s-round gradient gradient-1-cyan gradient-2-purple-light noselect"
+                                                className="button medium round-4px gradient gradient-1-cyan gradient-2-purple-light noselect"
                                                 onClick={this.contact}
                                             >
                                                 {"Contact"}
