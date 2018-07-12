@@ -311,7 +311,6 @@ class PredictiveGraph extends Component {
         }
 
         let extraClass = this.props.className ? " " + this.props.className : "";
-        console.log("class: ", extraClass);
 
         return (
             <div className={"font14px font12pxUnder400 transitionAll predictiveGraphContainer" + extraClass}>

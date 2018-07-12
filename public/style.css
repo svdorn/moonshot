@@ -3734,6 +3734,10 @@ button.link {
     padding-top: 20px;
 }
 
+.resultsHiringStage {
+    padding-left: 32px;
+}
+
 .addUserTabs > div:first-of-type {
     background-color: transparent !important;
     display: inline-block !important;
@@ -4795,13 +4799,13 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .myCandidates .candidatesAndOptions {
-        width: 750px;
+        width: calc(100% - 40px);
     }
     .candidateResults.halfScreen {
-        width: 494px;
+        width: 68%;
     }
     .myCandidates .left.arrowContainer.halfScreen {
-        right: 478px;
+        right: calc(68% - 16px);
     }
     .candidateResults .interestArea {
         left: 4%;
@@ -5057,16 +5061,21 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: none;
     }
 
-
-    .myCandidates .candidatesAndOptions {
-        width: 650px;
-    }
     .myPathwaysTabs > div:nth-of-type(2) {
         margin-left: 20%;
     }
 
     .evalPortionIntro > div:not(:first-child) {
         width: 400px;
+    }
+
+    .myCandidates .candidateTable td {
+        padding: 5px 0px;
+    }
+
+    .myCandidates .left.arrowContainer.halfScreen,
+    .myCandidates .left.arrowContainer.fullScreen {
+        right: calc(100% - 16px);
     }
 
     #pathwaySalaryInfo { margin-left: 16%; margin-right: 10%; }
@@ -5452,9 +5461,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-bottom: 20px;
     }
 
-    .myCandidates .candidatesAndOptions {
-        width: 450px;
-    }
     .mobile.candidateResults {
         font-size: 14px;
     }
@@ -5953,9 +5959,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .mobile.candidateResults .resultsHeader {
         height: 168px;
     }
-    .myCandidates .candidatesAndOptions {
-        width: 400px;
-    }
     .myCandidates tr.mobileCandidate > td > .predicted,
     .myCandidates tr.mobileCandidate > td > .score,
     .myCandidates tr.mobileCandidate > td > .skill {
@@ -6256,6 +6259,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         word-wrap:break-word;
     }
 
+    .resultsHiringStage {
+        padding-left: 0;
+    }
+
     .twoOptionsOr { margin: 55px 10px 0; }
 
     .font40pxUnder500 { font-size: 40px; }
@@ -6337,15 +6344,15 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         max-width: 300px;
     }
 
-
+    .myCandidates.mobile .candidateTable {
+        margin: 0 5px 15px 5px;
+        width: calc(100% - 10px);
+    }
     .myCandidatesTabs {
         width: 280px;
         font-size: 12px;
     }
 
-    .myCandidates .candidatesAndOptions {
-        width: 100%;
-    }
     .myCandidates .mobileCandidate,
     .myCandidates .selectRootWhite {
         font-size: 12px;
@@ -6353,7 +6360,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .myCandidates tr.mobileCandidate > td > .predicted,
     .myCandidates tr.mobileCandidate > td > .score,
     .myCandidates tr.mobileCandidate > td > .skill {
-        width: 88px;
+        width: 84px;
     }
 
 

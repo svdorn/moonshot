@@ -382,7 +382,7 @@ class CandidateResults extends Component {
 
         return (
             <Select
-                style={{paddingLeft: "32px"}}
+                className="resultsHiringStage"
                 disableUnderline={true}
                 classes={{
                     root: "selectRootWhite",
