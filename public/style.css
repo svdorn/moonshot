@@ -1212,59 +1212,10 @@ form > h1 {
     display: none !important;
 }
 
-.outlineButton {
-    padding: 2px 18px 5px;
-    margin-top: 25px;
-    cursor: pointer;
-    line-height: initial;
-}
-
-.bigOutlineButton {
-    padding: 12px 18px 16px;
-    margin-top: 25px;
-    cursor: pointer;
-    line-height: initial;
-}
-
 .width400px {
     width: 400px;
 }
 
-.greenButton {
-    background-color: white;
-    border: 2px solid var(--moonshotGreenText);
-    color: var(--moonshotGreenText);
-    padding-top: 5px;
-    margin-bottom: 10px;
-}
-
-
-.blueWhiteButton {
-    background: rgba(255,255,255,.2);
-    border: 2px solid white;
-    color: white;
-}
-.blueWhiteButton:hover { background: linear-gradient(to top right, #3dffef, #3de1ff); }
-.darkBlueButton {
-    background-color: rgba(102,160,255,.3);
-    border: 2px solid white;
-}
-.darkBlueButton:hover { background: linear-gradient(to top right, var(--moonshotBlue), var(--moonshotPurple)); }
-.purpleGradientButton {
-    background: #9B6BFB;
-    border: 2px solid white;
-}
-.purpleGradientButton:hover { background: linear-gradient(to bottom right, #CE9EFC, #a048fb); }
-.purpleToRedGradientButton {
-    background: rgba(255,255,255, 0.15);
-    border: 2px solid white;
-}
-.purpleToRedGradientButton:hover { background: linear-gradient(to bottom right, #d85e7e, #b130d3); }
-.redToLightRedGradientButton {
-    background: rgba(255,255,255, 0.15);
-    border: 2px solid white;
-}
-.redToLightRedGradientButton:hover { background: linear-gradient(to bottom right, #f76740, #e24794); }
 
 .stepNumber {
     background: -webkit-linear-gradient(right,#da5f7b, #b130d3);
@@ -6019,8 +5970,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         overflow-y: hidden;
         padding-right: 20px;
     }
-
-    .outlineButton { margin-top: 15px; }
 
     #exampleSkillsContainer {
         width: 95%;
