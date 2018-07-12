@@ -778,11 +778,8 @@ form > h1 {
     color: rgba(255,255,255,.8);
 }
 .blackInput:focus { outline-width: 0 }
-.mediumButton {
-    border-radius: 10px;
-    padding: 3px 10px;
-    cursor: pointer;
-}
+
+
 .button {
     cursor: pointer;
     display: inline-block;
@@ -848,26 +845,6 @@ form > h1 {
 .gradient-1-red { --gradient-color-1: var(--primary-red); }
 .gradient-2-red { --gradient-color-2: var(--primary-red); }
 
-.disabled.mediumButton {
-    background: linear-gradient(to right, #111111, #afafaf, #111111);
-    background-position-x: 100%;
-    background-size: 150%;
-    cursor: not-allowed;
-}
-.mediumButton.getStarted.blueToPurple {
-    background: linear-gradient(to right, #b172fe, #7ad6fe, #b172fe);
-    background-position-x: 100%;
-    background-size: 150%;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.mediumButton.getStarted.blueToPurple:hover {
-    background-position-x: 0px;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
 .purpleToBlueAnimate {
     background: linear-gradient(to right, #7ad6fe, #ab86fe, #7ad6fe);
     background-position-x: -64px;
@@ -876,8 +853,6 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-.smallMediumButton:focus {outline: none}
-.purpleToBlueAnimate.smallMediumButton { background-position-x: -40px; }
 .mediumLargeButton:focus { outline: none; }
 .purpleToBlueAnimate.mediumLargeButton { background-position-x: -112px; }
 .purpleToBlueAnimate:hover {
@@ -5908,8 +5883,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .purpleToBlueAnimate.mediumLargeButton { background-position-x: -80px; }
     .purpleToBlueAnimate.mediumLargeButton:hover { background-position-x: 0px; }
-    .purpleToBlueAnimate.smallMediumButton { background-position-x: -20px; }
-    .purpleToBlueAnimate.smallMediumButton :hover{ background-position-x: 0px; }
 
 
 

@@ -296,23 +296,6 @@ class MyEvaluations extends Component {
             );
         }
 
-        // The section for the account admin to take the psych test if they haven't already
-        let accountAdminTakePsychTest = null;
-        if (currentUser && currentUser.userType == "accountAdmin" && !currentUser.psychometricTest.endDate && (this.state.positions.length !== 0 || this.state.noPositions)) {
-            accountAdminTakePsychTest = (
-                <div className="marginBottom30px center">
-                    <div className="whiteText font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 inlineBlock">
-                        All admins must take a 10 minute psychometric quiz. Take it here!
-                    </div>
-                    <div className="inlineBlock marginLeft10px">
-                            <button className="veryRoundedButton smallMediumButton font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 purpleToBlueAnimate whiteText" onClick={this.startPsychEval.bind(this)} style={{padding: "4px 15px"}}>
-                                Quiz
-                            </button>
-                    </div>
-                </div>
-            );
-        }
-
         // Dialog for adding evaluation
         const screen = this.state.screen;
         let dialogBody = <div></div>;
@@ -380,7 +363,6 @@ class MyEvaluations extends Component {
                         My Evaluations
                     </div>
                 </div>
-                {accountAdminTakePsychTest}
                 <div className="marginBottom60px">
                     {evaluations}
                 </div>
