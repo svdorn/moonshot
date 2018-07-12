@@ -7,6 +7,9 @@ import Account from './account';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
 import AddUserDialog from '../childComponents/addUserDialog';
+import { addNotification } from "../../actions/usersActions"
+import axios from "axios";
+import { bindActionCreators } from "redux";
 
 class Settings extends Component {
     constructor(props) {
@@ -20,6 +23,20 @@ class Settings extends Component {
     handleTabChange = (tab) => {
         this.setState({tab})
     }
+
+
+    resetAlan = () => {
+        axios.post("/api/misc/resetAlan", {userId: this.props.currentUser._id, verificationToken: this.props.currentUser.verificationToken})
+        .then(response => {
+            this.props.addNotification("Reset!", "info");
+        })
+        .catch(error => {
+            console.log(error);
+            this.props.addNotification("Didn't reset", "error");
+        });
+    }
+
+
     //name, email, password, confirm password, signup button
     render() {
         const style = {
@@ -54,6 +71,15 @@ class Settings extends Component {
                     </Tabs>
                     </div>
                 </div>
+                {this.props.currentUser.email === "alan.alanson@email.com" ?
+                    <div
+                        onClick={this.resetAlan}
+                        className="pointer whiteText"
+                    >
+                        RESET
+                    </div>
+                    : null
+                }
             </div>
         );
     }
@@ -65,4 +91,10 @@ function mapStateToProps(state) {
     };
 }
 
-export default connect(mapStateToProps)(Settings);
+function mapDispatchToProps(dispatch) {
+    return bindActionCreators({
+        addNotification
+    }, dispatch);
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Settings);

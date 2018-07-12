@@ -285,8 +285,6 @@ class PsychAnalysis extends Component {
         const currentUser = this.props.currentUser;
         let content = this.createContent(currentUser);
 
-        console.log("in psychAnalysis");
-
         const progressBar = currentUser && currentUser.currentPosition ?
             <ProgressBar /> : null;
 

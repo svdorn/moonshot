@@ -7,7 +7,6 @@ class StyledContent extends Component {
 
         let keyCounter = -1;
         let contentHtml = [];
-        console.log("here");
         contentArray.forEach(function(part) {
             if (part && typeof part === "object") {
                 // default classNames; if className provided, give the part that className instead
