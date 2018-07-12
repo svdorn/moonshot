@@ -1482,21 +1482,6 @@ form > h1 {
 .youMedianMiddle > div { margin: 0 10px; }
 
 
-
-
-
-
-.whiteBlueButton, .semiOpaqueWhiteBlueButton {
-    padding-top: 5px;
-    border: 2px solid var(--moonshotLightBlue);
-    color: var(--moonshotLightBlue);
-}
-.semiOpaqueWhiteBlueButton { background-color: rgba(255,255,255,.4); }
-.whiteBlueButton { background-color: white; }
-.whiteButton {
-    background-color: white;
-    color: var(--moonshotGreenText);
-}
 .menuItem {
     margin: 40px 10px 10px 10px;
 }
@@ -1732,12 +1717,6 @@ form > h1 {
 .reserveYourSpotOnHover > div {
     margin-top: 70px;
 }
-.blueButton {
-    background-color: var(--moonshotLightBlue);
-    padding: 2px 15px 5px;
-    width: fit-content;
-    margin: auto;
-}
 /* show "Reserve your spot now" on hover on coming soon pathway preview */
 .pathwayPreview:hover > div:first-child.comingSoonPathwayPreview > div:nth-child(2) {
     display: initial;
@@ -1823,10 +1802,8 @@ form > h1 {
 
 button.link {
   background: none;
-  border: none;
   margin: 0;
   padding: 3px;
-  outline: none;
   outline-offset: 0;
   color: white;
 }
@@ -1890,7 +1867,6 @@ button.link {
 
 .noWrap { white-space: nowrap; }
 .center { text-align: center; }
-.centerButton { display:flex; justify-content: center; }
 .centerOfPage {
     position: fixed;
     top: 50%;
@@ -1991,12 +1967,6 @@ button.link {
     display: inline-block;
 }
 
-.bigButton {
-    font-size: 25px;
-    line-height: 120%;
-    cursor: pointer;
-}
-.bigButton > div { padding: 4px 15px 5px; }
 .paperBox {
     height: 300px;
     width: 400px;
@@ -3546,7 +3516,7 @@ button.link {
     border: 0px !important;
 }
 
-.myPathwaysTabs > div:first-of-type, .overviewExercisesComments > div:first-of-type {
+.myPathwaysTabs > div:first-of-type {
     background-color: transparent !important;
     display: inline-block !important;
 }
@@ -3562,9 +3532,6 @@ button.link {
 }
 .aboutMeSection {
     min-height: 550px;
-}
-.overviewExercisesComments > div:nth-of-type(2) {
-    margin-left: 20% !important;
 }
 
 
