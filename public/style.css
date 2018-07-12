@@ -1452,7 +1452,7 @@ form > h1 {
 .results > .statsAndDescription > .description { padding: 10px 15px; }
 .results > .statsAndDescription > .description > div > div,
 .results > .statsAndDescription > .description > div > div > div {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 }
 .results > .statsAndDescription > .stats > .legend {
     display: inline-block;
@@ -1464,7 +1464,6 @@ form > h1 {
 .results > .statsAndDescription > .stats > .legend > div > div:nth-child(2) {
     vertical-align: top;
 }
-.results > .statsAndDescription > .stats > .legend .medianTitle { padding-left: 9px; }
 .results > .statsAndDescription > .stats > .legend > div > div {
     display: inline-block;
 }
@@ -1495,6 +1494,7 @@ form > h1 {
     display: none;
     margin-top: 10px;
     margin-left: 5px;
+    z-index: 100;
 }
 .infoBubble > div:nth-child(2) > div {
     position: absolute;
@@ -1522,13 +1522,9 @@ form > h1 {
 
 .legend .middle80indicator {
     width: 50px;
-    margin: 0 8px 2px 0;
     -webkit-transition: all 0.5s ease;
     -ms-transition:     all 0.5s ease;
     transition:         all 0.5s ease;
-}
-.legend .youIndicator {
-    margin: 0 8px 2px 0;
 }
 .legend .medianIndicator {
     height: 24px;
@@ -4932,17 +4928,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 @media only screen and (max-width: 900px) {
     .above900only { display: none; }
 
-    .results > .statsAndDescription > div {
-        width: 650px;
-    }
-    .results > .statsAndDescription {
-        display: inline-block;
-        text-align: center;
-    }
-    .results > .statsAndDescription > div {
-        margin-bottom: 20px;
-    }
-
     .paperBox {
         height: 225px;
         width: 300px;
@@ -5421,6 +5406,17 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 18px;
     }
     .messageHeader { margin-top: -70px; }
+
+    .results > .statsAndDescription > div {
+        width: 650px;
+    }
+    .results > .statsAndDescription {
+        display: inline-block;
+        text-align: center;
+    }
+    .results > .statsAndDescription > div {
+        margin-bottom: 20px;
+    }
 
     .myCandidates .candidatesAndOptions {
         width: 450px;
@@ -5958,9 +5954,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 25px;
         margin: 0 8px 1px 0;
     }
-    .legend .youIndicator {
-        margin: 0 8px 1px 0;
-    }
     .legend .medianIndicator {
         height: 17px;
     }
@@ -6364,7 +6357,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .results > .statsAndDescription > .stats { padding: 20px; }
-    .legend .youIndicator { margin: 0 4px 0 0 }
 
     .twoOptionsOr { margin: 40px 8px 0; }
 
@@ -6563,8 +6555,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     textarea.multipleChoiceCustomAnswer {
         width: 180px;
     }
-
-    .results > .statsAndDescription > .stats > .legend .medianTitle { padding-left: 4px; }
 
     .font40pxUnder350 { font-size: 40px; }
     .font38pxUnder350 { font-size: 38px; }

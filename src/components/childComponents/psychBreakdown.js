@@ -155,10 +155,10 @@ class PsychBreakdown extends Component {
             <div className="center font12px" style={{color:"#d0d0d0"}}>{"Select an area to see its description"}</div>
             :
             <div className="font12px">
-                <div className="name font26px center" style={coloredText}>{this.state.areaSelected}</div>
+                <div className="name font20px center" style={coloredText}>{this.state.areaSelected}</div>
                 <div className="descriptionParts" style={{color:"#d0d0d0"}}>
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.left}</div>
-                    <div>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{areaSelectedDescription.right}</div>
+                    <div>{areaSelectedDescription.left}</div>
+                    <div>{areaSelectedDescription.right}</div>
                 </div>
                 <div className="youMedianMiddle" style={{color:"white", marginBottom: "0px"}}>
                     <div>{forCandidate ? "Your" : "Their"} Score: {this.makeLRversion(selectedArea.score)}</div>
@@ -183,6 +183,7 @@ class PsychBreakdown extends Component {
                                         ...middle80indicatorStyle
                                     }}
                                 />
+                                <br/>
                                 <div className="description">{"Middle 80%"}</div>
                                 <InfoBubble
                                     iconColor={standardColor}
@@ -200,10 +201,12 @@ class PsychBreakdown extends Component {
                                 <div className="youIndicator" style={{
                                     width: "8px", height: "8px"
                                 }} />
+                                <br/>
                                 <div className="description">{forCandidate ? "You" : "Candidate"}</div>
                             </div>
                             <div className="median">
                                 <div className="medianIndicator" style={{position: "absolute"}} />
+                                <br/>
                                 <div className="description medianTitle">{"Median Score"}</div>
                             </div>
                         </div>
