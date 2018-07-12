@@ -44,29 +44,15 @@ class PsychSlider extends Component {
     componentDidMount() {
         window.addEventListener("mouseup", this.onMouseUp.bind(this));
         window.addEventListener("mousemove", this.onMouseMove.bind(this));
+        window.addEventListener("touchend", this.onMouseUp.bind(this));
+        window.addEventListener("touchmove", this.onTouchMove.bind(this));
     }
     componentWillUnmount() {
         window.removeEventListener("mouseup", this.onMouseUp.bind(this));
         window.removeEventListener("mousemove", this.onMouseMove.bind(this));
+        window.removeEventListener("touchend", this.onMouseUp.bind(this));
+        window.removeEventListener("touchmove", this.onTouchMove.bind(this));
     }
-
-    // the return value of this is set as state
-    // static getDerivedStateFromProps(newProps, prevState) {
-    //     if (newProps.questionId.toString() !== prevState.questionId) {
-    //         // new question, update current answer to be 0
-    //         newProps.updateAnswer(0);
-    //
-    //         return {
-    //             // record the question id so we know next time if we need to reset
-    //             questionId: newProps.questionId.toString(),
-    //             // reset the slider
-    //             fromLeft: prevState.width/2,
-    //         }
-    //     }
-    //
-    //     // don't need to update state
-    //     else { return null; }
-    // }
 
 
     componentDidUpdate(prevProps, prevState) {
@@ -136,6 +122,13 @@ class PsychSlider extends Component {
     }
 
 
+    // when finger pressed down
+    onTouchStart(event) {
+        // convert touch to normal mouse down, act like it's a normal mouse down
+        this.onMouseDown(event.touches[0]);
+    }
+
+
     onMouseDown(event) {
         let self = this;
         document.body.className += " " + "grabbing";
@@ -156,7 +149,10 @@ class PsychSlider extends Component {
         // if the target is legit, set the correct left offset
         if (counter < 10 && target) { offsetLeft = target.getBoundingClientRect().left; };
 
-        event.persist();
+        // only persist if it was a click, not a touch
+        if (typeof event.persist === "function") {
+            event.persist();
+        }
         this.setState({...this.state, sliderOffsetLeft: offsetLeft}, setMouseDown);
 
         function setMouseDown() {
@@ -176,6 +172,13 @@ class PsychSlider extends Component {
     }
 
 
+
+    onTouchMove(event) {
+        // convert touch to normal mouse move, act like it's a normal mouse move
+        this.onMouseMove(event.touches[0]);
+    }
+
+
     onMouseMove(event) {
         // only move the circle if the mouse button is pressed down and we know the slider offset
         if (this.state.mouseDown && typeof this.state.sliderOffsetLeft !== "undefined") {
@@ -183,6 +186,8 @@ class PsychSlider extends Component {
         }
     }
 
+
+    // set how far left the circle slider should be
     setFromLeft(event, setMouseDown) {
         // how far left on the screen they clicked
         const xClick = event.clientX;
@@ -331,6 +336,7 @@ class PsychSlider extends Component {
             <div className={"psychSlider " + sliderClass}
                 style={sliderStyle}
                 onMouseDown={this.onMouseDown.bind(this)}
+                onTouchStart={this.onTouchStart.bind(this)}
             >
                 <div style={gradientRectRightStyle} />
                 <div style={gradientRectLeftStyle} />
