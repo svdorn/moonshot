@@ -2789,59 +2789,6 @@ button.link {
     filter: alpha(opacity=100); /* For IE8 and earlier */
 }
 
-.scrollDownButton > div {
-    position: relative;
-    float: left;
-    overflow: hidden;
-    width: 26px;
-    height: 28px;
-}
-.scrollDownButton > div > div {
-    width: 30px;
-    height: 3px;
-    background-color: rgba(255,255,255,.8);
-    position: absolute;
-    top: 7px;
-}
-.scrollDownButton > div:nth-child(1) > div {
-    transform: rotate(30deg);
-    border-bottom-left-radius: 2px;
-    border-top-left-radius: 2px;
-}
-.scrollDownButton > div:nth-child(2) > div {
-    margin-left: -4px;
-    transform: rotate(-30deg);
-    border-bottom-right-radius: 2px;
-    border-top-right-radius: 2px;
-}
-.scrollDownButton > div > div:nth-child(2) {
-    margin-top: 10px;
-}
-.scrollDownButton {
-    display: inline-block;
-    height: 28px;
-    width: 52px;
-    left: 0;
-    right: 0;
-    margin: auto;
-    cursor: pointer;
-    animation: MoveUpDown 1.2s linear infinite;
-}
-@keyframes MoveUpDown {
-    0% {
-        margin-top: 24px;
-        margin-bottom: 6px;
-    }
-    50% {
-        margin-top: 30px;
-        margin-bottom: 0px;
-    }
-    100% {
-        margin-top: 24px;
-        margin-bottom: 6px;
-    }
-}
-
 .pathwayImgContainer {
     display: inline-block;
     height: 168px;
@@ -5842,8 +5789,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: -14px;
     }
 
-    .scrollDownButton { transform: scale(.6); }
-
     .homepageTrajectory { margin-bottom: -20px; }
     /* .homepageTrajectoryTextLeft, .homepageTrajectoryTextRight {
         transform: scale(.7);
@@ -5902,9 +5847,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         transform: none;
     }
 
-    .scrollDownButton.lowerOnSmallScreen {
-        bottom: 15px;
-    }
     /* .forBusinessTrajectoryTextLeft > div,
     .forBusinessTrajectoryTextRight > div {
         text-align: center;
