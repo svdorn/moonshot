@@ -783,9 +783,80 @@ form > h1 {
     padding: 3px 10px;
     cursor: pointer;
 }
-.frontPage .infoContainer .content .buttonArea .mediumButton.getStarted {
-    margin-left: 10%;
+.button {
+    cursor: pointer;
+    display: inline-block;
 }
+.button.medium {
+    padding: 3px 10px;
+}
+.button.xs-round {
+    border-radius: 2px;
+}
+.button.s-round {
+    border-radius: 4px;
+}
+.button.m-round {
+    border-radius: 8px;
+}
+.button.l-round {
+    border-radius: 12px;
+}
+.button.xl-round {
+    border-radius: 16px;
+}
+.button.xxl-round {
+    border-radius: 20px;
+}
+.button.xxxl-round {
+    border-radius: 26px;
+}
+.button.disabled {
+    cursor: not-allowed;
+}
+.button.gradient {
+    background: linear-gradient(to right, var(--gradient-color-1), var(--gradient-color-2), var(--gradient-color-1));
+    background-position-x: 100%;
+    background-size: 150%;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.button.gradient:hover {
+    background-position-x: 0px;
+    -webkit-transition: all 0.5s ease;
+    -ms-transition: all 0.5s ease;
+    transition: all 0.5s ease;
+}
+.button.disabled.gradient {
+    background: linear-gradient(to right, #111111, #afafaf, #111111);
+    background-position-x: 100%;
+    background-size: 150%;
+}
+
+.gradient-1-orange { --gradient-color-1: var(--primary-orange); }
+.gradient-2-orange { --gradient-color-2: var(--primary-orange); }
+.gradient-1-pink { --gradient-color-1: var(--primary-pink); }
+.gradient-2-pink { --gradient-color-2: var(--primary-pink); }
+.gradient-1-cyan { --gradient-color-1: var(--primary-cyan); }
+.gradient-2-cyan { --gradient-color-2: var(--primary-cyan); }
+.gradient-1-peach { --gradient-color-1: var(--primary-peach); }
+.gradient-2-peach { --gradient-color-2: var(--primary-peach); }
+.gradient-1-white { --gradient-color-1: var(--primary-white); }
+.gradient-2-white { --gradient-color-2: var(--primary-white); }
+.gradient-1-purple-light { --gradient-color-1: var(--primary-purple-light); }
+.gradient-2-purple-light { --gradient-color-2: var(--primary-purple-light); }
+.gradient-1-purple-dark { --gradient-color-1: var(--primary-purple-dark); }
+.gradient-2-purple-dark { --gradient-color-2: var(--primary-purple-dark); }
+.gradient-1-black-light { --gradient-color-1: var(--primary-black-light); }
+.gradient-2-black-light { --gradient-color-2: var(--primary-black-light); }
+.gradient-1-black-dark { --gradient-color-1: var(--primary-black-dark); }
+.gradient-2-black-dark { --gradient-color-2: var(--primary-black-dark); }
+.gradient-1-gray { --gradient-color-1: var(--primary-gray); }
+.gradient-2-gray { --gradient-color-2: var(--primary-gray); }
+.gradient-1-red { --gradient-color-1: var(--primary-red); }
+.gradient-2-red { --gradient-color-2: var(--primary-red); }
+
 .disabled.mediumButton {
     background: linear-gradient(to right, #111111, #afafaf, #111111);
     background-position-x: 100%;
@@ -823,6 +894,10 @@ form > h1 {
     -webkit-transition: all 0.5s ease;
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
+}
+
+.frontPage .infoContainer .content .buttonArea .mediumButton.getStarted {
+    margin-left: 10%;
 }
 
 #myCandidatesScreenshot {
@@ -1160,10 +1235,6 @@ form > h1 {
 
 .dropDownSettings {
     display: none !important;
-}
-
-.button {
-  margin-top: 12px;
 }
 
 .outlineButton {
@@ -4434,7 +4505,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     right: 8%;
 }
 .candidateResults .dismiss {
-    margin-right: 30px;
+    margin-right: 40px;
     color: white;
     text-decoration: underline;
 }
