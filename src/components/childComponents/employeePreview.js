@@ -295,7 +295,7 @@ class EmployeePreview extends Component {
                                 onClick={this.handlePreviousQuestion.bind(this)}>
                                 Previous
                             </i>
-                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline marginLeft30px"
+                            <button className="button round-4px gradient gradient-1-red gradient-2-orange marginTop10px whiteText font14px marginLeft30px"
                                 onClick={this.handleSubmit.bind(this)}>
                                 Submit
                             </button>
@@ -306,7 +306,7 @@ class EmployeePreview extends Component {
                                 onClick={this.handlePreviousQuestion.bind(this)}>
                                 Previous
                             </i>
-                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline marginLeft30px"
+                            <button className="button round-4px gradient gradient-1-red gradient-2-orange marginTop10px whiteText font14px marginLeft30px"
                                 onClick={this.handleNextQuestion.bind(this)}>
                                 Next
                             </button>
@@ -330,7 +330,7 @@ class EmployeePreview extends Component {
                 </i>
                 <br/>
                 <div className="gradingMovementButtons">
-                    <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline"
+                    <button className="button round-4px gradient gradient-1-red gradient-2-orange marginTop10px whiteText font14px"
                             onClick={this.handleOpen.bind(this)}>
                         Grade
                     </button>

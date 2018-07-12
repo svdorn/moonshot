@@ -29,7 +29,7 @@ body {
     --primary-black-light: #393939;
     --primary-black-dark: #2e2e2e;
     --secondary-gray: #d7d7d7;
-    --secondary-red: #eb39f4;
+    --secondary-red: #eb394f;
 }
 
 .anchor {
@@ -803,8 +803,8 @@ form > h1 {
 
 .button.gradient {
     background: linear-gradient(to right, var(--gradient-color-1), var(--gradient-color-2), var(--gradient-color-1));
-    background-position-x: 100%;
-    background-size: 150%;
+    background-position-x: 108%;
+    background-size: 188%;
     -webkit-transition: all 0.5s ease;
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
@@ -842,10 +842,10 @@ form > h1 {
 .gradient-2-black-light { --gradient-color-2: var(--primary-black-light); }
 .gradient-1-black-dark { --gradient-color-1: var(--primary-black-dark); }
 .gradient-2-black-dark { --gradient-color-2: var(--primary-black-dark); }
-.gradient-1-gray { --gradient-color-1: var(--primary-gray); }
-.gradient-2-gray { --gradient-color-2: var(--primary-gray); }
-.gradient-1-red { --gradient-color-1: var(--primary-red); }
-.gradient-2-red { --gradient-color-2: var(--primary-red); }
+.gradient-1-gray { --gradient-color-1: var(--secondary-gray); }
+.gradient-2-gray { --gradient-color-2: var(--secondary-gray); }
+.gradient-1-red { --gradient-color-1: var(--secondary-red); }
+.gradient-2-red { --gradient-color-2: var(--secondary-red); }
 
 .purpleToBlueAnimate {
     background: linear-gradient(to right, #7ad6fe, #ab86fe, #7ad6fe);
@@ -1285,44 +1285,6 @@ form > h1 {
 .blueToDarkPurpleButtonGradientReverse {
     background: linear-gradient(to top left, #72d6f5, #b17dfe);
     color: #72d6f5;
-}
-.orangeToRedButtonGradient {
-    background: linear-gradient(to right, #fe256e, #ff5438, #fe256e);
-    background-position-x: -80px;
-    background-size: 150%;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.orangeToRedButtonGradient:hover {
-    background-position-x: 0px;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.orangeToRedButtonGradientSmall {
-    background: linear-gradient(to right, #fe256e, #ff5438, #fe256e);
-    background-position-x: 0;
-}
-.orangeToRedSmallButtonGradientRight {
-    background: linear-gradient(to right, #fe256e, #ff5438, #fe256e);
-    background-position-x: -50px;
-}
-.orangeToRedSmallButtonGradientLeft {
-    background: linear-gradient(to right, #ff5438, #fe256e, #ff5438);
-    background-position-x: -50px;
-}
-.transitionButton {
-    background-size: 150%;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.transitionButton:hover {
-    background-position-x: 0px;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
 }
 
 
@@ -4457,7 +4419,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 
 .pricingButton {
-    border: none;
     position: absolute;
     bottom: 40px;
     left: 50%;

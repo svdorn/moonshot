@@ -351,7 +351,7 @@ class AdminQuestions extends Component {
             content = (
                 <div>
                     Finished with the admin questions!<br/>
-                    <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
+                    <button className="button gradient gradient-1-red gradient-2-orange round-4px marginTop10px whiteText font22px font16pxUnder600"
                             onClick={this.finish.bind(this)}>
                         Advance
                     </button>

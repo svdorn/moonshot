@@ -132,7 +132,7 @@ class FreeResponse extends Component {
             content = (
                 <div className="center">
                     You have to complete the administrative questions first!<br/>
-                    <button onClick={() => this.goTo("/adminQuestions")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                    <button onClick={() => this.goTo("/adminQuestions")} className="button gradient gradient-1-red gradient-2-orange round-4px marginTop10px whiteText font22px font16pxUnder600">
                         Take me there!
                     </button>
                 </div>
@@ -143,7 +143,7 @@ class FreeResponse extends Component {
             content = (
                 <div className="center">
                     You have to complete the psychometric analysis first!<br/>
-                    <button onClick={() => this.goTo("/psychometricAnalysis")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                    <button onClick={() => this.goTo("/psychometricAnalysis")} className="button gradient gradient-1-red gradient-2-orange round-4px marginTop10px whiteText font22px font16pxUnder600">
                         Take me there!
                     </button>
                 </div>
@@ -155,7 +155,7 @@ class FreeResponse extends Component {
             content = (
                 <div className="center">
                     You have to complete all the skill evaluations first!<br/>
-                    <button onClick={() => this.goTo(skillTestUrl)} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                    <button onClick={() => this.goTo(skillTestUrl)} className="button gradient gradient-1-red gradient-2-orange round-4px marginTop10px whiteText font22px font16pxUnder600">
                         Take me there!
                     </button>
                 </div>
