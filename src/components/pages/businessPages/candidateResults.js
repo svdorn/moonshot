@@ -320,6 +320,8 @@ class CandidateResults extends Component {
         // change the interest in the results view
         let candidate = Object.assign({}, this.state.candidate);
         candidate.interest = interest;
+        // set as reviewed if wasn't already
+        candidate.reviewed = true;
         this.setState({ candidate });
     }
 
@@ -409,6 +411,9 @@ class CandidateResults extends Component {
             candidate.isDismissed = false;
             candidate.hiringStage = hiringStage;
         }
+        // set as reviewed if wasn't already
+        candidates[candIndex].reviewed = true;
+        // make the changes visible
         this.setState({ candidate });
     }
 
@@ -429,6 +434,9 @@ class CandidateResults extends Component {
 
         // toggle dismissed in results view
         candidate.isDismissed = dismissingCandidate;
+        // set as reviewed if wasn't already
+        candidates[candIndex].reviewed = true;
+        // make changes visible
         this.setState({ candidate });
     }
 

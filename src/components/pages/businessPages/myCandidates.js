@@ -316,8 +316,6 @@ class MyCandidates extends Component {
             sortedCandidates,
             resultsCandidateIndex
         });
-
-        console.log(sortedCandidates);
     }
 
 
@@ -484,7 +482,10 @@ class MyCandidates extends Component {
         let candidates = this.state.candidates.slice(0);
         const candIndex = candidates.findIndex(cand => { return cand._id.toString() === candidateId.toString() });
         if (candIndex < 0) { return console.log("Cannot set interest value for candidate that doesn't exist."); }
+        // set the new interest level
         candidates[candIndex].interest = interest;
+        // set as reviewed if wasn't already
+        candidates[candIndex].reviewed = true;
         this.setState({ candidates });
     }
 
@@ -548,6 +549,9 @@ class MyCandidates extends Component {
             candidates[candIndex].isDismissed = false;
             candidates[candIndex].hiringStage = hiringStage;
         }
+        // set as reviewed if wasn't already
+        candidates[candIndex].reviewed = true;
+        // make the changes visible
         this.setState({ candidates });
     }
 

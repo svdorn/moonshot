@@ -306,6 +306,8 @@ async function POST_rateInterest(req, res) {
 
     // update the business' interest in the candidate, making sure it is an integer
     candidate.positions[candidatePositionIndex].interest = Math.round(interest);
+    // mark the candidate as reviewed, in case they weren't already
+    candidate.positions[candidatePositionIndex].reviewed = true;
 
     // save the user with the new info
     try { await candidate.save() }
@@ -364,7 +366,6 @@ async function POST_changeHiringStage(req, res) {
     }
     // not dismissing the candidate
     else {
-        console.log("changing to ", hiringStage);
         candidate.positions[candidatePositionIndex].hiringStage = hiringStage;
         candidate.positions[candidatePositionIndex].isDismissed = false;
         hiringStageChanges.push({
@@ -375,6 +376,8 @@ async function POST_changeHiringStage(req, res) {
     }
     // update the business' interest in the candidate, making sure it is an integer
     candidate.positions[candidatePositionIndex].hiringStageChanges = hiringStageChanges;
+    // mark the candidate as reviewed, in case they weren't already
+    candidate.positions[candidatePositionIndex].reviewed = true;
 
     // save the user with the new info
     try { console.log(await candidate.save()); }
