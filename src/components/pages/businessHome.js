@@ -394,7 +394,7 @@ class BusinessHome extends Component {
                     { this.state.infoIndex < 3 ? <img src={"/icons/Arrow2" + this.props.png} className="rightArrow" onClick={() => this.selectProcess(this.state.infoIndex + 1)} /> : null }
                 </div>
                 <div className="center" style={{marginTop: "20px"}}>
-                    <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleDemoOpen}>
+                    <button className="button gradient gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 whiteText" onClick={this.handleDemoOpen}>
                         See Demo
                     </button>
                 </div>
@@ -751,7 +751,7 @@ class BusinessHome extends Component {
                                 </div>
                             </div>
                             <div className="center" style={{marginTop: "35px"}}>
-                                <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                <button className="button gradient gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
                                     Try for Free
                                 </button>
                             </div>
@@ -872,7 +872,7 @@ class BusinessHome extends Component {
                                 className="crystalBall"
                             />
                             <div className="center" style={{marginTop: "10px"}}>
-                                <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                <button className="button gradient gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
                                     Try for Free
                                 </button>
                             </div>

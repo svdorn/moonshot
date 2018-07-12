@@ -783,7 +783,9 @@ form > h1 {
 .button {
     cursor: pointer;
     display: inline-block;
+    border: none;
 }
+.button:focus { outline: none; }
 .button.medium { padding: 3px 10px; }
 
 .button.round-2px { border-radius: 2px; }
@@ -853,8 +855,12 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-.mediumLargeButton:focus { outline: none; }
-.purpleToBlueAnimate.mediumLargeButton { background-position-x: -112px; }
+
+
+
+
+
+
 .purpleToBlueAnimate:hover {
     background-position-x: 0px;
     -webkit-transition: all 0.5s ease;
@@ -5880,9 +5886,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .multipleChoiceCircle {
         margin-top: 2px;
     }
-
-    .purpleToBlueAnimate.mediumLargeButton { background-position-x: -80px; }
-    .purpleToBlueAnimate.mediumLargeButton:hover { background-position-x: 0px; }
 
 
 
