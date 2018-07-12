@@ -48,9 +48,9 @@ class MyCandidates extends Component {
             // which position we should see candidates for
             position: "",
             // can sort by Name, Score, Hiring Stage, etc...
-            sortBy: "",
+            sortBy: "stage",
             // the direction to sort in
-            sortAscending: true,
+            sortAscending: false,
             // hide candidates that have been dismissed?
             hideDismissed: false,
             // hide candidates that have been hired?
@@ -375,10 +375,10 @@ class MyCandidates extends Component {
         if (!candAhasHiringStage && !candBhasHiringStage) { return 0; }
         else if (!candAhasHiringStage) { return -1; }
         else if (!candBhasHiringStage) { return 1; }
-        // dismissed < any hiring stage
+        // dismissed > any hiring stage
         if (candA.isDismissed && candB.isDismissed) { return 0; }
-        else if (candA.isDismissed) { return -1; }
-        else if (candB.isDismissed) { return 1; }
+        else if (candA.isDismissed) { return 1; }
+        else if (candB.isDismissed) { return -1; }
         // both candidates have a hiring stage
         const candAstageVal = hiringStageValues[candA.hiringStage];
         const candBstageVal = hiringStageValues[candB.hiringStage];
@@ -491,7 +491,7 @@ class MyCandidates extends Component {
 
     // create the dropdown for a candidate's hiring stage
     makeHiringStage(candidateId, hiringStage, isDismissed) {
-        const stageNames = ["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"];
+        const stageNames = ["Not Contacted", "Contacted", "Interviewing", "Offered", "Hired", "Dismissed"];
         // if no stage is recorded, assume the candidate has not been contacted
         if (!hiringStage) { hiringStage = "Not Contacted" }
         // if the candidate is dismissed, show that
@@ -1231,12 +1231,12 @@ class MyCandidates extends Component {
 
 // how far along in the hiring process each of the hiring stages is relative to the others
 const hiringStageValues = {
-    "Dismissed": 0,
     "Not Contacted": 1,
     "Contacted": 2,
     "Interviewing": 3,
     "Offered": 4,
-    "Hired": 5
+    "Hired": 5,
+    "Dismissed": 6
 }
 
 
