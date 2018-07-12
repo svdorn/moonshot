@@ -202,7 +202,7 @@ class PredictiveGraph extends Component {
             let label = point.x;
             let yValue = point.y;
 
-            if (point.unavailable) { yValue = 100; }
+            if (point.unavailable || point.inProgress) { yValue = 100; }
 
             // 160 is the top of the graph, 40 is the bottom
             // 160 corresponds to 100%, 100 corresponds to 50%, 40 corresponds to 0%
@@ -218,7 +218,7 @@ class PredictiveGraph extends Component {
             let g = 126 + (94 * percentToGreen);
             let b = 252;
 
-            if (point.unavailable) {
+            if (point.unavailable || point.inProgress) {
                 r = 100; g = 100; b = 100;
             }
 
@@ -266,11 +266,19 @@ class PredictiveGraph extends Component {
                     <div className="confidenceIntervalLine" style={{...colorStyle, ...confidenceIntervalStyle}} />
                     <div className="confidenceIntervalBorder" style={{...colorStyle, ...topBorderStyle}} />
                     <div className="pointBox" style={{...colorStyle, ...pointBoxStyle}}>
-                        <div style={{position: "relative"}}>{point.unavailable ? "N/A" : yValue}</div>
+                        <div style={{position: "relative"}}>{point.unavailable || point.inProgress ? "N/A" : yValue}</div>
                         {point.unavailable ?
                             <HoverTip
                                 style={{minWidth: `${interiorWidth/2}px`}}
                                 text="Unavailable - not enough employee data to predict this value."
+                            />
+                            :
+                            null
+                        }
+                        {point.inProgress ?
+                            <HoverTip
+                                style={{minWidth: `${interiorWidth/2}px`}}
+                                text="Unavailable - user has not finished the evaluation."
                             />
                             :
                             null

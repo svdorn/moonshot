@@ -53,6 +53,11 @@ class CandidateResults extends Component {
     }
 
 
+    isInProgress(value) {
+        return typeof value !== "number";
+    }
+
+
     // load a new candidate's info and reset the component
     reset() {
         this.setState({ loading: true });
@@ -86,30 +91,35 @@ class CandidateResults extends Component {
                 }
             });
             const freeResponses = res.data.frqs;
-            const overallScore = res.data.performanceScores.overall;
+            const scores = res.data.performanceScores;
+            const overallScore = scores.overall;
             // they all have a confidence interval of 16 for now
             const predictivePoints = [
                 {
                     x: "Growth",
-                    y: this.round(res.data.performanceScores.growth),
-                    confidenceInterval: 16
+                    y: this.round(scores.growth),
+                    confidenceInterval: 16,
+                    inProgress: this.isInProgress(scores.growth)
                 },
                 {
                     x: "Performance",
-                    y: this.round(res.data.performanceScores.performance),
-                    confidenceInterval: 16
+                    y: this.round(scores.performance),
+                    confidenceInterval: 16,
+                    inProgress: this.isInProgress(scores.performance)
                 },
                 {
                     x: "Longevity",
-                    y: this.round(res.data.performanceScores.longevity),
+                    y: this.round(scores.longevity),
                     confidenceInterval: 0,
-                    unavailable: true
+                    unavailable: true,
+                    inProgress: this.isInProgress(scores.longevity)
                 },
                 {
                     x: "Culture",
-                    y: this.round(res.data.performanceScores.culture),
+                    y: this.round(scores.culture),
                     confidenceInterval: 0,
-                    unavailable: true
+                    unavailable: true,
+                    inProgress: this.isInProgress(scores.culture)
                 }
             ];
 
@@ -120,8 +130,8 @@ class CandidateResults extends Component {
                 psychScores: res.data.psychScores,
                 candidate,
                 overallScore,
-                predicted: res.data.performanceScores.predicted,
-                skill: res.data.performanceScores.skill,
+                predicted: scores.predicted,
+                skill: scores.skill,
                 hardSkillPoints,
                 predictivePoints,
                 freeResponses,

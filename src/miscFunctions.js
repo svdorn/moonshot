@@ -1,5 +1,10 @@
 // get the qualifier (e.g. "above average", "expert", etc) based on a score
 function qualifierFromScore(score, type) {
+    // make sure the score is a number we can use
+    if (typeof score === "string") { score = parseInt(score, 10); }
+    if (typeof score !== "number") { return "N/A"; }
+    if (score === NaN) { return "N/A"; }
+
     let qualifiers = undefined;
     // for predicted performance
     if (type === "predicted") {
