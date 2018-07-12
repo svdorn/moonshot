@@ -394,7 +394,7 @@ class BusinessHome extends Component {
                     { this.state.infoIndex < 3 ? <img src={"/icons/Arrow2" + this.props.png} className="rightArrow" onClick={() => this.selectProcess(this.state.infoIndex + 1)} /> : null }
                 </div>
                 <div className="center" style={{marginTop: "20px"}}>
-                    <button className="button gradient gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 whiteText" onClick={this.handleDemoOpen}>
+                    <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 whiteText" onClick={this.handleDemoOpen}>
                         See Demo
                     </button>
                 </div>
@@ -621,7 +621,7 @@ class BusinessHome extends Component {
                                     Analyze candidates to see if they exhibit the profile of
                                     proven high performers in that position.
                                 </div>
-                                <button className="button gradient gradient-1-purple-dark gradient-2-red round-4px marginTop10px whiteText font22px font16pxUnder600"
+                                <button className="button gradient-transition gradient-1-purple-dark gradient-2-red round-4px marginTop10px whiteText font22px font16pxUnder600"
                                         onClick={this.handleOpen}>
                                     Hire Faster
                                 </button>
@@ -645,7 +645,7 @@ class BusinessHome extends Component {
                                     machine learning to reveal the empirical evidence
                                     instead of conjecture based on a resume.
                                 </div>
-                                <button className="button gradient gradient-1-cyan gradient-2-purple-light round-4px marginTop10px whiteText font22px font16pxUnder600"
+                                <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px marginTop10px whiteText font22px font16pxUnder600"
                                         onClick={this.handleOpen}>
                                     Hire Smarter
                                 </button>
@@ -667,7 +667,7 @@ class BusinessHome extends Component {
                                     Engage your candidates better so they can understand
                                     your company and how they fit.
                                 </div>
-                                <button className="button gradient gradient-1-red gradient-2-orange round-4px marginTop10px whiteText font22px font16pxUnder600"
+                                <button className="button gradient-transition gradient-1-red gradient-2-orange round-4px marginTop10px whiteText font22px font16pxUnder600"
                                         onClick={this.handleOpen}>
                                     Hire Better
                                 </button>
@@ -751,7 +751,7 @@ class BusinessHome extends Component {
                                 </div>
                             </div>
                             <div className="center" style={{marginTop: "35px"}}>
-                                <button className="button gradient gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
                                     Try for Free
                                 </button>
                             </div>
@@ -824,7 +824,7 @@ class BusinessHome extends Component {
                                     <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
                                         {"Start with one position to see the results. No cost, no risk, no excuses not to kick this off."}
                                     </div>
-                                    <button className="button gradient gradient-1-red gradient-2-orange pricingButton whiteText font18px font14pxUnder400" onClick={this.handleOpen}>
+                                    <button className="button gradient-transition gradient-1-red gradient-2-orange pricingButton whiteText font18px font14pxUnder400" onClick={this.handleOpen}>
                                         Take Off
                                     </button>
                                 </div>
@@ -853,7 +853,7 @@ class BusinessHome extends Component {
                                     <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
                                         {"Easily scale the number of positions you are evaluating through Moonshot."}
                                     </div>
-                                    <button className="button gradient gradient-1-red gradient-2-orange pricingButton whiteText font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
+                                    <button className="button gradient-transition gradient-1-red gradient-2-orange pricingButton whiteText font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                         Blast Off
                                     </button>
                                 </div>
@@ -872,7 +872,7 @@ class BusinessHome extends Component {
                                 className="crystalBall"
                             />
                             <div className="center" style={{marginTop: "10px"}}>
-                                <button className="button gradient gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
                                     Try for Free
                                 </button>
                             </div>

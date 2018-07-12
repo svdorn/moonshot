@@ -802,6 +802,9 @@ form > h1 {
 .button.disabled { cursor: not-allowed; }
 
 .button.gradient {
+    background: linear-gradient(to left, var(--gradient-color-1), var(--gradient-color-2));
+}
+.button.gradient-transition {
     background: linear-gradient(to right, var(--gradient-color-1), var(--gradient-color-2), var(--gradient-color-1));
     background-position-x: 108%;
     background-size: 188%;
@@ -809,18 +812,18 @@ form > h1 {
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-.button.gradient:hover {
+.button.gradient-transition:hover {
     background-position-x: 0px;
     -webkit-transition: all 0.5s ease;
     -ms-transition: all 0.5s ease;
     transition: all 0.5s ease;
 }
-.button.disabled.gradient {
+.button.disabled.gradient-transition {
     background: linear-gradient(to right, #111111, #afafaf, #111111);
     background-position-x: 100%;
     background-size: 150%;
 }
-.button.disabled.gradient:hover {
+.button.disabled.gradient-transition:hover {
     background-position-x: 100%;
 }
 
@@ -1234,59 +1237,6 @@ form > h1 {
     padding-top: 5px;
     margin-bottom: 10px;
 }
-.slightlyRoundedButton {
-    border-radius: 3px 3px 3px 3px;
-    border: none;
-    cursor: pointer;
-}
-.slightlyRoundedButton:focus {
-    outline: none;
-}
-.veryRoundedButton {
-    border-radius: 6px 6px 6px 6px;
-    border: none;
-    cursor: pointer;
-}
-.veryRoundedButton:focus {
-    outline: none;
-}
-.pinkToPurpleButtonGradient {
-    background: linear-gradient(to right, #7d22dc, #d45279, #7d22dc);
-    background-position-x: -80px;
-    background-size: 150%;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.pinkToPurpleButtonGradient:hover {
-    background-position-x: 0px;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.blueToPurpleButtonGradient {
-    background: linear-gradient(to right, #ab86fe, #7bd6fe, #ab86fe);
-    background-position-x: -80px;
-    background-size: 150%;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.blueToPurpleButtonGradient:hover {
-    background-position-x: 0px;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-.blueToDarkPurpleButtonGradient {
-    background: linear-gradient(to bottom right, #72d6f5, #b17dfe);
-    color: #72d6f5;
-}
-.blueToDarkPurpleButtonGradientReverse {
-    background: linear-gradient(to top left, #72d6f5, #b17dfe);
-    color: #72d6f5;
-}
-
 
 
 .blueWhiteButton {
@@ -2090,57 +2040,6 @@ button.link {
     display: inline-block;
 }
 
-.blueGradientButtonExterior {
-    background: linear-gradient(to bottom right, #5dfdff, #3dabff);
-    color: var(--moonshotLightBlue);
-}
-.purpleToPinkButtonExterior {
-    background: linear-gradient(to bottom right, var(--moonshotDarkPurple), #ff79b7);
-    color: var(--moonshotDarkPurple);
-}
-.purpleToRedButtonExterior {
-    background: linear-gradient(to bottom right, #b130d3, #e35d67);
-    color: var(--moonshotDarkPurple);
-}
-.blueToPurpleButtonExterior {
-    background: linear-gradient(to right, #00fcff, #c383ff);
-    color: #00deff;
-}
-.redToLightRedButtonExterior {
-    background: linear-gradient(to right, #e24794, #f76740);
-    color: #f76740;
-}
-.purpleToPinkButtonExterior,
-.blueGradientButtonExterior,
-.blueToPurpleButtonExterior,
-.purpleToRedButtonExterior,
-.blueToDarkPurpleButtonGradient,
-.blueToDarkPurpleButtonGradientReverse,
-.redToLightRedButtonExterior {
-    padding: 2px;
-    border: none;
-    border-radius: 2px;
-    cursor: pointer;
-}
-
-.gradientBorderButtonInterior {
-    width: 100%;
-    height: 100%;
-    background-color: white;
-}
-.gradientBorderButtonInteriorBlack {
-    width: 100%;
-    height: 100%;
-    background: var(--primary-black-dark);
-}
-.gradientBorderButtonInteriorGradient {
-    background: linear-gradient(to right, #b172fe, #7ad6fe, #b172fe);
-    background-position-x: -112px;
-    background-size: 150%;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
 .bigButton {
     font-size: 25px;
     line-height: 120%;
@@ -3518,20 +3417,6 @@ button.link {
     color: white;
     border: none;
     padding-left: 5px;
-}
-
-.invertColorOnHover.gradientBorderButtonInterior:hover,
-.invertColorOnHover.gradientBorderButtonInteriorBlack:hover {
-    color: white;
-    background-color: rgba(0,0,0,0);
-    background: rgba(0,0,0,0);
-}
-
-.invertColorOnHover.gradientBorderButtonInteriorGradient:hover {
-    background-position-x: 0px;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
 }
 
 .videoContainer {
