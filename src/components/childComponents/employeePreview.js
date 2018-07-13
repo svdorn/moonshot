@@ -269,7 +269,7 @@ class EmployeePreview extends Component {
                     <div className="employeeName font18px center">
                         {this.props.name.toUpperCase()}
                     </div>
-                    <div className="center font14px redPinkText">
+                    <div className="center font14px secondary-red">
                         Question:
                         <br/>
                         {questionIndexDisplay + '/' + this.props.questions.length}
@@ -325,7 +325,7 @@ class EmployeePreview extends Component {
                     src={completionImage}
                 />
                 <br />
-                <i className={"completionStage center font14px " + (this.state.gradingComplete ? "" : "redPinkText")}>
+                <i className={"completionStage center font14px " + (this.state.gradingComplete ? "" : "secondary-red")}>
                     {this.state.gradingComplete ? "Complete" : "Incomplete"}
                 </i>
                 <br/>

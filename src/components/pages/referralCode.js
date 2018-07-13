@@ -221,7 +221,7 @@ class ReferralCode extends Component {
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
                     <div className="form lightWhiteForm" style={{padding: "10px 20px"}}>
                         {this.state.referralCode ?
-                            <div className="blueText">
+                            <div className="primary-cyan">
                                 <span className="font20px">Your referral code is:</span>
                                 <br/>
                                 <span className="font32px">{this.state.referralCode}</span>
@@ -260,7 +260,7 @@ class ReferralCode extends Component {
                                         className="lightBlueInputText"
                                     /><br/>
                                 </div>
-                                <div style={{margin: "20px 20px 10px"}} className="blueText">
+                                <div style={{margin: "20px 20px 10px"}} className="primary-cyan">
                                     <div className="checkbox smallCheckbox whiteCheckbox"
                                          onClick={this.handleCheckMarkClick.bind(this)}>
                                         <img
@@ -270,9 +270,9 @@ class ReferralCode extends Component {
                                         />
                                     </div>
                                     I understand and agree to
-                                    the <bdi className="clickable blueText" onClick={this.handleOpenAA}><b>Affiliate Agreement</b></bdi>
-                                    , <bdi className="clickable blueText" onClick={this.handleOpenPP}><b>Privacy Policy</b></bdi>
-                                    , and <bdi className="clickable blueText" onClick={this.handleOpenTOU}><b>Terms of Use</b></bdi>.
+                                    the <bdi className="clickable primary-cyan" onClick={this.handleOpenAA}><b>Affiliate Agreement</b></bdi>
+                                    , <bdi className="clickable primary-cyan" onClick={this.handleOpenPP}><b>Privacy Policy</b></bdi>
+                                    , and <bdi className="clickable primary-cyan" onClick={this.handleOpenTOU}><b>Terms of Use</b></bdi>.
                                 </div>
                                 <button
                                     type="submit"

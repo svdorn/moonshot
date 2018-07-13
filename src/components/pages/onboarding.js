@@ -1040,9 +1040,9 @@ class Onboarding extends Component {
                 </div>
         }
 
-        let skipClass = "blueText underline";
+        let skipClass = "primary-cyan underline";
         if (this.state.tabValue === "goals") {
-            skipClass = "purpleText underline";
+            skipClass = "primary-purple-light underline";
         } else if (this.state.tabValue === "info") {
             skipClass = "primary-purple-dark underline";
         }

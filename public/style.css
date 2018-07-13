@@ -2875,15 +2875,6 @@ button.link {
     margin-right: 5%;
 }
 
-.blueText { color: var(--primary-cyan); }
-.lightBlueText { color: rgb(117, 220, 252); }
-.purpleText { color: var(--primary-purple-dark) }
-.brightPinkText { color: #fd0d8b; }
-.brightOrangeText { color: #ff5d27; }
-.lightPurpleText { color: #b37bfe; }
-.redPinkText { color: #eb394f; }
-.orangeText { color: #f24c49; }
-
 .grayTextOnHover:hover { color: var(--secondary-gray); }
 
 
@@ -3534,9 +3525,6 @@ button.link {
 }
 .homepageImgBackgroundRight {
     right: 4%;
-}
-.purpleText {
-    color: var(--primary-purple-light);
 }
 
 .homepageTrajectoryTextLeftDiv,
