@@ -3343,10 +3343,6 @@ button.link {
     margin-top: 45px;
     font-size: 23px;
 }
-.homepageTrajectoryImagesRight {
-    float: right;
-    margin-right: 2%;
-}
 .businessHomeTrajectoryImagesLeft {
     float: left;
 }
@@ -3388,43 +3384,6 @@ button.link {
 .businessHomeTrajectoryImagesRight > img {
     right: 4%;
     margin: 30px 30px 0 0;
-}
-.homepageTrajectoryImagesRight {
-    float: right;
-    margin-right: 2%;
-}
-.homepageTrajectoryImagesLeft {
-    float: left;
-}
-.homepageTrajectoryImagesLeft > img,
-.homepageTrajectoryImagesRight > img {
-    transition: all 0.2s ease-in;
-    height: 216px;
-    z-index: 10;
-    width: 320px;
-    position: absolute;
-}
-.homepageTrajectoryImagesRight > img {
-    right: 4%;
-    margin: 30px 30px 0 0;
-}
-.homepageTrajectoryImagesLeft > img {
-    margin: 30px 0 0 30px;
-    left: 4%;
-}
-.homepageImgBackgroundLeft,
-.homepageImgBackgroundRight {
-    transition: all 0.2s ease-in;
-    height: 216px;
-    position: absolute;
-    width: 320px;
-    z-index: 5;
-}
-.homepageImgBackgroundLeft {
-    left: 4%;
-}
-.homepageImgBackgroundRight {
-    right: 4%;
 }
 
 .homepageTrajectoryTextLeftDiv,
@@ -4042,18 +4001,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .forBusinessTrajectoryTextRight > div {
         margin-right: 0px;
     }
-    .homepageImgBackgroundLeft {
-        left: 2%;
-    }
-    .homepageImgBackgroundRight {
-        right: 2%;
-    }
-    .homepageTrajectoryImagesRight > img {
-        right: 2%;
-    }
-    .homepageTrajectoryImagesLeft > img {
-        left: 2%;
-    }
     .businessHomeTrajectoryImagesLeft > img {
         left: 2%;
     }
@@ -4062,18 +4009,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .businessHomeTrajectoryImageRightNoBorder > img {
         right: 2%;
-    }
-    .homepageImgBackgroundLeft.forBusiness {
-        left: 0%;
-    }
-    .homepageImgBackgroundRight.forBusiness {
-        right: 0%;
-    }
-    .homepageTrajectoryImagesRight.forBusiness > img {
-        right: 0%;
-    }
-    .homepageTrajectoryImagesLeft.forBusiness > img {
-        left: 0%;
     }
     .businessHomeTrajectoryImagesLeft > img {
         left: 0%;
@@ -4140,14 +4075,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 25px; }
 
-    .homepageTrajectoryImagesLeft > img,
-    .homepageTrajectoryImagesRight > img,
-    .homepageImgBackgroundLeft,
-    .homepageImgBackgroundRight {
-        height: 216px;
-        width: 320px;
-        transition: all 0.2s ease-out;
-    }
     .businessHomeTrajectoryImagesLeft > img,
     .businessHomeTrajectoryImagesRight > img {
         top: 0px;
@@ -4161,10 +4088,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 372px;
         transition: all 0.2s ease-out;
     }
-    /* .homepageTrajectoryImagesLeft,
-    .homepageTrajectoryImagesRight {
-        margin-top: 30px;
-    } */
 
     .forBusiness > h2 > b {
         font-size: 25px;
@@ -4399,8 +4322,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .businessHome.frontPage { padding-bottom: 50px; }
 
-    .homepageTrajectoryImagesRight { display: none; }
-    .homepageTrajectoryImagesLeft { display: none; }
     .businessHomeTrajectoryImagesLeft > img,
     .businessHomeTrajectoryImagesRight > img {
         position: relative;
