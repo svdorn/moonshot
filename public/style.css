@@ -155,19 +155,11 @@ footer {
     color: rgb(114, 214, 245);
 }
 
-.lightBlueBoxInput {
-    color: var(--moonshotLightBlue);
-    border: 2px solid;
-    display: inline-block;
-    margin: 20px;
-    padding-left: 5px;
-}
-
 .formSubmitButton {
     padding: 0px 25px 3px;
-    border: 2px solid var(--moonshotLightBlue);
+    border: 2px solid var(--primary-cyan);
     background-color: rgba(255,255,255,.4);
-    color: var(--moonshotLightBlue);
+    color: var(--primary-cyan);
     margin: 10px auto;
     cursor: pointer;
 }
@@ -184,7 +176,7 @@ footer {
     display: inline-block;
 }
 form > h1 {
-    color: var(--moonshotLightBlue);
+    color: var(--primary-cyan);
 }
 
 .form-right{
@@ -850,26 +842,6 @@ form > h1 {
 .gradient-1-red { --gradient-color-1: var(--secondary-red); }
 .gradient-2-red { --gradient-color-2: var(--secondary-red); }
 
-.purpleToBlueAnimate {
-    background: linear-gradient(to right, #7ad6fe, #ab86fe, #7ad6fe);
-    background-position-x: -64px;
-    background-size: 150%;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
-
-
-
-
-
-
-.purpleToBlueAnimate:hover {
-    background-position-x: 0px;
-    -webkit-transition: all 0.5s ease;
-    -ms-transition: all 0.5s ease;
-    transition: all 0.5s ease;
-}
 
 .frontPage .infoContainer .content .buttonArea .button.getStarted {
     margin-left: 10%;
@@ -1543,13 +1515,6 @@ form > h1 {
 .headerDropdownWhite > div:first-child > div:nth-child(2) {
     color: white !important;
 }
-.headerDropdownBlue > div:first-child > div:nth-child(2) {
-    color: var(--moonshotLightBlue) !important;
-}
-.headerDropdownBlack > div:first-child > div:nth-child(2) {
-    color: black !important;
-}
-
 .clickable, .clickableNoUnderline, .borderBottomClickable { cursor: pointer; }
 .clickable:hover { text-decoration: underline; }
 .borderBottomClickable:hover { border-bottom: 2px solid white; }
@@ -1605,30 +1570,8 @@ form > h1 {
     overflow-x: hidden;
 }
 
-.noHeight {
-    height: 0;
-}
+.noHeight { height: 0; }
 
-.greenToBlue { background: linear-gradient(to top right, var(--moonshotGreen), var(--moonshotLightBlue)); }
-.purpleToBlue { background: linear-gradient(to top right, var(--moonshotPurple), var(--moonshotBlue)); }
-.purpleGradient { background: linear-gradient(to top right, #CE9EFC, #a048fb); }
-.purpleToRedGradient { background: linear-gradient(to bottom right, #721ae9, #e45c67); }
-.redToLightRedGradient { background: linear-gradient(to bottom right, #e24794, #f76740); }
-.redToLightRedDownGradient { background: linear-gradient(to bottom, #e24794, #f76740); }
-.redToLightRedUpGradientOpacity {
-    background: linear-gradient(to top, #e24794, #f76740);
-    opacity: 0.7;
-}
-.cottonCandyGradient { background: linear-gradient(to top right, #ae7efc, #75dcfc); }
-.purpleToRedLightGradient { background: linear-gradient(to bottom right, #983cc9, #e36273); }
-.purpleToRedLightGradientOpacity {
-    background: linear-gradient(to top right, #983cc9, #e36273);
-    opacity: 0.7;
-}
-.redToLightRedGradientOpacity {
-    background: linear-gradient(to top right, #e24794, #f76740);
-    opacity: 0.7;
-}
 .lightGrayText {
     color: var(--secondary-gray)
 }
@@ -1641,12 +1584,6 @@ form > h1 {
 .blackBackgroundOpacity {
     background: var(--primary-black-dark);
     opacity: 0.85;
-}
-.lightBlueToLightPurpleGradient { background: linear-gradient(to top right, #74e2ff, #b37bfe); }
-.orangeToYellowGradient { background: linear-gradient(to top right, #f24c49, #ebbb8a); }
-.orangeToYellowGradientOpacity {
-    background: linear-gradient(to top right, #f24c49, #ebbb8a);
-    opacity: 0.7;
 }
 
 
@@ -1946,7 +1883,7 @@ button.link {
 }
 .lightBlueChip {
     /* height: 36px; */
-    background: var(--moonshotLightBlue);
+    background: var(--primary-cyan);
     padding: 1px;
     border-radius: 25px;
     margin-left: 10px;
@@ -2508,7 +2445,7 @@ button.link {
     position: relative;
     width: 400px;
     padding: 10px;
-    color: var(--moonshotLightBlue);
+    color: var(--primary-cyan);
     -moz-box-shadow:    0px 2px 20px 0px #00000073;
     -webkit-box-shadow: 0px 2px 20px 0px #00000073;
     box-shadow:         0px 2px 20px 0px #00000073;
@@ -3033,9 +2970,6 @@ button.link {
     margin-right: 5%;
 }
 
-.blueTextOnHover:hover { color: var(--moonshotLightBlue); }
-
-.greenText { color: var(--moonshotGreenText); }
 .pinkTextHome { color: #d3546e; }
 .blueTextHome { color: #72d6f5; }
 .orangeTextHome { color: #ff5438; }
@@ -3154,9 +3088,6 @@ button.link {
     width: 18px;
     margin: -5px 10px 0px 0px;
 }
-.greenCheckbox { border: 2px solid var(--moonshotGreenText); }
-.purpleCheckbox { border: 2px solid #b130d3; }
-.blueCheckbox { border: 2px solid var(--moonshotLightBlue); }
 .whiteCheckbox { border: 2px solid white; }
 .mediumCheckbox > img {
     height: 15px;
@@ -3341,7 +3272,7 @@ button.link {
     visibility: hidden;
     position: absolute;
 }
-.overviewAndCommentBox, .pathwayContentContainer {
+.pathwayContentContainer {
     display: inline-block;
     width: calc(100% - 390px);
     text-align: center;
@@ -3356,23 +3287,6 @@ button.link {
 }
 .pathwayContentTimeText { margin-top: 7px; }
 
-.overviewAndCommentBox {
-    margin-top: 10px;
-    margin-bottom: 10px;
-}
-.overviewAndCommentBoxImg {
-    height: 35px;
-    margin-bottom: 10px;
-    max-width: 200px;
-}
-.overviewAndCommentBoxTab {
-    background-color: white !important;
-    color: var(--moonshotLightBlue) !important;
-}
-.overviewAndCommentBoxInfo {
-    display: inline-block;
-    width: 200px;
-}
 
 
 .raisedButtonBusinessHome > button {
@@ -3945,7 +3859,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     padding: 100px 40px 40px;
 }
 
-.blueTextImportant { color: var(--moonshotLightBlue) !important; }
 .blackTextImportant { color: black !important; }
 .whiteTextImportant { color: white !important; }
 .recharts-wrapper {
@@ -4061,15 +3974,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 .notAllowed { cursor: not-allowed; }
 .defaultCursor { cursor: default; }
 
-
-.twoOptionsBox {
-    width: 200px;
-    height: 150px;
-    display: inline-block;
-    vertical-align: top;
-}
-.twoOptionsBox.selected { background-color: var(--moonshotLightBlue) !important; }
-.twoOptionsBox.notSelected { background-color: #f7f7f7 !important; }
 .twoOptionsOr {
     display: inline-block;
     margin: 55px 20px 0;
@@ -4529,11 +4433,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 @media only screen and (min-width: 1001px) {
     .under1000only { display: none; }
-    .overviewAndCommentBox {
-        float: right;
-        margin-bottom: 10px;
-        margin-right: 30px;
-    }
 }
 
 @media only screen and (max-width: 1000px) {
@@ -4627,12 +4526,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .pathwayContentContainer {
         width: 100%;
-    }
-    .overviewAndCommentBox {
-        display: block;
-        width: 95%;
-        margin: auto;
-        margin-bottom: 20px
     }
     .videoContainer {
         display: block;
@@ -5356,13 +5249,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .onboardingIconLi {
         margin: 0px 40px;
     }
-    .overviewAndCommentBoxImg {
-        height: 25px;
-        max-width: 150px;
-    }
-    .overviewAndCommentBoxInfo {
-        width: 150px;
-    }
     .pathwayVideoContainer {
         width: 70%;
         padding-top: 40%;
@@ -5576,10 +5462,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .onboardingIconLi {
         margin: 0px 30px;
-    }
-    .twoOptionsBox {
-        width: 160px;
-        height: 120px;
     }
     .flex-center p { padding: 10px; }
 
@@ -5983,12 +5865,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .drawerWidth {
         width: 250px !important;
     }
-    .overviewAndCommentBoxInfo {
-        width: 140px;
-    }
-    .overviewAndCommentBoxImg {
-        max-width: 140px;
-    }
     .drawerContent {
         max-width:240px;
         word-wrap:break-word;
@@ -6115,13 +5991,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 38px;
         margin: auto -140px auto;
     }
-    .overviewAndCommentBoxImg {
-        height: 20px;
-        max-width: 90px;
-    }
-    .overviewAndCommentBoxInfo {
-        width: 90px;
-    }
     .onboardingIconLi {
         margin: 0px 10px;
     }
@@ -6140,10 +6009,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .pathwayLandingSponsoredBy {
         height: 30px;
-    }
-    .twoOptionsBox {
-        width: 128px;
-        height: 96px;
     }
 
     .multiSelectOption { min-height: 30px; }

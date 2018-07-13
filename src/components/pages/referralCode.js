@@ -178,7 +178,7 @@ class ReferralCode extends Component {
         }
 
         return (
-            <div className="fillScreen greenToBlue formContainer">
+            <div className="fillScreen formContainer">
                 <MetaTags>
                     <title>Referral Code | Moonshot</title>
                     <meta name="description" content="Become a Moonshot referrer and get $300 for every friend that gets a job through us!" />
@@ -261,7 +261,7 @@ class ReferralCode extends Component {
                                     /><br/>
                                 </div>
                                 <div style={{margin: "20px 20px 10px"}} className="blueText">
-                                    <div className="checkbox smallCheckbox blueCheckbox"
+                                    <div className="checkbox smallCheckbox whiteCheckbox"
                                          onClick={this.handleCheckMarkClick.bind(this)}>
                                         <img
                                             alt=""

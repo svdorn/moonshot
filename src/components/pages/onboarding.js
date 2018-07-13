@@ -1014,7 +1014,7 @@ class Onboarding extends Component {
                         </span>
 
                         <br/>
-                        <div className="checkbox mediumCheckbox purpleCheckbox"
+                        <div className="checkbox mediumCheckbox whiteCheckbox"
                              onClick={this.handleCheckMarkClick.bind(this)}>
                             <img
                                 alt="Checkmark Icon"

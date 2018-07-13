@@ -112,7 +112,7 @@ class Unsubscribe extends Component {
 
     render() {
         return (
-            <div className="fillScreen greenToBlue formContainer">
+            <div className="fillScreen formContainer">
                 <MetaTags>
                     <title>Unsubscribe | Moonshot</title>
                     <meta name="description" content="Unsubscribe from all Moonshot emails. Sorry to see you go!" />
