@@ -10,7 +10,6 @@ body {
 }
 
 :root {
-    --moonshotLightBlue: rgb(114, 214, 245);
     --moonshotMidBlue: #70cbff;
     --moonshotBlue: #66b1ff;
     --moonshotGreen: #3dffdd;
@@ -2976,7 +2975,7 @@ button.link {
 .redText { color: rgb(244, 67, 54); }
 .whiteText { color: white; }
 .grayText { color: #d7d7d7; }
-.blueText { color: var(--moonshotLightBlue); }
+.blueText { color: var(--primary-cyan); }
 .lightBlueText { color: rgb(117, 220, 252); }
 .darkBlueText { color: var(--moonshotMidBlue); }
 .purpleText { color: var(--moonshotPurple) }
@@ -4019,12 +4018,12 @@ textarea.freeResponseTextArea {
 textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     width: calc(100% - 70px);
 }
-.multipleChoiceCircle, .multiSelectCircle {
+.multipleChoiceCircle {
     width: 20px;
     height: 20px;
     background-color: white;
     border-radius: 15px;
-    border: 2px solid var(--moonshotLightBlue);
+    border: 2px solid var(--primary-cyan);
     margin-top: 4px;
 }
 .multipleChoiceCircle {
@@ -4033,8 +4032,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     vertical-align: top;
     margin-right: 20px;
 }
-.multipleChoiceCircle.selected, .multiSelectCircle.selected {
-    background-color: var(--moonshotLightBlue);
+.multipleChoiceCircle.selected {
+    background-color: var(--primary-cyan);
 }
 .multipleChoiceCircle.medium {
     /* left: calc(35% - 110px); */
@@ -4050,11 +4049,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .multiSelectAnswer {
     max-width: 160px;
     display: inline-block;
-}
-.multiSelectCircle {
-    display: inline-block;
-    vertical-align: top;
-    margin: 4px 10px 0 0;
 }
 
 .centeredElement {
@@ -6012,7 +6006,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
 
     .multiSelectOption { min-height: 30px; }
-    .multiSelectCircle, .multipleChoiceCircle {
+    .multipleChoiceCircle {
         margin-top: 0px;
         width: 15px;
         height: 15px;
