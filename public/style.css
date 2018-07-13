@@ -10,8 +10,6 @@ body {
 }
 
 :root {
-    --moonshotMidBlue: #70cbff;
-    --moonshotBlue: #66b1ff;
     --moonshotGreen: #3dffdd;
     --moonshotGreenText: #00e2ba;
     --moonshotPurple: #cf9bff;
@@ -2764,47 +2762,6 @@ button.link {
   transform: scale(5, .03);
 }
 
-.purpleGreenSeparator::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  background: linear-gradient(to bottom right, var(--moonshotPurple), var(--moonshotGreen));
-  transform: rotate(-45deg);
-}
-.purplePinkSeparator::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  background: linear-gradient(to bottom right, #ff79b7, var(--moonshotPurple));
-  transform: rotate(-45deg);
-}
-.purpleRedSeparator::after {
-    content: "";
-    position: absolute;
-    top: 10px;
-    bottom: 10px;
-    left: 10px;
-    right: 10px;
-    background: linear-gradient(to bottom right, #b130d3, #d85e7e);
-    transform: rotate(-45deg);
-}
-.blueLightBlueSeparator::after {
-  content: "";
-  position: absolute;
-  top: 10px;
-  bottom: 10px;
-  left: 10px;
-  right: 10px;
-  background: linear-gradient(to bottom right, #3dabff, #5deaff);
-  transform: rotate(-45deg);
-}
-
 .stepSeparatorLeft {
     border-right: 200px solid #da5f7b;
     right: 50%;
@@ -2977,7 +2934,6 @@ button.link {
 .grayText { color: #d7d7d7; }
 .blueText { color: var(--primary-cyan); }
 .lightBlueText { color: rgb(117, 220, 252); }
-.darkBlueText { color: var(--moonshotMidBlue); }
 .purpleText { color: var(--moonshotPurple) }
 .darkPurpleText { color: var(--moonshotDarkPurple) }
 .darkDarkPurpleText { color: #b17dfe; }
@@ -3067,7 +3023,7 @@ button.link {
     color: #b130d3;
 }
 .onboardingPage3Link {
-    color: var(--moonshotGreenText);
+    color: var(--primary-cyan);
     text-decoration: underline;
 }
 
@@ -3138,24 +3094,6 @@ button.link {
     background: linear-gradient(to bottom right, #b130d3, #e35d67);
 }
 
-.greenInput {
-    border-top: 2px solid var(--moonshotGreenText);
-    border-bottom: 2px solid var(--moonshotGreenText);
-    border-left: 3px solid var(--moonshotGreenText);
-    border-right: 3px solid var(--moonshotGreenText);
-    font-size: 20px;
-    text-align: center;
-    height: 40px;
-    width: 350px;
-    color: black;
-    margin-bottom: 15px;
-}
-.greenInput::placeholder { color: #B6B6B6; }
-.greenInput::-webkit-input-placeholder { color: #B6B6B6; }
-.greenInput:-moz-placeholder { color: #B6B6B6; }
-.greenInput::-moz-placeholder { color: #B6B6B6; }
-.greenInput:-ms-input-placeholder { color: #B6B6B6; }
-
 .horizListSpacer {
     height: 100%;
     position: relative;
@@ -3225,20 +3163,6 @@ button.link {
     padding-top: 56.25%
 }
 .videoContainer > span {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 0;
-    left: 0;
-}
-.pathwayVideoContainer {
-    position: relative;
-    margin: auto;
-    text-align:center;
-    width: 50%;
-    padding-top: 30%;
-}
-.pathwayVideoContainer > span {
     position: absolute;
     top: 0;
     bottom: 0;
@@ -3496,12 +3420,6 @@ button.link {
     width: 100%;
 }
 
-.purpleToGreenSpacer {
-    width: 60%;
-    height: 2px;
-    margin: 70px 20%;
-    background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotGreen));
-}
 .resultsPageSpacer {
     width: 40%;
     height: 2px;
@@ -3520,44 +3438,9 @@ button.link {
     margin: 70px 20%;
     background: linear-gradient(to right, #ff5d27, #fd0d8b);
 }
-.purpleToRedSpacer {
-    width: 60%;
-    height: 2px;
-    margin: 70px 20%;
-    background: linear-gradient(to right, #b130d3, #d85e7e);
-}
-.redToLightRedSpacer {
-    width: 60%;
-    height: 2px;
-    margin: 70px 20%;
-    background: linear-gradient(to right, #e24794, #f76740);
-}
 #picturesToPathwaysHomepageSpacer {
     margin-top: 60px;
     margin-bottom: 40px;
-}
-
-.profileSeparator {
-    margin: 30px 0;
-    width: 100%;
-    height: 46px;
-}
-.profileSeparatorRect {
-    color: white;
-    background-color: #00d2ff;
-    width: 300px;
-    height: 46px;
-    font-size: 20px;
-    float: left;
-    padding: 10px 0 0 80px;
-}
-.profileSeparatorTri {
-    border-left: 40px solid #00d2ff;
-    border-top: 23px solid transparent;
-    border-bottom: 23px solid transparent;
-    height: 0px;
-    width: 0px;
-    float: left;
 }
 
 .noselect {
@@ -3892,10 +3775,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     position: absolute;
     bottom: 0px;
     width: 100%;
-}
-.pathwayLandingSponsoredBy {
-    height: 50px;
-    margin-top: -15px;
 }
 .pathwayLandingIconsLeft {
     height: 31px;
@@ -5046,18 +4925,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         width: 218.75px;
         color: black;
     }
-    .greenInput {
-        border-top: 1px solid var(--moonshotGreenText);
-        border-bottom: 1px solid var(--moonshotGreenText);
-        border-left: 1.5px solid var(--moonshotGreenText);
-        border-right: 1.5px solid var(--moonshotGreenText);
-        font-size: 12px;
-        text-align: center;
-        height: 25px;
-        width: 218.75px;
-        color: black;
-        margin-bottom: 15px;
-    }
     .dp > div > div{
         font-size: 12px !important;
     }
@@ -5155,11 +5022,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         padding: 0;
     }
 
-    .profileSeparatorRect {
-        width: 200px;
-        padding-left: 45px;
-    }
-
     .aboutMeLi {
         width: calc(100% - 100px);
     }
@@ -5242,10 +5104,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .onboardingIconLi {
         margin: 0px 40px;
-    }
-    .pathwayVideoContainer {
-        width: 70%;
-        padding-top: 40%;
     }
     .settingsTabs > div > button {
         font-size: 12px !important;
@@ -5768,9 +5626,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         height: 30px;
         width: 30px;
     }
-    .pathwayLandingSponsoredBy {
-        height: 40px;
-    }
     .pathwayLandingIconsLeft {
         height: 24px;
         top: -5px;
@@ -5993,18 +5848,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .twoOptionsOr { margin: 40px 8px 0; }
 
-    .profileSeparatorRect {
-        width: 150px;
-        padding-left: 22px;
-    }
-    .pathwayVideoContainer {
-        width: 80%;
-        padding-top: 60%;
-    }
-    .pathwayLandingSponsoredBy {
-        height: 30px;
-    }
-
     .multiSelectOption { min-height: 30px; }
     .multipleChoiceCircle {
         margin-top: 0px;
@@ -6176,9 +6019,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .pathwayLandingQuoteRight {
         width: 240px;
-    }
-    .pathwayLandingSponsoredBy {
-        height: 23px;
     }
 
     textarea.multipleChoiceCustomAnswer {
