@@ -176,14 +176,14 @@ class EmployeeResults extends Component {
             <div className="analysis center aboutMeSection" style={style.tabContent}>
                 <div style={style.candidateScore}>
                     <div className="resultTopShadow center lightBlackBackground paddingTop20px">
-                        <div className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore inlineBlock">
+                        <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
                             Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                         </div>
                         <HoverTip style={{marginTop: "35px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
                         <div className="resultsSlidersContainer">
                             <div>
                                 <div
-                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
                                     Predicted Performance<br/>
                                     <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted, "predicted")}</p>
                                 </div>
@@ -196,7 +196,7 @@ class EmployeeResults extends Component {
                             </div>
                             <div>
                                 <div
-                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
                                     Skill Level<br/>
                                     <p style={style.lightBlue}>{qualifierFromScore(this.state.skill, "skill")}</p>
                                 </div>
@@ -283,7 +283,7 @@ class EmployeeResults extends Component {
         }
 
         const loading = this.state.loading;
-        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="grayText" /></div>
+        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="secondary-gray" /></div>
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
         const responsesSection = loading ? loadingArea : this.makeResponsesSection();
 
@@ -314,9 +314,9 @@ class EmployeeResults extends Component {
                                         </div>
                                         <div>
                                             {candidate.name ? <div><div
-                                                className="grayText font26px font14pxUnder700">{candidate.name}
+                                                className="secondary-gray font26px font14pxUnder700">{candidate.name}
                                             </div>
-                                            <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
+                                            <a className="font18px font12pxUnder500 secondary-gray grayTextOnHover underline"
                                                href={mailtoEmail}>Contact</a></div>
                                            : null}
                                         </div>

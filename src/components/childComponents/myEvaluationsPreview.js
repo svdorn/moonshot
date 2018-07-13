@@ -98,7 +98,7 @@ class MyEvaluationsPreview extends Component {
 
         if (editing) {
             clickableArea = (
-                <div className="grayText font16px font14pxUnder800 marginTop10px">
+                <div className="secondary-gray font16px font14pxUnder800 marginTop10px">
                     <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className="clickable underline" style={{display: "inline-block"}}>
                         Candidate Results
                     </div>
@@ -127,7 +127,7 @@ class MyEvaluationsPreview extends Component {
         } else {
             if (this.props.completedDate) {
                 clickableArea = (
-                    <div className="grayText font16px font14pxUnder800 marginTop15px">
+                    <div className="secondary-gray font16px font14pxUnder800 marginTop15px">
                         Complete - your results are being reviewed
                     </div>
                 )
@@ -165,7 +165,7 @@ class MyEvaluationsPreview extends Component {
                     <div className="myEvalsInfo" style={{display: 'inline-block'}}>
                         {infoArea}
                         <div className="font18px font16pxUnder800 primary-cyan">{this.props.name}</div>
-                        <div className="grayText">{this.props.company} Evaluation</div>
+                        <div className="secondary-gray">{this.props.company} Evaluation</div>
                         {editing ? estimatedLength : null}
                         {editing ? positionSkills : <div className="marginTop20px">{positionSkills}</div>}
                         {clickableArea}

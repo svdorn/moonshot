@@ -210,14 +210,14 @@ class CandidateResults extends Component {
         return (
             <div className="analysis center aboutMeSection blackBackground" style={style.tabContent}>
                 <div className="center" style={{backgroundColor:"#393939"}}>
-                    <div className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore inlineBlock">
+                    <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
                         Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                     </div>
                     <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
                     <div className="resultsSlidersContainer">
                         <div>
                             <div
-                                className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
                                 Predicted Performance<br/>
                                 <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted, "predicted")}</p>
                             </div>
@@ -230,7 +230,7 @@ class CandidateResults extends Component {
                         </div>
                         <div>
                             <div
-                                className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
                                 Skill Level<br/>
                                 <p style={style.lightBlue}>{qualifierFromScore(this.state.skill, "skill")}</p>
                             </div>
@@ -492,7 +492,7 @@ class CandidateResults extends Component {
                             <div>
                                 {candidate.name ?
                                     <div>
-                                        <div className="grayText font26px font18pxUnder700 candidateName">
+                                        <div className="secondary-gray font26px font18pxUnder700 candidateName">
                                             {candidate.name}
                                         </div>
                                         <div style={{marginTop: "8px"}}>
