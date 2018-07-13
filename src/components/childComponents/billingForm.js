@@ -45,7 +45,7 @@ class BillingForm extends Component {
                     <form onSubmit={this.handleSubmit.bind(this)}>
                         <h1 className="marginTop15px marginBottom20px">Billing</h1>
                         <div className="center" style={{width: "90%", marginLeft:"5%"}}>
-                            <div className="blueTextHome font18px marginBottom10px">Payment Information</div>
+                            <div className="primary-cyan font18px marginBottom10px">Payment Information</div>
                             <div className="whiteText font14px marginBottom30px">Please enter your payment information below and we will
                             bill your card with our agreed upon terms for your active positions.</div>
                             <CardElement style={{base: {fontSize: '16px', color:'white'}}} />

@@ -427,7 +427,7 @@ class BusinessHome extends Component {
                 ?
                 <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
                         <div
-                            className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop30px">
+                            className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop30px">
                             See Demo
                         </div>
                         <div className="whiteText font16px font14pxUnder500" style={{width: "85%", margin: "10px auto"}}>
@@ -462,7 +462,7 @@ class BusinessHome extends Component {
         if (screen === 1) {
                     dialogBody = (
                         <form onSubmit={this.handleSubmitForm.bind(this)} className="center">
-                            <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop40px">
+                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
                                 Try Moonshot Insights for Free
                             </div>
                             <div className="whiteText font16px font14pxUnder700 font12pxUnder400 marginTop10px">
@@ -500,7 +500,7 @@ class BusinessHome extends Component {
                     const calendly = <div className="calendly-inline-widget" data-url="https://calendly.com/kyle-treige-moonshot/30min" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
                     dialogBody = (
                         <div>
-                            <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
                                 Activate your Evaluation
                             </div>
                             <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"97%", margin:"10px auto 0"}}>
@@ -572,7 +572,7 @@ class BusinessHome extends Component {
                                 <div className="buttonArea font18px font14pxUnder900">
                                     <input className="blackInput getStarted" type="text" placeholder="Email Address" name="email"
                                     value={this.state.email} onChange={this.onChange.bind(this)}/>
-                                    <div className="getStarted button medium round-10px gradient gradient-1-purple-light gradient-2-cyan" onClick={this.handleOpen}>
+                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={this.handleOpen}>
                                         Try for Free
                                     </div>
                                 </div>
@@ -617,7 +617,7 @@ class BusinessHome extends Component {
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextLeft forBusiness">
                                 <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
-                                    <h2 className="pinkTextHome font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
+                                    <h2 className="secondary-red font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
                                     Analyze candidates to see if they exhibit the profile of
                                     proven high performers in that position.
                                 </div>
@@ -639,7 +639,7 @@ class BusinessHome extends Component {
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextRight forBusiness">
                                 <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forHome whiteText">
-                                    <h2 className="blueTextHome font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
+                                    <h2 className="primary-cyan font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
                                     </h2>
                                     Why read hundreds of resumes? Moonshot uses
                                     machine learning to reveal the empirical evidence
@@ -708,7 +708,7 @@ class BusinessHome extends Component {
 
                         <div>
                             <div className="center">
-                                <div className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400 center darkDarkPurpleText statisticsHeader">
+                                <div className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400 center primary-purple-light statisticsHeader">
                                     Predictive Analytics Improve Hiring Results
                                 </div>
                                 <div>
@@ -863,7 +863,7 @@ class BusinessHome extends Component {
 
                     <section id="crystalBall" className="marginBottom60px">
                         <div className="center">
-                            <div className="blueTextHome font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
+                            <div className="primary-cyan font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
                                 {"Your crystal ball to identify"}<div className="above800only noHeight"><br/></div>{" good and bad hires before it's too late."}
                             </div>
                             <img

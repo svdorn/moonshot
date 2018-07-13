@@ -50,7 +50,7 @@ class AgreeToTerms extends Component {
             // add 'and' right before the last element
             const and = i === agreements.length - 1 && i > 0 ? "and " : "";
             links.push(comma + and);
-            links.push(<a key={agreement.name} className="blueTextHome" href={`/${agreement.link}`} target="_blank">{agreement.name}</a>);
+            links.push(<a key={agreement.name} className="primary-cyan" href={`/${agreement.link}`} target="_blank">{agreement.name}</a>);
         }
 
         return links;

@@ -38,7 +38,7 @@ class Settings extends Component {
                 <HomepageTriangles className="blurred" style={{pointerEvents: "none"}} variation="5"/>
                 <div className="formContainer center">
                     <div className="form lightBlackForm noBlur">
-                    <div className="font32px font28pxUnder700 blueTextHome marginTop10px">Settings</div>
+                    <div className="font32px font28pxUnder700 primary-cyan marginTop10px">Settings</div>
                     <Tabs
                         inkBarStyle={{background: 'white'}}
                         className="settingsTabs"

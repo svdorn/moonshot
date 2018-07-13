@@ -10,12 +10,6 @@ body {
 }
 
 :root {
-    --moonshotGreen: #3dffdd;
-    --moonshotGreenText: #00e2ba;
-    --moonshotPurple: #cf9bff;
-    --moonshotDarkPurple: #B869FF;
-    --onboarding3Purple: #b130d3;
-
     --primary-orange: #ff582d;
     --primary-pink: #fd0d8b;
     --primary-cyan: #76defe;
@@ -28,6 +22,18 @@ body {
     --secondary-gray: #d7d7d7;
     --secondary-red: #eb394f;
 }
+
+.primary-orange { color: var(--primary-orange); }
+.primary-pink { color: var(--primary-pink); }
+.primary-cyan { color: var(--primary-cyan); }
+.primary-peach { color: var(--primary-peach); }
+.primary-white { color: var(--primary-white); }
+.primary-purple-light { color: var(--primary-purple-light); }
+.primary-purple-dark { color: var(--primary-purple-dark); }
+.primary-black-light { color: var(--primary-black-light); }
+.primary-black-dark { color: var(--primary-black-dark); }
+.secondary-gray { color: var(--secondary-gray); }
+.secondary-red { color: var(--secondary-red); }
 
 .anchor {
     position: absolute;
@@ -1456,7 +1462,7 @@ form > h1 {
 }
 
 .menuItem2 {
-    color: var(--moonshotDarkPurple);
+    color: var(--primary-purple-dark);
     font-size: 20px;
     margin: 30px 10px 10px 10px;
 }
@@ -1827,45 +1833,6 @@ button.link {
     background: white;
     height: 100%;
     width: 100%;
-}
-.gradientBorderBlueBox {
-    height: 100%;
-    width: 100%;
-    background: linear-gradient(to bottom right, #3dabff, #5deaff);
-    padding: 3px;
-    top: 0;
-}
-.gradientBorderBlueBox > div {
-    background: white;
-    height: 100%;
-    width: 100%;
-}
-.gradientBorderPurpleToRedBox {
-    height: 100%;
-    width: 100%;
-    background: linear-gradient(to bottom right, var(--moonshotDarkPurple), #DD5E8E);
-    padding: 3px;
-    top: 0;
-}
-.gradientBorderPurpleToRedBox > div {
-    background: white;
-    height: 100%;
-    width: 100%;
-}
-.gradientBorderPurpleToPinkChip {
-    height: 36px;
-    background: linear-gradient(to bottom right, var(--moonshotDarkPurple), #ff79b7);
-    padding: 1px;
-    border-radius: 25px;
-    margin-left: 20px;
-}
-.gradientBorderPurpleToPinkChip > div {
-    background: white;
-    height: 100%;
-    width: 100%;
-    font-size: 20px;
-    padding: 2px 10px;
-    border-radius: 25px;
 }
 .whiteBorderChip {
     border: solid 1px white;
@@ -2732,11 +2699,6 @@ button.link {
     display: none;
 }
 
-.pathwayLandingIcons {
-    height: 45px;
-    width: 45px;
-    margin-bottom: 5px;
-}
 .pathwayLandingQuoteReplacementImg {
     width: 100%;
     margin-top: 50px;
@@ -2789,17 +2751,6 @@ button.link {
 .profileInfoSkills {
     text-align: center;
 }
-.profileInfoSkillsLeft {
-    width: 20%;
-    display: inline-block;
-    vertical-align: top;
-    margin-right: 5%;
-}
-.profileInfoSkillsRight {
-    width: 60%;
-    display: inline-block;
-    vertical-align: top;
-}
 
 
 #onboardingBioTextarea {
@@ -2828,7 +2779,7 @@ button.link {
     opacity: .3;
 }
 .onboardingDotsgoals > div {
-    background: linear-gradient(to right, var(--moonshotPurple), var(--moonshotDarkPurple));
+    background: linear-gradient(to right, var(--primary-purple-light), var(--primary-purple-dark));
     opacity: .3;
 }
 .onboardingDotsinfo > div {
@@ -2926,17 +2877,13 @@ button.link {
     margin-right: 5%;
 }
 
-.pinkTextHome { color: #d3546e; }
-.blueTextHome { color: #72d6f5; }
 .orangeTextHome { color: #ff5438; }
 .redText { color: rgb(244, 67, 54); }
 .whiteText { color: white; }
 .grayText { color: #d7d7d7; }
 .blueText { color: var(--primary-cyan); }
 .lightBlueText { color: rgb(117, 220, 252); }
-.purpleText { color: var(--moonshotPurple) }
-.darkPurpleText { color: var(--moonshotDarkPurple) }
-.darkDarkPurpleText { color: #b17dfe; }
+.purpleText { color: var(--primary-purple-dark) }
 .brightPinkText { color: #fd0d8b; }
 .brightOrangeText { color: #ff5d27; }
 .lightPurpleText { color: #b37bfe; }
@@ -2946,7 +2893,6 @@ button.link {
 .grayTextOnHover:hover { color: #d7d7d7; }
 
 
-.onboarding3PurpleText { color: var(--onboarding3Purple); }
 .onboardingPage1Text {
     background: linear-gradient(to right, #5deaff, #3dabff);
     -webkit-background-clip: text;
@@ -3595,17 +3541,8 @@ button.link {
 .homepageImgBackgroundRight {
     right: 4%;
 }
-.greenGradient {
-    background: linear-gradient(to top right, #28EBC3, #6EFEE4);
-}
-.blueGradient {
-    background: linear-gradient(to top left, #32C4FC, #2CFCFE);
-}
-.purpleToRed {
-    background: linear-gradient(to top left, #DD5E8E, var(--moonshotDarkPurple));
-}
 .purpleText {
-    color: var(--moonshotDarkPurple);
+    color: var(--primary-purple-light);
 }
 
 .homepageTrajectoryTextLeftDiv,
@@ -3747,41 +3684,12 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
     margin : 0 auto;
 }
 
-.aResumeCantDoThis {
-    position: relative;
-    margin: 140px 5% 40px;
-    overflow: auto;
-}
-#aResumeCantDoThisContent {
-    margin-top: 30px;
-    width: 55%;
-    float: left;
-    text-align: center;
-}
+
 .forBusinessIcon {
     margin-bottom: 20px;
     height: 70px;
 }
-.aResumeCantDoThisText {
-    width: 90%;
-    margin-left: 5%;
-}
 
-#pathwayLandingTopInfoList > li {
-    width: 200px;
-    margin: 0 2%;
-}
-#pathwayLandingTopInfoList {
-    position: absolute;
-    bottom: 0px;
-    width: 100%;
-}
-.pathwayLandingIconsLeft {
-    height: 31px;
-    margin-right: 10px;
-    position: relative;
-    top: -8px;
-}
 .pathwayLandingQuote {
     text-align: center;
     padding: 70px 0px;
@@ -4023,9 +3931,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .whiteTriangle::after {
     background: linear-gradient(to top, rgba(255, 255, 255, .7), rgba(255, 255, 255, .3));
 }
-.purpleTriangle::after { background: var(--moonshotPurple); }
-.darkPurpleTriangle::after { background: var(--moonshotDarkPurple); }
-.greenTriangle::after { background: var(--moonshotGreen); }
+.purpleTriangle::after { background: var(--primary-purple-light); }
+.darkPurpleTriangle::after { background: var(--primary-purple-dark); }
+.greenTriangle::after { background: var(--primary-cyan); }
 
 /* end decorative triangles */
 
@@ -4079,10 +3987,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .forBusinessBoxText { padding: 0px 2px; }
 .marginTopOnDesktop { margin-top: 60px; }
 
-#aResumeCantDoThisTitle {
-    margin-bottom: 30px;
-    margin-top: -34px;
-}
 
 .sliderOnSelect {
     width: 200px;
@@ -4735,10 +4639,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: 0;
     }
 
-    #aResumeCantDoThisContent {
-        width: 85%;
-        margin-left: 7%;
-    }
     .pathwayLandingQuoteLeft {
         width: 90%;
         display: block;
@@ -5079,17 +4979,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .wideScreenMenuItem {
         display: none !important;
-    }
-    #pathwayLandingTopInfoList > li {
-        width: 145px;
-    }
-    .pathwayLandingIcons {
-        height: 36px;
-        width: 36px;
-    }
-    .pathwayLandingIconsLeft {
-        height: 28px;
-        top: -5px;
     }
     .infoBoxImage {
         height: 50px;
@@ -5582,30 +5471,12 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .fullHeight, .landingPage { height: 550px; min-height: 550px; }
     .infoBox { padding-top: 190px; }
 
-    .gradientBorderPurpleToPinkChip { height: 30px; }
-    .gradientBorderPurpleToPinkChip > div {
-        font-size: 15px;
-        padding-top: 2px;
-    }
     .lightBlueChip > div {
         font-size: 15px;
         padding-top: 2px;
     }
     .skillChip {
         font-size: 15px;
-    }
-    .profileInfoSkillsLeft {
-        width: 100%;
-        display: block;
-        margin-right: 0;
-    }
-    .profileInfoSkillsRight {
-        width: 95%;
-        display: block;
-        margin: auto;
-        max-height: 461px;
-        overflow-y: hidden;
-        padding-right: 20px;
     }
 
     #exampleSkillsContainer {
@@ -5618,18 +5489,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-bottom: 0px;
     }
 
-    .aResumeCantDoThis { margin-top: 90px; }
-
-    .pathwayLandingIcons { margin: 0px 0px 10px 3px; }
-    #pathwayLandingTopInfoList > li { width: 70px; }
-    .pathwayLandingIcons {
-        height: 30px;
-        width: 30px;
-    }
-    .pathwayLandingIconsLeft {
-        height: 24px;
-        top: -5px;
-    }
     .pathwayLandingQuoteRight {
         width: 300px;
     }

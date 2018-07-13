@@ -514,7 +514,7 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                     >
-                        <div className="blueTextHome font24px font20pxUnder500 marginTop20px">
+                        <div className="primary-cyan font24px font20pxUnder500 marginTop20px">
                             Success
                         </div>
                         <div className="whiteText font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
@@ -563,7 +563,7 @@ class AddUserDialog extends Component {
                     contentClassName="center"
                 >
 
-                    <div className="blueTextHome font24px font20pxUnder500 marginTop20px">
+                    <div className="primary-cyan font24px font20pxUnder500 marginTop20px">
                         Select a position
                     </div>
                     <DropDownMenu value={this.state.position}
@@ -597,7 +597,7 @@ class AddUserDialog extends Component {
 
                     <form className="center">
                         <div
-                            className="blueTextHome font24px font20pxUnder500 marginTop10px">
+                            className="primary-cyan font24px font20pxUnder500 marginTop10px">
                             Add
                         </div>
                         {this.state.formErrors ?
@@ -642,7 +642,7 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                 >
-                    <div className="blueTextHome font24px font20pxUnder500 marginTop10px">
+                    <div className="primary-cyan font24px font20pxUnder500 marginTop10px">
                         Last Step
                     </div>
                     <div className="whiteText font16px font12pxUnder500" style={{margin:"20px auto", width:"85%"}}>

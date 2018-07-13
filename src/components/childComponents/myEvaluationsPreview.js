@@ -109,7 +109,7 @@ class MyEvaluationsPreview extends Component {
             );
 
             infoArea = (
-                <div className="blueTextHome font16px center myEvalsInfoRight">
+                <div className="primary-cyan font16px center myEvalsInfoRight">
                     Time Allotted
                     <div className="whiteText marginBottom10px">{this.props.timeAllotted} Days</div>
                     Completions
@@ -121,7 +121,7 @@ class MyEvaluationsPreview extends Component {
 
             estimatedLength = (
                 <div className="whiteText font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom20px">Estimated Length:
-                    <div className="blueTextHome" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
+                    <div className="primary-cyan" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
                 </div>
             );
         } else {
@@ -142,7 +142,7 @@ class MyEvaluationsPreview extends Component {
             }
 
             infoArea = (
-                <div className="blueTextHome font16px center myEvalsInfoRight">
+                <div className="primary-cyan font16px center myEvalsInfoRight">
                     Assigned
                     <div className="whiteText marginBottom10px">{this.makeDatePretty(this.props.assignedDate)}</div>
                     Deadline
@@ -164,7 +164,7 @@ class MyEvaluationsPreview extends Component {
 
                     <div className="myEvalsInfo" style={{display: 'inline-block'}}>
                         {infoArea}
-                        <div className="font18px font16pxUnder800 blueTextHome">{this.props.name}</div>
+                        <div className="font18px font16pxUnder800 primary-cyan">{this.props.name}</div>
                         <div className="grayText">{this.props.company} Evaluation</div>
                         {editing ? estimatedLength : null}
                         {editing ? positionSkills : <div className="marginTop20px">{positionSkills}</div>}

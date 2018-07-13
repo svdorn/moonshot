@@ -302,7 +302,7 @@ class MyEvaluations extends Component {
         if (screen === 1) {
                     dialogBody = (
                         <form onSubmit={this.handleSubmit.bind(this)} className="center">
-                            <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop40px">
+                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
                                 Add Evaluation
                             </div>
                             <div className="whiteText font16px font14pxUnder700 font12pxUnder400 marginTop10px">
@@ -325,7 +325,7 @@ class MyEvaluations extends Component {
         } else if (screen === 2) {
                     dialogBody = (
                         <div>
-                            <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
                                 We&#39;ll get back to your shortly!
                             </div>
                             <div className="whiteTextImportant font16px font14pxUnder700 font12pxUnder400" style={{width:"90%", margin:"10px auto 0"}}>

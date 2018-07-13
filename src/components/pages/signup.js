@@ -327,8 +327,8 @@ class Signup extends Component {
                                             />
                                         </div>
 
-                                        I have read and agree to the Moonshot Insights <bdi className="clickable blueTextHome" onClick={this.handleOpenPP}>Privacy
-                                        Policy</bdi> and <bdi className="clickable blueTextHome" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
+                                        I have read and agree to the Moonshot Insights <bdi className="clickable primary-cyan" onClick={this.handleOpenPP}>Privacy
+                                        Policy</bdi> and <bdi className="clickable primary-cyan" onClick={this.handleOpenTOU}>Terms of Use</bdi>.
                                     </div>
                                     <br/>
                                     <RaisedButton
