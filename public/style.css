@@ -94,19 +94,11 @@ footer {
     transition: all 0.5s ease;
 }
 
-#toolIconExtraInfo {
-    width: 25px;
-    display: inline;
-    margin: -10px 10px 0px 0px;
-}
-
 .container .footer-text {
   margin: 20px 0;
 }
 
-.moonshotMenuLogo {
-    margin-left: 35px;
-}
+.moonshotMenuLogo { margin-left: 35px; }
 
 .inputContainer {
     position: relative;
@@ -116,34 +108,11 @@ footer {
 .inputContainer > div:nth-child(2) > input {
     padding-left: 5px !important;
 }
-.messageInputContainer > div:nth-child(2) > div:first-child {
-    padding-left: 5px !important;
-}
 .inputContainer > div:nth-child(2) > div:nth-child(2) {
     left: 5px;
 }
 .inputContainer > div:nth-child(2) > label:nth-child(1) {
     left: 5px;
-}
-.fieldWhiteSpace, .messageFieldWhiteSpace {
-    position: absolute;
-    height: 28px;
-    background-color: rgba(255,255,255, .4);
-    display: inline-block;
-}
-.fieldWhiteSpace {
-    width: 255px;
-    top: 35px;
-}
-.messageFieldWhiteSpace {
-    width: 500px;
-    top: 12px;
-    height: calc(100% - 20px);
-    min-height: 28px;
-}
-.lightWhiteForm {
-    background-color: rgba(255,255,255,.6);
-    color: white;
 }
 .lightBlackForm {
     z-index: 10;
@@ -183,19 +152,6 @@ form > h1 {
     color: var(--primary-cyan);
 }
 
-.form-right{
-    text-align: center;
-    padding-bottom: 40px;
-    padding-top: 20px;
-}
-
-.formOther{
-  text-align: center;
-  margin-top: 140px;
-  display: inline-block;
-  padding: 0 60px 15px 60px;
-}
-
 
 .skillContinueButton.disabled, .psychAnalysisButton.disabled {
     background: linear-gradient(to left, #3a3a3a, #afafaf);
@@ -209,9 +165,7 @@ form > h1 {
     cursor: pointer;
 }
 
-.evalPortionIntro {
-    text-align: center
-}
+.evalPortionIntro { text-align: center }
 .evalPortionIntro > div:not(:first-child) {
     text-align: left;
     width: 700px;
@@ -1832,17 +1786,6 @@ button.link {
     height: 100%;
     width: 100%;
 }
-.whiteBorderChip {
-    border: solid 1px white;
-    display: inline-block;
-    margin-left: 15px;
-}
-.whiteBorderChip > div {
-    background: transparent;
-    height: 100%;
-    width: 100%;
-    padding: 2px 13px;
-}
 .lightBlueChip {
     /* height: 36px; */
     background: var(--primary-cyan);
@@ -1866,14 +1809,6 @@ button.link {
     display: inline-block;
 }
 
-.paperBox {
-    height: 300px;
-    width: 400px;
-    display: inline-block;
-    margin: 0 25px 40px;
-    vertical-align: top;
-}
-
 .paperBoxBusinessHome {
     height: 465px;
     width: 340px;
@@ -1894,41 +1829,6 @@ button.link {
     padding: 2px 13px;
 }
 
-.gradientBorder {
-    padding: 3px;
-    background: linear-gradient(to bottom right, #5dfdff, #3dabff);
-}
-.gradientBorder > div {
-    background: white;
-    height: 100%;
-    width: 100%;
-}
-.gradientBorderPurpleBlue {
-    padding: 3px;
-    background: linear-gradient(to bottom right, #b37bfe, #74e2ff);
-}
-.gradientBorderPurpleBlue > div {
-    background: white;
-    height: 100%;
-    width: 100%;
-}
-.gradientBorderOrangeYellow {
-    padding: 3px;
-    background: linear-gradient(to top left, #f24c49, #ebbb8a);
-}
-.gradientBorderOrangeYellow > div {
-    background: white;
-    height: 100%;
-    width: 100%;
-}
-.whiteBorder {
-    border: 3px solid white;
-}
-.whiteBorder > div {
-    background: linear-gradient(to bottom right, #983cc9, #e36273);
-    height: 100%;
-    width: 100%;
-}
 .businessHomeGradientBorder {
     padding: 2px;
     background: linear-gradient(to top left, #ff5d27, #fd0d8b);
@@ -4364,10 +4264,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 @media only screen and (max-width: 900px) {
     .above900only { display: none; }
 
-    .paperBox {
-        height: 225px;
-        width: 300px;
-    }
     .forBusinessBox { padding-top: 13px; }
 
     .frontPage > .skewedRectanglesContainer {
@@ -5847,11 +5743,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 @media only screen and (max-width: 350px) {
     .above350only { display: none; }
-    .paperBox {
-        height: 195px;
-        width: 260px;
-        margin: 0 20px 40px;
-    }
     .forBusinessBox { padding-top: 10px; }
     .forBusinessBox > p {
         font-size: 11px;

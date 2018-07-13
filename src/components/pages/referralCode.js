@@ -219,7 +219,7 @@ class ReferralCode extends Component {
                         <AffiliateAgreement/>
                     </Dialog>
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
-                    <div className="form lightWhiteForm" style={{padding: "10px 20px"}}>
+                    <div className="form" style={{padding: "10px 20px"}}>
                         {this.state.referralCode ?
                             <div className="primary-cyan">
                                 <span className="font20px">Your referral code is:</span>
@@ -243,7 +243,6 @@ class ReferralCode extends Component {
                                 <span className="font24px">Earn $300 for every friend that <br/>gets a job through Moonshot.</span>
                                 <br/>
                                 <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
                                     <Field
                                         name="name"
                                         component={renderTextField}
@@ -252,7 +251,6 @@ class ReferralCode extends Component {
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
                                     <Field
                                         name="email"
                                         component={renderTextField}

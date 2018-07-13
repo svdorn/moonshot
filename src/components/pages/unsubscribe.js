@@ -118,7 +118,7 @@ class Unsubscribe extends Component {
                     <meta name="description" content="Unsubscribe from all Moonshot emails. Sorry to see you go!" />
                 </MetaTags>
                 <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
-                <div className="form lightWhiteForm">
+                <div className="form">
                     {this.state.unsubscribedViaUrl ?
                         <div>{this.props.location.query.email} was successfully unsubscribed.</div>
                     :
@@ -126,7 +126,6 @@ class Unsubscribe extends Component {
                         <h1>Unsubscribe</h1>
                         <div className="font20px font14pxUnder700 font10pxUnder400 font20pxUnder500 primary-cyan">Enter your email to unsubscribe.</div>
                         <div className="inputContainer">
-                        <div className="fieldWhiteSpace"/>
                         <Field
                         name="email"
                         component={renderTextField}
