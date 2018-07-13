@@ -111,16 +111,16 @@ class MyEvaluationsPreview extends Component {
             infoArea = (
                 <div className="primary-cyan font16px center myEvalsInfoRight">
                     Time Allotted
-                    <div className="whiteText marginBottom10px">{this.props.timeAllotted} Days</div>
+                    <div className="primary-white marginBottom10px">{this.props.timeAllotted} Days</div>
                     Completions
-                    <div className="whiteText marginBottom10px">{this.props.completions} Users</div>
+                    <div className="primary-white marginBottom10px">{this.props.completions} Users</div>
                     In Progress
-                    <div className="whiteText">{this.props.usersInProgress} Users</div>
+                    <div className="primary-white">{this.props.usersInProgress} Users</div>
                 </div>
             );
 
             estimatedLength = (
-                <div className="whiteText font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom20px">Estimated Length:
+                <div className="primary-white font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom20px">Estimated Length:
                     <div className="primary-cyan" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
                 </div>
             );
@@ -134,7 +134,7 @@ class MyEvaluationsPreview extends Component {
             } else {
                 clickableArea = (
                     <div style={{marginTop: "20px"}}>
-                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 whiteText" onClick={this.continueEval} style={{padding: "5px 17px"}}>
+                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.continueEval} style={{padding: "5px 17px"}}>
                                 Start/Continue
                             </button>
                     </div>
@@ -144,11 +144,11 @@ class MyEvaluationsPreview extends Component {
             infoArea = (
                 <div className="primary-cyan font16px center myEvalsInfoRight">
                     Assigned
-                    <div className="whiteText marginBottom10px">{this.makeDatePretty(this.props.assignedDate)}</div>
+                    <div className="primary-white marginBottom10px">{this.makeDatePretty(this.props.assignedDate)}</div>
                     Deadline
-                    <div className="whiteText marginBottom10px">{this.makeDatePretty(this.props.deadline)}</div>
+                    <div className="primary-white marginBottom10px">{this.makeDatePretty(this.props.deadline)}</div>
                     Completed
-                    <div className="whiteText">{this.makeDatePretty(this.props.completedDate)}</div>
+                    <div className="primary-white">{this.makeDatePretty(this.props.completedDate)}</div>
                 </div>
             );
         }

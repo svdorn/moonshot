@@ -229,7 +229,7 @@ class EmployeeResults extends Component {
                  <div className="resultsPageSpacer" />
 
                 <div
-                    className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                    className="primary-white center font24px font20pxUnder700 font16pxUnder500">
                     Skills Evaluation
                 </div>
                 <div>
@@ -260,7 +260,7 @@ class EmployeeResults extends Component {
 
         // if there are no frqs for this position eval
         if (responses.length === 0) {
-            responses = <div className="whiteText center">No responses for this position.</div>;
+            responses = <div className="primary-white center">No responses for this position.</div>;
         }
 
         return (

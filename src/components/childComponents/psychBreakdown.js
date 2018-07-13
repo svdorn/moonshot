@@ -170,8 +170,8 @@ class PsychBreakdown extends Component {
         const extraClass = this.props.className ? " " + this.props.className : "";
 
         return (
-            <div className={"results psychSection blackBackground whiteText" + extraClass}>
-                <div className="title whiteText center font24px font20pxUnder700 font16pxUnder500">
+            <div className={"results psychSection blackBackground primary-white" + extraClass}>
+                <div className="title primary-white center font24px font20pxUnder700 font16pxUnder500">
                     Psychometric Analysis
                 </div>
                 <div className="statsAndDescription" style={coloredText}>

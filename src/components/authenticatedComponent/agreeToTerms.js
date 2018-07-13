@@ -63,7 +63,7 @@ class AgreeToTerms extends Component {
                 <div className="headerSpace" />
                 <div className="fillScreen center">
                     <div className="form lightBlackForm" style={{padding: "10px 20px 20px"}}>
-                        <h1 className="whiteText" style={{margin: "20px 0 40px"}}>Terms and Conditions</h1>
+                        <h1 className="primary-white" style={{margin: "20px 0 40px"}}>Terms and Conditions</h1>
                         <div className="checkbox smallCheckbox whiteCheckbox"
                              onClick={this.handleCheckMarkClick.bind(this)}
                         >

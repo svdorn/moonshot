@@ -351,7 +351,7 @@ class AdminQuestions extends Component {
             content = (
                 <div>
                     Finished with the admin questions!<br/>
-                    <button className="button gradient-transition gradient-1-red gradient-2-orange round-4px marginTop10px whiteText font22px font16pxUnder600"
+                    <button className="button gradient-transition gradient-1-red gradient-2-orange round-4px marginTop10px primary-white font22px font16pxUnder600"
                             onClick={this.finish.bind(this)}>
                         Advance
                     </button>
@@ -392,7 +392,7 @@ class AdminQuestions extends Component {
         }
 
         return (
-            <div className="blackBackground fillScreen whiteText center">
+            <div className="blackBackground fillScreen primary-white center">
                 <MetaTags>
                     <title>Admin Questions | Moonshot</title>
                     <meta name="description" content={"Answer some administrative questions and then you'll be ready for the position evaluation."} />

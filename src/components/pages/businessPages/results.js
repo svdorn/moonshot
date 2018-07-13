@@ -240,7 +240,7 @@ class Results extends Component {
                  <div className="resultsPageSpacer" />
 
                 <div
-                    className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                    className="primary-white center font24px font20pxUnder700 font16pxUnder500">
                     Skills Evaluation
                 </div>
                 <div>

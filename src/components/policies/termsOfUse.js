@@ -17,7 +17,7 @@ class TermsOfUse extends Component {
 
         return (
             <div>
-                <div style={containerStyle} className="whiteText">
+                <div style={containerStyle} className="primary-white">
 
                     <b className="font20px font18pxUnder700px">Terms of Use Agreement</b>
 

@@ -220,11 +220,11 @@ class SkillEditor extends Component {
 
         // if loading the skill
         if (self.state.loading) {
-            return <div className="fillScreen whiteText"><CircularProgress /></div>;
+            return <div className="fillScreen primary-white"><CircularProgress /></div>;
         }
 
         if (self.state.error) {
-            return <div className="fillScreen whiteText">{"Error"}</div>;
+            return <div className="fillScreen primary-white">{"Error"}</div>;
         }
 
         let nameInput = (
@@ -315,7 +315,7 @@ class SkillEditor extends Component {
         }
 
         return (
-            <div className="fillScreen whiteText skillEditor" style={{margin: "30px"}}>
+            <div className="fillScreen primary-white skillEditor" style={{margin: "30px"}}>
                 {nameInput}
                 {levels}
                 <button onClick={() => self.addLevel()}>Add level</button><br/>

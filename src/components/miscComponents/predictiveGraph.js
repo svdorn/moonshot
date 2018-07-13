@@ -304,7 +304,7 @@ class PredictiveGraph extends Component {
         let title = null;
         if (this.props.title) {
             title = (
-                <div className="predictiveGraphTitle whiteText center font24px font20pxUnder700 font16pxUnder500">
+                <div className="predictiveGraphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">
                     Predicted Performance
                 </div>
             )

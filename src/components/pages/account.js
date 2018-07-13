@@ -158,7 +158,7 @@ class Account extends Component {
                                         src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                                     />
                                 </div>
-                                <div className="whiteText" style={{display:"inline-block"}}>
+                                <div className="primary-white" style={{display:"inline-block"}}>
                                     Hide Profile From Employers
                                 </div>
                             </div>

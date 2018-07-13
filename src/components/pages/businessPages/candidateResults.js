@@ -246,7 +246,7 @@ class CandidateResults extends Component {
 
                 {this.state.windowWidth ?
                     <div>
-                        <div className="graphTitle whiteText center font24px font20pxUnder700 font16pxUnder500">{"Predicted Performance"}</div>
+                        <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predicted Performance"}</div>
                         <PredictiveGraph
                             dataPoints={this.state.predictivePoints}
                             height={graphHeight}
@@ -265,7 +265,7 @@ class CandidateResults extends Component {
                 />
 
                 <div
-                    className="graphTitle whiteText center font24px font20pxUnder700 font16pxUnder500">
+                    className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">
                     Skills Evaluation
                 </div>
                 {this.state.windowWidth ?

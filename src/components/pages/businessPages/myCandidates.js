@@ -1165,7 +1165,7 @@ class MyCandidates extends Component {
         const mobileClass = this.state.mobile ? " mobile" : ""
 
         return (
-            <div className={"jsxWrapper blackBackground fillScreen myCandidates whiteText" + mobileClass} style={{paddingBottom: "20px"}} ref='myCandidates'>
+            <div className={"jsxWrapper blackBackground fillScreen myCandidates primary-white" + mobileClass} style={{paddingBottom: "20px"}} ref='myCandidates'>
                 {this.props.currentUser.userType == "accountAdmin" ?
                     <AddUserDialog position={this.state.position} tab={"Candidate"}/>
                     : null

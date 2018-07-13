@@ -28,6 +28,7 @@ body {
 .primary-cyan { color: var(--primary-cyan); }
 .primary-peach { color: var(--primary-peach); }
 .primary-white { color: var(--primary-white); }
+.primary-white-important { color: var(--primary-white) !important; }
 .primary-purple-light { color: var(--primary-purple-light); }
 .primary-purple-dark { color: var(--primary-purple-dark); }
 .primary-black-light { color: var(--primary-black-light); }
@@ -2877,9 +2878,6 @@ button.link {
     margin-right: 5%;
 }
 
-.orangeTextHome { color: #ff5438; }
-.redText { color: rgb(244, 67, 54); }
-.whiteText { color: white; }
 .grayText { color: #d7d7d7; }
 .blueText { color: var(--primary-cyan); }
 .lightBlueText { color: rgb(117, 220, 252); }
@@ -3679,7 +3677,6 @@ li.pathwayPreviewLi.featuredPathwayPreview { margin-bottom: 60px; }
 }
 
 .blackTextImportant { color: black !important; }
-.whiteTextImportant { color: white !important; }
 .recharts-wrapper {
     margin : 0 auto;
 }

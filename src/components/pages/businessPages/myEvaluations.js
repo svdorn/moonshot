@@ -186,7 +186,7 @@ class MyEvaluations extends Component {
             <FlatButton
                 label="Close"
                 onClick={this.handleClose}
-                className="whiteTextImportant"
+                className="primary-white-important"
             />,
         ];
 
@@ -305,7 +305,7 @@ class MyEvaluations extends Component {
                             <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
                                 Add Evaluation
                             </div>
-                            <div className="whiteText font16px font14pxUnder700 font12pxUnder400 marginTop10px">
+                            <div className="primary-white font16px font14pxUnder700 font12pxUnder400 marginTop10px">
                                 Let us know the position you&#39;d like to add an evaluation for and we&#39;ll contact you within 24 hours confirming next steps.
                             </div>
                             <Field
@@ -328,7 +328,7 @@ class MyEvaluations extends Component {
                             <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
                                 We&#39;ll get back to your shortly!
                             </div>
-                            <div className="whiteTextImportant font16px font14pxUnder700 font12pxUnder400" style={{width:"90%", margin:"10px auto 0"}}>
+                            <div className="primary-white-important font16px font14pxUnder700 font12pxUnder400" style={{width:"90%", margin:"10px auto 0"}}>
                                 Thanks for adding an evaluation, we&#39;ll get back to you shortly with next steps.
                             </div>
                         </div>
