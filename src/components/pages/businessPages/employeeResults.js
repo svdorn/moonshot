@@ -252,7 +252,7 @@ class EmployeeResults extends Component {
         let responses = freeResponses.map(freeResponse => {
             return (
                 <div className="employerDiv freeResponse">
-                    <span className="lightBlueText">{freeResponse.question}</span>
+                    <span className="primary-cyan">{freeResponse.question}</span>
                     <div className="answer">{freeResponse.answer}</div>
                 </div>
             )
