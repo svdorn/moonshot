@@ -27,14 +27,14 @@ class Footer extends Component {
                                 &copy; 2018 Moonshot Learning Inc. All rights reserved.
                             </div>
                             <div style={{marginTop: "10px"}}>
-                                <a href="https://www.facebook.com/MoonshotLearning/" target="_blank">
+                                <a href="https://www.facebook.com/MoonshotInsights/" target="_blank">
                                     <img
                                         alt="Facebook Logo"
                                         width={13}
                                         height={20}
                                         src={"/logos/Facebook" + this.props.png}/>
                                 </a>
-                                <a href="https://twitter.com/moonshotteched" target="_blank"
+                                <a href="https://twitter.com/Moonshotinsight" target="_blank"
                                    style={{marginLeft: "20px"}}>
                                     <img
                                         alt="Twitter Logo"
