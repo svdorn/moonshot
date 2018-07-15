@@ -1205,6 +1205,7 @@ async function GET_evaluationResults(req, res) {
         interest: userPosition.interest,
         hiringStage: userPosition.hiringStage,
         isDismissed: userPosition.isDismissed,
+        endDate: userPosition.appliedEndDate,
         performanceScores: userPosition.scores,
         frqs, skillScores, psychScores
     };

@@ -79,6 +79,7 @@ class CandidateResults extends Component {
                 name: res.data.name,
                 title: res.data.title ? res.data.title : "",
                 email: res.data.email,
+                endDate: res.data.endDate,
                 interest: res.data.interest,
                 hiringStage: res.data.hiringStage,
                 isDismissed: res.data.isDismissed
@@ -98,13 +99,13 @@ class CandidateResults extends Component {
                 {
                     x: "Growth",
                     y: this.round(scores.growth),
-                    confidenceInterval: 16,
+                    confidenceInterval: this.isInProgress(scores.growth) ? 0 : 16,
                     inProgress: this.isInProgress(scores.growth)
                 },
                 {
                     x: "Performance",
                     y: this.round(scores.performance),
-                    confidenceInterval: 16,
+                    confidenceInterval: this.isInProgress(scores.performance) ? 0 : 16,
                     inProgress: this.isInProgress(scores.performance)
                 },
                 {
@@ -207,80 +208,89 @@ class CandidateResults extends Component {
             graphHeight = 250;
         }
 
+        const candidate = this.state.candidate;
+
         return (
-            <div className="analysis center aboutMeSection blackBackground" style={style.tabContent}>
-                <div className="center" style={{backgroundColor:"#393939"}}>
-                    <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
-                        Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
-                    </div>
-                    <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
-                    <div className="resultsSlidersContainer">
-                        <div>
-                            <div
-                                className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                Predicted Performance<br/>
-                                <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted, "predicted")}</p>
+            !candidate.endDate ?
+                <div className="analysis center aboutMeSection blackBackground" style={{paddingTop:"20px"}}>
+                    { candidate.name + " has not yet finished the evaluation." }
+                </div>
+            :
+                <div className="analysis center aboutMeSection blackBackground" style={{paddingBottom:"30px"}}>
+                    <div className="center" style={{backgroundColor:"#393939"}}>
+                        <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
+                            Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
+                        </div>
+                        <HoverTip style={{marginTop: "65px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
+                        <div className="resultsSlidersContainer">
+                            <div>
+                                <div
+                                    className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
+                                    Predicted Performance<br/>
+                                    <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted, "predicted")}</p>
+                                </div>
+                                <Slider disabled={true}
+                                        value={this.getSliderValue(this.state.predicted)}
+                                        min={50}
+                                        max={150}
+                                        className="resultsSlider"
+                                />
                             </div>
-                            <Slider disabled={true}
-                                    value={this.getSliderValue(this.state.predicted)}
-                                    min={50}
-                                    max={150}
-                                    className="resultsSlider"
+                            <div>
+                                <div
+                                    className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
+                                    Skill Level<br/>
+                                    <p style={style.lightBlue}>{qualifierFromScore(this.state.skill, "skill")}</p>
+                                </div>
+                                <Slider disabled={true}
+                                        value={this.getSliderValue(this.state.skill)}
+                                        min={50}
+                                        max={150}
+                                        className="resultsSlider"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
+                    {this.state.windowWidth ?
+                        <div>
+                            <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predicted Performance"}</div>
+                            <PredictiveGraph
+                                dataPoints={this.state.predictivePoints}
+                                height={graphHeight}
+                                className="graph"
+                                containerName={"candidateResults"}
+                                ref={ instance => { this.child1 = instance; } }
                             />
                         </div>
+                        :
+                        <div ref={ instance => { this.child1 = instance; } } />
+                    }
+
+                    <PsychBreakdown
+                        className="candidateResultsPsychBreakdown"
+                        psychScores={this.state.psychScores}
+                        forCandidate={false}
+                    />
+
+                    <div
+                        className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">
+                        Skills Evaluation
+                    </div>
+                    {this.state.windowWidth ?
                         <div>
-                            <div
-                                className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
-                                Skill Level<br/>
-                                <p style={style.lightBlue}>{qualifierFromScore(this.state.skill, "skill")}</p>
-                            </div>
-                            <Slider disabled={true}
-                                    value={this.getSliderValue(this.state.skill)}
-                                    min={50}
-                                    max={150}
-                                    className="resultsSlider"
+                            <PredictiveGraph
+                                dataPoints={this.state.hardSkillPoints}
+                                height={graphHeight}
+                                className="graph"
+                                containerName={"candidateResults"}
+                                ref={ instance => { this.child2 = instance; } }
                             />
                         </div>
-                    </div>
+                        :
+                        <div ref={ instance => { this.child2 = instance; } } />
+                    }
                 </div>
-
-                {this.state.windowWidth ?
-                    <div>
-                        <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predicted Performance"}</div>
-                        <PredictiveGraph
-                            dataPoints={this.state.predictivePoints}
-                            height={graphHeight}
-                            className="graph"
-                            containerName={"candidateResults"}
-                            ref={ instance => { this.child1 = instance; } }
-                        />
-                    </div>
-                    : null
-                }
-
-                <PsychBreakdown
-                    className="candidateResultsPsychBreakdown"
-                    psychScores={this.state.psychScores}
-                    forCandidate={false}
-                />
-
-                <div
-                    className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">
-                    Skills Evaluation
-                </div>
-                {this.state.windowWidth ?
-                    <div>
-                        <PredictiveGraph
-                            dataPoints={this.state.hardSkillPoints}
-                            height={graphHeight}
-                            className="graph"
-                            containerName={"candidateResults"}
-                            ref={ instance => { this.child2 = instance; } }
-                        />
-                    </div>
-                    : null
-                }
-            </div>
         );
     }
 
@@ -566,9 +576,6 @@ const style = {
     },
     topTab: {
         color: 'white',
-    },
-    tabContent: {
-        paddingBottom: '30px',
     },
     lightBlue: {
         color: '#75dcfc'
