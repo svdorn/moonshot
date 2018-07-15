@@ -1041,21 +1041,32 @@ class MyCandidates extends Component {
 
     // lets you choose the filters for the candidates you see on mobile
     mobileSortByDropdown() {
-        let sortItems = ["name", "score", "interest", "stage", "predicted", "skill"].map(sortTerm => {
+        let sortItems = ["Name", "Score", "Interest", "Stage", "Predicted", "Skill"].map(sortTerm => {
+            const lowercaseSortTerm = sortTerm.toLowerCase();
             return (
                 <MenuItem
-                    value={sortTerm}
+                    value={lowercaseSortTerm}
                     key={`position${sortTerm}`}
                 >
                     { sortTerm }
                     <UpDownArrows
-                        selected={this.state.sortBy===sortTerm}
+                        selected={this.state.sortBy===lowercaseSortTerm}
                         sortAscending={this.state.sortAscending}
                         style={{marginLeft: "12px"}}
                     />
                 </MenuItem>
             );
         });
+        // add the item that says Sort By
+        sortItems.unshift(
+            <MenuItem
+                disabled
+                value={"sort by"}
+                key={"candidates mobile sort by"}
+            >
+                { "Sort By" }
+            </MenuItem>
+        );
 
         return (
             <Select
@@ -1064,7 +1075,7 @@ class MyCandidates extends Component {
                     root: "selectRootWhite myCandidatesSelect",
                     icon: "selectIconWhiteImportant"
                 }}
-                value={this.state.sortBy}
+                value={"sort by"}
                 onChange={this.handleMobileSortByChange}
                 key="sort selector"
             >
@@ -1077,8 +1088,9 @@ class MyCandidates extends Component {
     // handle a click on a hiring stage
     handleMobileSortByChange = event => {
         const sortTerm = event.target.value;
-        console.log("sortTerm: ", sortTerm);
-        this.handleSortByChange(sortTerm)
+        if (sortTerm !== "sort by") {
+            this.handleSortByChange(sortTerm)
+        }
     }
 
 
