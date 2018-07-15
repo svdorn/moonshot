@@ -236,7 +236,7 @@ const descriptions = {
     },
     Temperament: {
         left: `Those who score further to the left on this scale (L) are the type that would run into a burning building to save someone without hesitation. They thrive in high stress environments, remaining cool, calm and collected. They deal with obstacles on their own, rarely feeling the need to burden others with their problems.`,
-        right: `Those who score further to the right on this scale (R) are very concerned with their overall well being. They are always thinking about the little things, a trait that makes mistakes hard to slip by them. They work best with people at their side and have a deep emotional bond with those people.`,
+        right: `Those who score further to the right on this scale (R) are very concerned with their overall well-being. They are always thinking about the little things, a trait that makes mistakes hard to slip by them. They work best with people at their side and have a deep emotional bond with those people.`,
     },
     Viewpoint: {
         left: `Those who score further to the left (L) are often seen as hard-hearted or callous. But they too understand others’ plights, even if they sometimes choose not to express it. They are able to make the hard decisions that others cannot bring themselves to make.`,
