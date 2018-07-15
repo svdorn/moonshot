@@ -12,24 +12,8 @@ import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
 import AffiliateAgreement from '../policies/affiliateAgreement';
 import MetaTags from 'react-meta-tags';
+import { renderTextField } from "../../miscComponents";
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
-
-};
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
-        {...input}
-        {...custom}
-    />
-);
 
 const validate = values => {
     const errors = {};
