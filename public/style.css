@@ -1302,7 +1302,7 @@ form > h1 {
     -ms-transition:     all 0.5s ease;
     transition:         all 0.5s ease;
 }
-.results > .statsAndDescription > .stats { padding: 30px; }
+.results > .statsAndDescription > .stats { padding: 15px 20px 25px; }
 .results > .statsAndDescription > .description { padding: 10px 15px; }
 .results > .statsAndDescription > .description > div > div,
 .results > .statsAndDescription > .description > div > div > div {
@@ -5500,8 +5500,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .onboardingIconLi {
         margin: 0px 10px;
     }
-
-    .results > .statsAndDescription > .stats { padding: 20px; }
 
     .twoOptionsOr { margin: 40px 8px 0; }
 
