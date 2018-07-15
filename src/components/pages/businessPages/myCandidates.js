@@ -662,6 +662,17 @@ class MyCandidates extends Component {
     }
 
 
+    // takes a score, makes sure it is actually a score, and rounds it
+    makePretty(score) {
+        // if the candidate doesn't have a score, tell the user that this doesn't apply
+        if (score === undefined || score === null) {
+            return "N/A";
+        }
+        // return a rounded version of the score
+        return Math.round(score);
+    }
+
+
     // creates the table with all the candidates
     createCandidatesTable(positionId) {
         // copy this
@@ -720,6 +731,7 @@ class MyCandidates extends Component {
 
         // the position of the candidate within the sorted/filtered candidates array
         candidateRows = this.state.sortedCandidates.map(candidate => {
+            console.log("candidate: ", candidate);
             const isSelected = this.state.resultsCandidateId === candidate._id;
             let score = null;
             let predicted = null;
@@ -756,7 +768,7 @@ class MyCandidates extends Component {
                             </div>
                             <div className={"score"}>
                                 {"Score"}<br/>
-                                {Math.round(score)}
+                                {this.makePretty(score)}
                             </div>
                             <div className="skill">
                                 {"Skill"}<br/>
@@ -783,7 +795,7 @@ class MyCandidates extends Component {
                         <span className={candidate.reviewed ? "secondary-gray" : "bold"}>{candidate.name}</span>
                     </td>
                     <td className={"score"}>
-                        {Math.round(score)}
+                        {this.makePretty(score)}
                     </td>
                     <td className="interest">
                         {this.makeStars(candidate._id, candidate.interest)}
@@ -792,10 +804,10 @@ class MyCandidates extends Component {
                         {this.makeHiringStage(candidate._id, candidate.hiringStage, candidate.isDismissed)}
                     </td>
                     <td className="predicted">
-                        {Math.round(predicted)}
+                        {this.makePretty(predicted)}
                     </td>
                     <td className="skill">
-                        {Math.round(skill)}
+                        {this.makePretty(skill)}
                     </td>
                 </tr>
             );
