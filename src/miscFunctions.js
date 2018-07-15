@@ -1,3 +1,49 @@
+"use strict"
+import React from "react";
+import { TextField } from "material-ui";
+import colors from "./colors";
+
+const style = {
+    // the hint that shows up when search bar is in focus
+    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
+    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
+    searchFloatingLabelFocusStyle: { color: colors.primaryCyan },
+    searchFloatingLabelStyle: { color: colors.primaryCyan },
+    searchUnderlineFocusStyle: { color: colors.primaryCyan }
+};
+
+const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
+        {...input}
+        {...custom}
+    />
+);
+
+const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
+    <TextField
+        hintText={label}
+        floatingLabelText={label}
+        errorText={touched && error}
+        inputStyle={style.searchInputStyle}
+        hintStyle={style.searchHintStyle}
+        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
+        floatingLabelStyle={style.searchFloatingLabelStyle}
+        underlineFocusStyle = {style.searchUnderlineFocusStyle}
+        {...input}
+        {...custom}
+        type="password"
+    />
+);
+
+
 // get the qualifier (e.g. "above average", "expert", etc) based on a score
 function qualifierFromScore(score, type) {
     // make sure the score is a number we can use
@@ -28,7 +74,9 @@ function qualifierFromScore(score, type) {
 }
 
 const miscFunctions = {
-    qualifierFromScore
+    qualifierFromScore,
+    renderTextField,
+    renderPasswordField
 }
 
 module.exports = miscFunctions;
