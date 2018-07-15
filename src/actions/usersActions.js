@@ -589,7 +589,7 @@ export function unsubscribe(user, showNotification){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
-        axios.post("api/user/unsubscribeEmail", user)
+        axios.post("api/misc/unsubscribeEmail", user)
             .then(function(response) {
                 let action = { type:"FOR_BUSINESS" };
                 // only show the notification if the user unsubscribed by typing

@@ -87,7 +87,6 @@ app.post('/user/login', userApis.POST_login);
 app.post('/user/changePassword', userApis.POST_changePassword);
 app.post('/user/forgotPassword', userApis.POST_forgotPassword);
 app.post('/user/changeSettings', userApis.POST_changeSettings);
-app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 app.get('/user/positions', userApis.GET_positions);
 app.get("/user/adminQuestions", userApis.GET_adminQuestions);
 app.post("/user/answerAdminQuestion", userApis.POST_answerAdminQuestion);
@@ -135,6 +134,7 @@ app.post('/billing/customer', billingApis.POST_customer);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
+app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 
 
 // ----->> END APIs <<----- //
