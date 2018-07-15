@@ -670,7 +670,7 @@ class MyCandidates extends Component {
         if (qualifier === "N/A") {
             return (
                 <div>
-                    <div>"N/A"</div>
+                    <div>{ "N/A" }</div>
                     <HoverTip text="Candidate has not finished the evaluation." />
                 </div>
             )
@@ -754,7 +754,6 @@ class MyCandidates extends Component {
 
         // the position of the candidate within the sorted/filtered candidates array
         candidateRows = this.state.sortedCandidates.map(candidate => {
-            console.log("candidate: ", candidate);
             const isSelected = this.state.resultsCandidateId === candidate._id;
             let score = null;
             let predicted = null;
@@ -880,7 +879,6 @@ class MyCandidates extends Component {
             return candidate._id === candidateId;
         });
         if (candidateIndex < 0) { candidateIndex = undefined; }
-        console.log("candidate index: ", candidateIndex);
         this.setState({
             showResults: true,
             resultsCandidateId: candidateId,
