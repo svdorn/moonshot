@@ -25,8 +25,7 @@ before(function(done) {
 
 const {
 	POST_createReferralCode,
-    POST_unsubscribeEmail,
-    POST_resumeScorer_uploadResume
+    POST_unsubscribeEmail
 } = require('../apis/miscApis');
 
 describe('POST_createReferralCode()', function() {
