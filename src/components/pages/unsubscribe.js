@@ -8,25 +8,8 @@ import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
+import { renderTextField } from "../../miscFunctions";
 
-
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
-
-};
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
-        {...input}
-        {...custom}
-    />
-);
 
 const validate = values => {
     const errors = {};
@@ -159,7 +142,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
-        loadingSomething: state.users.loadingUnsubscribe,
+        loadingUnsubscribe: state.users.loadingSomething,
     };
 }
 
