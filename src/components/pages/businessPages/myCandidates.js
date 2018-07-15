@@ -24,6 +24,7 @@ import UpDownArrows from "./upDownArrows";
 import CandidateResults from "./candidateResults";
 import AddUserDialog from '../../childComponents/addUserDialog';
 import { qualifierFromScore } from '../../../miscFunctions';
+import HoverTip from "../../miscComponents/hoverTip";
 
 const renderTextField = ({input, label, ...custom}) => (
     <TextField
@@ -662,11 +663,33 @@ class MyCandidates extends Component {
     }
 
 
+    // gets the qualifier for a score and tells the user the candidate hasn't finished
+    // if that is the case
+    getQualifier(score, type) {
+        const qualifier = qualifierFromScore(score, type);
+        if (qualifier === "N/A") {
+            return (
+                <div>
+                    <div>"N/A"</div>
+                    <HoverTip text="Candidate has not finished the evaluation." />
+                </div>
+            )
+        } else {
+            return qualifier;
+        }
+    }
+
+
     // takes a score, makes sure it is actually a score, and rounds it
     makePretty(score) {
         // if the candidate doesn't have a score, tell the user that this doesn't apply
         if (score === undefined || score === null) {
-            return "N/A";
+            return (
+                <div>
+                    <div>{ "N/A" }</div>
+                    <HoverTip text="Candidate has not finished the evaluation." />
+                </div>
+            );
         }
         // return a rounded version of the score
         return Math.round(score);
@@ -764,7 +787,7 @@ class MyCandidates extends Component {
                             <br/><div style={{height:"8px",display:"block"}}/>
                             <div className="predicted">
                                 {"Predicted"}<br/>
-                                {qualifierFromScore(predicted, "predicted")}
+                                {this.getQualifier(predicted, "predicted")}
                             </div>
                             <div className={"score"}>
                                 {"Score"}<br/>
@@ -772,7 +795,7 @@ class MyCandidates extends Component {
                             </div>
                             <div className="skill">
                                 {"Skill"}<br/>
-                                {qualifierFromScore(skill, "skill")}
+                                {this.getQualifier(skill, "skill")}
                             </div>
                         </td>
                     </tr>
