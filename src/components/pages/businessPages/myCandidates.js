@@ -622,6 +622,10 @@ class MyCandidates extends Component {
             } else if (moveTo === "Favorites") {
                 // if moving to favorites, value of favorite will be true
                 property = "favorite";
+            } else if (moveTo === "Non-Favorites") {
+                // if out of favorites, value of favorite will be false
+                property = "favorite";
+                value = false;
             }
 
             // mark these values for every marked candidate
@@ -646,7 +650,7 @@ class MyCandidates extends Component {
     handleMoveTo = event => {
         const moveTo = event.target.value;
         // check for valid input
-        if (["Reviewed", "Not Reviewed", "Favorites"].includes(moveTo)) {
+        if (["Reviewed", "Not Reviewed", "Favorites", "Non-Favorites"].includes(moveTo)) {
             this.moveCandidates(moveTo);
         }
     }
@@ -942,7 +946,7 @@ class MyCandidates extends Component {
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
 
-        let menuItems = ["Reviewed", "Not Reviewed", "Favorites"].map(menuItem => {
+        let menuItems = ["Reviewed", "Not Reviewed", "Favorites", "Non-Favorites"].map(menuItem => {
             return (
                 <MenuItem
                     value={menuItem}

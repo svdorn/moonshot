@@ -400,7 +400,7 @@ async function POST_moveCandidates(req, res) {
     const positionId = sanitize(req.body.positionId);
 
     // make sure input is valid
-    if (!["Reviewed", "Not Reviewed", "Favorites", "Dismissed"].includes(moveTo)) {
+    if (!["Reviewed", "Not Reviewed", "Favorites", "Non-Favorites", "Dismissed"].includes(moveTo)) {
         console.log("moveTo invalid, was: ", moveTo);
         return res.status(400).send("Bad request.");
     }
@@ -479,6 +479,9 @@ async function POST_moveCandidates(req, res) {
         value = false;
     } else if (moveTo === "Favorites") {
         property = "favorite";
+    } else if (moveTo === "Non-Favorites") {
+        property = "favorite";
+        value = false;
     }
 
     // the current date
