@@ -435,11 +435,6 @@ class CandidateResults extends Component {
     }
 
 
-    contact = () => {
-        console.log("not actually contacting yet");
-    }
-
-
     toggleDismissed = () => {
         // get a copy of the candidate
         let candidate = Object.assign({}, this.state.candidate);
@@ -463,14 +458,6 @@ class CandidateResults extends Component {
         const candidate = this.state.candidate;
         const hardSkills = this.state.hardSkills;
         const predictiveInsights = this.state.predictiveInsights;
-
-        let mailtoEmail = undefined;
-        if (typeof candidate === "object") {
-            // use the email meant for contacting if available
-            if (candidate.emailToContact) { mailtoEmail = candidate.emailToContact; }
-            // otherwise use the default email
-            else { mailtoEmail = "mailto:" + candidate.email; }
-        }
 
         const loading = this.state.loading;
         const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="#76defe" /></div>
@@ -496,7 +483,7 @@ class CandidateResults extends Component {
                 <div onClick={this.toggleDismissed} className={"noselect " + (candidate.isDismissed ? "dismissed" : "dismiss")}>
                     { candidate.isDismissed ? "Dismissed" : "Dismiss" }
                 </div>
-            )
+            );
 
             content = (
                 <div
@@ -514,12 +501,12 @@ class CandidateResults extends Component {
                                         </div>
                                         <div style={{marginTop: "8px"}}>
                                             { dismissDiv }
-                                            <div
-                                                className="button medium round-4px gradient gradient-1-cyan gradient-2-purple-light noselect"
-                                                onClick={this.contact}
+                                            <a
+                                                className="button button-href medium round-4px primary-white gradient-transition gradient-1-cyan gradient-2-purple-light noselect"
+                                                href={`mailto:${candidate.email}?subject=Hello From Moonshot&Body=You have been contacted by a business!%0dHere is the second line!`}
                                             >
                                                 {"Contact"}
-                                            </div>
+                                            </a>
                                         </div>
                                     </div>
                                     : null

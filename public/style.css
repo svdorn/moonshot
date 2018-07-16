@@ -736,6 +736,11 @@ form > h1 {
     border: none;
 }
 .button:focus { outline: none; }
+.button-href { text-decoration: none; }
+.button-href:hover {
+    text-decoration: none;
+    color: inherit;
+}
 .button.medium { padding: 3px 10px; }
 
 .button.round-2px { border-radius: 2px; }
