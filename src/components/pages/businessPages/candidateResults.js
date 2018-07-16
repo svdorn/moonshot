@@ -12,7 +12,7 @@ import axios from 'axios';
 import PredictiveGraph from '../../miscComponents/predictiveGraph';
 import PsychBreakdown from '../../childComponents/psychBreakdown';
 import HoverTip from "../../miscComponents/hoverTip";
-import { qualifierFromScore } from "../../../miscFunctions";
+import { qualifierFromScore, getFirstName } from "../../../miscFunctions";
 
 class CandidateResults extends Component {
     constructor(props) {
@@ -453,6 +453,26 @@ class CandidateResults extends Component {
     }
 
 
+    // open up an email template to send to the candidate
+    contact() {
+        const candidate = this.state.candidate;
+        const user = this.props.currentUser;
+        let candidateName = "",
+            candidateEmail = candidate.email ? candidate.email : "",
+            outro = user.name ? `Thanks,%0d${user.name}` : "Thanks!";
+
+        try { candidateName = " " + getFirstName(candidate.name); }
+        catch(e) { /* some field did not exist */ }
+
+        window.location.href =
+            `mailto:${candidateEmail}
+             ?subject=Let's Get to Know Each Other
+             &Body=Hi${candidateName},
+             %0d%0dI'd love to hear more about your interest in working with us.
+             %0d%0d${outro}`;
+    }
+
+
     render() {
         const user = this.props.currentUser;
         const candidate = this.state.candidate;
@@ -501,12 +521,12 @@ class CandidateResults extends Component {
                                         </div>
                                         <div style={{marginTop: "8px"}}>
                                             { dismissDiv }
-                                            <a
-                                                className="button button-href medium round-4px primary-white gradient-transition gradient-1-cyan gradient-2-purple-light noselect"
-                                                href={`mailto:${candidate.email}?subject=Hello From Moonshot&Body=You have been contacted by a business!%0dHere is the second line!`}
+                                            <div
+                                                className="button medium round-4px primary-white gradient-transition gradient-1-cyan gradient-2-purple-light noselect"
+                                                onClick={this.contact.bind(this)}
                                             >
                                                 {"Contact"}
-                                            </a>
+                                            </div>
                                         </div>
                                     </div>
                                     : null

@@ -73,10 +73,25 @@ function qualifierFromScore(score, type) {
     }
 }
 
+
+// get a first name from a full name
+function getFirstName(name) {
+    // split by spaces, get array of non-spaced names, return the first one
+    let firstName = "";
+    try {
+        firstName = name.split(' ')[0];
+    } catch (e) {
+        firstName = "";
+    }
+    return firstName;
+}
+
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
-    renderPasswordField
+    renderPasswordField,
+    getFirstName
 }
 
 module.exports = miscFunctions;

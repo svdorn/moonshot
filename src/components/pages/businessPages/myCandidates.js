@@ -1034,9 +1034,9 @@ class MyCandidates extends Component {
                 >
                     {"Dismiss"}
                 </div>
-                <div className={"inlineBlock" + colorClass + cursorClass}>
+                {/*<div className={"inlineBlock" + colorClass + cursorClass}>
                     {"Contact"}
-                </div>
+                </div>*/}
                 <div className="inlineBlock">
                     <div className="checkbox smallCheckbox whiteCheckbox" onClick={() => this.handleCheckMarkClick("hideDismissed")}>
                         <img
