@@ -1164,6 +1164,7 @@ form > h1 {
     display: flex;
     justify-content: space-around;
     width: 100%;
+    position: relative;
 }
 .resultsSlidersContainer > div {
     width: 200px;
@@ -5489,7 +5490,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     .myCandidates tr.mobileCandidate > td > .predicted,
     .myCandidates tr.mobileCandidate > td > .score,
     .myCandidates tr.mobileCandidate > td > .skill {
-        width: 84px;
+        width: calc(100%/3);
     }
 
 
