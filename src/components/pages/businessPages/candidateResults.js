@@ -464,12 +464,14 @@ class CandidateResults extends Component {
         try { candidateName = " " + getFirstName(candidate.name); }
         catch(e) { /* some field did not exist */ }
 
-        window.location.href =
-            `mailto:${candidateEmail}
-             ?subject=Let's Get to Know Each Other
-             &Body=Hi${candidateName},
-             %0d%0dI'd love to hear more about your interest in working with us.
-             %0d%0d${outro}`;
+        // window.location.href =
+        //     `mailto:${candidateEmail}
+        //      ?subject=Let's Get to Know Each Other
+        //      &Body=Hi${candidateName},
+        //      %0d%0dI'd love to hear more about your interest in working with us.
+        //      %0d%0d${outro}`;
+
+        window.location.href = `mailto:${candidateEmail}`;
     }
 
 
