@@ -19,7 +19,7 @@ class Listing extends Component {
               <h2 itemprop="title">Software Engineer</h2>
               <span>
                 <p><strong>Location:</strong> <span itemprop="jobLocation" itemscope itemtype="http://schema.org/Place"><span itemprop="address" itemscope itemtype="http://schema.org/PostalAddress">
-                <span itemprop="addressLocality">Kirkland</span> <span itemprop="addressRegion">WA</span></span></span></p>
+                <span itemprop="addressLocality">Madison</span> <span itemprop="addressRegion">WI</span></span></span></p>
               </span>
               <p><strong>Industry:</strong> <span itemprop="industry">Computer Software</span>
               <br/><strong>Occupational Category:</strong> <span itemprop="occupationalCategory">15-1132.00 Software Developers, Application</span>
@@ -27,8 +27,7 @@ class Listing extends Component {
               <br/><strong>Salary:</strong> <span itemprop="salaryCurrency">USD</span> <span itemprop="baseSalary">100000</span>
               </p>
               <p itemprop="description">
-                <strong>Description:</strong> <span itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization"><span itemprop="name">ABC Company Inc.</span>
-                seeks a full-time mid-level software engineer to develop in-house tools.</span>
+                <strong>Description:</strong> <span itemprop="hiringOrganization" itemscope itemtype="http://schema.org/Organization"><span itemprop="name">Moonshot Insights</span> seeks a full-time mid-level software engineer to develop in-house tools.</span>
               </p>
               <p><strong>Responsibilities:</strong></p>
               <ul itemprop="responsibilities">
@@ -55,7 +54,7 @@ class Listing extends Component {
                 <li>Learns quickly.</li>
               </ul>
               <p><strong>Benefits:</strong></p>
-                <ul><li>ABC Corp provides top-tier employee compensation benefits and a relaxed, team-oriented work environment, including:<span itemprop="jobBenefits"> Medical, Life, Dental</span></li>
+                <ul><li>Moonshot Insights provides top-tier employee compensation benefits and a relaxed, team-oriented work environment, including:<span itemprop="jobBenefits"> Medical, Life, Dental</span></li>
                 </ul>
                   <p><strong>Incentives:</strong></p>
                     <ul><li><span itemprop="incentiveCompensation">Performance-based annual bonus plan, project-completion bonuses</span></li>
