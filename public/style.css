@@ -2457,7 +2457,7 @@ button.link {
 .myCandidatesPositionSelector {
     position: absolute;
     top: -2px;
-    right: calc(50% - 500px);
+    right: 0;
 }
 
 .star.white { --starColor: white; }
@@ -2548,6 +2548,7 @@ button.link {
 }
 
 .selectRootWhite { color: white; }
+.myCandidates .position-select-root { max-width: 180px; }
 .selectIconWhiteImportant { color: white !important; }
 .selectIconGrayImportant { color: #5E5E5E !important; }
 .topOptionWhite { color: white; }
@@ -4062,7 +4063,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         right: 3%;
     }
     .myCandidatesTabs { width: 400px; }
-    .myCandidatesPositionSelector { right: calc(50% - 450px); }
     .myCandidates .resultsOpenNoCandidates {
         left: 46px;
         width: 150px;
