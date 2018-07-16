@@ -30,6 +30,7 @@ import PrivacyPolicy from './components/policies/privacyPolicy';
 import TermsOfUse from './components/policies/termsOfUse';
 import ServiceLevelAgreement from './components/policies/serviceLevelAgreement';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
+import Listing from './components/pages/listing';
 
 import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
 
@@ -69,6 +70,7 @@ const routes = (
             <Route path="employeeResults/:profileUrl/:positionId" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
             <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
+            <Route path="listing" component={Listing} />
             <Route path="verifyEmail" component={VerifyEmail} />
             <Route path="forgotPassword" component={ForgotPassword} />
             <Route path="changePassword" component={ChangePassword} />
