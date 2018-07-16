@@ -364,6 +364,12 @@ const usersSchema = mongoose.Schema({
         hiringStage: String,
         // if the candidate is no longer being considered for the role
         isDismissed: Boolean,
+        // whether the candidate has been reviewed by an account admin or manager
+        reviewed: Boolean,
+        // whether the user is a favorite for the business
+        favorite: Boolean,
+        // how interested the business is in the user
+        interest: Number,
         // dates/times the hiring stage of the candidate was changed for this position
         hiringStageChanges: [{
            // what the hiring stage was changed to
@@ -395,6 +401,10 @@ const usersSchema = mongoose.Schema({
     }],
     // the position evaluation the user is currently taking
     positionInProgress: mongoose.Schema.Types.ObjectId,
+    // --->>              MANAGERS/ACCOUNT ADMINS ONLY              <<--- //
+    // if the user saw the box that says 'click candidate name for more info'
+    sawMyCandidatesInfoBox: Boolean,
+    // <<-------------------------------------------------------------->> //
 });
 
 var Users = mongoose.model('Users', usersSchema);

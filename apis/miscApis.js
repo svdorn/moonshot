@@ -18,7 +18,6 @@ const { sanitize,
 const miscApis = {
     POST_createReferralCode,
     POST_unsubscribeEmail,
-    POST_resumeScorer_uploadResume,
     POST_resetAlan
 }
 
@@ -162,60 +161,6 @@ function POST_unsubscribeEmail(req, res) {
             });
         }
     });
-}
-
-
-function POST_resumeScorer_uploadResume(req, res) {
-    try {
-        const email = sanitize(req.body.email);
-        const name = sanitize(req.body.name);
-        const desiredCareers = sanitize(req.body.desiredCareers);
-        const skills = sanitize(req.body.skills);
-        const resumeFile = req.files.resumeFile;
-        const resumeFileName = resumeFile.name;
-
-        // only allow certain file types to be uploaded
-        let extension = resumeFileName.split('.').pop().toLowerCase();
-        const allowedFileTypes = ['jpg', 'jpeg', 'png', 'pdf', 'doc', 'docx'];
-        if (!allowedFileTypes.some(function(fileType) {
-           return fileType === extension;
-        })) {
-           console.log(`User tried to upload a file of type .${extension}, which is not allowed.`);
-           return res.status(400).send("Wrong file type.");
-        }
-
-        let recipients = ["kyle@moonshotinsights.io", "justin@moonshotinsights.io", "ameyer24@wisc.edu"];
-
-        let subject = 'Resume To Be Scored';
-        let content =
-            '<div>'
-            +   '<p>New resume to be scored.</p>'
-            +   '<p>Name: ' + name + '</p>'
-            +   '<p>email: ' + email + '</p>'
-            +   '<p>Skills: ' + skills + '</p>'
-            +   '<p>Desired Careers: ' + desiredCareers + '</p>'
-            + '</div>';
-        let attachments = [{
-            filename: resumeFileName,
-            content: new Buffer(resumeFile.data,'7bit')
-        }];
-
-        const sendFrom = "Moonshot";
-        sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {
-            // on failure
-            if (!success) {
-                console.log("Error sending sign up alert email: ", msg);
-                res.status(500).send("Error uploading resume, try again later.");
-                return;
-            }
-            // on success
-            return res.json("Success!");
-        })
-    }
-    catch (error) {
-        console.log("Error sending resume to Kyle: ", error);
-        return res.status(500).send("Error uploading, try again later.");
-    }
 }
 
 

@@ -63,7 +63,7 @@ class BusinessPicker extends Component {
                 <div
                     key={business._id}
                     onClick={() => this.goTo(`/admin/businessEditor/${business._id}`)}
-                    className="clickable whiteText"
+                    className="clickable primary-white"
                 >
                     {business.name}
                 </div>
@@ -75,14 +75,14 @@ class BusinessPicker extends Component {
             <div
                 key={"new business"}
                 onClick={() => this.goTo(`/admin/businessEditor/new`)}
-                className="clickable whiteText"
+                className="clickable primary-white"
             >
                 {"+ New Business"}
             </div>
         );
 
         return (
-            <div className="fillScreen whiteText" style={{margin: "30px"}}>
+            <div className="fillScreen primary-white" style={{margin: "30px"}}>
                 {businesses}
             </div>
         );

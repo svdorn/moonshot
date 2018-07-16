@@ -186,7 +186,7 @@ class MyEvaluations extends Component {
             <FlatButton
                 label="Close"
                 onClick={this.handleClose}
-                className="whiteTextImportant"
+                className="primary-white-important"
             />,
         ];
 
@@ -289,27 +289,10 @@ class MyEvaluations extends Component {
                     <div style={{filter:"blur(5px)"}}>
                         <MyEvaluationsPreview {...attributes} />
                     </div>
-                    <div className="font28px font26pxUnder700 font22pxUnder500 grayText underline clickable center addEval" onClick={this.handleOpen}>
+                    <div className="font28px font26pxUnder700 font22pxUnder500 secondary-gray underline clickable center addEval" onClick={this.handleOpen}>
                         + Add Evaluation
                     </div>
                 </li>
-            );
-        }
-
-        // The section for the account admin to take the psych test if they haven't already
-        let accountAdminTakePsychTest = null;
-        if (currentUser && currentUser.userType == "accountAdmin" && !currentUser.psychometricTest.endDate && (this.state.positions.length !== 0 || this.state.noPositions)) {
-            accountAdminTakePsychTest = (
-                <div className="marginBottom30px center">
-                    <div className="whiteText font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 inlineBlock">
-                        All admins must take a 10 minute psychometric quiz. Take it here!
-                    </div>
-                    <div className="inlineBlock marginLeft10px">
-                            <button className="veryRoundedButton smallMediumButton font16px font14pxUnder800 font12pxUnder600 font10pxUnder450 purpleToBlueAnimate whiteText" onClick={this.startPsychEval.bind(this)} style={{padding: "4px 15px"}}>
-                                Quiz
-                            </button>
-                    </div>
-                </div>
             );
         }
 
@@ -319,10 +302,10 @@ class MyEvaluations extends Component {
         if (screen === 1) {
                     dialogBody = (
                         <form onSubmit={this.handleSubmit.bind(this)} className="center">
-                            <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop40px">
+                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
                                 Add Evaluation
                             </div>
-                            <div className="whiteText font16px font14pxUnder700 font12pxUnder400 marginTop10px">
+                            <div className="primary-white font16px font14pxUnder700 font12pxUnder400 marginTop10px">
                                 Let us know the position you&#39;d like to add an evaluation for and we&#39;ll contact you within 24 hours confirming next steps.
                             </div>
                             <Field
@@ -342,10 +325,10 @@ class MyEvaluations extends Component {
         } else if (screen === 2) {
                     dialogBody = (
                         <div>
-                            <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
                                 We&#39;ll get back to your shortly!
                             </div>
-                            <div className="whiteTextImportant font16px font14pxUnder700 font12pxUnder400" style={{width:"90%", margin:"10px auto 0"}}>
+                            <div className="primary-white-important font16px font14pxUnder700 font12pxUnder400" style={{width:"90%", margin:"10px auto 0"}}>
                                 Thanks for adding an evaluation, we&#39;ll get back to you shortly with next steps.
                             </div>
                         </div>
@@ -380,7 +363,6 @@ class MyEvaluations extends Component {
                         My Evaluations
                     </div>
                 </div>
-                {accountAdminTakePsychTest}
                 <div className="marginBottom60px">
                     {evaluations}
                 </div>

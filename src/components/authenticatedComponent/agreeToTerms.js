@@ -50,7 +50,7 @@ class AgreeToTerms extends Component {
             // add 'and' right before the last element
             const and = i === agreements.length - 1 && i > 0 ? "and " : "";
             links.push(comma + and);
-            links.push(<a key={agreement.name} className="blueTextHome" href={`/${agreement.link}`} target="_blank">{agreement.name}</a>);
+            links.push(<a key={agreement.name} className="primary-cyan" href={`/${agreement.link}`} target="_blank">{agreement.name}</a>);
         }
 
         return links;
@@ -63,7 +63,7 @@ class AgreeToTerms extends Component {
                 <div className="headerSpace" />
                 <div className="fillScreen center">
                     <div className="form lightBlackForm" style={{padding: "10px 20px 20px"}}>
-                        <h1 className="whiteText" style={{margin: "20px 0 40px"}}>Terms and Conditions</h1>
+                        <h1 className="primary-white" style={{margin: "20px 0 40px"}}>Terms and Conditions</h1>
                         <div className="checkbox smallCheckbox whiteCheckbox"
                              onClick={this.handleCheckMarkClick.bind(this)}
                         >

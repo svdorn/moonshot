@@ -98,7 +98,7 @@ class MyEvaluationsPreview extends Component {
 
         if (editing) {
             clickableArea = (
-                <div className="grayText font16px font14pxUnder800 marginTop10px">
+                <div className="secondary-gray font16px font14pxUnder800 marginTop10px">
                     <div onClick={() => this.goTo(`/myCandidates?position=${this.props.name}`)} className="clickable underline" style={{display: "inline-block"}}>
                         Candidate Results
                     </div>
@@ -109,32 +109,32 @@ class MyEvaluationsPreview extends Component {
             );
 
             infoArea = (
-                <div className="blueTextHome font16px center myEvalsInfoRight">
+                <div className="primary-cyan font16px center myEvalsInfoRight">
                     Time Allotted
-                    <div className="whiteText marginBottom10px">{this.props.timeAllotted} Days</div>
+                    <div className="primary-white marginBottom10px">{this.props.timeAllotted} Days</div>
                     Completions
-                    <div className="whiteText marginBottom10px">{this.props.completions} Users</div>
+                    <div className="primary-white marginBottom10px">{this.props.completions} Users</div>
                     In Progress
-                    <div className="whiteText">{this.props.usersInProgress} Users</div>
+                    <div className="primary-white">{this.props.usersInProgress} Users</div>
                 </div>
             );
 
             estimatedLength = (
-                <div className="whiteText font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom20px">Estimated Length:
-                    <div className="blueTextHome" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
+                <div className="primary-white font16px font14pxUnder800 font12pxUnder400 marginTop10px marginBottom20px">Estimated Length:
+                    <div className="primary-cyan" style={{display:"inline-block"}}>&nbsp;{this.props.length} mins</div>
                 </div>
             );
         } else {
             if (this.props.completedDate) {
                 clickableArea = (
-                    <div className="grayText font16px font14pxUnder800 marginTop15px">
+                    <div className="secondary-gray font16px font14pxUnder800 marginTop15px">
                         Complete - your results are being reviewed
                     </div>
                 )
             } else {
                 clickableArea = (
                     <div style={{marginTop: "20px"}}>
-                            <button className="veryRoundedButton mediumLargeButton font16px font14pxUnder800 purpleToBlueAnimate whiteText" onClick={this.continueEval} style={{padding: "5px 17px"}}>
+                            <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.continueEval} style={{padding: "5px 17px"}}>
                                 Start/Continue
                             </button>
                     </div>
@@ -142,13 +142,13 @@ class MyEvaluationsPreview extends Component {
             }
 
             infoArea = (
-                <div className="blueTextHome font16px center myEvalsInfoRight">
+                <div className="primary-cyan font16px center myEvalsInfoRight">
                     Assigned
-                    <div className="whiteText marginBottom10px">{this.makeDatePretty(this.props.assignedDate)}</div>
+                    <div className="primary-white marginBottom10px">{this.makeDatePretty(this.props.assignedDate)}</div>
                     Deadline
-                    <div className="whiteText marginBottom10px">{this.makeDatePretty(this.props.deadline)}</div>
+                    <div className="primary-white marginBottom10px">{this.makeDatePretty(this.props.deadline)}</div>
                     Completed
-                    <div className="whiteText">{this.makeDatePretty(this.props.completedDate)}</div>
+                    <div className="primary-white">{this.makeDatePretty(this.props.completedDate)}</div>
                 </div>
             );
         }
@@ -164,8 +164,8 @@ class MyEvaluationsPreview extends Component {
 
                     <div className="myEvalsInfo" style={{display: 'inline-block'}}>
                         {infoArea}
-                        <div className="font18px font16pxUnder800 blueTextHome">{this.props.name}</div>
-                        <div className="grayText">{this.props.company} Evaluation</div>
+                        <div className="font18px font16pxUnder800 primary-cyan">{this.props.name}</div>
+                        <div className="secondary-gray">{this.props.company} Evaluation</div>
                         {editing ? estimatedLength : null}
                         {editing ? positionSkills : <div className="marginTop20px">{positionSkills}</div>}
                         {clickableArea}

@@ -23,18 +23,18 @@ class Footer extends Component {
                                 alt="Moonshot Logo"
                                 title="Moonshot Logo"
                                 src={"/logos/MoonshotWhite" + this.props.png}/>
-                            <div className="whiteText font12px font10pxUnder400">
+                            <div className="primary-white font12px font10pxUnder400">
                                 &copy; 2018 Moonshot Learning Inc. All rights reserved.
                             </div>
                             <div style={{marginTop: "10px"}}>
-                                <a href="https://www.facebook.com/MoonshotLearning/" target="_blank">
+                                <a href="https://www.facebook.com/MoonshotInsights/" target="_blank">
                                     <img
                                         alt="Facebook Logo"
                                         width={13}
                                         height={20}
                                         src={"/logos/Facebook" + this.props.png}/>
                                 </a>
-                                <a href="https://twitter.com/moonshotteched" target="_blank"
+                                <a href="https://twitter.com/Moonshotinsight" target="_blank"
                                    style={{marginLeft: "20px"}}>
                                     <img
                                         alt="Twitter Logo"

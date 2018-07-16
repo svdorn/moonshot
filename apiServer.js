@@ -87,7 +87,6 @@ app.post('/user/login', userApis.POST_login);
 app.post('/user/changePassword', userApis.POST_changePassword);
 app.post('/user/forgotPassword', userApis.POST_forgotPassword);
 app.post('/user/changeSettings', userApis.POST_changeSettings);
-app.post('/user/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 app.get('/user/positions', userApis.GET_positions);
 app.get("/user/adminQuestions", userApis.GET_adminQuestions);
 app.post("/user/answerAdminQuestion", userApis.POST_answerAdminQuestion);
@@ -109,6 +108,10 @@ app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
+app.post("/business/rateInterest", businessApis.POST_rateInterest);
+app.post("/business/changeHiringStage", businessApis.POST_changeHiringStage);
+app.post("/business/moveCandidates", businessApis.POST_moveCandidates);
+app.post("/business/sawMyCandidatesInfoBox", businessApis.POST_sawMyCandidatesInfoBox);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/business", businessApis.GET_business);
@@ -131,8 +134,8 @@ app.post("/skill/agreeToTerms", skillApis.POST_agreeToTerms);
 app.post('/billing/customer', billingApis.POST_customer);
 
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
+app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 app.post("/misc/resetAlan", miscApis.POST_resetAlan);
-app.post("/misc/resumeScorer/uploadResume", miscApis.POST_resumeScorer_uploadResume);
 
 
 // ----->> END APIs <<----- //

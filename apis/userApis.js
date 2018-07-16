@@ -636,40 +636,44 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         // add the starting growth pq
         growth += 100;
 
-        // PERFORMANCE IS BASED ON IDEAL OUTPUTS
-        // add to the score when a non-zero facet score is ideal
-        // subtract from the score whatever the differences are between the
-        // ideal facets and the actual facets
-        // start at 100 as the baseline
-        let psychPerformance = 100;
-
-        // go through each factor to get to each facet
-        businessPos.idealFactors.forEach(idealFactor => {
-            // find the factor within the user's psych test
-            const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
-
-            // go through each facet to find the score compared to the ideal output
-            idealFactor.idealFacets.forEach(idealFacet => {
-                // find the facet within the user's psych test
-                const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
-
-                // the score that the user needs for the max pq
-                const idealScore = idealFacet.score;
-
-                // how far off of the ideal score the user got
-                const difference = Math.abs(idealScore - userFacet.score);
-
-                // subtract the difference from the predictive score
-                psychPerformance -= difference;
-
-                // add the absolute value of the facet score, making the
-                // potential predictive score higher
-                psychPerformance += Math.abs(idealScore);
-            })
-        });
+        // holding off on these, only calculating growth for now
+        // // PERFORMANCE IS BASED ON IDEAL OUTPUTS
+        // // add to the score when a non-zero facet score is ideal
+        // // subtract from the score whatever the differences are between the
+        // // ideal facets and the actual facets
+        // // start at 100 as the baseline
+        // let psychPerformance = 100;
+        //
+        // // go through each factor to get to each facet
+        // businessPos.idealFactors.forEach(idealFactor => {
+        //     // find the factor within the user's psych test
+        //     const userFactor = userFactors.find(factor => { return factor.factorId.toString() === idealFactor.factorId.toString(); });
+        //
+        //     // go through each facet to find the score compared to the ideal output
+        //     idealFactor.idealFacets.forEach(idealFacet => {
+        //         // find the facet within the user's psych test
+        //         const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+        //
+        //         // the score that the user needs for the max pq
+        //         const idealScore = idealFacet.score;
+        //
+        //         // how far off of the ideal score the user got
+        //         const difference = Math.abs(idealScore - userFacet.score);
+        //
+        //         // subtract the difference from the predictive score
+        //         psychPerformance -= difference;
+        //
+        //         // add the absolute value of the facet score, making the
+        //         // potential predictive score higher
+        //         psychPerformance += Math.abs(idealScore);
+        //     })
+        // });
 
         // to get the actual performance score, it is an average between skills and psychPerformance
-        const performance = (psychPerformance + overallSkill) / 2;
+        //const performance = (psychPerformance + overallSkill) / 2;
+
+        // performance is being calculated only using growth and skill for now
+        const performance = (growth + overallSkill) / 2;
 
         // PREDICTED SCORE IS AN AVERAGE BETWEEN GROWTH AND PERFORMANCE
         const predicted = (performance + growth) / 2;

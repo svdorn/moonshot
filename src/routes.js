@@ -30,12 +30,12 @@ import PrivacyPolicy from './components/policies/privacyPolicy';
 import TermsOfUse from './components/policies/termsOfUse';
 import ServiceLevelAgreement from './components/policies/serviceLevelAgreement';
 import AffiliateAgreement from './components/policies/affiliateAgreement';
+import Listing from './components/pages/listing';
 
 import PsychAnalysis from './components/pages/psychAnalysis/psychAnalysis';
 
 import SkillTest from './components/pages/skillTest/skillTest';
 import AdminQuestions from './components/pages/adminQuestions/adminQuestions';
-import PositionSignup from './components/pages/positionSignup';
 import FreeResponse from "./components/pages/freeResponse";
 import EvaluationIntro from "./components/pages/evaluationIntro";
 
@@ -69,6 +69,7 @@ const routes = (
             <Route path="employeeResults/:profileUrl/:positionId" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
             <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
+            <Route path="listing" component={Listing} />
             <Route path="verifyEmail" component={VerifyEmail} />
             <Route path="forgotPassword" component={ForgotPassword} />
             <Route path="changePassword" component={ChangePassword} />
@@ -83,7 +84,6 @@ const routes = (
 
             <Route path="skillTest/:skillUrl" component={AuthenticatedComponent} page={<SkillTest/>} />
             <Route path="adminQuestions" component={AuthenticatedComponent} page={<AdminQuestions/>} />
-            <Route path="positionSignup" component={PositionSignup} />
             <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
             <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
 

@@ -17,7 +17,7 @@ class PrivacyPolicy extends Component {
 
         return (
             <div>
-                <div style={containerStyle} className="whiteText">
+                <div style={containerStyle} className="primary-white">
                     <b className="font20px font18pxUnder700">Privacy Policy</b>
 
                     <br/><br/>Last updated: 6/10/2018

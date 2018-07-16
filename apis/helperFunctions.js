@@ -38,7 +38,8 @@ const FOR_USER = [
     "businessInfo",
     "adminQuestions",
     "psychometricTest",
-    "currentPosition"
+    "currentPosition",
+    "sawMyCandidatesInfoBox"
 ];
 
 // removes information from a db user object so that it can be passed for that

@@ -283,7 +283,7 @@ class SkillTest extends Component {
             content = (
                 <div className="blackBackground">
                     You have to complete the administrative questions first!<br/>
-                    <button onClick={() => this.goTo("/adminQuestions")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                    <button onClick={() => this.goTo("/adminQuestions")} className="button gradient-transition gradient-1-red gradient-2-orange round-4px marginTop10px primary-white font22px font16pxUnder600">
                         Take me there!
                     </button>
                 </div>
@@ -292,7 +292,7 @@ class SkillTest extends Component {
             content = (
                 <div>
                     You have to complete the psychometric analysis first!
-                    <button onClick={() => this.goTo("/psychometricAnalysis")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                    <button onClick={() => this.goTo("/psychometricAnalysis")} className="button gradient-transition gradient-1-red gradient-2-orange round-4px marginTop10px primary-white font22px font16pxUnder600">
                         Take me there!
                     </button>
                 </div>
@@ -316,7 +316,7 @@ class SkillTest extends Component {
         }
 
         return (
-            <div className="blackBackground fillScreen whiteText center">
+            <div className="blackBackground fillScreen primary-white center">
                 <MetaTags>
                     <title>{skillName} Test | Moonshot</title>
                     <meta name="description" content={"Prove your skills" + additionalMetaText + " to see how you stack up against your peers!"} />

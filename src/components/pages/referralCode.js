@@ -12,24 +12,8 @@ import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
 import AffiliateAgreement from '../policies/affiliateAgreement';
 import MetaTags from 'react-meta-tags';
+import { renderTextField } from "../../miscComponents";
 
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
-
-};
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
-        {...input}
-        {...custom}
-    />
-);
 
 const validate = values => {
     const errors = {};
@@ -178,7 +162,7 @@ class ReferralCode extends Component {
         }
 
         return (
-            <div className="fillScreen greenToBlue formContainer">
+            <div className="fillScreen formContainer">
                 <MetaTags>
                     <title>Referral Code | Moonshot</title>
                     <meta name="description" content="Become a Moonshot referrer and get $300 for every friend that gets a job through us!" />
@@ -219,9 +203,9 @@ class ReferralCode extends Component {
                         <AffiliateAgreement/>
                     </Dialog>
                     <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
-                    <div className="form lightWhiteForm" style={{padding: "10px 20px"}}>
+                    <div className="form" style={{padding: "10px 20px"}}>
                         {this.state.referralCode ?
-                            <div className="blueText">
+                            <div className="primary-cyan">
                                 <span className="font20px">Your referral code is:</span>
                                 <br/>
                                 <span className="font32px">{this.state.referralCode}</span>
@@ -243,7 +227,6 @@ class ReferralCode extends Component {
                                 <span className="font24px">Earn $300 for every friend that <br/>gets a job through Moonshot.</span>
                                 <br/>
                                 <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
                                     <Field
                                         name="name"
                                         component={renderTextField}
@@ -252,7 +235,6 @@ class ReferralCode extends Component {
                                     /><br/>
                                 </div>
                                 <div className="inputContainer">
-                                    <div className="fieldWhiteSpace"/>
                                     <Field
                                         name="email"
                                         component={renderTextField}
@@ -260,8 +242,8 @@ class ReferralCode extends Component {
                                         className="lightBlueInputText"
                                     /><br/>
                                 </div>
-                                <div style={{margin: "20px 20px 10px"}} className="blueText">
-                                    <div className="checkbox smallCheckbox blueCheckbox"
+                                <div style={{margin: "20px 20px 10px"}} className="primary-cyan">
+                                    <div className="checkbox smallCheckbox whiteCheckbox"
                                          onClick={this.handleCheckMarkClick.bind(this)}>
                                         <img
                                             alt=""
@@ -270,9 +252,9 @@ class ReferralCode extends Component {
                                         />
                                     </div>
                                     I understand and agree to
-                                    the <bdi className="clickable blueText" onClick={this.handleOpenAA}><b>Affiliate Agreement</b></bdi>
-                                    , <bdi className="clickable blueText" onClick={this.handleOpenPP}><b>Privacy Policy</b></bdi>
-                                    , and <bdi className="clickable blueText" onClick={this.handleOpenTOU}><b>Terms of Use</b></bdi>.
+                                    the <bdi className="clickable primary-cyan" onClick={this.handleOpenAA}><b>Affiliate Agreement</b></bdi>
+                                    , <bdi className="clickable primary-cyan" onClick={this.handleOpenPP}><b>Privacy Policy</b></bdi>
+                                    , and <bdi className="clickable primary-cyan" onClick={this.handleOpenTOU}><b>Terms of Use</b></bdi>.
                                 </div>
                                 <button
                                     type="submit"
