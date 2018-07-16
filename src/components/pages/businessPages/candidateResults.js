@@ -447,7 +447,7 @@ class CandidateResults extends Component {
         // toggle dismissed in results view
         candidate.isDismissed = dismissingCandidate;
         // set as reviewed if wasn't already
-        candidates[candIndex].reviewed = true;
+        candidate.reviewed = true;
         // make changes visible
         this.setState({ candidate });
     }

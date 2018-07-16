@@ -3735,8 +3735,8 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     text-decoration: underline;
 }
 .candidateResults .dismissed {
-    margin-right: 21px;
-    margin-left: -9px;
+    margin-right: 33px;
+    margin-left: -11px;
     color: #eb394f;
     font-style: italic;
 }
