@@ -561,7 +561,11 @@ class CandidateResults extends Component {
 
         return (
             <div className={"blackBackground candidateEvalResults " + mobileClass + this.props.className}
-                onTransitionEnd={() => { this.child1.parentTransitioned(); this.child2.parentTransitioned(); }}
+                onTransitionEnd={() => {
+                    if (candidate.endDate) {
+                        this.child1.parentTransitioned(); this.child2.parentTransitioned();
+                    }
+                }}
             >
                 { content }
             </div>
