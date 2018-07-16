@@ -1237,7 +1237,9 @@ class MyCandidates extends Component {
                     <div className="candidatesAndOptions">
                         { this.state.mobile ? this.mobileTopOptions() : this.topOptions() }
                         <div className="candidatesContainer">
-                            { this.createCandidatesTable(positionId) }
+                            <div>
+                                { this.createCandidatesTable(positionId) }
+                            </div>
                             { this.state.showResults ?
                                 <div>
                                     <CandidateResults
@@ -1250,6 +1252,7 @@ class MyCandidates extends Component {
                                         hiringStageChange={this.hiringStageChange.bind(this)}
                                         fullScreen={this.state.fullScreenResults}
                                         mobile={this.state.mobile}
+                                        interest={this.state.interest}
                                     />
                                     <div className={leftArrowContainerClass} onClick={() => this.nextPreviousResults(false)}>
                                         <div className={leftArrowClass} />
