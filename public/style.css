@@ -1162,7 +1162,6 @@ form > h1 {
 
 .resultsSlidersContainer {
     display: flex;
-    margin: 0 auto;
     justify-content: space-around;
     width: 100%;
 }
@@ -1170,7 +1169,7 @@ form > h1 {
     width: 200px;
 }
 .resultsSlider {
-    margin: auto !important;
+    margin: auto;
     width: 200px;
 }
 .resultsSlider > div > div > div {
@@ -4663,6 +4662,9 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-bottom: 15px;
         margin-top: 15px;
     }
+    .resultsSlider {
+        margin-bottom: -20px;
+    }
 
     .results > .statsAndDescription > div {
         width: 650px;
@@ -5156,7 +5158,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
     .results > .statsAndDescription > div {
         width: 90%;
-        min-width: 270px;
     }
     .legend .middle80indicator {
         width: 25px;

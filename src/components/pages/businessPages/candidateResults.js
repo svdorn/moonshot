@@ -33,7 +33,9 @@ class CandidateResults extends Component {
             // the currently selected tab
             tab: "Analysis",
             // if there was an error loading in results
-            error: false
+            error: false,
+            // how tall the predictive graphs should be
+            graphHeight: "200px"
         };
     }
 
@@ -46,8 +48,10 @@ class CandidateResults extends Component {
 
 
     componentDidMount() {
+        // set the height of the graphs
+        this.setState({ graphHeight: this.getGraphHeight() });
         // set resize listener
-        // window.addEventListener('resize', this.updateContainerDimensions.bind(this));
+        window.addEventListener('resize', this.updateGraphHeight.bind(this));
         // get the candidate's results
         this.reset();
     }
@@ -149,13 +153,28 @@ class CandidateResults extends Component {
 
 
     componentWillUnmount() {
-        //window.addEventListener('resize', this.updateContainerDimensions.bind(this));
+        window.addEventListener('resize', this.updateGraphHeight.bind(this));
     }
 
 
-    updateContainerDimensions() {
-        console.log("width: ", document.getElementById("candidateResults").offsetWidth);
-        this.setState({ windowWidth: document.getElementById("candidateResults").offsetWidth });
+    updateGraphHeight() {
+        this.setState({ graphHeight: this.getGraphHeight() });
+    }
+
+
+    getGraphHeight() {
+        const windowWidth = window.innerWidth;
+        let graphHeight;
+        if (windowWidth > 800) {
+            graphHeight = 270;
+        } else if (windowWidth > 600) {
+            graphHeight = 260;
+        } else if (windowWidth > 400) {
+            graphHeight = 250;
+        } else {
+            graphHeight = 240;
+        }
+        return graphHeight;
     }
 
 
@@ -172,7 +191,7 @@ class CandidateResults extends Component {
     // make it full screen then update the
     toggleFullScreen() {
         this.props.toggleFullScreen();
-        //this.updateContainerDimensions();
+        this.updateGraphHeight();
     }
 
 
@@ -195,18 +214,6 @@ class CandidateResults extends Component {
         if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
 
         const hardSkillsDataPoints = this.state.hardSkillPoints;
-
-        const windowWidth = window.innerWidth;
-        let graphHeight;
-        if (windowWidth > 800) {
-            graphHeight = 250;
-        } else if (windowWidth > 600) {
-            graphHeight = 280;
-        } else if (windowWidth > 400) {
-            graphHeight = 265;
-        } else {
-            graphHeight = 250;
-        }
 
         const candidate = this.state.candidate;
 
@@ -257,7 +264,7 @@ class CandidateResults extends Component {
                             <div className="graphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">{"Predicted Performance"}</div>
                             <PredictiveGraph
                                 dataPoints={this.state.predictivePoints}
-                                height={graphHeight}
+                                height={this.state.graphHeight}
                                 className="graph"
                                 containerName={"candidateResults"}
                                 ref={ instance => { this.child1 = instance; } }
@@ -281,7 +288,7 @@ class CandidateResults extends Component {
                         <div>
                             <PredictiveGraph
                                 dataPoints={this.state.hardSkillPoints}
-                                height={graphHeight}
+                                height={this.state.graphHeight}
                                 className="graph"
                                 containerName={"candidateResults"}
                                 ref={ instance => { this.child2 = instance; } }
