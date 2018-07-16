@@ -1168,10 +1168,14 @@ form > h1 {
 }
 .resultsSlidersContainer > div {
     width: 200px;
+    position: relative;
 }
 .resultsSlider {
-    margin: auto;
     width: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    position: absolute;
+    top: 40px;
 }
 .resultsSlider > div > div > div {
     background: linear-gradient(to right, #ae7efc, #75dcfc) !important;
@@ -2772,6 +2776,10 @@ button.link {
 
 .characteristicsList > div > div {
     margin: 10px 20px;
+}
+
+.scoreSummarySection {
+    height: 200px;
 }
 
 .logoBar {
@@ -4664,7 +4672,10 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         margin-top: 15px;
     }
     .resultsSlider {
-        margin-bottom: -20px;
+        top: 30px;
+    }
+    .scoreSummarySection {
+        height: 150px;
     }
 
     .results > .statsAndDescription > div {

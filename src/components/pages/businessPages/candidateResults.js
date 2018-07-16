@@ -224,7 +224,7 @@ class CandidateResults extends Component {
                 </div>
             :
                 <div className="analysis center aboutMeSection blackBackground" style={{paddingBottom:"30px"}}>
-                    <div className="center" style={{backgroundColor:"#393939"}}>
+                    <div className="center" className="scoreSummarySection" style={{backgroundColor:"#393939"}}>
                         <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
                             Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                         </div>
