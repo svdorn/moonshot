@@ -7,31 +7,8 @@ import {bindActionCreators} from 'redux';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
+import { renderTextField } from  "../../miscFunctions";
 
-const style = {
-    // the hint that shows up when search bar is in focus
-    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
-    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
-
-    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
-    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
-    searchUnderlineFocusStyle: { color: "green" }
-};
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        inputStyle={style.searchInputStyle}
-        hintStyle={style.searchHintStyle}
-        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
-        floatingLabelStyle={style.searchFloatingLabelStyle}
-        underlineFocusStyle = {style.searchUnderlineFocusStyle}
-        {...input}
-        {...custom}
-    />
-);
 
 const validate = values => {
     const errors = {};

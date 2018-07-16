@@ -193,7 +193,7 @@ class Menu extends Component {
         // class of any dropdown menu
         let dropdownClass = "headerDropdownWhite wideScreenMenuItem";
         // class of any menu item that is NOT currently selected
-        let menuItemClass = "menuItem font16px borderBottomClickable noWrap whiteText wideScreenMenuItem";
+        let menuItemClass = "menuItem font16px borderBottomClickable noWrap primary-white wideScreenMenuItem";
         // class of any menu item that IS currently selected
         const selectedMenuItemClass = menuItemClass + " currentRoute";
 

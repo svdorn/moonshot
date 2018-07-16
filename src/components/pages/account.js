@@ -6,47 +6,8 @@ import {updateUser} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm, change} from 'redux-form';
 import axios from 'axios';
+import { renderTextField, renderPasswordField } from "../../miscFunctions";
 
-const style = {
-    // the hint that shows up when search bar is in focus
-    searchHintStyle: { color: "rgba(255, 255, 255, .3)" },
-    searchInputStyle: { color: "rgba(255, 255, 255, .8)" },
-
-    searchFloatingLabelFocusStyle: { color: "rgb(114, 214, 245)" },
-    searchFloatingLabelStyle: { color: "rgb(114, 214, 245)" },
-    searchUnderlineFocusStyle: { color: "green" }
-};
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        inputStyle={style.searchInputStyle}
-        hintStyle={style.searchHintStyle}
-        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
-        floatingLabelStyle={style.searchFloatingLabelStyle}
-        underlineFocusStyle = {style.searchUnderlineFocusStyle}
-        {...input}
-        {...custom}
-    />
-);
-
-const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        inputStyle={style.searchInputStyle}
-        hintStyle={style.searchHintStyle}
-        floatingLabelFocusStyle={style.searchFloatingLabelFocusStyle}
-        floatingLabelStyle={style.searchFloatingLabelStyle}
-        underlineFocusStyle = {style.searchUnderlineFocusStyle}
-        {...input}
-        {...custom}
-        type="password"
-    />
-);
 
 const validate = values => {
     const errors = {};
@@ -158,7 +119,7 @@ class Account extends Component {
                                         src={"/icons/CheckMarkRoundedWhite" + this.props.png}
                                     />
                                 </div>
-                                <div className="whiteText" style={{display:"inline-block"}}>
+                                <div className="primary-white" style={{display:"inline-block"}}>
                                     Hide Profile From Employers
                                 </div>
                             </div>

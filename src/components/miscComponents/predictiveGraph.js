@@ -5,14 +5,67 @@ class PredictiveGraph extends Component {
     constructor(props) {
         super(props);
 
+        // if width prop is given, be that width; otherwise adjust to the page width
+        let width = window.innerWidth;
+        if (this.props.width) {
+            width = this.props.width;
+            if (typeof width !== "number") {
+                width = parseInt(width, 10);
+            }
+        }
+        // get the interior width, if given
+        let interiorWidth = undefined;
+        if (this.props.interiorWidth) {
+            interiorWidth = this.props.interiorWidth;
+            if (typeof interiorWidth !== "number") {
+                interiorWidth = parseInt(interiorWidth, 10);
+            }
+        }
+
         // need to keep track of width because this will change where the points are
-        this.state = { width: window.innerWidth };
+        this.state = { width, interiorWidth };
         this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
     }
 
 
+    // figures out which transition-end event should be used for the user's browser
+    whichTransitionEvent() {
+        let t;
+        let el = document.createElement('fakeelement');
+        const transitions = {
+          'transition':'transitionend',
+          'OTransition':'oTransitionEnd',
+          'MozTransition':'transitionend',
+          'WebkitTransition':'webkitTransitionEnd'
+        }
+
+        for (t in transitions) {
+            if (el.style[t] !== undefined) {
+                return transitions[t];
+            }
+        }
+    }
+
+
     componentDidMount() {
-        this.updateWindowDimensions();
+        // if the graph is contained in another div, use that div's width
+        if (this.props.containerName) {
+            // get the container element
+            let container = document.getElementById(this.props.containerName);
+            // get its current width
+            const width = container.offsetWidth;
+            // set current width in state
+            this.setState({ width });
+            // get the event that fires on transition end
+            const transitionEnd = this.whichTransitionEvent();
+            // listen for a transition on it; this will make it so the graph can
+            // update immediately on container resize intead of 1px later
+            container.addEventListener(transitionEnd, this.updateWindowDimensions)
+        }
+        // otherwise, update the width according to the window's width
+        else {
+            this.updateWindowDimensions();
+        }
         window.addEventListener('resize', this.updateWindowDimensions);
     }
 
@@ -22,8 +75,22 @@ class PredictiveGraph extends Component {
     }
 
 
+    // when a parent div transitions, resize to fit its new size
+    parentTransitioned() {
+        this.updateWindowDimensions();
+    }
+
+
     updateWindowDimensions() {
-        if (window.innerWidth > 300) {
+        // if there is a container, find its width
+        if (this.props.containerName) {
+                        // TODO: this is v hacky, but I don't know how to make it work otherwise
+                        // this makes it wait a fraction of a second after resize so that the
+                        // container div can update, then it checks the container div
+            this.setState({ width: document.getElementById(this.props.containerName).offsetWidth });
+        }
+        // if there is not container, width is the width of the window
+        else if (!this.props.width && window.innerWidth > 300) {
             this.setState({ width: window.innerWidth });
         }
     }
@@ -40,9 +107,8 @@ class PredictiveGraph extends Component {
         // the height of the actual graph where points can be plotted
         const interiorHeight = fullHeight - 30;
 
-        const interiorWidth = this.state.width / 2;
-        const interiorMarginLeft = this.state.width / 4;
-
+        const interiorWidth = this.state.interiorWidth ? this.state.interiorWidth : this.state.width / 2;
+        const interiorMarginLeft = (this.state.width - interiorWidth) / 2;
 
         const graphStyle = { height: fullHeight };
         const graphInteriorStyle = {
@@ -92,7 +158,7 @@ class PredictiveGraph extends Component {
             const g = 126 + (94 * percentToGreen);
             const b = 252;
 
-            const labelStyle = {
+            const yLabelStyle = {
                 color: `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`,
                 height: `${labelHeight}%`,
                 bottom: `${fromBottom}%`
@@ -101,27 +167,34 @@ class PredictiveGraph extends Component {
             labelCounter++;
 
             return (
-                <div className="leftYAxisLabel" style={labelStyle}>
+                <div className="leftYAxisLabel" style={yLabelStyle} key={`yAxis${label}`}>
                     <div>{label}</div>
                 </div>
             )
         })
 
         // figure out how rotated the x axis labels should be
-        const windowWidth = window.innerWidth > 300 ? window.innerWidth : 300;
-        const labelTransform = {};
-        if (windowWidth < 800) {
-            let rotateAngle, yTranslation, xTranslation;
-            if (windowWidth > 600) {
+        let labelContainerTransform = {};
+        let labelTransform = {};
+        let xLabelLeftAlign = false;
+        // rotate labels if there is more than one and the graph is small
+        if (interiorWidth < 500 && dataPoints.length > 1) {
+            let rotateAngle,
+                yTranslation,
+                xTranslation;
+
+            if (interiorWidth > 250) {
                 rotateAngle = 20;
-                yTranslation = 10;
-                xTranslation = 20;
+                yTranslation = 5;
+                xTranslation = 50;
             } else {
                 rotateAngle = 30;
-                yTranslation = 12;
-                xTranslation = 15;
+                yTranslation = 5;
+                xTranslation = 50;
             }
-            labelTransform.transform = `translate(${xTranslation}px, ${yTranslation}px) rotate(${rotateAngle}deg)`
+            labelTransform.transform = `rotate(${rotateAngle}deg)`;
+            labelContainerTransform.transform = "translateX(50%)";
+            xLabelLeftAlign = true;
         }
 
 
@@ -130,7 +203,7 @@ class PredictiveGraph extends Component {
             let label = point.x;
             let yValue = point.y;
 
-            if (point.unavailable) { yValue = 100; }
+            if (point.unavailable || point.inProgress) { yValue = 100; }
 
             // 160 is the top of the graph, 40 is the bottom
             // 160 corresponds to 100%, 100 corresponds to 50%, 40 corresponds to 0%
@@ -146,7 +219,7 @@ class PredictiveGraph extends Component {
             let g = 126 + (94 * percentToGreen);
             let b = 252;
 
-            if (point.unavailable) {
+            if (point.unavailable || point.inProgress) {
                 r = 100; g = 100; b = 100;
             }
 
@@ -185,20 +258,28 @@ class PredictiveGraph extends Component {
             }
 
             // labels will be at the same position as the points
-            const labelStyle = {
-                width: `${pointContainerWidth}%`
-            }
+            let xLabelStyle = { width: `${pointContainerWidth}%` }
+            // align text left if being rotated
+            if (xLabelLeftAlign) { xLabelStyle.textAlign = "left"; }
 
             points.push(
-                <div className="pointContainer" style={pointContainerStyle}>
+                <div className="pointContainer" style={pointContainerStyle} key={`points${label}`}>
                     <div className="confidenceIntervalLine" style={{...colorStyle, ...confidenceIntervalStyle}} />
                     <div className="confidenceIntervalBorder" style={{...colorStyle, ...topBorderStyle}} />
                     <div className="pointBox" style={{...colorStyle, ...pointBoxStyle}}>
-                        <div style={{position: "relative"}}>{point.unavailable ? "N/A" : yValue}</div>
+                        <div style={{position: "relative"}}>{point.unavailable || point.inProgress ? "N/A" : yValue}</div>
                         {point.unavailable ?
                             <HoverTip
                                 style={{minWidth: `${interiorWidth/2}px`}}
                                 text="Unavailable - not enough employee data to predict this value."
+                            />
+                            :
+                            null
+                        }
+                        {point.inProgress ?
+                            <HoverTip
+                                style={{minWidth: `${interiorWidth/2}px`}}
+                                text="Unavailable - user has not finished the evaluation."
                             />
                             :
                             null
@@ -210,8 +291,10 @@ class PredictiveGraph extends Component {
 
             // add the label for the x axis
             xAxisLabels.push(
-                <div className="xAxisLabel" style={{...labelStyle, ...labelTransform}}>
-                    {label}
+                <div className="xAxisLabel" style={{...xLabelStyle, ...labelContainerTransform}} key={`xAxis${label}`}>
+                    <div style={labelTransform}>
+                        {label}
+                    </div>
                 </div>
             );
 
@@ -222,14 +305,16 @@ class PredictiveGraph extends Component {
         let title = null;
         if (this.props.title) {
             title = (
-                <div className="predictiveGraphTitle whiteText center font24px font20pxUnder700 font16pxUnder500">
+                <div className="predictiveGraphTitle primary-white center font24px font20pxUnder700 font16pxUnder500">
                     Predicted Performance
                 </div>
             )
         }
 
+        let extraClass = this.props.className ? " " + this.props.className : "";
+
         return (
-            <div className="marginBottom50px font16px font14pxUnder500 font12pxUnder400 transitionAll">
+            <div className={"font14px font12pxUnder400 transitionAll predictiveGraphContainer" + extraClass}>
                 {title}
                 <div className="predictiveGraph" style={graphStyle}>
                     <div className="predictiveGraphInterior" style={graphInteriorStyle}>

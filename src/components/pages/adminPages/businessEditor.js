@@ -396,12 +396,12 @@ class BusinessEditor extends Component {
 
         // if loading the business
         if (self.state.loading) {
-            return <div className="fillScreen whiteText"><CircularProgress /></div>;
+            return <div className="fillScreen primary-white"><CircularProgress /></div>;
         }
 
         // if there's an error, don't show all the business info
         if (self.state.error) {
-            return <div className="fillScreen whiteText">{"Error"}</div>;
+            return <div className="fillScreen primary-white">{"Error"}</div>;
         }
 
         // get the current state of the business
@@ -763,7 +763,7 @@ class BusinessEditor extends Component {
 
 
         return (
-            <div className="fillScreen whiteText businessEditor" style={{margin: "30px"}}>
+            <div className="fillScreen primary-white businessEditor" style={{margin: "30px"}}>
                 {nameInput}<br/>
                 {adminsToAdd}
                 {addAdminButton}<br/>

@@ -63,7 +63,7 @@ class SkillPicker extends Component {
                 <div
                     key={skill._id}
                     onClick={() => this.goTo(`/admin/skillEditor/${skill._id}`)}
-                    className="clickable whiteText"
+                    className="clickable primary-white"
                 >
                     {skill.name}
                 </div>
@@ -75,14 +75,14 @@ class SkillPicker extends Component {
             <div
                 key={"new skill"}
                 onClick={() => this.goTo(`/admin/skillEditor/new`)}
-                className="clickable whiteText"
+                className="clickable primary-white"
             >
                 {"+ New Skill"}
             </div>
         );
 
         return (
-            <div className="fillScreen whiteText" style={{margin: "30px"}}>
+            <div className="fillScreen primary-white" style={{margin: "30px"}}>
                 {skills}
             </div>
         );

@@ -81,6 +81,19 @@ export function login(user, saveSession, navigateBackUrl) {
 }
 
 
+export function sawMyCandidatesInfoBox(userId, verificationToken) {
+    return function(dispatch) {
+        axios.post("/api/business/sawMyCandidatesInfoBox", {userId, verificationToken})
+        .then(response => {
+            dispatch({type: "USER_UPDATE", currentUser: response.data});
+        })
+        .catch(error => {
+            console.log("Error seeing my candidates info box: ", error);
+        });
+    }
+}
+
+
 export function answerAdminQuestion(userId, verificationToken, questionType, questionId, sliderAnswer, selectedId, selectedText, finished) {
     return function(dispatch) {
         axios.post("/api/user/answerAdminQuestion", {userId, verificationToken, questionType, questionId, sliderAnswer, selectedId, selectedText, finished})
@@ -576,7 +589,7 @@ export function unsubscribe(user, showNotification){
     return function(dispatch) {
         dispatch({type: "FOR_BUSINESS_REQUESTED"});
 
-        axios.post("api/user/unsubscribeEmail", user)
+        axios.post("api/misc/unsubscribeEmail", user)
             .then(function(response) {
                 let action = { type:"FOR_BUSINESS" };
                 // only show the notification if the user unsubscribed by typing

@@ -131,7 +131,7 @@ class PsychAnalysis extends Component {
             return (
                 <div className="center">
                     You have to complete the administrative questions first!<br/>
-                    <button onClick={() => this.goTo("/adminQuestions")} className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline">
+                    <button onClick={() => this.goTo("/adminQuestions")} className="button gradient-transition gradient-1-red gradient-2-orange round-4px marginTop10px primary-white font22px font16pxUnder600">
                         Take me there!
                     </button>
                 </div>
@@ -290,7 +290,7 @@ class PsychAnalysis extends Component {
 
 
         return (
-            <div className="blackBackground fillScreen whiteText center">
+            <div className="blackBackground fillScreen primary-white center">
                 <MetaTags>
                     <title>Psychometric Analysis | Moonshot</title>
                     <meta name="description" content={"Find out what personality type you have! This will let us know how to best help you in getting the perfect job."} />

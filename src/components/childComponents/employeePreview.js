@@ -269,7 +269,7 @@ class EmployeePreview extends Component {
                     <div className="employeeName font18px center">
                         {this.props.name.toUpperCase()}
                     </div>
-                    <div className="center font14px redPinkText">
+                    <div className="center font14px secondary-red">
                         Question:
                         <br/>
                         {questionIndexDisplay + '/' + this.props.questions.length}
@@ -295,7 +295,7 @@ class EmployeePreview extends Component {
                                 onClick={this.handlePreviousQuestion.bind(this)}>
                                 Previous
                             </i>
-                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline marginLeft30px"
+                            <button className="button round-4px gradient gradient-1-red gradient-2-orange marginTop10px primary-white font14px marginLeft30px"
                                 onClick={this.handleSubmit.bind(this)}>
                                 Submit
                             </button>
@@ -306,7 +306,7 @@ class EmployeePreview extends Component {
                                 onClick={this.handlePreviousQuestion.bind(this)}>
                                 Previous
                             </i>
-                            <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline marginLeft30px"
+                            <button className="button round-4px gradient gradient-1-red gradient-2-orange marginTop10px primary-white font14px marginLeft30px"
                                 onClick={this.handleNextQuestion.bind(this)}>
                                 Next
                             </button>
@@ -325,12 +325,12 @@ class EmployeePreview extends Component {
                     src={completionImage}
                 />
                 <br />
-                <i className={"completionStage center font14px " + (this.state.gradingComplete ? "" : "redPinkText")}>
+                <i className={"completionStage center font14px " + (this.state.gradingComplete ? "" : "secondary-red")}>
                     {this.state.gradingComplete ? "Complete" : "Incomplete"}
                 </i>
                 <br/>
                 <div className="gradingMovementButtons">
-                    <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradientSmall transitionButton whiteText font14px clickableNoUnderline"
+                    <button className="button round-4px gradient gradient-1-red gradient-2-orange marginTop10px primary-white font14px"
                             onClick={this.handleOpen.bind(this)}>
                         Grade
                     </button>

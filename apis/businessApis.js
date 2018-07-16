@@ -30,6 +30,10 @@ const businessApis = {
     POST_updateHiringStage,
     POST_answerQuestion,
     POST_emailInvites,
+    POST_rateInterest,
+    POST_changeHiringStage,
+    POST_moveCandidates,
+    POST_sawMyCandidatesInfoBox,
     GET_candidateSearch,
     GET_business,
     GET_employeeSearch,
@@ -274,6 +278,259 @@ async function POST_emailInvites(req, res) {
 
     // successfully sent all the emails
     return res.json(true);
+}
+
+
+// rates how interested the business is in the candidate (number of stars 1-5)
+async function POST_rateInterest(req, res) {
+    const bizUserId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const candidateId = sanitize(req.body.candidateId);
+    const interest = sanitize(req.body.interest);
+    const positionId = sanitize(req.body.positionId);
+
+    // make sure the interest value is valid
+    if (typeof interest !== "number" || interest < 1 || interest > 5) {
+        return res.status(400).send("Invalid interest level.");
+    }
+
+    // verify biz user, get candidate, find and verify candidate's position
+    let bizUser, candidate, userPositionIndex;
+    try {
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, candidateId);
+        bizUser = results.bizUser; candidate = results.user; candidatePositionIndex = results.userPositionIndex;
+    } catch(error) {
+        console.log("Error verifying business user or getting candidate position index: ", error);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // update the business' interest in the candidate, making sure it is an integer
+    candidate.positions[candidatePositionIndex].interest = Math.round(interest);
+    // mark the candidate as reviewed, in case they weren't already
+    candidate.positions[candidatePositionIndex].reviewed = true;
+
+    // save the user with the new info
+    try { await candidate.save() }
+    catch (saveCandidateError) {
+        console.log("Error saving candidate with new interest level: ", saveCandidateError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // return successfully
+    return res.json(true);
+}
+
+
+// changes hiring stage of a candidate
+async function POST_changeHiringStage(req, res) {
+    const bizUserId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const candidateId = sanitize(req.body.candidateId);
+    const hiringStage = sanitize(req.body.hiringStage);
+    const positionId = sanitize(req.body.positionId);
+
+    // make sure the interest value is valid
+    if (!["Dismissed", "Not Contacted", "Contacted", "Interviewing", "Offered", "Hired"].includes(hiringStage)) {
+        return res.status(400).send("Invalid hiring stage.");
+    }
+
+    // verify biz user, get candidate, find and verify candidate's position
+    let bizUser, candidate, userPositionIndex;
+    try {
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, candidateId);
+        bizUser = results.bizUser; candidate = results.user; candidatePositionIndex = results.userPositionIndex;
+    } catch(error) {
+        console.log("Error verifying business user or getting candidate position index: ", error);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // if dismissing a candidate
+    let hiringStageChanges = candidate.positions[candidatePositionIndex].hiringStageChanges;
+    // the hiring stage before it was changed
+    let mostRecentHiringStage;
+    // if there isn't a history of hiring stage changes, make one
+    if (!Array.isArray(hiringStageChanges) || hiringStageChanges.length === 0) {
+        hiringStageChanges = [];
+        mostRecentHiringStage = "Not Contacted";
+    }
+    // otherwise we can know what the most recent stage was
+    else { mostRecentHiringStage = hiringStageChanges[hiringStageChanges.length - 1].hiringStage; }
+    // process is a bit different for dismissing candidates
+    if (hiringStage === "Dismissed") {
+        candidate.positions[candidatePositionIndex].isDismissed = true;
+        hiringStageChanges.push({
+            isDismissed: true,
+            hiringStage: hiringStageChanges[hiringStageChanges.length - 1].hiringStage,
+            dateChanged: new Date()
+        });
+    }
+    // not dismissing the candidate
+    else {
+        candidate.positions[candidatePositionIndex].hiringStage = hiringStage;
+        candidate.positions[candidatePositionIndex].isDismissed = false;
+        hiringStageChanges.push({
+            isDismissed: false,
+            hiringStage,
+            dateChanged: new Date()
+        });
+    }
+    // update the business' interest in the candidate, making sure it is an integer
+    candidate.positions[candidatePositionIndex].hiringStageChanges = hiringStageChanges;
+    // mark the candidate as reviewed, in case they weren't already
+    candidate.positions[candidatePositionIndex].reviewed = true;
+
+    // save the user with the new info
+    try { console.log(await candidate.save()); }
+    catch (saveCandidateError) {
+        console.log("Error saving candidate with new interest level: ", saveCandidateError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+
+    // return successfully
+    return res.json(true);
+}
+
+
+async function POST_moveCandidates(req, res) {
+    const bizUserId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const candidateIds = sanitize(req.body.candidateIds);
+    const moveTo = sanitize(req.body.moveTo);
+    const positionId = sanitize(req.body.positionId);
+
+    // make sure input is valid
+    if (!["Reviewed", "Not Reviewed", "Favorites", "Non-Favorites", "Dismissed"].includes(moveTo)) {
+        console.log("moveTo invalid, was: ", moveTo);
+        return res.status(400).send("Bad request.");
+    }
+
+    // verify the business user
+    let bizUser;
+    try { bizUser = await getAndVerifyUser(bizUserId, verificationToken); }
+    catch (getBizUserError) {
+        console.log("Error getting/verifying biz user: ", getBizUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // get the business id that the biz user works for
+    let businessId;
+    try { businessId = bizUser.businessInfo.businessId; }
+    catch(noBizIdError) { return res.status(403).send(errors.PERMISSIONS_ERROR); }
+    if (!businessId) { return res.status(403).send(errors.PERMISSIONS_ERROR); }
+
+    // find all candidates that should be altered
+    const findQuery = {
+        "_id" : {
+            "$in": candidateIds
+        }
+    }
+
+    // TODO: SWITCH TO THIS AS SOON AS SANDBOX DB IS SWITCHED TO 3.6 (JULY 20th)
+    // // find which property is being modified and what to set it to
+    // // default to reviewed = true
+    // let property = "positions.$[elem].reviewed";
+    // let value = true;
+    // if (moveTo === "Not Reviewed") {
+    //     value = false;
+    // } else if (moveTo === "Favorites") {
+    //     property = "positions.$[elem].favorite";
+    // }
+    //
+    // // mark their reviewed or favorited status
+    // let updateQuery = {
+    //     "$set": {}
+    // };
+    // updateQuery["$set"][property] = value;
+    //
+    //
+    // // update only the correct position within the user
+    // const options = {
+    //     // can match multiple candidates
+    //     "multi": true,
+    //     // business and position id must match
+    //     "arrayFilters": [
+    //         { "_id": mongoose.Types.ObjectId(positionId) },
+    //         { "businessId": mongoose.Types.ObjectId(businessId) }
+    //     ],
+    //     // do NOT create a new position if no position matches
+    //     "upsert": false
+    // }
+    //
+    //
+    // try { await Users.update(findQuery, updateQuery, options); }
+    // catch (findAndUpdateError) {
+    //     console.log("Error finding/updating users with favorite/reviewed status: ", findAndUpdateError);
+    //     return res.status(500).send(errors.SERVER_ERROR);
+    // }
+
+    let users = [];
+    try { users = await Users.find(findQuery) }
+    catch (findUsersError) {
+        console.log("Error finding matching users when trying to update reviewed/favorited status: ", findUsersError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // find which property is being modified and what to set it to
+    // default to reviewed = true
+    let property = "reviewed";
+    let value = true;
+    if (moveTo === "Not Reviewed") {
+        value = false;
+    } else if (moveTo === "Favorites") {
+        property = "favorite";
+    } else if (moveTo === "Non-Favorites") {
+        property = "favorite";
+        value = false;
+    }
+
+    // the current date
+    const NOW = new Date();
+
+    // a list of promises, when it's done all users have been saved
+    let saveUserPromises = [];
+    // go through each affected user
+    users.forEach(user => {
+        // find the index of the position
+        const positionIndex = user.positions.findIndex(position => {
+            return position.positionId.toString() === positionId.toString() && position.businessId.toString() === businessId.toString();
+        });
+        // if the position is valid ...
+        if (positionIndex >= 0) {
+            // ... copy the poisition ...
+            let userPosition = user.positions[positionIndex];
+            // ... and if dismissing the candidates ...
+            if (moveTo === "Dismissed") {
+                // ... dismiss the candidate ...
+                userPosition.isDismissed = true;
+                // ... and add this to the history of changes
+                let mostRecentStage = "Not Contacted";
+                if (!Array.isArray(userPosition.hiringStageChanges) || userPosition.hiringStageChanges.length === 0) {
+                    userPosition.hiringStageChanges = [];
+                } else {
+                    mostRecentStage = userPosition.hiringStageChanges[userPosition.hiringStageChanges.length - 1].hiringStage;
+                }
+                user.positions[positionIndex].hiringStageChanges.push({
+                    hiringStage: mostRecentStage,
+                    isDismissed: true,
+                    dateChanged: NOW
+                });
+            } else {
+                // ... or alter the value
+                userPosition[property] = value;
+            }
+
+            // save the position
+            user.positions[positionIndex] = userPosition;
+            // save the user
+            saveUserPromises.push(user.save());
+        }
+    });
+
+    // wait for all users to get saved
+    await Promise.all(saveUserPromises);
+
+    res.json(true);
 }
 
 
@@ -546,9 +803,8 @@ async function POST_updateHiringStage(req, res) {
 
     // verify biz user, get candidate, find and verify candidate's position
     let bizUser, user, userPositionIndex;
-    const profileUrl = undefined;
     try {
-        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl);
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId);
         bizUser = results.bizUser; user = results.user; userPositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting user position index: ", error);
@@ -587,14 +843,18 @@ async function POST_updateHiringStage(req, res) {
 // the position within the positions array of the candidate/employee
 async function verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl) {
     return new Promise(async function(resolve, reject) {
+        if (!bizUserId) { return reject("No bizUserId."); }
+        else if (!verificationToken) { return reject("No business user verificationToken."); }
+        else if (!positionId) { return reject("No positionId."); }
+        else if (!userId) { return reject("No userId"); }
+
         // find the user and the candidate
         let bizUser, user;
         // search by id if possible, profile url otherwise
-        const userQuery = userId ? { _id: userId } : { profileUrl };
         try {
             const [foundBizUser, foundUser] = await Promise.all([
                 getAndVerifyUser(bizUserId, verificationToken),
-                Users.findOne(userQuery)
+                Users.findById(userId)
             ])
             bizUser = foundBizUser;
             user = foundUser;
@@ -649,9 +909,8 @@ async function POST_answerQuestion(req, res) {
 
     // verify biz user, get candidate, find and verify candidate's position
     let bizUser, user, userPositionIndex;
-    const profileUrl = undefined;
     try {
-        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl);
+        let results = await verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId);
         bizUser = results.bizUser; user = results.user; userPositionIndex = results.userPositionIndex;
     } catch(error) {
         console.log("Error verifying business user or getting user position index: ", error);
@@ -852,6 +1111,7 @@ async function addCompletionsAndInProgress(position) {
             const positionId = position._id;
             // all users with this position id in their positions array who have an end date
             completionsQuery = {
+                "userType": "candidate",
                 "positions": {
                     "$elemMatch": {
                         "$and": [
@@ -864,6 +1124,7 @@ async function addCompletionsAndInProgress(position) {
             // all users with this position id in their positions array who have a start
             // date but NOT an end date
             inProgressQuery = {
+                "userType": "candidate",
                 "positions": {
                     "$elemMatch": {
                         "$and": [
@@ -895,20 +1156,18 @@ async function addCompletionsAndInProgress(position) {
 async function GET_evaluationResults(req, res) {
     const bizUserId = sanitize(req.query.userId);
     const verificationToken = sanitize(req.query.verificationToken);
-    const profileUrl = sanitize(req.query.profileUrl);
-    const businessId = sanitize(req.query.businessId);
+    const userId = sanitize(req.query.candidateId);
     const positionId = sanitize(req.query.positionId);
     const positionIdString = positionId.toString();
 
     // verify biz user, get candidate/employee, find and verify candidate's/employee's position
     let bizUser, user, userPositionIndex, psychTest;
-    const userId = undefined;
     try {
         let [
             results,
             foundPsychTest
         ] = await Promise.all([
-            verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId, profileUrl),
+            verifyBizUserAndFindUserPosition(bizUserId, verificationToken, positionId, userId),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
         bizUser = results.bizUser; user = results.user; psychTest = foundPsychTest;
@@ -917,8 +1176,6 @@ async function GET_evaluationResults(req, res) {
         console.log("Error verifying business user or getting candidate position index: ", error);
         return res.status(500).send(errors.SERVER_ERROR);
     }
-
-    console.log("user: ", user);
 
     let userPosition = user.positions[userPositionIndex];
 
@@ -964,6 +1221,10 @@ async function GET_evaluationResults(req, res) {
         title: user.title,
         name: user.name,
         email: user.emailToContact ? user.emailToContact : user.email,
+        interest: userPosition.interest,
+        hiringStage: userPosition.hiringStage,
+        isDismissed: userPosition.isDismissed,
+        endDate: userPosition.appliedEndDate,
         performanceScores: userPosition.scores,
         frqs, skillScores, psychScores
     };
@@ -1000,30 +1261,21 @@ async function GET_candidateSearch(req, res) {
 
     // the id of the business that the user works for
     const businessId = user.businessInfo.businessId;
-    // the restrictions on the search
-    const searchTerm = sanitize(req.query.searchTerm);
-    // if a specific hiring stage is wanted
-    const hiringStage = sanitize(req.query.hiringStage);
+    // // the restrictions on the search
+    // const searchTerm = sanitize(req.query.searchTerm);
+    // // if a specific hiring stage is wanted
+    // const hiringStage = sanitize(req.query.hiringStage);
     // position name is the only required input to the search
     const positionName = sanitize(req.query.positionName);
-    // the thing we should sort by - default is alphabetical
-    const sortBy = sanitize(req.query.sortBy);
-
-
-    // sort by overall score by default
-    // let sort = { }
-    // if (sortBy) {
-    //
-    // }
 
     let positionRequirements = [
         { "businessId": mongoose.Types.ObjectId(businessId) },
         { "name": positionName }
     ];
-    // filter by hiring stage if requested
-    if (hiringStage) {
-        positionRequirements.push({ "hiringStage": hiringStage });
-    }
+    // // filter by hiring stage if requested
+    // if (hiringStage) {
+    //     positionRequirements.push({ "hiringStage": hiringStage });
+    // }
 
     // only get the position that was asked for
     let query = {
@@ -1035,14 +1287,14 @@ async function GET_candidateSearch(req, res) {
         }
     }
 
-    // search by name too if search term exists
-    if (searchTerm) {
-        const nameRegex = new RegExp(searchTerm, "i");
-        query["name"] = nameRegex;
-    }
+    // // search by name too if search term exists
+    // if (searchTerm) {
+    //     const nameRegex = new RegExp(searchTerm, "i");
+    //     query["name"] = nameRegex;
+    // }
 
     // the user attributes that we want to keep
-    const attributes = "_id name profileUrl positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
+    const attributes = "_id name profileUrl positions.reviewed positions.favorite positions.interest positions.isDismissed positions.hiringStage positions.isDismissed positions.hiringStageChanges positions.scores";
 
     // perform the search
     let candidates = [];
@@ -1159,6 +1411,28 @@ async function GET_employeeSearch(req, res) {
 
     // successfully return the employees
     return res.json(formattedEmployees);
+}
+
+
+// mark that a user has seen the info box shown at the top of my candidates
+async function POST_sawMyCandidatesInfoBox(req, res) {
+    const find = {
+        "_id": sanitize(req.body.userId),
+        "verificationToken": sanitize(req.body.verificationToken)
+    };
+    const update = { "sawMyCandidatesInfoBox": true };
+    const options = { "upsert": false, "new": true };
+
+    let user;
+    try { user = await Users.findOneAndUpdate(find, update, options) }
+    catch (updateError) {
+        console.log("Error updating user while trying to see my candidates info box: ", updateError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    console.log("new user: ", user);
+
+    return res.json(frontEndUser(user));
 }
 
 

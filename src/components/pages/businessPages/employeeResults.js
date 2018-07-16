@@ -12,6 +12,7 @@ import PredictiveGraph from '../../miscComponents/predictiveGraph';
 import AddUserDialog from '../../childComponents/addUserDialog';
 import PsychBreakdown from '../../childComponents/psychBreakdown';
 import HoverTip from "../../miscComponents/hoverTip";
+import { qualifierFromScore } from "../../../miscFunctions";
 
 class EmployeeResults extends Component {
     constructor(props) {
@@ -129,20 +130,6 @@ class EmployeeResults extends Component {
     }
 
 
-    qualifier(score, scoreType) {
-        const qualifiers = scoreType === "predicted" ?
-            ["BELOW AVERAGE", "AVERAGE", "ABOVE AVERAGE"] :
-            ["NOVICE", "INTERMEDIATE", "EXPERT"]
-        if (score < 90) {
-            return qualifiers[0];
-        } else if (score < 110) {
-            return qualifiers[1];
-        } else {
-            return qualifiers[2];
-        }
-    }
-
-
     goTo(route) {
         // closes any notification
         this.props.closeNotification();
@@ -189,16 +176,16 @@ class EmployeeResults extends Component {
             <div className="analysis center aboutMeSection" style={style.tabContent}>
                 <div style={style.candidateScore}>
                     <div className="resultTopShadow center lightBlackBackground paddingTop20px">
-                        <div className="font24px font20pxUnder700 font16pxUnder500 grayText candidateScore inlineBlock">
+                        <div className="font24px font20pxUnder700 font16pxUnder500 secondary-gray candidateScore inlineBlock">
                             Candidate Score <b style={style.lightBlue}><u>{this.round(this.state.overallScore)}</u></b>
                         </div>
                         <HoverTip style={{marginTop: "35px", marginLeft: "-14px"}} text="This is the candidate's overall score based on personality and skill proficiencies. It is based on a normal curve where 100 is average." />
                         <div className="resultsSlidersContainer">
                             <div>
                                 <div
-                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
                                     Predicted Performance<br/>
-                                    <p style={style.lightBlue}>{this.qualifier(this.state.predicted, "predicted")}</p>
+                                    <p style={style.lightBlue}>{qualifierFromScore(this.state.predicted, "predicted")}</p>
                                 </div>
                                 <Slider disabled={true}
                                         value={this.getSliderValue(this.state.predicted)}
@@ -209,9 +196,9 @@ class EmployeeResults extends Component {
                             </div>
                             <div>
                                 <div
-                                    className="horizListText grayText font18px font16pxUnder800 font12pxUnder700">
+                                    className="horizListText secondary-gray font18px font16pxUnder800 font12pxUnder700">
                                     Skill Level<br/>
-                                    <p style={style.lightBlue}>{this.qualifier(this.state.skill, "skill")}</p>
+                                    <p style={style.lightBlue}>{qualifierFromScore(this.state.skill, "skill")}</p>
                                 </div>
                                 <Slider disabled={true}
                                         value={this.getSliderValue(this.state.skill)}
@@ -242,7 +229,7 @@ class EmployeeResults extends Component {
                  <div className="resultsPageSpacer" />
 
                 <div
-                    className="whiteText center font24px font20pxUnder700 font16pxUnder500">
+                    className="primary-white center font24px font20pxUnder700 font16pxUnder500">
                     Skills Evaluation
                 </div>
                 <div>
@@ -265,7 +252,7 @@ class EmployeeResults extends Component {
         let responses = freeResponses.map(freeResponse => {
             return (
                 <div className="employerDiv freeResponse">
-                    <span className="lightBlueText">{freeResponse.question}</span>
+                    <span className="primary-cyan">{freeResponse.question}</span>
                     <div className="answer">{freeResponse.answer}</div>
                 </div>
             )
@@ -273,7 +260,7 @@ class EmployeeResults extends Component {
 
         // if there are no frqs for this position eval
         if (responses.length === 0) {
-            responses = <div className="whiteText center">No responses for this position.</div>;
+            responses = <div className="primary-white center">No responses for this position.</div>;
         }
 
         return (
@@ -296,7 +283,7 @@ class EmployeeResults extends Component {
         }
 
         const loading = this.state.loading;
-        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="grayText" /></div>
+        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}}><CircularProgress color="secondary-gray" /></div>
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
         const responsesSection = loading ? loadingArea : this.makeResponsesSection();
 
@@ -327,9 +314,9 @@ class EmployeeResults extends Component {
                                         </div>
                                         <div>
                                             {candidate.name ? <div><div
-                                                className="grayText font26px font14pxUnder700">{candidate.name}
+                                                className="secondary-gray font26px font14pxUnder700">{candidate.name}
                                             </div>
-                                            <a className="font18px font12pxUnder500 grayText grayTextOnHover underline"
+                                            <a className="font18px font12pxUnder500 secondary-gray grayTextOnHover underline"
                                                href={mailtoEmail}>Contact</a></div>
                                            : null}
                                         </div>

@@ -298,7 +298,7 @@ class AddUserDialog extends Component {
             <FlatButton
                 label="Close"
                 onClick={this.handleClose}
-                className="whiteTextImportant"
+                className="primary-white-important"
             />,
         ];
 
@@ -311,7 +311,7 @@ class AddUserDialog extends Component {
         let candidateEmailSection = [];
         for (let i = 0; i < this.state.numCandidateEmails; i++) {
             candidateEmailSection.push(
-                <div>
+                <div key={`candidateEmail${i}`}>
                     <Field
                         name={"candidateEmail" + i}
                         component={renderTextField}
@@ -328,7 +328,7 @@ class AddUserDialog extends Component {
         let employeeEmailSection = [];
         for (let i = 0; i < this.state.numEmployeeEmails; i++) {
             employeeEmailSection.push(
-                <div>
+                <div key={`employeeEmail${i}`}>
                     <Field
                         name={"employeeEmail" + i}
                         component={renderTextField}
@@ -362,7 +362,7 @@ class AddUserDialog extends Component {
         let adminEmailSection = [];
         for (let i = 0; i < this.state.numAdminEmails; i++) {
             adminEmailSection.push(
-                <div>
+                <div key={`adminEmail${i}`}>
                     <Field
                         name={"adminEmail" + i}
                         component={renderTextField}
@@ -378,20 +378,20 @@ class AddUserDialog extends Component {
 
         const candidateSection = (
             <div className="center marginTop20px">
-                <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
+                <div className="center font14px font12pxUnder500 primary-white marginBottom15px">
                     Candidates are incoming applicants that undergo predictive evaluations.
                 </div>
                 <div>
                     {candidateEmailSection}
                 </div>
                 <div className="marginTop15px">
-                    <i className="font14px underline clickable whiteText"
+                    <i className="font14px underline clickable primary-white"
                         onClick={this.addAnotherEmail.bind(this)}>
                         + Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
-                    <i className="font14px underline clickable whiteText"
+                    <i className="font14px underline clickable primary-white"
                         onClick={this.handleScreenPrevious.bind(this)}>
                         Back
                     </i>
@@ -406,20 +406,20 @@ class AddUserDialog extends Component {
 
         const employeeSection = (
             <div className="center marginTop20px">
-                <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
+                <div className="center font14px font12pxUnder500 primary-white marginBottom15px">
                     Employees undergo psychometric and skill evaluations to create a baseline for candidate predictions.
                 </div>
                 <div>
                     {employeeEmailSection}
                 </div>
                 <div className="marginTop15px">
-                    <i className="font14px underline clickable whiteText"
+                    <i className="font14px underline clickable primary-white"
                         onClick={this.addAnotherEmail.bind(this)}>
                         + Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
-                    <i className="font14px underline clickable whiteText"
+                    <i className="font14px underline clickable primary-white"
                         onClick={this.handleScreenPrevious.bind(this)}>
                         Back
                     </i>
@@ -438,13 +438,13 @@ class AddUserDialog extends Component {
         //             {managerEmailSection}
         //         </div>
         //         <div className="marginTop20px">
-        //             <i className="font14px underline clickable whiteText"
+        //             <i className="font14px underline clickable primary-white
         //                 onClick={this.addAnotherEmail.bind(this)}>
         //                 +Add Another Email
         //                 </i>
         //         </div>
         //         <div className="center marginTop10px">
-        //             <i className="font14px underline clickable whiteText"
+        //             <i className="font14px underline clickable primary-white
         //                 onClick={this.handleScreenPrevious.bind(this)}>
         //                 Back
         //             </i>
@@ -459,20 +459,20 @@ class AddUserDialog extends Component {
 
         const adminSection = (
             <div className="center marginTop20px">
-                <div className="center font14px font12pxUnder500 whiteText marginBottom15px">
+                <div className="center font14px font12pxUnder500 primary-white marginBottom15px">
                     Administrators can add and remove users, grade employees, and view results.
                 </div>
                 <div>
                     {adminEmailSection}
                 </div>
                 <div className="marginTop15px">
-                    <i className="font14px underline clickable whiteText"
+                    <i className="font14px underline clickable primary-white"
                         onClick={this.addAnotherEmail.bind(this)}>
                         + Add Another Email
                         </i>
                 </div>
                 <div className="center marginTop10px">
-                    <i className="font14px underline clickable whiteText"
+                    <i className="font14px underline clickable primary-white"
                         onClick={this.handleScreenPrevious.bind(this)}>
                         Back
                     </i>
@@ -498,7 +498,7 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                 >
-                    <div className="whiteText font20px font16pxUnder500 marginTop20px">
+                    <div className="primary-white font20px font16pxUnder500 marginTop20px">
                         Cannot Add Users because you have no current positions.
                     </div>
                 </Dialog>
@@ -514,10 +514,10 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                     >
-                        <div className="blueTextHome font24px font20pxUnder500 marginTop20px">
+                        <div className="primary-cyan font24px font20pxUnder500 marginTop20px">
                             Success
                         </div>
-                        <div className="whiteText font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
+                        <div className="primary-white font16px font14pxUnder500" style={{width:"80%", margin:"20px auto"}}>
                             Success! Your invites have been sent to the users emails with sign up instructions for the {this.state.position} position
                         </div>
                         <RaisedButton
@@ -538,11 +538,11 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                     >
-                        <div className="redText font18px font16pxUnder500" style={{width:"90%", margin:"40px auto"}}>
+                        <div className="secondary-red font18px font16pxUnder500" style={{width:"90%", margin:"40px auto"}}>
                             Emails failed to send to users for the {this.state.position} position. Please fix emails and retry.
                         </div>
                         <div className="center marginTop20px">
-                            <i className="font14px underline clickable whiteText"
+                            <i className="font14px underline clickable primary-white"
                                 onClick={this.handleFailureExit.bind(this)}>
                                 Back
                             </i>
@@ -563,7 +563,7 @@ class AddUserDialog extends Component {
                     contentClassName="center"
                 >
 
-                    <div className="blueTextHome font24px font20pxUnder500 marginTop20px">
+                    <div className="primary-cyan font24px font20pxUnder500 marginTop20px">
                         Select a position
                     </div>
                     <DropDownMenu value={this.state.position}
@@ -597,18 +597,18 @@ class AddUserDialog extends Component {
 
                     <form className="center">
                         <div
-                            className="blueTextHome font24px font20pxUnder500 marginTop10px">
+                            className="primary-cyan font24px font20pxUnder500 marginTop10px">
                             Add
                         </div>
                         {this.state.formErrors ?
                         <div
-                            className="redText font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
+                            className="secondary-red font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
                             Some emails invalid, please enter valid emails before continuing.
                         </div>
                         : null}
                         {this.state.duplicateEmails ?
                         <div
-                            className="redText font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
+                            className="secondary-red font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
                             Duplicate emails not allowed.
                         </div>
                         : null}
@@ -642,14 +642,14 @@ class AddUserDialog extends Component {
                     paperClassName="dialogForBiz"
                     contentClassName="center"
                 >
-                    <div className="blueTextHome font24px font20pxUnder500 marginTop10px">
+                    <div className="primary-cyan font24px font20pxUnder500 marginTop10px">
                         Last Step
                     </div>
-                    <div className="whiteText font16px font12pxUnder500" style={{margin:"20px auto", width:"85%"}}>
+                    <div className="primary-white font16px font12pxUnder500" style={{margin:"20px auto", width:"85%"}}>
                         Wait! You have one more step. Click Finish to send the invites to your candidates, employees and/or admins so they can begin.
                     </div>
                     <div className="center marginTop40px">
-                        <i className="font14px underline clickable whiteText"
+                        <i className="font14px underline clickable primary-white"
                             onClick={this.handleScreenPrevious.bind(this)}>
                             Back
                         </i>

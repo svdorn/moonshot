@@ -1,6 +1,6 @@
 "use strict"
 import React, { Component } from 'react';
-import { TextField, CircularProgress } from 'material-ui';
+import { TextField, CircularProgress, RaisedButton } from 'material-ui';
 import { unsubscribe, closeNotification } from '../../actions/usersActions';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
@@ -8,25 +8,8 @@ import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
+import { renderTextField } from "../../miscFunctions";
 
-
-const styles = {
-    floatingLabelStyle: {
-        color: '#00c3ff',
-    },
-
-};
-
-const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
-    <TextField
-        hintText={label}
-        floatingLabelText={label}
-        errorText={touched && error}
-        floatingLabelStyle={styles.floatingLabelStyle}
-        {...input}
-        {...custom}
-    />
-);
 
 const validate = values => {
     const errors = {};
@@ -112,39 +95,37 @@ class Unsubscribe extends Component {
 
     render() {
         return (
-            <div className="fillScreen greenToBlue formContainer">
+            <div className="fillScreen formContainer">
                 <MetaTags>
                     <title>Unsubscribe | Moonshot</title>
                     <meta name="description" content="Unsubscribe from all Moonshot emails. Sorry to see you go!" />
                 </MetaTags>
-                <HomepageTriangles style={{pointerEvents:"none"}} variation="1" />
-                <div className="form lightWhiteForm">
+                <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
+                <div className="form lightBlackForm noBlur">
                     {this.state.unsubscribedViaUrl ?
                         <div>{this.props.location.query.email} was successfully unsubscribed.</div>
                     :
                         <form onSubmit={this.handleSubmit.bind(this)}>
-                        <h1>Unsubscribe</h1>
-                        <div className="font20px font14pxUnder700 font10pxUnder400 font20pxUnder500 blueText">Enter your email to unsubscribe.</div>
-                        <div className="inputContainer">
-                        <div className="fieldWhiteSpace"/>
-                        <Field
-                        name="email"
-                        component={renderTextField}
-                        label="Email"
-                        className="lightBlueInputText"
-                        /><br/>
-                        </div>
-                        <button
-                        type="submit"
-                        className="formSubmitButton font24px font16pxUnder600"
-                        >
-                        Submit
-                        </button>
-                        { this.props.loadingSomething ? <div className="center"><CircularProgress style={{marginTop:"20px"}}/></div> : "" }
+                            <h1 style={{marginTop:"15px"}}>Unsubscribe</h1>
+                            <div className="font20px font14pxUnder700 font10pxUnder400 font20pxUnder500 primary-white">Enter your email to unsubscribe.</div>
+                            <div className="inputContainer">
+                                <Field
+                                    name="email"
+                                    component={renderTextField}
+                                    label="Email"
+                                /><br/>
+                            </div>
+                            <RaisedButton
+                                label="Submit"
+                                type="submit"
+                                className="raisedButtonBusinessHome"
+                                style={{margin: '10px 0'}}
+                            />
+                            <br/>
+                            {this.props.loadingUnsubscribe ? <CircularProgress color="white" style={{marginTop: "10px"}}/> : null}
                         </form>
                     }
                 </div>
-
             </div>
         );
     }
@@ -161,7 +142,7 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         formData: state.form,
-        loadingSomething: state.users.loadingSomething,
+        loadingUnsubscribe: state.users.loadingSomething,
     };
 }
 

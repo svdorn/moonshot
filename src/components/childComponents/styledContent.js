@@ -61,7 +61,7 @@ class StyledContent extends Component {
                                      style={{display: 'inline-block', marginTop: '15px'}}
                                      className="lightBlueChip"
                                 >
-                                    <div key={skill} className="blueText">
+                                    <div key={skill} className="primary-cyan">
                                         {skill}
                                     </div>
                                 </div>

@@ -32,7 +32,7 @@ class error404 extends Component {
                             id="image404"
                         /><br/>
                         You seem a little lost,<br/> but we can show you the way!
-                        <p  className="clickable blueText underline"
+                        <p  className="clickable primary-cyan underline"
                             onClick={() => this.goTo(route)}>
                             Follow Me
                         </p>

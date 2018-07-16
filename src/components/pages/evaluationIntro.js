@@ -31,7 +31,7 @@ class EvaluationIntro extends Component {
         }
 
         return (
-            <div className="blackBackground fillScreen whiteText center">
+            <div className="blackBackground fillScreen primary-white center">
                 <MetaTags>
                     <title>{currentUser.currentPosition.name} | Moonshot</title>
                     <meta name="description" content={"Show an employer your personality and skills."} />

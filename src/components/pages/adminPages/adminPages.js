@@ -19,8 +19,8 @@ class AdminPages extends Component {
     render() {
         return (
             <div className="fullHeight">
-                <div className="clickable whiteText"onClick={() => this.goTo("/admin/skillPicker")}>Skills</div><br/>
-                <div className="clickable whiteText" onClick={() => this.goTo("/admin/businessPicker")}>Businesses</div>
+                <div className="clickable primary-white" onClick={() => this.goTo("/admin/skillPicker")}>Skills</div><br/>
+                <div className="clickable primary-white" onClick={() => this.goTo("/admin/businessPicker")}>Businesses</div>
             </div>
         );
     }

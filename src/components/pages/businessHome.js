@@ -259,7 +259,7 @@ class BusinessHome extends Component {
             <FlatButton
                 label="Close"
                 onClick={this.handleClose}
-                className="whiteTextImportant"
+                className="primary-white-important"
             />,
         ];
 
@@ -267,7 +267,7 @@ class BusinessHome extends Component {
             <FlatButton
                 label="Close"
                 onClick={this.handleDemoClose}
-                className="whiteTextImportant"
+                className="primary-white-important"
             />,
         ];
 
@@ -394,7 +394,7 @@ class BusinessHome extends Component {
                     { this.state.infoIndex < 3 ? <img src={"/icons/Arrow2" + this.props.png} className="rightArrow" onClick={() => this.selectProcess(this.state.infoIndex + 1)} /> : null }
                 </div>
                 <div className="center" style={{marginTop: "20px"}}>
-                    <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleDemoOpen}>
+                    <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.handleDemoOpen}>
                         See Demo
                     </button>
                 </div>
@@ -427,10 +427,10 @@ class BusinessHome extends Component {
                 ?
                 <form onSubmit={this.handleEmailFormSubmit.bind(this)} className="center">
                         <div
-                            className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop30px">
+                            className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop30px">
                             See Demo
                         </div>
-                        <div className="whiteText font16px font14pxUnder500" style={{width: "85%", margin: "10px auto"}}>
+                        <div className="primary-white font16px font14pxUnder500" style={{width: "85%", margin: "10px auto"}}>
                             A walkthrough of the employer and candidate experience in Moonshot Insights.
                         </div>
                         <Field
@@ -462,10 +462,10 @@ class BusinessHome extends Component {
         if (screen === 1) {
                     dialogBody = (
                         <form onSubmit={this.handleSubmitForm.bind(this)} className="center">
-                            <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500 marginTop40px">
+                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500 marginTop40px">
                                 Try Moonshot Insights for Free
                             </div>
-                            <div className="whiteText font16px font14pxUnder700 font12pxUnder400 marginTop10px">
+                            <div className="primary-white font16px font14pxUnder700 font12pxUnder400 marginTop10px">
                                 Book a demo to activate your first free evaluation.
                             </div>
                             <Field
@@ -500,17 +500,17 @@ class BusinessHome extends Component {
                     const calendly = <div className="calendly-inline-widget" data-url="https://calendly.com/kyle-treige-moonshot/30min" style={{minWidth:"320px",height:"580px", zIndex:"100"}}></div>
                     dialogBody = (
                         <div>
-                            <div className="blueTextHome font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
+                            <div className="primary-cyan font28px font24pxUnder700 font20pxUnder500" style={{width:"90%", margin:"10px auto"}}>
                                 Activate your Evaluation
                             </div>
-                            <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"97%", margin:"10px auto 0"}}>
+                            <div className="primary-white-important font14px font12pxUnder500" style={{width:"97%", margin:"10px auto 0"}}>
                                 Schedule a demo with our team to select a position, define the evaluation
                                 and walk through the employer interface.
                             </div>
-                            <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"97%", margin:"auto"}}>
+                            <div className="primary-white-important font14px font12pxUnder500" style={{width:"97%", margin:"auto"}}>
                                 If you can give us 30 minutes, we can create your first free predictive evaluation.
                             </div>
-                            <div className="whiteTextImportant font14px font12pxUnder500" style={{width:"90%", margin:"10px auto 3px"}}>
+                            <div className="primary-white-important font14px font12pxUnder500" style={{width:"90%", margin:"10px auto 3px"}}>
                                 Find a time below.
                             </div>
                             {calendly}
@@ -572,7 +572,7 @@ class BusinessHome extends Component {
                                 <div className="buttonArea font18px font14pxUnder900">
                                     <input className="blackInput getStarted" type="text" placeholder="Email Address" name="email"
                                     value={this.state.email} onChange={this.onChange.bind(this)}/>
-                                    <div className="mediumButton getStarted blueToPurple" onClick={this.handleOpen}>
+                                    <div className="getStarted button medium round-10px gradient-transition gradient-1-purple-light gradient-2-cyan" onClick={this.handleOpen}>
                                         Try for Free
                                     </div>
                                 </div>
@@ -616,12 +616,12 @@ class BusinessHome extends Component {
                     <section id="threeScreenshots">
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextLeft forBusiness">
-                                <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
-                                    <h2 className="pinkTextHome font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
+                                <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
+                                    <h2 className="secondary-red font30px font24pxUnder800 font22pxUnder500">Quickly identify which candidates <div className="above1000only br"><br/></div>will be top performers</h2>
                                     Analyze candidates to see if they exhibit the profile of
                                     proven high performers in that position.
                                 </div>
-                                <button className="slightlyRoundedButton marginTop10px pinkToPurpleButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
+                                <button className="button gradient-transition gradient-1-purple-dark gradient-2-red round-4px marginTop10px primary-white font22px font16pxUnder600"
                                         onClick={this.handleOpen}>
                                     Hire Faster
                                 </button>
@@ -638,14 +638,14 @@ class BusinessHome extends Component {
 
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextRight forBusiness">
-                                <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forHome whiteText">
-                                    <h2 className="blueTextHome font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
+                                <div className="font18px font16pxUnder800 homepageTrajectoryTextRightDiv forHome primary-white">
+                                    <h2 className="primary-cyan font30px font24pxUnder800 font22pxUnder500">Use data to eliminate biases <div className="above900only br"><br/></div>and guesswork
                                     </h2>
                                     Why read hundreds of resumes? Moonshot uses
                                     machine learning to reveal the empirical evidence
                                     instead of conjecture based on a resume.
                                 </div>
-                                <button className="slightlyRoundedButton marginTop10px blueToPurpleButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
+                                <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px marginTop10px primary-white font22px font16pxUnder600"
                                         onClick={this.handleOpen}>
                                     Hire Smarter
                                 </button>
@@ -661,13 +661,13 @@ class BusinessHome extends Component {
 
                         <div className="homepageTrajectory forBusiness">
                             <div className="homepageTrajectoryTextLeft forBusiness">
-                                <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome whiteText">
-                                    <h2 className="orangeTextHome font30px font24pxUnder800 font22pxUnder500">Improve your candidate <div className="above800only br"><br/></div>experience</h2>
+                                <div className="font18px font16pxUnder800 homepageTrajectoryTextLeftDiv forHome primary-white">
+                                    <h2 className="primary-orange font30px font24pxUnder800 font22pxUnder500">Improve your candidate <div className="above800only br"><br/></div>experience</h2>
                                     83% of candidates rate their current experience as poor.
                                     Engage your candidates better so they can understand
                                     your company and how they fit.
                                 </div>
-                                <button className="slightlyRoundedButton marginTop10px orangeToRedButtonGradient whiteText font22px font16pxUnder600 clickableNoUnderline"
+                                <button className="button gradient-transition gradient-1-red gradient-2-orange round-4px marginTop10px primary-white font22px font16pxUnder600"
                                         onClick={this.handleOpen}>
                                     Hire Better
                                 </button>
@@ -708,7 +708,7 @@ class BusinessHome extends Component {
 
                         <div>
                             <div className="center">
-                                <div className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400 center darkDarkPurpleText statisticsHeader">
+                                <div className="font34px font30pxUnder850 font26pxUnder500 font24pxUnder450 font20pxUnder400 center primary-purple-light statisticsHeader">
                                     Predictive Analytics Improve Hiring Results
                                 </div>
                                 <div>
@@ -717,7 +717,7 @@ class BusinessHome extends Component {
                                              alt="Hourglass Icon"
                                              className="forBusinessIcon"
                                              style={{marginRight: '10px'}}/>
-                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
                                             Up to 80% decrease<div className="above1000only noHeight"><br/></div> in time to hire
                                         </div>
                                     </div>
@@ -726,7 +726,7 @@ class BusinessHome extends Component {
                                              alt="Diamond Icon"
                                              className="forBusinessIcon"
                                              style={{marginLeft: '10px'}}/>
-                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
                                             Up to 300% increase<div className="above1000only noHeight"><br/></div> in quality of hire
                                         </div>
                                     </div>
@@ -736,7 +736,7 @@ class BusinessHome extends Component {
                                         <img src={"/images/businessHome/Turnover" + this.props.png}
                                              alt="Turnover Icon"
                                              className="forBusinessIcon"/>
-                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
                                             Up to 70% decrease<div className="above1000only noHeight"><br/></div> in employee turnover
                                         </div>
                                     </div>
@@ -744,14 +744,14 @@ class BusinessHome extends Component {
                                         <img src={"/images/businessHome/Lightbulb" + this.props.png}
                                              alt="Lightbulb Icon"
                                              className="forBusinessIcon"/>
-                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 whiteText" style={{width:"90%", marginLeft:"5%"}}>
+                                        <div className="horizListText font18px font16pxUnder800 font12pxUnder700 primary-white" style={{width:"90%", marginLeft:"5%"}}>
                                             More than 85% of candidates<div className="above1000only noHeight"><br/></div> rate their experience as positive
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div className="center" style={{marginTop: "35px"}}>
-                                <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
                                     Try for Free
                                 </button>
                             </div>
@@ -791,11 +791,11 @@ class BusinessHome extends Component {
                         }
 
                         <div className="forBusinessBoxesContainer">
-                            <div className="font36px font32pxUnder700 font26pxUnder500 center brightPinkText"
+                            <div className="font36px font32pxUnder700 font26pxUnder500 center primary-pink"
                                  style={{marginBottom: '50px'}}>
                                 The New Baseline Evaluation
                                 <div className="infoTextContainer">
-                                    <div className="infoText i flex font18px font16pxUnder700 font10pxUnder400 whiteText" style={{margin: 'auto'}}>
+                                    <div className="infoText i flex font18px font16pxUnder700 font10pxUnder400 primary-white" style={{margin: 'auto'}}>
                                         <div>Free for First Active Position</div>
                                         <div>•</div>
                                         <div>Unlimited Evaluations of your Applicants</div>
@@ -810,21 +810,21 @@ class BusinessHome extends Component {
                                         alt="Paper Airplane Icon"
                                         className="businessHomeBoxIcons"
                                     />
-                                    <div className="brightPinkText marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
+                                    <div className="primary-pink marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
                                         STARTER
                                     </div>
                                     <div style={{height: '80px', lineHeight: '20px'}}>
-                                        <span className="whiteText font30px font24pxUnder400">
+                                        <span className="primary-white font30px font24pxUnder400">
                                             <br/><span style={{display: "inline-block", marginTop:"3px"}}>FREE</span>
                                             <br/>
                                             <i className="font12px">for first active position</i>
                                         </span>
                                     </div>
                                     <div className="pinkToOrangeSpacer marginTop20px marginBottom20px"/>
-                                    <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
+                                    <div className="primary-white font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
                                         {"Start with one position to see the results. No cost, no risk, no excuses not to kick this off."}
                                     </div>
-                                    <button className="pricingButton whiteText clickableNoUnderline transitionButton orangeToRedSmallButtonGradientLeft font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
+                                    <button className="button gradient-transition gradient-1-red gradient-2-orange pricingButton primary-white font18px font14pxUnder400" onClick={this.handleOpen}>
                                         Take Off
                                     </button>
                                 </div>
@@ -838,11 +838,11 @@ class BusinessHome extends Component {
                                         alt="Enterprise Rocket Icon"
                                         className="businessHomeBoxIcons"
                                     />
-                                    <div className="brightOrangeText marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
+                                    <div className="primary-pink marginTop24px marginTop20pxUnder400 font22px font18pxUnder400">
                                         PLUS
                                     </div>
                                     <div style={{height: '80px', lineHeight: '20px'}}>
-                                        <span className="whiteText font30px font24pxUnder400">
+                                        <span className="primary-white font30px font24pxUnder400">
                                             <i className="font12px" style={{display: "inline-block", marginBottom:"9px"}}>Starting at</i>
                                             <br/>$79
                                             <br/>
@@ -850,10 +850,10 @@ class BusinessHome extends Component {
                                         </span>
                                     </div>
                                     <div className="orangeToPinkSpacer marginTop20px marginBottom20px"/>
-                                    <div className="whiteText font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
+                                    <div className="primary-white font14px font12pxUnder400" style={{width: '90%', margin: 'auto'}}>
                                         {"Easily scale the number of positions you are evaluating through Moonshot."}
                                     </div>
-                                    <button className="pricingButton clickableNoUnderline transitionButton orangeToRedSmallButtonGradientRight whiteText font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
+                                    <button className="button gradient-transition gradient-1-red gradient-2-orange pricingButton primary-white font18px font14pxUnder400" style={{border: 'none'}} onClick={this.handleOpen}>
                                         Blast Off
                                     </button>
                                 </div>
@@ -863,7 +863,7 @@ class BusinessHome extends Component {
 
                     <section id="crystalBall" className="marginBottom60px">
                         <div className="center">
-                            <div className="blueTextHome font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
+                            <div className="primary-cyan font36px font32pxUnder700 font26pxUnder500 marginBottom30pxImportant" style={{maxWidth: '80%', margin:'auto'}}>
                                 {"Your crystal ball to identify"}<div className="above800only noHeight"><br/></div>{" good and bad hires before it's too late."}
                             </div>
                             <img
@@ -872,7 +872,7 @@ class BusinessHome extends Component {
                                 className="crystalBall"
                             />
                             <div className="center" style={{marginTop: "10px"}}>
-                                <button className="slightlyRoundedButton mediumLargeButton font20px font16pxUnder600 purpleToBlueAnimate whiteText" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
+                                <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.handleOpen} style={{padding: "6px 20px"}}>
                                     Try for Free
                                 </button>
                             </div>
