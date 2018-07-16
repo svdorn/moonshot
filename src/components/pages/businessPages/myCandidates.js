@@ -705,16 +705,15 @@ class MyCandidates extends Component {
         let candidatesContainer = null;
 
         // loading in positions or candidates
-        //if (this.state.loadingPositions || this.state.loadingCandidates) {
+        if (this.state.loadingPositions || this.state.loadingCandidates) {
             return (
                 <div key="candidatesTable">
                     <CircularProgress color="#76defe" style={style.noCandidatesMessage} />
                 </div>
             )
-        //}
+        }
 
-        //else
-        if (this.state.noPositions) {
+        else if (this.state.noPositions) {
             return (
                 <div key="no open evals">
                     Your business has no open evaluations.<br/>

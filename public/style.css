@@ -2335,6 +2335,7 @@ button.link {
 
 .myCandidates .candidatesContainer {
     height: calc(100vh - 218px);
+    width: calc(100% - 20px);
     min-height: 300px;
     display: inline-block;
     position: relative;
@@ -3203,7 +3204,7 @@ button.link {
     margin-right: 60px;
 }
 .aboutMeSection {
-    min-height: 550px;
+    min-height: 100%;
 }
 
 
@@ -4658,6 +4659,11 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .messageHeader { margin-top: -70px; }
 
+    .analysis .candidateScore {
+        margin-bottom: 15px;
+        margin-top: 15px;
+    }
+
     .results > .statsAndDescription > div {
         width: 650px;
     }
@@ -5103,10 +5109,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
         display: block;
         margin-top: 20px;
     }
-    .aboutMeSection {
-        min-height: 450px;
-    }
-
     .myCandidatesInfoBox {
         width: 280px;
     }
