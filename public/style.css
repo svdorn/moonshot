@@ -1322,6 +1322,10 @@ form > h1 {
     display: inline-block;
 }
 
+.myCandidates [class^=MuiSelect-select]:focus {
+    background: none;
+}
+
 .hoverTip {
     display: none;
     position: absolute;

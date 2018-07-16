@@ -1084,6 +1084,10 @@ class MyCandidates extends Component {
                 <MenuItem
                     value={lowercaseSortTerm}
                     key={`position${sortTerm}`}
+                    classes={{
+                        root: "default-select-root",
+                        selected: "default-select-selected"
+                    }}
                 >
                     { sortTerm }
                     <UpDownArrows
@@ -1112,6 +1116,7 @@ class MyCandidates extends Component {
                     root: "selectRootWhite myCandidatesSelect",
                     icon: "selectIconWhiteImportant"
                 }}
+                className="bigBamBoom"
                 value={"sort by"}
                 onChange={this.handleMobileSortByChange}
                 key="sort selector"
