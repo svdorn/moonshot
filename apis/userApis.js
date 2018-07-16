@@ -674,12 +674,17 @@ async function finishPositionEvaluation(user, positionId, businessId) {
 
         // performance is being calculated only using growth and skill for now
         const performance = (growth + overallSkill) / 2;
+        console.log("growth: ", growth);
+        console.log("overallSkill", overallSkill);
+        console.log("performance: ", performance);
 
         // PREDICTED SCORE IS AN AVERAGE BETWEEN GROWTH AND PERFORMANCE
         const predicted = (performance + growth) / 2;
+        console.log("predicted: ", predicted);
 
         // OVERALL SCORE IS AN AVERAGE BETWEEN OVERALL SKILL AND PREDICTED
         const overall = (predicted + overallSkill) / 2;
+        console.log("overall: ", overall);
 
         user.positions[positionIndex].scores = {
             skill: overallSkill,
