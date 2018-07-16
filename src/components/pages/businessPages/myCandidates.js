@@ -1197,12 +1197,6 @@ class MyCandidates extends Component {
                 <div className="myCandidatesTabs">
                     { this.tabParts() }
                 </div>
-                {this.state.mobile ? null :
-                    <div className="myCandidatesPositionSelector">
-                        { this.positionSelector() }
-                    </div>
-                }
-
             </div>
         );
 
@@ -1235,6 +1229,11 @@ class MyCandidates extends Component {
 
                 <div className="center">
                     <div className="candidatesAndOptions">
+                        {this.state.mobile ? null :
+                            <div className="myCandidatesPositionSelector">
+                                { this.positionSelector() }
+                            </div>
+                        }
                         { this.state.mobile ? this.mobileTopOptions() : this.topOptions() }
                         <div className="candidatesContainer">
                             <div>

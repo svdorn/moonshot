@@ -2344,7 +2344,7 @@ button.link {
 
 .myCandidates .candidatesContainer {
     height: calc(100vh - 218px);
-    width: calc(100% - 20px);
+    width: 100%;
     min-height: 300px;
     display: inline-block;
     position: relative;
@@ -2466,7 +2466,7 @@ button.link {
 
 .myCandidatesPositionSelector {
     position: absolute;
-    top: -2px;
+    top: -26px;
     right: 0;
 }
 
