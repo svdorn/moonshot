@@ -177,7 +177,8 @@ class PredictiveGraph extends Component {
         let labelContainerTransform = {};
         let labelTransform = {};
         let xLabelLeftAlign = false;
-        if (interiorWidth < 500) {
+        // rotate labels if there is more than one and the graph is small
+        if (interiorWidth < 500 && dataPoints.length > 1) {
             let rotateAngle,
                 yTranslation,
                 xTranslation;
