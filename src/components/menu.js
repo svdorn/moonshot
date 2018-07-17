@@ -67,10 +67,10 @@ class Menu extends Component {
             case "Sign Out":
                 //special case, user is signing out while on onboarding,
                 // don't mark onboarding complete yet
-                if (this.props.location.pathname === '/onboarding') {
-                    const markOnboardingComplete = false;
-                    this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
-                }
+                // if (this.props.location.pathname === '/onboarding') {
+                //     const markOnboardingComplete = false;
+                //     this.props.endOnboarding(this.props.currentUser, markOnboardingComplete);
+                // }
 
                 // always sign out when sign out clicked
                 this.props.signout();
