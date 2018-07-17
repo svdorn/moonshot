@@ -39,16 +39,17 @@ db.on('error', console.error.bind(console, '# MongoDB - connection error: '));
 
 
 // import all the api functions
-const userApis = require('./apis/userApis');
-const candidateApis = require('./apis/candidateApis');
-const businessApis = require('./apis/businessApis');
-const adminApis = require('./apis/adminApis');
-const miscApis = require('./apis/miscApis');
-const skillApis = require('./apis/skillApis');
-const psychApis = require('./apis/psychApis');
-const mlFunctions = require('./apis/mlFunctions');
-const billingApis = require('./apis/billingApis');
-const helperFunctions = require('./apis/helperFunctions');
+const userApis = require("./apis/userApis");
+const candidateApis = require("./apis/candidateApis");
+const businessApis = require("./apis/businessApis");
+const adminApis = require("./apis/adminApis");
+const miscApis = require("./apis/miscApis");
+const skillApis = require("./apis/skillApis");
+const psychApis = require("./apis/psychApis");
+const mlFunctions = require("./apis/mlFunctions");
+const billingApis = require("./apis/billingApis");
+const webhooks = require("./apis/webhooks");
+const helperFunctions = require("./apis/helperFunctions");
 
 
 // set up the session
@@ -66,6 +67,41 @@ app.use(session({
     store: new MongoStore({mongooseConnection: db, ttl: 7 * 24 * 60 * 60})
     // ttl: 7 days * 24 hours * 60 minutes * 60 seconds
 }));
+
+
+// --->> TEST WEBHOOKS <<--- //
+
+// const WebHooks = require("node-webhooks");
+// // add the place that stores webhooks
+// webHooks = new WebHooks({
+//     db: {
+//         "testHookStorage": [ "http://localhost:8081/testHooks" ]
+//     }
+// });
+// add a new webhook
+// webHooks.add("testHook1", "https://hooks.zapier.com/hooks/catch/3540048/wju5zh/")
+// .then(function() {
+//     console.log("did the hook!");
+// })
+// .catch(function(error) {
+//     console.log("error doing test hook:");
+//     console.log(error);
+// });
+
+// webHooks.add("testHook2", "https://da2cd9b4.ngrok.io/testingHooks")
+// .then(function() {
+//     console.log("did the local hook!");
+// })
+// .catch(function(error) {
+//     console.log("error doing test hook:");
+//     console.log(error);
+// });
+// trigger the webhook
+//webHooks.trigger("testHook1", {data: {email: "jangus@gmail.com"}});
+//webHooks.trigger("testingHooks", {data: {email: "flooben@gmail.com"}});
+
+// <<--------------------->> //
+
 
 // ----->> START APIS <<----- //
 
@@ -136,6 +172,8 @@ app.post('/billing/customer', billingApis.POST_customer);
 app.post('/misc/createReferralCode', miscApis.POST_createReferralCode);
 app.post('/misc/unsubscribeEmail', miscApis.POST_unsubscribeEmail);
 app.post("/misc/resetAlan", miscApis.POST_resetAlan);
+
+app.post("/webhooks/addCandidate", webhooks.POST_addCandidate);
 
 
 // ----->> END APIs <<----- //

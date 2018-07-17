@@ -39,7 +39,10 @@ const businessApis = {
     GET_employeeSearch,
     GET_employeeQuestions,
     GET_positions,
-    GET_evaluationResults
+    GET_evaluationResults,
+
+    createEmailInfo,
+    sendEmailInvite
 }
 
 
@@ -115,8 +118,6 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         const email = emailInfo.email;
         const userType = emailInfo.userType;
 
-        console.log("userName: ", userName);
-
         // recipient of the email
         const recipient = [ email ];
         // sender of the email
@@ -125,6 +126,12 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         let content = "";
         // subject of the email
         let subject = "";
+
+        // defining it before the call saves a bit of time
+        if (!moonshotUrl) {
+            // this is where all links will go
+            moonshotUrl = process.env.NODE_ENV === "development" ? "http://localhost:8081/" : "https://www.moonshotinsights.io/";
+        }
 
         // the button linking to the signup page with the signup code in the url
         const createAccountButton =

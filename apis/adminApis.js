@@ -330,8 +330,25 @@ async function POST_saveBusiness(req, res) {
                         highRange: 10
                     }
                 }
-            ]
+            ];
 
+            // create an API_Key for the business - first get a list of all current API_Keys
+            try {
+                const otherBusinesses = await Businesses.find({}).select("API_Key");
+                var existingKeys = otherBusinesses.map(biz => { return biz.API_Key; });
+            } catch (getKeysError) {
+                console.log("Error getting all keys of other businesses: ", getKeysError);
+                return res.status(500).send(errors.SERVER_ERROR);
+            }
+
+            // generate random keys until one of them is unique across all businesses
+            let API_Key = "";
+            do { API_Key = crypto.randomBytes(12).toString("hex"); }
+            while (existingKeys.includes(API_Key));
+            // give the business its api key
+            newBusiness.API_Key = API_Key;
+
+            // add every new position with only the attributes that can be updated from the admin dashboard
             newBusiness.positions = business.positions.map(position => {
                 let newPosition = JSON.parse(JSON.stringify(blankPosition));
 
