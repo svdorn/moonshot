@@ -175,9 +175,8 @@ function getFirstName(name) {
 function sendEmail(recipients, subject, content, sendFrom, attachments, callback) {
     // recipientArray is an array of strings while recipientList is one string with commas
     let recipientArray = [];
-    const emailRegex = /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i;
     // if only one recipient was given, in string form, and it is an actual email address
-    if (typeof recipients === "string" && emailRegex.test(recipients)) {
+    if (typeof recipients === "string" && isValidEmail(recipients)) {
         // add it to the recipients list
         recipientArray.push(recipients);
     }
@@ -201,7 +200,7 @@ function sendEmail(recipients, subject, content, sendFrom, attachments, callback
         const optedOutStudents = optedOut.emails;
         recipientArray.forEach(recipient => {
             // make sure the email is a legitimate address
-            if (emailRegex.test(recipient)) {
+            if (isValidEmail(recipient)) {
                 emailOptedOut = optedOutStudents.some(function(optedOutEmail) {
                     return optedOutEmail.toLowerCase() === recipient.toLowerCase();
                 });
@@ -625,6 +624,12 @@ function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
 }
 
 
+// checks if an email is of the correct form (i.e. name@something.blah )
+function isValidEmail(email) {
+    return /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email);
+}
+
+
 const helperFunctions = {
     sanitize,
     removeEmptyFields,
@@ -638,6 +643,7 @@ const helperFunctions = {
     speedTest,
     lastPossibleSecond,
     findNestedValue,
+    isValidEmail,
 
     FOR_USER
 }
