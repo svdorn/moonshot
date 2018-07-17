@@ -12,7 +12,8 @@ const { sanitize,
         getFirstName,
         frontEndUser,
         getAndVerifyUser,
-        findNestedValue
+        findNestedValue,
+        isValidEmail
 } = require('./helperFunctions');
 
 const {
@@ -45,7 +46,10 @@ async function POST_addCandidate(req, res) {
     console.log("API_Key: ", API_Key);
     console.log("positionId: ", positionId);
 
-    // TODO: test that the email is in the correct form (is a valid email)
+    // test that the email is in the correct form (is a valid email)
+    if (!isValidEmail(email)) {
+        return res.status(400).send("Invalid email format. Needs to be _____@_____.___");
+    }
 
     // query to find the business and position from the keys
     try {
@@ -85,8 +89,6 @@ async function POST_addCandidate(req, res) {
         console.log("Error creating a code for candidate signing up via webhook: ", codeCreationError);
         return res.status(500).send("Error sending invite to candidate.");
     }
-
-    console.log("emailInfo: ", emailInfo);
 
     // send invite email to candidate
     try { await sendEmailInvite(emailInfo, position.name, business.name); }

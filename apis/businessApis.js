@@ -636,6 +636,22 @@ async function POST_dialogEmailScreen2(req, res) {
         name: company
     };
 
+    // create an API_Key for the business - first get a list of all current API_Keys
+    try {
+        const otherBusinesses = await Businesses.find({}).select("API_Key");
+        var existingKeys = otherBusinesses.map(biz => { return biz.API_Key; });
+    } catch (getKeysError) {
+        console.log("Error getting all keys of other businesses: ", getKeysError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // generate random keys until one of them is unique across all businesses
+    let API_Key = "";
+    do { API_Key = crypto.randomBytes(12).toString("hex"); }
+    while (existingKeys.includes(API_Key));
+    // give the business its api key
+    business.API_Key = API_Key;
+
     // hash the user's password
     const saltRounds = 10;
     bcrypt.genSalt(saltRounds, function (err, salt) {
