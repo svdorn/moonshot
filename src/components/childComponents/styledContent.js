@@ -37,8 +37,6 @@ class StyledContent extends Component {
                                     {content[0]}
                                 </div>
                             );
-                            // add a break if there's supposed to be one
-                            if (part.shouldBreak) { contentHtml.push(<br key={"br" + keyCounter}/>); }
                         }
                         break;
                     case "img":
@@ -50,8 +48,6 @@ class StyledContent extends Component {
                                      className={className}
                                      key={"contentPart" + keyCounter} />
                             );
-                            // add a break if there's supposed to be one
-                            if (part.shouldBreak) { contentHtml.push(<br key={"br" + keyCounter}/>); }
                         }
                         break;
                     case "skillChips":
@@ -117,8 +113,6 @@ class StyledContent extends Component {
                                     {lis}
                                 </ul>
                             );
-                            // add a break if there's supposed to be one
-                            if (part.shouldBreak) { contentHtml.push(<br key={"br" + keyCounter}/>); }
                         }
                         break;
                     case "code":
@@ -139,7 +133,6 @@ class StyledContent extends Component {
                             contentHtml.push (
                                 <div className={className + " code"} style={{textAlign:"left"}} key={"questionPart" + keyCounter}>
                                     {code}
-                                    {breakArea}
                                 </div>
                             );
                         } else {
@@ -150,6 +143,9 @@ class StyledContent extends Component {
                         // console.log("content part type unnaccounted for");
                         break;
                 }
+
+                // add a break if there's supposed to be one
+                if (part.shouldBreak) { contentHtml.push(<br key={"br" + keyCounter}/>); }
             }
         });
 
