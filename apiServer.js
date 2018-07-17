@@ -89,24 +89,19 @@ webHooks = new WebHooks({
 // });
 
 // webHooks.remove('testHook2').catch(function(err){console.error(err);});
-// webHooks.add("testHook2", "http://5218a471.ngrok.io/api/webhooks/addCandidate")
-// .then(function() {
-//     console.log("set up the local hook");
-// })
-// .catch(function(error) {
-//     console.log("error setting up test hook:");
-//     console.log(error);
-// });
-// // trigger the webhook
-// webHooks.trigger("testHook1", {data: {
-//     API_Key: "123456789012345678901234",
-//     Position_Key: "0987654321234567890",
-//     email: "candidate@candidate.com"
-// }});
-// webHooks.trigger("testHook2", {data: {
-//     email: "flooben@gmail.com",
-//     API_Key: "12345",
-//     Position_Key: "00000"
+webHooks.add("addCandidate", "http://5218a471.ngrok.io/api/webhooks/addCandidate")
+.then(function() {
+    console.log("set up the local hook");
+})
+.catch(function(error) {
+    console.log("error setting up test hook:");
+    console.log(error);
+});
+// trigger the webhook
+// webHooks.trigger("addCandidate", {data: {
+//     API_Key: "a9bbc72aaeae4ecd5fafb113",
+//     Position_Key: "5b36c49f2a899062a029f59f",
+//     email: "frizzkitten@gmail.com"
 // }});
 
 // <<--------------------->> //

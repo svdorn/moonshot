@@ -42,19 +42,19 @@ async function POST_addCandidate(req, res) {
     const email = findNestedValue(body, "email", nestedLevels, traverseArrays);
 
     console.log("email: ", email);
-
-    return res.status(200).send("success");
+    console.log("API_Key: ", API_Key);
+    console.log("positionId: ", positionId);
 
     // TODO: test that the email is in the correct form (is a valid email)
 
     // query to find the business and position from the keys
     try {
         var query = {
-            "apiKey": API_Key,
+            "API_Key": API_Key,
             "positions": {
                 // will only get the wanted position
                 "$elemMatch": {
-                    "_id": mongoose.types.ObjectId(positionId)
+                    "_id": mongoose.Types.ObjectId(positionId)
                 }
             }
         }
@@ -72,6 +72,7 @@ async function POST_addCandidate(req, res) {
 
     // make sure a legit business is found from the webhook info
     if (!business || !Array.isArray(business.positions) || business.positions.length < 1) {
+        console.log("business: ", business);
         return res.status(401).send("Invalid API_Key and/or Position_Key.");
     }
 
@@ -79,20 +80,22 @@ async function POST_addCandidate(req, res) {
     const position = business.positions[0];
 
     // create a unique code for the candidate
-    try { var emailInfo = createEmailInfo(business._id, position._id, "candidate", email); }
+    try { var emailInfo = await createEmailInfo(business._id, position._id, "candidate", email); }
     catch (codeCreationError) {
         console.log("Error creating a code for candidate signing up via webhook: ", codeCreationError);
         return res.status(500).send("Error sending invite to candidate.");
     }
 
+    console.log("emailInfo: ", emailInfo);
+
     // send invite email to candidate
     try { await sendEmailInvite(emailInfo, position.name, business.name); }
     catch (sendEmailError) {
         console.log("Error sending email to candidate signing up via webhook: ", sendEmailError);
-        res.status(500).send("Error sending email invite to candidate");
+        return res.status(500).send("Error sending email invite to candidate");
     }
 
-    return res.status(200).send();
+    return res.status(200).send("success");
 }
 
 module.exports = webhooks;

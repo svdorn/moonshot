@@ -9,7 +9,7 @@ import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
-import { renderTextField, renderPasswordField } from "../../miscFunctions";
+import { renderTextField, renderPasswordField, isValidEmail } from "../../miscFunctions";
 
 
 const validate = values => {
@@ -18,7 +18,7 @@ const validate = values => {
         'email',
         'password',
     ];
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    if (values.email && !isValidEmail(values.email)) {
         errors.email = 'Invalid email address';
     }
     requiredFields.forEach(field => {
@@ -117,7 +117,7 @@ class Login extends Component {
             }
         });
         if (notValid) return;
-        if (vals.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
+        if (vals.email && !isValidEmail(vals.email)) {
             return;
         }
 
