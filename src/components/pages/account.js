@@ -7,6 +7,7 @@ import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm, change} from 'redux-form';
 import axios from 'axios';
 import { renderTextField, renderPasswordField } from "../../miscFunctions";
+import { isValidEmail } from "../../miscFunctions";
 
 
 const validate = values => {
@@ -21,7 +22,7 @@ const validate = values => {
             errors[field] = 'This field is required'
         }
     });
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    if (values.email && !isValidEmail(values.email)) {
         errors.email = 'Invalid email address';
     }
     return errors
@@ -61,7 +62,7 @@ class Account extends Component {
         });
         if (notValid) return;
 
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) return;
+        if (!isValidEmail(vals.email)) return;
 
         const user = {
             name: this.props.formData.settings.values.name,
