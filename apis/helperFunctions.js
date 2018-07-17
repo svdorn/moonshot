@@ -15,6 +15,15 @@ const sanitizeOptions = {
 }
 
 
+// Queue implementation
+function Queue() { this.data = []; }
+Queue.prototype.enqueue = function(record) { this.data.unshift(record); }
+Queue.prototype.dequeue = function() { return this.data.pop(); }
+Queue.prototype.first = function() { return this.data[0]; }
+Queue.prototype.last = function() { return this.data[this.data.length - 1]; }
+Queue.prototype.size = function() { return this.data.length; }
+
+
 const FOR_USER = [
     "_id",
     "verificationToken",
@@ -542,6 +551,80 @@ function lastPossibleSecond(date, daysToAdd) {
 }
 
 
+// find the value of a certain attribute within an object
+function findNestedValue(obj, wantedAttribute, nestedLevels, traverseArrays) {
+    // can't find anything if object is undefined
+    if (!obj) { return undefined; }
+    // wanted attribute is necessary for this to function
+    if (typeof wantedAttribute !== "string") { throw ("wantedAttribute must be a string - wantedAttribute: " + wantedAttribute); }
+    // if no nested levels value given, nest 4 times
+    if (typeof nestedLevels !== "number") { nestedLevels = 4; }
+    // assume we shouldn't go through arrays if the option isn't given
+    if (typeof traverseArrays !== "boolean") { traverseArrays = false; }
+
+    // create a queue of objects to dig through
+    let q = new Queue();
+    // the current object to look through
+    let currentObj = obj;
+    // add the top-level object to the queue
+    q.enqueue({object: obj, level: 0});
+    // go through the queue until the attribute is found or the queue is empty
+    do {
+        currentObj = q.dequeue();
+        // see if we found the value as a prop of the current object, if not, add all
+        // the properties of this object to the queue
+        const foundValue = addValuesToQueue(currentObj);
+        // return the value if it was found
+        if (foundValue) { return foundValue; }
+    }
+    // keep checking until the queue is empty
+    while (q.size() > 0);
+
+    // property never found
+    return undefined;
+
+    function addValuesToQueue(currentObject) {
+        const o = currentObject.object;
+        const level = currentObject.level;
+        // if o is not an object, can't check its values, so move on
+        if (typeof o !== "object") { return; }
+
+        // if the object is an array ...
+        else if (Array.isArray(o)) {
+            // ... make sure we should add array elements and that we haven't
+            // reached the maximum search depth
+            if (traverseArrays && level < nestedLevels) {
+                // go through every element of the array
+                o.forEach(value => {
+                    // add the element to the queue
+                    q.enqueue({object: value, level: level + 1});
+                });
+            }
+        }
+
+        // it is an object, so check it
+        else {
+            // go through every property the object has
+            for (const prop in o) {
+                // don't check the property if it's a default object property
+                if (!o.hasOwnProperty(prop)) { continue; }
+                // get the value of the current property
+                const value = o[prop];
+                // return value if found
+                if (prop === wantedAttribute) { return value; }
+                // otherwise, if the value is an object ...
+                else if (typeof value === "object" && level < nestedLevels) {
+                    // ... add it to the queue
+                    q.enqueue({object: value, level: level + 1});
+                }
+            }
+        }
+        // value not found in this object
+        return undefined;
+    }
+}
+
+
 const helperFunctions = {
     sanitize,
     removeEmptyFields,
@@ -554,6 +637,7 @@ const helperFunctions = {
     getAndVerifyUser,
     speedTest,
     lastPossibleSecond,
+    findNestedValue,
 
     FOR_USER
 }

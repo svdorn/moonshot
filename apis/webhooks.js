@@ -12,7 +12,7 @@ const { sanitize,
         getFirstName,
         frontEndUser,
         getAndVerifyUser,
-        //findValueByAttribute
+        findNestedValue
 } = require('./helperFunctions');
 
 const {
@@ -30,19 +30,20 @@ async function POST_addCandidate(req, res) {
     console.log("req.body: ", req.body);
     const body = sanitize(req.body);
 
-    // may be needed
-    // // maximum number of levels deep the search will go
-    // const nestedLevels = 4;
-    // const apiKey = findValueByAttribute(body, "API_Key", nestedLevels);
-    // const positionId = findValueByAttribute(body, "Position_Key", nestedLevels);
-    // const email = findValueByAttribute(body, "email", nestedLevels);
-
+    // maximum number of levels deep the search will go
+    const nestedLevels = 3;
+    // we want to go through arrays just in case the data is hidden in one
+    const traverseArrays = true;
     // the unique business identifier
-    const API_Key = body.API_Key;
+    const API_Key = findNestedValue(body, "API_Key", nestedLevels, traverseArrays);
     // identifier for position is just the position id
-    const positionId = body.Position_Key;
+    const positionId = findNestedValue(body, "Position_Key", nestedLevels, traverseArrays);
     // the email address of the candidate that should be invited
-    const email = body.Email;
+    const email = findNestedValue(body, "email", nestedLevels, traverseArrays);
+
+    console.log("email: ", email);
+
+    return res.status(200).send("success");
 
     // TODO: test that the email is in the correct form (is a valid email)
 

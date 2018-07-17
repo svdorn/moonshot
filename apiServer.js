@@ -71,13 +71,13 @@ app.use(session({
 
 // --->> TEST WEBHOOKS <<--- //
 
-// const WebHooks = require("node-webhooks");
-// // add the place that stores webhooks
-// webHooks = new WebHooks({
-//     db: {
-//         "testHookStorage": [ "http://localhost:8081/testHooks" ]
-//     }
-// });
+const WebHooks = require("node-webhooks");
+// add the place that stores webhooks
+webHooks = new WebHooks({
+    db: {
+        "testHookStorage": [ "http://localhost:8081/testHooks" ]
+    }
+});
 // add a new webhook
 // webHooks.add("testHook1", "https://hooks.zapier.com/hooks/catch/3540048/wju5zh/")
 // .then(function() {
@@ -88,20 +88,28 @@ app.use(session({
 //     console.log(error);
 // });
 
-// webHooks.add("testHook2", "https://da2cd9b4.ngrok.io/testingHooks")
+// webHooks.remove('testHook2').catch(function(err){console.error(err);});
+// webHooks.add("testHook2", "http://5218a471.ngrok.io/api/webhooks/addCandidate")
 // .then(function() {
-//     console.log("did the local hook!");
+//     console.log("set up the local hook");
 // })
 // .catch(function(error) {
-//     console.log("error doing test hook:");
+//     console.log("error setting up test hook:");
 //     console.log(error);
 // });
-// trigger the webhook
-//webHooks.trigger("testHook1", {data: {email: "jangus@gmail.com"}});
-//webHooks.trigger("testingHooks", {data: {email: "flooben@gmail.com"}});
+// // trigger the webhook
+// webHooks.trigger("testHook1", {data: {
+//     API_Key: "123456789012345678901234",
+//     Position_Key: "0987654321234567890",
+//     email: "candidate@candidate.com"
+// }});
+// webHooks.trigger("testHook2", {data: {
+//     email: "flooben@gmail.com",
+//     API_Key: "12345",
+//     Position_Key: "00000"
+// }});
 
 // <<--------------------->> //
-
 
 // ----->> START APIS <<----- //
 
