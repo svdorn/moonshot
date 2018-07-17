@@ -248,7 +248,8 @@ class MyEvaluations extends Component {
                             attributes.positionId = position.positionId.toString();
                         } catch (attributeError) {
                             console.log(attributeError);
-                            this.props.addNotification("Server error, try again later.", "error");
+                            console.log("position: ", position);
+                            this.props.addNotification("Something went wrong, try reloading.", "error");
                             return "";
                         }
                     }

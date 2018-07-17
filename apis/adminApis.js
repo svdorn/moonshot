@@ -47,6 +47,7 @@ async function POST_saveSkill(req, res) {
 
         // if it's a new skill, create and return the new skill
         if (!skill._id) {
+            console.log("did not have a skill id! skill is: ", skill);
             // count all the skills with the same name ...
             const skillCount = await Skills.count({name: skill.name});
             // ... and generate a random number ...
