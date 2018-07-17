@@ -7,7 +7,7 @@ import {bindActionCreators} from 'redux';
 import {Field, reduxForm} from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
-import { renderTextField } from  "../../miscFunctions";
+import { renderTextField, isValidEmail } from  "../../miscFunctions";
 
 
 const validate = values => {
@@ -20,7 +20,7 @@ const validate = values => {
             errors[field] = 'This field is required'
         }
     });
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    if (values.email && !isValidEmail(values.email)) {
         errors.email = 'Invalid email address';
     }
 
@@ -45,7 +45,7 @@ class ForgotPassword extends Component {
         });
         if (notValid) return;
 
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
+        if (!isValidEmail(vals.email)) {
             return;
         }
 

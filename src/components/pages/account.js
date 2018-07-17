@@ -6,8 +6,7 @@ import {updateUser} from '../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm, change} from 'redux-form';
 import axios from 'axios';
-import { renderTextField, renderPasswordField } from "../../miscFunctions";
-import { isValidEmail } from "../../miscFunctions";
+import { renderTextField, renderPasswordField, isValidEmail } from "../../miscFunctions";
 
 
 const validate = values => {

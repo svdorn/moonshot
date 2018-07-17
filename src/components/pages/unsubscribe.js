@@ -8,7 +8,7 @@ import { browserHistory } from 'react-router';
 import { Field, reduxForm } from 'redux-form';
 import HomepageTriangles from '../miscComponents/HomepageTriangles';
 import MetaTags from 'react-meta-tags';
-import { renderTextField } from "../../miscFunctions";
+import { renderTextField, isValidEmail } from "../../miscFunctions";
 
 
 const validate = values => {
@@ -16,7 +16,7 @@ const validate = values => {
     const requiredFields = [
         'email',
     ];
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    if (values.email && !isValidEmail(values.email)) {
         errors.email = 'Invalid email address';
     }
     requiredFields.forEach(field => {
@@ -38,9 +38,8 @@ class Unsubscribe extends Component {
             email = props.location.query.email;
         } catch(e) { /* no email provided, ask them to submit one */ }
 
-        if (/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(email)) {
+        if (isValidEmail(email)) {
             unsubscribedViaUrl = true;
-
         }
 
         this.state = {showErrors: true, unsubscribedViaUrl};
@@ -72,7 +71,7 @@ class Unsubscribe extends Component {
             }
         });
         if (notValid) return;
-        if (vals.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
+        if (vals.email && !isValidEmail(vals.email)) {
             return;
         }
 
@@ -103,7 +102,7 @@ class Unsubscribe extends Component {
                 <HomepageTriangles className="blurred" style={{pointerEvents:"none"}} variation="1" />
                 <div className="form lightBlackForm noBlur">
                     {this.state.unsubscribedViaUrl ?
-                        <div>{this.props.location.query.email} was successfully unsubscribed.</div>
+                        <div style={{padding:"10px"}}>{this.props.location.query.email} was successfully unsubscribed.</div>
                     :
                         <form onSubmit={this.handleSubmit.bind(this)}>
                             <h1 style={{marginTop:"15px"}}>Unsubscribe</h1>

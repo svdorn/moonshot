@@ -2,9 +2,8 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import { closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
-import {demoEmail, dialogEmail, dialogEmailScreen2,dialogEmailScreen3,dialogEmailScreen4} from '../../actions/usersActions';
+import { closeNotification, demoEmail, dialogEmail, dialogEmailScreen2, dialogEmailScreen3, dialogEmailScreen4 } from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
