@@ -2971,13 +2971,14 @@ button.link {
      margin-left: 80px;
  }
 
-.skillEditor .correctIndicator {
+.skillEditor .correctIndicator, .skillEditor .question-part-type {
     width: 30px;
     height: 30px;
     margin: 5px;
     cursor: pointer;
     display: inline-block;
     vertical-align: top;
+    font-size: 12px;
 }
 .skillEditor .correctIndicator.correct { background-color: green; }
 .skillEditor .correctIndicator.incorrect { background-color: red; }

@@ -211,6 +211,16 @@ class SkillEditor extends Component {
     }
 
 
+    changePartType(levelIndex, questionIndex, questionTextIndex) {
+        const self = this;
+        let skill = Object.assign({}, this.state.skill);
+        const currentValue = skill.levels[levelIndex].questions[questionIndex].body[questionTextIndex].partType;
+        const nextValue = currentValue === "code" ? "text" : "code";
+        skill.levels[levelIndex].questions[questionIndex].body[questionTextIndex].partType = nextValue;
+        this.setState({ skill });
+    }
+
+
     render() {
         const self = this;
 
@@ -253,6 +263,15 @@ class SkillEditor extends Component {
 
                 const numQuestionParts = question.body.length;
                 for (let questionTextIndex = 0; questionTextIndex < numQuestionParts; questionTextIndex++) {
+                    const isCode = question.body[questionTextIndex].partType === "code";
+                    questionBody.push(
+                        <div
+                            className={"question-part-type"}
+                            onClick={() => this.changePartType(levelIndex, questionIndex, questionTextIndex)}
+                        >
+                            {question.body[questionTextIndex].partType}
+                        </div>
+                    );
                     questionBody.push(
                         <textarea
                             value={question.body[questionTextIndex].content[0]}
@@ -261,6 +280,7 @@ class SkillEditor extends Component {
                             key={"level"+levelIndex+"question"+questionIndex+"part"+questionTextIndex}
                         />
                     );
+
                     if (questionTextIndex > 0) {
                         questionBody.push(<div key={"level"+levelIndex+"question"+questionIndex+"part"+questionTextIndex+"delete"} className="deleteButton" onClick={() => self.deleteQuestionText(levelIndex, questionIndex, questionTextIndex)}>X</div>)
                     }
