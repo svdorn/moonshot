@@ -346,6 +346,23 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
     }
 }
 
+// POST CREATE LINK
+export function postCreateLink(currentUserInfo) {
+    return function(dispatch) {
+        dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
+
+        axios.post("/api/business/postCreateLink", {currentUserInfo})
+            // email invites success
+            .then(function(res) {
+                console.log(res)
+                dispatch({type: "POST_LINK_SUCCESS", payload:res.data[0].code});
+            })
+            // error posting email invites
+            .catch(function(err) {
+                dispatch({type: "POST_LINK_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
+            });
+    }
+}
 
 export function addNotification(message, notificationType) {
     return function(dispatch) {

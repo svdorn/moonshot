@@ -30,6 +30,7 @@ const businessApis = {
     POST_updateHiringStage,
     POST_answerQuestion,
     POST_emailInvites,
+    POST_createLink,
     POST_rateInterest,
     POST_changeHiringStage,
     POST_moveCandidates,
@@ -46,7 +47,7 @@ const businessApis = {
 // ----->> START APIS <<----- //
 
 // create a signup code for a user
-function createCode(businessId, positionId, userType) {
+function createCode(businessId, positionId, userType, open) {
     return new Promise(async function(resolve, reject) {
         // initialize random characters string
         let randomChars;
@@ -76,7 +77,7 @@ function createCode(businessId, positionId, userType) {
             code: randomChars,
             created: NOW,
             expirationDate: lastPossibleSecond(NOW, TWO_WEEKS),
-            businessId, positionId, userType
+            businessId, positionId, userType, open
         }
         console.log("code: ", code);
         // make the code in the db
@@ -89,12 +90,26 @@ function createCode(businessId, positionId, userType) {
     });
 }
 
+function createLink(businessId, positionId, userType) {
+    return new Promise(async function(resolve, reject) {
+        try {
+            const codeObj = await createCode(businessId, positionId, userType, true);
+            resolve({
+                code: codeObj.code, userType
+            });
+        }
+        // catch whatever random error comes up
+        catch (error) {
+            reject(error);
+        }
+    })
+}
 
 // returns an object with the email, userType, and new code for a user
 function createEmailInfo(businessId, positionId, userType, email) {
     return new Promise(async function(resolve, reject) {
         try {
-            const codeObj = await createCode(businessId, positionId, userType);
+            const codeObj = await createCode(businessId, positionId, userType, false);
             resolve({
                 code: codeObj.code,
                 email, userType
@@ -278,6 +293,66 @@ async function POST_emailInvites(req, res) {
 
     // successfully sent all the emails
     return res.json(true);
+}
+
+// create link that people can sign up as
+async function POST_createLink(req, res) {
+    console.log("start");
+    const body = req.body;
+    const userId = sanitize(body.currentUserInfo.userId);
+    const userName = sanitize(body.currentUserInfo.userName);
+    const verificationToken = sanitize(body.currentUserInfo.verificationToken);
+    const businessId = sanitize(body.currentUserInfo.businessId);
+    const positionId = sanitize(body.currentUserInfo.positionId);
+    const positionName = sanitize(body.currentUserInfo.positionName);
+
+    // if one of the arguments doesn't exist, return with error code
+    if (!userId || !userName || !businessId || !verificationToken || !positionId || !positionName) {
+        return res.status(400).send("Bad request.");
+    }
+
+    // where links in the email will go
+    let moonshotUrl = 'https://www.moonshotinsights.io/';
+    // if we are in development, links are to localhost
+    if (process.env.NODE_ENV === "development") {
+        moonshotUrl = 'http://localhost:8081/';
+    }
+
+    // get the business and ensure the user has access to send invite emails
+    let business;
+    try { business = await verifyAccountAdminAndReturnBusiness(userId, verificationToken, businessId); }
+    catch (verifyUserError) {
+        console.log("error verifying user or getting business when sending invite emails: ", verifyUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // find the position within the business
+    const positionIndex = business.positions.findIndex(currPosition => {
+        return currPosition._id.toString() === positionId.toString();
+    });
+    if (typeof positionIndex !== "number" || positionIndex < 0) {
+        return res.status(403).send("Not a valid position.");
+    }
+    const position = business.positions[positionIndex];
+    if (!position) { return res.status(403).send("Not a valid position."); }
+    const businessName = business.name;
+
+    // a list of promises that will resolve to objects containing new codes
+    // as well as all user-specific info needed to send the invite email
+    let promise = [];
+    promise.push(createLink(businessId, positionId, "candidate"));
+
+    // wait for all the email object promises to resolve
+    let obj;
+    try { obj = await Promise.all(promise); }
+    catch (error) {
+        console.log("error creating links: ", error);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    console.log("return: ", obj);
+    // successfully created the link
+    return res.json(obj);
 }
 
 

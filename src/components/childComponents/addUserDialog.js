@@ -2,7 +2,7 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {postEmailInvites, closeAddUserModal, emailFailureExitPage} from '../../actions/usersActions';
+import {postEmailInvites, closeAddUserModal, emailFailureExitPage, postCreateLink} from '../../actions/usersActions';
 import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownMenu, MenuItem, Divider, Tab, Tabs } from 'material-ui';
 import {Field, reduxForm} from 'redux-form';
 import { browserHistory } from 'react-router';
@@ -32,6 +32,7 @@ class AddUserDialog extends Component {
         this.state = {
             open: props.modalOpen || false,
             screen: 1,
+            linkScreen: false,
             positions: [],
             position: "",
             // true if the business has no positions associated with it
@@ -226,6 +227,41 @@ class AddUserDialog extends Component {
         return false;
     }
 
+    handleCreateLink(e) {
+        e.preventDefault();
+        const currentUser = this.props.currentUser;
+
+        // Find position in positions array
+        const positions = this.state.positions;
+        let position = {};
+        for (let i = 0; i < positions.length; i++) {
+            if (positions[i].name == this.state.position) {
+                position = positions[i];
+                break;
+            }
+        }
+
+        const currentUserInfo = {
+            userId: currentUser._id,
+            userName: currentUser.name,
+            businessId: currentUser.businessInfo.businessId,
+            verificationToken: currentUser.verificationToken,
+            positionId: position._id,
+            positionName: position.name
+        }
+        console.log("creating link");
+
+        this.props.postCreateLink(currentUserInfo);
+        this.handleScreenLinkNext();
+    }
+
+    handleScreenLinkNext() {
+        this.setState({linkScreen:true, formErrors: false})
+    }
+
+    handleScreenLinkPrevious() {
+        this.setState({linkScreen:false, screen: 2})
+    }
 
     handleScreenNext() {
         let advanceScreen = true;
@@ -378,6 +414,11 @@ class AddUserDialog extends Component {
 
         const candidateSection = (
             <div className="center marginTop20px">
+                <div className="center marginTop10px marginBottom10px">
+                    <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font16px font14pxUnder600 primary-white" onClick={this.handleCreateLink.bind(this)}>
+                        Create Link
+                    </button>
+                </div>
                 <div className="center font14px font12pxUnder500 primary-white marginBottom15px">
                     Candidates are incoming applicants that undergo predictive evaluations.
                 </div>
@@ -549,6 +590,38 @@ class AddUserDialog extends Component {
                         </div>
                 </Dialog>
             );
+        } else if (this.state.linkScreen) {
+            body = (
+                <Dialog
+                    actions={actions}
+                    modal={false}
+                    open={this.state.open}
+                    onRequestClose={this.handleClose}
+                    autoScrollBodyContent={true}
+                    paperClassName="dialogForBiz"
+                    contentClassName="center"
+                    >
+                        <div className="primary-white font16px font14pxUnder500" style={{width:"98%", margin:"40px auto"}}>
+                            Candidates can sign up for a Moonshot account and complete your evaluation by going to the link below:
+                        </div>
+                        <div className="primary-cyan font16px font14pxUnder500" style={{margin:"40px auto"}}>
+                            {this.props.link ?
+                                <div>
+                                    {"https://moonshotinsights.io/signup?code=" + this.props.link}
+                                </div>
+                                :
+                                <CircularProgress color="#76defe"/>
+                            }
+
+                        </div>
+                        <div className="center marginTop20px">
+                            <i className="font14px underline clickable primary-white"
+                                onClick={this.handleScreenLinkPrevious.bind(this)}>
+                                Back
+                            </i>
+                        </div>
+                </Dialog>
+            );
         } else {
         if (screen === 1) {
             body = (
@@ -678,7 +751,8 @@ function mapDispatchToProps(dispatch) {
     return bindActionCreators({
         postEmailInvites,
         closeAddUserModal,
-        emailFailureExitPage
+        emailFailureExitPage,
+        postCreateLink
     }, dispatch);
 }
 
@@ -689,6 +763,7 @@ function mapStateToProps(state) {
         userPosted: state.users.userPosted,
         userPostedFailed: state.users.userPostedFailed,
         currentUser: state.users.currentUser,
+        link: state.users.link,
         modalOpen: state.users.userModalOpen
     };
 }
