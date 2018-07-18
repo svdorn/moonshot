@@ -89,14 +89,14 @@ webHooks = new WebHooks({
 // });
 
 // webHooks.remove('testHook2').catch(function(err){console.error(err);});
-webHooks.add("addCandidate", "http://5218a471.ngrok.io/api/webhooks/addCandidate")
-.then(function() {
-    console.log("set up the local hook");
-})
-.catch(function(error) {
-    console.log("error setting up test hook:");
-    console.log(error);
-});
+// webHooks.add("addCandidate", "http://5218a471.ngrok.io/api/webhooks/addCandidate")
+// .then(function() {
+//     console.log("set up the local hook");
+// })
+// .catch(function(error) {
+//     console.log("error setting up test hook:");
+//     console.log(error);
+// });
 // trigger the webhook
 // webHooks.trigger("addCandidate", {data: {
 //     API_Key: "a9bbc72aaeae4ecd5fafb113",

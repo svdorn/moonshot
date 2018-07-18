@@ -40,7 +40,7 @@ async function POST_addCandidate(req, res) {
     // identifier for position is just the position id
     const positionId = findNestedValue(body, "Position_Key", nestedLevels, traverseArrays);
     // the email address of the candidate that should be invited
-    const email = findNestedValue(body, "email", nestedLevels, traverseArrays);
+    const email = findNestedValue(body, "Email", nestedLevels, traverseArrays);
 
     console.log("email: ", email);
     console.log("API_Key: ", API_Key);
@@ -48,7 +48,7 @@ async function POST_addCandidate(req, res) {
 
     // test that the email is in the correct form (is a valid email)
     if (!isValidEmail(email)) {
-        return res.status(400).send("Invalid email format. Needs to be _____@_____.___");
+        return res.status(400).send("Invalid email format. Needs to be _____@_____.___ but got " + email + " - make sure the field is called Email.");
     }
 
     // query to find the business and position from the keys
@@ -97,7 +97,7 @@ async function POST_addCandidate(req, res) {
         return res.status(500).send("Error sending email invite to candidate");
     }
 
-    return res.status(200).send("success");
+    return res.status(200).send({success: true});
 }
 
 module.exports = webhooks;
