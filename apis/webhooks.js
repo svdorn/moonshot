@@ -41,7 +41,7 @@ async function POST_addCandidate(req, res) {
     // the email address of the candidate that should be invited
     const email = findNestedValue(body, "Email", nestedLevels, traverseArrays);
     // error to send if either/both API_Key and Position_Key are bad
-    const BAD_KEYS = {error: "Invalid API_Key and/or Position_Key"};
+    const BAD_KEYS = {error: "Invalid API_Key and/or Position_Key."};
 
     // test that all necessary values exist
     if (!API_Key) { return noInput("API_Key"); }
@@ -104,7 +104,7 @@ async function POST_addCandidate(req, res) {
     try { await sendEmailInvite(emailInfo, position.name, business.name); }
     catch (sendEmailError) {
         console.log("Error sending email to candidate signing up via webhook: ", sendEmailError);
-        return res.status(500).send({error: "Error sending email invite to candidate"});
+        return res.status(500).send({error: "Error sending email invite to candidate."});
     }
 
     // return successfully
@@ -113,8 +113,7 @@ async function POST_addCandidate(req, res) {
     // creates error to send for no input
     function noInput(arg) {
         return res.status(400).send({
-            error: `Must include ${arg}. Make sure capitalization is
-                    correct (${arg} not ${arg.toLowerCase()}).`
+            error: `Must include ${arg}. Make sure capitalization is correct (${arg} not ${arg.toLowerCase()}).`
         })
     }
 
