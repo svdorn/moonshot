@@ -39,7 +39,10 @@ const businessApis = {
     GET_employeeSearch,
     GET_employeeQuestions,
     GET_positions,
-    GET_evaluationResults
+    GET_evaluationResults,
+
+    createEmailInfo,
+    sendEmailInvite
 }
 
 
@@ -115,8 +118,6 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         const email = emailInfo.email;
         const userType = emailInfo.userType;
 
-        console.log("userName: ", userName);
-
         // recipient of the email
         const recipient = [ email ];
         // sender of the email
@@ -125,6 +126,12 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         let content = "";
         // subject of the email
         let subject = "";
+
+        // defining it before the call saves a bit of time
+        if (!moonshotUrl) {
+            // this is where all links will go
+            moonshotUrl = process.env.NODE_ENV === "development" ? "http://localhost:8081/" : "https://www.moonshotinsights.io/";
+        }
 
         // the button linking to the signup page with the signup code in the url
         const createAccountButton =
@@ -628,6 +635,22 @@ async function POST_dialogEmailScreen2(req, res) {
     let business = {
         name: company
     };
+
+    // create an API_Key for the business - first get a list of all current API_Keys
+    try {
+        const otherBusinesses = await Businesses.find({}).select("API_Key");
+        var existingKeys = otherBusinesses.map(biz => { return biz.API_Key; });
+    } catch (getKeysError) {
+        console.log("Error getting all keys of other businesses: ", getKeysError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // generate random keys until one of them is unique across all businesses
+    let API_Key = "";
+    do { API_Key = crypto.randomBytes(12).toString("hex"); }
+    while (existingKeys.includes(API_Key));
+    // give the business its api key
+    business.API_Key = API_Key;
 
     // hash the user's password
     const saltRounds = 10;

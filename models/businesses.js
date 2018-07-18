@@ -68,6 +68,9 @@ const businessesSchema = mongoose.Schema({
         length: String,
         amount: Number
     },
+    // the key the business will use to post to moonshot webhooks - must be kept
+    // a secret by the business
+    API_Key: String,
     // the positions that the company is (or was) hiring for
     positions: [ positionSchema ],
     // the questions that managers have to answer about each employee
