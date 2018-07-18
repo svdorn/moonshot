@@ -97,7 +97,7 @@ async function POST_addCandidate(req, res) {
         return res.status(500).send("Error sending email invite to candidate");
     }
 
-    return res.status(200).send("success");
+    return res.status(200).send({success: true});
 }
 
 module.exports = webhooks;
