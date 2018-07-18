@@ -10,7 +10,7 @@ import {browserHistory} from 'react-router';
 import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
 import MetaTags from 'react-meta-tags';
-import { renderTextField, renderPasswordField } from "../../miscFunctions";
+import { renderTextField, renderPasswordField, isValidEmail } from "../../miscFunctions";
 
 
 const validate = values => {
@@ -26,7 +26,7 @@ const validate = values => {
             errors[field] = 'This field is required'
         }
     });
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    if (values.email && !isValidEmail(values.email)) {
         errors.email = 'Invalid email address';
     }
     if (values.password && values.password2 && (values.password != values.password2)) {
@@ -104,7 +104,7 @@ class Signup extends Component {
         });
         if (notValid) return this.props.addNotification("Must fill out all fields.", "error");
 
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
+        if (!isValidEmail(vals.email)) {
             return this.props.addNotification("Invalid email.", "error");
         }
         if (vals.password != vals.password2) {

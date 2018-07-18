@@ -7,6 +7,7 @@ import {TextField, CircularProgress, RaisedButton, FlatButton, Dialog, DropDownM
 import {Field, reduxForm} from 'redux-form';
 import { browserHistory } from 'react-router';
 import axios from 'axios';
+import { isValidEmail } from "../../miscFunctions";
 
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => {
@@ -22,7 +23,7 @@ const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => {
 };
 
 const emailValidate = (value) => (
-    value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined
+    value && !isValidEmail(value) ? 'Invalid email address' : undefined
 )
 
 class AddUserDialog extends Component {
@@ -603,7 +604,7 @@ class AddUserDialog extends Component {
                         {this.state.formErrors ?
                         <div
                             className="secondary-red font14px font10pxUnder500" style={{width: "90%", margin:"10px auto"}}>
-                            Some emails invalid, please enter valid emails before continuing.
+                            Invalid email, please enter valid emails before continuing.
                         </div>
                         : null}
                         {this.state.duplicateEmails ?

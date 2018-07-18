@@ -2,9 +2,8 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
 import { browserHistory } from 'react-router';
-import { closeNotification } from "../../actions/usersActions";
 import { bindActionCreators } from 'redux';
-import {demoEmail, dialogEmail, dialogEmailScreen2,dialogEmailScreen3,dialogEmailScreen4} from '../../actions/usersActions';
+import { closeNotification, demoEmail, dialogEmail, dialogEmailScreen2, dialogEmailScreen3, dialogEmailScreen4 } from '../../actions/usersActions';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import { Dialog, Paper, TextField, FlatButton, RaisedButton, CircularProgress } from 'material-ui';
@@ -12,6 +11,7 @@ import {Field, reduxForm} from 'redux-form';
 import AddUserDialog from '../childComponents/addUserDialog';
 import YouTube from 'react-youtube';
 import ProgressBarDialog from '../miscComponents/progressBarDialog';
+import { isValidEmail } from "../../miscFunctions";
 
 const renderTextField = ({input, label, meta: {touched, error}, ...custom}) => (
     <TextField
@@ -50,7 +50,7 @@ const renderPasswordField = ({input, label, meta: {touched, error}, ...custom}) 
     />
 );
 
-const emailValidate = value => value && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(value) ? 'Invalid email address' : undefined;
+const emailValidate = value => value && !isValidEmail(value) ? 'Invalid email address' : undefined;
 
 const required = value => (value ? undefined : 'This field is required.');
 
@@ -134,7 +134,7 @@ class BusinessHome extends Component {
         });
         if (notValid) return;
 
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) return;
+        if (!isValidEmail(vals.email)) return;
 
         const user = {
             email: this.props.formData.forBusiness.values.email,
@@ -163,7 +163,7 @@ class BusinessHome extends Component {
         });
         if (notValid) return;
 
-        if (!/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) return;
+        if (!isValidEmail(vals.email)) return;
 
         const user = {
             name: this.props.formData.forBusiness.values.name,

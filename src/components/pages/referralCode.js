@@ -12,7 +12,7 @@ import TermsOfUse from '../policies/termsOfUse';
 import PrivacyPolicy from '../policies/privacyPolicy';
 import AffiliateAgreement from '../policies/affiliateAgreement';
 import MetaTags from 'react-meta-tags';
-import { renderTextField } from "../../miscComponents";
+import { renderTextField, isValidEmail } from "../../miscComponents";
 
 
 const validate = values => {
@@ -21,7 +21,7 @@ const validate = values => {
         'email',
         'name'
     ];
-    if (values.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)) {
+    if (values.email && !isValidEmail(values.email)) {
         errors.email = 'Invalid email address';
     }
     requiredFields.forEach(field => {
@@ -104,7 +104,7 @@ class ReferralCode extends Component {
             }
         });
         if (notValid) return;
-        if (vals.email && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(vals.email)) {
+        if (vals.email && !isValidEmail(vals.email)) {
             return;
         }
 
