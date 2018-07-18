@@ -148,7 +148,7 @@ class PsychAnalysis extends Component {
                     <div/>
                     <div>
                         {this.props.currentUser.currentPosition ?
-                            <p>This is the psychomentrics portion of the evaluation. In essence, this is a personality test.</p>
+                            <p>This is the psychometrics portion of the evaluation. In essence, this is a personality test.</p>
                             :
                             <p>Welcome to the Moonshot psychometric analysis! In essence, this is a personality test.</p>
                         }
