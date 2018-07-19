@@ -93,12 +93,23 @@ function isValidEmail(email) {
 }
 
 
+// decodes html-encoded text
+function htmlDecode(text) {
+    text = text.replace(/&quot;/g,"\"")
+               .replace(/&amp;/g,"&")
+               .replace(/&lt;/g,"<")
+               .replace(/&gt;/g,">");
+    return text;
+}
+
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
     renderPasswordField,
     getFirstName,
-    isValidEmail
+    isValidEmail,
+    htmlDecode
 }
 
 module.exports = miscFunctions;
