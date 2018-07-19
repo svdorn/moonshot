@@ -161,6 +161,30 @@ class BusinessEditor extends Component {
                 // save the factor into the position
                 position.growthFactors[growthFactorIndex] = growthFactor;
             }
+
+            if (position.longevityActive) {
+                // go through every longevity factor
+                for (let longevityFactorIndex = 0; longevityFactorIndex < position.longevityFactors.length; longevityFactorIndex++) {
+                    let longevityFactor = position.longevityFactors[longevityFactorIndex];
+                    for (let idealFacetIndex = 0; idealFacetIndex < longevityFactor.idealFacets.length; idealFacetIndex++) {
+                        longevityFactor.idealFacets[idealFacetIndex].score = parseInt(longevityFactor.idealFacets[idealFacetIndex].score, 10);
+                        // if a score was not given for this facet, show an error
+                        if (isNaN(longevityFactor.idealFacets[idealFacetIndex].score)) {
+                            this.props.addNotification(`'${longevityFactor.idealFacets[idealFacetIndex].name}' needs a longevity ideal score`, "error");
+                            return;
+                        }
+                        // otherwise, get rid of the name of the facet for ease of saving in the backend
+                        else {
+                            longevityFactor.idealFacets[idealFacetIndex].name = undefined;
+                        }
+                    }
+                    // save the factor into the position
+                    position.longevityFactors[longevityFactorIndex] = longevityFactor;
+                }
+            } else {
+                position.longevityFactors = undefined;
+            }
+
             bizToSave.positions[positionIndex] = position;
         }
 
@@ -279,6 +303,13 @@ class BusinessEditor extends Component {
     }
 
 
+    longevityFacetChange(e, positionIndex, factorIndex, facetIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].longevityFactors[factorIndex].idealFacets[facetIndex].score = e.target.value;
+        this.setState({ business });
+    }
+
+
     addSkill(positionIndex) {
         let business = Object.assign({}, this.state.business);
         business.positions[positionIndex].skills.push("");
@@ -345,6 +376,24 @@ class BusinessEditor extends Component {
     }
 
 
+    deleteLongevityFactor(positionIndex, factorIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].longevityFactors.splice(factorIndex, 1);
+        this.setState({ business });
+    }
+
+
+    deleteLongevityFacet(positionIndex, factorIndex, facetIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].longevityFactors[factorIndex].idealFacets.splice(facetIndex, 1);
+        // delete the containing factor too if all its facets are gone
+        if (business.positions[positionIndex].longevityFactors[factorIndex].idealFacets.length === 0) {
+            business.positions[positionIndex].longevityFactors.splice(factorIndex, 1);
+        }
+        this.setState({ business });
+    }
+
+
     addAdmin() {
         let business = Object.assign({}, this.state.business);
         if (!Array.isArray(business.adminsToAdd)) { business.adminsToAdd = []; }
@@ -382,6 +431,20 @@ class BusinessEditor extends Component {
     resetGrowthFactors(positionIndex) {
         let business = Object.assign({}, this.state.business);
         business.positions[positionIndex].growthFactors = JSON.parse(JSON.stringify(this.state.blankPosition.growthFactors));
+        this.setState({ business });
+    }
+
+
+    resetLongevityFactors(positionIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].longevityFactors = JSON.parse(JSON.stringify(this.state.blankPosition.longevityFactors));
+        this.setState({ business });
+    }
+
+
+    toggleLongevity(positionIndex) {
+        let business = Object.assign({}, this.state.business);
+        business.positions[positionIndex].longevityActive = !business.positions[positionIndex].longevityActive;
         this.setState({ business });
     }
 
@@ -669,6 +732,57 @@ class BusinessEditor extends Component {
                 )
             }
 
+            // create ideal-output inputs
+            let longevityFactors = [];
+            if (position.longevityActive) {
+                // go through every ideal factor
+                for (let factorIndex = 0; factorIndex < position.longevityFactors.length; factorIndex++) {
+                    const factor = position.longevityFactors[factorIndex];
+                    let idealFacets = [];
+                    // go through every ideal facet
+                    for (let facetIndex = 0; facetIndex < factor.idealFacets.length; facetIndex++) {
+                        const facet = factor.idealFacets[facetIndex];
+                        idealFacets.push(
+                            <div
+                                key={`position${positionIndex}longevityFactor${factorIndex}facet${facetIndex}`}
+                                className="idealFacet"
+                            >
+                                {facet.name}:
+                                <input
+                                    className="idealFacetInput"
+                                    value={facet.score.toString()}
+                                    onChange={(e) => self.longevityFacetChange(e, positionIndex, factorIndex, facetIndex)}
+                                    placeholder="NEED"
+                                />
+                                <div
+                                    className="deleteButton"
+                                    style={{marginLeft:"8px"}}
+                                    onClick={() => self.deleteLongevityFacet(positionIndex, factorIndex, facetIndex)}
+                                >
+                                    X
+                                </div>
+                            </div>
+                        );
+                    }
+                    longevityFactors.push(
+                        <div
+                            key={`position${positionIndex}longevityFactor${factorIndex}`}
+                            className="idealFactorInput"
+                        >
+                            {factor.name}
+                            <div
+                                className="deleteButton"
+                                style={{marginLeft:"8px"}}
+                                onClick={() => self.deleteLongevityFactor(positionIndex, factorIndex)}
+                            >
+                                X
+                            </div>
+                            {idealFacets}
+                        </div>
+                    )
+                }
+            }
+
             const resetIdealFactorsButton = (
                 <button onClick={() => self.resetIdealFactors(positionIndex)} style={{marginTop: "40px"}}>
                     Reset Ideal Factors
@@ -677,6 +791,12 @@ class BusinessEditor extends Component {
 
             const resetGrowthFactorsButton = (
                 <button onClick={() => self.resetGrowthFactors(positionIndex)} style={{marginTop: "40px"}}>
+                    Reset Growth Factors
+                </button>
+            );
+
+            const resetLongevityFactorsButton = (
+                <button onClick={() => self.resetLongevityFactors(positionIndex)} style={{marginTop: "40px"}}>
                     Reset Growth Factors
                 </button>
             );
@@ -692,6 +812,16 @@ class BusinessEditor extends Component {
                 </div>
             );
 
+            const longevityActive = position.longevityActive ?
+                <span style={{color:"green"}}>ACTIVE</span>
+                :
+                <span style={{color:"red"}}>INACTIVE</span>;
+            const toggleLongevity = (
+                <button onClick={() => self.toggleLongevity(positionIndex)} style={{marginTop: "40px"}}>
+                    {position.longevityActive ? "Disable Longevity" : "Enable Longevity"}
+                </button>
+            )
+
             positions.push(
                 <div key={`position${positionIndex}`} style={{marginTop: "50px"}}>
                     <div style={{width:"100%",height:"20px",backgroundColor:"gray",margin:"0 0 50px -30px"}} />
@@ -703,6 +833,7 @@ class BusinessEditor extends Component {
                     {"Time allowed to candidates for this position (in days): "} {timeAllottedInput}<br/>
                     {"Ideal psych results: "} {resetIdealFactorsButton} {idealFactors}<br/>
                     {"Ideal growth results: "} {resetGrowthFactorsButton} {growthFactors}
+                    {"Ideal longevity results: "} {longevityActive} {toggleLongevity} {resetLongevityFactorsButton} {longevityFactors}
                 </div>
             );
         }
