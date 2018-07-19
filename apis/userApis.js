@@ -49,7 +49,7 @@ const userApis = {
     POST_answerAdminQuestion,
     POST_sawEvaluationIntro,
     POST_agreeToTerms,
-    GET_verifyFromApiKey,
+    POST_verifyFromApiKey,
 
     internalStartPsychEval,
     addEvaluation,
@@ -1898,10 +1898,11 @@ async function POST_changeSettings(req, res) {
 
 
 // verify that a user has a legitimate api key
-async function GET_verifyFromApiKey(req, res) {
-    console.log("req:", req);
+async function POST_verifyFromApiKey(req, res) {
+    console.log("req.body:", req.body);
+
     // get the api key from the input values
-    const API_Key = sanitize(findNestedValue(req.body, "API_Key", 4, true));
+    const API_Key = sanitize(findNestedValue(req.body, "API_Key", 5, true));
     if (!API_Key) { return res.status(401).send({error: "No API_Key provided. Make sure the attribute name is API_Key with that exact capitalization."});}
     if (typeof API_Key !== "string" || API_Key.length !== 24) {
         return res.status(401).send({error: "Invalid API_Key. Must be 24-character string."});
