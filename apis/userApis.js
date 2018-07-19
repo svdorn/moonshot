@@ -678,10 +678,8 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         // how many facets are involved in the longevity calculation
         let numLongevityFacets = 0;
 
-        // go through each factor to get to each facet
-        const userFactors = userPsych.factors;
         // make sure there are factors used in longevity - otherwise longevity will be undefined
-        if (Array.isArray(businessPos.longevityFactors)) {
+        if (Array.isArray(businessPos.longevityFactors) && businessPos.longevityActive) {
             longevity = 190;
             // go through each factor that affects longevity
             businessPos.longevityFactors.forEach(longevityFactor => {

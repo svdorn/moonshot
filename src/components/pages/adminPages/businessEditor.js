@@ -797,7 +797,7 @@ class BusinessEditor extends Component {
 
             const resetLongevityFactorsButton = (
                 <button onClick={() => self.resetLongevityFactors(positionIndex)} style={{marginTop: "40px"}}>
-                    Reset Growth Factors
+                    Reset Longevity Factors
                 </button>
             );
 
