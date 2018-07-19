@@ -9,6 +9,7 @@ import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
 import { CircularProgress } from "material-ui";
 import ProgressBar from '../../miscComponents/progressBar';
+import { htmlDecode } from "../../../miscFunctions";
 
 class SkillTest extends Component {
     constructor(props) {
@@ -181,7 +182,7 @@ class SkillTest extends Component {
                 <div className="font24px" style={{marginBottom: "20px"}}><span>Skills</span></div>
                 <div>
                     <p>This is the skills portion of the evaluation. Here you will be tested on your aptitude in one or more skills.</p>
-                    <p><span>TIME IS A FACTOR.</span> After 20 seconds for each question, your score for that question will decrease as time goes on.</p>
+                    <p><span>TIME IS A FACTOR.</span> After 45 seconds for each question, your score for that question will decrease as time goes on.</p>
                     <p><span>DO NOT</span> exit this tab, go to another tab, or leave this window. Each time you do, your overall score will decrease.</p>
                     <p>The number of questions in the skills test will change as you go depending on a number of factors. It will end once a score has been determined, but each test should take no more than ten minutes.</p>
                 </div>
@@ -260,7 +261,7 @@ class SkillTest extends Component {
                          className={"skillMultipleChoiceAnswer" + selectedClass}
                     >
                         <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
-                        <div className="skillMultipleChoiceOptionText">{option.body}</div>
+                        <div className="skillMultipleChoiceOptionText">{htmlDecode(option.body)}</div>
                     </div>
                 );
             });

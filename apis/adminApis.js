@@ -47,6 +47,7 @@ async function POST_saveSkill(req, res) {
 
         // if it's a new skill, create and return the new skill
         if (!skill._id) {
+            console.log("did not have a skill id! skill is: ", skill);
             // count all the skills with the same name ...
             const skillCount = await Skills.count({name: skill.name});
             // ... and generate a random number ...
@@ -161,7 +162,7 @@ async function GET_blankPosition(req, res) {
     }
 
     // create an array of factors and facets with their names so that the position
-    // can have ideal performance and growth factors
+    // can have ideal performance, longevity and growth factors
     const idealFactors = psychTest.factors.map(factor => {
         const idealFacets = factor.facets.map(facet => {
             return {
@@ -187,7 +188,9 @@ async function GET_blankPosition(req, res) {
         length: 60,
         timeAllotted: 14,
         idealFactors,
-        growthFactors: idealFactors
+        growthFactors: idealFactors,
+        longevityFactors: idealFactors,
+        longevityActive: false
     }
 
     return res.json(position);
@@ -225,7 +228,7 @@ async function POST_saveBusiness(req, res) {
         }
 
         // position attributes that can be updated in this function
-        const newAttributes = ["name", "skills", "skillNames", "freeResponseQuestions", "employeesGetFrqs", "length", "timeAllotted", "idealFactors", "growthFactors"];
+        const newAttributes = ["name", "skills", "skillNames", "freeResponseQuestions", "employeesGetFrqs", "length", "timeAllotted", "idealFactors", "growthFactors", "longevityFactors", "longevityActive"];
         // defaults for a new position
         const blankPosition = {
             open: false,
@@ -544,7 +547,7 @@ async function GET_business(req, res) {
             // get user
             getAndVerifyUser(userId, verificationToken),
             // get all skills
-            Businesses.findById(businessId).select("name positions._id positions.name positions.skills positions.skillNames positions.freeResponseQuestions positions.employeesGetFrqs positions.length positions.timeAllotted positions.idealFactors positions.growthFactors"),
+            Businesses.findById(businessId).select("name positions._id positions.name positions.skills positions.skillNames positions.freeResponseQuestions positions.employeesGetFrqs positions.length positions.timeAllotted positions.idealFactors positions.growthFactors positions.longevityFactors positions.longevityActive"),
             Psychtests.findOne({}),
             Users.find(businessUserQuery).select("name email")
         ]);
@@ -577,6 +580,7 @@ async function GET_business(req, res) {
             let position = business.positions[positionIndex];
             let idealFactors = position.idealFactors;
             let growthFactors = position.growthFactors;
+            let longevityFactors = position.longevityFactors;
             // go through every ideal factor
             for (let idealFactorIndex = 0; idealFactorIndex < idealFactors.length; idealFactorIndex++) {
                 let idealFactor = idealFactors[idealFactorIndex];
@@ -600,6 +604,19 @@ async function GET_business(req, res) {
                     let idealFacet = idealFacets[idealFacetIndex];
                     // add the name of the facet to the ideal facet
                     business.positions[positionIndex].growthFactors[growthFactorIndex].idealFacets[idealFacetIndex].name = names[idealFacet.facetId];
+                }
+            }
+
+            // go through every ideal longevity factor
+            for (let longevityFactorIndex = 0; longevityFactorIndex < longevityFactors.length; longevityFactorIndex++) {
+                let longevityFactor = longevityFactors[longevityFactorIndex];
+                let idealFacets = longevityFactor.idealFacets;
+                // add the name of the factor to the ideal factor
+                business.positions[positionIndex].longevityFactors[longevityFactorIndex].name = names[longevityFactor.factorId];
+                for (let idealFacetIndex = 0; idealFacetIndex < idealFacets.length; idealFacetIndex++) {
+                    let idealFacet = idealFacets[idealFacetIndex];
+                    // add the name of the facet to the ideal facet
+                    business.positions[positionIndex].longevityFactors[longevityFactorIndex].idealFacets[idealFacetIndex].name = names[idealFacet.facetId];
                 }
             }
         }

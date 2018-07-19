@@ -115,8 +115,8 @@ class CandidateResults extends Component {
                 {
                     x: "Longevity",
                     y: this.round(scores.longevity),
-                    confidenceInterval: 0,
-                    unavailable: true,
+                    confidenceInterval: scores.longevity ? 32 : 0,
+                    unavailable: !scores.longevity,
                     inProgress: this.isInProgress(scores.longevity)
                 },
                 {
