@@ -131,6 +131,7 @@ app.get("/user/adminQuestions", userApis.GET_adminQuestions);
 app.post("/user/answerAdminQuestion", userApis.POST_answerAdminQuestion);
 app.post("/user/sawEvaluationIntro", userApis.POST_sawEvaluationIntro);
 app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
+app.get("/user/verifyFromApiKey", userApis.GET_verifyFromApiKey);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);

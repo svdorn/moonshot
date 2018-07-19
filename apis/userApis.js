@@ -18,7 +18,8 @@ const { sanitize,
         getAndVerifyUser,
         frontEndUser,
         getSkillNamesByIds,
-        lastPossibleSecond
+        lastPossibleSecond,
+        findNestedValue
 } = require('./helperFunctions');
 
 const { calculatePsychScores } = require('./psychApis');
@@ -48,6 +49,7 @@ const userApis = {
     POST_answerAdminQuestion,
     POST_sawEvaluationIntro,
     POST_agreeToTerms,
+    GET_verifyFromApiKey,
 
     internalStartPsychEval,
     addEvaluation,
@@ -1857,6 +1859,31 @@ async function POST_changeSettings(req, res) {
         // settings change successful
         return res.json(frontEndUser(user));
     });
+}
+
+
+// verify that a user has a legitimate api key
+async function GET_verifyFromApiKey(req, res) {
+    console.log("req:", req);
+    // get the api key from the input values
+    const API_Key = sanitize(findNestedValue(req.body, "API_Key", 4, true));
+    if (!API_Key) { return res.status(401).send({error: "No API_Key provided. Make sure the attribute name is API_Key with that exact capitalization."});}
+    if (typeof API_Key !== "string" || API_Key.length !== 24) {
+        return res.status(401).send({error: "Invalid API_Key. Must be 24-character string."});
+    }
+
+    // get the business that has this api key
+    try { var business = await Businesses.find({"API_Key": API_Key})}
+    catch (findBizError) {
+        console.log("Error finding business from API_Key: ", findBizError);
+        return res.status(401).send({error: "Server error. This may be Moonshot's fault. Contact support@moonshotinsights.io for help."});
+    }
+
+    // if there is no business associated with that api key, return unsuccessfully
+    if (!business) { return res.status(401).send({error: "Invalid API_Key."}); }
+
+    // successfully verified that user has correct api key
+    return res.json({ success: true });
 }
 
 
