@@ -105,11 +105,9 @@ async function GET_influencerResults(req, res) {
     const returnUser = getResults(user, psychTest);
 
     let returnInfluencers = [];
-    for (let i = 0; i < influencers.lenght; i++) {
+    for (let i = 0; i < influencers.length; i++) {
         returnInfluencers.push(getResults(influencers[i], psychTest));
     }
-
-    // Get the results data from the user and from all the influencers
 
     return res.json({returnUser, returnInfluencers});
 }
