@@ -9,6 +9,7 @@ import MetaTags from "react-meta-tags";
 import StyledContent from "../../childComponents/styledContent";
 import { CircularProgress } from "material-ui";
 import ProgressBar from '../../miscComponents/progressBar';
+import { htmlDecode } from "../../../miscFunctions";
 
 class SkillTest extends Component {
     constructor(props) {
@@ -260,7 +261,7 @@ class SkillTest extends Component {
                          className={"skillMultipleChoiceAnswer" + selectedClass}
                     >
                         <div className={"skillMultipleChoiceCircle" + selectedClass}><div/></div>
-                        <div className="skillMultipleChoiceOptionText">{option.body}</div>
+                        <div className="skillMultipleChoiceOptionText">{htmlDecode(option.body)}</div>
                     </div>
                 );
             });

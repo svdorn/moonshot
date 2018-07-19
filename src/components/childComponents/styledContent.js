@@ -11,7 +11,7 @@ class StyledContent extends Component {
             if (part && typeof part === "object") {
                 // default classNames; if className provided, give the part that className instead
                 let defaultClassNames = part.includeDefaultClasses === false ? "" : "inlineBlock marginSides80px marginSides40pxUnder700 marginSides20pxUnder400 leftAlign";
-                let fontSizes = "font20px font14pxUnder600";
+                let fontSizes = "font16px font14pxUnder600 font12pxUnder450";
                 // code looks smaller
                 if (part.partType === "code") {
                     fontSizes = "font16px font12pxUnder600";
