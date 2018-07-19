@@ -51,6 +51,20 @@ const positionSchema = mongoose.Schema({
             // best score for growth for this facet in this position
             score: Number
         }]
+    }],
+    // if the position is calculating for longevity
+    longevityActive: Boolean,
+    // the factors and facets that contribute to the longevity prediction
+    longevityFactors: [{
+        // id of the factor involved in longevity
+        factorId: mongoose.Schema.Types.ObjectId,
+        // ideal facet scores for longevity
+        idealFacets: [{
+            // id of the facet to score
+            facetId: mongoose.Schema.Types.ObjectId,
+            // best score for longevity for this facet in this position
+            score: Number
+        }]
     }]
 })
 
