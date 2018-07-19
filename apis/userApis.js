@@ -672,6 +672,42 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         // to get the actual performance score, it is an average between skills and psychPerformance
         //const performance = (psychPerformance + overallSkill) / 2;
 
+        // LONGEVITY IS PREDICTED AS 190 - (2 * DIFFERENCE BETWEEN SCORES AND IDEAL OUTPUTS)
+        let longevity = undefined;
+
+        // how many facets are involved in the longevity calculation
+        let numLongevityFacets = 0;
+
+        // go through each factor to get to each facet
+        const userFactors = userPsych.factors;
+        // make sure there are factors used in longevity - otherwise longevity will be undefined
+        if (Array.isArray(businessPos.longevityFactors)) {
+            longevity = 190;
+            // go through each factor that affects longevity
+            businessPos.longevityFactors.forEach(longevityFactor => {
+                // find the factor within the user's psych test
+                const userFactor = userFactors.find(factor => { return factor.factorId.toString() === longevityFactor.factorId.toString(); });
+
+                // add the number of facets in this factor to the total number of longevity facets
+                numLongevityFacets += longevityFactor.idealFacets.length;
+
+                // go through each facet to find the score compared to the ideal output
+                longevityFactor.idealFacets.forEach(idealFacet => {
+                    // find the facet within the user's psych test
+                    const userFacet = userFactor.facets.find(facet => { return facet.facetId.toString() === idealFacet.facetId.toString(); });
+
+                    // the score that the user needs for the max pq
+                    const idealScore = idealFacet.score;
+
+                    // how far off of the ideal score the user got
+                    const difference = Math.abs(idealScore - userFacet.score);
+
+                    // subtract the difference from the predictive score
+                    longevity -= (2 * difference);
+                })
+            });
+        }
+
         // performance is being calculated only using growth and skill for now
         const performance = (growth + overallSkill) / 2;
 
@@ -684,6 +720,7 @@ async function finishPositionEvaluation(user, positionId, businessId) {
         user.positions[positionIndex].scores = {
             skill: overallSkill,
             growth,
+            longevity,
             performance,
             predicted,
             overall
