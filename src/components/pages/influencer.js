@@ -21,7 +21,6 @@ class Influencer extends Component {
             overallScore: undefined,
             hardSkillPoints: [],
             predictivePoints: [],
-            freeResponses: [],
             psychScores: [],
             loading: true,
             areaSelected: undefined,
@@ -97,7 +96,6 @@ class Influencer extends Component {
             //         confidenceInterval: 16
             //     }
             // });
-            const freeResponses = position.freeResponseQuestions;
             const overallScore = position.scores.overall;
             // they all have a confidence interval of 16 for now
             const predictivePoints = [
@@ -136,7 +134,6 @@ class Influencer extends Component {
                 skill: position.scores.skill,
                 hardSkillPoints,
                 predictivePoints,
-                freeResponses,
                 windowWidth: window.innerWidth
             });
     }
@@ -216,14 +213,14 @@ class Influencer extends Component {
                     />
                 </div>
 
-                <div className="resultsPageSpacer" />
+                <div className="influencerPageSpacer" />
 
                  <PsychBreakdown
                      psychScores={this.state.psychScores}
                      forCandidate={false}
                  />
 
-                 <div className="resultsPageSpacer" />
+                 <div className="influencerPageSpacer" />
 
                 <div
                     className="primary-white center font24px font20pxUnder700 font16pxUnder500">
@@ -239,30 +236,6 @@ class Influencer extends Component {
         );
     }
 
-
-    makeResponsesSection() {
-        let freeResponses = [];
-        if (typeof this.state === "object" && Array.isArray(this.state.freeResponses)) {
-            freeResponses = this.state.freeResponses;
-        }
-
-        let responses = freeResponses.map(freeResponse => {
-            return (
-                <div className="employerDiv freeResponse" key={freeResponse.question}>
-                    <span className="primary-cyan">{freeResponse.question}</span>
-                    <div className="answer">{freeResponse.answer}</div>
-                </div>
-            )
-        });
-
-        return (
-            <div className="fillScreen candidateResponses" key={"candidateResponses"}>
-                {responses}
-            </div>
-        )
-    }
-
-
     render() {
         const user = this.props.currentUser;
         const candidate = this.state.candidate;
@@ -277,61 +250,24 @@ class Influencer extends Component {
         const loading = this.state.loading;
         const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}} key="loadingArea"><CircularProgress color="secondary-gray" /></div>
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
-        const responsesSection = loading ? loadingArea : this.makeResponsesSection();
 
         return (
             <div key="results">
                 <MetaTags>
-                    <title>{candidate.name} | Moonshot</title>
-                    <meta name="description" content="Results user view."/>
+                    <title>Influencer Results | Moonshot</title>
+                    <meta name="description" content="See how your results compare to influencers in the field."/>
                 </MetaTags>
                 <div>
                     {candidate ?
-                        <div>
-                            <div className="blackBackground paddingBottom40px">
-                                <div className="profileInfoSkills">
-                                    <div className="center">
-                                        <div style={style.imgContainer}>
-                                            <img
-                                                alt="Atom Icon"
-                                                src={"/icons/Atom2" + this.props.png}
-                                                style={{
-                                                    height: "100%",
-                                                    transform: "translateX(-50%)",
-                                                    left: "50%",
-                                                    position: "relative"
-                                                }}
-                                            />
-                                        </div>
-                                        <div>
-                                            {candidate.name ? <div><div
-                                                className="secondary-gray font26px font14pxUnder700">{candidate.name}
-                                            </div>
-                                            <a className="font18px font12pxUnder500 secondary-gray grayTextOnHover underline"
-                                               href={mailtoEmail}>Contact</a></div>
-                                           : null}
-                                        </div>
-                                    </div>
-                                    <Tabs
-                                        style={style.topTabs}
-                                        inkBarStyle={{background: 'white'}}
-                                        tabItemContainerStyle={{width: '40%'}}
-                                        className="myPathwaysTabs"
-                                    >
-                                        <Tab label="Analysis" style={style.topTab}>
-                                            <div className="tabsShadow" style={{position:"absolute"}}>
-                                                <div/>
-                                            </div>
-                                            {analysisSection}
-                                        </Tab>
-                                        <Tab label="Responses" style={style.topTab}>
-                                            <div className="tabsShadow">
-                                                <div/>
-                                            </div>
-                                            {responsesSection}
-                                        </Tab>
-                                    </Tabs>
+                        <div className="marginTop20px">
+                            <div className="blackBackground paddingBottom40px center">
+                                <div className="font28px font26pxUnder700 font24font16pxUnder500 secondary-red">
+                                    Ease Standard
                                 </div>
+                                <div className="secondary-gray font18px font16pxUnder700 font14pxUnder500 marginBottom40px marginTop10px">
+                                    See how you compare to top Content Marketing Influencers.
+                                </div>
+                                {analysisSection}
                             </div>
 
                         </div>

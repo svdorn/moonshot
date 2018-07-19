@@ -3282,6 +3282,12 @@ button.link {
     margin: 70px auto;
     background: linear-gradient(to right, #ae7efc, #75dcfc);
 }
+.influencerPageSpacer {
+    width: 40%;
+    height: 2px;
+    margin: 70px auto;
+    background: linear-gradient(to right, var(--primary-pink), var(--primary-orange));
+}
 .pinkToOrangeSpacer {
     width: 60%;
     height: 2px;

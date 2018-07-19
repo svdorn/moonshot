@@ -328,6 +328,8 @@ const usersSchema = mongoose.Schema({
         // the index of the current test that the user is taking within
         // skillTests array; the tests below the index have already been taken
         testIndex: Number,
+        // Whether the user is an influencer for this position
+        influencer: Boolean,
         // the free response questions specific to this position
         freeResponseQuestions: [{
             // the id of the free response question

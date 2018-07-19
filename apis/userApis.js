@@ -41,6 +41,7 @@ const userApis = {
     POST_continuePositionEval,
     POST_addPositionEval,
     POST_startPsychEval,
+    GET_influencerResults,
     POST_answerPsychQuestion,
     POST_submitFreeResponse,
     GET_positions,
@@ -52,6 +53,111 @@ const userApis = {
     internalStartPsychEval,
     addEvaluation,
     finishPositionEvaluation
+}
+
+
+// gets results for a user and influencers
+async function GET_influencerResults(req, res) {
+    const userId = sanitize(req.body.userId);
+    const positionId = sanitize(req.body.positionId);
+    const businessId = sanitize(req.body.businessId);
+
+    const positionRequirements = [
+        { "businessId": mongoose.Types.ObjectId(businessId) },
+        { "positionId": mongoose.Types.ObjectId(positionId) }
+    ];
+
+    const candidateQuery = {
+        "userType": "candidate",
+        "_id": mongoose.Types.ObjectId(userId),
+        "positions": {
+            "$elemMatch": {
+                "$and": positionRequirements
+            }
+        }
+    }
+
+    const infulencerPositionReqs = [
+        { "businessId": mongoose.Types.ObjectId(businessId) },
+        { "positionId": mongoose.Types.ObjectId(positionId) },
+        { "influencer": true }
+    ];
+
+    const influencersQuery = {
+        "positions": {
+            "$elemMatch": {
+                "$and": influencerPositionReqs
+            }
+        }
+    }
+
+    try {
+        var [user, influencers, psychTest] = await Promise.all([
+            Users.find(candidateQuery).select("name email skillTests psychometricTest positions"),
+            Users.find(influencersQuery).select("name email skillTests psychometricTest positions"),
+            Psychtests.findOne({}).select("factors._id factors.stats")
+        ]);
+    } catch(findError) {
+        console.log("Error finding user or influencers: ", findError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    const returnUser = getResults(user, psychTest);
+
+    let returnInfluencers = [];
+    for (let i = 0; i < influencers.lenght; i++) {
+        returnInfluencers.push(getResults(influencers[i]));
+    }
+
+    // Get the results data from the user and from all the influencers
+
+    return res.json({returnUser, returnInfluencers});
+}
+
+function getResults(user, psychTest) {
+    // get the position
+    const position = user.positions[0];
+    // Make newUser that we will return
+    const newUser = {
+        name: user.name,
+        email: user.email,
+        scores: position.scores
+    }
+    // get skill test scores for relevant skills
+    const skillScores = Array.isArray(user.skillTests) ? user.skillTests.filter(skill => {
+        return skillTestIds.some(posSkillId => {
+            return posSkillId.toString() === skill.skillId.toString();
+        });
+    }) : [];
+    // have to convert the factor names to what they will be displayed as
+    const psychNameConversions = {
+        "Extraversion": "Dimension",
+        "Emotionality": "Temperament",
+        "Honesty-Humility": "Viewpoint",
+        "Conscientiousness": "Methodology",
+        "Openness to Experience": "Perception",
+        "Agreeableness": "Ethos",
+        "Altruism": "Belief"
+    };
+    const psychScores = user.psychometricTest.factors.map(area => {
+        // find the factor within the psych test so we can get the middle 80 scores
+        const factorIndex = psychTest.factors.findIndex(fac => {
+            return fac._id.toString() === area.factorId.toString();
+        });
+        const foundFactor = typeof factorIndex === "number" && factorIndex >= 0;
+        stats = foundFactor ? psychTest.factors[factorIndex].stats : undefined;
+
+        return {
+            name: psychNameConversions[area.name],
+            score: area.score,
+            stats
+        }
+    });
+
+    newUser.skillScores = skillScores;
+    newUser.psychScores = psychScores;
+
+    return newUser;
 }
 
 
