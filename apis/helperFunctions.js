@@ -30,9 +30,11 @@ const FOR_USER = [
     "profileUrl",
     "dateSignedUp",
     "hasFinishedOnboarding",
+    "positions",
     "referredByCode",
     "verified",
     "skills",
+    "skillTests",
     "info",
     "redirect",
     "businessInfo",
@@ -78,6 +80,7 @@ function frontEndUser(dbUser, fieldsToInclude) {
                         cleanPsychTest.inProgress = psychTest.inProgress;
                         cleanPsychTest.startDate = psychTest.startDate;
                         cleanPsychTest.endDate = psychTest.endDate;
+                        cleanPsychTest.factors = psychTest.factors;
 
                         // find out how many questions there are total for the progress bar
                         if (typeof psychTest.questionsPerFacet === "number" && Array.isArray(psychTest.factors)) {

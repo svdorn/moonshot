@@ -16,6 +16,7 @@ import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import Billing from './components/pages/businessPages/billing';
 import BusinessHome from './components/pages/businessHome';
+import Influencer from './components/pages/influencer';
 import Main from './main';
 import AuthenticatedComponent from './components/authenticatedComponent/authenticatedComponent';
 import Settings from './components/pages/settings';
@@ -86,6 +87,7 @@ const routes = (
             <Route path="adminQuestions" component={AuthenticatedComponent} page={<AdminQuestions/>} />
             <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
             <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
+            <Route path="influencer" component={AuthenticatedComponent} page={<Influencer/>} />
 
             <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} userType={adminUserTypes}>
                 <IndexRoute component={AdminPages} />
