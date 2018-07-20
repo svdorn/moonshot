@@ -1209,6 +1209,14 @@ form > h1 {
 .predictiveGraphInterior {
     position: relative;
 }
+.predictiveGraphInterior > .yAxisInfluencer {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    width: 4px;
+    background: linear-gradient(to top, #ff582d, #fd0d8b);
+    border-radius: 2px;
+}
 .predictiveGraphInterior > .yAxis {
     position: absolute;
     height: 100%;

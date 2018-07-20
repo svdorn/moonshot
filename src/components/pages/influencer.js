@@ -8,7 +8,7 @@ import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
-import PredictiveGraph from '../miscComponents/predictiveGraph';
+import InfluencerPredictiveGraph from '../miscComponents/influencerPredictiveGraph';
 import PsychBreakdown from '../childComponents/psychBreakdown';
 import HoverTip from "../miscComponents/hoverTip";
 
@@ -112,104 +112,7 @@ class Influencer extends Component {
         })
         .catch(error => {
             console.log("error: ", error);
-            // console.log("error: ", error);
-            // if (error.response && error.response.data) {
-            //     console.log(error.response.data);
-            // }
         });
-            // get skill test scores for relevant skills
-            // const skillScores = Array.isArray(currentUser.skillTests) ? currentUser.skillTests.filter(skill => {
-            //     return position.skillTestIds.some(posSkillId => {
-            //         console.log("posSkillId", posSkillId);
-            //         console.log("skill.skillId: ",skill.skillId)
-            //         return posSkillId.toString() === skill.skillId.toString();
-            //     });
-            // }) : [];
-            // const hardSkillPoints = skillScores.map(skill => {
-            //     return {
-            //         x: skill.name,
-            //         y: this.round(skill.mostRecentScore),
-            //         confidenceInterval: 16
-            //     }
-            // });
-            // // have to convert the factor names to what they will be displayed as
-            // const psychNameConversions = {
-            //     "Extraversion": "Dimension",
-            //     "Emotionality": "Temperament",
-            //     "Honesty-Humility": "Viewpoint",
-            //     "Conscientiousness": "Methodology",
-            //     "Openness to Experience": "Perception",
-            //     "Agreeableness": "Ethos",
-            //     "Altruism": "Belief"
-            // };
-            // console.log(currentUser);
-            // const psychScores = currentUser.psychometricTest.factors.map(area => {
-            //     // get the stats from the influencers and map here
-            //     const stats= {
-            //         // the median score for this factor
-            //         median : 50,
-            //         // the scores that the middle 80% of people get
-            //         middle80: {
-            //             // what the person farthest negative in the 80% got
-            //             miminum: 20,
-            //             // what the person farthest positive in the 80% got
-            //             maximum:80
-            //         },
-            //     };
-            //
-            //     return {
-            //         name: psychNameConversions[area.name],
-            //         score: area.score,
-            //         stats
-            //     }
-            // });
-            // // const hardSkillPoints = scores.skill.map(skill => {
-            // //     return {
-            // //         x: skill.name,
-            // //         y: this.round(skill.mostRecentScore),
-            // //         confidenceInterval: 16
-            // //     }
-            // // });
-            // const overallScore = position.scores.overall;
-            // // they all have a confidence interval of 16 for now
-            // const predictivePoints = [
-            //     {
-            //         x: "Growth",
-            //         y: this.round(position.scores.growth),
-            //         confidenceInterval: 16
-            //     },
-            //     {
-            //         x: "Performance",
-            //         y: this.round(position.scores.performance),
-            //         confidenceInterval: 16
-            //     },
-            //     {
-            //         x: "Longevity",
-            //         y: this.round(position.scores.longevity),
-            //         confidenceInterval: 0,
-            //         unavailable: true
-            //     },
-            //     {
-            //         x: "Culture",
-            //         y: this.round(position.scores.culture),
-            //         confidenceInterval: 0,
-            //         unavailable: true
-            //     }
-            // ];
-            //
-            // let self = this;
-            // self.setState({
-            //     ...self.state,
-            //     loading: false,
-            //     psychScores: psychScores,
-            //     candidate,
-            //     overallScore,
-            //     predicted: position.scores.predicted,
-            //     skill: position.scores.skill,
-            //     hardSkillPoints,
-            //     predictivePoints,
-            //     windowWidth: window.innerWidth
-            // });
     }
 
 
@@ -221,21 +124,6 @@ class Influencer extends Component {
     updateWindowDimensions() {
         this.setState({ windowWidth: window.innerWidth });
     }
-
-
-    qualifier(score, scoreType) {
-        const qualifiers = scoreType === "predicted" ?
-            ["BELOW AVERAGE", "AVERAGE", "ABOVE AVERAGE"] :
-            ["NOVICE", "INTERMEDIATE", "EXPERT"]
-        if (score < 90) {
-            return qualifiers[0];
-        } else if (score < 110) {
-            return qualifiers[1];
-        } else {
-            return qualifiers[2];
-        }
-    }
-
 
     goTo(route) {
         // closes any notification
@@ -252,15 +140,6 @@ class Influencer extends Component {
         if (isNaN(rounded)) { return number; }
         return rounded;
     }
-
-
-    getSliderValue(score) {
-        let value = score;
-        if (score > 150) { value = 150; }
-        else if (value < 50) { value = 50; }
-        return value;
-    }
-
 
     makeAnalysisSection() {
         if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
@@ -280,7 +159,7 @@ class Influencer extends Component {
         return (
             <div className="analysis center aboutMeSection" style={style.tabContent} key={"analysisSection"}>
                 <div>
-                    <PredictiveGraph
+                    <InfluencerPredictiveGraph
                         title={"Predicted Performance"}
                         dataPoints={this.state.predictivePoints}
                         height={graphHeight}
@@ -301,7 +180,7 @@ class Influencer extends Component {
                     Skills Evaluation
                 </div>
                 <div>
-                    <PredictiveGraph
+                    <InfluencerPredictiveGraph
                         dataPoints={this.state.hardSkillPoints}
                         height={graphHeight}
                     />
@@ -316,13 +195,8 @@ class Influencer extends Component {
         const hardSkills = this.state.hardSkills;
         const predictiveInsights = this.state.predictiveInsights;
 
-        let mailtoEmail = undefined;
-        if (candidate) {
-            mailtoEmail = "mailto:" + candidate.email;
-        }
-
         const loading = this.state.loading;
-        const loadingArea = <div className="center fillScreen" style={{paddingTop: "40px"}} key="loadingArea"><CircularProgress color="secondary-gray" /></div>
+        const loadingArea = <div className="center fillScreen" style={{marginTop: "40px"}} key="loadingArea"><CircularProgress color="secondary-gray" /></div>
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
 
         return (
