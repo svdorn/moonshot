@@ -282,7 +282,7 @@ async function POST_submitFreeResponse(req, res) {
 
     try {
         user = await user.save();
-        return res.json({updatedUser: frontEndUser(user)})
+        return res.json({updatedUser: frontEndUser(user), positionId: userPosition.positionId, businessId: userPosition.businessId})
     } catch (saveError) {
         console.log("error saving user or business after submitting frq: ", saveError);
         return res.status(500).send("Server error.");

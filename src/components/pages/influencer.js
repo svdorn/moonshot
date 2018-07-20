@@ -33,7 +33,8 @@ class Influencer extends Component {
             avgInfluencerPsychScores: [],
             loading: true,
             areaSelected: undefined,
-            windowWidth: window.innerWidth
+            windowWidth: window.innerWidth,
+            name: "you"
         };
     }
 
@@ -61,7 +62,13 @@ class Influencer extends Component {
         .then(res => {
             const user = res.data.returnUser;
             const influencers = res.data.returnInfluencers;
-            console.log("influencers: ", influencers)
+
+            let name;
+            if (this.props.currentUser && (this.props.currentUser._id === userId)) {
+                name = "you";
+            } else {
+                name = user.name;
+            }
 
             const candidate = {
                 name: user.name,
@@ -208,7 +215,8 @@ class Influencer extends Component {
                 skill: user.scores.skill,
                 hardSkillPoints,
                 predictivePoints,
-                windowWidth: window.innerWidth
+                windowWidth: window.innerWidth,
+                name,
             });
         })
         .catch(error => {
@@ -432,7 +440,11 @@ class Influencer extends Component {
                                     Ease Standard
                                 </div>
                                 <div className="secondary-gray font18px font16pxUnder700 font14pxUnder500 marginBottom40px marginTop10px">
-                                    See how you compare to top Content Marketing Influencers.
+                                    {this.state.name === "you" ?
+                                        <div>See how {this.state.name} compare to top Content Marketing Influencers.</div>
+                                    :
+                                        <div>See how {this.state.name} compares to top Content Marketing Influencers.</div>
+                                    }
                                 </div>
                                 {analysisSection}
                             </div>

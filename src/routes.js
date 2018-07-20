@@ -71,6 +71,7 @@ const routes = (
             <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
             <Route path="listing" component={Listing} />
+            <Route path="influencer" component={Influencer} />
             <Route path="verifyEmail" component={VerifyEmail} />
             <Route path="forgotPassword" component={ForgotPassword} />
             <Route path="changePassword" component={ChangePassword} />
@@ -87,7 +88,6 @@ const routes = (
             <Route path="adminQuestions" component={AuthenticatedComponent} page={<AdminQuestions/>} />
             <Route path="freeResponse" component={AuthenticatedComponent} page={<FreeResponse/>} />
             <Route path="evaluationIntro" component={AuthenticatedComponent} page={<EvaluationIntro/>} />
-            <Route path="influencer" component={AuthenticatedComponent} page={<Influencer/>} />
 
             <Route path="admin" component={AuthenticatedComponent} page={<Admin/>} userType={adminUserTypes}>
                 <IndexRoute component={AdminPages} />
