@@ -58,11 +58,11 @@ const userApis = {
 
 // gets results for a user and influencers
 async function GET_influencerResults(req, res) {
-    const userId = sanitize(req.body.userId);
-    const positionId = sanitize(req.body.positionId);
-    const businessId = sanitize(req.body.businessId);
+    const userId = sanitize(req.query.userId);
+    const positionId = sanitize(req.query.positionId);
+    const businessId = sanitize(req.query.businessId);
 
-    const positionRequirements = [
+    let positionRequirements = [
         { "businessId": mongoose.Types.ObjectId(businessId) },
         { "positionId": mongoose.Types.ObjectId(positionId) }
     ];
@@ -77,7 +77,7 @@ async function GET_influencerResults(req, res) {
         }
     }
 
-    const infulencerPositionReqs = [
+    let infulencerPositionReqs = [
         { "businessId": mongoose.Types.ObjectId(businessId) },
         { "positionId": mongoose.Types.ObjectId(positionId) },
         { "influencer": true }
@@ -86,14 +86,14 @@ async function GET_influencerResults(req, res) {
     const influencersQuery = {
         "positions": {
             "$elemMatch": {
-                "$and": influencerPositionReqs
+                "$and": infulencerPositionReqs
             }
         }
     }
 
     try {
         var [user, influencers, psychTest] = await Promise.all([
-            Users.find(candidateQuery).select("name email skillTests psychometricTest positions"),
+            Users.findOne(candidateQuery).select("name email skillTests psychometricTest positions"),
             Users.find(influencersQuery).select("name email skillTests psychometricTest positions"),
             Psychtests.findOne({}).select("factors._id factors.stats")
         ]);
@@ -123,7 +123,7 @@ function getResults(user, psychTest) {
     }
     // get skill test scores for relevant skills
     const skillScores = Array.isArray(user.skillTests) ? user.skillTests.filter(skill => {
-        return skillTestIds.some(posSkillId => {
+        return position.skillTestIds.some(posSkillId => {
             return posSkillId.toString() === skill.skillId.toString();
         });
     }) : [];

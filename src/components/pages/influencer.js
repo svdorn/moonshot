@@ -37,105 +37,125 @@ class Influencer extends Component {
         let position = this.props.currentUser.positions[0];
 
             const currentUser = this.props.currentUser;
-            const candidate = {
-                name: currentUser.name,
-                title: currentUser.title ? currentUser.title : "",
-                email: currentUser.email
-            }
+            // const candidate = {
+            //     name: currentUser.name,
+            //     title: currentUser.title ? currentUser.title : "",
+            //     email: currentUser.email
+            // }
+            console.log("Id: ",currentUser._id);
+            console.log("pos ID ",position.positionId);
+            console.log("bus id: ",position.businessId);
             console.log(position);
+        axios.get("/api/user/influencerResults", {
+            params : {
+                userId: currentUser._id,
+                businessId: position.businessId,
+                positionId: position.positionId
+            }
+        })
+        .then(res => {
+            console.log("res: ",res);
+        })
+        .catch(error => {
+            console.log("error: ", error);
+            // console.log("error: ", error);
+            // if (error.response && error.response.data) {
+            //     console.log(error.response.data);
+            // }
+        });
             // get skill test scores for relevant skills
-            const skillScores = Array.isArray(currentUser.skillTests) ? currentUser.skillTests.filter(skill => {
-                return position.skillTestIds.some(posSkillId => {
-                    console.log("posSkillId", posSkillId);
-                    console.log("skill.skillId: ",skill.skillId)
-                    return posSkillId.toString() === skill.skillId.toString();
-                });
-            }) : [];
-            const hardSkillPoints = skillScores.map(skill => {
-                return {
-                    x: skill.name,
-                    y: this.round(skill.mostRecentScore),
-                    confidenceInterval: 16
-                }
-            });
-            // have to convert the factor names to what they will be displayed as
-            const psychNameConversions = {
-                "Extraversion": "Dimension",
-                "Emotionality": "Temperament",
-                "Honesty-Humility": "Viewpoint",
-                "Conscientiousness": "Methodology",
-                "Openness to Experience": "Perception",
-                "Agreeableness": "Ethos",
-                "Altruism": "Belief"
-            };
-            console.log(currentUser);
-            const psychScores = currentUser.psychometricTest.factors.map(area => {
-                // get the stats from the influencers and map here
-                const stats= {
-                    // the median score for this factor
-                    median : 50,
-                    // the scores that the middle 80% of people get
-                    middle80: {
-                        // what the person farthest negative in the 80% got
-                        miminum: 20,
-                        // what the person farthest positive in the 80% got
-                        maximum:80
-                    },
-                };
-
-                return {
-                    name: psychNameConversions[area.name],
-                    score: area.score,
-                    stats
-                }
-            });
-            // const hardSkillPoints = scores.skill.map(skill => {
+            // const skillScores = Array.isArray(currentUser.skillTests) ? currentUser.skillTests.filter(skill => {
+            //     return position.skillTestIds.some(posSkillId => {
+            //         console.log("posSkillId", posSkillId);
+            //         console.log("skill.skillId: ",skill.skillId)
+            //         return posSkillId.toString() === skill.skillId.toString();
+            //     });
+            // }) : [];
+            // const hardSkillPoints = skillScores.map(skill => {
             //     return {
             //         x: skill.name,
             //         y: this.round(skill.mostRecentScore),
             //         confidenceInterval: 16
             //     }
             // });
-            const overallScore = position.scores.overall;
-            // they all have a confidence interval of 16 for now
-            const predictivePoints = [
-                {
-                    x: "Growth",
-                    y: this.round(position.scores.growth),
-                    confidenceInterval: 16
-                },
-                {
-                    x: "Performance",
-                    y: this.round(position.scores.performance),
-                    confidenceInterval: 16
-                },
-                {
-                    x: "Longevity",
-                    y: this.round(position.scores.longevity),
-                    confidenceInterval: 0,
-                    unavailable: true
-                },
-                {
-                    x: "Culture",
-                    y: this.round(position.scores.culture),
-                    confidenceInterval: 0,
-                    unavailable: true
-                }
-            ];
-
-            let self = this;
-            self.setState({
-                ...self.state,
-                loading: false,
-                psychScores: psychScores,
-                candidate,
-                overallScore,
-                predicted: position.scores.predicted,
-                skill: position.scores.skill,
-                hardSkillPoints,
-                predictivePoints,
-                windowWidth: window.innerWidth
-            });
+            // // have to convert the factor names to what they will be displayed as
+            // const psychNameConversions = {
+            //     "Extraversion": "Dimension",
+            //     "Emotionality": "Temperament",
+            //     "Honesty-Humility": "Viewpoint",
+            //     "Conscientiousness": "Methodology",
+            //     "Openness to Experience": "Perception",
+            //     "Agreeableness": "Ethos",
+            //     "Altruism": "Belief"
+            // };
+            // console.log(currentUser);
+            // const psychScores = currentUser.psychometricTest.factors.map(area => {
+            //     // get the stats from the influencers and map here
+            //     const stats= {
+            //         // the median score for this factor
+            //         median : 50,
+            //         // the scores that the middle 80% of people get
+            //         middle80: {
+            //             // what the person farthest negative in the 80% got
+            //             miminum: 20,
+            //             // what the person farthest positive in the 80% got
+            //             maximum:80
+            //         },
+            //     };
+            //
+            //     return {
+            //         name: psychNameConversions[area.name],
+            //         score: area.score,
+            //         stats
+            //     }
+            // });
+            // // const hardSkillPoints = scores.skill.map(skill => {
+            // //     return {
+            // //         x: skill.name,
+            // //         y: this.round(skill.mostRecentScore),
+            // //         confidenceInterval: 16
+            // //     }
+            // // });
+            // const overallScore = position.scores.overall;
+            // // they all have a confidence interval of 16 for now
+            // const predictivePoints = [
+            //     {
+            //         x: "Growth",
+            //         y: this.round(position.scores.growth),
+            //         confidenceInterval: 16
+            //     },
+            //     {
+            //         x: "Performance",
+            //         y: this.round(position.scores.performance),
+            //         confidenceInterval: 16
+            //     },
+            //     {
+            //         x: "Longevity",
+            //         y: this.round(position.scores.longevity),
+            //         confidenceInterval: 0,
+            //         unavailable: true
+            //     },
+            //     {
+            //         x: "Culture",
+            //         y: this.round(position.scores.culture),
+            //         confidenceInterval: 0,
+            //         unavailable: true
+            //     }
+            // ];
+            //
+            // let self = this;
+            // self.setState({
+            //     ...self.state,
+            //     loading: false,
+            //     psychScores: psychScores,
+            //     candidate,
+            //     overallScore,
+            //     predicted: position.scores.predicted,
+            //     skill: position.scores.skill,
+            //     hardSkillPoints,
+            //     predictivePoints,
+            //     windowWidth: window.innerWidth
+            // });
     }
 
 
