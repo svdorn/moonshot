@@ -115,7 +115,7 @@ class InfluencerPredictiveGraph extends Component {
         const graphInteriorStyle = {
             height: interiorHeight,
             width: interiorWidth,
-            marginLeft: interiorMarginLeft
+            marginLeft: interiorMarginLeft,
         };
 
         // yAxisHeight is the height of the graph - the text on the x axis

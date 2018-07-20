@@ -42,24 +42,23 @@ class Influencer extends Component {
         // set resize listener
         window.addEventListener('resize', this.updateWindowDimensions.bind(this));
 
-        // get the position, set shit
-        let position = this.props.currentUser.positions[0];
+        let userId = "";
+        let businessId = "";
+        let positionId = "";
+        try {
+            userId = this.props.location.query.user;
+            businessId = this.props.location.query.businessId;
+            positionId = this.props.location.query.positionId;
+        } catch (e) {
+            this.goTo("/");
+        }
 
-            const currentUser = this.props.currentUser;
-            // const candidate = {
-            //     name: currentUser.name,
-            //     title: currentUser.title ? currentUser.title : "",
-            //     email: currentUser.email
-            // }
-            console.log("Id: ",currentUser._id);
-            console.log("pos ID ",position.positionId);
-            console.log("bus id: ",position.businessId);
-            console.log(position);
+
+        console.log("props: ", this.props);
+
         axios.get("/api/user/influencerResults", {
             params : {
-                userId: currentUser._id,
-                businessId: position.businessId,
-                positionId: position.positionId
+                userId, businessId, positionId
             }
         })
         .then(res => {
