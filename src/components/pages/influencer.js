@@ -18,10 +18,13 @@ class Influencer extends Component {
 
         this.state = {
             candidate: {},
-            overallScore: undefined,
+            influencers: [],
             hardSkillPoints: [],
+            influencerHardSkillPoints: [],
             predictivePoints: [],
+            influencerPredictivePoints: [],
             psychScores: [],
+            influencerPsychScores: [],
             loading: true,
             areaSelected: undefined,
             windowWidth: window.innerWidth
@@ -69,7 +72,6 @@ class Influencer extends Component {
                     confidenceInterval: 16
                 }
             });
-            const overallScore = user.scores.overall;
             // they all have a confidence interval of 16 for now
             const predictivePoints = [
                 {
@@ -85,8 +87,111 @@ class Influencer extends Component {
                 {
                     x: "Longevity",
                     y: this.round(user.scores.longevity),
-                    confidenceInterval: 0,
-                    unavailable: true
+                    confidenceInterval: 16
+                }
+            ];
+
+            // Get influencers names
+            let influencerPsychScores = [];
+            let influencerSkillScores = [];
+            let growth = 0;
+            let performance = 0;
+            let longevity = 0;
+            for (let i = 0; i < influencers.length; i++) {
+                const inf = influencers[i];
+                console.log("influencer: ", inf);
+                // get predictive points
+                growth += inf.scores.growth;
+                performance += inf.scores.performance;
+                longevity += inf.scores.longevity;
+                // get psych scores
+                for (let i = 0; i < inf.psychScores.length; i++) {
+                    const factor = inf.psychScores[i];
+                    console.log("factor: ", factor);
+                    // match factors we already have
+                    const factorIndex = influencerPsychScores.findIndex(fac => {
+                        return fac.name.toString() === factor.name.toString();
+                    });
+                    const foundFactor = typeof factorIndex === "number" && factorIndex >= 0;
+                    if (foundFactor) {
+                        // Add info to that skill
+                        influencerPsychScores[factorIndex].score += factor.score;
+                        influencerPsychScores[factorIndex].stats.median += factor.stats.median;
+                        influencerPsychScores[factorIndex].stats.middle80.maximum = factor.stats.middle80.maximum;
+                        influencerPsychScores[factorIndex].stats.middle80.minimum = factor.stats.middle80.minimum;
+                        influencerPsychScores[factorIndex].timesSeen++;
+                    } else {
+                        // Add new skill
+                        factor.timesSeen = 1;
+                        influencerPsychScores.push(factor);
+                    }
+                }
+                // get hard skill scores
+                for (let i = 0; i < inf.skillScores.length; i++) {
+                    const skill = inf.skillScores[i];
+                    // match skills we already have
+                    const skillIndex = influencerSkillScores.findIndex(sk => {
+                        return sk.name.toString() === skill.name.toString();
+                    });
+                    const foundSkill = typeof skillIndex === "number" && skillIndex >= 0;
+                    if (foundSkill) {
+                        // Add info to that skill
+                        console.log("skill score before: ", influencerSkillScores[skillIndex].mostRecentScore);
+                        console.log("skill score adding: ", skill.mostRecentScore);
+                        influencerSkillScores[skillIndex].mostRecentScore += skill.mostRecentScore;
+                        console.log("skill score after: ", influencerSkillScores[skillIndex].mostRecentScore);
+                        influencerSkillScores[skillIndex].timesSeen++;
+                    } else {
+                        // Add new skill
+                        skill.timesSeen = 1;
+                        influencerSkillScores.push(skill);
+                    }
+                }
+            }
+
+            // get averages for the hard skill scores
+            for (let i = 0; i < influencerSkillScores.length; i++) {
+                console.log("influencer skill score: ", influencerSkillScores);
+                influencerSkillScores[i].mostRecentScore = influencerSkillScores[i].mostRecentScore/influencerSkillScores[i].timesSeen;
+            }
+            // Give the skill scores the correct formatting
+            const influencerHardSkillPoints = influencerSkillScores.map(skill => {
+                return {
+                    x: skill.name,
+                    y: this.round(skill.mostRecentScore),
+                    confidenceInterval: 16
+                }
+            });
+
+            // get averages of psych scores
+            for (let i = 0; i < influencerPsychScores.length; i++) {
+                let times = influencerPsychScores[i].timesSeen;
+                influencerPsychScores[i].score = influencerPsychScores[i].score/times;
+                influencerPsychScores[i].stats.median = influencerPsychScores[i].stats.median/times;
+                influencerPsychScores[i].stats.middle80.maximum = influencerPsychScores[i].stats.middle80.maximum/times;
+                influencerPsychScores[i].stats.middle80.minimum = influencerPsychScores[i].stats.middle80.minimum/times;
+            }
+
+            // get averages of scores
+            growth = growth/influencers.length;
+            performance = performance/influencers.length;
+            longevity = longevity/influencers.length;
+
+            const influencerPredictivePoints = [
+                {
+                    x: "Growth",
+                    y: this.round(growth),
+                    confidenceInterval: 8
+                },
+                {
+                    x: "Performance",
+                    y: this.round(performance),
+                    confidenceInterval: 8
+                },
+                {
+                    x: "Longevity",
+                    y: this.round(longevity),
+                    confidenceInterval: 8
                 }
             ];
 
@@ -94,9 +199,12 @@ class Influencer extends Component {
             self.setState({
                 ...self.state,
                 loading: false,
+                influencers,
+                influencerPredictivePoints,
+                influencerHardSkillPoints,
+                influencerPsychScores,
                 psychScores: user.psychScores,
                 candidate,
-                overallScore,
                 predicted: user.scores.predicted,
                 skill: user.scores.skill,
                 hardSkillPoints,
@@ -186,6 +294,10 @@ class Influencer extends Component {
         const hardSkills = this.state.hardSkills;
         const predictiveInsights = this.state.predictiveInsights;
 
+        console.log("influencer hard skills: ", this.state.influencerHardSkillPoints);
+        console.log("influencer predictive points: ", this.state.influencerPredictivePoints);
+        console.log("influencer psych scores: ", this.state.influencerPsychScores);
+
         const loading = this.state.loading;
         const loadingArea = <div className="center fillScreen" style={{marginTop: "40px"}} key="loadingArea"><CircularProgress color="secondary-gray" /></div>
         const analysisSection = loading ? loadingArea : this.makeAnalysisSection();
@@ -200,7 +312,7 @@ class Influencer extends Component {
                     {candidate ?
                         <div className="marginTop20px">
                             <div className="blackBackground paddingBottom40px center">
-                                <div className="font28px font26pxUnder700 font24font16pxUnder500 secondary-red">
+                                <div className="font32px font26pxUnder700 font24font16pxUnder500 secondary-red">
                                     Ease Standard
                                 </div>
                                 <div className="secondary-gray font18px font16pxUnder700 font14pxUnder500 marginBottom40px marginTop10px">

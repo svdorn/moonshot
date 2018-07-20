@@ -314,7 +314,7 @@ class InfluencerPredictiveGraph extends Component {
         let extraClass = this.props.className ? " " + this.props.className : "";
 
         return (
-            <div className={"font14px font12pxUnder400 transitionAll predictiveGraphContainer" + extraClass}>
+            <div className={"font14px center font12pxUnder400 transitionAll predictiveGraphContainer" + extraClass}>
                 {title}
                 <div className="predictiveGraph" style={graphStyle}>
                     <div className="predictiveGraphInterior" style={graphInteriorStyle}>
