@@ -55,6 +55,7 @@ class InfluencerPsychBreakdown extends Component {
 
     render() {
         const psychScores = this.props.psychScores;
+        const influencerPsychScores = this.props.influencerPsychScores;
 
         if (!Array.isArray(psychScores)) { return null }
 
@@ -126,6 +127,22 @@ class InfluencerPsychBreakdown extends Component {
                 height: "8px",
                 width: "8px"
             }
+            const influencerIndex = influencerPsychScores.findIndex(fac => {
+                return fac.name.toString() === area.name.toString();
+            });
+            const foundIndex = typeof influencerIndex === "number" && influencerIndex >= 0;
+            let influencerLeftPercentage;
+            let influencerIndicatorStyle;
+            if (foundIndex) {
+                influencerLeftPercentage = (influencerPsychScores[influencerIndex].score + 5)*10;
+                influencerIndicatorStyle = {
+                    position: "absolute",
+                    left: `${influencerLeftPercentage}%`,
+                    // have to translate left because the points have widths
+                    transform: `translateX(-${influencerLeftPercentage}%)`,
+                    size: '10%'
+                }
+            }
             return (
                 <div
                     className="areaData center"
@@ -140,6 +157,7 @@ class InfluencerPsychBreakdown extends Component {
                     <div className="middle80indicator" style={{...middle80style, ...middle80indicatorStyle}} />
                     <div className="medianIndicator" style={medianStyle} />
                     <div className="youIndicator" style={youIndicatorStyle}/>
+                    <div className="influencerIndicator" style={influencerIndicatorStyle}>&#9733;</div>
                 </div>
             )
         });

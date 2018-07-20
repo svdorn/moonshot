@@ -1420,6 +1420,9 @@ form > h1 {
     background-color: white;
     display: inline-block;
 }
+.influencerIndicator {
+    color: var(--primary-white);
+}
 .medianIndicator {
     width: 2px;
     background-color: #e6e6e6;
