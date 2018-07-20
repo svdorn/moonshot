@@ -55,6 +55,60 @@ class Influencer extends Component {
         })
         .then(res => {
             console.log("res: ",res);
+            const user = res.data.returnUser;
+            const influencers = res.data.returnInfluencers;
+
+            const candidate = {
+                name: user.name,
+                email: user.email
+            }
+            const hardSkillPoints = user.skillScores.map(skill => {
+                return {
+                    x: skill.name,
+                    y: this.round(skill.mostRecentScore),
+                    confidenceInterval: 16
+                }
+            });
+            const overallScore = user.scores.overall;
+            // they all have a confidence interval of 16 for now
+            const predictivePoints = [
+                {
+                    x: "Growth",
+                    y: this.round(user.scores.growth),
+                    confidenceInterval: 16
+                },
+                {
+                    x: "Performance",
+                    y: this.round(user.scores.performance),
+                    confidenceInterval: 16
+                },
+                {
+                    x: "Longevity",
+                    y: this.round(user.scores.longevity),
+                    confidenceInterval: 0,
+                    unavailable: true
+                },
+                {
+                    x: "Culture",
+                    y: this.round(user.scores.culture),
+                    confidenceInterval: 0,
+                    unavailable: true
+                }
+            ];
+
+            let self = this;
+            self.setState({
+                ...self.state,
+                loading: false,
+                psychScores: user.psychScores,
+                candidate,
+                overallScore,
+                predicted: user.scores.predicted,
+                skill: user.scores.skill,
+                hardSkillPoints,
+                predictivePoints,
+                windowWidth: window.innerWidth
+            });
         })
         .catch(error => {
             console.log("error: ", error);
