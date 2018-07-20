@@ -140,7 +140,7 @@ class InfluencerPsychBreakdown extends Component {
                     left: `${influencerLeftPercentage}%`,
                     // have to translate left because the points have widths
                     transform: `translateX(-${influencerLeftPercentage}%)`,
-                    size: '10%'
+                    fontSize: '40%'
                 }
             }
             return (

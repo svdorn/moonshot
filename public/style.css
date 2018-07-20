@@ -1422,6 +1422,7 @@ form > h1 {
 }
 .influencerIndicator {
     color: var(--primary-white);
+    display: inline-block;
 }
 .medianIndicator {
     width: 2px;
