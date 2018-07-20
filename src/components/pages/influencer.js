@@ -53,9 +53,6 @@ class Influencer extends Component {
             this.goTo("/");
         }
 
-
-        console.log("props: ", this.props);
-
         axios.get("/api/user/influencerResults", {
             params : {
                 userId, businessId, positionId
@@ -64,6 +61,7 @@ class Influencer extends Component {
         .then(res => {
             const user = res.data.returnUser;
             const influencers = res.data.returnInfluencers;
+            console.log("influencers: ", influencers)
 
             const candidate = {
                 name: user.name,
@@ -201,6 +199,9 @@ class Influencer extends Component {
                 avgInfluencerPredictivePoints: influencerPredictivePoints,
                 avgInfluencerHardSkillPoints: influencerHardSkillPoints,
                 avgInfluencerPsychScores: influencerPsychScores,
+                influencerPredictivePoints,
+                influencerHardSkillPoints,
+                influencerPsychScores,
                 psychScores: user.psychScores,
                 candidate,
                 predicted: user.scores.predicted,
@@ -243,7 +244,64 @@ class Influencer extends Component {
 
     handleInfluencer(event, type) {
         const influencer = event.target.value;
-        this.setState({influencer})
+        let self = this;
+
+        if (influencer === "Select an influencer") {
+            // set influencer stuff to avgInfluencer
+            self.setState({
+                influencerHardSkillPoints: self.state.avgInfluencerHardSkillPoints,
+                influencerPsychScores: self.state.avgInfluencerPsychScores,
+                influencerPredictivePoints: self.state.avgInfluencerPredictivePoints,
+                influencer
+            });
+        } else {
+            const influencers = this.state.influencers;
+            const infIndex = influencers.findIndex(inf => {
+                return influencer.toString() === inf.name.toString();
+            });
+            const foundInfluencer = typeof infIndex === "number" && infIndex >= 0;
+            if (foundInfluencer) {
+                let inf = influencers[infIndex];
+                const influencerPsychScores = inf.psychScores;
+                const influencerHardSkillPoints = inf.skillScores.map(skill => {
+                    return {
+                        x: skill.name,
+                        y: this.round(skill.mostRecentScore),
+                        confidenceInterval: 16
+                    }
+                });
+                const influencerPredictivePoints = [
+                    {
+                        x: "Growth",
+                        y: this.round(inf.scores.growth),
+                        confidenceInterval: 8
+                    },
+                    {
+                        x: "Performance",
+                        y: this.round(inf.scores.performance),
+                        confidenceInterval: 8
+                    },
+                    {
+                        x: "Longevity",
+                        y: this.round(inf.scores.longevity),
+                        confidenceInterval: 8
+                    }
+                ];
+                self.setState({
+                    influencerHardSkillPoints,
+                    influencerPsychScores,
+                    influencerPredictivePoints,
+                    influencer,
+                })
+            } else {
+                self.setState({
+                    influencerHardSkillPoints: self.state.avgInfluencerHardSkillPoints,
+                    influencerPsychScores: self.state.avgInfluencerPsychScores,
+                    influencerPredictivePoints: self.state.avgInfluencerPredictivePointsm,
+                    influencer: "Select an influencer",
+                });
+            }
+        }
     }
 
     dropdown(type) {
@@ -314,7 +372,7 @@ class Influencer extends Component {
                     {this.dropdown("Predictive Points")}
                     <InfluencerPredictiveGraph
                         dataPoints={this.state.predictivePoints}
-                        influencerDataPoints={this.state.avgInfluencerPredictivePoints}
+                        influencerDataPoints={this.state.influencerPredictivePoints}
                         height={graphHeight}
                     />
                 </div>
@@ -328,7 +386,7 @@ class Influencer extends Component {
                     {this.dropdown("Psych Breakdown")}
                     <InfluencerPsychBreakdown
                          psychScores={this.state.psychScores}
-                         influencerPsychScores={this.state.avgInfluencerPsychScores}
+                         influencerPsychScores={this.state.influencerPsychScores}
                          forCandidate={false}
                      />
                  </div>
@@ -342,7 +400,7 @@ class Influencer extends Component {
                     {this.dropdown("Skills Evaluation")}
                     <InfluencerPredictiveGraph
                         dataPoints={this.state.hardSkillPoints}
-                        influencerDataPoints={this.state.avgInfluencerHardSkillPoints}
+                        influencerDataPoints={this.state.influencerHardSkillPoints}
                         height={graphHeight}
                     />
                 </div>
