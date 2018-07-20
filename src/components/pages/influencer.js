@@ -4,8 +4,10 @@ import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
-import {Tabs, Tab, Slider, CircularProgress} from 'material-ui';
+import {Tabs, Tab, Slider, CircularProgress,Divider} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
+import Select from '@material-ui/core/Select';
+import MenuItem from '@material-ui/core/MenuItem';
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import InfluencerPredictiveGraph from '../miscComponents/influencerPredictiveGraph';
@@ -19,12 +21,16 @@ class Influencer extends Component {
         this.state = {
             candidate: {},
             influencers: [],
+            influencer: "Select an influencer",
             hardSkillPoints: [],
             influencerHardSkillPoints: [],
+            avgInfluencerHardSkillPoints: [],
             predictivePoints: [],
             influencerPredictivePoints: [],
+            avgInfluencerPredictivePoints: [],
             psychScores: [],
             influencerPsychScores: [],
+            avgInfluencerPsychScores: [],
             loading: true,
             areaSelected: undefined,
             windowWidth: window.innerWidth
@@ -57,7 +63,6 @@ class Influencer extends Component {
             }
         })
         .then(res => {
-            console.log("res: ",res);
             const user = res.data.returnUser;
             const influencers = res.data.returnInfluencers;
 
@@ -99,7 +104,6 @@ class Influencer extends Component {
             let longevity = 0;
             for (let i = 0; i < influencers.length; i++) {
                 const inf = influencers[i];
-                console.log("influencer: ", inf);
                 // get predictive points
                 growth += inf.scores.growth;
                 performance += inf.scores.performance;
@@ -107,7 +111,6 @@ class Influencer extends Component {
                 // get psych scores
                 for (let i = 0; i < inf.psychScores.length; i++) {
                     const factor = inf.psychScores[i];
-                    console.log("factor: ", factor);
                     // match factors we already have
                     const factorIndex = influencerPsychScores.findIndex(fac => {
                         return fac.name.toString() === factor.name.toString();
@@ -136,10 +139,7 @@ class Influencer extends Component {
                     const foundSkill = typeof skillIndex === "number" && skillIndex >= 0;
                     if (foundSkill) {
                         // Add info to that skill
-                        console.log("skill score before: ", influencerSkillScores[skillIndex].mostRecentScore);
-                        console.log("skill score adding: ", skill.mostRecentScore);
                         influencerSkillScores[skillIndex].mostRecentScore += skill.mostRecentScore;
-                        console.log("skill score after: ", influencerSkillScores[skillIndex].mostRecentScore);
                         influencerSkillScores[skillIndex].timesSeen++;
                     } else {
                         // Add new skill
@@ -151,7 +151,6 @@ class Influencer extends Component {
 
             // get averages for the hard skill scores
             for (let i = 0; i < influencerSkillScores.length; i++) {
-                console.log("influencer skill score: ", influencerSkillScores);
                 influencerSkillScores[i].mostRecentScore = influencerSkillScores[i].mostRecentScore/influencerSkillScores[i].timesSeen;
             }
             // Give the skill scores the correct formatting
@@ -200,9 +199,9 @@ class Influencer extends Component {
                 ...self.state,
                 loading: false,
                 influencers,
-                influencerPredictivePoints,
-                influencerHardSkillPoints,
-                influencerPsychScores,
+                avgInfluencerPredictivePoints: influencerPredictivePoints,
+                avgInfluencerHardSkillPoints: influencerHardSkillPoints,
+                avgInfluencerPsychScores: influencerPsychScores,
                 psychScores: user.psychScores,
                 candidate,
                 predicted: user.scores.predicted,
@@ -243,6 +242,55 @@ class Influencer extends Component {
         return rounded;
     }
 
+    handleInfluencer(event, type) {
+        const influencer = event.target.value;
+        this.setState({influencer})
+    }
+
+    dropdown(type) {
+        // the hint that shows up when search bar is in focus
+        const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
+        const searchInputStyle = { color: "rgba(255, 255, 255, .8)" }
+        const searchFloatingLabelFocusStyle = { color: "rgb(117, 220, 252)" }
+        const searchFloatingLabelStyle = searchHintStyle;
+        const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
+
+
+        let menuItems = this.state.influencers.map(menuItem => {
+            return (
+                <MenuItem
+                    value={menuItem.name}
+                    key={`moveTo${menuItem.name}`}
+                >
+                    { menuItem.name }
+                </MenuItem>
+            );
+        });
+        menuItems.unshift( <Divider key="divider"/> );
+        menuItems.unshift( <MenuItem key="selectInfluencer" value={"Select an influencer"}>{"Select an influencer"}</MenuItem> );
+
+        const colorClass = " secondary-gray";
+        const cursorClass = " pointer";
+
+        let selectAttributes = {
+            disableUnderline: true,
+            classes: {
+                root: "myCandidatesSelect" + colorClass,
+                icon: "selectIconGrayImportant"
+            },
+            value: this.state.influencer,
+            onChange: (event) => this.handleInfluencer(event, type)
+        };
+
+        return (
+            <div className="" key="top options">
+                <div className="inlineBlock">
+                    <Select className="influencerSelection" {...selectAttributes}>{menuItems}</Select>
+                </div>
+            </div>
+        );
+    }
+
     makeAnalysisSection() {
         if (!Array.isArray(this.state.hardSkillPoints)) { return null; }
 
@@ -261,9 +309,13 @@ class Influencer extends Component {
         return (
             <div className="analysis center aboutMeSection" style={style.tabContent} key={"analysisSection"}>
                 <div>
+                    <div className="secondary-gray center font24px font20pxUnder700 font16pxUnder500 marginBottom10px">
+                        Predicted Performance
+                    </div>
+                    {this.dropdown("Predictive Points")}
                     <InfluencerPredictiveGraph
-                        title={"Predicted Performance"}
                         dataPoints={this.state.predictivePoints}
+                        influencerDataPoints={this.state.avgInfluencerPredictivePoints}
                         height={graphHeight}
                     />
                 </div>
@@ -272,15 +324,19 @@ class Influencer extends Component {
 
                  <InfluencerPsychBreakdown
                      psychScores={this.state.psychScores}
+                     influencerPsychScores={this.state.avgInfluencerPsychScores}
                      forCandidate={false}
                  />
 
                  <div className="influencerPageSpacer" />
 
                 <div>
+                    <div className="predictiveGraphTitle secondary-gray center font24px font20pxUnder700 font16pxUnder500">
+                        Skills Evaluation
+                    </div>
                     <InfluencerPredictiveGraph
-                        title={"Skills Evaluation"}
                         dataPoints={this.state.hardSkillPoints}
+                        influencerDataPoints={this.state.avgInfluencerHardSkillPoints}
                         height={graphHeight}
                     />
                 </div>
@@ -293,10 +349,6 @@ class Influencer extends Component {
         const candidate = this.state.candidate;
         const hardSkills = this.state.hardSkills;
         const predictiveInsights = this.state.predictiveInsights;
-
-        console.log("influencer hard skills: ", this.state.influencerHardSkillPoints);
-        console.log("influencer predictive points: ", this.state.influencerPredictivePoints);
-        console.log("influencer psych scores: ", this.state.influencerPsychScores);
 
         const loading = this.state.loading;
         const loadingArea = <div className="center fillScreen" style={{marginTop: "40px"}} key="loadingArea"><CircularProgress color="secondary-gray" /></div>

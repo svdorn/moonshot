@@ -98,7 +98,8 @@ class InfluencerPredictiveGraph extends Component {
     render() {
         const props = this.props;
         const dataPoints = props.dataPoints;
-        if (!dataPoints) {
+        const influencerDataPoints = props.influencerDataPoints;
+        if (!dataPoints || !influencerDataPoints) {
             return null;
         }
 
@@ -134,6 +135,7 @@ class InfluencerPredictiveGraph extends Component {
         };
 
         let xAxisLabels = [];
+        let influencerPoints = [];
         let points = [];
 
         let numPoints = dataPoints.length;
@@ -289,6 +291,8 @@ class InfluencerPredictiveGraph extends Component {
                 </div>
             );
 
+
+
             // add the label for the x axis
             xAxisLabels.push(
                 <div className="xAxisLabel" style={{...xLabelStyle, ...labelContainerTransform}} key={`xAxis${label}`}>
@@ -301,6 +305,97 @@ class InfluencerPredictiveGraph extends Component {
             // on to the next point
             pointCounter++;
         });
+
+        pointCounter = 1;
+
+        // add each point and x axis label to their respective arrays
+        influencerDataPoints.forEach(point => {
+            let label = point.x;
+            let yValue = point.y;
+
+            if (point.unavailable || point.inProgress) { yValue = 100; }
+
+            // 160 is the top of the graph, 40 is the bottom
+            // 160 corresponds to 100%, 100 corresponds to 50%, 40 corresponds to 0%
+            let fromBottomScore = yValue;
+            if (yValue > 150) { fromBottomScore = 150; }
+            if (yValue < 50 ) { fromBottomScore = 50; }
+            const fromBottom = (fromBottomScore - 40) * 5 / 6;
+
+            let r = 100;
+            let g = 100;
+            let b = 100;
+
+            const color = `rgb(${Math.round(r)},${Math.round(g)},${Math.round(b)})`;
+            let colorStyle = { backgroundColor: color };
+
+
+            // the height of the line is determined by the confidence interval
+            const confidenceInterval = point.confidenceInterval;
+            const confidenceIntervalHeight = confidenceInterval*5/6;
+            const confidenceIntervalStyle = {
+                height: `${confidenceIntervalHeight}%`,
+                bottom: `${fromBottom}%`,
+                width: "2px"
+            };
+
+            const topBorderStyle = {
+                bottom: `${fromBottom + (confidenceIntervalHeight / 2)}%`
+            }
+            const bottomBorderStyle = {
+                bottom: `${fromBottom - (confidenceIntervalHeight / 2)}%`
+            }
+
+            const pointBoxStyle = {
+                bottom: `${fromBottom}%`
+            }
+
+            const distanceFromYAxis = distanceBetweenPoints * pointCounter;
+
+            // in total the points will take up the width of the graph, but to
+            // ensure there is no overflow, take off just a bit
+            const pointContainerWidth = (100.0 / numPoints) - .1;
+
+            const pointContainerStyle = {
+                width: `${pointContainerWidth}%`
+            }
+
+            // labels will be at the same position as the points
+            let xLabelStyle = { width: `${pointContainerWidth}%` }
+            // align text left if being rotated
+            if (xLabelLeftAlign) { xLabelStyle.textAlign = "left"; }
+
+            influencerPoints.push(
+                <div className="pointContainer" style={pointContainerStyle} key={`points${label}`}>
+                    <div className="confidenceIntervalLine" style={{...colorStyle, ...confidenceIntervalStyle}} />
+                    <div className="confidenceIntervalBorder" style={{...colorStyle, ...topBorderStyle}} />
+                    <div className="pointBox" style={{...colorStyle, ...pointBoxStyle}}>
+                        <div style={{position: "relative"}}>{point.unavailable || point.inProgress ? "N/A" : yValue}</div>
+                        {point.unavailable ?
+                            <HoverTip
+                                style={{minWidth: `${interiorWidth/2}px`}}
+                                text="Unavailable - not enough employee data to predict this value."
+                            />
+                            :
+                            null
+                        }
+                        {point.inProgress ?
+                            <HoverTip
+                                style={{minWidth: `${interiorWidth/2}px`}}
+                                text="Unavailable - user has not finished the evaluation."
+                            />
+                            :
+                            null
+                        }
+                    </div>
+                    <div className="confidenceIntervalBorder" style={{...colorStyle, ...bottomBorderStyle}} />
+                </div>
+            );
+
+            // on to the next point
+            pointCounter++;
+        });
+
 
         let title = null;
         if (this.props.title) {
@@ -329,6 +424,7 @@ class InfluencerPredictiveGraph extends Component {
                         <div className="rightYAxisLabel" style={yAxisLabel80Style}>80</div>
                         <div className="pointsList">
                             { points }
+                            { influencerPoints }
                         </div>
                         <div className="xAxisLabelsContainer" style={xAxisLabelsContainerStyle}>
                             { xAxisLabels }

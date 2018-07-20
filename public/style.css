@@ -1055,6 +1055,13 @@ form > h1 {
     transform: translate(-50%, -50%);
 }
 
+.influencerSelection {
+    -webkit-box-shadow: 0 0 5px 2px rgba(0,0,0,.5);
+    -moz-box-shadow:    0 0 5px 2px rgba(0,0,0,.5);
+    box-shadow:        0 0 5px 2px rgba(0,0,0,.5);
+    padding: 3px;
+}
+
 
 
 #businessHomeStatistics div {
