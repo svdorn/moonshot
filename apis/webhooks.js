@@ -37,7 +37,7 @@ async function POST_addCandidate(req, res) {
     // the unique business identifier
     const API_Key = findNestedValue(body, "API_Key", nestedLevels, traverseArrays);
     // identifier for position is just the position id
-    const positionId = findNestedValue(body, "Position_Key", nestedLevels, traverseArrays);
+    const Position_Key = findNestedValue(body, "Position_Key", nestedLevels, traverseArrays);
     // the email address of the candidate that should be invited
     const email = findNestedValue(body, "Email", nestedLevels, traverseArrays);
     // error to send if either/both API_Key and Position_Key are bad
@@ -45,12 +45,12 @@ async function POST_addCandidate(req, res) {
 
     // test that all necessary values exist
     if (!API_Key) { return noInput("API_Key"); }
-    if (!positionId) { return noInput("Position_Key"); }
+    if (!Position_Key) { return noInput("Position_Key"); }
     if (!email) { return noInput("Email"); }
 
     // test that the api and position keys are valid
     if (typeof API_Key !== "string") { return badInput("API_Key", API_Key) }
-    if (typeof positionId !== "string") { return badInput("Position_Key", positionId)}
+    if (typeof Position_Key !== "string") { return badInput("Position_Key", Position_Key)}
     // test that the email is in the correct form (is a valid email)
     if (!isValidEmail(email)) {
         return res.status(400).send({
@@ -59,19 +59,28 @@ async function POST_addCandidate(req, res) {
         });
     }
 
-    // create the actual mongo id from the given position key
-    try { var positionMongooseId = mongoose.Types.ObjectId(positionId); }
-    catch (makeIdError) {
-        console.log("Position_Key not valid: ", makeIdError);
-        return res.status(200).send(BAD_KEYS);
+    // the different things that could be used to identify the position
+    let positionOptions = [
+        { "name": Position_Key }
+    ];
+
+    // try using the key as an id
+    try {
+        // make the position key into a mongoose id
+        const positionMongooseId = mongoose.Types.ObjectId(Position_Key);
+        // add the _id option to the query
+        positionOptions.push({ "_id": positionMongooseId });
     }
+    catch (makeIdError) { /* not searching by _id */ }
 
     // query to find the business and position from the keys
     const query = {
         "API_Key": API_Key,
         "positions": {
-            // will only get the wanted position
+            // will only get the wanted position, and will only get the business
+            // that has this position
             "$elemMatch": {
+                "$or": positionOptions
                 "_id": positionMongooseId
             }
         }

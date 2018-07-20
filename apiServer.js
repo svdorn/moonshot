@@ -71,13 +71,13 @@ app.use(session({
 
 // --->> TEST WEBHOOKS <<--- //
 
-const WebHooks = require("node-webhooks");
-// add the place that stores webhooks
-webHooks = new WebHooks({
-    db: {
-        "testHookStorage": [ "http://localhost:8081/testHooks" ]
-    }
-});
+// const WebHooks = require("node-webhooks");
+// // add the place that stores webhooks
+// webHooks = new WebHooks({
+//     db: {
+//         "testHookStorage": [ "http://localhost:8081/testHooks" ]
+//     }
+// });
 // add a new webhook
 // webHooks.add("testHook1", "https://hooks.zapier.com/hooks/catch/3540048/wju5zh/")
 // .then(function() {
