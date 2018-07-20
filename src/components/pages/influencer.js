@@ -9,7 +9,7 @@ import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} fro
 import axios from 'axios';
 import MetaTags from 'react-meta-tags';
 import InfluencerPredictiveGraph from '../miscComponents/influencerPredictiveGraph';
-import PsychBreakdown from '../childComponents/psychBreakdown';
+import InfluencerPsychBreakdown from '../childComponents/influencerPsychBreakdown';
 import HoverTip from "../miscComponents/hoverTip";
 
 class Influencer extends Component {
@@ -162,7 +162,7 @@ class Influencer extends Component {
 
                 <div className="influencerPageSpacer" />
 
-                 <PsychBreakdown
+                 <InfluencerPsychBreakdown
                      psychScores={this.state.psychScores}
                      forCandidate={false}
                  />
