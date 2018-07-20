@@ -396,6 +396,7 @@ class Influencer extends Component {
                          psychScores={this.state.psychScores}
                          influencerPsychScores={this.state.influencerPsychScores}
                          forCandidate={false}
+                         name={this.state.name}
                      />
                  </div>
 

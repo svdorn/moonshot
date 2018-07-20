@@ -140,7 +140,7 @@ class InfluencerPsychBreakdown extends Component {
                     left: `${influencerLeftPercentage}%`,
                     // have to translate left because the points have widths
                     transform: `translateX(-${influencerLeftPercentage}%)`,
-                    fontSize: '40%'
+                    fontSize: '50%',
                 }
             }
             return (
@@ -215,7 +215,12 @@ class InfluencerPsychBreakdown extends Component {
                                     width: "8px", height: "8px"
                                 }} />
                                 <br/>
-                                <div className="description">{forCandidate ? "You" : "Candidate"}</div>
+                                <div className="description">{this.props.name === "you" ? "you" : this.props.name}</div>
+                            </div>
+                            <div className="influencer">
+                                <div className="influencerIndicator" style={{fontSize:"80%"}}>&#9733;</div>
+                                <br/>
+                                <div className="description">{"Influencer"}</div>
                             </div>
                             <div className="median">
                                 <div className="medianIndicator" />
