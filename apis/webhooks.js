@@ -81,7 +81,6 @@ async function POST_addCandidate(req, res) {
             // that has this position
             "$elemMatch": {
                 "$or": positionOptions
-                "_id": positionMongooseId
             }
         }
     }
