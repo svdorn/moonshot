@@ -322,18 +322,25 @@ class Influencer extends Component {
 
                 <div className="influencerPageSpacer" />
 
-                 <InfluencerPsychBreakdown
-                     psychScores={this.state.psychScores}
-                     influencerPsychScores={this.state.avgInfluencerPsychScores}
-                     forCandidate={false}
-                 />
+                <div>
+                    <div className="secondary-gray center font24px font20pxUnder700 font16pxUnder500 marginBottom10px">
+                        Psychometric Analysis
+                    </div>
+                    {this.dropdown("Psych Breakdown")}
+                    <InfluencerPsychBreakdown
+                         psychScores={this.state.psychScores}
+                         influencerPsychScores={this.state.avgInfluencerPsychScores}
+                         forCandidate={false}
+                     />
+                 </div>
 
                  <div className="influencerPageSpacer" />
 
                 <div>
-                    <div className="predictiveGraphTitle secondary-gray center font24px font20pxUnder700 font16pxUnder500">
+                    <div className="secondary-gray center font24px font20pxUnder700 font16pxUnder500 marginBottom10px">
                         Skills Evaluation
                     </div>
+                    {this.dropdown("Skills Evaluation")}
                     <InfluencerPredictiveGraph
                         dataPoints={this.state.hardSkillPoints}
                         influencerDataPoints={this.state.avgInfluencerHardSkillPoints}

@@ -166,10 +166,7 @@ class InfluencerPsychBreakdown extends Component {
             </div>
 
         return (
-            <div className="results psychSection blackBackground primary-white">
-                <div className="title secondary-gray center font24px font20pxUnder700 font16pxUnder500 marginBottom20px">
-                    Psychometric Analysis
-                </div>
+            <div className="results psychSection blackBackground primary-white marginTop20px">
                 <div className="statsAndDescription" style={coloredText}>
                     <div className="stats lightBlackBackground">
                         <div className="legend font12px">
