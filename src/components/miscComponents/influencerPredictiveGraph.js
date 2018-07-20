@@ -306,7 +306,7 @@ class InfluencerPredictiveGraph extends Component {
         if (this.props.title) {
             title = (
                 <div className="predictiveGraphTitle secondary-gray center font24px font20pxUnder700 font16pxUnder500">
-                    Predicted Performance
+                    {this.props.title}
                 </div>
             )
         }

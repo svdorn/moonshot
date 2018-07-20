@@ -87,12 +87,6 @@ class Influencer extends Component {
                     y: this.round(user.scores.longevity),
                     confidenceInterval: 0,
                     unavailable: true
-                },
-                {
-                    x: "Culture",
-                    y: this.round(user.scores.culture),
-                    confidenceInterval: 0,
-                    unavailable: true
                 }
             ];
 
@@ -175,12 +169,9 @@ class Influencer extends Component {
 
                  <div className="influencerPageSpacer" />
 
-                <div
-                    className="primary-white center font24px font20pxUnder700 font16pxUnder500">
-                    Skills Evaluation
-                </div>
                 <div>
                     <InfluencerPredictiveGraph
+                        title={"Skills Evaluation"}
                         dataPoints={this.state.hardSkillPoints}
                         height={graphHeight}
                     />
