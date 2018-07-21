@@ -25,6 +25,14 @@ export function usersReducers(state = initialState, action) {
                 userPostedFailed: false
             };
             break;
+        case "POST_LINK_SUCCESS":
+            console.log(action.payload);
+            return {
+                ...state,
+                link: action.payload,
+                loadingSomething: false
+            };
+            break;
         case "GET_USER_FROM_SESSION_REQUEST":
         case "GET_USER_FROM_SESSION_REJECTED":
             return {

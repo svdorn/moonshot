@@ -13,7 +13,9 @@ var signupcodesSchema = mongoose.Schema({
     // the time this code was created
     created: Date,
     // when this code expires and is no longer valid and should be deleted
-    expirationDate: Date
+    expirationDate: Date,
+    // if the code is open for multiple sign ups
+    open: Boolean
 })
 
 var Signupcodes = mongoose.model('Signupcodes', signupcodesSchema);

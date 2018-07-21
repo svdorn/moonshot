@@ -289,7 +289,13 @@ export function submitFreeResponse(userId, verificationToken, frqs) {
                 currentUser: response.data.updatedUser,
                 notification: {message: "Position evaluation complete!", type: "infoHeader"}
             });
-            browserHistory.push("/myEvaluations");
+
+            if (response.data.positionId === "5b2952445635d4c1b9ed7b04" && response.data.businessId === "5b29597efb6fc033f887fda0") {
+                let url = "/influencer?user=" + response.data.updatedUser._id + "&businessId=" + response.data.businessId + "&positionId=" + response.data.positionId;
+                browserHistory.push(url);
+            } else {
+                browserHistory.push("/myEvaluations");
+            }
             window.scrollTo(0, 0);
         })
         .catch(error => {
@@ -346,6 +352,23 @@ export function postEmailInvites(candidateEmails, employeeEmails, adminEmails, c
     }
 }
 
+// POST CREATE LINK
+export function postCreateLink(currentUserInfo) {
+    return function(dispatch) {
+        dispatch({type: "POST_EMAIL_INVITES_REQUESTED"});
+
+        axios.post("/api/business/postCreateLink", {currentUserInfo})
+            // email invites success
+            .then(function(res) {
+                console.log(res)
+                dispatch({type: "POST_LINK_SUCCESS", payload:res.data[0].code});
+            })
+            // error posting email invites
+            .catch(function(err) {
+                dispatch({type: "POST_LINK_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
+            });
+    }
+}
 
 export function addNotification(message, notificationType) {
     return function(dispatch) {
