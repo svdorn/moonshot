@@ -1283,7 +1283,7 @@ form > h1 {
     display: inline-block;
     text-align: center;
     height: 100%;
-    position: relative;
+    position: absolute;
 }
 /* all the elements within point containers are horizontally centered */
 .pointsList > .pointContainer > div {

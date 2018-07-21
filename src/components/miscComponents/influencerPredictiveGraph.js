@@ -256,7 +256,8 @@ class InfluencerPredictiveGraph extends Component {
             const pointContainerWidth = (100.0 / numPoints) - .1;
 
             const pointContainerStyle = {
-                width: `${pointContainerWidth}%`
+                width: `${pointContainerWidth}%`,
+                left: `${pointContainerWidth * (pointCounter - 1)}%`
             }
 
             // labels will be at the same position as the points
@@ -357,7 +358,8 @@ class InfluencerPredictiveGraph extends Component {
             const pointContainerWidth = (100.0 / numPoints) - .1;
 
             const pointContainerStyle = {
-                width: `${pointContainerWidth}%`
+                width: `${pointContainerWidth}%`,
+                left: `${pointContainerWidth * (pointCounter - 1)}%`
             }
 
             // labels will be at the same position as the points
@@ -423,8 +425,8 @@ class InfluencerPredictiveGraph extends Component {
                         <div className="rightYAxisLabel" style={yAxisLabel120Style}>120</div>
                         <div className="rightYAxisLabel" style={yAxisLabel80Style}>80</div>
                         <div className="pointsList">
-                            { points }
                             { influencerPoints }
+                            { points }
                         </div>
                         <div className="xAxisLabelsContainer" style={xAxisLabelsContainerStyle}>
                             { xAxisLabels }
