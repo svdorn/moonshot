@@ -63,6 +63,7 @@ class Influencer extends Component {
             const user = res.data.returnUser;
             const influencers = res.data.returnInfluencers;
 
+            console.log("influencers: ", influencers)
             let name;
             if (this.props.currentUser && (this.props.currentUser._id === userId)) {
                 name = "you";
@@ -122,13 +123,18 @@ class Influencer extends Component {
                     const foundFactor = typeof factorIndex === "number" && factorIndex >= 0;
                     if (foundFactor) {
                         // Add info to that skill
+                        console.log("skill name: ", influencerPsychScores[factorIndex]);
+                        console.log("score before: ", influencerPsychScores[factorIndex].score)
                         influencerPsychScores[factorIndex].score += factor.score;
+                        console.log("score after: ", influencerPsychScores[factorIndex].score)
                         influencerPsychScores[factorIndex].stats.median += factor.stats.median;
                         influencerPsychScores[factorIndex].stats.middle80.maximum = factor.stats.middle80.maximum;
                         influencerPsychScores[factorIndex].stats.middle80.minimum = factor.stats.middle80.minimum;
                         influencerPsychScores[factorIndex].timesSeen++;
                     } else {
                         // Add new skill
+                        console.log("factor: ", factor)
+                        console.log("factor score: ", factor.score);
                         factor.timesSeen = 1;
                         influencerPsychScores.push(factor);
                     }
@@ -169,6 +175,7 @@ class Influencer extends Component {
             // get averages of psych scores
             for (let i = 0; i < influencerPsychScores.length; i++) {
                 let times = influencerPsychScores[i].timesSeen;
+                console.log("name: ", influencerPsychScores[i])
                 influencerPsychScores[i].score = influencerPsychScores[i].score/times;
                 influencerPsychScores[i].stats.median = influencerPsychScores[i].stats.median/times;
                 influencerPsychScores[i].stats.middle80.maximum = influencerPsychScores[i].stats.middle80.maximum/times;
@@ -269,6 +276,7 @@ class Influencer extends Component {
             });
             const foundInfluencer = typeof infIndex === "number" && infIndex >= 0;
             if (foundInfluencer) {
+                console.log("found influencer: ", influencers[infIndex]);
                 let inf = influencers[infIndex];
                 const influencerPsychScores = inf.psychScores;
                 const influencerHardSkillPoints = inf.skillScores.map(skill => {
@@ -370,6 +378,10 @@ class Influencer extends Component {
         } else {
             graphHeight = 250;
         }
+
+        console.log("Average psych score: ", this.state.avgInfluencerPsychScores);
+        console.log("Average hard score: ", this.state.avgInfluencerHardSkillPoints);
+        console.log("average predictive score: ", this.state.avgInfluencerPredictivePoints);
 
         return (
             <div className="analysis center aboutMeSection" style={style.tabContent} key={"analysisSection"}>
