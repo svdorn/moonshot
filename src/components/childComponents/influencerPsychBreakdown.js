@@ -59,6 +59,11 @@ class InfluencerPsychBreakdown extends Component {
 
         if (!Array.isArray(psychScores)) { return null }
 
+        let influencerData = true;
+        if (!Array.isArray(influencerPsychScores) || !influencerPsychScores || influencerPsychScores.length < 1) {
+            influencerData = false;
+        }
+
         const forCandidate = this.props.forCandidate;
 
         const pink = "#ff582d"
@@ -157,7 +162,7 @@ class InfluencerPsychBreakdown extends Component {
                     <div className="middle80indicator" style={{...middle80style, ...middle80indicatorStyle}} />
                     <div className="medianIndicator" style={medianStyle} />
                     <div className="youIndicator" style={youIndicatorStyle}/>
-                    <div className="influencerIndicator" style={influencerIndicatorStyle}>&#9733;</div>
+                    {influencerData ? <div className="influencerIndicator" style={influencerIndicatorStyle}>&#9733;</div> : null}
                 </div>
             )
         });
@@ -217,11 +222,13 @@ class InfluencerPsychBreakdown extends Component {
                                 <br/>
                                 <div className="description">{this.props.name === "you" ? "you" : this.props.name}</div>
                             </div>
+                            {influencerData ?
                             <div className="influencer">
                                 <div className="influencerIndicator" style={{fontSize:"85%"}}>&#9733;</div>
                                 <br/>
                                 <div className="description">{"Influencer"}</div>
                             </div>
+                            : null }
                             <div className="median">
                                 <div className="medianIndicator" />
                                 <br/>

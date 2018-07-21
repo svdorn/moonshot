@@ -99,6 +99,7 @@ class InfluencerPredictiveGraph extends Component {
         const props = this.props;
         const dataPoints = props.dataPoints;
         const influencerDataPoints = props.influencerDataPoints;
+        console.log(influencerDataPoints);
         if (!dataPoints || !influencerDataPoints) {
             return null;
         }
@@ -313,6 +314,12 @@ class InfluencerPredictiveGraph extends Component {
         influencerDataPoints.forEach(point => {
             let label = point.x;
             let yValue = point.y;
+            console.log(yValue)
+            if (typeof yValue !== "number" || Number.isNaN(yValue)) {
+                console.log("here")
+                return;
+            }
+
 
             if (point.unavailable || point.inProgress) { yValue = 100; }
 

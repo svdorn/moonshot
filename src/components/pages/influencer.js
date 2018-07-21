@@ -54,10 +54,6 @@ class Influencer extends Component {
             this.goTo("/");
         }
 
-        if (businessId !== "5b29597efb6fc033f887fda0" || positionId !== "5b2952445635d4c1b9ed7b04") {
-            this.goTo("/");
-        }
-
         axios.get("/api/user/influencerResults", {
             params : {
                 userId, businessId, positionId
@@ -65,7 +61,7 @@ class Influencer extends Component {
         })
         .then(res => {
             const user = res.data.returnUser;
-            const influencers = res.data.returnInfluencers;
+            let influencers = res.data.returnInfluencers;
 
             let name;
             if (this.props.currentUser && (this.props.currentUser._id === userId)) {
