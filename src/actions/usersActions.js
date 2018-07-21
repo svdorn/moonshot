@@ -289,11 +289,8 @@ export function submitFreeResponse(userId, verificationToken, frqs) {
                 currentUser: response.data.updatedUser,
                 notification: {message: "Position evaluation complete!", type: "infoHeader"}
             });
-            console.log("positionId: ", response.data.positionId);
-            console.log("businessId: ", response.data.businessId);
-            console.log("response: ", response);
-            // TODO: replace these with Ease's content marketer position and their businessId
-            if (response.data.positionId === "5b36c49f2a899062a029f59f" && response.data.businessId === "5b36c49f2a899062a029f593") {
+
+            if (response.data.positionId === "5b2952445635d4c1b9ed7b04" && response.data.businessId === "5b29597efb6fc033f887fda0") {
                 let url = "/influencer?user=" + response.data.updatedUser._id + "&businessId=" + response.data.businessId + "&positionId=" + response.data.positionId;
                 browserHistory.push(url);
             } else {
