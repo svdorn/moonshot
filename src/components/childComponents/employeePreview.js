@@ -247,9 +247,9 @@ class EmployeePreview extends Component {
 
         let resultsUrl = "/myEmployees";
         try {
-            const profileUrl = this.props.profileUrl;
+            const employeeId = this.props.employeeId;
             const positionId = this.props.positionId;
-            resultsUrl = `/employeeResults/${profileUrl}/${positionId}`;
+            resultsUrl = `/employeeResults/${employeeId}/${positionId}`;
         } catch (e) {
             // console.log("Error getting results url: ", e);
         }

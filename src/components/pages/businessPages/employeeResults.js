@@ -36,23 +36,26 @@ class EmployeeResults extends Component {
         // set resize listener
         window.addEventListener('resize', this.updateWindowDimensions.bind(this));
 
-        let profileUrl = "";
+        let candidateId = "";
         let businessId = "";
         let positionId = "";
+        console.log(this.props.params);
         try {
-            profileUrl = this.props.params.profileUrl;
+            candidateId = this.props.params.employeeId;
             businessId = this.props.currentUser.businessInfo.businessId;
             positionId = this.props.params.positionId;
         } catch (e) {
-            this.goTo("/myCandidates");
+            this.goTo("/myEmployees");
         }
+
+        console.log("candidateId: ", candidateId);
 
         // backend call to get results info
         axios.get("/api/business/evaluationResults", {
             params : {
                 userId: this.props.currentUser._id,
                 verificationToken: this.props.currentUser.verificationToken,
-                profileUrl, businessId, positionId
+                candidateId, businessId, positionId
             }
         })
         .then(res => {
