@@ -145,7 +145,7 @@ async function sendEmailInvite(emailInfo, positionName, businessName, moonshotUr
         // defining it before the call saves a bit of time
         if (!moonshotUrl) {
             // this is where all links will go
-            moonshotUrl = process.env.NODE_ENV === "development" ? "http://localhost:8081/" : "https://www.moonshotinsights.io/";
+            moonshotUrl = process.env.NODE_ENV === "development" ? "http://localhost:8081/" : "https://moonshotinsights.io/";
         }
 
         // the button linking to the signup page with the signup code in the url
@@ -239,7 +239,7 @@ async function POST_emailInvites(req, res) {
     }
 
     // where links in the email will go
-    let moonshotUrl = 'https://www.moonshotinsights.io/';
+    let moonshotUrl = 'https://moonshotinsights.io/';
     // if we are in development, links are to localhost
     if (process.env.NODE_ENV === "development") {
         moonshotUrl = 'http://localhost:8081/';
@@ -319,7 +319,7 @@ async function POST_createLink(req, res) {
     }
 
     // where links in the email will go
-    let moonshotUrl = 'https://www.moonshotinsights.io/';
+    let moonshotUrl = 'https://moonshotinsights.io/';
     // if we are in development, links are to localhost
     if (process.env.NODE_ENV === "development") {
         moonshotUrl = 'http://localhost:8081/';

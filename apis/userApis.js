@@ -1682,7 +1682,7 @@ async function POST_forgotPassword(req, res) {
     }
 
     // if we're in development (on localhost), links go to localhost
-    let moonshotUrl = "https://www.moonshotinsights.io/";
+    let moonshotUrl = "https://moonshotinsights.io/";
     if ( process.env.NODE_ENV === "development") {
         moonshotUrl = "http://localhost:8081/";
     }

@@ -220,7 +220,7 @@ class InfluencerPsychBreakdown extends Component {
                                     width: "8px", height: "8px"
                                 }} />
                                 <br/>
-                                <div className="description">{this.props.name === "you" ? "you" : this.props.name}</div>
+                                <div className="description">{this.props.name === "you" ? "You" : this.props.name}</div>
                             </div>
                             {influencerData ?
                             <div className="influencer">

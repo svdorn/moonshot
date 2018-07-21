@@ -29,7 +29,7 @@ function POST_createReferralCode(req, res) {
 
     let sendReferralEmail = function(theCode) {
         // if we're in development (on localhost) navigate to localhost
-        let moonshotUrl = "https://www.moonshotinsights.io/";
+        let moonshotUrl = "https://moonshotinsights.io/";
         if (process.env.NODE_ENV === "development") {
             moonshotUrl = "http://localhost:8081/";
         }
