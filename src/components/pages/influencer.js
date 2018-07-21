@@ -282,11 +282,6 @@ class Influencer extends Component {
                         x: "Performance",
                         y: this.round(inf.scores.performance),
                         confidenceInterval: 8
-                    },
-                    {
-                        x: "Longevity",
-                        y: this.round(inf.scores.longevity),
-                        confidenceInterval: 8
                     }
                 ];
                 self.setState({
@@ -383,7 +378,7 @@ class Influencer extends Component {
 
                 <div>
                     <div className="secondary-gray center font24px font20pxUnder700 font16pxUnder500 marginBottom10px">
-                        Psychometric Analysis
+                        Predictive Insights
                     </div>
                     {this.dropdown("Psych Breakdown")}
                     <InfluencerPsychBreakdown
