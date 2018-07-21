@@ -361,7 +361,7 @@ class Influencer extends Component {
             <div className="analysis center aboutMeSection" style={style.tabContent} key={"analysisSection"}>
                 <div>
                     <div className="secondary-gray center font24px font20pxUnder700 font16pxUnder500 marginBottom10px">
-                        Predicted Performance
+                        Predictive Insights
                     </div>
                     {this.dropdown("Predictive Points")}
                     <InfluencerPredictiveGraph
@@ -375,7 +375,7 @@ class Influencer extends Component {
 
                 <div>
                     <div className="secondary-gray center font24px font20pxUnder700 font16pxUnder500 marginBottom10px">
-                        Predictive Insights
+                        Psychometric Analysis
                     </div>
                     {this.dropdown("Psych Breakdown")}
                     <InfluencerPsychBreakdown
