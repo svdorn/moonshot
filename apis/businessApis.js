@@ -1257,6 +1257,7 @@ async function GET_evaluationResults(req, res) {
     const userId = sanitize(req.query.candidateId);
     const positionId = sanitize(req.query.positionId);
     const positionIdString = positionId.toString();
+    console.log("userId", userId);
 
     // verify biz user, get candidate/employee, find and verify candidate's/employee's position
     let bizUser, user, userPositionIndex, psychTest;
