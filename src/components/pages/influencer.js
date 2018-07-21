@@ -54,6 +54,10 @@ class Influencer extends Component {
             this.goTo("/");
         }
 
+        if (positionId !== "5b2952445635d4c1b9ed7b04" || businessId !== "5b29597efb6fc033f887fda0") {
+            this.goTo("/");
+        }
+
         axios.get("/api/user/influencerResults", {
             params : {
                 userId, businessId, positionId
