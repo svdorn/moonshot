@@ -254,7 +254,8 @@ class PredictiveGraph extends Component {
             const pointContainerWidth = (100.0 / numPoints) - .1;
 
             const pointContainerStyle = {
-                width: `${pointContainerWidth}%`
+                width: `${pointContainerWidth}%`,
+                left: `${pointContainerWidth * (pointCounter - 1)}%`
             }
 
             // labels will be at the same position as the points
