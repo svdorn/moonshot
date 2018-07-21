@@ -415,7 +415,7 @@ function POST_sendVerificationEmail(req, res) {
     let email = sanitize(req.body.email);
     let query = {email: email};
 
-    let moonshotUrl = 'https://www.moonshotinsights.io/';
+    let moonshotUrl = 'https://moonshotinsights.io/';
     // if we are in development, links are to localhost
     if (process.env.NODE_ENV === "development") {
         moonshotUrl = 'http://localhost:8081/';
