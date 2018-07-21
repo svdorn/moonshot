@@ -166,7 +166,7 @@ function POST_candidate(req, res) {
         }
 
         // delete the used sign up code
-        try { await Signupcodes.deleteOne({ _id: codeId }); }
+        try { await Signupcodes.deleteOne({ _id: codeId, open: false }); }
         catch (deleteCodeError) {
             console.log("error deleting sign up code: ", deleteCodeError);
             // don't stop execution since the user has already been created
@@ -265,7 +265,7 @@ function POST_candidate(req, res) {
             // check if the code has expired
             if ((new Date()).getTime() > dbCode.expirationDate.getTime()) {
                 // if it has expired, delete the code
-                await Signupcodes.deleteOne({ _id: dbCode._id });
+                await Signupcodes.deleteOne({ _id: dbCode._id, open: false });
                 // and tell the user that their code expired
                 return reject({status: 400, message: "That code has expired. Ask the employer to send a new one.", error: "code expired"});
             }
@@ -415,7 +415,7 @@ function POST_sendVerificationEmail(req, res) {
     let email = sanitize(req.body.email);
     let query = {email: email};
 
-    let moonshotUrl = 'https://www.moonshotinsights.io/';
+    let moonshotUrl = 'https://moonshotinsights.io/';
     // if we are in development, links are to localhost
     if (process.env.NODE_ENV === "development") {
         moonshotUrl = 'http://localhost:8081/';

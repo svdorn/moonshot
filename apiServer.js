@@ -71,13 +71,13 @@ app.use(session({
 
 // --->> TEST WEBHOOKS <<--- //
 
-const WebHooks = require("node-webhooks");
-// add the place that stores webhooks
-webHooks = new WebHooks({
-    db: {
-        "testHookStorage": [ "http://localhost:8081/testHooks" ]
-    }
-});
+// const WebHooks = require("node-webhooks");
+// // add the place that stores webhooks
+// webHooks = new WebHooks({
+//     db: {
+//         "testHookStorage": [ "http://localhost:8081/testHooks" ]
+//     }
+// });
 // add a new webhook
 // webHooks.add("testHook1", "https://hooks.zapier.com/hooks/catch/3540048/wju5zh/")
 // .then(function() {
@@ -128,9 +128,11 @@ app.post('/user/forgotPassword', userApis.POST_forgotPassword);
 app.post('/user/changeSettings', userApis.POST_changeSettings);
 app.get('/user/positions', userApis.GET_positions);
 app.get("/user/adminQuestions", userApis.GET_adminQuestions);
+app.get("/user/influencerResults", userApis.GET_influencerResults);
 app.post("/user/answerAdminQuestion", userApis.POST_answerAdminQuestion);
 app.post("/user/sawEvaluationIntro", userApis.POST_sawEvaluationIntro);
 app.post("/user/agreeToTerms", userApis.POST_agreeToTerms);
+app.post("/user/verifyFromApiKey", userApis.POST_verifyFromApiKey);
 
 app.post('/candidate/candidate', candidateApis.POST_candidate);
 app.post("/candidate/endOnboarding", candidateApis.POST_endOnboarding);
@@ -147,6 +149,7 @@ app.post('/business/contactUsEmail', businessApis.POST_contactUsEmail);
 app.post("/business/updateHiringStage", businessApis.POST_updateHiringStage);
 app.post("/business/answerQuestion", businessApis.POST_answerQuestion);
 app.post("/business/postEmailInvites", businessApis.POST_emailInvites);
+app.post("/business/postCreateLink", businessApis.POST_createLink);
 app.post("/business/rateInterest", businessApis.POST_rateInterest);
 app.post("/business/changeHiringStage", businessApis.POST_changeHiringStage);
 app.post("/business/moveCandidates", businessApis.POST_moveCandidates);

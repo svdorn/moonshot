@@ -1055,6 +1055,13 @@ form > h1 {
     transform: translate(-50%, -50%);
 }
 
+.influencerSelection {
+    -webkit-box-shadow: 0 0 5px 2px rgba(0,0,0,.5);
+    -moz-box-shadow:    0 0 5px 2px rgba(0,0,0,.5);
+    box-shadow:        0 0 5px 2px rgba(0,0,0,.5);
+    padding: 3px;
+}
+
 
 
 #businessHomeStatistics div {
@@ -1209,6 +1216,14 @@ form > h1 {
 .predictiveGraphInterior {
     position: relative;
 }
+.predictiveGraphInterior > .yAxisInfluencer {
+    position: absolute;
+    height: 100%;
+    left: 0;
+    width: 4px;
+    background: linear-gradient(to top, #ff582d, #fd0d8b);
+    border-radius: 2px;
+}
 .predictiveGraphInterior > .yAxis {
     position: absolute;
     height: 100%;
@@ -1268,7 +1283,7 @@ form > h1 {
     display: inline-block;
     text-align: center;
     height: 100%;
-    position: relative;
+    position: absolute;
 }
 /* all the elements within point containers are horizontally centered */
 .pointsList > .pointContainer > div {
@@ -1403,6 +1418,10 @@ form > h1 {
 .youIndicator {
     border-radius: 100%;
     background-color: white;
+    display: inline-block;
+}
+.influencerIndicator {
+    color: var(--primary-white);
     display: inline-block;
 }
 .medianIndicator {
@@ -3282,6 +3301,12 @@ button.link {
     height: 2px;
     margin: 70px auto;
     background: linear-gradient(to right, #ae7efc, #75dcfc);
+}
+.influencerPageSpacer {
+    width: 40%;
+    height: 2px;
+    margin: 70px auto;
+    background: linear-gradient(to right, var(--primary-pink), var(--primary-orange));
 }
 .pinkToOrangeSpacer {
     width: 60%;
