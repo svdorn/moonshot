@@ -70,7 +70,6 @@ async function GET_influencerResults(req, res) {
     ];
 
     const candidateQuery = {
-        "userType": "candidate",
         "_id": mongoose.Types.ObjectId(userId),
         "positions": {
             "$elemMatch": {
