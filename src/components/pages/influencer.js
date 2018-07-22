@@ -34,7 +34,7 @@ class Influencer extends Component {
             loading: true,
             areaSelected: undefined,
             windowWidth: window.innerWidth,
-            name: "you",
+            name: "",
             // stuff for modal
             open: false,
             description: "",
