@@ -2,11 +2,11 @@
 import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
-import {updateUser} from '../../actions/usersActions';
+import {updateUser} from '../../../actions/usersActions';
 import {TextField, RaisedButton, Paper, CircularProgress} from 'material-ui';
 import {Field, reduxForm, change} from 'redux-form';
 import axios from 'axios';
-import { renderTextField, renderPasswordField, isValidEmail } from "../../miscFunctions";
+import { renderTextField, renderPasswordField, isValidEmail } from "../../../miscFunctions";
 
 
 const validate = values => {

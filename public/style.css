@@ -1515,6 +1515,13 @@ form > h1 {
 }
 
 
+.fake-input {
+    background: none;
+    border: none;
+    width: 256px;
+}
+
+
 #menuDropdown:hover + div,
 #menuDropdown.currentRoute + div  {
     display: inline-block;

@@ -522,21 +522,50 @@ async function getAndVerifyUser(userId, verificationToken) {
             user = await Users.findById(userId);
         } catch (getUserError) {
             console.log("Error getting user from the database: ", getUserError);
-            reject({status: 500, message: "Server error, try again later", error: getUserError});
+            return reject({status: 500, message: "Server error, try again later", error: getUserError});
         }
 
         if (!user) {
             console.log("User not found from id: ", userId);
-            reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
+            return reject({status: 404, message: "User not found. Contact Moonshot.", error: `No user with id ${userId}.`})
         }
 
         // verify user's identity
         if (!verificationToken && user.verificationToken !== verificationToken) {
             console.log(`Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`);
-            reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
+            return reject({status: 500, message: "Invalid credentials.", error: `Mismatched verification token. Given: ${verificationToken}, should be: ${user.verificationToken}`});
         }
 
-        resolve(user);
+        return resolve(user);
+    })
+}
+
+
+// DANGEROUS, returns user with all fields
+async function getUserAndBusiness(userId, verificationToken) {
+    return new Promise(async function(resolve, reject) {
+        // get the user
+        try { var user = await getAndVerifyUser(userId, verificationToken); }
+        // just throw any caught error for the caller to deal with
+        catch (error) { return reject(error); }
+
+        // have to work for a company
+        if (!user.businessInfo || !user.businessInfo.businessId) {
+            return reject({status: 403, message: errors.PERMISSIONS_ERROR, error: "Business id not provided within user object."});
+        }
+
+        // get the business the user works for
+        try { var business = await Businesses.findById(user.businessInfo.businessId); }
+        catch (getBusinessError) {
+            return reject({status: 500, message: errors.SERVER_ERROR, error: getBusinessError})
+        }
+
+        // if no business was found, return unsuccessfully
+        if (!business) {
+            return reject({status: 500, message: errors.SERVER_ERROR, error: "No business found from business id."});
+        }
+
+        return resolve({user, business});
     })
 }
 
@@ -643,6 +672,7 @@ const helperFunctions = {
     randomInt,
     frontEndUser,
     getAndVerifyUser,
+    getUserAndBusiness,
     speedTest,
     lastPossibleSecond,
     findNestedValue,

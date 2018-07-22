@@ -11,6 +11,7 @@ const crypto = require('crypto');
 const { sanitize,
         sendEmail,
         getAndVerifyUser,
+        getUserAndBusiness,
         frontEndUser,
         speedTest,
         lastPossibleSecond
@@ -41,6 +42,8 @@ const businessApis = {
     GET_employeeQuestions,
     GET_positions,
     GET_evaluationResults,
+    GET_apiKey,
+    POST_resetApiKey,
 
     createEmailInfo,
     sendEmailInvite
@@ -1529,9 +1532,32 @@ async function POST_sawMyCandidatesInfoBox(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    console.log("new user: ", user);
-
     return res.json(frontEndUser(user));
+}
+
+
+// get the api key for the api key settings page
+async function GET_apiKey(req, res) {
+    // get user credentials
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    // get the user and business
+    try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
+    catch (error) {
+        console.log("Error finding user who was trying to see their api key: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    return res.status(200).json(business.API_Key);
+}
+
+
+// reset a company's api key
+async function POST_resetApiKey(req, res) {
+    // TODO
+
+    res.status(200).send("Nothing here yet!");
 }
 
 
