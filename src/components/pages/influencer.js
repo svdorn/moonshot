@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
-import {Tabs, Tab, Slider, CircularProgress,Divider} from 'material-ui';
+import {Tabs, Tab, Slider, CircularProgress,Divider, Dialog, FlatButton} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -317,6 +317,10 @@ class Influencer extends Component {
         this.setState({open: true, description, link});
     }
 
+    handleClose = () => {
+        this.setState({open: false, description: "", link: ""});
+    }
+
     dropdown(type) {
         // the hint that shows up when search bar is in focus
         const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
@@ -423,6 +427,14 @@ class Influencer extends Component {
     }
 
     render() {
+        const actions = [
+            <FlatButton
+                label="Close"
+                onClick={this.handleClose}
+                className="primary-white-important"
+            />,
+        ];
+
         const user = this.props.currentUser;
         const candidate = this.state.candidate;
         const hardSkills = this.state.hardSkills;
@@ -441,6 +453,23 @@ class Influencer extends Component {
                 <div>
                     {candidate ?
                         <div className="marginTop20px">
+                            <Dialog
+                                actions={actions}
+                                modal={false}
+                                open={this.state.open}
+                                onRequestClose={this.handleClose}
+                                autoScrollBodyContent={true}
+                                paperClassName="dialogForBiz"
+                                contentClassName="center"
+                                overlayClassName="dialogOverlay"
+                            >
+                                <div className="font16px secondary-gray" style={{width:"95%", margin: "30px auto"}}>
+                                    {this.state.description}
+                                </div>
+                                <div className="font16px primary-cyan" style={{width:"99%", margin: "30px auto", wordBreak: "break-all"}}>
+                                    {this.state.link}
+                                </div>
+                            </Dialog>
                             <div className="blackBackground paddingBottom40px center">
                                 <div className="font32px font26pxUnder700 font24font16pxUnder500 secondary-red">
                                     Ease Standard
@@ -459,21 +488,21 @@ class Influencer extends Component {
                                             <div className="secondary-gray font16px marginBottom5px">
                                                 Share Results
                                             </div>
-                                            <div className="clickable inline" onClick={this.handleShareResults}>
+                                            <div className="clickable inline" onClick={this.handleShareResults.bind(this)}>
                                                 <img
                                                     alt="Facebook Logo"
                                                     width={13}
                                                     height={20}
                                                     src={"/logos/Facebook" + this.props.png}/>
                                             </div>
-                                            <div className="clickable marginLeft20px inline" onClick={this.handleShareResults}>
+                                            <div className="clickable marginLeft20px inline" onClick={this.handleShareResults.bind(this)}>
                                                 <img
                                                     alt="Twitter Logo"
                                                     width={20}
                                                     height={20}
                                                     src={"/logos/Twitter" + this.props.png}/>
                                             </div>
-                                            <div className="clickable marginLeft20px inline" onClick={this.handleShareResults}>
+                                            <div className="clickable marginLeft20px inline" onClick={this.handleShareResults.bind(this)}>
                                                 <img
                                                     alt="LinkedIn Logo"
                                                     width={20}
@@ -487,7 +516,7 @@ class Influencer extends Component {
                                     <div className="secondary-gray font16px marginBottom5px">
                                         Invite Friends
                                     </div>
-                                    <div className="clickable" onClick={this.handleInviteFriends}>
+                                    <div className="clickable" onClick={this.handleInviteFriends.bind(this)}>
                                         <img
                                             alt="Mail Icon"
                                             width={30}
