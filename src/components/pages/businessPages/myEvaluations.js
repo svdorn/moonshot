@@ -160,7 +160,7 @@ class MyEvaluations extends Component {
         const style = {
             separator: {
                 width: "70%",
-                margin: "25px auto 25px",
+                margin: "25px auto 0",
                 position: "relative",
                 height: "40px",
                 textAlign: "center"
@@ -361,6 +361,8 @@ class MyEvaluations extends Component {
                 {dialog}
                 <div style={style.separator}>
                     <div style={style.separatorLine}/>
+                </div>
+                <div className="center" style={{margin: "-42px auto 20px"}}>
                     <div style={style.separatorText}>
                         My Evaluations
                     </div>
