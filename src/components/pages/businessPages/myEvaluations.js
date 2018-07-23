@@ -226,6 +226,7 @@ class MyEvaluations extends Component {
                         attributes.name = position.name;
                         attributes.logo = self.state.logo;
                         attributes.length = position.length;
+                        attributes.positionKey = position._id;
                         attributes.skills = position.skillNames;
                         attributes.company = self.state.businessName;
                         attributes.completions = position.completions;
