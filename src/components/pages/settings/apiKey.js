@@ -2,11 +2,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { resetApiKey } from '../../../actions/usersActions';
 import { TextField, RaisedButton, Paper, CircularProgress } from 'material-ui';
 import axios from "axios";
 import { Field, reduxForm } from 'redux-form';
 import { renderPasswordField } from "../../../miscFunctions";
+import { addNotification } from "../../../actions/usersActions";
 
 
 const validate = values => {
@@ -42,8 +42,15 @@ class PasswordChange extends Component {
             userId: this.props.currentUser._id,
             verificationToken: this.props.currentUser.verificationToken
         }
+
         // error that will be shown if the api key cannot be retrieved
-        const getApiKeyError = "Error getting API Key.";
+        const errorState = {
+            // tell the user there is an error
+            apiKey: "Error getting API Key.",
+            // show the error
+            apiKeyVisible: true
+        }
+
         // get the api key from the back end
         axios.get("/api/business/apiKey", {params: credentials})
         // on success, get the api key from the response
@@ -55,20 +62,14 @@ class PasswordChange extends Component {
             }
             // if the response did not contain the api key, set an error message
             else {
-                this.setState({
-                    apiKey: getApiKeyError,
-                    apiKeyVisible: true
-                });
+                this.setState(errorState);
                 console.log("Response did not contain API Key.");
             }
         })
         // if there is some error getting the api key from the backend
         .catch(error => {
             // set an error where the api key goes in the UI
-            this.setState({
-                apiKey: getApiKeyError,
-                apiKeyVisible: true
-            })
+            this.setState(errorState)
             console.log(error);
         });
     }
@@ -96,14 +97,43 @@ class PasswordChange extends Component {
         // if a required field is empty, do not reset api key
         if (notValid) return;
 
+        return this.resetApiKey();
+    }
+
+
+    // actually reset the api key after verifying all fields filled out
+    resetApiKey() {
         // info the server needs to reset the api key
-        const user = {
+        const credentials = {
             userId: this.props.currentUser._id,
+            verificationToken: this.props.currentUser.verificationToken,
             password: this.props.formData.resetApiKey.values.password
         };
 
         // reset the api key
-        this.props.resetApiKey(user);
+        axios.post("/api/business/resetApiKey", credentials)
+        // successful response
+        .then(response => {
+            // if response is correctly recieved ...
+            if (response && typeof response.data === "string") {
+                // ... alter the UI to match it
+                this.setState({
+                    // the new api key
+                    apiKey: response.data,
+                })
+            }
+            // otherwise ...
+            else {
+                // let the user know there was an error
+                this.props.addNotification("Error resetting API Key.", "error");
+            }
+        })
+        // error resetting api key
+        .catch(error => {
+            console.log(error);
+            // let the user know there was an error
+            this.props.addNotification(error.response && error.response.data ? error.response.data : "Error resetting API Key.", "error");
+        })
     }
 
 
@@ -157,7 +187,7 @@ class PasswordChange extends Component {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        resetApiKey,
+        addNotification
     }, dispatch);
 }
 

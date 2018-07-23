@@ -45,6 +45,7 @@ const businessApis = {
     GET_apiKey,
     POST_resetApiKey,
 
+    generateApiKey,
     createEmailInfo,
     sendEmailInvite
 }
@@ -1545,8 +1546,13 @@ async function GET_apiKey(req, res) {
     // get the user and business
     try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
     catch (error) {
-        console.log("Error finding user who was trying to see their api key: ", error);
+        console.log("Error finding user/business trying to see their api key: ", error);
         return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    // user has to be an account admin to see the api key
+    if (user.userType !== "accountAdmin") {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
     }
 
     return res.status(200).json(business.API_Key);
@@ -1555,9 +1561,84 @@ async function GET_apiKey(req, res) {
 
 // reset a company's api key
 async function POST_resetApiKey(req, res) {
-    // TODO
+    // get user credentials
+    const userId = sanitize(req.body.userId);
+    const password = sanitize(req.body.password)
+    const verificationToken = sanitize(req.body.verificationToken);
 
-    res.status(200).send("Nothing here yet!");
+    // get the user and business
+    try { var [user, newApiKey] = await Promise.all([
+        getAndVerifyUser(userId, verificationToken),
+        generateApiKey()
+    ]); }
+    catch (error) {
+        console.log("Error finding user who was trying to change their api key OR error generating new api key: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    // make sure the user has the right password
+    if (!(await bcrypt.compare(password, user.password))) {
+        return res.status(403).send("Wrong password.");
+    }
+
+    // make sure the generated api key is relevant
+    if (typeof newApiKey !== "string" || newApiKey.length !== 24) {
+        console.log("New Api Key was either not a string or had the wrong length.");
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // user has to be an account admin to change the api key
+    if (user.userType !== "accountAdmin") {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // get the id of the business the user works for
+    try { var businessId = user.businessInfo.businessId; }
+    catch (getBizIdError) {
+        console.log("User trying to update api key did not have an associated business.");
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+    // query to get the business the user works for
+    const find = { "_id": user.businessInfo.businessId };
+    // query to update the business api key
+    const update = { "API_Key": newApiKey }
+
+    try { await Businesses.findOneAndUpdate(find, update); }
+    catch (updateBizError) {
+        console.log("Error updating business to have a new api key: ", updateBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    return res.status(200).send(newApiKey);
+}
+
+
+// creates a unique api key for a business
+async function generateApiKey() {
+    return new Promise(async function(resolve, reject) {
+        // get a list of all current API_Keys
+        try {
+            // find all other businesses
+            const otherBusinesses = await Businesses.find({}).select("API_Key");
+            // an array of the api keys of every other business
+            var existingKeys = otherBusinesses.map(biz => { return biz.API_Key; });
+        } catch (getKeysError) {
+            console.log("Error getting all keys of other businesses.");
+            return reject({status: 500, message: errors.SERVER_ERROR, error: getKeysError})
+        }
+
+        // placeholder for api key
+        let API_Key = "";
+        // continue to generate random api keys ...
+        do { API_Key = crypto.randomBytes(12).toString("hex"); }
+        // ... until the key does not exist in the array of every other key
+        while (existingKeys.includes(API_Key));
+
+        console.log("new api key:", API_Key);
+
+        // return the new api key
+        return resolve(API_Key);
+    });
 }
 
 
