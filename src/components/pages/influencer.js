@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import {browserHistory} from 'react-router';
 import {closeNotification} from "../../actions/usersActions";
 import {bindActionCreators} from 'redux';
-import {Tabs, Tab, Slider, CircularProgress,Divider} from 'material-ui';
+import {Tabs, Tab, Slider, CircularProgress,Divider, Dialog, FlatButton} from 'material-ui';
 import {ScatterChart, Scatter, XAxis, YAxis, ResponsiveContainer, LabelList} from 'recharts';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -34,7 +34,11 @@ class Influencer extends Component {
             loading: true,
             areaSelected: undefined,
             windowWidth: window.innerWidth,
-            name: "you"
+            name: "",
+            // stuff for modal
+            open: false,
+            description: "",
+            link: ""
         };
     }
 
@@ -54,9 +58,9 @@ class Influencer extends Component {
             this.goTo("/");
         }
 
-        if (positionId !== "5b2952445635d4c1b9ed7b04" || businessId !== "5b29597efb6fc033f887fda0") {
-            this.goTo("/");
-        }
+        // if (positionId !== "5b2952445635d4c1b9ed7b04" || businessId !== "5b29597efb6fc033f887fda0") {
+        //     this.goTo("/");
+        // }
 
         axios.get("/api/user/influencerResults", {
             params : {
@@ -298,6 +302,25 @@ class Influencer extends Component {
         }
     }
 
+    handleShareResults() {
+        const userId = this.props.location.query.user;
+        const businessId = this.props.location.query.businessId;
+        const positionId = this.props.location.query.positionId;
+        const description = "Share your results to social media by copy and pasting this link:";
+        const link = "https://moonshotinsights.io/influencer?user=" + userId + "&businessId=" + businessId + "&positionId=" + positionId;
+        this.setState({open: true, description, link});
+    }
+
+    handleInviteFriends() {
+        const description = "Invite your friends to take the Ease Content Marketer evaluation with this link:";
+        const link = "https://moonshotinsights.io/signup?code=46ddd01e7e";
+        this.setState({open: true, description, link});
+    }
+
+    handleClose = () => {
+        this.setState({open: false, description: "", link: ""});
+    }
+
     dropdown(type) {
         // the hint that shows up when search bar is in focus
         const searchHintStyle = { color: "rgba(255, 255, 255, .3)" }
@@ -358,7 +381,7 @@ class Influencer extends Component {
         }
 
         return (
-            <div className="analysis center aboutMeSection" style={style.tabContent} key={"analysisSection"}>
+            <div className="analysis center aboutMeSection marginTop40px" style={style.tabContent} key={"analysisSection"}>
                 <div>
                     <div className="secondary-gray center font24px font20pxUnder700 font16pxUnder500 marginBottom10px">
                         Predictive Insights
@@ -404,6 +427,14 @@ class Influencer extends Component {
     }
 
     render() {
+        const actions = [
+            <FlatButton
+                label="Close"
+                onClick={this.handleClose}
+                className="primary-white-important"
+            />,
+        ];
+
         const user = this.props.currentUser;
         const candidate = this.state.candidate;
         const hardSkills = this.state.hardSkills;
@@ -422,17 +453,80 @@ class Influencer extends Component {
                 <div>
                     {candidate ?
                         <div className="marginTop20px">
+                            <Dialog
+                                actions={actions}
+                                modal={false}
+                                open={this.state.open}
+                                onRequestClose={this.handleClose}
+                                autoScrollBodyContent={true}
+                                paperClassName="dialogForBiz"
+                                contentClassName="center"
+                                overlayClassName="dialogOverlay"
+                            >
+                                <div className="font16px secondary-gray" style={{width:"95%", margin: "30px auto"}}>
+                                    {this.state.description}
+                                </div>
+                                <div className="font16px primary-cyan" style={{width:"99%", margin: "30px auto", wordBreak: "break-all"}}>
+                                    {this.state.link}
+                                </div>
+                            </Dialog>
                             <div className="blackBackground paddingBottom40px center">
                                 <div className="font32px font26pxUnder700 font24font16pxUnder500 secondary-red">
                                     Ease Standard
                                 </div>
-                                <div className="secondary-gray font18px font16pxUnder700 font14pxUnder500 marginBottom40px marginTop10px">
+                                <div className="secondary-gray font18px font16pxUnder700 font14pxUnder500 marginBottom20px marginTop10px">
                                     {this.state.name === "you" ?
                                         <div>See how {this.state.name} compare to top Content Marketing Influencers.</div>
                                     :
                                         <div>See how {this.state.name} compares to top Content Marketing Influencers.</div>
                                     }
                                 </div>
+                                {this.state.name === "you" ?
+                                <ul className="horizCenteredList marginBottom20px">
+                                    <li className="center">
+                                        <div style={{marginTop: "10px"}}>
+                                            <div className="secondary-gray font16px marginBottom5px">
+                                                Share Results
+                                            </div>
+                                            <div className="clickable inline" onClick={this.handleShareResults.bind(this)}>
+                                                <img
+                                                    alt="Facebook Logo"
+                                                    width={13}
+                                                    height={20}
+                                                    src={"/logos/Facebook" + this.props.png}/>
+                                            </div>
+                                            <div className="clickable marginLeft20px inline" onClick={this.handleShareResults.bind(this)}>
+                                                <img
+                                                    alt="Twitter Logo"
+                                                    width={20}
+                                                    height={20}
+                                                    src={"/logos/Twitter" + this.props.png}/>
+                                            </div>
+                                            <div className="clickable marginLeft20px inline" onClick={this.handleShareResults.bind(this)}>
+                                                <img
+                                                    alt="LinkedIn Logo"
+                                                    width={20}
+                                                    height={20}
+                                                    src={"/logos/LinkedIn" + this.props.png}/>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    <li className="center">
+                                    <div className="marginTop10px marginLeft30px">
+                                    <div className="secondary-gray font16px marginBottom5px">
+                                        Invite Friends
+                                    </div>
+                                    <div className="clickable" onClick={this.handleInviteFriends.bind(this)}>
+                                        <img
+                                            alt="Mail Icon"
+                                            width={30}
+                                            height={20}
+                                            src={"/icons/Mail" + this.props.png}/>
+                                    </div>
+                                    </div>
+                                    </li>
+                                </ul>
+                                : null }
                                 {analysisSection}
                             </div>
 
