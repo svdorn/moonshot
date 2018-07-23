@@ -15,6 +15,7 @@ import MyEvaluations from './components/pages/businessPages/myEvaluations';
 import Results from './components/pages/businessPages/results';
 import EmployeeResults from './components/pages/businessPages/employeeResults';
 import Billing from './components/pages/businessPages/billing';
+import Onboarding from './components/pages/businessPages/onboarding';
 import BusinessHome from './components/pages/businessHome';
 import Influencer from './components/pages/influencer';
 import Main from './main';
@@ -69,6 +70,7 @@ const routes = (
             <Route path="results/:profileUrl/:positionId" component={AuthenticatedComponent} page={<Results />} userType={businessAdminUserTypes} />
             <Route path="employeeResults/:employeeId/:positionId" component={AuthenticatedComponent} page={<EmployeeResults />} userType={businessAdminUserTypes} />
             <Route path="billing" component={AuthenticatedComponent} page={<Billing />} userType={businessAdminUserTypes} />
+            <Route path="onboarding" component={AuthenticatedComponent} page={<Onboarding />} userType={businessAdminUserTypes} />
             <Route path="settings" component={AuthenticatedComponent} page={<Settings/>}/>
             <Route path="listing" component={Listing} />
             <Route path="influencer" component={Influencer} />
