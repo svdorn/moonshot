@@ -41,6 +41,7 @@ const FOR_USER = [
     "hasFinishedOnboarding",
     "positions",
     "referredByCode",
+    "onboarding",
     "verified",
     "skills",
     "skillTests",

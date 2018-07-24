@@ -38,6 +38,15 @@ const usersSchema = mongoose.Schema({
     signUpReferralCode: String,
     // if false, should route user to onboarding on login
     hasFinishedOnboarding: Boolean,
+    // Employer onboarding
+    onboarding: {
+        // The current step the employer is on in onboarding
+        step: Number,
+        // The percent completion on the current step in onboarding
+        percent: Number,
+        // If the employer is done with onboarding
+        complete: Boolean
+    },
     // used to verify identity
     verificationToken: String,
     // sent to user's email address, used to verify user's account
