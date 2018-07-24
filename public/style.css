@@ -2441,7 +2441,7 @@ button.link {
 /* select boxes need to be moved down a bit since they aren't as tall */
 .myCandidates .candidateTable td:nth-child(1) {
     width: 40px;
-    padding-top: 9px;
+    padding-top: 7px;
 }
 /* width for name */
 .myCandidates .candidateTable td:nth-child(2) {
