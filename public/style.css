@@ -657,6 +657,35 @@ form > h1 {
 }
 /* END BASELINE EVAL PAGE GRID */
 
+#employerOnboarding {
+    max-width: 1300px;
+    width: 90%;
+    margin: auto;
+    min-width: 300px;
+}
+
+#employerOnboarding > .onboardingLeft {
+    background: #2a2a2a;
+    width: 340px;
+    height: 100%;
+    display: inline-block;
+    float: left;
+    -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
+    -moz-box-shadow:    0 0 80px 1px rgba(0,0,0,.5);
+    box-shadow:         0 0 80px 1px rgba(0,0,0,.5);
+}
+
+#employerOnboarding > .onboardingRight {
+    width: calc(100% - 340px);
+    text-align: center;
+    position: relative;
+    display: inline-block;
+    height: 100%;
+    -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
+    -moz-box-shadow:    0 0 80px 1px rgba(0,0,0,.5);
+    box-shadow:         0 0 80px 1px rgba(0,0,0,.5);
+}
+
 
 .businessHome.frontPage {
     position: relative;
@@ -2934,6 +2963,12 @@ button.link {
 }
 .checkbox > .checkMarkfalse { visibility: hidden; }
 .checkbox > .checkMarktrue { visibility: visible; }
+
+.checkmark {
+    height:15px;
+    width:15px;
+    margin: 0 5px 5px;
+}
 
 .onboardingLeftInput, .onboardingRightInput,
 #onboardingBioTextareaSpan {
