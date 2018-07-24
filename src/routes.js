@@ -46,6 +46,8 @@ import BusinessPicker from './components/pages/adminPages/businessPicker';
 import SkillEditor from './components/pages/adminPages/skillEditor';
 import SkillPicker from './components/pages/adminPages/skillPicker';
 
+import ImportCandidates from "./components/pages/importCandidates";
+
 import ReactGA from 'react-ga';
 ReactGA.initialize('UA-105560654-1');
 
@@ -81,6 +83,8 @@ const routes = (
             <Route path="termsOfUse" component={TermsOfUse} standalone={true} />
             <Route path="affiliateAgreement" component={AffiliateAgreement} standalone={true} />
             <Route path="serviceLevelAgreement" component={ServiceLevelAgreement} standalone={true} />
+
+            <Route path="importCandidates" component={ImportCandidates} />
 
             <Route path="psychometricAnalysis" component={AuthenticatedComponent} page={<PsychAnalysis/>} />
 

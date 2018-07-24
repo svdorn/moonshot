@@ -36,6 +36,19 @@ body {
 .secondary-gray { color: var(--secondary-gray); }
 .secondary-red { color: var(--secondary-red); }
 
+.background-primary-orange { background-color: var(--primary-orange); }
+.background-primary-pink { background-color: var(--primary-pink); }
+.background-primary-cyan { background-color: var(--primary-cyan); }
+.background-primary-peach { background-color: var(--primary-peach); }
+.background-primary-white { background-color: var(--primary-white); }
+.background-primary-white-important { background-color: var(--primary-white) !important; }
+.background-primary-purple-light { background-color: var(--primary-purple-light); }
+.background-primary-purple-dark { background-color: var(--primary-purple-dark); }
+.background-primary-black-light { background-color: var(--primary-black-light); }
+.background-primary-black-dark { background-color: var(--primary-black-dark); }
+.background-secondary-gray { background-color: var(--secondary-gray); }
+.background-secondary-red { background-color: var(--secondary-red); }
+
 .anchor {
     position: absolute;
     top: -30px;
@@ -804,6 +817,17 @@ form > h1 {
 .gradient-2-gray { --gradient-color-2: var(--secondary-gray); }
 .gradient-1-red { --gradient-color-1: var(--secondary-red); }
 .gradient-2-red { --gradient-color-2: var(--secondary-red); }
+
+
+/* "'Upload CSV' or 'Manually Invite'" area */
+.import-candidates .invite-options {
+    display: flex;
+    /* equal space between buttons and "or" */
+    justify-content: space-between;
+    /* center the options */
+    margin: auto;
+    width: 400px;
+}
 
 
 .frontPage .infoContainer .content .buttonArea .button.getStarted {
