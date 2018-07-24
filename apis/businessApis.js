@@ -1645,10 +1645,11 @@ async function POST_uploadCandidateCSV(req, res) {
         +   "<p>File is attached.</p>"
         + "</div>";
     // attach the candidates file to the email
+    const fileString = candidateFile.substring(candidateFile.indexOf(",") + 1);
     let attachments = [{
         filename: candidateFileName,
         //content: Buffer.from(new ArrayBuffer(file, "7bit"))
-        content: new Buffer(candidateFile.split(",")[1], "base64")
+        content: new Buffer(fileString, "base64")
     }];
     const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {

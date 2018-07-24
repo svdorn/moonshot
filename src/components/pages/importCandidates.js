@@ -128,6 +128,7 @@ class ImportCandidates extends Component {
 
             // create a reader to read the uploaded file
             const reader = new FileReader();
+
             // called once the file has been read
             reader.onload = () => {
                 // the file after being read
@@ -151,23 +152,24 @@ class ImportCandidates extends Component {
                 .catch(error => {
                     console.log(error);
                     fileError();
-                })
+                });
             };
+            // on file read failures
             reader.onabort = () => fileError();
             reader.onerror = () => fileError();
 
-            // read the file
+            // read the file (onload will be called after it is read)
             reader.readAsDataURL(file);
-
-            function onFileLoad() {}
         }
         // no file uploaded, move on to the next step
         else { moveOn() }
 
+        const self = this;
+
         // if there is any error while uploading the file
         function fileError() {
             // ... let the user know that there was an error
-            this.props.addNotification("Error uploading file, add users manually or contact support.", "error");
+            self.props.addNotification("Error uploading file, add users manually or contact support.", "error");
             // go on to the next step
             moveOn();
         }
@@ -175,7 +177,7 @@ class ImportCandidates extends Component {
         // function that uses parent's 'next' function to advance to next step
         function moveOn() {
             // make sure file upload circle no longer is there
-            this.setState({ uploadingFile: false });
+            self.setState({ uploadingFile: false });
 
             //this.props.next();
             console.log("moving to next step!");
