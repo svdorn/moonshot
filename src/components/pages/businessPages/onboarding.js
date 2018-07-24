@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
-import { closeNotification } from '../../../actions/usersActions';
+import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
 
 
 class Dashboard extends Component {
@@ -33,6 +33,26 @@ class Dashboard extends Component {
         if (!(user && user.userType === "accountAdmin" && user.onboarding)) {
             this.goTo("/");
         }
+    }
+
+    handleNext() {
+        const user = this.props.currentUser;
+        let onboarding = user.onboarding;
+        onboarding.step++;
+        if (onboarding.step >= 8) {
+            onboarding.complete = true;
+        }
+        this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
+    }
+
+    handlePrevious() {
+        const user = this.props.currentUser;
+        let onboarding = user.onboarding;
+        onboarding.step--;
+        if (onboarding.step < 0) {
+            return;
+        }
+        this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
     }
 
     render() {
@@ -119,6 +139,12 @@ class Dashboard extends Component {
                 </div>
                 <div className="onboardingRight">
                     {body}
+                    <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.handlePrevious.bind(this)}>
+                        Previous
+                    </button>
+                    <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.handleNext.bind(this)}>
+                        Next
+                    </button>
                 </div>
             </div>
         );
@@ -136,7 +162,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        closeNotification
+        closeNotification,
+        updateOnboarding
     }, dispatch);
 }
 

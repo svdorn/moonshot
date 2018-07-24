@@ -32,6 +32,7 @@ const userApis = {
     GET_keepMeLoggedIn,
     GET_session,
     POST_session,
+    POST_updateOnboarding,
     POST_verifyEmail,
     POST_changePasswordForgot,
     POST_forgotPassword,
@@ -1455,6 +1456,37 @@ async function POST_session(req, res) {
             return res.json(true);
         }
     });
+}
+
+async function POST_updateOnboarding(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const onboarding = sanitize(req.body.onboarding);
+
+    // get the user who is asking for their evaluations page
+    try {
+        var user = await getAndVerifyUser(userId, verificationToken);
+    } catch (getUserError) {
+        console.log("error getting user when trying update onboarding info: ", getUserError);
+        const status = getUserError.status ? getUserError.status : 500;
+        const message = getUserError.message ? getUserError.message : "Server error.";
+        return res.status(status).send(message);
+    }
+
+    // if no user found from token, can't verify
+    if (!user) { return res.status(404).send("User not found"); }
+
+    // if a user was found from the token, verify them and get rid of the token
+    user.onboarding = onboarding;
+
+    // save the verified user
+    try { var returnedUser = await user.save(); }
+    catch (saveUserError) {
+        console.log("Error saving user when updating onboarding info: ", saveUserError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    res.json(frontEndUser(returnedUser));
 }
 
 
