@@ -63,6 +63,12 @@ export function usersReducers(state = initialState, action) {
                 loadingSomething: false
             };
             break;
+        case "UPDATE_ONBOARDING":
+            return {
+                ...state,
+                currentUser: action.payload
+            }
+            break;
         case "NOTIFICATION":
         case "VERIFY_EMAIL_REJECTED":
         case "CHANGE_TEMP_PASS_REJECTED":
@@ -72,6 +78,7 @@ export function usersReducers(state = initialState, action) {
             break;
         case "UPDATE_USER_REJECTED":
         case "LOGIN_REJECTED":
+        case "UPDATE_ONBOARDING_REJECTED":
         case "CHANGE_PASSWORD":
         case "CHANGE_PASSWORD_REJECTED":
             return {...state, notification: action.notification, loadingSomething: false};

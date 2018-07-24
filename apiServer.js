@@ -120,6 +120,7 @@ app.post("/user/keepMeLoggedIn", userApis.POST_keepMeLoggedIn);
 app.get("/user/keepMeLoggedIn", userApis.GET_keepMeLoggedIn);
 app.get('/user/session', userApis.GET_session);
 app.post('/user/session', userApis.POST_session);
+app.post('/user/updateOnboarding', userApis.POST_updateOnboarding);
 app.post('/user/verifyEmail', userApis.POST_verifyEmail);
 app.post('/user/changePasswordForgot', userApis.POST_changePasswordForgot);
 app.post('/user/login', userApis.POST_login);

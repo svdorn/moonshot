@@ -80,6 +80,19 @@ export function login(user, saveSession, navigateBackUrl) {
     }
 }
 
+export function updateOnboarding(onboarding, verificationToken, userId) {
+    return function(dispatch) {
+        axios.post("/api/user/updateOnboarding", {onboarding, verificationToken, userId})
+            .then(function(response) {
+                const returnedUser = response.data;
+                dispatch({type:"UPDATE_ONBOARDING", payload: returnedUser});
+            })
+            .catch(function(err) {
+                dispatch({type: "UPDATE_ONBOARDING_REJECTED", notification: {message: err.response.data, type: "errorHeader"}});
+            });
+    }
+}
+
 
 export function sawMyCandidatesInfoBox(userId, verificationToken) {
     return function(dispatch) {
