@@ -1627,9 +1627,9 @@ async function POST_uploadCandidateCSV(req, res) {
     if (!candidateFile) { return res.status(400).send("No candidates file provided!"); }
 
     // ensure file is correct type
-    // if (!isValidFileType(file.name, ["csv"])) {
-    //     return res.status(400).send("Invalid file type!");
-    // }
+    if (!isValidFileType(candidateFileName, ["csv", "xls", "xlsx"])) {
+        return res.status(400).send("Invalid file type!");
+    }
 
     try { var { user, business } = await getUserAndBusiness(userId, verificationToken); }
     catch (getUserAndBizError) {

@@ -53,8 +53,6 @@ class ImportCandidates extends Component {
     // when a file is dropped into the input area
     onDrop(acceptedFiles, rejectedFiles) {
         let file = acceptedFiles.length === 1 ? acceptedFiles[0] : undefined;
-        console.log("acceptedFiles: ", acceptedFiles);
-        console.log("rejectedFiles: ", rejectedFiles);
         this.setState({ file });
     }
 
@@ -77,6 +75,7 @@ class ImportCandidates extends Component {
                         className="drop-zone"
                         activeClassName="dragging"
                         multiple={false}
+                        accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                     >
                         <img
                             src={"/icons/Upload" + this.props.png}
@@ -94,7 +93,7 @@ class ImportCandidates extends Component {
                                     {this.state.file.name}
                                 </div>
                             :
-                                ""
+                                null
                             }
                         </div>
                     </DropZone>
@@ -117,11 +116,11 @@ class ImportCandidates extends Component {
         // if the user is trying to upload a candidate file ...
         if (file) {
             // ... make sure the file type is valid
-            // if (!isValidFileType(file.name, ["csv"])) {
-            //     // if it isn't, alert the user that they need a different file
-            //     this.props.addNotification("Invalid file type! Must be .csv", "error");
-            //     return;
-            // }
+            if (!isValidFileType(file.name, ["csv", "xls", "xlsx"])) {
+                // if it isn't, alert the user that they need a different file
+                this.props.addNotification("Invalid file type! Must be .csv, .xls, or .xlsx", "error");
+                return;
+            }
 
             // mark file as currently uploading so that loading circle shows up
             this.setState({ uploadingFile: true });
@@ -133,7 +132,6 @@ class ImportCandidates extends Component {
             reader.onload = () => {
                 // the file after being read
                 const readFile = reader.result;
-                console.log("readFile: ", readFile);
                 // args to the api call
                 let args = new FormData();
                 // add credentials
