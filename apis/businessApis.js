@@ -14,7 +14,8 @@ const { sanitize,
         getUserAndBusiness,
         frontEndUser,
         speedTest,
-        lastPossibleSecond
+        lastPossibleSecond,
+        isValidFileType
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -44,6 +45,7 @@ const businessApis = {
     GET_evaluationResults,
     GET_apiKey,
     POST_resetApiKey,
+    POST_uploadCandidateCSV,
 
     generateApiKey,
     createEmailInfo,
@@ -1610,6 +1612,60 @@ async function POST_resetApiKey(req, res) {
     }
 
     return res.status(200).send(newApiKey);
+}
+
+
+// upload a csv containing candidate emails during business onboarding
+async function POST_uploadCandidateCSV(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    const file = sanitize(req.files.file);
+
+    // make sure the candidates file exists
+    if (!file) { return res.status(400).send("No candidates file provided!"); }
+
+    // ensure file is correct type
+    if (!isValidFileType(file.name, ["csv", "xls", "xlsx"])) {
+        return res.status(400).send("Invalid file type!");
+    }
+
+    try { var { user, business } = await getUserAndBusiness(userId, verificationToken); }
+    catch (getUserAndBizError) {
+        console.log("Error getting user and/or business while trying to upload candidate file: ", getUserAndBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    console.log("file.data: ", file.data);
+
+    let attachmentContent = undefined;
+    if (file.name.endsWith("xlsx")) {
+        const xlsxBuf = XLSX.write(wb, { type: "base64" });
+        attachmentContent = new Buffer(xslxBuf, "base64");
+    }
+
+    //new Buffer(file.data,'7bit')
+
+    let recipients = ["ameyer24@wisc.edu"];
+    let subject = `ACTION NEEDED: Candidates File Uploaded By ${business.name}`;
+    let content =
+        "<div>"
+        +   "<p>File is attached.</p>"
+        + "</div>";
+    // attach the candidates file to the email
+    let attachments = [{
+        filename: file.name,
+        content: attachmentContent
+    }];
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {
+        // on failure
+        if (!success) {
+            console.log("Error sending email with candidates file: ", msg);
+            return res.status(500).send("Error uploading candidates file.");
+        }
+        // on success
+        return res.status(200).json({});
+    })
 }
 
 

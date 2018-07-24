@@ -103,13 +103,35 @@ function htmlDecode(text) {
 }
 
 
+// checks if a file has the correct type based on the extension
+function isValidFileType(fileName, allowedFileTypes) {
+    // make sure arguments are valid
+    if (typeof fileName !== "string") {
+        console.log("Invalid usage of isValidFileType()! First argument must be the name of the file (e.g. 'dingus.png')");
+        return false;
+    }
+    if (!Array.isArray(allowedFileTypes)) {
+        console.log("Invalid usage of isValidFileType()! Second argument must be an array of extensions (e.g. ['csv', 'pdf'])");
+        return false;
+    }
+
+    // get the file extension from the end of the file name
+    let extension = fileName.split('.').pop().toLowerCase();
+    // look through the list of allowed file types, if any matches, success
+    const isValid = allowedFileTypes.includes(extension);
+
+    return isValid;
+}
+
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
     renderPasswordField,
     getFirstName,
     isValidEmail,
-    htmlDecode
+    htmlDecode,
+    isValidFileType
 }
 
 module.exports = miscFunctions;

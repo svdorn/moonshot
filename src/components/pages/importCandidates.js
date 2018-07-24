@@ -2,9 +2,11 @@
 import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { Dialog } from "material-ui";
+import axios from "axios";
+import { Dialog, CircularProgress } from "material-ui";
 import AddUserDialog from '../childComponents/addUserDialog';
-import { openAddUserModal } from '../../actions/usersActions';
+import { openAddUserModal, addNotification } from '../../actions/usersActions';
+import { isValidFileType } from "../../miscFunctions";
 
 class ImportCandidates extends Component {
     constructor(props) {
@@ -14,7 +16,9 @@ class ImportCandidates extends Component {
             // modal to import candidate csv
             importModalOpen: false,
             // the csv containing candidate information
-            file: undefined
+            file: undefined,
+            // whether file is currently uploading
+            uploadingFile: false
         }
     }
 
@@ -28,19 +32,6 @@ class ImportCandidates extends Component {
     // close the modal that lets the user import a csv
     handleCSVModalClose() {
         this.setState({ importModalOpen: false });
-    }
-
-
-    // only allow certain file types to be uploaded
-    isValidFileType(fileName) {
-        // get the file extension from the end of the file name
-        let extension = fileName.split('.').pop().toLowerCase();
-        // file types we allow
-        const allowedFileTypes = ["csv", "xls", "xlsx"];
-        // look through the list of allowed file types, if any matches, success
-        const isValid = allowedFileTypes.includes(fileType);
-
-        return isValid;
     }
 
 
@@ -103,9 +94,57 @@ class ImportCandidates extends Component {
     }
 
 
-    // deletes the candidate csv
+    // deletes the candidate csv from state
     removeFile() {
         this.setState({ file: undefined });
+    }
+
+
+    // move on to the next step
+    next() {
+        // get the given file from state (may be undefined)
+        const file = this.state.file;
+        // if the user is trying to upload a candidate file ...
+        if (file) {
+            // ... make sure the file type is valid
+            if (!isValidFileType(file.name, ["csv", "xls", "xlsx"])) {
+                // if it isn't, alert the user that they need a different file
+                this.props.addNotification("Invalid file type! Must be .csv, .xls, or .xlsx", "error");
+                return;
+            }
+
+            // mark file as currently uploading so that loading circle shows up
+            this.setState({ uploadingFile: true });
+
+            // upload the file and move on to the next step in the back-end
+            let args = new FormData();
+            args.append("userId", this.props.currentUser._id);
+            args.append("verificationToken", this.props.verificationToken);
+            args.append("file", file);
+            axios.post("/api/business/uploadCandidateCSV", args)
+            .then(response => {
+                // success, go on to the next step
+                moveOn();
+            })
+            // if there is an error uploading the csv ...
+            .catch(error => {
+                // ... let the user know that there was an error
+                this.props.addNotification("Error uploading file, add users manually or contact support.", "error");
+                // go on to the next step
+                moveOn();
+            })
+        }
+        // no file uploaded, move on to the next step
+        else { moveOn() }
+
+        // function that uses parent's 'next' function to advance to next step
+        function moveOn() {
+            // make sure file upload circle no longer is there
+            this.setState({ uploadingFile: false });
+
+            //this.props.next();
+            console.log("moving to next step!");
+        }
     }
 
 
@@ -153,8 +192,18 @@ class ImportCandidates extends Component {
                     You can manually invite candidates at any time by going to Account&nbsp;&nbsp;>&nbsp;&nbsp;Add User&nbsp;&nbsp;>&nbsp;&nbsp;Candidate.
                 </div>
                 <div className="previous-next-area font18px center">
-                    <div className="previous noselect clickable underline inlineBlock">Previous</div>
-                    <div className="button noselect round-4px background-primary-cyan inlineBlock">Next</div>
+                    <div
+                        className="previous noselect clickable underline inlineBlock"
+                    >
+                        Previous
+                    </div>
+                    <div
+                        className="button noselect round-4px background-primary-cyan inlineBlock"
+                        onClick={this.next.bind(this)}
+                    >
+                        Next
+                    </div>
+                    { this.state.uploadingFile ? <CircularProgress color="#FB553A" /> : null }
                 </div>
             </div>
         );
@@ -172,7 +221,8 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-        openAddUserModal
+        openAddUserModal,
+        addNotification
     }, dispatch);
 }
 
