@@ -850,7 +850,24 @@ form > h1 {
     justify-content: space-between;
     /* center the options */
     margin: auto;
-    width: 50%;
+    width: 400px;
+}
+
+.import-candidates .file-name {
+    max-width: 180px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* make so that the Previous and Next buttons aren't right next to each other */
+.import-candidates > .previous-next-area > div:first-child {
+    margin-right: 80px;
+}
+
+/* so that Next button is v wide */
+.import-candidates > .previous-next-area > .button {
+    padding: 3px 30px;
 }
 
 /* dialog for the drag and drop container */

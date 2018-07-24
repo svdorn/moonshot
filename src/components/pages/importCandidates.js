@@ -113,11 +113,11 @@ class ImportCandidates extends Component {
         const fileUploadArea = this.state.file ?
             (
                 <div className="inlineBlock">
-                    {this.state.file.name}
+                    <div className="file-name inlineBlock">{this.state.file.name}</div>
                     <span
                         onClick={this.removeFile.bind(this)}
                         className="clickable secondary-red"
-                        style={{marginLeft:"10px"}}
+                        style={{marginLeft:"10px", verticalAlign:"top"}}
                     >x</span>
                 </div>
             )
@@ -151,6 +151,10 @@ class ImportCandidates extends Component {
                 </div>
                 <div>
                     You can manually invite candidates at any time by going to Account&nbsp;&nbsp;>&nbsp;&nbsp;Add User&nbsp;&nbsp;>&nbsp;&nbsp;Candidate.
+                </div>
+                <div className="previous-next-area font18px center">
+                    <div className="previous noselect clickable underline inlineBlock">Previous</div>
+                    <div className="button noselect round-4px background-primary-cyan inlineBlock">Next</div>
                 </div>
             </div>
         );
