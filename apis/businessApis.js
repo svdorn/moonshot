@@ -1631,13 +1631,14 @@ async function POST_uploadCandidateCSV(req, res) {
         return res.status(400).send("Invalid file type!");
     }
 
+    // get the user and the business from the given credentials
     try { var { user, business } = await getUserAndBusiness(userId, verificationToken); }
     catch (getUserAndBizError) {
         console.log("Error getting user and/or business while trying to upload candidate file: ", getUserAndBizError);
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-
+    // set up the email to send
     let recipients = ["ameyer24@wisc.edu"];
     let subject = `ACTION NEEDED: Candidates File Uploaded By ${business.name}`;
     let content =
@@ -1648,7 +1649,6 @@ async function POST_uploadCandidateCSV(req, res) {
     const fileString = candidateFile.substring(candidateFile.indexOf(",") + 1);
     let attachments = [{
         filename: candidateFileName,
-        //content: Buffer.from(new ArrayBuffer(file, "7bit"))
         content: new Buffer(fileString, "base64")
     }];
     const sendFrom = "Moonshot";
