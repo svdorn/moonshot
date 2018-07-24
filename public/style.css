@@ -28,7 +28,6 @@ body {
 .primary-cyan { color: var(--primary-cyan); }
 .primary-peach { color: var(--primary-peach); }
 .primary-white { color: var(--primary-white); }
-.primary-white-important { color: var(--primary-white) !important; }
 .primary-purple-light { color: var(--primary-purple-light); }
 .primary-purple-dark { color: var(--primary-purple-dark); }
 .primary-black-light { color: var(--primary-black-light); }
@@ -36,18 +35,43 @@ body {
 .secondary-gray { color: var(--secondary-gray); }
 .secondary-red { color: var(--secondary-red); }
 
+/* USE SPARINGLY */
+.primary-orange-important { color: var(--primary-orange) !important; }
+.primary-pink-important { color: var(--primary-pink) !important; }
+.primary-cyan-important { color: var(--primary-cyan) !important; }
+.primary-peach-important { color: var(--primary-peach) !important; }
+.primary-white-important { color: var(--primary-white) !important; }
+.primary-purple-light-important { color: var(--primary-purple-light) !important; }
+.primary-purple-dark-important { color: var(--primary-purple-dark) !important; }
+.primary-black-light-important { color: var(--primary-black-light) !important; }
+.primary-black-dark-important { color: var(--primary-black-dark) !important; }
+.secondary-gray-important { color: var(--secondary-gray) !important; }
+.secondary-red-important { color: var(--secondary-red) !important; }
+
 .background-primary-orange { background-color: var(--primary-orange); }
 .background-primary-pink { background-color: var(--primary-pink); }
 .background-primary-cyan { background-color: var(--primary-cyan); }
 .background-primary-peach { background-color: var(--primary-peach); }
 .background-primary-white { background-color: var(--primary-white); }
-.background-primary-white-important { background-color: var(--primary-white) !important; }
 .background-primary-purple-light { background-color: var(--primary-purple-light); }
 .background-primary-purple-dark { background-color: var(--primary-purple-dark); }
 .background-primary-black-light { background-color: var(--primary-black-light); }
 .background-primary-black-dark { background-color: var(--primary-black-dark); }
 .background-secondary-gray { background-color: var(--secondary-gray); }
 .background-secondary-red { background-color: var(--secondary-red); }
+
+/* USE SPARINGLY */
+.background-primary-orange-important { background-color: var(--primary-orange) !important; }
+.background-primary-pink-important { background-color: var(--primary-pink) !important; }
+.background-primary-cyan-important { background-color: var(--primary-cyan) !important; }
+.background-primary-peach-important { background-color: var(--primary-peach) !important; }
+.background-primary-white-important { background-color: var(--primary-white) !important; }
+.background-primary-purple-light-important { background-color: var(--primary-purple-light) !important; }
+.background-primary-purple-dark-important { background-color: var(--primary-purple-dark) !important; }
+.background-primary-black-light-important { background-color: var(--primary-black-light) !important; }
+.background-primary-black-dark-important { background-color: var(--primary-black-dark) !important; }
+.background-secondary-gray-important { background-color: var(--secondary-gray) !important; }
+.background-secondary-red-important { background-color: var(--secondary-red) !important; }
 
 .anchor {
     position: absolute;
@@ -826,7 +850,33 @@ form > h1 {
     justify-content: space-between;
     /* center the options */
     margin: auto;
-    width: 400px;
+    width: 50%;
+}
+
+/* dialog for the drag and drop container */
+.upload-candidate-csv-dialog-paper {
+    margin: auto;
+    background-color: var(--primary-black-dark) !important;
+    min-width: 225px;
+}
+
+/* container for dragging and dropping a file to upload */
+.drag-drop-container {
+    margin: auto;
+    /* border: 1px solid var(--primary-black-light); */
+    outline-color: var(--primary-black-light);
+    outline-style: dashed;
+}
+
+.drag-drop-container > .upload-icon {
+    width: 40%;
+    min-width: 100px;
+    max-width: 500px;
+    margin-bottom: 50px;
+}
+
+.drag-drop-container > .drag-file-here {
+    padding: 50px 0;
 }
 
 
