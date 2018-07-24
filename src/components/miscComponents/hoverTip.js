@@ -7,7 +7,7 @@ class HoverTip extends Component {
         let style = { padding: "5px" };
         if (this.props.style) { style = {...style, ...this.props.style} };
         let className = "hoverTip noselect";
-        if (this.props.className) { className = className + this.props.className; }
+        if (this.props.className) { className = className + " " + this.props.className; }
 
         const backgroundColor = this.props.backgroundColor ? this.props.backgroundColor : defaultBlack;
         const color = this.props.color ? this.props.color : "white";

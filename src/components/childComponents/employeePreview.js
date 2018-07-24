@@ -14,6 +14,7 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import {bindActionCreators} from 'redux';
 import {browserHistory} from 'react-router';
+import HoverTip from "../miscComponents/hoverTip";
 
 class EmployeePreview extends Component {
     constructor(props) {
@@ -239,6 +240,30 @@ class EmployeePreview extends Component {
             // console.log("Error getting results url: ", e);
         }
 
+        // the text that will let the user know whether the employee finished the eval
+        let evalProgressText = "Eval In-Progress";
+        let progressHoverText = "The employee has not yet completed the evaluation.";
+        if (this.props.score) {
+            evalProgressText = "Eval Complete";
+            progressHoverText = "The employee completed the evaluation.";
+        }
+
+        const evalProgress = (
+            <div className="inlineBlock">
+                <div
+                    className="inlineBlock secondary-gray font12px"
+                    style={{marginLeft:"10px"}}
+                >
+                    { evalProgressText }
+                </div>
+                <HoverTip
+                    className="font12px"
+                    style={{left:"50%", top:"100%"}}
+                    text={progressHoverText}
+                />
+            </div>
+        )
+
         let completionImage;
         const gradingComplete = this.state.gradingComplete;
         if (gradingComplete) {
@@ -319,7 +344,8 @@ class EmployeePreview extends Component {
                             onClick={this.handleOpen.bind(this)}>
                         Grade
                     </button>
-                    {seeResults}
+                    { evalProgress }
+                    { seeResults }
                 </div>
             </div>
             }
