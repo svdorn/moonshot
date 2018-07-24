@@ -7,6 +7,7 @@ import { Dialog, CircularProgress } from "material-ui";
 import AddUserDialog from '../childComponents/addUserDialog';
 import { openAddUserModal, addNotification } from '../../actions/usersActions';
 import { isValidFileType } from "../../miscFunctions";
+import DropZone from "react-dropzone";
 
 class ImportCandidates extends Component {
     constructor(props) {
@@ -35,17 +36,26 @@ class ImportCandidates extends Component {
     }
 
 
-    // input containing the candidates csv changed
-    inputChange() {
-        // try to get the file that was selected
-        try { var file = this.refs.importCandidateInput.files[0]; }
-        catch (getFileError) {
-            console.log(getFileError);
-            this.setState({ file: undefined });
-            return;
-        }
+    // // input containing the candidates csv changed
+    // inputChange() {
+    //     // try to get the file that was selected
+    //     try { var file = this.refs.importCandidateInput.files[0]; }
+    //     catch (getFileError) {
+    //         console.log(getFileError);
+    //         this.setState({ file: undefined });
+    //         return;
+    //     }
+    //
+    //     this.setState({ file })
+    // }
 
-        this.setState({ file })
+
+    // when a file is dropped into the input area
+    onDrop(acceptedFiles, rejectedFiles) {
+        let file = acceptedFiles.length === 1 ? acceptedFiles[0] : undefined;
+        console.log("acceptedFiles: ", acceptedFiles);
+        console.log("rejectedFiles: ", rejectedFiles);
+        this.setState({ file });
     }
 
 
@@ -61,33 +71,33 @@ class ImportCandidates extends Component {
                 contentClassName="center"
                 className="upload-candidate-csv-dialog"
             >
-                <input
-                    id="import-candidate-input"
-                    name="importCandidateInput"
-                    type="file"
-                    ref="importCandidateInput"
-                    accept=".csv,application/pdf"
-                    onChange={this.inputChange.bind(this)}
-                    style={{opacity:"0", position:"absolute"}}
-                />
-
                 <div className="drag-drop-container primary-white">
-                    <img
-                        src={"/icons/Upload" + this.props.png}
-                        className="upload-icon"
-                    />
-                    <div className="primary-cyan font24px">{"Drag and Drop"}</div>
-                    <div className="drag-file-here">
-                        {"Drag a file here or "}
-                        <label
-                            htmlFor="import-candidate-input"
-                            className="primary-cyan clickable"
-                        >
-                            {"browse"}
-                        </label>
-                        {" for a file to upload."}
-                    </div>
-                    {this.state.file ? this.state.file.name : ""}
+                    <DropZone
+                        onDrop={(files) => this.onDrop(files)}
+                        className="drop-zone"
+                        activeClassName="dragging"
+                        multiple={false}
+                    >
+                        <img
+                            src={"/icons/Upload" + this.props.png}
+                            className="upload-icon"
+                        />
+                        <div className="primary-cyan font24px">{"Drag & Drop"}</div>
+                        <div className="drag-here-text">
+                            {"Drag a file here or "}
+                            <span className="primary-cyan clickable">
+                                {"browse"}
+                            </span>
+                            {" for a file to upload."}
+                            {this.state.file ?
+                                <div className="font14px" style={{marginTop:"10px"}}>
+                                    {this.state.file.name}
+                                </div>
+                            :
+                                ""
+                            }
+                        </div>
+                    </DropZone>
                 </div>
             </Dialog>
         )
@@ -116,26 +126,51 @@ class ImportCandidates extends Component {
             // mark file as currently uploading so that loading circle shows up
             this.setState({ uploadingFile: true });
 
-            // upload the file and move on to the next step in the back-end
-            let args = new FormData();
-            args.append("userId", this.props.currentUser._id);
-            args.append("verificationToken", this.props.verificationToken);
-            args.append("file", file);
-            axios.post("/api/business/uploadCandidateCSV", args)
-            .then(response => {
-                // success, go on to the next step
-                moveOn();
-            })
-            // if there is an error uploading the csv ...
-            .catch(error => {
-                // ... let the user know that there was an error
-                this.props.addNotification("Error uploading file, add users manually or contact support.", "error");
-                // go on to the next step
-                moveOn();
-            })
+            // create a reader to read the uploaded file
+            const reader = new FileReader();
+            // called once the file has been read
+            reader.onload = () => {
+                // the file after being read
+                const readFile = reader.result;
+                console.log("readFile: ", readFile);
+                // args to the api call
+                let args = new FormData();
+                // add credentials
+                args.append("userId", this.props.currentUser._id);
+                args.append("verificationToken", this.props.verificationToken);
+                // the file to upload
+                args.append("candidateFileName", file.name);
+                args.append("candidateFile", readFile);
+                // upload the file and move on to the next step in the back-end
+                axios.post("/api/business/uploadCandidateCSV", args)
+                .then(response => {
+                    // success, go on to the next step
+                    moveOn();
+                })
+                // if there is an error uploading the csv ...
+                .catch(error => {
+                    console.log(error);
+                    fileError();
+                })
+            };
+            reader.onabort = () => fileError();
+            reader.onerror = () => fileError();
+
+            // read the file
+            reader.readAsDataURL(file);
+
+            function onFileLoad() {}
         }
         // no file uploaded, move on to the next step
         else { moveOn() }
+
+        // if there is any error while uploading the file
+        function fileError() {
+            // ... let the user know that there was an error
+            this.props.addNotification("Error uploading file, add users manually or contact support.", "error");
+            // go on to the next step
+            moveOn();
+        }
 
         // function that uses parent's 'next' function to advance to next step
         function moveOn() {

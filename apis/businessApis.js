@@ -1619,10 +1619,12 @@ async function POST_resetApiKey(req, res) {
 async function POST_uploadCandidateCSV(req, res) {
     const userId = sanitize(req.body.userId);
     const verificationToken = sanitize(req.body.verificationToken);
-    const file = sanitize(req.files.file);
+    //const file = sanitize(req.files.file);
+    const candidateFile = sanitize(req.body.candidateFile);
+    const candidateFileName = sanitize(req.body.candidateFileName);
 
     // make sure the candidates file exists
-    if (!file) { return res.status(400).send("No candidates file provided!"); }
+    if (!candidateFile) { return res.status(400).send("No candidates file provided!"); }
 
     // ensure file is correct type
     // if (!isValidFileType(file.name, ["csv"])) {
@@ -1635,7 +1637,6 @@ async function POST_uploadCandidateCSV(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    console.log("file: ", file);
 
     let recipients = ["ameyer24@wisc.edu"];
     let subject = `ACTION NEEDED: Candidates File Uploaded By ${business.name}`;
@@ -1645,8 +1646,9 @@ async function POST_uploadCandidateCSV(req, res) {
         + "</div>";
     // attach the candidates file to the email
     let attachments = [{
-        filename: file.name,
-        content: new Buffer(file, "7bit")
+        filename: candidateFileName,
+        //content: Buffer.from(new ArrayBuffer(file, "7bit"))
+        content: new Buffer(candidateFile.split(",")[1], "base64")
     }];
     const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {

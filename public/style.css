@@ -877,24 +877,35 @@ form > h1 {
     min-width: 225px;
 }
 
-/* container for dragging and dropping a file to upload */
-.drag-drop-container {
-    margin: auto;
-    /* border: 1px solid var(--primary-black-light); */
-    outline-color: var(--primary-black-light);
-    outline-style: dashed;
+.upload-candidate-csv-dialog .drag-drop-container {
+    padding: 20px;
 }
 
-.drag-drop-container > .upload-icon {
+.upload-candidate-csv-dialog .drag-drop-container .drop-zone {
+    border-style: dashed;
+    border-width: 2px;
+    border-color: #444444;
+    position: relative;
+    width: 100%;
+    height: 100%;
+}
+
+.upload-candidate-csv-dialog .drag-drop-container .drop-zone.dragging {
+    background-color: var(--primary-black-light);
+}
+
+.upload-candidate-csv-dialog .drag-drop-container .upload-icon {
     width: 40%;
     min-width: 100px;
     max-width: 500px;
     margin-bottom: 50px;
+    margin-top: 20px;
 }
 
-.drag-drop-container > .drag-file-here {
-    padding: 50px 0;
+.upload-candidate-csv-dialog .drag-drop-container .drag-here-text {
+    margin: 20px auto 40px;
 }
+
 
 
 .frontPage .infoContainer .content .buttonArea .button.getStarted {
