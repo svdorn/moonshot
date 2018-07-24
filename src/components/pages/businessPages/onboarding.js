@@ -3,7 +3,8 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import MetaTags from 'react-meta-tags';
-import {  } from '../../../actions/usersActions';
+import { browserHistory } from 'react-router';
+import { closeNotification } from '../../../actions/usersActions';
 
 
 class Dashboard extends Component {
@@ -17,8 +18,21 @@ class Dashboard extends Component {
         };
     }
 
-    componentDidMount() {
+    goTo(route) {
+        // closes any notification
+        this.props.closeNotification();
+        // goes to the wanted page
+        browserHistory.push(route);
+        // goes to the top of the new page
+        window.scrollTo(0, 0);
+    }
 
+    componentDidMount() {
+        const user = this.props.currentUser;
+        console.log(user);
+        if (!(user && user.userType === "accountAdmin" && user.onboarding)) {
+            this.goTo("/");
+        }
     }
 
     render() {
@@ -63,7 +77,8 @@ class Dashboard extends Component {
                 length: "30s",
             }
         ];
-        if (user.onboarding && !user.onboarding.complete) {
+
+        if (user.onboarding) {
             const onboarding = user.onboarding;
             let key = 0;
             var checklist = checklistItems.map(item => {
@@ -121,7 +136,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
     return bindActionCreators({
-
+        closeNotification
     }, dispatch);
 }
 
