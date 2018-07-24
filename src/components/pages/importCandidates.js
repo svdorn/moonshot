@@ -66,7 +66,7 @@ class ImportCandidates extends Component {
                     name="importCandidateInput"
                     type="file"
                     ref="importCandidateInput"
-                    accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    accept=".csv,application/pdf"
                     onChange={this.inputChange.bind(this)}
                     style={{opacity:"0", position:"absolute"}}
                 />
@@ -107,11 +107,11 @@ class ImportCandidates extends Component {
         // if the user is trying to upload a candidate file ...
         if (file) {
             // ... make sure the file type is valid
-            if (!isValidFileType(file.name, ["csv", "xls", "xlsx"])) {
-                // if it isn't, alert the user that they need a different file
-                this.props.addNotification("Invalid file type! Must be .csv, .xls, or .xlsx", "error");
-                return;
-            }
+            // if (!isValidFileType(file.name, ["csv"])) {
+            //     // if it isn't, alert the user that they need a different file
+            //     this.props.addNotification("Invalid file type! Must be .csv", "error");
+            //     return;
+            // }
 
             // mark file as currently uploading so that loading circle shows up
             this.setState({ uploadingFile: true });

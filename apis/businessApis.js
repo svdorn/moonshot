@@ -1625,9 +1625,9 @@ async function POST_uploadCandidateCSV(req, res) {
     if (!file) { return res.status(400).send("No candidates file provided!"); }
 
     // ensure file is correct type
-    if (!isValidFileType(file.name, ["csv", "xls", "xlsx"])) {
-        return res.status(400).send("Invalid file type!");
-    }
+    // if (!isValidFileType(file.name, ["csv"])) {
+    //     return res.status(400).send("Invalid file type!");
+    // }
 
     try { var { user, business } = await getUserAndBusiness(userId, verificationToken); }
     catch (getUserAndBizError) {
@@ -1635,15 +1635,7 @@ async function POST_uploadCandidateCSV(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    console.log("file.data: ", file.data);
-
-    let attachmentContent = undefined;
-    if (file.name.endsWith("xlsx")) {
-        const xlsxBuf = XLSX.write(wb, { type: "base64" });
-        attachmentContent = new Buffer(xslxBuf, "base64");
-    }
-
-    //new Buffer(file.data,'7bit')
+    console.log("file: ", file);
 
     let recipients = ["ameyer24@wisc.edu"];
     let subject = `ACTION NEEDED: Candidates File Uploaded By ${business.name}`;
@@ -1654,7 +1646,7 @@ async function POST_uploadCandidateCSV(req, res) {
     // attach the candidates file to the email
     let attachments = [{
         filename: file.name,
-        content: attachmentContent
+        content: new Buffer(file, "7bit")
     }];
     const sendFrom = "Moonshot";
     sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {
