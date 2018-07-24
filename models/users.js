@@ -42,8 +42,6 @@ const usersSchema = mongoose.Schema({
     onboarding: {
         // The current step the employer is on in onboarding
         step: Number,
-        // The percent completion on the current step in onboarding
-        percent: Number,
         // If the employer is done with onboarding
         complete: Boolean
     },
