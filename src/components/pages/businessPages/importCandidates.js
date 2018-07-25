@@ -5,10 +5,10 @@ import { bindActionCreators } from 'redux';
 import axios from "axios";
 import { CircularProgress } from "material-ui";
 import Dialog from '@material-ui/core/Dialog';
-import AddUserDialog from '../childComponents/addUserDialog';
-import { openAddUserModal, addNotification } from '../../actions/usersActions';
-import { isValidFileType } from "../../miscFunctions";
-import { secondaryGray } from "../../colors";
+import AddUserDialog from '../../childComponents/addUserDialog';
+import { openAddUserModal, addNotification } from '../../../actions/usersActions';
+import { isValidFileType } from "../../../miscFunctions";
+import { secondaryGray } from "../../../colors";
 import DropZone from "react-dropzone";
 
 class ImportCandidates extends Component {
@@ -113,6 +113,8 @@ class ImportCandidates extends Component {
 
     // move on to the next step
     next() {
+        const self = this;
+
         // get the given file from state (may be undefined)
         const file = this.state.file;
         // if the user is trying to upload a candidate file ...
@@ -164,8 +166,6 @@ class ImportCandidates extends Component {
         // no file uploaded, move on to the next step
         else { moveOn() }
 
-        const self = this;
-
         // if there is any error while uploading the file
         function fileError() {
             // ... let the user know that there was an error
@@ -178,9 +178,8 @@ class ImportCandidates extends Component {
         function moveOn() {
             // make sure file upload circle no longer is there
             self.setState({ uploadingFile: false });
-
-            //this.props.next();
-            console.log("moving to next step!");
+            // go to the next step
+            self.props.next();
         }
     }
 
@@ -274,6 +273,7 @@ class ImportCandidates extends Component {
                 <div className="previous-next-area font18px center">
                     <div
                         className="previous noselect clickable underline inlineBlock"
+                        onClick={this.props.previous}
                     >
                         Previous
                     </div>

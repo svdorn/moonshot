@@ -13,7 +13,25 @@ class OnboardingProgress extends Component {
     }
 
     render() {
-        let amountDone = .8;
+        // FIND OUT HOW FAR THE USER IS ALONG THE ONBOARDING PROCESS
+        // get the current user and onboarding info
+        try {
+            var user = this.props.currentUser;
+            var onboarding = user.onboarding;
+            var furthestStep = onboarding.furthestStep;
+        }
+        // catch any errors (would probably be from the user not having onboarding info)
+        catch (e) {
+            console.log(e);
+            return null;
+        }
+
+        // if there is a "You're done!" step, make it the actual number of steps,
+        // otherwise should be one more than actual number so that you're not done
+        // until you've actually gone through every step
+        const NUM_ONBOARDING_STEPS = 10
+        // figure out how far the user is
+        const amountDone = furthestStep / NUM_ONBOARDING_STEPS;
 
         // purple and blue, respectively
         let rStart = 177,

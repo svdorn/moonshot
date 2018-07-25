@@ -5,6 +5,7 @@ import { bindActionCreators } from 'redux';
 import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
+import ImportCandidates from "./importCandidates";
 
 
 class Dashboard extends Component {
@@ -128,6 +129,11 @@ class Dashboard extends Component {
 
         let body = <div>Hey</div>;
 
+        const childProps = {
+            next: this.handleNext.bind(this),
+            previous: this.handlePrevious.bind(this)
+        }
+
         if (user.onboarding) {
             const onboarding = user.onboarding;
             var key = 0;
@@ -171,6 +177,10 @@ class Dashboard extends Component {
                             I&#39;m in
                         </button>
                     </div>
+                )
+            } else if (onboarding.step === 6) {
+                body = (
+                    <ImportCandidates {...childProps} />
                 )
             }
         }
