@@ -158,6 +158,7 @@ class Dashboard extends Component {
                 );
             });
 
+            // ROI Driven Onboarding
             if (onboarding.step === 0) {
                 body = (
                     <div className="marginTop30px">
@@ -171,7 +172,7 @@ class Dashboard extends Component {
                             I&#39;m in
                         </button>
                     </div>
-                )
+                );
             }
         }
 
