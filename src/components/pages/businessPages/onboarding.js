@@ -39,7 +39,12 @@ class Dashboard extends Component {
         const user = this.props.currentUser;
         let onboarding = user.onboarding;
         onboarding.step++;
-        if (onboarding.step >= 8) {
+
+        if (onboarding.step >= onboarding.furthestStep) {
+            onboarding.furthestStep = onboarding.step;
+        }
+        console.log(onboarding.furthestStep)
+        if (onboarding.step > 8 || onboarding.furthestStep > 8) {
             onboarding.complete = true;
         }
         this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
@@ -51,6 +56,20 @@ class Dashboard extends Component {
         onboarding.step--;
         if (onboarding.step < 0) {
             return;
+        }
+        this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
+    }
+
+    handleStep(step) {
+        const user = this.props.currentUser;
+        let onboarding = user.onboarding;
+        onboarding.step = step;
+        console.log(onboarding.step);
+        if (onboarding.step >= onboarding.furthestStep) {
+            onboarding.furthestStep = onboarding.step;
+        }
+        if (onboarding.step > 8 || onboarding.furthestStep > 8) {
+            onboarding.complete = true;
         }
         this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
     }
@@ -103,9 +122,9 @@ class Dashboard extends Component {
             let key = 0;
             var checklist = checklistItems.map(item => {
                 let body = <div></div>;
-                if (key < onboarding.step) {
+                if (key < onboarding.furthestStep) {
                     body = (
-                        <div className="marginTop20px marginBottom10px primary-cyan font16px">
+                        <div className="marginTop20px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(key)}>
                             <img
                                 alt=""
                                 src={"/icons/CheckMarkBlue" + this.props.png}
@@ -114,10 +133,10 @@ class Dashboard extends Component {
                             {item.name}
                         </div>
                     );
-                } else if (key > onboarding.step) {
+                } else if (key > onboarding.furthestStep) {
                     body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white opacity30Percent font16px">{item.name} <i className="secondary-red">{item.length}</i></div>;
                 } else {
-                    body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white font16px">{item.name} <i className="primary-cyan">{item.length}</i></div>;
+                    body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white font16px clickableNoUnderline" onClick={() => this.handleStep(key)}>{item.name} <i className="primary-cyan">{item.length}</i></div>;
                 }
                 key++;
                 return (
