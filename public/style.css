@@ -658,10 +658,12 @@ form > h1 {
 /* END BASELINE EVAL PAGE GRID */
 
 #employerOnboarding {
+    position: relative;
     max-width: 1300px;
     width: 90%;
     margin: 30px auto;
     min-width: 300px;
+    display: flex;
 }
 
 #employerOnboarding > .onboardingLeft {
@@ -669,7 +671,6 @@ form > h1 {
     width: 340px;
     height: 100%;
     display: inline-block;
-    float: left;
     -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
     -moz-box-shadow:    0 0 80px 1px rgba(0,0,0,.5);
     box-shadow:         0 0 80px 1px rgba(0,0,0,.5);
