@@ -4031,6 +4031,24 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 .marginTopOnDesktop { margin-top: 60px; }
 
 
+.fixed-onboarding-progress {
+    position: fixed;
+    right: 20px;
+    bottom: 20px;
+    height: 60px;
+    width: 200px;
+    z-index: 1000;
+    background-color: var(--primary-black-dark);
+    -webkit-box-shadow: 0 0 10px 3px rgba(0,0,0,.5);
+    -moz-box-shadow:    0 0 10px 3px rgba(0,0,0,.5);
+    box-shadow:        0 0 10px 3px rgba(0,0,0,.5);
+}
+
+.onboarding-progress-container > div {
+    height: 100%;
+}
+
+
 .sliderOnSelect {
     width: 200px;
     display: inline-block;
