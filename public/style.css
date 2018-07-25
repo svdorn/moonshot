@@ -910,11 +910,14 @@ form > h1 {
     min-width: 225px;
 }
 
-.upload-candidate-csv-dialog .drag-drop-container {
+.upload-candidate-csv-dialog {
+    background-color: var(--primary-black-dark);
+    min-width: 200px;
     padding: 20px;
+    overflow: hidden;
 }
 
-.upload-candidate-csv-dialog .drag-drop-container .drop-zone {
+.upload-candidate-csv-dialog .drop-zone {
     border-style: dashed;
     border-width: 2px;
     border-color: #444444;
@@ -923,11 +926,11 @@ form > h1 {
     height: 100%;
 }
 
-.upload-candidate-csv-dialog .drag-drop-container .drop-zone.dragging {
+.upload-candidate-csv-dialog .drop-zone.dragging {
     background-color: var(--primary-black-light);
 }
 
-.upload-candidate-csv-dialog .drag-drop-container .upload-icon {
+.upload-candidate-csv-dialog .upload-icon {
     width: 40%;
     min-width: 100px;
     max-width: 500px;
@@ -935,8 +938,8 @@ form > h1 {
     margin-top: 20px;
 }
 
-.upload-candidate-csv-dialog .drag-drop-container .drag-here-text {
-    margin: 20px auto 40px;
+.upload-candidate-csv-dialog .drag-here-text {
+    margin: 20px 10px 40px;
 }
 
 

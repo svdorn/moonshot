@@ -3,10 +3,12 @@ import React, { Component } from "react";
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
 import axios from "axios";
-import { Dialog, CircularProgress } from "material-ui";
+import { CircularProgress } from "material-ui";
+import Dialog from '@material-ui/core/Dialog';
 import AddUserDialog from '../childComponents/addUserDialog';
 import { openAddUserModal, addNotification } from '../../actions/usersActions';
 import { isValidFileType } from "../../miscFunctions";
+import { secondaryGray } from "../../colors";
 import DropZone from "react-dropzone";
 
 class ImportCandidates extends Component {
@@ -207,7 +209,50 @@ class ImportCandidates extends Component {
 
         return (
             <div className="import-candidates primary-white center">
-                { this.createCSVModal() }
+                {/* this.createCSVModal() */}
+                <Dialog
+                    open={this.state.importModalOpen}
+                    className="jangus"
+                    onClose={this.handleCSVModalClose.bind(this)}
+                    fullWidth={true}
+                >
+                    <div className="upload-candidate-csv-dialog center">
+                        <DropZone
+                            onDrop={(files) => this.onDrop(files)}
+                            className="drop-zone"
+                            activeClassName="dragging"
+                            multiple={false}
+                            accept=".csv,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                        >
+                            <img
+                                src={"/icons/Upload" + this.props.png}
+                                className="upload-icon"
+                            />
+                            <div className="primary-cyan font24px">{"Drag & Drop"}</div>
+                            <div className="drag-here-text primary-white">
+                                {"Drag a file here or "}
+                                <span className="primary-cyan clickable">
+                                    {"browse"}
+                                </span>
+                                {" for a file to upload."}
+                                {this.state.file ?
+                                    <div className="font14px" style={{marginTop:"10px"}}>
+                                        {this.state.file.name}
+                                    </div>
+                                :
+                                    null
+                                }
+                            </div>
+                        </DropZone>
+                        <div
+                            className="medium button round-4px primary-white background-primary-cyan"
+                            style={{marginTop:"10px"}}
+                            onClick={this.handleCSVModalClose.bind(this)}
+                        >
+                            {"Continue"}
+                        </div>
+                    </div>
+                </Dialog>
                 <AddUserDialog tab="Candidate"/>
                 <div>{"Import Candidates"}</div>
                 <div className="font18px">
@@ -238,7 +283,8 @@ class ImportCandidates extends Component {
                     >
                         Next
                     </div>
-                    { this.state.uploadingFile ? <CircularProgress color="#FB553A" /> : null }
+                    <br/>
+                    { this.state.uploadingFile ? <CircularProgress color={secondaryGray} /> : null }
                 </div>
             </div>
         );
