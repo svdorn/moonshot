@@ -16,7 +16,10 @@ class FixedOnboardingProgress extends Component {
     render() {
         return (
             <div className="fixed-onboarding-progress">
-                <OnboardingProgress />
+                <div>
+                    <div className="center primary-white">{"Onboarding Progress"}</div>
+                    <OnboardingProgress className="fixed-progress-bar"/>
+                </div>
             </div>
         );
     }
