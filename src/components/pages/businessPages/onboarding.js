@@ -39,7 +39,12 @@ class Dashboard extends Component {
         const user = this.props.currentUser;
         let onboarding = user.onboarding;
         onboarding.step++;
-        if (onboarding.step >= 8) {
+
+        if (onboarding.step >= onboarding.furthestStep) {
+            onboarding.furthestStep = onboarding.step;
+        }
+        console.log(onboarding.furthestStep)
+        if (onboarding.step > 8 || onboarding.furthestStep > 8) {
             onboarding.complete = true;
         }
         this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
@@ -55,6 +60,20 @@ class Dashboard extends Component {
         this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
     }
 
+    handleStep(step) {
+        const user = this.props.currentUser;
+        let onboarding = user.onboarding;
+        onboarding.step = step;
+        console.log(onboarding.step);
+        if (onboarding.step >= onboarding.furthestStep) {
+            onboarding.furthestStep = onboarding.step;
+        }
+        if (onboarding.step > 8 || onboarding.furthestStep > 8) {
+            onboarding.complete = true;
+        }
+        this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
+    }
+
     render() {
         console.log(this.props.currentUser);
         const user = this.props.currentUser;
@@ -63,49 +82,61 @@ class Dashboard extends Component {
             {
                 name: "Create Evaluation",
                 length: "20s",
+                step: 0
             },
             {
                 name: "Activate Admin Account",
                 length: "30s",
+                step: 1
             },
             {
                 name: "Watch Tutorial",
                 length: "3m",
+                step: 2
             },
             {
                 name: "Google Jobs Posting",
                 length: "30s",
+                step: 3
             },
             {
                 name: "Automate Applicant Invites",
                 length: "7m",
+                step: 4
             },
             {
                 name: "Set Applicate Invite Cadance",
                 length: "1m",
+                step: 5
             },
             {
                 name: "Import CSV or Manually Invite Existing Candidates",
                 length: "3m",
+                step: 6
             },
             {
                 name: "Invite Other Admins",
                 length: "30s",
+                step: 7
             },
             {
                 name: "Invite Employees to Strengthen Baseline",
                 length: "30s",
+                step: 8
             }
         ];
 
+        let body = <div>Hey</div>;
+
         if (user.onboarding) {
             const onboarding = user.onboarding;
-            let key = 0;
+            var key = 0;
             var checklist = checklistItems.map(item => {
                 let body = <div></div>;
-                if (key < onboarding.step) {
+                console.log(key);
+                if (key < onboarding.furthestStep) {
                     body = (
-                        <div className="marginTop20px marginBottom10px primary-cyan font16px">
+                        <div className="marginTop20px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>
                             <img
                                 alt=""
                                 src={"/icons/CheckMarkBlue" + this.props.png}
@@ -114,10 +145,10 @@ class Dashboard extends Component {
                             {item.name}
                         </div>
                     );
-                } else if (key > onboarding.step) {
+                } else if (key > onboarding.furthestStep) {
                     body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white opacity30Percent font16px">{item.name} <i className="secondary-red">{item.length}</i></div>;
                 } else {
-                    body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white font16px">{item.name} <i className="primary-cyan">{item.length}</i></div>;
+                    body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>{item.name} <i className="primary-cyan">{item.length}</i></div>;
                 }
                 key++;
                 return (
@@ -126,9 +157,23 @@ class Dashboard extends Component {
                     </div>
                 );
             });
-        }
 
-        let body = <div>Hey</div>
+            if (onboarding.step === 0) {
+                body = (
+                    <div className="marginTop30px">
+                        <div className="primary-cyan font32px font28pxUnder700 font24pxUnder500">
+                            ROI Driven Onboarding
+                        </div>
+                        <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"20px auto", minWidth: "200px", textAlign: "left"}}>
+                            If you complete the onboarding checklist within 48 hours from now, you get 50% off the first three months of any subscription plan you select. Hundreds of dollars in savings and the full benefits of the product, faster.
+                        </div>
+                        <button className="button round-4px font20px font16pxUnder600 primary-white marginBottom30px" style={{backgroundColor: "#76defe"}} onClick={this.handleNext.bind(this)}>
+                            I&#39;m in
+                        </button>
+                    </div>
+                )
+            }
+        }
 
         return (
             <div className="fillScreen" id="employerOnboarding">
@@ -139,12 +184,6 @@ class Dashboard extends Component {
                 </div>
                 <div className="onboardingRight">
                     {body}
-                    <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.handlePrevious.bind(this)}>
-                        Previous
-                    </button>
-                    <button className="button gradient-transition gradient-1-cyan gradient-2-purple-light round-4px font20px font16pxUnder600 primary-white" onClick={this.handleNext.bind(this)}>
-                        Next
-                    </button>
                 </div>
             </div>
         );
