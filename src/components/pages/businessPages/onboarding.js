@@ -82,38 +82,47 @@ class Dashboard extends Component {
             {
                 name: "Create Evaluation",
                 length: "20s",
+                step: 0
             },
             {
                 name: "Activate Admin Account",
                 length: "30s",
+                step: 1
             },
             {
                 name: "Watch Tutorial",
                 length: "3m",
+                step: 2
             },
             {
                 name: "Google Jobs Posting",
                 length: "30s",
+                step: 3
             },
             {
                 name: "Automate Applicant Invites",
                 length: "7m",
+                step: 4
             },
             {
                 name: "Set Applicate Invite Cadance",
                 length: "1m",
+                step: 5
             },
             {
                 name: "Import CSV or Manually Invite Existing Candidates",
                 length: "3m",
+                step: 6
             },
             {
                 name: "Invite Other Admins",
                 length: "30s",
+                step: 7
             },
             {
                 name: "Invite Employees to Strengthen Baseline",
                 length: "30s",
+                step: 8
             }
         ];
 
@@ -127,7 +136,7 @@ class Dashboard extends Component {
                 console.log(key);
                 if (key < onboarding.furthestStep) {
                     body = (
-                        <div className="marginTop20px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(key)}>
+                        <div className="marginTop20px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>
                             <img
                                 alt=""
                                 src={"/icons/CheckMarkBlue" + this.props.png}
@@ -139,7 +148,7 @@ class Dashboard extends Component {
                 } else if (key > onboarding.furthestStep) {
                     body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white opacity30Percent font16px">{item.name} <i className="secondary-red">{item.length}</i></div>;
                 } else {
-                    body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white font16px clickableNoUnderline" onClick={() => this.handleStep(key)}>{item.name} <i className="primary-cyan">{item.length}</i></div>;
+                    body = <div className="marginTop20px marginLeft20px marginBottom10px primary-white font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>{item.name} <i className="primary-cyan">{item.length}</i></div>;
                 }
                 key++;
                 return (
