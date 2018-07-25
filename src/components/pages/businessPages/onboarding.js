@@ -176,14 +176,16 @@ class Dashboard extends Component {
         }
 
         return (
-            <div className="fillScreen" id="employerOnboarding">
-                <div className="onboardingLeft">
-                    <div>
-                        {checklist}
+            <div className="fillScreen">
+                <div id="employerOnboarding">
+                    <div className="onboardingLeft">
+                        <div>
+                            {checklist}
+                        </div>
                     </div>
-                </div>
-                <div className="onboardingRight">
-                    {body}
+                    <div className="onboardingRight">
+                        {body}
+                    </div>
                 </div>
             </div>
         );

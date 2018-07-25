@@ -716,7 +716,8 @@ form > h1 {
 #employerOnboarding > .onboardingRight {
     width: calc(100% - 340px);
     text-align: center;
-    position: relative;
+    position: absolute;
+    right: 0;
     display: inline-block;
     height: 100%;
     -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
