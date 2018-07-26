@@ -6,6 +6,7 @@ import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
 import ImportCandidates from "./importCandidates";
+import YouTube from 'react-youtube';
 import OnboardingProgress from "../../miscComponents/onboardingProgress";
 
 
@@ -78,6 +79,15 @@ class Onboarding extends Component {
 
     render() {
         const user = this.props.currentUser;
+
+        const opts = {
+            height: '183',
+            width: '300',
+            playerVars: { // https://developers.google.com/youtube/player_parameters
+                autoplay: 1,
+                iv_load_policy: 3
+            }
+        };
 
         const checklistItems = [
             {
@@ -220,6 +230,12 @@ class Onboarding extends Component {
                     stepName = "Watch Tutorial";
                     body = (
                         <div>
+                            <YouTube
+                                videoId="m4_M9onXmpY"
+                                opts={opts}
+                                onReady={this._onReady}
+                                onEnd={this._onEnd}
+                            />
                             <div className="previous-next-area primary-white font18px center marginTop20px">
                                 <div
                                     className="previous noselect clickable underline inlineBlock"
