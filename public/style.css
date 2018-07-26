@@ -878,13 +878,26 @@ form > h1 {
 .gradient-2-red { --gradient-color-2: var(--secondary-red); }
 
 
+.import-candidates {
+    height: 100%;
+    position: relative;
+    padding: 10px;
+}
+
+.import-candidates > div:last-child {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+
 /* "'Upload CSV' or 'Manually Invite'" area */
 .import-candidates .invite-options {
     display: flex;
     /* equal space between buttons and "or" */
     justify-content: space-between;
     /* center the options */
-    margin: auto;
+    margin: 0 auto;
     width: 400px;
 }
 
@@ -896,12 +909,12 @@ form > h1 {
 }
 
 /* make so that the Previous and Next buttons aren't right next to each other */
-.import-candidates > .previous-next-area > div:first-child {
+.import-candidates .previous-next-area > div:first-child {
     margin-right: 80px;
 }
 
 /* so that Next button is v wide */
-.import-candidates > .previous-next-area > .button {
+.import-candidates .previous-next-area > .button {
     padding: 3px 30px;
 }
 

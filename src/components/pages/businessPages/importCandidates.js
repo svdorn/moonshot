@@ -253,39 +253,40 @@ class ImportCandidates extends Component {
                     </div>
                 </Dialog>
                 <AddUserDialog tab="Candidate"/>
-                <div>{"Import Candidates"}</div>
-                <div className="font18px">
-                    {"Once your candidates have been uploaded, they will be invited to complete the application. Make sure their contact emails are included."}
-                </div>
-                <div className="font18px invite-options">
-                    { fileUploadArea }
-                    <span>{"or"}</span>
-                    <div
-                        onClick={this.props.openAddUserModal}
-                        className="inlineBlock clickable underline"
-                    >
-                        {"Manually Invite"}
-                    </div>
-                </div>
                 <div>
-                    You can manually invite candidates at any time by going to Account&nbsp;&nbsp;>&nbsp;&nbsp;Add User&nbsp;&nbsp;>&nbsp;&nbsp;Candidate.
-                </div>
-                <div className="previous-next-area font18px center">
-                    <div
-                        className="previous noselect clickable underline inlineBlock"
-                        onClick={this.props.previous}
-                    >
-                        Previous
-                        asdfasdfasdf
+                    <div className="font26px primary-cyan">{"Import Candidates"}</div>
+                    <div className="font18px">
+                        {"Once your candidates have been uploaded, they will be invited to complete the application. Make sure their contact emails are included."}
                     </div>
-                    <div
-                        className="button noselect round-4px background-primary-cyan inlineBlock"
-                        onClick={this.next.bind(this)}
-                    >
-                        Next
+                    <div className="font18px invite-options">
+                        { fileUploadArea }
+                        <span>{"or"}</span>
+                        <div
+                            onClick={this.props.openAddUserModal}
+                            className="inlineBlock clickable underline"
+                        >
+                            {"Manually Invite"}
+                        </div>
                     </div>
-                    <br/>
-                    { this.state.uploadingFile ? <CircularProgress color={secondaryGray} /> : null }
+                    <div className="font14px">
+                        You can manually invite candidates at any time by going to Account&nbsp;&nbsp;>&nbsp;&nbsp;Add User&nbsp;&nbsp;>&nbsp;&nbsp;Candidate.
+                    </div>
+                    <div className="previous-next-area font18px center">
+                        <div
+                            className="previous noselect clickable underline inlineBlock"
+                            onClick={this.props.previous}
+                        >
+                            Previous
+                        </div>
+                        <div
+                            className="button noselect round-4px background-primary-cyan inlineBlock"
+                            onClick={this.next.bind(this)}
+                        >
+                            Next
+                        </div>
+                        <br/>
+                        { this.state.uploadingFile ? <CircularProgress color={secondaryGray} /> : null }
+                    </div>
                 </div>
             </div>
         );
