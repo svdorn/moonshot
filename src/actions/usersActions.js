@@ -131,6 +131,7 @@ export function stopLoading() {
     }
 }
 
+
 export function setupBillingCustomer(source, email, userId, verificationToken) {
     return function(dispatch) {
         axios.post("/api/billing/customer", {source, email, userId, verificationToken})

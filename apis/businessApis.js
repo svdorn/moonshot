@@ -11,9 +11,11 @@ const crypto = require('crypto');
 const { sanitize,
         sendEmail,
         getAndVerifyUser,
+        getUserAndBusiness,
         frontEndUser,
         speedTest,
-        lastPossibleSecond
+        lastPossibleSecond,
+        isValidFileType
 } = require('./helperFunctions.js');
 // get error strings that can be sent back to the user
 const errors = require('./errors.js');
@@ -41,7 +43,11 @@ const businessApis = {
     GET_employeeQuestions,
     GET_positions,
     GET_evaluationResults,
+    GET_apiKey,
+    POST_resetApiKey,
+    POST_uploadCandidateCSV,
 
+    generateApiKey,
     createEmailInfo,
     sendEmailInvite
 }
@@ -1529,9 +1535,161 @@ async function POST_sawMyCandidatesInfoBox(req, res) {
         return res.status(500).send(errors.SERVER_ERROR);
     }
 
-    console.log("new user: ", user);
-
     return res.json(frontEndUser(user));
+}
+
+
+// get the api key for the api key settings page
+async function GET_apiKey(req, res) {
+    // get user credentials
+    const userId = sanitize(req.query.userId);
+    const verificationToken = sanitize(req.query.verificationToken);
+
+    // get the user and business
+    try { var {user, business} = await getUserAndBusiness(userId, verificationToken); }
+    catch (error) {
+        console.log("Error finding user/business trying to see their api key: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    // user has to be an account admin to see the api key
+    if (user.userType !== "accountAdmin") {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    return res.status(200).json(business.API_Key);
+}
+
+
+// reset a company's api key
+async function POST_resetApiKey(req, res) {
+    // get user credentials
+    const userId = sanitize(req.body.userId);
+    const password = sanitize(req.body.password)
+    const verificationToken = sanitize(req.body.verificationToken);
+
+    // get the user and business
+    try { var [user, newApiKey] = await Promise.all([
+        getAndVerifyUser(userId, verificationToken),
+        generateApiKey()
+    ]); }
+    catch (error) {
+        console.log("Error finding user who was trying to change their api key OR error generating new api key: ", error);
+        return res.status(error.status ? error.status : 500).send(error.message ? error.message : errors.SERVER_ERROR);
+    }
+
+    // make sure the user has the right password
+    if (!(await bcrypt.compare(password, user.password))) {
+        return res.status(403).send("Wrong password.");
+    }
+
+    // make sure the generated api key is relevant
+    if (typeof newApiKey !== "string" || newApiKey.length !== 24) {
+        console.log("New Api Key was either not a string or had the wrong length.");
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // user has to be an account admin to change the api key
+    if (user.userType !== "accountAdmin") {
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+
+    // get the id of the business the user works for
+    try { var businessId = user.businessInfo.businessId; }
+    catch (getBizIdError) {
+        console.log("User trying to update api key did not have an associated business.");
+        return res.status(403).send(errors.PERMISSIONS_ERROR);
+    }
+    // query to get the business the user works for
+    const find = { "_id": user.businessInfo.businessId };
+    // query to update the business api key
+    const update = { "API_Key": newApiKey }
+
+    try { await Businesses.findOneAndUpdate(find, update); }
+    catch (updateBizError) {
+        console.log("Error updating business to have a new api key: ", updateBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    return res.status(200).send(newApiKey);
+}
+
+
+// upload a csv containing candidate emails during business onboarding
+async function POST_uploadCandidateCSV(req, res) {
+    const userId = sanitize(req.body.userId);
+    const verificationToken = sanitize(req.body.verificationToken);
+    //const file = sanitize(req.files.file);
+    const candidateFile = sanitize(req.body.candidateFile);
+    const candidateFileName = sanitize(req.body.candidateFileName);
+
+    // make sure the candidates file exists
+    if (!candidateFile) { return res.status(400).send("No candidates file provided!"); }
+
+    // ensure file is correct type
+    if (!isValidFileType(candidateFileName, ["csv", "xls", "xlsx"])) {
+        return res.status(400).send("Invalid file type!");
+    }
+
+    // get the user and the business from the given credentials
+    try { var { user, business } = await getUserAndBusiness(userId, verificationToken); }
+    catch (getUserAndBizError) {
+        console.log("Error getting user and/or business while trying to upload candidate file: ", getUserAndBizError);
+        return res.status(500).send(errors.SERVER_ERROR);
+    }
+
+    // set up the email to send
+    let recipients = ["ameyer24@wisc.edu"];
+    let subject = `ACTION NEEDED: Candidates File Uploaded By ${business.name}`;
+    let content =
+        "<div>"
+        +   "<p>File is attached.</p>"
+        + "</div>";
+    // attach the candidates file to the email
+    const fileString = candidateFile.substring(candidateFile.indexOf(",") + 1);
+    let attachments = [{
+        filename: candidateFileName,
+        content: new Buffer(fileString, "base64")
+    }];
+    const sendFrom = "Moonshot";
+    sendEmail(recipients, subject, content, sendFrom, attachments, function (success, msg) {
+        // on failure
+        if (!success) {
+            console.log("Error sending email with candidates file: ", msg);
+            return res.status(500).send("Error uploading candidates file.");
+        }
+        // on success
+        return res.status(200).json({});
+    })
+}
+
+
+// creates a unique api key for a business
+async function generateApiKey() {
+    return new Promise(async function(resolve, reject) {
+        // get a list of all current API_Keys
+        try {
+            // find all other businesses
+            const otherBusinesses = await Businesses.find({}).select("API_Key");
+            // an array of the api keys of every other business
+            var existingKeys = otherBusinesses.map(biz => { return biz.API_Key; });
+        } catch (getKeysError) {
+            console.log("Error getting all keys of other businesses.");
+            return reject({status: 500, message: errors.SERVER_ERROR, error: getKeysError})
+        }
+
+        // placeholder for api key
+        let API_Key = "";
+        // continue to generate random api keys ...
+        do { API_Key = crypto.randomBytes(12).toString("hex"); }
+        // ... until the key does not exist in the array of every other key
+        while (existingKeys.includes(API_Key));
+
+        console.log("new api key:", API_Key);
+
+        // return the new api key
+        return resolve(API_Key);
+    });
 }
 
 

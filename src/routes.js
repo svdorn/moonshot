@@ -20,7 +20,7 @@ import BusinessHome from './components/pages/businessHome';
 import Influencer from './components/pages/influencer';
 import Main from './main';
 import AuthenticatedComponent from './components/authenticatedComponent/authenticatedComponent';
-import Settings from './components/pages/settings';
+import Settings from './components/pages/settings/settings';
 import VerifyEmail from './components/pages/verifyEmail';
 import ForgotPassword from './components/pages/forgotpassword';
 import ChangePassword from './components/pages/changepasswordforgot';

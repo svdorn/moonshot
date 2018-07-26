@@ -5,6 +5,8 @@ import { bindActionCreators } from 'redux';
 import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
+import ImportCandidates from "./importCandidates";
+import OnboardingProgress from "../../miscComponents/onboardingProgress";
 
 
 class Dashboard extends Component {
@@ -128,6 +130,11 @@ class Dashboard extends Component {
 
         let body = <div>Hey</div>;
 
+        const childProps = {
+            next: this.handleNext.bind(this),
+            previous: this.handlePrevious.bind(this)
+        }
+
         if (user.onboarding) {
             const onboarding = user.onboarding;
             var key = 0;
@@ -166,25 +173,41 @@ class Dashboard extends Component {
                             ROI Driven Onboarding
                         </div>
                         <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"20px auto", minWidth: "200px", textAlign: "left"}}>
-                            If you complete the onboarding checklist within 48 hours from now, you get 50% off the first three months of any subscription plan you select. Hundreds of dollars in savings and the full benefits of the product, faster.
+                            If you complete the onboarding checklist within 48 hours, you get 50% off the first three months of any subscription plan you select. Hundreds of dollars in savings and the full benefits of the product, faster.
                         </div>
                         <button className="button round-4px font20px font16pxUnder600 primary-white marginBottom30px" style={{backgroundColor: "#76defe"}} onClick={this.handleNext.bind(this)}>
                             I&#39;m in
                         </button>
                     </div>
-                );
+                )
+            } else if (onboarding.step === 6) {
+                body = (
+                    <ImportCandidates {...childProps} />
+                )
             }
         }
 
+        const NUM_ONBOARDING_STEPS = 9;
+
         return (
-            <div className="fillScreen" id="employerOnboarding">
-                <div className="onboardingLeft">
-                    <div>
-                        {checklist}
+            <div className="fillScreen">
+                <div id="employerOnboarding">
+                    <div className="onboardingLeft">
+                        <div>
+                            {checklist}
+                        </div>
                     </div>
-                </div>
-                <div className="onboardingRight">
-                    {body}
+                    <div className="onboardingRight">
+                        <div className="center top-progress-bar primary-white">
+                            <OnboardingProgress className="inlineBlock" />
+                            <div className="font14px">
+                                {`Step: ${user.onboarding.step + 1} / ${NUM_ONBOARDING_STEPS}`}
+                            </div>
+                        </div>
+                        <div className="content">
+                            {body}
+                        </div>
+                    </div>
                 </div>
             </div>
         );
@@ -196,7 +219,6 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         png: state.users.png
-
     };
 }
 

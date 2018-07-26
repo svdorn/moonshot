@@ -155,12 +155,15 @@ app.post("/business/rateInterest", businessApis.POST_rateInterest);
 app.post("/business/changeHiringStage", businessApis.POST_changeHiringStage);
 app.post("/business/moveCandidates", businessApis.POST_moveCandidates);
 app.post("/business/sawMyCandidatesInfoBox", businessApis.POST_sawMyCandidatesInfoBox);
+app.post("/business/resetApiKey", businessApis.POST_resetApiKey);
+app.post("/business/uploadCandidateCSV", businessApis.POST_uploadCandidateCSV);
 app.get("/business/candidateSearch", businessApis.GET_candidateSearch);
 app.get("/business/employeeSearch", businessApis.GET_employeeSearch);
 app.get("/business/business", businessApis.GET_business);
 app.get("/business/employeeQuestions", businessApis.GET_employeeQuestions);
 app.get("/business/positions", businessApis.GET_positions);
 app.get("/business/evaluationResults", businessApis.GET_evaluationResults);
+app.get("/business/apiKey", businessApis.GET_apiKey);
 
 app.get("/admin/allSkills", adminApis.GET_allSkills);
 app.get("/admin/skill", adminApis.GET_skill);
