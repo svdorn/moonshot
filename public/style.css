@@ -718,7 +718,8 @@ form > h1 {
     text-align: center;
     position: absolute;
     right: 0;
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
     -moz-box-shadow:    0 0 80px 1px rgba(0,0,0,.5);
@@ -4091,6 +4092,28 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 }
 
 .onboarding-progress-container > div {
+    height: 100%;
+}
+
+.onboardingRight .onboarding-progress-container {
+    width: 70%;
+    height: 8px;
+    margin-top: 35px;
+}
+
+.onboardingRight > .top-progress-bar {
+    flex: 0 1 auto;
+}
+
+.onboardingRight > .content {
+    position: relative;
+    width: 100%;
+    flex: 1 1 auto;
+}
+
+.onboardingRight > .content > div {
+    position: absolute;
+    width: 100%;
     height: 100%;
 }
 

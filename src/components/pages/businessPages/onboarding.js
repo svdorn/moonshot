@@ -6,6 +6,7 @@ import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
 import ImportCandidates from "./importCandidates";
+import OnboardingProgress from "../../miscComponents/onboardingProgress";
 
 
 class Dashboard extends Component {
@@ -194,7 +195,12 @@ class Dashboard extends Component {
                         </div>
                     </div>
                     <div className="onboardingRight">
-                        {body}
+                        <div className="center top-progress-bar">
+                            <OnboardingProgress className="inlineBlock" />
+                        </div>
+                        <div className="content">
+                            {body}
+                        </div>
                     </div>
                 </div>
             </div>
