@@ -9,7 +9,7 @@ import ImportCandidates from "./importCandidates";
 import OnboardingProgress from "../../miscComponents/onboardingProgress";
 
 
-class Dashboard extends Component {
+class Onboarding extends Component {
     constructor(props) {
         super(props);
 
@@ -31,7 +31,7 @@ class Dashboard extends Component {
 
     componentDidMount() {
         const user = this.props.currentUser;
-        console.log(user);
+
         if (!(user && user.userType === "accountAdmin" && user.onboarding)) {
             this.goTo("/");
         }
@@ -45,7 +45,7 @@ class Dashboard extends Component {
         if (onboarding.step >= onboarding.furthestStep) {
             onboarding.furthestStep = onboarding.step;
         }
-        console.log(onboarding.furthestStep)
+
         if (onboarding.step > 8 || onboarding.furthestStep > 8) {
             onboarding.complete = true;
         }
@@ -66,7 +66,7 @@ class Dashboard extends Component {
         const user = this.props.currentUser;
         let onboarding = user.onboarding;
         onboarding.step = step;
-        console.log(onboarding.step);
+
         if (onboarding.step >= onboarding.furthestStep) {
             onboarding.furthestStep = onboarding.step;
         }
@@ -77,7 +77,6 @@ class Dashboard extends Component {
     }
 
     render() {
-        console.log(this.props.currentUser);
         const user = this.props.currentUser;
 
         const checklistItems = [
@@ -107,12 +106,12 @@ class Dashboard extends Component {
                 step: 4
             },
             {
-                name: "Set Applicate Invite Cadance",
+                name: "Set Applicant Invite Cadence",
                 length: "1m",
                 step: 5
             },
             {
-                name: "Import CSV or Manually Invite Existing Candidates",
+                name: "Invite Existing Candidates",
                 length: "3m",
                 step: 6
             },
@@ -122,7 +121,7 @@ class Dashboard extends Component {
                 step: 7
             },
             {
-                name: "Invite Employees to Strengthen Baseline",
+                name: "Invite Employees",
                 length: "30s",
                 step: 8
             }
@@ -139,8 +138,9 @@ class Dashboard extends Component {
             const onboarding = user.onboarding;
             var key = 0;
             var checklist = checklistItems.map(item => {
+
                 let body = <div></div>;
-                console.log(key);
+
                 if (key < onboarding.furthestStep) {
                     body = (
                         <div className="marginTop20px marginBottom10px primary-cyan font16px clickableNoUnderline" onClick={() => this.handleStep(item.step)}>
@@ -165,25 +165,58 @@ class Dashboard extends Component {
                 );
             });
 
-            // ROI Driven Onboarding
-            if (onboarding.step === 0) {
-                body = (
-                    <div className="marginTop30px">
-                        <div className="primary-cyan font32px font28pxUnder700 font24pxUnder500">
-                            ROI Driven Onboarding
+            var stepName = "Create Evaluation";
+
+            switch(onboarding.step) {
+                // Create Evaluation
+                case 0:
+                    stepName = "Create Evaluation";
+                    body = (
+                        <div>
+                            <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"auto", minWidth: "200px", textAlign: "left"}}>
+                                If you complete the onboarding checklist within 48 hours, you get 50% off the first three months of any subscription plan you select. Hundreds of dollars in savings and the full benefits of the product, faster.
+                            </div>
+                            <button className="button round-4px font20px font16pxUnder600 primary-white marginBottom30px" style={{backgroundColor: "#76defe"}} onClick={this.handleNext.bind(this)}>
+                                I&#39;m in
+                            </button>
                         </div>
-                        <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"20px auto", minWidth: "200px", textAlign: "left"}}>
-                            If you complete the onboarding checklist within 48 hours, you get 50% off the first three months of any subscription plan you select. Hundreds of dollars in savings and the full benefits of the product, faster.
-                        </div>
-                        <button className="button round-4px font20px font16pxUnder600 primary-white marginBottom30px" style={{backgroundColor: "#76defe"}} onClick={this.handleNext.bind(this)}>
-                            I&#39;m in
-                        </button>
-                    </div>
-                )
-            } else if (onboarding.step === 6) {
-                body = (
-                    <ImportCandidates {...childProps} />
-                )
+                    );
+                    break;
+                // Activate Admin Account
+                case 1:
+                    stepName = "Activate Admin Account";
+                    break;
+                // Watch Tutorial
+                case 2:
+                    stepName = "Watch Tutorial";
+                    break;
+                // Google Jobs Posting
+                case 3:
+                    stepName = "Google Jobs Posting";
+                    break;
+                // Automate Applicant Invites
+                case 4:
+                    stepName = "Automate Applicant Invites";
+                    break;
+                // Set Applicant Invite Cadence
+                case 5:
+                    stepName = "Set Applicant Invite Cadence";
+                    break;
+                // Invite Existing Candidates
+                case 6:
+                    stepName = "Import Candidates";
+                    body = (
+                        <ImportCandidates {...childProps} />
+                    );
+                    break;
+                // Invite Other Admins
+                case 7:
+                    stepName = "Invite Admins"
+                    break;
+                // Invite Employees
+                case 8:
+                    stepName = "Invite Employees";
+                    break;
             }
         }
 
@@ -205,7 +238,14 @@ class Dashboard extends Component {
                             </div>
                         </div>
                         <div className="content">
-                            {body}
+                            <div>
+                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginTop30px marginBottom10px">
+                                    {stepName}
+                                </div>
+                                <div>
+                                    {body}
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -230,4 +270,4 @@ function mapDispatchToProps(dispatch) {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Dashboard);
+export default connect(mapStateToProps, mapDispatchToProps)(Onboarding);
