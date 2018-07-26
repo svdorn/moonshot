@@ -54,7 +54,7 @@ const businessApis = {
 // ----->> START APIS <<----- //
 
 // create a signup code for a user
-function createCode(businessId, positionId, userType, open) {
+function createCode(businessId, positionId, userType, email, open) {
     return new Promise(async function(resolve, reject) {
         // initialize random characters string
         let randomChars;
@@ -84,9 +84,8 @@ function createCode(businessId, positionId, userType, open) {
             code: randomChars,
             created: NOW,
             expirationDate: lastPossibleSecond(NOW, TWO_WEEKS),
-            businessId, positionId, userType, open
+            email, businessId, positionId, userType, open
         }
-        console.log("code: ", code);
         // make the code in the db
         try { code = await Signupcodes.create(code) }
         catch (createCodeError) {
@@ -100,7 +99,7 @@ function createCode(businessId, positionId, userType, open) {
 function createLink(businessId, positionId, userType) {
     return new Promise(async function(resolve, reject) {
         try {
-            const codeObj = await createCode(businessId, positionId, userType, true);
+            const codeObj = await createCode(businessId, positionId, userType, null, true);
             resolve({
                 code: codeObj.code, userType
             });
@@ -116,7 +115,7 @@ function createLink(businessId, positionId, userType) {
 function createEmailInfo(businessId, positionId, userType, email) {
     return new Promise(async function(resolve, reject) {
         try {
-            const codeObj = await createCode(businessId, positionId, userType, false);
+            const codeObj = await createCode(businessId, positionId, userType, email, false);
             resolve({
                 code: codeObj.code,
                 email, userType

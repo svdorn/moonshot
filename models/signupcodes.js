@@ -10,6 +10,8 @@ var signupcodesSchema = mongoose.Schema({
     positionId: mongoose.Schema.Types.ObjectId,
     // the type of user this code is meant for
     userType: String,
+    // the email of the person who has been invited by signupcode if applicable
+    email: String,
     // the time this code was created
     created: Date,
     // when this code expires and is no longer valid and should be deleted
