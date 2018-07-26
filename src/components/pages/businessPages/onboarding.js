@@ -284,7 +284,7 @@ class Onboarding extends Component {
                     tab = "Admin";
                     body = (
                         <InviteAdmins {...childProps} />
-                    )
+                    );
                     break;
                 // Invite Employees
                 case 8:
@@ -313,7 +313,7 @@ class Onboarding extends Component {
                         </div>
                         <div className="content">
                             <div>
-                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginTop30px marginBottom10px">
+                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginBottom10px" style={{marginTop:"3px"}}>
                                     {stepName}
                                 </div>
                                 <div>
