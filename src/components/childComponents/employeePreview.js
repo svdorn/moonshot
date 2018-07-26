@@ -241,10 +241,10 @@ class EmployeePreview extends Component {
         }
 
         // the text that will let the user know whether the employee finished the eval
-        let evalProgressText = "Eval In-Progress";
+        let evalProgressText = "Incomplete";
         let progressHoverText = "The employee has not yet completed the evaluation.";
         if (this.props.score) {
-            evalProgressText = "Eval Complete";
+            evalProgressText = "Complete";
             progressHoverText = "The employee completed the evaluation.";
         }
 
@@ -252,7 +252,7 @@ class EmployeePreview extends Component {
             <div className="inlineBlock">
                 <div
                     className="inlineBlock secondary-gray font12px"
-                    style={{marginLeft:"10px"}}
+                    style={{marginLeft:"20px"}}
                 >
                     { evalProgressText }
                 </div>
@@ -336,14 +336,20 @@ class EmployeePreview extends Component {
                 />
                 <br />
                 <i className={"completionStage center font14px " + (this.state.gradingComplete ? "" : "secondary-red")}>
-                    {this.state.gradingComplete ? "Complete" : "Incomplete"}
+                    {this.state.gradingComplete ? "Graded" : "Needs Grading"}
                 </i>
                 <br/>
                 <div className="gradingMovementButtons">
-                    <button className="button round-4px gradient gradient-1-red gradient-2-orange marginTop10px primary-white font14px"
-                            onClick={this.handleOpen.bind(this)}>
-                        Grade
-                    </button>
+                    {this.state.gradingComplete ?
+                        <button className="button round-4px gradient disabled primary-white font14px">
+                            Grade
+                        </button>
+                    :
+                        <button className="button round-4px gradient gradient-1-red gradient-2-orange marginTop10px primary-white font14px"
+                                onClick={this.handleOpen.bind(this)}>
+                            Grade
+                        </button>
+                    }
                     { evalProgress }
                     { seeResults }
                 </div>

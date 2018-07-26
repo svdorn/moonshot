@@ -755,6 +755,9 @@ form > h1 {
 .button.round-20px { border-radius: 20px; }
 
 .button.disabled { cursor: not-allowed; }
+.button.disabled.gradient {
+    background: linear-gradient(to left, #3a3a3a, #afafaf);
+}
 
 .button.gradient {
     background: linear-gradient(to left, var(--gradient-color-1), var(--gradient-color-2));
