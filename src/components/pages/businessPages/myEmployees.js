@@ -40,8 +40,8 @@ class MyEmployees extends Component {
 
         this.state = {
             searchTerm: "",
-            status: "",
-            position: "",
+            status: "Status",
+            position: "Position",
             positionNameFromUrl,
             employees: [],
             questions: [],
@@ -122,9 +122,9 @@ class MyEmployees extends Component {
                 params: {
                     searchTerm: this.state.term,
                     // searching by position name right now, could search by id if want to
-                    positionName: this.state.position,
+                    positionName: this.state.position === "Position" ? "" : this.state.position,
                     userId: this.props.currentUser._id,
-                    status: this.state.status,
+                    status: this.state.status === "Status" ? "" : this.state.status,
                     verificationToken: this.props.currentUser.verificationToken
                 }
             }).then(res => {
@@ -154,8 +154,8 @@ class MyEmployees extends Component {
         this.setState({status: event.target.value, employees: [], noEmployees: false}, this.search);
     };
 
-    handlePositionChange = (event, index, position) => {
-        this.setState({position, employees: [], noEmployees: false}, this.search);
+    handlePositionChange = event => {
+        this.setState({position: event.target.value, employees: [], noEmployees: false}, this.search);
     };
 
     openAddUserModal() {
@@ -208,7 +208,7 @@ class MyEmployees extends Component {
 
         const positions = this.state.positions;
         const positionItems = positions.map(function (position) {
-            return <MenuItem value={position.name} primaryText={position.name} key={position.name}/>
+            return <SelectMenuItem value={position.name} key={position.name}>{ position.name }</SelectMenuItem>
         })
 
         // the hint that shows up when search bar is in focus
@@ -220,7 +220,7 @@ class MyEmployees extends Component {
         const searchUnderlineFocusStyle = searchFloatingLabelFocusStyle;
 
         const searchBar = (
-            <div>
+            <div className="search-fields">
                 <Toolbar style={style.searchBar} id="discoverSearchBarWideScreen">
                     <ToolbarGroup>
                         <Field
@@ -237,7 +237,7 @@ class MyEmployees extends Component {
                         />
                     </ToolbarGroup>
 
-                    <ToolbarGroup>
+                    <ToolbarGroup style={{alignItems: "flex-end"}}>
                         <Select
                             disableUnderline={true}
                             classes={{
@@ -247,11 +247,13 @@ class MyEmployees extends Component {
                             value={this.state.status}
                             onChange={this.handleStatusChange}
                             key="status selector"
+                            style={{marginRight:"30px"}}
                         >
-                            <SelectMenuItem value={""}>{"Status"}</SelectMenuItem>
+                            <SelectMenuItem value={"Status"}>{"Status"}</SelectMenuItem>
                             <Divider/>
                             {statusItems}
                         </Select>
+
                         <Select
                             disableUnderline={true}
                             classes={{
@@ -262,16 +264,12 @@ class MyEmployees extends Component {
                             onChange={this.handlePositionChange}
                             key="position selector"
                         >
-                            <SelectMenuItem value="">{"Position"}</SelectMenuItem>
+                            <SelectMenuItem value="Position">{"Position"}</SelectMenuItem>
                             <Divider/>
                             {positionItems}
                         </Select>
-
-
-
                     </ToolbarGroup>
                 </Toolbar>
-
 
                 <div id="discoverSearchBarMedScreen">
                     <Field
@@ -289,34 +287,42 @@ class MyEmployees extends Component {
 
                     <br/>
 
-                    <DropDownMenu value={this.state.status}
-                                  onChange={this.handleStatusChange}
-                                  labelStyle={style.menuLabelStyle}
-                                  anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "20px", marginTop: "11px"}}
+                    <Select
+                        disableUnderline={true}
+                        classes={{
+                            root: "position-select-root selectRootWhite",
+                            icon: "selectIconWhiteImportant"
+                        }}
+                        value={this.state.status}
+                        onChange={this.handleStatusChange}
+                        key="status selector"
                     >
-                        <MenuItem value={""} primaryText="Stage"/>
+                        <SelectMenuItem value={"Status"}>{"Status"}</SelectMenuItem>
                         <Divider/>
                         {statusItems}
-                    </DropDownMenu>
+                    </Select>
                     <div><br/></div>
-                    <DropDownMenu value={this.state.position}
-                                  onChange={this.handlePositionChange}
-                                  labelStyle={style.menuLabelStyle}
-                                  anchorOrigin={style.anchorOrigin}
-                                  style={{fontSize: "20px", marginTop: "11px"}}
+                    <Select
+                        disableUnderline={true}
+                        classes={{
+                            root: "position-select-root selectRootWhite",
+                            icon: "selectIconWhiteImportant"
+                        }}
+                        value={this.state.position}
+                        onChange={this.handlePositionChange}
+                        key="position selector"
                     >
-                        <MenuItem value={""} primaryText="Position"/>
+                        <SelectMenuItem value="Position">{"Position"}</SelectMenuItem>
                         <Divider/>
                         {positionItems}
-                    </DropDownMenu>
+                    </Select>
                 </div>
 
                 <div
-                    className="add-employee primary-cyan pointer font16px font14pxUnder500 font12pxUnder400"
+                    className="add-employee primary-cyan pointer font16px center"
                     onClick={this.props.openAddUserModal}
                 >
-                    + <span className="underline">Add Employee</span>
+                    + <span className="underline">Add Employees</span>
                 </div>
             </div>
         );
@@ -413,7 +419,7 @@ class MyEmployees extends Component {
         }
 
         return (
-            <div className="jsxWrapper blackBackground fillScreen" style={{paddingBottom: "20px"}} ref='myEmployees'>
+            <div className="jsxWrapper blackBackground fillScreen my-employees" style={{paddingBottom: "20px"}} ref='myEmployees'>
                 {this.props.currentUser.userType == "accountAdmin" ?
                     <AddUserDialog position={this.state.position} tab="Employee" />
                     : null
