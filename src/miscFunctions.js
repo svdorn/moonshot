@@ -2,6 +2,7 @@
 import React from "react";
 import { TextField } from "material-ui";
 import colors from "./colors";
+import { browserHistory } from "react-router";
 
 const style = {
     // the hint that shows up when search bar is in focus
@@ -124,6 +125,15 @@ function isValidFileType(fileName, allowedFileTypes) {
 }
 
 
+// goes to a different page within moonshot insights; passing "/onboarding" would go to moonshotinsights.io/onboarding
+function goTo(route) {
+    // go to the wanted page
+    browserHistory.push(route);
+    // scroll to the top of the new page
+    window.scrollTo(0, 0);
+}
+
+
 const miscFunctions = {
     qualifierFromScore,
     renderTextField,
@@ -131,7 +141,8 @@ const miscFunctions = {
     getFirstName,
     isValidEmail,
     htmlDecode,
-    isValidFileType
+    isValidFileType,
+    goTo
 }
 
 module.exports = miscFunctions;

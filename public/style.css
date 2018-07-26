@@ -4049,6 +4049,7 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
 
 
 .fixed-onboarding-progress {
+    cursor: pointer;
     position: fixed;
     right: 20px;
     bottom: 20px;

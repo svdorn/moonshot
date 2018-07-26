@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux';
 import {  } from '../../actions/usersActions';
 import OnboardingProgress from "./onboardingProgress";
 import { withRouter } from "react-router";
-
+import { goTo } from "../../miscFunctions";
 
 class FixedOnboardingProgress extends Component {
     constructor(props) {
@@ -44,7 +44,7 @@ class FixedOnboardingProgress extends Component {
         ) {
             // ... show the onboarding progress bar in the lower right corner
             return (
-                <div className="fixed-onboarding-progress">
+                <div className="fixed-onboarding-progress" onClick={() => goTo("/onboarding")}>
                     <div>
                         <div className="center primary-white">{"Onboarding Progress"}</div>
                         <OnboardingProgress className="fixed-progress-bar"/>
