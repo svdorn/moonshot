@@ -898,7 +898,8 @@ form > h1 {
     justify-content: space-between;
     /* center the options */
     margin: 0 auto;
-    width: 400px;
+    max-width: 400px;
+    width: 100%;
 }
 
 .import-candidates .file-name {
