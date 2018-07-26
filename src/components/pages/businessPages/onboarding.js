@@ -6,6 +6,7 @@ import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
 import ImportCandidates from "./importCandidates";
+import GoogleJobs from './googleJobs';
 import YouTube from 'react-youtube';
 import OnboardingProgress from "../../miscComponents/onboardingProgress";
 
@@ -256,6 +257,9 @@ class Onboarding extends Component {
                 // Google Jobs Posting
                 case 3:
                     stepName = "Google Jobs Posting";
+                    body = (
+                        <GoogleJobs {...childProps} />
+                    );
                     break;
                 // Automate Applicant Invites
                 case 4:
@@ -302,7 +306,7 @@ class Onboarding extends Component {
                         </div>
                         <div className="content">
                             <div>
-                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginTop30px marginBottom10px">
+                                <div className="primary-cyan font26px font24pxUnder700 font20pxUnder500 marginTop15px marginBottom10px">
                                     {stepName}
                                 </div>
                                 <div>
