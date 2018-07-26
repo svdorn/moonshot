@@ -710,9 +710,9 @@ form > h1 {
     width: 340px;
     height: 100%;
     display: inline-block;
-    -webkit-box-shadow: 0 0 80px 1px rgba(0,0,0,.5);
-    -moz-box-shadow:    0 0 80px 1px rgba(0,0,0,.5);
-    box-shadow:         0 0 80px 1px rgba(0,0,0,.5);
+    -webkit-box-shadow: 0 0 30px -3px rgba(0,0,0,.5);
+    -moz-box-shadow:    0 0 30px -3px rgba(0,0,0,.5);
+    box-shadow:         0 0 30px -3px rgba(0,0,0,.5);
 }
 
 #employerOnboarding > .onboardingRight {
@@ -1663,7 +1663,7 @@ form > h1 {
 .headerDropdownWhite > div:first-child > div:nth-child(2) {
     color: white !important;
 }
-.clickable, .clickableNoUnderline, .borderBottomClickable { cursor: pointer; }
+.clickable, .clickableNoUnderline, .clickable-no-underline, .borderBottomClickable { cursor: pointer; }
 .clickable:hover { text-decoration: underline; }
 .borderBottomClickable:hover { border-bottom: 2px solid white; }
 .currentRoute {
@@ -2630,7 +2630,7 @@ button.link {
     transform: scale(.8);
     vertical-align: middle;
 }
-.mobileTopOptions {
+.mobile-top-options {
     display: flex;
     justify-content: space-around;
     margin: 20px auto 10px;
@@ -2648,10 +2648,19 @@ button.link {
     width: 120px;
 }
 
-.myCandidatesPositionSelector {
+.my-candidates-position-selector {
     position: absolute;
     top: -26px;
     right: 0;
+}
+
+.my-candidates-position-selector > .add-candidate {
+    text-align: right;
+    margin-top: 5px;
+}
+
+.mobile-top-options + .add-candidate {
+    margin: -17px auto 13px
 }
 
 .star.white { --starColor: white; }
@@ -4989,9 +4998,6 @@ textarea.multiSelectCustomAnswer, textarea.multipleChoiceCustomAnswer {
     }
     .mobile.candidateResults .resultsHeader {
         height: 131px;
-    }
-    .myCandidates .candidatesContainer {
-        height: calc(100vh - 194px);
     }
     .candidateResults .resultsContent {
         height: calc(100vh - 325px);

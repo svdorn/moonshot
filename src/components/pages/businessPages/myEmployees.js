@@ -311,7 +311,7 @@ class MyEmployees extends Component {
             if (this.state.status == "" && (this.state.term == "" || !this.state.term)) {
             employeePreviews = (
                 <div className="center marginTop50px">
-                <div className="marginBottom15px font32px font28pxUnder500 clickable primary-cyan" onClick={this.openAddUserModal.bind(this)}>
+                <div className="marginBottom15px font32px font28pxUnder500 clickableNoUnderline primary-cyan" onClick={this.openAddUserModal.bind(this)}>
                     + <bdi className="underline">Add Employees</bdi>
                 </div>
                 <div className="center" style={{color: "rgba(255,255,255,.8)"}}>
