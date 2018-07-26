@@ -172,7 +172,7 @@ class Dashboard extends Component {
                             ROI Driven Onboarding
                         </div>
                         <div className="secondary-gray font16px font14pxUnder700" style={{width: "80%", margin:"20px auto", minWidth: "200px", textAlign: "left"}}>
-                            If you complete the onboarding checklist within 48 hours from now, you get 50% off the first three months of any subscription plan you select. Hundreds of dollars in savings and the full benefits of the product, faster.
+                            If you complete the onboarding checklist within 48 hours, you get 50% off the first three months of any subscription plan you select. Hundreds of dollars in savings and the full benefits of the product, faster.
                         </div>
                         <button className="button round-4px font20px font16pxUnder600 primary-white marginBottom30px" style={{backgroundColor: "#76defe"}} onClick={this.handleNext.bind(this)}>
                             I&#39;m in
