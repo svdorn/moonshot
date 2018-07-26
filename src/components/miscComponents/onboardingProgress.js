@@ -29,7 +29,7 @@ class OnboardingProgress extends Component {
         // if there is a "You're done!" step, make it the actual number of steps,
         // otherwise should be one more than actual number so that you're not done
         // until you've actually gone through every step
-        const NUM_ONBOARDING_STEPS = 10
+        const NUM_ONBOARDING_STEPS = 9;
         // figure out how far the user is
         const amountDone = furthestStep / NUM_ONBOARDING_STEPS;
 

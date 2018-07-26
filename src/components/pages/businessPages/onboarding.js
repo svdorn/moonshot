@@ -186,6 +186,8 @@ class Dashboard extends Component {
             }
         }
 
+        const NUM_ONBOARDING_STEPS = 9;
+
         return (
             <div className="fillScreen">
                 <div id="employerOnboarding">
@@ -195,8 +197,11 @@ class Dashboard extends Component {
                         </div>
                     </div>
                     <div className="onboardingRight">
-                        <div className="center top-progress-bar">
+                        <div className="center top-progress-bar primary-white">
                             <OnboardingProgress className="inlineBlock" />
+                            <div className="font14px">
+                                {`Step: ${user.onboarding.step + 1} / ${NUM_ONBOARDING_STEPS}`}
+                            </div>
                         </div>
                         <div className="content">
                             {body}
@@ -213,7 +218,6 @@ function mapStateToProps(state) {
     return {
         currentUser: state.users.currentUser,
         png: state.users.png
-
     };
 }
 

@@ -14,9 +14,6 @@ class FixedOnboardingProgress extends Component {
         this.state = {};
     }
 
-    componentDidUpdate() {
-        console.log("updated");
-    }
 
     render() {
         // console.log("rendering");
