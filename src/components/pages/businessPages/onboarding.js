@@ -6,7 +6,9 @@ import MetaTags from 'react-meta-tags';
 import { browserHistory } from 'react-router';
 import { closeNotification, updateOnboarding } from '../../../actions/usersActions';
 import ImportCandidates from "./importCandidates";
+import InviteAdmins from "./inviteAdmins";
 import OnboardingProgress from "../../miscComponents/onboardingProgress";
+import AddUserDialog from '../../childComponents/addUserDialog';
 
 
 class Dashboard extends Component {
@@ -76,9 +78,13 @@ class Dashboard extends Component {
         this.props.updateOnboarding(onboarding, user.verificationToken, user._id);
     }
 
+
     render() {
         console.log(this.props.currentUser);
         const user = this.props.currentUser;
+
+        // the tab to open to on Add User Modal
+        let tab = "Candidate";
 
         const checklistItems = [
             {
@@ -183,6 +189,11 @@ class Dashboard extends Component {
                 body = (
                     <ImportCandidates {...childProps} />
                 )
+            } else if (onboarding.step === 7) {
+                tab = "Admin";
+                body = (
+                    <InviteAdmins {...childProps} />
+                )
             }
         }
 
@@ -190,6 +201,7 @@ class Dashboard extends Component {
 
         return (
             <div className="fillScreen">
+                <AddUserDialog tab={tab} />
                 <div id="employerOnboarding">
                     <div className="onboardingLeft">
                         <div>

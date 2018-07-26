@@ -924,13 +924,36 @@ form > h1 {
 }
 
 /* make so that the Previous and Next buttons aren't right next to each other */
-.import-candidates .previous-next-area > div:first-child {
+.previous-next-area > div:first-child {
     margin-right: 80px;
 }
 
 /* so that Next button is v wide */
-.import-candidates .previous-next-area > .button {
+.previous-next-area > .button {
     padding: 3px 30px;
+}
+
+.invite-admins {
+    padding: 10px;
+}
+
+.invite-admins > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around;
+    height: 100%;
+}
+
+.invite-admins .position-titles {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 auto;
+    max-width: 400px;
+    width: 100%;
+}
+
+.invite-admins .position-titles > div {
+    display: inline-block;
 }
 
 /* dialog for the drag and drop container */
